@@ -1,0 +1,10 @@
+node_modules
+frontend_production
+frontend_development
+node_dist
+.DS_Store
+.idea
+VERSION
+yarn-error.log
+.env
+ci-tests/reports

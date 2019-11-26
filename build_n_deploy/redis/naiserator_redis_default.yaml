@@ -1,0 +1,24 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: familie-ba-sak-frontend-redis
+  namespace: default
+  labels:
+    team: teamfamilie
+spec:
+  image: navikt/secure-redis:5.0.3-alpine-2
+  port: 6379
+  replicas: # A single Redis-app doesn't scale
+    min: 1
+    max: 1
+  vault:
+    enabled: true
+  resources: # you need to monitor need your self
+    limits:
+      cpu: 250m 
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  service:
+    port: 6379

@@ -1,0 +1,27 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: familie-ba-sak-frontend-redis-exporter
+  namespace: default
+  labels:
+    team: teamfamilie
+spec:
+  image: navikt/secure-redisexporter:v0.29.0-alpine-3
+  port: 9121
+  prometheus:
+    enabled: true
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    limits:
+      cpu: 100m 
+      memory: 100Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  vault:
+    enabled: true
+  env:
+    - name: REDIS_ADDR
+      value: familie-ba-sak-frontend-redis.default.svc.nais.local:6379

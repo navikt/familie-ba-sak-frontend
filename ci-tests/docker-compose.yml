@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  ci-test-server:
+    image: navikt/node-express:1.0.0
+    volumes:
+      - ../dev-server:/var/server/
+      - ../frontend_development:/var/frontend_development/
+    ports:
+      - 8000
+    entrypoint:
+      - node
+      - /var/server/ci-server.js
+  jest-image-snapshot:
+    image: navikt/docker-jest-image-snapshot:1.0.0
+    depends_on:
+      - ci-test-server
+    volumes:
+      - ./jest-image-snapshot/baseline:/app/baseline/
+      - ./jest-image-snapshot/tests:/app/tests/
+      - ./reports:/app/reports/

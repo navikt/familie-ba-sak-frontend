@@ -1,0 +1,41 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: familie-ba-sak-frontend
+  namespace: default
+  labels:
+    team: teamfamilie
+spec:
+  image: navikt/familie-ba-sak-frontend:{{version}}
+  team: teamfamilie
+  replicas:
+    min: 2
+    max: 2
+    cpuThresholdPercentage: 50
+  port: 8000
+  liveness:
+    path: /isAlive
+    initialDelay: 5
+  readiness:
+    path: /isReady
+    initialDelay: 5
+  prometheus:
+    enabled: true
+    path: /metrics
+  istio:
+    enabled: false
+  ingresses:
+    - https://familie-ba-sak-frontend.nais.adeo.no
+    - https://kontantstotte.nais.adeo.no
+  vault:
+    enabled: true
+  webproxy: true
+  env:
+    - name: APP_VERSION
+      value: "{{version}}"
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+    requests:
+      memory: 512Mi
