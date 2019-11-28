@@ -1,13 +1,44 @@
-import { Lukknapp } from 'nav-frontend-ikonknapper';
+import { Lukknapp, Nesteknapp } from 'nav-frontend-ikonknapper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select } from 'nav-frontend-skjema';
 import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { behandlingstyper } from '../../typer/fagsak';
+import { sjekkeFødselsnummer, ErrorId } from './DataValidator';
 
 const OpprettFagsak: React.FunctionComponent = () => {
     const [søkersFødselsnummer, settSøkersFødselsnummer] = React.useState('');
     const [barnasFødselsnummer, settBarnasFødselsnummer] = React.useState<string[]>(['']);
+
+    const validereFødselsnummer = (): boolean => {
+        //TODO: decent error message and UI
+        try {
+            const err = sjekkeFødselsnummer(søkersFødselsnummer);
+            if (err == ErrorId.TømmeFødselsnummer) {
+                throw { message: 'Fødselsnummer for applicant must be filled.' };
+            } else if (err == ErrorId.UgyldigFødselsnummer) {
+                throw { message: 'Invalid Fødselsnummer for applicant: ' + søkersFødselsnummer };
+            }
+
+            if (barnasFødselsnummer.length < 1) {
+                throw { message: 'At least one child fødselsnummer is required.' };
+            }
+
+            barnasFødselsnummer.forEach(fn => {
+                const err = sjekkeFødselsnummer(fn);
+                if (err == ErrorId.TømmeFødselsnummer) {
+                    throw { message: 'Fødselsnummer for all children must be filled.' };
+                } else if (err == ErrorId.UgyldigFødselsnummer) {
+                    throw { message: 'Invalid Fødselsnummer for child: ' + fn };
+                }
+            });
+        } catch (e) {
+            alert(e.message);
+            return false;
+        }
+
+        return true;
+    };
 
     return (
         <div className={'opprettbehandling'}>
@@ -74,6 +105,17 @@ const OpprettFagsak: React.FunctionComponent = () => {
             >
                 Legg til barn
             </Knapp>
+
+            <br />
+            <Nesteknapp
+                id="knapp__neste"
+                onClick={() => {
+                    if (validereFødselsnummer()) {
+                        //TODO: call backend and navigate
+                        console.log('move on');
+                    }
+                }}
+            ></Nesteknapp>
         </div>
     );
 };
