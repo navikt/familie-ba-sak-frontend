@@ -1,5 +1,4 @@
 import { IPerson } from './person';
-import { ISøknad } from './søknad';
 
 // Enum
 export enum VilkårType {
@@ -36,7 +35,6 @@ export interface IBehandling {
     behandlingId: number;
     behandlingsresultat: IBehandlingsresultat;
     personopplysninger: IPersonopplysninger;
-    søknad: ISøknad;
 }
 
 export interface IBehandlingsresultat {
@@ -54,3 +52,18 @@ export interface IPersonopplysninger {
     barna: IPerson[];
     søker: IPerson;
 }
+
+export interface INøkkelPar {
+    [key: string]: {
+        navn: string;
+    };
+}
+
+export const behandlingstyper: INøkkelPar = {
+    FØRSTEGANGSBEHANDLING: {
+        navn: 'Førstegangsbehandling',
+    },
+    REVURDERING: {
+        navn: 'Revurdering',
+    },
+};
