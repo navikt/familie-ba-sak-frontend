@@ -5,6 +5,7 @@ import { slackNotify } from '../api/axios';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
+import Dekoratør from './Felleskomponenter/Dekoratør/Dekoratør';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 
@@ -51,7 +52,17 @@ class App extends React.Component<{}, IState> {
     }
 
     public render() {
-        return <div />;
+        return (
+            <div>
+                <Dekoratør
+                    innloggetSaksbehandler={this.state.innloggetSaksbehandler}
+                    tittel={'NAV barnetrygd'}
+                    onClick={() => {
+                        window.location.href = `${window.origin}/auth/logout`;
+                    }}
+                />
+            </div>
+        );
     }
 }
 
