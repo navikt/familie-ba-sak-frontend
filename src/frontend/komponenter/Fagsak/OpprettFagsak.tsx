@@ -3,20 +3,21 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select } from 'nav-frontend-skjema';
 import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+
 import { behandlingstyper } from '../../typer/fagsak';
-import { sjekkeFødselsnummer, ErrorId } from './DataValidator';
+import { ErrorId, sjekkeFødselsnummer } from './DataValidator';
 
 const OpprettFagsak: React.FunctionComponent = () => {
     const [søkersFødselsnummer, settSøkersFødselsnummer] = React.useState('');
     const [barnasFødselsnummer, settBarnasFødselsnummer] = React.useState<string[]>(['']);
 
     const validereFødselsnummer = (): boolean => {
-        //TODO: decent error message and UI
+        // TODO: decent error message and UI
         try {
             const err = sjekkeFødselsnummer(søkersFødselsnummer);
-            if (err == ErrorId.TømmeFødselsnummer) {
+            if (err === ErrorId.TømmeFødselsnummer) {
                 throw { message: 'Fødselsnummer for applicant must be filled.' };
-            } else if (err == ErrorId.UgyldigFødselsnummer) {
+            } else if (err === ErrorId.UgyldigFødselsnummer) {
                 throw { message: 'Invalid Fødselsnummer for applicant: ' + søkersFødselsnummer };
             }
 
@@ -25,10 +26,10 @@ const OpprettFagsak: React.FunctionComponent = () => {
             }
 
             barnasFødselsnummer.forEach(fn => {
-                const err = sjekkeFødselsnummer(fn);
-                if (err == ErrorId.TømmeFødselsnummer) {
+                const errid = sjekkeFødselsnummer(fn);
+                if (errid === ErrorId.TømmeFødselsnummer) {
                     throw { message: 'Fødselsnummer for all children must be filled.' };
-                } else if (err == ErrorId.UgyldigFødselsnummer) {
+                } else if (errid === ErrorId.UgyldigFødselsnummer) {
                     throw { message: 'Invalid Fødselsnummer for child: ' + fn };
                 }
             });
@@ -111,11 +112,11 @@ const OpprettFagsak: React.FunctionComponent = () => {
                 id="knapp__neste"
                 onClick={() => {
                     if (validereFødselsnummer()) {
-                        //TODO: call backend and navigate
+                        // TODO: call backend and navigate
                         console.log('move on');
                     }
                 }}
-            ></Nesteknapp>
+            />
         </div>
     );
 };
