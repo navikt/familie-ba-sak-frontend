@@ -33,8 +33,8 @@ export interface IFagsak {
 
 export interface IBehandling {
     behandlingId: number;
-    behandlingsresultat: IBehandlingsresultat;
-    personopplysninger: IPersonopplysninger;
+    søker: string;
+    barna: string[];
 }
 
 export interface IBehandlingsresultat {

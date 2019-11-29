@@ -6,7 +6,9 @@ import { slackNotify } from '../api/axios';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
+import FagsakContainer from './Fagsak/FagsakContainer';
 import OpprettFagsak from './Fagsak/OpprettFagsak';
+import { FagsakProvider } from './FagsakProvider';
 import Dekoratør from './Felleskomponenter/Dekoratør/Dekoratør';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
@@ -55,7 +57,7 @@ class App extends React.Component<{}, IState> {
 
     public render() {
         return (
-            <>
+            <FagsakProvider>
                 <Dekoratør
                     innloggetSaksbehandler={this.state.innloggetSaksbehandler}
                     tittel={'NAV barnetrygd'}
@@ -66,17 +68,12 @@ class App extends React.Component<{}, IState> {
                 <div className={'container'}>
                     <Router>
                         <Switch>
-                            <Route
-                                exact={true}
-                                path="/fagsak/opprett"
-                                render={({ match }) => {
-                                    return <OpprettFagsak />;
-                                }}
-                            />
+                            <Route exact={true} path="/fagsak/opprett" component={OpprettFagsak} />
+                            <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
                         </Switch>
                     </Router>
                 </div>
-            </>
+            </FagsakProvider>
         );
     }
 }

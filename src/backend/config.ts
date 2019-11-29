@@ -120,7 +120,7 @@ export const oboTokenConfig: ITokenRequest = {
     clientId: nodeConfig.clientID,
     clientSecret: nodeConfig.clientSecret,
     redirectUrl: nodeConfig.redirectUrl,
-    scope: process.env.KS_SAK_SCOPE,
+    scope: process.env.BA_SAK_SCOPE,
     tokenUri: nodeConfig.tokenURI,
 };
 
