@@ -27,7 +27,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <Select
                 bredde={'l'}
                 label={'Velg sakstype'}
-                value={state.sakstype}
+                value={state.sakstype.verdi}
                 onChange={event => dispatch({ type: 'SETT_SAKSTYPE', payload: event.target.value })}
             >
                 {Object.keys(sakstyper).map(mapSakstype => {
@@ -42,7 +42,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <Undertittel children={'Bergegning'} />
 
             <Panel className={'fastsett__beregning'}>
-                {state.barnasBeregning.map((barnBeregning: IBarnBeregning, index: number) => {
+                {state.barnasBeregning.verdi.map((barnBeregning: IBarnBeregning, index: number) => {
                     return (
                         <div className={'fastsett__beregning--barn'} key={barnBeregning.barn}>
                             <Element children={`Barn ${index + 1}: ${barnBeregning.barn}`} />
@@ -53,7 +53,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 type={'number'}
                                 onChange={event => {
                                     const oppdaterBarnasBeregning: IBarnBeregning[] = [
-                                        ...state.barnasBeregning,
+                                        ...state.barnasBeregning.verdi,
                                     ];
                                     oppdaterBarnasBeregning[index] = {
                                         ...oppdaterBarnasBeregning[index],
@@ -73,7 +73,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 placeholder={'DD.MM.YY'}
                                 onChange={event => {
                                     const oppdaterBarnasBeregning: IBarnBeregning[] = [
-                                        ...state.barnasBeregning,
+                                        ...state.barnasBeregning.verdi,
                                     ];
                                     oppdaterBarnasBeregning[index] = {
                                         ...oppdaterBarnasBeregning[index],
@@ -89,8 +89,8 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     );
                 })}
                 <Normaltekst
-                    children={`Totalsum: ${state.barnasBeregning.reduce(
-                        (sum, barnBeregning) => sum + barnBeregning.beløp,
+                    children={`Totalsum: ${state.barnasBeregning.verdi.reduce(
+                        (sum: number, barnBeregning: IBarnBeregning) => sum + barnBeregning.beløp,
                         0
                     )} kr`}
                 />
@@ -107,7 +107,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     { label: 'Innvilget', value: 'innvilget', id: 'innvilget' },
                     { label: 'Avslått', value: 'avslått', id: 'avslått' },
                 ]}
-                checked={state.behandlingsresultat}
+                checked={state.behandlingsresultat.verdi}
                 onChange={(event: any) => {
                     dispatch({ type: 'SETT_BEHANDLINGSRESULTAT', payload: event.target.value });
                 }}

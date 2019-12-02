@@ -21,11 +21,13 @@ interface IStore {
     behandlingsresultat: IFelt<string>;
 }
 
-const lagInitiellFelt = <T>(verdi: T): IFelt<T> => ({
-    feilmelding: '',
-    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-    verdi,
-});
+const lagInitiellFelt = <T>(verdi: T): IFelt<T> => {
+    return {
+        feilmelding: '',
+        valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
+        verdi,
+    };
+};
 
 export const lastInitialState = (fagsak: IFagsak): IStore => ({
     barnasBeregning: lagInitiellFelt<IBarnBeregning[]>(
@@ -53,22 +55,31 @@ export type Action =
           payload: string;
       };
 
-const fastsettReducer = (state: IStore, action: Action) => {
+const fastsettReducer = (state: IStore, action: Action): IStore => {
     switch (action.type) {
         case 'SETT_BARNAS_BEREGNING':
             return {
                 ...state,
-                barnasBeregning: action.payload,
+                barnasBeregning: {
+                    ...state.barnasBeregning,
+                    verdi: action.payload,
+                },
             };
         case 'SETT_BEHANDLINGSRESULTAT':
             return {
                 ...state,
-                behandlingsresultat: action.payload,
+                behandlingsresultat: {
+                    ...state.behandlingsresultat,
+                    verdi: action.payload,
+                },
             };
         case 'SETT_SAKSTYPE':
             return {
                 ...state,
-                sakstype: action.payload,
+                sakstype: {
+                    ...state.sakstype,
+                    verdi: action.payload,
+                },
             };
         default:
             return state;
