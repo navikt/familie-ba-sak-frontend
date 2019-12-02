@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ValideringsStatus } from '../../../typer/felt';
-import { fødselsnummerListeValidator, fødselsnummerValidator } from './validator';
 import { IFøldselsnummerFelt, IFøldselsnummerListeFelt } from './typer';
+import { fødselsnummerListeValidator, fødselsnummerValidator } from './validator';
 
 interface IStore {
     søkersFødselsnummer: IFøldselsnummerFelt;
@@ -11,8 +11,8 @@ interface IStore {
 const newBarnsFødselsnummer = () => {
     return {
         feilmelding: '',
-        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
         valideringsFunksjon: fødselsnummerValidator,
+        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
         verdi: '',
     };
 };
@@ -20,15 +20,15 @@ const newBarnsFødselsnummer = () => {
 const initialState: IStore = {
     søkersFødselsnummer: {
         feilmelding: '',
-        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
         valideringsFunksjon: fødselsnummerValidator,
+        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
         verdi: '',
     },
 
     barnsFødselsnummer: {
         feilmelding: '',
-        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
         valideringsFunksjon: fødselsnummerListeValidator,
+        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
         verdi: [newBarnsFødselsnummer()],
     },
 };
@@ -92,7 +92,7 @@ const opprettReducer = (state: IStore, action: Action) => {
                 }),
             };
         case 'SETT_BARNS_FØDSELSNUMMER':
-            let cloned = [...state.barnsFødselsnummer.verdi];
+            const cloned = [...state.barnsFødselsnummer.verdi];
             cloned[action.payload.index] = {
                 ...cloned[action.payload.index],
                 verdi: action.payload.fødselsnummer,

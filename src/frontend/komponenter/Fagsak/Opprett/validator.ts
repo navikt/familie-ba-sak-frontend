@@ -1,4 +1,5 @@
 import { feil, IFelt, ok, ValideringsStatus } from '../../../typer/felt';
+import { IFøldselsnummerListeFelt } from './typer';
 
 const harFyltInnFødselsnummer = (felt: IFelt<string>): IFelt<string> => {
     return /^\d{11}$/.test(felt.verdi.replace(' ', ''))
@@ -27,7 +28,7 @@ const fødselsnummerPassererMod10ogMod11Sjekk = (felt: IFelt<string>): IFelt<str
 
 export const fødselsnummerValidator = (fødselsnummerFelt: IFelt<string>): IFelt<string> => {
     const validated = harFyltInnFødselsnummer(fødselsnummerFelt);
-    if (validated.valideringsStatus != ValideringsStatus.OK) {
+    if (validated.valideringsStatus !== ValideringsStatus.OK) {
         return validated;
     }
 
@@ -35,9 +36,9 @@ export const fødselsnummerValidator = (fødselsnummerFelt: IFelt<string>): IFel
 };
 
 export const fødselsnummerListeValidator = (
-    fødselsnummerListeFelt: IFelt<IFelt<string>[]>
-): IFelt<IFelt<string>[]> => {
-    if (fødselsnummerListeFelt.verdi.length == 0) {
+    fødselsnummerListeFelt: IFøldselsnummerListeFelt
+): IFøldselsnummerListeFelt => {
+    if (fødselsnummerListeFelt.verdi.length === 0) {
         return feil(fødselsnummerListeFelt, 'Fødselsnummer.TomListe');
     }
 
@@ -48,7 +49,7 @@ export const fødselsnummerListeValidator = (
             const validatedFelt = felt.valideringsFunksjon(felt);
             if (firstError < 0) {
                 firstError =
-                    validatedFelt.valideringsStatus == ValideringsStatus.FEIL ? index : firstError;
+                    validatedFelt.valideringsStatus === ValideringsStatus.FEIL ? index : firstError;
             }
             return validatedFelt;
         }),

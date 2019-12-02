@@ -1,20 +1,20 @@
-export function ok<T>(felt: IFelt<T>): IFelt<T> {
+export const ok = <T>(felt: IFelt<T>): IFelt<T> => {
     return {
         feilmelding: '',
+        valideringsFunksjon: felt.valideringsFunksjon,
         valideringsStatus: ValideringsStatus.OK,
-        valideringsFunksjon: felt.valideringsFunksjon,
         verdi: felt.verdi,
     };
-}
+};
 
-export function feil<T>(felt: IFelt<T>, feilmelding: string): IFelt<T> {
+export const feil = <T>(felt: IFelt<T>, feilmelding: string): IFelt<T> => {
     return {
-        feilmelding: feilmelding,
-        valideringsStatus: ValideringsStatus.FEIL,
+        feilmelding,
         valideringsFunksjon: felt.valideringsFunksjon,
+        valideringsStatus: ValideringsStatus.FEIL,
         verdi: felt.verdi,
     };
-}
+};
 
 export enum ValideringsStatus {
     FEIL = 'FEIL',

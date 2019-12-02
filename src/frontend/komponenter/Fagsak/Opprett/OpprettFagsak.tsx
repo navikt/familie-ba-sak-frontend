@@ -5,8 +5,8 @@ import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 
 import { behandlingstyper } from '../../../typer/fagsak';
-import { useOpprettReducer } from './useOpprettReducer';
 import { IFøldselsnummerFelt } from './typer';
+import { useOpprettReducer } from './useOpprettReducer';
 
 const OpprettFagsak: React.FunctionComponent = () => {
     const [state, dispatch] = useOpprettReducer();
@@ -34,8 +34,8 @@ const OpprettFagsak: React.FunctionComponent = () => {
                 value={state.søkersFødselsnummer.verdi}
                 onChange={event => {
                     dispatch({
-                        type: 'SETT_SØKERS_FØDSELSNUMMER',
                         payload: event.target.value,
+                        type: 'SETT_SØKERS_FØDSELSNUMMER',
                     });
                 }}
             />
@@ -51,19 +51,19 @@ const OpprettFagsak: React.FunctionComponent = () => {
                                 value={barnsFødselsnummerFelt.verdi}
                                 onChange={event => {
                                     dispatch({
-                                        type: 'SETT_BARNS_FØDSELSNUMMER',
                                         payload: {
-                                            index: index,
                                             fødselsnummer: event.target.value,
+                                            index,
                                         },
+                                        type: 'SETT_BARNS_FØDSELSNUMMER',
                                     });
                                 }}
                             />
                             <Lukknapp
                                 onClick={() => {
                                     dispatch({
-                                        type: 'SLETT_BARNS_FØDSELSNUMMER',
                                         payload: index,
+                                        type: 'SLETT_BARNS_FØDSELSNUMMER',
                                     });
                                 }}
                             />
@@ -75,8 +75,8 @@ const OpprettFagsak: React.FunctionComponent = () => {
             <Knapp
                 onClick={() => {
                     dispatch({
-                        type: 'LEGG_TIL_BARNS_FØDSELSNUMMER',
                         payload: undefined,
+                        type: 'LEGG_TIL_BARNS_FØDSELSNUMMER',
                     });
                 }}
             >
