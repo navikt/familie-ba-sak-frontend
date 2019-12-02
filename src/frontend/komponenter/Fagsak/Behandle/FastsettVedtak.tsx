@@ -89,9 +89,10 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     );
                 })}
                 <Normaltekst
-                    children={`Totalsum: ${state.barnasBeregning
-                        .map(barnBeregning => barnBeregning.beløp)
-                        .reduce((a, b) => a + b, 0)} kr`}
+                    children={`Totalsum: ${state.barnasBeregning.reduce(
+                        (sum, barnBeregning) => sum + barnBeregning.beløp,
+                        0
+                    )} kr`}
                 />
             </Panel>
 

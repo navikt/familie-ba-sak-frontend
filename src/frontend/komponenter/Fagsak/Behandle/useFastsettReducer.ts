@@ -2,20 +2,41 @@ import * as React from 'react';
 import { IBarnBeregning, ordinærBeløp } from '../../../typer/behandle';
 import { IFagsak, sakstyper } from '../../../typer/fagsak';
 
-interface IStore {
-    sakstype: string;
-    barnasBeregning: IBarnBeregning[];
-    behandlingsresultat: string;
+enum Valideringsstatus {
+    FEIL = 'FEIL',
+    ADVARSEL = 'ADVARSEL',
+    OK = 'OK',
+    IKKE_VALIDERT = 'IKKE_VALIDERT',
 }
 
+interface IFelt<T> {
+    feilmelding: string;
+    valideringsstatus: Valideringsstatus;
+    verdi: T;
+}
+
+interface IStore {
+    sakstype: IFelt<string>;
+    barnasBeregning: IFelt<IBarnBeregning[]>;
+    behandlingsresultat: IFelt<string>;
+}
+
+const lagInitiellFelt = <T>(verdi: T): IFelt<T> => ({
+    feilmelding: '',
+    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
+    verdi,
+});
+
 export const lastInitialState = (fagsak: IFagsak): IStore => ({
-    barnasBeregning: fagsak.behandlinger[0].barna.map(barn => ({
-        barn,
-        beløp: ordinærBeløp,
-        startDato: '',
-    })),
-    behandlingsresultat: 'innvilget',
-    sakstype: sakstyper.ORDINÆR.id,
+    barnasBeregning: lagInitiellFelt<IBarnBeregning[]>(
+        fagsak.behandlinger[0].barna.map(barn => ({
+            barn,
+            beløp: ordinærBeløp,
+            startDato: '',
+        }))
+    ),
+    behandlingsresultat: lagInitiellFelt<string>('innvilget'),
+    sakstype: lagInitiellFelt<string>(sakstyper.ORDINÆR.id),
 });
 
 export type Action =
