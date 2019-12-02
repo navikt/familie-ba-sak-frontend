@@ -31,6 +31,12 @@ describe('dsop-kontroll', () => {
             await page.waitFor('.opprettbehandling');
             await takeSnapshot(`opprett-behandling-${name}`, page);
         });
+
+        test('behandle', async () => {
+            await page.goto('http://ci-test-server:8000/fagsak/1/behandle');
+            await page.waitFor('.fastsett');
+            await takeSnapshot(`behandle-${name}`, page);
+        });
     });
 
     afterAll(async () => {

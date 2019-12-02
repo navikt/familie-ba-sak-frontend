@@ -1,5 +1,6 @@
 import { captureException, configureScope, showReportDialog, withScope } from '@sentry/browser';
 import Modal from 'nav-frontend-modal';
+import { Panel } from 'nav-frontend-paneler';
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { slackNotify } from '../api/axios';
@@ -67,10 +68,20 @@ class App extends React.Component<{}, IState> {
                 />
                 <div className={'container'}>
                     <Router>
-                        <Switch>
-                            <Route exact={true} path="/fagsak/opprett" component={OpprettFagsak} />
-                            <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
-                        </Switch>
+                        <Panel border={true} className={'fagsakcontainer'}>
+                            <Switch>
+                                <Route
+                                    exact={true}
+                                    path="/fagsak/opprett"
+                                    component={OpprettFagsak}
+                                />
+                                <Route
+                                    className={'fagsakcontainer'}
+                                    path="/fagsak/:fagsakId"
+                                    component={FagsakContainer}
+                                />
+                            </Switch>
+                        </Panel>
                     </Router>
                 </div>
             </FagsakProvider>

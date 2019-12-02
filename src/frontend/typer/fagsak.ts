@@ -55,15 +55,29 @@ export interface IPersonopplysninger {
 
 export interface INøkkelPar {
     [key: string]: {
+        id: string;
         navn: string;
     };
 }
 
 export const behandlingstyper: INøkkelPar = {
     FØRSTEGANGSBEHANDLING: {
+        id: 'førstegangsbehandling',
         navn: 'Førstegangsbehandling',
     },
     REVURDERING: {
+        id: 'revurdering',
         navn: 'Revurdering',
+    },
+};
+
+export const sakstyper: INøkkelPar = {
+    ORDINÆR: {
+        id: 'ordinær',
+        navn: 'Ordinær barnetrygd',
+    },
+    UTVIDET: {
+        id: 'utvidet',
+        navn: 'Utvidet barnetrygd',
     },
 };
