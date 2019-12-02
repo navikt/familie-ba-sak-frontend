@@ -1,13 +1,13 @@
-import { feil, IFelt, ok, ValideringsStatus } from '../../../typer/felt';
-import { IFøldselsnummerListeFelt } from './typer';
+import { feil, ok, ValideringsStatus } from '../../../typer/felt';
+import { IFøldselsnummerListeFelt, IFøldselsnummerFelt } from './typer';
 
-const harFyltInnFødselsnummer = (felt: IFelt<string>): IFelt<string> => {
+const harFyltInnFødselsnummer = (felt: IFøldselsnummerFelt): IFøldselsnummerFelt => {
     return /^\d{11}$/.test(felt.verdi.replace(' ', ''))
         ? ok(felt)
         : feil(felt, 'Fødselsnummer.UgyldigFormat');
 };
 
-const fødselsnummerPassererMod10ogMod11Sjekk = (felt: IFelt<string>): IFelt<string> => {
+const fødselsnummerPassererMod10ogMod11Sjekk = (felt: IFøldselsnummerFelt): IFøldselsnummerFelt => {
     const vektSifreMod10 = [3, 7, 6, 1, 8, 9, 4, 5, 2, 1];
     const vektSifreMod11 = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1];
 
@@ -26,7 +26,9 @@ const fødselsnummerPassererMod10ogMod11Sjekk = (felt: IFelt<string>): IFelt<str
         : feil(felt, 'Fødselsnummer.ModSjekkFeil');
 };
 
-export const fødselsnummerValidator = (fødselsnummerFelt: IFelt<string>): IFelt<string> => {
+export const fødselsnummerValidator = (
+    fødselsnummerFelt: IFøldselsnummerFelt
+): IFøldselsnummerFelt => {
     const validated = harFyltInnFødselsnummer(fødselsnummerFelt);
     if (validated.valideringsStatus !== ValideringsStatus.OK) {
         return validated;
