@@ -3,19 +3,30 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select } from 'nav-frontend-skjema';
 import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-
-import { behandlingstyper } from '../../../typer/fagsak';
-import { IFøldselsnummerFelt, useOpprettReducer } from './useOpprettReducer';
+import { Behandlingstype, behandlingstyper } from '../../../typer/fagsak';
+import { IFelt, Valideringsstatus } from '../../../typer/felt';
+import { useOpprettReducer } from './useOpprettReducer';
 
 const OpprettFagsak: React.FunctionComponent = () => {
     const [state, dispatch] = useOpprettReducer();
+    const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
 
     return (
-        <div className={'opprettbehandling'}>
+        <div className={'opprett'}>
             <Systemtittel children={'Opprett behandling'} />
 
             <br />
-            <Select bredde={'l'} label="Velg behandlingstype">
+            <Select
+                bredde={'l'}
+                label="Velg behandlingstype"
+                onChange={event =>
+                    dispatch({
+                        payload: event.target.value as Behandlingstype,
+                        type: 'SETT_BEHANDLINGSTYPE',
+                    })
+                }
+                value={state.behandlingstype}
+            >
                 {Object.keys(behandlingstyper).map((key: string) => {
                     return (
                         <option key={key} value={key}>
@@ -37,14 +48,22 @@ const OpprettFagsak: React.FunctionComponent = () => {
                         type: 'SETT_SØKERS_FØDSELSNUMMER',
                     });
                 }}
+                feil={
+                    state.søkersFødselsnummer.valideringsstatus !== Valideringsstatus.OK &&
+                    visFeilmeldinger
+                        ? {
+                              feilmelding: state.søkersFødselsnummer.feilmelding,
+                          }
+                        : undefined
+                }
             />
 
             <br />
             <Undertittel children={'Barn'} />
-            {state.barnsFødselsnummer.verdi.map(
-                (barnsFødselsnummerFelt: IFøldselsnummerFelt, index: number) => {
+            {state.barnasFødselsnummer.map(
+                (barnsFødselsnummerFelt: IFelt<string>, index: number) => {
                     return (
-                        <div key={index} className={'opprettbehandling__barn'}>
+                        <div key={index} className={'opprett__barn'}>
                             <Input
                                 label={'Fødselsnummer'}
                                 value={barnsFødselsnummerFelt.verdi}
@@ -57,13 +76,23 @@ const OpprettFagsak: React.FunctionComponent = () => {
                                         type: 'SETT_BARNS_FØDSELSNUMMER',
                                     });
                                 }}
+                                feil={
+                                    barnsFødselsnummerFelt.valideringsstatus !==
+                                        Valideringsstatus.OK && visFeilmeldinger
+                                        ? {
+                                              feilmelding: barnsFødselsnummerFelt.feilmelding,
+                                          }
+                                        : undefined
+                                }
                             />
                             <Lukknapp
                                 onClick={() => {
-                                    dispatch({
-                                        payload: index,
-                                        type: 'SLETT_BARNS_FØDSELSNUMMER',
-                                    });
+                                    if (state.barnasFødselsnummer.length > 1) {
+                                        dispatch({
+                                            payload: index,
+                                            type: 'SLETT_BARN',
+                                        });
+                                    }
                                 }}
                             />
                         </div>
@@ -75,7 +104,7 @@ const OpprettFagsak: React.FunctionComponent = () => {
                 onClick={() => {
                     dispatch({
                         payload: undefined,
-                        type: 'LEGG_TIL_BARNS_FØDSELSNUMMER',
+                        type: 'LEGG_TIL_BARN',
                     });
                 }}
             >
@@ -84,10 +113,18 @@ const OpprettFagsak: React.FunctionComponent = () => {
 
             <br />
             <Nesteknapp
-                id="knapp__neste"
                 onClick={() => {
-                    console.log(state);
-                    console.log('move on');
+                    if (
+                        state.søkersFødselsnummer.valideringsstatus === Valideringsstatus.OK &&
+                        state.barnasFødselsnummer.find(
+                            barnFødselsnummer =>
+                                barnFødselsnummer.valideringsstatus !== Valideringsstatus.OK
+                        ) === undefined
+                    ) {
+                        // TODO call api
+                    } else {
+                        settVisFeilmeldinger(true);
+                    }
                 }}
             />
         </div>

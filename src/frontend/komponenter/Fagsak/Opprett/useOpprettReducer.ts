@@ -1,37 +1,21 @@
 import * as React from 'react';
-import { IFelt, ValideringsStatus } from '../../../typer/felt';
-import { fødselsnummerListeValidator, fødselsnummerValidator } from './validator';
+import { Behandlingstype } from '../../../typer/fagsak';
+import { IFelt } from '../../../typer/felt';
+import { fødselsnummerValidator } from '../../../utils/validators';
+import { lagInitiellFelt } from '../Behandle/useFastsettReducer';
 
-export type IFøldselsnummerFelt = IFelt<string>;
-export type IFøldselsnummerListeFelt = IFelt<IFøldselsnummerFelt[]>;
+export type IFødselsnummerFelt = IFelt<string>;
+
 interface IStore {
-    søkersFødselsnummer: IFøldselsnummerFelt;
-    barnsFødselsnummer: IFøldselsnummerListeFelt;
+    barnasFødselsnummer: IFødselsnummerFelt[];
+    behandlingstype: Behandlingstype;
+    søkersFødselsnummer: IFødselsnummerFelt;
 }
 
-const newBarnsFødselsnummer = () => {
-    return {
-        feilmelding: '',
-        valideringsFunksjon: fødselsnummerValidator,
-        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
-        verdi: '',
-    };
-};
-
 const initialState: IStore = {
-    søkersFødselsnummer: {
-        feilmelding: '',
-        valideringsFunksjon: fødselsnummerValidator,
-        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
-        verdi: '',
-    },
-
-    barnsFødselsnummer: {
-        feilmelding: '',
-        valideringsFunksjon: fødselsnummerListeValidator,
-        valideringsStatus: ValideringsStatus.IKKE_VALIDERT,
-        verdi: [newBarnsFødselsnummer()],
-    },
+    barnasFødselsnummer: [lagInitiellFelt('', fødselsnummerValidator)],
+    behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING,
+    søkersFødselsnummer: lagInitiellFelt('', fødselsnummerValidator),
 };
 
 export type Action =
@@ -40,11 +24,15 @@ export type Action =
           payload: string;
       }
     | {
-          type: 'LEGG_TIL_BARNS_FØDSELSNUMMER';
+          type: 'SETT_BEHANDLINGSTYPE';
+          payload: Behandlingstype;
+      }
+    | {
+          type: 'LEGG_TIL_BARN';
           payload: undefined;
       }
     | {
-          type: 'SLETT_BARNS_FØDSELSNUMMER';
+          type: 'SLETT_BARN';
           payload: number;
       }
     | {
@@ -65,46 +53,46 @@ const opprettReducer = (state: IStore, action: Action) => {
                     verdi: action.payload,
                 }),
             };
-
-        case 'LEGG_TIL_BARNS_FØDSELSNUMMER':
+        case 'SETT_BEHANDLINGSTYPE':
             return {
                 ...state,
-                barnsFødselsnummer: state.barnsFødselsnummer.valideringsFunksjon({
-                    ...state.barnsFødselsnummer,
-                    verdi: [...state.barnsFødselsnummer.verdi, newBarnsFødselsnummer()],
-                }),
+                behandlingstype: action.payload,
             };
-        case 'SLETT_BARNS_FØDSELSNUMMER':
-            const fødselsNummerListe = state.barnsFødselsnummer.verdi;
+        case 'LEGG_TIL_BARN':
             return {
                 ...state,
-                barnsFødselsnummer: state.barnsFødselsnummer.valideringsFunksjon({
-                    ...state.barnsFødselsnummer,
-                    verdi: [
-                        ...fødselsNummerListe
-                            .slice(0, action.payload)
-                            .concat(
-                                ...fødselsNummerListe.slice(
-                                    action.payload + 1,
-                                    fødselsNummerListe.length
-                                )
-                            ),
-                    ],
-                }),
+                barnasFødselsnummer: [
+                    ...state.barnasFødselsnummer,
+                    lagInitiellFelt('', fødselsnummerValidator),
+                ],
+            };
+        case 'SLETT_BARN':
+            const fødselsNummerListe = state.barnasFødselsnummer;
+            return {
+                ...state,
+                barnasFødselsnummer: [
+                    ...fødselsNummerListe
+                        .slice(0, action.payload)
+                        .concat(
+                            ...fødselsNummerListe.slice(
+                                action.payload + 1,
+                                fødselsNummerListe.length
+                            )
+                        ),
+                ],
             };
         case 'SETT_BARNS_FØDSELSNUMMER':
-            const cloned = [...state.barnsFødselsnummer.verdi];
-            cloned[action.payload.index] = {
-                ...cloned[action.payload.index],
+            const barnasFødselsnummerKopi = [...state.barnasFødselsnummer];
+            barnasFødselsnummerKopi[action.payload.index] = barnasFødselsnummerKopi[
+                action.payload.index
+            ].valideringsFunksjon({
+                ...barnasFødselsnummerKopi[action.payload.index],
                 verdi: action.payload.fødselsnummer,
-            };
+            });
 
             return {
                 ...state,
-                barnsFødselsnummer: state.barnsFødselsnummer.valideringsFunksjon({
-                    ...state.barnsFødselsnummer,
-                    verdi: cloned,
-                }),
+                barnasFødselsnummer: barnasFødselsnummerKopi,
             };
 
         default:

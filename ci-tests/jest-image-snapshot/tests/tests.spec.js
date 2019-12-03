@@ -28,7 +28,7 @@ describe('dsop-kontroll', () => {
 
         test('opprett-behandling', async () => {
             await page.goto('http://ci-test-server:8000/fagsak/opprett');
-            await page.waitFor('.opprettbehandling');
+            await page.waitFor('.opprett');
             await takeSnapshot(`opprett-behandling-${name}`, page);
         });
 
