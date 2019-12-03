@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { ValideringsStatus } from '../../../typer/felt';
-import { IFøldselsnummerFelt, IFøldselsnummerListeFelt } from './typer';
+import { IFelt, ValideringsStatus } from '../../../typer/felt';
 import { fødselsnummerListeValidator, fødselsnummerValidator } from './validator';
 
+export type IFøldselsnummerFelt = IFelt<string>;
+export type IFøldselsnummerListeFelt = IFelt<IFøldselsnummerFelt[]>;
 interface IStore {
     søkersFødselsnummer: IFøldselsnummerFelt;
     barnsFødselsnummer: IFøldselsnummerListeFelt;

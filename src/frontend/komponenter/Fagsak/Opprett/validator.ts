@@ -1,5 +1,5 @@
 import { feil, ok, ValideringsStatus } from '../../../typer/felt';
-import { IFøldselsnummerListeFelt, IFøldselsnummerFelt } from './typer';
+import { IFøldselsnummerFelt, IFøldselsnummerListeFelt } from './useOpprettReducer';
 
 const harFyltInnFødselsnummer = (felt: IFøldselsnummerFelt): IFøldselsnummerFelt => {
     return /^\d{11}$/.test(felt.verdi.replace(' ', ''))

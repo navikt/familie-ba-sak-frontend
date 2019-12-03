@@ -5,8 +5,7 @@ import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 
 import { behandlingstyper } from '../../../typer/fagsak';
-import { IFøldselsnummerFelt } from './typer';
-import { useOpprettReducer } from './useOpprettReducer';
+import { IFøldselsnummerFelt, useOpprettReducer } from './useOpprettReducer';
 
 const OpprettFagsak: React.FunctionComponent = () => {
     const [state, dispatch] = useOpprettReducer();
