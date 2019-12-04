@@ -76,7 +76,7 @@ const Environment = () => {
         return {
             buildPath: '../frontend_development',
             namespace: 'local',
-            proxyUrl: 'http://localhost:8083',
+            proxyUrl: 'http://localhost:8088',
             redisUrl: '127.0.0.1',
         };
     } else if (process.env.ENV === 'preprod') {

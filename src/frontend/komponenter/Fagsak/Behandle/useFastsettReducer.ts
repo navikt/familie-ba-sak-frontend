@@ -20,7 +20,7 @@ export const lagInitiellFelt = <T>(verdi: T, valideringsfunksjon: ValiderIFelt<T
 };
 
 export const lastInitialState = (fagsak: IFagsak): IStore => ({
-    barnasBeregning: fagsak.behandlinger[0].barna.map(barn => {
+    barnasBeregning: fagsak.behandlinger[0].barnasFødselsnummer.map(barn => {
         return lagInitiellFelt<IBarnBeregning>(
             {
                 barn,
