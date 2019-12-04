@@ -1,10 +1,15 @@
 import { captureException, configureScope, showReportDialog, withScope } from '@sentry/browser';
 import Modal from 'nav-frontend-modal';
+import { Panel } from 'nav-frontend-paneler';
 import * as React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { slackNotify } from '../api/axios';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
+import FagsakContainer from './Fagsak/FagsakContainer';
+import OpprettFagsak from './Fagsak/Opprett/OpprettFagsak';
+import { FagsakProvider } from './FagsakProvider';
 import Dekoratør from './Felleskomponenter/Dekoratør/Dekoratør';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
@@ -53,7 +58,7 @@ class App extends React.Component<{}, IState> {
 
     public render() {
         return (
-            <div>
+            <FagsakProvider>
                 <Dekoratør
                     innloggetSaksbehandler={this.state.innloggetSaksbehandler}
                     tittel={'NAV barnetrygd'}
@@ -61,7 +66,25 @@ class App extends React.Component<{}, IState> {
                         window.location.href = `${window.origin}/auth/logout`;
                     }}
                 />
-            </div>
+                <div className={'container'}>
+                    <Router>
+                        <Panel border={true} className={'fagsakcontainer'}>
+                            <Switch>
+                                <Route
+                                    exact={true}
+                                    path="/fagsak/opprett"
+                                    component={OpprettFagsak}
+                                />
+                                <Route
+                                    className={'fagsakcontainer'}
+                                    path="/fagsak/:fagsakId"
+                                    component={FagsakContainer}
+                                />
+                            </Switch>
+                        </Panel>
+                    </Router>
+                </div>
+            </FagsakProvider>
         );
     }
 }

@@ -21,7 +21,7 @@ export const slackNotify = (
     const formatertMelding: string = `*${displayName}, ${namespace}*\n ${req.body.melding}`;
 
     backend.logInfo(req, `Poster slack melding til #${kanal}: ${formatertMelding}`);
-    fetch('https://slack.com/api/chat.postMessage', {
+    /*fetch('https://slack.com/api/chat.postMessage', {
         agent:
             process.env.NODE_ENV !== 'development'
                 ? new HttpsProxyAgent({
@@ -47,5 +47,6 @@ export const slackNotify = (
         .catch((error: any) => {
             backend.logError(req, `Sending av melding til slack feilet: ${error.message}`);
             res.status(error.code).send(error);
-        });
+        });*/
+    res.status(200).send('OK');
 };

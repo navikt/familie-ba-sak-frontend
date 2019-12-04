@@ -1,0 +1,21 @@
+{
+	"data": {
+		"id": 1,
+		"opprettetTidspunkt": "2019-01-01T14:35:08.426697",
+		"søkerFødselsnummer": "00000000001",
+		"saksnummer": "1",
+		"behandlinger": [
+			{
+				"behandlingId": 1,
+				"søker": "00000000001",
+				"barna": [
+					"00000000003",
+					"00000000004"
+				]
+			}
+		]
+	},
+	"status": "SUKSESS",
+	"melding": "Innhenting av data var vellykket",
+	"errorMelding": null
+}
