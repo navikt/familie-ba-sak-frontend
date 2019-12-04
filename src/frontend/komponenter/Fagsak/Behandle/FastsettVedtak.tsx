@@ -42,7 +42,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 })}
             </Select>
 
-            <Undertittel children={'Bergegning'} />
+            <Undertittel children={'Beregning'} />
 
             <Panel className={'fastsett__beregning'}>
                 {state.barnasBeregning.map(
