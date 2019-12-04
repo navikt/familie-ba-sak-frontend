@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch, useParams } from 'react-router-
 import { RessursStatus } from '../../typer/ressurs';
 import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider';
 import FastsettVedtak from './Behandle/FastsettVedtak';
+import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -33,6 +34,13 @@ const FagsakContainer: React.FunctionComponent = () => {
                             path="/fagsak/:fagsakId/behandle"
                             render={() => {
                                 return <FastsettVedtak fagsak={fagsak.data} />;
+                            }}
+                        />
+                        <Route
+                            exact={true}
+                            path="/fagsak/:fagsakId/vedtak"
+                            render={() => {
+                                return <OppsummeringVedtak fagsak={fagsak.data} />;
                             }}
                         />
                     </Switch>
