@@ -8,9 +8,12 @@ import { axiosRequest } from '../../../api/axios';
 import { Behandlingstype, behandlingstyper, IFagsak } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { actions, useFagsakDispatch } from '../../FagsakProvider';
 import { useOpprettReducer } from './useOpprettReducer';
 
 const OpprettFagsak: React.FunctionComponent = () => {
+    const fagsakDispatcher = useFagsakDispatch();
+
     const history = useHistory();
     const [state, dispatch] = useOpprettReducer();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
@@ -150,6 +153,10 @@ const OpprettFagsak: React.FunctionComponent = () => {
                             url: '/familie-ba-sak/api/behandling/opprett',
                         }).then((response: Ressurs<IFagsak>) => {
                             if (response.status === RessursStatus.SUKSESS) {
+                                fagsakDispatcher({
+                                    payload: response,
+                                    type: actions.SETT_FAGSAK,
+                                });
                                 history.push(`/fagsak/${response.data.id}/behandle`);
                             } else {
                                 settVisFeilmeldinger(true);

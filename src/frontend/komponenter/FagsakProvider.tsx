@@ -9,6 +9,7 @@ export enum actions {
     HENT_FAGSAK_FEILET = 'HENT_FAGSAK_FEILET',
     HENT_FAGSAK_SUKSESS = 'HENT_FAGSAK_SUKSESS',
     SETT_FAGSAK_ID = 'SETT_FAGSAK_ID',
+    SETT_FAGSAK = 'SETT_FAGSAK',
 }
 
 interface IAction {
@@ -52,6 +53,12 @@ const fagsakReducer = (state: IState, action: IAction): IState => {
             return {
                 ...state,
                 fagsakId: action.payload,
+            };
+        }
+        case actions.SETT_FAGSAK: {
+            return {
+                ...state,
+                fagsak: action.payload,
             };
         }
         default: {
