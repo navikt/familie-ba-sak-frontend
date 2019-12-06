@@ -17,8 +17,8 @@ export interface IFagsak {
 
 export interface IBehandling {
     behandlingId: number;
-    søker: string;
-    barna: string[];
+    søker?: string;
+    barnasFødselsnummer: string[];
 }
 
 export interface IBehandlingsresultat {

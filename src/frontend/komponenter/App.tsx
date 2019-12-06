@@ -2,7 +2,7 @@ import { captureException, configureScope, showReportDialog, withScope } from '@
 import Modal from 'nav-frontend-modal';
 import { Panel } from 'nav-frontend-paneler';
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { slackNotify } from '../api/axios';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
@@ -70,6 +70,13 @@ class App extends React.Component<{}, IState> {
                     <Router>
                         <Panel border={true} className={'fagsakcontainer'}>
                             <Switch>
+                                <Route
+                                    exact={true}
+                                    path={'/'}
+                                    render={() => {
+                                        return <Redirect from="/" to="/fagsak/opprett" />;
+                                    }}
+                                />
                                 <Route
                                     exact={true}
                                     path="/fagsak/opprett"
