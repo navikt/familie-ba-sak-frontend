@@ -24,6 +24,7 @@ Appen krever en del environment variabler og legges til i .env fila i root på p
     ENV=local
     APP_VERSION=0.0.1
 ```
+Disse kan hentes ut fra Secrets i Vault under kv/preprod/fss/familie-ba-sak-frontend/default, med unntak av ENV og APP_VERSION som er gitt over.
 
 For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokalt med mindre det gjøres en del endringer i forbindelse med uthenting av environment variabler og URLer for uthenting av informasjon.
 
