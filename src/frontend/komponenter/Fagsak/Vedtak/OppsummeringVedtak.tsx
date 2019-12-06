@@ -1,8 +1,9 @@
-import { IFagsak } from '../../../typer/fagsak';
 import { Knapp } from 'nav-frontend-knapper';
-import * as React from 'react';
 import { Systemtittel } from 'nav-frontend-typografi';
+import * as React from 'react';
+
 import { hentVedtaksbrev, IVedtaksBrev } from '../../../api/oppsummeringvedtak';
+import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 
 interface IVedtakProps {
@@ -11,7 +12,6 @@ interface IVedtakProps {
 
 interface IOppsummeringFrameProps {
     content: string;
-    [name: string]: any;
 }
 
 const OppsummeringFrame: React.FunctionComponent<IOppsummeringFrameProps> = ({ ...props }) => {
@@ -30,14 +30,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     React.useEffect(() => {
         hentVedtaksbrev(fagsak.id)
             .then((response: Ressurs<IVedtaksBrev>) => {
-                if (response.status == RessursStatus.SUKSESS) {
+                if (response.status === RessursStatus.SUKSESS) {
                     setBrev(response.data.content);
                 } else {
                     setBrev(
                         'kunne ikke generere forhåndsvisning'.concat(
-                            response.errorMelding != undefined
+                            response.errorMelding !== undefined
                                 ? ': ' + response.errorMelding
-                                : response.melding != undefined
+                                : response.melding !== undefined
                                 ? ': ' + response.melding
                                 : '.'
                         )
