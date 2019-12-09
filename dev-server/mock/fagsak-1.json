@@ -8,7 +8,7 @@
 			{
 				"behandlingId": 1,
 				"søker": "00000000001",
-				"barna": [
+				"barnasFødselsnummer": [
 					"00000000003",
 					"00000000004"
 				]
