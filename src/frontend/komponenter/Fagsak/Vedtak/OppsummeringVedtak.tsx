@@ -15,13 +15,7 @@ interface IOppsummeringFrameProps {
 }
 
 const OppsummeringFrame: React.FunctionComponent<IOppsummeringFrameProps> = ({ ...props }) => {
-    const iframe = React.useRef();
-
-    React.useEffect(() => {
-        iframe.current.contentDocument.body.innerHTML = props.content;
-    });
-
-    return <iframe className="iframe" ref={iframe} />;
+    return <iframe className="iframe" srcDoc={props.content} />;
 };
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
@@ -30,17 +24,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     React.useEffect(() => {
         hentVedtaksbrev(fagsak.id)
             .then((response: Ressurs<IVedtaksBrev>) => {
+                console.log(response);
                 if (response.status === RessursStatus.SUKSESS) {
-                    setBrev(response.data.content);
+                    setBrev(response.data);
                 } else {
                     setBrev(
-                        'kunne ikke generere forhåndsvisning'.concat(
-                            response.errorMelding !== undefined
-                                ? ': ' + response.errorMelding
-                                : response.melding !== undefined
-                                ? ': ' + response.melding
-                                : '.'
-                        )
+                        response.errorMelding !== undefined
+                            ? response.errorMelding
+                            : response.melding !== undefined
+                            ? response.melding
+                            : 'kunne ikke generere forhåndsvisning.'
                     );
                 }
             })
