@@ -17,7 +17,7 @@ interface IAction {
     type: actions;
 }
 
-type Dispatch = (action: IAction) => void;
+export type Dispatch = (action: IAction) => void;
 
 interface IState {
     fagsakId?: string;
