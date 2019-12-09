@@ -13,7 +13,7 @@ export const hentVedtaksbrev = (
     return axiosRequest<IVedtaksBrev>(
         {
             method: 'GET',
-            url: `/familie-ba-sak/api/vedtaksbrev/${fagsakId}`,
+            url: `/familie-ba-sak/api/fagsak/${fagsakId}/vedtak-html`,
         },
         innloggetSaksbehandler
     );

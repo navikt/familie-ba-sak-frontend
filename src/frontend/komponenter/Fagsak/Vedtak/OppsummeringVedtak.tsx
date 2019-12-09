@@ -24,18 +24,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     React.useEffect(() => {
         hentVedtaksbrev(fagsak.id)
             .then((response: Ressurs<IVedtaksBrev>) => {
-                console.log(response);
-                if (response.status === RessursStatus.SUKSESS) {
-                    setBrev(response.data);
-                } else {
-                    setBrev(
-                        response.errorMelding !== undefined
-                            ? response.errorMelding
-                            : response.melding !== undefined
-                            ? response.melding
-                            : 'kunne ikke generere forhåndsvisning.'
-                    );
-                }
+                setBrev(response.data);
             })
             .catch(error => {
                 setBrev('kunne ikke generere forhåndsvisning. Internal Error: ' + error);
