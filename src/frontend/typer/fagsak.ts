@@ -16,9 +16,19 @@ export interface IFagsak {
 }
 
 export interface IBehandling {
+    aktiv: boolean;
     behandlingId: number;
     søker?: string;
     barnasFødselsnummer: string[];
+    vedtakForBehandling: IVedtakForBehandling[];
+}
+
+export interface IVedtakForBehandling {
+    aktiv: boolean;
+    ansvarligSaksbehandler: string;
+    stønadFom: string;
+    stønadTom: string;
+    vedtaksdato: string;
 }
 
 export interface IBehandlingsresultat {

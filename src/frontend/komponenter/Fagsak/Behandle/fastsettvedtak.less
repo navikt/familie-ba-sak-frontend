@@ -1,13 +1,23 @@
 .fastsett {
-    &__beregning {
-        background-color: @navLysGra;
-
-        &--barn {
-            margin-top: 1rem;
-        }
+    & .alertstripe {
+        margin: 1rem 0;
+    }
+    
+    & .alertstripe__tekst {
+        max-width: 100% !important;
     }
 
-    & .typo-undertittel {
-        margin: 1rem 0;
+    &__skjemagruppe {
+        &--beregning {
+            background-color: @navLysGra;
+
+            &-barn {
+                margin-top: 1rem;
+            }
+        }
+
+        & .typo-undertittel {
+            margin: 1rem 0;
+        }
     }
 }

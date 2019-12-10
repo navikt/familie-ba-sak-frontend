@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Behandlingstype } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
+import { lagInitiellFelt } from '../../../typer/provider';
 import { fødselsnummerValidator } from '../../../utils/validators';
-import { lagInitiellFelt } from '../Behandle/useFastsettReducer';
 
 export type IFødselsnummerFelt = IFelt<string>;
 
@@ -41,7 +41,7 @@ const OpprettBehandlingDispatchContext = React.createContext<Dispatch | undefine
 
 const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
     switch (action.type) {
-        case 'SETT_SØKERS_FØDSELSNUMMER':
+        case actions.SETT_SØKERS_FØDSELSNUMMER:
             return {
                 ...state,
                 søkersFødselsnummer: state.søkersFødselsnummer.valideringsFunksjon({
@@ -49,12 +49,12 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
                     verdi: action.payload,
                 }),
             };
-        case 'SETT_BEHANDLINGSTYPE':
+        case actions.SETT_BEHANDLINGSTYPE:
             return {
                 ...state,
                 behandlingstype: action.payload,
             };
-        case 'LEGG_TIL_BARN':
+        case actions.LEGG_TIL_BARN:
             return {
                 ...state,
                 barnasFødselsnummer: [
@@ -62,7 +62,7 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
                     lagInitiellFelt('', fødselsnummerValidator),
                 ],
             };
-        case 'SLETT_BARN':
+        case actions.SLETT_BARN:
             const fødselsNummerListe = state.barnasFødselsnummer;
             return {
                 ...state,
@@ -77,7 +77,7 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
                         ),
                 ],
             };
-        case 'SETT_BARNS_FØDSELSNUMMER':
+        case actions.SETT_BARNS_FØDSELSNUMMER:
             const barnasFødselsnummerKopi = [...state.barnasFødselsnummer];
             barnasFødselsnummerKopi[action.payload.index] = barnasFødselsnummerKopi[
                 action.payload.index
@@ -90,7 +90,7 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
                 ...state,
                 barnasFødselsnummer: barnasFødselsnummerKopi,
             };
-        case 'SETT_SENDER_INN':
+        case actions.SETT_SENDER_INN:
             return {
                 ...state,
                 senderInn: action.payload,
