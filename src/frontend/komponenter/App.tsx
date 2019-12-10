@@ -8,7 +8,8 @@ import { hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
 import FagsakContainer from './Fagsak/FagsakContainer';
-import OpprettFagsak from './Fagsak/Opprett/OpprettFagsak';
+import OpprettBehandling from './Fagsak/Opprett/OpprettBehandling';
+import { OpprettBehandlingProvider } from './Fagsak/Opprett/OpprettBehandlingProvider';
 import { FagsakProvider } from './FagsakProvider';
 import Dekoratør from './Felleskomponenter/Dekoratør/Dekoratør';
 
@@ -80,7 +81,13 @@ class App extends React.Component<{}, IState> {
                                 <Route
                                     exact={true}
                                     path="/fagsak/opprett"
-                                    component={OpprettFagsak}
+                                    render={() => {
+                                        return (
+                                            <OpprettBehandlingProvider>
+                                                <OpprettBehandling />
+                                            </OpprettBehandlingProvider>
+                                        );
+                                    }}
                                 />
                                 <Route
                                     className={'fagsakcontainer'}

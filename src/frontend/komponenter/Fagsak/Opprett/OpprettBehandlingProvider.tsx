@@ -6,44 +6,40 @@ import { lagInitiellFelt } from '../Behandle/useFastsettReducer';
 
 export type IFødselsnummerFelt = IFelt<string>;
 
-interface IStore {
+export enum actions {
+    SETT_SØKERS_FØDSELSNUMMER = 'SETT_SØKERS_FØDSELSNUMMER',
+    SETT_BEHANDLINGSTYPE = 'SETT_BEHANDLINGSTYPE',
+    LEGG_TIL_BARN = 'LEGG_TIL_BARN',
+    SLETT_BARN = 'SLETT_BARN',
+    SETT_BARNS_FØDSELSNUMMER = 'SETT_BARNS_FØDSELSNUMMER',
+    SETT_SENDER_INN = 'SETT_SENDER_INN',
+}
+
+export interface IAction {
+    payload?: any;
+    type: actions;
+}
+
+type Dispatch = (action: IAction) => void;
+
+export interface IState {
     barnasFødselsnummer: IFødselsnummerFelt[];
     behandlingstype: Behandlingstype;
+    senderInn: boolean;
     søkersFødselsnummer: IFødselsnummerFelt;
 }
 
-const initialState: IStore = {
+const initialState: IState = {
     barnasFødselsnummer: [lagInitiellFelt('', fødselsnummerValidator)],
     behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING,
+    senderInn: false,
     søkersFødselsnummer: lagInitiellFelt('', fødselsnummerValidator),
 };
 
-export type Action =
-    | {
-          type: 'SETT_SØKERS_FØDSELSNUMMER';
-          payload: string;
-      }
-    | {
-          type: 'SETT_BEHANDLINGSTYPE';
-          payload: Behandlingstype;
-      }
-    | {
-          type: 'LEGG_TIL_BARN';
-          payload: undefined;
-      }
-    | {
-          type: 'SLETT_BARN';
-          payload: number;
-      }
-    | {
-          type: 'SETT_BARNS_FØDSELSNUMMER';
-          payload: {
-              index: number;
-              fødselsnummer: string;
-          };
-      };
+const OpprettBehandlingStateContext = React.createContext<IState | undefined>(undefined);
+const OpprettBehandlingDispatchContext = React.createContext<Dispatch | undefined>(undefined);
 
-const opprettReducer = (state: IStore, action: Action) => {
+const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
     switch (action.type) {
         case 'SETT_SØKERS_FØDSELSNUMMER':
             return {
@@ -94,12 +90,45 @@ const opprettReducer = (state: IStore, action: Action) => {
                 ...state,
                 barnasFødselsnummer: barnasFødselsnummerKopi,
             };
-
-        default:
-            return state;
+        case 'SETT_SENDER_INN':
+            return {
+                ...state,
+                senderInn: action.payload,
+            };
+        default: {
+            throw new Error(`Uhåndtert action type: ${action.type}`);
+        }
     }
 };
 
-export const useOpprettReducer = () => {
-    return React.useReducer(opprettReducer, initialState);
+const OpprettBehandlingProvider: React.StatelessComponent = ({ children }) => {
+    const [state, dispatch] = React.useReducer(opprettBehandlingReducer, initialState);
+
+    return (
+        <OpprettBehandlingStateContext.Provider value={state}>
+            <OpprettBehandlingDispatchContext.Provider value={dispatch}>
+                {children}
+            </OpprettBehandlingDispatchContext.Provider>
+        </OpprettBehandlingStateContext.Provider>
+    );
 };
+
+const useOpprettBehandlingContext = () => {
+    const context = React.useContext(OpprettBehandlingStateContext);
+    if (context === undefined) {
+        throw new Error('useOpprettBehandlingContext må brukes inne i en OpprettBehandlingContext');
+    }
+    return context;
+};
+
+const useOpprettBehandlingDispatch = () => {
+    const context = React.useContext(OpprettBehandlingDispatchContext);
+    if (context === undefined) {
+        throw new Error(
+            'useOpprettBehandlingDispatch må brukes inne i en OpprettBehandlingContext'
+        );
+    }
+    return context;
+};
+
+export { OpprettBehandlingProvider, useOpprettBehandlingContext, useOpprettBehandlingDispatch };
