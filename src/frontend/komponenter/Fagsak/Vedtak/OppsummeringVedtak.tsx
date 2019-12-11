@@ -14,7 +14,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     const [brev, setBrev] = React.useState('Genererer forhåndsvisning...');
 
     React.useEffect(() => {
-        hentVedtaksbrev(fagsak.id)
+        hentVedtaksbrev(fagsak)
             .then((response: Ressurs<IVedtaksBrev>) => {
                 setBrev(response.data);
             })
