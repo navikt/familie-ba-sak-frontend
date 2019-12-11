@@ -10,14 +10,6 @@ interface IVedtakProps {
     fagsak: IFagsak;
 }
 
-interface IOppsummeringFrameProps {
-    content: string;
-}
-
-const OppsummeringFrame: React.FunctionComponent<IOppsummeringFrameProps> = ({ ...props }) => {
-    return <iframe className="iframe" srcDoc={props.content} />;
-};
-
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const [brev, setBrev] = React.useState('Genererer forhåndsvisning...');
 
@@ -34,10 +26,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     return (
         <div className="oppsummering">
             <Systemtittel children={'Vedtaksbrev'} />
-
             <br />
-            <OppsummeringFrame content={brev} />
-
+            <iframe className="iframe" srcDoc={brev} />
             <br />
             <Knapp
                 onClick={() => {
