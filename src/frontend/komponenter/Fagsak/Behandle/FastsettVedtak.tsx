@@ -79,8 +79,9 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     fødselsnummer: barnBeregning.verdi.barn,
                                     stønadFom: moment(
                                         barnBeregning.verdi.startDato,
-                                        'DD.MM.YY'
-                                    ).toISOString(),
+                                        'DD.MM.YY',
+                                        true
+                                    ).format('YYYY-MM-DD'),
                                 })),
                                 sakstype: context.sakstype,
                             },
