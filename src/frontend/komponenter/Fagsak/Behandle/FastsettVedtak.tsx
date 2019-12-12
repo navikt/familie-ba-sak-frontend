@@ -43,14 +43,6 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <Systemtittel children={'Behandle sak'} />
 
             <br />
-            {aktivBehandling.vedtakForBehandling.length > 0 && (
-                <AlertStripeAdvarsel>
-                    <Normaltekst>{`OBS! På denne behandlingen finnes det allerede et vedtak. Siste vedtak ble opprettet ${
-                        aktivBehandling.vedtakForBehandling.filter(vedtak => vedtak.aktiv)[0]
-                            .vedtaksdato
-                    }.`}</Normaltekst>
-                </AlertStripeAdvarsel>
-            )}
 
             <Normaltekst children={`Søker: ${fagsak.søkerFødselsnummer}`} />
             {aktivBehandling.barnasFødselsnummer.map(barn => {
