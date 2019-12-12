@@ -1,4 +1,5 @@
 import { Knapp } from 'nav-frontend-knapper';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 
@@ -12,28 +13,50 @@ interface IVedtakProps {
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const [brev, setBrev] = React.useState('Genererer forhåndsvisning...');
+    const [errorMessage, setErrorMessage] = React.useState(undefined);
 
     React.useEffect(() => {
         hentVedtaksbrev(fagsak)
             .then((response: Ressurs<IVedtaksBrev>) => {
-                setBrev(response.data);
+                if (response.status === RessursStatus.SUKSESS) {
+                    setBrev(response.data);
+                    setErrorMessage(undefined);
+                } else {
+                    setErrorMessage(
+                        response.melding !== undefined
+                            ? response.melding
+                            : 'Kunne ikke generere forhåndsvisning.'
+                    );
+                }
             })
             .catch(error => {
-                setBrev('kunne ikke generere forhåndsvisning. Internal Error: ' + error);
+                const displayed = 'Internal Error: Kunne ikke generere forhåndsvisning.';
+                setBrev(displayed);
+                setErrorMessage(displayed);
             });
     });
 
+    const content =
+        errorMessage === undefined ? (
+            <div>
+                <Systemtittel children={'Vedtaksbrev'} />
+                <br />
+                <iframe className="iframe" srcDoc={brev} />
+                <br />
+            </div>
+        ) : (
+            <SkjemaGruppe children="" feil={{ feilmelding: errorMessage }} />
+        );
+
     return (
         <div className="oppsummering">
-            <Systemtittel children={'Vedtaksbrev'} />
-            <br />
-            <iframe className="iframe" srcDoc={brev} />
-            <br />
+            {content}
             <Knapp
                 onClick={() => {
                     alert('TODO: send to backend');
                 }}
             >
+                {' '}
                 Send
             </Knapp>
         </div>

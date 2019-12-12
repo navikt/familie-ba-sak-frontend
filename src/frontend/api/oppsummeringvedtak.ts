@@ -1,7 +1,7 @@
-import { Ressurs } from '../typer/ressurs';
+import { IFagsak } from '../typer/fagsak';
+import { Ressurs, RessursStatus } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { axiosRequest } from './axios';
-import { IFagsak } from '../typer/fagsak';
 
 export interface IVedtaksBrev {
     content: string;
@@ -11,13 +11,23 @@ export const hentVedtaksbrev = (
     fagsak: IFagsak,
     innloggetSaksbehandler?: ISaksbehandler
 ): Promise<Ressurs<IVedtaksBrev>> => {
-    //TODO: get active behandling ID
-    const behandlingId = -1;
+    console.log(fagsak);
+
+    const aktivBehandling = fagsak.behandlinger.find(b => b.aktiv);
+
+    if (aktivBehandling === undefined) {
+        return new Promise(resolve =>
+            resolve({
+                status: RessursStatus.FEILET,
+                melding: 'Internal Error: No active behandling',
+            })
+        );
+    }
 
     return axiosRequest<IVedtaksBrev>(
         {
             method: 'GET',
-            url: `/familie-ba-sak/api/behandling/${behandlingId}/vedtak-html`,
+            url: `/familie-ba-sak/api/behandling/${aktivBehandling.behandlingId}/vedtak-html`,
         },
         innloggetSaksbehandler
     );
