@@ -1,143 +1,100 @@
+import * as moment from 'moment';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Nesteknapp } from 'nav-frontend-ikonknapper';
-import { Panel } from 'nav-frontend-paneler';
-import { Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { IBarnBeregning } from '../../../typer/behandle';
-import { IFagsak, sakstyper } from '../../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import useFastsettReducer from './useFastsettReducer';
+import { useHistory } from 'react-router';
+import { axiosRequest } from '../../../api/axios';
+import { IBehandling, IFagsak } from '../../../typer/fagsak';
+import { Valideringsstatus } from '../../../typer/felt';
+import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import {
+    actions,
+    useFastsettVedtakContext,
+    useFastsettVedtakDispatch,
+} from './FastsettVedtakProvider';
+import FastsettVedtakSkjema from './FastsettVedtakSkjema';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const [state, dispatch] = useFastsettReducer(fagsak);
+    const history = useHistory();
+    const context = useFastsettVedtakContext();
+    const dispatch = useFastsettVedtakDispatch();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
+    const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+
+    const aktivBehandling = fagsak.behandlinger.find(
+        (behandling: IBehandling) => behandling.aktiv === true
+    );
+
+    if (!aktivBehandling) {
+        return (
+            <div>
+                <Normaltekst>Ingen aktiv behandling</Normaltekst>
+            </div>
+        );
+    }
 
     return (
         <div className={'fastsett'}>
             <Systemtittel children={'Behandle sak'} />
 
             <br />
+
             <Normaltekst children={`Søker: ${fagsak.søkerFødselsnummer}`} />
-            {fagsak.behandlinger[0].barnasFødselsnummer.map(barn => {
+            {aktivBehandling.barnasFødselsnummer.map(barn => {
                 return <Normaltekst key={barn} children={`Barn: ${barn}`} />;
             })}
 
-            <br />
-            <Select
-                bredde={'l'}
-                label={'Velg sakstype'}
-                value={state.sakstype}
-                onChange={event => dispatch({ type: 'SETT_SAKSTYPE', payload: event.target.value })}
-            >
-                {Object.keys(sakstyper).map(mapSakstype => {
-                    return (
-                        <option key={sakstyper[mapSakstype].id} value={sakstyper[mapSakstype].id}>
-                            {sakstyper[mapSakstype].navn}
-                        </option>
-                    );
-                })}
-            </Select>
-
-            <Undertittel children={'Beregning'} />
-
-            <Panel className={'fastsett__beregning'}>
-                {state.barnasBeregning.map(
-                    (barnBeregning: IFelt<IBarnBeregning>, index: number) => {
-                        return (
-                            <SkjemaGruppe
-                                className={'fastsett__beregning--barn'}
-                                key={barnBeregning.verdi.barn}
-                                feil={
-                                    barnBeregning.valideringsstatus !== Valideringsstatus.OK &&
-                                    visFeilmeldinger
-                                        ? {
-                                              feilmelding: barnBeregning.feilmelding,
-                                          }
-                                        : undefined
-                                }
-                            >
-                                <Element
-                                    children={`Barn ${index + 1}: ${barnBeregning.verdi.barn}`}
-                                />
-                                <Input
-                                    bredde={'L'}
-                                    label={'Beløp'}
-                                    value={barnBeregning.verdi.beløp}
-                                    type={'number'}
-                                    onChange={event => {
-                                        dispatch({
-                                            payload: {
-                                                index,
-                                                oppdatertBarnBeregning: {
-                                                    ...barnBeregning.verdi,
-                                                    beløp: parseInt(event.target.value, 10),
-                                                },
-                                            },
-                                            type: 'SETT_BARNAS_BEREGNING',
-                                        });
-                                    }}
-                                />
-
-                                <Input
-                                    bredde={'L'}
-                                    label={'Startdato'}
-                                    value={barnBeregning.verdi.startDato}
-                                    placeholder={'DD.MM.YY'}
-                                    onChange={event => {
-                                        dispatch({
-                                            payload: {
-                                                index,
-                                                oppdatertBarnBeregning: {
-                                                    ...barnBeregning.verdi,
-                                                    startDato: event.target.value,
-                                                },
-                                            },
-                                            type: 'SETT_BARNAS_BEREGNING',
-                                        });
-                                    }}
-                                />
-                            </SkjemaGruppe>
-                        );
-                    }
-                )}
-                <Normaltekst
-                    children={`Totalsum: ${state.barnasBeregning.reduce(
-                        (sum: number, barnBeregning: IFelt<IBarnBeregning>) =>
-                            sum + barnBeregning.verdi.beløp,
-                        0
-                    )} kr`}
-                />
-            </Panel>
-
-            <Undertittel children={'Hjemler'} />
-            <Normaltekst children={'Vedtaket er fattet etter § 2 og § 11 i barnetrygdloven.'} />
-
-            <Undertittel children={'Resultat'} />
-            <RadioPanelGruppe
-                name="behandlingsresultat"
-                legend="Behandlingsresultat"
-                radios={[
-                    { label: 'Innvilget', value: 'innvilget', id: 'innvilget' },
-                    { label: 'Avslått', value: 'avslått', id: 'avslått' },
-                ]}
-                checked={state.behandlingsresultat}
-                onChange={(event: any) => {
-                    dispatch({ type: 'SETT_BEHANDLINGSRESULTAT', payload: event.target.value });
-                }}
+            <FastsettVedtakSkjema
+                opprettelseFeilmelding={opprettelseFeilmelding}
+                visFeilmeldinger={visFeilmeldinger}
             />
+
             <Nesteknapp
+                spinner={context.senderInn}
                 onClick={() => {
                     if (
-                        state.barnasBeregning.find(
+                        context.barnasBeregning.find(
                             barnBeregning =>
                                 barnBeregning.valideringsstatus !== Valideringsstatus.OK
                         ) === undefined
                     ) {
-                        // TODO call api
+                        dispatch({ type: actions.SETT_SENDER_INN, payload: true });
+                        axiosRequest<IFagsak>({
+                            data: {
+                                barnasBeregning: context.barnasBeregning.map(barnBeregning => ({
+                                    beløp: barnBeregning.verdi.beløp,
+                                    fødselsnummer: barnBeregning.verdi.barn,
+                                    stønadFom: moment(
+                                        barnBeregning.verdi.startDato,
+                                        'DD.MM.YY',
+                                        true
+                                    ).format('YYYY-MM-DD'),
+                                })),
+                                sakstype: context.sakstype,
+                            },
+                            method: 'POST',
+                            url: `/familie-ba-sak/api/fagsak/${fagsak.id}/nytt-vedtak`,
+                        })
+                            .then((response: Ressurs<any>) => {
+                                dispatch({ type: actions.SETT_SENDER_INN, payload: false });
+
+                                if (response.status === RessursStatus.SUKSESS) {
+                                    history.push(`/fagsak/${fagsak.id}/vedtak`);
+                                } else if (response.status === RessursStatus.FEILET) {
+                                    settOpprettelseFeilmelding(response.melding);
+                                } else {
+                                    settOpprettelseFeilmelding('Opprettelse av vedtak feilet');
+                                }
+                            })
+                            .catch(() => {
+                                dispatch({ type: actions.SETT_SENDER_INN, payload: false });
+                                settOpprettelseFeilmelding('Opprettelse av vedtak feilet');
+                            });
                     } else {
                         settVisFeilmeldinger(true);
                     }

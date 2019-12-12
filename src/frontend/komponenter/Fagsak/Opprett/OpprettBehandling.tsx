@@ -71,6 +71,7 @@ const OpprettBehandling: React.FunctionComponent = () => {
                             })
                             .catch(() => {
                                 dispatch({ type: actions.SETT_SENDER_INN, payload: false });
+                                settOpprettelseFeilmelding('Opprettelse av behandling feilet');
                             });
                     } else {
                         settVisFeilmeldinger(true);
