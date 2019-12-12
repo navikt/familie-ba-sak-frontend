@@ -5,6 +5,7 @@ import { RessursStatus } from '../../typer/ressurs';
 import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider';
 import FastsettVedtak from './Behandle/FastsettVedtak';
 import { FastsettVedtakProvider } from './Behandle/FastsettVedtakProvider';
+import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -38,6 +39,13 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         <FastsettVedtak fagsak={fagsak.data} />
                                     </FastsettVedtakProvider>
                                 );
+                            }}
+                        />
+                        <Route
+                            exact={true}
+                            path="/fagsak/:fagsakId/vedtak"
+                            render={() => {
+                                return <OppsummeringVedtak fagsak={fagsak.data} />;
                             }}
                         />
                     </Switch>
