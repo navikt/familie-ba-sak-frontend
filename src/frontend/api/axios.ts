@@ -44,7 +44,7 @@ export const axiosRequest = async <T>(
                     break;
                 default:
                     typetRessurs = {
-                        melding: 'Ukjent api feil',
+                        melding: 'Mest sannsynlig ukjent api feil',
                         status: RessursStatus.FEILET,
                     };
                     break;

@@ -6,8 +6,10 @@
 		"saksnummer": "1",
 		"behandlinger": [
 			{
+				"aktiv": true,
 				"behandlingId": 1,
 				"søker": "00000000001",
+				"vedtakForBehandling": [],
 				"barnasFødselsnummer": [
 					"00000000003",
 					"00000000004"
