@@ -5,6 +5,7 @@ import * as React from 'react';
 import { IBarnBeregning } from '../../../typer/behandle';
 import { sakstyper } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
+import { useFagsakContext } from '../../FagsakProvider';
 import {
     actions,
     useFastsettVedtakContext,
@@ -94,7 +95,7 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                                 <Input
                                     bredde={'L'}
                                     label={'Startdato'}
-                                    value={barnBeregning.verdi.startDato}
+                                    value={barnBeregning.verdi.stønadFom}
                                     placeholder={'DD.MM.YY'}
                                     onChange={event => {
                                         dispatch({
@@ -102,7 +103,7 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                                                 index,
                                                 oppdatertBarnBeregning: {
                                                     ...barnBeregning.verdi,
-                                                    startDato: event.target.value,
+                                                    stønadFom: event.target.value,
                                                 },
                                             },
                                             type: actions.SETT_BARNAS_BEREGNING,

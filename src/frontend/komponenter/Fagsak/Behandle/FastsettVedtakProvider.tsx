@@ -32,7 +32,7 @@ export const lastInitialState = (fagsak: IFagsak): IState => ({
             {
                 barn,
                 beløp: ordinærBeløp,
-                startDato: '',
+                stønadFom: '',
             },
             erGyldigDato
         );
