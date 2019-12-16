@@ -7,7 +7,7 @@ export interface IVedtaksBrev {
     content: string;
 }
 
-export const hentVedtaksbrev = (
+export const hentAktivVedtaksbrev = (
     fagsak: IFagsak,
     innloggetSaksbehandler?: ISaksbehandler
 ): Promise<Ressurs<IVedtaksBrev>> => {
