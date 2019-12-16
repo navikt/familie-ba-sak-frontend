@@ -40,8 +40,8 @@ export const fødselsnummerValidator = (
 };
 
 export const erGyldigDato = (felt: IFelt<IBarnBeregning>): IFelt<IBarnBeregning> => {
-    return /^\d{2}\.\d{2}\.\d{2}$/.test(felt.verdi.startDato) &&
-        moment(felt.verdi.startDato, 'DD.MM.YY').isValid()
+    return /^\d{2}\.\d{2}\.\d{2}$/.test(felt.verdi.stønadFom) &&
+        moment(felt.verdi.stønadFom, 'DD.MM.YY').isValid()
         ? ok(felt)
         : feil(felt, 'Ugyldig dato');
 };

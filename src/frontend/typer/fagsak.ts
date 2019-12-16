@@ -1,3 +1,4 @@
+import { IBarnBeregning } from './behandle';
 import { IPerson } from './person';
 
 // Enum
@@ -26,6 +27,7 @@ export interface IBehandling {
 export interface IVedtakForBehandling {
     aktiv: boolean;
     ansvarligSaksbehandler: string;
+    barnasBeregning: IBarnBeregning[];
     stønadFom: string;
     stønadTom: string;
     vedtaksdato: string;

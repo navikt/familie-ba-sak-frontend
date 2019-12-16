@@ -1,11 +1,10 @@
 import * as moment from 'moment';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Nesteknapp } from 'nav-frontend-ikonknapper';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { axiosRequest } from '../../../api/axios';
-import { IBehandling, IFagsak } from '../../../typer/fagsak';
+import { IBehandling, IFagsak, IVedtakForBehandling } from '../../../typer/fagsak';
 import { Valideringsstatus } from '../../../typer/felt';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import {
@@ -29,6 +28,29 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const aktivBehandling = fagsak.behandlinger.find(
         (behandling: IBehandling) => behandling.aktiv === true
     );
+
+    React.useEffect(() => {
+        if (aktivBehandling) {
+            const aktivVedtak = aktivBehandling.vedtakForBehandling.find(
+                (vedtak: IVedtakForBehandling) => vedtak.aktiv === true
+            );
+
+            if (aktivVedtak) {
+                aktivVedtak.barnasBeregning.map((barnBeregning, index) => {
+                    dispatch({
+                        payload: {
+                            index,
+                            oppdatertBarnBeregning: {
+                                ...barnBeregning,
+                                stønadFom: moment(barnBeregning.stønadFom).format('DD.MM.YY'),
+                            },
+                        },
+                        type: actions.SETT_BARNAS_BEREGNING,
+                    });
+                });
+            }
+        }
+    }, [aktivBehandling]);
 
     if (!aktivBehandling) {
         return (
@@ -70,7 +92,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     beløp: barnBeregning.verdi.beløp,
                                     fødselsnummer: barnBeregning.verdi.barn,
                                     stønadFom: moment(
-                                        barnBeregning.verdi.startDato,
+                                        barnBeregning.verdi.stønadFom,
                                         'DD.MM.YY',
                                         true
                                     ).format('YYYY-MM-DD'),
