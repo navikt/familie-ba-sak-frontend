@@ -11,15 +11,13 @@ export const hentVedtaksbrev = (
     fagsak: IFagsak,
     innloggetSaksbehandler?: ISaksbehandler
 ): Promise<Ressurs<IVedtaksBrev>> => {
-    console.log(fagsak);
-
     const aktivBehandling = fagsak.behandlinger.find(b => b.aktiv);
 
     if (aktivBehandling === undefined) {
         return new Promise(resolve =>
             resolve({
-                status: RessursStatus.FEILET,
                 melding: 'Internal Error: No active behandling',
+                status: RessursStatus.FEILET,
             })
         );
     }
