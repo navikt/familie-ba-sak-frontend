@@ -23,7 +23,7 @@ app.get('/user/profile', (req, res) => {
     });
 });
 
-app.get('/familie-ba-sak/api/fagsak/1/vedtak-html', (req, res) => {
+app.get('/familie-ba-sak/api/behandling/1/vedtak-html', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`vedtak-1.json`)), delayMs);
 });
 
