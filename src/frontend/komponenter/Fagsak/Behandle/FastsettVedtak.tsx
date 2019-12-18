@@ -104,13 +104,14 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         })
                             .then((response: Ressurs<any>) => {
                                 dispatch({ type: actions.SETT_SENDER_INN, payload: false });
-
                                 if (response.status === RessursStatus.SUKSESS) {
                                     history.push(`/fagsak/${fagsak.id}/vedtak`);
                                 } else if (response.status === RessursStatus.FEILET) {
                                     settOpprettelseFeilmelding(response.melding);
+                                    settVisFeilmeldinger(true);
                                 } else {
                                     settOpprettelseFeilmelding('Opprettelse av vedtak feilet');
+                                    settVisFeilmeldinger(true);
                                 }
                             })
                             .catch(() => {
