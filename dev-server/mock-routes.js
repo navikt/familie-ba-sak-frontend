@@ -24,7 +24,14 @@ app.get('/user/profile', (req, res) => {
 });
 
 app.get('/familie-ba-sak/api/behandling/1/vedtak-html', (req, res) => {
-    setTimeout(() => res.send(lesMockFil(`vedtak-1.json`)), delayMs);
+    setTimeout(
+        () =>
+            res.send({
+                data: lesMockFil(`vedtak.html`),
+                status: 'SUKSESS',
+            }),
+        delayMs
+    );
 });
 
 module.exports = app;

@@ -2,8 +2,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-
-import { hentAktivVedtaksbrev, IVedtaksBrev } from '../../../api/oppsummeringvedtak';
+import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 
@@ -12,26 +11,23 @@ interface IVedtakProps {
 }
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
-    const [brev, setBrev] = React.useState('Genererer forhåndsvisning...');
-    const [errorMessage, setErrorMessage] = React.useState(undefined);
+    const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
+    const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
 
     React.useEffect(() => {
         hentAktivVedtaksbrev(fagsak)
-            .then((response: Ressurs<IVedtaksBrev>) => {
+            .then((response: Ressurs<string>) => {
                 if (response.status === RessursStatus.SUKSESS) {
                     setBrev(response.data);
                     setErrorMessage(undefined);
+                } else if (response.status === RessursStatus.FEILET) {
+                    setErrorMessage(response.melding);
                 } else {
-                    setErrorMessage(
-                        response.melding !== undefined
-                            ? response.melding
-                            : 'Kunne ikke generere forhåndsvisning.'
-                    );
+                    setErrorMessage('Ukjent feil, kunne ikke generere forhåndsvisning.');
                 }
             })
             .catch(error => {
-                const displayed = 'Internal Error: Kunne ikke generere forhåndsvisning.';
-                setErrorMessage(displayed);
+                setErrorMessage('Ukjent feil, Kunne ikke generere forhåndsvisning.');
             });
     });
 
@@ -49,7 +45,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             )}
             <Knapp
                 onClick={() => {
-                    alert('TODO: send to backend');
+                    alert('Send to backend');
                 }}
             >
                 Send

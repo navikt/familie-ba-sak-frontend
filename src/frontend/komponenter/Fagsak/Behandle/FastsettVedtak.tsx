@@ -109,8 +109,10 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     history.push(`/fagsak/${fagsak.id}/vedtak`);
                                 } else if (response.status === RessursStatus.FEILET) {
                                     settOpprettelseFeilmelding(response.melding);
+                                    settVisFeilmeldinger(true);
                                 } else {
                                     settOpprettelseFeilmelding('Opprettelse av vedtak feilet');
+                                    settVisFeilmeldinger(true);
                                 }
                             })
                             .catch(() => {
