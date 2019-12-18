@@ -3,14 +3,10 @@ import { Ressurs, RessursStatus } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { axiosRequest } from './axios';
 
-export interface IVedtaksBrev {
-    content: string;
-}
-
 export const hentAktivVedtaksbrev = (
     fagsak: IFagsak,
     innloggetSaksbehandler?: ISaksbehandler
-): Promise<Ressurs<IVedtaksBrev>> => {
+): Promise<Ressurs<string>> => {
     const aktivBehandling = fagsak.behandlinger.find(b => b.aktiv);
 
     if (aktivBehandling === undefined) {
@@ -22,7 +18,7 @@ export const hentAktivVedtaksbrev = (
         );
     }
 
-    return axiosRequest<IVedtaksBrev>(
+    return axiosRequest<string>(
         {
             method: 'GET',
             url: `/familie-ba-sak/api/behandling/${aktivBehandling.behandlingId}/vedtak-html`,
