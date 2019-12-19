@@ -13,6 +13,11 @@ import {
     useFastsettVedtakDispatch,
 } from './FastsettVedtakProvider';
 import FastsettVedtakSkjema from './FastsettVedtakSkjema';
+import {
+    actions as fagsakActions,
+    useFagsakDispatch,
+    useFagsakContext,
+} from '../../FagsakProvider';
 
 interface IProps {
     fagsak: IFagsak;
@@ -22,6 +27,8 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const history = useHistory();
     const context = useFastsettVedtakContext();
     const dispatch = useFastsettVedtakDispatch();
+    const fagsakDispatch = useFagsakDispatch();
+    const fagsakContext = useFagsakContext().fagsak;
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
@@ -36,7 +43,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
             );
 
             if (aktivVedtak) {
-                aktivVedtak.barnasBeregning.map((barnBeregning, index) => {
+                aktivVedtak.barnasBeregning?.map((barnBeregning, index) => {
                     dispatch({
                         payload: {
                             index,
@@ -86,7 +93,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         ) === undefined
                     ) {
                         dispatch({ type: actions.SETT_SENDER_INN, payload: true });
-                        axiosRequest<IFagsak>({
+                        axiosRequest<IVedtakForBehandling>({
                             data: {
                                 barnasBeregning: context.barnasBeregning.map(barnBeregning => ({
                                     beløp: barnBeregning.verdi.beløp,
@@ -102,9 +109,43 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                             method: 'POST',
                             url: `/familie-ba-sak/api/fagsak/${fagsak.id}/nytt-vedtak`,
                         })
-                            .then((response: Ressurs<any>) => {
+                            .then((response: Ressurs<IVedtakForBehandling>) => {
                                 dispatch({ type: actions.SETT_SENDER_INN, payload: false });
                                 if (response.status === RessursStatus.SUKSESS) {
+                                    console.log(fagsakContext);
+                                    fagsakDispatch({
+                                        type: fagsakActions.SETT_FAGSAK,
+                                        payload: {
+                                            ...fagsakContext,
+                                            data: {
+                                                ...fagsakContext.data,
+                                                behandlinger: fagsak.behandlinger.map(b => {
+                                                    return !b.aktiv
+                                                        ? b
+                                                        : {
+                                                              ...b,
+                                                              vedtakForBehandling: [
+                                                                  ...b.vedtakForBehandling,
+                                                                  {
+                                                                      aktiv: response.data.aktiv,
+                                                                      ansvarligSaksbehandler:
+                                                                          response.data
+                                                                              .ansvarligSaksbehandler,
+                                                                      barnasBeregning: [], //not included in the response
+                                                                      stønadFom:
+                                                                          response.data.stønadFom,
+                                                                      stønadTom:
+                                                                          response.data.stønadTom,
+                                                                      vedtaksdato:
+                                                                          response.data.vedtaksdato,
+                                                                  },
+                                                              ],
+                                                          };
+                                                }),
+                                            },
+                                        },
+                                    });
+                                    console.log('navigate');
                                     history.push(`/fagsak/${fagsak.id}/vedtak`);
                                 } else if (response.status === RessursStatus.FEILET) {
                                     settOpprettelseFeilmelding(response.melding);
