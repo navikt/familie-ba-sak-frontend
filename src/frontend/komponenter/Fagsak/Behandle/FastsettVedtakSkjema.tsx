@@ -157,14 +157,14 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
     );
 };
 
-const harSkjemaEndringer = (context: IState, vedtak?: IVedtakForBehandling) => {
-    if (!vedtak) {
-        return false;
+const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling) => {
+    if (!aktivVedtak) {
+        return true;
     }
     const barnasBeregning = context.barnasBeregning;
 
     const endringPåBeregning =
-        vedtak.barnasBeregning.find(barnBeregning => {
+        aktivVedtak.barnasBeregning.find(barnBeregning => {
             const muligEndretBarnBeregning = barnasBeregning.find(
                 endretBarnBeregning => endretBarnBeregning.verdi.barn === barnBeregning.barn
             );
