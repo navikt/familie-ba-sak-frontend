@@ -56,7 +56,6 @@ const fagsakReducer = (state: IState, action: IAction): IState => {
             };
         }
         case actions.SETT_FAGSAK: {
-            console.log(action.payload);
             return {
                 ...state,
                 fagsak: action.payload,
@@ -75,12 +74,10 @@ const FagsakProvider: React.StatelessComponent = ({ children }) => {
     });
 
     React.useEffect(() => {
-        console.log('fagsak provider load');
         if (state.fagsakId) {
             dispatch({ type: actions.HENT_FAGSAK });
             hentFagsak(state.fagsakId)
                 .then((fagsak: Ressurs<IFagsak>) => {
-                    console.log(fagsak);
                     dispatch({
                         payload: fagsak,
                         type: actions.HENT_FAGSAK_SUKSESS,

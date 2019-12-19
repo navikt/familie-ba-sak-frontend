@@ -25,7 +25,6 @@ const FagsakContainer: React.FunctionComponent = () => {
         }
     }, [fagsakId]);
 
-    console.log(fagsak);
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
             return (

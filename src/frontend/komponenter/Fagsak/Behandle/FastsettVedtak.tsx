@@ -3,21 +3,22 @@ import { Nesteknapp } from 'nav-frontend-ikonknapper';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
+
 import { axiosRequest } from '../../../api/axios';
 import { IBehandling, IFagsak, IVedtakForBehandling } from '../../../typer/fagsak';
 import { Valideringsstatus } from '../../../typer/felt';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import {
+    actions as fagsakActions,
+    useFagsakContext,
+    useFagsakDispatch,
+} from '../../FagsakProvider';
 import {
     actions,
     useFastsettVedtakContext,
     useFastsettVedtakDispatch,
 } from './FastsettVedtakProvider';
 import FastsettVedtakSkjema from './FastsettVedtakSkjema';
-import {
-    actions as fagsakActions,
-    useFagsakDispatch,
-    useFagsakContext,
-} from '../../FagsakProvider';
 
 interface IProps {
     fagsak: IFagsak;
@@ -112,9 +113,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                             .then((response: Ressurs<IVedtakForBehandling>) => {
                                 dispatch({ type: actions.SETT_SENDER_INN, payload: false });
                                 if (response.status === RessursStatus.SUKSESS) {
-                                    console.log(fagsakContext);
                                     fagsakDispatch({
-                                        type: fagsakActions.SETT_FAGSAK,
                                         payload: {
                                             ...fagsakContext,
                                             data: {
@@ -131,7 +130,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                                                       ansvarligSaksbehandler:
                                                                           response.data
                                                                               .ansvarligSaksbehandler,
-                                                                      barnasBeregning: [], //not included in the response
+                                                                      barnasBeregning: [], // not included in the response
                                                                       stønadFom:
                                                                           response.data.stønadFom,
                                                                       stønadTom:
@@ -144,8 +143,8 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                                 }),
                                             },
                                         },
+                                        type: fagsakActions.SETT_FAGSAK,
                                     });
-                                    console.log('navigate');
                                     history.push(`/fagsak/${fagsak.id}/vedtak`);
                                 } else if (response.status === RessursStatus.FEILET) {
                                     settOpprettelseFeilmelding(response.melding);

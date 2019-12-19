@@ -13,11 +13,9 @@ interface IVedtakProps {
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
-    console.log(fagsak);
+    const [redirect, showRedirect] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        console.log(fagsak);
-
         if (
             !!fagsak?.behandlinger
                 ?.find(b => b.aktiv)
@@ -38,9 +36,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                     setErrorMessage('Ukjent feil, Kunne ikke generere forhåndsvisning.');
                 });
         } else {
-            console.log('error');
+            showRedirect(true);
             setErrorMessage(
-                'Vedtak for behandling ikke funnet. Klikk <> for å opprett en behandling.'
+                'Behandling ikke funnet. Klikk på lenken nedenfor for å opprett en behandling.'
             );
         }
     });
@@ -56,6 +54,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 </div>
             ) : (
                 <AlertStripe type="feil">{errorMessage}</AlertStripe>
+            )}
+            {redirect && (
+                <div>
+                    <br />
+                    <a href={'/fagsak/' + fagsak.id + '/behandle'}>Opprett Ny Behandling</a>
+                    <br />
+                    <br />
+                </div>
             )}
             <Knapp
                 onClick={() => {
