@@ -2,6 +2,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+import { useHistory } from 'react-router';
 import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
@@ -11,6 +12,7 @@ interface IVedtakProps {
 }
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
+    const history = useHistory();
     const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
 
@@ -39,17 +41,27 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                     <br />
                     <iframe className="iframe" srcDoc={brev} />
                     <br />
+
+                    <div className={'oppsummering__navigering'}>
+                        <Knapp
+                            type={'hoved'}
+                            onClick={() => {
+                                history.push(`/fagsak/${fagsak.id}/behandle`);
+                            }}
+                            children={'Tilbake'}
+                        />
+                        <Knapp
+                            type={'hoved'}
+                            onClick={() => {
+                                alert('Send to backend');
+                            }}
+                            children={'Send til beslutter'}
+                        />
+                    </div>
                 </div>
             ) : (
                 <AlertStripe type="feil">{errorMessage}</AlertStripe>
             )}
-            <Knapp
-                onClick={() => {
-                    alert('Send to backend');
-                }}
-            >
-                Send
-            </Knapp>
         </div>
     );
 };

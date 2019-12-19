@@ -1,4 +1,4 @@
-import { Nesteknapp } from 'nav-frontend-ikonknapper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
@@ -32,52 +32,59 @@ const OpprettBehandling: React.FunctionComponent = () => {
                 visFeilmeldinger={visFeilmeldinger}
             />
 
-            <Nesteknapp
-                spinner={context.senderInn}
-                onClick={() => {
-                    if (
-                        process.env.NODE_ENV === 'development' ||
-                        (context.søkersFødselsnummer.valideringsstatus === Valideringsstatus.OK &&
-                            context.barnasFødselsnummer.find(
-                                barnFødselsnummer =>
-                                    barnFødselsnummer.valideringsstatus !== Valideringsstatus.OK
-                            ) === undefined)
-                    ) {
-                        dispatch({ type: actions.SETT_SENDER_INN, payload: true });
-                        axiosRequest<IFagsak>({
-                            data: {
-                                barnasFødselsnummer: context.barnasFødselsnummer.map(
-                                    barnFødselsnummer => barnFødselsnummer.verdi
-                                ),
-                                behandlingType: context.behandlingstype,
-                                fødselsnummer: context.søkersFødselsnummer.verdi,
-                                journalpostID: '1234',
-                            },
-                            method: 'POST',
-                            url: '/familie-ba-sak/api/behandling/opprett',
-                        })
-                            .then((response: Ressurs<IFagsak>) => {
-                                dispatch({ type: actions.SETT_SENDER_INN, payload: false });
-                                if (response.status === RessursStatus.SUKSESS) {
-                                    fagsakDispatcher({
-                                        payload: response,
-                                        type: fagsakActions.SETT_FAGSAK,
-                                    });
-                                    history.push(`/fagsak/${response.data.id}/behandle`);
-                                } else {
-                                    settVisFeilmeldinger(true);
-                                    settOpprettelseFeilmelding('Opprettelse av behandling feilet');
-                                }
+            <div className={'opprett__navigering'}>
+                <Knapp
+                    type={'hoved'}
+                    spinner={context.senderInn}
+                    onClick={() => {
+                        if (
+                            process.env.NODE_ENV === 'development' ||
+                            (context.søkersFødselsnummer.valideringsstatus ===
+                                Valideringsstatus.OK &&
+                                context.barnasFødselsnummer.find(
+                                    barnFødselsnummer =>
+                                        barnFødselsnummer.valideringsstatus !== Valideringsstatus.OK
+                                ) === undefined)
+                        ) {
+                            dispatch({ type: actions.SETT_SENDER_INN, payload: true });
+                            axiosRequest<IFagsak>({
+                                data: {
+                                    barnasFødselsnummer: context.barnasFødselsnummer.map(
+                                        barnFødselsnummer => barnFødselsnummer.verdi
+                                    ),
+                                    behandlingType: context.behandlingstype,
+                                    fødselsnummer: context.søkersFødselsnummer.verdi,
+                                    journalpostID: '1234',
+                                },
+                                method: 'POST',
+                                url: '/familie-ba-sak/api/behandling/opprett',
                             })
-                            .catch(() => {
-                                dispatch({ type: actions.SETT_SENDER_INN, payload: false });
-                                settOpprettelseFeilmelding('Opprettelse av behandling feilet');
-                            });
-                    } else {
-                        settVisFeilmeldinger(true);
-                    }
-                }}
-            />
+                                .then((response: Ressurs<IFagsak>) => {
+                                    dispatch({ type: actions.SETT_SENDER_INN, payload: false });
+                                    if (response.status === RessursStatus.SUKSESS) {
+                                        fagsakDispatcher({
+                                            payload: response,
+                                            type: fagsakActions.SETT_FAGSAK,
+                                        });
+                                        history.push(`/fagsak/${response.data.id}/behandle`);
+                                    } else {
+                                        settVisFeilmeldinger(true);
+                                        settOpprettelseFeilmelding(
+                                            'Opprettelse av behandling feilet'
+                                        );
+                                    }
+                                })
+                                .catch(() => {
+                                    dispatch({ type: actions.SETT_SENDER_INN, payload: false });
+                                    settOpprettelseFeilmelding('Opprettelse av behandling feilet');
+                                });
+                        } else {
+                            settVisFeilmeldinger(true);
+                        }
+                    }}
+                    children={'Neste'}
+                />
+            </div>
         </div>
     );
 };

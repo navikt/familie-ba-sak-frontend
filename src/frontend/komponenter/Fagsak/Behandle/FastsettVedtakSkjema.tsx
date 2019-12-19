@@ -1,28 +1,37 @@
+import * as moment from 'moment';
 import { Panel } from 'nav-frontend-paneler';
 import { Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IBarnBeregning } from '../../../typer/behandle';
-import { sakstyper } from '../../../typer/fagsak';
+import { IVedtakForBehandling, sakstyper } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import { useFagsakContext } from '../../FagsakProvider';
 import {
     actions,
+    IState,
     useFastsettVedtakContext,
     useFastsettVedtakDispatch,
 } from './FastsettVedtakProvider';
 
 interface IFastsettVedtakSkjema {
+    aktivVedtak?: IVedtakForBehandling;
     opprettelseFeilmelding: string;
+    settSkjemaetHarEndringer: (skjemaetHarEndringer: boolean) => void;
     visFeilmeldinger: boolean;
 }
 
 const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
+    aktivVedtak,
     opprettelseFeilmelding,
+    settSkjemaetHarEndringer,
     visFeilmeldinger,
 }) => {
     const context = useFastsettVedtakContext();
     const dispatch = useFastsettVedtakDispatch();
+
+    React.useEffect(() => {
+        settSkjemaetHarEndringer(harSkjemaEndringer(context, aktivVedtak));
+    }, [context]);
 
     return (
         <SkjemaGruppe
@@ -74,7 +83,7 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                                     children={`Barn ${index + 1}: ${barnBeregning.verdi.barn}`}
                                 />
                                 <Input
-                                    bredde={'L'}
+                                    bredde={'S'}
                                     label={'Beløp'}
                                     value={barnBeregning.verdi.beløp}
                                     type={'number'}
@@ -93,7 +102,7 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                                 />
 
                                 <Input
-                                    bredde={'L'}
+                                    bredde={'S'}
                                     label={'Startdato'}
                                     value={barnBeregning.verdi.stønadFom}
                                     placeholder={'DD.MM.YY'}
@@ -127,7 +136,9 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
             <Normaltekst children={'Vedtaket er fattet etter § 2 og § 11 i barnetrygdloven.'} />
 
             <Undertittel children={'Resultat'} />
+
             <RadioPanelGruppe
+                className={'fastsett__skjemagruppe--behandlingsresultat'}
                 name="behandlingsresultat"
                 legend="Behandlingsresultat"
                 radios={[
@@ -144,6 +155,35 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
             />
         </SkjemaGruppe>
     );
+};
+
+const harSkjemaEndringer = (context: IState, vedtak?: IVedtakForBehandling) => {
+    if (!vedtak) {
+        return false;
+    }
+    const barnasBeregning = context.barnasBeregning;
+
+    const endringPåBeregning =
+        vedtak.barnasBeregning.find(barnBeregning => {
+            const muligEndretBarnBeregning = barnasBeregning.find(
+                endretBarnBeregning => endretBarnBeregning.verdi.barn === barnBeregning.barn
+            );
+
+            if (!muligEndretBarnBeregning) {
+                return false;
+            } else {
+                if (
+                    barnBeregning.beløp !== muligEndretBarnBeregning.verdi.beløp ||
+                    (muligEndretBarnBeregning.verdi.stønadFom !== '' &&
+                        moment(barnBeregning.stønadFom, 'YYYY-MM-DD', true).format('DD.MM.YY') !==
+                            muligEndretBarnBeregning.verdi.stønadFom)
+                ) {
+                    return true;
+                }
+            }
+        }) !== undefined;
+
+    return endringPåBeregning;
 };
 
 export default FastsettVedtakSkjema;

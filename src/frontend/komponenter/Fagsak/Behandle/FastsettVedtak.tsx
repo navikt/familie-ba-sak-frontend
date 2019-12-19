@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { Nesteknapp } from 'nav-frontend-ikonknapper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
@@ -24,33 +24,34 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const dispatch = useFastsettVedtakDispatch();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+    const [skjemaetHarEndringer, settSkjemaetHarEndringer] = React.useState(false);
 
     const aktivBehandling = fagsak.behandlinger.find(
         (behandling: IBehandling) => behandling.aktiv === true
     );
 
-    React.useEffect(() => {
-        if (aktivBehandling) {
-            const aktivVedtak = aktivBehandling.vedtakForBehandling.find(
-                (vedtak: IVedtakForBehandling) => vedtak.aktiv === true
-            );
+    const aktivVedtak = aktivBehandling
+        ? aktivBehandling.vedtakForBehandling.find(
+              (vedtak: IVedtakForBehandling) => vedtak.aktiv === true
+          )
+        : undefined;
 
-            if (aktivVedtak) {
-                aktivVedtak.barnasBeregning.map((barnBeregning, index) => {
-                    dispatch({
-                        payload: {
-                            index,
-                            oppdatertBarnBeregning: {
-                                ...barnBeregning,
-                                stønadFom: moment(barnBeregning.stønadFom).format('DD.MM.YY'),
-                            },
+    React.useEffect(() => {
+        if (aktivVedtak) {
+            aktivVedtak.barnasBeregning.map((barnBeregning, index) => {
+                dispatch({
+                    payload: {
+                        index,
+                        oppdatertBarnBeregning: {
+                            ...barnBeregning,
+                            stønadFom: moment(barnBeregning.stønadFom).format('DD.MM.YY'),
                         },
-                        type: actions.SETT_BARNAS_BEREGNING,
-                    });
+                    },
+                    type: actions.SETT_BARNAS_BEREGNING,
                 });
-            }
+            });
         }
-    }, [aktivBehandling]);
+    }, []);
 
     if (!aktivBehandling) {
         return (
@@ -72,57 +73,78 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
             })}
 
             <FastsettVedtakSkjema
+                aktivVedtak={aktivVedtak}
                 opprettelseFeilmelding={opprettelseFeilmelding}
+                settSkjemaetHarEndringer={settSkjemaetHarEndringer}
                 visFeilmeldinger={visFeilmeldinger}
             />
 
-            <Nesteknapp
-                spinner={context.senderInn}
-                onClick={() => {
-                    if (
-                        context.barnasBeregning.find(
-                            barnBeregning =>
-                                barnBeregning.valideringsstatus !== Valideringsstatus.OK
-                        ) === undefined
-                    ) {
-                        dispatch({ type: actions.SETT_SENDER_INN, payload: true });
-                        axiosRequest<IFagsak>({
-                            data: {
-                                barnasBeregning: context.barnasBeregning.map(barnBeregning => ({
-                                    beløp: barnBeregning.verdi.beløp,
-                                    fødselsnummer: barnBeregning.verdi.barn,
-                                    stønadFom: moment(
-                                        barnBeregning.verdi.stønadFom,
-                                        'DD.MM.YY',
-                                        true
-                                    ).format('YYYY-MM-DD'),
-                                })),
-                                sakstype: context.sakstype,
-                            },
-                            method: 'POST',
-                            url: `/familie-ba-sak/api/fagsak/${fagsak.id}/nytt-vedtak`,
-                        })
-                            .then((response: Ressurs<any>) => {
-                                dispatch({ type: actions.SETT_SENDER_INN, payload: false });
-                                if (response.status === RessursStatus.SUKSESS) {
-                                    history.push(`/fagsak/${fagsak.id}/vedtak`);
-                                } else if (response.status === RessursStatus.FEILET) {
-                                    settOpprettelseFeilmelding(response.melding);
-                                    settVisFeilmeldinger(true);
-                                } else {
-                                    settOpprettelseFeilmelding('Opprettelse av vedtak feilet');
-                                    settVisFeilmeldinger(true);
-                                }
-                            })
-                            .catch(() => {
-                                dispatch({ type: actions.SETT_SENDER_INN, payload: false });
-                                settOpprettelseFeilmelding('Opprettelse av vedtak feilet');
-                            });
-                    } else {
-                        settVisFeilmeldinger(true);
-                    }
-                }}
-            />
+            <div className={'fastsett__navigering'}>
+                <Knapp
+                    type={'hoved'}
+                    onClick={() => {
+                        history.push(`/fagsak/opprett`);
+                    }}
+                    children={'Tilbake'}
+                />
+                <Knapp
+                    type={'hoved'}
+                    spinner={context.senderInn}
+                    onClick={() => {
+                        if (
+                            context.barnasBeregning.find(
+                                barnBeregning =>
+                                    barnBeregning.valideringsstatus !== Valideringsstatus.OK
+                            ) === undefined
+                        ) {
+                            if (skjemaetHarEndringer) {
+                                dispatch({ type: actions.SETT_SENDER_INN, payload: true });
+                                axiosRequest<IFagsak>({
+                                    data: {
+                                        barnasBeregning: context.barnasBeregning.map(
+                                            barnBeregning => ({
+                                                beløp: barnBeregning.verdi.beløp,
+                                                fødselsnummer: barnBeregning.verdi.barn,
+                                                stønadFom: moment(
+                                                    barnBeregning.verdi.stønadFom,
+                                                    'DD.MM.YY',
+                                                    true
+                                                ).format('YYYY-MM-DD'),
+                                            })
+                                        ),
+                                        sakstype: context.sakstype,
+                                    },
+                                    method: 'POST',
+                                    url: `/familie-ba-sak/api/fagsak/${fagsak.id}/nytt-vedtak`,
+                                })
+                                    .then((response: Ressurs<any>) => {
+                                        dispatch({ type: actions.SETT_SENDER_INN, payload: false });
+                                        if (response.status === RessursStatus.SUKSESS) {
+                                            history.push(`/fagsak/${fagsak.id}/vedtak`);
+                                        } else if (response.status === RessursStatus.FEILET) {
+                                            settOpprettelseFeilmelding(response.melding);
+                                            settVisFeilmeldinger(true);
+                                        } else {
+                                            settOpprettelseFeilmelding(
+                                                'Opprettelse av vedtak feilet'
+                                            );
+                                            settVisFeilmeldinger(true);
+                                        }
+                                    })
+                                    .catch(() => {
+                                        dispatch({ type: actions.SETT_SENDER_INN, payload: false });
+                                        settOpprettelseFeilmelding('Opprettelse av vedtak feilet');
+                                    });
+                            } else {
+                                history.push(`/fagsak/${fagsak.id}/vedtak`);
+                            }
+                        } else {
+                            settVisFeilmeldinger(true);
+                        }
+                    }}
+                    children={skjemaetHarEndringer ? 'Lagre og gå neste' : 'Neste'}
+                />
+            </div>
         </div>
     );
 };
