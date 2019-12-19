@@ -31,7 +31,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             .catch(error => {
                 setErrorMessage('Ukjent feil, Kunne ikke generere forhåndsvisning.');
             });
-    });
+    }, []);
 
     return (
         <div className="oppsummering">
