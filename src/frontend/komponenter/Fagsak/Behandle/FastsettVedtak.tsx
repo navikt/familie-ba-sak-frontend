@@ -13,6 +13,7 @@ import {
     useFastsettVedtakDispatch,
 } from './FastsettVedtakProvider';
 import FastsettVedtakSkjema from './FastsettVedtakSkjema';
+import { actions as fagsakActions, useFagsakDispatch } from '../../FagsakProvider';
 
 interface IProps {
     fagsak: IFagsak;
@@ -25,6 +26,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
     const [skjemaetHarEndringer, settSkjemaetHarEndringer] = React.useState(false);
+    const fagsakDispatch = useFagsakDispatch();
 
     const aktivBehandling = fagsak.behandlinger.find(
         (behandling: IBehandling) => behandling.aktiv === true
@@ -120,6 +122,10 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     .then((response: Ressurs<any>) => {
                                         dispatch({ type: actions.SETT_SENDER_INN, payload: false });
                                         if (response.status === RessursStatus.SUKSESS) {
+                                            fagsakDispatch({
+                                                payload: response,
+                                                type: fagsakActions.SETT_FAGSAK,
+                                            });
                                             history.push(`/fagsak/${fagsak.id}/vedtak`);
                                         } else if (response.status === RessursStatus.FEILET) {
                                             settOpprettelseFeilmelding(response.melding);
