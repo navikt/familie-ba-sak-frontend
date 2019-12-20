@@ -1,13 +1,7 @@
 .fastsett {
-    & .alertstripe {
-        margin: 1rem 0;
-    }
-    
-    & .alertstripe__tekst {
-        max-width: 100% !important;
-    }
-
     &__skjemagruppe {
+        margin: 1rem 0;
+        
         &--beregning {
             background-color: @navLysGra;
 
@@ -19,5 +13,14 @@
         & .typo-undertittel {
             margin: 1rem 0;
         }
+
+        &--behandlingsresultat {
+            width: 140px;
+        }
+    }
+
+    &__navigering {
+        display: flex;
+        justify-content: space-between;
     }
 }

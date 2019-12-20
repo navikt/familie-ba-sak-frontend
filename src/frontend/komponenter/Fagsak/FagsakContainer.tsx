@@ -1,6 +1,6 @@
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch, useParams } from 'react-router-dom';
+import { Route, Switch, useParams } from 'react-router-dom';
 import { RessursStatus } from '../../typer/ressurs';
 import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider';
 import FastsettVedtak from './Behandle/FastsettVedtak';
@@ -28,28 +28,26 @@ const FagsakContainer: React.FunctionComponent = () => {
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
             return (
-                <Router>
-                    <Switch>
-                        <Route
-                            exact={true}
-                            path="/fagsak/:fagsakId/behandle"
-                            render={() => {
-                                return (
-                                    <FastsettVedtakProvider fagsak={fagsak.data}>
-                                        <FastsettVedtak fagsak={fagsak.data} />
-                                    </FastsettVedtakProvider>
-                                );
-                            }}
-                        />
-                        <Route
-                            exact={true}
-                            path="/fagsak/:fagsakId/vedtak"
-                            render={() => {
-                                return <OppsummeringVedtak fagsak={fagsak.data} />;
-                            }}
-                        />
-                    </Switch>
-                </Router>
+                <Switch>
+                    <Route
+                        exact={true}
+                        path="/fagsak/:fagsakId/behandle"
+                        render={() => {
+                            return (
+                                <FastsettVedtakProvider fagsak={fagsak.data}>
+                                    <FastsettVedtak fagsak={fagsak.data} />
+                                </FastsettVedtakProvider>
+                            );
+                        }}
+                    />
+                    <Route
+                        exact={true}
+                        path="/fagsak/:fagsakId/vedtak"
+                        render={() => {
+                            return <OppsummeringVedtak fagsak={fagsak.data} />;
+                        }}
+                    />
+                </Switch>
             );
 
         case RessursStatus.HENTER:
@@ -62,12 +60,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                 />
             );
         case RessursStatus.FEILET:
-            return (
-                <AlertStripe
-                    children={`Løsningen får ikke vist denne saken. Vennligst prøv igjen senere.`}
-                    type={'feil'}
-                />
-            );
+            return <AlertStripe children={fagsak.melding} type={'feil'} />;
         default:
             return <div />;
     }
