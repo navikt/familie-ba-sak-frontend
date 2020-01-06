@@ -1,3 +1,5 @@
+import BoxedListWithLinks from '@navikt/boxed-list-with-links';
+import Header from '@navikt/nap-header';
 import { captureException, configureScope, showReportDialog, withScope } from '@sentry/browser';
 import Modal from 'nav-frontend-modal';
 import { Panel } from 'nav-frontend-paneler';
@@ -11,7 +13,6 @@ import FagsakContainer from './Fagsak/FagsakContainer';
 import OpprettBehandling from './Fagsak/Opprett/OpprettBehandling';
 import { OpprettBehandlingProvider } from './Fagsak/Opprett/OpprettBehandlingProvider';
 import { FagsakProvider } from './FagsakProvider';
-import Dekoratør from './Felleskomponenter/Dekoratør/Dekoratør';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 
@@ -60,12 +61,18 @@ class App extends React.Component<{}, IState> {
     public render() {
         return (
             <FagsakProvider>
-                <Dekoratør
-                    innloggetSaksbehandler={this.state.innloggetSaksbehandler}
-                    tittel={'NAV barnetrygd'}
-                    onClick={() => {
-                        window.location.href = `${window.origin}/auth/logout`;
-                    }}
+                <Header
+                    renderLinksPopoverContent={() => <div>IKKE IMPLEMENTERT</div>}
+                    renderUserPopoverContent={() => (
+                        <BoxedListWithLinks
+                            items={[{ name: 'Logg ut', href: `${window.origin}/auth/logout` }]}
+                        />
+                    )}
+                    title="Barnetrygd"
+                    userName={
+                        this.state.innloggetSaksbehandler?.displayName ?? 'Ukjent saksbehandler'
+                    }
+                    userUnit="Enhet"
                 />
                 <div className={'container'} role="main">
                     <Router>
