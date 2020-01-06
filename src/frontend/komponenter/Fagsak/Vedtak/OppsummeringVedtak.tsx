@@ -17,20 +17,30 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
 
     React.useEffect(() => {
-        hentAktivVedtaksbrev(fagsak)
-            .then((response: Ressurs<string>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    setBrev(response.data);
-                    setErrorMessage(undefined);
-                } else if (response.status === RessursStatus.FEILET) {
-                    setErrorMessage(response.melding);
-                } else {
-                    setErrorMessage('Ukjent feil, kunne ikke generere forhåndsvisning.');
-                }
-            })
-            .catch(error => {
-                setErrorMessage('Ukjent feil, Kunne ikke generere forhåndsvisning.');
-            });
+        if (
+            fagsak?.behandlinger
+                ?.find(b => b.aktiv)
+                ?.vedtakForBehandling?.find(vedtak => vedtak.aktiv)
+        ) {
+            hentAktivVedtaksbrev(fagsak)
+                .then((response: Ressurs<string>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        setBrev(response.data);
+                        setErrorMessage(undefined);
+                    } else if (response.status === RessursStatus.FEILET) {
+                        setErrorMessage(response.melding);
+                    } else {
+                        setErrorMessage('Ukjent feil, kunne ikke generere forhåndsvisning.');
+                    }
+                })
+                .catch(error => {
+                    setErrorMessage('Ukjent feil, Kunne ikke generere forhåndsvisning.');
+                });
+        } else {
+            setErrorMessage(
+                'Vi finner ingen aktive vedtak på behandlingen, vennligst gå tilbake og fastsett vedtak.'
+            );
+        }
     }, []);
 
     return (
@@ -41,27 +51,29 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                     <br />
                     <iframe className="iframe" srcDoc={brev} />
                     <br />
-
-                    <div className={'oppsummering__navigering'}>
-                        <Knapp
-                            type={'hoved'}
-                            onClick={() => {
-                                history.push(`/fagsak/${fagsak.id}/behandle`);
-                            }}
-                            children={'Tilbake'}
-                        />
-                        <Knapp
-                            type={'hoved'}
-                            onClick={() => {
-                                alert('Send to backend');
-                            }}
-                            children={'Send til beslutter'}
-                        />
-                    </div>
                 </div>
             ) : (
                 <AlertStripe type="feil">{errorMessage}</AlertStripe>
             )}
+
+            <div className={'oppsummering__navigering'}>
+                <Knapp
+                    type={'hoved'}
+                    onClick={() => {
+                        history.push(`/fagsak/${fagsak.id}/behandle`);
+                    }}
+                    children={'Tilbake'}
+                />
+                {errorMessage === undefined && (
+                    <Knapp
+                        type={'hoved'}
+                        onClick={() => {
+                            alert('Send to backend');
+                        }}
+                        children={'Send til beslutter'}
+                    />
+                )}
+            </div>
         </div>
     );
 };
