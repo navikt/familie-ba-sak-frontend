@@ -47,7 +47,11 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
             >
                 {Object.keys(behandlingstyper).map((key: string) => {
                     return (
-                        <option key={key} value={key}>
+                        <option
+                            aria-selected={context.behandlingstype === key}
+                            key={key}
+                            value={key}
+                        >
                             {behandlingstyper[key].navn}
                         </option>
                     );
