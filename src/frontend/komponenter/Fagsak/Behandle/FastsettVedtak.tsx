@@ -7,13 +7,13 @@ import { axiosRequest } from '../../../api/axios';
 import { IBehandling, IFagsak, IVedtakForBehandling } from '../../../typer/fagsak';
 import { Valideringsstatus } from '../../../typer/felt';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { actions as fagsakActions, useFagsakDispatch } from '../../FagsakProvider';
 import {
     actions,
     useFastsettVedtakContext,
     useFastsettVedtakDispatch,
 } from './FastsettVedtakProvider';
 import FastsettVedtakSkjema from './FastsettVedtakSkjema';
-import { actions as fagsakActions, useFagsakDispatch } from '../../FagsakProvider';
 
 interface IProps {
     fagsak: IFagsak;
