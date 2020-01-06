@@ -49,7 +49,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 <div>
                     <Systemtittel children={'Vedtaksbrev'} />
                     <br />
-                    <iframe className="iframe" srcDoc={brev} />
+                    <iframe title="Vedtaksbrev" className="iframe" srcDoc={brev} />
                     <br />
                 </div>
             ) : (

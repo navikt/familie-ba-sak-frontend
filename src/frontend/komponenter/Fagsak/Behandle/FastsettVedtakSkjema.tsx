@@ -54,7 +54,11 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
             >
                 {Object.keys(sakstyper).map(mapSakstype => {
                     return (
-                        <option key={sakstyper[mapSakstype].id} value={sakstyper[mapSakstype].id}>
+                        <option
+                            aria-selected={context.sakstype === sakstyper[mapSakstype].id}
+                            key={sakstyper[mapSakstype].id}
+                            value={sakstyper[mapSakstype].id}
+                        >
                             {sakstyper[mapSakstype].navn}
                         </option>
                     );
