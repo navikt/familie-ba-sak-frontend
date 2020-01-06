@@ -1,6 +1,7 @@
 import { init } from '@sentry/browser';
 import * as React from 'react';
-import { render } from 'react-dom';
+import * as axe from 'react-axe';
+import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import App from './komponenter/App';
 
@@ -20,9 +21,13 @@ if (process.env.NODE_ENV !== 'development') {
     });
 }
 
+if (process.env.NODE_ENV !== 'production') {
+    axe(React, ReactDOM, 1000);
+}
+
 const rootElement = document.getElementById('app');
 const renderApp = (Component: React.ComponentType<{}>): void => {
-    render(
+    ReactDOM.render(
         <AppContainer>
             <Component />
         </AppContainer>,

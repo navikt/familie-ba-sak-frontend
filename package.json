@@ -90,6 +90,7 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.7.0",
+    "@types/react-axe": "^3.1.0",
     "@types/webpack": "^4.39.8",
     "@types/webpack-dev-middleware": "^2.0.3",
     "@types/webpack-env": "^1.14.1",
@@ -106,6 +107,7 @@
     "postcss-loader": "^3.0.0",
     "prettier": "^1.18.2",
     "pretty-quick": "^2.0.1",
+    "react-axe": "^3.3.0",
     "react-hot-loader": "4.12.16",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.2.1",

@@ -67,7 +67,7 @@ class App extends React.Component<{}, IState> {
                         window.location.href = `${window.origin}/auth/logout`;
                     }}
                 />
-                <div className={'container'}>
+                <div className={'container'} role="main">
                     <Router>
                         <Panel border={true} className={'fagsakcontainer'}>
                             <Switch>

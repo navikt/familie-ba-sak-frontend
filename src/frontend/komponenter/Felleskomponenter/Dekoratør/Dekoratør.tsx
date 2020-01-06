@@ -16,7 +16,7 @@ const Dekoratør: React.FunctionComponent<IProps> = ({
     tittel,
 }) => {
     return (
-        <div className={'dekoratør'}>
+        <header role="banner" className={'dekoratør'}>
             <div className={'dekoratør__tittel'}>
                 <Systemtittel className={'dekoratør__tittel--tekst'} tag={'h1'} children={tittel} />
                 <div className={'dekoratør__skille'} />
@@ -31,7 +31,7 @@ const Dekoratør: React.FunctionComponent<IProps> = ({
                     children={'Logg ut'}
                 />
             </div>
-        </div>
+        </header>
     );
 };
 
