@@ -30,6 +30,13 @@ For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokal
 
 ---
 
+# Accessibility
+
+Applikasjonen er satt opp med strenge UU regler med bruk av axe (https://github.com/dequelabs/react-axe) og tslint-react-a11y (https://github.com/joaovieira/tslint-react-a11y#readme) under utvikling. Linteren gir feil under kompilering og i IDE'en (gitt at den støtter tslint), mens axe passer på feil i DOMen. Ved merge til master bør det ikke være noen kritiske WCAG feil.
+
+I tillegg kan følgende verktøy brukes for mer avansert analyse av appen:
+1. Pluginen «axe» I nettleseren (gir oversikt over alle WCAG feil i consollen)
+2. Pluginen «tota11y» i nettleseren (gir god visuell oversikt over WCAG feil)
 
 # Bygg og deploy
 Appen bygges hos circleci, og gir beskjed til nais deploy om å deployere appen i fss området. Alle commits til feature brancher går til dev miljøet og master går til produksjon.
