@@ -1,5 +1,5 @@
 import BoxedListWithLinks from '@navikt/boxed-list-with-links';
-import Header from '@navikt/nap-header/dist/index';
+import Header from '@navikt/nap-header';
 import { captureException, configureScope, showReportDialog, withScope } from '@sentry/browser';
 import Modal from 'nav-frontend-modal';
 import { Panel } from 'nav-frontend-paneler';
@@ -74,7 +74,7 @@ class App extends React.Component<{}, IState> {
                     }
                     userUnit="Enhet"
                 />
-                <div className={'container'}>
+                <div className={'container'} role="main">
                     <Router>
                         <Panel border={true} className={'fagsakcontainer'}>
                             <Switch>
