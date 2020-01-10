@@ -73,13 +73,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                             axiosRequest<IFagsak>({
                                 method: 'POST',
                                 url: `/familie-ba-sak/api/fagsak/${fagsak.id}/iverksett-vedtak`,
-                            })
-                                .then((response: Ressurs<IFagsak>) => {
-                                    console.log(response);
-                                })
-                                .catch((error: AxiosError) => {
-                                    console.log(error);
-                                });
+                            });
                         }}
                         children={'Iverksett'}
                     />
