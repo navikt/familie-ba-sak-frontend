@@ -1,8 +1,10 @@
+import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
+import { axiosRequest } from '../../../api/axios';
 import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
@@ -68,9 +70,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                     <Knapp
                         type={'hoved'}
                         onClick={() => {
-                            alert('Send to backend');
+                            axiosRequest<IFagsak>({
+                                method: 'POST',
+                                url: `/familie-ba-sak/api/fagsak/${fagsak.id}/iverksett-vedtak`,
+                            })
+                                .then((response: Ressurs<IFagsak>) => {
+                                    console.log(response);
+                                })
+                                .catch((error: AxiosError) => {
+                                    console.log(error);
+                                });
                         }}
-                        children={'Send til beslutter'}
+                        children={'Iverksett'}
                     />
                 )}
             </div>
