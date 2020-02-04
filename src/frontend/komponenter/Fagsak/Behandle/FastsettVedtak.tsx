@@ -114,6 +114,7 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                                 ).format('YYYY-MM-DD'),
                                             })
                                         ),
+                                        resultat: 'INNVILGET',
                                         sakstype: context.sakstype,
                                     },
                                     method: 'POST',
