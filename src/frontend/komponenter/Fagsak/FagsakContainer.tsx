@@ -4,6 +4,7 @@ import { Route, Switch, useParams } from 'react-router-dom';
 import { RessursStatus } from '../../typer/ressurs';
 import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider';
 import FastsettVedtak from './Behandle/FastsettVedtak';
+import VelgVilkårene from './Vilkårene/VelgVilkårene';
 import { FastsettVedtakProvider } from './Behandle/FastsettVedtakProvider';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 
@@ -29,6 +30,13 @@ const FagsakContainer: React.FunctionComponent = () => {
         case RessursStatus.SUKSESS:
             return (
                 <Switch>
+                    <Route
+                        exact={true}
+                        path="/fagsak/:fagsakId/vilkårene"
+                        render={() => {
+                            return <VelgVilkårene fagsak={fagsak.data} />;
+                        }}
+                    />
                     <Route
                         exact={true}
                         path="/fagsak/:fagsakId/behandle"
