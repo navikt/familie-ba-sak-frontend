@@ -1,3 +1,4 @@
+import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
@@ -29,6 +30,7 @@ const FagsakContainer: React.FunctionComponent = () => {
         case RessursStatus.SUKSESS:
             return (
                 <Switch>
+                    <Visittkort />
                     <Route
                         exact={true}
                         path="/fagsak/:fagsakId/behandle"

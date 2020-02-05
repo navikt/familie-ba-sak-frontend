@@ -2,7 +2,7 @@ import {
     IOIDCStrategyOptionWithRequest,
     ISessionKonfigurasjon,
     ITokenRequest,
-} from '@navikt/familie-backend/lib/typer';
+} from '@navikt/familie-backend/dist/typer';
 
 interface IConfig {
     allowHttpForRedirectUrl: boolean;
@@ -99,11 +99,16 @@ const env = Environment();
 
 // Sett opp config mot felles backend skall
 export const nodeConfig = hentPassportConfig();
+if (!process.env.SESSION_SECRET) {
+    throw new Error('Session secret er ikke konfigurert');
+}
+
 export const sessionConfig: ISessionKonfigurasjon = {
     cookieSecret: [`${process.env.COOKIE_KEY1}`, `${process.env.COOKIE_KEY2}`],
     navn: 'familie-ba-sak-v1',
     redisPassord: process.env.REDIS_PASSWORD,
     redisUrl: env.redisUrl,
+    secureCookie: true,
     sessionMaxAgeSekunder: 12 * 60 * 60,
     sessionSecret: process.env.SESSION_SECRET,
 };
@@ -115,6 +120,10 @@ export const saksbehandlerTokenConfig: ITokenRequest = {
     scope: `${nodeConfig.clientID}/.default`,
     tokenUri: nodeConfig.tokenURI,
 };
+
+if (!process.env.BA_SAK_SCOPE) {
+    throw new Error('Scope mot familie-ba-sak er ikke konfigurert');
+}
 
 export const oboTokenConfig: ITokenRequest = {
     clientId: nodeConfig.clientID,
@@ -130,10 +139,10 @@ export const passportConfig: IOIDCStrategyOptionWithRequest = {
     clientSecret: nodeConfig.clientSecret,
     cookieEncryptionKeys: nodeConfig.cookieEncryptionKeys,
     identityMetadata: nodeConfig.identityMetadata,
-    loggingLevel: 'warn',
+    loggingLevel: 'info',
     passReqToCallback: true,
     redirectUrl: nodeConfig.redirectUrl,
-    responseMode: 'form_post',
+    responseMode: 'query',
     responseType: 'code',
     scope: 'profile offline_access',
     useCookieInsteadOfSession: false,
