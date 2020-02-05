@@ -28,9 +28,7 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
             className={'opprett__skjemagruppe'}
             feil={
                 visFeilmeldinger && opprettelseFeilmelding !== ''
-                    ? {
-                          feilmelding: opprettelseFeilmelding,
-                      }
+                    ? opprettelseFeilmelding
                     : undefined
             }
         >
@@ -73,9 +71,7 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                 feil={
                     context.søkersFødselsnummer.valideringsstatus !== Valideringsstatus.OK &&
                     visFeilmeldinger
-                        ? {
-                              feilmelding: context.søkersFødselsnummer.feilmelding,
-                          }
+                        ? context.søkersFødselsnummer.feilmelding
                         : undefined
                 }
             />
@@ -101,9 +97,7 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                                 feil={
                                     barnsFødselsnummerFelt.valideringsstatus !==
                                         Valideringsstatus.OK && visFeilmeldinger
-                                        ? {
-                                              feilmelding: barnsFødselsnummerFelt.feilmelding,
-                                          }
+                                        ? barnsFødselsnummerFelt.feilmelding
                                         : undefined
                                 }
                             />

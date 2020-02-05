@@ -7,6 +7,7 @@ import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider'
 import FastsettVedtak from './Behandle/FastsettVedtak';
 import { FastsettVedtakProvider } from './Behandle/FastsettVedtakProvider';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
+import { kjønnType } from '../../typer/person';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -29,27 +30,36 @@ const FagsakContainer: React.FunctionComponent = () => {
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
             return (
-                <Switch>
-                    <Visittkort />
-                    <Route
-                        exact={true}
-                        path="/fagsak/:fagsakId/behandle"
-                        render={() => {
-                            return (
-                                <FastsettVedtakProvider fagsak={fagsak.data}>
-                                    <FastsettVedtak fagsak={fagsak.data} />
-                                </FastsettVedtakProvider>
-                            );
-                        }}
+                <div className={'fagsakcontainer'}>
+                    <Visittkort
+                        navn={'IKKE IMPLEMENTERT'}
+                        ident={fagsak.data.søkerFødselsnummer}
+                        alder={18}
+                        kjønn={kjønnType.K}
                     />
-                    <Route
-                        exact={true}
-                        path="/fagsak/:fagsakId/vedtak"
-                        render={() => {
-                            return <OppsummeringVedtak fagsak={fagsak.data} />;
-                        }}
-                    />
-                </Switch>
+                    <div className={'fagsakcontainer__content'}>
+                        <Switch>
+                            <Route
+                                exact={true}
+                                path="/fagsak/:fagsakId/behandle"
+                                render={() => {
+                                    return (
+                                        <FastsettVedtakProvider fagsak={fagsak.data}>
+                                            <FastsettVedtak fagsak={fagsak.data} />
+                                        </FastsettVedtakProvider>
+                                    );
+                                }}
+                            />
+                            <Route
+                                exact={true}
+                                path="/fagsak/:fagsakId/vedtak"
+                                render={() => {
+                                    return <OppsummeringVedtak fagsak={fagsak.data} />;
+                                }}
+                            />
+                        </Switch>
+                    </div>
+                </div>
             );
 
         case RessursStatus.HENTER:
