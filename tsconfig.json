@@ -1,12 +1,6 @@
 {
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "sourceMap": true,
         "outDir": "node_dist",
         "baseUrl": "./src/backend",
     },
