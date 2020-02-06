@@ -4,7 +4,7 @@ import { IPerson } from './person';
 // Enum
 export enum Behandlingstype {
     FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
-    MIGRERING = 'MIGRERING',
+    MIGRERING_FRA_INFOTRYGD = 'MIGRERING_FRA_INFOTRYGD',
     REVURDERING = 'REVURDERING',
 }
 
@@ -66,9 +66,9 @@ export const behandlingstyper: INøkkelPar = {
         id: 'førstegangsbehandling',
         navn: 'Førstegangsbehandling',
     },
-    MIGRERING: {
-        id: 'migrering',
-        navn: 'Migrering',
+    MIGRERING_FRA_INFOTRYGD: {
+        id: 'migrering_fra_infotrygd',
+        navn: 'Migrering fra infotrygd',
     },
     REVURDERING: {
         id: 'revurdering',
