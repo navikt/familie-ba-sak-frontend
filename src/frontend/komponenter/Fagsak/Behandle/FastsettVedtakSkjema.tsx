@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 import { Panel } from 'nav-frontend-paneler';
 import { Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
@@ -38,9 +38,7 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
             className={'fastsett__skjemagruppe'}
             feil={
                 visFeilmeldinger && opprettelseFeilmelding !== ''
-                    ? {
-                          feilmelding: opprettelseFeilmelding,
-                      }
+                    ? opprettelseFeilmelding
                     : undefined
             }
         >
@@ -77,9 +75,7 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                                 feil={
                                     barnBeregning.valideringsstatus !== Valideringsstatus.OK &&
                                     visFeilmeldinger
-                                        ? {
-                                              feilmelding: barnBeregning.feilmelding,
-                                          }
+                                        ? barnBeregning.feilmelding
                                         : undefined
                                 }
                             >

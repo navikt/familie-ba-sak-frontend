@@ -139,7 +139,7 @@ export const passportConfig: IOIDCStrategyOptionWithRequest = {
     clientSecret: nodeConfig.clientSecret,
     cookieEncryptionKeys: nodeConfig.cookieEncryptionKeys,
     identityMetadata: nodeConfig.identityMetadata,
-    loggingLevel: 'info',
+    loggingLevel: 'warn',
     passReqToCallback: true,
     redirectUrl: nodeConfig.redirectUrl,
     responseMode: 'query',

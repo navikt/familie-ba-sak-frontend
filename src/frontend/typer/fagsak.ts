@@ -4,7 +4,16 @@ import { IPerson } from './person';
 // Enum
 export enum Behandlingstype {
     FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
+    MIGRERING = 'MIGRERING',
     REVURDERING = 'REVURDERING',
+}
+
+export enum BehandlingStatus {
+    OPPRETTET = 'OPPRETTET',
+    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
+    LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG = 'LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG',
+    SENDT_TIL_IVERKSETTING = 'SENDT_TIL_IVERKSETTING',
+    IVERKSATT = 'IVERKSATT',
 }
 
 // Interface
@@ -18,9 +27,11 @@ export interface IFagsak {
 
 export interface IBehandling {
     aktiv: boolean;
-    behandlingId: number;
-    søker?: string;
     barnasFødselsnummer: string[];
+    behandlingId: number;
+    status: BehandlingStatus;
+    type: Behandlingstype;
+    søker?: string;
     vedtakForBehandling: IVedtakForBehandling[];
 }
 
@@ -54,6 +65,10 @@ export const behandlingstyper: INøkkelPar = {
     FØRSTEGANGSBEHANDLING: {
         id: 'førstegangsbehandling',
         navn: 'Førstegangsbehandling',
+    },
+    MIGRERING: {
+        id: 'migrering',
+        navn: 'Migrering',
     },
     REVURDERING: {
         id: 'revurdering',
