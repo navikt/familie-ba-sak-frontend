@@ -66,7 +66,7 @@ const OpprettBehandling: React.FunctionComponent = () => {
                                             payload: response,
                                             type: fagsakActions.SETT_FAGSAK,
                                         });
-                                        history.push(`/fagsak/${response.data.id}/behandle`);
+                                        history.push(`/fagsak/${response.data.id}/vilkaar`);
                                     } else if (response.status === RessursStatus.FEILET) {
                                         settVisFeilmeldinger(true);
                                         settOpprettelseFeilmelding(response.melding);

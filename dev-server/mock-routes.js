@@ -1,9 +1,11 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 
 const delayMs = 20;
 const app = express();
+app.use(bodyParser.json());
 
 const lesMockFil = filnavn => {
     try {
@@ -31,6 +33,62 @@ app.get('/familie-ba-sak/api/behandling/1/vedtak-html', (req, res) => {
                 status: 'SUKSESS',
             }),
         delayMs
+    );
+});
+
+app.post('/familie-ba-sak/api/behandling/opprett', (req, res) => {
+    setTimeout(
+        () =>
+            res.send({
+                data: {
+                    opprettetTidspunkt: Date.now(),
+                    id: 1,
+                    søkerFødselsnummer: req.body.fødselsnummer,
+                    behandlinger: [
+                        {
+                            aktiv: true,
+                            behandlingId: 1,
+                            søker: req.body.fødselsnummer,
+                            barnasFødselsnummer: req.body.barnasFødselsnummer,
+                            vedtakForBehandling: [],
+                        },
+                    ],
+                },
+                status: 'SUKSESS',
+            }),
+        delayMs * 80
+    );
+});
+
+app.post('/familie-ba-sak/api/fagsak/1/kort-vedtak', (req, res) => {
+    setTimeout(
+        () =>
+            res.send({
+                data: {
+                    opprettetTidspunkt: Date.now(),
+                    id: 1,
+                    søkerFødselsnummer: req.body.fødselsnummer,
+                    behandlinger: [
+                        {
+                            aktiv: true,
+                            behandlingId: 1,
+                            søker: req.body.fødselsnummer,
+                            barnasFødselsnummer: req.body.barnasFødselsnummer,
+                            vedtakForBehandling: [
+                                {
+                                    aktiv: true,
+                                    ansvarligSaksbehandler: 'tester',
+                                    vedtaksdato: Date.now(),
+                                    barnasBeregning: [],
+                                    resultat: req.body.resultat,
+                                },
+                            ],
+                        },
+                    ],
+                },
+                status: 'SUKSESS',
+            }),
+        delayMs * 80
     );
 });
 

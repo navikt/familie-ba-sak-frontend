@@ -7,6 +7,14 @@ export enum Behandlingstype {
     REVURDERING = 'REVURDERING',
 }
 
+// Enum
+export enum VedtakResultat {
+    INNVILGET = 'INNVILGET',
+    AVSLÅTT = 'AVSLÅTT',
+    OPPHØRT = 'OPPHØRT',
+    HENLAGT = 'HENLAGT',
+}
+
 // Interface
 export interface IFagsak {
     behandlinger: IBehandling[];
@@ -31,6 +39,7 @@ export interface IVedtakForBehandling {
     stønadFom: string;
     stønadTom: string;
     vedtaksdato: string;
+    resultat: VedtakResultat;
 }
 
 export interface IBehandlingsresultat {

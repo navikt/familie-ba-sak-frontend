@@ -8,6 +8,7 @@ import FastsettVedtak from './Behandle/FastsettVedtak';
 import { FastsettVedtakProvider } from './Behandle/FastsettVedtakProvider';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import { kjønnType } from '../../typer/person';
+import VelgVilkaarene from './Vilkaar/VelgVilkaarene';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -39,6 +40,13 @@ const FagsakContainer: React.FunctionComponent = () => {
                     />
                     <div className={'fagsakcontainer__content'}>
                         <Switch>
+                            <Route
+                                exact={true}
+                                path="/fagsak/:fagsakId/vilkaar"
+                                render={() => {
+                                    return <VelgVilkaarene fagsak={fagsak.data} />;
+                                }}
+                            />
                             <Route
                                 exact={true}
                                 path="/fagsak/:fagsakId/behandle"

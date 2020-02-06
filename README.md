@@ -23,6 +23,7 @@ Appen krever en del environment variabler og legges til i .env fila i root på p
     
     ENV=local
     APP_VERSION=0.0.1
+    BA_SAK_SCOPE=<scope string>
 ```
 Disse kan hentes ut fra Secrets i Vault under kv/preprod/fss/familie-ba-sak-frontend/default, med unntak av ENV og APP_VERSION som er gitt over.
 
