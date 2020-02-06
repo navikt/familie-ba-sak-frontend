@@ -1,6 +1,6 @@
 import { init } from '@sentry/browser';
 import * as React from 'react';
-import * as axe from 'react-axe';
+import axe from 'react-axe';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import App from './komponenter/App';

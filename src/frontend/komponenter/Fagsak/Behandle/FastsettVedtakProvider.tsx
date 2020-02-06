@@ -20,7 +20,7 @@ export interface IAction {
 type Dispatch = (action: IAction) => void;
 
 export interface IState {
-    barnasBeregning: Array<IFelt<IBarnBeregning>>;
+    barnasBeregning: IFelt<IBarnBeregning>[];
     behandlingsresultat: string;
     sakstype: string;
     senderInn: boolean;

@@ -1,11 +1,6 @@
 import Backend from '@navikt/familie-backend';
-import { SessionRequest } from '@navikt/familie-backend/lib/typer';
-import { Response as ExpressResponse } from 'express';
-import HttpsProxyAgent from 'https-proxy-agent';
-import fetch, { Response } from 'node-fetch';
+import { Request, Response as ExpressResponse } from 'express';
 import { namespace } from '../config';
-
-const token = process.env.SLACK_TOKEN;
 
 /**
  * Funksjon som kaller slack sitt postMessage api.
@@ -13,10 +8,14 @@ const token = process.env.SLACK_TOKEN;
  */
 export const slackNotify = (
     backend: Backend,
-    req: SessionRequest,
+    req: Request,
     res: ExpressResponse,
     kanal: string
 ) => {
+    if (!req.session) {
+        throw Error('Ingen sesjon på requesten');
+    }
+
     const displayName = req.session.displayName ? req.session.displayName : 'System';
     const formatertMelding: string = `*${displayName}, ${namespace}*\n ${req.body.melding}`;
 

@@ -1,6 +1,5 @@
 import Backend from '@navikt/familie-backend';
-import { SessionRequest } from '@navikt/familie-backend/lib/typer';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import path from 'path';
 import { buildPath, saksbehandlerTokenConfig } from './config';
 import { prometheusTellere } from './metrikker';
@@ -11,12 +10,12 @@ const packageJson = require('../package.json');
 /* tslint:enable */
 
 export default (backend: Backend, middleware: any) => {
-    backend.getRouter().get('/version', (req, res) => {
+    backend.getRouter().get('/version', (_req, res) => {
         res.status(200)
             .send({ version: process.env.APP_VERSION, reduxVersion: packageJson.redux_version })
             .end();
     });
-    backend.getRouter().get('/error', (req, res) => {
+    backend.getRouter().get('/error', (_req, res) => {
         prometheusTellere.error_route.inc();
         res.sendFile('error.html', { root: path.join(`assets/`) });
     });
@@ -33,7 +32,7 @@ export default (backend: Backend, middleware: any) => {
             .get(
                 '*',
                 backend.ensureAuthenticated(false, saksbehandlerTokenConfig),
-                (req: SessionRequest, res: Response) => {
+                (_req: Request, res: Response) => {
                     prometheusTellere.app_load.inc();
 
                     res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -51,7 +50,7 @@ export default (backend: Backend, middleware: any) => {
             .get(
                 '*',
                 backend.ensureAuthenticated(false, saksbehandlerTokenConfig),
-                (req: SessionRequest, res: Response) => {
+                (_req: Request, res: Response) => {
                     prometheusTellere.app_load.inc();
 
                     res.sendFile('index.html', { root: path.join(__dirname, buildPath) });

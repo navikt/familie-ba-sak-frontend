@@ -67,6 +67,9 @@ const OpprettBehandling: React.FunctionComponent = () => {
                                             type: fagsakActions.SETT_FAGSAK,
                                         });
                                         history.push(`/fagsak/${response.data.id}/behandle`);
+                                    } else if (response.status === RessursStatus.FEILET) {
+                                        settVisFeilmeldinger(true);
+                                        settOpprettelseFeilmelding(response.melding);
                                     } else {
                                         settVisFeilmeldinger(true);
                                         settOpprettelseFeilmelding(
@@ -76,6 +79,7 @@ const OpprettBehandling: React.FunctionComponent = () => {
                                 })
                                 .catch(() => {
                                     dispatch({ type: actions.SETT_SENDER_INN, payload: false });
+                                    settVisFeilmeldinger(true);
                                     settOpprettelseFeilmelding('Opprettelse av behandling feilet');
                                 });
                         } else {

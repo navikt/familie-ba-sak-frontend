@@ -1,6 +1,6 @@
 import { captureException, configureScope, withScope } from '@sentry/core';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import { Ressurs, RessursStatus } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
 
@@ -16,47 +16,55 @@ export const axiosRequest = async <T>(
         .then((response: AxiosResponse<Ressurs<T>>) => {
             const responsRessurs: Ressurs<T> = response.data;
 
-            let typetRessurs: Ressurs<T> = {
-                status: RessursStatus.IKKE_HENTET,
-            };
-
-            switch (responsRessurs.status) {
-                case RessursStatus.SUKSESS:
-                    typetRessurs = {
-                        data: responsRessurs.data,
-                        status: RessursStatus.SUKSESS,
-                    };
-                    break;
-                case RessursStatus.IKKE_TILGANG:
-                    loggFeil(undefined, innloggetSaksbehandler, responsRessurs.melding);
-                    typetRessurs = {
-                        melding: responsRessurs.melding,
-                        status: RessursStatus.IKKE_TILGANG,
-                    };
-                    break;
-                case RessursStatus.FEILET:
-                    loggFeil(undefined, innloggetSaksbehandler, responsRessurs.melding);
-                    typetRessurs = {
-                        errorMelding: responsRessurs.errorMelding,
-                        melding: responsRessurs.melding,
-                        status: RessursStatus.FEILET,
-                    };
-                    break;
-                default:
-                    typetRessurs = {
-                        melding: 'Mest sannsynlig ukjent api feil',
-                        status: RessursStatus.FEILET,
-                    };
-                    break;
-            }
-
-            return typetRessurs;
+            return håndterRessurs(responsRessurs, innloggetSaksbehandler);
         })
         .catch((error: AxiosError) => {
             loggFeil(error, innloggetSaksbehandler);
+            const responsRessurs: Ressurs<T> = error.response?.data;
 
-            return byggFeiletRessurs<T>('Ukjent api feil', error);
+            return håndterRessurs(responsRessurs, innloggetSaksbehandler);
         });
+};
+
+const håndterRessurs = <T>(
+    ressurs: Ressurs<T>,
+    innloggetSaksbehandler?: ISaksbehandler
+): Ressurs<T> => {
+    let typetRessurs: Ressurs<T> = {
+        status: RessursStatus.IKKE_HENTET,
+    };
+
+    switch (ressurs.status) {
+        case RessursStatus.SUKSESS:
+            typetRessurs = {
+                data: ressurs.data,
+                status: RessursStatus.SUKSESS,
+            };
+            break;
+        case RessursStatus.IKKE_TILGANG:
+            loggFeil(undefined, innloggetSaksbehandler, ressurs.melding);
+            typetRessurs = {
+                melding: ressurs.melding,
+                status: RessursStatus.IKKE_TILGANG,
+            };
+            break;
+        case RessursStatus.FEILET:
+            loggFeil(undefined, innloggetSaksbehandler, ressurs.melding);
+            typetRessurs = {
+                errorMelding: ressurs.errorMelding,
+                melding: ressurs.melding,
+                status: RessursStatus.FEILET,
+            };
+            break;
+        default:
+            typetRessurs = {
+                melding: 'Mest sannsynlig ukjent api feil',
+                status: RessursStatus.FEILET,
+            };
+            break;
+    }
+
+    return typetRessurs;
 };
 
 const loggFeil = (
