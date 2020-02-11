@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 import { Panel } from 'nav-frontend-paneler';
 import { Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
