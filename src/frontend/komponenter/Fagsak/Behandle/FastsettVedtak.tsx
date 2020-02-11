@@ -69,6 +69,10 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
             <br />
 
+            <Normaltekst children={`Type behandling: ${aktivBehandling.type}`} />
+            <Normaltekst children={`Status på behandling: ${aktivBehandling.status}`} />
+            <br />
+
             <Normaltekst children={`Søker: ${fagsak.søkerFødselsnummer}`} />
             {aktivBehandling.barnasFødselsnummer.map(barn => {
                 return <Normaltekst key={barn} children={`Barn: ${barn}`} />;

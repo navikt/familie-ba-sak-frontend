@@ -38,9 +38,7 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
             className={'fastsett__skjemagruppe'}
             feil={
                 visFeilmeldinger && opprettelseFeilmelding !== ''
-                    ? {
-                          feilmelding: opprettelseFeilmelding,
-                      }
+                    ? opprettelseFeilmelding
                     : undefined
             }
         >
@@ -77,9 +75,7 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                                 feil={
                                     barnBeregning.valideringsstatus !== Valideringsstatus.OK &&
                                     visFeilmeldinger
-                                        ? {
-                                              feilmelding: barnBeregning.feilmelding,
-                                          }
+                                        ? barnBeregning.feilmelding
                                         : undefined
                                 }
                             >
