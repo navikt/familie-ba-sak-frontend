@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
@@ -67,6 +67,10 @@ const FastsettVedtak: React.FunctionComponent<IProps> = ({ fagsak }) => {
         <div className={'fastsett'}>
             <Systemtittel children={'Behandle sak'} />
 
+            <br />
+
+            <Normaltekst children={`Type behandling: ${aktivBehandling.type}`} />
+            <Normaltekst children={`Status på behandling: ${aktivBehandling.status}`} />
             <br />
 
             <Normaltekst children={`Søker: ${fagsak.søkerFødselsnummer}`} />

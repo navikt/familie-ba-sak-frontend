@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 import { IFødselsnummerFelt } from '../komponenter/Fagsak/Opprett/OpprettBehandlingProvider';
 import { IBarnBeregning } from '../typer/behandle';
 import { feil, IFelt, ok, Valideringsstatus } from '../typer/felt';

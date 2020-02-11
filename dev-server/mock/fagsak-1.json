@@ -1,23 +1,36 @@
 {
-	"data": {
-		"id": 1,
-		"opprettetTidspunkt": "2019-01-01T14:35:08.426697",
-		"søkerFødselsnummer": "00000000001",
-		"saksnummer": "1",
-		"behandlinger": [
-			{
-				"aktiv": true,
-				"behandlingId": 1,
-				"søker": "00000000001",
-				"vedtakForBehandling": [],
-				"barnasFødselsnummer": [
-					"00000000003",
-					"00000000004"
-				]
-			}
-		]
-	},
-	"status": "SUKSESS",
-	"melding": "Innhenting av data var vellykket",
-	"errorMelding": null
+    "data": {
+        "opprettetTidspunkt": "2020-02-06T11:58:00.58296",
+        "id": 1,
+        "søkerFødselsnummer": "12345678910",
+        "behandlinger": [
+            {
+                "aktiv": true,
+                "behandlingId": 1,
+                "type": "FØRSTEGANGSBEHANDLING",
+                "status": "OPPRETTET",
+                "barnasFødselsnummer": [
+                    "0000000000001"
+                ],
+                "vedtakForBehandling": [
+                    {
+                        "aktiv": true,
+                        "ansvarligSaksbehandler": "Mock.Mockersen@trygdeetaten.no",
+                        "vedtaksdato": "2020-02-06",
+                        "barnasBeregning": [
+                            {
+                                "barn": "0000000000001",
+                                "beløp": 1054,
+                                "stønadFom": "2020-01-01"
+                            }
+                        ],
+                        "resultat": "INNVILGET"
+                    }
+                ]
+            }
+        ]
+    },
+    "status": "SUKSESS",
+    "melding": "Innhenting av data var vellykket",
+    "stacktrace": null
 }
