@@ -1,4 +1,4 @@
-import { IFagsak } from '../typer/fagsak';
+import { IFagsak, Behandlingstype } from '../typer/fagsak';
 import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { axiosRequest } from './axios';
@@ -34,4 +34,18 @@ export const hentFagsaker = (
         },
         innloggetSaksbehandler
     );
+};
+
+export interface IOpprettBehandlingData {
+    barnasFødselsnummer: string[];
+    behandlingType: Behandlingstype;
+    fødselsnummer: string;
+}
+
+export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
+    return axiosRequest<IFagsak>({
+        data,
+        method: 'POST',
+        url: '/familie-ba-sak/api/behandling/opprett',
+    });
 };

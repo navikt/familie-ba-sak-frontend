@@ -12,7 +12,6 @@ export enum actions {
     LEGG_TIL_BARN = 'LEGG_TIL_BARN',
     SLETT_BARN = 'SLETT_BARN',
     SETT_BARNS_FØDSELSNUMMER = 'SETT_BARNS_FØDSELSNUMMER',
-    SETT_SENDER_INN = 'SETT_SENDER_INN',
 }
 
 export interface IAction {
@@ -25,14 +24,12 @@ type Dispatch = (action: IAction) => void;
 export interface IState {
     barnasFødselsnummer: IFødselsnummerFelt[];
     behandlingstype: Behandlingstype;
-    senderInn: boolean;
     søkersFødselsnummer: IFødselsnummerFelt;
 }
 
 const initialState: IState = {
     barnasFødselsnummer: [lagInitiellFelt('', fødselsnummerValidator)],
     behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING,
-    senderInn: false,
     søkersFødselsnummer: lagInitiellFelt('', fødselsnummerValidator),
 };
 
@@ -89,11 +86,6 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
             return {
                 ...state,
                 barnasFødselsnummer: barnasFødselsnummerKopi,
-            };
-        case actions.SETT_SENDER_INN:
-            return {
-                ...state,
-                senderInn: action.payload,
             };
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);
