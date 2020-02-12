@@ -22,6 +22,7 @@ const OpprettBehandling: React.FunctionComponent = () => {
                 tittel={'Opprett behandling'}
                 nesteOnClick={() => {
                     opprettBehandling(
+                        context,
                         {
                             barnasFødselsnummer: context.barnasFødselsnummer.map(
                                 barnFødselsnummer => barnFødselsnummer.verdi

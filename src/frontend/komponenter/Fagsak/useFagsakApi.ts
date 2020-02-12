@@ -4,7 +4,7 @@ import { useFagsakDispatch, actions as fagsakActions } from '../FagsakProvider';
 import { apiOpprettBehandling, IOpprettBehandlingData } from '../../api/fagsak';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { IFagsak } from '../../typer/fagsak';
-import { useOpprettBehandlingContext } from './Opprett/OpprettBehandlingProvider';
+import { IState as IOpprettBehandlingState } from './Opprett/OpprettBehandlingProvider';
 import { Valideringsstatus } from '../../typer/felt';
 
 const useFagsakApi = (
@@ -15,9 +15,12 @@ const useFagsakApi = (
     const [senderInn, settSenderInn] = useState(false);
 
     const fagsakDispatcher = useFagsakDispatch();
-    const context = useOpprettBehandlingContext();
 
-    const opprettBehandling = (data: IOpprettBehandlingData, redirect: string) => {
+    const opprettBehandling = (
+        context: IOpprettBehandlingState,
+        data: IOpprettBehandlingData,
+        redirect: string
+    ) => {
         if (
             process.env.NODE_ENV === 'development' ||
             (context.søkersFødselsnummer.valideringsstatus === Valideringsstatus.OK &&
