@@ -1,0 +1,55 @@
+import { Knapp } from 'nav-frontend-knapper';
+import { Systemtittel } from 'nav-frontend-typografi';
+import * as React from 'react';
+
+interface IProps {
+    forrigeOnClick?: () => void;
+    nesteOnClick?: () => void;
+    senderInn: boolean;
+    tittel: string;
+}
+
+const Skjemasteg: React.StatelessComponent<IProps> = ({
+    children,
+    forrigeOnClick,
+    nesteOnClick,
+    senderInn,
+    tittel,
+}) => {
+    return (
+        <div className={'skjemasteg'}>
+            <Systemtittel children={tittel} />
+
+            {children}
+
+            <div className={'skjemasteg__navigering'}>
+                {forrigeOnClick ? (
+                    <Knapp
+                        type={'hoved'}
+                        onClick={() => {
+                            forrigeOnClick();
+                        }}
+                        children={'Forrige'}
+                    />
+                ) : (
+                    <div />
+                )}
+
+                <div className={'skjemasteg__navigering--flex'} />
+
+                {nesteOnClick && (
+                    <Knapp
+                        type={'hoved'}
+                        spinner={senderInn}
+                        onClick={async () => {
+                            nesteOnClick();
+                        }}
+                        children={'Neste'}
+                    />
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default Skjemasteg;
