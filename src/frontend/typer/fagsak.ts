@@ -37,11 +37,10 @@ export interface IFagsak {
 
 export interface IBehandling {
     aktiv: boolean;
-    barnasFødselsnummer: string[];
+    personer: IPerson[];
     behandlingId: number;
     kategori: BehandlingKategori;
     status: BehandlingStatus;
-    søker?: string;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];

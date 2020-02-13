@@ -25,14 +25,17 @@ export enum kjønnType {
 
 // Interface
 export interface IPerson {
-    bostedsadresse?: IPersonAdresse;
     fødselsdato: string;
+    kjønn?: kjønnType;
+    navn?: string;
     personIdent: string;
-    kjønn: kjønnType;
-    navn: string;
-    personhistorikk: IPersonhistorikk;
-    relasjoner: IPersonRelasjon[];
-    statsborgerskap: string;
+    personType: PersonType;
+}
+
+export enum PersonType {
+    SØKER = 'SØKER',
+    ANNENPART = 'ANNENPART',
+    BARN = 'BARN',
 }
 
 export interface IPersonhistorikk {

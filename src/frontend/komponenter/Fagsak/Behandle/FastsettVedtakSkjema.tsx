@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Panel } from 'nav-frontend-paneler';
-import { Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IBarnBeregning } from '../../../typer/behandle';
