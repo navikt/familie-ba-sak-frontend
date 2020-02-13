@@ -3,7 +3,13 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { Behandlingstype, behandlingstyper } from '../../../typer/fagsak';
+import {
+    Behandlingstype,
+    behandlingstyper,
+    BehandlingKategori,
+    kategorier,
+    underkategorier,
+} from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import {
     actions,
@@ -56,6 +62,50 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                 })}
             </Select>
 
+            <br />
+            <Undertittel children={'Velg sakstype'} />
+            <Select
+                bredde={'l'}
+                label="Kategori"
+                onChange={event =>
+                    dispatch({
+                        payload: event.target.value as BehandlingKategori,
+                        type: actions.SETT_BEHANDLING_KATEGORI,
+                    })
+                }
+                value={context.kategori}
+            >
+                {Object.keys(kategorier).map((key: string) => {
+                    return (
+                        <option aria-selected={context.kategori === key} key={key} value={key}>
+                            {kategorier[key].navn}
+                        </option>
+                    );
+                })}
+            </Select>
+
+            <Select
+                bredde={'l'}
+                label="Underkategori"
+                onChange={event =>
+                    dispatch({
+                        payload: event.target.value as Behandlingstype,
+                        type: actions.SETT_BEHANDLING_UNDERKATEGORI,
+                    })
+                }
+                value={context.underkategori}
+            >
+                {Object.keys(underkategorier).map((key: string) => {
+                    return (
+                        <option aria-selected={context.underkategori === key} key={key} value={key}>
+                            {underkategorier[key].navn}
+                        </option>
+                    );
+                })}
+            </Select>
+
+            <br />
+            <hr />
             <br />
             <Undertittel children={'Søker'} />
             <Input

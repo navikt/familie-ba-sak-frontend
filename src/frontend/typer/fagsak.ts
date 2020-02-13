@@ -8,6 +8,16 @@ export enum Behandlingstype {
     REVURDERING = 'REVURDERING',
 }
 
+export enum BehandlingKategori {
+    NATIONAL = 'NATIONAL',
+    EØS = 'EØS',
+}
+
+export enum BehandlingUnderkategori {
+    ORDINÆR = 'ORDINÆR',
+    UTVIDET = 'UTVIDET',
+}
+
 export enum BehandlingStatus {
     OPPRETTET = 'OPPRETTET',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
@@ -36,9 +46,11 @@ export interface IBehandling {
     aktiv: boolean;
     barnasFødselsnummer: string[];
     behandlingId: number;
+    kategori: BehandlingKategori;
     status: BehandlingStatus;
-    type: Behandlingstype;
     søker?: string;
+    type: Behandlingstype;
+    underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
 }
 
@@ -83,7 +95,18 @@ export const behandlingstyper: INøkkelPar = {
     },
 };
 
-export const sakstyper: INøkkelPar = {
+export const kategorier: INøkkelPar = {
+    NATIONAL: {
+        id: 'national',
+        navn: 'National',
+    },
+    EØS: {
+        id: 'eøs',
+        navn: 'EØS',
+    },
+};
+
+export const underkategorier: INøkkelPar = {
     ORDINÆR: {
         id: 'ordinær',
         navn: 'Ordinær barnetrygd',
