@@ -29,6 +29,8 @@ const OpprettBehandling: React.FunctionComponent = () => {
                             ),
                             behandlingType: context.behandlingstype,
                             fødselsnummer: context.søkersFødselsnummer.verdi,
+                            kategori: context.kategori,
+                            underkategori: context.underkategori,
                         },
                         context.behandlingstype !== Behandlingstype.MIGRERING_FRA_INFOTRYGD
                             ? 'behandle'

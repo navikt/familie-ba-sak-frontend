@@ -1,4 +1,9 @@
-import { IFagsak, Behandlingstype } from '../typer/fagsak';
+import {
+    IFagsak,
+    Behandlingstype,
+    BehandlingKategori,
+    BehandlingUnderkategori,
+} from '../typer/fagsak';
 import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { axiosRequest } from './axios';
@@ -40,6 +45,8 @@ export interface IOpprettBehandlingData {
     barnasFødselsnummer: string[];
     behandlingType: Behandlingstype;
     fødselsnummer: string;
+    kategori: BehandlingKategori;
+    underkategori: BehandlingUnderkategori;
 }
 
 export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {

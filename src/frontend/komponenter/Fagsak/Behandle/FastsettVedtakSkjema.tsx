@@ -4,7 +4,7 @@ import { Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skje
 import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IBarnBeregning } from '../../../typer/behandle';
-import { IVedtakForBehandling, sakstyper } from '../../../typer/fagsak';
+import { IVedtakForBehandling } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import {
     actions,
@@ -42,27 +42,6 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                     : undefined
             }
         >
-            <Select
-                bredde={'l'}
-                label={'Velg sakstype'}
-                value={context.sakstype}
-                onChange={event =>
-                    dispatch({ type: actions.SETT_SAKSTYPE, payload: event.target.value })
-                }
-            >
-                {Object.keys(sakstyper).map(mapSakstype => {
-                    return (
-                        <option
-                            aria-selected={context.sakstype === sakstyper[mapSakstype].id}
-                            key={sakstyper[mapSakstype].id}
-                            value={sakstyper[mapSakstype].id}
-                        >
-                            {sakstyper[mapSakstype].navn}
-                        </option>
-                    );
-                })}
-            </Select>
-
             <Undertittel children={'Beregning'} />
 
             <Panel className={'fastsett__skjemagruppe--beregning'}>
