@@ -22,7 +22,6 @@ type Dispatch = (action: IAction) => void;
 export interface IState {
     barnasBeregning: IFelt<IBarnBeregning>[];
     behandlingsresultat: string;
-    sakstype: string;
     senderInn: boolean;
 }
 
@@ -38,7 +37,6 @@ export const lastInitialState = (fagsak: IFagsak): IState => ({
         );
     }),
     behandlingsresultat: 'innvilget',
-    sakstype: sakstyper.ORDINÆR.id,
     senderInn: false,
 });
 
@@ -64,11 +62,6 @@ const fastsettVedtakReducer = (state: IState, action: IAction): IState => {
             return {
                 ...state,
                 behandlingsresultat: action.payload,
-            };
-        case actions.SETT_SAKSTYPE:
-            return {
-                ...state,
-                sakstype: action.payload,
             };
         case actions.SETT_SENDER_INN:
             return {
