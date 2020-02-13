@@ -1,4 +1,4 @@
-import { IFagsak, Behandlingstype } from '../typer/fagsak';
+import { IFagsak, Behandlingstype, VedtakResultat } from '../typer/fagsak';
 import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { axiosRequest } from './axios';
@@ -47,5 +47,17 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
         data,
         method: 'POST',
         url: '/familie-ba-sak/api/behandling/opprett',
+    });
+};
+
+export interface IOpprettVedtakData {
+    resultat: VedtakResultat;
+}
+
+export const apiOpprettVedtak = (fagsakId: number, data: IOpprettVedtakData) => {
+    return axiosRequest<IFagsak>({
+        data,
+        method: 'POST',
+        url: `/familie-ba-sak/api/fagsak/${fagsakId}/nytt-vedtak`,
     });
 };

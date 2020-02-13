@@ -11,10 +11,10 @@ const OpprettBehandling: React.FunctionComponent = () => {
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
-    const { opprettBehandling, senderInn } = useFagsakApi(
-        settVisFeilmeldinger,
-        settOpprettelseFeilmelding
-    );
+    const api = useFagsakApi(settVisFeilmeldinger, settOpprettelseFeilmelding);
+
+    const opprettBehandling = api.opprettBehandling;
+    const senderInn = api.senderInn;
 
     return (
         <div className={'opprett'}>
@@ -31,7 +31,7 @@ const OpprettBehandling: React.FunctionComponent = () => {
                             fødselsnummer: context.søkersFødselsnummer.verdi,
                         },
                         context.behandlingstype !== Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                            ? 'behandle'
+                            ? 'vilkår'
                             : 'beregning'
                     );
                 }}

@@ -1,15 +1,8 @@
 import * as React from 'react'
-import { IFagsak } from '../../../typer/fagsak';
+import { IFagsak, VedtakResultat } from '../../../typer/fagsak';
 
 export enum actions {
     SETT_RESULTAT = 'SETT_RESULTAT',
-}
-
-export enum VedtakResultat {
-    INNVILGET = 'INNVILGET',
-    AVSLÅTT = 'AVSLÅTT',
-    OPPHØRT = 'OPPHØRT',
-    HENLAGT = 'HENLAGT'
 }
 
 export interface IAction {

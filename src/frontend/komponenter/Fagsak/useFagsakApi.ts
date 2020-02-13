@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useFagsakDispatch, actions as fagsakActions } from '../FagsakProvider';
-import { apiOpprettBehandling, IOpprettBehandlingData } from '../../api/fagsak';
+import { apiOpprettBehandling, IOpprettBehandlingData, apiOpprettVedtak } from '../../api/fagsak';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
-import { IFagsak } from '../../typer/fagsak';
+import { IFagsak, VedtakResultat } from '../../typer/fagsak';
 import { IState as IOpprettBehandlingState } from './Opprett/OpprettBehandlingProvider';
+import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { Valideringsstatus } from '../../typer/felt';
 
 const useFagsakApi = (
@@ -58,8 +59,42 @@ const useFagsakApi = (
         }
     };
 
+    const opprettVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {
+        settSenderInn(true);
+        apiOpprettVedtak(fagsak.id, { resultat: context.vedtakResultat })
+            .then((response: Ressurs<any>) => {
+                settSenderInn(false);
+                if (response.status === RessursStatus.SUKSESS) {
+                    fagsakDispatcher({
+                        payload: response,
+                        type: fagsakActions.SETT_FAGSAK,
+                    });
+
+                    if (context.vedtakResultat == VedtakResultat.INNVILGET) {
+                        history.push(`/fagsak/${fagsak.id}/behandle`);
+                    } else if (context.vedtakResultat == VedtakResultat.AVSLÅTT) {
+                        history.push(`/fagsak/${fagsak.id}/vedtak`);
+                    } else {
+                        settFeilmelding('Internal error: invalid vedtak result');
+                        settVisFeilmeldinger(true);
+                    }
+                } else if (response.status === RessursStatus.FEILET) {
+                    settFeilmelding(response.melding);
+                    settVisFeilmeldinger(true);
+                } else {
+                    settFeilmelding('Opprettelse av vedtak feilet');
+                    settVisFeilmeldinger(true);
+                }
+            })
+            .catch(() => {
+                settSenderInn(false);
+                settFeilmelding('Opprettelse av vedtak feilet');
+            });
+    };
+
     return {
         opprettBehandling,
+        opprettVedtak,
         senderInn,
     };
 };
