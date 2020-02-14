@@ -1,33 +1,28 @@
 import moment from 'moment';
 import { Panel } from 'nav-frontend-paneler';
-import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IBarnBeregning } from '../../../typer/behandle';
 import { IVedtakForBehandling } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import {
-    actions,
-    IState,
-    useFastsettVedtakContext,
-    useFastsettVedtakDispatch,
-} from './FastsettVedtakProvider';
+import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 
-interface IFastsettVedtakSkjema {
+interface IBeregningSkjema {
     aktivVedtak?: IVedtakForBehandling;
     opprettelseFeilmelding: string;
     settSkjemaetHarEndringer: (skjemaetHarEndringer: boolean) => void;
     visFeilmeldinger: boolean;
 }
 
-const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
+const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
     aktivVedtak,
     opprettelseFeilmelding,
     settSkjemaetHarEndringer,
     visFeilmeldinger,
 }) => {
-    const context = useFastsettVedtakContext();
-    const dispatch = useFastsettVedtakDispatch();
+    const context = useBeregningContext();
+    const dispatch = useBeregningDispatch();
 
     React.useEffect(() => {
         settSkjemaetHarEndringer(harSkjemaEndringer(context, aktivVedtak));
@@ -42,8 +37,6 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                     : undefined
             }
         >
-            <Undertittel children={'Beregning'} />
-
             <Panel className={'fastsett__skjemagruppe--beregning'}>
                 {context.barnasBeregning.map(
                     (barnBeregning: IFelt<IBarnBeregning>, index: number) => {
@@ -110,28 +103,6 @@ const FastsettVedtakSkjema: React.FunctionComponent<IFastsettVedtakSkjema> = ({
                     )} kr`}
                 />
             </Panel>
-
-            <Undertittel children={'Hjemler'} />
-            <Normaltekst children={'Vedtaket er fattet etter § 2 og § 11 i barnetrygdloven.'} />
-
-            <Undertittel children={'Resultat'} />
-
-            <RadioPanelGruppe
-                className={'fastsett__skjemagruppe--behandlingsresultat'}
-                name="behandlingsresultat"
-                legend="Behandlingsresultat"
-                radios={[
-                    { label: 'Innvilget', value: 'innvilget', id: 'innvilget' },
-                    { label: 'Avslått', value: 'avslått', id: 'avslått' },
-                ]}
-                checked={context.behandlingsresultat}
-                onChange={(event: any) => {
-                    dispatch({
-                        payload: event.target.value,
-                        type: actions.SETT_BEHANDLINGSRESULTAT,
-                    });
-                }}
-            />
         </SkjemaGruppe>
     );
 };
@@ -141,6 +112,10 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
         return true;
     }
     const barnasBeregning = context.barnasBeregning;
+
+    if (aktivVedtak.barnasBeregning.length === 0) {
+        return true;
+    }
 
     const endringPåBeregning =
         aktivVedtak.barnasBeregning.find(barnBeregning => {
@@ -165,4 +140,4 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
     return endringPåBeregning;
 };
 
-export default FastsettVedtakSkjema;
+export default BeregningSkjema;

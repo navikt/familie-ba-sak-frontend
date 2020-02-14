@@ -29,7 +29,7 @@ export interface IPerson {
     kjønn?: kjønnType;
     navn?: string;
     personIdent: string;
-    personType: PersonType;
+    type: PersonType;
 }
 
 export enum PersonType {

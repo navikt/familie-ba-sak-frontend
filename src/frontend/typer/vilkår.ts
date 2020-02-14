@@ -1,5 +1,10 @@
 import { PersonType, IPerson } from './person';
 
+export enum UtfallType {
+    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+    OPPFYLT = 'OPPFYLT',
+}
+
 export enum VilkårType {
     UNDER_18_ÅR_OG_BOR_MED_SØKER = 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
     BOSATT_I_RIKET = 'BOSATT_I_RIKET',
@@ -41,7 +46,7 @@ export const vilkårConfig: IVilkårsconfig = {
 export interface IVilkårResultat {
     personIdent: string;
     vilkårType: VilkårType;
-    utfallType: any;
+    utfallType: UtfallType;
 }
 
 /**
@@ -50,18 +55,22 @@ export interface IVilkårResultat {
  *
  * @param personer liste av personer fra personopplysningsgrunnlaget på behandlingen
  */
-export const hentVilkårForPersoner = (personer: IPerson[]): IVilkårResultat[] => {
+export const hentVilkårForPersoner = (personer?: IPerson[]): IVilkårResultat[] => {
+    if (!personer) {
+        return [];
+    }
+
     let listeMedVilkårForBehandling: IVilkårResultat[] = [];
     personer.map((person: IPerson) => {
         listeMedVilkårForBehandling = [
             ...listeMedVilkårForBehandling,
             ...Object.values(vilkårConfig)
-                .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.personType))
+                .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.type))
                 .map(
                     (vc: IVilkårConfig): IVilkårResultat => ({
                         personIdent: person.personIdent,
                         vilkårType: vc.key as VilkårType,
-                        utfallType: '',
+                        utfallType: UtfallType.IKKE_OPPFYLT,
                     })
                 ),
         ];

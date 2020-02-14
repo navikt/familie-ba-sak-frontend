@@ -1,6 +1,6 @@
 {
     "data": {
-        "opprettetTidspunkt": "2020-02-06T11:58:00.58296",
+        "opprettetTidspunkt": "2020-02-14T13:24:08.129343",
         "id": 1,
         "søkerFødselsnummer": "12345678910",
         "behandlinger": [
@@ -10,18 +10,54 @@
                 "type": "FØRSTEGANGSBEHANDLING",
                 "status": "OPPRETTET",
                 "kategori": "NATIONAL",
+                "personer": [
+                    {
+                        "type": "SØKER",
+                        "fødselsdato": "1990-01-01",
+                        "personIdent": "12345678910"
+                    },
+                    {
+                        "type": "BARN",
+                        "fødselsdato": "2018-05-01",
+                        "personIdent": "01101800033"
+                    }
+                ],
                 "underkategori": "ORDINÆR",
-                "barnasFødselsnummer": [
-                    "0000000000001"
+                "samletVilkårResultat": [
+                    {
+                        "personIdent": "01101800033",
+                        "vilkårType": "STØNADSPERIODE",
+                        "utfallType": "OPPFYLT"
+                    },
+                    {
+                        "personIdent": "12345678910",
+                        "vilkårType": "BOSATT_I_RIKET",
+                        "utfallType": "OPPFYLT"
+                    },
+                    {
+                        "personIdent": "12345678910",
+                        "vilkårType": "STØNADSPERIODE",
+                        "utfallType": "OPPFYLT"
+                    },
+                    {
+                        "personIdent": "01101800033",
+                        "vilkårType": "BOSATT_I_RIKET",
+                        "utfallType": "OPPFYLT"
+                    },
+                    {
+                        "personIdent": "01101800033",
+                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
+                        "utfallType": "OPPFYLT"
+                    }
                 ],
                 "vedtakForBehandling": [
                     {
                         "aktiv": true,
-                        "ansvarligSaksbehandler": "Mock.Mockersen@trygdeetaten.no",
-                        "vedtaksdato": "2020-02-06",
+                        "ansvarligSaksbehandler": "Henning.Hakonsen@trygdeetaten.no",
+                        "vedtaksdato": "2020-02-14",
                         "barnasBeregning": [
                             {
-                                "barn": "0000000000001",
+                                "barn": "01101800033",
                                 "beløp": 1054,
                                 "stønadFom": "2020-01-01"
                             }

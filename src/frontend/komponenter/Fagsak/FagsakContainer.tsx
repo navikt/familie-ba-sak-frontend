@@ -4,12 +4,12 @@ import * as React from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { RessursStatus } from '../../typer/ressurs';
 import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider';
-import FastsettVedtak from './Behandle/FastsettVedtak';
-import { FastsettVedtakProvider } from './Behandle/FastsettVedtakProvider';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import { kjønnType } from '../../typer/person';
 import BehandleVilkår from './Vilkår/BehandleVilkår';
 import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
+import { BeregningProvider } from './Beregning/BeregningProvider';
+import Beregning from './Beregning/Beregning';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -54,12 +54,12 @@ const FagsakContainer: React.FunctionComponent = () => {
                             />
                             <Route
                                 exact={true}
-                                path="/fagsak/:fagsakId/behandle"
+                                path="/fagsak/:fagsakId/beregning"
                                 render={() => {
                                     return (
-                                        <FastsettVedtakProvider fagsak={fagsak.data}>
-                                            <FastsettVedtak fagsak={fagsak.data} />
-                                        </FastsettVedtakProvider>
+                                        <BeregningProvider fagsak={fagsak.data}>
+                                            <Beregning fagsak={fagsak.data} />
+                                        </BeregningProvider>
                                     );
                                 }}
                             />

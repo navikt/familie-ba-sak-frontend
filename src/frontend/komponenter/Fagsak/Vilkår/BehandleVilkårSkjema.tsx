@@ -1,6 +1,12 @@
-import { useBehandlingVilkårContext, useBehandlingVilkårDispatch, actions } from "./BehandleVilkårProvider";
-import { RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import {
+    useBehandlingVilkårContext,
+    useBehandlingVilkårDispatch,
+    actions,
+} from './BehandleVilkårProvider';
+import { RadioPanelGruppe, SkjemaGruppe, CheckboksPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
+import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
+import { VedtakResultat } from '../../../typer/fagsak';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -24,18 +30,55 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
             }
         >
             <RadioPanelGruppe
-                className={'vilkår__skjemagruppe--vedtakresultat'}
                 name="vedtakresultat"
-                legend="Inngangsvilkår for barnetrygd"
+                legend="Vilkår for barnetrygd"
                 radios={[
-                    { label: 'Inngangsvilkårene er oppfylt', value: 'INNVILGET', id: 'INNVILGET' },
-                    { label: 'Inngangsvilkårene er ikke oppfylt', value: 'AVSLÅTT', id: 'AVSLÅTT' },
+                    {
+                        label: 'Vilkårene er oppfylt',
+                        value: 'INNVILGET',
+                        id: 'INNVILGET',
+                        checked: context.vedtakResultat === VedtakResultat.INNVILGET,
+                    },
+                    {
+                        label: 'Vilkårene er ikke oppfylt',
+                        value: 'AVSLÅTT',
+                        id: 'AVSLÅTT',
+                        checked: context.vedtakResultat === VedtakResultat.AVSLÅTT,
+                    },
                 ]}
-                checked={context.vedtakResultat}
                 onChange={(event: any) => {
                     dispatch({
                         payload: event.target.value,
                         type: actions.SETT_RESULTAT,
+                    });
+                }}
+                feil={
+                    visFeilmeldinger && !context.vedtakResultat && 'Du må velge et vedtaksresultat'
+                }
+            />
+
+            <br />
+
+            <CheckboksPanelGruppe
+                legend={'Velg hjemler for vurderingen'}
+                checkboxes={Object.values(vilkårConfig).map((vilkår: IVilkårConfig) => {
+                    return {
+                        id: vilkår.key,
+                        label: `${vilkår.lovreferanse}, ${vilkår.beskrivelse}`,
+                        value: vilkår.key,
+                        checked:
+                            context.samletVilkårResultat.find(
+                                (vilkårResultat: IVilkårResultat) =>
+                                    vilkårResultat.vilkårType === vilkår.key
+                            )?.utfallType === UtfallType.OPPFYLT,
+                    };
+                })}
+                onChange={(event: any) => {
+                    dispatch({
+                        type: actions.TOGGLE_VILKÅR,
+                        payload: {
+                            key: event.target.value,
+                        },
                     });
                 }}
             />
