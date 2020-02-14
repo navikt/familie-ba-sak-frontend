@@ -19,13 +19,13 @@
                     {
                         "type": "BARN",
                         "fødselsdato": "2018-05-01",
-                        "personIdent": "01101800033"
+                        "personIdent": "12345678911"
                     }
                 ],
                 "underkategori": "ORDINÆR",
                 "samletVilkårResultat": [
                     {
-                        "personIdent": "01101800033",
+                        "personIdent": "12345678911",
                         "vilkårType": "STØNADSPERIODE",
                         "utfallType": "OPPFYLT"
                     },
@@ -40,12 +40,12 @@
                         "utfallType": "OPPFYLT"
                     },
                     {
-                        "personIdent": "01101800033",
+                        "personIdent": "12345678911",
                         "vilkårType": "BOSATT_I_RIKET",
                         "utfallType": "OPPFYLT"
                     },
                     {
-                        "personIdent": "01101800033",
+                        "personIdent": "12345678911",
                         "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
                         "utfallType": "OPPFYLT"
                     }
@@ -57,7 +57,7 @@
                         "vedtaksdato": "2020-02-14",
                         "barnasBeregning": [
                             {
-                                "barn": "01101800033",
+                                "barn": "12345678911",
                                 "beløp": 1054,
                                 "stønadFom": "2020-01-01"
                             }
