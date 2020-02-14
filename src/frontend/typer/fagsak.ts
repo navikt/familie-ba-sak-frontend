@@ -26,6 +26,13 @@ export enum BehandlingStatus {
     IVERKSATT = 'IVERKSATT',
 }
 
+export enum VedtakResultat {
+    INNVILGET = 'INNVILGET',
+    AVSLÅTT = 'AVSLÅTT',
+    OPPHØRT = 'OPPHØRT',
+    HENLAGT = 'HENLAGT',
+}
+
 // Interface
 export interface IFagsak {
     behandlinger: IBehandling[];
