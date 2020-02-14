@@ -33,7 +33,7 @@ const OpprettBehandling: React.FunctionComponent = () => {
                             underkategori: context.underkategori,
                         },
                         context.behandlingstype !== Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                            ? 'behandle'
+                            ? 'vilkår'
                             : 'beregning'
                     );
                 }}

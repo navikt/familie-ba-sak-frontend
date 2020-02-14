@@ -8,6 +8,8 @@ import FastsettVedtak from './Behandle/FastsettVedtak';
 import { FastsettVedtakProvider } from './Behandle/FastsettVedtakProvider';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import { kjønnType } from '../../typer/person';
+import BehandleVilkår from './Vilkår/BehandleVilkår';
+import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -39,6 +41,17 @@ const FagsakContainer: React.FunctionComponent = () => {
                     />
                     <div className={'fagsakcontainer__content'}>
                         <Switch>
+                            <Route
+                                exact={true}
+                                path="/fagsak/:fagsakId/vilkår"
+                                render={() => {
+                                    return (
+                                        <BehandlingVilkårProvider fagsak={fagsak.data}>
+                                            <BehandleVilkår fagsak={fagsak.data} />
+                                        </BehandlingVilkårProvider>
+                                    );
+                                }}
+                            />
                             <Route
                                 exact={true}
                                 path="/fagsak/:fagsakId/behandle"
