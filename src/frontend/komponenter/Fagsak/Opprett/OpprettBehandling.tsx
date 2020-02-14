@@ -11,10 +11,10 @@ const OpprettBehandling: React.FunctionComponent = () => {
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
-    const api = useFagsakApi(settVisFeilmeldinger, settOpprettelseFeilmelding);
-
-    const opprettBehandling = api.opprettBehandling;
-    const senderInn = api.senderInn;
+    const { opprettBehandling, senderInn } = useFagsakApi(
+        settVisFeilmeldinger,
+        settOpprettelseFeilmelding
+    );
 
     return (
         <div className={'opprett'}>
