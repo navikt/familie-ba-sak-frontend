@@ -77,6 +77,7 @@ const useFagsakApi = (
         apiOpprettVedtak(fagsak.id, {
             resultat: context.vedtakResultat,
             samletVilkårResultat: context.samletVilkårResultat,
+            begrunnelse: context.begrunnelse,
         })
             .then((response: Ressurs<any>) => {
                 settSenderInn(false);

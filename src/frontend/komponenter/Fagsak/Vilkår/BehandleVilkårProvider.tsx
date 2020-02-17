@@ -7,6 +7,7 @@ export enum actions {
     SETT_RESULTAT = 'SETT_RESULTAT',
     SETT_SAMLET_VILKÅRS_RESULTAT = 'SETT_SAMLET_VILKÅRS_RESULTAT',
     TOGGLE_VILKÅR = 'TOGGLE_VILKÅR',
+    SETT_BEGRUNNELSE = 'SETT_BEGRUNNELSE',
 }
 
 export interface IAction {
@@ -19,12 +20,14 @@ type Dispatch = (action: IAction) => void;
 export interface IState {
     vedtakResultat?: VedtakResultat;
     samletVilkårResultat: IVilkårResultat[];
+    begrunnelse: string;
 }
 
 const initialState = (personer?: IPerson[]): IState => {
     return {
         vedtakResultat: undefined,
         samletVilkårResultat: hentVilkårForPersoner(personer),
+        begrunnelse: '',
     };
 };
 
@@ -81,6 +84,11 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
                         ? VedtakResultat.AVSLÅTT
                         : VedtakResultat.INNVILGET,
             };
+        case actions.SETT_BEGRUNNELSE:
+            return {
+                ...state,
+                begrunnelse: action.payload,
+            }
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);
         }

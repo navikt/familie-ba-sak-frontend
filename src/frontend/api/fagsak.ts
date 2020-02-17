@@ -63,6 +63,7 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
 export interface IOpprettVedtakData {
     resultat: VedtakResultat;
     samletVilkårResultat: IVilkårResultat[];
+    begrunnelse: string;
 }
 
 export const apiOpprettVedtak = (fagsakId: number, data: IOpprettVedtakData) => {
