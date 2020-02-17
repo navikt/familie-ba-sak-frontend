@@ -4,6 +4,7 @@ import * as React from 'react';
 
 interface IProps {
     forrigeOnClick?: () => void;
+    nesteKnappTittel?: string;
     nesteOnClick?: () => void;
     senderInn: boolean;
     tittel: string;
@@ -12,6 +13,7 @@ interface IProps {
 const Skjemasteg: React.StatelessComponent<IProps> = ({
     children,
     forrigeOnClick,
+    nesteKnappTittel,
     nesteOnClick,
     senderInn,
     tittel,
@@ -44,7 +46,7 @@ const Skjemasteg: React.StatelessComponent<IProps> = ({
                         onClick={async () => {
                             nesteOnClick();
                         }}
-                        children={'Neste'}
+                        children={nesteKnappTittel ?? 'Neste'}
                     />
                 )}
             </div>

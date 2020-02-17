@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useFagsakDispatch, actions as fagsakActions } from '../FagsakProvider';
-import { apiOpprettBehandling, IOpprettBehandlingData, apiOpprettVedtak } from '../../api/fagsak';
+import {
+    apiOpprettBehandling,
+    IOpprettBehandlingData,
+    apiOpprettVedtak,
+    apiOpprettBeregning,
+} from '../../api/fagsak';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { IFagsak, VedtakResultat } from '../../typer/fagsak';
+import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IOpprettBehandlingState } from './Opprett/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
-import { Valideringsstatus } from '../../typer/felt';
+import { Valideringsstatus, IFelt } from '../../typer/felt';
+import { IBarnBeregning } from '../../typer/behandle';
+import moment = require('moment');
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -60,8 +68,16 @@ const useFagsakApi = (
     };
 
     const opprettVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {
+        if (!context.vedtakResultat) {
+            settVisFeilmeldinger(true);
+            return;
+        }
+
         settSenderInn(true);
-        apiOpprettVedtak(fagsak.id, { resultat: context.vedtakResultat })
+        apiOpprettVedtak(fagsak.id, {
+            resultat: context.vedtakResultat,
+            samletVilkårResultat: context.samletVilkårResultat,
+        })
             .then((response: Ressurs<any>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
@@ -70,9 +86,9 @@ const useFagsakApi = (
                         type: fagsakActions.SETT_FAGSAK,
                     });
 
-                    if (context.vedtakResultat == VedtakResultat.INNVILGET) {
-                        history.push(`/fagsak/${fagsak.id}/behandle`);
-                    } else if (context.vedtakResultat == VedtakResultat.AVSLÅTT) {
+                    if (context.vedtakResultat === VedtakResultat.INNVILGET) {
+                        history.push(`/fagsak/${fagsak.id}/beregning`);
+                    } else if (context.vedtakResultat === VedtakResultat.AVSLÅTT) {
                         history.push(`/fagsak/${fagsak.id}/vedtak`);
                     } else {
                         settFeilmelding('Internal error: invalid vedtak result');
@@ -92,8 +108,63 @@ const useFagsakApi = (
             });
     };
 
+    const opprettBeregning = (
+        context: IBereningState,
+        skjemaetHarEndringer: boolean,
+        fagsak: IFagsak
+    ) => {
+        if (
+            context.barnasBeregning.find(
+                (barnBeregning: IFelt<IBarnBeregning>) =>
+                    barnBeregning.valideringsstatus !== Valideringsstatus.OK
+            ) === undefined
+        ) {
+            if (skjemaetHarEndringer) {
+                settSenderInn(true);
+                apiOpprettBeregning(fagsak.id, {
+                    barnasBeregning: context.barnasBeregning.map(
+                        (barnBeregning: IFelt<IBarnBeregning>) => ({
+                            beløp: barnBeregning.verdi.beløp,
+                            fødselsnummer: barnBeregning.verdi.barn,
+                            stønadFom: moment(
+                                barnBeregning.verdi.stønadFom,
+                                'DD.MM.YY',
+                                true
+                            ).format('YYYY-MM-DD'),
+                        })
+                    ),
+                })
+                    .then((response: Ressurs<any>) => {
+                        settSenderInn(false);
+                        if (response.status === RessursStatus.SUKSESS) {
+                            fagsakDispatcher({
+                                payload: response,
+                                type: fagsakActions.SETT_FAGSAK,
+                            });
+                            history.push(`/fagsak/${fagsak.id}/vedtak`);
+                        } else if (response.status === RessursStatus.FEILET) {
+                            settFeilmelding(response.melding);
+                            settVisFeilmeldinger(true);
+                        } else {
+                            settFeilmelding('Opprettelse av vedtak feilet');
+                            settVisFeilmeldinger(true);
+                        }
+                    })
+                    .catch(() => {
+                        settSenderInn(false);
+                        settFeilmelding('Opprettelse av vedtak feilet');
+                    });
+            } else {
+                history.push(`/fagsak/${fagsak.id}/vedtak`);
+            }
+        } else {
+            settVisFeilmeldinger(true);
+        }
+    };
+
     return {
         opprettBehandling,
+        opprettBeregning,
         opprettVedtak,
         senderInn,
     };

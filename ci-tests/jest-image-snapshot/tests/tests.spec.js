@@ -32,10 +32,17 @@ describe('dsop-kontroll', () => {
             await takeSnapshot(`opprett-behandling-${name}`, page);
         });
 
-        test('behandle', async () => {
-            await page.goto('http://ci-test-server:8000/fagsak/1/behandle');
-            await page.waitFor('.fastsett');
-            await takeSnapshot(`behandle-${name}`, page);
+        test('vilkår', async () => {
+            await page.goto('http://ci-test-server:8000/fagsak/1/vilkår');
+            await page.waitFor('.vilkår');
+            await takeSnapshot(`vilkår-${name}`, page);
+        });
+
+        test('beregning', async () => {
+            await page.goto('http://ci-test-server:8000/fagsak/1/beregning');
+            await page.waitFor('.beregning');
+            await page.waitFor(1000);
+            await takeSnapshot(`beregning-${name}`, page);
         });
 
         test('vedtak', async () => {

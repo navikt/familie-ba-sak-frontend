@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Systemtittel } from 'nav-frontend-typografi';
@@ -62,7 +61,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 <Knapp
                     type={'hoved'}
                     onClick={() => {
-                        history.push(`/fagsak/${fagsak.id}/behandle`);
+                        history.push(`/fagsak/${fagsak.id}/beregning`);
                     }}
                     children={'Tilbake'}
                 />

@@ -1,5 +1,6 @@
 import { IBarnBeregning } from './behandle';
 import { IPerson } from './person';
+import { IVilkårResultat } from './vilkår';
 
 // Enum
 export enum Behandlingstype {
@@ -44,11 +45,11 @@ export interface IFagsak {
 
 export interface IBehandling {
     aktiv: boolean;
-    barnasFødselsnummer: string[];
+    personer: IPerson[];
     behandlingId: number;
     kategori: BehandlingKategori;
+    samletVilkårResultat: IVilkårResultat[];
     status: BehandlingStatus;
-    søker?: string;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
@@ -58,8 +59,7 @@ export interface IVedtakForBehandling {
     aktiv: boolean;
     ansvarligSaksbehandler: string;
     barnasBeregning: IBarnBeregning[];
-    stønadFom: string;
-    stønadTom: string;
+    resultat: VedtakResultat;
     vedtaksdato: string;
 }
 
