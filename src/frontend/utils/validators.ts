@@ -45,3 +45,8 @@ export const erGyldigDato = (felt: IFelt<IBarnBeregning>): IFelt<IBarnBeregning>
         ? ok(felt)
         : feil(felt, 'Ugyldig dato');
 };
+
+export const erGyldigBegrunnelse = (felt: IFelt<string>): IFelt<string> => {
+    //TODO: decent validation
+    return ok(felt);
+};

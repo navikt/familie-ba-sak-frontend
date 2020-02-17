@@ -2,6 +2,8 @@ import * as React from 'react';
 import { IFagsak, VedtakResultat, IBehandling } from '../../../typer/fagsak';
 import { IVilkårResultat, hentVilkårForPersoner, UtfallType } from '../../../typer/vilkår';
 import { IPerson } from '../../../typer/person';
+import { IFelt, ok, Valideringsstatus } from '../../../typer/felt';
+import { erGyldigBegrunnelse } from '../../../utils/validators';
 
 export enum actions {
     SETT_RESULTAT = 'SETT_RESULTAT',
@@ -20,14 +22,19 @@ type Dispatch = (action: IAction) => void;
 export interface IState {
     vedtakResultat?: VedtakResultat;
     samletVilkårResultat: IVilkårResultat[];
-    begrunnelse: string;
+    begrunnelse: IFelt<string>;
 }
 
 const initialState = (personer?: IPerson[]): IState => {
     return {
         vedtakResultat: undefined,
         samletVilkårResultat: hentVilkårForPersoner(personer),
-        begrunnelse: '',
+        begrunnelse: {
+            feilmelding: '',
+            valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
+            valideringsFunksjon: erGyldigBegrunnelse,
+            verdi: ''
+        },
     };
 };
 
@@ -87,7 +94,11 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
         case actions.SETT_BEGRUNNELSE:
             return {
                 ...state,
-                begrunnelse: action.payload,
+                begrunnelse: {
+                    ...state.begrunnelse,
+                    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
+                    verdi: action.payload,
+                }
             }
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);

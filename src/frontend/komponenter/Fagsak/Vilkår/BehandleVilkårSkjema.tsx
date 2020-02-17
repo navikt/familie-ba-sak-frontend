@@ -7,6 +7,7 @@ import { RadioPanelGruppe, SkjemaGruppe, CheckboksPanelGruppe, TextareaControlle
 import React from 'react';
 import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
 import { VedtakResultat } from '../../../typer/fagsak';
+import { Valideringsstatus } from '../../../typer/felt';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -88,8 +89,9 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
             <TextareaControlled 
                 label={'Begrunnelse'}
                 maxLength={0}
-                defaultValue={context.begrunnelse}
-                onBlur={(evt:any)=>{
+                defaultValue={''}
+                value={context.begrunnelse.verdi}
+                onBlur={(evt:any)=>{                        
                     dispatch({
                         type: actions.SETT_BEGRUNNELSE,
                         payload: evt.target.value,

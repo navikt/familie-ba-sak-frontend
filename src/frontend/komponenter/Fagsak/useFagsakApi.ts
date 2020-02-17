@@ -73,11 +73,21 @@ const useFagsakApi = (
             return;
         }
 
+        if (context.begrunnelse.valideringsstatus == Valideringsstatus.IKKE_VALIDERT) {
+            context.begrunnelse = context.begrunnelse.valideringsFunksjon(context.begrunnelse);
+        }
+
+        if (context.begrunnelse.valideringsstatus == Valideringsstatus.FEIL) {
+            settVisFeilmeldinger(true);
+            settFeilmelding(context.begrunnelse.feilmelding);
+            return;
+        }
+
         settSenderInn(true);
         apiOpprettVedtak(fagsak.id, {
             resultat: context.vedtakResultat,
             samletVilkårResultat: context.samletVilkårResultat,
-            begrunnelse: context.begrunnelse,
+            begrunnelse: context.begrunnelse.verdi,
         })
             .then((response: Ressurs<any>) => {
                 settSenderInn(false);
