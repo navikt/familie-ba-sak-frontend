@@ -3,6 +3,11 @@ import { IPerson } from './person';
 import { IVilkårResultat } from './vilkår';
 
 // Enum
+export enum FagsakStatus {
+    OPPRETTET = 'OPPRETTET',
+    LØPENDE = 'LØPENDE',
+}
+
 export enum Behandlingstype {
     FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
     MIGRERING_FRA_INFOTRYGD = 'MIGRERING_FRA_INFOTRYGD',
@@ -10,7 +15,7 @@ export enum Behandlingstype {
 }
 
 export enum BehandlingKategori {
-    NATIONAL = 'NATIONAL',
+    NASJONAL = 'NASJONAL',
     EØS = 'EØS',
 }
 
@@ -30,8 +35,6 @@ export enum BehandlingStatus {
 export enum VedtakResultat {
     INNVILGET = 'INNVILGET',
     AVSLÅTT = 'AVSLÅTT',
-    OPPHØRT = 'OPPHØRT',
-    HENLAGT = 'HENLAGT',
 }
 
 // Interface
@@ -40,14 +43,16 @@ export interface IFagsak {
     id: number;
     opprettetTidspunkt: string;
     saksnummer: string;
+    status: FagsakStatus;
     søkerFødselsnummer: string;
 }
 
 export interface IBehandling {
     aktiv: boolean;
-    personer: IPerson[];
     behandlingId: number;
     kategori: BehandlingKategori;
+    opprettetTidspunkt: string;
+    personer: IPerson[];
     samletVilkårResultat: IVilkårResultat[];
     status: BehandlingStatus;
     type: Behandlingstype;
@@ -80,39 +85,66 @@ export interface INøkkelPar {
     };
 }
 
+export const fagsakStatus: INøkkelPar = {
+    OPPRETTET: {
+        id: 'OPPRETTET',
+        navn: 'Opprettet',
+    },
+    LØPENDE: {
+        id: 'LØPENDE',
+        navn: 'Løpende',
+    },
+};
+
 export const behandlingstyper: INøkkelPar = {
     FØRSTEGANGSBEHANDLING: {
-        id: 'førstegangsbehandling',
+        id: 'FØRSTEGANGSBEHANDLING',
         navn: 'Førstegangsbehandling',
     },
     MIGRERING_FRA_INFOTRYGD: {
-        id: 'migrering_fra_infotrygd',
+        id: 'MIGRERING_FRA_INFOTRYGD',
         navn: 'Migrering fra infotrygd',
     },
     REVURDERING: {
-        id: 'revurdering',
+        id: 'REVURDERING',
         navn: 'Revurdering',
     },
 };
 
+export const behandlingsstatuser: INøkkelPar = {
+    OPPRETTET: { id: 'OPPRETTET', navn: 'Opprettet' },
+    UNDER_BEHANDLING: { id: 'UNDER_BEHANDLING', navn: 'Under behandling' },
+    LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG: {
+        id: 'LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG',
+        navn: 'Lagt på kø for sending mot oppdrag',
+    },
+    SENDT_TIL_IVERKSETTING: { id: 'SENDT_TIL_IVERKSETTING', navn: 'Sendt til iverksetting' },
+    IVERKSATT: { id: 'IVERKSATT', navn: 'Iverksatt' },
+};
+
 export const kategorier: INøkkelPar = {
-    NATIONAL: {
-        id: 'national',
-        navn: 'National',
+    NASJONAL: {
+        id: 'NASJONAL',
+        navn: 'Nasjonal',
     },
     EØS: {
-        id: 'eøs',
+        id: 'EØS',
         navn: 'EØS',
     },
 };
 
 export const underkategorier: INøkkelPar = {
     ORDINÆR: {
-        id: 'ordinær',
+        id: 'ORDINÆR',
         navn: 'Ordinær barnetrygd',
     },
     UTVIDET: {
-        id: 'utvidet',
+        id: 'UTVIDET',
         navn: 'Utvidet barnetrygd',
     },
+};
+
+export const vedtaksresultater: INøkkelPar = {
+    INNVILGET: { id: 'INNVILGET', navn: 'Innvilget' },
+    AVSLÅTT: { id: 'AVSLÅTT', navn: 'Avslått' },
 };
