@@ -20,7 +20,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
 }) => {
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
-    console.log(context)
+
     return (
         <SkjemaGruppe
             className={'fastsett__skjemagruppe'}

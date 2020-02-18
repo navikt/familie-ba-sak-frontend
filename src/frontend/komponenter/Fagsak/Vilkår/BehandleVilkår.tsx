@@ -44,8 +44,6 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
             });
         }
 
-        console.log(aktivVedtak)
-        
         if(aktivVedtak && aktivVedtak.begrunnelse){
             dispatch({
                 type: actions.SETT_BEGRUNNELSE,
