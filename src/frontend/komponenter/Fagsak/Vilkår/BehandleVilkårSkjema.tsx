@@ -3,7 +3,7 @@ import {
     useBehandlingVilkårDispatch,
     actions,
 } from './BehandleVilkårProvider';
-import { RadioPanelGruppe, SkjemaGruppe, CheckboksPanelGruppe, TextareaControlled } from 'nav-frontend-skjema';
+import { RadioPanelGruppe, SkjemaGruppe, CheckboksPanelGruppe, TextareaControlled, Textarea, Input } from 'nav-frontend-skjema';
 import React from 'react';
 import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
 import { VedtakResultat } from '../../../typer/fagsak';
@@ -20,7 +20,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
 }) => {
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
-
+    console.log(context)
     return (
         <SkjemaGruppe
             className={'fastsett__skjemagruppe'}
@@ -85,11 +85,11 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
             />
 
             <br />
-
+            
             <TextareaControlled
                 label={'Begrunnelse'}
                 maxLength={0}
-                defaultValue={''}
+                defaultValue={context.begrunnelse.verdi}
                 value={context.begrunnelse.verdi}
                 onBlur={(evt: any) => {
                     dispatch({
@@ -101,7 +101,6 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     ? context.begrunnelse.feilmelding
                     : undefined}
             />
-
         </SkjemaGruppe>
     );
 };

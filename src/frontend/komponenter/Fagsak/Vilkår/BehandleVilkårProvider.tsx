@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IFagsak, VedtakResultat, IBehandling } from '../../../typer/fagsak';
+import { IFagsak, VedtakResultat, IBehandling, IVedtakForBehandling } from '../../../typer/fagsak';
 import { IVilkårResultat, hentVilkårForPersoner, UtfallType } from '../../../typer/vilkår';
 import { IPerson } from '../../../typer/person';
 import { IFelt, ok, Valideringsstatus } from '../../../typer/felt';
@@ -25,7 +25,7 @@ export interface IState {
     begrunnelse: IFelt<string>;
 }
 
-const initialState = (personer?: IPerson[]): IState => {
+const initialState = (personer?: IPerson[], aktivVedtak?: IVedtakForBehandling): IState => {
     return {
         vedtakResultat: undefined,
         samletVilkårResultat: hentVilkårForPersoner(personer),
@@ -33,7 +33,7 @@ const initialState = (personer?: IPerson[]): IState => {
             feilmelding: '',
             valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
             valideringsFunksjon: erGyldigBegrunnelse,
-            verdi: ''
+            verdi: aktivVedtak?.begrunnelse === undefined ? '' : aktivVedtak.begrunnelse
         },
     };
 };
@@ -115,10 +115,11 @@ const BehandlingVilkårProvider: React.StatelessComponent<IBehandlingVilkårProv
     children,
 }) => {
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
+    const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find((vedtak: IVedtakForBehandling) => vedtak.aktiv)
 
     const [state, dispatch] = React.useReducer(
         behandlingVilkårReducer,
-        initialState(aktivBehandling?.personer)
+        initialState(aktivBehandling?.personer, aktivVedtak)
     );
 
     return (
