@@ -45,3 +45,10 @@ export const erGyldigDato = (felt: IFelt<IBarnBeregning>): IFelt<IBarnBeregning>
         ? ok(felt)
         : feil(felt, 'Ugyldig dato');
 };
+
+export const erGyldigBegrunnelse = (felt: IFelt<string>): IFelt<string> => {
+    if (felt.verdi === '') {
+        return feil(felt, 'Begrunnelse er påkrevd. Vennligst fyll ut en begrunnelse til vedtaket.');
+    }
+    return ok(felt);
+};

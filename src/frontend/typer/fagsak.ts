@@ -61,6 +61,7 @@ export interface IVedtakForBehandling {
     barnasBeregning: IBarnBeregning[];
     resultat: VedtakResultat;
     vedtaksdato: string;
+    begrunnelse: string;
 }
 
 export interface IBehandlingsresultat {

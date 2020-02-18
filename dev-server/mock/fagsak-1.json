@@ -62,7 +62,8 @@
                                 "stønadFom": "2020-01-01"
                             }
                         ],
-                        "resultat": "INNVILGET"
+                        "resultat": "INNVILGET",
+                        "begrunnelse": "Fake information"
                     }
                 ]
             }
