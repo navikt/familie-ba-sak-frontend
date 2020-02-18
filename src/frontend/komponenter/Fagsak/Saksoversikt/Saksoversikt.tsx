@@ -9,7 +9,6 @@ import {
     underkategorier,
     behandlingstyper,
     behandlingsstatuser,
-    VedtakResultat,
     vedtaksresultater,
 } from '../../../typer/fagsak';
 import { Systemtittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
