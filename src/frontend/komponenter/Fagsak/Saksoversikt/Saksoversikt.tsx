@@ -135,55 +135,63 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {fagsak.behandlinger.map((behandling: IBehandling) => {
-                                const aktivVedtakForBehandling = behandling.vedtakForBehandling.find(
-                                    (vedtak: IVedtakForBehandling) => vedtak.aktiv
-                                );
+                            {fagsak.behandlinger
+                                .sort((a, b) =>
+                                    moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
+                                )
+                                .map((behandling: IBehandling) => {
+                                    const aktivVedtakForBehandling = behandling.vedtakForBehandling.find(
+                                        (vedtak: IVedtakForBehandling) => vedtak.aktiv
+                                    );
 
-                                return (
-                                    <tr key={behandling.behandlingId}>
-                                        <td
-                                            children={`${behandlingstyper[behandling.type].navn}`}
-                                        />
-                                        <td
-                                            children={`${
-                                                aktivVedtakForBehandling
-                                                    ? vedtaksresultater[
-                                                          aktivVedtakForBehandling?.resultat
-                                                      ].navn
-                                                    : 'Ukjent'
-                                            }`}
-                                        />
-                                        <td
-                                            children={`${formaterIsoDato(
-                                                behandling.opprettetTidspunkt,
-                                                datoformat.DATO
-                                            )}`}
-                                        />
-                                        <td
-                                            children={
-                                                aktivVedtakForBehandling
-                                                    ? formaterIsoDato(
-                                                          aktivVedtakForBehandling.vedtaksdato,
-                                                          datoformat.DATO
-                                                      )
-                                                    : 'Ukjent'
-                                            }
-                                        />
-                                        <td
-                                            children={
-                                                aktivVedtakForBehandling
-                                                    ? formaterIsoDato(
-                                                          aktivVedtakForBehandling
-                                                              .barnasBeregning[0].stønadFom,
-                                                          datoformat.DATO
-                                                      )
-                                                    : 'Ukjent'
-                                            }
-                                        />
-                                    </tr>
-                                );
-                            })}
+                                    return (
+                                        <tr key={behandling.behandlingId}>
+                                            <td
+                                                children={`${
+                                                    behandlingstyper[behandling.type].navn
+                                                }`}
+                                            />
+                                            <td
+                                                children={`${
+                                                    aktivVedtakForBehandling
+                                                        ? vedtaksresultater[
+                                                              aktivVedtakForBehandling?.resultat
+                                                          ].navn
+                                                        : 'Ukjent'
+                                                }`}
+                                            />
+                                            <td
+                                                children={`${formaterIsoDato(
+                                                    behandling.opprettetTidspunkt,
+                                                    datoformat.DATO
+                                                )}`}
+                                            />
+                                            <td
+                                                children={
+                                                    aktivVedtakForBehandling
+                                                        ? formaterIsoDato(
+                                                              aktivVedtakForBehandling.vedtaksdato,
+                                                              datoformat.DATO
+                                                          )
+                                                        : 'Ukjent'
+                                                }
+                                            />
+                                            {/* TODO: hente reel virkningstidspunkt */}
+                                            <td
+                                                children={
+                                                    aktivVedtakForBehandling &&
+                                                    aktivVedtakForBehandling.barnasBeregning[0]
+                                                        ? formaterIsoDato(
+                                                              aktivVedtakForBehandling
+                                                                  .barnasBeregning[0].stønadFom,
+                                                              datoformat.DATO
+                                                          )
+                                                        : 'Ukjent'
+                                                }
+                                            />
+                                        </tr>
+                                    );
+                                })}
                         </tbody>
                     </table>
                 ) : (
