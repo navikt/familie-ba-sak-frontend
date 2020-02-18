@@ -73,8 +73,6 @@ const useFagsakApi = (
             return;
         }
 
-        console.log(context);
-
         if (context.begrunnelse.valideringsstatus !== Valideringsstatus.OK) {
             settVisFeilmeldinger(true);
             return;
