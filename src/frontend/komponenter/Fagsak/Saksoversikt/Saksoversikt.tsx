@@ -19,6 +19,7 @@ import { formaterIsoDato, datoformat } from '../../../utils/formatter';
 import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
 import moment = require('moment');
+import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 
 interface IProps {
     fagsak: IFagsak;
@@ -60,17 +61,16 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
         <div className={'saksoversikt'}>
             <Systemtittel children={'Saksoversikt'} />
 
-            <div className={'saksoversikt__sak'}>
-                <Normaltekst children={`Status på sak`} />
-                <Normaltekst children={`Vedtaksdato`} />
-                <Normaltekst children={`Sakstype`} />
-
-                <Normaltekst children={fagsakStatus[fagsak.status].navn} />
-                <Normaltekst children={aktivVedtak?.vedtaksdato ?? 'Ikke satt'} />
-                <Normaltekst children={sakstype(gjeldendeBehandling)} />
-            </div>
+            <Informasjonsbolk
+                informasjon={[
+                    { label: `Status på sak`, tekst: fagsakStatus[fagsak.status].navn },
+                    { label: `Vedtaksdato`, tekst: aktivVedtak?.vedtaksdato ?? 'Ikke satt' },
+                    { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
+                ]}
+            />
 
             {aktivVedtak?.barnasBeregning &&
+                aktivVedtak?.barnasBeregning.length > 0 &&
                 gjeldendeBehandling?.status === BehandlingStatus.IVERKSATT && (
                     <div className={'saksoversikt__utbetalinger'}>
                         <Undertittel children={'Utbetalinger'} />
@@ -102,13 +102,16 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
             {aktivBehandling?.status !== BehandlingStatus.IVERKSATT && (
                 <div className={'saksoversikt__aktivbehandling'}>
                     <Undertittel children={'Aktiv behandling'} />
-                    <Normaltekst children={`Behandlingstype: ${sakstype(aktivBehandling)}`} />
-                    <Normaltekst
-                        children={`Behandlingsstatus: ${
-                            aktivBehandling
-                                ? behandlingsstatuser[aktivBehandling?.status].navn
-                                : 'Ukjent'
-                        }`}
+                    <Informasjonsbolk
+                        informasjon={[
+                            { label: `Behandlingstype`, tekst: sakstype(aktivBehandling) },
+                            {
+                                label: `Behandlingsstatus`,
+                                tekst: aktivBehandling
+                                    ? behandlingsstatuser[aktivBehandling?.status].navn
+                                    : 'Ukjent',
+                            },
+                        ]}
                     />
 
                     <Knapp

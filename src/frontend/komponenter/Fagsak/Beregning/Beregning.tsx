@@ -4,7 +4,7 @@ import { IBehandling, IFagsak, IVedtakForBehandling } from '../../../typer/fagsa
 import { useBeregningContext, useBeregningDispatch, actions } from './BeregningProvider';
 import BeregningSkjema from './BeregningSkjema';
 import useFagsakApi from '../useFagsakApi';
-import Skjemasteg from '../Skjemasteg/Skjemasteg';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import moment = require('moment');
 import { useHistory } from 'react-router';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
