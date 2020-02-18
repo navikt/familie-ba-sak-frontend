@@ -97,7 +97,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                         payload: evt.target.value,
                     })
                 }}
-                feil={context.begrunnelse.valideringsstatus !== Valideringsstatus.OK && context.begrunnelse.feilmelding
+                feil={context.begrunnelse.valideringsstatus !== Valideringsstatus.OK && visFeilmeldinger && context.begrunnelse.feilmelding
                     ? context.begrunnelse.feilmelding
                     : undefined}
             />

@@ -2,8 +2,9 @@ import * as React from 'react';
 import { IFagsak, VedtakResultat, IBehandling, IVedtakForBehandling } from '../../../typer/fagsak';
 import { IVilkårResultat, hentVilkårForPersoner, UtfallType } from '../../../typer/vilkår';
 import { IPerson } from '../../../typer/person';
-import { IFelt, ok, Valideringsstatus } from '../../../typer/felt';
+import { IFelt } from '../../../typer/felt';
 import { erGyldigBegrunnelse } from '../../../utils/validators';
+import { lagInitiellFelt } from '../../../typer/provider';
 
 export enum actions {
     SETT_RESULTAT = 'SETT_RESULTAT',
@@ -29,12 +30,8 @@ const initialState = (personer?: IPerson[], aktivVedtak?: IVedtakForBehandling):
     return {
         vedtakResultat: undefined,
         samletVilkårResultat: hentVilkårForPersoner(personer),
-        begrunnelse: {
-            feilmelding: '',
-            valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-            valideringsFunksjon: erGyldigBegrunnelse,
-            verdi: aktivVedtak?.begrunnelse === undefined ? '' : aktivVedtak.begrunnelse
-        },
+        begrunnelse: lagInitiellFelt(aktivVedtak?.begrunnelse === undefined ? '' : aktivVedtak.begrunnelse,
+         erGyldigBegrunnelse),
     };
 };
 

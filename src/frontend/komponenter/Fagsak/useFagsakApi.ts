@@ -73,12 +73,10 @@ const useFagsakApi = (
             return;
         }
 
-        if (context.begrunnelse.valideringsstatus === Valideringsstatus.IKKE_VALIDERT) {
-            context.begrunnelse = context.begrunnelse.valideringsFunksjon(context.begrunnelse);
-        }
+        console.log(context);
 
         if (context.begrunnelse.valideringsstatus !== Valideringsstatus.OK) {
-            settVisFeilmeldinger(true); //trigger rerender
+            settVisFeilmeldinger(true);
             return;
         }
 
