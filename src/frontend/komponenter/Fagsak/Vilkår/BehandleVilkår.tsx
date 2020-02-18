@@ -9,7 +9,7 @@ import {
 } from './BehandleVilkårProvider';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 import { useHistory } from 'react-router';
-import { AlertStripeInfo, AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {

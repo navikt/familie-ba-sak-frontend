@@ -84,19 +84,22 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 }}
             />
 
-            <br/>
-            
-            <TextareaControlled 
+            <br />
+
+            <TextareaControlled
                 label={'Begrunnelse'}
                 maxLength={0}
                 defaultValue={''}
                 value={context.begrunnelse.verdi}
-                onBlur={(evt:any)=>{                        
+                onBlur={(evt: any) => {
                     dispatch({
                         type: actions.SETT_BEGRUNNELSE,
                         payload: evt.target.value,
                     })
                 }}
+                feil={context.begrunnelse.valideringsstatus !== Valideringsstatus.OK && context.begrunnelse.feilmelding
+                    ? context.begrunnelse.feilmelding
+                    : undefined}
             />
 
         </SkjemaGruppe>

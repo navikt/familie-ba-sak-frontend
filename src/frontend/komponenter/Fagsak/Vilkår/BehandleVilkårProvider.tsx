@@ -94,11 +94,10 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
         case actions.SETT_BEGRUNNELSE:
             return {
                 ...state,
-                begrunnelse: {
+                begrunnelse: state.begrunnelse.valideringsFunksjon({
                     ...state.begrunnelse,
-                    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
                     verdi: action.payload,
-                }
+                })
             }
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);
