@@ -30,8 +30,8 @@ const initialState = (personer?: IPerson[], aktivVedtak?: IVedtakForBehandling):
     return {
         vedtakResultat: undefined,
         samletVilkårResultat: hentVilkårForPersoner(personer),
-        begrunnelse: lagInitiellFelt(aktivVedtak?.begrunnelse === undefined ? '' : aktivVedtak.begrunnelse,
-         erGyldigBegrunnelse),
+        begrunnelse: lagInitiellFelt(aktivVedtak?.begrunnelse ? aktivVedtak.begrunnelse : '',
+            erGyldigBegrunnelse),
     };
 };
 
