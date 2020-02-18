@@ -2,6 +2,7 @@ import moment from 'moment';
 import { IFødselsnummerFelt } from '../komponenter/Fagsak/Opprett/OpprettBehandlingProvider';
 import { IBarnBeregning } from '../typer/behandle';
 import { feil, IFelt, ok, Valideringsstatus } from '../typer/felt';
+import { datoformat } from './formatter';
 
 const harFyltInnFødselsnummer = (felt: IFødselsnummerFelt): IFødselsnummerFelt => {
     return /^\d{11}$/.test(felt.verdi.replace(' ', ''))
@@ -39,9 +40,9 @@ export const fødselsnummerValidator = (
     return fødselsnummerPassererMod10ogMod11Sjekk(fødselsnummerFelt);
 };
 
-export const erGyldigDato = (felt: IFelt<IBarnBeregning>): IFelt<IBarnBeregning> => {
+export const erGyldigMånedDato = (felt: IFelt<IBarnBeregning>): IFelt<IBarnBeregning> => {
     return /^\d{2}\.\d{2}$/.test(felt.verdi.stønadFom) &&
-        moment(felt.verdi.stønadFom, 'MM.YY').isValid()
+        moment(felt.verdi.stønadFom, datoformat.MÅNED).isValid()
         ? ok(felt)
         : feil(felt, 'Ugyldig dato');
 };

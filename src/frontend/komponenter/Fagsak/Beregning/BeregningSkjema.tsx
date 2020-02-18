@@ -7,6 +7,7 @@ import { IBarnBeregning } from '../../../typer/behandle';
 import { IVedtakForBehandling } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
+import { datoformat } from '../../../utils/formatter';
 
 interface IBeregningSkjema {
     aktivVedtak?: IVedtakForBehandling;
@@ -46,7 +47,8 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                 key={barnBeregning.verdi.barn}
                                 feil={
                                     barnBeregning.valideringsstatus !== Valideringsstatus.OK &&
-                                    visFeilmeldinger
+                                    visFeilmeldinger &&
+                                    barnBeregning.feilmelding !== ''
                                         ? barnBeregning.feilmelding
                                         : undefined
                                 }
@@ -129,8 +131,9 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
                 if (
                     barnBeregning.beløp !== muligEndretBarnBeregning.verdi.beløp ||
                     (muligEndretBarnBeregning.verdi.stønadFom !== '' &&
-                        moment(barnBeregning.stønadFom, 'YYYY-MM-DD', true).format('DD.MM.YY') !==
-                            muligEndretBarnBeregning.verdi.stønadFom)
+                        moment(barnBeregning.stønadFom, 'YYYY-MM-DD', true).format(
+                            datoformat.MÅNED
+                        ) !== muligEndretBarnBeregning.verdi.stønadFom)
                 ) {
                     return true;
                 }

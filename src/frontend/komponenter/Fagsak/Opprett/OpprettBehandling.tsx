@@ -3,7 +3,6 @@ import { useOpprettBehandlingContext } from './OpprettBehandlingProvider';
 import OpprettBehandlingSkjema from './OpprettBehandlingSkjema';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
-import { Behandlingstype } from '../../../typer/fagsak';
 
 const OpprettBehandling: React.FunctionComponent = () => {
     const context = useOpprettBehandlingContext();
@@ -21,21 +20,15 @@ const OpprettBehandling: React.FunctionComponent = () => {
             <Skjemasteg
                 tittel={'Opprett behandling'}
                 nesteOnClick={() => {
-                    opprettBehandling(
-                        context,
-                        {
-                            barnasFødselsnummer: context.barnasFødselsnummer.map(
-                                barnFødselsnummer => barnFødselsnummer.verdi
-                            ),
-                            behandlingType: context.behandlingstype,
-                            fødselsnummer: context.søkersFødselsnummer.verdi,
-                            kategori: context.kategori,
-                            underkategori: context.underkategori,
-                        },
-                        context.behandlingstype !== Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                            ? 'vilkår'
-                            : 'beregning'
-                    );
+                    opprettBehandling(context, {
+                        barnasFødselsnummer: context.barnasFødselsnummer.map(
+                            barnFødselsnummer => barnFødselsnummer.verdi
+                        ),
+                        behandlingType: context.behandlingstype,
+                        fødselsnummer: context.søkersFødselsnummer.verdi,
+                        kategori: context.kategori,
+                        underkategori: context.underkategori,
+                    });
                 }}
                 senderInn={senderInn}
             >

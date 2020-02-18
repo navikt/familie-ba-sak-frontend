@@ -46,7 +46,7 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         index,
                         oppdatertBarnBeregning: {
                             ...barnBeregning,
-                            stønadFom: moment(barnBeregning.stønadFom).format(datoformat.DATO),
+                            stønadFom: moment(barnBeregning.stønadFom).format(datoformat.MÅNED),
                         },
                     },
                     type: actions.SETT_BARNAS_BEREGNING,

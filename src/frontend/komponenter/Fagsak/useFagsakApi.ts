@@ -15,6 +15,7 @@ import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvid
 import { Valideringsstatus, IFelt } from '../../typer/felt';
 import { IBarnBeregning } from '../../typer/behandle';
 import moment = require('moment');
+import { datoformat } from '../../utils/formatter';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -25,11 +26,7 @@ const useFagsakApi = (
 
     const fagsakDispatcher = useFagsakDispatch();
 
-    const opprettBehandling = (
-        context: IOpprettBehandlingState,
-        data: IOpprettBehandlingData,
-        redirect: string
-    ) => {
+    const opprettBehandling = (context: IOpprettBehandlingState, data: IOpprettBehandlingData) => {
         if (
             process.env.NODE_ENV === 'development' ||
             (context.søkersFødselsnummer.valideringsstatus === Valideringsstatus.OK &&
@@ -47,7 +44,7 @@ const useFagsakApi = (
                             payload: response,
                             type: fagsakActions.SETT_FAGSAK,
                         });
-                        history.push(`/fagsak/${response.data.id}/${redirect}`);
+                        history.push(`/fagsak/${response.data.id}/vilkår`);
                         return;
                     } else if (response.status === RessursStatus.FEILET) {
                         settVisFeilmeldinger(true);
@@ -134,7 +131,7 @@ const useFagsakApi = (
                             fødselsnummer: barnBeregning.verdi.barn,
                             stønadFom: moment(
                                 barnBeregning.verdi.stønadFom,
-                                'DD.MM.YY',
+                                datoformat.MÅNED,
                                 true
                             ).format('YYYY-MM-DD'),
                         })
