@@ -49,7 +49,7 @@ export const erGyldigDato = (felt: IFelt<IBarnBeregning>): IFelt<IBarnBeregning>
 export const erGyldigBegrunnelse = (felt: IFelt<string>): IFelt<string> => {
     //TODO: decent validation
     if (felt.verdi === '') {
-        return feil(felt, 'Begrunnelse kan ikke være tomt');
+        return feil(felt, 'Begrunnelse er påkrevd. Vennligst fyll ut en begrunnelse til vedtaket.');
     }
     return ok(felt);
 };
