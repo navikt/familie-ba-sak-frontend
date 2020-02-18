@@ -75,9 +75,9 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
 
                                 <Input
                                     bredde={'S'}
-                                    label={'Startdato'}
+                                    label={'Virkningstidspunkt'}
                                     value={barnBeregning.verdi.stønadFom}
-                                    placeholder={'DD.MM.YY'}
+                                    placeholder={'MM.YY'}
                                     onChange={event => {
                                         dispatch({
                                             payload: {

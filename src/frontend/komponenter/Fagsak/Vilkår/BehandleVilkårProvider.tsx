@@ -30,8 +30,10 @@ const initialState = (personer?: IPerson[], aktivVedtak?: IVedtakForBehandling):
     return {
         vedtakResultat: undefined,
         samletVilkårResultat: hentVilkårForPersoner(personer),
-        begrunnelse: lagInitiellFelt(aktivVedtak?.begrunnelse ? aktivVedtak.begrunnelse : '',
-            erGyldigBegrunnelse),
+        begrunnelse: lagInitiellFelt(
+            aktivVedtak?.begrunnelse ? aktivVedtak.begrunnelse : '',
+            erGyldigBegrunnelse
+        ),
     };
 };
 
@@ -94,8 +96,8 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
                 begrunnelse: state.begrunnelse.valideringsFunksjon({
                     ...state.begrunnelse,
                     verdi: action.payload,
-                })
-            }
+                }),
+            };
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);
         }
@@ -112,7 +114,9 @@ const BehandlingVilkårProvider: React.StatelessComponent<IBehandlingVilkårProv
     children,
 }) => {
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
-    const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find((vedtak: IVedtakForBehandling) => vedtak.aktiv)
+    const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find(
+        (vedtak: IVedtakForBehandling) => vedtak.aktiv
+    );
 
     const [state, dispatch] = React.useReducer(
         behandlingVilkårReducer,

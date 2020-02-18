@@ -8,6 +8,7 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import moment = require('moment');
 import { useHistory } from 'react-router';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { datoformat } from '../../../utils/formatter';
 
 interface IProps {
     fagsak: IFagsak;
@@ -45,7 +46,7 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         index,
                         oppdatertBarnBeregning: {
                             ...barnBeregning,
-                            stønadFom: moment(barnBeregning.stønadFom).format('DD.MM.YY'),
+                            stønadFom: moment(barnBeregning.stønadFom).format(datoformat.DATO),
                         },
                     },
                     type: actions.SETT_BARNAS_BEREGNING,
