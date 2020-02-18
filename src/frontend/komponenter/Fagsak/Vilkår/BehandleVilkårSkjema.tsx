@@ -3,10 +3,11 @@ import {
     useBehandlingVilkårDispatch,
     actions,
 } from './BehandleVilkårProvider';
-import { RadioPanelGruppe, SkjemaGruppe, CheckboksPanelGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe, SkjemaGruppe, CheckboksPanelGruppe, TextareaControlled, Textarea, Input } from 'nav-frontend-skjema';
 import React from 'react';
 import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
 import { VedtakResultat } from '../../../typer/fagsak';
+import { Valideringsstatus } from '../../../typer/felt';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -81,6 +82,24 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                         },
                     });
                 }}
+            />
+
+            <br />
+            
+            <TextareaControlled
+                label={'Begrunnelse'}
+                maxLength={0}
+                defaultValue={context.begrunnelse.verdi}
+                value={context.begrunnelse.verdi}
+                onBlur={(evt: any) => {
+                    dispatch({
+                        type: actions.SETT_BEGRUNNELSE,
+                        payload: evt.target.value,
+                    })
+                }}
+                feil={context.begrunnelse.valideringsstatus !== Valideringsstatus.OK && visFeilmeldinger && context.begrunnelse.feilmelding
+                    ? context.begrunnelse.feilmelding
+                    : undefined}
             />
         </SkjemaGruppe>
     );

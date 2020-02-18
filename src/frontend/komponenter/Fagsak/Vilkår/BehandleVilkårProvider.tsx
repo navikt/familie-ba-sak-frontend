@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { IFagsak, VedtakResultat, IBehandling } from '../../../typer/fagsak';
+import { IFagsak, VedtakResultat, IBehandling, IVedtakForBehandling } from '../../../typer/fagsak';
 import { IVilkårResultat, hentVilkårForPersoner, UtfallType } from '../../../typer/vilkår';
 import { IPerson } from '../../../typer/person';
+import { IFelt } from '../../../typer/felt';
+import { erGyldigBegrunnelse } from '../../../utils/validators';
+import { lagInitiellFelt } from '../../../typer/provider';
 
 export enum actions {
     SETT_RESULTAT = 'SETT_RESULTAT',
     SETT_SAMLET_VILKÅRS_RESULTAT = 'SETT_SAMLET_VILKÅRS_RESULTAT',
     TOGGLE_VILKÅR = 'TOGGLE_VILKÅR',
+    SETT_BEGRUNNELSE = 'SETT_BEGRUNNELSE',
 }
 
 export interface IAction {
@@ -19,12 +23,15 @@ type Dispatch = (action: IAction) => void;
 export interface IState {
     vedtakResultat?: VedtakResultat;
     samletVilkårResultat: IVilkårResultat[];
+    begrunnelse: IFelt<string>;
 }
 
-const initialState = (personer?: IPerson[]): IState => {
+const initialState = (personer?: IPerson[], aktivVedtak?: IVedtakForBehandling): IState => {
     return {
         vedtakResultat: undefined,
         samletVilkårResultat: hentVilkårForPersoner(personer),
+        begrunnelse: lagInitiellFelt(aktivVedtak?.begrunnelse ? aktivVedtak.begrunnelse : '',
+            erGyldigBegrunnelse),
     };
 };
 
@@ -81,6 +88,14 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
                         ? VedtakResultat.AVSLÅTT
                         : VedtakResultat.INNVILGET,
             };
+        case actions.SETT_BEGRUNNELSE:
+            return {
+                ...state,
+                begrunnelse: state.begrunnelse.valideringsFunksjon({
+                    ...state.begrunnelse,
+                    verdi: action.payload,
+                })
+            }
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);
         }
@@ -97,10 +112,11 @@ const BehandlingVilkårProvider: React.StatelessComponent<IBehandlingVilkårProv
     children,
 }) => {
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
+    const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find((vedtak: IVedtakForBehandling) => vedtak.aktiv)
 
     const [state, dispatch] = React.useReducer(
         behandlingVilkårReducer,
-        initialState(aktivBehandling?.personer)
+        initialState(aktivBehandling?.personer, aktivVedtak)
     );
 
     return (

@@ -9,7 +9,7 @@ import {
 } from './BehandleVilkårProvider';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 import { useHistory } from 'react-router';
-import { AlertStripeInfo, AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {
@@ -28,6 +28,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     );
 
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
+    const aktivVedtak= aktivBehandling?.vedtakForBehandling?.find((vedtak: IVedtakForBehandling)=> vedtak.aktiv);
 
     React.useEffect(() => {
         if (aktivBehandling && aktivBehandling.samletVilkårResultat) {
@@ -41,6 +42,13 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     (vedtak: IVedtakForBehandling) => vedtak.aktiv
                 )?.resultat,
             });
+        }
+
+        if(aktivVedtak && aktivVedtak.begrunnelse){
+            dispatch({
+                type: actions.SETT_BEGRUNNELSE,
+                payload: aktivVedtak.begrunnelse,
+            })
         }
     }, [fagsak]);
 

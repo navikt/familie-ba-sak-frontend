@@ -73,10 +73,16 @@ const useFagsakApi = (
             return;
         }
 
+        if (context.begrunnelse.valideringsstatus !== Valideringsstatus.OK) {
+            settVisFeilmeldinger(true);
+            return;
+        }
+
         settSenderInn(true);
         apiOpprettVedtak(fagsak.id, {
             resultat: context.vedtakResultat,
             samletVilkårResultat: context.samletVilkårResultat,
+            begrunnelse: context.begrunnelse.verdi,
         })
             .then((response: Ressurs<any>) => {
                 settSenderInn(false);
