@@ -29,10 +29,9 @@ const useFagsakApi = (
     const opprettBehandling = (context: IOpprettBehandlingState, data: IOpprettBehandlingData) => {
         if (
             process.env.NODE_ENV === 'development' ||
-            (context.søkersFødselsnummer.valideringsstatus === Valideringsstatus.OK &&
-                context.barnasFødselsnummer.find(
-                    barnFødselsnummer =>
-                        barnFødselsnummer.valideringsstatus !== Valideringsstatus.OK
+            (context.søkersIdent.valideringsstatus === Valideringsstatus.OK &&
+                context.barnasIdenter.find(
+                    barnIdent => barnIdent.valideringsstatus !== Valideringsstatus.OK
                 ) === undefined)
         ) {
             settSenderInn(true);
@@ -128,7 +127,7 @@ const useFagsakApi = (
                     barnasBeregning: context.barnasBeregning.map(
                         (barnBeregning: IFelt<IBarnBeregning>) => ({
                             beløp: barnBeregning.verdi.beløp,
-                            fødselsnummer: barnBeregning.verdi.barn,
+                            ident: barnBeregning.verdi.barn,
                             stønadFom: moment(
                                 barnBeregning.verdi.stønadFom,
                                 datoformat.MÅNED,

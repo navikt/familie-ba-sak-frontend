@@ -8,6 +8,7 @@ import { IVedtakForBehandling } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 import { datoformat } from '../../../utils/formatter';
+import InputMedLabelTilVenstre from '../../Felleskomponenter/InputMedLabelTilVenstre/InputMedLabelTilVenstre';
 
 interface IBeregningSkjema {
     aktivVedtak?: IVedtakForBehandling;
@@ -31,19 +32,19 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
 
     return (
         <SkjemaGruppe
-            className={'fastsett__skjemagruppe'}
+            className={'beregning__skjemagruppe'}
             feil={
                 visFeilmeldinger && opprettelseFeilmelding !== ''
                     ? opprettelseFeilmelding
                     : undefined
             }
         >
-            <Panel className={'fastsett__skjemagruppe--beregning'}>
+            <Panel className={'beregning__skjemagruppe'}>
                 {context.barnasBeregning.map(
                     (barnBeregning: IFelt<IBarnBeregning>, index: number) => {
                         return (
                             <SkjemaGruppe
-                                className={'fastsett__skjemagruppe--beregning-barn'}
+                                className={'beregning__skjemagruppe--barn'}
                                 key={barnBeregning.verdi.barn}
                                 feil={
                                     barnBeregning.valideringsstatus !== Valideringsstatus.OK &&
@@ -56,7 +57,7 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                 <Element
                                     children={`Barn ${index + 1}: ${barnBeregning.verdi.barn}`}
                                 />
-                                <Input
+                                <InputMedLabelTilVenstre
                                     bredde={'S'}
                                     label={'Beløp'}
                                     value={barnBeregning.verdi.beløp}
@@ -75,11 +76,12 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                     }}
                                 />
 
-                                <Input
+                                <InputMedLabelTilVenstre
                                     bredde={'S'}
                                     label={'Virkningstidspunkt'}
                                     value={barnBeregning.verdi.stønadFom}
                                     placeholder={'MM.YY'}
+                                    autoFocus={true}
                                     onChange={event => {
                                         dispatch({
                                             payload: {

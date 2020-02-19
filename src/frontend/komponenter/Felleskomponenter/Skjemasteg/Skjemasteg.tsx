@@ -25,6 +25,19 @@ const Skjemasteg: React.StatelessComponent<IProps> = ({
             {children}
 
             <div className={'skjemasteg__navigering'}>
+                {nesteOnClick && (
+                    <Knapp
+                        type={'hoved'}
+                        spinner={senderInn}
+                        onClick={async () => {
+                            nesteOnClick();
+                        }}
+                        children={nesteKnappTittel ?? 'Neste'}
+                    />
+                )}
+
+                <div className={'skjemasteg__navigering--flex'} />
+
                 {forrigeOnClick ? (
                     <Knapp
                         type={'hoved'}
@@ -35,19 +48,6 @@ const Skjemasteg: React.StatelessComponent<IProps> = ({
                     />
                 ) : (
                     <div />
-                )}
-
-                <div className={'skjemasteg__navigering--flex'} />
-
-                {nesteOnClick && (
-                    <Knapp
-                        type={'hoved'}
-                        spinner={senderInn}
-                        onClick={async () => {
-                            nesteOnClick();
-                        }}
-                        children={nesteKnappTittel ?? 'Neste'}
-                    />
                 )}
             </div>
         </div>

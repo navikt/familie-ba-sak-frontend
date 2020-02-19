@@ -15,10 +15,6 @@ export const hentFagsak = (
     id: string,
     innloggetSaksbehandler?: ISaksbehandler
 ): Promise<Ressurs<IFagsak>> => {
-    if (window.location.host.includes('preprod')) {
-        axiosRequest({ method: 'GET', url: '/familie-ba-sak/api/fagsak' });
-    }
-
     return axiosRequest<IFagsak>(
         {
             method: 'GET',
@@ -45,9 +41,9 @@ export const hentFagsaker = (
 };
 
 export interface IOpprettBehandlingData {
-    barnasFødselsnummer: string[];
+    barnasIdenter: string[];
     behandlingType: Behandlingstype;
-    fødselsnummer: string;
+    ident: string;
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
 }
