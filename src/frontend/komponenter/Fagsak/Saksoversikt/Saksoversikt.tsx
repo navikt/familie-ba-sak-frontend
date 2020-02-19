@@ -19,6 +19,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
 import moment = require('moment');
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { axiosRequest } from '../../../api/axios';
 
 interface IProps {
     fagsak: IFagsak;
@@ -71,30 +72,45 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
             {aktivVedtak?.barnasBeregning &&
                 aktivVedtak?.barnasBeregning.length > 0 &&
                 gjeldendeBehandling?.status === BehandlingStatus.IVERKSATT && (
-                    <div className={'saksoversikt__utbetalinger'}>
-                        <Undertittel children={'Utbetalinger'} />
-                        <table className="tabell">
-                            <thead>
-                                <tr>
-                                    <th children={'Person'} />
-                                    <th children={'Beløp'} />
-                                    <th children={'Periode'} />
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {aktivVedtak?.barnasBeregning.map(
-                                    (barnBeregning: IBarnBeregning) => {
-                                        return (
-                                            <tr key={barnBeregning.barn}>
-                                                <td children={`${barnBeregning.barn}`} />
-                                                <td children={`${barnBeregning.beløp}`} />
-                                                <td children={`${barnBeregning.stønadFom}`} />
-                                            </tr>
-                                        );
-                                    }
-                                )}
-                            </tbody>
-                        </table>
+                    <div>
+                        <div className={'saksoversikt__utbetalinger'}>
+                            <Undertittel children={'Utbetalinger'} />
+                            <table className="tabell">
+                                <thead>
+                                    <tr>
+                                        <th children={'Person'} />
+                                        <th children={'Beløp'} />
+                                        <th children={'Periode'} />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {aktivVedtak?.barnasBeregning.map(
+                                        (barnBeregning: IBarnBeregning) => {
+                                            return (
+                                                <tr key={barnBeregning.barn}>
+                                                    <td children={`${barnBeregning.barn}`} />
+                                                    <td children={`${barnBeregning.beløp}`} />
+                                                    <td children={`${barnBeregning.stønadFom}`} />
+                                                </tr>
+                                            );
+                                        }
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className={'saksoversikt__opphør'}>
+                            <Undertittel children={'Opphør utbetalinger for migrert fagsak'} />
+                            <Knapp
+                                mini={true}
+                                onClick={() => {
+                                    axiosRequest({
+                                        method: 'POST',
+                                        url: `/familie-ba-sak/api/fagsak/${fagsak.id}/opphoer-migrert-vedtak`,
+                                    });
+                                }}
+                                children={'Opphør utbetaling'}
+                            />
+                        </div>
                     </div>
                 )}
 
