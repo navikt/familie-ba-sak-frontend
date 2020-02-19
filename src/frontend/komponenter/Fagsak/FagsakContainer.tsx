@@ -10,6 +10,7 @@ import BehandleVilkår from './Vilkår/BehandleVilkår';
 import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
 import { BeregningProvider } from './Beregning/BeregningProvider';
 import Beregning from './Beregning/Beregning';
+import Saksoversikt from './Saksoversikt/Saksoversikt';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -41,6 +42,13 @@ const FagsakContainer: React.FunctionComponent = () => {
                     />
                     <div className={'fagsakcontainer__content'}>
                         <Switch>
+                            <Route
+                                exact={true}
+                                path="/fagsak/:fagsakId"
+                                render={() => {
+                                    return <Saksoversikt fagsak={fagsak.data} />;
+                                }}
+                            />
                             <Route
                                 exact={true}
                                 path="/fagsak/:fagsakId/vilkår"

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IFagsak, IBehandling, IVedtakForBehandling } from '../../../typer/fagsak';
-import Skjemasteg from '../Skjemasteg/Skjemasteg';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import {
     useBehandlingVilkårContext,

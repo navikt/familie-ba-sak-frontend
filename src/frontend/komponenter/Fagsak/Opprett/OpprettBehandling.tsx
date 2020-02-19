@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useOpprettBehandlingContext } from './OpprettBehandlingProvider';
 import OpprettBehandlingSkjema from './OpprettBehandlingSkjema';
-import Skjemasteg from '../Skjemasteg/Skjemasteg';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { Behandlingstype } from '../../../typer/fagsak';
 

@@ -38,7 +38,7 @@ export interface IState {
 const initialState: IState = {
     barnasFødselsnummer: [lagInitiellFelt('', fødselsnummerValidator)],
     behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING,
-    kategori: BehandlingKategori.NATIONAL,
+    kategori: BehandlingKategori.NASJONAL,
     søkersFødselsnummer: lagInitiellFelt('', fødselsnummerValidator),
     underkategori: BehandlingUnderkategori.ORDINÆR,
 };
