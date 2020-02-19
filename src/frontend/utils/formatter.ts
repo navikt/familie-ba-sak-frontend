@@ -1,6 +1,7 @@
 import moment from 'moment';
 
 export enum datoformat {
+    MÅNED = 'MM.YY',
     DATO = 'DD.MM.YY',
     DATO_TID = 'DD.MM.YY HH:mm',
     TID = 'HH:mm',

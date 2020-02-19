@@ -6,9 +6,9 @@ import {
 } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
-import { fødselsnummerValidator } from '../../../utils/validators';
+import { identValidator } from '../../../utils/validators';
 
-export type IFødselsnummerFelt = IFelt<string>;
+export type IIdentFelt = IFelt<string>;
 
 export enum actions {
     SETT_SØKERS_FØDSELSNUMMER = 'SETT_SØKERS_FØDSELSNUMMER',
@@ -17,7 +17,7 @@ export enum actions {
     SETT_BEHANDLING_UNDERKATEGORI = 'SETT_BEHANDLING_UNDERKATEGORI',
     LEGG_TIL_BARN = 'LEGG_TIL_BARN',
     SLETT_BARN = 'SLETT_BARN',
-    SETT_BARNS_FØDSELSNUMMER = 'SETT_BARNS_FØDSELSNUMMER',
+    SETT_BARNAS_IDENTER = 'SETT_BARNAS_IDENTER',
 }
 
 export interface IAction {
@@ -28,18 +28,18 @@ export interface IAction {
 type Dispatch = (action: IAction) => void;
 
 export interface IState {
-    barnasFødselsnummer: IFødselsnummerFelt[];
+    barnasIdenter: IIdentFelt[];
     behandlingstype: Behandlingstype;
     kategori: BehandlingKategori;
-    søkersFødselsnummer: IFødselsnummerFelt;
+    søkersIdent: IIdentFelt;
     underkategori: BehandlingUnderkategori;
 }
 
 const initialState: IState = {
-    barnasFødselsnummer: [lagInitiellFelt('', fødselsnummerValidator)],
+    barnasIdenter: [lagInitiellFelt('', identValidator)],
     behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING,
     kategori: BehandlingKategori.NASJONAL,
-    søkersFødselsnummer: lagInitiellFelt('', fødselsnummerValidator),
+    søkersIdent: lagInitiellFelt('', identValidator),
     underkategori: BehandlingUnderkategori.ORDINÆR,
 };
 
@@ -51,8 +51,8 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
         case actions.SETT_SØKERS_FØDSELSNUMMER:
             return {
                 ...state,
-                søkersFødselsnummer: state.søkersFødselsnummer.valideringsFunksjon({
-                    ...state.søkersFødselsnummer,
+                søkersIdent: state.søkersIdent.valideringsFunksjon({
+                    ...state.søkersIdent,
                     verdi: action.payload,
                 }),
             };
@@ -74,38 +74,30 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
         case actions.LEGG_TIL_BARN:
             return {
                 ...state,
-                barnasFødselsnummer: [
-                    ...state.barnasFødselsnummer,
-                    lagInitiellFelt('', fødselsnummerValidator),
-                ],
+                barnasIdenter: [...state.barnasIdenter, lagInitiellFelt('', identValidator)],
             };
         case actions.SLETT_BARN:
-            const fødselsNummerListe = state.barnasFødselsnummer;
+            const identListe = state.barnasIdenter;
             return {
                 ...state,
-                barnasFødselsnummer: [
-                    ...fødselsNummerListe
+                barnasIdenter: [
+                    ...identListe
                         .slice(0, action.payload)
-                        .concat(
-                            ...fødselsNummerListe.slice(
-                                action.payload + 1,
-                                fødselsNummerListe.length
-                            )
-                        ),
+                        .concat(...identListe.slice(action.payload + 1, identListe.length)),
                 ],
             };
-        case actions.SETT_BARNS_FØDSELSNUMMER:
-            const barnasFødselsnummerKopi = [...state.barnasFødselsnummer];
-            barnasFødselsnummerKopi[action.payload.index] = barnasFødselsnummerKopi[
+        case actions.SETT_BARNAS_IDENTER:
+            const barnasIdenterKopi = [...state.barnasIdenter];
+            barnasIdenterKopi[action.payload.index] = barnasIdenterKopi[
                 action.payload.index
             ].valideringsFunksjon({
-                ...barnasFødselsnummerKopi[action.payload.index],
-                verdi: action.payload.fødselsnummer,
+                ...barnasIdenterKopi[action.payload.index],
+                verdi: action.payload.ident,
             });
 
             return {
                 ...state,
-                barnasFødselsnummer: barnasFødselsnummerKopi,
+                barnasIdenter: barnasIdenterKopi,
             };
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);

@@ -28,7 +28,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
 
     return (
         <SkjemaGruppe
-            className={'fastsett__skjemagruppe'}
+            className={'vilkår__skjemagruppe'}
             feil={
                 visFeilmeldinger && opprettelseFeilmelding !== ''
                     ? opprettelseFeilmelding
@@ -94,6 +94,8 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
             <TextareaControlled
                 label={'Begrunnelse'}
                 maxLength={0}
+                textareaClass={'vilkår__skjemagruppe--begrunnelse'}
+                placeholder={'Begrunn vurderingen din'}
                 defaultValue={context.begrunnelse.verdi}
                 value={context.begrunnelse.verdi}
                 onBlur={(evt: any) => {

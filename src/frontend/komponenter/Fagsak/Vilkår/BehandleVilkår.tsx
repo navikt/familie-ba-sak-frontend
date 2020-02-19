@@ -28,7 +28,9 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     );
 
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
-    const aktivVedtak= aktivBehandling?.vedtakForBehandling?.find((vedtak: IVedtakForBehandling)=> vedtak.aktiv);
+    const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find(
+        (vedtak: IVedtakForBehandling) => vedtak.aktiv
+    );
 
     React.useEffect(() => {
         if (aktivBehandling && aktivBehandling.samletVilkårResultat) {
@@ -44,11 +46,11 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
             });
         }
 
-        if(aktivVedtak && aktivVedtak.begrunnelse){
+        if (aktivVedtak && aktivVedtak.begrunnelse) {
             dispatch({
                 type: actions.SETT_BEGRUNNELSE,
                 payload: aktivVedtak.begrunnelse,
-            })
+            });
         }
     }, [fagsak]);
 

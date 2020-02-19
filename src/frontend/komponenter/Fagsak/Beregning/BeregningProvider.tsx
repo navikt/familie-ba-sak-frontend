@@ -3,7 +3,7 @@ import { IBarnBeregning, ordinærBeløp } from '../../../typer/behandle';
 import { IFagsak, IBehandling } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
-import { erGyldigDato } from '../../../utils/validators';
+import { erGyldigMånedDato } from '../../../utils/validators';
 import { IPerson, PersonType } from '../../../typer/person';
 
 export enum actions {
@@ -38,7 +38,7 @@ export const lastInitialState = (fagsak: IFagsak): IState => {
                         beløp: ordinærBeløp,
                         stønadFom: '',
                     },
-                    erGyldigDato
+                    erGyldigMånedDato
                 );
             });
     }

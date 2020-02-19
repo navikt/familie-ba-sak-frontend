@@ -1,6 +1,6 @@
 import { Lukknapp } from 'nav-frontend-ikonknapper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Input, Select, SkjemaGruppe, FnrInput } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import {
@@ -41,6 +41,7 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
             <Select
                 bredde={'l'}
                 label="Velg behandlingstype"
+                autoFocus={true}
                 onChange={event =>
                     dispatch({
                         payload: event.target.value as Behandlingstype,
@@ -110,8 +111,9 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
             <Undertittel children={'Søker'} />
             <Input
                 bredde={'L'}
-                label={'Fødselsnummer'}
-                value={context.søkersFødselsnummer.verdi}
+                label={'Ident'}
+                value={context.søkersIdent.verdi}
+                placeholder={'fnr/dnr'}
                 onChange={event => {
                     dispatch({
                         payload: event.target.value,
@@ -119,52 +121,51 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                     });
                 }}
                 feil={
-                    context.søkersFødselsnummer.valideringsstatus !== Valideringsstatus.OK &&
+                    context.søkersIdent.valideringsstatus !== Valideringsstatus.OK &&
                     visFeilmeldinger
-                        ? context.søkersFødselsnummer.feilmelding
+                        ? context.søkersIdent.feilmelding
                         : undefined
                 }
             />
 
             <br />
             <Undertittel children={'Barn'} />
-            {context.barnasFødselsnummer.map(
-                (barnsFødselsnummerFelt: IFelt<string>, index: number) => {
-                    return (
-                        <div key={index} className={'opprett__skjemagruppe--barn'}>
-                            <Input
-                                label={'Fødselsnummer'}
-                                value={barnsFødselsnummerFelt.verdi}
-                                onChange={event => {
+            {context.barnasIdenter.map((barnIdentFelt: IFelt<string>, index: number) => {
+                return (
+                    <div key={index} className={'opprett__skjemagruppe--barn'}>
+                        <Input
+                            label={'Ident'}
+                            value={barnIdentFelt.verdi}
+                            placeholder={'fnr/dnr'}
+                            onChange={event => {
+                                dispatch({
+                                    payload: {
+                                        ident: event.target.value,
+                                        index,
+                                    },
+                                    type: actions.SETT_BARNAS_IDENTER,
+                                });
+                            }}
+                            feil={
+                                barnIdentFelt.valideringsstatus !== Valideringsstatus.OK &&
+                                visFeilmeldinger
+                                    ? barnIdentFelt.feilmelding
+                                    : undefined
+                            }
+                        />
+                        <Lukknapp
+                            onClick={() => {
+                                if (context.barnasIdenter.length > 1) {
                                     dispatch({
-                                        payload: {
-                                            fødselsnummer: event.target.value,
-                                            index,
-                                        },
-                                        type: actions.SETT_BARNS_FØDSELSNUMMER,
+                                        payload: index,
+                                        type: actions.SLETT_BARN,
                                     });
-                                }}
-                                feil={
-                                    barnsFødselsnummerFelt.valideringsstatus !==
-                                        Valideringsstatus.OK && visFeilmeldinger
-                                        ? barnsFødselsnummerFelt.feilmelding
-                                        : undefined
                                 }
-                            />
-                            <Lukknapp
-                                onClick={() => {
-                                    if (context.barnasFødselsnummer.length > 1) {
-                                        dispatch({
-                                            payload: index,
-                                            type: actions.SLETT_BARN,
-                                        });
-                                    }
-                                }}
-                            />
-                        </div>
-                    );
-                }
-            )}
+                            }}
+                        />
+                    </div>
+                );
+            })}
 
             <Knapp
                 onClick={() => {
