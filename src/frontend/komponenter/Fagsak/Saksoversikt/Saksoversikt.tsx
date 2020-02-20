@@ -20,6 +20,7 @@ import { useHistory } from 'react-router';
 import moment = require('moment');
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { axiosRequest } from '../../../api/axios';
+import { Input } from 'nav-frontend-skjema';
 
 interface IProps {
     fagsak: IFagsak;
@@ -27,6 +28,7 @@ interface IProps {
 
 const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
     const history = useHistory();
+    const [opphørsdato, setOpphørsdato] = React.useState('');
 
     const behandlingshistorikk = fagsak.behandlinger.filter(
         (behandling: IBehandling) => !behandling.aktiv
@@ -100,12 +102,20 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
                         </div>
                         <div className={'saksoversikt__opphør'}>
                             <Undertittel children={'Opphør utbetalinger for migrert fagsak'} />
+                            <Input
+                                bredde={'S'}
+                                label={'Fra og med-dato'}
+                                placeholder={'MM.YY'}
+                                value={opphørsdato}
+                                onChange={(event: any) => setOpphørsdato(event.target.value)}
+                            />
                             <Knapp
                                 mini={true}
                                 onClick={() => {
                                     axiosRequest({
                                         method: 'POST',
-                                        url: `/familie-ba-sak/api/fagsak/${fagsak.id}/opphoer-migrert-vedtak`,
+                                        url: `/familie-ba-sak/api/fagsak/${fagsak.id}/opphoer-migrert-vedtak/v2`,
+                                        data: { opphørsdato },
                                     });
                                 }}
                                 children={'Opphør utbetaling'}
