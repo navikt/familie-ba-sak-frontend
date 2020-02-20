@@ -34,13 +34,13 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
         (behandling: IBehandling) => !behandling.aktiv
     );
 
-    const iverksatteBehandlinger = fagsak.behandlinger.filter(
-        (behandling: IBehandling) => behandling.status === BehandlingStatus.IVERKSATT
+    const ferdigstilteBehandlinger = fagsak.behandlinger.filter(
+        (behandling: IBehandling) => behandling.status === BehandlingStatus.FERDIGSTILT
     );
 
     let gjeldendeBehandling =
-        iverksatteBehandlinger.length > 0
-            ? iverksatteBehandlinger.sort((a, b) =>
+        ferdigstilteBehandlinger.length > 0
+            ? ferdigstilteBehandlinger.sort((a, b) =>
                   moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
               )[0]
             : undefined;
@@ -73,7 +73,7 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
 
             {aktivVedtak?.barnasBeregning &&
                 aktivVedtak?.barnasBeregning.length > 0 &&
-                gjeldendeBehandling?.status === BehandlingStatus.IVERKSATT && (
+                gjeldendeBehandling?.status === BehandlingStatus.FERDIGSTILT && (
                     <div>
                         <div className={'saksoversikt__utbetalinger'}>
                             <Undertittel children={'Utbetalinger'} />
@@ -124,7 +124,7 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
                     </div>
                 )}
 
-            {aktivBehandling?.status !== BehandlingStatus.IVERKSATT && (
+            {aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT && (
                 <div className={'saksoversikt__aktivbehandling'}>
                     <Undertittel children={'Aktiv behandling'} />
                     <Informasjonsbolk
