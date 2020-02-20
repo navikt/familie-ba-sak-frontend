@@ -121,6 +121,7 @@ export const behandlingsstatuser: INøkkelPar = {
     },
     SENDT_TIL_IVERKSETTING: { id: 'SENDT_TIL_IVERKSETTING', navn: 'Sendt til iverksetting' },
     IVERKSATT: { id: 'IVERKSATT', navn: 'Iverksatt' },
+    FERDIGSTILT: { id: 'FERDIGSTILT', navn: 'Ferdigstilt' },
 };
 
 export const kategorier: INøkkelPar = {
