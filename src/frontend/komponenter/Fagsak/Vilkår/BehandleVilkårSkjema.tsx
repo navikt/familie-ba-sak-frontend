@@ -40,6 +40,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 legend="Vilkår for barnetrygd"
                 radios={[
                     {
+                        autoFocus: true,
                         label: 'Vilkårene er oppfylt',
                         value: 'INNVILGET',
                         id: 'INNVILGET',
