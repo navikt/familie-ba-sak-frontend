@@ -98,7 +98,7 @@
                 "aktiv": false,
                 "behandlingId": 1,
                 "type": "FØRSTEGANGSBEHANDLING",
-                "status": "IVERKSATT",
+                "status": "FERDIGSTILT",
                 "kategori": "NASJONAL",
                 "opprettetTidspunkt": "2020-02-01T12:00:00.00",
                 "personer": [

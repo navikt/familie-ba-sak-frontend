@@ -19,6 +19,8 @@ import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
 import moment = require('moment');
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { axiosRequest } from '../../../api/axios';
+import { Input } from 'nav-frontend-skjema';
 
 interface IProps {
     fagsak: IFagsak;
@@ -26,18 +28,19 @@ interface IProps {
 
 const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
     const history = useHistory();
+    const [opphørsdato, setOpphørsdato] = React.useState('');
 
     const behandlingshistorikk = fagsak.behandlinger.filter(
         (behandling: IBehandling) => !behandling.aktiv
     );
 
-    const iverksatteBehandlinger = fagsak.behandlinger.filter(
-        (behandling: IBehandling) => behandling.status === BehandlingStatus.IVERKSATT
+    const ferdigstilteBehandlinger = fagsak.behandlinger.filter(
+        (behandling: IBehandling) => behandling.status === BehandlingStatus.FERDIGSTILT
     );
 
     let gjeldendeBehandling =
-        iverksatteBehandlinger.length > 0
-            ? iverksatteBehandlinger.sort((a, b) =>
+        ferdigstilteBehandlinger.length > 0
+            ? ferdigstilteBehandlinger.sort((a, b) =>
                   moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
               )[0]
             : undefined;
@@ -70,35 +73,64 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
 
             {aktivVedtak?.barnasBeregning &&
                 aktivVedtak?.barnasBeregning.length > 0 &&
-                gjeldendeBehandling?.status === BehandlingStatus.IVERKSATT && (
-                    <div className={'saksoversikt__utbetalinger'}>
-                        <Undertittel children={'Utbetalinger'} />
-                        <table className="tabell">
-                            <thead>
-                                <tr>
-                                    <th children={'Person'} />
-                                    <th children={'Beløp'} />
-                                    <th children={'Periode'} />
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {aktivVedtak?.barnasBeregning.map(
-                                    (barnBeregning: IBarnBeregning) => {
-                                        return (
-                                            <tr key={barnBeregning.barn}>
-                                                <td children={`${barnBeregning.barn}`} />
-                                                <td children={`${barnBeregning.beløp}`} />
-                                                <td children={`${barnBeregning.stønadFom}`} />
-                                            </tr>
-                                        );
-                                    }
-                                )}
-                            </tbody>
-                        </table>
+                gjeldendeBehandling?.status === BehandlingStatus.FERDIGSTILT && (
+                    <div>
+                        <div className={'saksoversikt__utbetalinger'}>
+                            <Undertittel children={'Utbetalinger'} />
+                            <table className="tabell">
+                                <thead>
+                                    <tr>
+                                        <th children={'Person'} />
+                                        <th children={'Beløp'} />
+                                        <th children={'Periode'} />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {aktivVedtak?.barnasBeregning.map(
+                                        (barnBeregning: IBarnBeregning) => {
+                                            return (
+                                                <tr key={barnBeregning.barn}>
+                                                    <td children={`${barnBeregning.barn}`} />
+                                                    <td children={`${barnBeregning.beløp}`} />
+                                                    <td children={`${barnBeregning.stønadFom}`} />
+                                                </tr>
+                                            );
+                                        }
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className={'saksoversikt__opphør'}>
+                            <Undertittel children={'Opphør utbetalinger for migrert fagsak'} />
+                            <Input
+                                bredde={'S'}
+                                label={'Fra og med-dato'}
+                                placeholder={'MM.YY'}
+                                value={opphørsdato}
+                                onChange={(event: any) => setOpphørsdato(event.target.value)}
+                            />
+                            <Knapp
+                                mini={true}
+                                onClick={() => {
+                                    axiosRequest({
+                                        method: 'POST',
+                                        url: `/familie-ba-sak/api/fagsak/${fagsak.id}/opphoer-migrert-vedtak/v2`,
+                                        data: {
+                                            opphørsdato: moment(
+                                                opphørsdato,
+                                                datoformat.MÅNED,
+                                                true
+                                            ).format('YYYY-MM-DD'),
+                                        },
+                                    });
+                                }}
+                                children={'Opphør utbetaling'}
+                            />
+                        </div>
                     </div>
                 )}
 
-            {aktivBehandling?.status !== BehandlingStatus.IVERKSATT && (
+            {aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT && (
                 <div className={'saksoversikt__aktivbehandling'}>
                     <Undertittel children={'Aktiv behandling'} />
                     <Informasjonsbolk

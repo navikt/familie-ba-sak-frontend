@@ -30,6 +30,7 @@ export enum BehandlingStatus {
     LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG = 'LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG',
     SENDT_TIL_IVERKSETTING = 'SENDT_TIL_IVERKSETTING',
     IVERKSATT = 'IVERKSATT',
+    FERDIGSTILT = 'FERDIGSTILT',
 }
 
 export enum VedtakResultat {
@@ -121,6 +122,7 @@ export const behandlingsstatuser: INøkkelPar = {
     },
     SENDT_TIL_IVERKSETTING: { id: 'SENDT_TIL_IVERKSETTING', navn: 'Sendt til iverksetting' },
     IVERKSATT: { id: 'IVERKSATT', navn: 'Iverksatt' },
+    FERDIGSTILT: { id: 'FERDIGSTILT', navn: 'Ferdigstilt' },
 };
 
 export const kategorier: INøkkelPar = {
