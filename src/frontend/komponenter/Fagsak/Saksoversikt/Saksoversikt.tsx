@@ -105,18 +105,23 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
                             <Input
                                 bredde={'S'}
                                 label={'Fra og med-dato'}
-                                placeholder={'MM.YYYY'}
+                                placeholder={'MM.YY'}
                                 value={opphørsdato}
                                 onChange={(event: any) => setOpphørsdato(event.target.value)}
                             />
                             <Knapp
                                 mini={true}
                                 onClick={() => {
-                                    const fomDato = '01.' + opphørsdato;
                                     axiosRequest({
                                         method: 'POST',
                                         url: `/familie-ba-sak/api/fagsak/${fagsak.id}/opphoer-migrert-vedtak/v2`,
-                                        data: { opphørsdato: fomDato },
+                                        data: {
+                                            opphørsdato: moment(
+                                                opphørsdato,
+                                                datoformat.MÅNED,
+                                                true
+                                            ).format('YYYY-MM-DD'),
+                                        },
                                     });
                                 }}
                                 children={'Opphør utbetaling'}
