@@ -54,6 +54,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         }
     }, []);
 
+    const visSubmitKnapp =
+        aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
+        aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
+
     return (
         <div className="oppsummering">
             {errorMessage === undefined ? (
@@ -75,7 +79,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                     }}
                     children={'Tilbake'}
                 />
-                {errorMessage === undefined && (
+                {errorMessage === undefined && visSubmitKnapp && (
                     <Knapp
                         type={'hoved'}
                         onClick={() => {
