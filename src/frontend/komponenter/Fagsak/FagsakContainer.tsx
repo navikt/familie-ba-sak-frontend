@@ -11,6 +11,8 @@ import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
 import { BeregningProvider } from './Beregning/BeregningProvider';
 import Beregning from './Beregning/Beregning';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
+import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -47,6 +49,17 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 path="/fagsak/:fagsakId"
                                 render={() => {
                                     return <Saksoversikt fagsak={fagsak.data} />;
+                                }}
+                            />
+                            <Route
+                                exact={true}
+                                path="/fagsak/:fagsakId/ny-behandling"
+                                render={() => {
+                                    return (
+                                        <OpprettBehandlingProvider fagsak={fagsak.data}>
+                                            <OpprettBehandling fagsak={fagsak.data} />
+                                        </OpprettBehandlingProvider>
+                                    );
                                 }}
                             />
                             <Route

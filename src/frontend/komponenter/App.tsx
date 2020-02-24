@@ -7,10 +7,11 @@ import { hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
 import FagsakContainer from './Fagsak/FagsakContainer';
-import OpprettBehandling from './Fagsak/Opprett/OpprettBehandling';
-import { OpprettBehandlingProvider } from './Fagsak/Opprett/OpprettBehandlingProvider';
+import OpprettBehandling from './Fagsak/OpprettBehandling/OpprettBehandling';
+import { OpprettBehandlingProvider } from './Fagsak/OpprettBehandling/OpprettBehandlingProvider';
 import { FagsakProvider } from './FagsakProvider';
 import TempHeader from './TempHeader';
+import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 
@@ -74,11 +75,7 @@ class App extends React.Component<{}, IState> {
                                 exact={true}
                                 path="/fagsak/opprett"
                                 render={() => {
-                                    return (
-                                        <OpprettBehandlingProvider>
-                                            <OpprettBehandling />
-                                        </OpprettBehandlingProvider>
-                                    );
+                                    return <OpprettFagsak />;
                                 }}
                             />
                             <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
