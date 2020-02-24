@@ -1,12 +1,14 @@
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Systemtittel, Feilmelding } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { axiosRequest } from '../../../api/axios';
 import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
-import { IFagsak } from '../../../typer/fagsak';
+import { IFagsak, IBehandling, BehandlingStatus } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { AxiosError } from 'axios';
+import { useFagsakDispatch, actions } from '../../FagsakProvider';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -14,8 +16,16 @@ interface IVedtakProps {
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const history = useHistory();
+    const fagsakDispatcher = useFagsakDispatch();
+
     const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
+
+    const [submitFeil, settSubmitFeil] = React.useState('');
+
+    const aktivBehandling = fagsak.behandlinger.find(
+        (behandling: IBehandling) => behandling.aktiv === true
+    );
 
     React.useEffect(() => {
         if (
@@ -34,7 +44,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                         setErrorMessage('Ukjent feil, kunne ikke generere forhåndsvisning.');
                     }
                 })
-                .catch(error => {
+                .catch((_error: AxiosError) => {
                     setErrorMessage('Ukjent feil, Kunne ikke generere forhåndsvisning.');
                 });
         } else {
@@ -43,6 +53,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             );
         }
     }, []);
+
+    const visSubmitKnapp =
+        aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
+        aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
 
     return (
         <div className="oppsummering">
@@ -65,19 +79,37 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                     }}
                     children={'Tilbake'}
                 />
-                {errorMessage === undefined && (
+                {errorMessage === undefined && visSubmitKnapp && (
                     <Knapp
                         type={'hoved'}
                         onClick={() => {
                             axiosRequest<IFagsak>({
                                 method: 'POST',
-                                url: `/familie-ba-sak/api/fagsak/${fagsak.id}/iverksett-vedtak`,
+                                url: `/familie-ba-sak/api/fagsak/${fagsak.id}/${
+                                    aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
+                                        ? 'iverksett-vedtak'
+                                        : 'send-til-beslutter'
+                                }`,
+                            }).then((response: Ressurs<IFagsak>) => {
+                                if (response.status === RessursStatus.SUKSESS) {
+                                    fagsakDispatcher({
+                                        payload: response,
+                                        type: actions.SETT_FAGSAK,
+                                    });
+                                } else if (response.status === RessursStatus.FEILET) {
+                                    settSubmitFeil(response.melding);
+                                }
                             });
                         }}
-                        children={'Iverksett'}
+                        children={
+                            aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
+                                ? 'Iverksett'
+                                : 'Send til beslutter'
+                        }
                     />
                 )}
             </div>
+            {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
         </div>
     );
 };
