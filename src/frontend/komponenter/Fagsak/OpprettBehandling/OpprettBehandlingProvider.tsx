@@ -43,9 +43,9 @@ const initialState = (fagsak: IFagsak): IState => {
             ...(hentSisteBehandlingPåFagsak(fagsak)
                 ?.personer.filter((person: IPerson) => person.type === PersonType.BARN)
                 .map(barn => ({
-                    feilmelding: 'Feltet er påkrevd, men mangler input',
+                    feilmelding: '',
                     valideringsFunksjon: identValidator,
-                    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
+                    valideringsstatus: Valideringsstatus.OK,
                     verdi: barn.personIdent,
                 })) ?? [lagInitiellFelt('', identValidator)]),
         ],
