@@ -70,7 +70,7 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
     return axiosRequest<IFagsak>({
         data,
         method: 'POST',
-        url: '/familie-ba-sak/api/behandling/opprett',
+        url: '/familie-ba-sak/api/behandling/ny-behandling',
     });
 };
 

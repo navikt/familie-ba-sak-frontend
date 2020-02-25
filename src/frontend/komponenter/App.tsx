@@ -68,12 +68,12 @@ class App extends React.Component<{}, IState> {
                                 exact={true}
                                 path={'/'}
                                 render={() => {
-                                    return <Redirect from="/" to="/fagsak/opprett" />;
+                                    return <Redirect from="/" to="/fagsak/ny-fagsak" />;
                                 }}
                             />
                             <Route
                                 exact={true}
-                                path="/fagsak/opprett"
+                                path="/fagsak/ny-fagsak"
                                 render={() => {
                                     return <OpprettFagsak />;
                                 }}

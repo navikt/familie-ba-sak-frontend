@@ -34,7 +34,7 @@ app.get('/familie-ba-sak/api/behandling/2/vedtak-html', (req, res) => {
     );
 });
 
-app.post('/familie-ba-sak/api/behandling/opprett', (req, res) => {
+app.post('/familie-ba-sak/api/behandling/ny-behandling', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
 });
 
