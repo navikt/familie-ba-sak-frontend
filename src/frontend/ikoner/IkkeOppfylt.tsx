@@ -6,7 +6,7 @@ interface IIkkeOppfylt {
     width?: number;
 }
 
-const IkkeOppfylt: React.StatelessComponent<IIkkeOppfylt> = ({ className, heigth, width }) => {
+const IkkeOppfylt: React.FunctionComponent<IIkkeOppfylt> = ({ className, heigth, width }) => {
     return (
         <svg
             aria-labelledby={'ikkeOppfylt'}

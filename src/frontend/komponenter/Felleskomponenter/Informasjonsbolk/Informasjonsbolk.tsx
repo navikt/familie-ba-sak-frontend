@@ -10,7 +10,7 @@ interface IProps {
     informasjon: IInformasjon[];
 }
 
-const Informasjonsbolk: React.StatelessComponent<IProps> = ({ informasjon }) => {
+const Informasjonsbolk: React.FunctionComponent<IProps> = ({ informasjon }) => {
     return (
         <div className={'informasjonsbolk'}>
             {informasjon.map((info: IInformasjon) => {

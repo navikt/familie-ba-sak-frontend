@@ -7,8 +7,6 @@ import { hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
 import FagsakContainer from './Fagsak/FagsakContainer';
-import OpprettBehandling from './Fagsak/OpprettBehandling/OpprettBehandling';
-import { OpprettBehandlingProvider } from './Fagsak/OpprettBehandling/OpprettBehandlingProvider';
 import { FagsakProvider } from './FagsakProvider';
 import TempHeader from './TempHeader';
 import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';

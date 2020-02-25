@@ -10,7 +10,7 @@ interface IProps {
     tittel: string;
 }
 
-const Skjemasteg: React.StatelessComponent<IProps> = ({
+const Skjemasteg: React.FunctionComponent<IProps> = ({
     children,
     forrigeOnClick,
     nesteKnappTittel,

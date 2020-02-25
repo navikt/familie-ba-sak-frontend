@@ -3,7 +3,6 @@ import {
     Behandlingstype,
     BehandlingKategori,
     BehandlingUnderkategori,
-    IBehandling,
     IFagsak,
 } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
@@ -116,7 +115,7 @@ interface IProps {
     fagsak: IFagsak;
 }
 
-const OpprettBehandlingProvider: React.StatelessComponent<IProps> = ({ fagsak, children }) => {
+const OpprettBehandlingProvider: React.FunctionComponent<IProps> = ({ fagsak, children }) => {
     const [state, dispatch] = React.useReducer(opprettBehandlingReducer, initialState(fagsak));
 
     return (

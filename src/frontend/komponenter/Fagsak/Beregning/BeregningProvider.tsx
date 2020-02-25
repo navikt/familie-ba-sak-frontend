@@ -76,7 +76,7 @@ interface IBeregningProvider {
     fagsak: IFagsak;
 }
 
-const BeregningProvider: React.StatelessComponent<IBeregningProvider> = ({ children, fagsak }) => {
+const BeregningProvider: React.FunctionComponent<IBeregningProvider> = ({ children, fagsak }) => {
     const [state, dispatch] = React.useReducer(beregningReducer, lastInitialState(fagsak));
 
     return (
