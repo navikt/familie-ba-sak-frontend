@@ -137,14 +137,6 @@ export const oboTokenConfig: ITokenRequest = {
     tokenUri: nodeConfig.tokenURI,
 };
 
-export const msGraphOBOTokenConfig: ITokenRequest = {
-    clientId: nodeConfig.clientID,
-    clientSecret: nodeConfig.clientSecret,
-    redirectUrl: nodeConfig.redirectUrl,
-    scope: process.env.MS_GRAPH_SCOPE,
-    tokenUri: nodeConfig.tokenURI,
-};
-
 export const passportConfig: IOIDCStrategyOptionWithRequest = {
     allowHttpForRedirectUrl: nodeConfig.allowHttpForRedirectUrl,
     clientID: nodeConfig.clientID,
