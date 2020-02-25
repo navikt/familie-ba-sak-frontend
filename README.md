@@ -21,7 +21,6 @@ Appen krever en del environment variabler og legges til i .env fila i root på p
     PASSPORTCOOKIE_KEY4='<any string of length 12>'
     SESSION_SECRET='<any string of length 32>'
     BA_SAK_SCOPE=api://<familie-ba-sak client ID>/.default
-    MS_GRAPH_SCOPE=https://graph.microsoft.com/.default
 
     ENV=local
     APP_VERSION=0.0.1
