@@ -2,7 +2,7 @@ import { captureException, configureScope, showReportDialog, withScope } from '@
 import Modal from 'nav-frontend-modal';
 import * as React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import { slackNotify, axiosRequest } from '../api/axios';
+import { slackNotify } from '../api/axios';
 import { hentBrukerEnhet, hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';

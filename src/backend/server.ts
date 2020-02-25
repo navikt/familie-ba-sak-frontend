@@ -14,7 +14,6 @@ import {
 } from './config';
 import { prometheusTellere } from './metrikker';
 import { attachToken, doProxy } from './proxy';
-//import { preferredAxios } from '../frontend/api/axios';
 import setupRouter from './router';
 
 /* tslint:disable */
