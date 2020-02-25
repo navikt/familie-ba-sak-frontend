@@ -20,11 +20,8 @@ app.get('/familie-ba-sak/api/fagsak/1', (req, res) => {
 app.get('/user/profile', (req, res) => {
     res.send({
         displayName: 'Test Testersen',
+        enhet: '8888',
     });
-});
-
-app.get('/user/enhet', (req, res) => {
-    res.send('8888');
 });
 
 app.get('/familie-ba-sak/api/behandling/2/vedtak-html', (req, res) => {

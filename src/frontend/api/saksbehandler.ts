@@ -6,9 +6,3 @@ export const hentInnloggetBruker = (): Promise<ISaksbehandler> => {
         return response.data;
     });
 };
-
-export const hentBrukerEnhet = (): Promise<string> => {
-    return preferredAxios.get(`/user/enhet`).then(response => {
-        return response.data;
-    });
-};
