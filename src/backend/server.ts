@@ -27,8 +27,8 @@ const backend = new Backend(
     passportConfig,
     sessionConfig,
     saksbehandlerTokenConfig,
-    msGraphOBOTokenConfig,
-    prometheusTellere
+    prometheusTellere,
+    msGraphOBOTokenConfig
 );
 
 const port = 8000;
