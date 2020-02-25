@@ -49,7 +49,10 @@ const initialState = (fagsak: IFagsak): IState => {
                     verdi: barn.personIdent,
                 })) ?? [lagInitiellFelt('', identValidator)]),
         ],
-        behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING,
+        behandlingstype:
+            fagsak.behandlinger.length === 0
+                ? Behandlingstype.FØRSTEGANGSBEHANDLING
+                : Behandlingstype.REVURDERING,
         kategori: BehandlingKategori.NASJONAL,
         underkategori: BehandlingUnderkategori.ORDINÆR,
     };
