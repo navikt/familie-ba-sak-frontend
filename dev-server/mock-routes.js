@@ -23,6 +23,10 @@ app.get('/user/profile', (req, res) => {
     });
 });
 
+app.get('/user/enhet', (req, res) => {
+    res.send('8888');
+});
+
 app.get('/familie-ba-sak/api/behandling/2/vedtak-html', (req, res) => {
     setTimeout(
         () =>
