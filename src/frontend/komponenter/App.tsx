@@ -2,8 +2,8 @@ import { captureException, configureScope, showReportDialog, withScope } from '@
 import Modal from 'nav-frontend-modal';
 import * as React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import { slackNotify } from '../api/axios';
-import { hentInnloggetBruker } from '../api/saksbehandler';
+import { slackNotify, axiosRequest } from '../api/axios';
+import { hentBrukerEnhet, hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
 import FagsakContainer from './Fagsak/FagsakContainer';
@@ -16,18 +16,27 @@ Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 
 interface IState {
     innloggetSaksbehandler?: ISaksbehandler;
+    enhet: string;
 }
 
 class App extends React.Component<{}, IState> {
     public constructor(props: any) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            enhet: `ukjent enhet`,
+        };
     }
 
     public componentDidMount() {
         hentInnloggetBruker().then(innhentetInnloggetSaksbehandler => {
             this.setState({ innloggetSaksbehandler: innhentetInnloggetSaksbehandler });
+        });
+
+        hentBrukerEnhet().then(enhet => {
+            this.setState({
+                enhet: enhet,
+            });
         });
     }
 
@@ -59,7 +68,10 @@ class App extends React.Component<{}, IState> {
     public render() {
         return (
             <FagsakProvider>
-                <TempHeader innloggetSaksbehandler={this.state.innloggetSaksbehandler} />
+                <TempHeader
+                    innloggetSaksbehandler={this.state.innloggetSaksbehandler}
+                    enhet={this.state.enhet}
+                />
                 <div className={'container'} role="main">
                     <Router>
                         <Switch>

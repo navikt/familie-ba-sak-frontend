@@ -7,9 +7,10 @@ import { ISaksbehandler } from '../typer/saksbehandler';
 
 interface IProps {
     innloggetSaksbehandler?: ISaksbehandler;
+    enhet: string;
 }
 
-const TempHeader: React.SFC<IProps> = ({ innloggetSaksbehandler }) => {
+const TempHeader: React.SFC<IProps> = ({ innloggetSaksbehandler, enhet }) => {
     const [linkWindowOpen, setLinkWindowOpen] = React.useState(false);
     const [unitWindowOpen, setUnitWindowOpen] = React.useState(false);
 
@@ -33,7 +34,7 @@ const TempHeader: React.SFC<IProps> = ({ innloggetSaksbehandler }) => {
                         <div ref={ref}>
                             <UserPanel
                                 name={innloggetSaksbehandler?.displayName ?? 'Ukjent bruker'}
-                                unit="Enhet1"
+                                unit={enhet}
                                 onClick={() => {
                                     if (linkWindowOpen) {
                                         setLinkWindowOpen(false);

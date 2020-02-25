@@ -6,9 +6,15 @@ import path from 'path';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import { passportConfig, saksbehandlerTokenConfig, sessionConfig } from './config';
+import {
+    passportConfig,
+    saksbehandlerTokenConfig,
+    sessionConfig,
+    msGraphOBOTokenConfig,
+} from './config';
 import { prometheusTellere } from './metrikker';
 import { attachToken, doProxy } from './proxy';
+//import { preferredAxios } from '../frontend/api/axios';
 import setupRouter from './router';
 
 /* tslint:disable */
@@ -21,6 +27,7 @@ const backend = new Backend(
     passportConfig,
     sessionConfig,
     saksbehandlerTokenConfig,
+    msGraphOBOTokenConfig,
     prometheusTellere
 );
 

@@ -125,11 +125,23 @@ if (!process.env.BA_SAK_SCOPE) {
     throw new Error('Scope mot familie-ba-sak er ikke konfigurert');
 }
 
+if (!process.env.MS_GRAPH_SCOPE) {
+    throw new Error('Scope mot microsoft graph er ikke konfigurert');
+}
+
 export const oboTokenConfig: ITokenRequest = {
     clientId: nodeConfig.clientID,
     clientSecret: nodeConfig.clientSecret,
     redirectUrl: nodeConfig.redirectUrl,
     scope: process.env.BA_SAK_SCOPE,
+    tokenUri: nodeConfig.tokenURI,
+};
+
+export const msGraphOBOTokenConfig: ITokenRequest = {
+    clientId: nodeConfig.clientID,
+    clientSecret: nodeConfig.clientSecret,
+    redirectUrl: nodeConfig.redirectUrl,
+    scope: process.env.MS_GRAPH_SCOPE,
     tokenUri: nodeConfig.tokenURI,
 };
 
