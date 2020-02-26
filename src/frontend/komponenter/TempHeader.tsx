@@ -33,7 +33,7 @@ const TempHeader: React.SFC<IProps> = ({ innloggetSaksbehandler }) => {
                         <div ref={ref}>
                             <UserPanel
                                 name={innloggetSaksbehandler?.displayName ?? 'Ukjent bruker'}
-                                unit="Enhet1"
+                                unit={`Enhet: ${innloggetSaksbehandler?.enhet}`}
                                 onClick={() => {
                                     if (linkWindowOpen) {
                                         setLinkWindowOpen(false);

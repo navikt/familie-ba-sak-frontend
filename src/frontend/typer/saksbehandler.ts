@@ -5,4 +5,5 @@ export interface ISaksbehandler {
     groups?: string[];
     identifier: string;
     lastName: string;
+    enhet: string;
 }
