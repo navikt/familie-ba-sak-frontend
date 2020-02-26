@@ -26,7 +26,7 @@ interface IProps {
     fagsak: IFagsak;
 }
 
-const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
+const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const history = useHistory();
     const [opphørsdato, setOpphørsdato] = React.useState('');
 
@@ -130,7 +130,7 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
                     </div>
                 )}
 
-            {aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT && (
+            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT && (
                 <div className={'saksoversikt__aktivbehandling'}>
                     <Undertittel children={'Aktiv behandling'} />
                     <Informasjonsbolk
@@ -237,6 +237,10 @@ const Saksoversikt: React.StatelessComponent<IProps> = ({ fagsak }) => {
 };
 
 const sakstype = (behandling?: IBehandling) => {
+    if (!behandling) {
+        return 'Ikke satt';
+    }
+
     return `${
         behandling?.kategori ? kategorier[behandling?.kategori].navn : behandling?.kategori
     }, ${

@@ -3,15 +3,17 @@ import {
     Behandlingstype,
     BehandlingKategori,
     BehandlingUnderkategori,
+    IFagsak,
 } from '../../../typer/fagsak';
-import { IFelt } from '../../../typer/felt';
+import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
 import { identValidator } from '../../../utils/validators';
+import { hentSisteBehandlingPåFagsak } from '../../../utils/fagsak';
+import { IPerson, PersonType } from '../../../typer/person';
 
 export type IIdentFelt = IFelt<string>;
 
 export enum actions {
-    SETT_SØKERS_FØDSELSNUMMER = 'SETT_SØKERS_FØDSELSNUMMER',
     SETT_BEHANDLINGSTYPE = 'SETT_BEHANDLINGSTYPE',
     SETT_BEHANDLING_KATEGORI = 'SETT_BEHANDLING_KATEGORI',
     SETT_BEHANDLING_UNDERKATEGORI = 'SETT_BEHANDLING_UNDERKATEGORI',
@@ -31,16 +33,28 @@ export interface IState {
     barnasIdenter: IIdentFelt[];
     behandlingstype: Behandlingstype;
     kategori: BehandlingKategori;
-    søkersIdent: IIdentFelt;
     underkategori: BehandlingUnderkategori;
 }
 
-const initialState: IState = {
-    barnasIdenter: [lagInitiellFelt('', identValidator)],
-    behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING,
-    kategori: BehandlingKategori.NASJONAL,
-    søkersIdent: lagInitiellFelt('', identValidator),
-    underkategori: BehandlingUnderkategori.ORDINÆR,
+const initialState = (fagsak: IFagsak): IState => {
+    return {
+        barnasIdenter: [
+            ...(hentSisteBehandlingPåFagsak(fagsak)
+                ?.personer.filter((person: IPerson) => person.type === PersonType.BARN)
+                .map(barn => ({
+                    feilmelding: '',
+                    valideringsFunksjon: identValidator,
+                    valideringsstatus: Valideringsstatus.OK,
+                    verdi: barn.personIdent,
+                })) ?? [lagInitiellFelt('', identValidator)]),
+        ],
+        behandlingstype:
+            fagsak.behandlinger.length === 0
+                ? Behandlingstype.FØRSTEGANGSBEHANDLING
+                : Behandlingstype.REVURDERING,
+        kategori: BehandlingKategori.NASJONAL,
+        underkategori: BehandlingUnderkategori.ORDINÆR,
+    };
 };
 
 const OpprettBehandlingStateContext = React.createContext<IState | undefined>(undefined);
@@ -48,14 +62,6 @@ const OpprettBehandlingDispatchContext = React.createContext<Dispatch | undefine
 
 const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
     switch (action.type) {
-        case actions.SETT_SØKERS_FØDSELSNUMMER:
-            return {
-                ...state,
-                søkersIdent: state.søkersIdent.valideringsFunksjon({
-                    ...state.søkersIdent,
-                    verdi: action.payload,
-                }),
-            };
         case actions.SETT_BEHANDLINGSTYPE:
             return {
                 ...state,
@@ -105,8 +111,12 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
     }
 };
 
-const OpprettBehandlingProvider: React.StatelessComponent = ({ children }) => {
-    const [state, dispatch] = React.useReducer(opprettBehandlingReducer, initialState);
+interface IProps {
+    fagsak: IFagsak;
+}
+
+const OpprettBehandlingProvider: React.FunctionComponent<IProps> = ({ fagsak, children }) => {
+    const [state, dispatch] = React.useReducer(opprettBehandlingReducer, initialState(fagsak));
 
     return (
         <OpprettBehandlingStateContext.Provider value={state}>

@@ -71,7 +71,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <Skjemasteg
                 tittel={'Vilkår'}
                 forrigeOnClick={() => {
-                    history.push(`/fagsak/opprett`);
+                    history.push(`/fagsak/${fagsak.id}/ny-behandling`);
                 }}
                 nesteOnClick={() => {
                     opprettVedtak(context, fagsak);

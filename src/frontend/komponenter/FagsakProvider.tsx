@@ -68,7 +68,7 @@ const fagsakReducer = (state: IState, action: IAction): IState => {
     }
 };
 
-const FagsakProvider: React.StatelessComponent = ({ children }) => {
+const FagsakProvider: React.FunctionComponent = ({ children }) => {
     const [state, dispatch] = React.useReducer(fagsakReducer, {
         fagsak: byggTomRessurs<IFagsak>(),
         fagsakId: undefined,
