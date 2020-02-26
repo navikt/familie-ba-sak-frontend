@@ -1,4 +1,4 @@
-import Backend from '@navikt/familie-backend';
+import Backend, { logRequest, LOG_LEVEL } from '@navikt/familie-backend';
 import { Response, Request } from 'express';
 import path from 'path';
 import { buildPath, saksbehandlerTokenConfig } from './config';
@@ -21,8 +21,13 @@ export default (backend: Backend, middleware: any) => {
     });
 
     // SLACK
-    backend.getRouter().post('/slack/notify/:kanal', (req: any, res: Response) => {
-        slackNotify(backend, req, res, req.params.kanal);
+    backend.getRouter().post('/slack/notify/:kanal', (req: Request, res: Response) => {
+        slackNotify(req, res, req.params.kanal);
+    });
+
+    backend.getRouter().post('/logg-feil', (req: Request, res: Response) => {
+        logRequest(req, req.body.melding, LOG_LEVEL.ERROR);
+        res.status(200).send();
     });
 
     // APP
