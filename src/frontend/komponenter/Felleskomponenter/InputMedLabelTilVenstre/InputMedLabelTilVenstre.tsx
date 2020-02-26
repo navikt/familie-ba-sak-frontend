@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Input, InputProps } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-const InputMedLabelTilVenstre: React.StatelessComponent<InputProps> = ({
+const InputMedLabelTilVenstre: React.FunctionComponent<InputProps> = ({
     bredde,
     label,
     onChange,

@@ -109,7 +109,7 @@ interface IBehandlingVilkårProvider {
     fagsak: IFagsak;
 }
 
-const BehandlingVilkårProvider: React.StatelessComponent<IBehandlingVilkårProvider> = ({
+const BehandlingVilkårProvider: React.FunctionComponent<IBehandlingVilkårProvider> = ({
     fagsak,
     children,
 }) => {

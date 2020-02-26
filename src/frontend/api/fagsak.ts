@@ -11,6 +11,20 @@ import { axiosRequest } from './axios';
 import { IVilkårResultat } from '../typer/vilkår';
 import { IBarnBeregning } from '../typer/behandle';
 
+export const apiOpprettFagsak = (
+    data: IOpprettFagsakData,
+    innloggetSaksbehandler?: ISaksbehandler
+) => {
+    return axiosRequest<IFagsak>(
+        {
+            data,
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsak/ny-fagsak`,
+        },
+        innloggetSaksbehandler
+    );
+};
+
 export const hentFagsak = (
     id: string,
     innloggetSaksbehandler?: ISaksbehandler
@@ -40,6 +54,10 @@ export const hentFagsaker = (
     );
 };
 
+export interface IOpprettFagsakData {
+    personIdent: string;
+}
+
 export interface IOpprettBehandlingData {
     barnasIdenter: string[];
     behandlingType: Behandlingstype;
@@ -52,7 +70,7 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
     return axiosRequest<IFagsak>({
         data,
         method: 'POST',
-        url: '/familie-ba-sak/api/behandling/opprett',
+        url: '/familie-ba-sak/api/behandling/ny-behandling',
     });
 };
 

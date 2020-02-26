@@ -1,7 +1,7 @@
 import { Lukknapp } from 'nav-frontend-ikonknapper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select, SkjemaGruppe, FnrInput } from 'nav-frontend-skjema';
-import { Undertittel } from 'nav-frontend-typografi';
+import { Undertittel, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import {
     Behandlingstype,
@@ -9,6 +9,8 @@ import {
     BehandlingKategori,
     kategorier,
     underkategorier,
+    IFagsak,
+    behandlingsstatuser,
 } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import {
@@ -18,11 +20,13 @@ import {
 } from './OpprettBehandlingProvider';
 
 interface IOpprettBehandlingSkjema {
+    fagsak: IFagsak;
     opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
 }
 
 const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema> = ({
+    fagsak,
     opprettelseFeilmelding,
     visFeilmeldinger,
 }) => {
@@ -31,7 +35,7 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
 
     return (
         <SkjemaGruppe
-            className={'opprett__skjemagruppe'}
+            className={'opprettbehandling__skjemagruppe'}
             feil={
                 visFeilmeldinger && opprettelseFeilmelding !== ''
                     ? opprettelseFeilmelding
@@ -50,17 +54,23 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                 }
                 value={context.behandlingstype}
             >
-                {Object.keys(behandlingstyper).map((key: string) => {
-                    return (
-                        <option
-                            aria-selected={context.behandlingstype === key}
-                            key={key}
-                            value={key}
-                        >
-                            {behandlingstyper[key].navn}
-                        </option>
-                    );
-                })}
+                {Object.keys(behandlingstyper)
+                    .filter(behandlingstype =>
+                        fagsak.behandlinger.length === 0
+                            ? behandlingstyper.REVURDERING.id !== behandlingstype
+                            : behandlingstyper.REVURDERING.id === behandlingstype
+                    )
+                    .map((key: string) => {
+                        return (
+                            <option
+                                aria-selected={context.behandlingstype === key}
+                                key={key}
+                                value={key}
+                            >
+                                {behandlingstyper[key].navn}
+                            </option>
+                        );
+                    })}
             </Select>
 
             <br />
@@ -109,30 +119,13 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
             <hr />
             <br />
             <Undertittel children={'Søker'} />
-            <Input
-                bredde={'L'}
-                label={'Ident'}
-                value={context.søkersIdent.verdi}
-                placeholder={'fnr/dnr'}
-                onChange={event => {
-                    dispatch({
-                        payload: event.target.value,
-                        type: actions.SETT_SØKERS_FØDSELSNUMMER,
-                    });
-                }}
-                feil={
-                    context.søkersIdent.valideringsstatus !== Valideringsstatus.OK &&
-                    visFeilmeldinger
-                        ? context.søkersIdent.feilmelding
-                        : undefined
-                }
-            />
+            <Normaltekst children={fagsak.søkerFødselsnummer} />
 
             <br />
             <Undertittel children={'Barn'} />
             {context.barnasIdenter.map((barnIdentFelt: IFelt<string>, index: number) => {
                 return (
-                    <div key={index} className={'opprett__skjemagruppe--barn'}>
+                    <div key={index} className={'opprettbehandling__skjemagruppe--barn'}>
                         <Input
                             label={'Ident'}
                             value={barnIdentFelt.verdi}

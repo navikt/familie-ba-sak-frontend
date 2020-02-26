@@ -6,11 +6,13 @@ import {
     IOpprettBehandlingData,
     apiOpprettVedtak,
     apiOpprettBeregning,
+    IOpprettFagsakData,
+    apiOpprettFagsak,
 } from '../../api/fagsak';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { IFagsak, VedtakResultat } from '../../typer/fagsak';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
-import { IState as IOpprettBehandlingState } from './Opprett/OpprettBehandlingProvider';
+import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { Valideringsstatus, IFelt } from '../../typer/felt';
 import { IBarnBeregning } from '../../typer/behandle';
@@ -26,13 +28,39 @@ const useFagsakApi = (
 
     const fagsakDispatcher = useFagsakDispatch();
 
+    const opprettFagsak = (data: IOpprettFagsakData) => {
+        settSenderInn(true);
+        apiOpprettFagsak(data)
+            .then((response: Ressurs<IFagsak>) => {
+                settSenderInn(false);
+                if (response.status === RessursStatus.SUKSESS) {
+                    fagsakDispatcher({
+                        payload: response,
+                        type: fagsakActions.SETT_FAGSAK,
+                    });
+                    history.push(`/fagsak/${response.data.id}`);
+                    return;
+                } else if (response.status === RessursStatus.FEILET) {
+                    settVisFeilmeldinger(true);
+                    settFeilmelding(response.melding);
+                } else {
+                    settVisFeilmeldinger(true);
+                    settFeilmelding('Opprettelse av fagsak feilet');
+                }
+            })
+            .catch(() => {
+                settSenderInn(false);
+                settVisFeilmeldinger(true);
+                settFeilmelding('Opprettelse av fagsak feilet');
+            });
+    };
+
     const opprettBehandling = (context: IOpprettBehandlingState, data: IOpprettBehandlingData) => {
         if (
             process.env.NODE_ENV === 'development' ||
-            (context.søkersIdent.valideringsstatus === Valideringsstatus.OK &&
-                context.barnasIdenter.find(
-                    barnIdent => barnIdent.valideringsstatus !== Valideringsstatus.OK
-                ) === undefined)
+            context.barnasIdenter.find(
+                barnIdent => barnIdent.valideringsstatus !== Valideringsstatus.OK
+            ) === undefined
         ) {
             settSenderInn(true);
             apiOpprettBehandling(data)
@@ -167,6 +195,7 @@ const useFagsakApi = (
     return {
         opprettBehandling,
         opprettBeregning,
+        opprettFagsak,
         opprettVedtak,
         senderInn,
     };

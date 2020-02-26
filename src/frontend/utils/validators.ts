@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { IIdentFelt } from '../komponenter/Fagsak/Opprett/OpprettBehandlingProvider';
+import { IIdentFelt } from '../komponenter/Fagsak/OpprettBehandling/OpprettBehandlingProvider';
 import { IBarnBeregning } from '../typer/behandle';
 import { feil, IFelt, ok, Valideringsstatus } from '../typer/felt';
 import { datoformat } from './formatter';
