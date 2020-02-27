@@ -1,7 +1,7 @@
 import Backend from '@navikt/familie-backend';
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
-import proxy from 'http-proxy-middleware';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import uuid from 'uuid';
 import { oboTokenConfig, proxyUrl, saksbehandlerTokenConfig } from './config';
 
@@ -15,11 +15,11 @@ const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
 };
 
 export const doProxy: any = () => {
-    return proxy('/familie-ba-sak/api', {
+    return createProxyMiddleware('/familie-ba-sak/api', {
         changeOrigin: true,
         logLevel: 'info',
         onProxyReq: restream,
-        pathRewrite: (path, _req) => {
+        pathRewrite: (path: string, _req: Request) => {
             const newPath = path.replace('/familie-ba-sak/api', '');
             return `/api${newPath}`;
         },

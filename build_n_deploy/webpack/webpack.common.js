@@ -8,7 +8,6 @@ module.exports = {
     entry: {
         'familie-ba-sak': ['./src/frontend/index.tsx'],
     },
-    devtool: 'source-map',
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
     },

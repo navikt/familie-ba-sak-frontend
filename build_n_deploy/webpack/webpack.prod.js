@@ -18,7 +18,6 @@ const config = merge.strategy({
         filename: '[name].[contenthash].js',
         publicPath: '/assets/',
     },
-    devtool: 'source-map',
     module: {
         rules: [
             {

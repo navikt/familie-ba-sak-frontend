@@ -72,7 +72,7 @@ const loggFeil = (
     innloggetSaksbehandler?: ISaksbehandler,
     feilmelding?: string
 ) => {
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV === 'development') {
         configureScope(scope => {
             scope.setUser({
                 username: innloggetSaksbehandler
@@ -92,6 +92,12 @@ const loggFeil = (
             });
         }
 
+        apiLoggFeil(
+            `${error ? `${error}${feilmelding ? ' - ' : ''}` : ''}${
+                feilmelding ? `Feilmelding: ${feilmelding}` : ''
+            }`
+        );
+
         slackNotify(
             `En feil har oppstått i barnetrygd vedtaksløsning!${
                 error ? `\n*Error*: ${error}` : ''
@@ -103,6 +109,12 @@ const loggFeil = (
 
 export const slackNotify = (melding: string, kanal: string) => {
     return preferredAxios.post(`/slack/notify/${kanal}`, {
+        melding,
+    });
+};
+
+export const apiLoggFeil = (melding: string) => {
+    return preferredAxios.post('/logg-feil', {
         melding,
     });
 };

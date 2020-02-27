@@ -1,26 +1,18 @@
-import Backend from '@navikt/familie-backend';
 import { Request, Response as ExpressResponse } from 'express';
-import { namespace } from '../config';
 
 /**
  * Funksjon som kaller slack sitt postMessage api.
  * Bruker node-fetch da axios ikke bryr seg om proxy agent som sendes inn.
  */
-export const slackNotify = (
-    backend: Backend,
-    req: Request,
-    res: ExpressResponse,
-    kanal: string
-) => {
+export const slackNotify = (req: Request, res: ExpressResponse, _kanal: string) => {
     if (!req.session) {
         throw Error('Ingen sesjon på requesten');
     }
 
-    const displayName = req.session.displayName ? req.session.displayName : 'System';
+    /*const displayName = req.session.displayName ? req.session.displayName : 'System';
     const formatertMelding: string = `*${displayName}, ${namespace}*\n ${req.body.melding}`;
 
-    backend.logInfo(req, `Poster slack melding til #${kanal}: ${formatertMelding}`);
-    /*fetch('https://slack.com/api/chat.postMessage', {
+    fetch('https://slack.com/api/chat.postMessage', {
         agent:
             process.env.NODE_ENV !== 'development'
                 ? new HttpsProxyAgent({

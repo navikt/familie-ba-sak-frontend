@@ -1,6 +1,6 @@
 import { Lukknapp } from 'nav-frontend-ikonknapper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Input, Select, SkjemaGruppe, FnrInput } from 'nav-frontend-skjema';
+import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import {
@@ -10,7 +10,6 @@ import {
     kategorier,
     underkategorier,
     IFagsak,
-    behandlingsstatuser,
 } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import {

@@ -7,4 +7,5 @@ node_dist
 VERSION
 yarn-error.log
 .env
+secure.log
 ci-tests/reports

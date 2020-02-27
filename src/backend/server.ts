@@ -1,7 +1,6 @@
-import Backend from '@navikt/familie-backend';
+import Backend, { error, getLogTimestamp, info } from '@navikt/familie-backend';
 import bodyParser from 'body-parser';
 import express from 'express';
-import loglevel from 'loglevel';
 import path from 'path';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
@@ -14,8 +13,6 @@ import setupRouter from './router';
 /* tslint:disable */
 const config = require('../build_n_deploy/webpack/webpack.dev');
 /* tslint:enable */
-
-loglevel.setDefaultLevel(loglevel.levels.INFO);
 
 const backend = new Backend(
     passportConfig,
@@ -57,10 +54,10 @@ backend.getApp().use('/', setupRouter(backend, middleware));
 
 backend.getApp().listen(port, '0.0.0.0', (err: Error) => {
     if (err) {
-        loglevel.error(`${backend.getLogTimestamp()}: server startup failed - ${err}`);
+        error(`${getLogTimestamp()}: server startup failed - ${err}`);
     }
-    loglevel.info(
-        `${backend.getLogTimestamp()}: server startet på port ${port}. Build version: ${
+    info(
+        `${getLogTimestamp()}: server startet på port ${port}. Build version: ${
             process.env.APP_VERSION
         }.`
     );
