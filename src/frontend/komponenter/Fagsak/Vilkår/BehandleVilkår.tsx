@@ -27,7 +27,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
         settOpprettelseFeilmelding
     );
 
-    var aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
+    const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
     const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find(
         (vedtak: IVedtakForBehandling) => vedtak.aktiv
     );
