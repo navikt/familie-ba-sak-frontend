@@ -68,9 +68,10 @@ export const underkategorier: INøkkelPar = {
     },
 };
 
-export const vedtaksresultater: INøkkelPar = {
+export const behandlingsresultater: INøkkelPar = {
     INNVILGET: { id: 'INNVILGET', navn: 'Innvilget' },
     AVSLÅTT: { id: 'AVSLÅTT', navn: 'Avslått' },
+    OPPHØRT: { id: 'OPPHØRT', navn: 'Opphørt' },
 };
 
 export const behandlingsstatuser: INøkkelPar = {

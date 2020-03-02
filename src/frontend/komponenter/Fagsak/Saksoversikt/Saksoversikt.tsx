@@ -13,11 +13,11 @@ import { axiosRequest } from '../../../api/axios';
 import {
     Behandlingstype,
     IBehandling,
+    behandlingsresultater,
     behandlingsstatuser,
     behandlingstyper,
     kategorier,
     underkategorier,
-    vedtaksresultater,
 } from '../../../typer/behandling';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 
@@ -196,10 +196,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                             />
                                             <td
                                                 children={`${
-                                                    aktivVedtakForBehandling
-                                                        ? vedtaksresultater[
-                                                              aktivVedtakForBehandling?.resultat
-                                                          ].navn
+                                                    behandling
+                                                        ? behandlingsresultater[behandling.resultat]
+                                                              .navn
                                                         : 'Ukjent'
                                                 }`}
                                             />

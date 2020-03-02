@@ -17,7 +17,7 @@ const Informasjonsbolk: React.FunctionComponent<IProps> = ({ informasjon }) => {
                 return <Element key={info.label + info.tekst} children={info.label} />;
             })}
             {informasjon.map((info: IInformasjon) => {
-                return <Normaltekst key={info.tekst} children={info.tekst} />;
+                return <Normaltekst key={info.tekst + info.label} children={info.tekst} />;
             })}
         </div>
     );
