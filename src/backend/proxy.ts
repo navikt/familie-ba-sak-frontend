@@ -2,7 +2,7 @@ import Backend from '@navikt/familie-backend';
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { oboTokenConfig, proxyUrl, saksbehandlerTokenConfig } from './config';
 
 const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
@@ -35,7 +35,7 @@ export const attachToken = (backend: Backend) => {
             saksbehandlerTokenConfig,
             oboTokenConfig
         );
-        req.headers['Nav-Call-Id'] = uuid.v1();
+        req.headers['Nav-Call-Id'] = uuidv4();
         req.headers.Authorization = `Bearer ${accessToken}`;
         return next();
     };
