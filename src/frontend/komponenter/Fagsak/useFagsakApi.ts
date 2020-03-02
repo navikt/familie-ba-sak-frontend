@@ -10,7 +10,7 @@ import {
     apiOpprettFagsak,
 } from '../../api/fagsak';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
-import { IFagsak, VedtakResultat } from '../../typer/fagsak';
+import { IFagsak, VedtakResultat, Behandlingstype } from '../../typer/fagsak';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
@@ -103,8 +103,16 @@ const useFagsakApi = (
         }
 
         settSenderInn(true);
+
+        const aktivBehandling = fagsak.behandlinger.find(b => b.aktiv);
+        const resutat =
+            aktivBehandling?.type === Behandlingstype.REVURDERING &&
+            context.vedtakResultat === VedtakResultat.AVSLÅTT
+                ? VedtakResultat.OPPHØRT
+                : context.vedtakResultat;
+
         apiOpprettVedtak(fagsak.id, {
-            resultat: context.vedtakResultat,
+            resultat: resutat,
             samletVilkårResultat: context.samletVilkårResultat,
             begrunnelse: context.begrunnelse.verdi,
         })

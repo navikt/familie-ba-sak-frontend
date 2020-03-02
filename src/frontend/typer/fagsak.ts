@@ -38,6 +38,7 @@ export enum BehandlingStatus {
 export enum VedtakResultat {
     INNVILGET = 'INNVILGET',
     AVSLÅTT = 'AVSLÅTT',
+    OPPHØRT = 'OPPHØRT',
 }
 
 // Interface

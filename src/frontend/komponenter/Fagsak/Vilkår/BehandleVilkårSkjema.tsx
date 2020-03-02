@@ -11,17 +11,19 @@ import {
 } from 'nav-frontend-skjema';
 import React from 'react';
 import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
-import { VedtakResultat } from '../../../typer/fagsak';
+import { VedtakResultat, Behandlingstype } from '../../../typer/fagsak';
 import { Valideringsstatus } from '../../../typer/felt';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
+    behandlingstype: Behandlingstype;
 }
 
 const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema> = ({
     opprettelseFeilmelding,
     visFeilmeldinger,
+    behandlingstype,
 }) => {
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
@@ -41,13 +43,13 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 radios={[
                     {
                         autoFocus: true,
-                        label: 'Vilkårene er oppfylt',
+                        label: behandlingstype == Behandlingstype.REVURDERING ? 'Forsatt innvilget' : 'Vilkårene er oppfylt',
                         value: 'INNVILGET',
                         id: 'INNVILGET',
                         checked: context.vedtakResultat === VedtakResultat.INNVILGET,
                     },
                     {
-                        label: 'Vilkårene er ikke oppfylt',
+                        label: behandlingstype == Behandlingstype.REVURDERING ? 'Opphør' : 'Vilkårene er ikke oppfylt',
                         value: 'AVSLÅTT',
                         id: 'AVSLÅTT',
                         checked: context.vedtakResultat === VedtakResultat.AVSLÅTT,
@@ -107,8 +109,8 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 }}
                 feil={
                     context.begrunnelse.valideringsstatus !== Valideringsstatus.OK &&
-                    visFeilmeldinger &&
-                    context.begrunnelse.feilmelding
+                        visFeilmeldinger &&
+                        context.begrunnelse.feilmelding
                         ? context.begrunnelse.feilmelding
                         : undefined
                 }
