@@ -27,13 +27,13 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
         settOpprettelseFeilmelding
     );
 
-    const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
+    var aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
     const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find(
         (vedtak: IVedtakForBehandling) => vedtak.aktiv
     );
 
     React.useEffect(() => {
-        if (aktivBehandling && aktivBehandling.samletVilkårResultat) {
+        if (aktivBehandling && aktivBehandling.samletVilkårResultat && aktivBehandling.samletVilkårResultat.length > 0) {
             dispatch({
                 type: actions.SETT_SAMLET_VILKÅRS_RESULTAT,
                 payload: aktivBehandling.samletVilkårResultat,
