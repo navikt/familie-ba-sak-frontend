@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IFagsak, IBehandling, IVedtakForBehandling } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import {
@@ -11,6 +11,7 @@ import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 import { useHistory } from 'react-router';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
+import { IBehandling } from '../../../typer/behandling';
 
 interface IProps {
     fagsak: IFagsak;
@@ -28,28 +29,20 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     );
 
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
-    const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find(
-        (vedtak: IVedtakForBehandling) => vedtak.aktiv
-    );
 
     React.useEffect(() => {
-        if (aktivBehandling && aktivBehandling.samletVilkårResultat) {
+        if (aktivBehandling && aktivBehandling.samletVilkårResultat.length !== 0) {
             dispatch({
                 type: actions.SETT_SAMLET_VILKÅRS_RESULTAT,
                 payload: aktivBehandling.samletVilkårResultat,
             });
             dispatch({
                 type: actions.SETT_RESULTAT,
-                payload: aktivBehandling.vedtakForBehandling.find(
-                    (vedtak: IVedtakForBehandling) => vedtak.aktiv
-                )?.resultat,
+                payload: aktivBehandling.resultat,
             });
-        }
-
-        if (aktivVedtak && aktivVedtak.begrunnelse) {
             dispatch({
                 type: actions.SETT_BEGRUNNELSE,
-                payload: aktivVedtak.begrunnelse,
+                payload: aktivBehandling.begrunnelse,
             });
         }
     }, [fagsak]);
@@ -78,7 +71,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 }}
                 senderInn={senderInn}
             >
-                {aktivBehandling.samletVilkårResultat && (
+                {aktivBehandling.samletVilkårResultat.length !== 0 && (
                     <>
                         <br />
                         <AlertStripeAdvarsel

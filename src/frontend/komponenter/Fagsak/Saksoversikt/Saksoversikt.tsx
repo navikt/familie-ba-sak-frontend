@@ -1,27 +1,25 @@
-import * as React from 'react';
-import {
-    IFagsak,
-    fagsakStatus,
-    IBehandling,
-    IVedtakForBehandling,
-    BehandlingStatus,
-    kategorier,
-    underkategorier,
-    behandlingstyper,
-    behandlingsstatuser,
-    vedtaksresultater,
-    Behandlingstype,
-} from '../../../typer/fagsak';
+import { Input } from 'nav-frontend-skjema';
 import { Systemtittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import * as React from 'react';
+import { IFagsak, fagsakStatus, BehandlingStatus } from '../../../typer/fagsak';
 import { IBarnBeregning } from '../../../typer/behandle';
 import 'nav-frontend-tabell-style';
 import { formaterIsoDato, datoformat } from '../../../utils/formatter';
 import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
-import moment = require('moment');
+import moment from 'moment';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { axiosRequest } from '../../../api/axios';
-import { Input } from 'nav-frontend-skjema';
+import {
+    Behandlingstype,
+    IBehandling,
+    behandlingsstatuser,
+    behandlingstyper,
+    kategorier,
+    underkategorier,
+    vedtaksresultater,
+} from '../../../typer/behandling';
+import { IVedtakForBehandling } from '../../../typer/vedtak';
 
 interface IProps {
     fagsak: IFagsak;
@@ -133,7 +131,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     </div>
                 )}
 
-            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT && (
+            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT ? (
                 <div className={'saksoversikt__aktivbehandling'}>
                     <Undertittel children={'Aktiv behandling'} />
                     <Informasjonsbolk
@@ -156,6 +154,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         children={'Gå til behandling'}
                     />
                 </div>
+            ) : (
+                <Knapp
+                    mini={true}
+                    onClick={() => {
+                        history.push(`/fagsak/${fagsak.id}/ny-behandling`);
+                    }}
+                    children={'Opprett behandling'}
+                />
             )}
 
             <div className={'saksoversikt__behandlingshistorikk'}>

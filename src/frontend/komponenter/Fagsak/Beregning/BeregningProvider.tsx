@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IBarnBeregning, ordinærBeløp } from '../../../typer/behandle';
-import { IFagsak, IBehandling } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
+import { IBehandling } from '../../../typer/IBehandling';
 import { IFelt } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
 import { erGyldigMånedDato } from '../../../utils/validators';

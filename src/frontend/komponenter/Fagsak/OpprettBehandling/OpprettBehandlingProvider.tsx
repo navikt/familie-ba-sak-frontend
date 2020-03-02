@@ -1,15 +1,11 @@
 import * as React from 'react';
-import {
-    Behandlingstype,
-    BehandlingKategori,
-    BehandlingUnderkategori,
-    IFagsak,
-} from '../../../typer/fagsak';
+import { BehandlingKategori, BehandlingUnderkategori, IFagsak } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
 import { identValidator } from '../../../utils/validators';
 import { hentSisteBehandlingPåFagsak } from '../../../utils/fagsak';
 import { IPerson, PersonType } from '../../../typer/person';
+import { Behandlingstype } from '../../../typer/behandling';
 
 export type IIdentFelt = IFelt<string>;
 
@@ -41,7 +37,7 @@ const initialState = (fagsak: IFagsak): IState => {
         barnasIdenter: [
             ...(hentSisteBehandlingPåFagsak(fagsak)
                 ?.personer.filter((person: IPerson) => person.type === PersonType.BARN)
-                .map(barn => ({
+                .map((barn: IPerson) => ({
                     feilmelding: '',
                     valideringsFunksjon: identValidator,
                     valideringsstatus: Valideringsstatus.OK,

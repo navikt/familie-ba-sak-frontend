@@ -11,8 +11,8 @@ import {
 } from 'nav-frontend-skjema';
 import React from 'react';
 import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
-import { VedtakResultat } from '../../../typer/fagsak';
 import { Valideringsstatus } from '../../../typer/felt';
+import { BehandlingResultat } from '../../../typer/behandling';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -36,7 +36,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
             }
         >
             <RadioPanelGruppe
-                name="vedtakresultat"
+                name="behandlingresultat"
                 legend="Vilkår for barnetrygd"
                 radios={[
                     {
@@ -44,13 +44,13 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                         label: 'Vilkårene er oppfylt',
                         value: 'INNVILGET',
                         id: 'INNVILGET',
-                        checked: context.vedtakResultat === VedtakResultat.INNVILGET,
+                        checked: context.behandlingResultat === BehandlingResultat.INNVILGET,
                     },
                     {
                         label: 'Vilkårene er ikke oppfylt',
                         value: 'AVSLÅTT',
                         id: 'AVSLÅTT',
-                        checked: context.vedtakResultat === VedtakResultat.AVSLÅTT,
+                        checked: context.behandlingResultat === BehandlingResultat.AVSLÅTT,
                     },
                 ]}
                 onChange={(event: any) => {
@@ -60,7 +60,9 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     });
                 }}
                 feil={
-                    visFeilmeldinger && !context.vedtakResultat && 'Du må velge et vedtaksresultat'
+                    visFeilmeldinger &&
+                    !context.behandlingResultat &&
+                    'Du må velge et behandlingsresultat'
                 }
             />
 

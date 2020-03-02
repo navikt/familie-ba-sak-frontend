@@ -74,17 +74,17 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
     });
 };
 
-export interface IOpprettVedtakData {
+export interface IRestVilkårsvurdering {
     resultat: VedtakResultat;
     samletVilkårResultat: IVilkårResultat[];
     begrunnelse: string;
 }
 
-export const apiOpprettVedtak = (fagsakId: number, data: IOpprettVedtakData) => {
+export const apiOpprettEllerOppdaterVedtak = (fagsakId: number, data: IRestVilkårsvurdering) => {
     return axiosRequest<IFagsak>({
         data,
-        method: 'POST',
-        url: `/familie-ba-sak/api/fagsak/${fagsakId}/nytt-vedtak`,
+        method: 'PUT',
+        url: `/familie-ba-sak/api/fagsak/${fagsakId}/vedtak`,
     });
 };
 
