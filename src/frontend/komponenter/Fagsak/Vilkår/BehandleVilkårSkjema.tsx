@@ -1,18 +1,10 @@
-import {
-    useBehandlingVilkårContext,
-    useBehandlingVilkårDispatch,
-    actions,
-} from './BehandleVilkårProvider';
-import {
-    RadioPanelGruppe,
-    SkjemaGruppe,
-    CheckboksPanelGruppe,
-    TextareaControlled,
-} from 'nav-frontend-skjema';
+import {actions, useBehandlingVilkårContext, useBehandlingVilkårDispatch,} from './BehandleVilkårProvider';
+import {CheckboksPanelGruppe, Input, RadioPanelGruppe, SkjemaGruppe, TextareaControlled,} from 'nav-frontend-skjema';
 import React from 'react';
-import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
-import { VedtakResultat, Behandlingstype } from '../../../typer/fagsak';
-import { Valideringsstatus } from '../../../typer/felt';
+import {IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig} from '../../../typer/vilkår';
+import {Behandlingstype, VedtakResultat} from '../../../typer/fagsak';
+import {Valideringsstatus} from '../../../typer/felt';
+import {Undertittel} from "nav-frontend-typografi";
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -27,6 +19,14 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
 }) => {
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
+
+    const inneværendeMåned =  () => {
+        const iDag = new Date();
+        const måned = iDag.getMonth().toString();
+        return [måned.length === 1 ? '0' + måned : måned, iDag.getFullYear().toString().substr(2)].join('.')
+    };
+
+    const [opphørsdato, settOpphørsdato] = React.useState( inneværendeMåned );
 
     return (
         <SkjemaGruppe
@@ -43,13 +43,13 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 radios={[
                     {
                         autoFocus: true,
-                        label: behandlingstype == Behandlingstype.REVURDERING ? 'Forsatt innvilget' : 'Vilkårene er oppfylt',
+                        label: behandlingstype === Behandlingstype.REVURDERING ? 'Forsatt innvilget' : 'Vilkårene er oppfylt',
                         value: 'INNVILGET',
                         id: 'INNVILGET',
                         checked: context.vedtakResultat === VedtakResultat.INNVILGET,
                     },
                     {
-                        label: behandlingstype == Behandlingstype.REVURDERING ? 'Opphør' : 'Vilkårene er ikke oppfylt',
+                        label: behandlingstype === Behandlingstype.REVURDERING ? 'Opphør' : 'Vilkårene er ikke oppfylt',
                         value: 'AVSLÅTT',
                         id: 'AVSLÅTT',
                         checked: context.vedtakResultat === VedtakResultat.AVSLÅTT,
@@ -65,6 +65,18 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     visFeilmeldinger && !context.vedtakResultat && 'Du må velge et vedtaksresultat'
                 }
             />
+            {context.vedtakResultat === VedtakResultat.AVSLÅTT && (
+                <div className={'vilkår__opphør'}>
+                    <Undertittel children={'Opphør utbetalinger for fagsak'} />
+                    <Input
+                        bredde={'S'}
+                        label={'Fra og med-dato'}
+                        placeholder={'MM.YY'}
+                        value={opphørsdato}
+                        onChange={(event: any) => settOpphørsdato(event.target.value)}
+                    />
+                </div>
+            )}
 
             <br />
 
