@@ -33,7 +33,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     );
 
     React.useEffect(() => {
-        if (aktivBehandling && aktivBehandling.samletVilkårResultat) {
+        if (aktivBehandling && aktivBehandling.samletVilkårResultat.length > 0) {
             dispatch({
                 type: actions.SETT_SAMLET_VILKÅRS_RESULTAT,
                 payload: aktivBehandling.samletVilkårResultat,
