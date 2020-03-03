@@ -3,8 +3,8 @@ import {CheckboksPanelGruppe, Input, RadioPanelGruppe, SkjemaGruppe, TextareaCon
 import React from 'react';
 import {IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig} from '../../../typer/vilkår';
 import {Valideringsstatus} from '../../../typer/felt';
+import {BehandlingResultat, Behandlingstype} from '../../../typer/behandling';
 import {Undertittel} from "nav-frontend-typografi";
-import { BehandlingResultat, Behandlingstype } from '../../../typer/behandling';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -13,20 +13,19 @@ interface IBehandlingVilkårSkjema {
 }
 
 const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema> = ({
-    opprettelseFeilmelding,
-    visFeilmeldinger,
-    behandlingstype,
-}) => {
+                                                                                      opprettelseFeilmelding,
+                                                                                      visFeilmeldinger,
+                                                                                      behandlingstype,
+                                                                                  }) => {
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
 
-    const inneværendeMåned =  () => {
+    const inneværendeMåned = () => {
         const iDag = new Date();
         const måned = iDag.getMonth().toString();
         return [måned.length === 1 ? '0' + måned : måned, iDag.getFullYear().toString().substr(2)].join('.')
     };
-
-    const [opphørsdato, settOpphørsdato] = React.useState( inneværendeMåned );
+    const [opphørsdato, settOpphørsdato] = React.useState(inneværendeMåned);
 
     return (
         <SkjemaGruppe
@@ -73,9 +72,9 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     'Du må velge et behandlingsresultat'
                 }
             />
-            {context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
+            {behandlingstype === Behandlingstype.REVURDERING && context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
                 <div className={'vilkår__opphør'}>
-                    <Undertittel children={'Opphør utbetalinger for fagsak'} />
+                    <Undertittel children={'Opphør utbetalinger for fagsak'}/>
                     <Input
                         bredde={'S'}
                         label={'Fra og med-dato'}
@@ -86,7 +85,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 </div>
             )}
 
-            <br />
+            <br/>
 
             <CheckboksPanelGruppe
                 legend={'Velg hjemler for vurderingen'}
@@ -112,7 +111,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 }}
             />
 
-            <br />
+            <br/>
 
             <TextareaControlled
                 label={'Begrunnelse'}
