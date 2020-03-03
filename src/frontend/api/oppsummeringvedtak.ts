@@ -21,7 +21,7 @@ export const hentAktivVedtaksbrev = (
     return axiosRequest<string>(
         {
             method: 'GET',
-            url: `/familie-ba-sak/api/behandling/${aktivBehandling.behandlingId}/vedtak-html`,
+            url: `/familie-ba-sak/api/behandlinger/${aktivBehandling.behandlingId}/vedtak-html`,
         },
         innloggetSaksbehandler
     );
