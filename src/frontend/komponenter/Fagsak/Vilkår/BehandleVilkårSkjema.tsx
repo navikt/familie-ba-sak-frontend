@@ -2,9 +2,9 @@ import {actions, useBehandlingVilkårContext, useBehandlingVilkårDispatch,} fro
 import {CheckboksPanelGruppe, Input, RadioPanelGruppe, SkjemaGruppe, TextareaControlled,} from 'nav-frontend-skjema';
 import React from 'react';
 import {IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig} from '../../../typer/vilkår';
-import {Behandlingstype, VedtakResultat} from '../../../typer/fagsak';
 import {Valideringsstatus} from '../../../typer/felt';
 import {Undertittel} from "nav-frontend-typografi";
+import { BehandlingResultat, Behandlingstype } from '../../../typer/behandling';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -38,21 +38,27 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
             }
         >
             <RadioPanelGruppe
-                name="vedtakresultat"
+                name="behandlingresultat"
                 legend="Vilkår for barnetrygd"
                 radios={[
                     {
                         autoFocus: true,
-                        label: behandlingstype === Behandlingstype.REVURDERING ? 'Forsatt innvilget' : 'Vilkårene er oppfylt',
+                        label:
+                            behandlingstype === Behandlingstype.REVURDERING
+                                ? 'Fortsatt innvilget'
+                                : 'Vilkårene er oppfylt',
                         value: 'INNVILGET',
                         id: 'INNVILGET',
-                        checked: context.vedtakResultat === VedtakResultat.INNVILGET,
+                        checked: context.behandlingResultat === BehandlingResultat.INNVILGET,
                     },
                     {
-                        label: behandlingstype === Behandlingstype.REVURDERING ? 'Opphør' : 'Vilkårene er ikke oppfylt',
+                        label:
+                            behandlingstype === Behandlingstype.REVURDERING
+                                ? 'Opphør'
+                                : 'Vilkårene er ikke oppfylt',
                         value: 'AVSLÅTT',
                         id: 'AVSLÅTT',
-                        checked: context.vedtakResultat === VedtakResultat.AVSLÅTT,
+                        checked: context.behandlingResultat === BehandlingResultat.AVSLÅTT,
                     },
                 ]}
                 onChange={(event: any) => {
@@ -62,10 +68,12 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     });
                 }}
                 feil={
-                    visFeilmeldinger && !context.vedtakResultat && 'Du må velge et vedtaksresultat'
+                    visFeilmeldinger &&
+                    !context.behandlingResultat &&
+                    'Du må velge et behandlingsresultat'
                 }
             />
-            {context.vedtakResultat === VedtakResultat.AVSLÅTT && (
+            {context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
                 <div className={'vilkår__opphør'}>
                     <Undertittel children={'Opphør utbetalinger for fagsak'} />
                     <Input
@@ -121,8 +129,8 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 }}
                 feil={
                     context.begrunnelse.valideringsstatus !== Valideringsstatus.OK &&
-                        visFeilmeldinger &&
-                        context.begrunnelse.feilmelding
+                    visFeilmeldinger &&
+                    context.begrunnelse.feilmelding
                         ? context.begrunnelse.feilmelding
                         : undefined
                 }
