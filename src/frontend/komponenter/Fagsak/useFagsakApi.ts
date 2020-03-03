@@ -18,7 +18,7 @@ import { Valideringsstatus, IFelt } from '../../typer/felt';
 import { IBarnBeregning } from '../../typer/behandle';
 import moment from 'moment';
 import { datoformat } from '../../utils/formatter';
-import { BehandlingResultat } from '../../typer/behandling';
+import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -104,8 +104,16 @@ const useFagsakApi = (
         }
 
         settSenderInn(true);
+
+        const aktivBehandling = fagsak.behandlinger.find(b => b.aktiv);
+        const resutat =
+            aktivBehandling?.type === Behandlingstype.REVURDERING &&
+            context.behandlingResultat === BehandlingResultat.AVSLÅTT
+                ? BehandlingResultat.OPPHØRT
+                : context.behandlingResultat;
+
         apiOpprettEllerOppdaterVedtak(fagsak.id, {
-            resultat: context.behandlingResultat,
+            resultat: resutat,
             samletVilkårResultat: context.samletVilkårResultat,
             begrunnelse: context.begrunnelse.verdi,
         })

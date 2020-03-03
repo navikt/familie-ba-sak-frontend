@@ -3,7 +3,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { BehandlingKategori, IFagsak } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import {
     actions,
@@ -15,6 +15,7 @@ import {
     behandlingstyper,
     kategorier,
     underkategorier,
+    BehandlingKategori,
 } from '../../../typer/behandling';
 
 interface IOpprettBehandlingSkjema {

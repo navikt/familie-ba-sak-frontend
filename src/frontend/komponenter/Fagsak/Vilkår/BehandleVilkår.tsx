@@ -86,6 +86,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 <BehandlingVilkårSkjema
                     opprettelseFeilmelding={opprettelseFeilmelding}
                     visFeilmeldinger={visFeilmeldinger}
+                    behandlingstype={aktivBehandling.type}
                 />
             </Skjemasteg>
         </div>

@@ -1,7 +1,7 @@
 import { Input } from 'nav-frontend-skjema';
 import { Systemtittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { IFagsak, fagsakStatus, BehandlingStatus } from '../../../typer/fagsak';
+import { IFagsak, fagsakStatus } from '../../../typer/fagsak';
 import { IBarnBeregning } from '../../../typer/behandle';
 import 'nav-frontend-tabell-style';
 import { formaterIsoDato, datoformat } from '../../../utils/formatter';
@@ -18,6 +18,7 @@ import {
     behandlingstyper,
     kategorier,
     underkategorier,
+    BehandlingStatus,
 } from '../../../typer/behandling';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 
@@ -69,6 +70,38 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
                 ]}
             />
+            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT ? (
+                <div className={'saksoversikt__aktivbehandling'}>
+                    <Undertittel children={'Aktiv behandling'} />
+                    <Informasjonsbolk
+                        informasjon={[
+                            { label: `Behandlingstype`, tekst: sakstype(aktivBehandling) },
+                            {
+                                label: `Behandlingsstatus`,
+                                tekst: aktivBehandling
+                                    ? behandlingsstatuser[aktivBehandling?.status].navn
+                                    : 'Ukjent',
+                            },
+                        ]}
+                    />
+
+                    <Knapp
+                        mini={true}
+                        onClick={() => {
+                            history.push(`/fagsak/${fagsak.id}/vilkår`);
+                        }}
+                        children={'Gå til behandling'}
+                    />
+                </div>
+            ) : (
+                <Knapp
+                    mini={true}
+                    onClick={() => {
+                        history.push(`/fagsak/${fagsak.id}/ny-behandling`);
+                    }}
+                    children={'Opprett behandling'}
+                />
+            )}
 
             {aktivVedtak?.barnasBeregning &&
                 aktivVedtak?.barnasBeregning.length > 0 &&
@@ -130,39 +163,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         )}
                     </div>
                 )}
-
-            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT ? (
-                <div className={'saksoversikt__aktivbehandling'}>
-                    <Undertittel children={'Aktiv behandling'} />
-                    <Informasjonsbolk
-                        informasjon={[
-                            { label: `Behandlingstype`, tekst: sakstype(aktivBehandling) },
-                            {
-                                label: `Behandlingsstatus`,
-                                tekst: aktivBehandling
-                                    ? behandlingsstatuser[aktivBehandling?.status].navn
-                                    : 'Ukjent',
-                            },
-                        ]}
-                    />
-
-                    <Knapp
-                        mini={true}
-                        onClick={() => {
-                            history.push(`/fagsak/${fagsak.id}/vilkår`);
-                        }}
-                        children={'Gå til behandling'}
-                    />
-                </div>
-            ) : (
-                <Knapp
-                    mini={true}
-                    onClick={() => {
-                        history.push(`/fagsak/${fagsak.id}/ny-behandling`);
-                    }}
-                    children={'Opprett behandling'}
-                />
-            )}
 
             <div className={'saksoversikt__behandlingshistorikk'}>
                 <Undertittel children={'Behandlingshistorikk'} />

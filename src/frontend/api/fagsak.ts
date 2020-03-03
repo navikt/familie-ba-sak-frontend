@@ -1,15 +1,15 @@
-import {
-    IFagsak,
-    Behandlingstype,
-    BehandlingKategori,
-    BehandlingUnderkategori,
-    VedtakResultat,
-} from '../typer/fagsak';
+import { IFagsak } from '../typer/fagsak';
 import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { axiosRequest } from './axios';
 import { IVilkårResultat } from '../typer/vilkår';
 import { IBarnBeregning } from '../typer/behandle';
+import {
+    BehandlingKategori,
+    BehandlingResultat,
+    BehandlingUnderkategori,
+    Behandlingstype,
+} from '../typer/behandling';
 
 export const apiOpprettFagsak = (
     data: IOpprettFagsakData,
@@ -75,7 +75,7 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
 };
 
 export interface IRestVilkårsvurdering {
-    resultat: VedtakResultat;
+    resultat: BehandlingResultat;
     samletVilkårResultat: IVilkårResultat[];
     begrunnelse: string;
 }

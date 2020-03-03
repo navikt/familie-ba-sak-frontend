@@ -5,11 +5,11 @@ import * as React from 'react';
 import { useHistory } from 'react-router';
 import { axiosRequest } from '../../../api/axios';
 import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
-import { IFagsak, BehandlingStatus } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { AxiosError } from 'axios';
 import { useFagsakDispatch, actions } from '../../FagsakProvider';
-import { IBehandling } from '../../../typer/behandling';
+import { IBehandling, BehandlingStatus } from '../../../typer/behandling';
 
 interface IVedtakProps {
     fagsak: IFagsak;

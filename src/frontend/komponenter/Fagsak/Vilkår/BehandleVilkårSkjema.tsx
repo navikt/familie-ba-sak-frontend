@@ -12,16 +12,18 @@ import {
 import React from 'react';
 import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
 import { Valideringsstatus } from '../../../typer/felt';
-import { BehandlingResultat } from '../../../typer/behandling';
+import { BehandlingResultat, Behandlingstype } from '../../../typer/behandling';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
+    behandlingstype: Behandlingstype;
 }
 
 const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema> = ({
     opprettelseFeilmelding,
     visFeilmeldinger,
+    behandlingstype,
 }) => {
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
@@ -41,13 +43,19 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 radios={[
                     {
                         autoFocus: true,
-                        label: 'Vilkårene er oppfylt',
+                        label:
+                            behandlingstype === Behandlingstype.REVURDERING
+                                ? 'Fortsatt innvilget'
+                                : 'Vilkårene er oppfylt',
                         value: 'INNVILGET',
                         id: 'INNVILGET',
                         checked: context.behandlingResultat === BehandlingResultat.INNVILGET,
                     },
                     {
-                        label: 'Vilkårene er ikke oppfylt',
+                        label:
+                            behandlingstype === Behandlingstype.REVURDERING
+                                ? 'Opphør'
+                                : 'Vilkårene er ikke oppfylt',
                         value: 'AVSLÅTT',
                         id: 'AVSLÅTT',
                         checked: context.behandlingResultat === BehandlingResultat.AVSLÅTT,

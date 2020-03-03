@@ -1,8 +1,28 @@
-import { BehandlingKategori, BehandlingStatus, BehandlingUnderkategori } from './fagsak';
 import { IPerson } from './person';
 import { IVilkårResultat } from './vilkår';
 import { IVedtakForBehandling } from './vedtak';
 import { INøkkelPar } from './common';
+
+export enum BehandlingKategori {
+    NASJONAL = 'NASJONAL',
+    EØS = 'EØS',
+}
+
+export enum BehandlingUnderkategori {
+    ORDINÆR = 'ORDINÆR',
+    UTVIDET = 'UTVIDET',
+}
+
+export enum BehandlingStatus {
+    OPPRETTET = 'OPPRETTET',
+    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
+    SENDT_TIL_BESLUTTER = 'SENDT_TIL_BESLUTTER',
+    GODKJENT = 'GODKJENT',
+    LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG = 'LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG',
+    SENDT_TIL_IVERKSETTING = 'SENDT_TIL_IVERKSETTING',
+    IVERKSATT = 'IVERKSATT',
+    FERDIGSTILT = 'FERDIGSTILT',
+}
 
 export enum Behandlingstype {
     FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
@@ -11,9 +31,10 @@ export enum Behandlingstype {
 }
 
 export enum BehandlingResultat {
+    AVSLÅTT = 'AVSLÅTT',
     IKKE_VURDERT = 'IKKE_VURDERT',
     INNVILGET = 'INNVILGET',
-    AVSLÅTT = 'AVSLÅTT',
+    OPPHØRT = 'OPPHØRT',
 }
 
 export interface IBehandling {

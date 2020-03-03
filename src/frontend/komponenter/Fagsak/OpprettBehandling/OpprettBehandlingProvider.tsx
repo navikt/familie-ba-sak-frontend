@@ -1,11 +1,15 @@
 import * as React from 'react';
-import { BehandlingKategori, BehandlingUnderkategori, IFagsak } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
 import { identValidator } from '../../../utils/validators';
 import { hentSisteBehandlingPåFagsak } from '../../../utils/fagsak';
 import { IPerson, PersonType } from '../../../typer/person';
-import { Behandlingstype } from '../../../typer/behandling';
+import {
+    BehandlingKategori,
+    BehandlingUnderkategori,
+    Behandlingstype,
+} from '../../../typer/behandling';
 
 export type IIdentFelt = IFelt<string>;
 
