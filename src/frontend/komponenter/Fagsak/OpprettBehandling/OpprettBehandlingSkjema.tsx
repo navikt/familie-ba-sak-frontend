@@ -3,20 +3,20 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import {
-    Behandlingstype,
-    behandlingstyper,
-    BehandlingKategori,
-    kategorier,
-    underkategorier,
-    IFagsak,
-} from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import {
     actions,
     useOpprettBehandlingContext,
     useOpprettBehandlingDispatch,
 } from './OpprettBehandlingProvider';
+import {
+    Behandlingstype,
+    behandlingstyper,
+    kategorier,
+    underkategorier,
+    BehandlingKategori,
+} from '../../../typer/behandling';
 
 interface IOpprettBehandlingSkjema {
     fagsak: IFagsak;

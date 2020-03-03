@@ -1,6 +1,7 @@
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { IBehandling, IFagsak, IVedtakForBehandling } from '../../../typer/fagsak';
+import { IFagsak, IVedtakForBehandling } from '../../../typer/fagsak';
+import { IBehandling } from '../../../typer/IBehandling';
 import { useBeregningContext, useBeregningDispatch, actions } from './BeregningProvider';
 import BeregningSkjema from './BeregningSkjema';
 import useFagsakApi from '../useFagsakApi';
