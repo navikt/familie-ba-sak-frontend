@@ -1,7 +1,6 @@
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { IFagsak, IVedtakForBehandling } from '../../../typer/fagsak';
-import { IBehandling } from '../../../typer/IBehandling';
+import { IFagsak } from '../../../typer/fagsak';
 import { useBeregningContext, useBeregningDispatch, actions } from './BeregningProvider';
 import BeregningSkjema from './BeregningSkjema';
 import useFagsakApi from '../useFagsakApi';
@@ -10,6 +9,8 @@ import moment = require('moment');
 import { useHistory } from 'react-router';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { datoformat } from '../../../utils/formatter';
+import { IBehandling } from '../../../typer/behandling';
+import { IVedtakForBehandling } from '../../../typer/vedtak';
 
 interface IProps {
     fagsak: IFagsak;
