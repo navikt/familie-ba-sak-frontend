@@ -1,11 +1,19 @@
-import {actions, useBehandlingVilkårContext, useBehandlingVilkårDispatch,} from './BehandleVilkårProvider';
-import {CheckboksPanelGruppe, RadioPanelGruppe, SkjemaGruppe, TextareaControlled,} from 'nav-frontend-skjema';
+import {
+    actions,
+    useBehandlingVilkårContext,
+    useBehandlingVilkårDispatch,
+} from './BehandleVilkårProvider';
+import {
+    CheckboksPanelGruppe,
+    RadioPanelGruppe,
+    SkjemaGruppe,
+    TextareaControlled,
+} from 'nav-frontend-skjema';
 import React from 'react';
-import {IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig} from '../../../typer/vilkår';
-import {Valideringsstatus} from '../../../typer/felt';
-import {BehandlingResultat, Behandlingstype} from '../../../typer/behandling';
-import {Undertittel} from "nav-frontend-typografi";
-import Informasjonsbolk from "../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk";
+import { IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig } from '../../../typer/vilkår';
+import { Valideringsstatus } from '../../../typer/felt';
+import { BehandlingResultat, Behandlingstype } from '../../../typer/behandling';
+import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -14,17 +22,23 @@ interface IBehandlingVilkårSkjema {
 }
 
 const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema> = ({
-                                                                                      opprettelseFeilmelding,
-                                                                                      visFeilmeldinger,
-                                                                                      behandlingstype,
-                                                                                  }) => {
+    opprettelseFeilmelding,
+    visFeilmeldinger,
+    behandlingstype,
+}) => {
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
 
     const inneværendeMåned = () => {
         const iDag = new Date();
         const måned = iDag.getMonth().toString();
-        return [måned.length === 1 ? '0' + måned : måned, iDag.getFullYear().toString().substr(2)].join('.')
+        return [
+            måned.length === 1 ? '0' + måned : måned,
+            iDag
+                .getFullYear()
+                .toString()
+                .substr(2),
+        ].join('.');
     };
 
     return (
@@ -72,18 +86,18 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     'Du må velge et behandlingsresultat'
                 }
             />
-            {behandlingstype === Behandlingstype.REVURDERING && context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
-                <div className={'vilkår__skjemagruppe'}>
-                    <Undertittel children={'Opphør utbetalinger for fagsak'}/>
-                    <Informasjonsbolk
-                        informasjon={[
-                            {label: `Fra og med-dato (MM.ÅÅ)`, tekst: inneværendeMåned()},
-                        ]}
-                    />
-                </div>
-            )}
+            {behandlingstype === Behandlingstype.REVURDERING &&
+                context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
+                    <div className={'vilkår__skjemagruppe--opphørsdato'}>
+                        <Informasjonsbolk
+                            informasjon={[
+                                { label: `Forventet opphørsmåned`, tekst: inneværendeMåned() },
+                            ]}
+                        />
+                    </div>
+                )}
 
-            <br/>
+            <br />
 
             <CheckboksPanelGruppe
                 legend={'Velg hjemler for vurderingen'}
@@ -109,7 +123,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 }}
             />
 
-            <br/>
+            <br />
 
             <TextareaControlled
                 label={'Begrunnelse'}
