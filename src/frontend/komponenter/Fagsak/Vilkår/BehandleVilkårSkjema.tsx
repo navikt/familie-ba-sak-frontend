@@ -29,9 +29,9 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
 
-    const inneværendeMåned = () => {
+    const nesteMåned = () => {
         const iDag = new Date();
-        const måned = iDag.getMonth().toString();
+        const måned = (iDag.getMonth() + 2).toString();
         return [
             måned.length === 1 ? '0' + måned : måned,
             iDag
@@ -90,9 +90,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
                     <div className={'vilkår__skjemagruppe--opphørsdato'}>
                         <Informasjonsbolk
-                            informasjon={[
-                                { label: `Forventet opphørsmåned`, tekst: inneværendeMåned() },
-                            ]}
+                            informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}
                         />
                     </div>
                 )}
