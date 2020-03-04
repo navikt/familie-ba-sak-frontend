@@ -54,10 +54,12 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                 value={context.behandlingstype}
             >
                 {Object.keys(behandlingstyper)
-                    .filter(behandlingstype =>
-                        fagsak.behandlinger.length === 0
-                            ? behandlingstyper.REVURDERING.id !== behandlingstype
-                            : behandlingstyper.REVURDERING.id === behandlingstype
+                    .filter(
+                        behandlingstype =>
+                            true ||
+                            (fagsak.behandlinger.length === 0
+                                ? behandlingstyper.REVURDERING.id !== behandlingstype
+                                : behandlingstyper.REVURDERING.id === behandlingstype)
                     )
                     .map((key: string) => {
                         return (
