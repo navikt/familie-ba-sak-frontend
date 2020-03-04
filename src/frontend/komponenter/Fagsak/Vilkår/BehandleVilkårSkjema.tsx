@@ -1,10 +1,11 @@
 import {actions, useBehandlingVilkårContext, useBehandlingVilkårDispatch,} from './BehandleVilkårProvider';
-import {CheckboksPanelGruppe, Input, RadioPanelGruppe, SkjemaGruppe, TextareaControlled,} from 'nav-frontend-skjema';
+import {CheckboksPanelGruppe, RadioPanelGruppe, SkjemaGruppe, TextareaControlled,} from 'nav-frontend-skjema';
 import React from 'react';
 import {IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig} from '../../../typer/vilkår';
 import {Valideringsstatus} from '../../../typer/felt';
 import {BehandlingResultat, Behandlingstype} from '../../../typer/behandling';
 import {Undertittel} from "nav-frontend-typografi";
+import Informasjonsbolk from "../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk";
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -25,7 +26,6 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
         const måned = iDag.getMonth().toString();
         return [måned.length === 1 ? '0' + måned : måned, iDag.getFullYear().toString().substr(2)].join('.')
     };
-    const [opphørsdato, settOpphørsdato] = React.useState(inneværendeMåned);
 
     return (
         <SkjemaGruppe
@@ -73,14 +73,12 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 }
             />
             {behandlingstype === Behandlingstype.REVURDERING && context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
-                <div className={'vilkår__opphør'}>
+                <div className={'vilkår__skjemagruppe'}>
                     <Undertittel children={'Opphør utbetalinger for fagsak'}/>
-                    <Input
-                        bredde={'S'}
-                        label={'Fra og med-dato'}
-                        placeholder={'MM.YY'}
-                        value={opphørsdato}
-                        onChange={(event: any) => settOpphørsdato(event.target.value)}
+                    <Informasjonsbolk
+                        informasjon={[
+                            {label: `Fra og med-dato (MM.ÅÅ)`, tekst: inneværendeMåned()},
+                        ]}
                     />
                 </div>
             )}
