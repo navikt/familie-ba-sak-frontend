@@ -1,18 +1,19 @@
 import {
+    actions,
     useBehandlingVilkårContext,
     useBehandlingVilkårDispatch,
-    actions,
 } from './BehandleVilkårProvider';
 import {
+    CheckboksPanelGruppe,
     RadioPanelGruppe,
     SkjemaGruppe,
-    CheckboksPanelGruppe,
     TextareaControlled,
 } from 'nav-frontend-skjema';
 import React from 'react';
-import { vilkårConfig, IVilkårConfig, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
+import { IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig } from '../../../typer/vilkår';
 import { Valideringsstatus } from '../../../typer/felt';
 import { BehandlingResultat, Behandlingstype } from '../../../typer/behandling';
+import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -27,6 +28,18 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
 }) => {
     const context = useBehandlingVilkårContext();
     const dispatch = useBehandlingVilkårDispatch();
+
+    const nesteMåned = () => {
+        const iDag = new Date();
+        const måned = (iDag.getMonth() + 2).toString();
+        return [
+            måned.length === 1 ? '0' + måned : måned,
+            iDag
+                .getFullYear()
+                .toString()
+                .substr(2),
+        ].join('.');
+    };
 
     return (
         <SkjemaGruppe
@@ -73,6 +86,14 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     'Du må velge et behandlingsresultat'
                 }
             />
+            {behandlingstype === Behandlingstype.REVURDERING &&
+                context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
+                    <div className={'vilkår__skjemagruppe--opphørsdato'}>
+                        <Informasjonsbolk
+                            informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}
+                        />
+                    </div>
+                )}
 
             <br />
 
