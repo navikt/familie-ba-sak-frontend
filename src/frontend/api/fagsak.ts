@@ -11,6 +11,11 @@ import { axiosRequest } from './axios';
 import { IVilkårResultat } from '../typer/vilkår';
 import { IBarnBeregning } from '../typer/behandle';
 
+const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
+
+const aktiveVedtak = (fagsak: IFagsak) =>
+    aktivBehandling(fagsak)?.vedtakForBehandling.find(v => v.aktiv);
+
 export const apiOpprettFagsak = (
     data: IOpprettFagsakData,
     innloggetSaksbehandler?: ISaksbehandler
