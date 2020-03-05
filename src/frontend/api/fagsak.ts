@@ -11,9 +11,9 @@ import { axiosRequest } from './axios';
 import { IVilkårResultat } from '../typer/vilkår';
 import { IBarnBeregning } from '../typer/behandle';
 
-const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
+export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
 
-const aktiveVedtak = (fagsak: IFagsak) =>
+export const aktivVedtak = (fagsak: IFagsak) =>
     aktivBehandling(fagsak)?.vedtakForBehandling.find(v => v.aktiv);
 
 export const apiOpprettFagsak = (
@@ -97,10 +97,12 @@ export interface IOpprettBeregningData {
     barnasBeregning: IBarnBeregning[];
 }
 
-export const apiOpprettBeregning = (fagsakId: number, data: any) => {
+export const apiOpprettBeregning = (fagsak: IFagsak, data: any) => {
+    const vedtakId = aktivVedtak(fagsak)?.id;
+
     return axiosRequest<IFagsak>({
         data,
         method: 'PUT',
-        url: `/familie-ba-sak/api/fagsaker/${fagsakId}/vedtak`,
+        url: `/familie-ba-sak/api/vedtak/${vedtakId}/vedtak`,
     });
 };

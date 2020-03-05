@@ -159,7 +159,7 @@ const useFagsakApi = (
         ) {
             if (skjemaetHarEndringer) {
                 settSenderInn(true);
-                apiOpprettBeregning(fagsak.id, {
+                apiOpprettBeregning(fagsak, {
                     barnasBeregning: context.barnasBeregning.map(
                         (barnBeregning: IFelt<IBarnBeregning>) => ({
                             beløp: barnBeregning.verdi.beløp,

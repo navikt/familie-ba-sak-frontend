@@ -71,6 +71,7 @@ export interface IVedtakForBehandling {
     resultat: VedtakResultat;
     vedtaksdato: string;
     begrunnelse: string;
+    id: number;
 }
 
 export interface IBehandlingsresultat {
