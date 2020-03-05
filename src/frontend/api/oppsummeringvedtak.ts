@@ -9,8 +9,6 @@ export const hentAktivVedtaksbrev = (
     innloggetSaksbehandler?: ISaksbehandler
 ): Promise<Ressurs<string>> => {
     const vedtak = aktivVedtak(fagsak);
-    console.log(fagsak);
-    console.log(vedtak);
     return axiosRequest<string>(
         {
             method: 'GET',
