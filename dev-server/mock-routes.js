@@ -24,7 +24,7 @@ app.get('/user/profile', (req, res) => {
     });
 });
 
-app.get('/familie-ba-sak/api/behandlinger/2/vedtak-html', (req, res) => {
+app.get('/familie-ba-sak/api/dokument/vedtak-html/3', (req, res) => {
     setTimeout(
         () =>
             res.send({

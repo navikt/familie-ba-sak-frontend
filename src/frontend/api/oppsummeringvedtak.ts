@@ -9,11 +9,12 @@ export const hentAktivVedtaksbrev = (
     innloggetSaksbehandler?: ISaksbehandler
 ): Promise<Ressurs<string>> => {
     const vedtak = aktivVedtak(fagsak);
-
+    console.log(fagsak);
+    console.log(vedtak);
     return axiosRequest<string>(
         {
             method: 'GET',
-            url: `/familie-ba-sak/api/dokument/vedtak-html/${vedtak?.id}/vedtak-html`,
+            url: `/familie-ba-sak/api/dokument/vedtak-html/${vedtak?.id}`,
         },
         innloggetSaksbehandler
     );

@@ -90,7 +90,8 @@
                             }
                         ],
                         "resultat": "INNVILGET",
-                        "begrunnelse": "Fake information"
+                        "begrunnelse": "Fake information",
+                        "id": "3"
                     }
                 ]
             },
