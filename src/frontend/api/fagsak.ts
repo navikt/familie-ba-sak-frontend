@@ -103,6 +103,6 @@ export const apiOpprettBeregning = (fagsak: IFagsak, data: any) => {
     return axiosRequest<IFagsak>({
         data,
         method: 'PUT',
-        url: `/familie-ba-sak/api/vedtak/${vedtakId}/vedtak`,
+        url: `/familie-ba-sak/api/vedtak/${vedtakId}/beregning`,
     });
 };
