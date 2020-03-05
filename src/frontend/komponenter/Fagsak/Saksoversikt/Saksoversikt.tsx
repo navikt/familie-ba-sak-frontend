@@ -1,27 +1,26 @@
-import * as React from 'react';
-import {
-    IFagsak,
-    fagsakStatus,
-    IBehandling,
-    IVedtakForBehandling,
-    BehandlingStatus,
-    kategorier,
-    underkategorier,
-    behandlingstyper,
-    behandlingsstatuser,
-    vedtaksresultater,
-    Behandlingstype,
-} from '../../../typer/fagsak';
+import { Input } from 'nav-frontend-skjema';
 import { Systemtittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import * as React from 'react';
+import { IFagsak, fagsakStatus } from '../../../typer/fagsak';
 import { IBarnBeregning } from '../../../typer/behandle';
 import 'nav-frontend-tabell-style';
 import { formaterIsoDato, datoformat } from '../../../utils/formatter';
 import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
-import moment = require('moment');
+import moment from 'moment';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { axiosRequest } from '../../../api/axios';
-import { Input } from 'nav-frontend-skjema';
+import {
+    Behandlingstype,
+    IBehandling,
+    behandlingsresultater,
+    behandlingsstatuser,
+    behandlingstyper,
+    kategorier,
+    underkategorier,
+    BehandlingStatus,
+} from '../../../typer/behandling';
+import { IVedtakForBehandling } from '../../../typer/vedtak';
 
 interface IProps {
     fagsak: IFagsak;
@@ -71,6 +70,38 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
                 ]}
             />
+            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT ? (
+                <div className={'saksoversikt__aktivbehandling'}>
+                    <Undertittel children={'Aktiv behandling'} />
+                    <Informasjonsbolk
+                        informasjon={[
+                            { label: `Behandlingstype`, tekst: sakstype(aktivBehandling) },
+                            {
+                                label: `Behandlingsstatus`,
+                                tekst: aktivBehandling
+                                    ? behandlingsstatuser[aktivBehandling?.status].navn
+                                    : 'Ukjent',
+                            },
+                        ]}
+                    />
+
+                    <Knapp
+                        mini={true}
+                        onClick={() => {
+                            history.push(`/fagsak/${fagsak.id}/vilkår`);
+                        }}
+                        children={'Gå til behandling'}
+                    />
+                </div>
+            ) : (
+                <Knapp
+                    mini={true}
+                    onClick={() => {
+                        history.push(`/fagsak/${fagsak.id}/ny-behandling`);
+                    }}
+                    children={'Opprett behandling'}
+                />
+            )}
 
             {aktivVedtak?.barnasBeregning &&
                 aktivVedtak?.barnasBeregning.length > 0 &&
@@ -133,31 +164,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     </div>
                 )}
 
-            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT && (
-                <div className={'saksoversikt__aktivbehandling'}>
-                    <Undertittel children={'Aktiv behandling'} />
-                    <Informasjonsbolk
-                        informasjon={[
-                            { label: `Behandlingstype`, tekst: sakstype(aktivBehandling) },
-                            {
-                                label: `Behandlingsstatus`,
-                                tekst: aktivBehandling
-                                    ? behandlingsstatuser[aktivBehandling?.status].navn
-                                    : 'Ukjent',
-                            },
-                        ]}
-                    />
-
-                    <Knapp
-                        mini={true}
-                        onClick={() => {
-                            history.push(`/fagsak/${fagsak.id}/vilkår`);
-                        }}
-                        children={'Gå til behandling'}
-                    />
-                </div>
-            )}
-
             <div className={'saksoversikt__behandlingshistorikk'}>
                 <Undertittel children={'Behandlingshistorikk'} />
                 {behandlingshistorikk.length > 0 ? (
@@ -190,10 +196,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                             />
                                             <td
                                                 children={`${
-                                                    aktivVedtakForBehandling
-                                                        ? vedtaksresultater[
-                                                              aktivVedtakForBehandling?.resultat
-                                                          ].navn
+                                                    behandling
+                                                        ? behandlingsresultater[behandling.resultat]
+                                                              .navn
                                                         : 'Ukjent'
                                                 }`}
                                             />

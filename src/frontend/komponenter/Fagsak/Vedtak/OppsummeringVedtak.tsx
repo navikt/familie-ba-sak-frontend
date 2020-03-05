@@ -1,14 +1,15 @@
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Systemtittel, Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { axiosRequest } from '../../../api/axios';
 import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
-import { IFagsak, IBehandling, BehandlingStatus } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { AxiosError } from 'axios';
-import { useFagsakDispatch, actions } from '../../FagsakProvider';
+import { actions, useFagsakDispatch } from '../../FagsakProvider';
+import { BehandlingStatus, Behandlingstype, IBehandling } from '../../../typer/behandling';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -23,9 +24,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const [submitFeil, settSubmitFeil] = React.useState('');
 
-    const aktivBehandling = fagsak.behandlinger.find(
-        (behandling: IBehandling) => behandling.aktiv === true
-    );
+    const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => {
+        return behandling.aktiv === true;
+    });
 
     React.useEffect(() => {
         if (
@@ -75,7 +76,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 <Knapp
                     type={'hoved'}
                     onClick={() => {
-                        history.push(`/fagsak/${fagsak.id}/beregning`);
+                        aktivBehandling?.type === Behandlingstype.REVURDERING
+                            ? history.push(`/fagsak/${fagsak.id}/vilkår`)
+                            : history.push(`/fagsak/${fagsak.id}/beregning`);
                     }}
                     children={'Tilbake'}
                 />

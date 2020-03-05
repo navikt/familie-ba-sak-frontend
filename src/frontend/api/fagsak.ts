@@ -1,15 +1,15 @@
-import {
-    IFagsak,
-    Behandlingstype,
-    BehandlingKategori,
-    BehandlingUnderkategori,
-    VedtakResultat,
-} from '../typer/fagsak';
+import { IFagsak } from '../typer/fagsak';
 import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { axiosRequest } from './axios';
 import { IVilkårResultat } from '../typer/vilkår';
 import { IBarnBeregning } from '../typer/behandle';
+import {
+    BehandlingKategori,
+    BehandlingResultat,
+    BehandlingUnderkategori,
+    Behandlingstype,
+} from '../typer/behandling';
 
 export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
 
@@ -79,13 +79,13 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
     });
 };
 
-export interface IOpprettVedtakData {
-    resultat: VedtakResultat;
+export interface IRestVilkårsvurdering {
+    resultat: BehandlingResultat;
     samletVilkårResultat: IVilkårResultat[];
     begrunnelse: string;
 }
 
-export const apiOpprettVedtak = (fagsakId: number, data: IOpprettVedtakData) => {
+export const apiOpprettEllerOppdaterVedtak = (fagsakId: number, data: IRestVilkårsvurdering) => {
     return axiosRequest<IFagsak>({
         data,
         method: 'POST',

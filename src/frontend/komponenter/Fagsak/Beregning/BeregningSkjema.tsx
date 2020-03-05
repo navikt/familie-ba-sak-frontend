@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Panel } from 'nav-frontend-paneler';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IBarnBeregning } from '../../../typer/behandle';

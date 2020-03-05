@@ -4,20 +4,21 @@ import { useFagsakDispatch, actions as fagsakActions } from '../FagsakProvider';
 import {
     apiOpprettBehandling,
     IOpprettBehandlingData,
-    apiOpprettVedtak,
+    apiOpprettEllerOppdaterVedtak,
     apiOpprettBeregning,
     IOpprettFagsakData,
     apiOpprettFagsak,
 } from '../../api/fagsak';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
-import { IFagsak, VedtakResultat, Behandlingstype } from '../../typer/fagsak';
+import { IFagsak } from '../../typer/fagsak';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { Valideringsstatus, IFelt } from '../../typer/felt';
 import { IBarnBeregning } from '../../typer/behandle';
-import moment = require('moment');
+import moment from 'moment';
 import { datoformat } from '../../utils/formatter';
+import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -91,8 +92,8 @@ const useFagsakApi = (
         }
     };
 
-    const opprettVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {
-        if (!context.vedtakResultat) {
+    const opprettEllerOppdaterVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {
+        if (!context.behandlingResultat) {
             settVisFeilmeldinger(true);
             return;
         }
@@ -107,11 +108,11 @@ const useFagsakApi = (
         const aktivBehandling = fagsak.behandlinger.find(b => b.aktiv);
         const resutat =
             aktivBehandling?.type === Behandlingstype.REVURDERING &&
-            context.vedtakResultat === VedtakResultat.AVSLÅTT
-                ? VedtakResultat.OPPHØRT
-                : context.vedtakResultat;
+            context.behandlingResultat === BehandlingResultat.AVSLÅTT
+                ? BehandlingResultat.OPPHØRT
+                : context.behandlingResultat;
 
-        apiOpprettVedtak(fagsak.id, {
+        apiOpprettEllerOppdaterVedtak(fagsak.id, {
             resultat: resutat,
             samletVilkårResultat: context.samletVilkårResultat,
             begrunnelse: context.begrunnelse.verdi,
@@ -124,9 +125,9 @@ const useFagsakApi = (
                         type: fagsakActions.SETT_FAGSAK,
                     });
 
-                    if (context.vedtakResultat === VedtakResultat.INNVILGET) {
+                    if (context.behandlingResultat === BehandlingResultat.INNVILGET) {
                         history.push(`/fagsak/${fagsak.id}/beregning`);
-                    } else if (context.vedtakResultat === VedtakResultat.AVSLÅTT) {
+                    } else if (context.behandlingResultat === BehandlingResultat.AVSLÅTT) {
                         history.push(`/fagsak/${fagsak.id}/vedtak`);
                     } else {
                         settFeilmelding('Internal error: invalid vedtak result');
@@ -204,7 +205,7 @@ const useFagsakApi = (
         opprettBehandling,
         opprettBeregning,
         opprettFagsak,
-        opprettVedtak,
+        opprettVedtak: opprettEllerOppdaterVedtak,
         senderInn,
     };
 };

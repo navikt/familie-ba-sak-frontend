@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { IFagsak, VedtakResultat, IBehandling, IVedtakForBehandling } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { IVilkårResultat, hentVilkårForPersoner, UtfallType } from '../../../typer/vilkår';
 import { IPerson } from '../../../typer/person';
 import { IFelt } from '../../../typer/felt';
 import { erGyldigBegrunnelse } from '../../../utils/validators';
 import { lagInitiellFelt } from '../../../typer/provider';
+import { BehandlingResultat, IBehandling } from '../../../typer/behandling';
 
 export enum actions {
     SETT_RESULTAT = 'SETT_RESULTAT',
@@ -21,17 +22,20 @@ export interface IAction {
 type Dispatch = (action: IAction) => void;
 
 export interface IState {
-    vedtakResultat?: VedtakResultat;
+    behandlingResultat?: BehandlingResultat;
     samletVilkårResultat: IVilkårResultat[];
     begrunnelse: IFelt<string>;
 }
 
-const initialState = (personer?: IPerson[], aktivVedtak?: IVedtakForBehandling): IState => {
+const initialState = (personer?: IPerson[], aktivBehandling?: IBehandling): IState => {
     return {
-        vedtakResultat: undefined,
+        behandlingResultat:
+            aktivBehandling?.resultat !== BehandlingResultat.IKKE_VURDERT
+                ? aktivBehandling?.resultat
+                : undefined,
         samletVilkårResultat: hentVilkårForPersoner(personer),
         begrunnelse: lagInitiellFelt(
-            aktivVedtak?.begrunnelse ? aktivVedtak.begrunnelse : '',
+            aktivBehandling?.begrunnelse ? aktivBehandling.begrunnelse : '',
             erGyldigBegrunnelse
         ),
     };
@@ -45,12 +49,12 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
         case actions.SETT_RESULTAT:
             return {
                 ...state,
-                vedtakResultat: action.payload,
+                behandlingResultat: action.payload,
                 samletVilkårResultat: state.samletVilkårResultat.map((vilkår: IVilkårResultat) => {
                     return {
                         ...vilkår,
                         utfallType:
-                            action.payload === VedtakResultat.INNVILGET
+                            action.payload === BehandlingResultat.INNVILGET
                                 ? UtfallType.OPPFYLT
                                 : UtfallType.IKKE_OPPFYLT,
                     };
@@ -82,13 +86,13 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
             return {
                 ...state,
                 samletVilkårResultat: nySamletVilkårResultat,
-                vedtakResultat:
+                behandlingResultat:
                     nySamletVilkårResultat.filter(
                         (vilkårResultat: IVilkårResultat) =>
                             vilkårResultat.utfallType === UtfallType.IKKE_OPPFYLT
                     ).length !== 0
-                        ? VedtakResultat.AVSLÅTT
-                        : VedtakResultat.INNVILGET,
+                        ? BehandlingResultat.AVSLÅTT
+                        : BehandlingResultat.INNVILGET,
             };
         case actions.SETT_BEGRUNNELSE:
             return {
@@ -114,13 +118,10 @@ const BehandlingVilkårProvider: React.FunctionComponent<IBehandlingVilkårProvi
     children,
 }) => {
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
-    const aktivVedtak = aktivBehandling?.vedtakForBehandling?.find(
-        (vedtak: IVedtakForBehandling) => vedtak.aktiv
-    );
 
     const [state, dispatch] = React.useReducer(
         behandlingVilkårReducer,
-        initialState(aktivBehandling?.personer, aktivVedtak)
+        initialState(aktivBehandling?.personer, aktivBehandling)
     );
 
     return (
