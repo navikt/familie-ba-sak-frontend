@@ -88,7 +88,7 @@ export interface IRestVilkårsvurdering {
 export const apiOpprettEllerOppdaterVedtak = (fagsakId: number, data: IRestVilkårsvurdering) => {
     return axiosRequest<IFagsak>({
         data,
-        method: 'POST',
+        method: 'PUT',
         url: `/familie-ba-sak/api/fagsaker/${fagsakId}/vedtak`,
     });
 };
