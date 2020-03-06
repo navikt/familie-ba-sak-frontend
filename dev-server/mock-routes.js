@@ -1,6 +1,3 @@
-import { IPerson } from './person';
-import { KjønnType, PersonType } from '../src/frontend/typer/person';
-
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
