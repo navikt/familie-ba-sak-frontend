@@ -1,10 +1,10 @@
 import moment from 'moment';
 import { Panel } from 'nav-frontend-paneler';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Checkbox, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Element } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { IBarnBeregning } from '../../../typer/behandle';
-import { IVedtakForBehandling } from '../../../typer/fagsak';
+import { IBarnBeregning, YtelseType, ytelsetype } from '../../../typer/behandle';
+import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 import { datoformat } from '../../../utils/formatter';
@@ -57,25 +57,52 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                 <Element
                                     children={`Barn ${index + 1}: ${barnBeregning.verdi.barn}`}
                                 />
-                                <InputMedLabelTilVenstre
-                                    bredde={'S'}
-                                    label={'Beløp'}
-                                    value={barnBeregning.verdi.beløp}
-                                    type={'number'}
+                                <Select
+                                    bredde={'l'}
+                                    label="Velg type"
+                                    value={barnBeregning.verdi.ytelseType}
                                     onChange={event => {
                                         dispatch({
                                             payload: {
                                                 index,
                                                 oppdatertBarnBeregning: {
                                                     ...barnBeregning.verdi,
-                                                    beløp: parseInt(event.target.value, 10),
+                                                    ytelseType: event.target.value as YtelseType,
+                                                },
+                                            },
+                                            type: actions.SETT_BARNAS_BEREGNING,
+                                        });
+                                    }}
+                                >
+                                    {Object.keys(ytelsetype).map((key: string) => {
+                                        return (
+                                            <option
+                                                aria-selected={
+                                                    barnBeregning.verdi.ytelseType === key
+                                                }
+                                                key={key}
+                                                value={key}
+                                            >
+                                                {ytelsetype[key].navn}
+                                            </option>
+                                        );
+                                    })}
+                                </Select>
+                                <Checkbox
+                                    label={'Skal ha delt ytelse'}
+                                    onChange={event => {
+                                        dispatch({
+                                            payload: {
+                                                index,
+                                                oppdatertBarnBeregning: {
+                                                    ...barnBeregning.verdi,
+                                                    deltYtelse: Boolean(event.target.value),
                                                 },
                                             },
                                             type: actions.SETT_BARNAS_BEREGNING,
                                         });
                                     }}
                                 />
-
                                 <InputMedLabelTilVenstre
                                     bredde={'S'}
                                     label={'Virkningstidspunkt'}
@@ -99,13 +126,6 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                         );
                     }
                 )}
-                <Normaltekst
-                    children={`Totalsum: ${context.barnasBeregning.reduce(
-                        (sum: number, barnBeregning: IFelt<IBarnBeregning>) =>
-                            sum + barnBeregning.verdi.beløp,
-                        0
-                    )} kr`}
-                />
             </Panel>
         </SkjemaGruppe>
     );
@@ -120,9 +140,8 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
     if (aktivVedtak.barnasBeregning.length === 0) {
         return true;
     }
-
-    const endringPåBeregning =
-        aktivVedtak.barnasBeregning.find(barnBeregning => {
+    return (
+        aktivVedtak.barnasBeregning.find((barnBeregning: IBarnBeregning) => {
             const muligEndretBarnBeregning = barnasBeregning.find(
                 endretBarnBeregning => endretBarnBeregning.verdi.barn === barnBeregning.barn
             );
@@ -131,18 +150,18 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
                 return false;
             } else {
                 if (
-                    barnBeregning.beløp !== muligEndretBarnBeregning.verdi.beløp ||
+                    barnBeregning.ytelseType !== muligEndretBarnBeregning.verdi.ytelseType ||
                     (muligEndretBarnBeregning.verdi.stønadFom !== '' &&
                         moment(barnBeregning.stønadFom, 'YYYY-MM-DD', true).format(
                             datoformat.MÅNED
-                        ) !== muligEndretBarnBeregning.verdi.stønadFom)
+                        ) !== muligEndretBarnBeregning.verdi.stønadFom) ||
+                    barnBeregning.deltYtelse !== muligEndretBarnBeregning.verdi.deltYtelse
                 ) {
                     return true;
                 }
             }
-        }) !== undefined;
-
-    return endringPåBeregning;
+        }) !== undefined
+    );
 };
 
 export default BeregningSkjema;

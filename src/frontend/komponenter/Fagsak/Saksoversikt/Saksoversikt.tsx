@@ -123,7 +123,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                             return (
                                                 <tr key={barnBeregning.barn}>
                                                     <td children={`${barnBeregning.barn}`} />
-                                                    <td children={`${barnBeregning.beløp}`} />
+                                                    <td children={`${barnBeregning.ytelseType}`} />
                                                     <td children={`${barnBeregning.stønadFom}`} />
                                                 </tr>
                                             );
