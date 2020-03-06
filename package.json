@@ -24,7 +24,8 @@
   "dependencies": {
     "@navikt/boxed-list-with-links": "^1.0.2",
     "@navikt/familie-backend": "4.1.6",
-    "@navikt/familie-visittkort": "^2.1.1",
+    "@navikt/familie-typer": "^3.0.2",
+    "@navikt/familie-visittkort": "^2.1.2",
     "@navikt/fnrvalidator": "^1.1.0",
     "@navikt/nap-header": "^1.0.8",
     "@navikt/nap-popover": "^1.0.4",

@@ -57,7 +57,11 @@ const FagsakContainer: React.FunctionComponent = () => {
                         }
                         ident={fagsak.data.søkerFødselsnummer}
                         alder={18}
-                        kjønn={kjønnType.M}
+                        kjønn={
+                            person.status === RessursStatus.SUKSESS
+                                ? person.data.kjønn
+                                : kjønnType.UKJENT
+                        }
                     />
                     <div className={'fagsakcontainer__content'}>
                         <Switch>
