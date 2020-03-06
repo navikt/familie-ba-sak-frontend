@@ -1,3 +1,6 @@
+import { IPerson } from './person';
+import { KjønnType, PersonType } from '../src/frontend/typer/person';
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -15,6 +18,20 @@ const lesMockFil = filnavn => {
 
 app.get('/familie-ba-sak/api/fagsak/1', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
+});
+
+app.get('/familie-ba-sak/api/person', (req, res) => {
+    setTimeout(
+        () =>
+            res.send({
+                fødselsdato: '2001-02-20',
+                kjønn: 'KVINNE',
+                navn: 'Mor Moresen',
+                personIdent: '12345678910',
+                type: 'SØKER',
+            }),
+        delayMs
+    );
 });
 
 app.get('/user/profile', (req, res) => {

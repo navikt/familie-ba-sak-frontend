@@ -18,16 +18,17 @@ export enum RelasjonsRolleType {
     SAMB,
 }
 
-export enum kjønnType {
-    'K' = 'K',
-    'M' = 'M',
+export enum KjønnType {
+    'KVINNE' = 'KVINNE',
+    'MANN' = 'MANN',
+    'UKJENT' = 'UKJENT',
 }
 
 // Interface
 export interface IPerson {
     fødselsdato: string;
-    kjønn?: kjønnType;
-    navn?: string;
+    kjønn: KjønnType;
+    navn: string;
     personIdent: string;
     type: PersonType;
 }
