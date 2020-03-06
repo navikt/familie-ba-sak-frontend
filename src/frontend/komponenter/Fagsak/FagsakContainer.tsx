@@ -18,7 +18,7 @@ import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
-    const [person, settPerson] = React.useState<Ressurs<IPerson>>({
+    const [bruker, settBruker] = React.useState<Ressurs<IPerson>>({
         status: RessursStatus.IKKE_HENTET,
     });
 
@@ -40,7 +40,7 @@ const FagsakContainer: React.FunctionComponent = () => {
     React.useEffect(() => {
         if (fagsak.status === RessursStatus.SUKSESS) {
             hentPerson(fagsak.data.søkerFødselsnummer).then((hentetPerson: Ressurs<IPerson>) =>
-                settPerson(hentetPerson)
+                settBruker(hentetPerson)
             );
         }
     }, [fagsak.status]);
@@ -51,15 +51,15 @@ const FagsakContainer: React.FunctionComponent = () => {
                 <div className={'fagsakcontainer'}>
                     <Visittkort
                         navn={
-                            person.status === RessursStatus.SUKSESS
-                                ? person.data.navn
+                            bruker.status === RessursStatus.SUKSESS
+                                ? bruker.data.navn
                                 : 'IKKE IMPLEMENTERT'
                         }
                         ident={fagsak.data.søkerFødselsnummer}
                         alder={18}
                         kjønn={
-                            person.status === RessursStatus.SUKSESS
-                                ? person.data.kjønn
+                            bruker.status === RessursStatus.SUKSESS
+                                ? bruker.data.kjønn
                                 : kjønnType.UKJENT
                         }
                     />
