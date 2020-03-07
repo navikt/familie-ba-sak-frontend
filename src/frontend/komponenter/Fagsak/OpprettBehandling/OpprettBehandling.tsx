@@ -28,7 +28,7 @@ const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     opprettBehandling(context, {
                         barnasIdenter: context.barnasIdenter.map(barnIdent => barnIdent.verdi),
                         behandlingType: context.behandlingstype,
-                        ident: fagsak.søkerFødselsnummer,
+                        søkersIdent: fagsak.søkerFødselsnummer,
                         kategori: context.kategori,
                         underkategori: context.underkategori,
                     });
