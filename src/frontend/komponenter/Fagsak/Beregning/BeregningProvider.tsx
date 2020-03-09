@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IBarnBeregning, ordinærBeløp } from '../../../typer/behandle';
+import { IBarnBeregning, YtelseType } from '../../../typer/behandle';
 import { IFagsak } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
@@ -36,7 +36,8 @@ export const lastInitialState = (fagsak: IFagsak): IState => {
                 return lagInitiellFelt<IBarnBeregning>(
                     {
                         barn: barn.personIdent,
-                        beløp: ordinærBeløp,
+                        ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
+                        deltYtelse: false,
                         stønadFom: '',
                     },
                     erGyldigMånedDato
