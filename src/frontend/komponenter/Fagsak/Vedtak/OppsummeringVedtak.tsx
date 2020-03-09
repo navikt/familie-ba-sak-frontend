@@ -2,6 +2,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+import Confetti from 'react-confetti';
 import { useHistory } from 'react-router';
 import { axiosRequest } from '../../../api/axios';
 import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
@@ -16,6 +17,8 @@ interface IVedtakProps {
 }
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
+    const [makeItRain, settMakeItRain] = React.useState(false);
+
     const history = useHistory();
     const fagsakDispatcher = useFagsakDispatch();
 
@@ -61,6 +64,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     return (
         <div className="oppsummering">
+            {makeItRain && <Confetti />}
             {errorMessage === undefined ? (
                 <div>
                     <Systemtittel children={'Vedtaksbrev'} />
@@ -101,6 +105,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                                     });
                                 } else if (response.status === RessursStatus.FEILET) {
                                     settSubmitFeil(response.melding);
+                                }
+
+                                if (
+                                    aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
+                                ) {
+                                    settMakeItRain(true);
+                                    setTimeout(() => {
+                                        settMakeItRain(false);
+                                    }, 10000);
                                 }
                             });
                         }}
