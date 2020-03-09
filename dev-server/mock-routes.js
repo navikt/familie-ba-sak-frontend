@@ -13,7 +13,7 @@ const lesMockFil = filnavn => {
     }
 };
 
-app.get('/familie-ba-sak/api/fagsak/1', (req, res) => {
+app.get('/familie-ba-sak/api/fagsaker/1', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
 });
 
@@ -24,7 +24,7 @@ app.get('/user/profile', (req, res) => {
     });
 });
 
-app.get('/familie-ba-sak/api/behandling/2/vedtak-html', (req, res) => {
+app.get('/familie-ba-sak/api/dokument/vedtak-html/3', (req, res) => {
     setTimeout(
         () =>
             res.send({
@@ -35,11 +35,11 @@ app.get('/familie-ba-sak/api/behandling/2/vedtak-html', (req, res) => {
     );
 });
 
-app.post('/familie-ba-sak/api/behandling/ny-behandling', (req, res) => {
+app.post('/familie-ba-sak/api/behandlinger', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
 });
 
-app.post('/familie-ba-sak/api/fagsak/1/nytt-vedtak', (req, res) => {
+app.post('/familie-ba-sak/api/fagsaker/1/vedtak', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
 });
 

@@ -92,7 +92,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                         onClick={() => {
                             axiosRequest<IFagsak>({
                                 method: 'POST',
-                                url: `/familie-ba-sak/api/fagsak/${fagsak.id}/${
+                                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/${
                                     aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
                                         ? 'iverksett-vedtak'
                                         : 'send-til-beslutter'
