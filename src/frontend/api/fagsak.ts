@@ -61,7 +61,7 @@ export interface IOpprettFagsakData {
 export interface IOpprettBehandlingData {
     barnasIdenter: string[];
     behandlingType: Behandlingstype;
-    ident: string;
+    søkersIdent: string;
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
 }
