@@ -1,7 +1,7 @@
 import { INøkkelPar } from './common';
 
-export interface IBarnBeregning {
-    barn: string;
+export interface IPersonBeregning {
+    personident: string;
     ytelseType: YtelseType;
     deltYtelse: boolean;
     stønadFom: string;

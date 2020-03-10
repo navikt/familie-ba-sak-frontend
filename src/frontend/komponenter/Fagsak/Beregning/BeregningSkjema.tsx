@@ -3,7 +3,7 @@ import { Panel } from 'nav-frontend-paneler';
 import { Checkbox, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { IBarnBeregning, YtelseType, ytelsetype } from '../../../typer/behandle';
+import { IPersonBeregning, YtelseType, ytelsetype } from '../../../typer/behandle';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
@@ -40,37 +40,39 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
             }
         >
             <Panel className={'beregning__skjemagruppe'}>
-                {context.barnasBeregning.map(
-                    (barnBeregning: IFelt<IBarnBeregning>, index: number) => {
+                {context.personBeregninger.map(
+                    (personBeregning: IFelt<IPersonBeregning>, index: number) => {
                         return (
                             <SkjemaGruppe
                                 className={'beregning__skjemagruppe--barn'}
-                                key={barnBeregning.verdi.barn}
+                                key={personBeregning.verdi.personident}
                                 feil={
-                                    barnBeregning.valideringsstatus !== Valideringsstatus.OK &&
+                                    personBeregning.valideringsstatus !== Valideringsstatus.OK &&
                                     visFeilmeldinger &&
-                                    barnBeregning.feilmelding !== ''
-                                        ? barnBeregning.feilmelding
+                                    personBeregning.feilmelding !== ''
+                                        ? personBeregning.feilmelding
                                         : undefined
                                 }
                             >
                                 <Element
-                                    children={`Barn ${index + 1}: ${barnBeregning.verdi.barn}`}
+                                    children={`Person ${index + 1}: ${
+                                        personBeregning.verdi.personident
+                                    }`}
                                 />
                                 <Select
                                     bredde={'l'}
                                     label="Velg type"
-                                    value={barnBeregning.verdi.ytelseType}
+                                    value={personBeregning.verdi.ytelseType}
                                     onChange={event => {
                                         dispatch({
                                             payload: {
                                                 index,
-                                                oppdatertBarnBeregning: {
-                                                    ...barnBeregning.verdi,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
                                                     ytelseType: event.target.value as YtelseType,
                                                 },
                                             },
-                                            type: actions.SETT_BARNAS_BEREGNING,
+                                            type: actions.SETT_PERSON_BEREGNINGER,
                                         });
                                     }}
                                 >
@@ -78,7 +80,7 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                         return (
                                             <option
                                                 aria-selected={
-                                                    barnBeregning.verdi.ytelseType === key
+                                                    personBeregning.verdi.ytelseType === key
                                                 }
                                                 key={key}
                                                 value={key}
@@ -94,31 +96,31 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                         dispatch({
                                             payload: {
                                                 index,
-                                                oppdatertBarnBeregning: {
-                                                    ...barnBeregning.verdi,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
                                                     deltYtelse: Boolean(event.target.value),
                                                 },
                                             },
-                                            type: actions.SETT_BARNAS_BEREGNING,
+                                            type: actions.SETT_PERSON_BEREGNINGER,
                                         });
                                     }}
                                 />
                                 <InputMedLabelTilVenstre
                                     bredde={'S'}
                                     label={'Virkningstidspunkt'}
-                                    value={barnBeregning.verdi.stønadFom}
+                                    value={personBeregning.verdi.stønadFom}
                                     placeholder={'MM.YY'}
                                     autoFocus={true}
                                     onChange={event => {
                                         dispatch({
                                             payload: {
                                                 index,
-                                                oppdatertBarnBeregning: {
-                                                    ...barnBeregning.verdi,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
                                                     stønadFom: event.target.value,
                                                 },
                                             },
-                                            type: actions.SETT_BARNAS_BEREGNING,
+                                            type: actions.SETT_PERSON_BEREGNINGER,
                                         });
                                     }}
                                 />
@@ -135,27 +137,28 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
     if (!aktivVedtak) {
         return true;
     }
-    const barnasBeregning = context.barnasBeregning;
+    const personBeregninger = context.personBeregninger;
 
-    if (aktivVedtak.barnasBeregning.length === 0) {
+    if (aktivVedtak.personBeregninger.length === 0) {
         return true;
     }
     return (
-        aktivVedtak.barnasBeregning.find((barnBeregning: IBarnBeregning) => {
-            const muligEndretBarnBeregning = barnasBeregning.find(
-                endretBarnBeregning => endretBarnBeregning.verdi.barn === barnBeregning.barn
+        aktivVedtak.personBeregninger.find((personBeregning: IPersonBeregning) => {
+            const muligEndretPersonBeregning = personBeregninger.find(
+                endretBarnBeregning =>
+                    endretBarnBeregning.verdi.personident === personBeregning.personident
             );
 
-            if (!muligEndretBarnBeregning) {
+            if (!muligEndretPersonBeregning) {
                 return false;
             } else {
                 if (
-                    barnBeregning.ytelseType !== muligEndretBarnBeregning.verdi.ytelseType ||
-                    (muligEndretBarnBeregning.verdi.stønadFom !== '' &&
-                        moment(barnBeregning.stønadFom, 'YYYY-MM-DD', true).format(
+                    personBeregning.ytelseType !== muligEndretPersonBeregning.verdi.ytelseType ||
+                    (muligEndretPersonBeregning.verdi.stønadFom !== '' &&
+                        moment(personBeregning.stønadFom, 'YYYY-MM-DD', true).format(
                             datoformat.MÅNED
-                        ) !== muligEndretBarnBeregning.verdi.stønadFom) ||
-                    barnBeregning.deltYtelse !== muligEndretBarnBeregning.verdi.deltYtelse
+                        ) !== muligEndretPersonBeregning.verdi.stønadFom) ||
+                    personBeregning.deltYtelse !== muligEndretPersonBeregning.verdi.deltYtelse
                 ) {
                     return true;
                 }

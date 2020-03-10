@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { IIdentFelt } from '../komponenter/Fagsak/OpprettBehandling/OpprettBehandlingProvider';
-import { IBarnBeregning } from '../typer/behandle';
+import { IPersonBeregning } from '../typer/behandle';
 import { feil, IFelt, ok, Valideringsstatus } from '../typer/felt';
 import { datoformat } from './formatter';
 
@@ -28,7 +28,7 @@ export const identValidator = (identFelt: IIdentFelt): IIdentFelt => {
     return validerIdent(identFelt);
 };
 
-export const erGyldigMånedDato = (felt: IFelt<IBarnBeregning>): IFelt<IBarnBeregning> => {
+export const erGyldigMånedDato = (felt: IFelt<IPersonBeregning>): IFelt<IPersonBeregning> => {
     return /^\d{2}\.\d{2}$/.test(felt.verdi.stønadFom) &&
         moment(felt.verdi.stønadFom, datoformat.MÅNED).isValid()
         ? ok(felt)

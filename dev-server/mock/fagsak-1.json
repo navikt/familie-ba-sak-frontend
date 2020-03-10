@@ -79,7 +79,7 @@
                         "aktiv": true,
                         "ansvarligSaksbehandler": "Henning.Hakonsen@trygdeetaten.no",
                         "vedtaksdato": "2020-02-14",
-                        "barnasBeregning": [
+                        "personBeregninger": [
                             {
                                 "barn": "12345678911",
                                 "beløp": 1054,
@@ -148,7 +148,7 @@
                         "aktiv": true,
                         "ansvarligSaksbehandler": "Henning.Hakonsen@trygdeetaten.no",
                         "vedtaksdato": "2020-02-14",
-                        "barnasBeregning": [
+                        "personBeregninger": [
                             {
                                 "barn": "12345678911",
                                 "beløp": 1054,

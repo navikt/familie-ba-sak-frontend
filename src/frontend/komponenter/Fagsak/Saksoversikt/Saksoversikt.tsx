@@ -2,7 +2,7 @@ import { Input } from 'nav-frontend-skjema';
 import { Systemtittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IFagsak, fagsakStatus } from '../../../typer/fagsak';
-import { IBarnBeregning } from '../../../typer/behandle';
+import { IPersonBeregning } from '../../../typer/behandle';
 import 'nav-frontend-tabell-style';
 import { formaterIsoDato, datoformat } from '../../../utils/formatter';
 import { Knapp } from 'nav-frontend-knapper';
@@ -103,8 +103,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 />
             )}
 
-            {aktivVedtak?.barnasBeregning &&
-                aktivVedtak?.barnasBeregning.length > 0 &&
+            {aktivVedtak?.personBeregninger &&
+                aktivVedtak?.personBeregninger.length > 0 &&
                 gjeldendeBehandling?.status === BehandlingStatus.FERDIGSTILT && (
                     <div>
                         <div className={'saksoversikt__utbetalinger'}>
@@ -118,11 +118,11 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {aktivVedtak?.barnasBeregning.map(
-                                        (barnBeregning: IBarnBeregning) => {
+                                    {aktivVedtak?.personBeregninger.map(
+                                        (barnBeregning: IPersonBeregning) => {
                                             return (
-                                                <tr key={barnBeregning.barn}>
-                                                    <td children={`${barnBeregning.barn}`} />
+                                                <tr key={barnBeregning.personident}>
+                                                    <td children={`${barnBeregning.personident}`} />
                                                     <td children={`${barnBeregning.ytelseType}`} />
                                                     <td children={`${barnBeregning.stønadFom}`} />
                                                 </tr>
@@ -222,10 +222,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                             <td
                                                 children={
                                                     aktivVedtakForBehandling &&
-                                                    aktivVedtakForBehandling.barnasBeregning[0]
+                                                    aktivVedtakForBehandling.personBeregninger[0]
                                                         ? formaterIsoDato(
                                                               aktivVedtakForBehandling
-                                                                  .barnasBeregning[0].stønadFom,
+                                                                  .personBeregninger[0].stønadFom,
                                                               datoformat.DATO
                                                           )
                                                         : 'Ukjent'

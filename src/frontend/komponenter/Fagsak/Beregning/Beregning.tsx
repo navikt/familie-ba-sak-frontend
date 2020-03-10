@@ -42,16 +42,16 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     React.useEffect(() => {
         if (aktivVedtak) {
-            aktivVedtak.barnasBeregning.map((barnBeregning, index) => {
+            aktivVedtak.personBeregninger.map((barnBeregning, index) => {
                 dispatch({
                     payload: {
                         index,
-                        oppdatertBarnBeregning: {
+                        oppdatertPersonBeregning: {
                             ...barnBeregning,
                             stønadFom: moment(barnBeregning.stønadFom).format(datoformat.MÅNED),
                         },
                     },
-                    type: actions.SETT_BARNAS_BEREGNING,
+                    type: actions.SETT_PERSON_BEREGNINGER,
                 });
             });
         }
@@ -64,7 +64,6 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
             </div>
         );
     }
-
     return (
         <div className={'beregning'}>
             <Skjemasteg
@@ -78,7 +77,7 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 nesteKnappTittel={skjemaetHarEndringer ? 'Lagre og gå neste' : 'Neste'}
                 senderInn={senderInn}
             >
-                {aktivVedtak?.barnasBeregning.length !== 0 && (
+                {aktivVedtak?.personBeregninger.length !== 0 && (
                     <>
                         <br />
                         <AlertStripeAdvarsel

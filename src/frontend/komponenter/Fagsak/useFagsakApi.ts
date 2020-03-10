@@ -15,7 +15,7 @@ import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { Valideringsstatus, IFelt } from '../../typer/felt';
-import { IBarnBeregning } from '../../typer/behandle';
+import { IPersonBeregning } from '../../typer/behandle';
 import moment from 'moment';
 import { datoformat } from '../../utils/formatter';
 import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
@@ -153,18 +153,19 @@ const useFagsakApi = (
         fagsak: IFagsak
     ) => {
         if (
-            context.barnasBeregning.find(
-                (barnBeregning: IFelt<IBarnBeregning>) =>
+            context.personBeregninger.find(
+                (barnBeregning: IFelt<IPersonBeregning>) =>
                     barnBeregning.valideringsstatus !== Valideringsstatus.OK
             ) === undefined
         ) {
             if (skjemaetHarEndringer) {
                 settSenderInn(true);
                 apiOpprettBeregning(fagsak.id, {
-                    barnasBeregning: context.barnasBeregning.map(
-                        (barnBeregning: IFelt<IBarnBeregning>) => ({
-                            beløp: barnBeregning.verdi.beløp,
-                            ident: barnBeregning.verdi.barn,
+                    personBeregninger: context.personBeregninger.map(
+                        (barnBeregning: IFelt<IPersonBeregning>) => ({
+                            ident: barnBeregning.verdi.personident,
+                            type: barnBeregning.verdi.ytelseType,
+                            deltYtelse: barnBeregning.verdi.deltYtelse,
                             stønadFom: moment(
                                 barnBeregning.verdi.stønadFom,
                                 datoformat.MÅNED,

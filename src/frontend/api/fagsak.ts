@@ -3,7 +3,7 @@ import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { axiosRequest } from './axios';
 import { IVilkårResultat } from '../typer/vilkår';
-import { IBarnBeregning } from '../typer/behandle';
+import { IPersonBeregning } from '../typer/behandle';
 import {
     BehandlingKategori,
     BehandlingResultat,
@@ -89,7 +89,7 @@ export const apiOpprettEllerOppdaterVedtak = (fagsakId: number, data: IRestVilk�
 };
 
 export interface IOpprettBeregningData {
-    barnasBeregning: IBarnBeregning[];
+    personBeregninger: IPersonBeregning[];
 }
 
 export const apiOpprettBeregning = (fagsakId: number, data: any) => {

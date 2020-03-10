@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IBarnBeregning, YtelseType } from '../../../typer/behandle';
+import { IPersonBeregning, YtelseType } from '../../../typer/behandle';
 import { IFagsak } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
@@ -8,7 +8,7 @@ import { IPerson, PersonType } from '../../../typer/person';
 import { IBehandling } from '../../../typer/behandling';
 
 export enum actions {
-    SETT_BARNAS_BEREGNING = 'SETT_BARNAS_BEREGNING',
+    SETT_PERSON_BEREGNINGER = 'SETT_PERSON_BEREGNINGER',
     SETT_SAKSTYPE = 'SETT_SAKSTYPE',
     SETT_BEHANDLINGSRESULTAT = 'SETT_BEHANDLINGSRESULTAT',
     SETT_SENDER_INN = 'SETT_SENDER_INN',
@@ -22,20 +22,20 @@ export interface IAction {
 type Dispatch = (action: IAction) => void;
 
 export interface IState {
-    barnasBeregning: IFelt<IBarnBeregning>[];
+    personBeregninger: IFelt<IPersonBeregning>[];
 }
 
 export const lastInitialState = (fagsak: IFagsak): IState => {
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
 
-    let nyBarnasBeregning: IFelt<IBarnBeregning>[] = [];
+    let nyPersonBeregninger: IFelt<IPersonBeregning>[] = [];
     if (aktivBehandling) {
-        nyBarnasBeregning = aktivBehandling.personer
+        nyPersonBeregninger = aktivBehandling.personer
             .filter((person: IPerson) => person.type === PersonType.BARN)
-            .map(barn => {
-                return lagInitiellFelt<IBarnBeregning>(
+            .map(person => {
+                return lagInitiellFelt<IPersonBeregning>(
                     {
-                        barn: barn.personIdent,
+                        personident: person.personIdent,
                         ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
                         deltYtelse: false,
                         stønadFom: '',
@@ -46,7 +46,7 @@ export const lastInitialState = (fagsak: IFagsak): IState => {
     }
 
     return {
-        barnasBeregning: nyBarnasBeregning,
+        personBeregninger: nyPersonBeregninger,
     };
 };
 
@@ -55,18 +55,18 @@ const BeregningDispatchContext = React.createContext<Dispatch | undefined>(undef
 
 const beregningReducer = (state: IState, action: IAction): IState => {
     switch (action.type) {
-        case actions.SETT_BARNAS_BEREGNING:
-            const barnasBeregningKopi = [...state.barnasBeregning];
-            barnasBeregningKopi[action.payload.index] = barnasBeregningKopi[
+        case actions.SETT_PERSON_BEREGNINGER:
+            const personBeregningerKopi = [...state.personBeregninger];
+            personBeregningerKopi[action.payload.index] = personBeregningerKopi[
                 action.payload.index
             ].valideringsFunksjon({
-                ...barnasBeregningKopi[action.payload.index],
-                verdi: action.payload.oppdatertBarnBeregning,
+                ...personBeregningerKopi[action.payload.index],
+                verdi: action.payload.oppdatertPersonBeregning,
             });
 
             return {
                 ...state,
-                barnasBeregning: barnasBeregningKopi,
+                personBeregninger: personBeregningerKopi,
             };
         default:
             return state;
