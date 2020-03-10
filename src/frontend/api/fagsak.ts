@@ -11,6 +11,11 @@ import {
     Behandlingstype,
 } from '../typer/behandling';
 
+export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
+
+export const aktivVedtak = (fagsak: IFagsak) =>
+    aktivBehandling(fagsak)?.vedtakForBehandling.find(v => v.aktiv);
+
 export const apiOpprettFagsak = (
     data: IOpprettFagsakData,
     innloggetSaksbehandler?: ISaksbehandler
@@ -19,7 +24,7 @@ export const apiOpprettFagsak = (
         {
             data,
             method: 'POST',
-            url: `/familie-ba-sak/api/fagsak/ny-fagsak`,
+            url: `/familie-ba-sak/api/fagsaker`,
         },
         innloggetSaksbehandler
     );
@@ -32,7 +37,7 @@ export const hentFagsak = (
     return axiosRequest<IFagsak>(
         {
             method: 'GET',
-            url: `/familie-ba-sak/api/fagsak/${id}`,
+            url: `/familie-ba-sak/api/fagsaker/${id}`,
         },
         innloggetSaksbehandler
     );
@@ -48,7 +53,7 @@ export const hentFagsaker = (
                 filter,
             },
             method: 'GET',
-            url: '/familie-ba-sak/api/fagsak',
+            url: '/familie-ba-sak/api/fagsaker',
         },
         innloggetSaksbehandler
     );
@@ -61,7 +66,7 @@ export interface IOpprettFagsakData {
 export interface IOpprettBehandlingData {
     barnasIdenter: string[];
     behandlingType: Behandlingstype;
-    ident: string;
+    s√∏kersIdent: string;
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
 }
@@ -70,7 +75,7 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
     return axiosRequest<IFagsak>({
         data,
         method: 'POST',
-        url: '/familie-ba-sak/api/behandling/ny-behandling',
+        url: '/familie-ba-sak/api/behandlinger',
     });
 };
 
@@ -84,7 +89,7 @@ export const apiOpprettEllerOppdaterVedtak = (fagsakId: number, data: IRestVilk√
     return axiosRequest<IFagsak>({
         data,
         method: 'PUT',
-        url: `/familie-ba-sak/api/fagsak/${fagsakId}/vedtak`,
+        url: `/familie-ba-sak/api/fagsaker/${fagsakId}/vedtak`,
     });
 };
 
@@ -92,10 +97,12 @@ export interface IOpprettBeregningData {
     barnasBeregning: IBarnBeregning[];
 }
 
-export const apiOpprettBeregning = (fagsakId: number, data: any) => {
+export const apiOpprettBeregning = (fagsak: IFagsak, data: any) => {
+    const vedtakId = aktivVedtak(fagsak)?.id;
+
     return axiosRequest<IFagsak>({
         data,
-        method: 'POST',
-        url: `/familie-ba-sak/api/fagsak/${fagsakId}/oppdater-vedtak-beregning`,
+        method: 'PUT',
+        url: `/familie-ba-sak/api/vedtak/${vedtakId}/beregning`,
     });
 };

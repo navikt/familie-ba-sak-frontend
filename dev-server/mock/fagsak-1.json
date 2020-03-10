@@ -90,7 +90,10 @@
                                 "beløp": 1054,
                                 "stønadFom": "2020-01-01"
                             }
-                        ]
+                        ],
+                        "resultat": "INNVILGET",
+                        "begrunnelse": "Fake information",
+                        "id": "3"
                     }
                 ]
             },
