@@ -1,7 +1,7 @@
-import { IPerson } from './person';
-import { IVilkårResultat } from './vilkår';
-import { IVedtakForBehandling } from './vedtak';
 import { INøkkelPar } from './common';
+import { IPerson } from './person';
+import { IVedtakForBehandling } from './vedtak';
+import { IVilkårResultat } from './vilkår';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',

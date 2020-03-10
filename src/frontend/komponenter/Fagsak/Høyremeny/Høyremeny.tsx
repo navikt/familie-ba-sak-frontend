@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import Logg from './Logg';

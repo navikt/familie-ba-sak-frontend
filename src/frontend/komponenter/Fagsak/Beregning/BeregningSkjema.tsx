@@ -3,12 +3,13 @@ import { Panel } from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
+
 import { IBarnBeregning } from '../../../typer/behandle';
-import { IVedtakForBehandling } from '../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
+import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { datoformat } from '../../../utils/formatter';
 import InputMedLabelTilVenstre from '../../Felleskomponenter/InputMedLabelTilVenstre/InputMedLabelTilVenstre';
+import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 
 interface IBeregningSkjema {
     aktivVedtak?: IVedtakForBehandling;

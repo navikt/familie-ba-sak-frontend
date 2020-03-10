@@ -1,19 +1,21 @@
-import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
+
+import Visittkort from '@navikt/familie-visittkort';
+
+import { kjønnType } from '../../typer/person';
 import { RessursStatus } from '../../typer/ressurs';
 import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider';
-import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
-import { kjønnType } from '../../typer/person';
-import BehandleVilkår from './Vilkår/BehandleVilkår';
-import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
-import { BeregningProvider } from './Beregning/BeregningProvider';
 import Beregning from './Beregning/Beregning';
-import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { BeregningProvider } from './Beregning/BeregningProvider';
+import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
-import Høyremeny from './Høyremeny/Høyremeny';
+import Saksoversikt from './Saksoversikt/Saksoversikt';
+import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
+import BehandleVilkår from './Vilkår/BehandleVilkår';
+import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();

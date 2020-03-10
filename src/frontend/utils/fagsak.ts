@@ -1,7 +1,7 @@
-import { IFagsak } from '../typer/fagsak';
-import moment = require('moment');
 import { IBehandling } from '../typer/behandling';
+import { IFagsak } from '../typer/fagsak';
 
+import moment = require('moment');
 export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
     if (fagsak.behandlinger.length === 0) {
         return undefined;

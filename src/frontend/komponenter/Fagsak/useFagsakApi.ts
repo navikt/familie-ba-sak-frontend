@@ -1,24 +1,25 @@
+import moment from 'moment';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import { useFagsakDispatch, actions as fagsakActions } from '../FagsakProvider';
+
 import {
     apiOpprettBehandling,
-    IOpprettBehandlingData,
-    apiOpprettEllerOppdaterVedtak,
     apiOpprettBeregning,
-    IOpprettFagsakData,
+    apiOpprettEllerOppdaterVedtak,
     apiOpprettFagsak,
+    IOpprettBehandlingData,
+    IOpprettFagsakData,
 } from '../../api/fagsak';
-import { Ressurs, RessursStatus } from '../../typer/ressurs';
+import { IBarnBeregning } from '../../typer/behandle';
+import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
+import { IFelt, Valideringsstatus } from '../../typer/felt';
+import { Ressurs, RessursStatus } from '../../typer/ressurs';
+import { datoformat } from '../../utils/formatter';
+import { actions as fagsakActions, useFagsakDispatch } from '../FagsakProvider';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
-import { Valideringsstatus, IFelt } from '../../typer/felt';
-import { IBarnBeregning } from '../../typer/behandle';
-import moment from 'moment';
-import { datoformat } from '../../utils/formatter';
-import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,

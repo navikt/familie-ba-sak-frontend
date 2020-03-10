@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { IFagsak } from '../../../typer/fagsak';
-import { IVilkårResultat, hentVilkårForPersoner, UtfallType } from '../../../typer/vilkår';
-import { IPerson } from '../../../typer/person';
-import { IFelt } from '../../../typer/felt';
-import { erGyldigBegrunnelse } from '../../../utils/validators';
-import { lagInitiellFelt } from '../../../typer/provider';
+
 import { BehandlingResultat, IBehandling } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
+import { IFelt } from '../../../typer/felt';
+import { IPerson } from '../../../typer/person';
+import { lagInitiellFelt } from '../../../typer/provider';
+import { hentVilkårForPersoner, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
+import { erGyldigBegrunnelse } from '../../../utils/validators';
 
 export enum actions {
     SETT_RESULTAT = 'SETT_RESULTAT',

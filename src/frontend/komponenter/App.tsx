@@ -1,15 +1,17 @@
-import { captureException, configureScope, showReportDialog, withScope } from '@sentry/browser';
 import Modal from 'nav-frontend-modal';
 import * as React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+
+import { captureException, configureScope, showReportDialog, withScope } from '@sentry/browser';
+
 import { slackNotify } from '../api/axios';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
 import FagsakContainer from './Fagsak/FagsakContainer';
+import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';
 import { FagsakProvider } from './FagsakProvider';
 import TempHeader from './TempHeader';
-import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 

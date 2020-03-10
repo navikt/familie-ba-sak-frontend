@@ -1,15 +1,15 @@
-import { IFagsak } from '../typer/fagsak';
-import { Ressurs } from '../typer/ressurs';
-import { ISaksbehandler } from '../typer/saksbehandler';
-import { axiosRequest } from './axios';
-import { IVilkårResultat } from '../typer/vilkår';
 import { IBarnBeregning } from '../typer/behandle';
 import {
     BehandlingKategori,
     BehandlingResultat,
-    BehandlingUnderkategori,
     Behandlingstype,
+    BehandlingUnderkategori,
 } from '../typer/behandling';
+import { IFagsak } from '../typer/fagsak';
+import { Ressurs } from '../typer/ressurs';
+import { ISaksbehandler } from '../typer/saksbehandler';
+import { IVilkårResultat } from '../typer/vilkår';
+import { axiosRequest } from './axios';
 
 export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
 

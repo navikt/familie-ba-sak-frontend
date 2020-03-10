@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { useOpprettBehandlingContext } from './OpprettBehandlingProvider';
-import OpprettBehandlingSkjema from './OpprettBehandlingSkjema';
+
+import { IFagsak } from '../../../typer/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
-import { IFagsak } from '../../../typer/fagsak';
+import { useOpprettBehandlingContext } from './OpprettBehandlingProvider';
+import OpprettBehandlingSkjema from './OpprettBehandlingSkjema';
 
 interface IProps {
     fagsak: IFagsak;

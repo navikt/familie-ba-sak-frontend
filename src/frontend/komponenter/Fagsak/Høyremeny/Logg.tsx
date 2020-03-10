@@ -1,15 +1,14 @@
-import * as React from 'react';
-import Hendelsesoversikt, {
-    Hendelse,
-    Hendelsetype,
-} from '@navikt/helse-frontend-hendelsesoversikt';
-import { RessursStatus, Ressurs, byggFeiletRessurs } from '../../../typer/ressurs';
-import { ILogg } from '../../../typer/logg';
-import AlertStripe from 'nav-frontend-alertstriper';
 import moment from 'moment';
-import { datoformat } from '../../../utils/formatter';
+import AlertStripe from 'nav-frontend-alertstriper';
+import * as React from 'react';
+
+import Hendelsesoversikt, { Hendelse } from '@navikt/helse-frontend-hendelsesoversikt';
+
 import { hentLoggForBehandling } from '../../../api/logg';
 import { IBehandling } from '../../../typer/behandling';
+import { ILogg } from '../../../typer/logg';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { datoformat } from '../../../utils/formatter';
 
 interface IProps {
     aktivBehandling: IBehandling | undefined;

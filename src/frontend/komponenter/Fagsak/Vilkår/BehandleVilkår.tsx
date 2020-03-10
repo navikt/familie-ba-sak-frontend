@@ -1,17 +1,16 @@
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
+import { useHistory } from 'react-router';
+
 import { IFagsak } from '../../../typer/fagsak';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import {
-    useBehandlingVilkårContext,
-    useBehandlingVilkårDispatch,
-    actions,
+    actions, useBehandlingVilkårContext, useBehandlingVilkårDispatch
 } from './BehandleVilkårProvider';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
-import { useHistory } from 'react-router';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import { Normaltekst } from 'nav-frontend-typografi';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 
 interface IProps {
     fagsak: IFagsak;

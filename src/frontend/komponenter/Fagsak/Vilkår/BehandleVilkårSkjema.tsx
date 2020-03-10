@@ -1,19 +1,15 @@
 import {
-    actions,
-    useBehandlingVilkårContext,
-    useBehandlingVilkårDispatch,
-} from './BehandleVilkårProvider';
-import {
-    CheckboksPanelGruppe,
-    RadioPanelGruppe,
-    SkjemaGruppe,
-    TextareaControlled,
+    CheckboksPanelGruppe, RadioPanelGruppe, SkjemaGruppe, TextareaControlled
 } from 'nav-frontend-skjema';
 import React from 'react';
-import { IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig } from '../../../typer/vilkår';
-import { Valideringsstatus } from '../../../typer/felt';
+
 import { BehandlingResultat, Behandlingstype } from '../../../typer/behandling';
+import { Valideringsstatus } from '../../../typer/felt';
+import { IVilkårConfig, IVilkårResultat, UtfallType, vilkårConfig } from '../../../typer/vilkår';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import {
+    actions, useBehandlingVilkårContext, useBehandlingVilkårDispatch
+} from './BehandleVilkårProvider';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
