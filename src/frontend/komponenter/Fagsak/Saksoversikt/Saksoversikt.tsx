@@ -21,6 +21,7 @@ import {
     BehandlingStatus,
 } from '../../../typer/behandling';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 
 interface IProps {
     fagsak: IFagsak;
@@ -45,9 +46,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
               )[0]
             : undefined;
 
-    const aktivBehandling = fagsak.behandlinger.find(
-        (behandling: IBehandling) => behandling.aktiv === true
-    );
+    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     if (!gjeldendeBehandling) {
         gjeldendeBehandling = aktivBehandling;

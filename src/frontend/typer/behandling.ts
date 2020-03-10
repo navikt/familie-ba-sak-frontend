@@ -37,6 +37,12 @@ export enum BehandlingResultat {
     OPPHØRT = 'OPPHØRT',
 }
 
+export enum BehandlerRolle {
+    SYSTEM,
+    SAKSBEHANDLER,
+    BESLUTTER,
+}
+
 export interface IBehandling {
     aktiv: boolean;
     begrunnelse: string;

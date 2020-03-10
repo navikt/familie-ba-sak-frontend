@@ -10,7 +10,8 @@ import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { AxiosError } from 'axios';
 import { actions, useFagsakDispatch } from '../../FagsakProvider';
-import { BehandlingStatus, Behandlingstype, IBehandling } from '../../../typer/behandling';
+import { BehandlingStatus, Behandlingstype } from '../../../typer/behandling';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -27,9 +28,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const [submitFeil, settSubmitFeil] = React.useState('');
 
-    const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => {
-        return behandling.aktiv === true;
-    });
+    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     React.useEffect(() => {
         if (

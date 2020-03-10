@@ -26,6 +26,7 @@
     "@navikt/familie-backend": "4.1.6",
     "@navikt/familie-visittkort": "^2.1.1",
     "@navikt/fnrvalidator": "^1.1.0",
+    "@navikt/helse-frontend-hendelsesoversikt": "^1.0.3",
     "@navikt/nap-header": "^1.0.8",
     "@navikt/nap-popover": "^1.0.4",
     "@navikt/nap-user-panel": "^1.0.0",

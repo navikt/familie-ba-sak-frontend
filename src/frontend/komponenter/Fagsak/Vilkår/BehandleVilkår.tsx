@@ -11,7 +11,7 @@ import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 import { useHistory } from 'react-router';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
-import { IBehandling } from '../../../typer/behandling';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 
 interface IProps {
     fagsak: IFagsak;
@@ -28,7 +28,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
         settOpprettelseFeilmelding
     );
 
-    const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
+    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     React.useEffect(() => {
         if (aktivBehandling && aktivBehandling.samletVilkårResultat.length !== 0) {

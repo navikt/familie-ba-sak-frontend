@@ -200,6 +200,13 @@
   resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.1.0.tgz#8efc8310f02ad2498058e15c298278f0913474bd"
   integrity sha512-IJQymBSGmUYL79MENMlE/MCyE16X7QbPe5MVHz7x2eJDyiqhiCkAmDsVUTHE8Nqu1hmUHADk2qV98Frd/pHtbQ==
 
+"@navikt/helse-frontend-hendelsesoversikt@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@navikt/helse-frontend-hendelsesoversikt/-/helse-frontend-hendelsesoversikt-1.0.3.tgz#3f5fc207d5c73dda121be4c073eaeeb9c4e7c0df"
+  integrity sha512-3N7ROQR4bitF/NBTdKFccLJSmmC3vlzsCuV5cX7LNnUXdPlftht6mhLZnTTiP9LC7XokSrzC8nXQ643JvTTyyA==
+  dependencies:
+    react "^16.12.0"
+
 "@navikt/nap-bem-utils@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@navikt/nap-bem-utils/-/nap-bem-utils-1.0.1.tgz#dd7edcee164611c187e3f548ad0463c9c10da8c8"

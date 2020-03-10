@@ -13,6 +13,7 @@ import Beregning from './Beregning/Beregning';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
+import Høyremeny from './Høyremeny/Høyremeny';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -43,6 +44,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                         kjønn={kjønnType.K}
                     />
                     <div className={'fagsakcontainer__content'}>
+                        <div className={'fagsakcontainer__content--venstremeny'} />
                         <Switch>
                             <Route
                                 exact={true}
@@ -92,6 +94,9 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 }}
                             />
                         </Switch>
+                        <div className={'fagsakcontainer__content--høyremeny'}>
+                            <Høyremeny fagsak={fagsak.data} />
+                        </div>
                     </div>
                 </div>
             );

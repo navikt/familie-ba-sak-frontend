@@ -1,7 +1,17 @@
 .fagsakcontainer {
     &__content {
-        width: 60rem;
-        margin: 0 auto;
-        padding: 2rem 0;
+        width: 100%;
+        height: calc(100vh - 8rem);
+        display: flex;
+        
+        &--venstremeny {
+            width: 10rem;
+            border-right: 2px solid @navGra40;
+        }
+
+        &--høyremeny {
+            width: 20rem;
+            border-left: 2px solid @navGra40;
+        }
     }
 }

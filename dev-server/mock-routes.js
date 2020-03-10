@@ -43,4 +43,8 @@ app.post('/familie-ba-sak/api/fagsaker/1/vedtak', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
 });
 
+app.get('/familie-ba-sak/api/logg/2', (req, res) => {
+    setTimeout(() => res.send(lesMockFil(`logg-2.json`)), delayMs);
+});
+
 module.exports = app;
