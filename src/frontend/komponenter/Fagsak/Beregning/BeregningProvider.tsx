@@ -4,7 +4,6 @@ import { IFagsak } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
 import { erGyldigMånedDato } from '../../../utils/validators';
-import { IPerson, PersonType } from '../../../typer/person';
 import { IBehandling } from '../../../typer/behandling';
 
 export enum actions {
@@ -30,19 +29,17 @@ export const lastInitialState = (fagsak: IFagsak): IState => {
 
     let nyPersonBeregninger: IFelt<IPersonBeregning>[] = [];
     if (aktivBehandling) {
-        nyPersonBeregninger = aktivBehandling.personer
-            .filter((person: IPerson) => person.type === PersonType.BARN)
-            .map(person => {
-                return lagInitiellFelt<IPersonBeregning>(
-                    {
-                        personident: person.personIdent,
-                        ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
-                        deltYtelse: false,
-                        stønadFom: '',
-                    },
-                    erGyldigMånedDato
-                );
-            });
+        nyPersonBeregninger = aktivBehandling.personer.map(person => {
+            return lagInitiellFelt<IPersonBeregning>(
+                {
+                    personident: person.personIdent,
+                    ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
+                    deltYtelse: false,
+                    stønadFom: '',
+                },
+                erGyldigMånedDato
+            );
+        });
     }
 
     return {

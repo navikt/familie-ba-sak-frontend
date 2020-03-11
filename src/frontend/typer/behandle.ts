@@ -4,6 +4,7 @@ export interface IPersonBeregning {
     personident: string;
     ytelseType: YtelseType;
     deltYtelse: boolean;
+    beløp: number;
     stønadFom: string;
 }
 

@@ -107,7 +107,25 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                 />
                                 <InputMedLabelTilVenstre
                                     bredde={'S'}
-                                    label={'Virkningstidspunkt'}
+                                    label={'Beløp'}
+                                    value={personBeregning.verdi.beløp}
+                                    type={'number'}
+                                    onChange={event => {
+                                        dispatch({
+                                            payload: {
+                                                index,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
+                                                    beløp: parseInt(event.target.value, 10),
+                                                },
+                                            },
+                                            type: actions.SETT_PERSON_BEREGNINGER,
+                                        });
+                                    }}
+                                />
+                                <InputMedLabelTilVenstre
+                                    bredde={'S'}
+                                    label={'Virkningstidspunkt - Fra og med'}
                                     value={personBeregning.verdi.stønadFom}
                                     placeholder={'MM.YY'}
                                     autoFocus={true}
@@ -158,7 +176,8 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
                         moment(personBeregning.stønadFom, 'YYYY-MM-DD', true).format(
                             datoformat.MÅNED
                         ) !== muligEndretPersonBeregning.verdi.stønadFom) ||
-                    personBeregning.deltYtelse !== muligEndretPersonBeregning.verdi.deltYtelse
+                    personBeregning.deltYtelse !== muligEndretPersonBeregning.verdi.deltYtelse ||
+                    personBeregning.beløp !== muligEndretPersonBeregning.verdi.beløp
                 ) {
                     return true;
                 }

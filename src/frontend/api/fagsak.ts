@@ -92,7 +92,12 @@ export interface IOpprettBeregningData {
     personBeregninger: IPersonBeregning[];
 }
 
-export const apiOpprettBeregning = (fagsakId: number, data: any) => {
+export const apiOpprettBeregning = (fagsakId: number, data: IOpprettBeregningData) => {
+    axiosRequest<IFagsak>({
+        data,
+        method: 'PUT',
+        url: `/familie-ba-sak/api/kalkulator`,
+    });
     return axiosRequest<IFagsak>({
         data,
         method: 'POST',
