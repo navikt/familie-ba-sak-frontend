@@ -1,3 +1,5 @@
+import { kjønnType } from '@navikt/familie-typer';
+
 // Enum
 export enum AdresseType {
     BOSTEDSADRESSE = 'BOSTEDSADRESSE',
@@ -18,16 +20,11 @@ export enum RelasjonsRolleType {
     SAMB,
 }
 
-export enum kjønnType {
-    'K' = 'K',
-    'M' = 'M',
-}
-
 // Interface
 export interface IPerson {
     fødselsdato: string;
-    kjønn?: kjønnType;
-    navn?: string;
+    kjønn: kjønnType;
+    navn: string;
     personIdent: string;
     type: PersonType;
 }

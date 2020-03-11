@@ -1,21 +1,26 @@
+import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
-import { RessursStatus } from '../../typer/ressurs';
+import { hentPerson } from '../../api/person';
+import { IPerson } from '../../typer/person';
+import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider';
-import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
-import { kjønnType } from '../../typer/person';
-import BehandleVilkår from './Vilkår/BehandleVilkår';
-import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
-import { BeregningProvider } from './Beregning/BeregningProvider';
 import Beregning from './Beregning/Beregning';
-import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { BeregningProvider } from './Beregning/BeregningProvider';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
+import Saksoversikt from './Saksoversikt/Saksoversikt';
+import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
+import BehandleVilkår from './Vilkår/BehandleVilkår';
+import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
+    const [bruker, settBruker] = React.useState<Ressurs<IPerson>>({
+        status: RessursStatus.IKKE_HENTET,
+    });
 
     const fagsakDispatcher = useFagsakDispatch();
     const fagsak = useFagsakContext().fagsak;
@@ -32,15 +37,31 @@ const FagsakContainer: React.FunctionComponent = () => {
         }
     }, [fagsakId]);
 
+    React.useEffect(() => {
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            hentPerson(fagsak.data.søkerFødselsnummer).then((hentetPerson: Ressurs<IPerson>) =>
+                settBruker(hentetPerson)
+            );
+        }
+    }, [fagsak.status]);
+
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
             return (
                 <div className={'fagsakcontainer'}>
                     <Visittkort
-                        navn={'IKKE IMPLEMENTERT'}
+                        navn={
+                            bruker.status === RessursStatus.SUKSESS
+                                ? bruker.data.navn
+                                : 'IKKE IMPLEMENTERT'
+                        }
                         ident={fagsak.data.søkerFødselsnummer}
                         alder={18}
-                        kjønn={kjønnType.K}
+                        kjønn={
+                            bruker.status === RessursStatus.SUKSESS
+                                ? bruker.data.kjønn
+                                : kjønnType.UKJENT
+                        }
                     />
                     <div className={'fagsakcontainer__content'}>
                         <Switch>
