@@ -1,8 +1,7 @@
+import { Ressurs, RessursStatus } from '../typer/ressurs';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-
 import { captureException, configureScope, withScope } from '@sentry/core';
 
-import { Ressurs, RessursStatus } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { slackKanaler } from '../typer/slack';
 

@@ -17,6 +17,23 @@ app.get('/familie-ba-sak/api/fagsaker/1', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
 });
 
+app.get('/familie-ba-sak/api/person', (req, res) => {
+    setTimeout(
+        () =>
+            res.status(200).send({
+                data: {
+                    fødselsdato: '2001-02-20',
+                    kjønn: 'KVINNE',
+                    navn: 'Mor Moresen',
+                    personIdent: '12345678910',
+                    type: 'SØKER',
+                },
+                status: 'SUKSESS',
+            }),
+        delayMs
+    );
+});
+
 app.get('/user/profile', (req, res) => {
     res.send({
         displayName: 'Test Testersen',
