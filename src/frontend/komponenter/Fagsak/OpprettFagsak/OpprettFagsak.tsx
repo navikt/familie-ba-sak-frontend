@@ -1,8 +1,9 @@
-import * as React from 'react';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import useFagsakApi from '../useFagsakApi';
 import { Input } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
+import * as React from 'react';
+
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import useFagsakApi from '../useFagsakApi';
 
 const OpprettFagsak: React.FunctionComponent = () => {
     const [personIdent, settPersonIdent] = React.useState('');

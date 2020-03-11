@@ -1,14 +1,16 @@
-import moment from 'moment';
+import * as React from 'react';
+
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { IFelt, Valideringsstatus } from '../../../typer/felt';
+import { IState, actions, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
+
+import { IBarnBeregning } from '../../../typer/behandle';
+import { IVedtakForBehandling } from '../../../typer/vedtak';
+import InputMedLabelTilVenstre from '../../Felleskomponenter/InputMedLabelTilVenstre/InputMedLabelTilVenstre';
 import { Panel } from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
-import * as React from 'react';
-import { IBarnBeregning } from '../../../typer/behandle';
-import { IVedtakForBehandling } from '../../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 import { datoformat } from '../../../utils/formatter';
-import InputMedLabelTilVenstre from '../../Felleskomponenter/InputMedLabelTilVenstre/InputMedLabelTilVenstre';
+import moment from 'moment';
 
 interface IBeregningSkjema {
     aktivVedtak?: IVedtakForBehandling;
@@ -39,7 +41,7 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                     : undefined
             }
         >
-            <Panel className={'beregning__skjemagruppe'}>
+            <Panel className={'beregning__skjemagruppe--panel'}>
                 {context.barnasBeregning.map(
                     (barnBeregning: IFelt<IBarnBeregning>, index: number) => {
                         return (

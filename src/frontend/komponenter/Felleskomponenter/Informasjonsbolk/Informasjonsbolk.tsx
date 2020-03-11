@@ -1,5 +1,5 @@
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { Normaltekst, Element } from 'nav-frontend-typografi';
 
 export interface IInformasjon {
     label: string;
