@@ -162,12 +162,13 @@ const useFagsakApi = (
                 settSenderInn(true);
                 apiOpprettBeregning(fagsak, {
                     personBeregninger: context.personBeregninger.map(
-                        (barnBeregning: IFelt<IPersonBeregning>) => ({
-                            ident: barnBeregning.verdi.personident,
-                            type: barnBeregning.verdi.ytelseType,
-                            deltYtelse: barnBeregning.verdi.deltYtelse,
+                        (personBeregning: IFelt<IPersonBeregning>) => ({
+                            personident: personBeregning.verdi.personident,
+                            ytelseType: personBeregning.verdi.ytelseType,
+                            deltYtelse: personBeregning.verdi.deltYtelse,
+                            beløp: personBeregning.verdi.beløp,
                             stønadFom: moment(
-                                barnBeregning.verdi.stønadFom,
+                                personBeregning.verdi.stønadFom,
                                 datoformat.MÅNED,
                                 true
                             ).format('YYYY-MM-DD'),

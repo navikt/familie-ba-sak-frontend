@@ -42,13 +42,13 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     React.useEffect(() => {
         if (aktivVedtak) {
-            aktivVedtak.personBeregninger.map((barnBeregning, index) => {
+            aktivVedtak.personBeregninger.map((personBeregning, index) => {
                 dispatch({
                     payload: {
                         index,
                         oppdatertPersonBeregning: {
-                            ...barnBeregning,
-                            stønadFom: moment(barnBeregning.stønadFom).format(datoformat.MÅNED),
+                            ...personBeregning,
+                            stønadFom: moment(personBeregning.stønadFom).format(datoformat.MÅNED),
                         },
                     },
                     type: actions.SETT_PERSON_BEREGNINGER,

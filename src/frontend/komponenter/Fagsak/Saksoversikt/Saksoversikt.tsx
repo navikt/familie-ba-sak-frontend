@@ -119,12 +119,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 </thead>
                                 <tbody>
                                     {aktivVedtak?.personBeregninger.map(
-                                        (barnBeregning: IPersonBeregning) => {
+                                        (personBeregning: IPersonBeregning) => {
                                             return (
-                                                <tr key={barnBeregning.personident}>
-                                                    <td children={`${barnBeregning.personident}`} />
-                                                    <td children={`${barnBeregning.ytelseType}`} />
-                                                    <td children={`${barnBeregning.stønadFom}`} />
+                                                <tr key={personBeregning.personident}>
+                                                    <td
+                                                        children={`${personBeregning.personident}`}
+                                                    />
+                                                    <td children={`${personBeregning.beløp}`} />
+                                                    <td children={`${personBeregning.stønadFom}`} />
                                                 </tr>
                                             );
                                         }

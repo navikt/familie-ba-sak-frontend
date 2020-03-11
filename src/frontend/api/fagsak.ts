@@ -97,15 +97,27 @@ export interface IOpprettBeregningData {
     personBeregninger: IPersonBeregning[];
 }
 
-export const apiOpprettBeregning = (fagsak: IFagsak, data: any) => {
+export const apiOpprettBeregning = (fagsak: IFagsak, data: IOpprettBeregningData) => {
+    const dataTilKalkulator = data.personBeregninger.map(beregning => ({
+        personident: beregning.personident,
+        ytelsetype: beregning.ytelseType,
+        halvytelse: beregning.deltYtelse,
+        stønadFom: beregning.stønadFom,
+        stønadTom: beregning.stønadFom,
+    }));
+    const dataTilIverksetting = data.personBeregninger.map(beregning => ({
+        personident: beregning.personident,
+        beløp: beregning.beløp,
+        stønadFom: beregning.stønadFom,
+    }));
     const vedtakId = aktivVedtak(fagsak)?.id;
     axiosRequest<IFagsak>({
-        data,
+        data: dataTilKalkulator,
         method: 'PUT',
         url: `/familie-ba-sak/api/kalkulator`,
     });
     return axiosRequest<IFagsak>({
-        data,
+        data: dataTilIverksetting,
         method: 'PUT',
         url: `/familie-ba-sak/api/vedtak/${vedtakId}/beregning`,
     });
