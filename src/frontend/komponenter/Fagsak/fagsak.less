@@ -1,16 +1,19 @@
 .fagsakcontainer {
     &__content {
-        width: 100%;
-        height: calc(100vh - 8rem);
         display: flex;
-        
+
         &--venstremeny {
-            width: 10rem;
+            min-width: 10rem;
             border-right: 2px solid @navGra40;
         }
 
+        &--main {
+            padding: 1rem;
+            flex: 1;
+        }
+    
         &--høyremeny {
-            width: 20rem;
+            max-width: 315px;
             border-left: 2px solid @navGra40;
         }
     }
