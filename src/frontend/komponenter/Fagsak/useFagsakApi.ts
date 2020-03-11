@@ -160,7 +160,7 @@ const useFagsakApi = (
         ) {
             if (skjemaetHarEndringer) {
                 settSenderInn(true);
-                apiOpprettBeregning(fagsak.id, {
+                apiOpprettBeregning(fagsak, {
                     personBeregninger: context.personBeregninger.map(
                         (barnBeregning: IFelt<IPersonBeregning>) => ({
                             ident: barnBeregning.verdi.personident,

@@ -147,7 +147,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     onClick={() => {
                                         axiosRequest({
                                             method: 'POST',
-                                            url: `/familie-ba-sak/api/fagsak/${fagsak.id}/opphoer-migrert-vedtak/v2`,
+                                            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,
                                             data: {
                                                 opphørsdato: moment(
                                                     opphørsdato,

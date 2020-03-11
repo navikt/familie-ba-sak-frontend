@@ -5,4 +5,5 @@ export interface IVedtakForBehandling {
     ansvarligSaksbehandler: string;
     personBeregninger: IPersonBeregning[];
     vedtaksdato: string;
+    id: number;
 }
