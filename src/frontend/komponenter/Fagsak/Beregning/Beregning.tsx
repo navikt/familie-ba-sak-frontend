@@ -49,6 +49,7 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         oppdatertPersonBeregning: {
                             ...personBeregning,
                             stønadFom: moment(personBeregning.stønadFom).format(datoformat.MÅNED),
+                            stønadTom: moment(personBeregning.stønadTom).format(datoformat.MÅNED),
                         },
                     },
                     type: actions.SETT_PERSON_BEREGNINGER,

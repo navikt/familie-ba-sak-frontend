@@ -104,7 +104,7 @@ export const apiOpprettBeregning = (fagsak: IFagsak, data: IOpprettBeregningData
         ytelsetype: beregning.ytelseType,
         halvytelse: beregning.deltYtelse,
         stønadFom: formaterIsoDato(beregning.stønadFom, datoformat.ISO_MÅNED),
-        stønadTom: formaterIsoDato(beregning.stønadFom, datoformat.ISO_MÅNED),
+        stønadTom: formaterIsoDato(beregning.stønadTom, datoformat.ISO_MÅNED),
     }));
     const dataTilIverksetting = {
         personBeregninger: data.personBeregninger.map(beregning => ({

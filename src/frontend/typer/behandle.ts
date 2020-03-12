@@ -6,11 +6,12 @@ export interface IPersonBeregning {
     deltYtelse: boolean;
     beløp: number;
     stønadFom: string;
+    stønadTom: string;
 }
 
 export enum YtelseType {
-    ORDINÆR_BARNETRYGD = 'ORDINÆR BARNETRYGD',
-    UTVIDET_BARNETRYGD = 'UTVIDET BARNETRYGD',
+    ORDINÆR_BARNETRYGD = 'ORDINÆR_BARNETRYGD',
+    UTVIDET_BARNETRYGD = 'UTVIDET_BARNETRYGD',
     SMÅBARNSTILLEGG = 'SMÅBARNSTILLEGG',
 }
 

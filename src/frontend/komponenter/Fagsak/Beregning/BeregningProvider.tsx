@@ -37,6 +37,7 @@ export const lastInitialState = (fagsak: IFagsak): IState => {
                     beløp: ordinærBeløp,
                     deltYtelse: false,
                     stønadFom: '',
+                    stønadTom: '',
                 },
                 erGyldigMånedDato
             );

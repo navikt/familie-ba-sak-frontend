@@ -85,21 +85,24 @@
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
-                                "stønadFom": "2020-01-01"
+                                "stønadFom": "2020-01-01",
+                                "stonadTom": "2037-12-31"
                             },
                             {
                                 "personident": "12345678911",
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
-                                "stønadFom": "2020-01-01"
+                                "stønadFom": "2020-01-01",
+                                "stønadTom": "2037-12-31"
                             },
                             {
                                 "personident": "12345678912",
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
-                                "stønadFom": "2020-01-01"
+                                "stønadFom": "2020-01-01",
+                                "stønadTom": "2037-12-31"
                             }
                         ],
                         "resultat": "INNVILGET",
@@ -168,21 +171,24 @@
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
-                                "stønadFom": "2020-01-01"
+                                "stønadFom": "2020-01-01",
+                                "stønadTom": "2037-12-31"
                             },
                             {
                                 "personident": "12345678911",
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
-                                "stønadFom": "2020-01-01"
+                                "stønadFom": "2020-01-01",
+                                "stønadTom": "2037-12-31"
                             },
                             {
                                 "personident": "12345678912",
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": true,
-                                "stønadFom": "2020-01-01"
+                                "stønadFom": "2020-01-01",
+                                "stønadTom": "2037-12-31"
                             }
                         ]
                     }

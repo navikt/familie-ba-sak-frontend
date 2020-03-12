@@ -172,6 +172,11 @@ const useFagsakApi = (
                                 datoformat.MÅNED,
                                 true
                             ).format('YYYY-MM-DD'),
+                            stønadTom: moment(
+                                personBeregning.verdi.stønadTom,
+                                datoformat.MÅNED,
+                                true
+                            ).format('YYYY-MM-DD'),
                         })
                     ),
                 })
