@@ -30,7 +30,7 @@ const Logg: React.FunctionComponent<IProps> = ({ aktivBehandling }) => {
                     settLogg(byggFeiletRessurs('Ukjent feil ved lasting av logg'));
                 });
         }
-    }, [aktivBehandling?.behandlingId]);
+    }, [aktivBehandling?.steg]);
 
     return (
         <Hendelsesoversikt

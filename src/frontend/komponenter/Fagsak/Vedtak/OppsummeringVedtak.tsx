@@ -103,17 +103,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                                         payload: response,
                                         type: actions.SETT_FAGSAK,
                                     });
+
+                                    if (
+                                        aktivBehandling?.status ===
+                                        BehandlingStatus.SENDT_TIL_BESLUTTER
+                                    ) {
+                                        settMakeItRain(true);
+                                        setTimeout(() => {
+                                            settMakeItRain(false);
+                                        }, 10000);
+                                    }
                                 } else if (response.status === RessursStatus.FEILET) {
                                     settSubmitFeil(response.melding);
-                                }
-
-                                if (
-                                    aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
-                                ) {
-                                    settMakeItRain(true);
-                                    setTimeout(() => {
-                                        settMakeItRain(false);
-                                    }, 10000);
                                 }
                             });
                         }}
