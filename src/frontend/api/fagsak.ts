@@ -7,9 +7,10 @@ import { IPersonBeregning } from '../typer/behandle';
 import {
     BehandlingKategori,
     BehandlingResultat,
-    BehandlingUnderkategori,
     Behandlingstype,
+    BehandlingUnderkategori,
 } from '../typer/behandling';
+import { datoformat, formaterIsoDato } from '../utils/formatter';
 
 export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
 
@@ -102,14 +103,16 @@ export const apiOpprettBeregning = (fagsak: IFagsak, data: IOpprettBeregningData
         personident: beregning.personident,
         ytelsetype: beregning.ytelseType,
         halvytelse: beregning.deltYtelse,
-        stønadFom: beregning.stønadFom,
-        stønadTom: beregning.stønadFom,
+        stønadFom: formaterIsoDato(beregning.stønadFom, datoformat.ISO_MÅNED),
+        stønadTom: formaterIsoDato(beregning.stønadFom, datoformat.ISO_MÅNED),
     }));
-    const dataTilIverksetting = data.personBeregninger.map(beregning => ({
-        personident: beregning.personident,
-        beløp: beregning.beløp,
-        stønadFom: beregning.stønadFom,
-    }));
+    const dataTilIverksetting = {
+        personBeregninger: data.personBeregninger.map(beregning => ({
+            ident: beregning.personident,
+            beløp: beregning.beløp,
+            stønadFom: beregning.stønadFom,
+        })),
+    };
     const vedtakId = aktivVedtak(fagsak)?.id;
     axiosRequest<IFagsak>({
         data: dataTilKalkulator,

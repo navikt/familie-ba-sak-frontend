@@ -163,8 +163,8 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
     return (
         aktivVedtak.personBeregninger.find((personBeregning: IPersonBeregning) => {
             const muligEndretPersonBeregning = personBeregninger.find(
-                endretBarnBeregning =>
-                    endretBarnBeregning.verdi.personident === personBeregning.personident
+                endretPersonBeregning =>
+                    endretPersonBeregning.verdi.personident === personBeregning.personident
             );
 
             if (!muligEndretPersonBeregning) {
