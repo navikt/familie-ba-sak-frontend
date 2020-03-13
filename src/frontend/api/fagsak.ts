@@ -1,4 +1,4 @@
-import { IBarnBeregning } from '../typer/behandle';
+import { IPersonBeregning } from '../typer/behandle';
 import {
     BehandlingKategori,
     BehandlingResultat,
@@ -10,6 +10,7 @@ import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { IVilkårResultat } from '../typer/vilkår';
 import { axiosRequest } from './axios';
+import { datoformat, formaterIsoDato } from '../utils/formatter';
 
 export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
 
@@ -94,14 +95,36 @@ export const apiOpprettEllerOppdaterVedtak = (fagsakId: number, data: IRestVilk�
 };
 
 export interface IOpprettBeregningData {
-    barnasBeregning: IBarnBeregning[];
+    personBeregninger: IPersonBeregning[];
 }
 
-export const apiOpprettBeregning = (fagsak: IFagsak, data: any) => {
+export const apiOpprettBeregning = (fagsak: IFagsak, data: IOpprettBeregningData) => {
+    const dataTilKalkulator = data.personBeregninger
+        .filter(personBeregning => !personBeregning.ingenYtelse)
+        .map(beregning => ({
+            personident: beregning.personident,
+            ytelsetype: beregning.ytelseType,
+            halvytelse: beregning.deltYtelse,
+            stønadFom: formaterIsoDato(beregning.stønadFom, datoformat.ISO_MÅNED),
+            stønadTom: formaterIsoDato(beregning.stønadTom, datoformat.ISO_MÅNED),
+        }));
+    const dataTilIverksetting = {
+        personBeregninger: data.personBeregninger
+            .filter(personBeregning => !personBeregning.ingenYtelse)
+            .map(beregning => ({
+                ident: beregning.personident,
+                beløp: beregning.beløp,
+                stønadFom: beregning.stønadFom,
+            })),
+    };
     const vedtakId = aktivVedtak(fagsak)?.id;
-
+    axiosRequest<IFagsak>({
+        data: dataTilKalkulator,
+        method: 'PUT',
+        url: `/familie-ba-sak/api/kalkulator`,
+    });
     return axiosRequest<IFagsak>({
-        data,
+        data: dataTilIverksetting,
         method: 'PUT',
         url: `/familie-ba-sak/api/vedtak/${vedtakId}/beregning`,
     });

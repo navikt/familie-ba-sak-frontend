@@ -1,14 +1,13 @@
 import 'nav-frontend-tabell-style';
+import { Input } from 'nav-frontend-skjema';
+import { Systemtittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import * as React from 'react';
+import { IFagsak, fagsakStatus } from '../../../typer/fagsak';
 
 import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
-import { Input } from 'nav-frontend-skjema';
-import { Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
-import * as React from 'react';
 import { useHistory } from 'react-router';
-
 import { axiosRequest } from '../../../api/axios';
-import { IBarnBeregning } from '../../../typer/behandle';
 import {
     behandlingsresultater,
     behandlingsstatuser,
@@ -19,11 +18,11 @@ import {
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { IPersonBeregning } from '../../../typer/behandle';
 
 interface IProps {
     fagsak: IFagsak;
@@ -104,8 +103,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 />
             )}
 
-            {aktivVedtak?.barnasBeregning &&
-                aktivVedtak?.barnasBeregning.length > 0 &&
+            {aktivVedtak?.personBeregninger &&
+                aktivVedtak?.personBeregninger.length > 0 &&
                 gjeldendeBehandling?.status === BehandlingStatus.FERDIGSTILT && (
                     <div>
                         <div className={'saksoversikt__utbetalinger'}>
@@ -119,17 +118,22 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {aktivVedtak?.barnasBeregning.map(
-                                        (barnBeregning: IBarnBeregning) => {
+                                    {aktivVedtak?.personBeregninger
+                                        .filter(
+                                            (personBeregning: IPersonBeregning) =>
+                                                !personBeregning.ingenYtelse
+                                        )
+                                        .map((personBeregning: IPersonBeregning) => {
                                             return (
-                                                <tr key={barnBeregning.barn}>
-                                                    <td children={`${barnBeregning.barn}`} />
-                                                    <td children={`${barnBeregning.beløp}`} />
-                                                    <td children={`${barnBeregning.stønadFom}`} />
+                                                <tr key={personBeregning.personident}>
+                                                    <td
+                                                        children={`${personBeregning.personident}`}
+                                                    />
+                                                    <td children={`${personBeregning.beløp}`} />
+                                                    <td children={`${personBeregning.stønadFom}`} />
                                                 </tr>
                                             );
-                                        }
-                                    )}
+                                        })}
                                 </tbody>
                             </table>
                         </div>
@@ -223,10 +227,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                             <td
                                                 children={
                                                     aktivVedtakForBehandling &&
-                                                    aktivVedtakForBehandling.barnasBeregning[0]
+                                                    aktivVedtakForBehandling.personBeregninger[0]
                                                         ? formaterIsoDato(
                                                               aktivVedtakForBehandling
-                                                                  .barnasBeregning[0].stønadFom,
+                                                                  .personBeregninger[0].stønadFom,
                                                               datoformat.DATO
                                                           )
                                                         : 'Ukjent'

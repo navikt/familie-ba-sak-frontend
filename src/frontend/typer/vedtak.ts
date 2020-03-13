@@ -1,9 +1,9 @@
-import { IBarnBeregning } from './behandle';
+import { IPersonBeregning } from './behandle';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
     ansvarligSaksbehandler: string;
-    barnasBeregning: IBarnBeregning[];
+    personBeregninger: IPersonBeregning[];
     vedtaksdato: string;
     id: number;
 }

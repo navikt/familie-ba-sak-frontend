@@ -1,16 +1,16 @@
 import * as React from 'react';
+import moment from 'moment';
 
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { IState, actions, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 
-import { IBarnBeregning } from '../../../typer/behandle';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
+import { IPersonBeregning, YtelseType, ytelsetype } from '../../../typer/behandle';
 import InputMedLabelTilVenstre from '../../Felleskomponenter/InputMedLabelTilVenstre/InputMedLabelTilVenstre';
 import { Panel } from 'nav-frontend-paneler';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Checkbox, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { datoformat } from '../../../utils/formatter';
-import moment from 'moment';
 
 interface IBeregningSkjema {
     aktivVedtak?: IVedtakForBehandling;
@@ -42,58 +42,139 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
             }
         >
             <Panel className={'beregning__skjemagruppe--panel'}>
-                {context.barnasBeregning.map(
-                    (barnBeregning: IFelt<IBarnBeregning>, index: number) => {
+                {context.personBeregninger.map(
+                    (personBeregning: IFelt<IPersonBeregning>, index: number) => {
                         return (
                             <SkjemaGruppe
                                 className={'beregning__skjemagruppe--barn'}
-                                key={barnBeregning.verdi.barn}
+                                key={personBeregning.verdi.personident}
                                 feil={
-                                    barnBeregning.valideringsstatus !== Valideringsstatus.OK &&
+                                    personBeregning.valideringsstatus !== Valideringsstatus.OK &&
                                     visFeilmeldinger &&
-                                    barnBeregning.feilmelding !== ''
-                                        ? barnBeregning.feilmelding
+                                    personBeregning.feilmelding !== ''
+                                        ? personBeregning.feilmelding
                                         : undefined
                                 }
                             >
                                 <Element
-                                    children={`Barn ${index + 1}: ${barnBeregning.verdi.barn}`}
+                                    children={`Person ${index + 1}: ${
+                                        personBeregning.verdi.personident
+                                    }`}
+                                />
+                                <Select
+                                    bredde={'l'}
+                                    label="Velg type"
+                                    value={personBeregning.verdi.ytelseType}
+                                    onChange={event => {
+                                        dispatch({
+                                            payload: {
+                                                index,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
+                                                    ytelseType: event.target.value as YtelseType,
+                                                },
+                                            },
+                                            type: actions.SETT_PERSON_BEREGNINGER,
+                                        });
+                                    }}
+                                >
+                                    {Object.keys(ytelsetype).map((key: string) => {
+                                        return (
+                                            <option
+                                                aria-selected={
+                                                    personBeregning.verdi.ytelseType === key
+                                                }
+                                                key={key}
+                                                value={key}
+                                            >
+                                                {ytelsetype[key].navn}
+                                            </option>
+                                        );
+                                    })}
+                                </Select>
+                                <Checkbox
+                                    label={'Skal ikke ha ytelse'}
+                                    onChange={event => {
+                                        dispatch({
+                                            payload: {
+                                                index,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
+                                                    ingenYtelse: Boolean(event.target.value),
+                                                },
+                                            },
+                                            type: actions.SETT_PERSON_BEREGNINGER,
+                                        });
+                                    }}
+                                />
+                                <Checkbox
+                                    label={'Skal ha delt ytelse'}
+                                    onChange={event => {
+                                        dispatch({
+                                            payload: {
+                                                index,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
+                                                    deltYtelse: Boolean(event.target.value),
+                                                },
+                                            },
+                                            type: actions.SETT_PERSON_BEREGNINGER,
+                                        });
+                                    }}
                                 />
                                 <InputMedLabelTilVenstre
                                     bredde={'S'}
                                     label={'Beløp'}
-                                    value={barnBeregning.verdi.beløp}
+                                    value={personBeregning.verdi.beløp}
                                     type={'number'}
                                     onChange={event => {
                                         dispatch({
                                             payload: {
                                                 index,
-                                                oppdatertBarnBeregning: {
-                                                    ...barnBeregning.verdi,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
                                                     beløp: parseInt(event.target.value, 10),
                                                 },
                                             },
-                                            type: actions.SETT_BARNAS_BEREGNING,
+                                            type: actions.SETT_PERSON_BEREGNINGER,
                                         });
                                     }}
                                 />
-
                                 <InputMedLabelTilVenstre
                                     bredde={'S'}
-                                    label={'Virkningstidspunkt'}
-                                    value={barnBeregning.verdi.stønadFom}
+                                    label={'Virkningstidspunkt - Fra og med'}
+                                    value={personBeregning.verdi.stønadFom}
                                     placeholder={'MM.YY'}
                                     autoFocus={true}
                                     onChange={event => {
                                         dispatch({
                                             payload: {
                                                 index,
-                                                oppdatertBarnBeregning: {
-                                                    ...barnBeregning.verdi,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
                                                     stønadFom: event.target.value,
                                                 },
                                             },
-                                            type: actions.SETT_BARNAS_BEREGNING,
+                                            type: actions.SETT_PERSON_BEREGNINGER,
+                                        });
+                                    }}
+                                />
+                                <InputMedLabelTilVenstre
+                                    bredde={'S'}
+                                    label={'Virkningstidspunkt - Til og med'}
+                                    value={personBeregning.verdi.stønadTom}
+                                    placeholder={'MM.YY'}
+                                    autoFocus={true}
+                                    onChange={event => {
+                                        dispatch({
+                                            payload: {
+                                                index,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
+                                                    stønadTom: event.target.value,
+                                                },
+                                            },
+                                            type: actions.SETT_PERSON_BEREGNINGER,
                                         });
                                     }}
                                 />
@@ -101,13 +182,6 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                         );
                     }
                 )}
-                <Normaltekst
-                    children={`Totalsum: ${context.barnasBeregning.reduce(
-                        (sum: number, barnBeregning: IFelt<IBarnBeregning>) =>
-                            sum + barnBeregning.verdi.beløp,
-                        0
-                    )} kr`}
-                />
             </Panel>
         </SkjemaGruppe>
     );
@@ -117,34 +191,40 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
     if (!aktivVedtak) {
         return true;
     }
-    const barnasBeregning = context.barnasBeregning;
+    const personBeregninger = context.personBeregninger;
 
-    if (aktivVedtak.barnasBeregning.length === 0) {
+    if (aktivVedtak.personBeregninger.length === 0) {
         return true;
     }
-
-    const endringPåBeregning =
-        aktivVedtak.barnasBeregning.find(barnBeregning => {
-            const muligEndretBarnBeregning = barnasBeregning.find(
-                endretBarnBeregning => endretBarnBeregning.verdi.barn === barnBeregning.barn
+    return (
+        aktivVedtak.personBeregninger.find((personBeregning: IPersonBeregning) => {
+            const muligEndretPersonBeregning = personBeregninger.find(
+                endretPersonBeregning =>
+                    endretPersonBeregning.verdi.personident === personBeregning.personident
             );
 
-            if (!muligEndretBarnBeregning) {
+            if (!muligEndretPersonBeregning) {
                 return false;
             } else {
                 if (
-                    barnBeregning.beløp !== muligEndretBarnBeregning.verdi.beløp ||
-                    (muligEndretBarnBeregning.verdi.stønadFom !== '' &&
-                        moment(barnBeregning.stønadFom, 'YYYY-MM-DD', true).format(
+                    personBeregning.ytelseType !== muligEndretPersonBeregning.verdi.ytelseType ||
+                    (muligEndretPersonBeregning.verdi.stønadFom !== '' &&
+                        moment(personBeregning.stønadFom, 'YYYY-MM-DD', true).format(
                             datoformat.MÅNED
-                        ) !== muligEndretBarnBeregning.verdi.stønadFom)
+                        ) !== muligEndretPersonBeregning.verdi.stønadFom) ||
+                    (muligEndretPersonBeregning.verdi.stønadTom !== '' &&
+                        moment(personBeregning.stønadTom, 'YYYY-MM-DD', true).format(
+                            datoformat.MÅNED
+                        ) !== muligEndretPersonBeregning.verdi.stønadTom) ||
+                    personBeregning.deltYtelse !== muligEndretPersonBeregning.verdi.deltYtelse ||
+                    personBeregning.ingenYtelse !== muligEndretPersonBeregning.verdi.ingenYtelse ||
+                    personBeregning.beløp !== muligEndretPersonBeregning.verdi.beløp
                 ) {
                     return true;
                 }
             }
-        }) !== undefined;
-
-    return endringPåBeregning;
+        }) !== undefined
+    );
 };
 
 export default BeregningSkjema;
