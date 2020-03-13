@@ -1,7 +1,7 @@
 import * as React from 'react';
 import moment from 'moment';
 
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { IState, actions, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 
