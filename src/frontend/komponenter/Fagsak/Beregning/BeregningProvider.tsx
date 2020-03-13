@@ -1,10 +1,11 @@
 import * as React from 'react';
+
+import { IBehandling } from '../../../typer/behandling';
 import { IPersonBeregning, ordinærBeløp, YtelseType } from '../../../typer/behandle';
 import { IFagsak } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { lagInitiellFelt } from '../../../typer/provider';
 import { erGyldigMånedDato } from '../../../utils/validators';
-import { IBehandling } from '../../../typer/behandling';
 
 export enum actions {
     SETT_PERSON_BEREGNINGER = 'SETT_PERSON_BEREGNINGER',

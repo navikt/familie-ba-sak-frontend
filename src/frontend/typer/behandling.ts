@@ -1,7 +1,7 @@
-import { IPerson } from './person';
-import { IVilkårResultat } from './vilkår';
-import { IVedtakForBehandling } from './vedtak';
 import { INøkkelPar } from './common';
+import { IPerson } from './person';
+import { IVedtakForBehandling } from './vedtak';
+import { IVilkårResultat } from './vilkår';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -35,6 +35,12 @@ export enum BehandlingResultat {
     IKKE_VURDERT = 'IKKE_VURDERT',
     INNVILGET = 'INNVILGET',
     OPPHØRT = 'OPPHØRT',
+}
+
+export enum BehandlerRolle {
+    SYSTEM,
+    SAKSBEHANDLER,
+    BESLUTTER,
 }
 
 export interface IBehandling {

@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 import { IIdentFelt } from '../komponenter/Fagsak/OpprettBehandling/OpprettBehandlingProvider';
 import { IPersonBeregning } from '../typer/behandle';
 import { feil, IFelt, ok, Valideringsstatus } from '../typer/felt';

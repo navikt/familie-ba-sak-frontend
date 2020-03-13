@@ -1,9 +1,11 @@
+import '../typer/vilkår';
+
 import { AxiosError } from 'axios';
 import * as React from 'react';
+
 import { hentFagsak } from '../api/fagsak';
 import { IFagsak } from '../typer/fagsak';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
-import './../typer/vilkår';
 
 export enum actions {
     HENT_FAGSAK = 'HENT_FAGSAK',

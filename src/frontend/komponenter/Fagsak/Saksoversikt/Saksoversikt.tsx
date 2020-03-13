@@ -1,26 +1,28 @@
+import 'nav-frontend-tabell-style';
 import { Input } from 'nav-frontend-skjema';
 import { Systemtittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IFagsak, fagsakStatus } from '../../../typer/fagsak';
-import { IPersonBeregning } from '../../../typer/behandle';
-import 'nav-frontend-tabell-style';
-import { formaterIsoDato, datoformat } from '../../../utils/formatter';
+
+import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
-import moment from 'moment';
-import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { axiosRequest } from '../../../api/axios';
 import {
-    Behandlingstype,
-    IBehandling,
     behandlingsresultater,
     behandlingsstatuser,
+    BehandlingStatus,
+    Behandlingstype,
     behandlingstyper,
+    IBehandling,
     kategorier,
     underkategorier,
-    BehandlingStatus,
 } from '../../../typer/behandling';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { IPersonBeregning } from '../../../typer/behandle';
 
 interface IProps {
     fagsak: IFagsak;
@@ -45,9 +47,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
               )[0]
             : undefined;
 
-    const aktivBehandling = fagsak.behandlinger.find(
-        (behandling: IBehandling) => behandling.aktiv === true
-    );
+    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     if (!gjeldendeBehandling) {
         gjeldendeBehandling = aktivBehandling;

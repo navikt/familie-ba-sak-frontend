@@ -1,16 +1,18 @@
+import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import Confetti from 'react-confetti';
 import { useHistory } from 'react-router';
+
 import { axiosRequest } from '../../../api/axios';
 import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
+import { BehandlingStatus, Behandlingstype } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { AxiosError } from 'axios';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { actions, useFagsakDispatch } from '../../FagsakProvider';
-import { BehandlingStatus, Behandlingstype, IBehandling } from '../../../typer/behandling';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -27,9 +29,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const [submitFeil, settSubmitFeil] = React.useState('');
 
-    const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => {
-        return behandling.aktiv === true;
-    });
+    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     React.useEffect(() => {
         if (

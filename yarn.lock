@@ -165,29 +165,29 @@
     react "^16.12.0"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-ikoner@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.0.1.tgz#29a72f0bc3a3c24325888d8751d1f86448affe37"
-  integrity sha512-0QjLiv27X4SY98MyfvHsKq8kWpyn3bDiyndKdq8FGdq9vy9gVy9BH7tCh0Z6E8s/7nSXamHEBTEvDEBVOTPNAQ==
+"@navikt/familie-ikoner@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.0.2.tgz#52141f4a7428031770f526fc43ecab3c87b00d80"
+  integrity sha512-9PME6TYcFzGk7O+XGsNlwEiO1FfJNX2VZ0wOMWDDWoJQ2vSf93ESWjTxQox1uRMryZMwgttSTn9MocJhFpWvBg==
   dependencies:
-    "@navikt/familie-typer" "^3.0.1"
+    "@navikt/familie-typer" "^3.0.2"
     react "^16.12.0"
 
-"@navikt/familie-typer@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.1.tgz#1ec8e8cfd3e8503211e88cca30c6a60d2cdf64fe"
-  integrity sha512-5Ial8bdSYaXWxJi/csvmNWDtCNShKUe4u8W2O6KFvpln+JyHB+C5aR9kVAWLjOLcKKVj5ZgAaeuaLraiKJzmMg==
+"@navikt/familie-typer@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.2.tgz#000ce6fc1c8bb7061abb2d284ff4621763a4ed6b"
+  integrity sha512-C/R5lZTGIERP4twDZfJYV4uszaV6dCMwc39qSfSOyrY9+0NBMmhF1gG1/ZGKZ/CqF+nTzL4vrO2oyqThT+p93w==
   dependencies:
     react "^16.12.0"
 
-"@navikt/familie-visittkort@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.1.tgz#1b9759e3a33f465b3774f0f8202cee2cbb613d83"
-  integrity sha512-OE9oy9YTOJGMH9yiLzI3yQChve7/w4hcy/f66hH/O/nlyUzEMnoC3j3Vb5YJ49fQZ3EQrLVRfHQOU6kVKaOcxw==
+"@navikt/familie-visittkort@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.2.tgz#f76ca5d9a8e691968654009ce066cd97f33adc4f"
+  integrity sha512-F1bT+AjSgWe/4bVSDYcWRT22iuwa5wiVjlLeeLDF3D60bSWwMHg+e+S5rG6AC6YycSXA+ZRrHx8G2ekzkIFHJA==
   dependencies:
     "@navikt/familie-clipboard" "^3.0.1"
-    "@navikt/familie-ikoner" "^3.0.1"
-    "@navikt/familie-typer" "^3.0.1"
+    "@navikt/familie-ikoner" "^3.0.2"
+    "@navikt/familie-typer" "^3.0.2"
     classnames "^2.2.6"
     nav-frontend-core "^4.0.11"
     nav-frontend-typografi "^2.0.17"
@@ -5601,15 +5601,15 @@ react-confetti@^5.0.1:
   dependencies:
     tween-functions "^1.2.0"
 
-react-dom@^16.11.0:
-  version "16.12.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.12.0.tgz#0da4b714b8d13c2038c9396b54a92baea633fe11"
-  integrity sha512-LMxFfAGrcS3kETtQaCkTKjMiifahaMySFDn71fZUNpPHZQEzmk/GiAeIT8JSOrHB23fnuCOMruL2a8NYlw+8Gw==
+react-dom@^16.12.0:
+  version "16.13.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.0.tgz#cdde54b48eb9e8a0ca1b3dc9943d9bb409b81866"
+  integrity sha512-y09d2c4cG220DzdlFkPTnVvGTszVvNpC73v+AaLGLHbkpy3SSgvYq8x0rNwPJ/Rk/CicTNgk0hbHNw1gMEZAXg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.18.0"
+    scheduler "^0.19.0"
 
 react-hot-loader@4.12.19:
   version "4.12.19"
@@ -6001,10 +6001,10 @@ sax@~1.2.4:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-scheduler@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.18.0.tgz#5901ad6659bc1d8f3fdaf36eb7a67b0d6746b1c4"
-  integrity sha512-agTSHR1Nbfi6ulI0kYNK0203joW2Y5W4po4l+v03tOoiJKpTBbxpNhWDvqc/4IcOw+KLmSiQLTasZ4cab2/UWQ==
+scheduler@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.0.tgz#a715d56302de403df742f4a9be11975b32f5698d"
+  integrity sha512-xowbVaTPe9r7y7RUejcK73/j8tt2jfiyTednOvHbA8JoClvMYCp+r8QegLwK/n8zWQAtZb1fFnER4XLBZXrCxA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

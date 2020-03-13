@@ -1,16 +1,18 @@
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { IFagsak } from '../../../typer/fagsak';
-import { useBeregningContext, useBeregningDispatch, actions } from './BeregningProvider';
-import BeregningSkjema from './BeregningSkjema';
-import useFagsakApi from '../useFagsakApi';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import moment = require('moment');
 import { useHistory } from 'react-router';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import { datoformat } from '../../../utils/formatter';
+
 import { IBehandling } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
+import { datoformat } from '../../../utils/formatter';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import useFagsakApi from '../useFagsakApi';
+import { actions, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
+import BeregningSkjema from './BeregningSkjema';
+
+import moment = require('moment');
 
 interface IProps {
     fagsak: IFagsak;

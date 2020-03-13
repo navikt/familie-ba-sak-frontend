@@ -21,32 +21,6 @@ const config = merge.strategy({
         publicPath: '/assets/',
         globalObject: 'this',
     },
-    module: {
-        rules: [
-            {
-                test: /\.(css|less)$/,
-                use: [
-                    { loader: 'style-loader' },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 2,
-                        },
-                    },
-                    { loader: 'postcss-loader' },
-                    {
-                        loader: 'less-loader',
-                        options: {
-                            globalVars: {
-                                coreModulePath: '"~"',
-                                nodeModulesPath: '"~"',
-                            },
-                        },
-                    },
-                ],
-            },
-        ],
-    },
     devtool: 'inline-source-map',
     plugins: [
         new webpack.DefinePlugin({

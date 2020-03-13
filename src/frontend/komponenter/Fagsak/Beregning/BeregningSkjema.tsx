@@ -1,14 +1,16 @@
+import * as React from 'react';
 import moment from 'moment';
+
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { IFelt, Valideringsstatus } from '../../../typer/felt';
+import { IState, actions, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
+
+import { IVedtakForBehandling } from '../../../typer/vedtak';
+import { IPersonBeregning, YtelseType, ytelsetype } from '../../../typer/behandle';
+import InputMedLabelTilVenstre from '../../Felleskomponenter/InputMedLabelTilVenstre/InputMedLabelTilVenstre';
 import { Panel } from 'nav-frontend-paneler';
 import { Checkbox, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
-import * as React from 'react';
-import { IPersonBeregning, YtelseType, ytelsetype } from '../../../typer/behandle';
-import { IVedtakForBehandling } from '../../../typer/vedtak';
-import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import { actions, IState, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 import { datoformat } from '../../../utils/formatter';
-import InputMedLabelTilVenstre from '../../Felleskomponenter/InputMedLabelTilVenstre/InputMedLabelTilVenstre';
 
 interface IBeregningSkjema {
     aktivVedtak?: IVedtakForBehandling;
@@ -39,7 +41,7 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                     : undefined
             }
         >
-            <Panel className={'beregning__skjemagruppe'}>
+            <Panel className={'beregning__skjemagruppe--panel'}>
                 {context.personBeregninger.map(
                     (personBeregning: IFelt<IPersonBeregning>, index: number) => {
                         return (

@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { IFagsak } from '../../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import { lagInitiellFelt } from '../../../typer/provider';
-import { identValidator } from '../../../utils/validators';
-import { hentSisteBehandlingPåFagsak } from '../../../utils/fagsak';
-import { IPerson, PersonType } from '../../../typer/person';
+
 import {
     BehandlingKategori,
-    BehandlingUnderkategori,
     Behandlingstype,
+    BehandlingUnderkategori,
 } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
+import { IFelt, Valideringsstatus } from '../../../typer/felt';
+import { IPerson, PersonType } from '../../../typer/person';
+import { lagInitiellFelt } from '../../../typer/provider';
+import { hentSisteBehandlingPåFagsak } from '../../../utils/fagsak';
+import { identValidator } from '../../../utils/validators';
 
 export type IIdentFelt = IFelt<string>;
 

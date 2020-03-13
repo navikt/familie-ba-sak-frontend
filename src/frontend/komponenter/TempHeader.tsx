@@ -1,8 +1,10 @@
 import * as React from 'react';
-import Header from '@navikt/nap-header';
+
 import BoxedListWithLinks from '@navikt/boxed-list-with-links';
+import Header from '@navikt/nap-header';
 import Popover from '@navikt/nap-popover';
 import UserPanel from '@navikt/nap-user-panel';
+
 import { ISaksbehandler } from '../typer/saksbehandler';
 
 interface IProps {

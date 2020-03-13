@@ -18,32 +18,6 @@ const config = merge.strategy({
         filename: '[name].[contenthash].js',
         publicPath: '/assets/',
     },
-    module: {
-        rules: [
-            {
-                test: /\.(css|less)$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 2,
-                        },
-                    },
-                    { loader: 'postcss-loader' },
-                    {
-                        loader: 'less-loader',
-                        options: {
-                            globalVars: {
-                                coreModulePath: '"~"',
-                                nodeModulesPath: '"~"',
-                            },
-                        },
-                    },
-                ],
-            },
-        ],
-    },
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),

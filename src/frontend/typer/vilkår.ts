@@ -1,4 +1,4 @@
-import { PersonType, IPerson } from './person';
+import { IPerson, PersonType } from './person';
 
 export enum UtfallType {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
