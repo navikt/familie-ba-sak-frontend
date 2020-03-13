@@ -1,15 +1,14 @@
 import * as React from 'react';
 
-import { IBarnBeregning, ordinærBeløp } from '../../../typer/behandle';
 import { IBehandling } from '../../../typer/behandling';
+import { IPersonBeregning, ordinærBeløp, YtelseType } from '../../../typer/behandle';
 import { IFagsak } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
-import { IPerson, PersonType } from '../../../typer/person';
 import { lagInitiellFelt } from '../../../typer/provider';
 import { erGyldigMånedDato } from '../../../utils/validators';
 
 export enum actions {
-    SETT_BARNAS_BEREGNING = 'SETT_BARNAS_BEREGNING',
+    SETT_PERSON_BEREGNINGER = 'SETT_PERSON_BEREGNINGER',
     SETT_SAKSTYPE = 'SETT_SAKSTYPE',
     SETT_BEHANDLINGSRESULTAT = 'SETT_BEHANDLINGSRESULTAT',
     SETT_SENDER_INN = 'SETT_SENDER_INN',
@@ -23,30 +22,32 @@ export interface IAction {
 type Dispatch = (action: IAction) => void;
 
 export interface IState {
-    barnasBeregning: IFelt<IBarnBeregning>[];
+    personBeregninger: IFelt<IPersonBeregning>[];
 }
 
 export const lastInitialState = (fagsak: IFagsak): IState => {
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
 
-    let nyBarnasBeregning: IFelt<IBarnBeregning>[] = [];
+    let nyPersonBeregninger: IFelt<IPersonBeregning>[] = [];
     if (aktivBehandling) {
-        nyBarnasBeregning = aktivBehandling.personer
-            .filter((person: IPerson) => person.type === PersonType.BARN)
-            .map(barn => {
-                return lagInitiellFelt<IBarnBeregning>(
-                    {
-                        barn: barn.personIdent,
-                        beløp: ordinærBeløp,
-                        stønadFom: '',
-                    },
-                    erGyldigMånedDato
-                );
-            });
+        nyPersonBeregninger = aktivBehandling.personer.map(person => {
+            return lagInitiellFelt<IPersonBeregning>(
+                {
+                    personident: person.personIdent,
+                    ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
+                    beløp: ordinærBeløp,
+                    deltYtelse: false,
+                    ingenYtelse: false,
+                    stønadFom: '',
+                    stønadTom: '',
+                },
+                erGyldigMånedDato
+            );
+        });
     }
 
     return {
-        barnasBeregning: nyBarnasBeregning,
+        personBeregninger: nyPersonBeregninger,
     };
 };
 
@@ -55,18 +56,18 @@ const BeregningDispatchContext = React.createContext<Dispatch | undefined>(undef
 
 const beregningReducer = (state: IState, action: IAction): IState => {
     switch (action.type) {
-        case actions.SETT_BARNAS_BEREGNING:
-            const barnasBeregningKopi = [...state.barnasBeregning];
-            barnasBeregningKopi[action.payload.index] = barnasBeregningKopi[
+        case actions.SETT_PERSON_BEREGNINGER:
+            const personBeregningerKopi = [...state.personBeregninger];
+            personBeregningerKopi[action.payload.index] = personBeregningerKopi[
                 action.payload.index
             ].valideringsFunksjon({
-                ...barnasBeregningKopi[action.payload.index],
-                verdi: action.payload.oppdatertBarnBeregning,
+                ...personBeregningerKopi[action.payload.index],
+                verdi: action.payload.oppdatertPersonBeregning,
             });
 
             return {
                 ...state,
-                barnasBeregning: barnasBeregningKopi,
+                personBeregninger: personBeregningerKopi,
             };
         default:
             return state;

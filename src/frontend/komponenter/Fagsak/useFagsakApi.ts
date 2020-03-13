@@ -10,7 +10,6 @@ import {
     IOpprettBehandlingData,
     IOpprettFagsakData,
 } from '../../api/fagsak';
-import { IBarnBeregning } from '../../typer/behandle';
 import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
@@ -20,6 +19,7 @@ import { actions as fagsakActions, useFagsakDispatch } from '../FagsakProvider';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
+import { IPersonBeregning } from '../../typer/behandle';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -154,20 +154,28 @@ const useFagsakApi = (
         fagsak: IFagsak
     ) => {
         if (
-            context.barnasBeregning.find(
-                (barnBeregning: IFelt<IBarnBeregning>) =>
+            context.personBeregninger.find(
+                (barnBeregning: IFelt<IPersonBeregning>) =>
                     barnBeregning.valideringsstatus !== Valideringsstatus.OK
             ) === undefined
         ) {
             if (skjemaetHarEndringer) {
                 settSenderInn(true);
                 apiOpprettBeregning(fagsak, {
-                    barnasBeregning: context.barnasBeregning.map(
-                        (barnBeregning: IFelt<IBarnBeregning>) => ({
-                            beløp: barnBeregning.verdi.beløp,
-                            ident: barnBeregning.verdi.barn,
+                    personBeregninger: context.personBeregninger.map(
+                        (personBeregning: IFelt<IPersonBeregning>) => ({
+                            personident: personBeregning.verdi.personident,
+                            ytelseType: personBeregning.verdi.ytelseType,
+                            deltYtelse: personBeregning.verdi.deltYtelse,
+                            ingenYtelse: personBeregning.verdi.ingenYtelse,
+                            beløp: personBeregning.verdi.beløp,
                             stønadFom: moment(
-                                barnBeregning.verdi.stønadFom,
+                                personBeregning.verdi.stønadFom,
+                                datoformat.MÅNED,
+                                true
+                            ).format('YYYY-MM-DD'),
+                            stønadTom: moment(
+                                personBeregning.verdi.stønadTom,
                                 datoformat.MÅNED,
                                 true
                             ).format('YYYY-MM-DD'),
