@@ -13,6 +13,15 @@ export enum BehandlingUnderkategori {
     UTVIDET = 'UTVIDET',
 }
 
+export enum BehandlingSteg {
+    REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
+    VILKÅRSVURDERING = 'VILKÅRSVURDERING',
+    FORESLÅ_VEDTAK = 'FORESLÅ_VEDTAK',
+    GODKJENNE_VEDTAK = 'GODKJENNE_VEDTAK',
+    FERDIGSTILLE_BEHANDLING = 'FERDIGSTILLE_BEHANDLING',
+    BEHANDLING_AVSLUTTET = 'BEHANDLING_AVSLUTTET',
+}
+
 export enum BehandlingStatus {
     OPPRETTET = 'OPPRETTET',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
@@ -53,6 +62,7 @@ export interface IBehandling {
     resultat: BehandlingResultat;
     samletVilkårResultat: IVilkårResultat[];
     status: BehandlingStatus;
+    steg: BehandlingSteg;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];

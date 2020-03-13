@@ -11,7 +11,7 @@ const HendelseItem = ({ hendelse }: IHendelseItemProps) => (
         <p className={'hendelsesnavn'}>{hendelse.tittel}</p>
         {hendelse.beskrivelse && <p className={'hendelsesbeskrivelse'}>{hendelse.beskrivelse}</p>}
         <p className={'hendelsesdato'}>{`${hendelse.dato}`}</p>
-        <p className={'hendelsesdato'}>{`${hendelse.utførtAv.split('@')[0].replace('.', ' ')} ${
+        <p className={'hendelsesdato'}>{`${hendelse.utførtAv} ${
             hendelse.rolle !== BehandlerRolle.SYSTEM ? `(${hendelse.rolle.toLowerCase()})` : ''
         }`}</p>
     </li>

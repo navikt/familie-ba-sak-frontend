@@ -2,7 +2,7 @@
     "data": [
         {
             "id": 1,
-            "opprettetAv": "Mock.Mockesen@trygdeetaten.no",
+            "opprettetAv": "Mock Mockesen",
             "opprettetTidspunkt": "2020-03-09T17:41:38.680611",
             "behandlingId": 1,
             "type": "BEHANDLING_OPPRETTET",
