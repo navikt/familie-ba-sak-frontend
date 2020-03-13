@@ -37,6 +37,7 @@ export const lastInitialState = (fagsak: IFagsak): IState => {
                     ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
                     beløp: ordinærBeløp,
                     deltYtelse: false,
+                    ingenYtelse: false,
                     stønadFom: '',
                     stønadTom: '',
                 },

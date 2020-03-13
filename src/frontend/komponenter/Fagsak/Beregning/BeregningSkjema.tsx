@@ -93,6 +93,21 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                     })}
                                 </Select>
                                 <Checkbox
+                                    label={'Skal ikke ha ytelse'}
+                                    onChange={event => {
+                                        dispatch({
+                                            payload: {
+                                                index,
+                                                oppdatertPersonBeregning: {
+                                                    ...personBeregning.verdi,
+                                                    ingenYtelse: Boolean(event.target.value),
+                                                },
+                                            },
+                                            type: actions.SETT_PERSON_BEREGNINGER,
+                                        });
+                                    }}
+                                />
+                                <Checkbox
                                     label={'Skal ha delt ytelse'}
                                     onChange={event => {
                                         dispatch({
@@ -202,6 +217,7 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
                             datoformat.MÅNED
                         ) !== muligEndretPersonBeregning.verdi.stønadTom) ||
                     personBeregning.deltYtelse !== muligEndretPersonBeregning.verdi.deltYtelse ||
+                    personBeregning.ingenYtelse !== muligEndretPersonBeregning.verdi.ingenYtelse ||
                     personBeregning.beløp !== muligEndretPersonBeregning.verdi.beløp
                 ) {
                     return true;

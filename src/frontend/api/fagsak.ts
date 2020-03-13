@@ -99,19 +99,23 @@ export interface IOpprettBeregningData {
 }
 
 export const apiOpprettBeregning = (fagsak: IFagsak, data: IOpprettBeregningData) => {
-    const dataTilKalkulator = data.personBeregninger.map(beregning => ({
-        personident: beregning.personident,
-        ytelsetype: beregning.ytelseType,
-        halvytelse: beregning.deltYtelse,
-        stønadFom: formaterIsoDato(beregning.stønadFom, datoformat.ISO_MÅNED),
-        stønadTom: formaterIsoDato(beregning.stønadTom, datoformat.ISO_MÅNED),
-    }));
+    const dataTilKalkulator = data.personBeregninger
+        .filter(personBeregning => !personBeregning.ingenYtelse)
+        .map(beregning => ({
+            personident: beregning.personident,
+            ytelsetype: beregning.ytelseType,
+            halvytelse: beregning.deltYtelse,
+            stønadFom: formaterIsoDato(beregning.stønadFom, datoformat.ISO_MÅNED),
+            stønadTom: formaterIsoDato(beregning.stønadTom, datoformat.ISO_MÅNED),
+        }));
     const dataTilIverksetting = {
-        personBeregninger: data.personBeregninger.map(beregning => ({
-            ident: beregning.personident,
-            beløp: beregning.beløp,
-            stønadFom: beregning.stønadFom,
-        })),
+        personBeregninger: data.personBeregninger
+            .filter(personBeregning => !personBeregning.ingenYtelse)
+            .map(beregning => ({
+                ident: beregning.personident,
+                beløp: beregning.beløp,
+                stønadFom: beregning.stønadFom,
+            })),
     };
     const vedtakId = aktivVedtak(fagsak)?.id;
     axiosRequest<IFagsak>({

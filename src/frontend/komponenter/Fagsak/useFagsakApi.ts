@@ -167,6 +167,7 @@ const useFagsakApi = (
                             personident: personBeregning.verdi.personident,
                             ytelseType: personBeregning.verdi.ytelseType,
                             deltYtelse: personBeregning.verdi.deltYtelse,
+                            ingenYtelse: personBeregning.verdi.ingenYtelse,
                             beløp: personBeregning.verdi.beløp,
                             stønadFom: moment(
                                 personBeregning.verdi.stønadFom,

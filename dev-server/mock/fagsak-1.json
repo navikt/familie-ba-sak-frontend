@@ -85,6 +85,7 @@
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
+                                "ingenYtelse": true,
                                 "stønadFom": "2020-01-01",
                                 "stonadTom": "2037-12-31"
                             },
@@ -93,6 +94,7 @@
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
+                                "ingenYtelse": false,
                                 "stønadFom": "2020-01-01",
                                 "stønadTom": "2037-12-31"
                             },
@@ -101,6 +103,7 @@
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
+                                "ingenYtelse": false,
                                 "stønadFom": "2020-01-01",
                                 "stønadTom": "2037-12-31"
                             }
@@ -171,6 +174,7 @@
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
+                                "ingenYtelse": true,
                                 "stønadFom": "2020-01-01",
                                 "stønadTom": "2037-12-31"
                             },
@@ -179,6 +183,7 @@
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": false,
+                                "ingenYtelse": false,
                                 "stønadFom": "2020-01-01",
                                 "stønadTom": "2037-12-31"
                             },
@@ -187,6 +192,7 @@
                                 "beløp": 1054,
                                 "ytelseType": "ORDINÆR_BARNETRYGD",
                                 "deltYtelse": true,
+                                "ingenYtelse": false,
                                 "stønadFom": "2020-01-01",
                                 "stønadTom": "2037-12-31"
                             }

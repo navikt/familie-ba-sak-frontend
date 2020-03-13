@@ -118,8 +118,12 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {aktivVedtak?.personBeregninger.map(
-                                        (personBeregning: IPersonBeregning) => {
+                                    {aktivVedtak?.personBeregninger
+                                        .filter(
+                                            (personBeregning: IPersonBeregning) =>
+                                                !personBeregning.ingenYtelse
+                                        )
+                                        .map((personBeregning: IPersonBeregning) => {
                                             return (
                                                 <tr key={personBeregning.personident}>
                                                     <td
@@ -129,8 +133,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                                     <td children={`${personBeregning.stønadFom}`} />
                                                 </tr>
                                             );
-                                        }
-                                    )}
+                                        })}
                                 </tbody>
                             </table>
                         </div>
