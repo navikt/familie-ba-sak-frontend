@@ -13,6 +13,8 @@ import { actions, useBeregningContext, useBeregningDispatch } from './BeregningP
 import BeregningSkjema from './BeregningSkjema';
 
 import moment = require('moment');
+import { IFelt } from '../../../typer/felt';
+import { IPersonBeregning } from '../../../typer/behandle';
 
 interface IProps {
     fagsak: IFagsak;
@@ -67,6 +69,7 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
             </div>
         );
     }
+
     return (
         <div className={'beregning'}>
             <Skjemasteg
@@ -80,7 +83,7 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 nesteKnappTittel={skjemaetHarEndringer ? 'Lagre og gå neste' : 'Neste'}
                 senderInn={senderInn}
             >
-                {aktivVedtak?.personBeregninger.length !== 0 && (
+                {aktivVedtak && aktivVedtak.personBeregninger.length !== 0 && (
                     <>
                         <br />
                         <AlertStripeAdvarsel
