@@ -18,6 +18,7 @@ import Saksoversikt from './Saksoversikt/Saksoversikt';
 import Visittkort from '@navikt/familie-visittkort';
 import { hentPerson } from '../../api/person';
 import { kjønnType } from '@navikt/familie-typer';
+import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -67,12 +68,14 @@ const FagsakContainer: React.FunctionComponent = () => {
                         }
                     />
                     <div className={'fagsakcontainer__content'}>
-                        <div className={'fagsakcontainer__content--venstremeny'} />
+                        <div className={'fagsakcontainer__content--venstremeny'}>
+                            <Venstremeny fagsak={fagsak.data} />
+                        </div>
                         <div className={'fagsakcontainer__content--main'}>
                             <Switch>
                                 <Route
                                     exact={true}
-                                    path="/fagsak/:fagsakId"
+                                    path="/fagsak/:fagsakId/saksoversikt"
                                     render={() => {
                                         return <Saksoversikt fagsak={fagsak.data} />;
                                     }}
@@ -90,7 +93,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 />
                                 <Route
                                     exact={true}
-                                    path="/fagsak/:fagsakId/vilkår"
+                                    path="/fagsak/:fagsakId/vilkårsvurdering"
                                     render={() => {
                                         return (
                                             <BehandlingVilkårProvider fagsak={fagsak.data}>

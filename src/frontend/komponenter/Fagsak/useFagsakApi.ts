@@ -40,7 +40,7 @@ const useFagsakApi = (
                         payload: response,
                         type: fagsakActions.SETT_FAGSAK,
                     });
-                    history.push(`/fagsak/${response.data.id}`);
+                    history.push(`/fagsak/${response.data.id}/saksoversikt`);
                     return;
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
@@ -73,7 +73,7 @@ const useFagsakApi = (
                             payload: response,
                             type: fagsakActions.SETT_FAGSAK,
                         });
-                        history.push(`/fagsak/${response.data.id}/vilkår`);
+                        history.push(`/fagsak/${response.data.id}/vilkårsvurdering`);
                         return;
                     } else if (response.status === RessursStatus.FEILET) {
                         settVisFeilmeldinger(true);

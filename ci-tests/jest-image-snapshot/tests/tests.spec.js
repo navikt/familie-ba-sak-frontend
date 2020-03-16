@@ -27,7 +27,7 @@ describe('dsop-kontroll', () => {
         });
 
         test('saksoversikt', async () => {
-            await page.goto('http://ci-test-server:8000/fagsak/1');
+            await page.goto('http://ci-test-server:8000/fagsak/1/saksoversikt');
             await page.waitFor('.saksoversikt');
             await page.waitFor(1000);
             await takeSnapshot(`saksoversikt-${name}`, page);
@@ -48,7 +48,7 @@ describe('dsop-kontroll', () => {
         });
 
         test('vilkår', async () => {
-            await page.goto('http://ci-test-server:8000/fagsak/1/vilkår');
+            await page.goto('http://ci-test-server:8000/fagsak/1/vilkårsvurdering');
             await page.waitFor('.vilkår');
             await page.waitFor(1000);
             await takeSnapshot(`vilkår-${name}`, page);
