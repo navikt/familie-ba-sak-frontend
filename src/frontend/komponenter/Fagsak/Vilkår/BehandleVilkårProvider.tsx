@@ -5,7 +5,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { IPerson } from '../../../typer/person';
 import { lagInitiellFelt } from '../../../typer/provider';
-import { hentVilkårForPersoner, IVilkårResultat, UtfallType } from '../../../typer/vilkår';
+import { hentVilkårForPersoner, IVilkårResultat, Resultat } from '../../../typer/vilkår';
 import { erGyldigBegrunnelse } from '../../../utils/validators';
 
 export enum actions {
@@ -54,10 +54,10 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
                 samletVilkårResultat: state.samletVilkårResultat.map((vilkår: IVilkårResultat) => {
                     return {
                         ...vilkår,
-                        utfallType:
+                        resultat:
                             action.payload === BehandlingResultat.INNVILGET
-                                ? UtfallType.OPPFYLT
-                                : UtfallType.IKKE_OPPFYLT,
+                                ? Resultat.JA
+                                : Resultat.NEI,
                     };
                 }),
             };
@@ -69,17 +69,15 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
         case actions.TOGGLE_VILKÅR:
             const nySamletVilkårResultat = state.samletVilkårResultat.map(
                 (vilkår: IVilkårResultat) => {
-                    const nyUtfallType =
-                        vilkår.utfallType === UtfallType.OPPFYLT
-                            ? UtfallType.IKKE_OPPFYLT
-                            : UtfallType.OPPFYLT;
+                    const nyttResultat =
+                        vilkår.resultat === Resultat.JA ? Resultat.NEI : Resultat.JA;
 
                     return {
                         ...vilkår,
-                        utfallType:
+                        resultat:
                             action.payload.key === vilkår.vilkårType
-                                ? nyUtfallType
-                                : vilkår.utfallType,
+                                ? nyttResultat
+                                : vilkår.resultat,
                     };
                 }
             );
@@ -90,7 +88,7 @@ const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
                 behandlingResultat:
                     nySamletVilkårResultat.filter(
                         (vilkårResultat: IVilkårResultat) =>
-                            vilkårResultat.utfallType === UtfallType.IKKE_OPPFYLT
+                            vilkårResultat.resultat === Resultat.NEI
                     ).length !== 0
                         ? BehandlingResultat.AVSLÅTT
                         : BehandlingResultat.INNVILGET,

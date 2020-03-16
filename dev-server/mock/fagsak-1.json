@@ -37,42 +37,42 @@
                     {
                         "personIdent": "12345678911",
                         "vilkårType": "STØNADSPERIODE",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678912",
                         "vilkårType": "STØNADSPERIODE",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678910",
                         "vilkårType": "BOSATT_I_RIKET",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678910",
                         "vilkårType": "STØNADSPERIODE",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678912",
                         "vilkårType": "BOSATT_I_RIKET",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678912",
                         "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678911",
                         "vilkårType": "BOSATT_I_RIKET",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678911",
                         "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     }
                 ],
                 "vedtakForBehandling": [
@@ -141,27 +141,27 @@
                     {
                         "personIdent": "12345678911",
                         "vilkårType": "STØNADSPERIODE",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678910",
                         "vilkårType": "BOSATT_I_RIKET",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678910",
                         "vilkårType": "STØNADSPERIODE",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678911",
                         "vilkårType": "BOSATT_I_RIKET",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678911",
                         "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "utfallType": "OPPFYLT"
+                        "resultat": "JA"
                     }
                 ],
                 "vedtakForBehandling": [
