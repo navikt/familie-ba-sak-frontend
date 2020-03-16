@@ -1,8 +1,8 @@
 import { IPerson, PersonType } from './person';
 
-export enum UtfallType {
-    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
-    OPPFYLT = 'OPPFYLT',
+export enum Resultat {
+    NEI = 'NEI',
+    JA = 'JA',
 }
 
 export enum VilkårType {
@@ -46,7 +46,7 @@ export const vilkårConfig: IVilkårsconfig = {
 export interface IVilkårResultat {
     personIdent: string;
     vilkårType: VilkårType;
-    utfallType: UtfallType;
+    resultat: Resultat;
 }
 
 /**
@@ -70,7 +70,7 @@ export const hentVilkårForPersoner = (personer?: IPerson[]): IVilkårResultat[]
                     (vc: IVilkårConfig): IVilkårResultat => ({
                         personIdent: person.personIdent,
                         vilkårType: vc.key as VilkårType,
-                        utfallType: UtfallType.IKKE_OPPFYLT,
+                        resultat: Resultat.NEI,
                     })
                 ),
         ];
