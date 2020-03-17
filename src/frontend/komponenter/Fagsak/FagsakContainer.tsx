@@ -93,7 +93,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 />
                                 <Route
                                     exact={true}
-                                    path="/fagsak/:fagsakId/vilkårsvurdering"
+                                    path="/fagsak/:fagsakId/vilkaarsvurdering"
                                     render={() => {
                                         return (
                                             <BehandlingVilkårProvider fagsak={fagsak.data}>

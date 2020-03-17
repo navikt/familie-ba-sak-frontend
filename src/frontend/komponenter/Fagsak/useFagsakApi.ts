@@ -10,7 +10,7 @@ import {
     IOpprettBehandlingData,
     IOpprettFagsakData,
 } from '../../api/fagsak';
-import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
+import { BehandlingResultat, Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
@@ -20,6 +20,8 @@ import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
+import { sider, ISide } from '../Felleskomponenter/Venstremeny/sider';
+import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -73,7 +75,21 @@ const useFagsakApi = (
                             payload: response,
                             type: fagsakActions.SETT_FAGSAK,
                         });
-                        history.push(`/fagsak/${response.data.id}/vilkårsvurdering`);
+                        const aktivBehandling:
+                            | IBehandling
+                            | undefined = hentAktivBehandlingPåFagsak(response.data);
+
+                        if (!aktivBehandling) {
+                            settVisFeilmeldinger(true);
+                            settFeilmelding('Opprettelse av behandling feilet');
+                        } else if (
+                            aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+                        ) {
+                            history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
+                        } else {
+                            history.push(`/fagsak/${response.data.id}/registrer-soknad`);
+                        }
+
                         return;
                     } else if (response.status === RessursStatus.FEILET) {
                         settVisFeilmeldinger(true);
