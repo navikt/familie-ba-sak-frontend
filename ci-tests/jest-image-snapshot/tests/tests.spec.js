@@ -48,7 +48,7 @@ describe('dsop-kontroll', () => {
         });
 
         test('vilkår', async () => {
-            await page.goto('http://ci-test-server:8000/fagsak/1/vilkårsvurdering');
+            await page.goto('http://ci-test-server:8000/fagsak/1/vilkaarsvurdering');
             await page.waitFor('.vilkår');
             await page.waitFor(1000);
             await takeSnapshot(`vilkår-${name}`, page);
