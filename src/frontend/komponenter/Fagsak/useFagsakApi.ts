@@ -20,7 +20,6 @@ import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
-import { sider, ISide } from '../Felleskomponenter/Venstremeny/sider';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (

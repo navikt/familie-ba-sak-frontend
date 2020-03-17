@@ -10,14 +10,17 @@ export enum AdresseType {
     UKJENT_ADRESSE = 'UKJENT_ADRESSE',
 }
 
-export enum RelasjonsRolleType {
+export enum PersonType {
+    SØKER = 'SØKER',
+    ANNENPART = 'ANNENPART',
+    BARN = 'BARN',
+}
+
+export enum FamilieRelasjonRolle {
     BARN,
-    EKTE,
-    FARA,
-    MMOR,
-    MORA,
-    REPA,
-    SAMB,
+    FAR,
+    MEDMOR,
+    MOR,
 }
 
 // Interface
@@ -26,11 +29,11 @@ export interface IPerson {
     kjønn: kjønnType;
     navn: string;
     personIdent: string;
+    familierelasjoner: IFamilieRelasjon[];
     type: PersonType;
 }
 
-export enum PersonType {
-    SØKER = 'SØKER',
-    ANNENPART = 'ANNENPART',
-    BARN = 'BARN',
+export interface IFamilieRelasjon {
+    personIdent: string;
+    relasjonsrolle: FamilieRelasjonRolle;
 }
