@@ -17,7 +17,6 @@ import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { datoformat } from '../../utils/formatter';
 import { actions as fagsakActions, useFagsakDispatch } from '../FagsakProvider';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
-import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
@@ -58,13 +57,8 @@ const useFagsakApi = (
             });
     };
 
-    const opprettBehandling = (context: IOpprettBehandlingState, data: IOpprettBehandlingData) => {
-        if (
-            process.env.NODE_ENV === 'development' ||
-            context.barnasIdenter.find(
-                barnIdent => barnIdent.valideringsstatus !== Valideringsstatus.OK
-            ) === undefined
-        ) {
+    const opprettBehandling = (data: IOpprettBehandlingData) => {
+        if (process.env.NODE_ENV === 'development') {
             settSenderInn(true);
             apiOpprettBehandling(data)
                 .then((response: Ressurs<IFagsak>) => {

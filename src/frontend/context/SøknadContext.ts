@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import createUseContext from 'constate';
 import { ISøknadDTO, TypeSøker, IPartMedOpplysninger } from '../typer/søknad';
 import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandling';
 import { useBruker } from './BrukerContext';
 import { IPerson, PersonType, IFamilieRelasjon, FamilieRelasjonRolle } from '../typer/person';
 import { RessursStatus } from '../typer/ressurs';
+import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 
 const initalState = (bruker?: IPerson): ISøknadDTO => {
     return {
@@ -27,6 +28,7 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
 
 const initellOpplysninger = (ident: string, personType: PersonType): IPartMedOpplysninger => {
     return {
+        checked: true,
         ident,
         personType,
         opphold: {
@@ -42,6 +44,7 @@ const initellOpplysninger = (ident: string, personType: PersonType): IPartMedOpp
 const [SøknadProvider, useSøknad] = createUseContext(() => {
     const { bruker } = useBruker();
     const [søknad, settSøknad] = React.useState<ISøknadDTO>(initalState());
+    const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
 
     React.useEffect(() => {
         if (bruker.status === RessursStatus.SUKSESS) {
@@ -49,7 +52,24 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
         }
     }, [bruker.status]);
 
-    return { søknad, settSøknad };
+    const erSøknadGyldig = (): boolean => {
+        let søknadenErGyldig = true;
+        if (process.env.NODE_ENV === 'developmen') {
+            return true;
+        }
+
+        if (søknad.annenPartIdent === '') {
+            søknadenErGyldig = false;
+            settFeilmeldinger([
+                ...feilmeldinger,
+                { skjemaelementId: 'hent-person', feilmelding: 'Annen part er ikke utfylt' },
+            ]);
+        }
+
+        return søknadenErGyldig;
+    };
+
+    return { feilmeldinger, søknad, settSøknad, erSøknadGyldig };
 });
 
 export { SøknadProvider, useSøknad };

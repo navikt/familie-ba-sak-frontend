@@ -4,9 +4,8 @@ import { BehandlingResultat, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { IPerson } from '../../../typer/person';
-import { lagInitiellFelt } from '../../../typer/provider';
 import { hentVilkårForPersoner, IVilkårResultat, Resultat } from '../../../typer/vilkår';
-import { erGyldigBegrunnelse } from '../../../utils/validators';
+import { erGyldigBegrunnelse, lagInitiellFelt } from '../../../utils/validators';
 
 export enum actions {
     SETT_RESULTAT = 'SETT_RESULTAT',

@@ -26,8 +26,7 @@ const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <Skjemasteg
                 tittel={'Opprett behandling'}
                 nesteOnClick={() => {
-                    opprettBehandling(context, {
-                        barnasIdenter: context.barnasIdenter.map(barnIdent => barnIdent.verdi),
+                    opprettBehandling({
                         behandlingType: context.behandlingstype,
                         søkersIdent: fagsak.søkerFødselsnummer,
                         kategori: context.kategori,

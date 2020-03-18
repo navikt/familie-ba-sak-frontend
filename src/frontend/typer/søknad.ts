@@ -12,6 +12,7 @@ export interface ISøknadDTO {
 }
 
 export interface IPartMedOpplysninger {
+    checked: boolean;
     ident: string;
     personType: PersonType;
     opphold: IOpphold;

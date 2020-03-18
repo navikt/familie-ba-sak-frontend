@@ -8,12 +8,9 @@ import {
     BehandlingKategori,
     Behandlingstype,
     behandlingstyper,
-    kategorier,
-    underkategorier,
     BehandlingUnderkategori,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import {
     actions,
     useOpprettBehandlingContext,
@@ -93,64 +90,6 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                     })
                 }
             />
-
-            <br />
-            <hr />
-            <br />
-            <Undertittel children={'Søker'} />
-            <Normaltekst children={fagsak.søkerFødselsnummer} />
-
-            <br />
-            <Undertittel children={'Barn'} />
-            {context.barnasIdenter.map((barnIdentFelt: IFelt<string>, index: number) => {
-                return (
-                    <div key={index} className={'opprettbehandling__skjemagruppe--barn'}>
-                        <Input
-                            label={'Ident'}
-                            value={barnIdentFelt.verdi}
-                            placeholder={'fnr/dnr'}
-                            onChange={event => {
-                                dispatch({
-                                    payload: {
-                                        ident: event.target.value,
-                                        index,
-                                    },
-                                    type: actions.SETT_BARNAS_IDENTER,
-                                });
-                            }}
-                            feil={
-                                barnIdentFelt.valideringsstatus !== Valideringsstatus.OK &&
-                                visFeilmeldinger
-                                    ? barnIdentFelt.feilmelding
-                                    : undefined
-                            }
-                        />
-                        <Lukknapp
-                            onClick={() => {
-                                if (context.barnasIdenter.length > 1) {
-                                    dispatch({
-                                        payload: index,
-                                        type: actions.SLETT_BARN,
-                                    });
-                                }
-                            }}
-                        />
-                    </div>
-                );
-            })}
-
-            <Knapp
-                onClick={() => {
-                    dispatch({
-                        payload: undefined,
-                        type: actions.LEGG_TIL_BARN,
-                    });
-                }}
-            >
-                Legg til barn
-            </Knapp>
-
-            <br />
         </SkjemaGruppe>
     );
 };

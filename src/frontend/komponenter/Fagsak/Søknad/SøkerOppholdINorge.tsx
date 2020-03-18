@@ -1,11 +1,8 @@
 import * as React from 'react';
-import { ISøknadDTO, søknadstyper, TypeSøker } from '../../../typer/søknad';
+import { ISøknadDTO } from '../../../typer/søknad';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
-import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
-import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
-import { RadioPanelGruppe, Checkbox, Input, Textarea } from 'nav-frontend-skjema';
-import { IPar } from '../../../typer/common';
+import { Checkbox, Input, Textarea } from 'nav-frontend-skjema';
 
 interface IProps {
     settSøknad: (søknad: ISøknadDTO) => void;
