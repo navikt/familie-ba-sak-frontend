@@ -24,7 +24,7 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
             bruker?.familierelasjoner
                 .filter(
                     (relasjon: IFamilieRelasjon) =>
-                        relasjon.relasjonRolle !== FamilieRelasjonRolle.BARN
+                        relasjon.relasjonRolle === FamilieRelasjonRolle.BARN
                 )
                 .map(
                     (relasjon: IFamilieRelasjon): IBarnMedOpplysninger => ({
