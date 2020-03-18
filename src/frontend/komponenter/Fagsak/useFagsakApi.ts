@@ -213,8 +213,8 @@ const useFagsakApi = (
     return {
         opprettBehandling,
         opprettBeregning,
-        opprettFagsak: opprettEllerHentFagsak,
-        opprettVedtak: opprettEllerOppdaterVedtak,
+        opprettEllerHentFagsak,
+        opprettEllerOppdaterVedtak,
         senderInn,
     };
 };
