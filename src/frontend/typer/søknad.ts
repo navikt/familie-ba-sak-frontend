@@ -1,28 +1,30 @@
 import { BehandlingKategori, BehandlingUnderkategori } from './behandling';
-import { PersonType } from './person';
 import { INøkkelPar } from './common';
 
 export interface ISøknadDTO {
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
     typeSøker: TypeSøker;
-    søkerMedOpplysninger: IPartMedOpplysninger;
-    barnaMedOpplysninger: IPartMedOpplysninger[];
+    søkerMedOpplysninger: ISøkerMedOpplysninger;
+    barnaMedOpplysninger: IBarnMedOpplysninger[];
     annenPartIdent: string;
 }
 
-export interface IPartMedOpplysninger {
-    checked: boolean;
+export interface ISøkerMedOpplysninger {
     ident: string;
-    personType: PersonType;
-    opphold: IOpphold;
-}
-
-export interface IOpphold {
     oppholderSegINorge: boolean;
     harOppholdtSegINorgeSiste12Måneder: boolean;
     komTilNorge?: string;
     skalOppholdeSegINorgeNeste12Måneder: boolean;
+    tilleggsopplysninger?: string;
+}
+
+export interface IBarnMedOpplysninger {
+    checked: boolean;
+    ident: string;
+    oppholderSegINorge: boolean;
+    borMedSøker: boolean;
+    harOppholdtSegINorgeSiste12Måneder: boolean;
     tilleggsopplysninger?: string;
 }
 

@@ -16,17 +16,13 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
             <br />
             <Checkbox
                 label={'Søker oppholder seg ikke i Norge'}
-                checked={!søknad.søkerMedOpplysninger.opphold.oppholderSegINorge}
+                checked={!søknad.søkerMedOpplysninger.oppholderSegINorge}
                 onChange={() => {
                     settSøknad({
                         ...søknad,
                         søkerMedOpplysninger: {
                             ...søknad.søkerMedOpplysninger,
-                            opphold: {
-                                ...søknad.søkerMedOpplysninger.opphold,
-                                oppholderSegINorge: !søknad.søkerMedOpplysninger.opphold
-                                    .oppholderSegINorge,
-                            },
+                            oppholderSegINorge: !søknad.søkerMedOpplysninger.oppholderSegINorge,
                         },
                     });
                 }}
@@ -35,39 +31,33 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
             <br />
             <Checkbox
                 label={'Søker har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'}
-                checked={!søknad.søkerMedOpplysninger.opphold.harOppholdtSegINorgeSiste12Måneder}
+                checked={!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder}
                 onChange={() => {
                     settSøknad({
                         ...søknad,
                         søkerMedOpplysninger: {
                             ...søknad.søkerMedOpplysninger,
-                            opphold: {
-                                ...søknad.søkerMedOpplysninger.opphold,
-                                harOppholdtSegINorgeSiste12Måneder: !søknad.søkerMedOpplysninger
-                                    .opphold.harOppholdtSegINorgeSiste12Måneder,
-                            },
+                            harOppholdtSegINorgeSiste12Måneder: !søknad.søkerMedOpplysninger
+                                .harOppholdtSegINorgeSiste12Måneder,
                         },
                     });
                 }}
             />
 
             <br />
-            {!søknad.søkerMedOpplysninger.opphold.harOppholdtSegINorgeSiste12Måneder && (
+            {!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder && (
                 <div className={'søknad__panel--innrykk'}>
                     <Input
                         label={'Når kom søker til Norge?'}
                         bredde={'S'}
-                        value={søknad.søkerMedOpplysninger.opphold.komTilNorge}
+                        value={søknad.søkerMedOpplysninger.komTilNorge}
                         placeholder={'MM.YY'}
                         onChange={(event: any) => {
                             settSøknad({
                                 ...søknad,
                                 søkerMedOpplysninger: {
                                     ...søknad.søkerMedOpplysninger,
-                                    opphold: {
-                                        ...søknad.søkerMedOpplysninger.opphold,
-                                        komTilNorge: event.target.value,
-                                    },
+                                    komTilNorge: event.target.value,
                                 },
                             });
                         }}
@@ -76,20 +66,14 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                     <br />
                     <Checkbox
                         label={'Søker skal ikke oppholde seg i Norge de neste 12 månedene'}
-                        checked={
-                            !søknad.søkerMedOpplysninger.opphold.skalOppholdeSegINorgeNeste12Måneder
-                        }
+                        checked={!søknad.søkerMedOpplysninger.skalOppholdeSegINorgeNeste12Måneder}
                         onChange={() => {
                             settSøknad({
                                 ...søknad,
                                 søkerMedOpplysninger: {
                                     ...søknad.søkerMedOpplysninger,
-                                    opphold: {
-                                        ...søknad.søkerMedOpplysninger.opphold,
-                                        skalOppholdeSegINorgeNeste12Måneder: !søknad
-                                            .søkerMedOpplysninger.opphold
-                                            .skalOppholdeSegINorgeNeste12Måneder,
-                                    },
+                                    skalOppholdeSegINorgeNeste12Måneder: !søknad
+                                        .søkerMedOpplysninger.skalOppholdeSegINorgeNeste12Måneder,
                                 },
                             });
                         }}
@@ -98,7 +82,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                     <br />
                     <Textarea
                         label={'8 Tilleggsopplysninger'}
-                        value={søknad.søkerMedOpplysninger.opphold.tilleggsopplysninger ?? ''}
+                        value={søknad.søkerMedOpplysninger.tilleggsopplysninger ?? ''}
                         placeholder={'Skriv her'}
                         maxLength={500}
                         onChange={(event: any) => {
@@ -106,10 +90,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                                 ...søknad,
                                 søkerMedOpplysninger: {
                                     ...søknad.søkerMedOpplysninger,
-                                    opphold: {
-                                        ...søknad.søkerMedOpplysninger.opphold,
-                                        tilleggsopplysninger: event.target.value,
-                                    },
+                                    tilleggsopplysninger: event.target.value,
                                 },
                             });
                         }}

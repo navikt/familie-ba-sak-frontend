@@ -17,10 +17,11 @@ export enum PersonType {
 }
 
 export enum FamilieRelasjonRolle {
-    BARN,
-    FAR,
-    MEDMOR,
-    MOR,
+    BARN = 'BARN',
+    FAR = 'FAR',
+    MEDMOR = 'MEDMOR',
+    MOR = 'MOR',
+    EKTE = 'EKTE',
 }
 
 // Interface
@@ -35,5 +36,5 @@ export interface IPerson {
 
 export interface IFamilieRelasjon {
     personIdent: string;
-    relasjonsrolle: FamilieRelasjonRolle;
+    relasjonRolle: FamilieRelasjonRolle;
 }

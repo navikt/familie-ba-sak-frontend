@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import createUseContext from 'constate';
-import { ISøknadDTO, TypeSøker, IPartMedOpplysninger } from '../typer/søknad';
+import { ISøknadDTO, TypeSøker, IBarnMedOpplysninger } from '../typer/søknad';
 import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandling';
 import { useBruker } from './BrukerContext';
-import { IPerson, PersonType, IFamilieRelasjon, FamilieRelasjonRolle } from '../typer/person';
+import { IPerson, IFamilieRelasjon, FamilieRelasjonRolle } from '../typer/person';
 import { RessursStatus } from '../typer/ressurs';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 
@@ -12,32 +12,31 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
         kategori: BehandlingKategori.NASJONAL,
         underkategori: BehandlingUnderkategori.ORDINÆR,
         typeSøker: TypeSøker.ORDINÆR,
-        søkerMedOpplysninger: initellOpplysninger(bruker?.personIdent ?? '', PersonType.SØKER),
-        barnaMedOpplysninger:
-            bruker?.familierelasjoner
-                .filter(
-                    (relasjon: IFamilieRelasjon) =>
-                        relasjon.relasjonsrolle !== FamilieRelasjonRolle.BARN
-                )
-                .map((relasjon: IFamilieRelasjon) => {
-                    return initellOpplysninger(relasjon.personIdent, PersonType.BARN);
-                }) ?? [],
-        annenPartIdent: '',
-    };
-};
-
-const initellOpplysninger = (ident: string, personType: PersonType): IPartMedOpplysninger => {
-    return {
-        checked: true,
-        ident,
-        personType,
-        opphold: {
+        søkerMedOpplysninger: {
+            ident: bruker?.personIdent ?? '',
             oppholderSegINorge: true,
             harOppholdtSegINorgeSiste12Måneder: true,
             komTilNorge: '',
             skalOppholdeSegINorgeNeste12Måneder: true,
             tilleggsopplysninger: '',
         },
+        barnaMedOpplysninger:
+            bruker?.familierelasjoner
+                .filter(
+                    (relasjon: IFamilieRelasjon) =>
+                        relasjon.relasjonRolle !== FamilieRelasjonRolle.BARN
+                )
+                .map(
+                    (relasjon: IFamilieRelasjon): IBarnMedOpplysninger => ({
+                        checked: true,
+                        borMedSøker: true,
+                        ident: relasjon.personIdent,
+                        oppholderSegINorge: true,
+                        harOppholdtSegINorgeSiste12Måneder: true,
+                        tilleggsopplysninger: '',
+                    })
+                ) ?? [],
+        annenPartIdent: '',
     };
 };
 
@@ -54,7 +53,7 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
 
     const erSøknadGyldig = (): boolean => {
         let søknadenErGyldig = true;
-        if (process.env.NODE_ENV === 'developmen') {
+        if (process.env.NODE_ENV === 'development') {
             return true;
         }
 
@@ -69,7 +68,16 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
         return søknadenErGyldig;
     };
 
-    return { feilmeldinger, søknad, settSøknad, erSøknadGyldig };
+    const settBarn = (barn: IBarnMedOpplysninger) => {
+        settSøknad({
+            ...søknad,
+            barnaMedOpplysninger: søknad.barnaMedOpplysninger.map((it: IBarnMedOpplysninger) =>
+                it.ident === barn.ident ? barn : it
+            ),
+        });
+    };
+
+    return { feilmeldinger, søknad, settBarn, settSøknad, erSøknadGyldig };
 });
 
 export { SøknadProvider, useSøknad };

@@ -4,12 +4,12 @@ import { Sidetittel, Feilmelding } from 'nav-frontend-typografi';
 import SøknadType from './SøknadType';
 import SøkerOppholdINorge from './SøkerOppholdINorge';
 import AnnenPart from './AnnenPart';
-import Barn from './Barn';
+import Barna from './Barna';
 import { Knapp } from 'nav-frontend-knapper';
 import { registrerSøknad } from '../../../api/søknad';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IFagsak } from '../../../typer/fagsak';
-import { useFagsakContext } from '../../FagsakProvider';
+import { useFagsakContext, useFagsakDispatch, actions } from '../../FagsakProvider';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { axiosRequest } from '../../../api/axios';
@@ -22,6 +22,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
     const [feilmelding, settFeilmelding] = React.useState('');
 
     const fagsak = useFagsakContext().fagsak;
+    const fagsakDispatch = useFagsakDispatch();
 
     const [senderInn, settSenderInn] = React.useState(false);
 
@@ -47,7 +48,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
 
             <AnnenPart settSøknad={settSøknad} søknad={søknad} />
 
-            <Barn settSøknad={settSøknad} søknad={søknad} />
+            <Barna søknad={søknad} />
 
             {feilmeldinger.length > 0 && (
                 <Feiloppsummering
@@ -70,8 +71,12 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                                 (response: Ressurs<IFagsak>) => {
                                     settSenderInn(false);
                                     if (response.status === RessursStatus.SUKSESS) {
+                                        fagsakDispatch({
+                                            type: actions.SETT_FAGSAK,
+                                            payload: response,
+                                        });
                                         history.push(
-                                            `/fagsak/${response.data.id}/vilkårsvurdering`
+                                            `/fagsak/${response.data.id}/vilkaarsvurdering`
                                         );
                                     } else if (response.status === RessursStatus.FEILET) {
                                         settFeilmelding(response.melding);
