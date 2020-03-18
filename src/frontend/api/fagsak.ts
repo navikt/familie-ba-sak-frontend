@@ -17,8 +17,8 @@ export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b =
 export const aktivVedtak = (fagsak: IFagsak) =>
     aktivBehandling(fagsak)?.vedtakForBehandling.find(v => v.aktiv);
 
-export const apiOpprettFagsak = (
-    data: IOpprettFagsakData,
+export const apiOpprettEllerHentFagsak = (
+    data: IOpprettEllerHentFagsakData,
     innloggetSaksbehandler?: ISaksbehandler
 ) => {
     return axiosRequest<IFagsak>(
@@ -60,7 +60,7 @@ export const hentFagsaker = (
     );
 };
 
-export interface IOpprettFagsakData {
+export interface IOpprettEllerHentFagsakData {
     personIdent: string;
 }
 
