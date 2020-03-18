@@ -6,9 +6,9 @@ import {
     apiOpprettBehandling,
     apiOpprettBeregning,
     apiOpprettEllerOppdaterVedtak,
-    apiOpprettFagsak,
+    apiOpprettEllerHentFagsak,
     IOpprettBehandlingData,
-    IOpprettFagsakData,
+    IOpprettEllerHentFagsakData,
 } from '../../api/fagsak';
 import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
@@ -30,9 +30,9 @@ const useFagsakApi = (
 
     const fagsakDispatcher = useFagsakDispatch();
 
-    const opprettFagsak = (data: IOpprettFagsakData) => {
+    const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {
         settSenderInn(true);
-        apiOpprettFagsak(data)
+        apiOpprettEllerHentFagsak(data)
             .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
@@ -213,8 +213,8 @@ const useFagsakApi = (
     return {
         opprettBehandling,
         opprettBeregning,
-        opprettFagsak,
-        opprettVedtak: opprettEllerOppdaterVedtak,
+        opprettEllerHentFagsak,
+        opprettEllerOppdaterVedtak,
         senderInn,
     };
 };
