@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { Checkbox } from 'nav-frontend-skjema';
+import { Checkbox, Textarea } from 'nav-frontend-skjema';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -56,6 +56,15 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                             harOppholdtSegINorgeSiste12Måneder: !barn.harOppholdtSegINorgeSiste12Måneder,
                         });
                     }}
+                />
+
+                <Textarea
+                    label={'Tilleggsopplysninger'}
+                    placeholder={'Skriv her'}
+                    value={barn.tilleggsopplysninger ?? ''}
+                    onChange={(event: any) =>
+                        settBarn({ ...barn, tilleggsopplysninger: event.target.value })
+                    }
                 />
             </div>
         </div>
