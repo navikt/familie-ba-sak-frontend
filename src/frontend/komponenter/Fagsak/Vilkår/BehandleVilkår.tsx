@@ -24,7 +24,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
     const history = useHistory();
-    const { opprettVedtak, senderInn } = useFagsakApi(
+    const { opprettEllerOppdaterVedtak, senderInn } = useFagsakApi(
         settVisFeilmeldinger,
         settOpprettelseFeilmelding
     );
@@ -68,7 +68,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     history.push(`/fagsak/${fagsak.id}/registrer-soknad`);
                 }}
                 nesteOnClick={() => {
-                    opprettVedtak(context, fagsak);
+                    opprettEllerOppdaterVedtak(context, fagsak);
                 }}
                 senderInn={senderInn}
             >
