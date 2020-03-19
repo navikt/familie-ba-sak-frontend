@@ -58,48 +58,42 @@ const useFagsakApi = (
     };
 
     const opprettBehandling = (data: IOpprettBehandlingData) => {
-        if (process.env.NODE_ENV === 'development') {
-            settSenderInn(true);
-            apiOpprettBehandling(data)
-                .then((response: Ressurs<IFagsak>) => {
-                    settSenderInn(false);
-                    if (response.status === RessursStatus.SUKSESS) {
-                        fagsakDispatcher({
-                            payload: response,
-                            type: fagsakActions.SETT_FAGSAK,
-                        });
-                        const aktivBehandling:
-                            | IBehandling
-                            | undefined = hentAktivBehandlingPåFagsak(response.data);
+        settSenderInn(true);
+        apiOpprettBehandling(data)
+            .then((response: Ressurs<IFagsak>) => {
+                settSenderInn(false);
+                if (response.status === RessursStatus.SUKSESS) {
+                    fagsakDispatcher({
+                        payload: response,
+                        type: fagsakActions.SETT_FAGSAK,
+                    });
+                    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
+                        response.data
+                    );
 
-                        if (!aktivBehandling) {
-                            settVisFeilmeldinger(true);
-                            settFeilmelding('Opprettelse av behandling feilet');
-                        } else if (
-                            aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                        ) {
-                            history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
-                        } else {
-                            history.push(`/fagsak/${response.data.id}/registrer-soknad`);
-                        }
-
-                        return;
-                    } else if (response.status === RessursStatus.FEILET) {
-                        settVisFeilmeldinger(true);
-                        settFeilmelding(response.melding);
-                    } else {
+                    if (!aktivBehandling) {
                         settVisFeilmeldinger(true);
                         settFeilmelding('Opprettelse av behandling feilet');
+                    } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
+                        history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
+                    } else {
+                        history.push(`/fagsak/${response.data.id}/registrer-soknad`);
                     }
-                })
-                .catch(() => {
-                    settSenderInn(false);
+
+                    return;
+                } else if (response.status === RessursStatus.FEILET) {
+                    settVisFeilmeldinger(true);
+                    settFeilmelding(response.melding);
+                } else {
                     settVisFeilmeldinger(true);
                     settFeilmelding('Opprettelse av behandling feilet');
-                });
-        } else {
-            settVisFeilmeldinger(true);
-        }
+                }
+            })
+            .catch(() => {
+                settSenderInn(false);
+                settVisFeilmeldinger(true);
+                settFeilmelding('Opprettelse av behandling feilet');
+            });
     };
 
     const opprettEllerOppdaterVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {
