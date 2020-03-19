@@ -8,7 +8,11 @@
         "familierelasjoner": [
             {
                 "personIdent": "01101800033",
-                "relasjonsrolle": "BARN"
+                "relasjonRolle": "BARN"
+            },
+            {
+                "personIdent": "01101800044",
+                "relasjonRolle": "BARN"
             }
         ]
     },

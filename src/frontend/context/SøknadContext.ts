@@ -57,11 +57,14 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
             return true;
         }
 
-        if (søknad.annenPartIdent === '') {
+        if (
+            søknad.barnaMedOpplysninger.filter((barn: IBarnMedOpplysninger) => barn.checked)
+                .length === 0
+        ) {
             søknadenErGyldig = false;
             settFeilmeldinger([
                 ...feilmeldinger,
-                { skjemaelementId: 'hent-person', feilmelding: 'Annen part er ikke utfylt' },
+                { skjemaelementId: 'barna', feilmelding: 'Ingen av barna er valgt.' },
             ]);
         }
 
