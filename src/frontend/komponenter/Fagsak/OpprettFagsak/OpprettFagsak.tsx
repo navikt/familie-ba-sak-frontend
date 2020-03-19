@@ -19,13 +19,13 @@ const OpprettFagsak: React.FunctionComponent = () => {
     return (
         <div className={'opprettfagsak'}>
             <Skjemasteg
-                tittel={'Opprett fagsak'}
+                tittel={'Opprett eller hent fagsak'}
                 nesteOnClick={() => {
                     opprettFagsak({
                         personIdent,
                     });
                 }}
-                nesteKnappTittel={'Opprett'}
+                nesteKnappTittel={'Fortsett'}
                 senderInn={senderInn}
             >
                 <Input
