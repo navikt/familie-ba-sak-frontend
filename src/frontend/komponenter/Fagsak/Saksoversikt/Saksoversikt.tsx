@@ -84,14 +84,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                             },
                         ]}
                     />
-
-                    <Knapp
-                        mini={true}
-                        onClick={() => {
-                            history.push(`/fagsak/${fagsak.id}/vilkår`);
-                        }}
-                        children={'Gå til behandling'}
-                    />
                 </div>
             ) : (
                 <Knapp
