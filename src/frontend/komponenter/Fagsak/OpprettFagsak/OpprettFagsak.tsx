@@ -11,7 +11,7 @@ const OpprettFagsak: React.FunctionComponent = () => {
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
-    const { opprettFagsak, senderInn } = useFagsakApi(
+    const { opprettEllerHentFagsak, senderInn } = useFagsakApi(
         settVisFeilmeldinger,
         settOpprettelseFeilmelding
     );
@@ -21,7 +21,7 @@ const OpprettFagsak: React.FunctionComponent = () => {
             <Skjemasteg
                 tittel={'Opprett eller hent fagsak'}
                 nesteOnClick={() => {
-                    opprettFagsak({
+                    opprettEllerHentFagsak({
                         personIdent,
                     });
                 }}

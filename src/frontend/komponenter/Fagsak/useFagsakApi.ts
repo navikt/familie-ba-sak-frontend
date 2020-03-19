@@ -6,9 +6,9 @@ import {
     apiOpprettBehandling,
     apiOpprettBeregning,
     apiOpprettEllerOppdaterVedtak,
-    apiOpprettEllerHentFagsak,
     IOpprettBehandlingData,
     IOpprettEllerHentFagsakData,
+    apiOpprettEllerHentFagsak,
 } from '../../api/fagsak';
 import { BehandlingResultat, Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
