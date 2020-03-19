@@ -4,7 +4,7 @@ import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
+import { Select } from 'nav-frontend-skjema';
 import { IPar } from '../../../typer/common';
 import classNames from 'classnames';
 
@@ -36,24 +36,46 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
             />
 
             <br />
-            <RadioPanelGruppe
-                name="behandlingresultat"
-                legend="Søknadstype"
-                radios={Object.values(søknadstyper).map((type: IPar) => {
-                    return {
-                        label: type.navn,
-                        value: type.id,
-                        id: type.id,
-                        checked: søknad.typeSøker === type.id,
-                    };
-                })}
+            <Select
+                name="type søker"
+                label="Type søker"
+                bredde={'l'}
+                value={søknad.typeSøker}
                 onChange={(event: any) => {
-                    settSøknad({
-                        ...søknad,
-                        typeSøker: event.target.value as TypeSøker,
-                    });
+                    if ((event.target.value as TypeSøker) === søknad.typeSøker) {
+                        settSøknad({
+                            ...søknad,
+                            typeSøker: TypeSøker.ORDINÆR,
+                        });
+                    } else {
+                        settSøknad({
+                            ...søknad,
+                            typeSøker: event.target.value as TypeSøker,
+                        });
+                    }
                 }}
-            />
+            >
+                <option
+                    aria-selected={TypeSøker.ORDINÆR === søknad.typeSøker}
+                    key={TypeSøker.ORDINÆR}
+                    value={TypeSøker.ORDINÆR}
+                >
+                    Velg type søker
+                </option>
+                {Object.values(søknadstyper)
+                    .filter((type: IPar) => type.id !== TypeSøker.ORDINÆR)
+                    .map((type: IPar) => {
+                        return (
+                            <option
+                                aria-selected={type.id === søknad.typeSøker}
+                                key={type.id}
+                                value={type.id}
+                            >
+                                {type.navn}
+                            </option>
+                        );
+                    })}
+            </Select>
         </PanelBase>
     );
 };
