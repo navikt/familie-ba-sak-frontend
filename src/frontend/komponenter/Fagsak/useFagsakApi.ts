@@ -6,20 +6,20 @@ import {
     apiOpprettBehandling,
     apiOpprettBeregning,
     apiOpprettEllerOppdaterVedtak,
-    apiOpprettEllerHentFagsak,
     IOpprettBehandlingData,
     IOpprettEllerHentFagsakData,
+    apiOpprettEllerHentFagsak,
 } from '../../api/fagsak';
-import { BehandlingResultat, Behandlingstype } from '../../typer/behandling';
+import { BehandlingResultat, Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { datoformat } from '../../utils/formatter';
 import { actions as fagsakActions, useFagsakDispatch } from '../FagsakProvider';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
-import { IState as IOpprettBehandlingState } from './OpprettBehandling/OpprettBehandlingProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
+import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -57,40 +57,43 @@ const useFagsakApi = (
             });
     };
 
-    const opprettBehandling = (context: IOpprettBehandlingState, data: IOpprettBehandlingData) => {
-        if (
-            process.env.NODE_ENV === 'development' ||
-            context.barnasIdenter.find(
-                barnIdent => barnIdent.valideringsstatus !== Valideringsstatus.OK
-            ) === undefined
-        ) {
-            settSenderInn(true);
-            apiOpprettBehandling(data)
-                .then((response: Ressurs<IFagsak>) => {
-                    settSenderInn(false);
-                    if (response.status === RessursStatus.SUKSESS) {
-                        fagsakDispatcher({
-                            payload: response,
-                            type: fagsakActions.SETT_FAGSAK,
-                        });
-                        history.push(`/fagsak/${response.data.id}/vilkårsvurdering`);
-                        return;
-                    } else if (response.status === RessursStatus.FEILET) {
-                        settVisFeilmeldinger(true);
-                        settFeilmelding(response.melding);
-                    } else {
+    const opprettBehandling = (data: IOpprettBehandlingData) => {
+        settSenderInn(true);
+        apiOpprettBehandling(data)
+            .then((response: Ressurs<IFagsak>) => {
+                settSenderInn(false);
+                if (response.status === RessursStatus.SUKSESS) {
+                    fagsakDispatcher({
+                        payload: response,
+                        type: fagsakActions.SETT_FAGSAK,
+                    });
+                    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
+                        response.data
+                    );
+
+                    if (!aktivBehandling) {
                         settVisFeilmeldinger(true);
                         settFeilmelding('Opprettelse av behandling feilet');
+                    } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
+                        history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
+                    } else {
+                        history.push(`/fagsak/${response.data.id}/registrer-soknad`);
                     }
-                })
-                .catch(() => {
-                    settSenderInn(false);
+
+                    return;
+                } else if (response.status === RessursStatus.FEILET) {
+                    settVisFeilmeldinger(true);
+                    settFeilmelding(response.melding);
+                } else {
                     settVisFeilmeldinger(true);
                     settFeilmelding('Opprettelse av behandling feilet');
-                });
-        } else {
-            settVisFeilmeldinger(true);
-        }
+                }
+            })
+            .catch(() => {
+                settSenderInn(false);
+                settVisFeilmeldinger(true);
+                settFeilmelding('Opprettelse av behandling feilet');
+            });
     };
 
     const opprettEllerOppdaterVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {

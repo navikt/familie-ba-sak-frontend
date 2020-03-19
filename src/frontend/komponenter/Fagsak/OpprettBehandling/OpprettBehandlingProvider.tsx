@@ -6,21 +6,11 @@ import {
     BehandlingUnderkategori,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import { IPerson, PersonType } from '../../../typer/person';
-import { lagInitiellFelt } from '../../../typer/provider';
-import { hentSisteBehandlingPåFagsak } from '../../../utils/fagsak';
-import { identValidator } from '../../../utils/validators';
-
-export type IIdentFelt = IFelt<string>;
 
 export enum actions {
     SETT_BEHANDLINGSTYPE = 'SETT_BEHANDLINGSTYPE',
     SETT_BEHANDLING_KATEGORI = 'SETT_BEHANDLING_KATEGORI',
     SETT_BEHANDLING_UNDERKATEGORI = 'SETT_BEHANDLING_UNDERKATEGORI',
-    LEGG_TIL_BARN = 'LEGG_TIL_BARN',
-    SLETT_BARN = 'SLETT_BARN',
-    SETT_BARNAS_IDENTER = 'SETT_BARNAS_IDENTER',
 }
 
 export interface IAction {
@@ -31,7 +21,6 @@ export interface IAction {
 type Dispatch = (action: IAction) => void;
 
 export interface IState {
-    barnasIdenter: IIdentFelt[];
     behandlingstype: Behandlingstype;
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
@@ -39,16 +28,6 @@ export interface IState {
 
 const initialState = (fagsak: IFagsak): IState => {
     return {
-        barnasIdenter: [
-            ...(hentSisteBehandlingPåFagsak(fagsak)
-                ?.personer.filter((person: IPerson) => person.type === PersonType.BARN)
-                .map((barn: IPerson) => ({
-                    feilmelding: '',
-                    valideringsFunksjon: identValidator,
-                    valideringsstatus: Valideringsstatus.OK,
-                    verdi: barn.personIdent,
-                })) ?? [lagInitiellFelt('', identValidator)]),
-        ],
         behandlingstype:
             fagsak.behandlinger.length === 0
                 ? Behandlingstype.FØRSTEGANGSBEHANDLING
@@ -77,34 +56,6 @@ const opprettBehandlingReducer = (state: IState, action: IAction): IState => {
             return {
                 ...state,
                 underkategori: action.payload,
-            };
-        case actions.LEGG_TIL_BARN:
-            return {
-                ...state,
-                barnasIdenter: [...state.barnasIdenter, lagInitiellFelt('', identValidator)],
-            };
-        case actions.SLETT_BARN:
-            const identListe = state.barnasIdenter;
-            return {
-                ...state,
-                barnasIdenter: [
-                    ...identListe
-                        .slice(0, action.payload)
-                        .concat(...identListe.slice(action.payload + 1, identListe.length)),
-                ],
-            };
-        case actions.SETT_BARNAS_IDENTER:
-            const barnasIdenterKopi = [...state.barnasIdenter];
-            barnasIdenterKopi[action.payload.index] = barnasIdenterKopi[
-                action.payload.index
-            ].valideringsFunksjon({
-                ...barnasIdenterKopi[action.payload.index],
-                verdi: action.payload.ident,
-            });
-
-            return {
-                ...state,
-                barnasIdenter: barnasIdenterKopi,
             };
         default: {
             throw new Error(`Uhåndtert action type: ${action.type}`);

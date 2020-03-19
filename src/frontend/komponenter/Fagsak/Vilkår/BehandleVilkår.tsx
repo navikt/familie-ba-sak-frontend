@@ -8,7 +8,9 @@ import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import {
-    actions, useBehandlingVilkårContext, useBehandlingVilkårDispatch
+    actions,
+    useBehandlingVilkårContext,
+    useBehandlingVilkårDispatch,
 } from './BehandleVilkårProvider';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 
@@ -63,7 +65,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <Skjemasteg
                 tittel={'Vilkår'}
                 forrigeOnClick={() => {
-                    history.push(`/fagsak/${fagsak.id}/ny-behandling`);
+                    history.push(`/fagsak/${fagsak.id}/registrer-soknad`);
                 }}
                 nesteOnClick={() => {
                     opprettVedtak(context, fagsak);

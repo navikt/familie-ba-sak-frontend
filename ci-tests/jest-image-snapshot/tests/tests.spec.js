@@ -47,8 +47,15 @@ describe('dsop-kontroll', () => {
             await takeSnapshot(`opprett-behandling-${name}`, page);
         });
 
+        test('registrer-søknad', async () => {
+            await page.goto('http://ci-test-server:8000/fagsak/1/registrer-soknad');
+            await page.waitFor('.søknad');
+            await page.waitFor(1000);
+            await takeSnapshot(`registrer-søknad-${name}`, page);
+        });
+
         test('vilkår', async () => {
-            await page.goto('http://ci-test-server:8000/fagsak/1/vilkårsvurdering');
+            await page.goto('http://ci-test-server:8000/fagsak/1/vilkaarsvurdering');
             await page.waitFor('.vilkår');
             await page.waitFor(1000);
             await takeSnapshot(`vilkår-${name}`, page);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Ressurs, RessursStatus } from '../../typer/ressurs';
+import { RessursStatus } from '../../typer/ressurs';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { actions, useFagsakContext, useFagsakDispatch } from '../FagsakProvider';
 
@@ -10,24 +10,23 @@ import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
 import Beregning from './Beregning/Beregning';
 import { BeregningProvider } from './Beregning/BeregningProvider';
 import Høyremeny from './Høyremeny/Høyremeny';
-import { IPerson } from '../../typer/person';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import Visittkort from '@navikt/familie-visittkort';
-import { hentPerson } from '../../api/person';
 import { kjønnType } from '@navikt/familie-typer';
+import { useBruker } from '../../context/BrukerContext';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
+import RegistrerSøknad from './Søknad/RegistrerSøknad';
+import { SøknadProvider } from '../../context/SøknadContext';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
-    const [bruker, settBruker] = React.useState<Ressurs<IPerson>>({
-        status: RessursStatus.IKKE_HENTET,
-    });
-
     const fagsakDispatcher = useFagsakDispatch();
     const fagsak = useFagsakContext().fagsak;
+
+    const { bruker } = useBruker();
 
     React.useEffect(() => {
         if (
@@ -40,14 +39,6 @@ const FagsakContainer: React.FunctionComponent = () => {
             });
         }
     }, [fagsakId]);
-
-    React.useEffect(() => {
-        if (fagsak.status === RessursStatus.SUKSESS) {
-            hentPerson(fagsak.data.søkerFødselsnummer).then((hentetPerson: Ressurs<IPerson>) =>
-                settBruker(hentetPerson)
-            );
-        }
-    }, [fagsak.status]);
 
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
@@ -91,9 +82,21 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         );
                                     }}
                                 />
+
                                 <Route
                                     exact={true}
-                                    path="/fagsak/:fagsakId/vilkårsvurdering"
+                                    path="/fagsak/:fagsakId/registrer-soknad"
+                                    render={() => {
+                                        return (
+                                            <SøknadProvider>
+                                                <RegistrerSøknad />
+                                            </SøknadProvider>
+                                        );
+                                    }}
+                                />
+                                <Route
+                                    exact={true}
+                                    path="/fagsak/:fagsakId/vilkaarsvurdering"
                                     render={() => {
                                         return (
                                             <BehandlingVilkårProvider fagsak={fagsak.data}>

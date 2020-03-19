@@ -1,0 +1,20 @@
+{
+    "data": {
+        "fødselsdato": "2001-02-20",
+        "kjønn": "KVINNE",
+        "navn": "Mor Moresen",
+        "personIdent": "12345678910",
+        "type": "SØKER",
+        "familierelasjoner": [
+            {
+                "personIdent": "01101800033",
+                "relasjonRolle": "BARN"
+            },
+            {
+                "personIdent": "01101800044",
+                "relasjonRolle": "BARN"
+            }
+        ]
+    },
+    "status": "SUKSESS"
+}
