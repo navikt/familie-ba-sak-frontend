@@ -8,11 +8,15 @@
         "familierelasjoner": [
             {
                 "personIdent": "01101800033",
-                "relasjonRolle": "BARN"
+                "relasjonRolle": "BARN",
+                "navn": "Barn Barnesen",
+                "fødselsdato": "2015-10-20"
             },
             {
                 "personIdent": "01101800044",
-                "relasjonRolle": "BARN"
+                "relasjonRolle": "BARN",
+                "navn": "Barn Barnesen",
+                "fødselsdato": "2015-10-20"
             }
         ]
     },

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import moment from 'moment';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { Checkbox, Textarea } from 'nav-frontend-skjema';
@@ -9,12 +10,13 @@ interface IProps {
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { settBarn } = useSøknad();
+    const alder = moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years');
 
     return (
         <div>
             <Checkbox
                 id={`barn-${barn.ident}`}
-                label={barn.ident}
+                label={`${barn.navn} (${alder} år) ${barn.ident}`}
                 checked={barn.checked}
                 onChange={() => {
                     settBarn({

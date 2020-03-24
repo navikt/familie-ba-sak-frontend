@@ -37,4 +37,6 @@ export interface IPerson {
 export interface IFamilieRelasjon {
     personIdent: string;
     relasjonRolle: FamilieRelasjonRolle;
+    navn: string;
+    fødselsdato: string;
 }
