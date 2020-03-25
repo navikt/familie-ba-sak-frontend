@@ -22,7 +22,6 @@ const hentPassportConfig = () => {
     };
 
     const host = 'barnetrygd';
-    console.log('ENV: ', process.env.ENV);
     switch (process.env.ENV) {
         case 'local':
             config = {
@@ -155,7 +154,7 @@ export const passportConfig: IOIDCStrategyOptionWithRequest = {
     clientSecret: nodeConfig.clientSecret,
     cookieEncryptionKeys: nodeConfig.cookieEncryptionKeys,
     identityMetadata: nodeConfig.identityMetadata,
-    loggingLevel: 'info',
+    loggingLevel: 'warn',
     passReqToCallback: true,
     redirectUrl: nodeConfig.redirectUrl,
     responseMode: 'query',
