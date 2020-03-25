@@ -126,10 +126,10 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
-"@navikt/familie-backend@4.1.6":
-  version "4.1.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-4.1.6.tgz#d56c299468d49487aa6cf659ab4917f7295a89d2"
-  integrity sha512-xXzj9VaBslzuhxzzdmOAmymMUovFTJhgpJp5rs8zXMMirJftpsY9+ZIwR4yYTXphHUEWf6gjV8w7a++DUJMapA==
+"@navikt/familie-backend@^4.1.7":
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-4.1.7.tgz#83aca60b87b4d728ea1f15bb17778a7e72c1d886"
+  integrity sha512-OZNP739ieJHZqLtihs54gzEeaYywCuJny414/+mAs/BYYmeMymWs65/GShVwNeRYtKYUpJSPV5KXLNIQ8xnMOQ==
   dependencies:
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.2"

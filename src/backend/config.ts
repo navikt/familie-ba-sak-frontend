@@ -87,13 +87,13 @@ const Environment = () => {
             buildPath: '../frontend_development',
             namespace: 'local',
             proxyUrl: 'http://localhost:8089',
-            redisUrl: '127.0.0.1',
         };
     } else if (process.env.ENV === 'e2e') {
         return {
             buildPath: '../frontend_production',
             namespace: 'e2e',
-            proxyUrl: 'http://familie-ba-sak',
+            proxyUrl: 'http://familie-ba-sak:8089',
+            redisUrl: 'familie-redis',
         };
     } else if (process.env.ENV === 'preprod') {
         return {
