@@ -32,6 +32,15 @@ const hentPassportConfig = () => {
                 tenant: 'navq.onmicrosoft.com',
             };
             break;
+        case 'e2e':
+            config = {
+                allowHttpForRedirectUrl: true,
+                cookieDomain: 'e2e',
+                logoutUri: `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/logout?post_logout_redirect_uri=http:\\\\localhost:8000`,
+                redirectUrl: 'http://localhost:8000/auth/openid/callback',
+                tenant: 'navq.onmicrosoft.com',
+            };
+            break;
         case 'preprod':
             config = {
                 allowHttpForRedirectUrl: false,
@@ -77,7 +86,13 @@ const Environment = () => {
             buildPath: '../frontend_development',
             namespace: 'local',
             proxyUrl: 'http://localhost:8089',
-            redisUrl: '127.0.0.1',
+        };
+    } else if (process.env.ENV === 'e2e') {
+        return {
+            buildPath: '../frontend_production',
+            namespace: 'e2e',
+            proxyUrl: 'http://familie-ba-sak:8089',
+            redisUrl: 'familie-redis',
         };
     } else if (process.env.ENV === 'preprod') {
         return {
@@ -108,7 +123,7 @@ export const sessionConfig: ISessionKonfigurasjon = {
     navn: 'familie-ba-sak-v1',
     redisPassord: process.env.REDIS_PASSWORD,
     redisUrl: env.redisUrl,
-    secureCookie: process.env.ENV === 'local' ? false : true,
+    secureCookie: process.env.ENV === 'local' || process.env.ENV === 'e2e' ? false : true,
     sessionMaxAgeSekunder: 12 * 60 * 60,
     sessionSecret: process.env.SESSION_SECRET,
 };
