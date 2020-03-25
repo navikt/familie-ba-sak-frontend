@@ -34,6 +34,8 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
                         oppholderSegINorge: true,
                         harOppholdtSegINorgeSiste12Måneder: true,
                         tilleggsopplysninger: '',
+                        navn: relasjon.navn,
+                        fødselsdato: relasjon.fødselsdato
                     })
                 ) ?? [],
         annenPartIdent: '',
