@@ -1,4 +1,4 @@
-import { Counter } from 'prom-client';
+import { Counter } from '@navikt/familie-backend';
 
 export const prometheusTellere = {
     app_load: new Counter({
