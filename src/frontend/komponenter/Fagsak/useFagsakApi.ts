@@ -138,12 +138,12 @@ const useFagsakApi = (
             });
             const periodeResultater: IRestPeriodeResultat[] = [];
 
-            for (let [ident, identResultater] of Object.entries(periodeResultater)) {
+            for (let [ident, resultater] of Object.entries(identResultater)) {
                 periodeResultater.push({
                     personIdent: ident,
                     periodeFom: null,
                     periodeTom: null,
-                    vilkårResultater: identResultater,
+                    vilkårResultater: resultater,
                 });
             }
             /*
