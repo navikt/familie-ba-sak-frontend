@@ -120,19 +120,15 @@ const useFagsakApi = (
                 : context.behandlingResultat;
 
         const mapTilPeriodeResultater = (samletVilkårResultat: IVilkårResultat[]) => {
-            interface IIdentResultater {
-                [personIdent: string]: IRestVilkårResultat[];
-            }
-
-            const identResultater: IIdentResultater = {};
+            const identResultater: Map<string, IRestVilkårResultat[]> = new Map();
             samletVilkårResultat.map(resultat => {
-                if (resultat.personIdent in identResultater) {
-                    identResultater[resultat.personIdent].push({
+                if (resultat.personIdent in identResultater.keys()) {
+                    identResultater.get(resultat.personIdent).push({
                         vilkårType: resultat.vilkårType,
                         resultat: resultat.resultat,
                     });
                 } else {
-                    identResultater[resultat.personIdent] = [
+                    identResultater.get(resultat.personIdent) = [
                         {
                             vilkårType: resultat.vilkårType,
                             resultat: resultat.resultat,
