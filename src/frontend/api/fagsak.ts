@@ -87,8 +87,8 @@ export interface IRestVilkårsvurdering {
 
 export interface IRestPeriodeResultat {
     personIdent: string;
-    periodeFom: string;
-    periodeTom: string;
+    periodeFom: string | null;
+    periodeTom: string | null;
     vilkårResultater: IRestVilkårResultat[];
 }
 

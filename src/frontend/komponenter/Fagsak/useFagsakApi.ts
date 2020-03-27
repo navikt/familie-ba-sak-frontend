@@ -9,6 +9,8 @@ import {
     IOpprettBehandlingData,
     IOpprettEllerHentFagsakData,
     apiOpprettEllerHentFagsak,
+    IRestVilkårResultat,
+    IRestPeriodeResultat,
 } from '../../api/fagsak';
 import { BehandlingResultat, Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
@@ -20,7 +22,7 @@ import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
-import { IVilkårResultat, Resultat, VilkårType } from '../../typer/vilkår';
+import { IVilkårResultat } from '../../typer/vilkår';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -118,19 +120,43 @@ const useFagsakApi = (
                 : context.behandlingResultat;
 
         const mapTilPeriodeResultater = (samletVilkårResultat: IVilkårResultat[]) => {
-            /*
-            const periodeResultater = samletVilkårResultat.map( resultat =>
-            {
-
+            interface IIdentResultater {
+                [personIdent: string]: IRestVilkårResultat[];
             }
+
+            const identResultater: IIdentResultater = {};
+            samletVilkårResultat.map(resultat => {
+                if (resultat.personIdent in identResultater) {
+                    identResultater[resultat.personIdent].push({
+                        vilkårType: resultat.vilkårType,
+                        resultat: resultat.resultat,
+                    });
+                } else {
+                    identResultater[resultat.personIdent] = [
+                        {
+                            vilkårType: resultat.vilkårType,
+                            resultat: resultat.resultat,
+                        },
+                    ];
+                }
+            });
+            const periodeResultater: IRestPeriodeResultat[] = [];
+
+            for (let [ident, identResultater] of Object.entries(periodeResultater)) {
+                periodeResultater.push({
+                    personIdent: ident,
+                    periodeFom: null,
+                    periodeTom: null,
+                    vilkårResultater: identResultater,
+                });
+            }
+            /*
             MAPPING FRA:
             export interface IVilkårResultat {
                 personIdent: string;
                 vilkårType: VilkårType;
                 resultat: Resultat;
             }
-
-
             MAPPING TIL:
             export interface IRestPeriodeResultat {
                 personIdent: string;
@@ -142,16 +168,13 @@ const useFagsakApi = (
                 vilkårType: VilkårType;
                 resultat: Resultat;
             }
-             */
-
-            return samletVilkårResultat;
+            */
+            return periodeResultater;
         };
-
-        const periodeResultater = mapTilPeriodeResultater(context.samletVilkårResultat);
 
         apiOpprettEllerOppdaterVedtak(fagsak.id, {
             brevType: resutat,
-            periodeResultater: periodeResultater,
+            periodeResultater: mapTilPeriodeResultater(context.samletVilkårResultat),
             begrunnelse: context.begrunnelse.verdi,
         })
             .then((response: Ressurs<any>) => {
