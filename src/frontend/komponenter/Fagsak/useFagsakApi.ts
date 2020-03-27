@@ -122,23 +122,23 @@ const useFagsakApi = (
         const mapTilPeriodeResultater = (samletVilkårResultat: IVilkårResultat[]) => {
             const identResultater: Map<string, IRestVilkårResultat[]> = new Map();
             samletVilkårResultat.map(resultat => {
-                if (resultat.personIdent in identResultater.keys()) {
+                if (identResultater.has(resultat.personIdent)) {
                     identResultater.get(resultat.personIdent).push({
                         vilkårType: resultat.vilkårType,
                         resultat: resultat.resultat,
                     });
                 } else {
-                    identResultater.get(resultat.personIdent) = [
+                    identResultater.set(resultat.personIdent, [
                         {
                             vilkårType: resultat.vilkårType,
                             resultat: resultat.resultat,
                         },
-                    ];
+                    ]);
                 }
             });
             const periodeResultater: IRestPeriodeResultat[] = [];
 
-            for (let [ident, resultater] of Object.entries(identResultater)) {
+            for (const [ident, resultater] of Object.entries(identResultater)) {
                 periodeResultater.push({
                     personIdent: ident,
                     periodeFom: null,
