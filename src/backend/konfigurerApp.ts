@@ -16,7 +16,7 @@ const konfigurerAzure = () => {
             break;
         case 'e2e':
             process.env.AAD_LOGOUT_REDIRECT_URL = `http://host.docker.internal:1111/v2.0/logout?post_logout_redirect_uri=http:\\\\localhost:8000`;
-            process.env.AAD_REDIRECT_URL = 'http://localhost:8000/auth/openid/callback';
+            process.env.AAD_REDIRECT_URL = 'http://host.docker.internal:8000/auth/openid/callback';
             process.env.AAD_DISCOVERY_URL = `http://host.docker.internal:1111/v2.0/.well-known/openid-configuration`;
             process.env.GRAPH_API = 'http://familie-mock-server:1337/graph/me';
             break;
