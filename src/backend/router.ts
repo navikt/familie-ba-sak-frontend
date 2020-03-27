@@ -3,7 +3,6 @@ import { Response, Request, Router } from 'express';
 import path from 'path';
 import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
-import { slackNotify } from './slack/slack';
 
 /* tslint:disable */
 const packageJson = require('../package.json');
@@ -18,11 +17,6 @@ export default (authClient: Client, router: Router, middleware: any) => {
     router.get('/error', (_: Request, res: Response) => {
         prometheusTellere.error_route.inc();
         res.sendFile('error.html', { root: path.join(`assets/`) });
-    });
-
-    // SLACK
-    router.post('/slack/notify/:kanal', (req: Request, res: Response) => {
-        slackNotify(req, res, req.params.kanal);
     });
 
     router.post('/logg-feil', (req: Request, res: Response) => {

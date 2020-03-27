@@ -11,10 +11,10 @@ const Environment = () => {
         };
     } else if (process.env.ENV === 'e2e') {
         return {
-            buildPath: '../frontend_development',
+            buildPath: '../frontend_production',
             namespace: 'e2e',
             proxyUrl: 'http://familie-ba-sak:8089',
-            redisUrl: 'familie-redis',
+            //redisUrl: 'familie-redis',
         };
     } else if (process.env.ENV === 'preprod') {
         return {
