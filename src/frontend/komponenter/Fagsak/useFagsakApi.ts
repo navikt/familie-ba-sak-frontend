@@ -20,6 +20,7 @@ import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
+import { IVilkårResultat, Resultat, VilkårType } from '../../typer/vilkår';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -116,9 +117,41 @@ const useFagsakApi = (
                 ? BehandlingResultat.OPPHØRT
                 : context.behandlingResultat;
 
+        const mapTilPeriodeResultater = (samletVilkårResultat: IVilkårResultat[]) => {
+            /*
+            const periodeResultater = samletVilkårResultat.map( resultat =>
+            {
+
+            }
+            MAPPING FRA:
+            export interface IVilkårResultat {
+                personIdent: string;
+                vilkårType: VilkårType;
+                resultat: Resultat;
+            }
+
+
+            MAPPING TIL:
+            export interface IRestPeriodeResultat {
+                personIdent: string;
+                periodeFom: string;
+                periodeTom: string;
+                vilkårResultater: IRestVilkårResultat[];
+            }
+            export interface IRestVilkårResultat {
+                vilkårType: VilkårType;
+                resultat: Resultat;
+            }
+             */
+
+            return samletVilkårResultat;
+        };
+
+        const periodeResultater = mapTilPeriodeResultater(context.samletVilkårResultat);
+
         apiOpprettEllerOppdaterVedtak(fagsak.id, {
-            resultat: resutat,
-            samletVilkårResultat: context.samletVilkårResultat,
+            brevType: resutat,
+            periodeResultater: periodeResultater,
             begrunnelse: context.begrunnelse.verdi,
         })
             .then((response: Ressurs<any>) => {

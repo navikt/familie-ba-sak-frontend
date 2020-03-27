@@ -8,7 +8,7 @@ import {
 import { IFagsak } from '../typer/fagsak';
 import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
-import { IVilkårResultat } from '../typer/vilkår';
+import { Resultat, VilkårType } from '../typer/vilkår';
 import { axiosRequest } from './axios';
 import { datoformat, formaterIsoDato } from '../utils/formatter';
 
@@ -80,9 +80,21 @@ export const apiOpprettBehandling = (data: IOpprettBehandlingData) => {
 };
 
 export interface IRestVilkårsvurdering {
-    resultat: BehandlingResultat;
-    samletVilkårResultat: IVilkårResultat[];
+    brevType: BehandlingResultat;
+    periodeResultater: IRestPeriodeResultat[];
     begrunnelse: string;
+}
+
+export interface IRestPeriodeResultat {
+    personIdent: string;
+    periodeFom: string;
+    periodeTom: string;
+    vilkårResultater: IRestVilkårResultat[];
+}
+
+export interface IRestVilkårResultat {
+    vilkårType: VilkårType;
+    resultat: Resultat;
 }
 
 export const apiOpprettEllerOppdaterVedtak = (fagsakId: number, data: IRestVilkårsvurdering) => {
