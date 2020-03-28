@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@navikt/boxed-list-with-links": "^1.0.2",
-    "@navikt/familie-backend": "4.1.10-alpha.4",
+    "@navikt/familie-backend": "^5.0.1",
     "@navikt/familie-typer": "^3.0.2",
     "@navikt/familie-visittkort": "^2.1.2",
     "@navikt/fnrvalidator": "^1.1.0",
