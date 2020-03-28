@@ -1,9 +1,9 @@
-import Backend from '@navikt/familie-backend';
+import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { v4 as uuidv4 } from 'uuid';
-import { oboTokenConfig, proxyUrl, saksbehandlerTokenConfig } from './config';
+import { oboConfig, proxyUrl } from './config';
 
 const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     if (req.body) {
@@ -28,15 +28,12 @@ export const doProxy: any = () => {
     });
 };
 
-export const attachToken = (backend: Backend) => {
+export const attachToken = (authClient: Client) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
-        const accessToken = await backend.validerEllerOppdaterOnBehalfOfToken(
-            req,
-            saksbehandlerTokenConfig,
-            oboTokenConfig
-        );
-        req.headers['Nav-Call-Id'] = uuidv4();
-        req.headers.Authorization = `Bearer ${accessToken}`;
-        return next();
+        getOnBehalfOfAccessToken(authClient, req, oboConfig).then((accessToken: string) => {
+            req.headers['Nav-Call-Id'] = uuidv4();
+            req.headers.Authorization = `Bearer ${accessToken}`;
+            return next();
+        });
     };
 };
