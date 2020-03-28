@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamfamilie
 spec:
-  image: navikt/familie-ba-sak-frontend:{{version}}
+  image: {{ image }}
   team: teamfamilie
   replicas:
     min: 2

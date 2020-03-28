@@ -10,11 +10,8 @@
     "start:mock": "NODE_ENV=development node dev-server/mock-server.js",
     "start:dev": "tsc && NODE_ENV=development node node_dist/server.js",
     "build": "yarn build:prod",
-    "build:ci": "webpack --config ./build_n_deploy/webpack/webpack.dev.js",
     "build:prod": "tsc & webpack --config ./build_n_deploy/webpack/webpack.prod.js",
-    "snyk-protect": "snyk protect",
-    "test:ci": "./ci-tests/scripts.sh test",
-    "test:ci-capture": "./ci-tests/scripts.sh capture"
+    "snyk-protect": "snyk protect"
   },
   "husky": {
     "hooks": {
