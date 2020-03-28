@@ -14,7 +14,7 @@ const Environment = () => {
             buildPath: '../frontend_production',
             namespace: 'e2e',
             proxyUrl: 'http://familie-ba-sak:8089',
-            //redisUrl: 'familie-redis',
+            redisUrl: 'familie-redis',
         };
     } else if (process.env.ENV === 'preprod') {
         return {

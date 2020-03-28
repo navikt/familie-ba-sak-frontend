@@ -126,10 +126,10 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
-"@navikt/familie-backend@^4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-4.1.9.tgz#479e92c23230b847c4415fc7622c48bea8217243"
-  integrity sha512-w89J2Q1OEPDOmJRJKlgAlv4P6GXy6PnI7TImNjD1T1+AOGM2++xEiSgYi6wPcKmiDTKxtvNhZjZzXCUPKB2Yrg==
+"@navikt/familie-backend@4.1.10-alpha.4":
+  version "4.1.10-alpha.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-4.1.10-alpha.4.tgz#f167d241bc0810eac597c6ae9e21b9104f380039"
+  integrity sha512-JjKKcOXb1x6Hy/+52Coroltqtq9UmR1Rdljxw27qPdfq+IWgIb4fHRtTYtc62E3u/QZaaenkRjetUQPyzCGUvQ==
   dependencies:
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.2"
@@ -138,7 +138,7 @@
     "@types/morgan" "^1.7.37"
     "@types/passport" "^1.0.1"
     "@types/redis" "^2.8.14"
-    "@types/request-promise" "^4.1.44"
+    "@types/request-promise" "^4.1.46"
     "@types/tunnel" "^0.0.1"
     axios "^0.19.2"
     connect-redis "^4.0.3"
@@ -563,6 +563,14 @@
   version "4.1.45"
   resolved "https://registry.yarnpkg.com/@types/request-promise/-/request-promise-4.1.45.tgz#7fcdd39fd920674ab7bfb44197270f225fb4e585"
   integrity sha512-KFagTY/a7CzAj86DkhaAtqP0ViYTNam+CfEokSwtPFUIuq9Qrq+Rq2X4nuaB6OJmM2s0xWeiS085Ro7vR0tt9Q==
+  dependencies:
+    "@types/bluebird" "*"
+    "@types/request" "*"
+
+"@types/request-promise@^4.1.46":
+  version "4.1.46"
+  resolved "https://registry.yarnpkg.com/@types/request-promise/-/request-promise-4.1.46.tgz#37df6efae984316dfbfbbe8fcda37f3ba52822f2"
+  integrity sha512-3Thpj2Va5m0ji3spaCk8YKrjkZyZc6RqUVOphA0n/Xet66AW/AiOAs5vfXhQIL5NmkaO7Jnun7Nl9NEjJ2zBaw==
   dependencies:
     "@types/bluebird" "*"
     "@types/request" "*"
