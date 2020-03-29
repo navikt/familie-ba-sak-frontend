@@ -119,10 +119,13 @@ const useFagsakApi = (
                 ? BehandlingResultat.OPPHØRT
                 : context.behandlingResultat;
 
-        const mapTilPeriodeResultater = (samletVilkårResultat: IVilkårResultat[]) => {
+        const mapTilPeriodeResultater = (
+            samletVilkårResultat: IVilkårResultat[]
+        ): IRestPeriodeResultat[] => {
             const identResultater: Map<string, IRestVilkårResultat[]> = new Map();
             samletVilkårResultat.map(resultat => {
                 if (identResultater.has(resultat.personIdent)) {
+                    // @ts-ignore
                     identResultater.get(resultat.personIdent).push({
                         vilkårType: resultat.vilkårType,
                         resultat: resultat.resultat,
@@ -136,36 +139,14 @@ const useFagsakApi = (
                     ]);
                 }
             });
-            const periodeResultater: IRestPeriodeResultat[] = [];
-
-            for (const [ident, resultater] of Object.entries(identResultater)) {
-                periodeResultater.push({
+            return Array.from(identResultater, ([ident, resultater]) => {
+                return {
                     personIdent: ident,
-                    periodeFom: null,
-                    periodeTom: null,
+                    periodeFom: undefined,
+                    periodeTom: undefined,
                     vilkårResultater: resultater,
-                });
-            }
-            /*
-            MAPPING FRA:
-            export interface IVilkårResultat {
-                personIdent: string;
-                vilkårType: VilkårType;
-                resultat: Resultat;
-            }
-            MAPPING TIL:
-            export interface IRestPeriodeResultat {
-                personIdent: string;
-                periodeFom: string;
-                periodeTom: string;
-                vilkårResultater: IRestVilkårResultat[];
-            }
-            export interface IRestVilkårResultat {
-                vilkårType: VilkårType;
-                resultat: Resultat;
-            }
-            */
-            return periodeResultater;
+                };
+            });
         };
 
         apiOpprettEllerOppdaterVedtak(fagsak.id, {
