@@ -8,7 +8,6 @@ import { ISaksbehandler } from '../typer/saksbehandler';
 import FagsakContainer from './Fagsak/FagsakContainer';
 import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';
 import { FagsakProvider } from './FagsakProvider';
-import TempHeader from './TempHeader';
 import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 

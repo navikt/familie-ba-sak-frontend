@@ -25,6 +25,7 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
     navn, ident, rolle, index, kjønn, fagsakId, onClick, children
 }) => {
     type IkonerMap = Record<string, React.ReactNode>;
+    type RolleNavnMap = Record<string, string>;
 
     const ikoner: IkonerMap = {
         "FORELDER_MANN": <MannIkon className='ikon'></MannIkon>,
@@ -44,11 +45,9 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
         "BARN_UKJENT": "BARN"
     }
 
-    type RolleNavnMap = Record<string, string>;
-
     console.log(fagsakId);
     return (
-        <div className= {`${fagsakId? "": "gray-out"}`}>
+        <div className={`${fagsakId ? "" : "gray-out"}`}>
             <Infokort
                 ikon={ikoner[`${rolle}_${kjønn}`]}
                 header={`${navn}(${ident}) : ${rolleNavn[`${rolle}_${kjønn}`]}`}
