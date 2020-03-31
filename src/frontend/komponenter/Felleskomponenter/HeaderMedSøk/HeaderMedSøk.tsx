@@ -8,8 +8,7 @@ import { søkFagsaker } from '../../../api/fagsak';
 import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import FagsakDeltagerskort from './FagsakDeltagerskort';
-
-const validator = require('@navikt/fnrvalidator');
+import validator from '@navikt/fnrvalidator';
 
 export interface IHeaderMedSøkProps {
     brukerNavn?: string;
@@ -27,7 +26,6 @@ export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({ br
         slettResultat();
         settSpinner(true)
         søkFagsaker(v).then((response: Ressurs<IFagsakDeltager[]>) => {
-            console.log(response);
             settSpinner(false);
             if (response.status === RessursStatus.SUKSESS) {
                 settSøkfeil(undefined);
@@ -38,7 +36,6 @@ export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({ br
                 settSøkfeil(response.melding);
             }
         }).catch(error => {
-            console.log(error);
             settSøkfeil("Ukjent API feil: " + error);
         });
     }
@@ -57,9 +54,9 @@ export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({ br
             fagsakId={deltager.fagsakId}
             index={index}
             key={index}
-            onClick={index =>
-                resultat[index].fagsakId &&
-                history.push(`/fagsak/${resultat[index].fagsakId}/saksoversikt`)
+            onClick={idx =>
+                resultat[idx].fagsakId &&
+                history.push(`/fagsak/${resultat[idx].fagsakId}/saksoversikt`)
             }
         />
     }) : <AlertStripe type={'advarsel'}>Beklager, ingen treff</AlertStripe>)

@@ -28,12 +28,12 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
     type RolleNavnMap = Record<string, string>;
 
     const ikoner: IkonerMap = {
-        "FORELDER_MANN": <MannIkon className='ikon'></MannIkon>,
-        "FORELDER_KVINNE": <KvinneIkon className='ikon'></KvinneIkon>,
-        "FORELDER_UKJENT": <NøytralPersonIkon className='ikon'></NøytralPersonIkon>,
-        "BARN_KVINNE": <JenteIkon className='ikon'></JenteIkon>,
-        "BARN_MANN": <GuttIkon className='ikon'></GuttIkon>,
-        "BARN_UKJENT": <NøytralPersonIkon className='ikon'></NøytralPersonIkon>
+        "FORELDER_MANN": <MannIkon className='ikon' />,
+        "FORELDER_KVINNE": <KvinneIkon className='ikon' />,
+        "FORELDER_UKJENT": <NøytralPersonIkon className='ikon' />,
+        "BARN_KVINNE": <JenteIkon className='ikon' />,
+        "BARN_MANN": <GuttIkon className='ikon' />,
+        "BARN_UKJENT": <NøytralPersonIkon className='ikon' />
     };
 
     const rolleNavn: RolleNavnMap = {
@@ -45,7 +45,6 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
         "BARN_UKJENT": "BARN"
     }
 
-    console.log(fagsakId);
     return (
         <div className={`${fagsakId ? "" : "gray-out"}`}>
             <Infokort
