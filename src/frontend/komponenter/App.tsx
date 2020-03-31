@@ -10,6 +10,7 @@ import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';
 import { FagsakProvider } from './FagsakProvider';
 import TempHeader from './TempHeader';
 import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
+import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 
@@ -28,9 +29,12 @@ const App: React.FunctionComponent = () => {
         <ErrorBoundary innloggetSaksbehandler={innloggetSaksbehandler}>
             <FagsakProvider>
                 <BrukerProvider>
-                    <TempHeader innloggetSaksbehandler={innloggetSaksbehandler} />
                     <div className={'container'} role="main">
                         <Router>
+                            <HeaderMedSøk
+                                brukerNavn={innloggetSaksbehandler?.displayName}
+                                brukerEnhet={innloggetSaksbehandler?.enhet}
+                            />
                             <Switch>
                                 <Route
                                     exact={true}

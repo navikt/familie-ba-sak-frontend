@@ -11,6 +11,7 @@ import { ISaksbehandler } from '../typer/saksbehandler';
 import { IVilkårResultat } from '../typer/vilkår';
 import { axiosRequest } from './axios';
 import { datoformat, formaterIsoDato } from '../utils/formatter';
+import { FagsakDeltagerRolle, IFagsakDeltager } from '../typer/fagsakdeltager';
 
 export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
 
@@ -58,6 +59,13 @@ export const hentFagsaker = (
         },
         innloggetSaksbehandler
     );
+};
+
+export const søkFagsaker = (personIdent: string): Promise<Ressurs<IFagsakDeltager[]>> => {
+    return axiosRequest({
+        method: 'GET',
+        url: 'familie-ba-sak/api/fagsaker/sok?personIdent=' + personIdent,
+    });
 };
 
 export interface IOpprettEllerHentFagsakData {

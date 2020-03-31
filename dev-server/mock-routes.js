@@ -51,4 +51,21 @@ app.get('/familie-ba-sak/api/logg/2', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`logg-2.json`)), delayMs);
 });
 
+app.get('/familie-ba-sak/api/fagsaker/sok', (req, res) => {
+    if (req.query.personIdent === '17058018783') {
+        setTimeout(() => res.send(lesMockFil(`søk-2.json`)), 500);
+    } else if (req.query.personIdent === '28111883612') {
+        setTimeout(() => res.send(lesMockFil(`søk-1.json`)), 500);
+    } else {
+        setTimeout(
+            () =>
+                res.send({
+                    status: 'FEILET',
+                    melding: 'Person ikke funnet',
+                }),
+            500
+        );
+    }
+});
+
 module.exports = app;
