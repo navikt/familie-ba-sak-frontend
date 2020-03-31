@@ -40,7 +40,9 @@ const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IPro
         settModal(initalState);
     };
 
-    const axiosRequest = async <T,>(config: AxiosRequestConfig): Promise<Ressurs<T>> => {
+    const axiosRequest = async <T, D>(
+        config: AxiosRequestConfig & { data?: D }
+    ): Promise<Ressurs<T>> => {
         return preferredAxios
             .request(config)
             .then((response: AxiosResponse<Ressurs<T>>) => {

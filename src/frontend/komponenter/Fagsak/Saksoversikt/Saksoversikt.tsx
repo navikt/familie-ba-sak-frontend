@@ -143,7 +143,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 <Knapp
                                     mini={true}
                                     onClick={() => {
-                                        axiosRequest({
+                                        axiosRequest<any, any>({
                                             method: 'POST',
                                             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,
                                             data: {

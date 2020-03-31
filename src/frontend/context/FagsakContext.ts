@@ -37,7 +37,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                     status: RessursStatus.HENTER,
                 },
             });
-            axiosRequest<IPerson>({
+            axiosRequest<IPerson, void>({
                 method: 'GET',
                 url: '/familie-ba-sak/api/person',
                 headers: {
@@ -59,7 +59,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 status: RessursStatus.HENTER,
             },
         });
-        axiosRequest<IFagsak>({
+        axiosRequest<IFagsak, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/${fagsakId}`,
         })
@@ -84,7 +84,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 status: RessursStatus.HENTER,
             },
         });
-        axiosRequest<ILogg[]>({
+        axiosRequest<ILogg[], void>({
             method: 'GET',
             url: `/familie-ba-sak/api/logg/${behandlingId}`,
         })

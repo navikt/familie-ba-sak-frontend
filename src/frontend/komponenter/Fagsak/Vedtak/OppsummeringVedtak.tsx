@@ -35,7 +35,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtak(fagsak);
         if (aktivtVedtak) {
-            axiosRequest<string>({
+            axiosRequest<string, void>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/dokument/vedtak-html/${aktivtVedtak?.id}`,
             })
@@ -91,7 +91,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                     <Knapp
                         type={'hoved'}
                         onClick={() => {
-                            axiosRequest<IFagsak>({
+                            axiosRequest<IFagsak, void>({
                                 method: 'POST',
                                 url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/${
                                     aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER

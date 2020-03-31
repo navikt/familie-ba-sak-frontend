@@ -7,6 +7,7 @@ import {
     IOpprettEllerHentFagsakData,
     aktivVedtak,
     IOpprettBeregningData,
+    IRestVilkårsvurdering,
 } from '../../api/fagsak';
 import { BehandlingResultat, Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
@@ -32,7 +33,7 @@ const useFagsakApi = (
 
     const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {
         settSenderInn(true);
-        axiosRequest<IFagsak>({
+        axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
@@ -61,7 +62,7 @@ const useFagsakApi = (
 
     const opprettBehandling = (data: IOpprettBehandlingData) => {
         settSenderInn(true);
-        axiosRequest<IFagsak>({
+        axiosRequest<IFagsak, IOpprettBehandlingData>({
             data,
             method: 'POST',
             url: '/familie-ba-sak/api/behandlinger',
@@ -120,7 +121,7 @@ const useFagsakApi = (
                 ? BehandlingResultat.OPPHØRT
                 : context.behandlingResultat;
 
-        axiosRequest<IFagsak>({
+        axiosRequest<IFagsak, IRestVilkårsvurdering>({
             data: {
                 resultat: resutat,
                 samletVilkårResultat: context.samletVilkårResultat,
@@ -211,12 +212,12 @@ const useFagsakApi = (
                 };
 
                 const vedtakId = aktivVedtak(fagsak)?.id;
-                axiosRequest<IFagsak>({
+                axiosRequest<IFagsak, any>({
                     data: dataTilKalkulator,
                     method: 'PUT',
                     url: `/familie-ba-sak/api/kalkulator`,
                 });
-                return axiosRequest<IFagsak>({
+                return axiosRequest<IFagsak, any>({
                     data: dataTilIverksetting,
                     method: 'PUT',
                     url: `/familie-ba-sak/api/vedtak/${vedtakId}/beregning`,

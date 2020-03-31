@@ -157,10 +157,10 @@
     tunnel "^0.0.6"
     winston "^3.2.1"
 
-"@navikt/familie-clipboard@^3.0.3-alpha.14+239c3e8":
-  version "3.0.3-alpha.14"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.0.3-alpha.14.tgz#20ddf8644d640c28e4b4008a18887ca42a1a381c"
-  integrity sha512-ulVQG2TeqEhpN8cSmuZ3xUjt91FPu5ERKE9HpuKny92tqJVG14ougb49+DVCG7hd08K5iFZ4IvlcYcOpwhksgw==
+"@navikt/familie-clipboard@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.0.3.tgz#eeda5986de771a21a1431ecdc7ee585bde9fae0a"
+  integrity sha512-fiq4z8CfkxUbjalKalMtkrVs600RuY+cQD0i9auSFiMBkAtKQforJEppOJZTOfz3Pbf5n2IOdz5rpFY9x0hhig==
   dependencies:
     "@types/react-tooltip" "^3.11.0"
     framer-motion "^1.8.3"
@@ -185,12 +185,12 @@
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.3.tgz#8a3bec3d06cd6d2b92eb15b6de7aaecbf21d6c55"
   integrity sha512-rZwcfVZpKCz0Ib+OkqlCw8ObZaXMy+KZOxZcT/gYDSdq5g9jOfM6HkTrgKJwkon1fNyZytQHdYrSUchJ2OeHAA==
 
-"@navikt/familie-visittkort@2.1.4-alpha.14":
-  version "2.1.4-alpha.14"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.4-alpha.14.tgz#dc9ede66c0c65f5ecb981eb823f58795fc1d2c54"
-  integrity sha512-D/0l+W93pmgck6gcU2SNFIbmjecD0Rqwv4iHR/g6BIfURpVUW37MI7l270F717p0lftVPhfEj091FsDQn5tI2A==
+"@navikt/familie-visittkort@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.4.tgz#10c133df89b830b8fe16563e75820249c40a1ee6"
+  integrity sha512-YSNkSzG/Ek31bWDHXFV2LFVY4fZkdFf4+IQCBosK3hxU6PxqfxAB62RnJmum80odp3u08Fy9kh2XHBz3DbKQhA==
   dependencies:
-    "@navikt/familie-clipboard" "^3.0.3-alpha.14+239c3e8"
+    "@navikt/familie-clipboard" "^3.0.3"
     "@navikt/familie-ikoner" "^3.0.3"
     "@navikt/familie-typer" "^3.0.3"
     classnames "^2.2.6"

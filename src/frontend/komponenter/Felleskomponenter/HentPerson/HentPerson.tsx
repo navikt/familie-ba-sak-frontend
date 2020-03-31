@@ -46,7 +46,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
                             process.env.NODE_ENV === 'development'
                         ) {
                             settPerson({ status: RessursStatus.HENTER });
-                            axiosRequest<IPerson>({
+                            axiosRequest<IPerson, void>({
                                 method: 'GET',
                                 url: '/familie-ba-sak/api/person',
                                 headers: {

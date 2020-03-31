@@ -38,7 +38,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                 parseInt(BehandlingSteg[aktivBehandling!!.steg], 10) >=
                     BehandlingSteg.VILKÅRSVURDERING
             ) {
-                axiosRequest<ISøknadDTO>({
+                axiosRequest<ISøknadDTO, void>({
                     method: 'GET',
                     url: `/familie-ba-sak/api/behandlinger/${
                         hentAktivBehandlingPåFagsak(fagsak.data)?.behandlingId
@@ -102,7 +102,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
                             settSenderInn(true);
 
-                            axiosRequest<IFagsak>({
+                            axiosRequest<IFagsak, ISøknadDTO>({
                                 method: 'POST',
                                 data: søknad,
                                 url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
