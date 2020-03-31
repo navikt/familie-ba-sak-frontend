@@ -157,23 +157,21 @@
     tunnel "^0.0.6"
     winston "^3.2.1"
 
-"@navikt/familie-clipboard@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.0.1.tgz#c5c0ec0dde015e550ee3f008cbee8cef5ffdf739"
-  integrity sha512-NHSBVUNdskPf+YYq1vsZ1QzvVX36wDNyIgei7b0jqAMBNVzJjCu7qb9gkudVCaU45m67onW6FqttxsJB8AtT6A==
+"@navikt/familie-clipboard@^3.0.3-alpha.14+239c3e8":
+  version "3.0.3-alpha.14"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.0.3-alpha.14.tgz#20ddf8644d640c28e4b4008a18887ca42a1a381c"
+  integrity sha512-ulVQG2TeqEhpN8cSmuZ3xUjt91FPu5ERKE9HpuKny92tqJVG14ougb49+DVCG7hd08K5iFZ4IvlcYcOpwhksgw==
   dependencies:
     "@types/react-tooltip" "^3.11.0"
     framer-motion "^1.8.3"
-    react "^16.12.0"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-ikoner@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.0.2.tgz#52141f4a7428031770f526fc43ecab3c87b00d80"
-  integrity sha512-9PME6TYcFzGk7O+XGsNlwEiO1FfJNX2VZ0wOMWDDWoJQ2vSf93ESWjTxQox1uRMryZMwgttSTn9MocJhFpWvBg==
+"@navikt/familie-ikoner@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.0.3.tgz#34892433051e14656c805cadf3b109b79cd37c96"
+  integrity sha512-DfEm15CQgzc/vqkJvoB62MdH7K6kKVPttbrmio6EZh99YM08Lx1IxbUqDU0tkwZ9zmleF38pwBwna+CBOd56Qw==
   dependencies:
-    "@navikt/familie-typer" "^3.0.2"
-    react "^16.12.0"
+    "@navikt/familie-typer" "^3.0.3"
 
 "@navikt/familie-typer@^3.0.2":
   version "3.0.2"
@@ -182,20 +180,24 @@
   dependencies:
     react "^16.12.0"
 
-"@navikt/familie-visittkort@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.2.tgz#f76ca5d9a8e691968654009ce066cd97f33adc4f"
-  integrity sha512-F1bT+AjSgWe/4bVSDYcWRT22iuwa5wiVjlLeeLDF3D60bSWwMHg+e+S5rG6AC6YycSXA+ZRrHx8G2ekzkIFHJA==
+"@navikt/familie-typer@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.3.tgz#8a3bec3d06cd6d2b92eb15b6de7aaecbf21d6c55"
+  integrity sha512-rZwcfVZpKCz0Ib+OkqlCw8ObZaXMy+KZOxZcT/gYDSdq5g9jOfM6HkTrgKJwkon1fNyZytQHdYrSUchJ2OeHAA==
+
+"@navikt/familie-visittkort@2.1.4-alpha.14":
+  version "2.1.4-alpha.14"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.4-alpha.14.tgz#dc9ede66c0c65f5ecb981eb823f58795fc1d2c54"
+  integrity sha512-D/0l+W93pmgck6gcU2SNFIbmjecD0Rqwv4iHR/g6BIfURpVUW37MI7l270F717p0lftVPhfEj091FsDQn5tI2A==
   dependencies:
-    "@navikt/familie-clipboard" "^3.0.1"
-    "@navikt/familie-ikoner" "^3.0.2"
-    "@navikt/familie-typer" "^3.0.2"
+    "@navikt/familie-clipboard" "^3.0.3-alpha.14+239c3e8"
+    "@navikt/familie-ikoner" "^3.0.3"
+    "@navikt/familie-typer" "^3.0.3"
     classnames "^2.2.6"
     nav-frontend-core "^4.0.11"
     nav-frontend-typografi "^2.0.17"
     nav-frontend-typografi-style "^1.0.18"
     prop-types "^15.7.2"
-    react "^16.12.0"
 
 "@navikt/fnrvalidator@^1.1.0":
   version "1.1.0"
@@ -517,6 +519,13 @@
   version "16.9.5"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.5.tgz#5de610b04a35d07ffd8f44edad93a71032d9aaa7"
   integrity sha512-BX6RQ8s9D+2/gDhxrj8OW+YD4R+8hj7FEM/OJHGNR0KipE1h1mSsf39YeyC81qafkq+N3rU3h3RFbLSwE5VqUg==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-modal@^3.10.5":
+  version "3.10.5"
+  resolved "https://registry.yarnpkg.com/@types/react-modal/-/react-modal-3.10.5.tgz#5aa40bcb71b59243126069330856eb430ed3adcc"
+  integrity sha512-iLL9afYbcgYlboW2J8mFNKH2tFgErIHR0q+JgHotKrFK99+d97v+V/dxL5LVoxt1OjlnWsuwj8sZuBMVsI1MtQ==
   dependencies:
     "@types/react" "*"
 
@@ -5782,10 +5791,19 @@ react-tooltip@^3.11.4:
   dependencies:
     prop-types "^15.6.0"
 
-react@^16.12.0, react@^16.13.0:
+react@^16.12.0:
   version "16.13.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.0.tgz#d046eabcdf64e457bbeed1e792e235e1b9934cf7"
   integrity sha512-TSavZz2iSLkq5/oiE7gnFzmURKZMltmi193rm5HEoUDAXpzT9Kzw6oNZnGoai/4+fUnm7FqS5dwgUL34TujcWQ==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+
+react@^16.13.1:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
+  integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

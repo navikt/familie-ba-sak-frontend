@@ -6,34 +6,58 @@ import SøkerOppholdINorge from './SøkerOppholdINorge';
 import AnnenPart from './AnnenPart';
 import Barna from './Barna';
 import { Knapp } from 'nav-frontend-knapper';
-import { registrerSøknad } from '../../../api/søknad';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IFagsak } from '../../../typer/fagsak';
-import { useFagsakContext, useFagsakDispatch, actions } from '../../FagsakProvider';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { axiosRequest } from '../../../api/axios';
 import { useHistory } from 'react-router';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
+import { useApp } from '../../../context/AppContext';
+import { BehandlingSteg } from '../../../typer/behandling';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
+    const { axiosRequest } = useApp();
+    const { fagsak, settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknad, erSøknadGyldig } = useSøknad();
     const [feilmelding, settFeilmelding] = React.useState('');
 
-    const fagsak = useFagsakContext().fagsak;
-    const fagsakDispatch = useFagsakDispatch();
+    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
     const [senderInn, settSenderInn] = React.useState(false);
 
     React.useEffect(() => {
         if (fagsak.status === RessursStatus.SUKSESS) {
-            axiosRequest({
-                method: 'GET',
-                url: `/familie-ba-sak/api/behandlinger/${
-                    hentAktivBehandlingPåFagsak(fagsak.data)?.behandlingId
-                }/søknad`,
-            });
+            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
+
+            if (
+                aktivBehandling &&
+                parseInt(BehandlingSteg[aktivBehandling!!.steg], 10) >=
+                    BehandlingSteg.VILKÅRSVURDERING
+            ) {
+                axiosRequest<ISøknadDTO>({
+                    method: 'GET',
+                    url: `/familie-ba-sak/api/behandlinger/${
+                        hentAktivBehandlingPåFagsak(fagsak.data)?.behandlingId
+                    }/søknad`,
+                }).then((response: Ressurs<ISøknadDTO>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settSøknadErLastetFraBackend(true);
+                        settSøknad({
+                            ...response.data,
+                            barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
+                                (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                                    ...barnMedOpplysninger,
+                                    checked: true,
+                                })
+                            ),
+                        });
+                    }
+                });
+            }
         }
     }, [fagsak.status]);
 
@@ -41,7 +65,17 @@ const RegistrerSøknad: React.FunctionComponent = () => {
         <div className={'søknad'}>
             <Sidetittel children={'Informasjon fra søknaden'} />
             <br />
-
+            {søknadErLastetFraBackend && (
+                <>
+                    <br />
+                    <AlertStripeAdvarsel
+                        children={
+                            'En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.'
+                        }
+                    />
+                    <br />
+                </>
+            )}
             <SøknadType settSøknad={settSøknad} søknad={søknad} />
 
             <SøkerOppholdINorge settSøknad={settSøknad} søknad={søknad} />
@@ -67,24 +101,23 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                         if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig()) {
                             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
                             settSenderInn(true);
-                            registrerSøknad(søknad, aktivBehandling).then(
-                                (response: Ressurs<IFagsak>) => {
-                                    settSenderInn(false);
-                                    if (response.status === RessursStatus.SUKSESS) {
-                                        fagsakDispatch({
-                                            type: actions.SETT_FAGSAK,
-                                            payload: response,
-                                        });
-                                        history.push(
-                                            `/fagsak/${response.data.id}/vilkaarsvurdering`
-                                        );
-                                    } else if (response.status === RessursStatus.FEILET) {
-                                        settFeilmelding(response.melding);
-                                    } else {
-                                        settFeilmelding('Registrering av søknaden feilet');
-                                    }
+
+                            axiosRequest<IFagsak>({
+                                method: 'POST',
+                                data: søknad,
+                                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
+                            }).then((response: Ressurs<IFagsak>) => {
+                                settSenderInn(false);
+                                if (response.status === RessursStatus.SUKSESS) {
+                                    settFagsak(response);
+
+                                    history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
+                                } else if (response.status === RessursStatus.FEILET) {
+                                    settFeilmelding(response.melding);
+                                } else {
+                                    settFeilmelding('Registrering av søknaden feilet');
                                 }
-                            );
+                            });
                         }
                     }}
                     children={'Bekreft og fortsett'}
