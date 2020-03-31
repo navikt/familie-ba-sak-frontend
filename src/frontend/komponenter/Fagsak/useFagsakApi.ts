@@ -125,8 +125,7 @@ const useFagsakApi = (
             const identResultater: Map<string, IRestVilkårResultat[]> = new Map();
             samletVilkårResultat.map(resultat => {
                 if (identResultater.has(resultat.personIdent)) {
-                    // @ts-ignore
-                    identResultater.get(resultat.personIdent).push({
+                    identResultater.get(resultat.personIdent)!!.push({
                         vilkårType: resultat.vilkårType,
                         resultat: resultat.resultat,
                     });
