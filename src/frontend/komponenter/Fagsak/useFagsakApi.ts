@@ -15,7 +15,7 @@ import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
-import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
+import { IState as IBehandleVilkårState } from './Vilkårsvurdering/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';

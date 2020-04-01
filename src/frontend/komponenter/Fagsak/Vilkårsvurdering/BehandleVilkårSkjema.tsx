@@ -11,6 +11,8 @@ import {
     useBehandlingVilkårDispatch,
 } from './BehandleVilkårProvider';
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
+import { Undertittel } from 'nav-frontend-typografi';
+import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -46,6 +48,23 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     : undefined
             }
         >
+            {context.periodeResultater.map((periodeResultat: IPeriodeResultat) => {
+                return (
+                    <>
+                        <Undertittel
+                            children={`Vurder vilkår for ${periodeResultat.personIdent}`}
+                        />
+                        {periodeResultat.vilkårResultater.map((vilkårResultat: IVilkårResultat) => {
+                            return (
+                                <GeneriskVilkår
+                                    key={`${periodeResultat.personIdent}_${vilkårResultat.vilkårType}`}
+                                    vilkårResultat={vilkårResultat}
+                                />
+                            );
+                        })}
+                    </>
+                );
+            })}
             <br />
 
             {context.periodeResultater.map((periodeResultat: IPeriodeResultat) => {

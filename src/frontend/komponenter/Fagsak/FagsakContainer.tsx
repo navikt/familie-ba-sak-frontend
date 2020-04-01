@@ -4,8 +4,8 @@ import { RessursStatus } from '../../typer/ressurs';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import BehandleVilkår from './Vilkår/BehandleVilkår';
-import { BehandlingVilkårProvider } from './Vilkår/BehandleVilkårProvider';
+import BehandleVilkår from './Vilkårsvurdering/BehandleVilkår';
+import { BehandlingVilkårProvider } from './Vilkårsvurdering/BehandleVilkårProvider';
 import Beregning from './Beregning/Beregning';
 import { BeregningProvider } from './Beregning/BeregningProvider';
 import Høyremeny from './Høyremeny/Høyremeny';

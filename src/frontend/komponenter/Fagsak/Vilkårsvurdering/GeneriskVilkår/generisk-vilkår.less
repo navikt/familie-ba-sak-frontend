@@ -1,0 +1,36 @@
+.generisk-vilkår {
+
+    &__tittel-og-utfør {
+        display: flex;
+        height: 2.2rem;
+        align-items: center;
+
+        > *:not(:first-child) {
+            margin-left: .75rem;
+        }
+    }
+
+    &__utførknapp {
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: .125rem .5rem;
+        height: 35px;
+        border-radius: 2px;
+        color: @navBla;
+        text-decoration: underline;
+
+        & svg {
+            margin-left: .5rem;
+        }
+
+        &:focus {
+            outline: solid 2px @navBla;
+        }
+
+        &:hover {
+            background-color: @navLysGra;
+            text-decoration: unset;
+        }
+    }
+}

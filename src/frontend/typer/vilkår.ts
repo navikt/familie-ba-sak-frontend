@@ -9,6 +9,7 @@ export enum VilkårType {
     UNDER_18_ÅR_OG_BOR_MED_SØKER = 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
     BOSATT_I_RIKET = 'BOSATT_I_RIKET',
     STØNADSPERIODE = 'STØNADSPERIODE',
+    LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
 }
 
 export interface IPeriodeResultat {
@@ -31,7 +32,8 @@ export interface IVilkårConfig {
     beskrivelse: string;
     key: string;
     lovreferanse: string;
-    parterDetteGjelderFor: PersonType[];
+    spørsmål?: (part: string) => string;
+    tittel: string;
 }
 
 export const vilkårConfig: IVilkårsconfig = {
@@ -39,19 +41,27 @@ export const vilkårConfig: IVilkårsconfig = {
         beskrivelse: 'under 18 år, bor med søker',
         key: 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
         lovreferanse: '§ 2',
-        parterDetteGjelderFor: [PersonType.BARN],
+        tittel: 'Under 18 år og bor med søker',
     },
     BOSATT_I_RIKET: {
         beskrivelse: 'bosatt i riket',
         key: 'BOSATT_I_RIKET',
         lovreferanse: '§ 4',
-        parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
+        spørsmål: (part: string) => `Er ${part} bosatt i riket?`,
+        tittel: 'Bosatt i riket',
     },
     STØNADSPERIODE: {
         beskrivelse: 'stønadsperiode',
         key: 'STØNADSPERIODE',
         lovreferanse: '§ 11',
-        parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
+        tittel: 'Stønadsperiode',
+    },
+    LOVLIG_OPPHOLD: {
+        beskrivelse: 'lovlig opphold',
+        key: 'LOVLIG_OPPHOLD',
+        lovreferanse: '§ 4-2',
+        spørsmål: (part: string) => `Har ${part} lovlig opphold`,
+        tittel: 'Lovlig opphold',
     },
 };
 
@@ -68,13 +78,11 @@ export const hentVilkårForPersoner = (personer?: IPerson[]): IPeriodeResultat[]
 
     return personer.map((person: IPerson) => ({
         personIdent: person.personIdent,
-        vilkårResultater: Object.values(vilkårConfig)
-            .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.type))
-            .map(
-                (vc: IVilkårConfig): IVilkårResultat => ({
-                    vilkårType: vc.key as VilkårType,
-                    resultat: Resultat.NEI,
-                })
-            ),
+        vilkårResultater: Object.values(vilkårConfig).map(
+            (vc: IVilkårConfig): IVilkårResultat => ({
+                vilkårType: vc.key as VilkårType,
+                resultat: Resultat.NEI,
+            })
+        ),
     }));
 };
