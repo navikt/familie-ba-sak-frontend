@@ -5,9 +5,9 @@ import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';
 import FagsakContainer from './Fagsak/FagsakContainer';
 import { useApp } from '../context/AppContext';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
-import TempHeader from './TempHeader';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
+import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 
 interface IProps {
     innloggetSaksbehandler?: ISaksbehandler;
@@ -21,9 +21,12 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
             <UIModalWrapper />
             {autentisert ? (
                 <>
-                    <TempHeader innloggetSaksbehandler={innloggetSaksbehandler} />
                     <div className={'container'} role="main">
                         <Router>
+                            <HeaderMedSøk
+                                brukerNavn={innloggetSaksbehandler?.displayName}
+                                brukerEnhet={innloggetSaksbehandler?.enhet}
+                            />
                             <Switch>
                                 <Route
                                     exact={true}
