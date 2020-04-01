@@ -63,8 +63,11 @@ export const hentFagsaker = (
 
 export const søkFagsaker = (personIdent: string): Promise<Ressurs<IFagsakDeltager[]>> => {
     return axiosRequest({
-        method: 'GET',
-        url: 'familie-ba-sak/api/fagsaker/sok?personIdent=' + personIdent,
+        method: 'POST',
+        url: 'familie-ba-sak/api/fagsaker/sok',
+        data: {
+            personIdent: personIdent,
+        },
     });
 };
 

@@ -4,6 +4,8 @@ const fs = require('fs');
 
 const delayMs = 20;
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded());
 
 const lesMockFil = filnavn => {
     try {
@@ -51,10 +53,11 @@ app.get('/familie-ba-sak/api/logg/2', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`logg-2.json`)), delayMs);
 });
 
-app.get('/familie-ba-sak/api/fagsaker/sok', (req, res) => {
-    if (req.query.personIdent === '17058018783') {
+app.post('/familie-ba-sak/api/fagsaker/sok', (req, res) => {
+    const søkparam = req.body;
+    if (søkparam.personIdent === '17058018783') {
         setTimeout(() => res.send(lesMockFil(`søk-2.json`)), 500);
-    } else if (req.query.personIdent === '28111883612') {
+    } else if (søkparam.personIdent === '28111883612') {
         setTimeout(() => res.send(lesMockFil(`søk-1.json`)), 500);
     } else {
         setTimeout(
