@@ -7,11 +7,9 @@ import {
     IOpprettEllerHentFagsakData,
     aktivVedtak,
     IOpprettBeregningData,
-    IRestPeriodeResultat,
-    IRestVilkårResultat,
     IRestVilkårsvurdering,
 } from '../../api/fagsak';
-import { BehandlingResultat, Behandlingstype, IBehandling } from '../../typer/behandling';
+import { Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
@@ -19,10 +17,9 @@ import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
-import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
+import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useApp } from '../../context/AppContext';
-import { IVilkårResultat } from '../../typer/vilkår';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -105,58 +102,15 @@ const useFagsakApi = (
     };
 
     const opprettEllerOppdaterVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {
-        if (!context.behandlingResultat) {
-            settVisFeilmeldinger(true);
-            return;
-        }
-
         if (context.begrunnelse.valideringsstatus !== Valideringsstatus.OK) {
             settVisFeilmeldinger(true);
             return;
         }
 
         settSenderInn(true);
-
-        const aktivBehandling = fagsak.behandlinger.find(b => b.aktiv);
-        const resutat =
-            aktivBehandling?.type === Behandlingstype.REVURDERING &&
-            context.behandlingResultat === BehandlingResultat.AVSLÅTT
-                ? BehandlingResultat.OPPHØRT
-                : context.behandlingResultat;
-
-        const mapTilPeriodeResultater = (
-            samletVilkårResultat: IVilkårResultat[]
-        ): IRestPeriodeResultat[] => {
-            const identResultater: Map<string, IRestVilkårResultat[]> = new Map();
-            samletVilkårResultat.map(resultat => {
-                if (identResultater.has(resultat.personIdent)) {
-                    identResultater.get(resultat.personIdent)!!.push({
-                        vilkårType: resultat.vilkårType,
-                        resultat: resultat.resultat,
-                    });
-                } else {
-                    identResultater.set(resultat.personIdent, [
-                        {
-                            vilkårType: resultat.vilkårType,
-                            resultat: resultat.resultat,
-                        },
-                    ]);
-                }
-            });
-            return Array.from(identResultater, ([ident, resultater]) => {
-                return {
-                    personIdent: ident,
-                    periodeFom: undefined,
-                    periodeTom: undefined,
-                    vilkårResultater: resultater,
-                };
-            });
-        };
-
         axiosRequest<IFagsak, IRestVilkårsvurdering>({
             data: {
-                brevType: resutat,
-                periodeResultater: mapTilPeriodeResultater(context.samletVilkårResultat),
+                periodeResultater: context.periodeResultater,
                 begrunnelse: context.begrunnelse.verdi,
             },
             method: 'PUT',
@@ -167,13 +121,10 @@ const useFagsakApi = (
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
 
-                    if (context.behandlingResultat === BehandlingResultat.INNVILGET) {
+                    if (erBehandlingenInnvilget(context.periodeResultater)) {
                         history.push(`/fagsak/${fagsak.id}/beregning`);
-                    } else if (context.behandlingResultat === BehandlingResultat.AVSLÅTT) {
-                        history.push(`/fagsak/${fagsak.id}/vedtak`);
                     } else {
-                        settFeilmelding('Internal error: invalid vedtak result');
-                        settVisFeilmeldinger(true);
+                        history.push(`/fagsak/${fagsak.id}/vedtak`);
                     }
                 } else if (response.status === RessursStatus.FEILET) {
                     settFeilmelding(response.melding);

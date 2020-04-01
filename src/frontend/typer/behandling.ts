@@ -1,7 +1,7 @@
 import { INøkkelPar } from './common';
 import { IPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
-import { IVilkårResultat } from './vilkår';
+import { IVilkårResultat, IPeriodeResultat } from './vilkår';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -60,8 +60,7 @@ export interface IBehandling {
     kategori: BehandlingKategori;
     opprettetTidspunkt: string;
     personer: IPerson[];
-    resultat: BehandlingResultat;
-    samletVilkårResultat: IVilkårResultat[];
+    periodeResultater: IPeriodeResultat[];
     status: BehandlingStatus;
     steg: BehandlingSteg;
     type: Behandlingstype;
