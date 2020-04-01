@@ -12,3 +12,8 @@ export const formaterIsoDato = (dato: string, tilFormat: datoformat) => {
     const momentDato = moment(dato);
     return momentDato.isValid() ? momentDato.format(tilFormat) : dato ? dato : '';
 };
+
+export const hentAlder = (dato: string): number => {
+    const momentDato = moment(dato);
+    return momentDato.isValid() ? momentDato.diff(moment(), 'years') : 0;
+};
