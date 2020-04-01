@@ -17,15 +17,15 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             <Checkbox
                 id={`barn-${barn.ident}`}
                 label={`${barn.navn} (${alder} år) ${barn.ident}`}
-                checked={barn.checked}
+                checked={barn.inkludertISøknaden}
                 onChange={() => {
                     settBarn({
                         ...barn,
-                        checked: !barn.checked,
+                        inkludertISøknaden: !barn.inkludertISøknaden,
                     });
                 }}
             />
-            {barn.checked && (
+            {barn.inkludertISøknaden && (
                 <div className={'søknad__panel--innrykk'}>
                     <Checkbox
                         label={'5.1 Barnet bor ikke fast sammen med søker'}

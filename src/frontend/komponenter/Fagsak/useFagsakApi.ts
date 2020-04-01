@@ -3,46 +3,49 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 
 import {
-    apiOpprettBehandling,
-    apiOpprettBeregning,
-    apiOpprettEllerOppdaterVedtak,
     IOpprettBehandlingData,
     IOpprettEllerHentFagsakData,
-    apiOpprettEllerHentFagsak,
-    IRestVilkårResultat,
+    aktivVedtak,
+    IOpprettBeregningData,
     IRestPeriodeResultat,
+    IRestVilkårResultat,
+    IRestVilkårsvurdering,
 } from '../../api/fagsak';
 import { BehandlingResultat, Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
-import { datoformat } from '../../utils/formatter';
-import { actions as fagsakActions, useFagsakDispatch } from '../FagsakProvider';
+import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
 import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
+import { useFagsakRessurser } from '../../context/FagsakContext';
+import { useApp } from '../../context/AppContext';
 import { IVilkårResultat } from '../../typer/vilkår';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
     settFeilmelding: (feilmelding: string) => void
 ) => {
+    const { settFagsak } = useFagsakRessurser();
+    const { axiosRequest } = useApp();
+
     const history = useHistory();
     const [senderInn, settSenderInn] = useState(false);
 
-    const fagsakDispatcher = useFagsakDispatch();
-
     const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {
         settSenderInn(true);
-        apiOpprettEllerHentFagsak(data)
+        axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
+            data,
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker`,
+        })
             .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
-                    fagsakDispatcher({
-                        payload: response,
-                        type: fagsakActions.SETT_FAGSAK,
-                    });
+                    settFagsak(response);
+
                     history.push(`/fagsak/${response.data.id}/saksoversikt`);
                     return;
                 } else if (response.status === RessursStatus.FEILET) {
@@ -62,14 +65,16 @@ const useFagsakApi = (
 
     const opprettBehandling = (data: IOpprettBehandlingData) => {
         settSenderInn(true);
-        apiOpprettBehandling(data)
+        axiosRequest<IFagsak, IOpprettBehandlingData>({
+            data,
+            method: 'POST',
+            url: '/familie-ba-sak/api/behandlinger',
+        })
             .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
-                    fagsakDispatcher({
-                        payload: response,
-                        type: fagsakActions.SETT_FAGSAK,
-                    });
+                    settFagsak(response);
+
                     const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
                         response.data
                     );
@@ -148,18 +153,19 @@ const useFagsakApi = (
             });
         };
 
-        apiOpprettEllerOppdaterVedtak(fagsak.id, {
-            brevType: resutat,
-            periodeResultater: mapTilPeriodeResultater(context.samletVilkårResultat),
-            begrunnelse: context.begrunnelse.verdi,
+        axiosRequest<IFagsak, IRestVilkårsvurdering>({
+            data: {
+                brevType: resutat,
+                periodeResultater: mapTilPeriodeResultater(context.samletVilkårResultat),
+                begrunnelse: context.begrunnelse.verdi,
+            },
+            method: 'PUT',
+            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
         })
             .then((response: Ressurs<any>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
-                    fagsakDispatcher({
-                        payload: response,
-                        type: fagsakActions.SETT_FAGSAK,
-                    });
+                    settFagsak(response);
 
                     if (context.behandlingResultat === BehandlingResultat.INNVILGET) {
                         history.push(`/fagsak/${fagsak.id}/beregning`);
@@ -196,7 +202,7 @@ const useFagsakApi = (
         ) {
             if (skjemaetHarEndringer) {
                 settSenderInn(true);
-                apiOpprettBeregning(fagsak, {
+                const data: IOpprettBeregningData = {
                     personBeregninger: context.personBeregninger.map(
                         (personBeregning: IFelt<IPersonBeregning>) => ({
                             personident: personBeregning.verdi.personident,
@@ -216,14 +222,43 @@ const useFagsakApi = (
                             ).format('YYYY-MM-DD'),
                         })
                     ),
+                };
+
+                const dataTilKalkulator = data.personBeregninger
+                    .filter(personBeregning => !personBeregning.ingenYtelse)
+                    .map(beregning => ({
+                        personident: beregning.personident,
+                        ytelsetype: beregning.ytelseType,
+                        halvytelse: beregning.deltYtelse,
+                        stønadFom: formaterIsoDato(beregning.stønadFom, datoformat.ISO_MÅNED),
+                        stønadTom: formaterIsoDato(beregning.stønadTom, datoformat.ISO_MÅNED),
+                    }));
+                const dataTilIverksetting = {
+                    personBeregninger: data.personBeregninger
+                        .filter(personBeregning => !personBeregning.ingenYtelse)
+                        .map(beregning => ({
+                            ident: beregning.personident,
+                            beløp: beregning.beløp,
+                            stønadFom: beregning.stønadFom,
+                        })),
+                };
+
+                const vedtakId = aktivVedtak(fagsak)?.id;
+                axiosRequest<IFagsak, any>({
+                    data: dataTilKalkulator,
+                    method: 'PUT',
+                    url: `/familie-ba-sak/api/kalkulator`,
+                });
+                return axiosRequest<IFagsak, any>({
+                    data: dataTilIverksetting,
+                    method: 'PUT',
+                    url: `/familie-ba-sak/api/vedtak/${vedtakId}/beregning`,
                 })
                     .then((response: Ressurs<any>) => {
                         settSenderInn(false);
                         if (response.status === RessursStatus.SUKSESS) {
-                            fagsakDispatcher({
-                                payload: response,
-                                type: fagsakActions.SETT_FAGSAK,
-                            });
+                            settFagsak(response);
+
                             history.push(`/fagsak/${fagsak.id}/vedtak`);
                         } else if (response.status === RessursStatus.FEILET) {
                             settFeilmelding(response.melding);
