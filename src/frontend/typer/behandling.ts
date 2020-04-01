@@ -23,6 +23,10 @@ export enum BehandlingSteg {
     BEHANDLING_AVSLUTTET = 6,
 }
 
+export const hentBehandlingStegVerdi = (behandlingSteg: BehandlingSteg): BehandlingSteg => {
+    return behandlingSteg as BehandlingSteg;
+};
+
 export enum BehandlingStatus {
     OPPRETTET = 'OPPRETTET',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',

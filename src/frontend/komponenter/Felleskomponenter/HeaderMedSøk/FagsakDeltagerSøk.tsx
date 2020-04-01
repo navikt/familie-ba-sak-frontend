@@ -4,10 +4,19 @@ import React from 'react';
 import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
 import { useHistory } from 'react-router';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { søkFagsaker } from '../../../api/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 
 import validator from '@navikt/fnrvalidator';
+
+const søkFagsaker = (personIdent: string): Promise<Ressurs<IFagsakDeltager[]>> => {
+    return axiosRequest({
+        method: 'POST',
+        url: 'familie-ba-sak/api/fagsaker/sok',
+        data: {
+            personIdent: personIdent,
+        },
+    });
+};
 
 const FagsakDeltagerSøk: React.FC = () => {
     const history = useHistory();

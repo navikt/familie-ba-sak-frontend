@@ -6,23 +6,24 @@ import * as React from 'react';
 import Confetti from 'react-confetti';
 import { useHistory } from 'react-router';
 
-import { axiosRequest } from '../../../api/axios';
-import { hentAktivVedtaksbrev } from '../../../api/oppsummeringvedtak';
 import { BehandlingStatus, Behandlingstype } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { actions, useFagsakDispatch } from '../../FagsakProvider';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useApp } from '../../../context/AppContext';
+import { aktivVedtak } from '../../../api/fagsak';
 
 interface IVedtakProps {
     fagsak: IFagsak;
 }
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
+    const { axiosRequest } = useApp();
+    const { settFagsak } = useFagsakRessurser();
     const [makeItRain, settMakeItRain] = React.useState(false);
 
     const history = useHistory();
-    const fagsakDispatcher = useFagsakDispatch();
 
     const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
@@ -32,12 +33,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     React.useEffect(() => {
-        if (
-            fagsak?.behandlinger
-                ?.find(b => b.aktiv)
-                ?.vedtakForBehandling?.find(vedtak => vedtak.aktiv)
-        ) {
-            hentAktivVedtaksbrev(fagsak)
+        const aktivtVedtak = aktivVedtak(fagsak);
+        if (aktivtVedtak) {
+            axiosRequest<string, void>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/dokument/vedtak-html/${aktivtVedtak?.id}`,
+            })
                 .then((response: Ressurs<string>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         setBrev(response.data);
@@ -90,7 +91,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                     <Knapp
                         type={'hoved'}
                         onClick={() => {
-                            axiosRequest<IFagsak>({
+                            axiosRequest<IFagsak, void>({
                                 method: 'POST',
                                 url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/${
                                     aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
@@ -99,10 +100,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                                 }`,
                             }).then((response: Ressurs<IFagsak>) => {
                                 if (response.status === RessursStatus.SUKSESS) {
-                                    fagsakDispatcher({
-                                        payload: response,
-                                        type: actions.SETT_FAGSAK,
-                                    });
+                                    settFagsak(response);
 
                                     if (
                                         aktivBehandling?.status ===
