@@ -1,24 +1,16 @@
 import { Søk } from '@navikt/familie-header';
 import FagsakDeltagerskort from './FagsakDeltagerskort';
 import React from 'react';
-import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
+import { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { useHistory } from 'react-router';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { useApp } from '../../../context/AppContext';
 
 import validator from '@navikt/fnrvalidator';
 
-const søkFagsaker = (personIdent: string): Promise<Ressurs<IFagsakDeltager[]>> => {
-    return axiosRequest({
-        method: 'POST',
-        url: 'familie-ba-sak/api/fagsaker/sok',
-        data: {
-            personIdent: personIdent,
-        },
-    });
-};
-
 const FagsakDeltagerSøk: React.FC = () => {
+    const { axiosRequest } = useApp();
     const history = useHistory();
     const [resultat, settResultat] = React.useState<IFagsakDeltager[] | undefined>(undefined);
     const [spinner, settSpinner] = React.useState<boolean>(false);
@@ -32,7 +24,13 @@ const FagsakDeltagerSøk: React.FC = () => {
     const søk = (v: string) => {
         slettResultat();
         settSpinner(true)
-        søkFagsaker(v).then((response: Ressurs<IFagsakDeltager[]>) => {
+        axiosRequest<IFagsakDeltager[], ISøkParam>({
+            method: 'POST',
+            url: 'familie-ba-sak/api/fagsaker/sok',
+            data: {
+                personIdent: v,
+            },
+        }).then((response: Ressurs<IFagsakDeltager[]>) => {
             settSpinner(false);
             if (response.status === RessursStatus.SUKSESS) {
                 settSøkfeil(undefined);
@@ -47,7 +45,7 @@ const FagsakDeltagerSøk: React.FC = () => {
         });
     }
 
-    const fnrValidator = (verdi: string)=>{
+    const fnrValidator = (verdi: string) => {
         return validator.idnr(verdi).status === 'valid'
     }
 
