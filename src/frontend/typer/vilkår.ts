@@ -1,4 +1,6 @@
-import { IPerson, PersonType } from './person';
+import { IPerson } from './person';
+import moment from 'moment';
+import { randomUUID } from '../utils/commons';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -6,22 +8,40 @@ export enum Resultat {
 }
 
 export enum VilkårType {
-    UNDER_18_ÅR_OG_BOR_MED_SØKER = 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
+    //UNDER_18_ÅR_OG_BOR_MED_SØKER = 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
     BOSATT_I_RIKET = 'BOSATT_I_RIKET',
     STØNADSPERIODE = 'STØNADSPERIODE',
     LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
 }
 
+// Vilkårsvurdering typer for ui
 export interface IPeriodeResultat {
     personIdent: string;
-    periodeFom?: string;
-    periodeTom?: string;
     vilkårResultater: IVilkårResultat[];
+    person: IPerson;
 }
 
 export interface IVilkårResultat {
     vilkårType: VilkårType;
-    resultat: Resultat;
+    id: string;
+    begrunnelse: string;
+    periodeFom: string;
+    periodeTom: string;
+    resultat?: Resultat;
+}
+
+// Vilkårsvurdering typer for api
+export interface IRestPeriodeResultat {
+    personIdent: string;
+    periodeFom?: string;
+    periodeTom?: string;
+    vilkårResultater: IRestVilkårResultat[];
+}
+
+export interface IRestVilkårResultat {
+    vilkårType: VilkårType;
+    begrunnelse: string;
+    resultat?: Resultat;
 }
 
 type IVilkårsconfig = {
@@ -37,12 +57,12 @@ export interface IVilkårConfig {
 }
 
 export const vilkårConfig: IVilkårsconfig = {
-    UNDER_18_ÅR_OG_BOR_MED_SØKER: {
+    /*UNDER_18_ÅR_OG_BOR_MED_SØKER: {
         beskrivelse: 'under 18 år, bor med søker',
         key: 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
         lovreferanse: '§ 2',
         tittel: 'Under 18 år og bor med søker',
-    },
+    },*/
     BOSATT_I_RIKET: {
         beskrivelse: 'bosatt i riket',
         key: 'BOSATT_I_RIKET',
@@ -78,11 +98,33 @@ export const hentVilkårForPersoner = (personer?: IPerson[]): IPeriodeResultat[]
 
     return personer.map((person: IPerson) => ({
         personIdent: person.personIdent,
-        vilkårResultater: Object.values(vilkårConfig).map(
-            (vc: IVilkårConfig): IVilkårResultat => ({
-                vilkårType: vc.key as VilkårType,
+        person,
+        vilkårResultater: [
+            {
+                id: randomUUID(),
+                vilkårType: VilkårType.BOSATT_I_RIKET,
+                periodeFom: '2020-05-01',
+                periodeTom: '2020-05-30',
+                begrunnelse: '',
                 resultat: Resultat.NEI,
-            })
-        ),
+            },
+            {
+                id: randomUUID(),
+                vilkårType: VilkårType.BOSATT_I_RIKET,
+                periodeFom: '2020-04-01',
+                periodeTom: '2020-04-30',
+                begrunnelse: '',
+                resultat: Resultat.JA,
+            },
+            ...Object.values(vilkårConfig).map(
+                (vc: IVilkårConfig): IVilkårResultat => ({
+                    id: randomUUID(),
+                    vilkårType: vc.key as VilkårType,
+                    periodeFom: '',
+                    periodeTom: '',
+                    begrunnelse: '',
+                })
+            ),
+        ].sort((a, b) => moment(a.periodeFom).diff(moment(b.periodeFom))),
     }));
 };

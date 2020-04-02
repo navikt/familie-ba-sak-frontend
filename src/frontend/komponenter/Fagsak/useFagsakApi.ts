@@ -15,11 +15,11 @@ import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
-import { IState as IBehandleVilkårState } from './Vilkårsvurdering/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useApp } from '../../context/AppContext';
+import { IPeriodeResultat } from '../../typer/vilkår';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -101,17 +101,13 @@ const useFagsakApi = (
             });
     };
 
-    const opprettEllerOppdaterVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {
-        if (context.begrunnelse.valideringsstatus !== Valideringsstatus.OK) {
-            settVisFeilmeldinger(true);
-            return;
-        }
+    const opprettEllerOppdaterVedtak = (periodeResultater: IPeriodeResultat[], fagsak: IFagsak) => {
+        // TODO legg til validering av skjema
 
         settSenderInn(true);
         axiosRequest<IFagsak, IRestVilkårsvurdering>({
             data: {
-                periodeResultater: context.periodeResultater,
-                begrunnelse: context.begrunnelse.verdi,
+                periodeResultater,
             },
             method: 'PUT',
             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
@@ -121,7 +117,7 @@ const useFagsakApi = (
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
 
-                    if (erBehandlingenInnvilget(context.periodeResultater)) {
+                    if (erBehandlingenInnvilget(periodeResultater)) {
                         history.push(`/fagsak/${fagsak.id}/beregning`);
                     } else {
                         history.push(`/fagsak/${fagsak.id}/vedtak`);

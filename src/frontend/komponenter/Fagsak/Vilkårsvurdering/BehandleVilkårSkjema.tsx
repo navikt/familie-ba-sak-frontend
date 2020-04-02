@@ -1,18 +1,13 @@
-import { CheckboksPanelGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 
 import { Behandlingstype } from '../../../typer/behandling';
-import { Valideringsstatus } from '../../../typer/felt';
-import { IVilkårResultat, Resultat, vilkårConfig, IPeriodeResultat } from '../../../typer/vilkår';
+import { IVilkårResultat, IPeriodeResultat } from '../../../typer/vilkår';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import {
-    actions,
-    useBehandlingVilkårContext,
-    useBehandlingVilkårDispatch,
-} from './BehandleVilkårProvider';
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import { Undertittel } from 'nav-frontend-typografi';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
+import { useVilkårsvurdering } from '../../../context/VilkårsvurderingContext';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -25,8 +20,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
     visFeilmeldinger,
     behandlingstype,
 }) => {
-    const context = useBehandlingVilkårContext();
-    const dispatch = useBehandlingVilkårDispatch();
+    const { periodeResultater } = useVilkårsvurdering();
 
     const nesteMåned = () => {
         const iDag = new Date();
@@ -48,80 +42,33 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     : undefined
             }
         >
-            {context.periodeResultater.map((periodeResultat: IPeriodeResultat) => {
+            {periodeResultater.map((periodeResultat: IPeriodeResultat) => {
                 return (
-                    <>
+                    <div key={periodeResultat.personIdent}>
                         <Undertittel
-                            children={`Vurder vilkår for ${periodeResultat.personIdent}`}
+                            children={`Vurder vilkår for ${periodeResultat.person.navn}`}
                         />
-                        {periodeResultat.vilkårResultater.map((vilkårResultat: IVilkårResultat) => {
-                            return (
-                                <GeneriskVilkår
-                                    key={`${periodeResultat.personIdent}_${vilkårResultat.vilkårType}`}
-                                    vilkårResultat={vilkårResultat}
-                                />
-                            );
-                        })}
-                    </>
-                );
-            })}
-            <br />
-
-            {context.periodeResultater.map((periodeResultat: IPeriodeResultat) => {
-                return (
-                    <CheckboksPanelGruppe
-                        key={periodeResultat.personIdent}
-                        legend={`Vurder vilkår for ${periodeResultat.personIdent}`}
-                        checkboxes={periodeResultat.vilkårResultater.map(
-                            (vilkårResultat: IVilkårResultat) => {
-                                const vilkår = vilkårConfig[vilkårResultat.vilkårType];
-                                return {
-                                    id: `${periodeResultat.personIdent}_${vilkår.key}`,
-                                    label: `${vilkår.lovreferanse}, ${vilkår.beskrivelse}`,
-                                    value: vilkår.key,
-                                    checked: vilkårResultat.resultat === Resultat.JA,
-                                };
-                            }
-                        )}
-                        onChange={(event: any) => {
-                            dispatch({
-                                type: actions.TOGGLE_VILKÅR,
-                                payload: {
-                                    personIdent: periodeResultat.personIdent,
-                                    key: event.target.value,
-                                },
-                            });
-                        }}
-                    />
+                        <ul className={'vilkårsvurdering__list'}>
+                            {periodeResultat.vilkårResultater.map(
+                                (vilkårResultat: IVilkårResultat) => {
+                                    return (
+                                        <GeneriskVilkår
+                                            key={`${periodeResultat.personIdent}_${vilkårResultat.vilkårType}_${vilkårResultat.id}`}
+                                            person={periodeResultat.person}
+                                            vilkårResultat={vilkårResultat}
+                                        />
+                                    );
+                                }
+                            )}
+                        </ul>
+                    </div>
                 );
             })}
 
             <br />
-
-            <TextareaControlled
-                label={'Begrunnelse'}
-                maxLength={0}
-                textareaClass={'vilkår__skjemagruppe--begrunnelse'}
-                placeholder={'Begrunn vurderingen din'}
-                defaultValue={context.begrunnelse.verdi}
-                value={context.begrunnelse.verdi}
-                onBlur={(evt: any) => {
-                    dispatch({
-                        type: actions.SETT_BEGRUNNELSE,
-                        payload: evt.target.value,
-                    });
-                }}
-                feil={
-                    context.begrunnelse.valideringsstatus !== Valideringsstatus.OK &&
-                    visFeilmeldinger &&
-                    context.begrunnelse.feilmelding
-                        ? context.begrunnelse.feilmelding
-                        : undefined
-                }
-            />
 
             {behandlingstype === Behandlingstype.REVURDERING &&
-                !erBehandlingenInnvilget(context.periodeResultater) && (
+                !erBehandlingenInnvilget(periodeResultater) && (
                     <div className={'vilkår__skjemagruppe--opphørsdato'}>
                         <Informasjonsbolk
                             informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}

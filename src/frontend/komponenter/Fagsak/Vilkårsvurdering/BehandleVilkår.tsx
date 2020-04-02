@@ -7,11 +7,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
-import {
-    actions,
-    useBehandlingVilkårContext,
-    useBehandlingVilkårDispatch,
-} from './BehandleVilkårProvider';
+import { useVilkårsvurdering } from '../../../context/VilkårsvurderingContext';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 
 interface IProps {
@@ -19,8 +15,8 @@ interface IProps {
 }
 
 const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const context = useBehandlingVilkårContext();
-    const dispatch = useBehandlingVilkårDispatch();
+    const { periodeResultater, settPeriodeResultater } = useVilkårsvurdering();
+
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
     const history = useHistory();
@@ -33,14 +29,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     React.useEffect(() => {
         if (aktivBehandling && aktivBehandling.periodeResultater.length !== 0) {
-            dispatch({
-                type: actions.SETT_SAMLET_VILKÅRS_RESULTAT,
-                payload: aktivBehandling.periodeResultater,
-            });
-            dispatch({
-                type: actions.SETT_BEGRUNNELSE,
-                payload: aktivBehandling.begrunnelse,
-            });
+            settPeriodeResultater(aktivBehandling.periodeResultater);
         }
     }, [fagsak]);
 
@@ -52,19 +41,19 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
         );
     }
 
-    if (context.periodeResultater.length === 0) {
+    if (periodeResultater.length === 0) {
         return <div>Finner ingen vilkår på behandlingen. Det er sansynligvis noe feil.</div>;
     }
 
     return (
-        <div className={'vilkår'}>
+        <div className={'vilkårsvurdering'}>
             <Skjemasteg
                 tittel={'Vilkår'}
                 forrigeOnClick={() => {
                     history.push(`/fagsak/${fagsak.id}/registrer-soknad`);
                 }}
                 nesteOnClick={() => {
-                    opprettEllerOppdaterVedtak(context, fagsak);
+                    opprettEllerOppdaterVedtak(periodeResultater, fagsak);
                 }}
                 senderInn={senderInn}
             >

@@ -5,7 +5,7 @@ import { Route, Switch, useParams } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
 import BehandleVilkår from './Vilkårsvurdering/BehandleVilkår';
-import { BehandlingVilkårProvider } from './Vilkårsvurdering/BehandleVilkårProvider';
+import { VilkårsvurderingProvider } from '../../context/VilkårsvurderingContext';
 import Beregning from './Beregning/Beregning';
 import { BeregningProvider } from './Beregning/BeregningProvider';
 import Høyremeny from './Høyremeny/Høyremeny';
@@ -101,9 +101,9 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             path="/fagsak/:fagsakId/vilkaarsvurdering"
                                             render={() => {
                                                 return (
-                                                    <BehandlingVilkårProvider fagsak={fagsak.data}>
+                                                    <VilkårsvurderingProvider fagsak={fagsak.data}>
                                                         <BehandleVilkår fagsak={fagsak.data} />
-                                                    </BehandlingVilkårProvider>
+                                                    </VilkårsvurderingProvider>
                                                 );
                                             }}
                                         />

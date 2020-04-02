@@ -27,6 +27,10 @@ module.exports = {
                 },
             },
             {
+                test: /\.svg$/,
+                loader: 'svg-inline-loader',
+            },
+            {
                 test: /\.(less)$/,
                 use: [
                     { loader: require.resolve('style-loader') },
