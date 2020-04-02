@@ -20,7 +20,7 @@ export interface ISøkerMedOpplysninger {
 }
 
 export interface IBarnMedOpplysninger {
-    checked: boolean;
+    inkludertISøknaden: boolean;
     ident: string;
     oppholderSegINorge: boolean;
     borMedSøker: boolean;

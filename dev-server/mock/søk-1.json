@@ -1,0 +1,18 @@
+{
+    "status": "SUKSESS",
+    "data": [
+            {
+                "navn": "Smart Kakkerlakk",
+                "ident": "02129122008",
+                "rolle": "FORELDER",
+                "kjønn": "KVINNE"
+            },
+            {
+                "navn": "Bråkete Taremel",
+                "ident": "30088024369",
+                "rolle": "FORELDER",
+                "kjønn": "MANN",
+                "fagsakId": 1
+            }
+        ]
+}

@@ -11,7 +11,7 @@ const packageJson = require('../package.json');
 export default (authClient: Client, router: Router, middleware: any) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
-            .send({ version: process.env.APP_VERSION, reduxVersion: packageJson.redux_version })
+            .send({ status: 'SUKSESS', data: packageJson.version })
             .end();
     });
     router.get('/error', (_: Request, res: Response) => {

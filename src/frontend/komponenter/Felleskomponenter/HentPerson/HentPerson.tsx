@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Input } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
-import { hentPerson } from '../../../api/person';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IPerson } from '../../../typer/person';
 import PanelBase from 'nav-frontend-paneler';
@@ -10,6 +9,7 @@ import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { identValidator, validerFelt, lagInitiellFelt } from '../../../utils/validators';
 import classNames from 'classnames';
 import { Feilmelding } from 'nav-frontend-typografi';
+import { useApp } from '../../../context/AppContext';
 
 interface IProps {
     person: Ressurs<IPerson>;
@@ -17,6 +17,7 @@ interface IProps {
 }
 
 const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => {
+    const { axiosRequest } = useApp();
     const [ident, settIdent] = React.useState<IFelt<string>>(lagInitiellFelt('', identValidator));
     const [visFeilmelding, settVisFeilmelding] = React.useState(false);
 
@@ -45,7 +46,13 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
                             process.env.NODE_ENV === 'development'
                         ) {
                             settPerson({ status: RessursStatus.HENTER });
-                            hentPerson(ident.verdi)
+                            axiosRequest<IPerson, void>({
+                                method: 'GET',
+                                url: '/familie-ba-sak/api/person',
+                                headers: {
+                                    personIdent: ident.verdi,
+                                },
+                            })
                                 .then((hentetPerson: Ressurs<IPerson>) => {
                                     settPerson(hentetPerson);
                                 })

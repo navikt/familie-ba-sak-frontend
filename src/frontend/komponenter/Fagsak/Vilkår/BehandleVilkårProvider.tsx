@@ -1,10 +1,15 @@
 import * as React from 'react';
 
-import { BehandlingResultat, IBehandling } from '../../../typer/behandling';
+import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IFelt } from '../../../typer/felt';
 import { IPerson } from '../../../typer/person';
-import { hentVilkårForPersoner, IVilkårResultat, Resultat } from '../../../typer/vilkår';
+import {
+    hentVilkårForPersoner,
+    IVilkårResultat,
+    Resultat,
+    IPeriodeResultat,
+} from '../../../typer/vilkår';
 import { erGyldigBegrunnelse, lagInitiellFelt } from '../../../utils/validators';
 
 export enum actions {
@@ -22,18 +27,13 @@ export interface IAction {
 type Dispatch = (action: IAction) => void;
 
 export interface IState {
-    behandlingResultat?: BehandlingResultat;
-    samletVilkårResultat: IVilkårResultat[];
+    periodeResultater: IPeriodeResultat[];
     begrunnelse: IFelt<string>;
 }
 
 const initialState = (personer?: IPerson[], aktivBehandling?: IBehandling): IState => {
     return {
-        behandlingResultat:
-            aktivBehandling?.resultat !== BehandlingResultat.IKKE_VURDERT
-                ? aktivBehandling?.resultat
-                : undefined,
-        samletVilkårResultat: hentVilkårForPersoner(personer),
+        periodeResultater: hentVilkårForPersoner(personer),
         begrunnelse: lagInitiellFelt(
             aktivBehandling?.begrunnelse ? aktivBehandling.begrunnelse : '',
             erGyldigBegrunnelse
@@ -46,51 +46,40 @@ const BehandlingVilkårDispatchContext = React.createContext<Dispatch | undefine
 
 const behandlingVilkårReducer = (state: IState, action: IAction): IState => {
     switch (action.type) {
-        case actions.SETT_RESULTAT:
-            return {
-                ...state,
-                behandlingResultat: action.payload,
-                samletVilkårResultat: state.samletVilkårResultat.map((vilkår: IVilkårResultat) => {
-                    return {
-                        ...vilkår,
-                        resultat:
-                            action.payload === BehandlingResultat.INNVILGET
-                                ? Resultat.JA
-                                : Resultat.NEI,
-                    };
-                }),
-            };
         case actions.SETT_SAMLET_VILKÅRS_RESULTAT:
             return {
                 ...state,
-                samletVilkårResultat: action.payload,
+                periodeResultater: action.payload,
             };
         case actions.TOGGLE_VILKÅR:
-            const nySamletVilkårResultat = state.samletVilkårResultat.map(
-                (vilkår: IVilkårResultat) => {
-                    const nyttResultat =
-                        vilkår.resultat === Resultat.JA ? Resultat.NEI : Resultat.JA;
-
-                    return {
-                        ...vilkår,
-                        resultat:
-                            action.payload.key === vilkår.vilkårType
-                                ? nyttResultat
-                                : vilkår.resultat,
-                    };
-                }
-            );
-
             return {
                 ...state,
-                samletVilkårResultat: nySamletVilkårResultat,
-                behandlingResultat:
-                    nySamletVilkårResultat.filter(
-                        (vilkårResultat: IVilkårResultat) =>
-                            vilkårResultat.resultat === Resultat.NEI
-                    ).length !== 0
-                        ? BehandlingResultat.AVSLÅTT
-                        : BehandlingResultat.INNVILGET,
+                periodeResultater: state.periodeResultater.map(
+                    (periodeResultat: IPeriodeResultat): IPeriodeResultat => {
+                        if (periodeResultat.personIdent === action.payload.personIdent) {
+                            return {
+                                ...periodeResultat,
+                                vilkårResultater: periodeResultat.vilkårResultater.map(
+                                    (vilkårResultat: IVilkårResultat): IVilkårResultat => {
+                                        if (vilkårResultat.vilkårType === action.payload.key) {
+                                            return {
+                                                ...vilkårResultat,
+                                                resultat:
+                                                    vilkårResultat.resultat === Resultat.JA
+                                                        ? Resultat.NEI
+                                                        : Resultat.JA,
+                                            };
+                                        } else {
+                                            return vilkårResultat;
+                                        }
+                                    }
+                                ),
+                            };
+                        } else {
+                            return periodeResultat;
+                        }
+                    }
+                ),
             };
         case actions.SETT_BEGRUNNELSE:
             return {

@@ -32,14 +32,10 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     React.useEffect(() => {
-        if (aktivBehandling && aktivBehandling.samletVilkårResultat.length !== 0) {
+        if (aktivBehandling && aktivBehandling.periodeResultater.length !== 0) {
             dispatch({
                 type: actions.SETT_SAMLET_VILKÅRS_RESULTAT,
-                payload: aktivBehandling.samletVilkårResultat,
-            });
-            dispatch({
-                type: actions.SETT_RESULTAT,
-                payload: aktivBehandling.resultat,
+                payload: aktivBehandling.periodeResultater,
             });
             dispatch({
                 type: actions.SETT_BEGRUNNELSE,
@@ -56,7 +52,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
         );
     }
 
-    if (context.samletVilkårResultat.length === 0) {
+    if (context.periodeResultater.length === 0) {
         return <div>Finner ingen vilkår på behandlingen. Det er sansynligvis noe feil.</div>;
     }
 
@@ -72,7 +68,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 }}
                 senderInn={senderInn}
             >
-                {aktivBehandling.samletVilkårResultat.length !== 0 && (
+                {aktivBehandling.periodeResultater.length !== 0 && (
                     <>
                         <br />
                         <AlertStripeAdvarsel

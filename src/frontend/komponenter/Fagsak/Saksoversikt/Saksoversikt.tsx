@@ -7,7 +7,6 @@ import { IFagsak, fagsakStatus } from '../../../typer/fagsak';
 import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
-import { axiosRequest } from '../../../api/axios';
 import {
     behandlingsresultater,
     behandlingsstatuser,
@@ -23,12 +22,14 @@ import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { IPersonBeregning } from '../../../typer/behandle';
+import { useApp } from '../../../context/AppContext';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
+    const { axiosRequest } = useApp();
     const history = useHistory();
     const [opphørsdato, setOpphørsdato] = React.useState('');
 
@@ -142,7 +143,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 <Knapp
                                     mini={true}
                                     onClick={() => {
-                                        axiosRequest({
+                                        axiosRequest<any, any>({
                                             method: 'POST',
                                             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,
                                             data: {

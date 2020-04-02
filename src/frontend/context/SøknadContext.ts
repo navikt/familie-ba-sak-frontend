@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import createUseContext from 'constate';
 import { ISøknadDTO, TypeSøker, IBarnMedOpplysninger } from '../typer/søknad';
 import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandling';
-import { useBruker } from './BrukerContext';
 import { IPerson, IFamilieRelasjon, FamilieRelasjonRolle } from '../typer/person';
 import { RessursStatus } from '../typer/ressurs';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
+import { useFagsakRessurser } from './FagsakContext';
 
 const initalState = (bruker?: IPerson): ISøknadDTO => {
     return {
@@ -28,14 +28,14 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
                 )
                 .map(
                     (relasjon: IFamilieRelasjon): IBarnMedOpplysninger => ({
-                        checked: true,
+                        inkludertISøknaden: true,
                         borMedSøker: true,
                         ident: relasjon.personIdent,
                         oppholderSegINorge: true,
                         harOppholdtSegINorgeSiste12Måneder: true,
                         tilleggsopplysninger: '',
                         navn: relasjon.navn,
-                        fødselsdato: relasjon.fødselsdato
+                        fødselsdato: relasjon.fødselsdato,
                     })
                 ) ?? [],
         annenPartIdent: '',
@@ -43,7 +43,7 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
 };
 
 const [SøknadProvider, useSøknad] = createUseContext(() => {
-    const { bruker } = useBruker();
+    const { bruker } = useFagsakRessurser();
     const [søknad, settSøknad] = React.useState<ISøknadDTO>(initalState());
     const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
 
@@ -60,8 +60,9 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
         }
 
         if (
-            søknad.barnaMedOpplysninger.filter((barn: IBarnMedOpplysninger) => barn.checked)
-                .length === 0
+            søknad.barnaMedOpplysninger.filter(
+                (barn: IBarnMedOpplysninger) => barn.inkludertISøknaden
+            ).length === 0
         ) {
             søknadenErGyldig = false;
             settFeilmeldinger([

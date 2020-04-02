@@ -1,20 +1,16 @@
-import {
-    CheckboksPanelGruppe,
-    RadioPanelGruppe,
-    SkjemaGruppe,
-    TextareaControlled,
-} from 'nav-frontend-skjema';
+import { CheckboksPanelGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
 import React from 'react';
 
-import { BehandlingResultat, Behandlingstype } from '../../../typer/behandling';
+import { Behandlingstype } from '../../../typer/behandling';
 import { Valideringsstatus } from '../../../typer/felt';
-import { IVilkårConfig, IVilkårResultat, Resultat, vilkårConfig } from '../../../typer/vilkår';
+import { IVilkårResultat, Resultat, vilkårConfig, IPeriodeResultat } from '../../../typer/vilkår';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import {
     actions,
     useBehandlingVilkårContext,
     useBehandlingVilkårDispatch,
 } from './BehandleVilkårProvider';
+import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -41,7 +37,6 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                 .substr(2),
         ].join('.');
     };
-
     return (
         <SkjemaGruppe
             className={'vilkår__skjemagruppe'}
@@ -51,76 +46,36 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     : undefined
             }
         >
-            <RadioPanelGruppe
-                name="behandlingresultat"
-                legend="Vilkår for barnetrygd"
-                radios={[
-                    {
-                        autoFocus: true,
-                        label:
-                            behandlingstype === Behandlingstype.REVURDERING
-                                ? 'Fortsatt innvilget'
-                                : 'Vilkårene er oppfylt',
-                        value: 'INNVILGET',
-                        id: 'INNVILGET',
-                        checked: context.behandlingResultat === BehandlingResultat.INNVILGET,
-                    },
-                    {
-                        label:
-                            behandlingstype === Behandlingstype.REVURDERING
-                                ? 'Opphør'
-                                : 'Vilkårene er ikke oppfylt',
-                        value: 'AVSLÅTT',
-                        id: 'AVSLÅTT',
-                        checked: context.behandlingResultat === BehandlingResultat.AVSLÅTT,
-                    },
-                ]}
-                onChange={(event: any) => {
-                    dispatch({
-                        payload: event.target.value,
-                        type: actions.SETT_RESULTAT,
-                    });
-                }}
-                feil={
-                    visFeilmeldinger &&
-                    !context.behandlingResultat &&
-                    'Du må velge et behandlingsresultat'
-                }
-            />
-            {behandlingstype === Behandlingstype.REVURDERING &&
-                context.behandlingResultat === BehandlingResultat.AVSLÅTT && (
-                    <div className={'vilkår__skjemagruppe--opphørsdato'}>
-                        <Informasjonsbolk
-                            informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}
-                        />
-                    </div>
-                )}
-
             <br />
 
-            <CheckboksPanelGruppe
-                legend={'Velg hjemler for vurderingen'}
-                checkboxes={Object.values(vilkårConfig).map((vilkår: IVilkårConfig) => {
-                    return {
-                        id: vilkår.key,
-                        label: `${vilkår.lovreferanse}, ${vilkår.beskrivelse}`,
-                        value: vilkår.key,
-                        checked:
-                            context.samletVilkårResultat.find(
-                                (vilkårResultat: IVilkårResultat) =>
-                                    vilkårResultat.vilkårType === vilkår.key
-                            )?.resultat === Resultat.JA,
-                    };
-                })}
-                onChange={(event: any) => {
-                    dispatch({
-                        type: actions.TOGGLE_VILKÅR,
-                        payload: {
-                            key: event.target.value,
-                        },
-                    });
-                }}
-            />
+            {context.periodeResultater.map((periodeResultat: IPeriodeResultat) => {
+                return (
+                    <CheckboksPanelGruppe
+                        key={periodeResultat.personIdent}
+                        legend={`Vurder vilkår for ${periodeResultat.personIdent}`}
+                        checkboxes={periodeResultat.vilkårResultater.map(
+                            (vilkårResultat: IVilkårResultat) => {
+                                const vilkår = vilkårConfig[vilkårResultat.vilkårType];
+                                return {
+                                    id: `${periodeResultat.personIdent}_${vilkår.key}`,
+                                    label: `${vilkår.lovreferanse}, ${vilkår.beskrivelse}`,
+                                    value: vilkår.key,
+                                    checked: vilkårResultat.resultat === Resultat.JA,
+                                };
+                            }
+                        )}
+                        onChange={(event: any) => {
+                            dispatch({
+                                type: actions.TOGGLE_VILKÅR,
+                                payload: {
+                                    personIdent: periodeResultat.personIdent,
+                                    key: event.target.value,
+                                },
+                            });
+                        }}
+                    />
+                );
+            })}
 
             <br />
 
@@ -145,6 +100,15 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                         : undefined
                 }
             />
+
+            {behandlingstype === Behandlingstype.REVURDERING &&
+                !erBehandlingenInnvilget(context.periodeResultater) && (
+                    <div className={'vilkår__skjemagruppe--opphørsdato'}>
+                        <Informasjonsbolk
+                            informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}
+                        />
+                    </div>
+                )}
         </SkjemaGruppe>
     );
 };

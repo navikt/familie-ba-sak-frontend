@@ -11,6 +11,18 @@ export enum VilkårType {
     STØNADSPERIODE = 'STØNADSPERIODE',
 }
 
+export interface IPeriodeResultat {
+    personIdent: string;
+    periodeFom?: string;
+    periodeTom?: string;
+    vilkårResultater: IVilkårResultat[];
+}
+
+export interface IVilkårResultat {
+    vilkårType: VilkårType;
+    resultat: Resultat;
+}
+
 type IVilkårsconfig = {
     [key in VilkårType]: IVilkårConfig;
 };
@@ -43,38 +55,26 @@ export const vilkårConfig: IVilkårsconfig = {
     },
 };
 
-export interface IVilkårResultat {
-    personIdent: string;
-    vilkårType: VilkårType;
-    resultat: Resultat;
-}
-
 /**
  * Funksjon som basert på personene innvolvert i behandlingen henter ut vilkårene som må behandles
  * og lager en state struktur som vi videre kan bruke når saksbehandler vurderer vilkårene.
  *
  * @param personer liste av personer fra personopplysningsgrunnlaget på behandlingen
  */
-export const hentVilkårForPersoner = (personer?: IPerson[]): IVilkårResultat[] => {
+export const hentVilkårForPersoner = (personer?: IPerson[]): IPeriodeResultat[] => {
     if (!personer) {
         return [];
     }
 
-    let listeMedVilkårForBehandling: IVilkårResultat[] = [];
-    personer.map((person: IPerson) => {
-        listeMedVilkårForBehandling = [
-            ...listeMedVilkårForBehandling,
-            ...Object.values(vilkårConfig)
-                .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.type))
-                .map(
-                    (vc: IVilkårConfig): IVilkårResultat => ({
-                        personIdent: person.personIdent,
-                        vilkårType: vc.key as VilkårType,
-                        resultat: Resultat.NEI,
-                    })
-                ),
-        ];
-    });
-
-    return listeMedVilkårForBehandling;
+    return personer.map((person: IPerson) => ({
+        personIdent: person.personIdent,
+        vilkårResultater: Object.values(vilkårConfig)
+            .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.type))
+            .map(
+                (vc: IVilkårConfig): IVilkårResultat => ({
+                    vilkårType: vc.key as VilkårType,
+                    resultat: Resultat.NEI,
+                })
+            ),
+    }));
 };
