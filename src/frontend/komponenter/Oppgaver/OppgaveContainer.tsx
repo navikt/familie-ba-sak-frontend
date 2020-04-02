@@ -5,7 +5,7 @@ import { OppgaveProvider } from '../OppgaveProvider';
 const OppgaveContainer: React.FunctionComponent = () => {
     return (
         <OppgaveProvider>
-            <div>ajsdklø</div>
+            <div>Oppgaver vises...</div>
         </OppgaveProvider>
     );
 };
