@@ -3,6 +3,7 @@ import { FagsakProvider } from '../context/FagsakContext';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';
 import FagsakContainer from './Fagsak/FagsakContainer';
+import OppgaveContainer from './Oppgaver/OppgaveContainer';
 import { useApp } from '../context/AppContext';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import { ISaksbehandler } from '../typer/saksbehandler';
@@ -43,6 +44,7 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                     }}
                                 />
                                 <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
+                                <Route path="/oppgaver" component={OppgaveContainer} />
                             </Switch>
                         </Router>
                     </div>
