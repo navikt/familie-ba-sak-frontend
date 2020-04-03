@@ -6,9 +6,11 @@ export enum Resultat {
 }
 
 export enum VilkårType {
-    UNDER_18_ÅR_OG_BOR_MED_SØKER = 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
+    UNDER_18_ÅR = 'UNDER_18_ÅR',
+    BOR_MED_SØKER = 'BOR_MED_SØKER',
+    GIFT_PARTNERSKAP = 'GIFT_PARTNERSKAP',
     BOSATT_I_RIKET = 'BOSATT_I_RIKET',
-    STØNADSPERIODE = 'STØNADSPERIODE',
+    LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
 }
 
 export interface IPeriodeResultat {
@@ -35,10 +37,22 @@ export interface IVilkårConfig {
 }
 
 export const vilkårConfig: IVilkårsconfig = {
-    UNDER_18_ÅR_OG_BOR_MED_SØKER: {
-        beskrivelse: 'under 18 år, bor med søker',
-        key: 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
+    UNDER_18_ÅR: {
+        beskrivelse: 'under 18 år',
+        key: 'UNDER_18_ÅR',
         lovreferanse: '§ 2',
+        parterDetteGjelderFor: [PersonType.BARN],
+    },
+    BOR_MED_SØKER: {
+        beskrivelse: 'bor med søker',
+        key: 'BOR_MED_SØKER',
+        lovreferanse: '§ 2-2',
+        parterDetteGjelderFor: [PersonType.BARN],
+    },
+    GIFT_PARTNERSKAP: {
+        beskrivelse: 'gift eller partnerskap',
+        key: 'GIFT_PARTNERSKAP',
+        lovreferanse: '§ 2-2',
         parterDetteGjelderFor: [PersonType.BARN],
     },
     BOSATT_I_RIKET: {
@@ -47,9 +61,9 @@ export const vilkårConfig: IVilkårsconfig = {
         lovreferanse: '§ 4',
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
     },
-    STØNADSPERIODE: {
-        beskrivelse: 'stønadsperiode',
-        key: 'STØNADSPERIODE',
+    LOVLIG_OPPHOLD: {
+        beskrivelse: 'lovlig opphold',
+        key: 'LOVLIG_OPPHOLD',
         lovreferanse: '§ 11',
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
     },

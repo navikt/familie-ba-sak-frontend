@@ -36,12 +36,12 @@
                 "samletVilkårResultat": [
                     {
                         "personIdent": "12345678911",
-                        "vilkårType": "STØNADSPERIODE",
+                        "vilkårType": "LOVLIG_OPPHOLD",
                         "resultat": "JA"
                     },
                     {
                         "personIdent": "12345678912",
-                        "vilkårType": "STØNADSPERIODE",
+                        "vilkårType": "LOVLIG_OPPHOLD",
                         "resultat": "JA"
                     },
                     {
@@ -51,7 +51,7 @@
                     },
                     {
                         "personIdent": "12345678910",
-                        "vilkårType": "STØNADSPERIODE",
+                        "vilkårType": "LOVLIG_OPPHOLD",
                         "resultat": "JA"
                     },
                     {
@@ -61,7 +61,7 @@
                     },
                     {
                         "personIdent": "12345678912",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
+                        "vilkårType": "UNDER_18_ÅR",
                         "resultat": "JA"
                     },
                     {
@@ -71,7 +71,12 @@
                     },
                     {
                         "personIdent": "12345678911",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
+                        "vilkårType": "UNDER_18_ÅR",
+                        "resultat": "JA"
+                    },
+                    {
+                        "personIdent": "12345678911",
+                        "vilkårType": "BOR_MED_SØKER",
                         "resultat": "JA"
                     }
                 ],
@@ -140,7 +145,7 @@
                 "samletVilkårResultat": [
                     {
                         "personIdent": "12345678911",
-                        "vilkårType": "STØNADSPERIODE",
+                        "vilkårType": "LOVLIG_OPPHOLD",
                         "resultat": "JA"
                     },
                     {
@@ -150,7 +155,7 @@
                     },
                     {
                         "personIdent": "12345678910",
-                        "vilkårType": "STØNADSPERIODE",
+                        "vilkårType": "LOVLIG_OPPHOLD",
                         "resultat": "JA"
                     },
                     {
@@ -160,7 +165,7 @@
                     },
                     {
                         "personIdent": "12345678911",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
+                        "vilkårType": "UNDER_18_ÅR",
                         "resultat": "JA"
                     }
                 ],
