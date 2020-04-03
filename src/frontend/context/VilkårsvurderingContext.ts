@@ -2,158 +2,209 @@ import * as React from 'react';
 
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { hentVilkårForPersoner, IPeriodeResultat, IVilkårResultat } from '../typer/vilkår';
+import {
+    hentVilkårForPersoner,
+    IPeriodeResultat,
+    IVilkårResultat,
+    VilkårType,
+} from '../typer/vilkår';
 import constate from 'constate';
-import moment, { Moment } from 'moment';
-import uuid from 'uuid';
 import { randomUUID } from '../utils/commons';
+import {
+    nyPeriode,
+    nyMoment,
+    periodeToString,
+    kanSplitte,
+    kanFlytteFom,
+    kanFlytteTom,
+    etterfølgende,
+    slåSammen,
+    diff,
+    overlapperMinstEttSted,
+} from '../typer/periode';
+import { datoformat } from '../utils/formatter';
 
 interface IProps {
     fagsak: IFagsak;
 }
+
+const vilkårsvurderingFeilmelding = 'Feil i rekonstruksjon av vilkårsvurdering for part';
 
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: IProps) => {
     const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
     const [periodeResultater, settPeriodeResultater] = React.useState<IPeriodeResultat[]>(
         hentVilkårForPersoner(aktivBehandling?.personer)
     );
-    console.log(periodeResultater);
+
+    const vilkårHarSammeTypeOgOverlapperMinstEttSted = (
+        nyttVilkårResultat: IVilkårResultat,
+        annenVilkårResultat: IVilkårResultat
+    ) => {
+        return (
+            annenVilkårResultat.vilkårType === nyttVilkårResultat.vilkårType &&
+            overlapperMinstEttSted(nyttVilkårResultat.periode, annenVilkårResultat.periode)
+        );
+    };
 
     const settVilkårForPeriodeResultat = (
         personIdent: string,
         vilkårResultat: IVilkårResultat
     ): void => {
-        const kopiAvPeriodeResultater = [...periodeResultater];
-
-        const gjeldendePeriodeResultat = periodeResultater.find(
+        const vilkårsvurderingForPerson = periodeResultater.find(
             (periodeResultat: IPeriodeResultat) => periodeResultat.personIdent === personIdent
         );
 
-        console.log(gjeldendePeriodeResultat?.vilkårResultater);
+        if (!vilkårsvurderingForPerson) {
+            throw new Error(`${vilkårsvurderingFeilmelding}. Finner ikke vilkår for part.`);
+        }
 
-        const vilkårMedSammeTypeOgOverlappendePerioderUtenVilkåretSelv = gjeldendePeriodeResultat?.vilkårResultater
-            .filter((filterVilkårResultat: IVilkårResultat) => {
-                const nyFom = moment(vilkårResultat.periodeFom);
-                const nyTom = moment(vilkårResultat.periodeTom);
+        const sortertVilkårForPerson: IVilkårResultat[] = vilkårsvurderingForPerson.vilkårResultater.sort(
+            (a, b) => a.vilkårType.localeCompare(b.vilkårType) || diff(a.periode, b.periode)
+        );
 
-                const gammelFom = moment(filterVilkårResultat.periodeFom);
-                const gammelTom = moment(filterVilkårResultat.periodeTom);
+        // Lag plass for ny vurdering
+        const nyPeriodeResultat: IVilkårResultat[] = [
+            ...sortertVilkårForPerson?.reduce(
+                (nyeVilkårResultater: IVilkårResultat[], annenVilkårResultat: IVilkårResultat) => {
+                    if (vilkårResultat.id === annenVilkårResultat.id) {
+                        return nyeVilkårResultater;
+                    }
 
-                return (
-                    filterVilkårResultat.vilkårType === vilkårResultat.vilkårType &&
-                    filterVilkårResultat.id !== vilkårResultat.id &&
-                    filterVilkåretOverlapperPåMinstEnMåte(nyFom, nyTom, gammelFom, gammelTom)
-                );
-            })
-            .sort((a, b) => moment(a.periodeFom).diff(moment(b.periodeFom)));
+                    if (
+                        vilkårHarSammeTypeOgOverlapperMinstEttSted(
+                            vilkårResultat,
+                            annenVilkårResultat
+                        )
+                    ) {
+                        if (kanSplitte(vilkårResultat.periode, annenVilkårResultat.periode)) {
+                            const nyFom = nyMoment(vilkårResultat.periode.tom)
+                                .add(1, 'day')
+                                .format(datoformat.ISO_DAG);
+                            const nyTom = nyMoment(vilkårResultat.periode.fom)
+                                .subtract(1, 'day')
+                                .format(datoformat.ISO_DAG);
 
-        console.log(vilkårMedSammeTypeOgOverlappendePerioderUtenVilkåretSelv);
+                            return [
+                                ...nyeVilkårResultater,
+                                {
+                                    ...annenVilkårResultat,
+                                    id: randomUUID(),
+                                    periode: nyPeriode(annenVilkårResultat.periode.fom, nyTom),
+                                },
+                                {
+                                    ...annenVilkårResultat,
+                                    id: randomUUID(),
+                                    periode: nyPeriode(nyFom, annenVilkårResultat.periode.tom),
+                                },
+                            ];
+                        } else if (
+                            kanFlytteFom(vilkårResultat.periode, annenVilkårResultat.periode)
+                        ) {
+                            const nyFom = nyMoment(vilkårResultat.periode.tom)
+                                .add(1, 'day')
+                                .format(datoformat.ISO_DAG);
 
-        let vilkårResultaterForVilkårType: IVilkårResultat[] = [];
-        if (
-            vilkårMedSammeTypeOgOverlappendePerioderUtenVilkåretSelv &&
-            vilkårMedSammeTypeOgOverlappendePerioderUtenVilkåretSelv.length > 0
-        ) {
-            const c = vilkårMedSammeTypeOgOverlappendePerioderUtenVilkåretSelv?.reduce(
-                (nyeVilkårResultater: IVilkårResultat[], reduceVilkårResultat: IVilkårResultat) => {
-                    const nyFom = moment(vilkårResultat.periodeFom);
-                    const nyTom = moment(vilkårResultat.periodeTom);
+                            return [
+                                ...nyeVilkårResultater,
+                                {
+                                    ...annenVilkårResultat,
+                                    id: randomUUID(),
+                                    periode: nyPeriode(nyFom, annenVilkårResultat.periode.tom),
+                                },
+                            ];
+                        } else if (
+                            kanFlytteTom(vilkårResultat.periode, annenVilkårResultat.periode)
+                        ) {
+                            const nyTom = nyMoment(vilkårResultat.periode.fom)
+                                .subtract(1, 'day')
+                                .format(datoformat.ISO_DAG);
 
-                    const gammelFom = moment(reduceVilkårResultat.periodeFom);
-                    const gammelTom = moment(reduceVilkårResultat.periodeTom);
-
-                    if (nyPeriodeSplitterGammelPeriode(nyFom, nyTom, gammelFom, gammelTom)) {
-                        return [
-                            ...nyeVilkårResultater,
-                            {
-                                ...reduceVilkårResultat,
-                                periodeTom: vilkårResultat.periodeFom,
-                            },
-                            {
-                                ...reduceVilkårResultat,
-                                periodeFom: vilkårResultat.periodeTom,
-                            },
-                        ];
-                    } else if (nyPeriodeOverlapperFom(nyFom, nyTom, gammelFom, gammelTom)) {
-                        return [
-                            ...nyeVilkårResultater,
-                            {
-                                ...reduceVilkårResultat,
-                                periodeFom: vilkårResultat.periodeTom,
-                            },
-                        ];
-                    } else if (nyPeriodeOverlapperTom(nyFom, nyTom, gammelFom, gammelTom)) {
-                        return [
-                            ...nyeVilkårResultater,
-                            {
-                                ...reduceVilkårResultat,
-                                periodeTom: vilkårResultat.periodeFom,
-                            },
-                        ];
+                            return [
+                                ...nyeVilkårResultater,
+                                {
+                                    ...annenVilkårResultat,
+                                    id: randomUUID(),
+                                    periode: nyPeriode(annenVilkårResultat.periode.fom, nyTom),
+                                },
+                            ];
+                        } else {
+                            throw new Error(
+                                `${vilkårsvurderingFeilmelding}. Perioden som skal inn overlapper ikke.`
+                            );
+                        }
                     } else {
-                        return [...nyeVilkårResultater, reduceVilkårResultat];
+                        return [...nyeVilkårResultater, annenVilkårResultat];
                     }
                 },
                 []
-            );
+            ),
+            vilkårResultat,
+        ].sort((a, b) => {
+            return a.vilkårType.localeCompare(b.vilkårType) || diff(a.periode, b.periode);
+        });
 
-            vilkårResultaterForVilkårType = [...c, vilkårResultat].sort((a, b) =>
-                moment(a.periodeFom).diff(moment(b.periodeFom))
-            );
-        } else {
-            console.log('test', gjeldendePeriodeResultat?.vilkårResultater);
-            vilkårResultaterForVilkårType =
-                gjeldendePeriodeResultat?.vilkårResultater.map(
-                    (mapVilkårResultat: IVilkårResultat) => {
-                        if (vilkårResultat.id === mapVilkårResultat.id) {
-                            return vilkårResultat;
-                        } else {
-                            return mapVilkårResultat;
-                        }
-                    }
-                ) ?? [];
-        }
-
-        console.log('vilkårResultaterForVilkårType', vilkårResultaterForVilkårType);
-
+        // Slå sammen perioder med samme vilkår type og resultat. Lager aksjonspunkter for hull i vilkårsvurdering.
         let sammenslåttPerioder: IVilkårResultat[] = [];
-        for (let i = 0; i < vilkårResultaterForVilkårType.length; i++) {
-            const fletteVilkår: IVilkårResultat = vilkårResultaterForVilkårType[i];
-            const nesteVilkår: IVilkårResultat | undefined = vilkårResultaterForVilkårType[i + 1];
+        let systemetHarVurdertSammenhengendePerioder = false;
+        for (let i = 0; i < nyPeriodeResultat.length; i++) {
+            const fletteVilkår: IVilkårResultat = nyPeriodeResultat[i];
+            const nesteVilkår: IVilkårResultat | undefined = nyPeriodeResultat[i + 1];
 
             if (!nesteVilkår) {
                 sammenslåttPerioder = [...sammenslåttPerioder, fletteVilkår];
-            } else {
-                if (fletteVilkår.periodeTom !== nesteVilkår.periodeFom) {
+            } else if (
+                fletteVilkår.vilkårType === nesteVilkår.vilkårType &&
+                fletteVilkår.resultat === nesteVilkår.resultat
+            ) {
+                if (!etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
+                    systemetHarVurdertSammenhengendePerioder = false;
+
                     // Periodene er ikke sammenhengende så vil legger til et aksjonspunkt som må vurderes
+                    const nyFom = nyMoment(fletteVilkår.periode.tom)
+                        .add(1, 'day')
+                        .format(datoformat.ISO_DAG);
+                    const nyTom = nyMoment(nesteVilkår.periode.fom)
+                        .subtract(1, 'day')
+                        .format(datoformat.ISO_DAG);
+
                     sammenslåttPerioder = [
                         ...sammenslåttPerioder,
+                        fletteVilkår,
                         {
                             vilkårType: vilkårResultat.vilkårType,
                             begrunnelse: '',
                             id: randomUUID(),
-                            periodeFom: fletteVilkår.periodeFom,
-                            periodeTom: nesteVilkår.periodeTom,
+                            periode: nyPeriode(nyFom, nyTom),
                         },
                     ];
-                } else if (fletteVilkår.resultat === nesteVilkår.resultat) {
-                    // Periodene har samme resultat så vi slår de sammen
+                } else if (etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
+                    // Periodene er etterfølgende og vi slår dem sammen. Tar med begge begrunnelsene. Hopper over neste vilkår.
                     sammenslåttPerioder = [
                         ...sammenslåttPerioder,
                         {
                             ...fletteVilkår,
-                            periodeFom: fletteVilkår.periodeFom,
-                            periodeTom: nesteVilkår.periodeTom,
+                            id: randomUUID(),
+                            periode: slåSammen(fletteVilkår.periode, nesteVilkår.periode),
+                            begrunnelse: `${
+                                !systemetHarVurdertSammenhengendePerioder
+                                    ? 'Systemet har slått sammen perioder! Under ser du begrunnelsen tilknyttet de ulike periode.\n'
+                                    : ''
+                            }${periodeToString(fletteVilkår.periode)}:\n${
+                                fletteVilkår.begrunnelse
+                            }\n${periodeToString(nesteVilkår.periode)}:\n${
+                                nesteVilkår.begrunnelse
+                            }`,
                         },
                     ];
+
                     i++;
-                } else {
-                    // Periodene har forskjellig resultat så vi legger til det nye vilkåret
-                    sammenslåttPerioder = [...sammenslåttPerioder, fletteVilkår];
+                    systemetHarVurdertSammenhengendePerioder = true;
                 }
+            } else {
+                systemetHarVurdertSammenhengendePerioder = false;
+                sammenslåttPerioder = [...sammenslåttPerioder, fletteVilkår];
             }
         }
-        console.log('sammenslåttPerioder', sammenslåttPerioder);
 
         settPeriodeResultater(
             periodeResultater.map((periodeResultat: IPeriodeResultat) => {
@@ -169,70 +220,35 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: 
         );
     };
 
-    return { periodeResultater, settPeriodeResultater, settVilkårForPeriodeResultat };
+    const leggTilVilkår = (personIdent: string) => {
+        settPeriodeResultater(
+            periodeResultater.map((periodeResultat: IPeriodeResultat) => {
+                if (periodeResultat.personIdent === personIdent) {
+                    return {
+                        ...periodeResultat,
+                        vilkårResultater: [
+                            ...periodeResultat.vilkårResultater,
+                            {
+                                id: randomUUID(),
+                                vilkårType: VilkårType.BOSATT_I_RIKET,
+                                periode: nyPeriode(),
+                                begrunnelse: '',
+                            },
+                        ],
+                    };
+                } else {
+                    return periodeResultat;
+                }
+            })
+        );
+    };
+
+    return {
+        leggTilVilkår,
+        periodeResultater,
+        settPeriodeResultater,
+        settVilkårForPeriodeResultat,
+    };
 });
-
-const førNyPeriode = (nyVilkårResultat: IVilkårResultat, tom: string): IVilkårResultat => ({
-    ...nyVilkårResultat,
-    periodeTom: tom,
-});
-
-const etterNyPeriode = (nyVilkårResultat: IVilkårResultat, fom: string): IVilkårResultat => ({
-    ...nyVilkårResultat,
-    periodeFom: fom,
-});
-
-const filterVilkåretOverlapperPåMinstEnMåte = (
-    nyFom: Moment,
-    nyTom: Moment,
-    gammelFom: Moment,
-    gammelTom: Moment
-) => {
-    return nyFom.isBetween(gammelFom, gammelTom) || nyTom.isBetween(gammelFom, gammelTom);
-};
-
-const nyPeriodeErstatterGammelPeriode = (
-    nyFom: Moment,
-    nyTom: Moment,
-    gammelFom: Moment,
-    gammelTom: Moment
-) => {
-    const val = nyFom.isBefore(gammelFom) && nyTom.isAfter(gammelTom);
-    console.log('nyPeriodeErstatterGammelPeriode', val);
-    return val;
-};
-
-const nyPeriodeSplitterGammelPeriode = (
-    nyFom: Moment,
-    nyTom: Moment,
-    gammelFom: Moment,
-    gammelTom: Moment
-) => {
-    const val = nyFom.isBetween(gammelFom, gammelTom) && nyTom.isBetween(gammelFom, gammelTom);
-    console.log('nyPeriodeSplitterGammelPeriode', val);
-    return val;
-};
-
-const nyPeriodeOverlapperFom = (
-    nyFom: Moment,
-    nyTom: Moment,
-    gammelFom: Moment,
-    gammelTom: Moment
-) => {
-    const val = nyFom.isBefore(gammelFom) && nyTom.isBetween(gammelFom, gammelTom);
-    console.log('nyPeriodeOverlapperFom', val);
-    return val;
-};
-
-const nyPeriodeOverlapperTom = (
-    nyFom: Moment,
-    nyTom: Moment,
-    gammelFom: Moment,
-    gammelTom: Moment
-) => {
-    const val = nyFom.isBetween(gammelFom, gammelTom) && nyTom.isAfter(gammelTom);
-    console.log('nyPeriodeOverlapperTom', val);
-    return val;
-};
 
 export { VilkårsvurderingProvider, useVilkårsvurdering };

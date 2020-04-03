@@ -1,6 +1,6 @@
 import { IPerson } from './person';
-import moment from 'moment';
 import { randomUUID } from '../utils/commons';
+import { nyPeriode, Periode, diff } from './periode';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -25,8 +25,7 @@ export interface IVilkårResultat {
     vilkårType: VilkårType;
     id: string;
     begrunnelse: string;
-    periodeFom: string;
-    periodeTom: string;
+    periode: Periode;
     resultat?: Resultat;
 }
 
@@ -100,31 +99,15 @@ export const hentVilkårForPersoner = (personer?: IPerson[]): IPeriodeResultat[]
         personIdent: person.personIdent,
         person,
         vilkårResultater: [
-            {
-                id: randomUUID(),
-                vilkårType: VilkårType.BOSATT_I_RIKET,
-                periodeFom: '2020-05-01',
-                periodeTom: '2020-05-30',
-                begrunnelse: '',
-                resultat: Resultat.NEI,
-            },
-            {
-                id: randomUUID(),
-                vilkårType: VilkårType.BOSATT_I_RIKET,
-                periodeFom: '2020-04-01',
-                periodeTom: '2020-04-30',
-                begrunnelse: '',
-                resultat: Resultat.JA,
-            },
             ...Object.values(vilkårConfig).map(
                 (vc: IVilkårConfig): IVilkårResultat => ({
                     id: randomUUID(),
                     vilkårType: vc.key as VilkårType,
-                    periodeFom: '',
-                    periodeTom: '',
+                    periode: nyPeriode('2020-04-01', '2020-04-30'),
                     begrunnelse: '',
+                    resultat: Resultat.NEI,
                 })
             ),
-        ].sort((a, b) => moment(a.periodeFom).diff(moment(b.periodeFom))),
+        ].sort((a, b) => diff(a.periode, b.periode)),
     }));
 };

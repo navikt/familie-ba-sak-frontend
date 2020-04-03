@@ -1,10 +1,8 @@
 import React from 'react';
-import { useVilkårsvurdering } from '../../../../../context/VilkårsvurderingContext';
-import { IPerson } from '../../../../../typer/person';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { Normaltekst } from 'nav-frontend-typografi';
-import { Input, Label } from 'nav-frontend-skjema';
 import Datovegler from '../../../../Felleskomponenter/Datovelger/Datovelger';
+import { nyPeriode } from '../../../../../typer/periode';
 
 interface IProps {
     redigerbartVilkår: IVilkårResultat;
@@ -12,15 +10,6 @@ interface IProps {
 }
 
 const FastsettPeriode: React.FC<IProps> = ({ redigerbartVilkår, settRedigerbartVilkår }) => {
-    const onPeriodeChange = (periodeFom: string, periodeTom: string) => {
-        console.log('fom: ', periodeFom);
-        settRedigerbartVilkår({
-            ...redigerbartVilkår,
-            periodeFom,
-            periodeTom,
-        });
-    };
-
     return (
         <div className={'fastsett-periode'}>
             <Normaltekst children={'Fastsett periode'} />
@@ -28,15 +17,25 @@ const FastsettPeriode: React.FC<IProps> = ({ redigerbartVilkår, settRedigerbart
                 <Datovegler
                     id={'fastsett-periode-fom'}
                     label={'F.o.m.'}
-                    onChange={(dato: string) => onPeriodeChange(dato, redigerbartVilkår.periodeTom)}
-                    valgtDato={redigerbartVilkår.periodeFom}
+                    onChange={(dato: string) => {
+                        settRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            periode: nyPeriode(dato, redigerbartVilkår.periode.tom),
+                        });
+                    }}
+                    valgtDato={redigerbartVilkår.periode.fom}
                 />
 
                 <Datovegler
                     id={'fastsett-periode-tom'}
                     label={'T.o.m.'}
-                    onChange={(dato: string) => onPeriodeChange(redigerbartVilkår.periodeFom, dato)}
-                    valgtDato={redigerbartVilkår.periodeTom}
+                    onChange={(dato: string) => {
+                        settRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            periode: nyPeriode(redigerbartVilkår.periode.fom, dato),
+                        });
+                    }}
+                    valgtDato={redigerbartVilkår.periode.tom}
                 />
             </div>
         </div>

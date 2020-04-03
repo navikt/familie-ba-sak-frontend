@@ -8,6 +8,7 @@ import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import { Undertittel } from 'nav-frontend-typografi';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import { useVilkårsvurdering } from '../../../context/VilkårsvurderingContext';
+import { Knapp } from 'nav-frontend-knapper';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -20,7 +21,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
     visFeilmeldinger,
     behandlingstype,
 }) => {
-    const { periodeResultater } = useVilkårsvurdering();
+    const { leggTilVilkår, periodeResultater } = useVilkårsvurdering();
 
     const nesteMåned = () => {
         const iDag = new Date();
@@ -60,6 +61,13 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                                     );
                                 }
                             )}
+                            <Knapp
+                                type={'hoved'}
+                                onClick={() => {
+                                    leggTilVilkår(periodeResultat.personIdent);
+                                }}
+                                children={'Legg til vilkår'}
+                            />
                         </ul>
                     </div>
                 );

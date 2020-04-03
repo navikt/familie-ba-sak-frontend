@@ -58,13 +58,13 @@ const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
                     >
                         <Radio
                             label={'Ja'}
-                            name={`vilkår-spørsmål_ja_${redigerbartVilkår.vilkårType}_${person.personIdent}`}
+                            name={`vilkår-spørsmål_ja_${redigerbartVilkår.vilkårType}_${redigerbartVilkår.id}`}
                             checked={redigerbartVilkår.resultat === Resultat.JA}
                             onChange={() => radioOnChange(Resultat.JA)}
                         />
                         <Radio
                             label={'Nei'}
-                            name={`vilkår-spørsmål_nei_${redigerbartVilkår.vilkårType}_${person.personIdent}`}
+                            name={`vilkår-spørsmål_nei_${redigerbartVilkår.vilkårType}_${redigerbartVilkår.id}`}
                             checked={redigerbartVilkår.resultat === Resultat.NEI}
                             onChange={() => radioOnChange(Resultat.NEI)}
                         />
@@ -98,6 +98,7 @@ const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
                         type={'hoved'}
                         onClick={() => {
                             settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
+                            settEkspandertVilkår(!ekspandertVilkår);
                         }}
                         children={'Ferdig'}
                     />
