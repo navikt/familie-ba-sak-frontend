@@ -1,12 +1,21 @@
 import * as React from 'react';
-
-import { OppgaveProvider } from '../OppgaveProvider';
+import { Switch, Route } from 'react-router';
+import VisOppgaver from './VisOppgaver/VisOppgaver';
+import './oppgavecontainer.less';
 
 const OppgaveContainer: React.FunctionComponent = () => {
     return (
-        <OppgaveProvider>
-            <div>Oppgaver vises...</div>
-        </OppgaveProvider>
+        <div className="oppgavercontainer__content">
+            <Switch>
+                <Route
+                    exact={true}
+                    path="/oppgaver/vise"
+                    render={() => {
+                        return <VisOppgaver />;
+                    }}
+                />
+            </Switch>
+        </div>
     );
 };
 

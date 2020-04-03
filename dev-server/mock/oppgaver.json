@@ -1,0 +1,29 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "tildeltEnhetsnr": "8888",
+            "journalpostId": "j33",
+            "saksreferanse": "sak1",
+            "aktoerid": "12345678910",
+            "tilordnetRessurs": "SomeResource",
+            "behandlingstema": "ab0180",
+            "oppgavetype": "BehandleSak",
+            "prioritet": "nei",
+            "status": "SomeStatus"
+        },
+        {
+            "id": 2,
+            "tildeltEnhetsnr": "8889",
+            "journalpostId": "j31",
+            "saksreferanse": "sak2",
+            "aktoerid": "32345678910",
+            "tilordnetRessurs": "SomeResource",
+            "behandlingstema": "ab0270",
+            "oppgavetype": "BehandleSak",
+            "prioritet": "nei",
+            "status": "SomeStatus"
+        }
+    ],
+    "status": "SUKSESS"
+}

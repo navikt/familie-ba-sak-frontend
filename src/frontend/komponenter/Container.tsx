@@ -9,6 +9,7 @@ import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
+import { OppgaverProvider } from '../context/OppgaverContext';
 
 interface IProps {
     innloggetSaksbehandler?: ISaksbehandler;
@@ -19,39 +20,41 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
 
     return (
         <FagsakProvider>
-            <UIModalWrapper />
-            {autentisert ? (
-                <>
-                    <div className={'container'} role="main">
-                        <Router>
-                            <HeaderMedSøk
-                                brukerNavn={innloggetSaksbehandler?.displayName}
-                                brukerEnhet={innloggetSaksbehandler?.enhet}
-                            />
-                            <Switch>
-                                <Route
-                                    exact={true}
-                                    path={'/'}
-                                    render={() => {
-                                        return <Redirect from="/" to="/fagsak/ny-fagsak" />;
-                                    }}
+            <OppgaverProvider>
+                <UIModalWrapper />
+                {autentisert ? (
+                    <>
+                        <div className={'container'} role="main">
+                            <Router>
+                                <HeaderMedSøk
+                                    brukerNavn={innloggetSaksbehandler?.displayName}
+                                    brukerEnhet={innloggetSaksbehandler?.enhet}
                                 />
-                                <Route
-                                    exact={true}
-                                    path="/fagsak/ny-fagsak"
-                                    render={() => {
-                                        return <OpprettFagsak />;
-                                    }}
-                                />
-                                <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
-                                <Route path="/oppgaver" component={OppgaveContainer} />
-                            </Switch>
-                        </Router>
-                    </div>
-                </>
-            ) : (
-                <UgyldigSesjon />
-            )}
+                                <Switch>
+                                    <Route
+                                        exact={true}
+                                        path={'/'}
+                                        render={() => {
+                                            return <Redirect from="/" to="/fagsak/ny-fagsak" />;
+                                        }}
+                                    />
+                                    <Route
+                                        exact={true}
+                                        path="/fagsak/ny-fagsak"
+                                        render={() => {
+                                            return <OpprettFagsak />;
+                                        }}
+                                    />
+                                    <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
+                                    <Route path="/oppgaver" component={OppgaveContainer} />
+                                </Switch>
+                            </Router>
+                        </div>
+                    </>
+                ) : (
+                    <UgyldigSesjon />
+                )}
+            </OppgaverProvider>
         </FagsakProvider>
     );
 };
