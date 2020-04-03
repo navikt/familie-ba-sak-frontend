@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router';
-import VisOppgaver from './VisOppgaver/VisOppgaver';
+import VisOppgaver from './VisOppgaver';
 import './oppgavecontainer.less';
 
 const OppgaveContainer: React.FunctionComponent = () => {
