@@ -1,17 +1,21 @@
 import moment, { Moment } from 'moment';
+
 import { datoformat, formaterIsoDato } from '../utils/formatter';
 
-interface IPeriode {
-    // Format 2020-04-09 (ISO)
-    fom: string;
-    tom: string;
+export const TIDENES_MORGEN: Moment = moment(-8640000000000000);
+export const TIDENES_ENDE: Moment = moment(8640000000000000);
+
+export interface IPeriode {
+    // Format YYYY-MM-DD (ISO)
+    fom?: string;
+    tom?: string;
 }
 
 export const nyPeriode = (fom?: string, tom?: string): IPeriode => {
-    return { fom: fom ? fom : '', tom: tom ? tom : '' };
+    return { fom: fom !== '' ? fom : undefined, tom: tom !== '' ? tom : undefined };
 };
 
-export const nyMoment = (dato: string) => {
+export const nyMoment = (dato: string | undefined) => {
     return moment(dato, datoformat.ISO_DAG);
 };
 
@@ -26,16 +30,21 @@ export const formaterMomentTilStringDato = (dato: Moment): string => {
     return dato.format(datoformat.ISO_DAG);
 };
 
-export const stringToMoment = (dato: string): Moment => {
-    return moment(dato, datoformat.ISO_DAG);
+export const stringToMoment = (dato: string | undefined, defaultValue: Moment): Moment => {
+    return dato && dato !== '' ? moment(dato, datoformat.ISO_DAG) : defaultValue;
 };
 
 export const isValid = (periode: IPeriode): boolean => {
-    return stringToMoment(periode.fom).isBefore(periode.tom);
+    return stringToMoment(periode.fom, TIDENES_MORGEN).isBefore(
+        stringToMoment(periode.tom, TIDENES_ENDE)
+    );
 };
 
 export const diff = (første: IPeriode, annen: IPeriode) => {
-    return stringToMoment(første.fom).diff(annen.fom, 'day');
+    return stringToMoment(første.fom, TIDENES_MORGEN).diff(
+        stringToMoment(annen.fom, TIDENES_MORGEN),
+        'day'
+    );
 };
 
 export const slåSammen = (første: IPeriode, annen: IPeriode): IPeriode => {
@@ -46,50 +55,68 @@ export const slåSammen = (første: IPeriode, annen: IPeriode): IPeriode => {
 };
 
 export const etterfølgende = (første: IPeriode, annen: IPeriode): boolean => {
-    return stringToMoment(første.tom)
+    return stringToMoment(første.tom, TIDENES_ENDE)
         .add(1, 'day')
-        .isSame(annen.fom);
+        .isSame(stringToMoment(annen.fom, TIDENES_MORGEN));
 };
 
-export const kanErstatte = (første: IPeriode, annen: IPeriode): boolean => {
+export const kanErstatte = (skalErstatte: IPeriode, annen: IPeriode): boolean => {
     return (
-        stringToMoment(første.fom).isBefore(stringToMoment(annen.fom)) &&
-        stringToMoment(første.tom).isAfter(stringToMoment(annen.tom))
-    );
-};
-
-export const kanSplitte = (første: IPeriode, annen: IPeriode): boolean => {
-    return (
-        stringToMoment(første.fom).isBetween(
-            stringToMoment(annen.fom),
-            stringToMoment(annen.tom)
+        stringToMoment(skalErstatte.fom, TIDENES_MORGEN).isSameOrBefore(
+            stringToMoment(annen.fom, TIDENES_MORGEN)
         ) &&
-        stringToMoment(første.tom).isBetween(stringToMoment(annen.fom), stringToMoment(annen.tom))
+        stringToMoment(skalErstatte.tom, TIDENES_ENDE).isSameOrAfter(
+            stringToMoment(annen.tom, TIDENES_ENDE)
+        )
     );
 };
 
-export const kanFlytteFom = (første: IPeriode, annen: IPeriode): boolean => {
+export const kanSplitte = (skalSplitte: IPeriode, annen: IPeriode): boolean => {
     return (
-        stringToMoment(første.fom).isBefore(stringToMoment(annen.fom)) &&
-        stringToMoment(første.tom).isBetween(stringToMoment(annen.fom), stringToMoment(annen.tom))
+        stringToMoment(skalSplitte.fom, TIDENES_MORGEN).isBetween(
+            stringToMoment(annen.fom, TIDENES_MORGEN),
+            stringToMoment(annen.tom, TIDENES_ENDE)
+        ) &&
+        stringToMoment(skalSplitte.tom, TIDENES_ENDE).isBetween(
+            stringToMoment(annen.fom, TIDENES_MORGEN),
+            stringToMoment(annen.tom, TIDENES_ENDE)
+        )
     );
 };
 
-export const kanFlytteTom = (første: IPeriode, annen: IPeriode): boolean => {
+export const kanFlytteFom = (skalFlytteFom: IPeriode, annen: IPeriode): boolean => {
     return (
-        stringToMoment(første.fom).isBetween(
-            stringToMoment(annen.fom),
-            stringToMoment(annen.tom)
-        ) && stringToMoment(første.tom).isAfter(stringToMoment(annen.tom))
+        stringToMoment(skalFlytteFom.fom, TIDENES_MORGEN).isSameOrBefore(
+            stringToMoment(annen.fom, TIDENES_MORGEN)
+        ) &&
+        stringToMoment(skalFlytteFom.tom, TIDENES_ENDE).isBetween(
+            stringToMoment(annen.fom, TIDENES_MORGEN),
+            stringToMoment(annen.tom, TIDENES_ENDE)
+        )
+    );
+};
+
+export const kanFlytteTom = (skalFlytteTom: IPeriode, annen: IPeriode): boolean => {
+    return (
+        stringToMoment(skalFlytteTom.fom, TIDENES_MORGEN).isBetween(
+            stringToMoment(annen.fom, TIDENES_MORGEN),
+            stringToMoment(annen.tom, TIDENES_ENDE)
+        ) &&
+        stringToMoment(skalFlytteTom.tom, TIDENES_ENDE).isSameOrAfter(
+            stringToMoment(annen.tom, TIDENES_ENDE)
+        )
     );
 };
 
 export const overlapperMinstEttSted = (første: IPeriode, annen: IPeriode): boolean => {
+    const førsteFom = stringToMoment(første.fom, TIDENES_MORGEN);
+    const førsteTom = stringToMoment(første.tom, TIDENES_ENDE);
+    const annenFom = stringToMoment(annen.fom, TIDENES_MORGEN);
+    const annenTom = stringToMoment(annen.tom, TIDENES_ENDE);
+
     return (
-        stringToMoment(første.fom).isBetween(
-            stringToMoment(annen.fom),
-            stringToMoment(annen.tom)
-        ) ||
-        stringToMoment(første.tom).isBetween(stringToMoment(annen.fom), stringToMoment(annen.tom))
+        førsteFom.isBetween(annenFom, annenTom) ||
+        førsteTom.isBetween(annenFom, annenTom) ||
+        (førsteFom.isBefore(annenFom) && førsteTom.isAfter(annenTom))
     );
 };

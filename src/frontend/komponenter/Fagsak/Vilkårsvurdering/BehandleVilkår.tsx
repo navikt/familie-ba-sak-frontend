@@ -7,7 +7,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
-import { useVilkårsvurdering } from '../../../context/VilkårsvurderingContext';
+import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 
 interface IProps {

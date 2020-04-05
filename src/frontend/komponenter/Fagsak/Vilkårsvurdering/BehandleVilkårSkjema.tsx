@@ -1,14 +1,14 @@
+import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 
+import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { Behandlingstype } from '../../../typer/behandling';
-import { IVilkårResultat, IPeriodeResultat } from '../../../typer/vilkår';
-import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { IPeriodeResultat, IVilkårResultat, VilkårType } from '../../../typer/vilkår';
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
-import { Undertittel } from 'nav-frontend-typografi';
+import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
-import { useVilkårsvurdering } from '../../../context/VilkårsvurderingContext';
-import { Knapp } from 'nav-frontend-knapper';
 
 interface IBehandlingVilkårSkjema {
     opprettelseFeilmelding: string;
@@ -62,11 +62,15 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                                 }
                             )}
                             <Knapp
-                                type={'hoved'}
+                                type={'flat'}
+                                mini={true}
                                 onClick={() => {
-                                    leggTilVilkår(periodeResultat.personIdent);
+                                    leggTilVilkår(
+                                        periodeResultat.personIdent,
+                                        VilkårType.BOSATT_I_RIKET
+                                    );
                                 }}
-                                children={'Legg til vilkår'}
+                                children={'Vurder ny periode'}
                             />
                         </ul>
                     </div>

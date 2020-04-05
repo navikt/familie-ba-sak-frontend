@@ -1,7 +1,7 @@
 import { INøkkelPar } from './common';
 import { IPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
-import { IVilkårResultat, IPeriodeResultat } from './vilkår';
+import { IPeriodeResultat } from './vilkår';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',

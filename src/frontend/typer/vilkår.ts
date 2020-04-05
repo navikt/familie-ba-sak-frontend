@@ -1,6 +1,6 @@
-import { IPerson } from './person';
 import { randomUUID } from '../utils/commons';
-import { nyPeriode, Periode, diff } from './periode';
+import { diff, IPeriode, nyPeriode } from './periode';
+import { IPerson } from './person';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -8,7 +8,7 @@ export enum Resultat {
 }
 
 export enum VilkårType {
-    //UNDER_18_ÅR_OG_BOR_MED_SØKER = 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
+    UNDER_18_ÅR_OG_BOR_MED_SØKER = 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
     BOSATT_I_RIKET = 'BOSATT_I_RIKET',
     STØNADSPERIODE = 'STØNADSPERIODE',
     LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
@@ -25,7 +25,7 @@ export interface IVilkårResultat {
     vilkårType: VilkårType;
     id: string;
     begrunnelse: string;
-    periode: Periode;
+    periode: IPeriode;
     resultat?: Resultat;
 }
 
@@ -56,12 +56,12 @@ export interface IVilkårConfig {
 }
 
 export const vilkårConfig: IVilkårsconfig = {
-    /*UNDER_18_ÅR_OG_BOR_MED_SØKER: {
+    UNDER_18_ÅR_OG_BOR_MED_SØKER: {
         beskrivelse: 'under 18 år, bor med søker',
         key: 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
         lovreferanse: '§ 2',
         tittel: 'Under 18 år og bor med søker',
-    },*/
+    },
     BOSATT_I_RIKET: {
         beskrivelse: 'bosatt i riket',
         key: 'BOSATT_I_RIKET',

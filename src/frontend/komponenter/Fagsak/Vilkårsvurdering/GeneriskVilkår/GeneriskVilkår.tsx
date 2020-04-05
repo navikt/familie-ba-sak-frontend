@@ -1,24 +1,32 @@
-import React, { useState } from 'react';
-import { IVilkårConfig, vilkårConfig, IVilkårResultat, Resultat } from '../../../../typer/vilkår';
-import { Element, Undertekst } from 'nav-frontend-typografi';
-import UtførKnapp from './UtførKnapp';
-import { RadioGruppe, Radio, TextareaControlled } from 'nav-frontend-skjema';
-import { useVilkårsvurdering } from '../../../../context/VilkårsvurderingContext';
-import { IPerson } from '../../../../typer/person';
-import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
 import classNames from 'classnames';
+import deepEqual from 'deep-equal';
 import { Knapp } from 'nav-frontend-knapper';
+import { FeiloppsummeringFeil, Radio, RadioGruppe, TextareaControlled } from 'nav-frontend-skjema';
+import { Element, Feilmelding, Undertekst } from 'nav-frontend-typografi';
+import React, { useState } from 'react';
+
+import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { IPerson } from '../../../../typer/person';
+import { IVilkårConfig, IVilkårResultat, Resultat, vilkårConfig } from '../../../../typer/vilkår';
+import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
+import UtførKnapp from './UtførKnapp';
 
 interface IProps {
     person: IPerson;
     vilkårResultat: IVilkårResultat;
 }
 
+export const vilkårResultatFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
+    `vilkår-resultat_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
+
+export const vilkårBegrunnelseFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
+    `vilkår-begrunnelse_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
+
 const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
     const { settVilkårForPeriodeResultat } = useVilkårsvurdering();
     const vilkårFraConfig: IVilkårConfig = vilkårConfig[vilkårResultat.vilkårType];
     const [ekspandertVilkår, settEkspandertVilkår] = useState(false);
-    const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
+    const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
 
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<IVilkårResultat>(vilkårResultat);
 
@@ -27,6 +35,15 @@ const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
             ...redigerbartVilkår,
             resultat,
         });
+    };
+
+    const toggleForm = () => {
+        if (!deepEqual(vilkårResultat, redigerbartVilkår)) {
+            alert('Vurderingen har endringer som ikke er lagret!');
+        } else {
+            settEkspandertVilkår(!ekspandertVilkår);
+            settRedigerbartVilkår(vilkårResultat);
+        }
     };
 
     return (
@@ -41,10 +58,7 @@ const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
             <div className={'generisk-vilkår__tittel-og-utfør'}>
                 <Element children={vilkårFraConfig.tittel} />
                 <Undertekst children={vilkårFraConfig.lovreferanse} />
-                <UtførKnapp
-                    onClick={() => settEkspandertVilkår(!ekspandertVilkår)}
-                    aktiv={ekspandertVilkår}
-                />
+                <UtførKnapp onClick={toggleForm} aktiv={ekspandertVilkår} />
             </div>
 
             {ekspandertVilkår && (
@@ -55,6 +69,7 @@ const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
                                 ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
                                 : ''
                         }
+                        feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår)}
                     >
                         <Radio
                             label={'Ja'}
@@ -76,10 +91,11 @@ const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
                     </RadioGruppe>
 
                     <TextareaControlled
-                        label={'Begrunnelse'}
-                        textareaClass={'generisk-vilkår__ekspandert--begrunnelse'}
-                        placeholder={'Begrunn vurderingen'}
                         defaultValue={redigerbartVilkår.begrunnelse}
+                        id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår)}
+                        label={'Begrunnelse'}
+                        placeholder={'Begrunn vurderingen'}
+                        textareaClass={'generisk-vilkår__ekspandert--begrunnelse'}
                         value={redigerbartVilkår.begrunnelse}
                         onBlur={(event: any) => {
                             settRedigerbartVilkår({
@@ -87,21 +103,63 @@ const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
                                 begrunnelse: event?.target.value,
                             });
                         }}
-                        feil={
-                            visFeilmeldinger && redigerbartVilkår.begrunnelse === ''
-                                ? 'Begrunnelse er påkrevd'
-                                : undefined
-                        }
                     />
 
+                    {feilmeldinger.length > 0 && (
+                        <>
+                            {feilmeldinger.map((feilmelding: FeiloppsummeringFeil) => (
+                                <Feilmelding
+                                    key={feilmelding.skjemaelementId}
+                                    children={feilmelding.feilmelding}
+                                />
+                            ))}
+                            <br />
+                        </>
+                    )}
+
                     <Knapp
-                        type={'hoved'}
                         onClick={() => {
-                            settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
-                            settEkspandertVilkår(!ekspandertVilkår);
+                            let harFeil = false;
+
+                            if (redigerbartVilkår.resultat === undefined) {
+                                settFeilmeldinger([
+                                    ...feilmeldinger,
+                                    {
+                                        feilmelding: 'Resultat er ikke satt',
+                                        skjemaelementId: vilkårResultatFeilmeldingId(
+                                            redigerbartVilkår
+                                        ),
+                                    },
+                                ]);
+                                harFeil = true;
+                            }
+
+                            if (redigerbartVilkår.begrunnelse === '') {
+                                settFeilmeldinger([
+                                    ...feilmeldinger,
+                                    {
+                                        feilmelding: 'Begrunnelse er ikke satt',
+                                        skjemaelementId: vilkårBegrunnelseFeilmeldingId(
+                                            redigerbartVilkår
+                                        ),
+                                    },
+                                ]);
+                                harFeil = true;
+                            }
+
+                            if (!harFeil) {
+                                settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
+                                settEkspandertVilkår(!ekspandertVilkår);
+                            }
                         }}
-                        children={'Ferdig'}
-                    />
+                        mini={true}
+                        type={'standard'}
+                    >
+                        Ferdig
+                    </Knapp>
+                    <Knapp onClick={toggleForm} mini={true} type={'flat'}>
+                        Avbryt
+                    </Knapp>
                 </div>
             )}
         </li>

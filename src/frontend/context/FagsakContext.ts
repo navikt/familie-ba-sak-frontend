@@ -1,10 +1,11 @@
-import React from 'react';
+import { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { Ressurs, RessursStatus, byggFeiletRessurs } from '../typer/ressurs';
-import { IPerson } from '../typer/person';
+import React from 'react';
+
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
-import { AxiosError } from 'axios';
+import { IPerson } from '../typer/person';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
 
 interface IHovedRessurser {

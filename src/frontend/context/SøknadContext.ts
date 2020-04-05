@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
 import createUseContext from 'constate';
-import { ISøknadDTO, TypeSøker, IBarnMedOpplysninger } from '../typer/søknad';
-import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandling';
-import { IPerson, IFamilieRelasjon, FamilieRelasjonRolle } from '../typer/person';
-import { RessursStatus } from '../typer/ressurs';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+
+import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandling';
+import { FamilieRelasjonRolle, IFamilieRelasjon, IPerson } from '../typer/person';
+import { RessursStatus } from '../typer/ressurs';
+import { IBarnMedOpplysninger, ISøknadDTO, TypeSøker } from '../typer/søknad';
 import { useFagsakRessurser } from './FagsakContext';
 
 const initalState = (bruker?: IPerson): ISøknadDTO => {
