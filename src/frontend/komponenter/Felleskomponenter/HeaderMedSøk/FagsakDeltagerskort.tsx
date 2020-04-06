@@ -33,16 +33,19 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
         "FORELDER_UKJENT": <NøytralPersonIkon className='ikon' />,
         "BARN_KVINNE": <JenteIkon className='ikon' />,
         "BARN_MANN": <GuttIkon className='ikon' />,
-        "BARN_UKJENT": <NøytralPersonIkon className='ikon' />
+        "BARN_UKJENT": <NøytralPersonIkon className='ikon' />,
+        "UKJENT_UKJENT": <NøytralPersonIkon className='ikon' />,
+        "UKJENT_MANN": <MannIkon className='ikon' />,
+        "UKJENT_KVINNE": <KvinneIkon className='ikon' />
     };
 
     const rolleNavn: RolleNavnMap = {
-        "FORELDER_MANN": "FAR",
-        "FORELDER_KVINNE": "MOR",
-        "FORELDER_UKJENT": "FORELDER",
-        "BARN_KVINNE": "BARN",
-        "BARN_MANN": "BARN",
-        "BARN_UKJENT": "BARN"
+        "FORELDER_MANN": " : FAR",
+        "FORELDER_KVINNE": " : MOR",
+        "FORELDER_UKJENT": " : FORELDER",
+        "BARN_KVINNE": " : BARN",
+        "BARN_MANN": " : BARN",
+        "BARN_UKJENT": " : BARN"
     }
 
     const ingenTreff = !fagsakId;
@@ -51,7 +54,7 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
         <div className={`${ingenTreff ? "gray-out": ""}`}>
             <Infokort
                 ikon={ikoner[`${rolle}_${kjønn}`]}
-                header={`${navn}(${ident}) : ${rolleNavn[`${rolle}_${kjønn}`]}`}
+                header={`${navn}(${ident})${rolleNavn[`${rolle}_${kjønn}`] || ""}`}
                 index={index}
                 onClick={onClick}
             >
