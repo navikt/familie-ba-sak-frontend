@@ -13,8 +13,8 @@ interface IProps {
 }
 
 const FastsettPeriode: React.FC<IProps> = ({ redigerbartVilkår, settRedigerbartVilkår }) => {
-    const [fastsettTom, settFastsettTom] = useState(
-        redigerbartVilkår.periode.tom && redigerbartVilkår.periode.tom !== ''
+    const [fastsettTom, settFastsettTom] = useState<boolean>(
+        redigerbartVilkår.periode.tom && redigerbartVilkår.periode.tom !== '' ? true : false
     );
 
     return (

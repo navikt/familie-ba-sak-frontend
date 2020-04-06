@@ -269,7 +269,7 @@ describe('Skal teste vilkårsvurdering', () => {
             mockVilkår(
                 VilkårType.BOSATT_I_RIKET,
                 Resultat.JA,
-                nyPeriode('2020-07-10', '2021-01-01')
+                nyPeriode('2020-08-10', '2021-01-01')
             ),
             mockVilkår(
                 VilkårType.LOVLIG_OPPHOLD,
@@ -283,7 +283,7 @@ describe('Skal teste vilkårsvurdering', () => {
             VilkårType.BOSATT_I_RIKET
         );
         expect(nyVilkårsvurdering.length).toBe(4);
-        expect(nyVilkårsvurdering[1].periode).toStrictEqual(nyPeriode('2020-06-16', '2020-07-09'));
+        expect(nyVilkårsvurdering[1].periode).toStrictEqual(nyPeriode('2020-06-16', '2020-08-09'));
         expect(nyVilkårsvurdering[1].resultat).toBe(undefined);
     });
 

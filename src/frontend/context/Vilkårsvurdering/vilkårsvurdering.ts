@@ -11,6 +11,7 @@ import {
     etterfølgende,
     slåSammen,
     periodeToString,
+    ikkeEtterfølgendeOgHullPåOver1Måned,
 } from '../../typer/periode';
 import { datoformat } from '../../utils/formatter';
 import { randomUUID } from '../../utils/commons';
@@ -178,7 +179,26 @@ export const slåSammenVilkårForPerson = (
                 sammenslåttPerioder.pop();
             }
 
-            if (!etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
+            if (etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
+                // Periodene er etterfølgende og vi slår dem sammen. Tar med begge begrunnelsene.
+                const sammenslåttVilkår = {
+                    ...fletteVilkår,
+                    id: randomUUID(),
+                    periode: slåSammen(fletteVilkår.periode, nesteVilkår.periode),
+                    begrunnelse: `${
+                        !systemetHarVurdertSammenhengendePerioder
+                            ? `Systemet har slått sammen perioder!\n${periodeToString(
+                                  fletteVilkår.periode
+                              )}:\n${fletteVilkår.begrunnelse}`
+                            : fletteVilkår.begrunnelse
+                    }\n\n${periodeToString(nesteVilkår.periode)}:\n${nesteVilkår.begrunnelse}`,
+                };
+
+                sammenslåttPerioder.push(sammenslåttVilkår);
+                systemetHarVurdertSammenhengendePerioder = true;
+            } else if (
+                ikkeEtterfølgendeOgHullPåOver1Måned(fletteVilkår.periode, nesteVilkår.periode)
+            ) {
                 // Periodene er ikke sammenhengende så vil legger til et aksjonspunkt som må vurderes
                 const nyFom = nyMoment(fletteVilkår.periode.tom)
                     .add(1, 'day')
@@ -199,23 +219,10 @@ export const slåSammenVilkårForPerson = (
                 ];
 
                 systemetHarVurdertSammenhengendePerioder = false;
-            } else if (etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
-                // Periodene er etterfølgende og vi slår dem sammen. Tar med begge begrunnelsene.
-                const sammenslåttVilkår = {
-                    ...fletteVilkår,
-                    id: randomUUID(),
-                    periode: slåSammen(fletteVilkår.periode, nesteVilkår.periode),
-                    begrunnelse: `${
-                        !systemetHarVurdertSammenhengendePerioder
-                            ? `Systemet har slått sammen perioder!\n${periodeToString(
-                                  fletteVilkår.periode
-                              )}:\n${fletteVilkår.begrunnelse}`
-                            : fletteVilkår.begrunnelse
-                    }\n\n${periodeToString(nesteVilkår.periode)}:\n${nesteVilkår.begrunnelse}`,
-                };
+            } else {
+                sammenslåttPerioder = leggTilHvisIkkeFinnes(sammenslåttPerioder, fletteVilkår);
 
-                sammenslåttPerioder.push(sammenslåttVilkår);
-                systemetHarVurdertSammenhengendePerioder = true;
+                systemetHarVurdertSammenhengendePerioder = false;
             }
         } else {
             sammenslåttPerioder = leggTilHvisIkkeFinnes(sammenslåttPerioder, fletteVilkår);

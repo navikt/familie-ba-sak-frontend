@@ -60,6 +60,16 @@ export const etterfølgende = (første: IPeriode, annen: IPeriode): boolean => {
         .isSame(stringToMoment(annen.fom, TIDENES_MORGEN));
 };
 
+export const ikkeEtterfølgendeOgHullPåOver1Måned = (første: IPeriode, annen: IPeriode): boolean => {
+    return (
+        !etterfølgende(første, annen) &&
+        stringToMoment(annen.fom, TIDENES_MORGEN).diff(
+            stringToMoment(første.tom, TIDENES_ENDE),
+            'days'
+        ) > 30
+    );
+};
+
 export const kanErstatte = (skalErstatte: IPeriode, annen: IPeriode): boolean => {
     return (
         stringToMoment(skalErstatte.fom, TIDENES_MORGEN).isSameOrBefore(
