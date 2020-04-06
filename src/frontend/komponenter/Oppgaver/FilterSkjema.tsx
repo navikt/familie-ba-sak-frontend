@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Select } from 'nav-frontend-skjema';
+import { Select, Input } from 'nav-frontend-skjema';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
     Oppgavetype,
@@ -109,7 +109,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                 )
                             }
                             value={filter.selectedValue}
-                            className="filterskjema__filtre__filter"
+                            className="filterskjema__filtre__input"
                         >
                             {filter.values.map((value: string) => {
                                 return (
@@ -125,6 +125,18 @@ const FilterSkjema: React.FunctionComponent = () => {
                         </Select>
                     );
                 })}
+            </div>
+            <div className="filterskjema__filtre filterskjema__content">
+                <Input
+                    label="Frist"
+                    placeholder="DD.MM.ÅÅÅÅ"
+                    className="filterskjema__filtre__input"
+                />
+                <Input
+                    label="Registert dato"
+                    placeholder="DD.MM.ÅÅÅÅ"
+                    className="filterskjema__filtre__input"
+                />
             </div>
             <Knapp
                 onClick={() => {
