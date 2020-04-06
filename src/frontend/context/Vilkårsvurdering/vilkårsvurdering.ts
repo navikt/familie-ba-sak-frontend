@@ -155,7 +155,7 @@ const leggTilHvisIkkeFinnes = (
  */
 export const slåSammenVilkårForPerson = (
     vilkårsvurderingForPerson: IVilkårResultat[],
-    vilkårTypeSomSkalSlåsSammen: VilkårType
+    ikkeSlåSammenBegrunnelser?: boolean
 ): IVilkårResultat[] => {
     let sammenslåttPerioder: IVilkårResultat[] = [];
     let systemetHarVurdertSammenhengendePerioder = false;
@@ -185,13 +185,17 @@ export const slåSammenVilkårForPerson = (
                     ...fletteVilkår,
                     id: randomUUID(),
                     periode: slåSammen(fletteVilkår.periode, nesteVilkår.periode),
-                    begrunnelse: `${
-                        !systemetHarVurdertSammenhengendePerioder
-                            ? `Systemet har slått sammen perioder!\n${periodeToString(
-                                  fletteVilkår.periode
-                              )}:\n${fletteVilkår.begrunnelse}`
-                            : fletteVilkår.begrunnelse
-                    }\n\n${periodeToString(nesteVilkår.periode)}:\n${nesteVilkår.begrunnelse}`,
+                    begrunnelse: ikkeSlåSammenBegrunnelser
+                        ? fletteVilkår.begrunnelse
+                        : `${
+                              !systemetHarVurdertSammenhengendePerioder
+                                  ? `Systemet har slått sammen perioder!\n${periodeToString(
+                                        fletteVilkår.periode
+                                    )}:\n${fletteVilkår.begrunnelse}`
+                                  : fletteVilkår.begrunnelse
+                          }\n\n${periodeToString(nesteVilkår.periode)}:\n${
+                              nesteVilkår.begrunnelse
+                          }`,
                 };
 
                 sammenslåttPerioder.push(sammenslåttVilkår);
@@ -211,7 +215,7 @@ export const slåSammenVilkårForPerson = (
                     ...sammenslåttPerioder,
                     fletteVilkår,
                     {
-                        vilkårType: vilkårTypeSomSkalSlåsSammen,
+                        vilkårType: fletteVilkår.vilkårType,
                         begrunnelse: '',
                         id: randomUUID(),
                         periode: nyPeriode(nyFom, nyTom),

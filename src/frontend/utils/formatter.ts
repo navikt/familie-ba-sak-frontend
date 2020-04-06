@@ -13,7 +13,11 @@ export enum datoformatNorsk {
     DATO = 'DD.MM.ÅÅÅÅ',
 }
 
-export const formaterIsoDato = (dato: string | undefined, tilFormat: datoformat) => {
+export const formaterIsoDato = (
+    dato: string | undefined,
+    tilFormat: datoformat,
+    defaultValue?: Moment
+) => {
     const momentDato = moment(dato);
     return momentDato.isValid() ? momentDato.format(tilFormat) : dato ? dato : '';
 };

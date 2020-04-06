@@ -33,46 +33,47 @@
                     }
                 ],
                 "underkategori": "UTVIDET",
-                "samletVilkårResultat": [
+                "periodeResultater": [
                     {
                         "personIdent": "12345678911",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678912",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
+                        "periodeFom": "2020-01-01",
+                        "periodeTom": null,
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "BOSATT_I_RIKET",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse"
+                            },
+                            {
+                                "vilkårType": "UNDER_18_ÅR",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse under 18 år"
+                            }
+                        ]
                     },
                     {
                         "personIdent": "12345678910",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
+                        "periodeFom": "2020-02-01",
+                        "periodeTom": null,
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "BOSATT_I_RIKET",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse"
+                            }
+                        ]
                     },
                     {
                         "personIdent": "12345678910",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678912",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678912",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678911",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678911",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "resultat": "JA"
+                        "periodeFom": "2020-01-01",
+                        "periodeTom": "2020-01-31",
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "BOSATT_I_RIKET",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse"
+                            }
+                        ]
                     }
                 ],
                 "vedtakForBehandling": [
@@ -137,31 +138,47 @@
                     }
                 ],
                 "underkategori": "ORDINÆR",
-                "samletVilkårResultat": [
+                "periodeResultater": [
                     {
                         "personIdent": "12345678911",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
+                        "periodeFom": "2020-01-01",
+                        "periodeTom": null,
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "BOSATT_I_RIKET",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse"
+                            },
+                            {
+                                "vilkårType": "UNDER_18_ÅR",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse under 18 år"
+                            }
+                        ]
                     },
                     {
                         "personIdent": "12345678910",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
+                        "periodeFom": "2020-02-01",
+                        "periodeTom": null,
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "BOSATT_I_RIKET",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse"
+                            }
+                        ]
                     },
                     {
                         "personIdent": "12345678910",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678911",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678911",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "resultat": "JA"
+                        "periodeFom": "2020-01-01",
+                        "periodeTom": "2020-01-31",
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "BOSATT_I_RIKET",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse"
+                            }
+                        ]
                     }
                 ],
                 "vedtakForBehandling": [

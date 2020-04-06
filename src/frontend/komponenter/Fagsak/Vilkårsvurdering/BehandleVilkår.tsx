@@ -9,6 +9,16 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
+import { slåSammenVilkårForPerson } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
+import {
+    IPeriodeResultat,
+    IRestPeriodeResultat,
+    IVilkårResultat,
+    IRestVilkårResultat,
+} from '../../../typer/vilkår';
+import { randomUUID } from '../../../utils/commons';
+import { nyPeriode } from '../../../typer/periode';
+import { IPerson } from '../../../typer/person';
 
 interface IProps {
     fagsak: IFagsak;
@@ -30,7 +40,54 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     React.useEffect(() => {
         if (aktivBehandling && aktivBehandling.periodeResultater.length !== 0) {
             // TODO map til frontend format
-            //settVilkårsvurdering(aktivBehandling.periodeResultater);
+            const mappetVilkårsvurdering = aktivBehandling.periodeResultater.reduce(
+                (acc: IPeriodeResultat[], periodeResultat: IRestPeriodeResultat) => {
+                    const reduceVilkårsvurderingForPersonIndex = acc.findIndex(
+                        (pResultat: IPeriodeResultat) =>
+                            pResultat.personIdent === periodeResultat.personIdent
+                    );
+
+                    const vilkårsvurderingForPerson: IVilkårResultat[] = slåSammenVilkårForPerson(
+                        periodeResultat.vilkårResultater.map(
+                            (vilkårResultat: IRestVilkårResultat) => ({
+                                vilkårType: vilkårResultat.vilkårType,
+                                id: randomUUID(),
+                                begrunnelse: vilkårResultat.begrunnelse,
+                                resultat: vilkårResultat.resultat,
+                                periode: nyPeriode(
+                                    periodeResultat.periodeFom,
+                                    periodeResultat.periodeTom
+                                ),
+                            })
+                        ),
+                        true
+                    );
+
+                    if (reduceVilkårsvurderingForPersonIndex !== -1) {
+                        acc[reduceVilkårsvurderingForPersonIndex] = {
+                            ...acc[reduceVilkårsvurderingForPersonIndex],
+                            vilkårResultater: [
+                                ...acc[reduceVilkårsvurderingForPersonIndex].vilkårResultater,
+                                ...vilkårsvurderingForPerson,
+                            ],
+                        };
+                    } else {
+                        acc.push({
+                            personIdent: periodeResultat.personIdent,
+                            vilkårResultater: vilkårsvurderingForPerson,
+                            person: aktivBehandling.personer.find(
+                                (person: IPerson) =>
+                                    person.personIdent === periodeResultat.personIdent
+                            )!!,
+                        });
+                    }
+
+                    return acc;
+                },
+                []
+            );
+            console.log(aktivBehandling.periodeResultater, mappetVilkårsvurdering);
+            settVilkårsvurdering(mappetVilkårsvurdering);
         }
     }, [fagsak]);
 

@@ -54,14 +54,13 @@ const FastsettPeriode: React.FC<IProps> = ({ redigerbartVilkår, settRedigerbart
                     <Checkbox
                         checked={fastsettTom}
                         onChange={() => {
-                            settFastsettTom(!fastsettTom);
-
                             if (redigerbartVilkår.periode.tom !== '') {
                                 settRedigerbartVilkår({
                                     ...redigerbartVilkår,
                                     periode: nyPeriode(redigerbartVilkår.periode.fom, undefined),
                                 });
                             }
+                            settFastsettTom(!fastsettTom);
                         }}
                         label={'Har en sluttdato'}
                     />
