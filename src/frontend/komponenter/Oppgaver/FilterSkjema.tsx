@@ -67,12 +67,21 @@ const initialFiltre: IOppgaverFiltre = [
 
 const getbehandlingstema = (filter: IOppgaverFilter) => {
     const index = filter.values.findIndex(v => v === filter.selectedValue);
-    return Object.keys(Gjelder)[index].toString();
+    return index === 0 ? undefined : Object.keys(Gjelder)[index].toString();
 };
 
 const getOppgavetype = (filter: IOppgaverFilter) => {
     const index = filter.values.findIndex(v => v === filter.selectedValue);
-    return Object.keys(Oppgavetype)[index].toString();
+    return index === 0 ? undefined : Object.keys(Oppgavetype)[index].toString();
+};
+
+const getEnhet = (filter: IOppgaverFilter) => {
+    const index = filter.values.findIndex(v => v === filter.selectedValue);
+    return index === 0
+        ? undefined
+        : Object.values(Enhet)
+              [index].toString()
+              .substring(0, 4);
 };
 
 const FilterSkjema: React.FunctionComponent = () => {
@@ -124,7 +133,8 @@ const FilterSkjema: React.FunctionComponent = () => {
                         getbehandlingstema(
                             filtre.find(filter => filter.name === 'Behandlingstema')!!
                         ),
-                        getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!)
+                        getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!),
+                        getEnhet(filtre.find(filter => filter.name === 'Enhet')!!)
                     ).then(() => {
                         filterOppgaver();
                     });

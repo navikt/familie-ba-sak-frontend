@@ -13,12 +13,12 @@ export interface IOppgave {
 
 export enum Enhet {
     Alle = 'Alle',
-    Drammen = 'Drammen',
-    Sandnes = 'Sandnes',
-    Vadsø = 'Vadsø',
-    Oslo = 'Oslo',
-    Stord = 'Stord',
-    LevangerSteinkjer = 'Levanger-Steinkjer',
+    Drammen = '4806 Drammen',
+    Sandnes = '4811 Sandnes',
+    Vadsø = '4820 Vadsø',
+    Oslo = '4833 Oslo',
+    Stord = '4842 Stord',
+    LevangerSteinkjer = '4847 Levanger-Steinkjer',
 }
 
 export enum Saksbehandler {
@@ -36,16 +36,25 @@ export enum Gjelder {
 
 export enum Oppgavetype {
     Alle = 'Alle',
-    Journalføring = 'Journalføring',
-    Behandle = 'Behandle sak',
-    GodkjenneVedtak = 'Godkjenne vedtak',
-    BehandleUnderkjentVedtak = 'Behandle underkjent vedtak',
-    BehandleSED = 'Behandle SED',
-    Fremlegg = 'Fremlegg',
-    InnhentDokumentasjon = 'Innhent dokumentasjon?',
-    KontaktBruker = 'Kontakt bruker',
-    VurderHenvendelse = 'Vurder henvendelse',
-    VurderKonsekvensForYtelse = 'Vurder konsekvens for ytelse',
+    RETUR = 'Behandle returpost',
+    BEH_SAK = 'Behandle sak',
+    BEH_SED = 'Behandle SED',
+    BEH_UND_VED = 'Behandle underkjent vedtak',
+    FDR = 'Fordeling',
+    FDR_SED = 'Fordeling SED',
+    FREM = 'Fremlegg',
+    GEN = 'Generell',
+    GOD_VED = 'Godkjenne vedtak',
+    INNH_DOK = 'Innhent dokumentasjon',
+    JFR = 'Journalføring',
+    JFR_UT = 'Journalføring utgående',
+    KONT_BRUK = 'Kontakt bruker',
+    KON_UTG_SCA_DOK = 'Kontroller utgående skannet dokument',
+    SVAR_IK_MOT = 'Svar ikke mottatt',
+    VUR = 'Vurder dokument',
+    VURD_HENV = 'Vurder henvendelse',
+    VUR_KONS_YTE = 'Vurder konsekvens for ytelse',
+    VUR_SVAR = 'Vurder svar',
 }
 
 export enum Enhetsmappe {

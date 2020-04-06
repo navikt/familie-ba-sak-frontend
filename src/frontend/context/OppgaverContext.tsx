@@ -20,9 +20,10 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         settHenter(true);
         return axiosRequest<IOppgave[], void>({
             method: 'GET',
-            url: `/familie-ba-sak/api/oppgaver?behandlingstema=${behandlingstema ||
-                ''}&oppgavetype=${oppgavetype || ''}&enhet=${enhet ||
-                ''}&saksbehandler=${saksbehandler || ''}`,
+            url: `/familie-ba-sak/api/oppgaver?${
+                behandlingstema ? `behandlingstema=${behandlingstema}` : ''
+            }&oppgavetype=${oppgavetype || ''}&enhet=${enhet || ''}&saksbehandler=${saksbehandler ||
+                ''}`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
                 settHenter(false);
