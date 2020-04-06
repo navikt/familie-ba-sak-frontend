@@ -17,13 +17,23 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         enhet?: string,
         saksbehandler?: string
     ) => {
+        const params = new Array<string>();
+        behandlingstema && params.push(`behandlingstema=${behandlingstema}`);
+        oppgavetype && params.push(`oppgavetype=${oppgavetype}`);
+        enhet && params.push(`enhet=${enhet}`);
+        saksbehandler && params.push(`saksbehandler=${saksbehandler}`);
+
+        let query = params.length > 0 ? '?' : '';
+
+        params.forEach((p, i) => {
+            query += i == 0 ? '' : '&';
+            query += p;
+        });
+
         settHenter(true);
         return axiosRequest<IOppgave[], void>({
             method: 'GET',
-            url: `/familie-ba-sak/api/oppgaver?${
-                behandlingstema ? `behandlingstema=${behandlingstema}` : ''
-            }&oppgavetype=${oppgavetype || ''}&enhet=${enhet || ''}&saksbehandler=${saksbehandler ||
-                ''}`,
+            url: `/familie-ba-sak/api/oppgaver${query}`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
                 settHenter(false);
