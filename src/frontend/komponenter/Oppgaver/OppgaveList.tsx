@@ -3,13 +3,17 @@ import { RessursStatus } from '../../typer/ressurs';
 import { useOppgaver } from '../../context/OppgaverContext';
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { hentetOppgaver } = useOppgaver();
+    const { oppgaver } = useOppgaver();
 
     return (
         <div>
-            {hentetOppgaver &&
-                hentetOppgaver.status == RessursStatus.SUKSESS &&
-                hentetOppgaver.data.map((oppg, index) => <p key={index}>{oppg.aktoerid}</p>)}
+            {oppgaver &&
+                oppgaver.status == RessursStatus.SUKSESS &&
+                oppgaver.data.map((oppg, index) => (
+                    <p key={index}>
+                        {oppg.aktoerid} {oppg.prioritet}
+                    </p>
+                ))}
         </div>
     );
 };

@@ -7,7 +7,7 @@ import { byggFeiletRessurs, byggTomRessurs, Ressurs } from '../typer/ressurs';
 import { useApp } from './AppContext';
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
-    const [hentetOppgaver, settHentetOppgaver] = React.useState(byggTomRessurs<IOppgave[]>());
+    const [oppgaver, settOppgaver] = React.useState(byggTomRessurs<IOppgave[]>());
     const [henter, settHenter] = React.useState(false);
     const { axiosRequest } = useApp();
 
@@ -18,7 +18,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         saksbehandler?: string
     ) => {
         settHenter(true);
-        axiosRequest<IOppgave[], void>({
+        return axiosRequest<IOppgave[], void>({
             method: 'GET',
             url: `/familie-ba-sak/api/oppgaver?behandlingstema=${behandlingstema ||
                 ''}&oppgavetype=${oppgavetype || ''}&enhet=${enhet ||
@@ -26,14 +26,21 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
                 settHenter(false);
-                settHentetOppgaver(oppgaverRes);
+                settOppgaver(oppgaverRes);
             })
             .catch((error: AxiosError) => {
                 settHenter(false);
-                settHentetOppgaver(byggFeiletRessurs('Ukjent ved innhenting av oppgaver', error));
+                settOppgaver(byggFeiletRessurs('Ukjent ved innhenting av oppgaver', error));
             });
     };
-    return { hentetOppgaver, hentOppgaver, henter };
+
+    const filterOppgaver = () => {
+        console.log('frontend filtering');
+    };
+
+    const sortOppgaver = () => {};
+
+    return { oppgaver, hentOppgaver, filterOppgaver, sortOppgaver, henter };
 });
 
 export { OppgaverProvider, useOppgaver };
