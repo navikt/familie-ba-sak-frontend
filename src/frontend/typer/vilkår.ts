@@ -52,19 +52,19 @@ export const vilkårConfig: IVilkårsconfig = {
     GIFT_PARTNERSKAP: {
         beskrivelse: 'gift eller partnerskap',
         key: 'GIFT_PARTNERSKAP',
-        lovreferanse: '§ 2-2',
+        lovreferanse: '§ 2-4',
         parterDetteGjelderFor: [PersonType.BARN],
     },
     BOSATT_I_RIKET: {
         beskrivelse: 'bosatt i riket',
         key: 'BOSATT_I_RIKET',
-        lovreferanse: '§ 4',
+        lovreferanse: '§ 4-1',
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
     },
     LOVLIG_OPPHOLD: {
         beskrivelse: 'lovlig opphold',
         key: 'LOVLIG_OPPHOLD',
-        lovreferanse: '§ 11',
+        lovreferanse: '§ 4-2',
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
     },
 };
