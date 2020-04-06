@@ -12,6 +12,7 @@ import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 import { mapFraRestVilkårsvurderingTilUi } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
 import { IPeriodeResultat, IRestPeriodeResultat, IRestVilkårResultat } from '../../../typer/vilkår';
 import { PersonType } from '../../../typer/person';
+import { FeiloppsummeringFeil, Feiloppsummering } from 'nav-frontend-skjema';
 
 interface IProps {
     fagsak: IFagsak;
@@ -22,10 +23,13 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+    const [feilmeldinger, settFeilmeldinger] = React.useState<FeiloppsummeringFeil[]>([]);
+
     const history = useHistory();
     const { opprettEllerOppdaterVilkårsvurdering, senderInn } = useFagsakApi(
         settVisFeilmeldinger,
-        settOpprettelseFeilmelding
+        settOpprettelseFeilmelding,
+        settFeilmeldinger
     );
 
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
@@ -90,10 +94,18 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     )}
 
                 <BehandlingVilkårSkjema
+                    feilmeldinger={feilmeldinger}
                     opprettelseFeilmelding={opprettelseFeilmelding}
                     visFeilmeldinger={visFeilmeldinger}
                     behandlingstype={aktivBehandling.type}
                 />
+
+                {feilmeldinger.length > 0 && (
+                    <Feiloppsummering
+                        tittel={'For å gå videre må du rette opp følgende:'}
+                        feil={feilmeldinger}
+                    />
+                )}
             </Skjemasteg>
         </div>
     );

@@ -19,11 +19,13 @@ import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useApp } from '../../context/AppContext';
-import { IPeriodeResultat } from '../../typer/vilkår';
+import { IPeriodeResultat, vilkårConfig, IVilkårConfig, IVilkårResultat } from '../../typer/vilkår';
+import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
-    settFeilmelding: (feilmelding: string) => void
+    settFeilmelding: (feilmelding: string) => void,
+    settFeilmeldinger?: (feilmeldinger: FeiloppsummeringFeil[]) => void
 ) => {
     const { settFagsak } = useFagsakRessurser();
     const { axiosRequest } = useApp();
@@ -105,38 +107,66 @@ const useFagsakApi = (
         vilkårsvurdering: IPeriodeResultat[],
         fagsak: IFagsak
     ) => {
-        // TODO legg til validering av skjema
-
-        settSenderInn(true);
-        axiosRequest<IFagsak, IRestVilkårsvurdering>({
-            data: {
-                periodeResultater: vilkårsvurdering,
-            },
-            method: 'PUT',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
-        })
-            .then((response: Ressurs<any>) => {
-                settSenderInn(false);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settFagsak(response);
-
-                    if (erBehandlingenInnvilget(vilkårsvurdering)) {
-                        history.push(`/fagsak/${fagsak.id}/beregning`);
-                    } else {
-                        history.push(`/fagsak/${fagsak.id}/vedtak`);
+        // Basic validering av skjemaet
+        const feilmeldinger: FeiloppsummeringFeil[] = [];
+        vilkårsvurdering.filter((periodeResultat: IPeriodeResultat) => {
+            Object.values(vilkårConfig)
+                .filter((vc: IVilkårConfig) =>
+                    vc.parterDetteGjelderFor.includes(periodeResultat.person.type)
+                )
+                .forEach((vc: IVilkårConfig) => {
+                    if (
+                        periodeResultat.vilkårResultater.find(
+                            (vilkårResultat: IVilkårResultat) =>
+                                vilkårResultat.vilkårType === vc.key &&
+                                vilkårResultat.resultat !== undefined
+                        ) === undefined
+                    ) {
+                        feilmeldinger.push({
+                            skjemaelementId: `${vc.key}_${periodeResultat.personIdent}`,
+                            feilmelding: `Vilkåret '${vc.key}' er ikke vurdert for ${periodeResultat.person.navn}`,
+                        });
                     }
-                } else if (response.status === RessursStatus.FEILET) {
-                    settFeilmelding(response.melding);
-                    settVisFeilmeldinger(true);
-                } else {
-                    settFeilmelding('Opprettelse av vilkårsvurdering feilet');
-                    settVisFeilmeldinger(true);
-                }
+                });
+        });
+
+        if (feilmeldinger.length !== 0 && settFeilmeldinger) {
+            settFeilmeldinger(feilmeldinger);
+            settVisFeilmeldinger(true);
+        } else {
+            settFeilmeldinger && settFeilmeldinger([]);
+
+            settSenderInn(true);
+            axiosRequest<IFagsak, IRestVilkårsvurdering>({
+                data: {
+                    periodeResultater: vilkårsvurdering,
+                },
+                method: 'PUT',
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
             })
-            .catch(() => {
-                settSenderInn(false);
-                settFeilmelding('Opprettelse av vilkårsvurdering feilet');
-            });
+                .then((response: Ressurs<any>) => {
+                    settSenderInn(false);
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settFagsak(response);
+
+                        if (erBehandlingenInnvilget(vilkårsvurdering)) {
+                            history.push(`/fagsak/${fagsak.id}/beregning`);
+                        } else {
+                            history.push(`/fagsak/${fagsak.id}/vedtak`);
+                        }
+                    } else if (response.status === RessursStatus.FEILET) {
+                        settFeilmelding(response.melding);
+                        settVisFeilmeldinger(true);
+                    } else {
+                        settFeilmelding('Opprettelse av vilkårsvurdering feilet');
+                        settVisFeilmeldinger(true);
+                    }
+                })
+                .catch(() => {
+                    settSenderInn(false);
+                    settFeilmelding('Opprettelse av vilkårsvurdering feilet');
+                });
+        }
     };
 
     const opprettBeregning = (

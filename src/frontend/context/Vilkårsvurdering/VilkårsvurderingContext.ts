@@ -13,13 +13,16 @@ import {
     lagNyVilkårsvurderingMedNyttVilkår,
     hentVilkårsvurderingMedEkstraVilkår,
 } from './vilkårsvurdering';
+import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: IProps) => {
-    const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPeriodeResultat[]>([]);
+    const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPeriodeResultat[]>(
+        hentVilkårForPersoner(hentAktivBehandlingPåFagsak(fagsak)?.personer ?? [])
+    );
 
     const settVilkårForPeriodeResultat = (
         personIdent: string,

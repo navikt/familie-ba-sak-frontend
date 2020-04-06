@@ -114,15 +114,16 @@ export const hentVilkårForPersoner = (personer?: IPerson[]): IPeriodeResultat[]
         personIdent: person.personIdent,
         person,
         vilkårResultater: [
-            ...Object.values(vilkårConfig).map(
-                (vc: IVilkårConfig): IVilkårResultat => ({
-                    id: randomUUID(),
-                    vilkårType: vc.key as VilkårType,
-                    periode: nyPeriode('2020-04-01', '2020-04-30'),
-                    begrunnelse: '',
-                    resultat: Resultat.NEI,
-                })
-            ),
+            ...Object.values(vilkårConfig)
+                .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.type))
+                .map(
+                    (vc: IVilkårConfig): IVilkårResultat => ({
+                        id: randomUUID(),
+                        vilkårType: vc.key as VilkårType,
+                        periode: nyPeriode('2020-04-01', '2020-04-30'),
+                        begrunnelse: '',
+                    })
+                ),
         ].sort((a, b) => diff(a.periode, b.periode)),
     }));
 };

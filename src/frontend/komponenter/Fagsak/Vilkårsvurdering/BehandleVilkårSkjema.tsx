@@ -1,5 +1,5 @@
 import { Knapp } from 'nav-frontend-knapper';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe, FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 
@@ -11,6 +11,7 @@ import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasj
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 
 interface IBehandlingVilkårSkjema {
+    feilmeldinger: FeiloppsummeringFeil[];
     opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
     behandlingstype: Behandlingstype;
