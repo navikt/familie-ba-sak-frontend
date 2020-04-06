@@ -1,6 +1,6 @@
 import { randomUUID } from '../utils/commons';
 import { diff, IPeriode, nyPeriode } from './periode';
-import { IPerson } from './person';
+import { IPerson, PersonType } from './person';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -8,9 +8,10 @@ export enum Resultat {
 }
 
 export enum VilkårType {
-    UNDER_18_ÅR_OG_BOR_MED_SØKER = 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
+    UNDER_18_ÅR = 'UNDER_18_ÅR',
+    BOR_MED_SØKER = 'BOR_MED_SØKER',
+    GIFT_PARTNERSKAP = 'GIFT_PARTNERSKAP',
     BOSATT_I_RIKET = 'BOSATT_I_RIKET',
-    STØNADSPERIODE = 'STØNADSPERIODE',
     LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
 }
 
@@ -51,36 +52,50 @@ export interface IVilkårConfig {
     beskrivelse: string;
     key: string;
     lovreferanse: string;
-    spørsmål?: (part: string) => string;
+    spørsmål?: (part?: string) => string;
     tittel: string;
+    parterDetteGjelderFor: PersonType[];
 }
 
 export const vilkårConfig: IVilkårsconfig = {
-    UNDER_18_ÅR_OG_BOR_MED_SØKER: {
-        beskrivelse: 'under 18 år, bor med søker',
-        key: 'UNDER_18_ÅR_OG_BOR_MED_SØKER',
+    UNDER_18_ÅR: {
+        beskrivelse: 'under 18 år',
+        key: 'UNDER_18_ÅR',
         lovreferanse: '§ 2',
-        tittel: 'Under 18 år og bor med søker',
+        tittel: 'Under 18 år',
+        spørsmål: () => `Er barnet under 18 år?`,
+        parterDetteGjelderFor: [PersonType.BARN],
+    },
+    BOR_MED_SØKER: {
+        beskrivelse: 'bor med søker',
+        key: 'BOR_MED_SØKER',
+        lovreferanse: '§ 2-2',
+        tittel: 'Bor med søker',
+        spørsmål: () => `Bor barnet med søker?`,
+        parterDetteGjelderFor: [PersonType.BARN],
+    },
+    GIFT_PARTNERSKAP: {
+        beskrivelse: 'gift eller partnerskap',
+        key: 'GIFT_PARTNERSKAP',
+        lovreferanse: '§ 2-4',
+        tittel: 'Er gift eller har partnerskap',
+        parterDetteGjelderFor: [PersonType.BARN],
     },
     BOSATT_I_RIKET: {
         beskrivelse: 'bosatt i riket',
         key: 'BOSATT_I_RIKET',
-        lovreferanse: '§ 4',
-        spørsmål: (part: string) => `Er ${part} bosatt i riket?`,
+        lovreferanse: '§ 4-1',
         tittel: 'Bosatt i riket',
-    },
-    STØNADSPERIODE: {
-        beskrivelse: 'stønadsperiode',
-        key: 'STØNADSPERIODE',
-        lovreferanse: '§ 11',
-        tittel: 'Stønadsperiode',
+        spørsmål: (part?: string) => `Er ${part} bosatt i riket?`,
+        parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
     },
     LOVLIG_OPPHOLD: {
         beskrivelse: 'lovlig opphold',
         key: 'LOVLIG_OPPHOLD',
         lovreferanse: '§ 4-2',
-        spørsmål: (part: string) => `Har ${part} lovlig opphold`,
         tittel: 'Lovlig opphold',
+        spørsmål: (part?: string) => `Har ${part} lovlig opphold?`,
+        parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
     },
 };
 

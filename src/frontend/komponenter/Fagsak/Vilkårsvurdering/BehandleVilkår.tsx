@@ -9,16 +9,9 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
-import { slåSammenVilkårForPerson } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import {
-    IPeriodeResultat,
-    IRestPeriodeResultat,
-    IVilkårResultat,
-    IRestVilkårResultat,
-} from '../../../typer/vilkår';
-import { randomUUID } from '../../../utils/commons';
-import { nyPeriode } from '../../../typer/periode';
-import { IPerson } from '../../../typer/person';
+import { mapFraRestVilkårsvurderingTilUi } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
+import { IPeriodeResultat, IRestPeriodeResultat, IRestVilkårResultat } from '../../../typer/vilkår';
+import { PersonType } from '../../../typer/person';
 
 interface IProps {
     fagsak: IFagsak;
@@ -39,55 +32,14 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     React.useEffect(() => {
         if (aktivBehandling && aktivBehandling.periodeResultater.length !== 0) {
-            // TODO map til frontend format
-            const mappetVilkårsvurdering = aktivBehandling.periodeResultater.reduce(
-                (acc: IPeriodeResultat[], periodeResultat: IRestPeriodeResultat) => {
-                    const reduceVilkårsvurderingForPersonIndex = acc.findIndex(
-                        (pResultat: IPeriodeResultat) =>
-                            pResultat.personIdent === periodeResultat.personIdent
-                    );
-
-                    const vilkårsvurderingForPerson: IVilkårResultat[] = slåSammenVilkårForPerson(
-                        periodeResultat.vilkårResultater.map(
-                            (vilkårResultat: IRestVilkårResultat) => ({
-                                vilkårType: vilkårResultat.vilkårType,
-                                id: randomUUID(),
-                                begrunnelse: vilkårResultat.begrunnelse,
-                                resultat: vilkårResultat.resultat,
-                                periode: nyPeriode(
-                                    periodeResultat.periodeFom,
-                                    periodeResultat.periodeTom
-                                ),
-                            })
-                        ),
-                        true
-                    );
-
-                    if (reduceVilkårsvurderingForPersonIndex !== -1) {
-                        acc[reduceVilkårsvurderingForPersonIndex] = {
-                            ...acc[reduceVilkårsvurderingForPersonIndex],
-                            vilkårResultater: [
-                                ...acc[reduceVilkårsvurderingForPersonIndex].vilkårResultater,
-                                ...vilkårsvurderingForPerson,
-                            ],
-                        };
-                    } else {
-                        acc.push({
-                            personIdent: periodeResultat.personIdent,
-                            vilkårResultater: vilkårsvurderingForPerson,
-                            person: aktivBehandling.personer.find(
-                                (person: IPerson) =>
-                                    person.personIdent === periodeResultat.personIdent
-                            )!!,
-                        });
-                    }
-
-                    return acc;
-                },
-                []
+            settVilkårsvurdering(
+                mapFraRestVilkårsvurderingTilUi(
+                    aktivBehandling.periodeResultater,
+                    aktivBehandling.personer
+                ).sort((periodeResultat: IPeriodeResultat) =>
+                    periodeResultat.person.type === PersonType.SØKER ? -1 : 1
+                )
             );
-            console.log(aktivBehandling.periodeResultater, mappetVilkårsvurdering);
-            settVilkårsvurdering(mappetVilkårsvurdering);
         }
     }, [fagsak]);
 
@@ -115,17 +67,27 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 }}
                 senderInn={senderInn}
             >
-                {aktivBehandling.periodeResultater.length !== 0 && (
-                    <>
-                        <br />
-                        <AlertStripeAdvarsel
-                            children={
-                                'Det finnes allerede en vilkårsvurdering på behandlingen. Vi har fylt ut gjeldende vurdering.'
-                            }
-                        />
-                        <br />
-                    </>
-                )}
+                {aktivBehandling.periodeResultater.length !== 0 &&
+                    aktivBehandling.periodeResultater.filter(
+                        (periodeResultat: IRestPeriodeResultat) => {
+                            return (
+                                periodeResultat.vilkårResultater.filter(
+                                    (vilkårResultat: IRestVilkårResultat) =>
+                                        vilkårResultat.resultat !== null
+                                ).length > 0
+                            );
+                        }
+                    ).length > 0 && (
+                        <>
+                            <br />
+                            <AlertStripeAdvarsel
+                                children={
+                                    'Det finnes allerede en vilkårsvurdering på behandlingen. Vi har fylt ut gjeldende vurdering.'
+                                }
+                            />
+                            <br />
+                        </>
+                    )}
 
                 <BehandlingVilkårSkjema
                     opprettelseFeilmelding={opprettelseFeilmelding}

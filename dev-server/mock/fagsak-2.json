@@ -1,0 +1,119 @@
+{
+    "data": {
+        "opprettetTidspunkt": "2020-02-14T13:24:08.129343",
+        "id": 2,
+        "søkerFødselsnummer": "12345678920",
+        "status": "LØPENDE",
+        "behandlinger": [
+            {
+                "aktiv": true,
+                "behandlingId": 1,
+                "type": "FØRSTEGANGSBEHANDLING",
+                "status": "OPPRETTET",
+                "kategori": "NASJONAL",
+                "opprettetTidspunkt": "2020-02-01T12:00:00.00",
+                "resultat": null,
+                "begrunnelse": "Mock begrunnelse",
+                "personer": [
+                    {
+                        "type": "SØKER",
+                        "navn": "Mock Mockersen",
+                        "kjønn": "KVINNE",
+                        "fødselsdato": "1990-01-01",
+                        "personIdent": "12345678920"
+                    },
+                    {
+                        "type": "BARN",
+                        "navn": "Barn Barnesen",
+                        "kjønn": "KVINNE",
+                        "fødselsdato": "2018-05-01",
+                        "personIdent": "12345678921"
+                    }
+                ],
+                "underkategori": "ORDINÆR",
+                "periodeResultater": [
+                    {
+                        "personIdent": "12345678921",
+                        "periodeFom": "2020-01-01",
+                        "periodeTom": null,
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": null,
+                                "begrunnelse": "Mock begrunnelse"
+                            },
+                            {
+                                "vilkårType": "UNDER_18_ÅR",
+                                "resultat": null,
+                                "begrunnelse": "Mock begrunnelse under 18 år"
+                            }
+                        ]
+                    },
+                    {
+                        "personIdent": "12345678920",
+                        "periodeFom": "2020-02-01",
+                        "periodeTom": null,
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": null,
+                                "begrunnelse": "Mock begrunnelse"
+                            }
+                        ]
+                    },
+                    {
+                        "personIdent": "12345678920",
+                        "periodeFom": "2020-01-01",
+                        "periodeTom": "2020-01-31",
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": null,
+                                "begrunnelse": "Mock begrunnelse"
+                            }
+                        ]
+                    }
+                ],
+                "vedtakForBehandling": [
+                    {
+                        "aktiv": true,
+                        "ansvarligSaksbehandler": "Henning.Hakonsen@trygdeetaten.no",
+                        "vedtaksdato": "2020-02-14",
+                        "personBeregninger": [
+                            {
+                                "personident": "12345678920",
+                                "beløp": 1054,
+                                "ytelseType": "ORDINÆR_BARNETRYGD",
+                                "deltYtelse": false,
+                                "ingenYtelse": true,
+                                "stønadFom": "2020-01-01",
+                                "stønadTom": "2037-12-31"
+                            },
+                            {
+                                "personident": "12345678921",
+                                "beløp": 1054,
+                                "ytelseType": "ORDINÆR_BARNETRYGD",
+                                "deltYtelse": false,
+                                "ingenYtelse": false,
+                                "stønadFom": "2020-01-01",
+                                "stønadTom": "2037-12-31"
+                            },
+                            {
+                                "personident": "12345678912",
+                                "beløp": 1054,
+                                "ytelseType": "ORDINÆR_BARNETRYGD",
+                                "deltYtelse": true,
+                                "ingenYtelse": false,
+                                "stønadFom": "2020-01-01",
+                                "stønadTom": "2037-12-31"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "status": "SUKSESS",
+    "melding": "Innhenting av data var vellykket",
+    "stacktrace": null
+}

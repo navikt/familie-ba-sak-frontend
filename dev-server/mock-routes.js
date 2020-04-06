@@ -15,8 +15,9 @@ const lesMockFil = filnavn => {
     }
 };
 
-app.get('/familie-ba-sak/api/fagsaker/1', (req, res) => {
-    setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
+app.get('/familie-ba-sak/api/fagsaker/:id', (req, res) => {
+    const { id } = req.params;
+    setTimeout(() => res.send(lesMockFil(`fagsak-${id}.json`)), delayMs);
 });
 
 app.get('/familie-ba-sak/api/person', (req, res) => {

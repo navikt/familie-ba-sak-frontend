@@ -216,10 +216,7 @@ describe('Skal teste vilkårsvurdering', () => {
             ),
         ];
 
-        const nyVilkårsvurdering = slåSammenVilkårForPerson(
-            vilkårForPerson,
-            VilkårType.BOSATT_I_RIKET
-        );
+        const nyVilkårsvurdering = slåSammenVilkårForPerson(vilkårForPerson);
         expect(nyVilkårsvurdering.length).toBe(2);
     });
 
@@ -247,10 +244,7 @@ describe('Skal teste vilkårsvurdering', () => {
             ),
         ];
 
-        const nyVilkårsvurdering = slåSammenVilkårForPerson(
-            vilkårForPerson,
-            VilkårType.BOSATT_I_RIKET
-        );
+        const nyVilkårsvurdering = slåSammenVilkårForPerson(vilkårForPerson);
         expect(nyVilkårsvurdering.length).toBe(2);
     });
 
@@ -278,10 +272,7 @@ describe('Skal teste vilkårsvurdering', () => {
             ),
         ];
 
-        const nyVilkårsvurdering = slåSammenVilkårForPerson(
-            vilkårForPerson,
-            VilkårType.BOSATT_I_RIKET
-        );
+        const nyVilkårsvurdering = slåSammenVilkårForPerson(vilkårForPerson);
         expect(nyVilkårsvurdering.length).toBe(4);
         expect(nyVilkårsvurdering[1].periode).toStrictEqual(nyPeriode('2020-06-16', '2020-08-09'));
         expect(nyVilkårsvurdering[1].resultat).toBe(undefined);
@@ -309,10 +300,7 @@ describe('Skal teste vilkårsvurdering', () => {
             ),
         ];
 
-        const nyVilkårsvurdering = slåSammenVilkårForPerson(
-            vilkårForPerson,
-            VilkårType.BOSATT_I_RIKET
-        );
+        const nyVilkårsvurdering = slåSammenVilkårForPerson(vilkårForPerson);
         const sammenslåttBegrunnelse = `Systemet har slått sammen perioder!\n01.01.2020 - 31.03.2020:\nFørste begrunnelse\n\n01.04.2020 - 15.06.2020:\nAndre begrunnelsen\n\n16.06.2020 - 01.01.2021:\nTredje begrunnelsen`;
 
         expect(nyVilkårsvurdering.length).toBe(1);

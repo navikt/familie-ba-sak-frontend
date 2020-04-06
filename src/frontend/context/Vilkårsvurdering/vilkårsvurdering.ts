@@ -1,4 +1,10 @@
-import { IPeriodeResultat, IVilkårResultat, VilkårType } from '../../typer/vilkår';
+import {
+    IPeriodeResultat,
+    IVilkårResultat,
+    VilkårType,
+    IRestPeriodeResultat,
+    IRestVilkårResultat,
+} from '../../typer/vilkår';
 import {
     overlapperMinstEttSted,
     diff,
@@ -15,6 +21,7 @@ import {
 } from '../../typer/periode';
 import { datoformat } from '../../utils/formatter';
 import { randomUUID } from '../../utils/commons';
+import { IPerson } from '../../typer/person';
 
 const vilkårsvurderingFeilmelding = 'Feil i rekonstruksjon av vilkårsvurdering for part';
 
@@ -28,7 +35,7 @@ export const vilkårHarSammeTypeOgOverlapperMinstEttSted = (
     );
 };
 
-const sorterVilkårsvurderingForPerson = (
+export const sorterVilkårsvurderingForPerson = (
     vilkårResultater: IVilkårResultat[]
 ): IVilkårResultat[] => {
     return vilkårResultater.sort(
@@ -279,8 +286,7 @@ export const lagNyVilkårsvurderingMedNyttVilkår = (
     );
 
     const sammenslåttVilkårsvurderingForPerson: IVilkårResultat[] = slåSammenVilkårForPerson(
-        nyVilkårsvurderingForPerson,
-        nyttVilkårResultat.vilkårType
+        nyVilkårsvurderingForPerson
     );
 
     return vilkårsvurdering.map((periodeResultat: IPeriodeResultat) => {
@@ -318,4 +324,61 @@ export const hentVilkårsvurderingMedEkstraVilkår = (
             return periodeResultat;
         }
     });
+};
+
+/**
+ * Funksjon som gjør en flatten på vilkår for person
+ * og slår sammen eventuelle sammenhengende perioder.
+ *
+ * @param periodeResultater perioder fra api
+ * @param personer personer på behandlingen
+ */
+export const mapFraRestVilkårsvurderingTilUi = (
+    periodeResultater: IRestPeriodeResultat[],
+    personer: IPerson[]
+) => {
+    return periodeResultater.reduce(
+        (acc: IPeriodeResultat[], periodeResultat: IRestPeriodeResultat) => {
+            const reduceVilkårsvurderingForPersonIndex = acc.findIndex(
+                (pResultat: IPeriodeResultat) =>
+                    pResultat.personIdent === periodeResultat.personIdent
+            );
+
+            const vilkårsvurderingForPerson: IVilkårResultat[] = periodeResultat.vilkårResultater.map(
+                (vilkårResultat: IRestVilkårResultat) => {
+                    return {
+                        vilkårType: vilkårResultat.vilkårType,
+                        id: randomUUID(),
+                        begrunnelse: vilkårResultat.begrunnelse,
+                        resultat: vilkårResultat.resultat,
+                        periode: nyPeriode(periodeResultat.periodeFom, periodeResultat.periodeTom),
+                    };
+                }
+            );
+
+            if (reduceVilkårsvurderingForPersonIndex !== -1) {
+                acc[reduceVilkårsvurderingForPersonIndex] = {
+                    ...acc[reduceVilkårsvurderingForPersonIndex],
+                    vilkårResultater: slåSammenVilkårForPerson(
+                        sorterVilkårsvurderingForPerson([
+                            ...acc[reduceVilkårsvurderingForPersonIndex].vilkårResultater,
+                            ...vilkårsvurderingForPerson,
+                        ]),
+                        true
+                    ),
+                };
+            } else {
+                acc.push({
+                    personIdent: periodeResultat.personIdent,
+                    vilkårResultater: vilkårsvurderingForPerson,
+                    person: personer.find(
+                        (person: IPerson) => person.personIdent === periodeResultat.personIdent
+                    )!!,
+                });
+            }
+
+            return acc;
+        },
+        []
+    );
 };

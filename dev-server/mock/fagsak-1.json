@@ -18,16 +18,22 @@
                 "personer": [
                     {
                         "type": "SØKER",
+                        "navn": "Mock Mockersen",
+                        "kjønn": "KVINNE",
                         "fødselsdato": "1990-01-01",
                         "personIdent": "12345678910"
                     },
                     {
                         "type": "BARN",
+                        "navn": "Barn Barnesen",
+                        "kjønn": "KVINNE",
                         "fødselsdato": "2018-05-01",
                         "personIdent": "12345678911"
                     },
                     {
                         "type": "BARN",
+                        "navn": "Barn Barnesen2",
+                        "kjønn": "MANN",
                         "fødselsdato": "2019-10-01",
                         "personIdent": "12345678912"
                     }
@@ -40,7 +46,7 @@
                         "periodeTom": null,
                         "vilkårResultater": [
                             {
-                                "vilkårType": "BOSATT_I_RIKET",
+                                "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
                                 "begrunnelse": "Mock begrunnelse"
                             },
@@ -57,9 +63,26 @@
                         "periodeTom": null,
                         "vilkårResultater": [
                             {
-                                "vilkårType": "BOSATT_I_RIKET",
+                                "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
                                 "begrunnelse": "Mock begrunnelse"
+                            }
+                        ]
+                    },
+                    {
+                        "personIdent": "12345678912",
+                        "periodeFom": "2020-02-01",
+                        "periodeTom": null,
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse"
+                            },
+                            {
+                                "vilkårType": "UNDER_18_ÅR",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse under 18 år"
                             }
                         ]
                     },
@@ -69,7 +92,7 @@
                         "periodeTom": "2020-01-31",
                         "vilkårResultater": [
                             {
-                                "vilkårType": "BOSATT_I_RIKET",
+                                "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
                                 "begrunnelse": "Mock begrunnelse"
                             }
@@ -128,11 +151,15 @@
                 "personer": [
                     {
                         "type": "SØKER",
+                        "navn": "Mock Mockersen",
+                        "kjønn": "KVINNE",
                         "fødselsdato": "1990-01-01",
                         "personIdent": "12345678910"
                     },
                     {
                         "type": "BARN",
+                        "navn": "Barn Barnesen",
+                        "kjønn": "KVINNE",
                         "fødselsdato": "2018-05-01",
                         "personIdent": "12345678911"
                     }
@@ -145,7 +172,7 @@
                         "periodeTom": null,
                         "vilkårResultater": [
                             {
-                                "vilkårType": "BOSATT_I_RIKET",
+                                "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
                                 "begrunnelse": "Mock begrunnelse"
                             },
@@ -162,7 +189,7 @@
                         "periodeTom": null,
                         "vilkårResultater": [
                             {
-                                "vilkårType": "BOSATT_I_RIKET",
+                                "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
                                 "begrunnelse": "Mock begrunnelse"
                             }
@@ -174,7 +201,7 @@
                         "periodeTom": "2020-01-31",
                         "vilkårResultater": [
                             {
-                                "vilkårType": "BOSATT_I_RIKET",
+                                "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
                                 "begrunnelse": "Mock begrunnelse"
                             }

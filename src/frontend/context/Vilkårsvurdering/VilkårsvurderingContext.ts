@@ -19,10 +19,7 @@ interface IProps {
 }
 
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: IProps) => {
-    const aktivBehandling = fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
-    const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPeriodeResultat[]>(
-        hentVilkårForPersoner(aktivBehandling?.personer)
-    );
+    const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPeriodeResultat[]>([]);
 
     const settVilkårForPeriodeResultat = (
         personIdent: string,
