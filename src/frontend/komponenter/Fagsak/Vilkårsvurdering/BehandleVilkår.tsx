@@ -15,12 +15,12 @@ interface IProps {
 }
 
 const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { periodeResultater, settPeriodeResultater } = useVilkårsvurdering();
+    const { vilkårsvurdering, settVilkårsvurdering } = useVilkårsvurdering();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
     const history = useHistory();
-    const { opprettEllerOppdaterVedtak, senderInn } = useFagsakApi(
+    const { opprettEllerOppdaterVilkårsvurdering, senderInn } = useFagsakApi(
         settVisFeilmeldinger,
         settOpprettelseFeilmelding
     );
@@ -29,7 +29,8 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     React.useEffect(() => {
         if (aktivBehandling && aktivBehandling.periodeResultater.length !== 0) {
-            settPeriodeResultater(aktivBehandling.periodeResultater);
+            // TODO map til frontend format
+            //settVilkårsvurdering(aktivBehandling.periodeResultater);
         }
     }, [fagsak]);
 
@@ -41,7 +42,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
         );
     }
 
-    if (periodeResultater.length === 0) {
+    if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen. Det er sansynligvis noe feil.</div>;
     }
 
@@ -53,7 +54,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     history.push(`/fagsak/${fagsak.id}/registrer-soknad`);
                 }}
                 nesteOnClick={() => {
-                    opprettEllerOppdaterVedtak(periodeResultater, fagsak);
+                    opprettEllerOppdaterVilkårsvurdering(vilkårsvurdering, fagsak);
                 }}
                 senderInn={senderInn}
             >

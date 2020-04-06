@@ -12,7 +12,8 @@
     "build": "yarn build:prod",
     "build:prod": "tsc & webpack --config ./build_n_deploy/webpack/webpack.prod.js",
     "snyk-protect": "snyk protect",
-    "test": "jest"
+    "test": "jest",
+    "test:one": "jest -t"
   },
   "husky": {
     "hooks": {

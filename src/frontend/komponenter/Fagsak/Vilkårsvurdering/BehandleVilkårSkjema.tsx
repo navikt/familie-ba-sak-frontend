@@ -21,7 +21,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
     visFeilmeldinger,
     behandlingstype,
 }) => {
-    const { leggTilVilkår, periodeResultater } = useVilkårsvurdering();
+    const { leggTilVilkår, vilkårsvurdering } = useVilkårsvurdering();
 
     const nesteMåned = () => {
         const iDag = new Date();
@@ -43,7 +43,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     : undefined
             }
         >
-            {periodeResultater.map((periodeResultat: IPeriodeResultat) => {
+            {vilkårsvurdering.map((periodeResultat: IPeriodeResultat) => {
                 return (
                     <div key={periodeResultat.personIdent}>
                         <Undertittel
@@ -80,7 +80,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
             <br />
 
             {behandlingstype === Behandlingstype.REVURDERING &&
-                !erBehandlingenInnvilget(periodeResultater) && (
+                !erBehandlingenInnvilget(vilkårsvurdering) && (
                     <div className={'vilkår__skjemagruppe--opphørsdato'}>
                         <Informasjonsbolk
                             informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}

@@ -22,11 +22,11 @@ export const hentAktivBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | und
  * Når man får periodisert vilkårsvurdering med aksjonspunkter
  * må denne ta høyde for at noen perioder kan være innvilget, mens andre er avslått.
  *
- * @param periodeResultater liste av perioder med vilkår
+ * @param vilkårsvurdering liste av perioder med vilkår
  */
-export const erBehandlingenInnvilget = (periodeResultater: IPeriodeResultat[]) => {
+export const erBehandlingenInnvilget = (vilkårsvurdering: IPeriodeResultat[]) => {
     if (
-        periodeResultater.find((periodeResultat: IPeriodeResultat) =>
+        vilkårsvurdering.find((periodeResultat: IPeriodeResultat) =>
             periodeResultat.vilkårResultater.find(
                 (vilkårResultat: IVilkårResultat) => vilkårResultat.resultat === Resultat.NEI
             )

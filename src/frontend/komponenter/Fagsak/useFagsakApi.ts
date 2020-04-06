@@ -101,13 +101,16 @@ const useFagsakApi = (
             });
     };
 
-    const opprettEllerOppdaterVedtak = (periodeResultater: IPeriodeResultat[], fagsak: IFagsak) => {
+    const opprettEllerOppdaterVilkårsvurdering = (
+        vilkårsvurdering: IPeriodeResultat[],
+        fagsak: IFagsak
+    ) => {
         // TODO legg til validering av skjema
 
         settSenderInn(true);
         axiosRequest<IFagsak, IRestVilkårsvurdering>({
             data: {
-                periodeResultater,
+                periodeResultater: vilkårsvurdering,
             },
             method: 'PUT',
             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
@@ -117,7 +120,7 @@ const useFagsakApi = (
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
 
-                    if (erBehandlingenInnvilget(periodeResultater)) {
+                    if (erBehandlingenInnvilget(vilkårsvurdering)) {
                         history.push(`/fagsak/${fagsak.id}/beregning`);
                     } else {
                         history.push(`/fagsak/${fagsak.id}/vedtak`);
@@ -126,13 +129,13 @@ const useFagsakApi = (
                     settFeilmelding(response.melding);
                     settVisFeilmeldinger(true);
                 } else {
-                    settFeilmelding('Opprettelse av vedtak feilet');
+                    settFeilmelding('Opprettelse av vilkårsvurdering feilet');
                     settVisFeilmeldinger(true);
                 }
             })
             .catch(() => {
                 settSenderInn(false);
-                settFeilmelding('Opprettelse av vedtak feilet');
+                settFeilmelding('Opprettelse av vilkårsvurdering feilet');
             });
     };
 
@@ -231,7 +234,7 @@ const useFagsakApi = (
         opprettBehandling,
         opprettBeregning,
         opprettEllerHentFagsak,
-        opprettEllerOppdaterVedtak,
+        opprettEllerOppdaterVilkårsvurdering,
         senderInn,
     };
 };

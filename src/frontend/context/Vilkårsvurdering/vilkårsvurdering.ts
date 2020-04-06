@@ -27,8 +27,10 @@ export const vilkårHarSammeTypeOgOverlapperMinstEttSted = (
     );
 };
 
-const sorterVilkårsvurderingForPerson = (vilkår: IVilkårResultat[]): IVilkårResultat[] => {
-    return vilkår.sort(
+const sorterVilkårsvurderingForPerson = (
+    vilkårResultater: IVilkårResultat[]
+): IVilkårResultat[] => {
+    return vilkårResultater.sort(
         (a, b) => a.vilkårType.localeCompare(b.vilkårType) || diff(a.periode, b.periode)
     );
 };
@@ -126,32 +128,57 @@ export const leggTilNyttVilkårIGjeldendeVilkårsvurdering = (
     ]);
 };
 
+const leggTilHvisIkkeFinnes = (
+    vilkårForPerson: IVilkårResultat[],
+    vilkårResultat: IVilkårResultat
+): IVilkårResultat[] => {
+    if (
+        vilkårForPerson.find((vilkår: IVilkårResultat) => vilkår.id === vilkårResultat.id) ===
+        undefined
+    ) {
+        return [...vilkårForPerson, vilkårResultat];
+    } else {
+        return vilkårForPerson;
+    }
+};
+
 /**
  * Slår sammen perioder med samme vilkår type og resultat.
- * Lager aksjonspunkter for hull i vilkårsvurdering.
+ * For perioder som slås sammen legger systemet til alle begrunnelser
+ * i det nye vilkåret og for hvilke perioder de gjaldt ved sammenslåing.
+ *
+ * Funksjonen lager også aksjonspunkter for hull i vilkårsvurdering.
  *
  * @param vilkårsvurderingForPerson vilkårsvurderingen som foreligger
- * @param nyttVilkårResultat vilkåret som legges til
+ * @param vilkårTypeSomSkalSlåsSammen vilkåret som legges til
  */
-const slåSammenVilkårForPerson = (
+export const slåSammenVilkårForPerson = (
     vilkårsvurderingForPerson: IVilkårResultat[],
-    nyttVilkårResultat: IVilkårResultat
+    vilkårTypeSomSkalSlåsSammen: VilkårType
 ): IVilkårResultat[] => {
     let sammenslåttPerioder: IVilkårResultat[] = [];
     let systemetHarVurdertSammenhengendePerioder = false;
+
     for (let i = 0; i < vilkårsvurderingForPerson.length; i++) {
-        const fletteVilkår: IVilkårResultat = vilkårsvurderingForPerson[i];
+        let fletteVilkår: IVilkårResultat = vilkårsvurderingForPerson[i];
         const nesteVilkår: IVilkårResultat | undefined = vilkårsvurderingForPerson[i + 1];
 
-        if (!nesteVilkår) {
-            sammenslåttPerioder = [...sammenslåttPerioder, fletteVilkår];
-        } else if (
+        // Hvis systemet nettopp har slått sammen 2 perioder setter vi forrige periode til fletteperioden
+        if (systemetHarVurdertSammenhengendePerioder) {
+            fletteVilkår = sammenslåttPerioder[sammenslåttPerioder.length - 1];
+        }
+
+        if (
+            nesteVilkår &&
             fletteVilkår.vilkårType === nesteVilkår.vilkårType &&
             fletteVilkår.resultat === nesteVilkår.resultat
         ) {
-            if (!etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
-                systemetHarVurdertSammenhengendePerioder = false;
+            // Dersom systemet nettopp har slått sammen en periode popper vi denne slik at den ikke kommer med dobbelt.
+            if (systemetHarVurdertSammenhengendePerioder) {
+                sammenslåttPerioder.pop();
+            }
 
+            if (!etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
                 // Periodene er ikke sammenhengende så vil legger til et aksjonspunkt som må vurderes
                 const nyFom = nyMoment(fletteVilkår.periode.tom)
                     .add(1, 'day')
@@ -164,36 +191,36 @@ const slåSammenVilkårForPerson = (
                     ...sammenslåttPerioder,
                     fletteVilkår,
                     {
-                        vilkårType: nyttVilkårResultat.vilkårType,
+                        vilkårType: vilkårTypeSomSkalSlåsSammen,
                         begrunnelse: '',
                         id: randomUUID(),
                         periode: nyPeriode(nyFom, nyTom),
                     },
                 ];
-            } else if (etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
-                // Periodene er etterfølgende og vi slår dem sammen. Tar med begge begrunnelsene. Hopper over neste vilkår.
-                sammenslåttPerioder = [
-                    ...sammenslåttPerioder,
-                    {
-                        ...fletteVilkår,
-                        id: randomUUID(),
-                        periode: slåSammen(fletteVilkår.periode, nesteVilkår.periode),
-                        begrunnelse: `${
-                            !systemetHarVurdertSammenhengendePerioder
-                                ? 'Systemet har slått sammen perioder! Under ser du begrunnelsen tilknyttet de ulike periode.\n'
-                                : ''
-                        }${periodeToString(fletteVilkår.periode)}:\n${
-                            fletteVilkår.begrunnelse
-                        }\n${periodeToString(nesteVilkår.periode)}:\n${nesteVilkår.begrunnelse}`,
-                    },
-                ];
 
-                i++;
+                systemetHarVurdertSammenhengendePerioder = false;
+            } else if (etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
+                // Periodene er etterfølgende og vi slår dem sammen. Tar med begge begrunnelsene.
+                const sammenslåttVilkår = {
+                    ...fletteVilkår,
+                    id: randomUUID(),
+                    periode: slåSammen(fletteVilkår.periode, nesteVilkår.periode),
+                    begrunnelse: `${
+                        !systemetHarVurdertSammenhengendePerioder
+                            ? `Systemet har slått sammen perioder!\n${periodeToString(
+                                  fletteVilkår.periode
+                              )}:\n${fletteVilkår.begrunnelse}`
+                            : fletteVilkår.begrunnelse
+                    }\n\n${periodeToString(nesteVilkår.periode)}:\n${nesteVilkår.begrunnelse}`,
+                };
+
+                sammenslåttPerioder.push(sammenslåttVilkår);
                 systemetHarVurdertSammenhengendePerioder = true;
             }
         } else {
+            sammenslåttPerioder = leggTilHvisIkkeFinnes(sammenslåttPerioder, fletteVilkår);
+
             systemetHarVurdertSammenhengendePerioder = false;
-            sammenslåttPerioder = [...sammenslåttPerioder, fletteVilkår];
         }
     }
 
@@ -214,16 +241,16 @@ const slåSammenVilkårForPerson = (
  * 4. For å unngå hull og perioder som har samme resultat liggende etterhverandre slår man sammen perioder
  * og lager aksjonspunkter i hullene.
  *
- * @param periodeResultater Gjeldende vilkårsvurdering for behandlingen
+ * @param vilkårsvurdering Gjeldende vilkårsvurdering for behandlingen
  * @param personIdent Personident for vilkårsvurderingen vi skal gjøre endringer på
  * @param nyttVilkårResultat vilkåret som legges til
  */
 export const lagNyVilkårsvurderingMedNyttVilkår = (
-    periodeResultater: IPeriodeResultat[],
+    vilkårsvurdering: IPeriodeResultat[],
     personIdent: string,
     nyttVilkårResultat: IVilkårResultat
 ): IPeriodeResultat[] => {
-    const vilkårsvurderingForPerson = periodeResultater.find(
+    const vilkårsvurderingForPerson = vilkårsvurdering.find(
         (periodeResultat: IPeriodeResultat) => periodeResultat.personIdent === personIdent
     );
 
@@ -231,25 +258,25 @@ export const lagNyVilkårsvurderingMedNyttVilkår = (
         throw new Error(`${vilkårsvurderingFeilmelding}. Finner ikke vilkår for part.`);
     }
 
-    const sortertVilkårForPerson: IVilkårResultat[] = sorterVilkårsvurderingForPerson(
+    const sortertVilkårsvurderingForPerson: IVilkårResultat[] = sorterVilkårsvurderingForPerson(
         vilkårsvurderingForPerson.vilkårResultater
     );
 
     const nyVilkårsvurderingForPerson: IVilkårResultat[] = leggTilNyttVilkårIGjeldendeVilkårsvurdering(
-        sortertVilkårForPerson,
+        sortertVilkårsvurderingForPerson,
         nyttVilkårResultat
     );
 
-    let sammenslåttPerioder: IVilkårResultat[] = slåSammenVilkårForPerson(
+    const sammenslåttVilkårsvurderingForPerson: IVilkårResultat[] = slåSammenVilkårForPerson(
         nyVilkårsvurderingForPerson,
-        nyttVilkårResultat
+        nyttVilkårResultat.vilkårType
     );
 
-    return periodeResultater.map((periodeResultat: IPeriodeResultat) => {
+    return vilkårsvurdering.map((periodeResultat: IPeriodeResultat) => {
         if (periodeResultat.personIdent === personIdent) {
             return {
                 ...periodeResultat,
-                vilkårResultater: sammenslåttPerioder,
+                vilkårResultater: sammenslåttVilkårsvurderingForPerson,
             };
         } else {
             return periodeResultat;
@@ -258,11 +285,11 @@ export const lagNyVilkårsvurderingMedNyttVilkår = (
 };
 
 export const hentVilkårsvurderingMedEkstraVilkår = (
-    periodeResultater: IPeriodeResultat[],
+    vilkårsvurdering: IPeriodeResultat[],
     personIdent: string,
     vilkårType: VilkårType
 ) => {
-    return periodeResultater.map((periodeResultat: IPeriodeResultat) => {
+    return vilkårsvurdering.map((periodeResultat: IPeriodeResultat) => {
         if (periodeResultat.personIdent === personIdent) {
             return {
                 ...periodeResultat,
@@ -270,7 +297,7 @@ export const hentVilkårsvurderingMedEkstraVilkår = (
                     ...periodeResultat.vilkårResultater,
                     {
                         id: randomUUID(),
-                        vilkårType: vilkårType,
+                        vilkårType,
                         periode: nyPeriode(),
                         begrunnelse: '',
                     },
