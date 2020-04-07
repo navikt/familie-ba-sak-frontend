@@ -1,8 +1,8 @@
 import {
-    IPeriodeResultat,
+    IPersonResultat,
     IVilkårResultat,
     VilkårType,
-    IRestPeriodeResultat,
+    IRestPersonResultat,
     IRestVilkårResultat,
 } from '../../typer/vilkår';
 import {
@@ -264,12 +264,12 @@ export const slåSammenVilkårForPerson = (
  * @param nyttVilkårResultat vilkåret som legges til
  */
 export const lagNyVilkårsvurderingMedNyttVilkår = (
-    vilkårsvurdering: IPeriodeResultat[],
+    vilkårsvurdering: IPersonResultat[],
     personIdent: string,
     nyttVilkårResultat: IVilkårResultat
-): IPeriodeResultat[] => {
+): IPersonResultat[] => {
     const vilkårsvurderingForPerson = vilkårsvurdering.find(
-        (periodeResultat: IPeriodeResultat) => periodeResultat.personIdent === personIdent
+        (periodeResultat: IPersonResultat) => periodeResultat.personIdent === personIdent
     );
 
     if (!vilkårsvurderingForPerson) {
@@ -289,7 +289,7 @@ export const lagNyVilkårsvurderingMedNyttVilkår = (
         nyVilkårsvurderingForPerson
     );
 
-    return vilkårsvurdering.map((periodeResultat: IPeriodeResultat) => {
+    return vilkårsvurdering.map((periodeResultat: IPersonResultat) => {
         if (periodeResultat.personIdent === personIdent) {
             return {
                 ...periodeResultat,
@@ -302,11 +302,11 @@ export const lagNyVilkårsvurderingMedNyttVilkår = (
 };
 
 export const hentVilkårsvurderingMedEkstraVilkår = (
-    vilkårsvurdering: IPeriodeResultat[],
+    vilkårsvurdering: IPersonResultat[],
     personIdent: string,
     vilkårType: VilkårType
 ) => {
-    return vilkårsvurdering.map((periodeResultat: IPeriodeResultat) => {
+    return vilkårsvurdering.map((periodeResultat: IPersonResultat) => {
         if (periodeResultat.personIdent === personIdent) {
             return {
                 ...periodeResultat,
@@ -327,58 +327,28 @@ export const hentVilkårsvurderingMedEkstraVilkår = (
 };
 
 /**
- * Funksjon som gjør en flatten på vilkår for person
- * og slår sammen eventuelle sammenhengende perioder.
+ * Funksjon som mapper vilkår for person.
  *
- * @param periodeResultater perioder fra api
+ * @param personResultater perioder fra api
  * @param personer personer på behandlingen
  */
 export const mapFraRestVilkårsvurderingTilUi = (
-    periodeResultater: IRestPeriodeResultat[],
+    personResultater: IRestPersonResultat[],
     personer: IPerson[]
-) => {
-    return periodeResultater.reduce(
-        (acc: IPeriodeResultat[], periodeResultat: IRestPeriodeResultat) => {
-            const reduceVilkårsvurderingForPersonIndex = acc.findIndex(
-                (pResultat: IPeriodeResultat) =>
-                    pResultat.personIdent === periodeResultat.personIdent
-            );
-
-            const vilkårsvurderingForPerson: IVilkårResultat[] = periodeResultat.vilkårResultater.map(
-                (vilkårResultat: IRestVilkårResultat) => {
-                    return {
-                        vilkårType: vilkårResultat.vilkårType,
-                        id: randomUUID(),
-                        begrunnelse: vilkårResultat.begrunnelse,
-                        resultat: vilkårResultat.resultat,
-                        periode: nyPeriode(periodeResultat.periodeFom, periodeResultat.periodeTom),
-                    };
-                }
-            );
-
-            if (reduceVilkårsvurderingForPersonIndex !== -1) {
-                acc[reduceVilkårsvurderingForPersonIndex] = {
-                    ...acc[reduceVilkårsvurderingForPersonIndex],
-                    vilkårResultater: slåSammenVilkårForPerson(
-                        sorterVilkårsvurderingForPerson([
-                            ...acc[reduceVilkårsvurderingForPersonIndex].vilkårResultater,
-                            ...vilkårsvurderingForPerson,
-                        ]),
-                        true
-                    ),
-                };
-            } else {
-                acc.push({
-                    personIdent: periodeResultat.personIdent,
-                    vilkårResultater: vilkårsvurderingForPerson,
-                    person: personer.find(
-                        (person: IPerson) => person.personIdent === periodeResultat.personIdent
-                    )!!,
-                });
-            }
-
-            return acc;
-        },
-        []
-    );
+): IPersonResultat[] => {
+    return personResultater.map((personResultat: IRestPersonResultat) => ({
+        person: personer.find(
+            (person: IPerson) => person.personIdent === personResultat.personIdent
+        )!!,
+        personIdent: personResultat.personIdent,
+        vilkårResultater: personResultat.vilkårResultater.map(
+            (vilkårResultat: IRestVilkårResultat) => ({
+                vilkårType: vilkårResultat.vilkårType,
+                id: randomUUID(),
+                begrunnelse: vilkårResultat.begrunnelse,
+                resultat: vilkårResultat.resultat,
+                periode: nyPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom),
+            })
+        ),
+    }));
 };

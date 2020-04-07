@@ -124,7 +124,6 @@
     "react-axe": "^3.4.1",
     "react-hot-loader": "4.12.20",
     "style-loader": "^1.0.0",
-    "svg-inline-loader": "^0.8.2",
     "ts-jest": "^25.3.1",
     "ts-loader": "^6.2.1",
     "tslint": "^6.1.0",

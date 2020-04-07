@@ -19,7 +19,7 @@ import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useApp } from '../../context/AppContext';
-import { IPeriodeResultat, vilkårConfig, IVilkårConfig, IVilkårResultat } from '../../typer/vilkår';
+import { IPersonResultat, vilkårConfig, IVilkårConfig, IVilkårResultat } from '../../typer/vilkår';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 
 const useFagsakApi = (
@@ -104,12 +104,12 @@ const useFagsakApi = (
     };
 
     const opprettEllerOppdaterVilkårsvurdering = (
-        vilkårsvurdering: IPeriodeResultat[],
+        vilkårsvurdering: IPersonResultat[],
         fagsak: IFagsak
     ) => {
         // Basic validering av skjemaet
         const feilmeldinger: FeiloppsummeringFeil[] = [];
-        vilkårsvurdering.filter((periodeResultat: IPeriodeResultat) => {
+        vilkårsvurdering.filter((periodeResultat: IPersonResultat) => {
             Object.values(vilkårConfig)
                 .filter((vc: IVilkårConfig) =>
                     vc.parterDetteGjelderFor.includes(periodeResultat.person.type)
@@ -134,7 +134,9 @@ const useFagsakApi = (
             settFeilmeldinger(feilmeldinger);
             settVisFeilmeldinger(true);
         } else {
-            settFeilmeldinger && settFeilmeldinger([]);
+            if (settFeilmeldinger) {
+                settFeilmeldinger([]);
+            }
 
             settSenderInn(true);
             axiosRequest<IFagsak, IRestVilkårsvurdering>({

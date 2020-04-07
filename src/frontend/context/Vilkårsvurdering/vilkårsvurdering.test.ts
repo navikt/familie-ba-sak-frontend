@@ -1,9 +1,11 @@
 import {
-    IPeriodeResultat,
+    IPersonResultat,
     hentVilkårForPersoner,
     VilkårType,
     Resultat,
     IVilkårResultat,
+    vilkårConfig,
+    IVilkårConfig,
 } from '../../typer/vilkår';
 import {
     hentVilkårsvurderingMedEkstraVilkår,
@@ -25,10 +27,10 @@ import {
 
 const hentVilkårsvurderingForPerson = (
     personIdent: string,
-    vilkårsvurdering: IPeriodeResultat[]
-): IPeriodeResultat | undefined => {
+    vilkårsvurdering: IPersonResultat[]
+): IPersonResultat | undefined => {
     return vilkårsvurdering.find(
-        (periodeResultat: IPeriodeResultat) => periodeResultat.personIdent === personIdent
+        (personResultat: IPersonResultat) => personResultat.personIdent === personIdent
     );
 };
 
@@ -58,11 +60,13 @@ describe('Skal teste vilkårsvurdering', () => {
     test('Skal lage periode resultat og legge til 1 vilkår', () => {
         const fnr = randomUUID();
 
-        let vilkårsvurdering: IPeriodeResultat[] = hentVilkårForPersoner([mockPerson(fnr)]);
+        let vilkårsvurdering: IPersonResultat[] = hentVilkårForPersoner([mockPerson(fnr)]);
 
         expect(vilkårsvurdering.length).toBe(1);
         expect(hentVilkårsvurderingForPerson(fnr, vilkårsvurdering)?.vilkårResultater.length).toBe(
-            Object.values(VilkårType).length
+            Object.values(vilkårConfig).filter((vc: IVilkårConfig) =>
+                vc.parterDetteGjelderFor.includes(PersonType.SØKER)
+            ).length
         );
 
         vilkårsvurdering = hentVilkårsvurderingMedEkstraVilkår(
@@ -72,7 +76,9 @@ describe('Skal teste vilkårsvurdering', () => {
         );
 
         expect(hentVilkårsvurderingForPerson(fnr, vilkårsvurdering)?.vilkårResultater.length).toBe(
-            Object.values(VilkårType).length + 1
+            Object.values(vilkårConfig).filter((vc: IVilkårConfig) =>
+                vc.parterDetteGjelderFor.includes(PersonType.SØKER)
+            ).length + 1
         );
     });
 
@@ -320,7 +326,7 @@ describe('Skal teste vilkårsvurdering', () => {
             vilkårType: VilkårType.BOSATT_I_RIKET,
         };
 
-        const vilkårsvurdering: IPeriodeResultat[] = [
+        const vilkårsvurdering: IPersonResultat[] = [
             {
                 personIdent: fnr,
                 vilkårResultater: [
@@ -331,7 +337,7 @@ describe('Skal teste vilkårsvurdering', () => {
             },
         ];
 
-        const nyVilkårsvurdering: IPeriodeResultat[] = lagNyVilkårsvurderingMedNyttVilkår(
+        const nyVilkårsvurdering: IPersonResultat[] = lagNyVilkårsvurderingMedNyttVilkår(
             vilkårsvurdering,
             fnr,
             {

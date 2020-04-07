@@ -10,7 +10,7 @@ import useFagsakApi from '../useFagsakApi';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 import { mapFraRestVilkårsvurderingTilUi } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import { IPeriodeResultat, IRestPeriodeResultat, IRestVilkårResultat } from '../../../typer/vilkår';
+import { IPersonResultat, IRestPersonResultat, IRestVilkårResultat } from '../../../typer/vilkår';
 import { PersonType } from '../../../typer/person';
 import { FeiloppsummeringFeil, Feiloppsummering } from 'nav-frontend-skjema';
 
@@ -35,12 +35,12 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     React.useEffect(() => {
-        if (aktivBehandling && aktivBehandling.periodeResultater.length !== 0) {
+        if (aktivBehandling && aktivBehandling.personResultater.length !== 0) {
             settVilkårsvurdering(
                 mapFraRestVilkårsvurderingTilUi(
-                    aktivBehandling.periodeResultater,
+                    aktivBehandling.personResultater,
                     aktivBehandling.personer
-                ).sort((periodeResultat: IPeriodeResultat) =>
+                ).sort((periodeResultat: IPersonResultat) =>
                     periodeResultat.person.type === PersonType.SØKER ? -1 : 1
                 )
             );
@@ -71,9 +71,9 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 }}
                 senderInn={senderInn}
             >
-                {aktivBehandling.periodeResultater.length !== 0 &&
-                    aktivBehandling.periodeResultater.filter(
-                        (periodeResultat: IRestPeriodeResultat) => {
+                {aktivBehandling.personResultater.length !== 0 &&
+                    aktivBehandling.personResultater.filter(
+                        (periodeResultat: IRestPersonResultat) => {
                             return (
                                 periodeResultat.vilkårResultater.filter(
                                     (vilkårResultat: IRestVilkårResultat) =>

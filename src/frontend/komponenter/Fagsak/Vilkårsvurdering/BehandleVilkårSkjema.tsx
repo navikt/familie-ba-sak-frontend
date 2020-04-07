@@ -5,7 +5,7 @@ import React from 'react';
 
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { Behandlingstype } from '../../../typer/behandling';
-import { IPeriodeResultat, IVilkårResultat, VilkårType } from '../../../typer/vilkår';
+import { IPersonResultat, IVilkårResultat, VilkårType } from '../../../typer/vilkår';
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
@@ -44,7 +44,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     : undefined
             }
         >
-            {vilkårsvurdering.map((periodeResultat: IPeriodeResultat) => {
+            {vilkårsvurdering.map((periodeResultat: IPersonResultat) => {
                 return (
                     <div key={periodeResultat.personIdent}>
                         <Undertittel

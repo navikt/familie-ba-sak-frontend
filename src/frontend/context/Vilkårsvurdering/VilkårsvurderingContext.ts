@@ -5,7 +5,7 @@ import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import {
     hentVilkårForPersoner,
-    IPeriodeResultat,
+    IPersonResultat,
     IVilkårResultat,
     VilkårType,
 } from '../../typer/vilkår';
@@ -20,7 +20,7 @@ interface IProps {
 }
 
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: IProps) => {
-    const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPeriodeResultat[]>(
+    const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
         hentVilkårForPersoner(hentAktivBehandlingPåFagsak(fagsak)?.personer ?? [])
     );
 

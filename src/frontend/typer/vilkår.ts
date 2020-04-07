@@ -16,7 +16,7 @@ export enum VilkårType {
 }
 
 // Vilkårsvurdering typer for ui
-export interface IPeriodeResultat {
+export interface IPersonResultat {
     personIdent: string;
     vilkårResultater: IVilkårResultat[];
     person: IPerson;
@@ -31,10 +31,8 @@ export interface IVilkårResultat {
 }
 
 // Vilkårsvurdering typer for api
-export interface IRestPeriodeResultat {
+export interface IRestPersonResultat {
     personIdent: string;
-    periodeFom?: string;
-    periodeTom?: string;
     vilkårResultater: IRestVilkårResultat[];
 }
 
@@ -42,6 +40,8 @@ export interface IRestVilkårResultat {
     vilkårType: VilkårType;
     begrunnelse: string;
     resultat?: Resultat;
+    periodeFom?: string;
+    periodeTom?: string;
 }
 
 type IVilkårsconfig = {
@@ -78,7 +78,8 @@ export const vilkårConfig: IVilkårsconfig = {
         beskrivelse: 'gift eller partnerskap',
         key: 'GIFT_PARTNERSKAP',
         lovreferanse: '§ 2-4',
-        tittel: 'Er gift eller har partnerskap',
+        tittel: 'Gift eller partnerskap',
+        spørsmål: () => 'Er barnet gift eller har partnerskap',
         parterDetteGjelderFor: [PersonType.BARN],
     },
     BOSATT_I_RIKET: {
@@ -105,7 +106,7 @@ export const vilkårConfig: IVilkårsconfig = {
  *
  * @param personer liste av personer fra personopplysningsgrunnlaget på behandlingen
  */
-export const hentVilkårForPersoner = (personer?: IPerson[]): IPeriodeResultat[] => {
+export const hentVilkårForPersoner = (personer?: IPerson[]): IPersonResultat[] => {
     if (!personer) {
         return [];
     }

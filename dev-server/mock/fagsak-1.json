@@ -39,62 +39,54 @@
                     }
                 ],
                 "underkategori": "UTVIDET",
-                "periodeResultater": [
+                "personResultater": [
                     {
                         "personIdent": "12345678911",
-                        "periodeFom": "2020-01-01",
-                        "periodeTom": null,
                         "vilkårResultater": [
                             {
                                 "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse"
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
                             },
                             {
                                 "vilkårType": "UNDER_18_ÅR",
                                 "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse under 18 år"
+                                "begrunnelse": "Mock begrunnelse under 18 år",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
                             }
                         ]
                     },
                     {
                         "personIdent": "12345678910",
-                        "periodeFom": "2020-02-01",
-                        "periodeTom": null,
                         "vilkårResultater": [
                             {
                                 "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse"
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
                             }
                         ]
                     },
                     {
                         "personIdent": "12345678912",
-                        "periodeFom": "2020-02-01",
-                        "periodeTom": null,
                         "vilkårResultater": [
                             {
                                 "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse"
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-02-01",
+                                "periodeTom": null
                             },
                             {
                                 "vilkårType": "UNDER_18_ÅR",
                                 "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse under 18 år"
-                            }
-                        ]
-                    },
-                    {
-                        "personIdent": "12345678910",
-                        "periodeFom": "2020-01-01",
-                        "periodeTom": "2020-01-31",
-                        "vilkårResultater": [
-                            {
-                                "vilkårType": "LOVLIG_OPPHOLD",
-                                "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse"
+                                "begrunnelse": "Mock begrunnelse under 18 år",
+                                "periodeFom": "2020-02-01",
+                                "periodeTom": null
                             }
                         ]
                     }
@@ -165,45 +157,35 @@
                     }
                 ],
                 "underkategori": "ORDINÆR",
-                "periodeResultater": [
+                "personResultater": [
                     {
                         "personIdent": "12345678911",
-                        "periodeFom": "2020-01-01",
-                        "periodeTom": null,
                         "vilkårResultater": [
                             {
                                 "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse"
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
                             },
                             {
                                 "vilkårType": "UNDER_18_ÅR",
                                 "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse under 18 år"
+                                "begrunnelse": "Mock begrunnelse under 18 år",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
                             }
                         ]
                     },
                     {
                         "personIdent": "12345678910",
-                        "periodeFom": "2020-02-01",
-                        "periodeTom": null,
                         "vilkårResultater": [
                             {
                                 "vilkårType": "LOVLIG_OPPHOLD",
                                 "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse"
-                            }
-                        ]
-                    },
-                    {
-                        "personIdent": "12345678910",
-                        "periodeFom": "2020-01-01",
-                        "periodeTom": "2020-01-31",
-                        "vilkårResultater": [
-                            {
-                                "vilkårType": "LOVLIG_OPPHOLD",
-                                "resultat": "JA",
-                                "begrunnelse": "Mock begrunnelse"
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
                             }
                         ]
                     }
