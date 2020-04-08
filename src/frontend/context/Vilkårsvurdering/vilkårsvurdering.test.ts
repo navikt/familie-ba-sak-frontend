@@ -24,6 +24,15 @@ import {
     kanFlytteTom,
     IPeriode,
 } from '../../typer/periode';
+import { IFelt } from '../../typer/felt';
+import {
+    lagInitiellFelt,
+    erUtfylt,
+    erResultatGyldig,
+    erPeriodeGyldig,
+} from '../../utils/validators';
+import { validerVilkår } from './validering';
+import { hentPeriode, hentResultat, hentBegrunnelse } from './utils';
 
 const hentVilkårsvurderingForPerson = (
     personIdent: string,
@@ -47,14 +56,20 @@ const mockVilkår = (
     vilkårType: VilkårType,
     resultat: Resultat,
     periode: IPeriode,
-    begrunnelse: string = ''
-): IVilkårResultat => ({
-    begrunnelse,
-    id: randomUUID(),
-    resultat,
-    vilkårType,
-    periode,
-});
+    begrunnelse: string = 'mock'
+): IFelt<IVilkårResultat> =>
+    validerVilkår(
+        lagInitiellFelt(
+            {
+                begrunnelse: lagInitiellFelt(begrunnelse, erUtfylt),
+                id: randomUUID(),
+                resultat: lagInitiellFelt(resultat, erResultatGyldig),
+                vilkårType,
+                periode: lagInitiellFelt(periode, erPeriodeGyldig),
+            },
+            validerVilkår
+        )
+    );
 
 describe('Skal teste vilkårsvurdering', () => {
     test('Skal lage periode resultat og legge til 1 vilkår', () => {
@@ -186,10 +201,14 @@ describe('Skal teste vilkårsvurdering', () => {
             mockVilkår(VilkårType.BOSATT_I_RIKET, Resultat.NEI, nyPeriode('2020-05-01'))
         );
         expect(nyVilkårsvurdering.length).toBe(2);
-        expect(nyVilkårsvurdering[0].periode).toStrictEqual(nyPeriode('2020-01-01', '2020-04-30'));
-        expect(nyVilkårsvurdering[0].resultat).toBe(Resultat.JA);
-        expect(nyVilkårsvurdering[1].periode).toStrictEqual(nyPeriode('2020-05-01', undefined));
-        expect(nyVilkårsvurdering[1].resultat).toBe(Resultat.NEI);
+        expect(hentPeriode(nyVilkårsvurdering[0])).toStrictEqual(
+            nyPeriode('2020-01-01', '2020-04-30')
+        );
+        expect(hentResultat(nyVilkårsvurdering[0])).toBe(Resultat.JA);
+        expect(hentPeriode(nyVilkårsvurdering[1])).toStrictEqual(
+            nyPeriode('2020-05-01', undefined)
+        );
+        expect(hentResultat(nyVilkårsvurdering[1])).toBe(Resultat.NEI);
     });
 
     test('Skal legge til nytt vilkår med likt resultat som lager to perioder (uten sammenslåing)', () => {
@@ -202,10 +221,14 @@ describe('Skal teste vilkårsvurdering', () => {
             mockVilkår(VilkårType.BOSATT_I_RIKET, Resultat.JA, nyPeriode('2020-05-01'))
         );
         expect(nyVilkårsvurdering.length).toBe(2);
-        expect(nyVilkårsvurdering[0].periode).toStrictEqual(nyPeriode('2020-01-01', '2020-04-30'));
-        expect(nyVilkårsvurdering[0].resultat).toBe(Resultat.JA);
-        expect(nyVilkårsvurdering[1].periode).toStrictEqual(nyPeriode('2020-05-01', undefined));
-        expect(nyVilkårsvurdering[1].resultat).toBe(Resultat.JA);
+        expect(hentPeriode(nyVilkårsvurdering[0])).toStrictEqual(
+            nyPeriode('2020-01-01', '2020-04-30')
+        );
+        expect(hentResultat(nyVilkårsvurdering[0])).toBe(Resultat.JA);
+        expect(hentPeriode(nyVilkårsvurdering[1])).toStrictEqual(
+            nyPeriode('2020-05-01', undefined)
+        );
+        expect(hentResultat(nyVilkårsvurdering[1])).toBe(Resultat.JA);
     });
 
     test('Skal ikke slå sammen to ulike vilkår', () => {
@@ -280,8 +303,10 @@ describe('Skal teste vilkårsvurdering', () => {
 
         const nyVilkårsvurdering = slåSammenVilkårForPerson(vilkårForPerson);
         expect(nyVilkårsvurdering.length).toBe(4);
-        expect(nyVilkårsvurdering[1].periode).toStrictEqual(nyPeriode('2020-06-16', '2020-08-09'));
-        expect(nyVilkårsvurdering[1].resultat).toBe(undefined);
+        expect(hentPeriode(nyVilkårsvurdering[1])).toStrictEqual(
+            nyPeriode('2020-06-16', '2020-08-09')
+        );
+        expect(hentResultat(nyVilkårsvurdering[1])).toBe(Resultat.KANSKJE);
     });
 
     test('Skal teste at begrunnelsen fra periodene som ligger inntil hverandre kommer med i sammenslått begrunnelse', () => {
@@ -310,21 +335,26 @@ describe('Skal teste vilkårsvurdering', () => {
         const sammenslåttBegrunnelse = `Systemet har slått sammen perioder!\n01.01.2020 - 31.03.2020:\nFørste begrunnelse\n\n01.04.2020 - 15.06.2020:\nAndre begrunnelsen\n\n16.06.2020 - 01.01.2021:\nTredje begrunnelsen`;
 
         expect(nyVilkårsvurdering.length).toBe(1);
-        expect(nyVilkårsvurdering[0].periode).toStrictEqual(nyPeriode('2020-01-01', '2021-01-01'));
-        expect(nyVilkårsvurdering[0].resultat).toBe(Resultat.JA);
-        expect(nyVilkårsvurdering[0].begrunnelse).toStrictEqual(sammenslåttBegrunnelse);
+        expect(hentPeriode(nyVilkårsvurdering[0])).toStrictEqual(
+            nyPeriode('2020-01-01', '2021-01-01')
+        );
+        expect(hentResultat(nyVilkårsvurdering[0])).toBe(Resultat.JA);
+        expect(hentBegrunnelse(nyVilkårsvurdering[0])).toStrictEqual(sammenslåttBegrunnelse);
     });
 
     test('Skal oppdatere 1 vilkår', () => {
         const fnr = randomUUID();
 
-        const vilkårsSomSkalEndres: IVilkårResultat = {
-            begrunnelse: 'begrunnelse',
-            id: randomUUID(),
-            periode: nyPeriode('2020-01-01', '2020-03-31'),
-            resultat: Resultat.JA,
-            vilkårType: VilkårType.BOSATT_I_RIKET,
-        };
+        const vilkårsSomSkalEndres: IFelt<IVilkårResultat> = lagInitiellFelt(
+            {
+                begrunnelse: lagInitiellFelt('begrunnelse', erUtfylt),
+                id: randomUUID(),
+                periode: lagInitiellFelt(nyPeriode('2020-01-01', '2020-03-31'), erPeriodeGyldig),
+                resultat: lagInitiellFelt(Resultat.JA, erResultatGyldig),
+                vilkårType: VilkårType.BOSATT_I_RIKET,
+            },
+            validerVilkår
+        );
 
         const vilkårsvurdering: IPersonResultat[] = [
             {
@@ -342,15 +372,21 @@ describe('Skal teste vilkårsvurdering', () => {
             fnr,
             {
                 ...vilkårsSomSkalEndres,
-                begrunnelse: 'Ny begrunnelse',
+                verdi: {
+                    ...vilkårsSomSkalEndres.verdi,
+                    begrunnelse: {
+                        ...vilkårsSomSkalEndres.verdi.begrunnelse,
+                        verdi: 'Ny begrunnelse',
+                    },
+                },
             }
         );
 
         expect(nyVilkårsvurdering.length).toBe(1);
         expect(nyVilkårsvurdering[0].vilkårResultater.length).toBe(2);
-        expect(nyVilkårsvurdering[0].vilkårResultater[0].periode).toStrictEqual(
+        expect(hentPeriode(nyVilkårsvurdering[0].vilkårResultater[0])).toStrictEqual(
             nyPeriode('2020-01-01', '2020-03-31')
         );
-        expect(nyVilkårsvurdering[0].vilkårResultater[0].begrunnelse).toBe('Ny begrunnelse');
+        expect(hentBegrunnelse(nyVilkårsvurdering[0].vilkårResultater[0])).toBe('Ny begrunnelse');
     });
 });

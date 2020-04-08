@@ -1,5 +1,5 @@
 import { Knapp } from 'nav-frontend-knapper';
-import { SkjemaGruppe, FeiloppsummeringFeil } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 
@@ -9,9 +9,9 @@ import { IPersonResultat, IVilkårResultat, VilkårType } from '../../../typer/v
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
+import { IFelt } from '../../../typer/felt';
 
 interface IBehandlingVilkårSkjema {
-    feilmeldinger: FeiloppsummeringFeil[];
     opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
     behandlingstype: Behandlingstype;
@@ -52,12 +52,13 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                         />
                         <ul className={'vilkårsvurdering__list'}>
                             {periodeResultat.vilkårResultater.map(
-                                (vilkårResultat: IVilkårResultat) => {
+                                (vilkårResultat: IFelt<IVilkårResultat>) => {
                                     return (
                                         <GeneriskVilkår
-                                            key={`${periodeResultat.personIdent}_${vilkårResultat.vilkårType}_${vilkårResultat.id}`}
+                                            key={`${periodeResultat.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
                                             person={periodeResultat.person}
                                             vilkårResultat={vilkårResultat}
+                                            visFeilmeldinger={visFeilmeldinger}
                                         />
                                     );
                                 }

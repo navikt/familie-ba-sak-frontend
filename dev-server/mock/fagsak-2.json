@@ -37,14 +37,14 @@
                         "vilkårResultater": [
                             {
                                 "vilkårType": "LOVLIG_OPPHOLD",
-                                "resultat": null,
+                                "resultat": "KANSKJE",
                                 "begrunnelse": "Mock begrunnelse",
                                 "periodeFom": "2020-01-01",
                                 "periodeTom": null
                             },
                             {
                                 "vilkårType": "UNDER_18_ÅR",
-                                "resultat": null,
+                                "resultat": "KANSKJE",
                                 "begrunnelse": "Mock begrunnelse under 18 år",
                                 "periodeFom": "2020-01-01",
                                 "periodeTom": null
@@ -56,7 +56,7 @@
                         "vilkårResultater": [
                             {
                                 "vilkårType": "LOVLIG_OPPHOLD",
-                                "resultat": null,
+                                "resultat": "KANSKJE",
                                 "begrunnelse": "Mock begrunnelse",
                                 "periodeFom": "2020-01-01",
                                 "periodeTom": null

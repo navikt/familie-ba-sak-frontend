@@ -24,8 +24,7 @@ import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
-    settFeilmelding: (feilmelding: string) => void,
-    settFeilmeldinger?: (feilmeldinger: FeiloppsummeringFeil[]) => void
+    settFeilmelding: (feilmelding: string) => void
 ) => {
     const { settFagsak } = useFagsakRessurser();
     const { axiosRequest } = useApp();
@@ -117,9 +116,9 @@ const useFagsakApi = (
                 .forEach((vc: IVilkårConfig) => {
                     if (
                         periodeResultat.vilkårResultater.find(
-                            (vilkårResultat: IVilkårResultat) =>
-                                vilkårResultat.vilkårType === vc.key &&
-                                vilkårResultat.resultat !== undefined
+                            (vilkårResultat: IFelt<IVilkårResultat>) =>
+                                vilkårResultat.verdi.vilkårType === vc.key &&
+                                vilkårResultat.verdi.resultat !== undefined
                         ) === undefined
                     ) {
                         feilmeldinger.push({
@@ -130,45 +129,36 @@ const useFagsakApi = (
                 });
         });
 
-        if (feilmeldinger.length !== 0 && settFeilmeldinger) {
-            settFeilmeldinger(feilmeldinger);
-            settVisFeilmeldinger(true);
-        } else {
-            if (settFeilmeldinger) {
-                settFeilmeldinger([]);
-            }
+        settSenderInn(true);
+        axiosRequest<IFagsak, IRestVilkårsvurdering>({
+            data: {
+                periodeResultater: vilkårsvurdering,
+            },
+            method: 'PUT',
+            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
+        })
+            .then((response: Ressurs<any>) => {
+                settSenderInn(false);
+                if (response.status === RessursStatus.SUKSESS) {
+                    settFagsak(response);
 
-            settSenderInn(true);
-            axiosRequest<IFagsak, IRestVilkårsvurdering>({
-                data: {
-                    periodeResultater: vilkårsvurdering,
-                },
-                method: 'PUT',
-                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
-            })
-                .then((response: Ressurs<any>) => {
-                    settSenderInn(false);
-                    if (response.status === RessursStatus.SUKSESS) {
-                        settFagsak(response);
-
-                        if (erBehandlingenInnvilget(vilkårsvurdering)) {
-                            history.push(`/fagsak/${fagsak.id}/beregning`);
-                        } else {
-                            history.push(`/fagsak/${fagsak.id}/vedtak`);
-                        }
-                    } else if (response.status === RessursStatus.FEILET) {
-                        settFeilmelding(response.melding);
-                        settVisFeilmeldinger(true);
+                    if (erBehandlingenInnvilget(vilkårsvurdering)) {
+                        history.push(`/fagsak/${fagsak.id}/beregning`);
                     } else {
-                        settFeilmelding('Opprettelse av vilkårsvurdering feilet');
-                        settVisFeilmeldinger(true);
+                        history.push(`/fagsak/${fagsak.id}/vedtak`);
                     }
-                })
-                .catch(() => {
-                    settSenderInn(false);
+                } else if (response.status === RessursStatus.FEILET) {
+                    settFeilmelding(response.melding);
+                    settVisFeilmeldinger(true);
+                } else {
                     settFeilmelding('Opprettelse av vilkårsvurdering feilet');
-                });
-        }
+                    settVisFeilmeldinger(true);
+                }
+            })
+            .catch(() => {
+                settSenderInn(false);
+                settFeilmelding('Opprettelse av vilkårsvurdering feilet');
+            });
     };
 
     const opprettBeregning = (

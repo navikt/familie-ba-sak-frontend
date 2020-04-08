@@ -34,12 +34,6 @@ export const stringToMoment = (dato: string | undefined, defaultValue: Moment): 
     return dato && dato !== '' ? moment(dato, datoformat.ISO_DAG) : defaultValue;
 };
 
-export const isValid = (periode: IPeriode): boolean => {
-    return stringToMoment(periode.fom, TIDENES_MORGEN).isBefore(
-        stringToMoment(periode.tom, TIDENES_ENDE)
-    );
-};
-
 export const diff = (første: IPeriode, annen: IPeriode) => {
     return stringToMoment(første.fom, TIDENES_MORGEN).diff(
         stringToMoment(annen.fom, TIDENES_MORGEN),

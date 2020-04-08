@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import deepEqual from 'deep-equal';
 import { Knapp } from 'nav-frontend-knapper';
-import { FeiloppsummeringFeil, Radio, RadioGruppe, TextareaControlled } from 'nav-frontend-skjema';
-import { Element, Feilmelding, Undertekst } from 'nav-frontend-typografi';
+import { Radio, RadioGruppe, TextareaControlled, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Element, Undertekst } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
@@ -10,11 +10,11 @@ import { IPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, vilkårConfig } from '../../../../typer/vilkår';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
 import UtførKnapp from './UtførKnapp';
+import { IFelt, Valideringsstatus } from '../../../../typer/felt';
+import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 
-interface IProps {
-    person: IPerson;
-    vilkårResultat: IVilkårResultat;
-}
+export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
+    `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
 
 export const vilkårResultatFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår-resultat_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -22,23 +22,46 @@ export const vilkårResultatFeilmeldingId = (vilkårResultat: IVilkårResultat) 
 export const vilkårBegrunnelseFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår-begrunnelse_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
 
-const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
-    const { settVilkårForPeriodeResultat } = useVilkårsvurdering();
-    const vilkårFraConfig: IVilkårConfig = vilkårConfig[vilkårResultat.vilkårType];
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(false);
-    const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
+export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
+    `vilkår-periode_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
 
-    const [redigerbartVilkår, settRedigerbartVilkår] = useState<IVilkårResultat>(vilkårResultat);
+interface IProps {
+    person: IPerson;
+    vilkårResultat: IFelt<IVilkårResultat>;
+    visFeilmeldinger: boolean;
+}
+
+const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat, visFeilmeldinger }) => {
+    const { settVilkårForPeriodeResultat } = useVilkårsvurdering();
+    const vilkårFraConfig: IVilkårConfig = vilkårConfig[vilkårResultat.verdi.vilkårType];
+
+    const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
+
+    const [ekspandertVilkår, settEkspandertVilkår] = useState(false);
+
+    const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
+        vilkårResultat
+    );
+
+    const validerOgSettRedigerbartVilkår = (endretVilkår: IFelt<IVilkårResultat>) => {
+        settRedigerbartVilkår(validerVilkår(endretVilkår));
+    };
 
     const radioOnChange = (resultat: Resultat) => {
-        settRedigerbartVilkår({
+        validerOgSettRedigerbartVilkår({
             ...redigerbartVilkår,
-            resultat,
+            verdi: {
+                ...redigerbartVilkår.verdi,
+                resultat: {
+                    ...redigerbartVilkår.verdi.resultat,
+                    verdi: resultat,
+                },
+            },
         });
     };
 
     const toggleForm = () => {
-        if (!deepEqual(vilkårResultat, redigerbartVilkår)) {
+        if (ekspandertVilkår && !deepEqual(vilkårResultat, redigerbartVilkår)) {
             alert('Vurderingen har endringer som ikke er lagret!');
         } else {
             settEkspandertVilkår(!ekspandertVilkår);
@@ -46,122 +69,120 @@ const GeneriskVilkår: React.FC<IProps> = ({ person, vilkårResultat }) => {
         }
     };
 
+    const skalViseFeilmeldinger = () => {
+        return visFeilmeldinger || visFeilmeldingerForEttVilkår;
+    };
+
     return (
         <li
             className={classNames(
                 ekspandertVilkår ? 'aapen' : 'lukket',
                 `resultat__${
-                    redigerbartVilkår.resultat ? redigerbartVilkår.resultat.toLowerCase() : 'ukjent'
+                    redigerbartVilkår.verdi.resultat.verdi !== Resultat.KANSKJE
+                        ? redigerbartVilkår.verdi.resultat.verdi.toLowerCase()
+                        : 'ukjent'
                 }`
             )}
         >
-            <div className={'generisk-vilkår__tittel-og-utfør'}>
-                <Element children={vilkårFraConfig.tittel} />
-                <Undertekst children={vilkårFraConfig.lovreferanse} />
-                <UtførKnapp onClick={toggleForm} aktiv={ekspandertVilkår} />
-            </div>
+            <SkjemaGruppe feilmeldingId={vilkårFeilmeldingId(redigerbartVilkår.verdi)}>
+                <div className={'generisk-vilkår__tittel-og-utfør'}>
+                    <Element children={vilkårFraConfig.tittel} />
+                    <Undertekst children={vilkårFraConfig.lovreferanse} />
+                    <UtførKnapp
+                        onClick={toggleForm}
+                        aktiv={ekspandertVilkår}
+                        vilkårResultat={vilkårResultat.verdi}
+                    />
+                </div>
 
-            {ekspandertVilkår && (
-                <div className={'generisk-vilkår__ekspandert'}>
-                    <RadioGruppe
-                        legend={
-                            vilkårFraConfig.spørsmål
-                                ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
-                                : ''
-                        }
-                        feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår)}
-                    >
-                        <Radio
-                            label={'Ja'}
-                            name={`vilkår-spørsmål_ja_${redigerbartVilkår.vilkårType}_${redigerbartVilkår.id}`}
-                            checked={redigerbartVilkår.resultat === Resultat.JA}
-                            onChange={() => radioOnChange(Resultat.JA)}
-                        />
-                        <Radio
-                            label={'Nei'}
-                            name={`vilkår-spørsmål_nei_${redigerbartVilkår.vilkårType}_${redigerbartVilkår.id}`}
-                            checked={redigerbartVilkår.resultat === Resultat.NEI}
-                            onChange={() => radioOnChange(Resultat.NEI)}
-                        />
+                {ekspandertVilkår && (
+                    <div className={'generisk-vilkår__ekspandert'}>
+                        <RadioGruppe
+                            legend={
+                                vilkårFraConfig.spørsmål
+                                    ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
+                                    : ''
+                            }
+                            feil={
+                                redigerbartVilkår.verdi.resultat.valideringsstatus ===
+                                    Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                                    ? redigerbartVilkår.verdi.resultat.feilmelding
+                                    : ''
+                            }
+                            feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
+                        >
+                            <Radio
+                                label={'Ja'}
+                                name={`vilkår-spørsmål_ja_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.JA}
+                                onChange={() => radioOnChange(Resultat.JA)}
+                            />
+                            <Radio
+                                label={'Nei'}
+                                name={`vilkår-spørsmål_nei_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI}
+                                onChange={() => radioOnChange(Resultat.NEI)}
+                            />
+                        </RadioGruppe>
 
                         <FastsettPeriode
                             redigerbartVilkår={redigerbartVilkår}
-                            settRedigerbartVilkår={settRedigerbartVilkår}
+                            validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
+                            visFeilmeldinger={skalViseFeilmeldinger()}
                         />
-                    </RadioGruppe>
 
-                    <TextareaControlled
-                        defaultValue={redigerbartVilkår.begrunnelse}
-                        id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår)}
-                        label={'Begrunnelse'}
-                        placeholder={'Begrunn vurderingen'}
-                        textareaClass={'generisk-vilkår__ekspandert--begrunnelse'}
-                        value={redigerbartVilkår.begrunnelse}
-                        onBlur={(event: any) => {
-                            settRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                begrunnelse: event?.target.value,
-                            });
-                        }}
-                    />
-
-                    {feilmeldinger.length > 0 && (
-                        <>
-                            {feilmeldinger.map((feilmelding: FeiloppsummeringFeil) => (
-                                <Feilmelding
-                                    key={feilmelding.skjemaelementId}
-                                    children={feilmelding.feilmelding}
-                                />
-                            ))}
-                            <br />
-                        </>
-                    )}
-
-                    <Knapp
-                        onClick={() => {
-                            let harFeil = false;
-
-                            if (redigerbartVilkår.resultat === undefined) {
-                                settFeilmeldinger([
-                                    ...feilmeldinger,
-                                    {
-                                        feilmelding: 'Resultat er ikke satt',
-                                        skjemaelementId: vilkårResultatFeilmeldingId(
-                                            redigerbartVilkår
-                                        ),
-                                    },
-                                ]);
-                                harFeil = true;
+                        <TextareaControlled
+                            defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
+                            id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
+                            label={'Begrunnelse'}
+                            placeholder={'Begrunn vurderingen'}
+                            textareaClass={'generisk-vilkår__ekspandert--begrunnelse'}
+                            value={redigerbartVilkår.verdi.begrunnelse.verdi}
+                            feil={
+                                redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
+                                    Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                                    ? redigerbartVilkår.verdi.begrunnelse.feilmelding
+                                    : ''
                             }
-
-                            if (redigerbartVilkår.begrunnelse === '') {
-                                settFeilmeldinger([
-                                    ...feilmeldinger,
-                                    {
-                                        feilmelding: 'Begrunnelse er ikke satt',
-                                        skjemaelementId: vilkårBegrunnelseFeilmeldingId(
-                                            redigerbartVilkår
-                                        ),
+                            onBlur={(event: any) => {
+                                validerOgSettRedigerbartVilkår({
+                                    ...redigerbartVilkår,
+                                    verdi: {
+                                        ...redigerbartVilkår.verdi,
+                                        begrunnelse: {
+                                            ...redigerbartVilkår.verdi.begrunnelse,
+                                            verdi: event?.target.value,
+                                        },
                                     },
-                                ]);
-                                harFeil = true;
-                            }
+                                });
+                            }}
+                        />
 
-                            if (!harFeil) {
+                        <Knapp
+                            onClick={() => {
+                                const erVilkårGyldig: boolean =
+                                    redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
+                                        .valideringsstatus === Valideringsstatus.OK;
+
                                 settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
-                                settEkspandertVilkår(!ekspandertVilkår);
-                            }
-                        }}
-                        mini={true}
-                        type={'standard'}
-                    >
-                        Ferdig
-                    </Knapp>
-                    <Knapp onClick={toggleForm} mini={true} type={'flat'}>
-                        Avbryt
-                    </Knapp>
-                </div>
-            )}
+                                if (erVilkårGyldig) {
+                                    settEkspandertVilkår(false);
+                                    settVisFeilmeldingerForEttVilkår(false);
+                                } else {
+                                    settVisFeilmeldingerForEttVilkår(true);
+                                }
+                            }}
+                            mini={true}
+                            type={'standard'}
+                        >
+                            Ferdig
+                        </Knapp>
+                        <Knapp onClick={toggleForm} mini={true} type={'flat'}>
+                            Avbryt
+                        </Knapp>
+                    </div>
+                )}
+            </SkjemaGruppe>
         </li>
     );
 };

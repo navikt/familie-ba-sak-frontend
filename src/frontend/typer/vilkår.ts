@@ -1,10 +1,14 @@
 import { randomUUID } from '../utils/commons';
 import { diff, IPeriode, nyPeriode } from './periode';
 import { IPerson, PersonType } from './person';
+import { IFelt, nyttFelt } from './felt';
+import { erUtfylt, erPeriodeGyldig, erResultatGyldig, lagInitiellFelt } from '../utils/validators';
+import { validerVilkår } from '../context/Vilkårsvurdering/validering';
 
 export enum Resultat {
     NEI = 'NEI',
     JA = 'JA',
+    KANSKJE = 'KANSKJE',
 }
 
 export enum VilkårType {
@@ -15,19 +19,27 @@ export enum VilkårType {
     LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
 }
 
+export const lagTomtFeltMedVilkår = (vilkårType: VilkårType): IVilkårResultat => ({
+    begrunnelse: nyttFelt('', erUtfylt),
+    id: randomUUID(),
+    periode: nyttFelt(nyPeriode('2020-04-01', '2020-04-30'), erPeriodeGyldig),
+    resultat: nyttFelt(Resultat.KANSKJE, erResultatGyldig),
+    vilkårType,
+});
+
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
-    vilkårResultater: IVilkårResultat[];
+    vilkårResultater: IFelt<IVilkårResultat>[];
     person: IPerson;
 }
 
 export interface IVilkårResultat {
-    vilkårType: VilkårType;
+    begrunnelse: IFelt<string>;
     id: string;
-    begrunnelse: string;
-    periode: IPeriode;
-    resultat?: Resultat;
+    periode: IFelt<IPeriode>;
+    resultat: IFelt<Resultat>;
+    vilkårType: VilkårType;
 }
 
 // Vilkårsvurdering typer for api
@@ -39,7 +51,7 @@ export interface IRestPersonResultat {
 export interface IRestVilkårResultat {
     vilkårType: VilkårType;
     begrunnelse: string;
-    resultat?: Resultat;
+    resultat: Resultat;
     periodeFom?: string;
     periodeTom?: string;
 }
@@ -118,13 +130,9 @@ export const hentVilkårForPersoner = (personer?: IPerson[]): IPersonResultat[] 
             ...Object.values(vilkårConfig)
                 .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.type))
                 .map(
-                    (vc: IVilkårConfig): IVilkårResultat => ({
-                        id: randomUUID(),
-                        vilkårType: vc.key as VilkårType,
-                        periode: nyPeriode('2020-04-01', '2020-04-30'),
-                        begrunnelse: '',
-                    })
+                    (vc: IVilkårConfig): IFelt<IVilkårResultat> =>
+                        lagInitiellFelt(lagTomtFeltMedVilkår(vc.key as VilkårType), validerVilkår)
                 ),
-        ].sort((a, b) => diff(a.periode, b.periode)),
+        ].sort((a, b) => diff(a.verdi.periode.verdi, b.verdi.periode.verdi)),
     }));
 };

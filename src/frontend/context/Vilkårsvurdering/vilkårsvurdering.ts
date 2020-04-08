@@ -1,45 +1,58 @@
 import {
     IPersonResultat,
-    IVilkårResultat,
-    VilkårType,
     IRestPersonResultat,
     IRestVilkårResultat,
+    IVilkårResultat,
+    Resultat,
+    VilkårType,
+    lagTomtFeltMedVilkår,
 } from '../../typer/vilkår';
 import {
-    overlapperMinstEttSted,
     diff,
+    etterfølgende,
+    ikkeEtterfølgendeOgHullPåOver1Måned,
     kanErstatte,
+    kanFlytteFom,
+    kanFlytteTom,
     kanSplitte,
     nyMoment,
     nyPeriode,
-    kanFlytteFom,
-    kanFlytteTom,
-    etterfølgende,
-    slåSammen,
+    overlapperMinstEttSted,
     periodeToString,
-    ikkeEtterfølgendeOgHullPåOver1Måned,
+    slåSammen,
 } from '../../typer/periode';
 import { datoformat } from '../../utils/formatter';
 import { randomUUID } from '../../utils/commons';
 import { IPerson } from '../../typer/person';
+import { IFelt } from '../../typer/felt';
+import {
+    lagInitiellFelt,
+    erUtfylt,
+    erPeriodeGyldig,
+    erResultatGyldig,
+} from '../../utils/validators';
+import { validerVilkår, kjørValidering } from './validering';
+import { hentPeriode, hentResultat, hentBegrunnelse } from './utils';
 
 const vilkårsvurderingFeilmelding = 'Feil i rekonstruksjon av vilkårsvurdering for part';
 
 export const vilkårHarSammeTypeOgOverlapperMinstEttSted = (
-    nyttVilkårResultat: IVilkårResultat,
-    annenVilkårResultat: IVilkårResultat
+    nyttVilkårResultat: IFelt<IVilkårResultat>,
+    annenVilkårResultat: IFelt<IVilkårResultat>
 ) => {
     return (
-        annenVilkårResultat.vilkårType === nyttVilkårResultat.vilkårType &&
-        overlapperMinstEttSted(nyttVilkårResultat.periode, annenVilkårResultat.periode)
+        annenVilkårResultat.verdi.vilkårType === nyttVilkårResultat.verdi.vilkårType &&
+        overlapperMinstEttSted(hentPeriode(nyttVilkårResultat), hentPeriode(annenVilkårResultat))
     );
 };
 
 export const sorterVilkårsvurderingForPerson = (
-    vilkårResultater: IVilkårResultat[]
-): IVilkårResultat[] => {
+    vilkårResultater: IFelt<IVilkårResultat>[]
+): IFelt<IVilkårResultat>[] => {
     return vilkårResultater.sort(
-        (a, b) => a.vilkårType.localeCompare(b.vilkårType) || diff(a.periode, b.periode)
+        (a, b) =>
+            a.verdi.vilkårType.localeCompare(b.verdi.vilkårType) ||
+            diff(a.verdi.periode.verdi, b.verdi.periode.verdi)
     );
 };
 
@@ -50,13 +63,16 @@ export const sorterVilkårsvurderingForPerson = (
  * @param nyttVilkårResultat vilkåret som legges til
  */
 export const leggTilNyttVilkårIGjeldendeVilkårsvurdering = (
-    vilkårsvurderingForPerson: IVilkårResultat[],
-    nyttVilkårResultat: IVilkårResultat
-): IVilkårResultat[] => {
+    vilkårsvurderingForPerson: IFelt<IVilkårResultat>[],
+    nyttVilkårResultat: IFelt<IVilkårResultat>
+): IFelt<IVilkårResultat>[] => {
     return sorterVilkårsvurderingForPerson([
-        ...vilkårsvurderingForPerson?.reduce(
-            (nyeVilkårResultater: IVilkårResultat[], annenVilkårResultat: IVilkårResultat) => {
-                if (nyttVilkårResultat.id === annenVilkårResultat.id) {
+        ...vilkårsvurderingForPerson.reduce(
+            (
+                nyeVilkårResultater: IFelt<IVilkårResultat>[],
+                annenVilkårResultat: IFelt<IVilkårResultat>
+            ) => {
+                if (nyttVilkårResultat.verdi.id === annenVilkårResultat.verdi.id) {
                     return nyeVilkårResultater;
                 }
 
@@ -66,59 +82,97 @@ export const leggTilNyttVilkårIGjeldendeVilkårsvurdering = (
                         annenVilkårResultat
                     )
                 ) {
-                    if (kanErstatte(nyttVilkårResultat.periode, annenVilkårResultat.periode)) {
+                    if (
+                        kanErstatte(
+                            hentPeriode(nyttVilkårResultat),
+                            hentPeriode(annenVilkårResultat)
+                        )
+                    ) {
                         return nyeVilkårResultater;
                     } else if (
-                        kanSplitte(nyttVilkårResultat.periode, annenVilkårResultat.periode)
+                        kanSplitte(
+                            hentPeriode(nyttVilkårResultat),
+                            hentPeriode(annenVilkårResultat)
+                        )
                     ) {
-                        const nyFom = nyMoment(nyttVilkårResultat.periode.tom)
+                        const nyFom = nyMoment(hentPeriode(nyttVilkårResultat).tom)
                             .add(1, 'day')
                             .format(datoformat.ISO_DAG);
-                        const nyTom = nyMoment(nyttVilkårResultat.periode.fom)
+                        const nyTom = nyMoment(hentPeriode(nyttVilkårResultat).fom)
                             .subtract(1, 'day')
                             .format(datoformat.ISO_DAG);
 
-                        return [
+                        nyeVilkårResultater = [
                             ...nyeVilkårResultater,
                             {
                                 ...annenVilkårResultat,
-                                id: randomUUID(),
-                                periode: nyPeriode(annenVilkårResultat.periode.fom, nyTom),
+                                verdi: {
+                                    ...annenVilkårResultat.verdi,
+                                    periode: lagInitiellFelt(
+                                        nyPeriode(hentPeriode(annenVilkårResultat).fom, nyTom),
+                                        erPeriodeGyldig
+                                    ),
+                                    id: randomUUID(),
+                                },
                             },
                             {
                                 ...annenVilkårResultat,
-                                id: randomUUID(),
-                                periode: nyPeriode(nyFom, annenVilkårResultat.periode.tom),
+                                verdi: {
+                                    ...annenVilkårResultat.verdi,
+                                    periode: lagInitiellFelt(
+                                        nyPeriode(nyFom, hentPeriode(annenVilkårResultat).tom),
+                                        erPeriodeGyldig
+                                    ),
+                                    id: randomUUID(),
+                                },
                             },
                         ];
                     } else if (
-                        kanFlytteFom(nyttVilkårResultat.periode, annenVilkårResultat.periode)
+                        kanFlytteFom(
+                            hentPeriode(nyttVilkårResultat),
+                            hentPeriode(annenVilkårResultat)
+                        )
                     ) {
-                        const nyFom = nyMoment(nyttVilkårResultat.periode.tom)
+                        const nyFom = nyMoment(hentPeriode(nyttVilkårResultat).tom)
                             .add(1, 'day')
                             .format(datoformat.ISO_DAG);
 
-                        return [
+                        nyeVilkårResultater = [
                             ...nyeVilkårResultater,
                             {
                                 ...annenVilkårResultat,
-                                id: randomUUID(),
-                                periode: nyPeriode(nyFom, annenVilkårResultat.periode.tom),
+                                verdi: {
+                                    ...annenVilkårResultat.verdi,
+                                    periode: lagInitiellFelt(
+                                        nyPeriode(nyFom, hentPeriode(annenVilkårResultat).tom),
+                                        erPeriodeGyldig
+                                    ),
+                                    id: randomUUID(),
+                                },
                             },
                         ];
                     } else if (
-                        kanFlytteTom(nyttVilkårResultat.periode, annenVilkårResultat.periode)
+                        kanFlytteTom(
+                            hentPeriode(nyttVilkårResultat),
+                            hentPeriode(annenVilkårResultat)
+                        )
                     ) {
-                        const nyTom = nyMoment(nyttVilkårResultat.periode.fom)
+                        const nyTom = nyMoment(hentPeriode(nyttVilkårResultat).fom)
                             .subtract(1, 'day')
                             .format(datoformat.ISO_DAG);
 
-                        return [
+                        nyeVilkårResultater = [
                             ...nyeVilkårResultater,
                             {
                                 ...annenVilkårResultat,
-                                id: randomUUID(),
-                                periode: nyPeriode(annenVilkårResultat.periode.fom, nyTom),
+                                verdi: {
+                                    ...annenVilkårResultat.verdi,
+                                    periode: lagInitiellFelt(
+                                        nyPeriode(hentPeriode(annenVilkårResultat).fom, nyTom),
+                                        erPeriodeGyldig
+                                    ),
+                                    id: randomUUID(),
+                                },
                             },
                         ];
                     } else {
@@ -129,6 +183,8 @@ export const leggTilNyttVilkårIGjeldendeVilkårsvurdering = (
                 } else {
                     return [...nyeVilkårResultater, annenVilkårResultat];
                 }
+
+                return nyeVilkårResultater;
             },
             []
         ),
@@ -137,12 +193,13 @@ export const leggTilNyttVilkårIGjeldendeVilkårsvurdering = (
 };
 
 const leggTilHvisIkkeFinnes = (
-    vilkårForPerson: IVilkårResultat[],
-    vilkårResultat: IVilkårResultat
-): IVilkårResultat[] => {
+    vilkårForPerson: IFelt<IVilkårResultat>[],
+    vilkårResultat: IFelt<IVilkårResultat>
+): IFelt<IVilkårResultat>[] => {
     if (
-        vilkårForPerson.find((vilkår: IVilkårResultat) => vilkår.id === vilkårResultat.id) ===
-        undefined
+        vilkårForPerson.find(
+            (vilkår: IFelt<IVilkårResultat>) => vilkår.verdi.id === vilkårResultat.verdi.id
+        ) === undefined
     ) {
         return [...vilkårForPerson, vilkårResultat];
     } else {
@@ -161,15 +218,15 @@ const leggTilHvisIkkeFinnes = (
  * @param vilkårTypeSomSkalSlåsSammen vilkåret som legges til
  */
 export const slåSammenVilkårForPerson = (
-    vilkårsvurderingForPerson: IVilkårResultat[],
+    vilkårsvurderingForPerson: IFelt<IVilkårResultat>[],
     ikkeSlåSammenBegrunnelser?: boolean
-): IVilkårResultat[] => {
-    let sammenslåttPerioder: IVilkårResultat[] = [];
+): IFelt<IVilkårResultat>[] => {
+    let sammenslåttPerioder: IFelt<IVilkårResultat>[] = [];
     let systemetHarVurdertSammenhengendePerioder = false;
 
     for (let i = 0; i < vilkårsvurderingForPerson.length; i++) {
-        let fletteVilkår: IVilkårResultat = vilkårsvurderingForPerson[i];
-        const nesteVilkår: IVilkårResultat | undefined = vilkårsvurderingForPerson[i + 1];
+        let fletteVilkår: IFelt<IVilkårResultat> = vilkårsvurderingForPerson[i];
+        const nesteVilkår: IFelt<IVilkårResultat> | undefined = vilkårsvurderingForPerson[i + 1];
 
         // Hvis systemet nettopp har slått sammen 2 perioder setter vi forrige periode til fletteperioden
         if (systemetHarVurdertSammenhengendePerioder) {
@@ -178,55 +235,71 @@ export const slåSammenVilkårForPerson = (
 
         if (
             nesteVilkår &&
-            fletteVilkår.vilkårType === nesteVilkår.vilkårType &&
-            fletteVilkår.resultat === nesteVilkår.resultat
+            fletteVilkår.verdi.vilkårType === nesteVilkår.verdi.vilkårType &&
+            hentResultat(fletteVilkår) === hentResultat(nesteVilkår)
         ) {
             // Dersom systemet nettopp har slått sammen en periode popper vi denne slik at den ikke kommer med dobbelt.
             if (systemetHarVurdertSammenhengendePerioder) {
                 sammenslåttPerioder.pop();
             }
 
-            if (etterfølgende(fletteVilkår.periode, nesteVilkår.periode)) {
+            if (etterfølgende(hentPeriode(fletteVilkår), hentPeriode(nesteVilkår))) {
                 // Periodene er etterfølgende og vi slår dem sammen. Tar med begge begrunnelsene.
-                const sammenslåttVilkår = {
+                const sammenslåttVilkår: IFelt<IVilkårResultat> = {
                     ...fletteVilkår,
-                    id: randomUUID(),
-                    periode: slåSammen(fletteVilkår.periode, nesteVilkår.periode),
-                    begrunnelse: ikkeSlåSammenBegrunnelser
-                        ? fletteVilkår.begrunnelse
-                        : `${
-                              !systemetHarVurdertSammenhengendePerioder
-                                  ? `Systemet har slått sammen perioder!\n${periodeToString(
-                                        fletteVilkår.periode
-                                    )}:\n${fletteVilkår.begrunnelse}`
-                                  : fletteVilkår.begrunnelse
-                          }\n\n${periodeToString(nesteVilkår.periode)}:\n${
-                              nesteVilkår.begrunnelse
-                          }`,
+                    verdi: {
+                        ...fletteVilkår.verdi,
+                        id: randomUUID(),
+                        periode: lagInitiellFelt(
+                            slåSammen(hentPeriode(fletteVilkår), hentPeriode(nesteVilkår)),
+                            erPeriodeGyldig
+                        ),
+                        begrunnelse: lagInitiellFelt(
+                            ikkeSlåSammenBegrunnelser
+                                ? hentBegrunnelse(fletteVilkår)
+                                : `${
+                                      !systemetHarVurdertSammenhengendePerioder
+                                          ? `Systemet har slått sammen perioder!\n${periodeToString(
+                                                hentPeriode(fletteVilkår)
+                                            )}:\n${hentBegrunnelse(fletteVilkår)}`
+                                          : hentBegrunnelse(fletteVilkår)
+                                  }\n\n${periodeToString(
+                                      hentPeriode(nesteVilkår)
+                                  )}:\n${hentBegrunnelse(nesteVilkår)}`,
+                            erUtfylt
+                        ),
+                    },
                 };
 
-                sammenslåttPerioder.push(sammenslåttVilkår);
+                sammenslåttPerioder = [...sammenslåttPerioder, sammenslåttVilkår];
                 systemetHarVurdertSammenhengendePerioder = true;
             } else if (
-                ikkeEtterfølgendeOgHullPåOver1Måned(fletteVilkår.periode, nesteVilkår.periode)
+                ikkeEtterfølgendeOgHullPåOver1Måned(
+                    hentPeriode(fletteVilkår),
+                    hentPeriode(nesteVilkår)
+                )
             ) {
-                // Periodene er ikke sammenhengende så vil legger til et aksjonspunkt som må vurderes
-                const nyFom = nyMoment(fletteVilkår.periode.tom)
+                // Periodene er ikke sammenhengende så vi legger til et aksjonspunkt som må vurderes
+                const nyFom = nyMoment(hentPeriode(fletteVilkår).tom)
                     .add(1, 'day')
                     .format(datoformat.ISO_DAG);
-                const nyTom = nyMoment(nesteVilkår.periode.fom)
+                const nyTom = nyMoment(hentPeriode(nesteVilkår).fom)
                     .subtract(1, 'day')
                     .format(datoformat.ISO_DAG);
 
                 sammenslåttPerioder = [
                     ...sammenslåttPerioder,
                     fletteVilkår,
-                    {
-                        vilkårType: fletteVilkår.vilkårType,
-                        begrunnelse: '',
-                        id: randomUUID(),
-                        periode: nyPeriode(nyFom, nyTom),
-                    },
+                    lagInitiellFelt(
+                        {
+                            vilkårType: fletteVilkår.verdi.vilkårType,
+                            begrunnelse: lagInitiellFelt('', erUtfylt),
+                            id: randomUUID(),
+                            periode: lagInitiellFelt(nyPeriode(nyFom, nyTom), erPeriodeGyldig),
+                            resultat: lagInitiellFelt(Resultat.KANSKJE, erResultatGyldig),
+                        },
+                        validerVilkår
+                    ),
                 ];
 
                 systemetHarVurdertSammenhengendePerioder = false;
@@ -266,7 +339,7 @@ export const slåSammenVilkårForPerson = (
 export const lagNyVilkårsvurderingMedNyttVilkår = (
     vilkårsvurdering: IPersonResultat[],
     personIdent: string,
-    nyttVilkårResultat: IVilkårResultat
+    nyttVilkårResultat: IFelt<IVilkårResultat>
 ): IPersonResultat[] => {
     const vilkårsvurderingForPerson = vilkårsvurdering.find(
         (periodeResultat: IPersonResultat) => periodeResultat.personIdent === personIdent
@@ -276,16 +349,18 @@ export const lagNyVilkårsvurderingMedNyttVilkår = (
         throw new Error(`${vilkårsvurderingFeilmelding}. Finner ikke vilkår for part.`);
     }
 
-    const sortertVilkårsvurderingForPerson: IVilkårResultat[] = sorterVilkårsvurderingForPerson(
-        vilkårsvurderingForPerson.vilkårResultater
-    );
+    const sortertVilkårsvurderingForPerson: IFelt<
+        IVilkårResultat
+    >[] = sorterVilkårsvurderingForPerson(vilkårsvurderingForPerson.vilkårResultater);
 
-    const nyVilkårsvurderingForPerson: IVilkårResultat[] = leggTilNyttVilkårIGjeldendeVilkårsvurdering(
+    const nyVilkårsvurderingForPerson: IFelt<
+        IVilkårResultat
+    >[] = leggTilNyttVilkårIGjeldendeVilkårsvurdering(
         sortertVilkårsvurderingForPerson,
         nyttVilkårResultat
     );
 
-    const sammenslåttVilkårsvurderingForPerson: IVilkårResultat[] = slåSammenVilkårForPerson(
+    const sammenslåttVilkårsvurderingForPerson: IFelt<IVilkårResultat>[] = slåSammenVilkårForPerson(
         nyVilkårsvurderingForPerson
     );
 
@@ -305,19 +380,14 @@ export const hentVilkårsvurderingMedEkstraVilkår = (
     vilkårsvurdering: IPersonResultat[],
     personIdent: string,
     vilkårType: VilkårType
-) => {
+): IPersonResultat[] => {
     return vilkårsvurdering.map((periodeResultat: IPersonResultat) => {
         if (periodeResultat.personIdent === personIdent) {
             return {
                 ...periodeResultat,
                 vilkårResultater: [
                     ...periodeResultat.vilkårResultater,
-                    {
-                        id: randomUUID(),
-                        vilkårType,
-                        periode: nyPeriode(),
-                        begrunnelse: '',
-                    },
+                    lagInitiellFelt(lagTomtFeltMedVilkår(vilkårType), validerVilkår),
                 ],
             };
         } else {
@@ -336,19 +406,28 @@ export const mapFraRestVilkårsvurderingTilUi = (
     personResultater: IRestPersonResultat[],
     personer: IPerson[]
 ): IPersonResultat[] => {
-    return personResultater.map((personResultat: IRestPersonResultat) => ({
-        person: personer.find(
-            (person: IPerson) => person.personIdent === personResultat.personIdent
-        )!!,
-        personIdent: personResultat.personIdent,
-        vilkårResultater: personResultat.vilkårResultater.map(
-            (vilkårResultat: IRestVilkårResultat) => ({
-                vilkårType: vilkårResultat.vilkårType,
-                id: randomUUID(),
-                begrunnelse: vilkårResultat.begrunnelse,
-                resultat: vilkårResultat.resultat,
-                periode: nyPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom),
-            })
-        ),
-    }));
+    return kjørValidering(
+        personResultater.map((personResultat: IRestPersonResultat) => ({
+            person: personer.find(
+                (person: IPerson) => person.personIdent === personResultat.personIdent
+            )!!,
+            personIdent: personResultat.personIdent,
+            vilkårResultater: personResultat.vilkårResultater.map(
+                (vilkårResultat: IRestVilkårResultat) =>
+                    lagInitiellFelt(
+                        {
+                            begrunnelse: lagInitiellFelt(vilkårResultat.begrunnelse, erUtfylt),
+                            id: randomUUID(),
+                            periode: lagInitiellFelt(
+                                nyPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom),
+                                erPeriodeGyldig
+                            ),
+                            resultat: lagInitiellFelt(vilkårResultat.resultat, erResultatGyldig),
+                            vilkårType: vilkårResultat.vilkårType,
+                        },
+                        validerVilkår
+                    )
+            ),
+        }))
+    );
 };

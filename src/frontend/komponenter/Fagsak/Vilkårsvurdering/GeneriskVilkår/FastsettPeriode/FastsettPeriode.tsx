@@ -1,4 +1,4 @@
-import { Checkbox } from 'nav-frontend-skjema';
+import { Checkbox, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 
@@ -6,19 +6,38 @@ import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
 import Datovegler from '../../../../Felleskomponenter/Datovelger/Datovelger';
+import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
+import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 
 interface IProps {
-    redigerbartVilkår: IVilkårResultat;
-    settRedigerbartVilkår: (redigerbartVilkår: IVilkårResultat) => void;
+    redigerbartVilkår: IFelt<IVilkårResultat>;
+    validerOgSettRedigerbartVilkår: (redigerbartVilkår: IFelt<IVilkårResultat>) => void;
+    visFeilmeldinger: boolean;
 }
 
-const FastsettPeriode: React.FC<IProps> = ({ redigerbartVilkår, settRedigerbartVilkår }) => {
+const FastsettPeriode: React.FC<IProps> = ({
+    redigerbartVilkår,
+    validerOgSettRedigerbartVilkår,
+    visFeilmeldinger,
+}) => {
     const [fastsettTom, settFastsettTom] = useState<boolean>(
-        redigerbartVilkår.periode.tom && redigerbartVilkår.periode.tom !== '' ? true : false
+        redigerbartVilkår.verdi.periode.verdi.tom &&
+            redigerbartVilkår.verdi.periode.verdi.tom !== ''
+            ? true
+            : false
     );
 
     return (
-        <div className={'fastsett-periode'}>
+        <SkjemaGruppe
+            feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
+            className={'fastsett-periode'}
+            feil={
+                redigerbartVilkår.verdi.periode.valideringsstatus === Valideringsstatus.FEIL &&
+                visFeilmeldinger
+                    ? redigerbartVilkår.verdi.periode.feilmelding
+                    : ''
+            }
+        >
             <Normaltekst children={'Fastsett periode'} />
             <div className={'fastsett-periode__flex'}>
                 <div>
@@ -27,37 +46,63 @@ const FastsettPeriode: React.FC<IProps> = ({ redigerbartVilkår, settRedigerbart
                         label={'F.o.m.'}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato: string) => {
-                            settRedigerbartVilkår({
+                            validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
-                                periode: nyPeriode(dato, redigerbartVilkår.periode.tom),
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    periode: {
+                                        ...redigerbartVilkår.verdi.periode,
+                                        verdi: nyPeriode(
+                                            dato,
+                                            redigerbartVilkår.verdi.periode.verdi.tom
+                                        ),
+                                    },
+                                },
                             });
                         }}
-                        valgtDato={redigerbartVilkår.periode.fom}
+                        valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
                     />
                 </div>
 
                 <div>
                     <Datovegler
-                        // Hvis denne er disablet, skal man oppdatere staten med tom-streng/null
                         disabled={!fastsettTom}
                         id={'fastsett-periode-tom'}
                         label={'T.o.m.'}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato: string) => {
-                            settRedigerbartVilkår({
+                            validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
-                                periode: nyPeriode(redigerbartVilkår.periode.fom, dato),
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    periode: {
+                                        ...redigerbartVilkår.verdi.periode,
+                                        verdi: nyPeriode(
+                                            redigerbartVilkår.verdi.periode.verdi.fom,
+                                            dato
+                                        ),
+                                    },
+                                },
                             });
                         }}
-                        valgtDato={redigerbartVilkår.periode.tom}
+                        valgtDato={redigerbartVilkår.verdi.periode.verdi.tom}
                     />
                     <Checkbox
                         checked={fastsettTom}
                         onChange={() => {
-                            if (redigerbartVilkår.periode.tom !== '') {
-                                settRedigerbartVilkår({
+                            if (redigerbartVilkår.verdi.periode.verdi.tom !== '' && fastsettTom) {
+                                validerOgSettRedigerbartVilkår({
                                     ...redigerbartVilkår,
-                                    periode: nyPeriode(redigerbartVilkår.periode.fom, undefined),
+                                    verdi: {
+                                        ...redigerbartVilkår.verdi,
+                                        periode: {
+                                            ...redigerbartVilkår.verdi.periode,
+                                            verdi: nyPeriode(
+                                                redigerbartVilkår.verdi.periode.verdi.fom,
+                                                undefined
+                                            ),
+                                        },
+                                    },
                                 });
                             }
                             settFastsettTom(!fastsettTom);
@@ -66,7 +111,7 @@ const FastsettPeriode: React.FC<IProps> = ({ redigerbartVilkår, settRedigerbart
                     />
                 </div>
             </div>
-        </div>
+        </SkjemaGruppe>
     );
 };
 

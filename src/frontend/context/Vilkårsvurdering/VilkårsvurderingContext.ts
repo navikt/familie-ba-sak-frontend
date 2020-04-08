@@ -1,7 +1,6 @@
 import constate from 'constate';
 import * as React from 'react';
 
-import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import {
     hentVilkårForPersoner,
@@ -14,6 +13,8 @@ import {
     hentVilkårsvurderingMedEkstraVilkår,
 } from './vilkårsvurdering';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
+import { kjørValidering } from './validering';
+import { Valideringsstatus, IFelt } from '../../typer/felt';
 
 interface IProps {
     fagsak: IFagsak;
@@ -26,24 +27,60 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: 
 
     const settVilkårForPeriodeResultat = (
         personIdent: string,
-        vilkårResultat: IVilkårResultat
+        vilkårResultat: IFelt<IVilkårResultat>
     ): void => {
         settVilkårsvurdering(
-            lagNyVilkårsvurderingMedNyttVilkår(vilkårsvurdering, personIdent, vilkårResultat)
+            kjørValidering(
+                lagNyVilkårsvurderingMedNyttVilkår(vilkårsvurdering, personIdent, vilkårResultat)
+            )
         );
     };
 
     const leggTilVilkår = (personIdent: string, vilkårType: VilkårType): void => {
         settVilkårsvurdering(
-            hentVilkårsvurderingMedEkstraVilkår(vilkårsvurdering, personIdent, vilkårType)
+            kjørValidering(
+                hentVilkårsvurderingMedEkstraVilkår(vilkårsvurdering, personIdent, vilkårType)
+            )
+        );
+    };
+
+    const erVilkårsvurderingenGyldig = (): boolean => {
+        return (
+            vilkårsvurdering.filter((periodeResultat: IPersonResultat) => {
+                return (
+                    periodeResultat.vilkårResultater.filter(
+                        (vilkårResultat: IFelt<IVilkårResultat>) =>
+                            vilkårResultat.valideringsstatus !== Valideringsstatus.OK
+                    ).length > 0
+                );
+            }).length === 0
+        );
+    };
+
+    const hentVilkårMedFeil = (): IVilkårResultat[] => {
+        return vilkårsvurdering.reduce(
+            (accVilkårMedFeil: IVilkårResultat[], personResultat: IPersonResultat) => {
+                return [
+                    ...accVilkårMedFeil,
+                    ...personResultat.vilkårResultater
+                        .filter(
+                            (vilkårResultat: IFelt<IVilkårResultat>) =>
+                                vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
+                        )
+                        .map((vilkårResultat: IFelt<IVilkårResultat>) => vilkårResultat.verdi),
+                ];
+            },
+            []
         );
     };
 
     return {
+        erVilkårsvurderingenGyldig,
+        hentVilkårMedFeil,
         leggTilVilkår,
-        vilkårsvurdering,
-        settVilkårsvurdering,
         settVilkårForPeriodeResultat,
+        settVilkårsvurdering,
+        vilkårsvurdering,
     };
 });
 

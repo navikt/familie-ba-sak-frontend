@@ -10,26 +10,36 @@ import useFagsakApi from '../useFagsakApi';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
 import { mapFraRestVilkårsvurderingTilUi } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import { IPersonResultat, IRestPersonResultat, IRestVilkårResultat } from '../../../typer/vilkår';
+import {
+    IPersonResultat,
+    IRestPersonResultat,
+    IRestVilkårResultat,
+    IVilkårResultat,
+    Resultat,
+} from '../../../typer/vilkår';
 import { PersonType } from '../../../typer/person';
-import { FeiloppsummeringFeil, Feiloppsummering } from 'nav-frontend-skjema';
+import { Feiloppsummering } from 'nav-frontend-skjema';
+import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { vilkårsvurdering, settVilkårsvurdering } = useVilkårsvurdering();
+    const {
+        erVilkårsvurderingenGyldig,
+        hentVilkårMedFeil,
+        settVilkårsvurdering,
+        vilkårsvurdering,
+    } = useVilkårsvurdering();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
-    const [feilmeldinger, settFeilmeldinger] = React.useState<FeiloppsummeringFeil[]>([]);
 
     const history = useHistory();
     const { opprettEllerOppdaterVilkårsvurdering, senderInn } = useFagsakApi(
         settVisFeilmeldinger,
-        settOpprettelseFeilmelding,
-        settFeilmeldinger
+        settOpprettelseFeilmelding
     );
 
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
@@ -67,7 +77,11 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     history.push(`/fagsak/${fagsak.id}/registrer-soknad`);
                 }}
                 nesteOnClick={() => {
-                    opprettEllerOppdaterVilkårsvurdering(vilkårsvurdering, fagsak);
+                    if (erVilkårsvurderingenGyldig()) {
+                        opprettEllerOppdaterVilkårsvurdering(vilkårsvurdering, fagsak);
+                    } else {
+                        settVisFeilmeldinger(true);
+                    }
                 }}
                 senderInn={senderInn}
             >
@@ -77,7 +91,7 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                             return (
                                 periodeResultat.vilkårResultater.filter(
                                     (vilkårResultat: IRestVilkårResultat) =>
-                                        vilkårResultat.resultat !== null
+                                        vilkårResultat.resultat !== Resultat.KANSKJE
                                 ).length > 0
                             );
                         }
@@ -94,16 +108,18 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     )}
 
                 <BehandlingVilkårSkjema
-                    feilmeldinger={feilmeldinger}
                     opprettelseFeilmelding={opprettelseFeilmelding}
                     visFeilmeldinger={visFeilmeldinger}
                     behandlingstype={aktivBehandling.type}
                 />
 
-                {feilmeldinger.length > 0 && (
+                {hentVilkårMedFeil().length > 0 && visFeilmeldinger && (
                     <Feiloppsummering
                         tittel={'For å gå videre må du rette opp følgende:'}
-                        feil={feilmeldinger}
+                        feil={hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
+                            feilmelding: `Vilkåret mangler resultat`,
+                            skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
+                        }))}
                     />
                 )}
             </Skjemasteg>

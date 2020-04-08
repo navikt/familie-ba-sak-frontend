@@ -2,16 +2,19 @@ import React from 'react';
 import PennFylt from '../../../../ikoner/PennFylt';
 import Penn from '../../../../ikoner/Penn';
 import { randomUUID } from '../../../../utils/commons';
+import { IVilkårResultat } from '../../../../typer/vilkår';
+import { vilkårFeilmeldingId } from './GeneriskVilkår';
 
 interface IProps {
     aktiv: boolean;
     onClick: () => void;
+    vilkårResultat: IVilkårResultat;
 }
 
-const UtførKnapp: React.FC<IProps> = ({ aktiv, onClick }) => {
+const UtførKnapp: React.FC<IProps> = ({ aktiv, onClick, vilkårResultat }) => {
     return (
         <button
-            id={`utfør_${randomUUID()}`}
+            id={vilkårFeilmeldingId(vilkårResultat)}
             aria-label={`utfør_${randomUUID()}`}
             className={'generisk-vilkår__utførknapp'}
             onClick={onClick}
