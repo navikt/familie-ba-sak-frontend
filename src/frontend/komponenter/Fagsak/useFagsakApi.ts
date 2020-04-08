@@ -19,8 +19,15 @@ import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useApp } from '../../context/AppContext';
-import { IPersonResultat, vilkårConfig, IVilkårConfig, IVilkårResultat } from '../../typer/vilkår';
+import {
+    IPersonResultat,
+    vilkårConfig,
+    IVilkårConfig,
+    IVilkårResultat,
+    IRestVilkårResultat,
+} from '../../typer/vilkår';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
+import { hentResultat, hentBegrunnelse, hentPeriode } from '../../context/Vilkårsvurdering/utils';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -132,7 +139,20 @@ const useFagsakApi = (
         settSenderInn(true);
         axiosRequest<IFagsak, IRestVilkårsvurdering>({
             data: {
-                periodeResultater: vilkårsvurdering,
+                periodeResultater: vilkårsvurdering.map((personResultat: IPersonResultat) => {
+                    return {
+                        personIdent: personResultat.personIdent,
+                        vilkårResultater: personResultat.vilkårResultater.map(
+                            (vilkårResultat: IFelt<IVilkårResultat>): IRestVilkårResultat => ({
+                                begrunnelse: hentBegrunnelse(vilkårResultat),
+                                periodeFom: hentPeriode(vilkårResultat).fom,
+                                periodeTom: hentPeriode(vilkårResultat).tom,
+                                resultat: hentResultat(vilkårResultat),
+                                vilkårType: vilkårResultat.verdi.vilkårType,
+                            })
+                        ),
+                    };
+                }),
             },
             method: 'PUT',
             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,

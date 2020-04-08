@@ -1,7 +1,7 @@
 import { IPersonBeregning } from '../typer/behandle';
 import { BehandlingKategori, Behandlingstype, BehandlingUnderkategori } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { IPersonResultat } from '../typer/vilkår';
+import { IRestPersonResultat } from '../typer/vilkår';
 
 export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
 
@@ -20,7 +20,7 @@ export interface IOpprettBehandlingData {
 }
 
 export interface IRestVilkårsvurdering {
-    periodeResultater: IPersonResultat[];
+    periodeResultater: IRestPersonResultat[];
 }
 
 export interface IOpprettBeregningData {
