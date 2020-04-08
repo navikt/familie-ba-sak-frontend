@@ -1,9 +1,8 @@
 import { randomUUID } from '../utils/commons';
-import { diff, IPeriode, nyPeriode } from './periode';
+import { IPeriode, nyPeriode } from './periode';
 import { IPerson, PersonType } from './person';
 import { IFelt, nyttFelt } from './felt';
-import { erUtfylt, erPeriodeGyldig, erResultatGyldig, lagInitiellFelt } from '../utils/validators';
-import { validerVilkår } from '../context/Vilkårsvurdering/validering';
+import { erUtfylt, erPeriodeGyldig, erResultatGyldig } from '../utils/validators';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -110,29 +109,4 @@ export const vilkårConfig: IVilkårsconfig = {
         spørsmål: (part?: string) => `Har ${part} lovlig opphold?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
     },
-};
-
-/**
- * Funksjon som basert på personene innvolvert i behandlingen henter ut vilkårene som må behandles
- * og lager en state struktur som vi videre kan bruke når saksbehandler vurderer vilkårene.
- *
- * @param personer liste av personer fra personopplysningsgrunnlaget på behandlingen
- */
-export const hentVilkårForPersoner = (personer?: IPerson[]): IPersonResultat[] => {
-    if (!personer) {
-        return [];
-    }
-
-    return personer.map((person: IPerson) => ({
-        personIdent: person.personIdent,
-        person,
-        vilkårResultater: [
-            ...Object.values(vilkårConfig)
-                .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.type))
-                .map(
-                    (vc: IVilkårConfig): IFelt<IVilkårResultat> =>
-                        lagInitiellFelt(lagTomtFeltMedVilkår(vc.key as VilkårType), validerVilkår)
-                ),
-        ].sort((a, b) => diff(a.verdi.periode.verdi, b.verdi.periode.verdi)),
-    }));
 };

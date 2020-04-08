@@ -9,15 +9,12 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import BehandlingVilkårSkjema from './BehandleVilkårSkjema';
-import { mapFraRestVilkårsvurderingTilUi } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
 import {
-    IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
     Resultat,
 } from '../../../typer/vilkår';
-import { PersonType } from '../../../typer/person';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
 
@@ -29,7 +26,6 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const {
         erVilkårsvurderingenGyldig,
         hentVilkårMedFeil,
-        settVilkårsvurdering,
         vilkårsvurdering,
     } = useVilkårsvurdering();
 
@@ -43,19 +39,6 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
     );
 
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-
-    React.useEffect(() => {
-        if (aktivBehandling && aktivBehandling.personResultater.length !== 0) {
-            settVilkårsvurdering(
-                mapFraRestVilkårsvurderingTilUi(
-                    aktivBehandling.personResultater,
-                    aktivBehandling.personer
-                ).sort((periodeResultat: IPersonResultat) =>
-                    periodeResultat.person.type === PersonType.SØKER ? -1 : 1
-                )
-            );
-        }
-    }, [fagsak]);
 
     if (!aktivBehandling) {
         return (

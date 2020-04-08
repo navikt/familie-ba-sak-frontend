@@ -2,27 +2,34 @@ import constate from 'constate';
 import * as React from 'react';
 
 import { IFagsak } from '../../typer/fagsak';
-import {
-    hentVilkårForPersoner,
-    IPersonResultat,
-    IVilkårResultat,
-    VilkårType,
-} from '../../typer/vilkår';
+import { IPersonResultat, IVilkårResultat, VilkårType } from '../../typer/vilkår';
 import {
     lagNyVilkårsvurderingMedNyttVilkår,
     hentVilkårsvurderingMedEkstraVilkår,
+    mapFraRestVilkårsvurderingTilUi,
 } from './vilkårsvurdering';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { kjørValidering } from './validering';
 import { Valideringsstatus, IFelt } from '../../typer/felt';
+import { IBehandling } from '../../typer/behandling';
+import { PersonType } from '../../typer/person';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: IProps) => {
+    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(fagsak);
+
     const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
-        hentVilkårForPersoner(hentAktivBehandlingPåFagsak(fagsak)?.personer ?? [])
+        aktivBehandling
+            ? mapFraRestVilkårsvurderingTilUi(
+                  aktivBehandling.personResultater,
+                  aktivBehandling.personer
+              ).sort((periodeResultat: IPersonResultat) =>
+                  periodeResultat.person.type === PersonType.SØKER ? -1 : 1
+              )
+            : []
     );
 
     const settVilkårForPeriodeResultat = (

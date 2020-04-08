@@ -1,11 +1,11 @@
 import {
     IPersonResultat,
-    hentVilkårForPersoner,
     VilkårType,
     Resultat,
     IVilkårResultat,
     vilkårConfig,
     IVilkårConfig,
+    lagTomtFeltMedVilkår,
 } from '../../typer/vilkår';
 import {
     hentVilkårsvurderingMedEkstraVilkår,
@@ -23,6 +23,7 @@ import {
     kanFlytteFom,
     kanFlytteTom,
     IPeriode,
+    diff,
 } from '../../typer/periode';
 import { IFelt } from '../../typer/felt';
 import {
@@ -71,11 +72,30 @@ const mockVilkår = (
         )
     );
 
+const mockHentVilkårForPersoner = (personer?: IPerson[]): IPersonResultat[] => {
+    if (!personer) {
+        return [];
+    }
+
+    return personer.map((person: IPerson) => ({
+        personIdent: person.personIdent,
+        person,
+        vilkårResultater: [
+            ...Object.values(vilkårConfig)
+                .filter((vc: IVilkårConfig) => vc.parterDetteGjelderFor.includes(person.type))
+                .map(
+                    (vc: IVilkårConfig): IFelt<IVilkårResultat> =>
+                        lagInitiellFelt(lagTomtFeltMedVilkår(vc.key as VilkårType), validerVilkår)
+                ),
+        ].sort((a, b) => diff(a.verdi.periode.verdi, b.verdi.periode.verdi)),
+    }));
+};
+
 describe('Skal teste vilkårsvurdering', () => {
     test('Skal lage periode resultat og legge til 1 vilkår', () => {
         const fnr = randomUUID();
 
-        let vilkårsvurdering: IPersonResultat[] = hentVilkårForPersoner([mockPerson(fnr)]);
+        let vilkårsvurdering: IPersonResultat[] = mockHentVilkårForPersoner([mockPerson(fnr)]);
 
         expect(vilkårsvurdering.length).toBe(1);
         expect(hentVilkårsvurderingForPerson(fnr, vilkårsvurdering)?.vilkårResultater.length).toBe(
