@@ -1,11 +1,16 @@
 import React from 'react';
 import FilterSkjema from './FilterSkjema';
 import OppgaveList from './OppgaveList';
+import { ISaksbehandler } from '../../typer/saksbehandler';
 
-const VisOppgaver: React.FunctionComponent = () => {
+interface IVisOppgaverProps {
+    innloggetSaksbehandler?: ISaksbehandler;
+}
+
+const VisOppgaver: React.FunctionComponent<IVisOppgaverProps> = props => {
     return (
         <div className="visoppgaver">
-            <FilterSkjema />
+            <FilterSkjema innloggetSaksbehandler={props.innloggetSaksbehandler} />
             <OppgaveList />
         </div>
     );

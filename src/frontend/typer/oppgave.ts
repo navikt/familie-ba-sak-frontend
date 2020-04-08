@@ -11,7 +11,7 @@ export interface IOppgave {
     status: string;
 }
 
-export enum Enhet {
+export enum EnhetFilter {
     Alle = 'Alle',
     Drammen = '4806 Drammen',
     Sandnes = '4811 Sandnes',
@@ -21,12 +21,12 @@ export enum Enhet {
     LevangerSteinkjer = '4847 Levanger-Steinkjer',
 }
 
-export enum Saksbehandler {
+export enum SaksbehandlerFilter {
     Alle = 'Alle (fordelte og ufordelte)',
     AlleUfordelte = 'Alle (ufordelte)',
 }
 
-export enum Gjelder {
+export enum GjelderFilter {
     Alle = 'Alle',
     ab0270 = 'Uspesifisert',
     ab0180 = 'Ordinær',
@@ -34,7 +34,7 @@ export enum Gjelder {
     ab0058 = 'EØS',
 }
 
-export enum Oppgavetype {
+export enum OppgavetypeFilter {
     Alle = 'Alle',
     RETUR = 'Behandle returpost',
     BEH_SAK = 'Behandle sak',
@@ -57,7 +57,7 @@ export enum Oppgavetype {
     VUR_SVAR = 'Vurder svar',
 }
 
-export enum Enhetsmappe {
+export enum EnhetsmappeFilter {
     Alle = 'Alle',
     Uplasserte = 'Uplasserte',
     EM10 = '10 Søknader-klar til behandling',
@@ -68,7 +68,7 @@ export enum Enhetsmappe {
     EM50 = '50 Tilbakekreving klar til behandling',
 }
 
-export enum Prioritet {
+export enum PrioritetFilter {
     Alle = 'Alle',
     Normal = 'Normal',
     Høy = 'Høy',
