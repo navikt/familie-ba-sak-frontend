@@ -89,7 +89,7 @@ export const vilkårConfig: IVilkårsconfig = {
         beskrivelse: 'ugift og ikke partnerskap',
         key: 'GIFT_PARTNERSKAP',
         lovreferanse: '§ 2-4',
-        tittel: 'UGift og ikke partnerskap',
+        tittel: 'Ugift og ikke partnerskap',
         spørsmål: () => 'Er barnet ugift og har ikke partnerskap',
         parterDetteGjelderFor: [PersonType.BARN],
     },
