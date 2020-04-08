@@ -22,7 +22,7 @@ export enum VilkårType {
 export const lagTomtFeltMedVilkår = (vilkårType: VilkårType): IVilkårResultat => ({
     begrunnelse: nyttFelt('', erUtfylt),
     id: randomUUID(),
-    periode: nyttFelt(nyPeriode('2020-04-01', '2020-04-30'), erPeriodeGyldig),
+    periode: nyttFelt(nyPeriode(), erPeriodeGyldig),
     resultat: nyttFelt(Resultat.KANSKJE, erResultatGyldig),
     vilkårType,
 });
