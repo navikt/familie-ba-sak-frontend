@@ -1,28 +1,61 @@
 {
     "data": [
         {
-            "id": 1,
-            "tildeltEnhetsnr": "8888",
+            "id": "20002",
+            "tildeltEnhetsnr": "4820",
             "journalpostId": "j33",
             "saksreferanse": "sak1",
             "aktoerid": "12345678910",
-            "tilordnetRessurs": "SomeResource",
+            "tilordnetRessurs": "J981724",
+            "beskrivelse": "--- 28.01.2020 15:.23 F_Z991031 E_Z991031 (Z991031, 9999) ---\nÃrlig kontroll\n\n",
             "behandlingstema": "ab0180",
-            "oppgavetype": "BehandleSak",
-            "prioritet": "nei",
-            "status": "SomeStatus"
+            "oppgavetype": "JFR",
+            "fristFerdigstillelse": "2020-01-21",
+            "opprettetTidspunkt": "2020-01-11T10:57:29.717+01:00",
+            "prioritet": "NORM",
+            "status": "OPPRETTET"
         },
         {
-            "id": 2,
-            "tildeltEnhetsnr": "8889",
+            "id": "81923",
+            "tildeltEnhetsnr": "4833",
             "journalpostId": "j31",
             "saksreferanse": "sak2",
             "aktoerid": "32345678910",
-            "tilordnetRessurs": "SomeResource",
+            "tilordnetRessurs": "F712598",
+            "beskrivelse": "F016, rinaSakId=97812, rinaDokumentId=abcf6780b6f7acbaf70b67af8c, link=http://rina-ss1-q.adeo.no/portal/#/caseManagement/97812?freeText=&searchDefinition=&rightView=SearchDefinitionList&openMode=Read&docId=abcf6780b6f7acbaf70b67af8c",
             "behandlingstema": "ab0270",
-            "oppgavetype": "BehandleSak",
-            "prioritet": "nei",
-            "status": "SomeStatus"
+            "oppgavetype": "BEH_SAK",
+            "fristFerdigstillelse": "2020-03-03",
+            "opprettetTidspunkt": "2020-02-28T10:57:29.717+01:00",
+            "prioritet": "NORM",
+            "status": "OPPRETTET"
+        },
+        {
+            "id": "91258",
+            "tildeltEnhetsnr": "4833",
+            "saksreferanse": "1428",
+            "aktoerid": "71298489248",
+            "beskrivelse": "Lorem ipsum",
+            "behandlingstema": "",
+            "oppgavetype": "BEH_SAK",
+            "fristFerdigstillelse": "2020-02-28",
+            "opprettetTidspunkt": "2020-02-25T12:33:22.423+01:00",
+            "prioritet": "HOY",
+            "status": "OPPRETTET"
+        },
+        {
+            "id": "39412",
+            "tildeltEnhetsnr": "4833",
+            "saksreferanse": "1003403",
+            "aktoerid": "32345678910",
+            "tilordnetRessurs": "D784424",
+            "beskrivelse": "----- Opprettet av familie-ba-sak 2020-02-21T10:57:29.658799 --- \nNy sak om behandling av ordinær barnetrygd \nhttps://barnetrygd.nais.adeo.no/fagsak/1003403/behandle",
+            "behandlingstema": "ab0180",
+            "oppgavetype": "BEH_SAK",
+            "fristFerdigstillelse": "2020-02-22",
+            "opprettetTidspunkt": "2020-02-21T12:33:22.423+01:00",
+            "prioritet": "NORM",
+            "status": "OPPRETTET"
         }
     ],
     "status": "SUKSESS"

@@ -53,6 +53,7 @@ const initialFiltre: IOppgaverFiltre = [
     },
 
     {
+        // there is a 'status' field in oppgave.ts - not the same as the status referred to here.
         name: 'Enhetsmappe',
         label: 'Enhetsmappe (status på oppgave)',
         values: Object.values(Enhetsmappe),

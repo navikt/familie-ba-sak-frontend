@@ -5,7 +5,7 @@ import './visoppgave.less';
 
 const OppgaveContainer: React.FunctionComponent = () => {
     return (
-        <div className="oppgavercontainer__content">
+        <div className="oppgavecontainer__content">
             <Switch>
                 <Route
                     exact={true}

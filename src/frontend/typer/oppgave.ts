@@ -1,12 +1,15 @@
 export interface IOppgave {
-    id: number;
+    id: string;
     tildeltEnhetsnr: string;
     journalpostId: string;
     saksreferanse: string;
     aktoerid: string;
     tilordnetRessurs: string;
+    beskrivelse: string;
     behandlingstema: string;
     oppgavetype: string;
+    fristFerdigstillelse: string;
+    opprettetTidspunkt: string;
     prioritet: string;
     status: string;
 }
@@ -61,7 +64,7 @@ export enum Enhetsmappe {
     Alle = 'Alle',
     Uplasserte = 'Uplasserte',
     EM10 = '10 Søknader-klar til behandling',
-    EM20 = '20 AVventer dokumentasjon',
+    EM20 = '20 Avventer dokumentasjon',
     EM30 = '30 Klager klar til behandling',
     EM40 = '40 Revurdering klar til behandling',
     EM41 = '41 Revurdering',
@@ -70,7 +73,7 @@ export enum Enhetsmappe {
 
 export enum Prioritet {
     Alle = 'Alle',
-    Normal = 'Normal',
-    Høy = 'Høy',
-    Lav = 'Lav',
+    NORM = 'Normal',
+    HOY = 'Høy',
+    LAV = 'Lav',
 }

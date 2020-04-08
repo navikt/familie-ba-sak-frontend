@@ -1,25 +1,101 @@
-.oppgavercontainer {
+.oppgavecontainer {
     &__content {
-        display: flex;
         padding: 1rem;
     }
 }
 
-.filterskjema{
+.filterskjema {
     display: flex;
     flex-direction: column;
 
-    &__content{
+    &__content {
         margin-top: 2rem;
     }
 
-    &__filtre{
+    &__filtre {
         display: flex;
         &__input{
             padding-right: 2rem;
         }
     }
-    &__button{
+    &__button {
         width: 10rem;
     }
+}
+
+.oppgaveliste {
+    margin-top: 50px;
+    font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+    color: #3e3832;
+}
+
+.row-head {
+    display: flex;
+}
+
+.cell-head {
+    padding-left: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #999;
+}
+
+.row {
+    display: flex;
+}
+
+.cell {
+    padding-left: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+}
+
+.regdato {
+    flex: 0 0 135px;
+}
+
+.oppgavetype {
+    flex: 0 0 215px;
+}
+
+.gjelder {
+    flex: 0 0 150px;
+}
+
+.frist {
+    flex: 0 0 90px;
+}
+
+.prioritet {
+    flex: 0 0 120px;
+}
+
+.beskrivelse {
+    flex: 0 0 350px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.bruker {
+    flex: 0 0 115px;
+}
+
+.enhet {
+    flex: 0 0 155px;
+}
+
+.saksbehandler {
+    flex: 0 0 225px;
+}
+
+.handlinger {
+    flex: 0 0 275px;
+}
+
+.cell.handlinger > a {
+    color: #0067c5;
+    text-decoration: none;
+    padding-right: 15px;
 }
