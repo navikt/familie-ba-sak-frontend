@@ -139,7 +139,7 @@ const useFagsakApi = (
         settSenderInn(true);
         axiosRequest<IFagsak, IRestVilkårsvurdering>({
             data: {
-                periodeResultater: vilkårsvurdering.map((personResultat: IPersonResultat) => {
+                personResultater: vilkårsvurdering.map((personResultat: IPersonResultat) => {
                     return {
                         personIdent: personResultat.personIdent,
                         vilkårResultater: personResultat.vilkårResultater.map(

@@ -20,7 +20,7 @@ export interface IOpprettBehandlingData {
 }
 
 export interface IRestVilkårsvurdering {
-    periodeResultater: IRestPersonResultat[];
+    personResultater: IRestPersonResultat[];
 }
 
 export interface IOpprettBeregningData {
