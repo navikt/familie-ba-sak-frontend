@@ -309,6 +309,71 @@ describe('Skal teste vilkårsvurdering', () => {
         expect(hentResultat(nyVilkårsvurdering[1])).toBe(Resultat.KANSKJE);
     });
 
+    test('Skal slå sammen første 2 perioder og ikke fylle hull med nytt aksjonspunkt etter det fordi hullet ikke er over 1 måned', () => {
+        const vilkårForPerson = [
+            mockVilkår(
+                VilkårType.BOSATT_I_RIKET,
+                Resultat.JA,
+                nyPeriode('2020-01-01', '2020-03-31')
+            ),
+            mockVilkår(
+                VilkårType.BOSATT_I_RIKET,
+                Resultat.JA,
+                nyPeriode('2020-04-01', '2020-05-30')
+            ),
+            mockVilkår(
+                VilkårType.BOSATT_I_RIKET,
+                Resultat.JA,
+                nyPeriode('2020-06-10', '2021-01-01')
+            ),
+            mockVilkår(
+                VilkårType.LOVLIG_OPPHOLD,
+                Resultat.JA,
+                nyPeriode('2020-01-01', '2020-06-15')
+            ),
+        ];
+
+        const nyVilkårsvurdering = slåSammenVilkårForPerson(vilkårForPerson);
+        expect(nyVilkårsvurdering.length).toBe(3);
+        expect(hentPeriode(nyVilkårsvurdering[0])).toStrictEqual(
+            nyPeriode('2020-01-01', '2020-05-30')
+        );
+    });
+
+    test('Skal teste special cases for logikk rundt opprettelse av nye aksjonspunkter', () => {
+        const vilkårForPersonUtenHull = [
+            mockVilkår(
+                VilkårType.BOSATT_I_RIKET,
+                Resultat.JA,
+                nyPeriode('2020-01-01', '2020-04-01')
+            ),
+            mockVilkår(
+                VilkårType.BOSATT_I_RIKET,
+                Resultat.JA,
+                nyPeriode('2020-05-01', '2021-01-01')
+            ),
+        ];
+
+        const nyVilkårsvurderingUtenHull = slåSammenVilkårForPerson(vilkårForPersonUtenHull);
+        expect(nyVilkårsvurderingUtenHull.length).toBe(2);
+
+        const vilkårForPersonMedHull = [
+            mockVilkår(
+                VilkårType.BOSATT_I_RIKET,
+                Resultat.JA,
+                nyPeriode('2019-01-01', '2019-01-31')
+            ),
+            mockVilkår(
+                VilkårType.BOSATT_I_RIKET,
+                Resultat.JA,
+                nyPeriode('2019-03-01', '2020-01-01')
+            ),
+        ];
+
+        const nyVilkårsvurderingMedHull = slåSammenVilkårForPerson(vilkårForPersonMedHull);
+        expect(nyVilkårsvurderingMedHull.length).toBe(3);
+    });
+
     test('Skal teste at begrunnelsen fra periodene som ligger inntil hverandre kommer med i sammenslått begrunnelse', () => {
         const vilkårForPerson = [
             mockVilkår(

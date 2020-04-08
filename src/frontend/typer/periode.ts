@@ -60,7 +60,10 @@ export const ikkeEtterfølgendeOgHullPåOver1Måned = (første: IPeriode, annen:
         stringToMoment(annen.fom, TIDENES_MORGEN).diff(
             stringToMoment(første.tom, TIDENES_ENDE),
             'days'
-        ) > 30
+        ) >= 28 &&
+        stringToMoment(annen.fom, TIDENES_MORGEN).month() -
+            stringToMoment(første.tom, TIDENES_ENDE).month() >
+            1
     );
 };
 
