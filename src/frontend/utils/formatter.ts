@@ -1,16 +1,25 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 export enum datoformat {
     MÅNED = 'MM.YY',
-    DATO = 'DD.MM.YY',
+    DATO = 'DD.MM.YYYY',
     ISO_MÅNED = 'YYYY-MM',
+    ISO_DAG = 'YYYY-MM-DD',
     DATO_TID = 'DD.MM.YY HH:mm',
     TID = 'HH:mm',
 }
 
-export const formaterIsoDato = (dato: string, tilFormat: datoformat) => {
+export enum datoformatNorsk {
+    DATO = 'DD.MM.ÅÅÅÅ',
+}
+
+export const formaterIsoDato = (dato: string | undefined, tilFormat: datoformat) => {
     const momentDato = moment(dato);
     return momentDato.isValid() ? momentDato.format(tilFormat) : dato ? dato : '';
+};
+
+export const formaterDato = (dato: Moment, tilFormat: datoformat) => {
+    return dato.isValid() ? dato.format(tilFormat) : '';
 };
 
 export const hentAlder = (dato: string): number => {

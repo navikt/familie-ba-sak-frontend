@@ -1,0 +1,96 @@
+import { Knapp } from 'nav-frontend-knapper';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Undertittel } from 'nav-frontend-typografi';
+import React from 'react';
+
+import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { Behandlingstype } from '../../../typer/behandling';
+import { IPersonResultat, IVilkårResultat, VilkårType } from '../../../typer/vilkår';
+import { erBehandlingenInnvilget } from '../../../utils/fagsak';
+import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
+import { IFelt } from '../../../typer/felt';
+
+interface IBehandlingVilkårSkjema {
+    opprettelseFeilmelding: string;
+    visFeilmeldinger: boolean;
+    behandlingstype: Behandlingstype;
+}
+
+const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema> = ({
+    opprettelseFeilmelding,
+    visFeilmeldinger,
+    behandlingstype,
+}) => {
+    const { leggTilVilkår, vilkårsvurdering } = useVilkårsvurdering();
+
+    const nesteMåned = () => {
+        const iDag = new Date();
+        const måned = (iDag.getMonth() + 2).toString();
+        return [
+            måned.length === 1 ? '0' + måned : måned,
+            iDag
+                .getFullYear()
+                .toString()
+                .substr(2),
+        ].join('.');
+    };
+    return (
+        <SkjemaGruppe
+            className={'vilkår__skjemagruppe'}
+            feil={
+                visFeilmeldinger && opprettelseFeilmelding !== ''
+                    ? opprettelseFeilmelding
+                    : undefined
+            }
+        >
+            {vilkårsvurdering.map((periodeResultat: IPersonResultat) => {
+                return (
+                    <div key={periodeResultat.personIdent}>
+                        <Undertittel
+                            children={`Vurder vilkår for ${periodeResultat.person.navn}`}
+                        />
+                        <ul className={'vilkårsvurdering__list'}>
+                            {periodeResultat.vilkårResultater.map(
+                                (vilkårResultat: IFelt<IVilkårResultat>) => {
+                                    return (
+                                        <GeneriskVilkår
+                                            key={`${periodeResultat.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
+                                            person={periodeResultat.person}
+                                            vilkårResultat={vilkårResultat}
+                                            visFeilmeldinger={visFeilmeldinger}
+                                        />
+                                    );
+                                }
+                            )}
+                            <Knapp
+                                type={'flat'}
+                                mini={true}
+                                onClick={() => {
+                                    leggTilVilkår(
+                                        periodeResultat.personIdent,
+                                        VilkårType.BOSATT_I_RIKET
+                                    );
+                                }}
+                                children={'Vurder ny periode'}
+                            />
+                        </ul>
+                    </div>
+                );
+            })}
+
+            <br />
+
+            {behandlingstype === Behandlingstype.REVURDERING &&
+                !erBehandlingenInnvilget(vilkårsvurdering) && (
+                    <div className={'vilkår__skjemagruppe--opphørsdato'}>
+                        <Informasjonsbolk
+                            informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}
+                        />
+                    </div>
+                )}
+        </SkjemaGruppe>
+    );
+};
+
+export default BehandlingVilkårSkjema;

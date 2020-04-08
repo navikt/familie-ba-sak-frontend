@@ -11,10 +11,7 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { actions, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 import BeregningSkjema from './BeregningSkjema';
-
-import moment = require('moment');
-import { IFelt } from '../../../typer/felt';
-import { IPersonBeregning } from '../../../typer/behandle';
+import moment from 'moment';
 
 interface IProps {
     fagsak: IFagsak;
