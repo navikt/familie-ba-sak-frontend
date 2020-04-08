@@ -1,8 +1,7 @@
 import React from 'react';
-import { Gjelder, Oppgavetype, Enhet, Prioritet } from '../../typer/oppgave';
+import { GjelderFilter, OppgavetypeFilter, PrioritetFilter } from '../../typer/oppgave';
 import { RessursStatus } from '../../typer/ressurs';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { string } from 'prop-types';
 
 function intDatoTilNorskDato(intDato: string) {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -40,14 +39,18 @@ const OppgaveList: React.FunctionComponent = () => {
                         <div className={'cell regdato'}>
                             {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
                         </div>
-                        <div className={'cell oppgavetype'}>{Oppgavetype[oppg.oppgavetype]}</div>
+                        <div className={'cell oppgavetype'}>
+                            {OppgavetypeFilter[oppg.oppgavetype]}
+                        </div>
                         <div className={'cell gjelder'}>
-                            {oppg.behandlingstema ? Gjelder[oppg.behandlingstema] : 'Ikke satt'}
+                            {oppg.behandlingstema
+                                ? GjelderFilter[oppg.behandlingstema]
+                                : 'Ikke satt'}
                         </div>
                         <div className={'cell frist'}>
                             {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
                         </div>
-                        <div className={'cell prioritet'}>{Prioritet[oppg.prioritet]}</div>
+                        <div className={'cell prioritet'}>{PrioritetFilter[oppg.prioritet]}</div>
                         <div className={'cell beskrivelse'}>{oppg.beskrivelse}</div>
                         <div className={'cell bruker'}>{oppg.aktoerid}</div>
                         <div className={'cell enhet'}>{enheter.get(oppg.tildeltEnhetsnr)}</div>
