@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { IPersonBeregning } from '../typer/behandle';
+import { IPersonBeregning } from '../typer/beregning';
 import { feil, IFelt, ok, Valideringsstatus, ValiderIFelt } from '../typer/felt';
 import { datoformat } from './formatter';
 import { IPeriode, stringToMoment, TIDENES_MORGEN, TIDENES_ENDE } from '../typer/periode';

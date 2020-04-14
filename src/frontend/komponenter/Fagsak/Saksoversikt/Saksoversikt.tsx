@@ -21,7 +21,7 @@ import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import { IPersonBeregning } from '../../../typer/behandle';
+import { IPersonBeregning } from '../../../typer/beregning';
 import { useApp } from '../../../context/AppContext';
 
 interface IProps {

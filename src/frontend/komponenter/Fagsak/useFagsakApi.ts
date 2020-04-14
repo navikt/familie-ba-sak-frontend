@@ -15,7 +15,7 @@ import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
-import { IPersonBeregning } from '../../typer/behandle';
+import { IPersonBeregning } from '../../typer/beregning';
 import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useApp } from '../../context/AppContext';
@@ -251,7 +251,7 @@ const useFagsakApi = (
                         if (response.status === RessursStatus.SUKSESS) {
                             settFagsak(response);
 
-                            history.push(`/fagsak/${fagsak.id}/vedtak`);
+                            history.push(`/fagsak/${fagsak.id}/oppsummeringberegning`);
                         } else if (response.status === RessursStatus.FEILET) {
                             settFeilmelding(response.melding);
                             settVisFeilmeldinger(true);
@@ -265,7 +265,7 @@ const useFagsakApi = (
                         settFeilmelding('Opprettelse av vedtak feilet');
                     });
             } else {
-                history.push(`/fagsak/${fagsak.id}/vedtak`);
+                history.push(`/fagsak/${fagsak.id}/oppsummeringberegning`);
             }
         } else {
             settVisFeilmeldinger(true);

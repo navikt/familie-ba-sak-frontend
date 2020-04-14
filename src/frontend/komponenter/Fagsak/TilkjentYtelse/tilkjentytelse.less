@@ -1,0 +1,50 @@
+.tilkjentytelse-rad {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  & .tilkjentytelse-kolonne:nth-child(1) {
+    width: 5%;
+  }
+  & .tilkjentytelse-kolonne:nth-child(2) {
+    width: 20%;
+  }
+  & .tilkjentytelse-kolonne:nth-child(3) {
+    width: 20%;
+  }
+  & .tilkjentytelse-kolonne:nth-child(4) {
+    width: 40%;
+  }
+  & .tilkjentytelse-kolonne:nth-child(5) {
+    width: 5%;
+  }
+  & .tilkjentytelse-kolonne:nth-child(6) {
+    width: 10%;
+  }
+
+  & .tilkjentytelse-kolonne {
+    box-sizing: border-box;
+    flex-grow: 1;
+    //width: 20%; // 5kolonner
+    padding: 0.8em 1.2em;
+    overflow: hidden; // Or flex might break
+    list-style: none;
+    border-bottom: 1px solid red;
+  }
+  & .tilkjentytelse-detaljer-rad {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  & .tilkjentytelse-detaljer-kolonne {
+    box-sizing: border-box;
+    flex-grow: 1;
+    //width: 20%; // 5kolonner
+    padding: 0.8em 1.2em;
+    overflow: hidden; // Or flex might break
+    list-style: none;
+  }
+}
