@@ -2,6 +2,7 @@ import moment from 'moment';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../typer/vilkår';
+import { IFelt } from '../typer/felt';
 
 export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
     if (fagsak.behandlinger.length === 0) {
@@ -28,7 +29,8 @@ export const erBehandlingenInnvilget = (vilkårsvurdering: IPersonResultat[]) =>
     if (
         vilkårsvurdering.find((personResultat: IPersonResultat) =>
             personResultat.vilkårResultater.find(
-                (vilkårResultat: IVilkårResultat) => vilkårResultat.resultat === Resultat.NEI
+                (vilkårResultat: IFelt<IVilkårResultat>) =>
+                    vilkårResultat.verdi.resultat.verdi === Resultat.NEI
             )
         ) !== undefined
     ) {

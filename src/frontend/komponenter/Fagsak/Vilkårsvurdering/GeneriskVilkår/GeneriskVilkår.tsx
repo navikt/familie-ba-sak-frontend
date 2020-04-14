@@ -5,7 +5,6 @@ import { IPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, VilkårType } from '../../../../typer/vilkår';
 import { IFelt } from '../../../../typer/felt';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
-import { Knapp } from 'nav-frontend-knapper';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import UtførKnapp from './UtførKnapp';
 

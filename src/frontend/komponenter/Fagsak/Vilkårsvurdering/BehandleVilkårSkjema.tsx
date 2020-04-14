@@ -1,4 +1,3 @@
-import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
@@ -8,7 +7,6 @@ import { Behandlingstype } from '../../../typer/behandling';
 import {
     IPersonResultat,
     IVilkårResultat,
-    VilkårType,
     vilkårConfig,
     IVilkårConfig,
 } from '../../../typer/vilkår';
@@ -28,7 +26,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
     visFeilmeldinger,
     behandlingstype,
 }) => {
-    const { leggTilVilkår, vilkårsvurdering } = useVilkårsvurdering();
+    const { vilkårsvurdering } = useVilkårsvurdering();
 
     const nesteMåned = () => {
         const iDag = new Date();
