@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Select } from 'nav-frontend-skjema';
 import { DatoInput } from '../Felleskomponenter/DatoInput/DatoInput';
-import { useOppgaver } from '../../context/OppgaverContext';
+import { useOppgaver, OppgaverProvider } from '../../context/OppgaverContext';
 import {
     OppgavetypeFilter,
     EnhetFilter,
@@ -14,6 +14,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import './visoppgave.less';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 import { v4 as uuidv4 } from 'uuid';
+import { RessursStatus } from '../../typer/ressurs';
 
 type IOppgaverFilter = {
     name: string;
@@ -97,7 +98,7 @@ interface IFilterSkjemaProps {
 }
 
 const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSaksbehandler }) => {
-    const { hentOppgaver, filterOppgaver, henter } = useOppgaver();
+    const { hentOppgaver, filterOppgaver, oppgaver } = useOppgaver();
     const [filtre, settFiltre] = useState<IOppgaverFilter[]>(initialFiltre(innloggetSaksbehandler));
     return (
         <div className="filterskjema">
@@ -145,7 +146,6 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
             </div>
             <Knapp
                 onClick={() => {
-                    console.log(filtre);
                     hentOppgaver(
                         getbehandlingstema(
                             filtre.find(filter => filter.name === 'Behandlingstema')!!
@@ -156,7 +156,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                         filterOppgaver();
                     });
                 }}
-                spinner={henter}
+                spinner={oppgaver.status == RessursStatus.HENTER}
                 className="filterskjema__button filterskjema__content"
             >
                 Hent
