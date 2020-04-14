@@ -7,6 +7,7 @@ import {
     lagNyVilkårsvurderingMedNyttVilkår,
     hentVilkårsvurderingMedEkstraVilkår,
     mapFraRestVilkårsvurderingTilUi,
+    slåSammenVilkårForPerson,
 } from './vilkårsvurdering';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { kjørValidering } from './validering';
@@ -26,8 +27,8 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: 
             ? mapFraRestVilkårsvurderingTilUi(
                   aktivBehandling.personResultater,
                   aktivBehandling.personer
-              ).sort((periodeResultat: IPersonResultat) =>
-                  periodeResultat.person.type === PersonType.SØKER ? -1 : 1
+              ).sort((personResultat: IPersonResultat) =>
+                  personResultat.person.type === PersonType.SØKER ? -1 : 1
               )
             : []
     );
@@ -51,11 +52,27 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: 
         );
     };
 
+    const fjernVilkår = (id: string) => {
+        settVilkårsvurdering(
+            vilkårsvurdering.map((personResultat: IPersonResultat) => {
+                return {
+                    ...personResultat,
+                    vilkårResultater: slåSammenVilkårForPerson(
+                        personResultat.vilkårResultater.filter(
+                            (vilkårResultat: IFelt<IVilkårResultat>) =>
+                                vilkårResultat.verdi.id !== id
+                        )
+                    ),
+                };
+            })
+        );
+    };
+
     const erVilkårsvurderingenGyldig = (): boolean => {
         return (
-            vilkårsvurdering.filter((periodeResultat: IPersonResultat) => {
+            vilkårsvurdering.filter((personResultat: IPersonResultat) => {
                 return (
-                    periodeResultat.vilkårResultater.filter(
+                    personResultat.vilkårResultater.filter(
                         (vilkårResultat: IFelt<IVilkårResultat>) =>
                             vilkårResultat.valideringsstatus !== Valideringsstatus.OK
                     ).length > 0
@@ -83,6 +100,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: 
 
     return {
         erVilkårsvurderingenGyldig,
+        fjernVilkår,
         hentVilkårMedFeil,
         leggTilVilkår,
         settVilkårForPeriodeResultat,

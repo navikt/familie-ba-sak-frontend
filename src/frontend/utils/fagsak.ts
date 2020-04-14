@@ -26,8 +26,8 @@ export const hentAktivBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | und
  */
 export const erBehandlingenInnvilget = (vilkårsvurdering: IPersonResultat[]) => {
     if (
-        vilkårsvurdering.find((periodeResultat: IPersonResultat) =>
-            periodeResultat.vilkårResultater.find(
+        vilkårsvurdering.find((personResultat: IPersonResultat) =>
+            personResultat.vilkårResultater.find(
                 (vilkårResultat: IVilkårResultat) => vilkårResultat.resultat === Resultat.NEI
             )
         ) !== undefined
