@@ -20,50 +20,52 @@ const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver } = useOppgaver();
 
     return (
-        <div className={'oppgaveliste'}>
-            <div className={'row-head'}>
-                <div className={'cell-head regdato'}>Reg. dato</div>
-                <div className={'cell-head oppgavetype'}>Oppgavetype</div>
-                <div className={'cell-head gjelder'}>Gjelder</div>
-                <div className={'cell-head frist'}>Frist</div>
-                <div className={'cell-head prioritet'}>Prioritet</div>
-                <div className={'cell-head beskrivelse'}>Beskrivelse</div>
-                <div className={'cell-head bruker'}>Bruker</div>
-                <div className={'cell-head enhet'}>Enhet</div>
-                <div className={'cell-head saksbehandler'}>Saksbehandler</div>
-                <div className={'cell-head handlinger'}>Handlinger</div>
-            </div>
-            {oppgaver.status == RessursStatus.SUKSESS &&
-                oppgaver.data.map((oppg, index) => (
-                    <div className={'row'} key={index}>
-                        <div className={'cell regdato'}>
-                            {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
-                        </div>
-                        <div className={'cell oppgavetype'}>
-                            {OppgavetypeFilter[oppg.oppgavetype]}
-                        </div>
-                        <div className={'cell gjelder'}>
-                            {oppg.behandlingstema
-                                ? GjelderFilter[oppg.behandlingstema]
-                                : 'Ikke satt'}
-                        </div>
-                        <div className={'cell frist'}>
-                            {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
-                        </div>
-                        <div className={'cell prioritet'}>{PrioritetFilter[oppg.prioritet]}</div>
-                        <div className={'cell beskrivelse'}>{oppg.beskrivelse}</div>
-                        <div className={'cell bruker'}>{oppg.aktoerid}</div>
-                        <div className={'cell enhet'}>{enheter.get(oppg.tildeltEnhetsnr)}</div>
-                        <div className={'cell saksbehandler'}>
-                            {oppg.tilordnetRessurs ? oppg.tilordnetRessurs : 'Ikke tildelt'}
-                        </div>
-                        <div className={'cell handlinger'}>
-                            <a href="">Tildel/plukk</a>
-                            <a href="">Gå til oppg</a>
-                        </div>
-                    </div>
-                ))}
-        </div>
+        <table className="tabell">
+            <thead>
+                <tr>
+                    <th className={'regdato'}>Reg. dato</th>
+                    <th className={'oppgavetype'}>Oppgavetype</th>
+                    <th className={'gjelder'}>Gjelder</th>
+                    <th className={'frist'}>Frist</th>
+                    <th className={'prioritet'}>Prioritet</th>
+                    <th className={'beskrivelse'}>Beskrivelse</th>
+                    <th className={'bruker'}>Bruker</th>
+                    <th className={'enhet'}>Enhet</th>
+                    <th className={'saksbehandler'}>Saksbehandler</th>
+                    <th className={'handlinger'}>Handlinger</th>
+                </tr>
+            </thead>
+            <tbody>
+                {oppgaver.status == RessursStatus.SUKSESS &&
+                    oppgaver.data.map((oppg, index) => (
+                        <tr key={index}>
+                            <td className={'regdato'}>
+                                {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
+                            </td>
+                            <td className={'oppgavetype'}>{OppgavetypeFilter[oppg.oppgavetype]}</td>
+                            <td className={'gjelder'}>
+                                {oppg.behandlingstema
+                                    ? GjelderFilter[oppg.behandlingstema]
+                                    : 'Ikke satt'}
+                            </td>
+                            <td className={'frist'}>
+                                {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
+                            </td>
+                            <td className={'prioritet'}>{PrioritetFilter[oppg.prioritet]}</td>
+                            <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
+                            <td className={'bruker'}>{oppg.aktoerid}</td>
+                            <td className={'enhet'}>{enheter.get(oppg.tildeltEnhetsnr)}</td>
+                            <td className={'saksbehandler'}>
+                                {oppg.tilordnetRessurs ? oppg.tilordnetRessurs : 'Ikke tildelt'}
+                            </td>
+                            <td className={'handlinger'}>
+                                <a href="">Tildel/plukk</a>
+                                <a href="">Gå til oppg</a>
+                            </td>
+                        </tr>
+                    ))}
+            </tbody>
+        </table>
     );
 };
 
