@@ -13,6 +13,7 @@ const Høyremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return (
         <div className={'høyremeny'}>
+            <div className={'høyremeny__totrinn'}>TOTRINNSKONTROLL</div>
             <Logg aktivBehandling={aktivBehandling} />
         </div>
     );
