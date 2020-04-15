@@ -72,7 +72,7 @@ app.post('/familie-ba-sak/api/fagsaker/sok', (req, res) => {
     }
 });
 
-app.get('/familie-ba-sak/api/oppgaver', (req, res) => {
+app.get('/familie-ba-sak/api/oppgave', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`oppgaver.json`)), 500);
 });
 

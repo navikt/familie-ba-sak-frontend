@@ -36,7 +36,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         return axiosRequest<IOppgave[], void>({
             method: 'GET',
-            url: `/familie-ba-sak/api/oppgaver${query}`,
+            url: `/familie-ba-sak/api/oppgave${query}`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
                 settOppgaver(oppgaverRes);
