@@ -128,6 +128,6 @@ export const overlapperMinstEttSted = (første: IPeriode, annen: IPeriode): bool
     return (
         førsteFom.isBetween(annenFom, annenTom) ||
         førsteTom.isBetween(annenFom, annenTom) ||
-        (førsteFom.isBefore(annenFom) && førsteTom.isAfter(annenTom))
+        (førsteFom.isSameOrBefore(annenFom) && førsteTom.isSameOrAfter(annenTom))
     );
 };
