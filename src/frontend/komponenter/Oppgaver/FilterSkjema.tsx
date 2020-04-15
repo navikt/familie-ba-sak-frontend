@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Select } from 'nav-frontend-skjema';
 import { DatoInput } from '../Felleskomponenter/DatoInput/DatoInput';
-import { useOppgaver, OppgaverProvider } from '../../context/OppgaverContext';
+import { useOppgaver } from '../../context/OppgaverContext';
 import {
     OppgavetypeFilter,
     EnhetFilter,
@@ -13,7 +13,6 @@ import {
 import { Knapp } from 'nav-frontend-knapper';
 import './visoppgave.less';
 import { ISaksbehandler } from '../../typer/saksbehandler';
-import { v4 as uuidv4 } from 'uuid';
 import { RessursStatus } from '../../typer/ressurs';
 
 type IOppgaverFilter = {
@@ -55,23 +54,17 @@ const initialFiltre = (innloggetSaksbehandler?: ISaksbehandler): IOppgaverFilter
             values: Object.values(PrioritetFilter).map(v => v.toString()),
             selectedValue: PrioritetFilter.Alle,
         },
-    ].concat(
-        innloggetSaksbehandler
-            ? {
-                  name: 'Saksbehandler',
-                  label: 'Saksbehandler',
-                  values: Object.values(SaksbehandlerFilter)
+        {
+            name: 'Saksbehandler',
+            label: 'Saksbehandler',
+            values: innloggetSaksbehandler
+                ? Object.values(SaksbehandlerFilter)
                       .map(v => v.toString())
-                      .concat(innloggetSaksbehandler!.identifier),
-                  selectedValue: PrioritetFilter.Alle,
-              }
-            : {
-                  name: 'Saksbehandler',
-                  label: 'Saksbehandler',
-                  values: Object.values(SaksbehandlerFilter).map(v => v.toString()),
-                  selectedValue: PrioritetFilter.Alle,
-              }
-    );
+                      .concat(innloggetSaksbehandler.displayName)
+                : Object.values(SaksbehandlerFilter).map(v => v.toString()),
+            selectedValue: SaksbehandlerFilter.Alle,
+        },
+    ];
 };
 
 const getbehandlingstema = (filter: IOppgaverFilter) => {
@@ -121,7 +114,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                                     )
                                 )
                             }
-                            key={uuidv4()}
+                            key={filter.name}
                             value={filter.selectedValue}
                             className="filterskjema__filtre__input"
                         >
@@ -144,23 +137,33 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                 <DatoInput label="Frist" className="filterskjema__filtre__input" />
                 <DatoInput label="Registert dato" className="filterskjema__filtre__input" />
             </div>
-            <Knapp
-                onClick={() => {
-                    hentOppgaver(
-                        getbehandlingstema(
-                            filtre.find(filter => filter.name === 'Behandlingstema')!!
-                        ),
-                        getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!),
-                        getEnhet(filtre.find(filter => filter.name === 'Enhet')!!)
-                    ).then(() => {
-                        filterOppgaver();
-                    });
-                }}
-                spinner={oppgaver.status == RessursStatus.HENTER}
-                className="filterskjema__button filterskjema__content"
-            >
-                Hent
-            </Knapp>
+            <div className="filterskjema__content">
+                <Knapp
+                    onClick={() => {
+                        hentOppgaver(
+                            getbehandlingstema(
+                                filtre.find(filter => filter.name === 'Behandlingstema')!!
+                            ),
+                            getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!),
+                            getEnhet(filtre.find(filter => filter.name === 'Enhet')!!)
+                        ).then(() => {
+                            filterOppgaver();
+                        });
+                    }}
+                    spinner={oppgaver.status == RessursStatus.HENTER}
+                    className="filterskjema__button"
+                >
+                    Hent
+                </Knapp>
+                <Knapp
+                    onClick={() => {
+                        settFiltre(initialFiltre(innloggetSaksbehandler));
+                    }}
+                    className="filterskjema__tilbakestill"
+                >
+                    Tilbakestill filtrering
+                </Knapp>
+            </div>
         </div>
     );
 };
