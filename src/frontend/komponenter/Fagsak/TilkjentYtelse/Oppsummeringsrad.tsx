@@ -6,9 +6,11 @@ import BeregningDetalj from './BeregningDetalj';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import classNames from 'classnames';
 import { kategorier } from '../../../typer/behandling';
+
 interface IProps {
     beregning: IOppsummeringBeregning;
 }
+
 const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
     const [åpentElement, setÅpentElement] = React.useState<boolean>(false);
 
