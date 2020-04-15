@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select } from 'nav-frontend-skjema';
 import { DatoInput } from '../Felleskomponenter/DatoInput/DatoInput';
 import { useOppgaver } from '../../context/OppgaverContext';
@@ -106,6 +106,24 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
     const [filtre, settFiltre] = useState<IOppgaverFilter[]>(initialFiltre(innloggetSaksbehandler));
     const [frist, settFrist] = useState<string>('');
     const [registertDato, settRegistertDato] = useState<string>('');
+
+    useEffect(() => {
+        settFiltre(
+            filtre.map(filter =>
+                filter.name === 'Saksbehandler'
+                    ? {
+                          ...filter,
+                          values: innloggetSaksbehandler
+                              ? Object.values(SaksbehandlerFilter)
+                                    .map(v => v.toString())
+                                    .concat(innloggetSaksbehandler.displayName)
+                              : Object.values(SaksbehandlerFilter).map(v => v.toString()),
+                      }
+                    : filter
+            )
+        );
+    }, [innloggetSaksbehandler]);
+
     return (
         <div className="filterskjema">
             <div className="filterskjema__filtre filterskjema__content">
