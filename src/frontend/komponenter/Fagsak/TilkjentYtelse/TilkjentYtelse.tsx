@@ -1,5 +1,5 @@
 import { IFagsak } from '../../../typer/fagsak';
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Ingress, Innholdstittel, Undertittel } from 'nav-frontend-typografi';
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
@@ -11,6 +11,7 @@ import { Behandlingstype } from '../../../typer/behandling';
 import { useHistory } from 'react-router';
 import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -43,11 +44,19 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
                 setErrorMessage('Ukjent feil, Kunne ikke generere forhåndsvisning.');
             });
     }, []);
+    const startdato = oppsummeringBeregning[0]
+        ? formaterIsoDato(oppsummeringBeregning[0].periodeFom, datoformat.DATO)
+        : '';
     return (
-        <div>
+        <div className="tilkjentytelse">
             {errorMessage === undefined ? (
                 <div>
-                    <Systemtittel children={'Tilkjent ytelse'} />
+                    <Innholdstittel children={'Behandlingsresultat'} />
+                    <br />
+                    <Undertittel>
+                        Vilkårene for barnetrygd er oppfylt f.o.m. {startdato}
+                    </Undertittel>
+                    <Ingress>Se detaljer under periode.</Ingress>
                     <br />
                     <div>
                         <OppsummeringsradHeader />
@@ -59,7 +68,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
             ) : (
                 <AlertStripe type="feil">{errorMessage}</AlertStripe>
             )}
-            <div className={'oppsummering__navigering'}>
+            <div className={'tilkjentytelse__navigering'}>
                 <Knapp
                     type={'hoved'}
                     onClick={() => {

@@ -1,4 +1,13 @@
+.tilkjentytelse {
+  margin-left: 6rem;
+  margin-right: 6rem;
 
+  &__navigering {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+  }
+}
 .tilkjentytelse-rad {
   display: flex;
   flex-wrap: wrap;
@@ -49,6 +58,19 @@
     margin: 0;
     padding: 0;
     width: 100%;
+
+    & .tilkjentytelse-detaljer-kolonne:nth-child(1) {
+      width: 5%;
+    }
+    & .tilkjentytelse-detaljer-kolonne:nth-child(2) {
+      width: 35%;
+    }
+    & .tilkjentytelse-detaljer-kolonne:nth-child(3) {
+      width: 50%;
+    }
+    & .tilkjentytelse-detaljer-kolonne:nth-child(4) {
+      width: 10%;
+    }
   }
   & .tilkjentytelse-detaljer-kolonne {
     box-sizing: border-box;
@@ -58,9 +80,15 @@
     overflow: hidden; // Or flex might break
     list-style: none;
 
+    & .detaljer-personalia {
+      display: flex;
+      align-items: center;
+    }
+
     & .familie-ikon {
       height: 20px;
       width: 20px;
+      margin-right: 0.5rem;
     }
   }
 }

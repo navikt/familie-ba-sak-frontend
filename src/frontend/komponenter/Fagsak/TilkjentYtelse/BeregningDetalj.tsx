@@ -7,22 +7,27 @@ import { Normaltekst } from 'nav-frontend-typografi';
 interface IProps {
     beregningDetaljer: IBeregningDetalj[];
 }
+
 const BeregningDetalj: React.FunctionComponent<IProps> = ({ beregningDetaljer }) => {
     return (
         <>
             {beregningDetaljer.map((detalj, index) => {
+                const alder = hentAlder(detalj.person.fødselsdato);
                 return (
                     <div className="tilkjentytelse-detaljer-rad" key={index}>
+                        <div className="tilkjentytelse-detaljer-kolonne" />
                         <div className="tilkjentytelse-detaljer-kolonne">
-                            <Normaltekst>
+                            <div className="detaljer-personalia">
                                 <FamilieIkonVelger
                                     className="familie-ikon"
-                                    alder={hentAlder(detalj.person.fødselsdato)}
+                                    alder={alder}
                                     kjønn={detalj.person.kjønn}
-                                />{' '}
-                                {detalj.person.navn} | {detalj.person.personIdent} |{' '}
-                                {detalj.person.type}
-                            </Normaltekst>
+                                />
+                                <Normaltekst>
+                                    {detalj.person.navn} ({alder} år) | {detalj.person.personIdent}{' '}
+                                    | {detalj.person.type}
+                                </Normaltekst>
+                            </div>
                         </div>
                         <div className="tilkjentytelse-detaljer-kolonne">
                             <Normaltekst>{ytelsetype[detalj.stønadstype].navn}</Normaltekst>
