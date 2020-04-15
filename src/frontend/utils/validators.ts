@@ -40,9 +40,10 @@ export const erGyldigMånedDato = (felt: IFelt<IPersonBeregning>): IFelt<IPerson
 };
 
 export const erPeriodeGyldig = (felt: IFelt<IPeriode>): IFelt<IPeriode> => {
-    return stringToMoment(felt.verdi.fom, TIDENES_MORGEN).isBefore(
-        stringToMoment(felt.verdi.tom, TIDENES_ENDE)
-    )
+    return moment(felt.verdi.fom).isValid() &&
+        stringToMoment(felt.verdi.fom, TIDENES_MORGEN).isBefore(
+            stringToMoment(felt.verdi.tom, TIDENES_ENDE)
+        )
         ? ok(felt)
         : feil(felt, 'Ugyldig periode');
 };
