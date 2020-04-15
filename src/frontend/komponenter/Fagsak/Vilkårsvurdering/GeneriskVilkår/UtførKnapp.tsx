@@ -2,24 +2,22 @@ import React from 'react';
 import PennFylt from '../../../../ikoner/PennFylt';
 import Penn from '../../../../ikoner/Penn';
 import { randomUUID } from '../../../../utils/commons';
-import { IVilkårResultat } from '../../../../typer/vilkår';
-import { vilkårFeilmeldingId } from './GeneriskVilkår';
 
 interface IProps {
-    aktiv: boolean;
+    aktiv?: boolean;
+    id: string;
     onClick: () => void;
-    vilkårResultat: IVilkårResultat;
 }
 
-const UtførKnapp: React.FC<IProps> = ({ aktiv, onClick, vilkårResultat }) => {
+const UtførKnapp: React.FC<IProps> = ({ aktiv, id, children, onClick }) => {
     return (
         <button
-            id={vilkårFeilmeldingId(vilkårResultat)}
+            id={id}
             aria-label={`utfør_${randomUUID()}`}
-            className={'generisk-vilkår__utførknapp'}
+            className={'vilkårsvurdering__knapp-med-ikon'}
             onClick={onClick}
         >
-            Utfør
+            {children}
             {aktiv ? <PennFylt heigth={20} width={20} /> : <Penn heigth={20} width={20} />}
         </button>
     );

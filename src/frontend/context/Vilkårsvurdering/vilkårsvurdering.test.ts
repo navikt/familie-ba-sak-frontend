@@ -474,4 +474,53 @@ describe('Skal teste vilkårsvurdering', () => {
         );
         expect(hentBegrunnelse(nyVilkårsvurdering[0].vilkårResultater[0])).toBe('Ny begrunnelse');
     });
+
+    test('Skal erstatte 1 periode med samme periode', () => {
+        const fnr = randomUUID();
+
+        const vilkårsSomSkalEndres: IFelt<IVilkårResultat> = mockVilkår(
+            VilkårType.LOVLIG_OPPHOLD,
+            Resultat.NEI,
+            nyPeriode('2019-01-01', '2019-12-31')
+        );
+
+        const vilkårsvurdering: IPersonResultat[] = [
+            {
+                personIdent: fnr,
+                vilkårResultater: [
+                    vilkårsSomSkalEndres,
+                    mockVilkår(VilkårType.LOVLIG_OPPHOLD, Resultat.JA, nyPeriode('2020-01-01')),
+                ],
+                person: mockPerson(fnr),
+            },
+        ];
+
+        const nyVilkårsvurdering: IPersonResultat[] = lagNyVilkårsvurderingMedNyttVilkår(
+            vilkårsvurdering,
+            fnr,
+            {
+                ...vilkårsSomSkalEndres,
+                verdi: {
+                    ...vilkårsSomSkalEndres.verdi,
+                    periode: {
+                        ...vilkårsSomSkalEndres.verdi.periode,
+                        verdi: nyPeriode('2020-01-01'),
+                    },
+                    begrunnelse: {
+                        ...vilkårsSomSkalEndres.verdi.begrunnelse,
+                        verdi: 'Erstattet begrunnelse',
+                    },
+                },
+            }
+        );
+
+        expect(nyVilkårsvurdering.length).toBe(1);
+        expect(nyVilkårsvurdering[0].vilkårResultater.length).toBe(1);
+        expect(hentPeriode(nyVilkårsvurdering[0].vilkårResultater[0])).toStrictEqual(
+            nyPeriode('2020-01-01')
+        );
+        expect(hentBegrunnelse(nyVilkårsvurdering[0].vilkårResultater[0])).toBe(
+            'Erstattet begrunnelse'
+        );
+    });
 });

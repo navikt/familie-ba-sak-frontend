@@ -15,10 +15,16 @@ export enum datoformatNorsk {
     DATO = 'DD.MM.ÅÅÅÅ',
 }
 
-export const formaterIsoDato = (dato: string | undefined, tilFormat: datoformat) => {
+export const formaterIsoDato = (
+    dato: string | undefined,
+    tilFormat: datoformat,
+    defaultString?: string
+) => {
     moment.locale('nb');
     const momentDato = moment(dato);
-    return momentDato.isValid() ? momentDato.format(tilFormat) : dato ? dato : '';
+    return momentDato.isValid() && dato
+        ? momentDato.format(tilFormat)
+        : dato || defaultString || '';
 };
 
 export const formaterDato = (dato: Moment, tilFormat: datoformat) => {

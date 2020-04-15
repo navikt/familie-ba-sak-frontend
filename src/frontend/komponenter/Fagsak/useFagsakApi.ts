@@ -115,22 +115,22 @@ const useFagsakApi = (
     ) => {
         // Basic validering av skjemaet
         const feilmeldinger: FeiloppsummeringFeil[] = [];
-        vilkårsvurdering.filter((periodeResultat: IPersonResultat) => {
+        vilkårsvurdering.filter((personResultat: IPersonResultat) => {
             Object.values(vilkårConfig)
                 .filter((vc: IVilkårConfig) =>
-                    vc.parterDetteGjelderFor.includes(periodeResultat.person.type)
+                    vc.parterDetteGjelderFor.includes(personResultat.person.type)
                 )
                 .forEach((vc: IVilkårConfig) => {
                     if (
-                        periodeResultat.vilkårResultater.find(
+                        personResultat.vilkårResultater.find(
                             (vilkårResultat: IFelt<IVilkårResultat>) =>
                                 vilkårResultat.verdi.vilkårType === vc.key &&
                                 vilkårResultat.verdi.resultat !== undefined
                         ) === undefined
                     ) {
                         feilmeldinger.push({
-                            skjemaelementId: `${vc.key}_${periodeResultat.personIdent}`,
-                            feilmelding: `Vilkåret '${vc.key}' er ikke vurdert for ${periodeResultat.person.navn}`,
+                            skjemaelementId: `${vc.key}_${personResultat.personIdent}`,
+                            feilmelding: `Vilkåret '${vc.key}' er ikke vurdert for ${personResultat.person.navn}`,
                         });
                     }
                 });

@@ -1,11 +1,15 @@
-import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { Behandlingstype } from '../../../typer/behandling';
-import { IPersonResultat, IVilkårResultat, VilkårType } from '../../../typer/vilkår';
+import {
+    IPersonResultat,
+    IVilkårResultat,
+    vilkårConfig,
+    IVilkårConfig,
+} from '../../../typer/vilkår';
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
@@ -22,7 +26,7 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
     visFeilmeldinger,
     behandlingstype,
 }) => {
-    const { leggTilVilkår, vilkårsvurdering } = useVilkårsvurdering();
+    const { vilkårsvurdering } = useVilkårsvurdering();
 
     const nesteMåned = () => {
         const iDag = new Date();
@@ -44,37 +48,37 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
                     : undefined
             }
         >
-            {vilkårsvurdering.map((periodeResultat: IPersonResultat) => {
+            {vilkårsvurdering.map((personResultat: IPersonResultat) => {
                 return (
-                    <div key={periodeResultat.personIdent}>
-                        <Undertittel
-                            children={`Vurder vilkår for ${periodeResultat.person.navn}`}
-                        />
-                        <ul className={'vilkårsvurdering__list'}>
-                            {periodeResultat.vilkårResultater.map(
-                                (vilkårResultat: IFelt<IVilkårResultat>) => {
+                    <div key={personResultat.personIdent}>
+                        <Undertittel children={`Vurder vilkår for ${personResultat.person.navn}`} />
+
+                        {Object.values(vilkårConfig)
+                            .filter((vc: IVilkårConfig) =>
+                                vc.parterDetteGjelderFor.includes(personResultat.person.type)
+                            )
+                            .map((vc: IVilkårConfig) => {
+                                const vilkårResultater: IFelt<
+                                    IVilkårResultat
+                                >[] = personResultat.vilkårResultater.filter(
+                                    (vilkårResultat: IFelt<IVilkårResultat>) =>
+                                        vilkårResultat.verdi.vilkårType === vc.key
+                                );
+
+                                if (vilkårResultater.length !== 0) {
                                     return (
                                         <GeneriskVilkår
-                                            key={`${periodeResultat.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
-                                            person={periodeResultat.person}
-                                            vilkårResultat={vilkårResultat}
+                                            key={`${personResultat.personIdent}_${vc.key}`}
+                                            person={personResultat.person}
+                                            vilkårResultater={vilkårResultater}
+                                            vilkårFraConfig={vc}
                                             visFeilmeldinger={visFeilmeldinger}
                                         />
                                     );
+                                } else {
+                                    return undefined;
                                 }
-                            )}
-                            <Knapp
-                                type={'flat'}
-                                mini={true}
-                                onClick={() => {
-                                    leggTilVilkår(
-                                        periodeResultat.personIdent,
-                                        VilkårType.BOSATT_I_RIKET
-                                    );
-                                }}
-                                children={'Vurder ny periode'}
-                            />
-                        </ul>
+                            })}
                     </div>
                 );
             })}

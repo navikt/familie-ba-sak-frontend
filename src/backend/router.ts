@@ -3,6 +3,7 @@ import { Response, Request, Router } from 'express';
 import path from 'path';
 import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
+import { slackNotify } from './slack/slack';
 
 /* tslint:disable */
 const packageJson = require('../package.json');
@@ -19,9 +20,14 @@ export default (authClient: Client, router: Router, middleware: any) => {
         res.sendFile('error.html', { root: path.join(`assets/`) });
     });
 
+    // Feilhåndtering
     router.post('/logg-feil', (req: Request, res: Response) => {
         logRequest(req, req.body.melding, LOG_LEVEL.ERROR);
         res.status(200).send();
+    });
+
+    router.post('/slack/notify/:kanal', (req: any, res: Response) => {
+        slackNotify(req, res, req.params.kanal);
     });
 
     // APP
