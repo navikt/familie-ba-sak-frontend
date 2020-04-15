@@ -14,6 +14,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import './visoppgave.less';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 import { RessursStatus } from '../../typer/ressurs';
+import moment from 'moment';
 
 type IOppgaverFilter = {
     name: string;
@@ -86,6 +87,16 @@ const getEnhet = (filter: IOppgaverFilter) => {
               .substring(0, 4);
 };
 
+const getPrioritet = (filter: IOppgaverFilter) => {
+    const index = filter.values!.findIndex(v => v === filter.selectedValue);
+    return index === 0 ? undefined : Object.keys(PrioritetFilter)[index];
+};
+
+const getDato = (dato: string) => {
+    const m = moment(dato, 'DD.MM.YYYY', true);
+    return m.isValid() ? m.format('YYYY-MM-DD') : undefined;
+};
+
 interface IFilterSkjemaProps {
     innloggetSaksbehandler?: ISaksbehandler;
 }
@@ -93,6 +104,8 @@ interface IFilterSkjemaProps {
 const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSaksbehandler }) => {
     const { hentOppgaver, filterOppgaver, oppgaver } = useOppgaver();
     const [filtre, settFiltre] = useState<IOppgaverFilter[]>(initialFiltre(innloggetSaksbehandler));
+    const [frist, settFrist] = useState<string>('');
+    const [registertDato, settRegistertDato] = useState<string>('');
     return (
         <div className="filterskjema">
             <div className="filterskjema__filtre filterskjema__content">
@@ -134,8 +147,18 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                 })}
             </div>
             <div className="filterskjema__filtre filterskjema__content">
-                <DatoInput label="Frist" className="filterskjema__filtre__input" />
-                <DatoInput label="Registert dato" className="filterskjema__filtre__input" />
+                <DatoInput
+                    label="Frist"
+                    className="filterskjema__filtre__input"
+                    onChange={e => settFrist(e.target.value)}
+                    value={frist}
+                />
+                <DatoInput
+                    label="Registert dato"
+                    className="filterskjema__filtre__input"
+                    onChange={e => settRegistertDato(e.target.value)}
+                    value={registertDato}
+                />
             </div>
             <div className="filterskjema__content">
                 <Knapp
@@ -146,8 +169,14 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                             ),
                             getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!),
                             getEnhet(filtre.find(filter => filter.name === 'Enhet')!!)
-                        ).then(() => {
-                            filterOppgaver();
+                        ).then(oppgaverRes => {
+                            filterOppgaver(
+                                oppgaverRes,
+                                getPrioritet(filtre.find(filter => filter.name === 'Prioritet')!),
+                                undefined,
+                                getDato(frist),
+                                getDato(registertDato)
+                            );
                         });
                     }}
                     spinner={oppgaver.status == RessursStatus.HENTER}
@@ -158,6 +187,8 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                 <Knapp
                     onClick={() => {
                         settFiltre(initialFiltre(innloggetSaksbehandler));
+                        settFrist('');
+                        settRegistertDato('');
                     }}
                     className="filterskjema__tilbakestill"
                 >

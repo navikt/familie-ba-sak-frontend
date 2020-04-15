@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 
-import { IOppgave } from '../typer/oppgave';
+import { IOppgave, GjelderFilter, EnhetsmappeFilter, PrioritetFilter } from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
 
@@ -40,14 +40,41 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
                 settOppgaver(oppgaverRes);
+                return oppgaverRes;
             })
             .catch((error: AxiosError) => {
                 settOppgaver(byggFeiletRessurs('Ukjent ved innhenting av oppgaver', error));
             });
     };
 
-    const filterOppgaver = () => {
-        console.log('frontend filtering');
+    const filterOppgaver = (
+        oppgaverRes: Ressurs<IOppgave[]>,
+        prioritet?: string,
+        enhetsmappe?: string,
+        frist?: string,
+        registertDato?: string
+    ) => {
+        if (oppgaverRes.status === RessursStatus.SUKSESS) {
+            console.log(
+                oppgaverRes.data.filter(
+                    oppgave =>
+                        (!prioritet || oppgave.prioritet === prioritet.toString()) &&
+                        (!frist || oppgave.fristFerdigstillelse === frist) &&
+                        (!registertDato || oppgave.opprettetTidspunkt === registertDato)
+                )
+            );
+        }
+        oppgaverRes.status === RessursStatus.SUKSESS &&
+            settOppgaver({
+                status: RessursStatus.SUKSESS,
+                data: oppgaverRes.data.filter(
+                    oppgave =>
+                        (!prioritet || oppgave.prioritet === prioritet.toString()) &&
+                        (!frist || oppgave.fristFerdigstillelse === frist) &&
+                        (!registertDato ||
+                            oppgave.opprettetTidspunkt.substring(0, 10) === registertDato)
+                ),
+            });
     };
 
     const sortOppgaver = () => {};

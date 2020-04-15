@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { Input } from 'nav-frontend-skjema';
 import { IkonFeil, IkonGyldig } from '@navikt/familie-header';
 import './datoinput.less';
@@ -13,6 +13,7 @@ export interface IDatoInputProps {
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
     datoFormat?: string;
     settValiderFeil?: (feil: boolean) => void;
+    value?: string;
 }
 
 export const DatoInput: React.FC<IDatoInputProps> = ({
@@ -22,13 +23,21 @@ export const DatoInput: React.FC<IDatoInputProps> = ({
     onChange,
     settValiderFeil,
     datoFormat = 'DD.MM.YYYY',
+    value = '',
 }) => {
     const [feilPrompt, settFeilPrompt] = React.useState(false);
     const [verdi, settVerdi] = React.useState('');
 
     const validateVerdi = (verdi: string) => {
-        return verdi === '' || moment(verdi, datoFormat, true).isValid();
+        const valid = verdi === '' || moment(verdi, datoFormat, true).isValid();
+        settFeilPrompt(!valid);
+        settValiderFeil && settValiderFeil(!valid);
     };
+
+    useEffect(() => {
+        settVerdi(value);
+        validateVerdi(value);
+    }, [value]);
 
     return (
         <div className="datoinput">
@@ -38,18 +47,17 @@ export const DatoInput: React.FC<IDatoInputProps> = ({
                 className={className}
                 onChange={event => {
                     settVerdi(event.target.value);
-                    const valid = validateVerdi(event.target.value);
-                    settFeilPrompt(!valid);
-                    settValiderFeil && settValiderFeil(!valid);
+                    validateVerdi(event.target.value);
                     onChange && onChange(event);
                 }}
+                value={value}
             />
             {feilPrompt && (
                 <div className="datoinput__feilprompt">
                     <IkonFeil />
                 </div>
             )}
-            {verdi != '' && !feilPrompt && (
+            {verdi && !feilPrompt && (
                 <div className="datoinput__feilprompt">
                     <IkonGyldig color={navGronn} />
                 </div>
