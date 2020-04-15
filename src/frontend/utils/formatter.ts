@@ -4,6 +4,7 @@ export enum datoformat {
     MÅNED = 'MM.YY',
     DATO = 'DD.MM.YYYY',
     DATO_FORKORTTET = 'DD.MM.YY',
+    DATO_FORLENGET = 'LL',
     ISO_MÅNED = 'YYYY-MM',
     ISO_DAG = 'YYYY-MM-DD',
     DATO_TID = 'DD.MM.YY HH:mm',
@@ -15,6 +16,7 @@ export enum datoformatNorsk {
 }
 
 export const formaterIsoDato = (dato: string | undefined, tilFormat: datoformat) => {
+    moment.locale('nb');
     const momentDato = moment(dato);
     return momentDato.isValid() ? momentDato.format(tilFormat) : dato ? dato : '';
 };

@@ -45,7 +45,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
             });
     }, []);
     const startdato = oppsummeringBeregning[0]
-        ? formaterIsoDato(oppsummeringBeregning[0].periodeFom, datoformat.DATO)
+        ? formaterIsoDato(oppsummeringBeregning[0].periodeFom, datoformat.DATO_FORLENGET)
         : '';
     return (
         <div className="tilkjentytelse">
@@ -60,7 +60,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
                     <br />
                     <div>
                         <OppsummeringsradHeader />
-                        {oppsummeringBeregning.map((beregning, index) => {
+                        {oppsummeringBeregning.reverse().map((beregning, index) => {
                             return <Oppsummeringsrad beregning={beregning} key={index} />;
                         })}
                     </div>
@@ -70,13 +70,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
             )}
             <div className={'tilkjentytelse__navigering'}>
                 <Knapp
-                    type={'hoved'}
+                    type={'standard'}
                     onClick={() => {
                         aktivBehandling?.type === Behandlingstype.REVURDERING
                             ? history.push(`/fagsak/${fagsak.id}/vilkår`)
                             : history.push(`/fagsak/${fagsak.id}/beregning`);
                     }}
-                    children={'Tilbake'}
+                    children={'Forrige'}
                 />
                 <Knapp
                     type={'hoved'}
