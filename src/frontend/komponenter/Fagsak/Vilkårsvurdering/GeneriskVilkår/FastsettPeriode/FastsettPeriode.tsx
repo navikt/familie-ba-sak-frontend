@@ -42,7 +42,9 @@ const FastsettPeriode: React.FC<IProps> = ({
             <div className={'fastsett-periode__flex'}>
                 <div>
                     <Datovegler
-                        id={'fastsett-periode-fom'}
+                        id={`${vilkårPeriodeFeilmeldingId(
+                            redigerbartVilkår.verdi
+                        )}__fastsett-periode-fom`}
                         label={'F.o.m.'}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato: string) => {
@@ -67,7 +69,9 @@ const FastsettPeriode: React.FC<IProps> = ({
                 <div>
                     <Datovegler
                         disabled={!fastsettTom}
-                        id={'fastsett-periode-tom'}
+                        id={`${vilkårPeriodeFeilmeldingId(
+                            redigerbartVilkår.verdi
+                        )}__fastsett-periode-tom`}
                         label={'T.o.m.'}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato: string) => {

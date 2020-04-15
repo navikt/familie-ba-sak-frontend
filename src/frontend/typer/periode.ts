@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment';
 
-import { datoformat, formaterIsoDato } from '../utils/formatter';
+import { datoformat, formaterIsoDato, datoformatNorsk } from '../utils/formatter';
 
 export const TIDENES_MORGEN: Moment = moment(-8640000000000000);
 export const TIDENES_ENDE: Moment = moment(8640000000000000);
@@ -12,7 +12,10 @@ export interface IPeriode {
 }
 
 export const nyPeriode = (fom?: string, tom?: string): IPeriode => {
-    return { fom: fom !== '' ? fom : undefined, tom: tom !== '' ? tom : undefined };
+    return {
+        fom: fom !== '' && fom !== null ? fom : undefined,
+        tom: tom !== '' && tom !== null ? tom : undefined,
+    };
 };
 
 export const nyMoment = (dato: string | undefined) => {
@@ -20,10 +23,11 @@ export const nyMoment = (dato: string | undefined) => {
 };
 
 export const periodeToString = (periode: IPeriode) => {
-    return `${formaterIsoDato(periode.fom, datoformat.DATO)} - ${formaterIsoDato(
-        periode.tom,
-        datoformat.DATO
-    )}`;
+    return `${formaterIsoDato(
+        periode.fom,
+        datoformat.DATO,
+        datoformatNorsk.DATO.toLowerCase()
+    )} - ${formaterIsoDato(periode.tom, datoformat.DATO)}`;
 };
 
 export const formaterMomentTilStringDato = (dato: Moment): string => {
@@ -124,6 +128,6 @@ export const overlapperMinstEttSted = (første: IPeriode, annen: IPeriode): bool
     return (
         førsteFom.isBetween(annenFom, annenTom) ||
         førsteTom.isBetween(annenFom, annenTom) ||
-        (førsteFom.isBefore(annenFom) && førsteTom.isAfter(annenTom))
+        (førsteFom.isSameOrBefore(annenFom) && førsteTom.isSameOrAfter(annenTom))
     );
 };

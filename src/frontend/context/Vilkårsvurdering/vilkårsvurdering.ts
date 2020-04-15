@@ -342,7 +342,7 @@ export const lagNyVilkårsvurderingMedNyttVilkår = (
     nyttVilkårResultat: IFelt<IVilkårResultat>
 ): IPersonResultat[] => {
     const vilkårsvurderingForPerson = vilkårsvurdering.find(
-        (periodeResultat: IPersonResultat) => periodeResultat.personIdent === personIdent
+        (personResultat: IPersonResultat) => personResultat.personIdent === personIdent
     );
 
     if (!vilkårsvurderingForPerson) {
@@ -364,14 +364,14 @@ export const lagNyVilkårsvurderingMedNyttVilkår = (
         nyVilkårsvurderingForPerson
     );
 
-    return vilkårsvurdering.map((periodeResultat: IPersonResultat) => {
-        if (periodeResultat.personIdent === personIdent) {
+    return vilkårsvurdering.map((personResultat: IPersonResultat) => {
+        if (personResultat.personIdent === personIdent) {
             return {
-                ...periodeResultat,
+                ...personResultat,
                 vilkårResultater: sammenslåttVilkårsvurderingForPerson,
             };
         } else {
-            return periodeResultat;
+            return personResultat;
         }
     });
 };
@@ -381,17 +381,17 @@ export const hentVilkårsvurderingMedEkstraVilkår = (
     personIdent: string,
     vilkårType: VilkårType
 ): IPersonResultat[] => {
-    return vilkårsvurdering.map((periodeResultat: IPersonResultat) => {
-        if (periodeResultat.personIdent === personIdent) {
+    return vilkårsvurdering.map((personResultat: IPersonResultat) => {
+        if (personResultat.personIdent === personIdent) {
             return {
-                ...periodeResultat,
+                ...personResultat,
                 vilkårResultater: [
-                    ...periodeResultat.vilkårResultater,
+                    ...personResultat.vilkårResultater,
                     lagInitiellFelt(lagTomtFeltMedVilkår(vilkårType), validerVilkår),
                 ],
             };
         } else {
-            return periodeResultat;
+            return personResultat;
         }
     });
 };
@@ -412,8 +412,8 @@ export const mapFraRestVilkårsvurderingTilUi = (
                 (person: IPerson) => person.personIdent === personResultat.personIdent
             )!!,
             personIdent: personResultat.personIdent,
-            vilkårResultater: personResultat.vilkårResultater.map(
-                (vilkårResultat: IRestVilkårResultat) =>
+            vilkårResultater: sorterVilkårsvurderingForPerson(
+                personResultat.vilkårResultater.map((vilkårResultat: IRestVilkårResultat) =>
                     lagInitiellFelt(
                         {
                             begrunnelse: lagInitiellFelt(vilkårResultat.begrunnelse, erUtfylt),
@@ -427,6 +427,7 @@ export const mapFraRestVilkårsvurderingTilUi = (
                         },
                         validerVilkår
                     )
+                )
             ),
         }))
     );

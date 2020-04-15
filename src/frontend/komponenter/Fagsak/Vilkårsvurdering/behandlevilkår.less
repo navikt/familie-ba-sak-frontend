@@ -7,11 +7,11 @@
         min-height: 3.125rem;
         list-style: none;
         margin: 0;
-        padding: @listPadding;
+        padding-left: .5rem;
         
         & li {
             position: relative;
-            margin: 1rem 0;
+            margin: .5rem 0;
             padding: @itemPadding 0 @itemPadding 2.25rem;
     
             &.aapen:before {
@@ -53,6 +53,33 @@
                             no-repeat
                             center;
             }
+        }
+    }
+
+    &__knapp-med-ikon {
+        display: flex;
+        align-items: center;
+        border: none;
+        background: none;
+        padding: 0 .25rem;
+        cursor: pointer;
+        height: 30px;
+        border-radius: 2px;
+        color: @navBla;
+        text-decoration: underline;
+    
+        & svg {
+            margin-left: .5rem;
+            margin-top: .5rem;
+        }
+    
+        &:focus {
+            outline: solid 2px @navBla;
+        }
+    
+        &:hover {
+            background-color: @navLysGra;
+            text-decoration: unset;
         }
     }
 }

@@ -70,9 +70,9 @@ const BehandleVilkår: React.FunctionComponent<IProps> = ({ fagsak }) => {
             >
                 {aktivBehandling.personResultater.length !== 0 &&
                     aktivBehandling.personResultater.filter(
-                        (periodeResultat: IRestPersonResultat) => {
+                        (personResultat: IRestPersonResultat) => {
                             return (
-                                periodeResultat.vilkårResultater.filter(
+                                personResultat.vilkårResultater.filter(
                                     (vilkårResultat: IRestVilkårResultat) =>
                                         vilkårResultat.resultat !== Resultat.KANSKJE
                                 ).length > 0
