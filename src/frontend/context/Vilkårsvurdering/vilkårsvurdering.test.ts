@@ -506,6 +506,10 @@ describe('Skal teste vilkårsvurdering', () => {
                         ...vilkårsSomSkalEndres.verdi.periode,
                         verdi: nyPeriode('2020-01-01'),
                     },
+                    begrunnelse: {
+                        ...vilkårsSomSkalEndres.verdi.begrunnelse,
+                        verdi: 'Erstattet begrunnelse',
+                    },
                 },
             }
         );
@@ -514,6 +518,9 @@ describe('Skal teste vilkårsvurdering', () => {
         expect(nyVilkårsvurdering[0].vilkårResultater.length).toBe(1);
         expect(hentPeriode(nyVilkårsvurdering[0].vilkårResultater[0])).toStrictEqual(
             nyPeriode('2020-01-01')
+        );
+        expect(hentBegrunnelse(nyVilkårsvurdering[0].vilkårResultater[0])).toBe(
+            'Erstattet begrunnelse'
         );
     });
 });
