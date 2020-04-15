@@ -19,13 +19,9 @@ export const formaterIsoDato = (
     defaultString?: string
 ) => {
     const momentDato = moment(dato);
-    return momentDato.isValid() && dato !== undefined
+    return momentDato.isValid() && dato
         ? momentDato.format(tilFormat)
-        : dato
-        ? dato
-        : defaultString
-        ? defaultString
-        : '';
+        : dato || defaultString || '';
 };
 
 export const formaterDato = (dato: Moment, tilFormat: datoformat) => {
