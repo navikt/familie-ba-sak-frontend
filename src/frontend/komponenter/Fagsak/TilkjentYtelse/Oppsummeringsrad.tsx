@@ -16,12 +16,11 @@ const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
         setÅpentElement(!åpentElement);
     };
 
-    const kolonneClassnames = classNames(
-        'tilkjentytelse-kolonne',
-        åpentElement ? 'tilkjentytelse-rad-åpen' : ''
-    );
+    const kolonneClassnames = classNames('tilkjentytelse-kolonne', { åpen: åpentElement });
+    const radClassnames = classNames('tilkjentytelse-rad', { åpen: åpentElement });
+    const distinkteStønadstyper = [...new Set(beregning.stønadstype)];
     return (
-        <div className="tilkjentytelse-rad" onClick={() => oppdaterÅpentElement()} role="button">
+        <div className={radClassnames} onClick={() => oppdaterÅpentElement()} role="button">
             <div className={kolonneClassnames}>
                 <Chevron retning={åpentElement ? 'opp' : 'ned'} />
             </div>
@@ -36,7 +35,7 @@ const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
             </div>
             <div className={kolonneClassnames}>
                 <Normaltekst>
-                    {beregning.stønadstype.map(stønad => ytelsetype[stønad].navn).join(' + ')}
+                    {distinkteStønadstyper.map(stønad => ytelsetype[stønad].navn).join(' + ')}
                 </Normaltekst>
             </div>
             <div className={kolonneClassnames}>

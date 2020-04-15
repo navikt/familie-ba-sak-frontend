@@ -25,7 +25,7 @@ export const formaterDato = (dato: Moment, tilFormat: datoformat) => {
 
 export const hentAlder = (dato: string): number => {
     const momentDato = moment(dato);
-    return momentDato.isValid() ? momentDato.diff(moment(), 'years') : 0;
+    return momentDato.isValid() ? moment().diff(momentDato, 'years') : 0;
 };
 
 export const formaterBeløp = (beløp: number): string => {

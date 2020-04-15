@@ -16,6 +16,10 @@
   width: 100%;
   border-bottom: 1px solid @navGra20;
 
+  &.åpen {
+    border: 2px solid @navDypBlaLighten20;
+  }
+
   &.tilkjentytelse-header-rad {
     border-bottom: 1px solid @navGra80;
   }
@@ -23,20 +27,28 @@
   & .tilkjentytelse-kolonne:nth-child(1) {
     width: 5%;
   }
+
   & .tilkjentytelse-kolonne:nth-child(2) {
     width: 20%;
   }
+
   & .tilkjentytelse-kolonne:nth-child(3) {
     width: 15%;
   }
+
   & .tilkjentytelse-kolonne:nth-child(4) {
     width: 40%;
   }
+
   & .tilkjentytelse-kolonne:nth-child(5) {
     width: 10%;
+    text-align: center;
   }
+
   & .tilkjentytelse-kolonne:nth-child(6) {
     width: 10%;
+    text-align: right;
+    white-space: nowrap;
   }
 
   & .tilkjentytelse-kolonne {
@@ -47,7 +59,7 @@
     overflow: visible; // Or flex might break
     list-style: none;
 
-    &.tilkjentytelse-rad-åpen {
+    &.åpen {
       background-color: @navBlaLighten80;
     }
 
@@ -70,6 +82,8 @@
     }
     & .tilkjentytelse-detaljer-kolonne:nth-child(4) {
       width: 10%;
+      text-align: right;
+      white-space: nowrap;
     }
   }
   & .tilkjentytelse-detaljer-kolonne {
@@ -79,6 +93,10 @@
     padding: 0.8em 1.2em;
     overflow: hidden; // Or flex might break
     list-style: none;
+
+    &.familierelasjon-separator {
+      border-bottom: 1px dashed @navGra20;
+    }
 
     & .detaljer-personalia {
       display: flex;
