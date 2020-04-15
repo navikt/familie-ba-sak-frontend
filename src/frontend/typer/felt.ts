@@ -31,3 +31,10 @@ export interface IFelt<T> {
     valideringsFunksjon: ValiderIFelt<T>;
     verdi: T;
 }
+
+export const nyttFelt = <T>(verdi: T, valideringsFunksjon: ValiderIFelt<T>): IFelt<T> => ({
+    feilmelding: '',
+    valideringsFunksjon,
+    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
+    verdi,
+});

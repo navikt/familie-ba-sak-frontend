@@ -30,7 +30,7 @@ For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokal
 
 
 # Bygg og deploy
-Appen bygges hos circleci, og gir beskjed til nais deploy om å deployere appen i fss området. Alle commits til feature brancher går til dev miljøet og master går til produksjon.
+Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i fss området. Alle commits til feature brancher går til dev miljøet og master går til produksjon.
 
 # Henvendelser
 

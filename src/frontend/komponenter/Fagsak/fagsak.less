@@ -1,21 +1,23 @@
 .fagsakcontainer {
     &__content {
         display: flex;
+        height: calc(100vh - 8rem);
 
         &--venstremeny {
             min-width: 10rem;
             border-right: 2px solid @navGra40;
+            overflow: hidden;
         }
 
         &--main {
             padding: 1rem;
-            padding-bottom: 10rem;
             flex: 1;
+            overflow: auto;
         }
     
         &--høyremeny {
-            max-width: 19.6875rem;
             border-left: 2px solid @navGra40;
+            overflow: hidden;
         }
     }
 }

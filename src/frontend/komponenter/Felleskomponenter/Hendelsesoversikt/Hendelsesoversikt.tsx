@@ -38,11 +38,11 @@ const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) =>
                     onClick={() => settAktivTab(Tabs.Dokumenter)}
                 />
             </div>
-            {aktivTab === Tabs.Historikk && hendelser.length > 0 ? (
-                <ul className={'hendelsesoversikt__list'}>{hendelser?.map(tilHendelseItem)}</ul>
-            ) : (
-                <p>Ingen hendelser</p>
-            )}
+            <div className={'hendelsesoversikt__content'}>
+                {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
+                    <ul className={'hendelsesoversikt__list'}>{hendelser?.map(tilHendelseItem)}</ul>
+                )}
+            </div>
         </div>
     );
 };

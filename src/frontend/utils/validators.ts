@@ -3,6 +3,8 @@ import moment from 'moment';
 import { IPersonBeregning } from '../typer/behandle';
 import { feil, IFelt, ok, Valideringsstatus, ValiderIFelt } from '../typer/felt';
 import { datoformat } from './formatter';
+import { IPeriode, stringToMoment, TIDENES_MORGEN, TIDENES_ENDE } from '../typer/periode';
+import { Resultat } from '../typer/vilkår';
 
 export type IIdentFelt = IFelt<string>;
 
@@ -35,6 +37,19 @@ export const erGyldigMånedDato = (felt: IFelt<IPersonBeregning>): IFelt<IPerson
         moment(felt.verdi.stønadFom, datoformat.MÅNED).isValid()
         ? ok(felt)
         : feil(felt, 'Ugyldig dato');
+};
+
+export const erPeriodeGyldig = (felt: IFelt<IPeriode>): IFelt<IPeriode> => {
+    return moment(felt.verdi.fom).isValid() &&
+        stringToMoment(felt.verdi.fom, TIDENES_MORGEN).isBefore(
+            stringToMoment(felt.verdi.tom, TIDENES_ENDE)
+        )
+        ? ok(felt)
+        : feil(felt, 'Ugyldig periode');
+};
+
+export const erResultatGyldig = (felt: IFelt<Resultat>): IFelt<Resultat> => {
+    return felt.verdi !== Resultat.KANSKJE ? ok(felt) : feil(felt, 'Resultat er ikke satt');
 };
 
 export const erGyldigBegrunnelse = (felt: IFelt<string>): IFelt<string> => {

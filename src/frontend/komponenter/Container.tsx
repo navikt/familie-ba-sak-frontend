@@ -39,9 +39,7 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                 <Route
                                     exact={true}
                                     path="/fagsak/ny-fagsak"
-                                    render={() => {
-                                        return <OpprettFagsak />;
-                                    }}
+                                    component={OpprettFagsak}
                                 />
                                 <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
 

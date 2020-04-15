@@ -1,8 +1,9 @@
-import React from 'react';
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import createUseContext from 'constate';
-import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
+import React from 'react';
+
+import { håndterRessurs, loggFeil, preferredAxios } from '../api/axios';
 import { Ressurs } from '../typer/ressurs';
-import { preferredAxios, håndterRessurs, loggFeil } from '../api/axios';
 import { ISaksbehandler } from '../typer/saksbehandler';
 
 export interface IModal {

@@ -54,7 +54,7 @@ export const loggFeil = (
     innloggetSaksbehandler?: ISaksbehandler,
     feilmelding?: string
 ) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV !== 'development') {
         configureScope(scope => {
             scope.setUser({
                 username: innloggetSaksbehandler

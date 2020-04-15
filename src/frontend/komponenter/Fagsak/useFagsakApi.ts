@@ -15,11 +15,19 @@ import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { IState as IBereningState } from './Beregning/BeregningProvider';
-import { IState as IBehandleVilkårState } from './Vilkår/BehandleVilkårProvider';
 import { IPersonBeregning } from '../../typer/behandle';
 import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useApp } from '../../context/AppContext';
+import {
+    IPersonResultat,
+    vilkårConfig,
+    IVilkårConfig,
+    IVilkårResultat,
+    IRestVilkårResultat,
+} from '../../typer/vilkår';
+import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
+import { hentResultat, hentBegrunnelse, hentPeriode } from '../../context/Vilkårsvurdering/utils';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -101,17 +109,50 @@ const useFagsakApi = (
             });
     };
 
-    const opprettEllerOppdaterVedtak = (context: IBehandleVilkårState, fagsak: IFagsak) => {
-        if (context.begrunnelse.valideringsstatus !== Valideringsstatus.OK) {
-            settVisFeilmeldinger(true);
-            return;
-        }
+    const opprettEllerOppdaterVilkårsvurdering = (
+        vilkårsvurdering: IPersonResultat[],
+        fagsak: IFagsak
+    ) => {
+        // Basic validering av skjemaet
+        const feilmeldinger: FeiloppsummeringFeil[] = [];
+        vilkårsvurdering.filter((personResultat: IPersonResultat) => {
+            Object.values(vilkårConfig)
+                .filter((vc: IVilkårConfig) =>
+                    vc.parterDetteGjelderFor.includes(personResultat.person.type)
+                )
+                .forEach((vc: IVilkårConfig) => {
+                    if (
+                        personResultat.vilkårResultater.find(
+                            (vilkårResultat: IFelt<IVilkårResultat>) =>
+                                vilkårResultat.verdi.vilkårType === vc.key &&
+                                vilkårResultat.verdi.resultat !== undefined
+                        ) === undefined
+                    ) {
+                        feilmeldinger.push({
+                            skjemaelementId: `${vc.key}_${personResultat.personIdent}`,
+                            feilmelding: `Vilkåret '${vc.key}' er ikke vurdert for ${personResultat.person.navn}`,
+                        });
+                    }
+                });
+        });
 
         settSenderInn(true);
         axiosRequest<IFagsak, IRestVilkårsvurdering>({
             data: {
-                periodeResultater: context.periodeResultater,
-                begrunnelse: context.begrunnelse.verdi,
+                personResultater: vilkårsvurdering.map((personResultat: IPersonResultat) => {
+                    return {
+                        personIdent: personResultat.personIdent,
+                        vilkårResultater: personResultat.vilkårResultater.map(
+                            (vilkårResultat: IFelt<IVilkårResultat>): IRestVilkårResultat => ({
+                                begrunnelse: hentBegrunnelse(vilkårResultat),
+                                periodeFom: hentPeriode(vilkårResultat).fom,
+                                periodeTom: hentPeriode(vilkårResultat).tom,
+                                resultat: hentResultat(vilkårResultat),
+                                vilkårType: vilkårResultat.verdi.vilkårType,
+                            })
+                        ),
+                    };
+                }),
             },
             method: 'PUT',
             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
@@ -121,7 +162,7 @@ const useFagsakApi = (
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
 
-                    if (erBehandlingenInnvilget(context.periodeResultater)) {
+                    if (erBehandlingenInnvilget(vilkårsvurdering)) {
                         history.push(`/fagsak/${fagsak.id}/beregning`);
                     } else {
                         history.push(`/fagsak/${fagsak.id}/vedtak`);
@@ -130,13 +171,13 @@ const useFagsakApi = (
                     settFeilmelding(response.melding);
                     settVisFeilmeldinger(true);
                 } else {
-                    settFeilmelding('Opprettelse av vedtak feilet');
+                    settFeilmelding('Opprettelse av vilkårsvurdering feilet');
                     settVisFeilmeldinger(true);
                 }
             })
             .catch(() => {
                 settSenderInn(false);
-                settFeilmelding('Opprettelse av vedtak feilet');
+                settFeilmelding('Opprettelse av vilkårsvurdering feilet');
             });
     };
 
@@ -235,7 +276,7 @@ const useFagsakApi = (
         opprettBehandling,
         opprettBeregning,
         opprettEllerHentFagsak,
-        opprettEllerOppdaterVedtak,
+        opprettEllerOppdaterVilkårsvurdering,
         senderInn,
     };
 };

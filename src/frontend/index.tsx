@@ -15,7 +15,7 @@ const packageConfig = require('../../package.json');
 const environment = window.location.hostname;
 
 init({
-    dsn: 'https://eca7c1c693ca462c905a29bd6327a657@sentry.nav.no/12',
+    dsn: 'https://10239ce4baed4db79d080d85f08b5878@sentry.gc.nav.no/26',
     environment,
     release: packageConfig.version,
     enabled: process.env.NODE_ENV !== 'development',

@@ -18,61 +18,77 @@
                 "personer": [
                     {
                         "type": "SØKER",
+                        "navn": "Mock Mockersen",
+                        "kjønn": "KVINNE",
                         "fødselsdato": "1990-01-01",
                         "personIdent": "12345678910"
                     },
                     {
                         "type": "BARN",
+                        "navn": "Barn Barnesen",
+                        "kjønn": "KVINNE",
                         "fødselsdato": "2018-05-01",
                         "personIdent": "12345678911"
                     },
                     {
                         "type": "BARN",
+                        "navn": "Barn Barnesen2",
+                        "kjønn": "MANN",
                         "fødselsdato": "2019-10-01",
                         "personIdent": "12345678912"
                     }
                 ],
                 "underkategori": "UTVIDET",
-                "samletVilkårResultat": [
+                "personResultater": [
                     {
                         "personIdent": "12345678911",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678912",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
+                            },
+                            {
+                                "vilkårType": "UNDER_18_ÅR",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse under 18 år",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
+                            }
+                        ]
                     },
                     {
                         "personIdent": "12345678910",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678910",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678912",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
+                            }
+                        ]
                     },
                     {
                         "personIdent": "12345678912",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678911",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678911",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "resultat": "JA"
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-02-01",
+                                "periodeTom": null
+                            },
+                            {
+                                "vilkårType": "UNDER_18_ÅR",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse under 18 år",
+                                "periodeFom": "2020-02-01",
+                                "periodeTom": null
+                            }
+                        ]
                     }
                 ],
                 "vedtakForBehandling": [
@@ -127,41 +143,51 @@
                 "personer": [
                     {
                         "type": "SØKER",
+                        "navn": "Mock Mockersen",
+                        "kjønn": "KVINNE",
                         "fødselsdato": "1990-01-01",
                         "personIdent": "12345678910"
                     },
                     {
                         "type": "BARN",
+                        "navn": "Barn Barnesen",
+                        "kjønn": "KVINNE",
                         "fødselsdato": "2018-05-01",
                         "personIdent": "12345678911"
                     }
                 ],
                 "underkategori": "ORDINÆR",
-                "samletVilkårResultat": [
+                "personResultater": [
                     {
                         "personIdent": "12345678911",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
+                            },
+                            {
+                                "vilkårType": "UNDER_18_ÅR",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse under 18 år",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
+                            }
+                        ]
                     },
                     {
                         "personIdent": "12345678910",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678910",
-                        "vilkårType": "STØNADSPERIODE",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678911",
-                        "vilkårType": "BOSATT_I_RIKET",
-                        "resultat": "JA"
-                    },
-                    {
-                        "personIdent": "12345678911",
-                        "vilkårType": "UNDER_18_ÅR_OG_BOR_MED_SØKER",
-                        "resultat": "JA"
+                        "vilkårResultater": [
+                            {
+                                "vilkårType": "LOVLIG_OPPHOLD",
+                                "resultat": "JA",
+                                "begrunnelse": "Mock begrunnelse",
+                                "periodeFom": "2020-01-01",
+                                "periodeTom": null
+                            }
+                        ]
                     }
                 ],
                 "vedtakForBehandling": [
