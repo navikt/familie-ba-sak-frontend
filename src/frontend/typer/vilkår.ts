@@ -10,6 +10,19 @@ export enum Resultat {
     KANSKJE = 'KANSKJE',
 }
 
+export const resultatTilUi = (resultat: Resultat) => {
+    switch (resultat) {
+        case Resultat.JA:
+            return 'Oppfylt';
+        case Resultat.NEI:
+            return 'Ikke oppfylt';
+        case Resultat.KANSKJE:
+            return 'Ikke vurdert';
+        default:
+            return 'Ukjent resultat';
+    }
+};
+
 export enum VilkårType {
     UNDER_18_ÅR = 'UNDER_18_ÅR',
     BOR_MED_SØKER = 'BOR_MED_SØKER',
@@ -80,7 +93,7 @@ export const vilkårConfig: IVilkårsconfig = {
     BOR_MED_SØKER: {
         beskrivelse: 'bor med søker',
         key: 'BOR_MED_SØKER',
-        lovreferanse: '§ 2-2',
+        lovreferanse: '§ 2, 2. LEDD',
         tittel: 'Bor med søker',
         spørsmål: () => `Bor barnet med søker?`,
         parterDetteGjelderFor: [PersonType.BARN],
@@ -88,7 +101,7 @@ export const vilkårConfig: IVilkårsconfig = {
     GIFT_PARTNERSKAP: {
         beskrivelse: 'ugift og ikke partnerskap',
         key: 'GIFT_PARTNERSKAP',
-        lovreferanse: '§ 2-4',
+        lovreferanse: '§ 2, 4. LEDD',
         tittel: 'Ugift og ikke partnerskap',
         spørsmål: () => 'Er barnet ugift og har ikke partnerskap',
         parterDetteGjelderFor: [PersonType.BARN],
@@ -96,7 +109,7 @@ export const vilkårConfig: IVilkårsconfig = {
     BOSATT_I_RIKET: {
         beskrivelse: 'bosatt i riket',
         key: 'BOSATT_I_RIKET',
-        lovreferanse: '§ 4-1',
+        lovreferanse: '§ 4, 1. LEDD',
         tittel: 'Bosatt i riket',
         spørsmål: (part?: string) => `Er ${part} bosatt i riket?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
@@ -104,7 +117,7 @@ export const vilkårConfig: IVilkårsconfig = {
     LOVLIG_OPPHOLD: {
         beskrivelse: 'lovlig opphold',
         key: 'LOVLIG_OPPHOLD',
-        lovreferanse: '§ 4-2',
+        lovreferanse: '§ 4, 2. LEDD',
         tittel: 'Lovlig opphold',
         spørsmål: (part?: string) => `Har ${part} lovlig opphold?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],

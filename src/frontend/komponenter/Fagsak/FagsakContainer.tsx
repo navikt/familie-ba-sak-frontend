@@ -4,7 +4,7 @@ import { RessursStatus } from '../../typer/ressurs';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import BehandleVilkår from './Vilkårsvurdering/BehandleVilkår';
+import BehandleVilkår from './Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
@@ -104,6 +104,13 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                         <BehandleVilkår fagsak={fagsak.data} />
                                                     </VilkårsvurderingProvider>
                                                 );
+                                            }}
+                                        />
+                                        <Route
+                                            exact={true}
+                                            path="/fagsak/:fagsakId/tilkjent-ytelse"
+                                            render={() => {
+                                                return <TilkjentYtelse fagsak={fagsak.data} />;
                                             }}
                                         />
                                         <Route
