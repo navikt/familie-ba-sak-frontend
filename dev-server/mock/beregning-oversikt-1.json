@@ -1,0 +1,89 @@
+{
+  "data": [
+    {
+      "periodeFom": "2020-04-01",
+      "periodeTom": "2036-04-30",
+      "sakstype": "NASJONAL",
+      "beregningDetaljer": [
+        {
+          "person": {
+            "type": "BARN",
+            "fødselsdato": "2018-05-01",
+            "personIdent": "01101800033",
+            "navn": "Jenta Barnesen",
+            "kjønn": "KVINNE"
+          },
+          "stønadstype": "ORDINÆR_BARNETRYGD",
+          "utbetaltPerMnd": 1054
+        },
+        {
+          "person": {
+            "type": "BARN",
+            "fødselsdato": "2019-05-01",
+            "personIdent": "01101900033",
+            "navn": "Gutten Barnesen",
+            "kjønn": "MANN"
+          },
+          "stønadstype": "ORDINÆR_BARNETRYGD",
+          "utbetaltPerMnd": 1054
+        },
+        {
+          "person": {
+            "type": "SØKER",
+            "fødselsdato": "1990-05-01",
+            "personIdent": "12345678910",
+            "navn": "Mor Moresen",
+            "kjønn": "KVINNE"
+          },
+          "stønadstype": "UTVIDET_BARNETRYGD",
+          "utbetaltPerMnd": 1054
+        },
+        {
+          "person": {
+            "type": "SØKER",
+            "fødselsdato": "1990-05-01",
+            "personIdent": "12345678910",
+            "navn": "Mor Moresen",
+            "kjønn": "KVINNE"
+          },
+          "stønadstype": "SMÅBARNSTILLEGG",
+          "utbetaltPerMnd": 660
+        }
+      ],
+      "stønadstype": [
+        "ORDINÆR_BARNETRYGD",
+        "ORDINÆR_BARNETRYGD",
+        "UTVIDET_BARNETRYGD",
+        "SMÅBARNSTILLEGG"
+      ],
+      "antallBarn": 2,
+      "utbetaltPerMnd": 3162
+    },
+    {
+      "periodeFom": "2036-05-01",
+      "periodeTom": "2037-04-30",
+      "sakstype": "NASJONAL",
+      "beregningDetaljer": [
+        {
+          "person": {
+            "type": "BARN",
+            "fødselsdato": "2019-05-01",
+            "personIdent": "01101900033",
+            "navn": "Gutten Barnesen",
+            "kjønn": "MANN"
+          },
+          "stønadstype": "ORDINÆR_BARNETRYGD",
+          "utbetaltPerMnd": 1054
+        }
+      ],
+      "stønadstype": [
+        "ORDINÆR_BARNETRYGD"
+      ],
+      "antallBarn": 1,
+      "utbetaltPerMnd": 1054
+    }
+  ],
+  "status": "SUKSESS",
+  "melding": "Innhenting av data var vellykket",
+  "stacktrace": null
+}

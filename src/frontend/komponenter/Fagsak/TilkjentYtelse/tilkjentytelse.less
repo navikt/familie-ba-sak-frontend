@@ -1,0 +1,124 @@
+.tilkjentytelse {
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+.tilkjentytelse-informasjon {
+  padding: 0.8rem 0;
+}
+
+.tilkjentytelse-rad {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  border-bottom: 1px solid @navGra20;
+  cursor: pointer;
+
+  &.åpen {
+    border: 2px solid @navDypBlaLighten20;
+  }
+
+  &.tilkjentytelse-header-rad {
+    border-bottom: 1px solid @navGra80;
+  }
+
+  & .tilkjentytelse-kolonne:nth-child(1) {
+    max-width: 40px;
+    padding-left: 0.8rem;
+    padding-right: 1.2rem;
+  }
+
+  & .tilkjentytelse-kolonne:nth-child(2) {
+    flex: 4;
+  }
+
+  & .tilkjentytelse-kolonne:nth-child(3) {
+    flex: 3;
+    padding-right: 1.2rem;
+  }
+
+  & .tilkjentytelse-kolonne:nth-child(4) {
+    flex: 8;
+  }
+
+  & .tilkjentytelse-kolonne:nth-child(5) {
+    flex: 2;
+    text-align: center;
+    padding-right: 1.2rem;
+  }
+
+  & .tilkjentytelse-kolonne:nth-child(6) {
+    flex: 2;
+    padding-right: 1.2rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  & .tilkjentytelse-kolonne {
+    box-sizing: border-box;
+    flex-grow: 1;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    overflow: visible;
+    list-style: none;
+
+    &.åpen {
+      background-color: @navBlaLighten80;
+    }
+
+  }
+
+  & .tilkjentytelse-detaljer-rad {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    & .tilkjentytelse-detaljer-kolonne:nth-child(1) {
+      max-width: 40px;
+      padding-left: 0.8rem;
+      padding-right: 1.2rem;
+    }
+    & .tilkjentytelse-detaljer-kolonne:nth-child(2) {
+      flex: 7;
+      padding-right: 1.2rem;
+    }
+    & .tilkjentytelse-detaljer-kolonne:nth-child(3) {
+      flex: 10;
+      padding-right: 1.2rem;
+    }
+    & .tilkjentytelse-detaljer-kolonne:nth-child(4) {
+      flex: 2;
+      padding-right: 1.2rem;
+      text-align: right;
+      white-space: nowrap;
+    }
+  }
+
+  & .tilkjentytelse-detaljer-kolonne {
+    box-sizing: border-box;
+    flex-grow: 1;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    overflow: hidden;
+    list-style: none;
+
+    &.familierelasjon-separator {
+      border-bottom: 1px dashed @navGra20;
+    }
+
+    & .detaljer-personalia {
+      display: flex;
+      align-items: center;
+    }
+
+    & .familie-ikon {
+      height: 20px;
+      width: 20px;
+      margin-right: 0.5rem;
+    }
+  }
+}

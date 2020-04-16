@@ -6,7 +6,7 @@ import * as React from 'react';
 import Confetti from 'react-confetti';
 import { useHistory } from 'react-router';
 
-import { BehandlingStatus, Behandlingstype } from '../../../typer/behandling';
+import { BehandlingStatus } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
@@ -80,11 +80,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             <div className={'oppsummering__navigering'}>
                 <Knapp
                     type={'hoved'}
-                    onClick={() => {
-                        aktivBehandling?.type === Behandlingstype.REVURDERING
-                            ? history.push(`/fagsak/${fagsak.id}/vilkår`)
-                            : history.push(`/fagsak/${fagsak.id}/beregning`);
-                    }}
+                    onClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
                     children={'Tilbake'}
                 />
                 {errorMessage === undefined && visSubmitKnapp && (

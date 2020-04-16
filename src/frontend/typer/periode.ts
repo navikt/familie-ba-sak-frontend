@@ -22,12 +22,12 @@ export const nyMoment = (dato: string | undefined) => {
     return moment(dato, datoformat.ISO_DAG);
 };
 
-export const periodeToString = (periode: IPeriode) => {
+export const periodeToString = (periode: IPeriode, format: datoformat = datoformat.DATO) => {
     return `${formaterIsoDato(
         periode.fom,
-        datoformat.DATO,
+        format,
         datoformatNorsk.DATO.toLowerCase()
-    )} - ${formaterIsoDato(periode.tom, datoformat.DATO)}`;
+    )} - ${formaterIsoDato(periode.tom, format)}`;
 };
 
 export const formaterMomentTilStringDato = (dato: Moment): string => {
