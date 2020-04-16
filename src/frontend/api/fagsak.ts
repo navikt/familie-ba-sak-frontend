@@ -1,4 +1,4 @@
-import { IPersonBeregning } from '../typer/behandle';
+import { IPersonBeregning } from '../typer/beregning';
 import { BehandlingKategori, Behandlingstype, BehandlingUnderkategori } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IRestPersonResultat } from '../typer/vilkår';

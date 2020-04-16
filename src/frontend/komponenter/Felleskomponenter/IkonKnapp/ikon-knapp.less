@@ -1,0 +1,20 @@
+.ikon-knapp {
+    &.knapp {
+        height: 25px;
+        text-decoration: underline;
+    
+        & svg {
+            margin-left: .5rem;
+            margin-top: .5rem;
+        }
+    
+        &:focus {
+            outline: solid 2px @navBla;
+        }
+    
+        &:hover {
+            background-color: @navLysGra !important;
+            text-decoration: unset;
+        }
+    }
+}
