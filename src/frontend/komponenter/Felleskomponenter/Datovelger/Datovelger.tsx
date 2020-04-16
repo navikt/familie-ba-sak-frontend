@@ -10,6 +10,7 @@ interface IProps {
     onChange: (dato: any) => void;
     placeholder?: string;
     valgtDato?: string;
+    className?: string;
 }
 
 const Datovegler: React.FC<IProps> = ({
@@ -19,9 +20,10 @@ const Datovegler: React.FC<IProps> = ({
     onChange,
     placeholder,
     valgtDato,
+    className = '',
 }) => {
     return (
-        <div>
+        <div className={className}>
             <Label children={label} htmlFor={id} />
             <Datovelger
                 disabled={disabled}

@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 
-import { IOppgave, GjelderFilter, EnhetsmappeFilter, PrioritetFilter } from '../typer/oppgave';
+import { IOppgave, SaksbehandlerFilter } from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
 
@@ -52,18 +52,9 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         prioritet?: string,
         enhetsmappe?: string,
         frist?: string,
-        registertDato?: string
+        registertDato?: string,
+        saksbehandler?: string
     ) => {
-        if (oppgaverRes.status === RessursStatus.SUKSESS) {
-            console.log(
-                oppgaverRes.data.filter(
-                    oppgave =>
-                        (!prioritet || oppgave.prioritet === prioritet.toString()) &&
-                        (!frist || oppgave.fristFerdigstillelse === frist) &&
-                        (!registertDato || oppgave.opprettetTidspunkt === registertDato)
-                )
-            );
-        }
         oppgaverRes.status === RessursStatus.SUKSESS &&
             settOppgaver({
                 status: RessursStatus.SUKSESS,
@@ -72,7 +63,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                         (!prioritet || oppgave.prioritet === prioritet.toString()) &&
                         (!frist || oppgave.fristFerdigstillelse === frist) &&
                         (!registertDato ||
-                            oppgave.opprettetTidspunkt.substring(0, 10) === registertDato)
+                            oppgave.opprettetTidspunkt.substring(0, 10) === registertDato) &&
+                        (!saksbehandler ||
+                            saksbehandler === Object.keys(SaksbehandlerFilter)[0] ||
+                            (saksbehandler === Object.keys(SaksbehandlerFilter)[1] &&
+                                !oppgave.tilordnetRessurs) ||
+                            saksbehandler === oppgave.tilordnetRessurs)
                 ),
             });
     };

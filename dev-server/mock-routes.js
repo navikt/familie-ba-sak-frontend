@@ -28,6 +28,7 @@ app.get('/user/profile', (req, res) => {
     res.send({
         displayName: 'Test Testersen',
         enhet: '8888',
+        identifier: 'Z991144',
     });
 });
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from 'nav-frontend-skjema';
-import { DatoInput } from '../Felleskomponenter/DatoInput/DatoInput';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
     OppgavetypeFilter,
@@ -15,6 +14,8 @@ import './visoppgave.less';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 import { RessursStatus } from '../../typer/ressurs';
 import moment from 'moment';
+import Datovegler from '../Felleskomponenter/Datovelger/Datovelger';
+import { datoformatNorsk } from '../../utils/formatter';
 
 type IOppgaverFilter = {
     name: string;
@@ -93,8 +94,13 @@ const getPrioritet = (filter: IOppgaverFilter) => {
 };
 
 const getDato = (dato: string) => {
-    const m = moment(dato, 'DD.MM.YYYY', true);
+    const m = moment(dato, 'YYYY-MM-DD', true);
     return m.isValid() ? m.format('YYYY-MM-DD') : undefined;
+};
+
+const getSaksbehandler = (filter: IOppgaverFilter, innloggetSaksbehandler?: ISaksbehandler) => {
+    const index = filter.values!.findIndex(v => v === filter.selectedValue);
+    return index < 2 ? Object.keys(SaksbehandlerFilter)[index] : innloggetSaksbehandler?.identifier;
 };
 
 interface IFilterSkjemaProps {
@@ -165,17 +171,21 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                 })}
             </div>
             <div className="filterskjema__filtre filterskjema__content">
-                <DatoInput
+                <Datovegler
+                    id="frist"
                     label="Frist"
+                    onChange={verdi => settFrist(verdi)}
+                    placeholder={datoformatNorsk.DATO}
+                    valgtDato={frist}
                     className="filterskjema__filtre__input"
-                    onChange={e => settFrist(e.target.value)}
-                    value={frist}
                 />
-                <DatoInput
+                <Datovegler
+                    id="registertDato"
                     label="Registert dato"
+                    onChange={verdi => settRegistertDato(verdi)}
+                    placeholder={datoformatNorsk.DATO}
+                    valgtDato={registertDato}
                     className="filterskjema__filtre__input"
-                    onChange={e => settRegistertDato(e.target.value)}
-                    value={registertDato}
                 />
             </div>
             <div className="filterskjema__content">
@@ -193,7 +203,11 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                                 getPrioritet(filtre.find(filter => filter.name === 'Prioritet')!),
                                 undefined,
                                 getDato(frist),
-                                getDato(registertDato)
+                                getDato(registertDato),
+                                getSaksbehandler(
+                                    filtre.find(filter => filter.name === 'Saksbehandler')!,
+                                    innloggetSaksbehandler
+                                )
                             );
                         });
                     }}
