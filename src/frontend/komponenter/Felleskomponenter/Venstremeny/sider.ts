@@ -29,7 +29,7 @@ export const sider: ISide[] = [
     },
     {
         id: 'BEHANDLINGRESULTAT',
-        href: 'oppsummeringberegning',
+        href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
         steg: BehandlingSteg.VILKÅRSVURDERING,
     },

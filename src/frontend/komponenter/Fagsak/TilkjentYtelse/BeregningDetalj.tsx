@@ -1,19 +1,13 @@
 import * as React from 'react';
 import { IBeregningDetalj, ytelsetype } from '../../../typer/beregning';
-import { FamilieIkonVelger } from '@navikt/familie-ikoner';
-import { formaterBeløp, hentAlder } from '../../../utils/formatter';
+import { formaterBeløp } from '../../../utils/formatter';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { PersonType } from '../../../typer/person';
 import classNames from 'classnames';
+import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 
 interface IProps {
     beregningDetaljer: IBeregningDetalj[];
-}
-
-interface IDetaljRadProps {
-    detalj: IBeregningDetalj;
-    skalVisePersonalia: boolean;
-    skalViseStipletLinje: boolean;
 }
 
 const BeregningDetalj: React.FunctionComponent<IProps> = ({ beregningDetaljer }) => {
@@ -22,7 +16,7 @@ const BeregningDetalj: React.FunctionComponent<IProps> = ({ beregningDetaljer })
         .map((detalj, index, alle) => {
             return (
                 <DetaljRad
-                    detalj={detalj}
+                    beregningDetalj={detalj}
                     skalVisePersonalia={index === 0}
                     skalViseStipletLinje={index === alle.length - 1}
                     key={index}
@@ -37,7 +31,7 @@ const BeregningDetalj: React.FunctionComponent<IProps> = ({ beregningDetaljer })
                 .map((detalj, index) => {
                     return (
                         <DetaljRad
-                            detalj={detalj}
+                            beregningDetalj={detalj}
                             skalVisePersonalia={true}
                             skalViseStipletLinje={false}
                             key={index}
@@ -48,38 +42,31 @@ const BeregningDetalj: React.FunctionComponent<IProps> = ({ beregningDetaljer })
     );
 };
 
+interface IDetaljRadProps {
+    beregningDetalj: IBeregningDetalj;
+    skalVisePersonalia: boolean;
+    skalViseStipletLinje: boolean;
+}
+
 const DetaljRad: React.FunctionComponent<IDetaljRadProps> = ({
-    detalj,
+    beregningDetalj,
     skalVisePersonalia,
     skalViseStipletLinje,
 }) => {
-    const alder = hentAlder(detalj.person.fødselsdato);
     const kolonneClassnames = classNames('tilkjentytelse-detaljer-kolonne', {
         'familierelasjon-separator': skalViseStipletLinje,
     });
     return (
-        <div className="tilkjentytelse-detaljer-rad">
-            <div className="tilkjentytelse-detaljer-kolonne" />
-            <div className={kolonneClassnames}>
-                {skalVisePersonalia && (
-                    <div className="detaljer-personalia">
-                        <FamilieIkonVelger
-                            className="familie-ikon"
-                            alder={alder}
-                            kjønn={detalj.person.kjønn}
-                        />
-                        <Normaltekst>
-                            {detalj.person.navn} ({alder} år) | {detalj.person.personIdent} |{' '}
-                            {detalj.person.type}
-                        </Normaltekst>
-                    </div>
-                )}
+        <div className="tilkjentytelse-detaljer-rad" role="row">
+            <div className="tilkjentytelse-detaljer-kolonne" role="cell" />
+            <div className={kolonneClassnames} role="cell">
+                {skalVisePersonalia && <PersonInformasjon person={beregningDetalj.person} />}
             </div>
-            <div className={kolonneClassnames}>
-                <Normaltekst>{ytelsetype[detalj.stønadstype].navn}</Normaltekst>
+            <div className={kolonneClassnames} role="cell">
+                <Normaltekst>{ytelsetype[beregningDetalj.stønadstype].navn}</Normaltekst>
             </div>
-            <div className={kolonneClassnames}>
-                <Normaltekst>{formaterBeløp(detalj.utbetaltPerMnd)}</Normaltekst>
+            <div className={kolonneClassnames} role="cell">
+                <Normaltekst>{formaterBeløp(beregningDetalj.utbetaltPerMnd)}</Normaltekst>
             </div>
         </div>
     );

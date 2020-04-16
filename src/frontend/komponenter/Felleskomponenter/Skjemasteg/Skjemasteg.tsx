@@ -8,6 +8,7 @@ interface IProps {
     nesteOnClick?: () => void;
     senderInn: boolean;
     tittel: string;
+    maxWidthStyle: string | undefined;
 }
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
@@ -17,9 +18,10 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     nesteOnClick,
     senderInn,
     tittel,
+    maxWidthStyle = '40rem',
 }) => {
     return (
-        <div className={'skjemasteg'}>
+        <div className={'skjemasteg'} style={{ maxWidth: maxWidthStyle }}>
             <Systemtittel children={tittel} />
 
             {children}

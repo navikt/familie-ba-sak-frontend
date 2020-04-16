@@ -8,6 +8,7 @@ import { AppContainer } from 'react-hot-loader';
 import { init } from '@sentry/browser';
 
 import App from './komponenter/App';
+import moment from 'moment';
 
 /* tslint:disable */
 const packageConfig = require('../../package.json');
@@ -24,6 +25,7 @@ init({
 if (process.env.NODE_ENV !== 'production') {
     axe(React, ReactDOM, 1000);
 }
+moment.locale('nb');
 
 const rootElement = document.getElementById('app');
 const renderApp = (Component: React.ComponentType<{}>): void => {

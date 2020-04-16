@@ -20,7 +20,6 @@ export const formaterIsoDato = (
     tilFormat: datoformat,
     defaultString?: string
 ) => {
-    moment.locale('nb');
     const momentDato = moment(dato);
     return momentDato.isValid() && dato
         ? momentDato.format(tilFormat)
