@@ -19,6 +19,7 @@ import { periodeToString } from '../../../../typer/periode';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PennFylt from '../../../../ikoner/PennFylt';
 import Penn from '../../../../ikoner/Penn';
+import Slett from '../../../../ikoner/Slett';
 
 interface IProps {
     person: IPerson;
@@ -108,11 +109,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     ? 'Vurder'
                                     : 'Endre'
                                 : 'Lukk'}
-                            {ekspandertVilkår ? (
-                                <PennFylt heigth={20} width={20} />
-                            ) : (
-                                <Penn heigth={20} width={20} />
-                            )}
+                            {ekspandertVilkår ? <PennFylt /> : <Penn />}
                         </IkonKnapp>
                         <IkonKnapp
                             onClick={() =>
@@ -121,6 +118,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                         >
                             Slett
+                            <Slett />
                         </IkonKnapp>
                     </div>
                 </div>

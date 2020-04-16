@@ -9,6 +9,7 @@ import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/Vilk
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Advarsel from '../../../../ikoner/Advarsel';
 import DashedHr from '../../../Felleskomponenter/DashedHr/DashedHr';
+import Pluss from '../../../../ikoner/Pluss';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -54,6 +55,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
                 >
                     Legg til periode
+                    <Pluss />
                 </UtførKnapp>
             </div>
             <DashedHr />
