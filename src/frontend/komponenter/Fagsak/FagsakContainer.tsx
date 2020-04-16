@@ -6,8 +6,6 @@ import { Route, Switch, useParams } from 'react-router-dom';
 import AlertStripe from 'nav-frontend-alertstriper';
 import BehandleVilkår from './Vilkårsvurdering/BehandleVilkår';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import Beregning from './Beregning/Beregning';
-import { BeregningProvider } from './Beregning/BeregningProvider';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
@@ -105,17 +103,6 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                     <VilkårsvurderingProvider fagsak={fagsak.data}>
                                                         <BehandleVilkår fagsak={fagsak.data} />
                                                     </VilkårsvurderingProvider>
-                                                );
-                                            }}
-                                        />
-                                        <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/beregning"
-                                            render={() => {
-                                                return (
-                                                    <BeregningProvider fagsak={fagsak.data}>
-                                                        <Beregning fagsak={fagsak.data} />
-                                                    </BeregningProvider>
                                                 );
                                             }}
                                         />

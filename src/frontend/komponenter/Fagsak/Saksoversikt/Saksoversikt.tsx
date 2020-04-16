@@ -196,7 +196,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                                 children={`${
                                                     behandling
                                                         ? behandlingsresultater[behandling.resultat]
-                                                              .navn
+                                                              .navn // TODO: Finnes resultat på dette objektet? Jeg (Charlie) klarer ikke å se at denne ligger i datamodellen hverken i backend eller frontend.
                                                         : 'Ukjent'
                                                 }`}
                                             />

@@ -6,7 +6,6 @@ import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { AxiosError } from 'axios';
-import { Behandlingstype } from '../../../typer/behandling';
 import { useHistory } from 'react-router';
 import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
@@ -53,10 +52,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
     };
 
     const forrigeOnClick = () => {
-        aktivBehandling?.type === Behandlingstype.REVURDERING
-            ? history.push(`/fagsak/${fagsak.id}/vilkaarsvurdering`)
-            : history.push(`/fagsak/${fagsak.id}/beregning`);
+        history.push(`/fagsak/${fagsak.id}/vilkaarsvurdering`);
     };
+
     switch (tilkjentYtelseRessurs.status) {
         case RessursStatus.HENTER:
         case RessursStatus.IKKE_HENTET:
