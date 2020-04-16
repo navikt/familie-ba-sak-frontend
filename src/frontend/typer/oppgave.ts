@@ -1,4 +1,5 @@
 import { IPerson } from './person';
+import { string } from 'prop-types';
 
 export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;
@@ -149,4 +150,20 @@ export enum PrioritetFilter {
     LAV = 'Lav',
 }
 
-export enum DokumentTyper {}
+export enum DokumentType {
+    TEST,
+}
+
+export interface IRestOppdaterJournalpost {
+    bruker: INavnOgIdent;
+    avsender: INavnOgIdent;
+    dokumentType: string;
+    mottattDato: string;
+    annetInnhold: string;
+    knyttTilFagsak: Boolean;
+}
+
+export interface INavnOgIdent {
+    navn: string;
+    ident: string;
+}

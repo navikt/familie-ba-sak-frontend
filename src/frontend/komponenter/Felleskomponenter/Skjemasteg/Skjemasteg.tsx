@@ -1,18 +1,21 @@
 import { Knapp } from 'nav-frontend-knapper';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+import classNames from 'classnames';
 
 interface IProps {
+    className?: string;
     forrigeOnClick?: () => void;
     nesteKnappTittel?: string;
     nesteOnClick?: () => void;
     senderInn: boolean;
     tittel: string;
-    maxWidthStyle: string | undefined;
+    maxWidthStyle?: string;
 }
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
     children,
+    className,
     forrigeOnClick,
     nesteKnappTittel,
     nesteOnClick,
@@ -21,7 +24,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     maxWidthStyle = '40rem',
 }) => {
     return (
-        <div className={'skjemasteg'} style={{ maxWidth: maxWidthStyle }}>
+        <div className={classNames('skjemasteg', className)} style={{ maxWidth: maxWidthStyle }}>
             <Systemtittel children={tittel} />
 
             {children}
