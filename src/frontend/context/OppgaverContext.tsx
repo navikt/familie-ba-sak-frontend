@@ -2,13 +2,29 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 
-import { IOppgave, SaksbehandlerFilter } from '../typer/oppgave';
+import { IOppgave, SaksbehandlerFilter, IDataForManuellJournalføring } from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
+    const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
+        byggTomRessurs<IDataForManuellJournalføring>()
+    );
     const [oppgaver, settOppgaver] = React.useState(byggTomRessurs<IOppgave[]>());
     const { axiosRequest } = useApp();
+
+    const hentDataForManuellJournalføring = (oppgaveId: string) => {
+        axiosRequest<IDataForManuellJournalføring, void>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
+        })
+            .then((dataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
+                settDataForManuellJournalføring(dataForManuellJournalføring);
+            })
+            .catch((error: AxiosError) => {
+                settOppgaver(byggFeiletRessurs('Ukjent feil ved henting av oppgave', error));
+            });
+    };
 
     const hentOppgaver = (
         behandlingstema?: string,
@@ -25,7 +41,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         let query = params.length > 0 ? '?' : '';
 
         params.forEach((p, i) => {
-            query += i == 0 ? '' : '&';
+            query += i === 0 ? '' : '&';
             query += p;
         });
 
@@ -75,7 +91,14 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const sortOppgaver = () => {};
 
-    return { oppgaver, hentOppgaver, filterOppgaver, sortOppgaver };
+    return {
+        dataForManuellJournalføring,
+        oppgaver,
+        hentDataForManuellJournalføring,
+        hentOppgaver,
+        filterOppgaver,
+        sortOppgaver,
+    };
 });
 
 export { OppgaverProvider, useOppgaver };

@@ -53,7 +53,7 @@ const OppgaveList: React.FunctionComponent = () => {
                             </td>
                             <td className={'prioritet'}>{PrioritetFilter[oppg.prioritet]}</td>
                             <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
-                            <td className={'bruker'}>{oppg.aktoerid}</td>
+                            <td className={'bruker'}>{oppg.aktoerId}</td>
                             <td className={'enhet'}>{enheter.get(oppg.tildeltEnhetsnr)}</td>
                             <td className={'saksbehandler'}>
                                 {oppg.tilordnetRessurs ? oppg.tilordnetRessurs : 'Ikke tildelt'}

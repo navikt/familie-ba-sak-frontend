@@ -1,9 +1,80 @@
+import { IPerson } from './person';
+
+export interface IDataForManuellJournalføring {
+    journalpost: IJournalpost;
+    oppgave: IOppgave;
+    person: IPerson;
+}
+
+export interface IJournalpost {
+    journalpostId: string;
+    journalposttype: Journalposttype;
+    journalstatus: Journalstatus;
+    tema?: string;
+    behandlingstema?: string;
+    sak?: IJournalpostSak;
+    bruker?: IJournalpostBruker;
+    journalforendeEnhet?: string;
+    kanal?: string;
+    dokumenter?: IDokumentInfo[];
+}
+
+export interface IJournalpostSak {
+    arkivsaksnummer?: string;
+    arkivsaksystem?: string;
+    fagsakId?: string;
+    fagsaksystem?: string;
+}
+
+export interface IJournalpostBruker {
+    id: string;
+}
+
+export interface IDokumentInfo {
+    tittel?: string;
+    brevkode?: string;
+    dokumentstatus?: Dokumentstatus;
+    dokumentvarianter?: IDokumentvariant[];
+}
+
+export interface IDokumentvariant {
+    variantformat: string;
+}
+
+enum Journalposttype {
+    I,
+    U,
+    N,
+}
+
+enum Journalstatus {
+    MOTTATT,
+    JOURNALFOERT,
+    FERDIGSTILT,
+    EKSPEDERT,
+    UNDER_ARBEID,
+    FEILREGISTRERT,
+    UTGAAR,
+    AVBRUTT,
+    UKJENT_BRUKER,
+    RESERVERT,
+    OPPLASTING_DOKUMENT,
+    UKJENT,
+}
+
+enum Dokumentstatus {
+    FERDIGSTILT,
+    AVBRUTT,
+    UNDER_REDIGERING,
+    KASSERT,
+}
+
 export interface IOppgave {
     id: string;
     tildeltEnhetsnr: string;
     journalpostId: string;
     saksreferanse: string;
-    aktoerid: string;
+    aktoerId: string;
     tilordnetRessurs: string;
     beskrivelse: string;
     behandlingstema: string;
@@ -77,3 +148,5 @@ export enum PrioritetFilter {
     HOY = 'Høy',
     LAV = 'Lav',
 }
+
+export enum DokumentTyper {}

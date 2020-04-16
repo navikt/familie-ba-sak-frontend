@@ -40,3 +40,36 @@ export const byggFeiletRessurs = <T>(melding: string, error?: Error): Ressurs<T>
         status: RessursStatus.FEILET,
     };
 };
+
+export const hentDataFraRessurs = (ressurs: Ressurs<any>, defaultValue?: any) => {
+    return ressurs.status === RessursStatus.SUKSESS ? ressurs.data : defaultValue;
+};
+
+export const statusFraFlereRessurser = (ressurser: Ressurs<any>[]): RessursStatus => {
+    if (ressurser.every((ressurs: Ressurs<any>) => ressurs.status === ressurser[0].status)) {
+        return ressurser[0].status;
+    }
+
+    if (
+        ressurser.find((ressurs: Ressurs<any>) => ressurs.status === RessursStatus.IKKE_HENTET) !==
+        undefined
+    ) {
+        return RessursStatus.IKKE_HENTET;
+    }
+
+    if (
+        ressurser.find((ressurs: Ressurs<any>) => ressurs.status === RessursStatus.HENTER) !==
+        undefined
+    ) {
+        return RessursStatus.HENTER;
+    }
+
+    if (
+        ressurser.find((ressurs: Ressurs<any>) => ressurs.status === RessursStatus.FEILET) !==
+        undefined
+    ) {
+        return RessursStatus.FEILET;
+    }
+
+    return RessursStatus.IKKE_HENTET;
+};
