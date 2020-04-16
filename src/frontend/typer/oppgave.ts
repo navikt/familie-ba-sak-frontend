@@ -1,10 +1,9 @@
 import { IPerson } from './person';
-import { string } from 'prop-types';
 
 export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;
     oppgave: IOppgave;
-    person: IPerson;
+    person?: IPerson;
 }
 
 export interface IJournalpost {

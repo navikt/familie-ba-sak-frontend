@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useParams, useHistory } from 'react-router';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { RessursStatus, Ressurs } from '../../typer/ressurs';
-import { Systemtittel } from 'nav-frontend-typografi';
 import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { IPerson } from '../../typer/person';
@@ -38,7 +37,7 @@ const ManuellJournalføring: React.FC = () => {
         case RessursStatus.HENTER:
             return <SystemetLaster />;
         case RessursStatus.SUKSESS:
-            const personData: IPerson = dataForManuellJournalføring.data.person;
+            const personData: IPerson | undefined = dataForManuellJournalføring.data.person;
 
             return (
                 <Skjemasteg
@@ -54,12 +53,12 @@ const ManuellJournalføring: React.FC = () => {
                             url: `/oppgaver/${oppgaveId}`,
                             data: {
                                 bruker: {
-                                    navn: personData.navn,
-                                    ident: personData.personIdent,
+                                    navn: personData?.navn ?? '',
+                                    ident: personData?.personIdent ?? '',
                                 },
                                 avsender: {
-                                    navn: personData.navn,
-                                    ident: personData.personIdent,
+                                    navn: personData?.navn ?? '',
+                                    ident: personData?.personIdent ?? '',
                                 },
                                 mottattDato: '',
                                 dokumentType: dokumentTittel,
@@ -80,7 +79,9 @@ const ManuellJournalføring: React.FC = () => {
                     senderInn={senderInn}
                 >
                     <br />
-                    <PersonInformasjon person={dataForManuellJournalføring.data.person} />
+                    {dataForManuellJournalføring.data.person && (
+                        <PersonInformasjon person={dataForManuellJournalføring.data.person} />
+                    )}
                     <br />
 
                     <Input
