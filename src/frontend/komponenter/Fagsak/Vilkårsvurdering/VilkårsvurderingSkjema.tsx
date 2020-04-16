@@ -15,13 +15,13 @@ import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasj
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import { IFelt } from '../../../typer/felt';
 
-interface IBehandlingVilkårSkjema {
+interface IVilkårsvurderingSkjema {
     opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
     behandlingstype: Behandlingstype;
 }
 
-const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema> = ({
+const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema> = ({
     opprettelseFeilmelding,
     visFeilmeldinger,
     behandlingstype,
@@ -97,4 +97,4 @@ const BehandlingVilkårSkjema: React.FunctionComponent<IBehandlingVilkårSkjema>
     );
 };
 
-export default BehandlingVilkårSkjema;
+export default VilkårsvurderingSkjema;

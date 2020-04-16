@@ -1,7 +1,5 @@
-import { Lukknapp } from 'nav-frontend-ikonknapper';
-import { Knapp } from 'nav-frontend-knapper';
-import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 
 import {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
-import { IVilkårResultat, Resultat, IVilkårConfig } from '../../../../typer/vilkår';
+import { IVilkårResultat, Resultat, IVilkårConfig, resultatTilUi } from '../../../../typer/vilkår';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 import { RadioGruppe, Radio, TextareaControlled, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -14,13 +14,14 @@ import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
 import { Knapp } from 'nav-frontend-knapper';
 import { IPerson } from '../../../../typer/person';
 import classNames from 'classnames';
-import UtførKnapp from './UtførKnapp';
-import { Undertekst } from 'nav-frontend-typografi';
+import { Undertekst, Normaltekst } from 'nav-frontend-typografi';
 import { periodeToString } from '../../../../typer/periode';
+import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import PennFylt from '../../../../ikoner/PennFylt';
+import Penn from '../../../../ikoner/Penn';
 
 interface IProps {
     person: IPerson;
-    tillattFjerning: boolean;
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: IFelt<IVilkårResultat>;
     visFeilmeldinger: boolean;
@@ -28,16 +29,16 @@ interface IProps {
 
 const GeneriskVilkårVurdering: React.FC<IProps> = ({
     person,
-    tillattFjerning,
     vilkårFraConfig,
     vilkårResultat,
     visFeilmeldinger,
 }) => {
-    const { fjernVilkår, settVilkårForPeriodeResultat } = useVilkårsvurdering();
+    const {
+        fjernEllerNullstillPeriodeForVilkår,
+        settVilkårForPeriodeResultat,
+    } = useVilkårsvurdering();
 
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(
-        vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
-    );
+    const [ekspandertVilkår, settEkspandertVilkår] = useState(false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
@@ -77,33 +78,51 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     return (
         <li
             className={classNames(
+                'generisk-vilkår__en-periode',
                 ekspandertVilkår ? 'aapen' : 'lukket',
                 `resultat__${
-                    redigerbartVilkår.verdi.resultat.verdi !== Resultat.KANSKJE
-                        ? redigerbartVilkår.verdi.resultat.verdi.toLowerCase()
+                    vilkårResultat.verdi.resultat.verdi !== Resultat.KANSKJE
+                        ? vilkårResultat.verdi.resultat.verdi.toLowerCase()
                         : 'ukjent'
                 }`
             )}
         >
             <SkjemaGruppe feilmeldingId={vilkårFeilmeldingId(redigerbartVilkår.verdi)}>
-                <div className={'horisontal-sentrert-div'}>
-                    <Undertekst children={periodeToString(redigerbartVilkår.verdi.periode.verdi)} />
-                    <UtførKnapp
-                        onClick={() => toggleForm(true)}
-                        aktiv={ekspandertVilkår}
-                        id={vilkårFeilmeldingId(redigerbartVilkår.verdi)}
-                    >
-                        {!ekspandertVilkår ? 'Vurder' : 'Lukk'}
-                    </UtførKnapp>
-                    {tillattFjerning && (
-                        <UtførKnapp
-                            onClick={() => fjernVilkår(redigerbartVilkår.verdi.id)}
-                            aktiv={ekspandertVilkår}
-                            id={vilkårFeilmeldingId(redigerbartVilkår.verdi)}
+                <div className={'generisk-vilkår__en-periode--tittel'}>
+                    <div className={'flex--space'}>
+                        <Normaltekst
+                            children={resultatTilUi(vilkårResultat.verdi.resultat.verdi)}
+                        />
+                        <Undertekst
+                            children={periodeToString(vilkårResultat.verdi.periode.verdi)}
+                        />
+                    </div>
+                    <div style={{ flexGrow: 1 }} />
+                    <div className={'flex--space'}>
+                        <IkonKnapp
+                            onClick={() => toggleForm(true)}
+                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                         >
-                            Fjern
-                        </UtførKnapp>
-                    )}
+                            {!ekspandertVilkår
+                                ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                    ? 'Vurder'
+                                    : 'Endre'
+                                : 'Lukk'}
+                            {ekspandertVilkår ? (
+                                <PennFylt heigth={20} width={20} />
+                            ) : (
+                                <Penn heigth={20} width={20} />
+                            )}
+                        </IkonKnapp>
+                        <IkonKnapp
+                            onClick={() =>
+                                fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
+                            }
+                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                        >
+                            Slett
+                        </IkonKnapp>
+                    </div>
                 </div>
 
                 {ekspandertVilkår && (
