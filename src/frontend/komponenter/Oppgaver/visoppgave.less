@@ -26,9 +26,26 @@
     }
 }
 
-table {
+table.tabell{
+    width: 1900px;
     margin-top: 50px;
     table-layout: fixed;
+    border-collapse: collapse;
+}
+
+table.tabell tbody{
+    display:block;
+    width: 100%;
+    overflow: auto;
+    height: 30rem;
+}
+
+table.tabell thead tr{
+    display:block;
+}
+
+table.tabell th, table.tabell td{
+    text-align: left;
 }
 
 .regdato {
@@ -52,10 +69,11 @@ table {
 }
 
 .beskrivelse {
-    width: 350px;
+    width: 318px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    padding: 0;
 }
 
 .bruker {

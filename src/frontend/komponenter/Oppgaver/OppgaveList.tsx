@@ -21,21 +21,23 @@ const OppgaveList: React.FunctionComponent = () => {
 
     return (
         <table className="tabell">
-            <thead>
-                <tr>
+            <thead className="tabell__head">
+                <tr className="tabell__head__tr">
                     <th className={'regdato'}>Reg. dato</th>
                     <th className={'oppgavetype'}>Oppgavetype</th>
                     <th className={'gjelder'}>Gjelder</th>
                     <th className={'frist'}>Frist</th>
                     <th className={'prioritet'}>Prioritet</th>
-                    <th className={'beskrivelse'}>Beskrivelse</th>
+                    <th>
+                        <div className={'beskrivelse'}>Beskrivelse</div>
+                    </th>
                     <th className={'bruker'}>Bruker</th>
                     <th className={'enhet'}>Enhet</th>
                     <th className={'saksbehandler'}>Saksbehandler</th>
                     <th className={'handlinger'}>Handlinger</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="tabell__body">
                 {oppgaver.status == RessursStatus.SUKSESS &&
                     oppgaver.data.map((oppg, index) => (
                         <tr key={index}>
@@ -52,7 +54,9 @@ const OppgaveList: React.FunctionComponent = () => {
                                 {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
                             </td>
                             <td className={'prioritet'}>{PrioritetFilter[oppg.prioritet]}</td>
-                            <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
+                            <td>
+                                <div className={'beskrivelse'}>{oppg.beskrivelse}</div>
+                            </td>
                             <td className={'bruker'}>{oppg.aktoerid}</td>
                             <td className={'enhet'}>{enheter.get(oppg.tildeltEnhetsnr)}</td>
                             <td className={'saksbehandler'}>
