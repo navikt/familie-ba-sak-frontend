@@ -251,7 +251,7 @@ const useFagsakApi = (
                         if (response.status === RessursStatus.SUKSESS) {
                             settFagsak(response);
 
-                            history.push(`/fagsak/${fagsak.id}/oppsummeringberegning`);
+                            history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
                         } else if (response.status === RessursStatus.FEILET) {
                             settFeilmelding(response.melding);
                             settVisFeilmeldinger(true);
@@ -265,7 +265,7 @@ const useFagsakApi = (
                         settFeilmelding('Opprettelse av vedtak feilet');
                     });
             } else {
-                history.push(`/fagsak/${fagsak.id}/oppsummeringberegning`);
+                history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
             }
         } else {
             settVisFeilmeldinger(true);

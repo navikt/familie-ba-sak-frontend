@@ -80,7 +80,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             <div className={'oppsummering__navigering'}>
                 <Knapp
                     type={'hoved'}
-                    onClick={() => history.push(`/fagsak/${fagsak.id}/oppsummeringberegning`)}
+                    onClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
                     children={'Tilbake'}
                 />
                 {errorMessage === undefined && visSubmitKnapp && (
