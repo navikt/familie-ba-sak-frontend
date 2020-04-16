@@ -42,10 +42,10 @@ const GeneriskVilkår: React.FC<IProps> = ({
         <div className={'generisk-vilkår'}>
             <br />
             <div className={'horisontal-sentrert-div'}>
-                {vilkårResultater.find(
+                {vilkårResultater.filter(
                     (vilkårResultat: IFelt<IVilkårResultat>) =>
                         vilkårResultat.verdi.resultat.verdi !== Resultat.KANSKJE
-                ) === undefined && <Advarsel heigth={24} width={24} />}
+                ).length === 0 && <Advarsel heigth={24} width={24} />}
                 <Element children={vilkårFraConfig.tittel} />
                 <Undertekst children={vilkårFraConfig.lovreferanse} />
                 <UtførKnapp

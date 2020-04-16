@@ -6,7 +6,7 @@ import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { IState, actions, useBeregningContext, useBeregningDispatch } from './BeregningProvider';
 
 import { IVedtakForBehandling } from '../../../typer/vedtak';
-import { IPersonBeregning, YtelseType, ytelsetype } from '../../../typer/behandle';
+import { IPersonBeregning, YtelseType, ytelsetype } from '../../../typer/beregning';
 import InputMedLabelTilVenstre from '../../Felleskomponenter/InputMedLabelTilVenstre/InputMedLabelTilVenstre';
 import { Panel } from 'nav-frontend-paneler';
 import { Checkbox, Select, SkjemaGruppe } from 'nav-frontend-skjema';
