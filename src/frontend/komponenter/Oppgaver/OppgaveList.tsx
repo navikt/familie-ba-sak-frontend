@@ -58,10 +58,7 @@ const OppgaveList: React.FunctionComponent = () => {
                             <td className={'saksbehandler'}>
                                 {oppg.tilordnetRessurs ? oppg.tilordnetRessurs : 'Ikke tildelt'}
                             </td>
-                            <td className={'handlinger'}>
-                                <a href="">Tildel/plukk</a>
-                                <a href="">Gå til oppg</a>
-                            </td>
+                            <td className={'handlinger'}></td>
                         </tr>
                     ))}
             </tbody>
