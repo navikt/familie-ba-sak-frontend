@@ -32,11 +32,12 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
     const history = useHistory();
     const { hentDataForManuellJournalføring, dataForManuellJournalføring } = useOppgaver();
 
-    const [dokumentTittel, settDokumentTittel] = useState('');
+    const [dokumenttype, settDokumenttype] = useState('');
     const [annetInnhold, settAnnetInnhold] = useState('');
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
     const [mottattDato, settMottattDato] = useState(moment(undefined).format(datoformat.ISO_DAG));
     const [senderInn, settSenderInn] = useState(false);
+    const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
 
     const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
 
@@ -65,8 +66,22 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
 
         if (person.status !== RessursStatus.SUKSESS) {
             accFeilmeldinger.push({
-                feilmelding: 'Hent bruker du vil knytte til journalposten',
+                feilmelding: 'Du må knytte bruker til journalposten',
                 skjemaelementId: 'hent-person',
+            });
+        }
+
+        if (dokumenttype === '') {
+            accFeilmeldinger.push({
+                feilmelding: 'Du må sette dokumenttype for dokumentet',
+                skjemaelementId: 'manuell-journalføring-dokumenttype',
+            });
+        }
+
+        if (annetInnhold === '') {
+            accFeilmeldinger.push({
+                feilmelding: 'Du må sette annet innhold for dokumentet',
+                skjemaelementId: 'manuell-journalføring-annet-innhold',
             });
         }
 
@@ -110,7 +125,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                         ident: person.data.personIdent,
                                     },
                                     mottattDato: '',
-                                    dokumentType: dokumentTittel,
+                                    dokumentType: dokumenttype,
                                     annetInnhold: '',
                                     knyttTilFagsak,
                                 },
@@ -124,6 +139,8 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                 .catch(() => {
                                     settSenderInn(false);
                                 });
+                        } else {
+                            settVisfeilmeldinger(true);
                         }
                     }}
                     senderInn={senderInn}
@@ -132,15 +149,22 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                     <Undertittel children={'Bruker'} />
                     <HentPerson
                         person={person}
-                        settPerson={(person: Ressurs<IPerson>) => settPerson(person)}
+                        settPerson={(person: Ressurs<IPerson>) => {
+                            settPerson(person);
+                            validerSkjema();
+                        }}
                     />
                     <br />
 
                     <Input
                         bredde={'XL'}
+                        id={'manuell-journalføring-dokumenttype'}
                         label={'Dokumenttype'}
-                        value={dokumentTittel}
-                        onChange={(event: any) => settDokumentTittel(event.target.value)}
+                        value={dokumenttype}
+                        onChange={(event: any) => {
+                            settDokumenttype(event.target.value);
+                            validerSkjema();
+                        }}
                     />
 
                     <br />
@@ -154,9 +178,13 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                     <br />
                     <Input
                         bredde={'XL'}
+                        id={'manuell-journalføring-annet-innhold'}
                         label={'Annet innhold'}
                         value={annetInnhold}
-                        onChange={(event: any) => settAnnetInnhold(event.target.value)}
+                        onChange={(event: any) => {
+                            settAnnetInnhold(event.target.value);
+                            validerSkjema();
+                        }}
                     />
                     <br />
 
@@ -175,8 +203,11 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                         />
                     </RadioGruppe>
 
-                    {feilmeldinger.length > 0 && (
-                        <Feiloppsummering tittel={'Det finnes feil'} feil={feilmeldinger} />
+                    {feilmeldinger.length > 0 && visFeilmeldinger && (
+                        <Feiloppsummering
+                            tittel={'For å gå videre må du rette opp følgende:'}
+                            feil={feilmeldinger}
+                        />
                     )}
                 </Skjemasteg>
             );
