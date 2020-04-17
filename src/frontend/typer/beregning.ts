@@ -19,7 +19,7 @@ export interface IBeregningDetalj {
 }
 
 export interface IPersonBeregning {
-    personident: string;
+    personIdent: string;
     ytelseType: YtelseType;
     deltYtelse: boolean;
     ingenYtelse: boolean;

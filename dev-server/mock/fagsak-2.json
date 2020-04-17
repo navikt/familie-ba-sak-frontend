@@ -71,33 +71,26 @@
                         "vedtaksdato": "2020-02-14",
                         "personBeregninger": [
                             {
-                                "personident": "12345678920",
-                                "beløp": 1054,
-                                "ytelseType": "ORDINÆR_BARNETRYGD",
-                                "deltYtelse": false,
-                                "ingenYtelse": true,
-                                "stønadFom": "2020-01-01",
-                                "stønadTom": "2037-12-31"
-                            },
-                            {
-                                "personident": "12345678921",
-                                "beløp": 1054,
-                                "ytelseType": "ORDINÆR_BARNETRYGD",
-                                "deltYtelse": false,
-                                "ingenYtelse": false,
-                                "stønadFom": "2020-01-01",
-                                "stønadTom": "2037-12-31"
-                            },
-                            {
-                                "personident": "12345678912",
-                                "beløp": 1054,
-                                "ytelseType": "ORDINÆR_BARNETRYGD",
-                                "deltYtelse": true,
-                                "ingenYtelse": false,
-                                "stønadFom": "2020-01-01",
-                                "stønadTom": "2037-12-31"
+                                "personIdent": "12345678912",
+                                "beløp": 2024,
+                                "stønadFom": "2018-07-01",
+                                "ytelsePerioder": [
+                                    {
+                                        "beløp": 1054,
+                                        "stønadFom": "2019-03-01",
+                                        "stønadTom": "2036-03-31",
+                                        "type": "ORDINÆR_BARNETRYGD"
+                                    },
+                                    {
+                                        "beløp": 970,
+                                        "stønadFom": "2018-07-01",
+                                        "stønadTom": "2019-02-28",
+                                        "type": "ORDINÆR_BARNETRYGD"
+                                    }
+                                ]
                             }
-                        ]
+                        ],
+                        "id": "3"
                     }
                 ]
             }

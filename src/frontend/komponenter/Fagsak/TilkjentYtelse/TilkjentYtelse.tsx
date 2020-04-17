@@ -6,7 +6,6 @@ import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { AxiosError } from 'axios';
-import { Behandlingstype } from '../../../typer/behandling';
 import { useHistory } from 'react-router';
 import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
@@ -88,9 +87,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
                         </div>
                         <div role="table">
                             <OppsummeringsradHeader />
-                            {tilkjentYtelseRessurs.data.reverse().map((beregning, index) => {
-                                return <Oppsummeringsrad beregning={beregning} key={index} />;
-                            })}
+                            {tilkjentYtelseRessurs.data
+                                .slice()
+                                .reverse()
+                                .map((beregning, index) => {
+                                    return <Oppsummeringsrad beregning={beregning} key={index} />;
+                                })}
                         </div>
                     </Skjemasteg>
                 </div>

@@ -61,6 +61,7 @@ export interface IBehandling {
     opprettetTidspunkt: string;
     personer: IPerson[];
     personResultater: IRestPersonResultat[];
+    samletResultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;
     type: Behandlingstype;
