@@ -6,13 +6,13 @@ import {
     EnhetFilter,
     SaksbehandlerFilter,
     GjelderFilter,
-    EnhetsmappeFilter,
     PrioritetFilter,
+    IOppgave,
 } from '../../typer/oppgave';
 import { Knapp } from 'nav-frontend-knapper';
 import './visoppgave.less';
 import { ISaksbehandler } from '../../typer/saksbehandler';
-import { RessursStatus } from '../../typer/ressurs';
+import { RessursStatus, Ressurs } from '../../typer/ressurs';
 import moment from 'moment';
 import Datovegler from '../Felleskomponenter/Datovelger/Datovelger';
 import { datoformatNorsk } from '../../utils/formatter';
@@ -43,12 +43,6 @@ const initialFiltre = (innloggetSaksbehandler?: ISaksbehandler): IOppgaverFilter
             label: 'Gjelder',
             values: Object.values(GjelderFilter).map(v => v.toString()),
             selectedValue: GjelderFilter.Alle,
-        },
-        {
-            name: 'Enhetsmappe',
-            label: 'Enhetsmappe (status på oppgave)',
-            values: Object.values(EnhetsmappeFilter).map(v => v.toString()),
-            selectedValue: EnhetsmappeFilter.Alle,
         },
         {
             name: 'Prioritet',
@@ -141,13 +135,13 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                             autoFocus={true}
                             onChange={event =>
                                 settFiltre(
-                                    filtre.map((filter, idx) =>
+                                    filtre.map((f, idx) =>
                                         idx === index
                                             ? {
-                                                  ...filter,
+                                                  ...f,
                                                   selectedValue: event.target.value,
                                               }
-                                            : filter
+                                            : f
                                     )
                                 )
                             }
@@ -197,11 +191,10 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                             ),
                             getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!),
                             getEnhet(filtre.find(filter => filter.name === 'Enhet')!!)
-                        ).then(oppgaverRes => {
+                        ).then((oppgaverRes: Ressurs<IOppgave[]>) => {
                             filterOppgaver(
                                 oppgaverRes,
                                 getPrioritet(filtre.find(filter => filter.name === 'Prioritet')!),
-                                undefined,
                                 getDato(frist),
                                 getDato(registertDato),
                                 getSaksbehandler(
@@ -211,7 +204,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                             );
                         });
                     }}
-                    spinner={oppgaver.status == RessursStatus.HENTER}
+                    spinner={oppgaver.status === RessursStatus.HENTER}
                     className="filterskjema__button"
                 >
                     Hent

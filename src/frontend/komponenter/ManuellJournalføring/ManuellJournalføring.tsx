@@ -151,8 +151,8 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                     <Undertittel children={'Bruker'} />
                     <HentPerson
                         person={person}
-                        settPerson={(person: Ressurs<IPerson>) => {
-                            settPerson(person);
+                        settPerson={(hentetPerson: Ressurs<IPerson>) => {
+                            settPerson(hentetPerson);
                             validerSkjema();
                         }}
                     />

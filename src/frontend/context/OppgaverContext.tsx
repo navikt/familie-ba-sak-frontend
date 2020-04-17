@@ -18,8 +18,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             method: 'GET',
             url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
         })
-            .then((dataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
-                settDataForManuellJournalføring(dataForManuellJournalføring);
+            .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
+                settDataForManuellJournalføring(hentetDataForManuellJournalføring);
             })
             .catch((error: AxiosError) => {
                 settOppgaver(byggFeiletRessurs('Ukjent feil ved henting av oppgave', error));
@@ -31,12 +31,20 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         oppgavetype?: string,
         enhet?: string,
         saksbehandler?: string
-    ) => {
+    ): Promise<Ressurs<IOppgave[]>> => {
         const params = new Array<string>();
-        behandlingstema && params.push(`behandlingstema=${behandlingstema}`);
-        oppgavetype && params.push(`oppgavetype=${oppgavetype}`);
-        enhet && params.push(`enhet=${enhet}`);
-        saksbehandler && params.push(`saksbehandler=${saksbehandler}`);
+        if (behandlingstema) {
+            params.push(`behandlingstema=${behandlingstema}`);
+        }
+        if (oppgavetype) {
+            params.push(`oppgavetype=${oppgavetype}`);
+        }
+        if (enhet) {
+            params.push(`enhet=${enhet}`);
+        }
+        if (saksbehandler) {
+            params.push(`saksbehandler=${saksbehandler}`);
+        }
 
         let query = params.length > 0 ? '?' : '';
 
@@ -55,23 +63,21 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             url: `/familie-ba-sak/api/oppgave${query}`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
-                settOppgaver(oppgaverRes);
                 return oppgaverRes;
             })
             .catch((error: AxiosError) => {
-                settOppgaver(byggFeiletRessurs('Ukjent ved innhenting av oppgaver', error));
+                return byggFeiletRessurs('Ukjent ved innhenting av oppgaver', error);
             });
     };
 
     const filterOppgaver = (
         oppgaverRes: Ressurs<IOppgave[]>,
         prioritet?: string,
-        enhetsmappe?: string,
         frist?: string,
         registertDato?: string,
         saksbehandler?: string
     ) => {
-        oppgaverRes.status === RessursStatus.SUKSESS &&
+        if (oppgaverRes.status === RessursStatus.SUKSESS) {
             settOppgaver({
                 status: RessursStatus.SUKSESS,
                 data: oppgaverRes.data.filter(
@@ -87,9 +93,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                             saksbehandler === oppgave.tilordnetRessurs)
                 ),
             });
+        }
     };
-
-    const sortOppgaver = () => {};
 
     return {
         dataForManuellJournalføring,
@@ -97,7 +102,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         hentDataForManuellJournalføring,
         hentOppgaver,
         filterOppgaver,
-        sortOppgaver,
     };
 });
 
