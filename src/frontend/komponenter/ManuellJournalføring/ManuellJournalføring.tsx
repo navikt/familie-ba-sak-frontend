@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import { useParams, useHistory } from 'react-router';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { RessursStatus, Ressurs } from '../../typer/ressurs';
+import { RessursStatus, Ressurs, byggTomRessurs } from '../../typer/ressurs';
 import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { IPerson } from '../../typer/person';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { useApp } from '../../context/AppContext';
 import { IRestOppdaterJournalpost } from '../../typer/oppgave';
-import { Input, RadioGruppe, Radio } from 'nav-frontend-skjema';
+import {
+    Input,
+    RadioGruppe,
+    Radio,
+    FeiloppsummeringFeil,
+    Feiloppsummering,
+} from 'nav-frontend-skjema';
 import Datovegler from '../Felleskomponenter/Datovelger/Datovelger';
 import { datoformat } from '../../utils/formatter';
 import moment from 'moment';
-import PersonInformasjon from '../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
+import { Undertittel } from 'nav-frontend-typografi';
 
 const ManuellJournalføring: React.FC = () => {
     const { oppgaveId } = useParams();
@@ -26,19 +33,47 @@ const ManuellJournalføring: React.FC = () => {
     const [mottattDato, settMottattDato] = useState(moment(undefined).format(datoformat.ISO_DAG));
     const [senderInn, settSenderInn] = useState(false);
 
+    const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
+
+    const [person, settPerson] = useState<Ressurs<IPerson>>(byggTomRessurs());
+
     React.useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
         }
     }, [oppgaveId]);
 
+    React.useEffect(() => {
+        if (
+            dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+            dataForManuellJournalføring.data.person !== undefined
+        ) {
+            settPerson({
+                status: RessursStatus.SUKSESS,
+                data: dataForManuellJournalføring.data.person,
+            });
+        }
+    }, [dataForManuellJournalføring.status]);
+
+    const validerSkjema = () => {
+        const accFeilmeldinger: FeiloppsummeringFeil[] = [];
+
+        if (person.status !== RessursStatus.SUKSESS) {
+            accFeilmeldinger.push({
+                feilmelding: 'Hent bruker du vil knytte til journalposten',
+                skjemaelementId: 'hent-person',
+            });
+        }
+
+        settFeilmeldinger(accFeilmeldinger);
+        return accFeilmeldinger;
+    };
+
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.IKKE_HENTET:
         case RessursStatus.HENTER:
             return <SystemetLaster />;
         case RessursStatus.SUKSESS:
-            const personData: IPerson | undefined = dataForManuellJournalføring.data.person;
-
             return (
                 <Skjemasteg
                     className={'journalføring'}
@@ -47,41 +82,50 @@ const ManuellJournalføring: React.FC = () => {
                         history.push(`/oppgaver`);
                     }}
                     nesteOnClick={() => {
-                        settSenderInn(true);
-                        axiosRequest<string, IRestOppdaterJournalpost>({
-                            method: 'POST',
-                            url: `/oppgaver/${oppgaveId}`,
-                            data: {
-                                bruker: {
-                                    navn: personData?.navn ?? '',
-                                    ident: personData?.personIdent ?? '',
+                        const accFeilmeldinger = validerSkjema();
+
+                        if (
+                            accFeilmeldinger.length === 0 &&
+                            person.status === RessursStatus.SUKSESS
+                        ) {
+                            settSenderInn(true);
+                            axiosRequest<string, IRestOppdaterJournalpost>({
+                                method: 'POST',
+                                url: `/oppgaver/${oppgaveId}`,
+                                data: {
+                                    bruker: {
+                                        navn: person.data.navn,
+                                        ident: person.data.personIdent,
+                                    },
+                                    avsender: {
+                                        navn: person.data.navn,
+                                        ident: person.data.personIdent,
+                                    },
+                                    mottattDato: '',
+                                    dokumentType: dokumentTittel,
+                                    annetInnhold: '',
+                                    knyttTilFagsak,
                                 },
-                                avsender: {
-                                    navn: personData?.navn ?? '',
-                                    ident: personData?.personIdent ?? '',
-                                },
-                                mottattDato: '',
-                                dokumentType: dokumentTittel,
-                                annetInnhold: '',
-                                knyttTilFagsak,
-                            },
-                        })
-                            .then((fagsakId: Ressurs<string>) => {
-                                settSenderInn(false);
-                                if (fagsakId.status === RessursStatus.SUKSESS) {
-                                    history.push(`/fagsak/${fagsakId.data}`);
-                                }
                             })
-                            .catch(() => {
-                                settSenderInn(false);
-                            });
+                                .then((fagsakId: Ressurs<string>) => {
+                                    settSenderInn(false);
+                                    if (fagsakId.status === RessursStatus.SUKSESS) {
+                                        history.push(`/fagsak/${fagsakId.data}`);
+                                    }
+                                })
+                                .catch(() => {
+                                    settSenderInn(false);
+                                });
+                        }
                     }}
                     senderInn={senderInn}
                 >
                     <br />
-                    {dataForManuellJournalføring.data.person && (
-                        <PersonInformasjon person={dataForManuellJournalføring.data.person} />
-                    )}
+                    <Undertittel children={'Bruker'} />
+                    <HentPerson
+                        person={person}
+                        settPerson={(person: Ressurs<IPerson>) => settPerson(person)}
+                    />
                     <br />
 
                     <Input
@@ -122,6 +166,10 @@ const ManuellJournalføring: React.FC = () => {
                             onChange={() => settKnyttTilFagsak(false)}
                         />
                     </RadioGruppe>
+
+                    {feilmeldinger.length > 0 && (
+                        <Feiloppsummering tittel={'Det finnes feil'} feil={feilmeldinger} />
+                    )}
                 </Skjemasteg>
             );
         default:
