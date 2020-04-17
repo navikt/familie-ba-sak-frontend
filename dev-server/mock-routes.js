@@ -55,6 +55,11 @@ app.get('/familie-ba-sak/api/logg/2', (req, res) => {
     setTimeout(() => res.send(lesMockFil(`logg-2.json`)), delayMs);
 });
 
+app.get('/familie-ba-sak/api/vedtak/oversikt/2', (req, res) => {
+    console.log('Truffet mock-endepunkt for beregning-oversikt');
+    setTimeout(() => res.send(lesMockFil(`beregning-oversikt-1.json`)), delayMs);
+});
+
 app.post('/familie-ba-sak/api/fagsaker/sok', (req, res) => {
     const søkparam = req.body;
     if (søkparam.personIdent === '17058018783') {

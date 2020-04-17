@@ -4,7 +4,7 @@ import { RessursStatus } from '../../typer/ressurs';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import BehandleVilkår from './Vilkårsvurdering/BehandleVilkår';
+import BehandleVilkår from './Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Beregning from './Beregning/Beregning';
 import { BeregningProvider } from './Beregning/BeregningProvider';
@@ -21,6 +21,7 @@ import { SøknadProvider } from '../../context/SøknadContext';
 import { hentAlder } from '../../utils/formatter';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
+import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -116,6 +117,13 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                         <Beregning fagsak={fagsak.data} />
                                                     </BeregningProvider>
                                                 );
+                                            }}
+                                        />
+                                        <Route
+                                            exact={true}
+                                            path="/fagsak/:fagsakId/tilkjent-ytelse"
+                                            render={() => {
+                                                return <TilkjentYtelse fagsak={fagsak.data} />;
                                             }}
                                         />
                                         <Route

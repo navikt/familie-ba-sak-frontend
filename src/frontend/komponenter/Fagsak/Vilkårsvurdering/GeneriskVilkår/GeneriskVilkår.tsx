@@ -2,11 +2,14 @@ import { Element, Undertekst } from 'nav-frontend-typografi';
 import React from 'react';
 
 import { IPerson } from '../../../../typer/person';
-import { IVilkårConfig, IVilkårResultat, VilkårType } from '../../../../typer/vilkår';
+import { IVilkårConfig, IVilkårResultat, VilkårType, Resultat } from '../../../../typer/vilkår';
 import { IFelt } from '../../../../typer/felt';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import UtførKnapp from './UtførKnapp';
+import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import Advarsel from '../../../../ikoner/Advarsel';
+import DashedHr from '../../../Felleskomponenter/DashedHr/DashedHr';
+import Pluss from '../../../../ikoner/Pluss';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -36,9 +39,13 @@ const GeneriskVilkår: React.FC<IProps> = ({
     const { leggTilVilkår } = useVilkårsvurdering();
 
     return (
-        <>
+        <div className={'generisk-vilkår'}>
             <br />
             <div className={'horisontal-sentrert-div'}>
+                {vilkårResultater.filter(
+                    (vilkårResultat: IFelt<IVilkårResultat>) =>
+                        vilkårResultat.verdi.resultat.verdi !== Resultat.KANSKJE
+                ).length === 0 && <Advarsel heigth={24} width={24} />}
                 <Element children={vilkårFraConfig.tittel} />
                 <Undertekst children={vilkårFraConfig.lovreferanse} />
                 <UtførKnapp
@@ -48,8 +55,10 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
                 >
                     Legg til periode
+                    <Pluss />
                 </UtførKnapp>
             </div>
+            <DashedHr />
             <ul className={'vilkårsvurdering__list'}>
                 {vilkårResultater.map((vilkårResultat: IFelt<IVilkårResultat>) => {
                     return (
@@ -59,12 +68,12 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             person={person}
                             vilkårResultat={vilkårResultat}
                             visFeilmeldinger={visFeilmeldinger}
-                            tillattFjerning={vilkårResultater.length > 1}
                         />
                     );
                 })}
             </ul>
-        </>
+            <DashedHr />
+        </div>
     );
 };
 

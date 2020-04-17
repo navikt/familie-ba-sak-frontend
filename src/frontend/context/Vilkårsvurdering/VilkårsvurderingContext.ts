@@ -2,7 +2,12 @@ import constate from 'constate';
 import * as React from 'react';
 
 import { IFagsak } from '../../typer/fagsak';
-import { IPersonResultat, IVilkårResultat, VilkårType } from '../../typer/vilkår';
+import {
+    IPersonResultat,
+    IVilkårResultat,
+    VilkårType,
+    lagTomtFeltMedVilkår,
+} from '../../typer/vilkår';
 import {
     lagNyVilkårsvurderingMedNyttVilkår,
     hentVilkårsvurderingMedEkstraVilkår,
@@ -10,10 +15,11 @@ import {
     slåSammenVilkårForPerson,
 } from './vilkårsvurdering';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
-import { kjørValidering } from './validering';
+import { kjørValidering, validerVilkår } from './validering';
 import { Valideringsstatus, IFelt } from '../../typer/felt';
 import { IBehandling } from '../../typer/behandling';
 import { PersonType } from '../../typer/person';
+import { lagInitiellFelt } from '../../utils/validators';
 
 interface IProps {
     fagsak: IFagsak;
@@ -52,15 +58,41 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: 
         );
     };
 
-    const fjernVilkår = (id: string) => {
+    const fjernEllerNullstillPeriodeForVilkår = (id: string) => {
         settVilkårsvurdering(
             vilkårsvurdering.map((personResultat: IPersonResultat) => {
                 return {
                     ...personResultat,
                     vilkårResultater: slåSammenVilkårForPerson(
-                        personResultat.vilkårResultater.filter(
-                            (vilkårResultat: IFelt<IVilkårResultat>) =>
-                                vilkårResultat.verdi.id !== id
+                        personResultat.vilkårResultater.reduce(
+                            (
+                                acc: IFelt<IVilkårResultat>[],
+                                vilkårResultat: IFelt<IVilkårResultat>
+                            ) => {
+                                if (vilkårResultat.verdi.id !== id) {
+                                    acc = [...acc, vilkårResultat];
+                                } else {
+                                    if (
+                                        personResultat.vilkårResultater.filter(
+                                            (filterVilkårResultat: IFelt<IVilkårResultat>) =>
+                                                filterVilkårResultat.verdi.vilkårType ===
+                                                vilkårResultat.verdi.vilkårType
+                                        ).length === 1
+                                    ) {
+                                        acc = [
+                                            ...acc,
+                                            lagInitiellFelt(
+                                                lagTomtFeltMedVilkår(
+                                                    vilkårResultat.verdi.vilkårType
+                                                ),
+                                                validerVilkår
+                                            ),
+                                        ];
+                                    }
+                                }
+                                return acc;
+                            },
+                            []
                         )
                     ),
                 };
@@ -100,7 +132,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: 
 
     return {
         erVilkårsvurderingenGyldig,
-        fjernVilkår,
+        fjernEllerNullstillPeriodeForVilkår,
         hentVilkårMedFeil,
         leggTilVilkår,
         settVilkårForPeriodeResultat,

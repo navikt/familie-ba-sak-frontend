@@ -6,7 +6,7 @@ interface IPennFylt {
     width?: number;
 }
 
-const PennFylt: React.FunctionComponent<IPennFylt> = ({ className, heigth, width }) => {
+const PennFylt: React.FunctionComponent<IPennFylt> = ({ className, heigth = 24, width = 24 }) => {
     return (
         <svg
             aria-labelledby={'PennFylt'}

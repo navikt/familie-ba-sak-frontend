@@ -1,4 +1,4 @@
-import { IPersonBeregning } from './behandle';
+import { IPersonBeregning } from './beregning';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;

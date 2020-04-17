@@ -6,7 +6,7 @@ interface IPenn {
     width?: number;
 }
 
-const Penn: React.FunctionComponent<IPenn> = ({ className, heigth, width }) => {
+const Penn: React.FunctionComponent<IPenn> = ({ className, heigth = 24, width = 24 }) => {
     return (
         <svg
             aria-labelledby={'Penn'}

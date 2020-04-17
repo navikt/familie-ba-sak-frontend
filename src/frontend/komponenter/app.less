@@ -33,3 +33,15 @@ button {
 .panel--gra {
     background-color: @navLysGra !important;
 }
+
+.flex {
+    display: flex;
+}
+
+.flex--space {
+    display: flex;
+
+    > *:not(:first-child) {
+        margin-left: .75rem;
+    }
+}
