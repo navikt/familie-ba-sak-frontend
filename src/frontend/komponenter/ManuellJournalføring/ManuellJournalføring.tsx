@@ -20,8 +20,13 @@ import { datoformat } from '../../utils/formatter';
 import moment from 'moment';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import { Undertittel } from 'nav-frontend-typografi';
+import { ISaksbehandler } from '../../typer/saksbehandler';
 
-const ManuellJournalføring: React.FC = () => {
+interface IProps {
+    innloggetSaksbehandler?: ISaksbehandler;
+}
+
+const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
     const { oppgaveId } = useParams();
     const { axiosRequest } = useApp();
     const history = useHistory();
@@ -90,8 +95,11 @@ const ManuellJournalføring: React.FC = () => {
                         ) {
                             settSenderInn(true);
                             axiosRequest<string, IRestOppdaterJournalpost>({
-                                method: 'POST',
-                                url: `/oppgaver/${oppgaveId}`,
+                                method: 'PUT',
+                                url: `/familie-ba-sak/api/journalpost/${
+                                    dataForManuellJournalføring.data.journalpost.journalpostId
+                                }/ferdigstill/${oppgaveId}?journalfoerendeEnhet=${innloggetSaksbehandler?.enhet ??
+                                    '9999'}`,
                                 data: {
                                     bruker: {
                                         navn: person.data.navn,

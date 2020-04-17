@@ -61,7 +61,11 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                         exact={true}
                                         path="/oppgaver/journalfør/:oppgaveId"
                                         render={() => {
-                                            return <ManuellJournalføring />;
+                                            return (
+                                                <ManuellJournalføring
+                                                    innloggetSaksbehandler={innloggetSaksbehandler}
+                                                />
+                                            );
                                         }}
                                     />
                                 </OppgaverProvider>
