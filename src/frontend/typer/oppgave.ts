@@ -16,12 +16,12 @@ export interface IOppgave {
 
 export enum EnhetFilter {
     Alle = 'Alle',
-    Drammen = '4806 Drammen',
-    Sandnes = '4811 Sandnes',
-    Vadsø = '4820 Vadsø',
-    Oslo = '4833 Oslo',
-    Stord = '4842 Stord',
-    LevangerSteinkjer = '4847 Levanger-Steinkjer',
+    E4806 = '4806 Drammen',
+    E4811 = '4811 Sandnes',
+    E4820 = '4820 Vadsø',
+    E4833 = '4833 Oslo',
+    E4842 = '4842 Stord',
+    E4847 = '4847 Levanger-Steinkjer',
 }
 
 export enum SaksbehandlerFilter {

@@ -17,15 +17,23 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         saksbehandler?: string
     ) => {
         const params = new Array<string>();
-        behandlingstema && params.push(`behandlingstema=${behandlingstema}`);
-        oppgavetype && params.push(`oppgavetype=${oppgavetype}`);
-        enhet && params.push(`enhet=${enhet}`);
-        saksbehandler && params.push(`saksbehandler=${saksbehandler}`);
+        if (behandlingstema) {
+            params.push(`behandlingstema=${behandlingstema}`);
+        }
+        if (oppgavetype) {
+            params.push(`oppgavetype=${oppgavetype}`);
+        }
+        if (enhet) {
+            params.push(`enhet=${enhet}`);
+        }
+        if (saksbehandler) {
+            params.push(`saksbehandler=${saksbehandler}`);
+        }
 
         let query = params.length > 0 ? '?' : '';
 
         params.forEach((p, i) => {
-            query += i == 0 ? '' : '&';
+            query += i === 0 ? '' : '&';
             query += p;
         });
 
@@ -50,12 +58,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const filterOppgaver = (
         oppgaverRes: Ressurs<IOppgave[]>,
         prioritet?: string,
-        enhetsmappe?: string,
         frist?: string,
         registertDato?: string,
         saksbehandler?: string
     ) => {
-        oppgaverRes.status === RessursStatus.SUKSESS &&
+        if (oppgaverRes.status === RessursStatus.SUKSESS) {
             settOppgaver({
                 status: RessursStatus.SUKSESS,
                 data: oppgaverRes.data.filter(
@@ -71,11 +78,10 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                             saksbehandler === oppgave.tilordnetRessurs)
                 ),
             });
+        }
     };
 
-    const sortOppgaver = () => {};
-
-    return { oppgaver, hentOppgaver, filterOppgaver, sortOppgaver };
+    return { oppgaver, hentOppgaver, filterOppgaver };
 });
 
 export { OppgaverProvider, useOppgaver };

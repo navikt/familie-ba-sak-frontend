@@ -1,20 +1,21 @@
 import React from 'react';
-import { GjelderFilter, OppgavetypeFilter, PrioritetFilter } from '../../typer/oppgave';
+import {
+    GjelderFilter,
+    OppgavetypeFilter,
+    PrioritetFilter,
+    EnhetFilter,
+} from '../../typer/oppgave';
 import { RessursStatus } from '../../typer/ressurs';
 import { useOppgaver } from '../../context/OppgaverContext';
 
-function intDatoTilNorskDato(intDato: string) {
+const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
-}
+};
 
-const enheter = new Map<string, string>([
-    ['4806', '4806 Drammen'],
-    ['4811', '4811 Sandnes'],
-    ['4820', '4820 Vadsø'],
-    ['4833', '4833 Oslo'],
-    ['4842', '4842 Stord'],
-    ['4847', '4847 Levanger-Steinkjer'],
-]);
+const getEnheter = (enhetId: string) => {
+    const index = Object.keys(EnhetFilter).findIndex(k => k === `E${enhetId}`);
+    return index < 0 ? enhetId : Object.values(EnhetFilter)[index];
+};
 
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver } = useOppgaver();
@@ -38,7 +39,7 @@ const OppgaveList: React.FunctionComponent = () => {
                 </tr>
             </thead>
             <tbody className="tabell__body">
-                {oppgaver.status == RessursStatus.SUKSESS &&
+                {oppgaver.status === RessursStatus.SUKSESS &&
                     oppgaver.data.map((oppg, index) => (
                         <tr key={index}>
                             <td className={'regdato'}>
@@ -58,11 +59,11 @@ const OppgaveList: React.FunctionComponent = () => {
                                 <div className={'beskrivelse'}>{oppg.beskrivelse}</div>
                             </td>
                             <td className={'bruker'}>{oppg.aktoerid}</td>
-                            <td className={'enhet'}>{enheter.get(oppg.tildeltEnhetsnr)}</td>
+                            <td className={'enhet'}>{getEnheter(oppg.tildeltEnhetsnr)}</td>
                             <td className={'saksbehandler'}>
                                 {oppg.tilordnetRessurs ? oppg.tilordnetRessurs : 'Ikke tildelt'}
                             </td>
-                            <td className={'handlinger'}></td>
+                            <td className={'handlinger'} />
                         </tr>
                     ))}
             </tbody>
