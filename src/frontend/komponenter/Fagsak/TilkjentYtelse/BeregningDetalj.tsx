@@ -63,7 +63,7 @@ const DetaljRad: React.FunctionComponent<IDetaljRadProps> = ({
                 {skalVisePersonalia && <PersonInformasjon person={beregningDetalj.person} />}
             </div>
             <div className={kolonneClassnames} role="cell">
-                <Normaltekst>{ytelsetype[beregningDetalj.stønadstype].navn}</Normaltekst>
+                <Normaltekst>{ytelsetype[beregningDetalj.ytelseType].navn}</Normaltekst>
             </div>
             <div className={kolonneClassnames} role="cell">
                 <Normaltekst>{formaterBeløp(beregningDetalj.utbetaltPerMnd)}</Normaltekst>

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 interface IProps {
     className?: string;
+    forrigeKnappTittel?: string;
     forrigeOnClick?: () => void;
     nesteKnappTittel?: string;
     nesteOnClick?: () => void;
@@ -16,6 +17,7 @@ interface IProps {
 const Skjemasteg: React.FunctionComponent<IProps> = ({
     children,
     className,
+    forrigeKnappTittel,
     forrigeOnClick,
     nesteKnappTittel,
     nesteOnClick,
@@ -49,7 +51,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         onClick={() => {
                             forrigeOnClick();
                         }}
-                        children={'Forrige'}
+                        children={forrigeKnappTittel ?? 'Forrige'}
                     />
                 ) : (
                     <div />

@@ -51,13 +51,6 @@ export const statusFraFlereRessurser = (ressurser: Ressurs<any>[]): RessursStatu
     }
 
     if (
-        ressurser.find((ressurs: Ressurs<any>) => ressurs.status === RessursStatus.IKKE_HENTET) !==
-        undefined
-    ) {
-        return RessursStatus.IKKE_HENTET;
-    }
-
-    if (
         ressurser.find((ressurs: Ressurs<any>) => ressurs.status === RessursStatus.HENTER) !==
         undefined
     ) {

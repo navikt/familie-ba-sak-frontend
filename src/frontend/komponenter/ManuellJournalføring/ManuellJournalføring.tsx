@@ -98,9 +98,11 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                 <Skjemasteg
                     className={'journalføring'}
                     tittel={'Registrere journalpost: Barnetrygd'}
+                    forrigeKnappTittel={'Avbryt'}
                     forrigeOnClick={() => {
                         history.push(`/oppgaver`);
                     }}
+                    nesteKnappTittel={'Journalfør'}
                     nesteOnClick={() => {
                         const accFeilmeldinger = validerSkjema();
 
@@ -130,10 +132,10 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                     knyttTilFagsak,
                                 },
                             })
-                                .then((fagsakId: Ressurs<string>) => {
+                                .then((href: Ressurs<string>) => {
                                     settSenderInn(false);
-                                    if (fagsakId.status === RessursStatus.SUKSESS) {
-                                        history.push(`/fagsak/${fagsakId.data}`);
+                                    if (href.status === RessursStatus.SUKSESS) {
+                                        history.push(href.data);
                                     }
                                 })
                                 .catch(() => {
