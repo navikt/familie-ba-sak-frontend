@@ -164,5 +164,5 @@ export interface IRestOppdaterJournalpost {
 
 export interface INavnOgIdent {
     navn: string;
-    ident: string;
+    id: string;
 }

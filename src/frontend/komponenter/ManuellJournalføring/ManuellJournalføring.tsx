@@ -38,6 +38,8 @@ const ManuellJournalføring: React.FC = () => {
             return <SystemetLaster />;
         case RessursStatus.SUKSESS:
             const personData: IPerson | undefined = dataForManuellJournalføring.data.person;
+            const journalpostId: string | undefined =
+                dataForManuellJournalføring.data.journalpost.journalpostId;
 
             return (
                 <Skjemasteg
@@ -49,16 +51,16 @@ const ManuellJournalføring: React.FC = () => {
                     nesteOnClick={() => {
                         settSenderInn(true);
                         axiosRequest<string, IRestOppdaterJournalpost>({
-                            method: 'POST',
-                            url: `/oppgaver/${oppgaveId}`,
+                            method: 'PUT',
+                            url: `/familie-ba-sak/api/journalpost/${journalpostId}/ferdigstill/${oppgaveId}?journalfoerendeEnhet=9999`,
                             data: {
                                 bruker: {
                                     navn: personData?.navn ?? '',
-                                    ident: personData?.personIdent ?? '',
+                                    id: personData?.personIdent ?? '',
                                 },
                                 avsender: {
                                     navn: personData?.navn ?? '',
-                                    ident: personData?.personIdent ?? '',
+                                    id: personData?.personIdent ?? '',
                                 },
                                 mottattDato: '',
                                 dokumentType: dokumentTittel,
