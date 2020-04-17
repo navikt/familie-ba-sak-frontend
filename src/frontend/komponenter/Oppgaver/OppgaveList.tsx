@@ -1,5 +1,5 @@
 import React from 'react';
-import { GjelderFilter, OppgavetypeFilter, PrioritetFilter } from '../../typer/oppgave';
+import { GjelderFilter, OppgavetypeFilter, PrioritetFilter, IOppgave } from '../../typer/oppgave';
 import { RessursStatus } from '../../typer/ressurs';
 import { useOppgaver } from '../../context/OppgaverContext';
 
@@ -37,7 +37,7 @@ const OppgaveList: React.FunctionComponent = () => {
             </thead>
             <tbody>
                 {oppgaver.status == RessursStatus.SUKSESS &&
-                    oppgaver.data.map((oppg, index) => (
+                    oppgaver.data.map((oppg: IOppgave, index) => (
                         <tr key={index}>
                             <td className={'regdato'}>
                                 {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
@@ -60,7 +60,15 @@ const OppgaveList: React.FunctionComponent = () => {
                             </td>
                             <td className={'handlinger'}>
                                 <a href="">Tildel/plukk</a>
-                                <a href="">Gå til oppg</a>
+                                <a
+                                    href={
+                                        oppg.oppgavetype === OppgavetypeFilter.JFR
+                                            ? `/oppgaver/journalfør/${oppg.id}`
+                                            : ''
+                                    }
+                                >
+                                    Gå til oppg
+                                </a>
                             </td>
                         </tr>
                     ))}

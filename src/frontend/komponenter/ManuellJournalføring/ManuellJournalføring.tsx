@@ -118,11 +118,11 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                 data: {
                                     bruker: {
                                         navn: person.data.navn,
-                                        ident: person.data.personIdent,
+                                        id: person.data.personIdent,
                                     },
                                     avsender: {
                                         navn: person.data.navn,
-                                        ident: person.data.personIdent,
+                                        id: person.data.personIdent,
                                     },
                                     mottattDato: '',
                                     dokumentType: dokumenttype,
