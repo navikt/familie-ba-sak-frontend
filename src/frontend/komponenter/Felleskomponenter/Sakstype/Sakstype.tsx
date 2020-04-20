@@ -3,7 +3,6 @@ import { Select } from 'nav-frontend-skjema';
 import {
     BehandlingKategori,
     kategorier,
-    Behandlingstype,
     underkategorier,
     BehandlingUnderkategori,
 } from '../../../typer/behandling';

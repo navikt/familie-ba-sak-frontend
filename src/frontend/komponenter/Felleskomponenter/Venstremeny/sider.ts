@@ -22,12 +22,6 @@ export const sider: ISide[] = [
         steg: BehandlingSteg.VILKÅRSVURDERING,
     },
     {
-        id: 'BEREGNING',
-        href: 'beregning',
-        navn: 'Beregning',
-        steg: BehandlingSteg.VILKÅRSVURDERING,
-    },
-    {
         id: 'BEHANDLINGRESULTAT',
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
