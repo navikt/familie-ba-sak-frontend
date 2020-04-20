@@ -35,7 +35,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { leggTilVilkår } = useVilkårsvurdering();
-    const visLeseversjon = true; // TODO : erLesevisning() ?? false;
+    const visLeseversjon = erLesevisning() ?? false;
 
     return (
         <>

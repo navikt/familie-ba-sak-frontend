@@ -12,6 +12,7 @@ export const erLesevisning = (): boolean | undefined => {
     const { innloggetSaksbehandler } = useApp();
     const saksbehandlerRolle = innloggetSaksbehandler && innloggetSaksbehandler.firstName; // TODO: Hvis veileder-rolle
     return (
+        true ||
         saksbehandlerRolle === 'Nina' ||
         hentStegPåBehandlingOppe() === BehandlingSteg.GODKJENNE_VEDTAK
     );

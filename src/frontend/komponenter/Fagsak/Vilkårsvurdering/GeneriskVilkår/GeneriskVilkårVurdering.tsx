@@ -1,31 +1,23 @@
 import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
-import { IVilkårResultat, Resultat, IVilkårConfig } from '../../../../typer/vilkår';
+import { IVilkårConfig, IVilkårResultat, Resultat } from '../../../../typer/vilkår';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
+import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
 import {
-    RadioGruppe,
-    Radio,
-    TextareaControlled,
-    SkjemaGruppe,
-    Checkbox,
-} from 'nav-frontend-skjema';
-import {
-    vilkårResultatFeilmeldingId,
     vilkårBegrunnelseFeilmeldingId,
     vilkårFeilmeldingId,
-    vilkårPeriodeFeilmeldingId,
+    vilkårResultatFeilmeldingId,
 } from './GeneriskVilkår';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
 import { Knapp } from 'nav-frontend-knapper';
 import { IPerson } from '../../../../typer/person';
 import classNames from 'classnames';
 import UtførKnapp from './UtførKnapp';
-import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
-import { nyPeriode, periodeToString } from '../../../../typer/periode';
-import Datovegler from '../../../Felleskomponenter/Datovelger/Datovelger';
-import { datoformatNorsk } from '../../../../utils/formatter';
+import { Undertekst } from 'nav-frontend-typografi';
+import { periodeToString } from '../../../../typer/periode';
+import GeneriskVilkårVurderingLeseversjon from './GeneriskVilkårVurderingLeseversjon';
 
 interface IProps {
     person: IPerson;
@@ -45,7 +37,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     visLeseversjon,
 }) => {
     const { fjernVilkår, settVilkårForPeriodeResultat } = useVilkårsvurdering();
-    // TODO: BØR MAN KUNNE ÅPNE/LUKKE II LESEVERSJON ELLER KAN MAN SETTE EKSPANDERT TRUE NÅR LESEVERSJON (SAMT SMÅ TILPASNINGER?)
+    // TODO: BØR MAN KUNNE ÅPNE/LUKKE II LESEVERSJON?
+    // TODO: SKAL I SÅ FALL EKSPANDERTE ÅPNA BY DEFAULT?
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(
         vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
@@ -89,7 +82,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     return (
         <li
             className={classNames(
-                ekspandertVilkår || visLeseversjon ? 'aapen' : 'lukket',
+                ekspandertVilkår ? 'aapen' : 'lukket',
                 `resultat__${
                     redigerbartVilkår.verdi.resultat.verdi !== Resultat.KANSKJE
                         ? redigerbartVilkår.verdi.resultat.verdi.toLowerCase()
@@ -118,8 +111,15 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     )}
                 </div>
 
-                {!visLeseversjon
+                {visLeseversjon
                     ? ekspandertVilkår && (
+                          <GeneriskVilkårVurderingLeseversjon
+                              person={person}
+                              vilkårFraConfig={vilkårFraConfig}
+                              vilkårResultat={vilkårResultat}
+                          />
+                      )
+                    : ekspandertVilkår && (
                           <div className={'generisk-vilkår__ekspandert'}>
                               <RadioGruppe
                                   legend={
@@ -212,50 +212,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                               <Knapp onClick={() => toggleForm(false)} mini={true} type={'flat'}>
                                   Avbryt
                               </Knapp>
-                          </div>
-                      )
-                    : ekspandertVilkår && (
-                          <div className={'generisk-vilkår__ekspandert'}>
-                              <div className={'lese-element'}>
-                                  <Element>
-                                      {vilkårFraConfig.spørsmål
-                                          ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
-                                          : ''}
-                                  </Element>
-                                  <Normaltekst>
-                                      {redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
-                                          ? 'Ja'
-                                          : redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI
-                                          ? 'Nei'
-                                          : Error('TODO: Håndter - skal ikke skje?')}
-                                  </Normaltekst>
-                              </div>
-                              <div className={'lese-element'}>
-                                  <div className={'fastsett-periode__flex'}>
-                                      <div className={'lese-element'}>
-                                          <Element children={'F.o.m.'} />
-                                          <Normaltekst
-                                              children={
-                                                  redigerbartVilkår.verdi.periode.verdi.fom ?? '-'
-                                              }
-                                          />
-                                      </div>
-                                      <div className={'lese-element'}>
-                                          <Element children={'T.o.m.'} />
-                                          <Normaltekst
-                                              children={
-                                                  redigerbartVilkår.verdi.periode.verdi.tom ?? '-'
-                                              }
-                                          />
-                                      </div>
-                                  </div>
-                              </div>
-                              <div className={'lese-element'}>
-                                  <Element children={'Begrunnelse'} />
-                                  <Normaltekst
-                                      children={redigerbartVilkår.verdi.begrunnelse.verdi}
-                                  />
-                              </div>
                           </div>
                       )}
             </SkjemaGruppe>
