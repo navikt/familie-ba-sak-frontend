@@ -20,12 +20,16 @@ export interface IBeregningDetalj {
 
 export interface IPersonBeregning {
     personIdent: string;
-    ytelseType: YtelseType;
-    deltYtelse: boolean;
-    ingenYtelse: boolean;
+    ytelsePerioder: IYtelsePeriode[];
+    beløp: number;
+    stønadFom: string;
+}
+
+interface IYtelsePeriode {
     beløp: number;
     stønadFom: string;
     stønadTom: string;
+    ytelseType: YtelseType;
 }
 
 export enum YtelseType {

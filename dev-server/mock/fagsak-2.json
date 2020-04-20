@@ -79,13 +79,13 @@
                                         "beløp": 1054,
                                         "stønadFom": "2019-03-01",
                                         "stønadTom": "2036-03-31",
-                                        "type": "ORDINÆR_BARNETRYGD"
+                                        "ytelseType": "ORDINÆR_BARNETRYGD"
                                     },
                                     {
                                         "beløp": 970,
                                         "stønadFom": "2018-07-01",
                                         "stønadTom": "2019-02-28",
-                                        "type": "ORDINÆR_BARNETRYGD"
+                                        "ytelseType": "ORDINÆR_BARNETRYGD"
                                     }
                                 ]
                             }

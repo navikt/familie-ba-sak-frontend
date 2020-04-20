@@ -110,7 +110,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     {aktivVedtak?.personBeregninger
                                         .filter(
                                             (personBeregning: IPersonBeregning) =>
-                                                !personBeregning.ingenYtelse
+                                                personBeregning.ytelsePerioder.length > 0
                                         )
                                         .map((personBeregning: IPersonBeregning) => {
                                             return (
