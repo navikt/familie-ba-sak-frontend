@@ -9,6 +9,8 @@ import { ISaksbehandler } from '../typer/saksbehandler';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import VisOppgaver from './Oppgaver/VisOppgaver';
+import { OppgaverProvider } from '../context/OppgaverContext';
+import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring';
 
 interface IProps {
     innloggetSaksbehandler?: ISaksbehandler;
@@ -43,17 +45,30 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                 />
                                 <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
 
-                                <Route
-                                    exact={true}
-                                    path="/oppgaver"
-                                    render={() => {
-                                        return (
-                                            <VisOppgaver
-                                                innloggetSaksbehandler={innloggetSaksbehandler}
-                                            />
-                                        );
-                                    }}
-                                />
+                                <OppgaverProvider>
+                                    <Route
+                                        exact={true}
+                                        path="/oppgaver"
+                                        render={() => {
+                                            return (
+                                                <VisOppgaver
+                                                    innloggetSaksbehandler={innloggetSaksbehandler}
+                                                />
+                                            );
+                                        }}
+                                    />
+                                    <Route
+                                        exact={true}
+                                        path="/oppgaver/journalfør/:oppgaveId"
+                                        render={() => {
+                                            return (
+                                                <ManuellJournalføring
+                                                    innloggetSaksbehandler={innloggetSaksbehandler}
+                                                />
+                                            );
+                                        }}
+                                    />
+                                </OppgaverProvider>
                             </Switch>
                         </Router>
                     </div>

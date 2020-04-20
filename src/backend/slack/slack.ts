@@ -2,9 +2,18 @@ import { Request, Response as ExpressResponse } from 'express';
 import fetch, { Response } from 'node-fetch';
 import { namespace } from '../config';
 import { logRequest, LOG_LEVEL } from '@navikt/familie-backend';
-import createHttpsProxyAgent from 'https-proxy-agent';
+import HttpsProxyAgent from 'https-proxy-agent/dist/agent';
 
 const token = process.env.SLACK_TOKEN;
+const agent =
+    process.env.ENV !== 'local' && process.env.ENV !== 'e2e'
+        ? new HttpsProxyAgent({
+              host: 'webproxy.nais',
+              secureProxy: true,
+              port: 8088,
+              rejectUnauthorized: false,
+          })
+        : undefined;
 
 /**
  * Funksjon som kaller slack sitt postMessage api.
@@ -16,15 +25,7 @@ export const slackNotify = (req: Request, res: ExpressResponse, kanal: string) =
 
     logRequest(req, `Poster slack melding til #${kanal}: ${formatertMelding}`, LOG_LEVEL.INFO);
     fetch('https://slack.com/api/chat.postMessage', {
-        agent:
-            process.env.ENV !== 'local' && process.env.ENV !== 'e2e'
-                ? createHttpsProxyAgent({
-                      host: 'webproxy.nais',
-                      secureProxy: true,
-                      port: 8088,
-                      rejectUnauthorized: false,
-                  })
-                : undefined,
+        agent,
         body: JSON.stringify({
             channel: `#${kanal}`,
             text: formatertMelding,

@@ -2,20 +2,36 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 
-import { IOppgave, SaksbehandlerFilter } from '../typer/oppgave';
+import { IOppgave, SaksbehandlerFilter, IDataForManuellJournalføring } from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
+    const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
+        byggTomRessurs<IDataForManuellJournalføring>()
+    );
     const [oppgaver, settOppgaver] = React.useState(byggTomRessurs<IOppgave[]>());
     const { axiosRequest } = useApp();
+
+    const hentDataForManuellJournalføring = (oppgaveId: string) => {
+        axiosRequest<IDataForManuellJournalføring, void>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
+        })
+            .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
+                settDataForManuellJournalføring(hentetDataForManuellJournalføring);
+            })
+            .catch((error: AxiosError) => {
+                settOppgaver(byggFeiletRessurs('Ukjent feil ved henting av oppgave', error));
+            });
+    };
 
     const hentOppgaver = (
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
         saksbehandler?: string
-    ) => {
+    ): Promise<Ressurs<IOppgave[]>> => {
         const params = new Array<string>();
         if (behandlingstema) {
             params.push(`behandlingstema=${behandlingstema}`);
@@ -47,11 +63,10 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             url: `/familie-ba-sak/api/oppgave${query}`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
-                settOppgaver(oppgaverRes);
                 return oppgaverRes;
             })
             .catch((error: AxiosError) => {
-                settOppgaver(byggFeiletRessurs('Ukjent ved innhenting av oppgaver', error));
+                return byggFeiletRessurs('Ukjent ved innhenting av oppgaver', error);
             });
     };
 
@@ -81,7 +96,13 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         }
     };
 
-    return { oppgaver, hentOppgaver, filterOppgaver };
+    return {
+        dataForManuellJournalføring,
+        oppgaver,
+        hentDataForManuellJournalføring,
+        hentOppgaver,
+        filterOppgaver,
+    };
 });
 
 export { OppgaverProvider, useOppgaver };
