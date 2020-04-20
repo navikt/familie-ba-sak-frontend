@@ -8,7 +8,7 @@ import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { identValidator, validerFelt, lagInitiellFelt } from '../../../utils/validators';
 import classNames from 'classnames';
-import { Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import { useApp } from '../../../context/AppContext';
 
 interface IProps {
@@ -19,6 +19,15 @@ interface IProps {
 const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => {
     const { axiosRequest } = useApp();
     const [ident, settIdent] = React.useState<IFelt<string>>(lagInitiellFelt('', identValidator));
+
+    React.useEffect(() => {
+        if (person.status === RessursStatus.SUKSESS) {
+            settIdent({
+                ...ident,
+                verdi: person.data.personIdent,
+            });
+        }
+    }, [person.status]);
     const [visFeilmelding, settVisFeilmelding] = React.useState(false);
 
     return (
@@ -73,11 +82,20 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
 
             {person.status === RessursStatus.SUKSESS && (
                 <PanelBase className={classNames('hentperson__panel', 'panel--gra')}>
+                    <Undertittel children={'Fant person'} />
                     <Informasjonsbolk
                         informasjon={[
                             {
                                 label: 'Navn',
                                 tekst: person.data.navn,
+                            },
+                            {
+                                label: 'Fødselsdato',
+                                tekst: person.data.fødselsdato,
+                            },
+                            {
+                                label: 'Kjønn',
+                                tekst: person.data.kjønn,
                             },
                         ]}
                     />

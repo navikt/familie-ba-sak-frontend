@@ -4,6 +4,7 @@ import {
     OppgavetypeFilter,
     PrioritetFilter,
     EnhetFilter,
+    IOppgave,
 } from '../../typer/oppgave';
 import { RessursStatus } from '../../typer/ressurs';
 import { useOppgaver } from '../../context/OppgaverContext';
@@ -40,7 +41,7 @@ const OppgaveList: React.FunctionComponent = () => {
             </thead>
             <tbody className="tabell__body">
                 {oppgaver.status === RessursStatus.SUKSESS &&
-                    oppgaver.data.map((oppg, index) => (
+                    oppgaver.data.map((oppg: IOppgave, index) => (
                         <tr key={index}>
                             <td className={'regdato'}>
                                 {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
@@ -58,12 +59,22 @@ const OppgaveList: React.FunctionComponent = () => {
                             <td>
                                 <div className={'beskrivelse'}>{oppg.beskrivelse}</div>
                             </td>
-                            <td className={'bruker'}>{oppg.aktoerid}</td>
+                            <td className={'bruker'}>{oppg.aktoerId}</td>
                             <td className={'enhet'}>{getEnheter(oppg.tildeltEnhetsnr)}</td>
                             <td className={'saksbehandler'}>
                                 {oppg.tilordnetRessurs ? oppg.tilordnetRessurs : 'Ikke tildelt'}
                             </td>
-                            <td className={'handlinger'} />
+                            <td className={'handlinger'}>
+                                <a
+                                    href={
+                                        oppg.oppgavetype === OppgavetypeFilter.JFR
+                                            ? `/oppgaver/journalfør/${oppg.id}`
+                                            : ''
+                                    }
+                                >
+                                    Gå til oppg
+                                </a>
+                            </td>
                         </tr>
                     ))}
             </tbody>

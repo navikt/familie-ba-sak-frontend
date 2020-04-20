@@ -7,11 +7,12 @@ import {
     SaksbehandlerFilter,
     GjelderFilter,
     PrioritetFilter,
+    IOppgave,
 } from '../../typer/oppgave';
 import { Knapp } from 'nav-frontend-knapper';
 import './visoppgave.less';
 import { ISaksbehandler } from '../../typer/saksbehandler';
-import { RessursStatus } from '../../typer/ressurs';
+import { RessursStatus, Ressurs } from '../../typer/ressurs';
 import moment from 'moment';
 import Datovelger from '../Felleskomponenter/Datovelger/Datovelger';
 import { datoformatNorsk } from '../../utils/formatter';
@@ -190,7 +191,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                             ),
                             getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!),
                             getEnhet(filtre.find(filter => filter.name === 'Enhet')!!)
-                        ).then(oppgaverRes => {
+                        ).then((oppgaverRes: Ressurs<IOppgave[]>) => {
                             filterOppgaver(
                                 oppgaverRes,
                                 getPrioritet(filtre.find(filter => filter.name === 'Prioritet')!),
