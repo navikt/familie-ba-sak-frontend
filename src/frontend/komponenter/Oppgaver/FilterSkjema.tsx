@@ -104,7 +104,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
     const { hentOppgaver, filterOppgaver, oppgaver } = useOppgaver();
     const [filtre, settFiltre] = useState<IOppgaverFilter[]>(initialFiltre(innloggetSaksbehandler));
     const [frist, settFrist] = useState<string>('');
-    const [registertDato, settRegistertDato] = useState<string>('');
+    const [registrertDato, settRegistrertDato] = useState<string>('');
 
     useEffect(() => {
         settFiltre(
@@ -173,11 +173,11 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                     className="filterskjema__filtre__input"
                 />
                 <Datovelger
-                    id="registertDato"
-                    label="Registert dato"
-                    onChange={verdi => settRegistertDato(verdi)}
+                    id="registrertDato"
+                    label="Registrert dato"
+                    onChange={verdi => settRegistrertDato(verdi)}
                     placeholder={datoformatNorsk.DATO}
-                    valgtDato={registertDato}
+                    valgtDato={registrertDato}
                     className="filterskjema__filtre__input"
                 />
             </div>
@@ -195,7 +195,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                                 oppgaverRes,
                                 getPrioritet(filtre.find(filter => filter.name === 'Prioritet')!),
                                 getDato(frist),
-                                getDato(registertDato),
+                                getDato(registrertDato),
                                 getSaksbehandler(
                                     filtre.find(filter => filter.name === 'Saksbehandler')!,
                                     innloggetSaksbehandler
@@ -212,7 +212,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                     onClick={() => {
                         settFiltre(initialFiltre(innloggetSaksbehandler));
                         settFrist('');
-                        settRegistertDato('');
+                        settRegistrertDato('');
                     }}
                     className="filterskjema__tilbakestill"
                 >

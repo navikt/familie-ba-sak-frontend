@@ -59,7 +59,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         oppgaverRes: Ressurs<IOppgave[]>,
         prioritet?: string,
         frist?: string,
-        registertDato?: string,
+        registrertDato?: string,
         saksbehandler?: string
     ) => {
         if (oppgaverRes.status === RessursStatus.SUKSESS) {
@@ -69,8 +69,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     oppgave =>
                         (!prioritet || oppgave.prioritet === prioritet.toString()) &&
                         (!frist || oppgave.fristFerdigstillelse === frist) &&
-                        (!registertDato ||
-                            oppgave.opprettetTidspunkt.substring(0, 10) === registertDato) &&
+                        (!registrertDato ||
+                            oppgave.opprettetTidspunkt.substring(0, 10) === registrertDato) &&
                         (!saksbehandler ||
                             saksbehandler === Object.keys(SaksbehandlerFilter)[0] ||
                             (saksbehandler === Object.keys(SaksbehandlerFilter)[1] &&
