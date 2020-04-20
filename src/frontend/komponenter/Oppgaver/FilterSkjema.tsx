@@ -63,17 +63,17 @@ const initialFiltre = (innloggetSaksbehandler?: ISaksbehandler): IOppgaverFilter
 };
 
 const getbehandlingstema = (filter: IOppgaverFilter) => {
-    const index = filter.values!.findIndex(v => v === filter.selectedValue);
+    const index = filter.values.findIndex(v => v === filter.selectedValue);
     return index === 0 ? undefined : Object.keys(GjelderFilter)[index].toString();
 };
 
 const getOppgavetype = (filter: IOppgaverFilter) => {
-    const index = filter.values!.findIndex(v => v === filter.selectedValue);
+    const index = filter.values.findIndex(v => v === filter.selectedValue);
     return index === 0 ? undefined : Object.keys(OppgavetypeFilter)[index].toString();
 };
 
 const getEnhet = (filter: IOppgaverFilter) => {
-    const index = filter.values!.findIndex(v => v === filter.selectedValue);
+    const index = filter.values.findIndex(v => v === filter.selectedValue);
     return index === 0
         ? undefined
         : Object.values(EnhetFilter)
@@ -82,7 +82,7 @@ const getEnhet = (filter: IOppgaverFilter) => {
 };
 
 const getPrioritet = (filter: IOppgaverFilter) => {
-    const index = filter.values!.findIndex(v => v === filter.selectedValue);
+    const index = filter.values.findIndex(v => v === filter.selectedValue);
     return index === 0 ? undefined : Object.keys(PrioritetFilter)[index];
 };
 
@@ -92,7 +92,7 @@ const getDato = (dato: string) => {
 };
 
 const getSaksbehandler = (filter: IOppgaverFilter, innloggetSaksbehandler?: ISaksbehandler) => {
-    const index = filter.values!.findIndex(v => v === filter.selectedValue);
+    const index = filter.values.findIndex(v => v === filter.selectedValue);
     return index < 2 ? Object.keys(SaksbehandlerFilter)[index] : innloggetSaksbehandler?.identifier;
 };
 
