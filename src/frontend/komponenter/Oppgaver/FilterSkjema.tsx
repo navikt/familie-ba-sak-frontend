@@ -13,7 +13,7 @@ import './visoppgave.less';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 import { RessursStatus } from '../../typer/ressurs';
 import moment from 'moment';
-import Datovegler from '../Felleskomponenter/Datovelger/Datovelger';
+import Datovelger from '../Felleskomponenter/Datovelger/Datovelger';
 import { datoformatNorsk } from '../../utils/formatter';
 
 type IOppgaverFilter = {
@@ -164,7 +164,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                 })}
             </div>
             <div className="filterskjema__filtre filterskjema__content">
-                <Datovegler
+                <Datovelger
                     id="frist"
                     label="Frist"
                     onChange={verdi => settFrist(verdi)}
@@ -172,7 +172,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                     valgtDato={frist}
                     className="filterskjema__filtre__input"
                 />
-                <Datovegler
+                <Datovelger
                     id="registertDato"
                     label="Registert dato"
                     onChange={verdi => settRegistertDato(verdi)}

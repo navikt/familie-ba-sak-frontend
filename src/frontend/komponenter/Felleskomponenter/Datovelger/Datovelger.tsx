@@ -13,7 +13,7 @@ interface IProps {
     className?: string;
 }
 
-const Datovegler: React.FC<IProps> = ({
+const Datovelger: React.FC<IProps> = ({
     disabled,
     id,
     label,
@@ -40,4 +40,4 @@ const Datovegler: React.FC<IProps> = ({
     );
 };
 
-export default Datovegler;
+export default Datovelger;
