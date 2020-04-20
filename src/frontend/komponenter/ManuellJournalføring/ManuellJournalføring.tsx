@@ -15,7 +15,7 @@ import {
     FeiloppsummeringFeil,
     Feiloppsummering,
 } from 'nav-frontend-skjema';
-import Datovegler from '../Felleskomponenter/Datovelger/Datovelger';
+import Datovelger from '../Felleskomponenter/Datovelger/Datovelger';
 import { datoformat } from '../../utils/formatter';
 import moment from 'moment';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
@@ -170,7 +170,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                     />
 
                     <br />
-                    <Datovegler
+                    <Datovelger
                         id={'manuell-journalføring-mottatt-dato'}
                         label={'Mottatt dato'}
                         valgtDato={mottattDato}
