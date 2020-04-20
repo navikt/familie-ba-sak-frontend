@@ -17,6 +17,10 @@ import classNames from 'classnames';
 import UtførKnapp from './UtførKnapp';
 import { Undertekst } from 'nav-frontend-typografi';
 import { periodeToString } from '../../../../typer/periode';
+import { useApp } from '../../../../context/AppContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { RessursStatus } from '../../../../typer/ressurs';
+import { erLesevisning, hentStegPåBehandlingOppe } from '../../../../utils/behandling';
 
 interface IProps {
     person: IPerson;
@@ -34,6 +38,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { fjernVilkår, settVilkårForPeriodeResultat } = useVilkårsvurdering();
+    const visLeseversjon = erLesevisning();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(
         vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE

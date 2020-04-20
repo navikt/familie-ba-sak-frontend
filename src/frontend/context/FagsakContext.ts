@@ -5,13 +5,22 @@ import React from 'react';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPerson } from '../typer/person';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import {
+    byggDataRessurs,
+    byggFeiletRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '../typer/ressurs';
 import { useApp } from './AppContext';
+import { IBehandling } from '../typer/behandling';
+import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
     fagsak: Ressurs<IFagsak>;
     logg: Ressurs<ILogg[]>;
+    behandlingOppe: Ressurs<IBehandling>;
 }
 
 const initialState: IHovedRessurser = {
@@ -22,6 +31,9 @@ const initialState: IHovedRessurser = {
         status: RessursStatus.IKKE_HENTET,
     },
     logg: {
+        status: RessursStatus.IKKE_HENTET,
+    },
+    behandlingOppe: {
         status: RessursStatus.IKKE_HENTET,
     },
 };
@@ -59,21 +71,32 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             fagsak: {
                 status: RessursStatus.HENTER,
             },
+            behandlingOppe: {
+                status: RessursStatus.HENTER,
+            },
         });
         axiosRequest<IFagsak, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/${fagsakId}`,
         })
             .then((hentetFagsak: Ressurs<IFagsak>) => {
+                const aktivBehandling =
+                    hentetFagsak.status === RessursStatus.SUKSESS &&
+                    hentAktivBehandlingPåFagsak(hentetFagsak.data);
+
                 settFagsakRessurser({
                     ...fagsakRessurser,
                     fagsak: hentetFagsak,
+                    behandlingOppe: aktivBehandling
+                        ? byggDataRessurs(aktivBehandling)
+                        : byggTomRessurs(),
                 });
             })
             .catch((error: AxiosError) => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
                     fagsak: byggFeiletRessurs('Ukjent ved innhenting av fagsak', error),
+                    behandlingOppe: byggFeiletRessurs('Ukjent ved innhenting av fagsak', error),
                 });
             });
     };
@@ -106,6 +129,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     return {
         bruker: fagsakRessurser.bruker,
         fagsak: fagsakRessurser.fagsak,
+        behandlingOppe: fagsakRessurser.behandlingOppe,
         hentFagsak,
         hentLogg,
         logg: fagsakRessurser.logg,

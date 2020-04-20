@@ -62,7 +62,15 @@ const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IPro
             });
     };
 
-    return { axiosRequest, autentisert, åpneModal, lukkModal, modal, settModal };
+    return {
+        axiosRequest,
+        innloggetSaksbehandler,
+        autentisert,
+        åpneModal,
+        lukkModal,
+        modal,
+        settModal,
+    };
 });
 
 export { AppProvider, useApp };

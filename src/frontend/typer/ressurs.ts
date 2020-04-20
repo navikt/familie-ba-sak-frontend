@@ -33,6 +33,13 @@ export const byggTomRessurs = <T>(): Ressurs<T> => {
     };
 };
 
+export const byggDataRessurs = <T>(ressursData: T): Ressurs<T> => {
+    return {
+        data: ressursData,
+        status: RessursStatus.SUKSESS,
+    };
+};
+
 export const byggFeiletRessurs = <T>(melding: string, error?: Error): Ressurs<T> => {
     return {
         errorMelding: error ? error.message : undefined,
