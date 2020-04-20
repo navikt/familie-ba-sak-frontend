@@ -1,13 +1,13 @@
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
+import express, { Request, Response } from 'express';
+import path from 'path';
+import fs from 'fs';
 
 const delayMs = 20;
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.json({ limit: '200mb' }));
+app.use(express.urlencoded({ limit: '200mb', extended: true }));
 
-const lesMockFil = filnavn => {
+const lesMockFil = (filnavn: string) => {
     try {
         return fs.readFileSync(path.join(__dirname, '/mock/' + filnavn), 'UTF-8');
     } catch (err) {
@@ -15,23 +15,23 @@ const lesMockFil = filnavn => {
     }
 };
 
-app.get('/familie-ba-sak/api/fagsaker/:id', (req, res) => {
+app.get('/familie-ba-sak/api/fagsaker/:id', (req: Request, res: Response) => {
     const { id } = req.params;
     setTimeout(() => res.send(lesMockFil(`fagsak-${id}.json`)), delayMs);
 });
 
-app.get('/familie-ba-sak/api/person', (req, res) => {
+app.get('/familie-ba-sak/api/person', (_: Request, res: Response) => {
     setTimeout(() => res.status(200).send(lesMockFil(`person-1.json`)), delayMs);
 });
 
-app.get('/user/profile', (req, res) => {
+app.get('/user/profile', (_: Request, res: Response) => {
     res.send({
         displayName: 'Test Testersen',
         enhet: '8888',
     });
 });
 
-app.get('/familie-ba-sak/api/dokument/vedtak-html/3', (req, res) => {
+app.get('/familie-ba-sak/api/dokument/vedtak-html/3', (_: Request, res: Response) => {
     setTimeout(
         () =>
             res.send({
@@ -42,24 +42,24 @@ app.get('/familie-ba-sak/api/dokument/vedtak-html/3', (req, res) => {
     );
 });
 
-app.post('/familie-ba-sak/api/behandlinger', (req, res) => {
+app.post('/familie-ba-sak/api/behandlinger', (_: Request, res: Response) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
 });
 
-app.post('/familie-ba-sak/api/fagsaker/1/vedtak', (req, res) => {
+app.post('/familie-ba-sak/api/fagsaker/1/vedtak', (_: Request, res: Response) => {
     setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
 });
 
-app.get('/familie-ba-sak/api/logg/2', (req, res) => {
+app.get('/familie-ba-sak/api/logg/2', (_: Request, res: Response) => {
     setTimeout(() => res.send(lesMockFil(`logg-2.json`)), delayMs);
 });
 
-app.get('/familie-ba-sak/api/vedtak/oversikt/2', (req, res) => {
+app.get('/familie-ba-sak/api/vedtak/oversikt/2', (_: Request, res: Response) => {
     console.log('Truffet mock-endepunkt for beregning-oversikt');
     setTimeout(() => res.send(lesMockFil(`beregning-oversikt-1.json`)), delayMs);
 });
 
-app.post('/familie-ba-sak/api/fagsaker/sok', (req, res) => {
+app.post('/familie-ba-sak/api/fagsaker/sok', (req: Request, res: Response) => {
     const søkparam = req.body;
     if (søkparam.personIdent === '17058018783') {
         setTimeout(() => res.send(lesMockFil(`søk-2.json`)), 500);
@@ -77,4 +77,4 @@ app.post('/familie-ba-sak/api/fagsaker/sok', (req, res) => {
     }
 });
 
-module.exports = app;
+export default app;

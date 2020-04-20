@@ -1,13 +1,14 @@
-const app = require('./mock-routes');
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('../build_n_deploy/webpack/webpack.dev');
-const path = require('path');
+import app from './mock-routes';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import path from 'path';
+import { Request, Response } from 'express';
+
+const config = require('../../build_n_deploy/webpack/webpack.dev');
 
 const port = 8000;
 
-// @ts-ignore
 const compiler = webpack(config);
 const middleware = webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -16,11 +17,11 @@ const middleware = webpackDevMiddleware(compiler, {
 app.use(middleware);
 app.use(webpackHotMiddleware(compiler));
 
-app.get('/*', (req, res) => {
+app.get('/*', (_: Request, res: Response) => {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write(
         middleware.fileSystem.readFileSync(
-            path.join(__dirname, '/../frontend_development/index.html')
+            path.join(__dirname, '/../../frontend_development/index.html')
         )
     );
     res.end();

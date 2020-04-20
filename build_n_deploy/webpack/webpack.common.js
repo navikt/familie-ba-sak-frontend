@@ -15,8 +15,16 @@ module.exports = {
         rules: [
             {
                 test: /\.(ts|tsx)$/,
-                loader: 'tslint-loader',
                 enforce: 'pre',
+                use: [
+                    {
+                        options: {
+                            eslintPath: require.resolve('eslint'),
+                        },
+                        loader: require.resolve('eslint-loader'),
+                    },
+                ],
+                exclude: /node_modules/,
             },
             {
                 test: /\.(js|ts|tsx)$/,
@@ -54,7 +62,9 @@ module.exports = {
             inject: 'body',
             alwaysWriteToDisk: true,
         }),
-        new TypeScriptTypeChecker(),
+        new TypeScriptTypeChecker({
+            tsconfig: path.join(__dirname, '../../src/frontend/tsconfig.json'),
+        }),
         new webpack.NoEmitOnErrorsPlugin(),
         new OptimizeCssAssetsPlugin(),
     ],

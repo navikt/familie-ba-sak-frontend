@@ -1,10 +1,7 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "rootDir": ".",
         "typeRoots": ["../../node_modules/@types", "./@types"]
-    },
-    "exclude": [
-        "../../node_modules",
-    ]
+    }
 }

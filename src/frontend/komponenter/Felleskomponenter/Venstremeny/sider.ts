@@ -36,7 +36,7 @@ export const sider: ISide[] = [
     { id: 'VEDTAK', href: 'vedtak', navn: 'Vedtak', steg: BehandlingSteg.SEND_TIL_BESLUTTER },
 ];
 
-export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg) => {
+export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
     if (!side.steg && side.steg !== 0) {
         return true;
     }

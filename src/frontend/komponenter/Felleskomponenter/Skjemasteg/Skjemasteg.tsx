@@ -8,7 +8,7 @@ interface IProps {
     nesteOnClick?: () => void;
     senderInn: boolean;
     tittel: string;
-    maxWidthStyle: string | undefined;
+    maxWidthStyle?: string;
 }
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
