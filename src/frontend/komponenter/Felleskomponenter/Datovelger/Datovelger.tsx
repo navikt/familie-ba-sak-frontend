@@ -1,6 +1,6 @@
 import React from 'react';
 import { Label } from 'nav-frontend-skjema';
-import { Datovelger } from 'nav-datovelger';
+import { Datovelger as NavDatovelger } from 'nav-datovelger';
 import 'nav-datovelger/lib/styles/datovelger';
 
 interface IProps {
@@ -25,7 +25,7 @@ const Datovelger: React.FC<IProps> = ({
     return (
         <div className={className}>
             <Label children={label} htmlFor={id} />
-            <Datovelger
+            <NavDatovelger
                 disabled={disabled}
                 id={id}
                 input={{ name: id, id: `input_${id}`, placeholder }}
