@@ -3,11 +3,11 @@ import { useParams, useHistory } from 'react-router';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { RessursStatus, Ressurs, byggTomRessurs } from '../../typer/ressurs';
 import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { IPerson } from '../../typer/person';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { useApp } from '../../context/AppContext';
-import { IRestOppdaterJournalpost } from '../../typer/oppgave';
+import { IRestOppdaterJournalpost, Journalstatus } from '../../typer/oppgave';
 import {
     Input,
     RadioGruppe,
@@ -32,7 +32,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
     const history = useHistory();
     const { hentDataForManuellJournalføring, dataForManuellJournalføring } = useOppgaver();
 
-    const [dokumenttype, settDokumenttype] = useState('');
+    const [dokumentType, settDokumenttype] = useState('');
     const [annetInnhold, settAnnetInnhold] = useState('');
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
     const [mottattDato, settMottattDato] = useState(moment(undefined).format(datoformat.ISO_DAG));
@@ -71,7 +71,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
             });
         }
 
-        if (dokumenttype === '') {
+        if (dokumentType === '') {
             accFeilmeldinger.push({
                 feilmelding: 'Du må sette dokumenttype for dokumentet',
                 skjemaelementId: 'manuell-journalføring-dokumenttype',
@@ -94,7 +94,8 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
         case RessursStatus.HENTER:
             return <SystemetLaster />;
         case RessursStatus.SUKSESS:
-            return (
+            return dataForManuellJournalføring.data.journalpost.journalstatus ===
+                Journalstatus.MOTTATT ? (
                 <Skjemasteg
                     className={'journalføring'}
                     tittel={'Registrere journalpost: Barnetrygd'}
@@ -126,16 +127,22 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                         navn: person.data.navn,
                                         id: person.data.personIdent,
                                     },
-                                    mottattDato: '',
-                                    dokumentType: dokumenttype,
-                                    annetInnhold: '',
+                                    mottattDato,
+                                    dokumentType,
+                                    annetInnhold,
                                     knyttTilFagsak,
                                 },
                             })
-                                .then((href: Ressurs<string>) => {
+                                .then((fagsakId: Ressurs<string>) => {
+                                    console.log(fagsakId);
                                     settSenderInn(false);
-                                    if (href.status === RessursStatus.SUKSESS) {
-                                        history.push(href.data);
+                                    if (
+                                        fagsakId.status === RessursStatus.SUKSESS &&
+                                        fagsakId.data !== ''
+                                    ) {
+                                        history.push(`/fagsak/${fagsakId.data}/registrer-soknad`);
+                                    } else if (fagsakId.status === RessursStatus.SUKSESS) {
+                                        history.push('/oppgaver');
                                     }
                                 })
                                 .catch(() => {
@@ -162,7 +169,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                         bredde={'XL'}
                         id={'manuell-journalføring-dokumenttype'}
                         label={'Dokumenttype'}
-                        value={dokumenttype}
+                        value={dokumentType}
                         onChange={(event: any) => {
                             settDokumenttype(event.target.value);
                             validerSkjema();
@@ -212,6 +219,10 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                         />
                     )}
                 </Skjemasteg>
+            ) : (
+                <AlertStripeAdvarsel
+                    children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
+                />
             );
         default:
             return <AlertStripeFeil children={'Uventet feil ved henting av oppgave'} />;
