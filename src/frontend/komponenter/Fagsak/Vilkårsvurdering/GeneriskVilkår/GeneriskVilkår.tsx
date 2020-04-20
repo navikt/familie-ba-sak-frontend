@@ -7,6 +7,7 @@ import { IFelt } from '../../../../typer/felt';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import UtførKnapp from './UtførKnapp';
+import { erLesevisning } from '../../../../utils/behandling';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -34,6 +35,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { leggTilVilkår } = useVilkårsvurdering();
+    const visLeseversjon = true; // TODO : erLesevisning() ?? false;
 
     return (
         <>
@@ -41,14 +43,16 @@ const GeneriskVilkår: React.FC<IProps> = ({
             <div className={'horisontal-sentrert-div'}>
                 <Element children={vilkårFraConfig.tittel} />
                 <Undertekst children={vilkårFraConfig.lovreferanse} />
-                <UtførKnapp
-                    onClick={() =>
-                        leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)
-                    }
-                    id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
-                >
-                    Legg til periode
-                </UtførKnapp>
+                {!visLeseversjon && (
+                    <UtførKnapp
+                        onClick={() =>
+                            leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)
+                        }
+                        id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
+                    >
+                        Legg til periode
+                    </UtførKnapp>
+                )}
             </div>
             <ul className={'vilkårsvurdering__list'}>
                 {vilkårResultater.map((vilkårResultat: IFelt<IVilkårResultat>) => {
@@ -60,6 +64,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             vilkårResultat={vilkårResultat}
                             visFeilmeldinger={visFeilmeldinger}
                             tillattFjerning={vilkårResultater.length > 1}
+                            visLeseversjon={visLeseversjon}
                         />
                     );
                 })}

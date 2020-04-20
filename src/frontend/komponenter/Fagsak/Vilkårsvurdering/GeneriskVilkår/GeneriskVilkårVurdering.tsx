@@ -4,23 +4,28 @@ import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { IVilkårResultat, Resultat, IVilkårConfig } from '../../../../typer/vilkår';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
-import { RadioGruppe, Radio, TextareaControlled, SkjemaGruppe } from 'nav-frontend-skjema';
+import {
+    RadioGruppe,
+    Radio,
+    TextareaControlled,
+    SkjemaGruppe,
+    Checkbox,
+} from 'nav-frontend-skjema';
 import {
     vilkårResultatFeilmeldingId,
     vilkårBegrunnelseFeilmeldingId,
     vilkårFeilmeldingId,
+    vilkårPeriodeFeilmeldingId,
 } from './GeneriskVilkår';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
 import { Knapp } from 'nav-frontend-knapper';
 import { IPerson } from '../../../../typer/person';
 import classNames from 'classnames';
 import UtførKnapp from './UtførKnapp';
-import { Undertekst } from 'nav-frontend-typografi';
-import { periodeToString } from '../../../../typer/periode';
-import { useApp } from '../../../../context/AppContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import { RessursStatus } from '../../../../typer/ressurs';
-import { erLesevisning, hentStegPåBehandlingOppe } from '../../../../utils/behandling';
+import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
+import { nyPeriode, periodeToString } from '../../../../typer/periode';
+import Datovegler from '../../../Felleskomponenter/Datovelger/Datovelger';
+import { datoformatNorsk } from '../../../../utils/formatter';
 
 interface IProps {
     person: IPerson;
@@ -28,6 +33,7 @@ interface IProps {
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: IFelt<IVilkårResultat>;
     visFeilmeldinger: boolean;
+    visLeseversjon: boolean;
 }
 
 const GeneriskVilkårVurdering: React.FC<IProps> = ({
@@ -36,9 +42,10 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     vilkårFraConfig,
     vilkårResultat,
     visFeilmeldinger,
+    visLeseversjon,
 }) => {
     const { fjernVilkår, settVilkårForPeriodeResultat } = useVilkårsvurdering();
-    const visLeseversjon = erLesevisning();
+    // TODO: BØR MAN KUNNE ÅPNE/LUKKE II LESEVERSJON ELLER KAN MAN SETTE EKSPANDERT TRUE NÅR LESEVERSJON (SAMT SMÅ TILPASNINGER?)
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(
         vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
@@ -82,7 +89,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     return (
         <li
             className={classNames(
-                ekspandertVilkår ? 'aapen' : 'lukket',
+                ekspandertVilkår || visLeseversjon ? 'aapen' : 'lukket',
                 `resultat__${
                     redigerbartVilkår.verdi.resultat.verdi !== Resultat.KANSKJE
                         ? redigerbartVilkår.verdi.resultat.verdi.toLowerCase()
@@ -100,7 +107,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     >
                         {!ekspandertVilkår ? 'Vurder' : 'Lukk'}
                     </UtførKnapp>
-                    {tillattFjerning && (
+                    {!visLeseversjon && tillattFjerning && (
                         <UtførKnapp
                             onClick={() => fjernVilkår(redigerbartVilkår.verdi.id)}
                             aktiv={ekspandertVilkår}
@@ -111,93 +118,146 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     )}
                 </div>
 
-                {ekspandertVilkår && (
-                    <div className={'generisk-vilkår__ekspandert'}>
-                        <RadioGruppe
-                            legend={
-                                vilkårFraConfig.spørsmål
-                                    ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
-                                    : ''
-                            }
-                            feil={
-                                redigerbartVilkår.verdi.resultat.valideringsstatus ===
-                                    Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                                    ? redigerbartVilkår.verdi.resultat.feilmelding
-                                    : ''
-                            }
-                            feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
-                        >
-                            <Radio
-                                label={'Ja'}
-                                name={`vilkår-spørsmål_ja_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                                checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.JA}
-                                onChange={() => radioOnChange(Resultat.JA)}
-                            />
-                            <Radio
-                                label={'Nei'}
-                                name={`vilkår-spørsmål_nei_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                                checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI}
-                                onChange={() => radioOnChange(Resultat.NEI)}
-                            />
-                        </RadioGruppe>
+                {!visLeseversjon
+                    ? ekspandertVilkår && (
+                          <div className={'generisk-vilkår__ekspandert'}>
+                              <RadioGruppe
+                                  legend={
+                                      vilkårFraConfig.spørsmål
+                                          ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
+                                          : ''
+                                  }
+                                  feil={
+                                      redigerbartVilkår.verdi.resultat.valideringsstatus ===
+                                          Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                                          ? redigerbartVilkår.verdi.resultat.feilmelding
+                                          : ''
+                                  }
+                                  feilmeldingId={vilkårResultatFeilmeldingId(
+                                      redigerbartVilkår.verdi
+                                  )}
+                              >
+                                  <Radio
+                                      label={'Ja'}
+                                      name={`vilkår-spørsmål_ja_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                      checked={
+                                          redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
+                                      }
+                                      onChange={() => radioOnChange(Resultat.JA)}
+                                  />
+                                  <Radio
+                                      label={'Nei'}
+                                      name={`vilkår-spørsmål_nei_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                      checked={
+                                          redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI
+                                      }
+                                      onChange={() => radioOnChange(Resultat.NEI)}
+                                  />
+                              </RadioGruppe>
 
-                        <FastsettPeriode
-                            redigerbartVilkår={redigerbartVilkår}
-                            validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
-                            visFeilmeldinger={skalViseFeilmeldinger()}
-                        />
+                              <FastsettPeriode
+                                  redigerbartVilkår={redigerbartVilkår}
+                                  validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
+                                  visFeilmeldinger={skalViseFeilmeldinger()}
+                              />
 
-                        <TextareaControlled
-                            defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
-                            id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
-                            label={'Begrunnelse'}
-                            placeholder={'Begrunn vurderingen'}
-                            textareaClass={'generisk-vilkår__ekspandert--begrunnelse'}
-                            value={redigerbartVilkår.verdi.begrunnelse.verdi}
-                            feil={
-                                redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
-                                    Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                                    ? redigerbartVilkår.verdi.begrunnelse.feilmelding
-                                    : ''
-                            }
-                            onBlur={(event: any) => {
-                                validerOgSettRedigerbartVilkår({
-                                    ...redigerbartVilkår,
-                                    verdi: {
-                                        ...redigerbartVilkår.verdi,
-                                        begrunnelse: {
-                                            ...redigerbartVilkår.verdi.begrunnelse,
-                                            verdi: event?.target.value,
-                                        },
-                                    },
-                                });
-                            }}
-                        />
+                              <TextareaControlled
+                                  defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
+                                  id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
+                                  label={'Begrunnelse'}
+                                  placeholder={'Begrunn vurderingen'}
+                                  textareaClass={'generisk-vilkår__ekspandert--begrunnelse'}
+                                  value={redigerbartVilkår.verdi.begrunnelse.verdi}
+                                  feil={
+                                      redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
+                                          Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                                          ? redigerbartVilkår.verdi.begrunnelse.feilmelding
+                                          : ''
+                                  }
+                                  onBlur={(event: any) => {
+                                      validerOgSettRedigerbartVilkår({
+                                          ...redigerbartVilkår,
+                                          verdi: {
+                                              ...redigerbartVilkår.verdi,
+                                              begrunnelse: {
+                                                  ...redigerbartVilkår.verdi.begrunnelse,
+                                                  verdi: event?.target.value,
+                                              },
+                                          },
+                                      });
+                                  }}
+                              />
+                              <Knapp
+                                  onClick={() => {
+                                      const erVilkårGyldig: boolean =
+                                          redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
+                                              .valideringsstatus === Valideringsstatus.OK;
 
-                        <Knapp
-                            onClick={() => {
-                                const erVilkårGyldig: boolean =
-                                    redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
-                                        .valideringsstatus === Valideringsstatus.OK;
-
-                                settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
-                                if (erVilkårGyldig) {
-                                    settEkspandertVilkår(false);
-                                    settVisFeilmeldingerForEttVilkår(false);
-                                } else {
-                                    settVisFeilmeldingerForEttVilkår(true);
-                                }
-                            }}
-                            mini={true}
-                            type={'standard'}
-                        >
-                            Ferdig
-                        </Knapp>
-                        <Knapp onClick={() => toggleForm(false)} mini={true} type={'flat'}>
-                            Avbryt
-                        </Knapp>
-                    </div>
-                )}
+                                      settVilkårForPeriodeResultat(
+                                          person.personIdent,
+                                          redigerbartVilkår
+                                      );
+                                      if (erVilkårGyldig) {
+                                          settEkspandertVilkår(false);
+                                          settVisFeilmeldingerForEttVilkår(false);
+                                      } else {
+                                          settVisFeilmeldingerForEttVilkår(true);
+                                      }
+                                  }}
+                                  mini={true}
+                                  type={'standard'}
+                              >
+                                  Ferdig
+                              </Knapp>
+                              <Knapp onClick={() => toggleForm(false)} mini={true} type={'flat'}>
+                                  Avbryt
+                              </Knapp>
+                          </div>
+                      )
+                    : ekspandertVilkår && (
+                          <div className={'generisk-vilkår__ekspandert'}>
+                              <div className={'lese-element'}>
+                                  <Element>
+                                      {vilkårFraConfig.spørsmål
+                                          ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
+                                          : ''}
+                                  </Element>
+                                  <Normaltekst>
+                                      {redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
+                                          ? 'Ja'
+                                          : redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI
+                                          ? 'Nei'
+                                          : Error('TODO: Håndter - skal ikke skje?')}
+                                  </Normaltekst>
+                              </div>
+                              <div className={'lese-element'}>
+                                  <div className={'fastsett-periode__flex'}>
+                                      <div className={'lese-element'}>
+                                          <Element children={'F.o.m.'} />
+                                          <Normaltekst
+                                              children={
+                                                  redigerbartVilkår.verdi.periode.verdi.fom ?? '-'
+                                              }
+                                          />
+                                      </div>
+                                      <div className={'lese-element'}>
+                                          <Element children={'T.o.m.'} />
+                                          <Normaltekst
+                                              children={
+                                                  redigerbartVilkår.verdi.periode.verdi.tom ?? '-'
+                                              }
+                                          />
+                                      </div>
+                                  </div>
+                              </div>
+                              <div className={'lese-element'}>
+                                  <Element children={'Begrunnelse'} />
+                                  <Normaltekst
+                                      children={redigerbartVilkår.verdi.begrunnelse.verdi}
+                                  />
+                              </div>
+                          </div>
+                      )}
             </SkjemaGruppe>
         </li>
     );
