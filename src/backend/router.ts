@@ -4,19 +4,23 @@ import path from 'path';
 import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
 import { slackNotify } from './slack/slack';
+import WebpackDevMiddleware from 'webpack-dev-middleware';
 
-/* tslint:disable */
+// eslint-disable-next-line
 const packageJson = require('../package.json');
-/* tslint:enable */
 
-export default (authClient: Client, router: Router, middleware: any) => {
+export default (
+    authClient: Client,
+    router: Router,
+    middleware?: WebpackDevMiddleware.WebpackDevMiddleware
+) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
             .send({ status: 'SUKSESS', data: packageJson.version })
             .end();
     });
     router.get('/error', (_: Request, res: Response) => {
-        prometheusTellere.error_route.inc();
+        prometheusTellere.errorRoute.inc();
         res.sendFile('error.html', { root: path.join(`assets/`) });
     });
 
@@ -26,14 +30,14 @@ export default (authClient: Client, router: Router, middleware: any) => {
         res.status(200).send();
     });
 
-    router.post('/slack/notify/:kanal', (req: any, res: Response) => {
+    router.post('/slack/notify/:kanal', (req: Request, res: Response) => {
         slackNotify(req, res, req.params.kanal);
     });
 
     // APP
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' && middleware) {
         router.get('*', ensureAuthenticated(authClient, false), (_: Request, res: Response) => {
-            prometheusTellere.app_load.inc();
+            prometheusTellere.appLoad.inc();
 
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.write(
@@ -43,7 +47,7 @@ export default (authClient: Client, router: Router, middleware: any) => {
         });
     } else {
         router.get('*', ensureAuthenticated(authClient, false), (_: Request, res: Response) => {
-            prometheusTellere.app_load.inc();
+            prometheusTellere.appLoad.inc();
 
             res.sendFile('index.html', { root: path.join(__dirname, buildPath) });
         });

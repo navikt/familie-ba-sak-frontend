@@ -10,7 +10,7 @@
     "start:mock": "tsc --p ./src/mock-server/tsconfig.json && NODE_ENV=development node node_dev_dist/mock-server/server.js",
     "start:dev": "tsc --p ./src/backend/tsconfig.json && NODE_ENV=development node node_dist/server.js",
     "build": "yarn build:prod",
-    "build:prod": "tsc --noEmit && yarn lint && webpack --config ./build_n_deploy/webpack/webpack.prod.js",
+    "build:prod": "tsc --p ./src/backend/tsconfig.json && webpack --config ./build_n_deploy/webpack/webpack.prod.js",
     "snyk-protect": "snyk protect",
     "test": "jest",
     "test:one": "jest -t",
@@ -19,7 +19,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsc --noEmit && lint-staged"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {

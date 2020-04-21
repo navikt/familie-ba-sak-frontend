@@ -45,8 +45,13 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
         return false;
     }
 
-    // @ts-ignore
-    return side.steg <= BehandlingSteg[steg];
+    /**
+     * Litt stygg cast for å gjøre tsc fornøyd.
+     * Skrives kanskje om når vi har mer logikk rundt hvilke steg som skal være aktive i en behandling senere.
+     *  */
+    return side.steg !== undefined
+        ? side.steg <= ((BehandlingSteg[steg] as unknown) as BehandlingSteg)
+        : false;
 };
 
 export const visSide = (side: ISide, aktivBehandling?: IBehandling) => {

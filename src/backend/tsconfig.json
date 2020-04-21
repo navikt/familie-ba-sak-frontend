@@ -2,8 +2,7 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../../node_dist",
-        "baseUrl": "../",
+        "rootDir": ".",
     },
-    "exclude": ["./src/frontend"],
     "lib": ["es2015"]
   }

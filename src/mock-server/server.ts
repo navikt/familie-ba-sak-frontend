@@ -5,6 +5,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import path from 'path';
 import { Request, Response } from 'express';
 
+// eslint-disable-next-line
 const config = require('../../build_n_deploy/webpack/webpack.dev');
 
 const port = 8000;

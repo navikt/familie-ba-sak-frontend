@@ -2,7 +2,9 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../../node_dev_dist",
-        "baseUrl": "..",
+        "rootDir": "..",
+        "resolveJsonModule": true
     },
+    "include": [".", "./**/*.json", "./**/*.html"],
     "lib": ["es2015"]
   }

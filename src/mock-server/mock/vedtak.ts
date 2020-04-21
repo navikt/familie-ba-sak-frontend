@@ -1,4 +1,4 @@
-<html>
+export const vedtakHtml = `<html>
  <head>
   <meta charset="UTF-8">
   <style>body {
@@ -146,4 +146,4 @@ p, table {
    <p><br>Vedlegg:<br> Orientering om rettigheter og plikter NAV 33-00.05</p> 
   </div>
  </body>
-</html>
+</html>`;

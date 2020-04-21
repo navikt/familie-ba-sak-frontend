@@ -19,9 +19,8 @@ import { prometheusTellere } from './metrikker';
 import { attachToken, doProxy } from './proxy';
 import setupRouter from './router';
 
-/* tslint:disable */
+// eslint-disable-next-line
 const config = require('../build_n_deploy/webpack/webpack.dev');
-/* tslint:enable */
 
 const port = 8000;
 

@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
+import { vedtakHtml } from './mock/vedtak';
 
 const delayMs = 20;
 const app = express();
@@ -8,11 +9,7 @@ app.use(express.json({ limit: '200mb' }));
 app.use(express.urlencoded({ limit: '200mb', extended: true }));
 
 const lesMockFil = (filnavn: string) => {
-    try {
-        return fs.readFileSync(path.join(__dirname, '/mock/' + filnavn), 'UTF-8');
-    } catch (err) {
-        throw err;
-    }
+    return fs.readFileSync(path.join(__dirname, '/mock/' + filnavn), 'UTF-8');
 };
 
 app.get('/familie-ba-sak/api/fagsaker/:id', (req: Request, res: Response) => {
@@ -35,7 +32,7 @@ app.get('/familie-ba-sak/api/dokument/vedtak-html/3', (_: Request, res: Response
     setTimeout(
         () =>
             res.send({
-                data: lesMockFil(`vedtak.html`),
+                data: vedtakHtml,
                 status: 'SUKSESS',
             }),
         delayMs
