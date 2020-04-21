@@ -46,16 +46,26 @@ const OppgaveList: React.FunctionComponent = () => {
                             <td className={'regdato'}>
                                 {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
                             </td>
-                            <td className={'oppgavetype'}>{OppgavetypeFilter[oppg.oppgavetype]}</td>
+                            <td className={'oppgavetype'}>
+                                {
+                                    OppgavetypeFilter[
+                                        oppg.oppgavetype as keyof typeof OppgavetypeFilter
+                                    ]
+                                }
+                            </td>
                             <td className={'gjelder'}>
                                 {oppg.behandlingstema
-                                    ? GjelderFilter[oppg.behandlingstema]
+                                    ? GjelderFilter[
+                                          oppg.behandlingstema as keyof typeof GjelderFilter
+                                      ]
                                     : 'Ikke satt'}
                             </td>
                             <td className={'frist'}>
                                 {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
                             </td>
-                            <td className={'prioritet'}>{PrioritetFilter[oppg.prioritet]}</td>
+                            <td className={'prioritet'}>
+                                {PrioritetFilter[oppg.prioritet as keyof typeof PrioritetFilter]}
+                            </td>
                             <td>
                                 <div className={'beskrivelse'}>{oppg.beskrivelse}</div>
                             </td>
