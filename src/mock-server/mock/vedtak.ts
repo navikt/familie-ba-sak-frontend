@@ -7,7 +7,7 @@ export const vedtakHtml = `<html>
     max-width: 470px;
     color: #3E3832;
 }
-​
+
 * {
     margin: 0;
     padding: 0;
@@ -21,30 +21,30 @@ h1,h2,h3,h4,h5 {
 p, table {
     font-size: 0.875em; /* 14px/16=0.875em */
 }
-​
+
 @media only screen and (max-width: 480px) {
     h1 {
         font-size: 1.3em;
     }
-​
+
     h2 {
         font-size: 1.1em;
     }
-​
+
     h3 {
         font-size: 1em;
     }
 }
-​
+
 @media only screen and (max-width: 240px) {
     h2 {
         font-size: 1em;
     }
-​
+
     h3 {
         font-size: 0.875em;
     }
-​
+
     p {
         font-size: 0.750em;
     }

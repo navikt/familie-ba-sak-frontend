@@ -7,7 +7,7 @@ import { slackNotify } from './slack/slack';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
 
 // eslint-disable-next-line
-const packageJson = require('../package.json');
+const packageJson = require('../../package.json');
 
 export default (
     authClient: Client,

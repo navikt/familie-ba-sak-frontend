@@ -6,11 +6,11 @@
   "author": "Henning Håkonsen",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=production node node_dist/server.js",
-    "start:mock": "tsc --p ./src/mock-server/tsconfig.json && NODE_ENV=development node node_dev_dist/mock-server/server.js",
-    "start:dev": "tsc --p ./src/backend/tsconfig.json && NODE_ENV=development node node_dist/server.js",
+    "start": "NODE_ENV=production node node_dist/backend/server.js",
+    "start:mock": "tsc && NODE_ENV=development node node_dist/mock-server/server.js",
+    "start:dev": "tsc && NODE_ENV=development node node_dist/backend/server.js",
     "build": "yarn build:prod",
-    "build:prod": "tsc --p ./src/backend/tsconfig.json && webpack --config ./build_n_deploy/webpack/webpack.prod.js",
+    "build:prod": "tsc && yarn lint && webpack --config ./build_n_deploy/webpack/webpack.prod.js",
     "snyk-protect": "snyk protect",
     "test": "jest",
     "test:one": "jest -t",
@@ -105,7 +105,6 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "request-promise": "^4.2.5",
-    "ts-auto-mock": "^1.6.0",
     "uuid": "^7.0.2"
   },
   "devDependencies": {

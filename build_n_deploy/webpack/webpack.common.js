@@ -16,6 +16,7 @@ module.exports = {
             {
                 test: /\.(ts|tsx)$/,
                 enforce: 'pre',
+                exclude: /node_modules/,
                 use: [
                     {
                         options: {
@@ -24,7 +25,6 @@ module.exports = {
                         loader: require.resolve('eslint-loader'),
                     },
                 ],
-                exclude: /node_modules/,
             },
             {
                 test: /\.(js|ts|tsx)$/,
@@ -63,7 +63,7 @@ module.exports = {
             alwaysWriteToDisk: true,
         }),
         new TypeScriptTypeChecker({
-            tsconfig: path.join(__dirname, '../../src/frontend/tsconfig.json'),
+            tsconfig: path.join(__dirname, '../../tsconfig.json'),
         }),
         new webpack.NoEmitOnErrorsPlugin(),
         new OptimizeCssAssetsPlugin(),

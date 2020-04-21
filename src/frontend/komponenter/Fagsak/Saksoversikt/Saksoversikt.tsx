@@ -8,7 +8,6 @@ import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
 import {
-    behandlingsresultater,
     behandlingsstatuser,
     BehandlingStatus,
     Behandlingstype,
@@ -195,14 +194,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                                     behandlingstyper[behandling.type].navn
                                                 }`}
                                             />
-                                            <td
-                                                children={`${
-                                                    behandling
-                                                        ? behandlingsresultater[behandling.resultat]
-                                                              .navn
-                                                        : 'Ukjent'
-                                                }`}
-                                            />
+                                            <td children={`${'Ukjent'}`} />
                                             <td
                                                 children={`${formaterIsoDato(
                                                     behandling.opprettetTidspunkt,

@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
 import { vedtakHtml } from './mock/vedtak';
+import { mockFagsak3 } from './mock/fagsak';
 
 const delayMs = 20;
 const app = express();
@@ -14,7 +15,15 @@ const lesMockFil = (filnavn: string) => {
 
 app.get('/familie-ba-sak/api/fagsaker/:id', (req: Request, res: Response) => {
     const { id } = req.params;
-    setTimeout(() => res.send(lesMockFil(`fagsak-${id}.json`)), delayMs);
+    setTimeout(
+        () =>
+            res.send(
+                id === '3'
+                    ? mockFagsak3(parseInt(id, 10), '12345678910')
+                    : lesMockFil(`fagsak-${id}.json`)
+            ),
+        delayMs
+    );
 });
 
 app.get('/familie-ba-sak/api/person', (_: Request, res: Response) => {
