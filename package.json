@@ -15,12 +15,18 @@
     "test": "jest",
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
-    "lint-staged": "eslint './src/**/*.{js,ts,tsx}' --fix && git add ."
+    "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {
     "@navikt/boxed-list-with-links": "^1.0.2",
@@ -128,6 +134,7 @@
     "jest": "^25.2.7",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
+    "lint-staged": "^10.1.7",
     "mini-css-extract-plugin": "^0.9.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
