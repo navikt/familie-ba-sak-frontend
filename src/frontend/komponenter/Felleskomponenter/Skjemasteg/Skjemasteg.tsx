@@ -37,7 +37,9 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         type={'hoved'}
                         spinner={senderInn}
                         onClick={async () => {
-                            nesteOnClick();
+                            if (!senderInn) {
+                                nesteOnClick();
+                            }
                         }}
                         children={nesteKnappTittel ?? 'Neste'}
                     />
