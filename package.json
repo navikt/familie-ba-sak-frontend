@@ -15,18 +15,12 @@
     "test": "jest",
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
-    "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix"
+    "lint-staged": "eslint './src/**/*.{js,ts,tsx}' --fix && git add ."
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --fix",
-      "git add"
-    ]
   },
   "dependencies": {
     "@navikt/boxed-list-with-links": "^1.0.2",
