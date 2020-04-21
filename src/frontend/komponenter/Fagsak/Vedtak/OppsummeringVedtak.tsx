@@ -1,7 +1,6 @@
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
+import { Feilmelding } from 'nav-frontend-typografi';
 import * as React from 'react';
 import Confetti from 'react-confetti';
 import { useHistory } from 'react-router';
@@ -13,6 +12,7 @@ import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useApp } from '../../../context/AppContext';
 import { aktivVedtak } from '../../../api/fagsak';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -29,6 +29,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
 
     const [submitFeil, settSubmitFeil] = React.useState('');
+    const [senderInn, settSenderInn] = React.useState(false);
 
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
@@ -63,65 +64,65 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
         aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
 
+    const sendInn = () => {
+        settSenderInn(true);
+        settSubmitFeil('');
+        axiosRequest<IFagsak, void>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/${
+                aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
+                    ? 'iverksett-vedtak'
+                    : 'send-til-beslutter'
+            }`,
+        }).then((response: Ressurs<IFagsak>) => {
+            settSenderInn(false);
+            if (response.status === RessursStatus.SUKSESS) {
+                settFagsak(response);
+
+                if (aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER) {
+                    settMakeItRain(true);
+                    setTimeout(() => {
+                        settMakeItRain(false);
+                    }, 10000);
+                }
+            } else if (
+                response.status === RessursStatus.FEILET ||
+                response.status === RessursStatus.IKKE_TILGANG
+            ) {
+                settSubmitFeil(response.melding);
+                settSenderInn(false);
+            }
+        });
+    };
+
     return (
-        <div className="oppsummering">
-            {makeItRain && <Confetti />}
-            {errorMessage === undefined ? (
-                <div>
-                    <Systemtittel children={'Vedtaksbrev'} />
-                    <br />
-                    <iframe title="Vedtaksbrev" className="iframe" srcDoc={brev} />
-                    <br />
-                </div>
-            ) : (
-                <AlertStripe type="feil">{errorMessage}</AlertStripe>
-            )}
-
-            <div className={'oppsummering__navigering'}>
-                <Knapp
-                    type={'hoved'}
-                    onClick={(): void => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
-                    children={'Tilbake'}
-                />
-                {errorMessage === undefined && visSubmitKnapp && (
-                    <Knapp
-                        type={'hoved'}
-                        onClick={(): void => {
-                            axiosRequest<IFagsak, void>({
-                                method: 'POST',
-                                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/${
-                                    aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
-                                        ? 'iverksett-vedtak'
-                                        : 'send-til-beslutter'
-                                }`,
-                            }).then((response: Ressurs<IFagsak>) => {
-                                if (response.status === RessursStatus.SUKSESS) {
-                                    settFagsak(response);
-
-                                    if (
-                                        aktivBehandling?.status ===
-                                        BehandlingStatus.SENDT_TIL_BESLUTTER
-                                    ) {
-                                        settMakeItRain(true);
-                                        setTimeout(() => {
-                                            settMakeItRain(false);
-                                        }, 10000);
-                                    }
-                                } else if (response.status === RessursStatus.FEILET) {
-                                    settSubmitFeil(response.melding);
-                                }
-                            });
-                        }}
-                        children={
-                            aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
-                                ? 'Iverksett'
-                                : 'Send til beslutter'
-                        }
-                    />
+        <Skjemasteg
+            tittel={'Vedtaksbrev'}
+            forrigeOnClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
+            nesteOnClick={visSubmitKnapp ? sendInn : undefined}
+            nesteKnappTittel={
+                aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
+                    ? 'Iverksett'
+                    : 'Send til beslutter'
+            }
+            senderInn={senderInn}
+            maxWidthStyle="100%"
+        >
+            <div className="oppsummering">
+                {makeItRain && <Confetti />}
+                {errorMessage === undefined ? (
+                    <div>
+                        <br />
+                        <iframe title="Vedtaksbrev" className="iframe" srcDoc={brev} />
+                        <br />
+                    </div>
+                ) : (
+                    <AlertStripe type="feil">{errorMessage}</AlertStripe>
                 )}
+
+                {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
             </div>
-            {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
-        </div>
+        </Skjemasteg>
     );
 };
 

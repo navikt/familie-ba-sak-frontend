@@ -7,6 +7,7 @@ import {
     BehandlingUnderkategori,
     BehandlingStatus,
     Behandlingstype,
+    BehandlingResultat,
 } from '../../frontend/typer/behandling';
 import { PersonType, IPerson } from '../../frontend/typer/person';
 import { IRestPersonResultat, VilkårType, Resultat } from '../../frontend/typer/vilkår';
@@ -105,6 +106,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         personer: [barn, søker],
         begrunnelse: '',
+        samletResultat: BehandlingResultat.INNVILGET,
         opprettetTidspunkt: '2020-03-19T09:08:56.8',
         kategori: BehandlingKategori.NASJONAL,
         underkategori: BehandlingUnderkategori.ORDINÆR,

@@ -1,8 +1,8 @@
 import 'nav-frontend-tabell-style';
 import { Input } from 'nav-frontend-skjema';
-import { Systemtittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { IFagsak, fagsakStatus } from '../../../typer/fagsak';
+import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 
 import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
@@ -15,6 +15,7 @@ import {
     IBehandling,
     kategorier,
     underkategorier,
+    behandlingsresultater,
 } from '../../../typer/behandling';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
@@ -33,16 +34,12 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const [opphørsdato, setOpphørsdato] = React.useState('');
 
     const behandlingshistorikk = fagsak.behandlinger.filter(
-        (behandling: IBehandling) => !behandling.aktiv
-    );
-
-    const ferdigstilteBehandlinger = fagsak.behandlinger.filter(
         (behandling: IBehandling) => behandling.status === BehandlingStatus.FERDIGSTILT
     );
 
     let gjeldendeBehandling =
-        ferdigstilteBehandlinger.length > 0
-            ? ferdigstilteBehandlinger.sort((a, b) =>
+        behandlingshistorikk.length > 0
+            ? behandlingshistorikk.sort((a, b) =>
                   moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
               )[0]
             : undefined;
@@ -113,13 +110,13 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     {aktivVedtak?.personBeregninger
                                         .filter(
                                             (personBeregning: IPersonBeregning) =>
-                                                !personBeregning.ingenYtelse
+                                                personBeregning.ytelsePerioder.length > 0
                                         )
                                         .map((personBeregning: IPersonBeregning) => {
                                             return (
-                                                <tr key={personBeregning.personident}>
+                                                <tr key={personBeregning.personIdent}>
                                                     <td
-                                                        children={`${personBeregning.personident}`}
+                                                        children={`${personBeregning.personIdent}`}
                                                     />
                                                     <td children={`${personBeregning.beløp}`} />
                                                     <td children={`${personBeregning.stønadFom}`} />
@@ -194,7 +191,15 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                                     behandlingstyper[behandling.type].navn
                                                 }`}
                                             />
-                                            <td children={`${'Ukjent'}`} />
+                                            <td
+                                                children={`${
+                                                    behandling
+                                                        ? behandlingsresultater[
+                                                              behandling.samletResultat
+                                                          ].navn
+                                                        : 'Ukjent'
+                                                }`}
+                                            />
                                             <td
                                                 children={`${formaterIsoDato(
                                                     behandling.opprettetTidspunkt,
