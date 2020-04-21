@@ -65,7 +65,9 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                     bredde={'l'}
                                     label="Velg type"
                                     value={personBeregning.verdi.ytelseType}
-                                    onChange={event => {
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLSelectElement>
+                                    ): void => {
                                         dispatch({
                                             payload: {
                                                 index,
@@ -94,7 +96,9 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                 </Select>
                                 <Checkbox
                                     label={'Skal ikke ha ytelse'}
-                                    onChange={event => {
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
                                         dispatch({
                                             payload: {
                                                 index,
@@ -109,7 +113,9 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                 />
                                 <Checkbox
                                     label={'Skal ha delt ytelse'}
-                                    onChange={event => {
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
                                         dispatch({
                                             payload: {
                                                 index,
@@ -127,7 +133,9 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                     label={'Beløp'}
                                     value={personBeregning.verdi.beløp}
                                     type={'number'}
-                                    onChange={event => {
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
                                         dispatch({
                                             payload: {
                                                 index,
@@ -145,8 +153,9 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                     label={'Virkningstidspunkt - Fra og med'}
                                     value={personBeregning.verdi.stønadFom}
                                     placeholder={'MM.YY'}
-                                    autoFocus={true}
-                                    onChange={event => {
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
                                         dispatch({
                                             payload: {
                                                 index,
@@ -164,8 +173,9 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
                                     label={'Virkningstidspunkt - Til og med'}
                                     value={personBeregning.verdi.stønadTom}
                                     placeholder={'MM.YY'}
-                                    autoFocus={true}
-                                    onChange={event => {
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
                                         dispatch({
                                             payload: {
                                                 index,
@@ -187,7 +197,7 @@ const BeregningSkjema: React.FunctionComponent<IBeregningSkjema> = ({
     );
 };
 
-const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling) => {
+const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling): boolean => {
     if (!aktivVedtak) {
         return true;
     }
@@ -221,6 +231,8 @@ const harSkjemaEndringer = (context: IState, aktivVedtak?: IVedtakForBehandling)
                     personBeregning.beløp !== muligEndretPersonBeregning.verdi.beløp
                 ) {
                     return true;
+                } else {
+                    return false;
                 }
             }
         }) !== undefined

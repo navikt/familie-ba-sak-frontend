@@ -1,23 +1,22 @@
 module.exports = {
-    env: {
-        browser: true,
-        es6: true,
-    },
+    extends: [
+        'eslint:recommended',
+        'plugin:react-app/recommended',
+        'plugin:jsx-a11y/recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'prettier',
+        'prettier/@typescript-eslint',
+    ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
         },
-        ecmaVersion: 2018,
+        ecmaVersion: 2020,
         sourceType: 'module',
     },
-    plugins: ['react', '@typescript-eslint', 'prettier'],
-    extends: [
-        'airbnb',
-        'plugin:prettier/recommended',
-        'plugin:@typescript-eslint/eslint-recommended',
-        'plugin:@typescript-eslint/recommended',
-    ],
+    plugins: ['@typescript-eslint', 'react-app', 'prettier'],
     rules: {
         'import/extensions': [
             0,
@@ -29,15 +28,16 @@ module.exports = {
                 tsx: 'never',
             },
         ],
+        '@typescript-eslint/ban-ts-ignore': ['warn'],
         'prettier/prettier': 'error',
+        '@typescript-eslint/interface-name-prefix': 'off',
+        '@typescript-eslint/no-var-requires': 'warn',
         '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-unused-vars': 'off',
-        '@typescript-eslint/interface-name-prefix': 0,
-        'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+        'react-app/react-hooks/exhaustive-deps': 'off',
     },
     settings: {
         react: {
-            version: 'detect', // Tells eslint-plugin-react to automatically detect the version of React to use
+            version: 'detect',
         },
     },
 };

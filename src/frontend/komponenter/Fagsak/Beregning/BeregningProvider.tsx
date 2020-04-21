@@ -14,6 +14,7 @@ export enum actions {
 }
 
 export interface IAction {
+    // eslint-disable-next-line
     payload?: any;
     type: actions;
 }
@@ -55,7 +56,7 @@ const BeregningDispatchContext = React.createContext<Dispatch | undefined>(undef
 
 const beregningReducer = (state: IState, action: IAction): IState => {
     switch (action.type) {
-        case actions.SETT_PERSON_BEREGNINGER:
+        case actions.SETT_PERSON_BEREGNINGER: {
             const personBeregningerKopi = [...state.personBeregninger];
             personBeregningerKopi[action.payload.index] = personBeregningerKopi[
                 action.payload.index
@@ -68,13 +69,13 @@ const beregningReducer = (state: IState, action: IAction): IState => {
                 ...state,
                 personBeregninger: personBeregningerKopi,
             };
+        }
         default:
             return state;
     }
 };
 
 interface IBeregningProvider {
-    children: any;
     fagsak: IFagsak;
 }
 
@@ -90,6 +91,7 @@ const BeregningProvider: React.FunctionComponent<IBeregningProvider> = ({ childr
     );
 };
 
+// eslint-disable-next-line
 const useBeregningContext = () => {
     const context = React.useContext(BeregningStateContext);
     if (context === undefined) {
@@ -98,6 +100,7 @@ const useBeregningContext = () => {
     return context;
 };
 
+// eslint-disable-next-line
 const useBeregningDispatch = () => {
     const context = React.useContext(BeregningDispatchContext);
     if (context === undefined) {

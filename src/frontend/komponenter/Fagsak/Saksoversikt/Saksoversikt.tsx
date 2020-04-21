@@ -138,11 +138,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     label={'Fra og med-dato'}
                                     placeholder={'MM.YY'}
                                     value={opphørsdato}
-                                    onChange={(event: any) => setOpphørsdato(event.target.value)}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                                        setOpphørsdato(event.target.value)
+                                    }
                                 />
                                 <Knapp
                                     mini={true}
                                     onClick={() => {
+                                        // eslint-disable-next-line
                                         axiosRequest<any, any>({
                                             method: 'POST',
                                             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,

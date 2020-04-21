@@ -43,7 +43,7 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     React.useEffect(() => {
         if (aktivVedtak) {
-            aktivVedtak.personBeregninger.map((personBeregning, index) => {
+            aktivVedtak.personBeregninger.map((personBeregning, index) =>
                 dispatch({
                     payload: {
                         index,
@@ -54,8 +54,8 @@ const Beregning: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         },
                     },
                     type: actions.SETT_PERSON_BEREGNINGER,
-                });
-            });
+                })
+            );
         }
     }, []);
 

@@ -29,11 +29,15 @@ const FagsakContainer: React.FunctionComponent = () => {
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
     React.useEffect(() => {
-        if (
-            fagsak.status !== RessursStatus.SUKSESS ||
-            (fagsakId !== undefined && fagsak.data.id !== parseInt(fagsakId, 10))
-        ) {
-            hentFagsak(fagsakId!!);
+        if (fagsakId !== undefined) {
+            if (fagsak.status !== RessursStatus.SUKSESS) {
+                hentFagsak(fagsakId);
+            } else if (
+                fagsak.status === RessursStatus.SUKSESS &&
+                fagsak.data.id !== parseInt(fagsakId, 10)
+            ) {
+                hentFagsak(fagsakId);
+            }
         }
     }, [fagsakId]);
 

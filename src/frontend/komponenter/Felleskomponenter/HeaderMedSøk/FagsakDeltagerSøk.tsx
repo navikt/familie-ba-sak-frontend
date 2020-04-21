@@ -7,7 +7,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { useApp } from '../../../context/AppContext';
 
-/* tslint:disable */
+// eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
 
 const FagsakDeltagerSøk: React.FC = () => {
@@ -17,19 +17,19 @@ const FagsakDeltagerSøk: React.FC = () => {
     const [spinner, settSpinner] = React.useState<boolean>(false);
     const [søkfeil, settSøkfeil] = React.useState<string | undefined>(undefined);
 
-    const slettResultat = () => {
+    const slettResultat = (): void => {
         settSøkfeil(undefined);
         settResultat(undefined);
     };
 
-    const søk = (v: string) => {
+    const søk = (personIdent: string): void => {
         slettResultat();
         settSpinner(true);
         axiosRequest<IFagsakDeltager[], ISøkParam>({
             method: 'POST',
             url: 'familie-ba-sak/api/fagsaker/sok',
             data: {
-                personIdent: v,
+                personIdent,
             },
         })
             .then((response: Ressurs<IFagsakDeltager[]>) => {
@@ -51,7 +51,7 @@ const FagsakDeltagerSøk: React.FC = () => {
             });
     };
 
-    const fnrValidator = (verdi: string) => {
+    const fnrValidator = (verdi: string): boolean => {
         return validator.idnr(verdi).status === 'valid';
     };
 
@@ -83,10 +83,12 @@ const FagsakDeltagerSøk: React.FC = () => {
                             fagsakId={deltager.fagsakId?.toString()}
                             index={index}
                             key={index}
-                            onClick={idx =>
-                                resultat[idx].fagsakId &&
-                                history.push(`/fagsak/${resultat[idx].fagsakId}/saksoversikt`)
-                            }
+                            onClick={(index: number): void => {
+                                resultat[index].fagsakId &&
+                                    history.push(
+                                        `/fagsak/${resultat[index].fagsakId}/saksoversikt`
+                                    );
+                            }}
                         />
                     );
                 })}

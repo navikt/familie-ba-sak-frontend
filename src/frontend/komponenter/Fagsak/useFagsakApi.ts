@@ -115,7 +115,7 @@ const useFagsakApi = (
     ) => {
         // Basic validering av skjemaet
         const feilmeldinger: FeiloppsummeringFeil[] = [];
-        vilkårsvurdering.filter((personResultat: IPersonResultat) => {
+        vilkårsvurdering.filter((personResultat: IPersonResultat) =>
             Object.values(vilkårConfig)
                 .filter((vc: IVilkårConfig) =>
                     vc.parterDetteGjelderFor.includes(personResultat.person.type)
@@ -133,8 +133,8 @@ const useFagsakApi = (
                             feilmelding: `Vilkåret '${vc.key}' er ikke vurdert for ${personResultat.person.navn}`,
                         });
                     }
-                });
-        });
+                })
+        );
 
         settSenderInn(true);
         axiosRequest<IFagsak, IRestVilkårsvurdering>({
@@ -157,7 +157,7 @@ const useFagsakApi = (
             method: 'PUT',
             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
         })
-            .then((response: Ressurs<any>) => {
+            .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
@@ -236,34 +236,40 @@ const useFagsakApi = (
                 };
 
                 const vedtakId = aktivVedtak(fagsak)?.id;
+
+                // eslint-disable-next-line
                 axiosRequest<IFagsak, any>({
                     data: dataTilKalkulator,
                     method: 'PUT',
                     url: `/familie-ba-sak/api/kalkulator`,
                 });
-                return axiosRequest<IFagsak, any>({
-                    data: dataTilIverksetting,
-                    method: 'PUT',
-                    url: `/familie-ba-sak/api/vedtak/${vedtakId}/beregning`,
-                })
-                    .then((response: Ressurs<any>) => {
-                        settSenderInn(false);
-                        if (response.status === RessursStatus.SUKSESS) {
-                            settFagsak(response);
-
-                            history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
-                        } else if (response.status === RessursStatus.FEILET) {
-                            settFeilmelding(response.melding);
-                            settVisFeilmeldinger(true);
-                        } else {
-                            settFeilmelding('Opprettelse av vedtak feilet');
-                            settVisFeilmeldinger(true);
-                        }
+                return (
+                    // eslint-disable-next-line
+                    axiosRequest<IFagsak, any>({
+                        data: dataTilIverksetting,
+                        method: 'PUT',
+                        url: `/familie-ba-sak/api/vedtak/${vedtakId}/beregning`,
                     })
-                    .catch(() => {
-                        settSenderInn(false);
-                        settFeilmelding('Opprettelse av vedtak feilet');
-                    });
+                        // eslint-disable-next-line
+                        .then((response: Ressurs<any>) => {
+                            settSenderInn(false);
+                            if (response.status === RessursStatus.SUKSESS) {
+                                settFagsak(response);
+
+                                history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
+                            } else if (response.status === RessursStatus.FEILET) {
+                                settFeilmelding(response.melding);
+                                settVisFeilmeldinger(true);
+                            } else {
+                                settFeilmelding('Opprettelse av vedtak feilet');
+                                settVisFeilmeldinger(true);
+                            }
+                        })
+                        .catch(() => {
+                            settSenderInn(false);
+                            settFeilmelding('Opprettelse av vedtak feilet');
+                        })
+                );
             } else {
                 history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
             }

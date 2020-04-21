@@ -57,7 +57,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 'Vi finner ingen aktive vedtak på behandlingen, vennligst gå tilbake og fastsett vedtak.'
             );
         }
-    }, []);
+    }, [fagsak, axiosRequest]);
 
     const visSubmitKnapp =
         aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
@@ -80,13 +80,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             <div className={'oppsummering__navigering'}>
                 <Knapp
                     type={'hoved'}
-                    onClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
+                    onClick={(): void => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
                     children={'Tilbake'}
                 />
                 {errorMessage === undefined && visSubmitKnapp && (
                     <Knapp
                         type={'hoved'}
-                        onClick={() => {
+                        onClick={(): void => {
                             axiosRequest<IFagsak, void>({
                                 method: 'POST',
                                 url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/${
