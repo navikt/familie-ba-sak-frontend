@@ -7,7 +7,6 @@ import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { BehandlerRolle } from '../typer/behandling';
 import { gruppeIdTilRolle } from '../utils/behandling';
-import { useHistory } from 'react-router';
 
 export interface IModal {
     content: string;
