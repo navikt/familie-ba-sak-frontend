@@ -21,6 +21,7 @@ import moment from 'moment';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import { Undertittel } from 'nav-frontend-typografi';
 import { ISaksbehandler } from '../../typer/saksbehandler';
+import { ISODateString } from 'nav-datovelger';
 
 interface IProps {
     innloggetSaksbehandler?: ISaksbehandler;
@@ -35,7 +36,9 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
     const [dokumentType, settDokumenttype] = useState('');
     const [annetInnhold, settAnnetInnhold] = useState('');
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
-    const [mottattDato, settMottattDato] = useState(moment(undefined).format(datoformat.ISO_DAG));
+    const [mottattDato, settMottattDato] = useState<string>(
+        moment(undefined).format(datoformat.ISO_DAG)
+    );
     const [senderInn, settSenderInn] = useState(false);
     const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
 
@@ -169,7 +172,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                         id={'manuell-journalføring-dokumenttype'}
                         label={'Dokumenttype'}
                         value={dokumentType}
-                        onChange={(event: any) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             settDokumenttype(event.target.value);
                             validerSkjema();
                         }}
@@ -180,7 +183,11 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                         id={'manuell-journalføring-mottatt-dato'}
                         label={'Mottatt dato'}
                         valgtDato={mottattDato}
-                        onChange={(dato: string) => settMottattDato(dato)}
+                        onChange={(dato?: ISODateString) => {
+                            if (dato) {
+                                settMottattDato(dato);
+                            }
+                        }}
                     />
 
                     <br />
@@ -189,7 +196,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                         id={'manuell-journalføring-annet-innhold'}
                         label={'Annet innhold'}
                         value={annetInnhold}
-                        onChange={(event: any) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             settAnnetInnhold(event.target.value);
                             validerSkjema();
                         }}
