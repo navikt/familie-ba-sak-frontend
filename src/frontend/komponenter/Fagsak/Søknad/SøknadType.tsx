@@ -20,14 +20,14 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
             <br />
             <Sakstype
                 kategori={søknad.kategori}
-                kategoriOnChange={(behandlingKategori: BehandlingKategori) =>
+                kategoriOnChange={(behandlingKategori: BehandlingKategori): void =>
                     settSøknad({
                         ...søknad,
                         kategori: behandlingKategori,
                     })
                 }
                 underkategori={søknad.underkategori}
-                underkategoriOnChange={(behandlingUnderkategori: BehandlingUnderkategori) =>
+                underkategoriOnChange={(behandlingUnderkategori: BehandlingUnderkategori): void =>
                     settSøknad({
                         ...søknad,
                         underkategori: behandlingUnderkategori,
@@ -41,7 +41,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
                 label="Type søker"
                 bredde={'l'}
                 value={søknad.typeSøker}
-                onChange={(event: any) => {
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                     if ((event.target.value as TypeSøker) === søknad.typeSøker) {
                         settSøknad({
                             ...søknad,

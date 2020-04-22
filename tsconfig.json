@@ -2,9 +2,11 @@
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "outDir": "node_dist",
-        "baseUrl": "./src/backend",
+        "baseUrl": "./src",
+        "rootDir": "./src",
+        "resolveJsonModule": true
     },
-    "include": ["./src/backend"],
+    "include": ["./src/backend", "./src/mock-server", "./src/mock-server/**/*.json"],
     "exclude": ["./src/frontend"],
     "lib": ["es2015"]
   }

@@ -30,7 +30,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
                     bredde={'XL'}
                     value={ident.verdi}
                     placeholder={'fnr/dnr'}
-                    onChange={(event: any) => {
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         settIdent(validerFelt(event.target.value, ident));
                     }}
                     feil={

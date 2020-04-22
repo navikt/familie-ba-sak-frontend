@@ -35,7 +35,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
 
             if (
                 aktivBehandling &&
-                parseInt(BehandlingSteg[aktivBehandling!!.steg], 10) >=
+                parseInt(BehandlingSteg[aktivBehandling.steg], 10) >=
                     BehandlingSteg.VILKÅRSVURDERING
             ) {
                 axiosRequest<ISøknadDTO, void>({
