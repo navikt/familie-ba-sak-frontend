@@ -52,7 +52,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         bredde={'S'}
                         value={søknad.søkerMedOpplysninger.komTilNorge}
                         placeholder={'MM.YY'}
-                        onChange={(event: any) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             settSøknad({
                                 ...søknad,
                                 søkerMedOpplysninger: {
@@ -85,7 +85,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         value={søknad.søkerMedOpplysninger.tilleggsopplysninger ?? ''}
                         placeholder={'Skriv her'}
                         maxLength={500}
-                        onChange={(event: any) => {
+                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
                             settSøknad({
                                 ...søknad,
                                 søkerMedOpplysninger: {

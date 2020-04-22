@@ -109,7 +109,7 @@ const useFagsakApi = (
     ) => {
         // Basic validering av skjemaet
         const feilmeldinger: FeiloppsummeringFeil[] = [];
-        vilkårsvurdering.filter((personResultat: IPersonResultat) => {
+        vilkårsvurdering.filter((personResultat: IPersonResultat) =>
             Object.values(vilkårConfig)
                 .filter((vc: IVilkårConfig) =>
                     vc.parterDetteGjelderFor.includes(personResultat.person.type)
@@ -127,8 +127,8 @@ const useFagsakApi = (
                             feilmelding: `Vilkåret '${vc.key}' er ikke vurdert for ${personResultat.person.navn}`,
                         });
                     }
-                });
-        });
+                })
+        );
 
         settSenderInn(true);
         axiosRequest<IFagsak, IRestVilkårsvurdering>({
@@ -151,7 +151,7 @@ const useFagsakApi = (
             method: 'PUT',
             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
         })
-            .then((response: Ressurs<any>) => {
+            .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);

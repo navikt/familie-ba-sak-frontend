@@ -75,7 +75,7 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
         return søknadenErGyldig;
     };
 
-    const settBarn = (barn: IBarnMedOpplysninger) => {
+    const settBarn = (barn: IBarnMedOpplysninger): void => {
         settSøknad({
             ...søknad,
             barnaMedOpplysninger: søknad.barnaMedOpplysninger.map((it: IBarnMedOpplysninger) =>

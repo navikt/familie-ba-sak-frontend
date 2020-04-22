@@ -59,8 +59,8 @@ export interface IBehandling {
     behandlingId: number;
     kategori: BehandlingKategori;
     opprettetTidspunkt: string;
-    personer: IPerson[];
     personResultater: IRestPersonResultat[];
+    personer: IPerson[];
     samletResultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;

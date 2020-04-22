@@ -19,9 +19,8 @@ import { prometheusTellere } from './metrikker';
 import { attachToken, doProxy } from './proxy';
 import setupRouter from './router';
 
-/* tslint:disable */
-const config = require('../build_n_deploy/webpack/webpack.dev');
-/* tslint:enable */
+// eslint-disable-next-line
+const config = require('../../build_n_deploy/webpack/webpack.dev');
 
 const port = 8000;
 
@@ -37,7 +36,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         app.use(middleware);
         app.use(webpackHotMiddleware(compiler));
     } else {
-        app.use('/assets', express.static(path.join(__dirname, '..', 'frontend_production')));
+        app.use('/assets', express.static(path.join(__dirname, '../../frontend_production')));
     }
 
     app.use(
