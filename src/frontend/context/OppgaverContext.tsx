@@ -65,26 +65,29 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         enhet?: string,
         saksbehandler?: string
     ): Promise<Ressurs<IOppgave[]>> => {
-        const params = new Array<string>();
-        if (behandlingstema) {
-            params.push(`behandlingstema=${behandlingstema}`);
+        interface LooseObject {
+            [key: string]: any;
         }
-        if (oppgavetype) {
-            params.push(`oppgavetype=${oppgavetype}`);
-        }
-        if (enhet) {
-            params.push(`enhet=${enhet}`);
-        }
-        if (saksbehandler) {
-            params.push(`saksbehandler=${saksbehandler}`);
+        const searchParams: LooseObject = {};
+
+        if (behandlingstema !== undefined) {
+            searchParams['behandlingstema'] = behandlingstema;
         }
 
-        let query = params.length > 0 ? '?' : '';
+        if (oppgavetype !== undefined) {
+            searchParams['oppgavetype'] = oppgavetype;
+        }
 
-        params.forEach((p, i) => {
-            query += i === 0 ? '' : '&';
-            query += p;
-        });
+        if (enhet !== undefined) {
+            searchParams['enhet'] = enhet;
+        }
+
+        if (saksbehandler !== undefined) {
+            searchParams['saksbehandler'] = saksbehandler;
+        }
+
+        let query = new URLSearchParams(searchParams).toString();
+        query = query === '' ? query : '?' + query;
 
         settOppgaver({
             ...oppgaver,
