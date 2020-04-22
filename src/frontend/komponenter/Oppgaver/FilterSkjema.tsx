@@ -102,7 +102,7 @@ interface IFilterSkjemaProps {
 }
 
 const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSaksbehandler }) => {
-    const { hentOppgaver, filterOppgaver, oppgaver } = useOppgaver();
+    const { hentOppgaver, oppgaver } = useOppgaver();
     const [filtre, settFiltre] = useState<IOppgaverFilter[]>(initialFiltre(innloggetSaksbehandler));
     const [frist, settFrist] = useState<string>('');
     const [registrertDato, settRegistrertDato] = useState<string>('');
@@ -190,19 +190,15 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                                 filtre.find(filter => filter.name === 'Behandlingstema')!!
                             ),
                             getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!),
-                            getEnhet(filtre.find(filter => filter.name === 'Enhet')!!)
-                        ).then((oppgaverRes: Ressurs<IOppgave[]>) => {
-                            filterOppgaver(
-                                oppgaverRes,
-                                getPrioritet(filtre.find(filter => filter.name === 'Prioritet')!),
-                                getDato(frist),
-                                getDato(registrertDato),
-                                getSaksbehandler(
-                                    filtre.find(filter => filter.name === 'Saksbehandler')!,
-                                    innloggetSaksbehandler
-                                )
-                            );
-                        });
+                            getEnhet(filtre.find(filter => filter.name === 'Enhet')!!),
+                            getPrioritet(filtre.find(filter => filter.name === 'Prioritet')!),
+                            getDato(frist),
+                            getDato(registrertDato),
+                            getSaksbehandler(
+                                filtre.find(filter => filter.name === 'Saksbehandler')!,
+                                innloggetSaksbehandler
+                            )
+                        );
                     }}
                     spinner={oppgaver.status === RessursStatus.HENTER}
                     className="filterskjema__button"

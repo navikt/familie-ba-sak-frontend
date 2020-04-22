@@ -134,7 +134,6 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                 },
                             })
                                 .then((fagsakId: Ressurs<string>) => {
-                                    console.log(fagsakId);
                                     settSenderInn(false);
                                     if (
                                         fagsakId.status === RessursStatus.SUKSESS &&
