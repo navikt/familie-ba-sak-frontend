@@ -1,13 +1,9 @@
+import { BehandlerRolle } from '../../../typer/behandling';
+
 export enum Tabs {
     Historikk,
     Meldinger,
     Dokumenter,
-}
-
-export enum BehandlerRolle {
-    SYSTEM = 'SYSTEM',
-    SAKSBEHANDLER = 'SAKSBEHANDLER',
-    BESLUTTER = 'BESLUTTER',
 }
 
 export interface Hendelse {
