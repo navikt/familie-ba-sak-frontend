@@ -77,6 +77,10 @@ const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IPro
             innloggetSaksbehandler,
             'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
         );
+        axiosRequest<void, void>({
+            method: 'GET',
+            url: '/error',
+        });
     };
 
     return {

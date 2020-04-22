@@ -100,3 +100,7 @@ export const apiLoggFeil = (melding: string) => {
         melding,
     });
 };
+
+export const tilFeilside = () => {
+    return preferredAxios.get('/error');
+};
