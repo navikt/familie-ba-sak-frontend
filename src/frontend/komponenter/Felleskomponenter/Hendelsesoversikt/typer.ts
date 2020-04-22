@@ -1,3 +1,5 @@
+import { BehandlerRolle } from '../../../typer/behandling';
+
 export enum Tabs {
     Historikk,
     Meldinger,
