@@ -7,6 +7,7 @@ import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { BehandlerRolle } from '../typer/behandling';
 import { gruppeIdTilRolle } from '../utils/behandling';
+import { useHistory } from 'react-router';
 
 export interface IModal {
     content: string;
@@ -31,6 +32,7 @@ interface IProps {
 const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IProps) => {
     const [autentisert, settAutentisert] = React.useState(true);
     const [modal, settModal] = React.useState<IModal>(initalState);
+    const history = useHistory();
 
     const åpneModal = () => {
         settModal({
@@ -77,10 +79,7 @@ const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IPro
             innloggetSaksbehandler,
             'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
         );
-        axiosRequest<void, void>({
-            method: 'GET',
-            url: '/error',
-        });
+        history.push(`/error`);
     };
 
     return {
