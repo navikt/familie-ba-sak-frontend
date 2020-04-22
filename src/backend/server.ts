@@ -36,7 +36,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         app.use(middleware);
         app.use(webpackHotMiddleware(compiler));
     } else {
-        app.use('/assets', express.static(path.join(__dirname, '..', 'frontend_production')));
+        app.use('/assets', express.static(path.join(__dirname, '../../frontend_production')));
     }
 
     app.use(
