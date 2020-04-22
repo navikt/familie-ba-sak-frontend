@@ -19,7 +19,7 @@ module.exports = {
     plugins: ['@typescript-eslint', 'react-app', 'prettier'],
     rules: {
         'import/extensions': [
-            0,
+            'off',
             'ignorePackages',
             {
                 js: 'never',
