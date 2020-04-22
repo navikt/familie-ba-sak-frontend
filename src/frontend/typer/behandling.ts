@@ -49,6 +49,7 @@ export enum BehandlingResultat {
 
 export enum BehandlerRolle {
     SYSTEM,
+    VEILEDER,
     SAKSBEHANDLER,
     BESLUTTER,
 }
