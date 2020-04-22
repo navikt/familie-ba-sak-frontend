@@ -10,9 +10,9 @@ import { init } from '@sentry/browser';
 import App from './komponenter/App';
 import moment from 'moment';
 
-/* tslint:disable */
+// eslint-disable-next-line
 const packageConfig = require('../../package.json');
-/* tslint:enable */
+
 const environment = window.location.hostname;
 
 init({

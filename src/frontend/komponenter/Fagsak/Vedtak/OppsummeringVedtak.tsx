@@ -58,7 +58,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 'Vi finner ingen aktive vedtak på behandlingen, vennligst gå tilbake og fastsett vedtak.'
             );
         }
-    }, []);
+    }, [fagsak, axiosRequest]);
 
     const visSubmitKnapp =
         aktivBehandling?.status === BehandlingStatus.OPPRETTET ||

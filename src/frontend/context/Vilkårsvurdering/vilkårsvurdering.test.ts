@@ -57,7 +57,7 @@ const mockVilkår = (
     vilkårType: VilkårType,
     resultat: Resultat,
     periode: IPeriode,
-    begrunnelse: string = 'mock'
+    begrunnelse = 'mock'
 ): IFelt<IVilkårResultat> =>
     validerVilkår(
         lagInitiellFelt(

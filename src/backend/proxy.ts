@@ -14,6 +14,7 @@ const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     }
 };
 
+// eslint-disable-next-line
 export const doProxy: any = () => {
     return createProxyMiddleware('/familie-ba-sak/api', {
         changeOrigin: true,

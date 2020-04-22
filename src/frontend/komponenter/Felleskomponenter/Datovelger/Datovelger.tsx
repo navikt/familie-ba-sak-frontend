@@ -1,13 +1,13 @@
 import React from 'react';
 import { Label } from 'nav-frontend-skjema';
-import { Datovelger as NavDatovelger } from 'nav-datovelger';
+import { Datovelger as NavDatovelger, ISODateString } from 'nav-datovelger';
 import 'nav-datovelger/lib/styles/datovelger';
 
 interface IProps {
     disabled?: boolean;
     id: string;
     label: string;
-    onChange: (dato: any) => void;
+    onChange: (dato?: ISODateString) => void;
     placeholder?: string;
     valgtDato?: string;
     className?: string;

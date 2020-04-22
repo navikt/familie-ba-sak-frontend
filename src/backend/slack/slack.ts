@@ -21,7 +21,7 @@ const agent =
  */
 export const slackNotify = (req: Request, res: ExpressResponse, kanal: string) => {
     const displayName = req.session?.user.displayName ? req.session.user.displayName : 'System';
-    const formatertMelding: string = `*${displayName}, ${namespace}*\n ${req.body.melding}`;
+    const formatertMelding = `*${displayName}, ${namespace}*\n ${req.body.melding}`;
 
     logRequest(req, `Poster slack melding til #${kanal}: ${formatertMelding}`, LOG_LEVEL.INFO);
     fetch('https://slack.com/api/chat.postMessage', {
@@ -39,6 +39,7 @@ export const slackNotify = (req: Request, res: ExpressResponse, kanal: string) =
         .then((_: Response) => {
             res.status(200).send('OK');
         })
+        // eslint-disable-next-line
         .catch((error: any) => {
             logRequest(
                 req,

@@ -10,6 +10,7 @@ import {
     MannIkon,
     NøytralPersonIkon,
 } from '@navikt/familie-ikoner';
+
 import { kjønnType } from '@navikt/familie-typer';
 
 import { FagsakDeltagerRolle } from '../../../typer/fagsakdeltager';

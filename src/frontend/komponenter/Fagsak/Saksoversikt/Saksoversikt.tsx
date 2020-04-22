@@ -8,7 +8,6 @@ import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { useHistory } from 'react-router';
 import {
-    behandlingsresultater,
     behandlingsstatuser,
     BehandlingStatus,
     Behandlingstype,
@@ -16,6 +15,7 @@ import {
     IBehandling,
     kategorier,
     underkategorier,
+    behandlingsresultater,
 } from '../../../typer/behandling';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
@@ -134,11 +134,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     label={'Fra og med-dato'}
                                     placeholder={'MM.YY'}
                                     value={opphørsdato}
-                                    onChange={(event: any) => setOpphørsdato(event.target.value)}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                                        setOpphørsdato(event.target.value)
+                                    }
                                 />
                                 <Knapp
                                     mini={true}
                                     onClick={() => {
+                                        // eslint-disable-next-line
                                         axiosRequest<any, any>({
                                             method: 'POST',
                                             url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,

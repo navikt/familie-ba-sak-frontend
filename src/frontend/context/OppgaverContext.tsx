@@ -37,7 +37,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         registrertDato?: string,
         saksbehandler?: string
     ) => {
-        hentOppgaverFraBackend(behandlingstema, oppgavetype, enhet, saksbehandler).then(
+        const saksbehandlerForBackend =
+            saksbehandler !== Object.keys(SaksbehandlerFilter)[0] &&
+            saksbehandler !== Object.keys(SaksbehandlerFilter)[1]
+                ? saksbehandler
+                : undefined;
+        hentOppgaverFraBackend(behandlingstema, oppgavetype, enhet, saksbehandlerForBackend).then(
             (oppgaverRessurs: Ressurs<IOppgave[]>) => {
                 if (oppgaverRessurs.status === RessursStatus.SUKSESS) {
                     const filteredOppgaver = filterOppgaver(

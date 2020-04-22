@@ -1,3 +1,10 @@
+export enum Valideringsstatus {
+    FEIL = 'FEIL',
+    ADVARSEL = 'ADVARSEL',
+    OK = 'OK',
+    IKKE_VALIDERT = 'IKKE_VALIDERT',
+}
+
 export const ok = <T>(felt: IFelt<T>): IFelt<T> => {
     return {
         feilmelding: '',
@@ -15,13 +22,6 @@ export const feil = <T>(felt: IFelt<T>, feilmelding: string): IFelt<T> => {
         verdi: felt.verdi,
     };
 };
-
-export enum Valideringsstatus {
-    FEIL = 'FEIL',
-    ADVARSEL = 'ADVARSEL',
-    OK = 'OK',
-    IKKE_VALIDERT = 'IKKE_VALIDERT',
-}
 
 export type ValiderIFelt<T> = (felt: IFelt<T>) => IFelt<T>;
 

@@ -8,7 +8,7 @@ import { Resultat } from '../typer/vilkår';
 
 export type IIdentFelt = IFelt<string>;
 
-// tslint:disable-next-line: no-var-requires
+// eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
 
 const harFyltInnIdent = (felt: IIdentFelt): IIdentFelt => {

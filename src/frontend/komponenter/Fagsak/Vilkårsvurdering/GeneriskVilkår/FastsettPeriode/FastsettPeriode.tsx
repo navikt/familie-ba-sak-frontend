@@ -8,6 +8,7 @@ import { datoformatNorsk } from '../../../../../utils/formatter';
 import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
+import { ISODateString } from 'nav-datovelger';
 
 interface IProps {
     redigerbartVilkår: IFelt<IVilkårResultat>;
@@ -47,7 +48,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                         )}__fastsett-periode-fom`}
                         label={'F.o.m.'}
                         placeholder={datoformatNorsk.DATO}
-                        onChange={(dato: string) => {
+                        onChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
                                 verdi: {
@@ -74,7 +75,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                         )}__fastsett-periode-tom`}
                         label={'T.o.m.'}
                         placeholder={datoformatNorsk.DATO}
-                        onChange={(dato: string) => {
+                        onChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
                                 verdi: {

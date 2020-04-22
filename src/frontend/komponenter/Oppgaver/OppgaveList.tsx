@@ -75,15 +75,9 @@ const OppgaveList: React.FunctionComponent = () => {
                                 {oppg.tilordnetRessurs ? oppg.tilordnetRessurs : 'Ikke tildelt'}
                             </td>
                             <td className={'handlinger'}>
-                                <a
-                                    href={
-                                        oppg.oppgavetype === OppgavetypeFilter.JFR
-                                            ? `/oppgaver/journalfør/${oppg.id}`
-                                            : ''
-                                    }
-                                >
-                                    Gå til oppg
-                                </a>
+                                {oppg.oppgavetype === OppgavetypeFilter.JFR && (
+                                    <a href={`/oppgaver/journalfør/${oppg.id}`}>Gå til oppg</a>
+                                )}
                             </td>
                         </tr>
                     ))}

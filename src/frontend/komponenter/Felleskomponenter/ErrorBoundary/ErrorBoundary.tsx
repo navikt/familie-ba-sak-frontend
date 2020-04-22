@@ -10,12 +10,13 @@ interface IProps {
 }
 
 class ErrorBoundary extends React.Component<IProps> {
-    public constructor(props: any) {
+    public constructor(props: IProps) {
         super(props);
     }
 
-    public componentDidCatch(error: any, info: any) {
-        // tslint:disable-next-line: no-console
+    // eslint-disable-next-line
+    public componentDidCatch(error: any, info: any): void {
+        // eslint-disable-next-line: no-console
         console.log(error, info);
         if (process.env.NODE_ENV !== 'development') {
             configureScope(scope => {
@@ -41,7 +42,7 @@ class ErrorBoundary extends React.Component<IProps> {
         }
     }
 
-    render() {
+    render(): React.ReactNode {
         return this.props.children;
     }
 }

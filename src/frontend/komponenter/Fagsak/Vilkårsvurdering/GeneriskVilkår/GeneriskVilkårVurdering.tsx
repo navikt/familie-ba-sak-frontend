@@ -172,7 +172,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     ? redigerbartVilkår.verdi.begrunnelse.feilmelding
                                     : ''
                             }
-                            onBlur={(event: any) => {
+                            onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                                 validerOgSettRedigerbartVilkår({
                                     ...redigerbartVilkår,
                                     verdi: {
