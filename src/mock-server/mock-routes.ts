@@ -61,7 +61,6 @@ app.get('/familie-ba-sak/api/logg/2', (_: Request, res: Response) => {
 });
 
 app.get('/familie-ba-sak/api/vedtak/oversikt/2', (_: Request, res: Response) => {
-    console.log('Truffet mock-endepunkt for beregning-oversikt');
     setTimeout(() => res.send(lesMockFil(`beregning-oversikt-1.json`)), delayMs);
 });
 
