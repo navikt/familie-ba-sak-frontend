@@ -32,7 +32,6 @@ interface IProps {
 const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IProps) => {
     const [autentisert, settAutentisert] = React.useState(true);
     const [modal, settModal] = React.useState<IModal>(initalState);
-    const history = useHistory();
 
     const åpneModal = () => {
         settModal({
@@ -79,7 +78,6 @@ const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IPro
             innloggetSaksbehandler,
             'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
         );
-        history.push(`/error`);
     };
 
     return {
