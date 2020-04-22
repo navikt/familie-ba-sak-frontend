@@ -82,14 +82,23 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 status: RessursStatus.SUKSESS,
                 data: oppgaverRes.data.filter(
                     oppgave =>
+                        //if "prioritet" parameter is set, only accept the oppgave with the same prioritet value
                         (!prioritet || oppgave.prioritet === prioritet.toString()) &&
+                        //if "frist" parameter is set, only accept the oppgave with the same frist value
                         (!frist || oppgave.fristFerdigstillelse === frist) &&
+                        //if "registrertDato" parameter is set, only accept the oppgave with the same opprettetTidspunkt,
+                        //because the opprettetTidspunkt field of oppgave is in a complete time format like YYYY-MM-DD HH:MM:SS
+                        //we have to take the first part of the field by substring()
                         (!registrertDato ||
                             oppgave.opprettetTidspunkt.substring(0, 10) === registrertDato) &&
+                        //if "saksbehandler" parameter is set, we need to check the tilordnedRessurs of oppgave
                         (!saksbehandler ||
+                            //if "saksbehandler" is set to 'Alle', all oppgave will be accepted
                             saksbehandler === Object.keys(SaksbehandlerFilter)[0] ||
+                            //if "saksbehandler" is set to 'AlleUfordelte', all oppgave without tilordnedRessurs will be accepted
                             (saksbehandler === Object.keys(SaksbehandlerFilter)[1] &&
                                 !oppgave.tilordnetRessurs) ||
+                            //if "saksbehandler" is set to other values, only oppgave with tilordnedRessurs === saksbehandler will be accepted
                             saksbehandler === oppgave.tilordnetRessurs)
                 ),
             });
