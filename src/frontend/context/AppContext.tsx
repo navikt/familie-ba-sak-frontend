@@ -72,6 +72,11 @@ const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IPro
             });
             return rolle;
         }
+        loggFeil(
+            undefined,
+            innloggetSaksbehandler,
+            'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
+        );
     };
 
     return {
