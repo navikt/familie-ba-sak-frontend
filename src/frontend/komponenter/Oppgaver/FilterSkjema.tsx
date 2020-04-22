@@ -23,34 +23,38 @@ type IOppgaverFilter = {
     selectedValue: string;
 };
 
-const initialFiltre = (innloggetSaksbehandler?: ISaksbehandler): IOppgaverFilter[] => {
-    return [
-        {
-            name: 'Enhet',
+interface IOppgaverFiltre {
+    [key: string]: IOppgaverFilter;
+}
+
+const initialFiltre = (innloggetSaksbehandler?: ISaksbehandler): IOppgaverFiltre => {
+    return {
+        enhet: {
+            name: 'enhet',
             label: 'Enhet',
             values: Object.values(EnhetFilter).map(v => v.toString()),
             selectedValue: EnhetFilter.Alle,
         },
-        {
-            name: 'Oppgavetype',
+        oppgavetype: {
+            name: 'oppgavetype',
             label: 'Oppgavetype',
             values: Object.values(OppgavetypeFilter).map(v => v.toString()),
             selectedValue: OppgavetypeFilter.Alle,
         },
-        {
-            name: 'Behandlingstema',
+        behandlingstema: {
+            name: 'behandlingstema',
             label: 'Gjelder',
             values: Object.values(GjelderFilter).map(v => v.toString()),
             selectedValue: GjelderFilter.Alle,
         },
-        {
-            name: 'Prioritet',
+        prioritet: {
+            name: 'prioritet',
             label: 'Prioritet',
             values: Object.values(PrioritetFilter).map(v => v.toString()),
             selectedValue: PrioritetFilter.Alle,
         },
-        {
-            name: 'Saksbehandler',
+        saksbehandler: {
+            name: 'saksbehandler',
             label: 'Saksbehandler',
             values: innloggetSaksbehandler
                 ? Object.values(SaksbehandlerFilter)
@@ -59,10 +63,10 @@ const initialFiltre = (innloggetSaksbehandler?: ISaksbehandler): IOppgaverFilter
                 : Object.values(SaksbehandlerFilter).map(v => v.toString()),
             selectedValue: SaksbehandlerFilter.Alle,
         },
-    ];
+    };
 };
 
-const getbehandlingstema = (filter: IOppgaverFilter) => {
+const getBehandlingstema = (filter: IOppgaverFilter) => {
     const index = filter.values.findIndex(v => v === filter.selectedValue);
     return index === 0 ? undefined : Object.keys(GjelderFilter)[index].toString();
 };
@@ -86,7 +90,7 @@ const getPrioritet = (filter: IOppgaverFilter) => {
     return index === 0 ? undefined : Object.keys(PrioritetFilter)[index];
 };
 
-const getDato = (dato: string) => {
+const getDato = (dato?: string) => {
     const m = moment(dato, 'YYYY-MM-DD', true);
     return m.isValid() ? m.format('YYYY-MM-DD') : undefined;
 };
@@ -102,46 +106,40 @@ interface IFilterSkjemaProps {
 
 const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSaksbehandler }) => {
     const { hentOppgaver, oppgaver } = useOppgaver();
-    const [filtre, settFiltre] = useState<IOppgaverFilter[]>(initialFiltre(innloggetSaksbehandler));
-    const [frist, settFrist] = useState<string>('');
-    const [registrertDato, settRegistrertDato] = useState<string>('');
+    const [filtre, settFiltre] = useState<IOppgaverFiltre>(initialFiltre(innloggetSaksbehandler));
+    const [frist, settFrist] = useState<string | undefined>('');
+    const [registrertDato, settRegistrertDato] = useState<string | undefined>('');
 
     useEffect(() => {
-        settFiltre(
-            filtre.map(filter =>
-                filter.name === 'Saksbehandler'
-                    ? {
-                          ...filter,
-                          values: innloggetSaksbehandler
-                              ? Object.values(SaksbehandlerFilter)
-                                    .map(v => v.toString())
-                                    .concat(innloggetSaksbehandler.displayName)
-                              : Object.values(SaksbehandlerFilter).map(v => v.toString()),
-                      }
-                    : filter
-            )
-        );
+        settFiltre({
+            ...filtre,
+            saksbehandler: {
+                ...filtre.saksbehandler,
+                values: innloggetSaksbehandler
+                    ? Object.values(SaksbehandlerFilter)
+                          .map(v => v.toString())
+                          .concat(innloggetSaksbehandler.displayName)
+                    : Object.values(SaksbehandlerFilter).map(v => v.toString()),
+            },
+        });
     }, [innloggetSaksbehandler]);
 
     return (
         <div className="filterskjema">
             <div className="filterskjema__filtre filterskjema__content">
-                {filtre.map((filter, index) => {
+                {Object.values(filtre).map(filter => {
                     return (
                         <Select
                             bredde={'l'}
                             label={filter.label}
                             onChange={event =>
-                                settFiltre(
-                                    filtre.map((f: IOppgaverFilter, idx: number) =>
-                                        idx === index
-                                            ? {
-                                                  ...f,
-                                                  selectedValue: event.target.value,
-                                              }
-                                            : f
-                                    )
-                                )
+                                settFiltre({
+                                    ...filtre,
+                                    [filter.name]: {
+                                        ...filtre[filter.name],
+                                        selectedValue: event.target.value,
+                                    },
+                                })
                             }
                             key={filter.name}
                             value={filter.selectedValue}
@@ -184,18 +182,13 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                 <Knapp
                     onClick={() => {
                         hentOppgaver(
-                            getbehandlingstema(
-                                filtre.find(filter => filter.name === 'Behandlingstema')!!
-                            ),
-                            getOppgavetype(filtre.find(filter => filter.name === 'Oppgavetype')!!),
-                            getEnhet(filtre.find(filter => filter.name === 'Enhet')!!),
-                            getPrioritet(filtre.find(filter => filter.name === 'Prioritet')!),
+                            getBehandlingstema(filtre.behandlingstema),
+                            getOppgavetype(filtre.oppgavetype),
+                            getEnhet(filtre.enhet),
+                            getPrioritet(filtre.prioritet),
                             getDato(frist),
                             getDato(registrertDato),
-                            getSaksbehandler(
-                                filtre.find(filter => filter.name === 'Saksbehandler')!,
-                                innloggetSaksbehandler
-                            )
+                            getSaksbehandler(filtre.saksbehandler, innloggetSaksbehandler)
                         );
                     }}
                     spinner={oppgaver.status === RessursStatus.HENTER}
