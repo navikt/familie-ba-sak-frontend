@@ -14,7 +14,7 @@ interface IProps {
     aktivBehandling: IBehandling | undefined;
 }
 
-const Logg: React.FunctionComponent<IProps> = ({ aktivBehandling }) => {
+const Logg = ({ aktivBehandling }: IProps) => {
     const { logg, hentLogg } = useFagsakRessurser();
 
     React.useEffect(() => {

@@ -47,3 +47,10 @@ export const byggFeiletRessurs = <T>(melding: string, error?: Error): Ressurs<T>
         status: RessursStatus.FEILET,
     };
 };
+
+export const byggSuksessRessurs = <T>(data: T): Ressurs<T> => {
+    return {
+        data,
+        status: RessursStatus.SUKSESS,
+    };
+};

@@ -8,7 +8,7 @@ interface IProps {
     nesteOnClick?: () => void;
     senderInn: boolean;
     tittel: string;
-    maxWidthStyle: string | undefined;
+    maxWidthStyle?: string;
 }
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
@@ -32,7 +32,9 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         type={'hoved'}
                         spinner={senderInn}
                         onClick={async () => {
-                            nesteOnClick();
+                            if (!senderInn) {
+                                nesteOnClick();
+                            }
                         }}
                         children={nesteKnappTittel ?? 'Neste'}
                     />

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
+<<<<<<< HEAD
 import { IVilkårConfig, IVilkårResultat, Resultat } from '../../../../typer/vilkår';
+=======
+import { IVilkårResultat, Resultat, IVilkårConfig, resultatTilUi } from '../../../../typer/vilkår';
+>>>>>>> b07cdae8c47113dd5abdabd1bcbcdc6d06dda1e8
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
@@ -14,14 +18,19 @@ import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
 import { Knapp } from 'nav-frontend-knapper';
 import { IPerson } from '../../../../typer/person';
 import classNames from 'classnames';
-import UtførKnapp from './UtførKnapp';
-import { Undertekst } from 'nav-frontend-typografi';
+import { Undertekst, Normaltekst } from 'nav-frontend-typografi';
 import { periodeToString } from '../../../../typer/periode';
+<<<<<<< HEAD
 import GeneriskVilkårVurderingLeseversjon from './GeneriskVilkårVurderingLeseversjon';
+=======
+import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import PennFylt from '../../../../ikoner/PennFylt';
+import Penn from '../../../../ikoner/Penn';
+import Slett from '../../../../ikoner/Slett';
+>>>>>>> b07cdae8c47113dd5abdabd1bcbcdc6d06dda1e8
 
 interface IProps {
     person: IPerson;
-    tillattFjerning: boolean;
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: IFelt<IVilkårResultat>;
     visFeilmeldinger: boolean;
@@ -30,19 +39,23 @@ interface IProps {
 
 const GeneriskVilkårVurdering: React.FC<IProps> = ({
     person,
-    tillattFjerning,
     vilkårFraConfig,
     vilkårResultat,
     visFeilmeldinger,
     visLeseversjon,
 }) => {
+<<<<<<< HEAD
     const { fjernVilkår, settVilkårForPeriodeResultat } = useVilkårsvurdering();
     // TODO: BØR MAN KUNNE ÅPNE/LUKKE II LESEVERSJON?
     // TODO: SKAL I SÅ FALL EKSPANDERTE ÅPNA BY DEFAULT?
+=======
+    const {
+        fjernEllerNullstillPeriodeForVilkår,
+        settVilkårForPeriodeResultat,
+    } = useVilkårsvurdering();
+>>>>>>> b07cdae8c47113dd5abdabd1bcbcdc6d06dda1e8
 
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(
-        vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
-    );
+    const [ekspandertVilkår, settEkspandertVilkår] = useState(false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
@@ -82,15 +95,17 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     return (
         <li
             className={classNames(
+                'generisk-vilkår__en-periode',
                 ekspandertVilkår ? 'aapen' : 'lukket',
                 `resultat__${
-                    redigerbartVilkår.verdi.resultat.verdi !== Resultat.KANSKJE
-                        ? redigerbartVilkår.verdi.resultat.verdi.toLowerCase()
+                    vilkårResultat.verdi.resultat.verdi !== Resultat.KANSKJE
+                        ? vilkårResultat.verdi.resultat.verdi.toLowerCase()
                         : 'ukjent'
                 }`
             )}
         >
             <SkjemaGruppe feilmeldingId={vilkårFeilmeldingId(redigerbartVilkår.verdi)}>
+<<<<<<< HEAD
                 <div className={'horisontal-sentrert-div'}>
                     <Undertekst children={periodeToString(redigerbartVilkår.verdi.periode.verdi)} />
                     <UtførKnapp
@@ -105,10 +120,40 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             onClick={() => fjernVilkår(redigerbartVilkår.verdi.id)}
                             aktiv={ekspandertVilkår}
                             id={vilkårFeilmeldingId(redigerbartVilkår.verdi)}
+=======
+                <div className={'generisk-vilkår__en-periode--tittel'}>
+                    <div className={'flex--space'}>
+                        <Normaltekst
+                            children={resultatTilUi(vilkårResultat.verdi.resultat.verdi)}
+                        />
+                        <Undertekst
+                            children={periodeToString(vilkårResultat.verdi.periode.verdi)}
+                        />
+                    </div>
+                    <div style={{ flexGrow: 1 }} />
+                    <div className={'flex--space'}>
+                        <IkonKnapp
+                            onClick={() => toggleForm(true)}
+                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+>>>>>>> b07cdae8c47113dd5abdabd1bcbcdc6d06dda1e8
                         >
-                            Fjern
-                        </UtførKnapp>
-                    )}
+                            {!ekspandertVilkår
+                                ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                    ? 'Vurder'
+                                    : 'Endre'
+                                : 'Lukk'}
+                            {ekspandertVilkår ? <PennFylt /> : <Penn />}
+                        </IkonKnapp>
+                        <IkonKnapp
+                            onClick={() =>
+                                fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
+                            }
+                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                        >
+                            Slett
+                            <Slett />
+                        </IkonKnapp>
+                    </div>
                 </div>
 
                 {visLeseversjon
@@ -161,6 +206,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                   visFeilmeldinger={skalViseFeilmeldinger()}
                               />
 
+<<<<<<< HEAD
                               <TextareaControlled
                                   defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                                   id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
@@ -192,6 +238,34 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                       const erVilkårGyldig: boolean =
                                           redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
                                               .valideringsstatus === Valideringsstatus.OK;
+=======
+                        <TextareaControlled
+                            defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
+                            id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
+                            label={'Begrunnelse'}
+                            placeholder={'Begrunn vurderingen'}
+                            textareaClass={'generisk-vilkår__ekspandert--begrunnelse'}
+                            value={redigerbartVilkår.verdi.begrunnelse.verdi}
+                            feil={
+                                redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
+                                    Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                                    ? redigerbartVilkår.verdi.begrunnelse.feilmelding
+                                    : ''
+                            }
+                            onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                                validerOgSettRedigerbartVilkår({
+                                    ...redigerbartVilkår,
+                                    verdi: {
+                                        ...redigerbartVilkår.verdi,
+                                        begrunnelse: {
+                                            ...redigerbartVilkår.verdi.begrunnelse,
+                                            verdi: event?.target.value,
+                                        },
+                                    },
+                                });
+                            }}
+                        />
+>>>>>>> b07cdae8c47113dd5abdabd1bcbcdc6d06dda1e8
 
                                       settVilkårForPeriodeResultat(
                                           person.personIdent,

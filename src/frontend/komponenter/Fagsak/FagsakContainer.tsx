@@ -4,10 +4,8 @@ import { RessursStatus } from '../../typer/ressurs';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import BehandleVilkår from './Vilkårsvurdering/BehandleVilkår';
+import BehandleVilkår from './Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import Beregning from './Beregning/Beregning';
-import { BeregningProvider } from './Beregning/BeregningProvider';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
@@ -29,11 +27,15 @@ const FagsakContainer: React.FunctionComponent = () => {
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
     React.useEffect(() => {
-        if (
-            fagsak.status !== RessursStatus.SUKSESS ||
-            (fagsakId !== undefined && fagsak.data.id !== parseInt(fagsakId, 10))
-        ) {
-            hentFagsak(fagsakId!!);
+        if (fagsakId !== undefined) {
+            if (fagsak.status !== RessursStatus.SUKSESS) {
+                hentFagsak(fagsakId);
+            } else if (
+                fagsak.status === RessursStatus.SUKSESS &&
+                fagsak.data.id !== parseInt(fagsakId, 10)
+            ) {
+                hentFagsak(fagsakId);
+            }
         }
     }, [fagsakId]);
 
@@ -110,13 +112,9 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         />
                                         <Route
                                             exact={true}
-                                            path="/fagsak/:fagsakId/beregning"
+                                            path="/fagsak/:fagsakId/tilkjent-ytelse"
                                             render={() => {
-                                                return (
-                                                    <BeregningProvider fagsak={fagsak.data}>
-                                                        <Beregning fagsak={fagsak.data} />
-                                                    </BeregningProvider>
-                                                );
+                                                return <TilkjentYtelse fagsak={fagsak.data} />;
                                             }}
                                         />
                                         <Route

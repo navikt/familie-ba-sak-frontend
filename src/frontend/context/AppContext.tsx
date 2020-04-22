@@ -5,6 +5,8 @@ import React from 'react';
 import { håndterRessurs, loggFeil, preferredAxios } from '../api/axios';
 import { Ressurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
+import { BehandlerRolle } from '../typer/behandling';
+import { gruppeIdTilRolle } from '../utils/behandling';
 
 export interface IModal {
     content: string;
@@ -62,9 +64,24 @@ const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IPro
             });
     };
 
+    const hentSaksbehandlerRolle = (): BehandlerRolle | undefined => {
+        let rolle = BehandlerRolle.SYSTEM;
+        if (innloggetSaksbehandler && innloggetSaksbehandler.groups) {
+            innloggetSaksbehandler.groups.forEach(id => {
+                rolle = rolle < gruppeIdTilRolle(id) ? gruppeIdTilRolle(id) : rolle;
+            });
+            return rolle;
+        }
+        loggFeil(
+            undefined,
+            innloggetSaksbehandler,
+            'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
+        );
+    };
+
     return {
         axiosRequest,
-        innloggetSaksbehandler,
+        hentSaksbehandlerRolle,
         autentisert,
         åpneModal,
         lukkModal,

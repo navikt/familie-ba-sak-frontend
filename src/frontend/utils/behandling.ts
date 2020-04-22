@@ -1,23 +1,14 @@
-import { BehandlingSteg } from '../typer/behandling';
-import { useFagsakRessurser } from '../context/FagsakContext';
-import { RessursStatus } from '../typer/ressurs';
-import { useApp } from '../context/AppContext';
+import { BehandlerRolle } from '../typer/behandling';
 
-export const hentStegPåBehandlingOppe = (): BehandlingSteg | undefined => {
-    const { behandlingOppe } = useFagsakRessurser();
-    return behandlingOppe.status === RessursStatus.SUKSESS ? behandlingOppe.data.steg : undefined;
-};
-
-export const hentSaksbehandlerRolle = (): string | undefined => {
-    // TODO: Enum for roller?
-    const { innloggetSaksbehandler } = useApp();
-    const saksbehandlerRolle = innloggetSaksbehandler && innloggetSaksbehandler.firstName; // TODO: Logikk som returnerer "høyeste" rolle?
-    return saksbehandlerRolle;
-};
-
-export const erLesevisning = (): boolean | undefined => {
-    return (
-        hentSaksbehandlerRolle() === 'VEILEDERROLLE' || //TODO: Sjekk om veileder er høyeste blant grupper, evt om rolle er veileder
-        hentStegPåBehandlingOppe() === BehandlingSteg.GODKJENNE_VEDTAK
-    );
+export const gruppeIdTilRolle = (gruppeId: string) => {
+    switch (gruppeId) {
+        case '199c2b39-e535-4ae8-ac59-8ccbee7991ae':
+            return BehandlerRolle.VEILEDER;
+        case '847e3d72-9dc1-41c3-80ff-f5d4acdd5d46':
+            return BehandlerRolle.SAKSBEHANDLER;
+        case '7a271f87-39fb-468b-a9ee-6cf3c070f548':
+            return BehandlerRolle.BESLUTTER;
+        default:
+            return BehandlerRolle.SYSTEM;
+    }
 };

@@ -39,7 +39,7 @@ const vilkårsvurderingFeilmelding = 'Feil i rekonstruksjon av vilkårsvurdering
 export const vilkårHarSammeTypeOgOverlapperMinstEttSted = (
     nyttVilkårResultat: IFelt<IVilkårResultat>,
     annenVilkårResultat: IFelt<IVilkårResultat>
-) => {
+): boolean => {
     return (
         annenVilkårResultat.verdi.vilkårType === nyttVilkårResultat.verdi.vilkårType &&
         overlapperMinstEttSted(hentPeriode(nyttVilkårResultat), hentPeriode(annenVilkårResultat))
@@ -407,28 +407,45 @@ export const mapFraRestVilkårsvurderingTilUi = (
     personer: IPerson[]
 ): IPersonResultat[] => {
     return kjørValidering(
-        personResultater.map((personResultat: IRestPersonResultat) => ({
-            person: personer.find(
+        personResultater.map((personResultat: IRestPersonResultat) => {
+            const person: IPerson | undefined = personer.find(
                 (person: IPerson) => person.personIdent === personResultat.personIdent
-            )!!,
-            personIdent: personResultat.personIdent,
-            vilkårResultater: sorterVilkårsvurderingForPerson(
-                personResultat.vilkårResultater.map((vilkårResultat: IRestVilkårResultat) =>
-                    lagInitiellFelt(
-                        {
-                            begrunnelse: lagInitiellFelt(vilkårResultat.begrunnelse, erUtfylt),
-                            id: randomUUID(),
-                            periode: lagInitiellFelt(
-                                nyPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom),
-                                erPeriodeGyldig
-                            ),
-                            resultat: lagInitiellFelt(vilkårResultat.resultat, erResultatGyldig),
-                            vilkårType: vilkårResultat.vilkårType,
-                        },
-                        validerVilkår
-                    )
-                )
-            ),
-        }))
+            );
+
+            if (person === undefined) {
+                throw new Error('Finner ikke person ved validering av vilkårsvurdering');
+            } else {
+                return {
+                    person,
+                    personIdent: personResultat.personIdent,
+                    vilkårResultater: sorterVilkårsvurderingForPerson(
+                        personResultat.vilkårResultater.map((vilkårResultat: IRestVilkårResultat) =>
+                            lagInitiellFelt(
+                                {
+                                    begrunnelse: lagInitiellFelt(
+                                        vilkårResultat.begrunnelse,
+                                        erUtfylt
+                                    ),
+                                    id: randomUUID(),
+                                    periode: lagInitiellFelt(
+                                        nyPeriode(
+                                            vilkårResultat.periodeFom,
+                                            vilkårResultat.periodeTom
+                                        ),
+                                        erPeriodeGyldig
+                                    ),
+                                    resultat: lagInitiellFelt(
+                                        vilkårResultat.resultat,
+                                        erResultatGyldig
+                                    ),
+                                    vilkårType: vilkårResultat.vilkårType,
+                                },
+                                validerVilkår
+                            )
+                        )
+                    ),
+                };
+            }
+        })
     );
 };

@@ -48,9 +48,10 @@ export enum BehandlingResultat {
 }
 
 export enum BehandlerRolle {
-    SYSTEM,
-    SAKSBEHANDLER,
-    BESLUTTER,
+    SYSTEM = 0,
+    VEILEDER = 1,
+    SAKSBEHANDLER = 2,
+    BESLUTTER = 3,
 }
 
 export interface IBehandling {
@@ -59,8 +60,9 @@ export interface IBehandling {
     behandlingId: number;
     kategori: BehandlingKategori;
     opprettetTidspunkt: string;
-    personer: IPerson[];
     personResultater: IRestPersonResultat[];
+    personer: IPerson[];
+    samletResultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;
     type: Behandlingstype;

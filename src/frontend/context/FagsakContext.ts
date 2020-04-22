@@ -65,7 +65,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         }
     }, [fagsakRessurser.fagsak.status]);
 
-    const hentFagsak = (fagsakId: string) => {
+    const hentFagsak = (fagsakId: string): void => {
         settFagsakRessurser({
             ...fagsakRessurser,
             fagsak: {
@@ -101,7 +101,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
-    const hentLogg = (behandlingId: number) => {
+    const hentLogg = (behandlingId: number): void => {
         settFagsakRessurser({
             ...fagsakRessurser,
             logg: {
@@ -123,7 +123,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
-    const settFagsak = (modifisertFagsak: Ressurs<IFagsak>) =>
+    const settFagsak = (modifisertFagsak: Ressurs<IFagsak>): void =>
         settFagsakRessurser({ ...fagsakRessurser, fagsak: modifisertFagsak });
 
     return {

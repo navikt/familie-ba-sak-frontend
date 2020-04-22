@@ -1,7 +1,5 @@
-import { Lukknapp } from 'nav-frontend-ikonknapper';
-import { Knapp } from 'nav-frontend-knapper';
-import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 
 import {
@@ -44,8 +42,7 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
             <Select
                 bredde={'l'}
                 label="Velg behandlingstype"
-                autoFocus={true}
-                onChange={event =>
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void =>
                     dispatch({
                         payload: event.target.value as Behandlingstype,
                         type: actions.SETT_BEHANDLINGSTYPE,
@@ -76,14 +73,14 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
             <Undertittel children={'Velg sakstype'} />
             <Sakstype
                 kategori={context.kategori}
-                kategoriOnChange={(behandlingKategori: BehandlingKategori) =>
+                kategoriOnChange={(behandlingKategori: BehandlingKategori): void =>
                     dispatch({
                         payload: behandlingKategori,
                         type: actions.SETT_BEHANDLING_KATEGORI,
                     })
                 }
                 underkategori={context.underkategori}
-                underkategoriOnChange={(behandlingUnderkategori: BehandlingUnderkategori) =>
+                underkategoriOnChange={(behandlingUnderkategori: BehandlingUnderkategori): void =>
                     dispatch({
                         payload: behandlingUnderkategori,
                         type: actions.SETT_BEHANDLING_UNDERKATEGORI,

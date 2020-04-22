@@ -66,7 +66,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                         label={'Tilleggsopplysninger'}
                         placeholder={'Skriv her'}
                         value={barn.tilleggsopplysninger ?? ''}
-                        onChange={(event: any) =>
+                        onChange={(event: React.FocusEvent<HTMLTextAreaElement>) =>
                             settBarn({ ...barn, tilleggsopplysninger: event.target.value })
                         }
                     />

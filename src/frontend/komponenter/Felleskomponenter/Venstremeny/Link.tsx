@@ -10,8 +10,8 @@ interface Props {
     className?: string;
 }
 
-const Link = ({ active = true, id, to, children, className }: Props) => {
-    const onClick = (event: React.MouseEvent) => {
+const Link: React.FC<Props> = ({ active = true, id, to, children, className }) => {
+    const onClick = (event: React.MouseEvent): void => {
         (event.target as HTMLElement).blur();
     };
 
@@ -20,7 +20,7 @@ const Link = ({ active = true, id, to, children, className }: Props) => {
             {children}
         </NavLink>
     ) : (
-        // tslint:disable-next-line: react-a11y-anchors
+        // eslint-disable-next-line
         <a className={classNames('inactive', className)}>{children}</a>
     );
 };

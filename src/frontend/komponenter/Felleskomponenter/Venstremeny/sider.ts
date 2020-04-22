@@ -22,12 +22,6 @@ export const sider: ISide[] = [
         steg: BehandlingSteg.VILKÅRSVURDERING,
     },
     {
-        id: 'BEREGNING',
-        href: 'beregning',
-        navn: 'Beregning',
-        steg: BehandlingSteg.VILKÅRSVURDERING,
-    },
-    {
         id: 'BEHANDLINGRESULTAT',
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
@@ -36,7 +30,7 @@ export const sider: ISide[] = [
     { id: 'VEDTAK', href: 'vedtak', navn: 'Vedtak', steg: BehandlingSteg.SEND_TIL_BESLUTTER },
 ];
 
-export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg) => {
+export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
     if (!side.steg && side.steg !== 0) {
         return true;
     }
@@ -45,8 +39,13 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg) => {
         return false;
     }
 
-    // @ts-ignore
-    return side.steg <= BehandlingSteg[steg];
+    /**
+     * Litt stygg cast for å gjøre tsc fornøyd.
+     * Skrives kanskje om når vi har mer logikk rundt hvilke steg som skal være aktive i en behandling senere.
+     *  */
+    return side.steg !== undefined
+        ? side.steg <= ((BehandlingSteg[steg] as unknown) as BehandlingSteg)
+        : false;
 };
 
 export const visSide = (side: ISide, aktivBehandling?: IBehandling) => {

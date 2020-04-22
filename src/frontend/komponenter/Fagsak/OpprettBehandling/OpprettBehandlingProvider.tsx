@@ -14,6 +14,7 @@ export enum actions {
 }
 
 export interface IAction {
+    // eslint-disable-next-line
     payload?: any;
     type: actions;
 }
