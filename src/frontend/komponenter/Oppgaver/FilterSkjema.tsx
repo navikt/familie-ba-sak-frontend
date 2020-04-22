@@ -133,7 +133,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                             label={filter.label}
                             onChange={event =>
                                 settFiltre(
-                                    filtre.map((f, idx) =>
+                                    filtre.map((f: IOppgaverFilter, idx: number) =>
                                         idx === index
                                             ? {
                                                   ...f,

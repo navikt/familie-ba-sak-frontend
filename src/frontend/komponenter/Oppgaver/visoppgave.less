@@ -32,11 +32,17 @@ table.tabell{
     border-collapse: collapse;
 }
 
+@titleFontSize: 1.1rem;
+@titleMarginV: 30px;
+@headerHeight: ~"calc("@titleFontSize ~"+" @titleMarginV ~")";
+@filterFormHeight: 30rem;
+@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~" )";
+
 table.tabell tbody{
     display:block;
     width: 100%;
     overflow: auto;
-    height: 30rem;
+    height: @tableBodyHeight;
 }
 
 table.tabell thead tr{
