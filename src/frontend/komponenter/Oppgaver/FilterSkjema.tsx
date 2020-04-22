@@ -94,7 +94,7 @@ const getDato = (dato: string) => {
 
 const getSaksbehandler = (filter: IOppgaverFilter, innloggetSaksbehandler?: ISaksbehandler) => {
     const index = filter.values.findIndex(v => v === filter.selectedValue);
-    return index < 2 ? Object.keys(SaksbehandlerFilter)[index] : innloggetSaksbehandler?.identifier;
+    return index < 2 ? Object.keys(SaksbehandlerFilter)[index] : innloggetSaksbehandler?.navIdent;
 };
 
 interface IFilterSkjemaProps {
