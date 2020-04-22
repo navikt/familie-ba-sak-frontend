@@ -1,0 +1,11 @@
+version: "3"
+services:
+  familie-ba-sak-frontend:
+    restart: always
+    build: 
+      context: ../
+      dockerfile: ./Dockerfile-e2e
+    ports:
+      - 8000:8000
+    environment: 
+      ENV: e2e
