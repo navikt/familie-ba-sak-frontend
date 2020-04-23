@@ -2,7 +2,7 @@ import React from 'react';
 import FilterSkjema from './FilterSkjema';
 import OppgaveList from './OppgaveList';
 import { ISaksbehandler } from '../../typer/saksbehandler';
-import { Systemtittel } from 'nav-frontend-typografi';
+import OppgaveHeader from './OppgaveHeader';
 
 interface IVisOppgaverProps {
     innloggetSaksbehandler?: ISaksbehandler;
@@ -11,7 +11,8 @@ interface IVisOppgaverProps {
 const VisOppgaver: React.FunctionComponent<IVisOppgaverProps> = props => {
     return (
         <div className="visoppgaver">
-            <Systemtittel>Oppgavebenk</Systemtittel>
+            <OppgaveHeader>Oppgavebenk</OppgaveHeader>
+            <hr className={'visoppgaver__hr'} />
             <FilterSkjema innloggetSaksbehandler={props.innloggetSaksbehandler} />
             <OppgaveList />
         </div>

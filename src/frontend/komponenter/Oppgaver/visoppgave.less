@@ -1,5 +1,8 @@
 .visoppgaver {
     padding: 1rem;
+    &__hr{
+        margin-top: 2rem;
+    }
 }
 
 .filterskjema {
@@ -107,4 +110,28 @@ table.tabell th, table.tabell td{
     color: #0067c5;
     text-decoration: none;
     padding-right: 15px;
+}
+
+.oppgaveHeader{
+    display: flex;
+    flex-direction: row;
+
+    &__tittel{
+        flex: 1 0 0px;
+    }
+    
+    &__fnrInput{
+        width: 200px;
+    }
+
+    &__opprettFagsakKnapp{
+        margin-left: 1rem;
+        margin-top: auto;
+        align-self:flex-start;
+    }
+}
+
+.feilmelding{
+    margin-top: 10px;
+    float: right;
 }
