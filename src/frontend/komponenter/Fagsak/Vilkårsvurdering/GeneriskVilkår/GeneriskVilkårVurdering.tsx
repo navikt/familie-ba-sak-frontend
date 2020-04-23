@@ -34,7 +34,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     vilkårFraConfig,
     vilkårResultat,
     visFeilmeldinger,
-    visLeseversjon,
 }) => {
     // TODO: BØR MAN KUNNE ÅPNE/LUKKE II LESEVERSJON?
     // TODO: SKAL I SÅ FALL EKSPANDERTE ÅPNA BY DEFAULT?

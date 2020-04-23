@@ -14,7 +14,7 @@ const HendelseItem = ({ hendelse }: IHendelseItemProps) => (
         <p className={'hendelsesdato'}>{`${hendelse.dato}`}</p>
         <p className={'hendelsesdato'}>{`${hendelse.utførtAv} ${
             hendelse.rolle !== BehandlerRolle.SYSTEM
-                ? `(${BehandlerRolle[hendelse.rolle].toString().toLowerCase()})`
+                ? `(${hendelse.rolle.toString().toLowerCase()})`
                 : ''
         }`}</p>
     </li>

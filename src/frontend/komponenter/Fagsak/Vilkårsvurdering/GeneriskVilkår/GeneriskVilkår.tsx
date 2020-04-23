@@ -10,10 +10,10 @@ import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Advarsel from '../../../../ikoner/Advarsel';
 import DashedHr from '../../../Felleskomponenter/DashedHr/DashedHr';
 import Pluss from '../../../../ikoner/Pluss';
-import { BehandlerRolle, BehandlingSteg } from '../../../../typer/behandling';
 import { useHistory } from 'react-router';
 import { useApp } from '../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { erLesevisning } from '../../../../utils/behandling';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -41,22 +41,18 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { leggTilVilkår } = useVilkårsvurdering();
-    const { hentSaksbehandlerRolle } = useApp();
-    const { hentStegPåÅpenBehandling } = useFagsakRessurser();
     const history = useHistory();
 
+    const { hentSaksbehandlerRolle } = useApp();
+    const { hentStegPåÅpenBehandling } = useFagsakRessurser();
     const visLeseversjon = (): boolean => {
         const saksbehandlerRolle = hentSaksbehandlerRolle();
         const steg = hentStegPåÅpenBehandling();
         if (saksbehandlerRolle && steg) {
-            return (
-                saksbehandlerRolle <= BehandlerRolle.VEILEDER ||
-                steg >= BehandlingSteg.GODKJENNE_VEDTAK
-            );
-        } else {
-            history.push('/error');
-            return true;
+            return erLesevisning(saksbehandlerRolle, steg);
         }
+        history.push('/error');
+        return true;
     };
 
     return (

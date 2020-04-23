@@ -17,6 +17,7 @@ import { useApp } from '../../../context/AppContext';
 import { BehandlingSteg } from '../../../typer/behandling';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import RegistrerSøknadLeseversjon from './RegistrerSøknadLeseversjon';
+import { erLesevisning } from '../../../utils/behandling';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
     const { axiosRequest } = useApp();
@@ -29,6 +30,18 @@ const RegistrerSøknad: React.FunctionComponent = () => {
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
     const [senderInn, settSenderInn] = React.useState(false);
+
+    const { hentSaksbehandlerRolle } = useApp();
+    const { hentStegPåÅpenBehandling } = useFagsakRessurser();
+    const visLeseversjon = (): boolean => {
+        const saksbehandlerRolle = hentSaksbehandlerRolle();
+        const steg = hentStegPåÅpenBehandling();
+        if (saksbehandlerRolle && steg) {
+            return erLesevisning(saksbehandlerRolle, steg);
+        }
+        history.push('/error');
+        return true;
+    };
 
     React.useEffect(() => {
         if (fagsak.status === RessursStatus.SUKSESS) {
@@ -94,7 +107,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
             )}
 
             <br />
-            <RegistrerSøknadLeseversjon søknad={søknad} />
+            {visLeseversjon() && <RegistrerSøknadLeseversjon søknad={søknad} />}
 
             {feilmelding && <Feilmelding children={feilmelding} />}
             <div style={{ display: 'flex' }}>
