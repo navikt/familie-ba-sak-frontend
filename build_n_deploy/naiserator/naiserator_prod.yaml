@@ -25,7 +25,6 @@ spec:
   istio:
     enabled: false
   ingresses:
-    - https://familie-ba-sak-frontend.nais.adeo.no
     - https://barnetrygd.nais.adeo.no
   vault:
     enabled: true
