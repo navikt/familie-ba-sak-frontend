@@ -19,7 +19,7 @@ import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
     const { axiosRequest } = useApp();
-    const { fagsak, settFagsak } = useFagsakRessurser();
+    const { fagsak, settFagsak, erLesevisning } = useFagsakRessurser();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknad, erSøknadGyldig } = useSøknad();
@@ -97,33 +97,37 @@ const RegistrerSøknad: React.FunctionComponent = () => {
             {feilmelding && <Feilmelding children={feilmelding} />}
             <div style={{ display: 'flex' }}>
                 <div style={{ flex: 1 }} />
-                <Knapp
-                    onClick={() => {
-                        if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig()) {
-                            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
-                            settSenderInn(true);
+                {!erLesevisning() && (
+                    <Knapp
+                        onClick={() => {
+                            if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig()) {
+                                const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
+                                settSenderInn(true);
 
-                            axiosRequest<IFagsak, ISøknadDTO>({
-                                method: 'POST',
-                                data: søknad,
-                                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
-                            }).then((response: Ressurs<IFagsak>) => {
-                                settSenderInn(false);
-                                if (response.status === RessursStatus.SUKSESS) {
-                                    settFagsak(response);
+                                axiosRequest<IFagsak, ISøknadDTO>({
+                                    method: 'POST',
+                                    data: søknad,
+                                    url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
+                                }).then((response: Ressurs<IFagsak>) => {
+                                    settSenderInn(false);
+                                    if (response.status === RessursStatus.SUKSESS) {
+                                        settFagsak(response);
 
-                                    history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
-                                } else if (response.status === RessursStatus.FEILET) {
-                                    settFeilmelding(response.melding);
-                                } else {
-                                    settFeilmelding('Registrering av søknaden feilet');
-                                }
-                            });
-                        }
-                    }}
-                    children={'Bekreft og fortsett'}
-                    spinner={senderInn}
-                />
+                                        history.push(
+                                            `/fagsak/${response.data.id}/vilkaarsvurdering`
+                                        );
+                                    } else if (response.status === RessursStatus.FEILET) {
+                                        settFeilmelding(response.melding);
+                                    } else {
+                                        settFeilmelding('Registrering av søknaden feilet');
+                                    }
+                                });
+                            }
+                        }}
+                        children={'Bekreft og fortsett'}
+                        spinner={senderInn}
+                    />
+                )}
             </div>
         </div>
     );
