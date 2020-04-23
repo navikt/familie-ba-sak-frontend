@@ -21,7 +21,6 @@ interface IVedtakProps {
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
     const { settFagsak } = useFagsakRessurser();
-    const [makeItRain, settMakeItRain] = React.useState(false);
 
     const history = useHistory();
 
@@ -62,30 +61,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const visSubmitKnapp =
         aktivBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
-        aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
-        aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
+        aktivBehandling?.status === BehandlingStatus.OPPRETTET;
 
     const sendInn = () => {
         settSenderInn(true);
         settSubmitFeil('');
         axiosRequest<IFagsak, void>({
             method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/${
-                aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
-                    ? 'iverksett-vedtak'
-                    : 'send-til-beslutter'
-            }`,
+            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/send-til-beslutter`,
         }).then((response: Ressurs<IFagsak>) => {
             settSenderInn(false);
             if (response.status === RessursStatus.SUKSESS) {
                 settFagsak(response);
-
-                if (aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER) {
-                    settMakeItRain(true);
-                    setTimeout(() => {
-                        settMakeItRain(false);
-                    }, 10000);
-                }
             } else if (
                 response.status === RessursStatus.FEILET ||
                 response.status === RessursStatus.IKKE_TILGANG
@@ -101,16 +88,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             tittel={'Vedtaksbrev'}
             forrigeOnClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
-            nesteKnappTittel={
-                aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
-                    ? 'Iverksett'
-                    : 'Send til beslutter'
-            }
+            nesteKnappTittel={'Send til beslutter'}
             senderInn={senderInn}
             maxWidthStyle="100%"
         >
             <div className="oppsummering">
-                {makeItRain && <Confetti />}
                 {errorMessage === undefined ? (
                     <div>
                         <br />
