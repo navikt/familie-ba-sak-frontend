@@ -2,7 +2,7 @@ import React from 'react';
 import { IFelt } from '../../../../typer/felt';
 import { IVilkårResultat, Resultat, IVilkårConfig } from '../../../../typer/vilkår';
 import { IPerson } from '../../../../typer/person';
-import Lesefelt from '../../../Felleskomponenter/Lesefelt/Lesefelt';
+import Lesefelt from '../../../Felleskomponenter/InputMedLesevisning/Lesefelt';
 
 interface IProps {
     person: IPerson;

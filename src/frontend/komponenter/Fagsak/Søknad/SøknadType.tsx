@@ -4,9 +4,9 @@ import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
-import { Select } from 'nav-frontend-skjema';
 import { IPar } from '../../../typer/common';
 import classNames from 'classnames';
+import SelectFelt from '../../Felleskomponenter/InputMedLesevisning/SelectFelt';
 
 interface IProps {
     settSøknad: (søknad: ISøknadDTO) => void;
@@ -36,7 +36,9 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
             />
 
             <br />
-            <Select
+
+            <SelectFelt
+                visLeseversjon={true}
                 name="type søker"
                 label="Type søker"
                 bredde={'l'}
@@ -75,7 +77,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
                             </option>
                         );
                     })}
-            </Select>
+            </SelectFelt>
         </PanelBase>
     );
 };

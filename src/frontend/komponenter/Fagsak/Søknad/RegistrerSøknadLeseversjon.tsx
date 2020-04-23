@@ -3,7 +3,7 @@ import { ISøknadDTO } from '../../../typer/søknad';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 import classNames from 'classnames';
-import Lesefelt from '../../Felleskomponenter/Lesefelt/Lesefelt';
+import Lesefelt from '../../Felleskomponenter/InputMedLesevisning/Lesefelt';
 
 interface IProps {
     søknad: ISøknadDTO;
