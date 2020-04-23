@@ -9,21 +9,18 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { Feiloppsummering, Select } from 'nav-frontend-skjema';
+import { Feiloppsummering } from 'nav-frontend-skjema';
 import { useHistory } from 'react-router';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { IBarnMedOpplysninger, ISøknadDTO, søknadstyper, TypeSøker } from '../../../typer/søknad';
+import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
 import { useApp } from '../../../context/AppContext';
 import { BehandlingSteg } from '../../../typer/behandling';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import RegistrerSøknadLeseversjon from './RegistrerSøknadLeseversjon';
-import { erLesevisning } from '../../../utils/behandling';
-import { IPar } from '../../../typer/common';
-import SelectFelt from '../../Felleskomponenter/InputMedLesevisning/SelectFelt';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
-    const { axiosRequest, hentSaksbehandlerRolle } = useApp();
-    const { fagsak, settFagsak, hentStegPåÅpenBehandling } = useFagsakRessurser();
+    const { axiosRequest } = useApp();
+    const { fagsak, settFagsak, erLesevisning } = useFagsakRessurser();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknad, erSøknadGyldig } = useSøknad();
@@ -32,17 +29,6 @@ const RegistrerSøknad: React.FunctionComponent = () => {
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
     const [senderInn, settSenderInn] = React.useState(false);
-
-    const visLeseversjon = (): boolean => {
-        const saksbehandlerRolle = hentSaksbehandlerRolle();
-        const steg = hentStegPåÅpenBehandling();
-        if (saksbehandlerRolle && steg) {
-            //return erLesevisning(saksbehandlerRolle, steg);
-            return true;
-        }
-        history.push('/error');
-        return true;
-    };
 
     React.useEffect(() => {
         if (fagsak.status === RessursStatus.SUKSESS) {
@@ -108,7 +94,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
             )}
 
             <br />
-            {visLeseversjon() && <RegistrerSøknadLeseversjon søknad={søknad} />}
+            {erLesevisning() && <RegistrerSøknadLeseversjon søknad={søknad} />}
 
             {feilmelding && <Feilmelding children={feilmelding} />}
             <div style={{ display: 'flex' }}>

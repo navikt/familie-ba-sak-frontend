@@ -7,6 +7,7 @@ import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/beha
 import { IPar } from '../../../typer/common';
 import classNames from 'classnames';
 import SelectFelt from '../../Felleskomponenter/InputMedLesevisning/SelectFelt';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     settSøknad: (søknad: ISøknadDTO) => void;
@@ -14,6 +15,8 @@ interface IProps {
 }
 
 const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) => {
+    const { erLesevisning } = useFagsakRessurser();
+
     return (
         <PanelBase className={classNames('søknad__panel', 'panel--gra')}>
             <Undertittel children={'1 Hva har bruker søkt om?'} />
@@ -38,7 +41,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
             <br />
 
             <SelectFelt
-                visLeseversjon={true}
+                visLeseversjon={erLesevisning()}
                 name="type søker"
                 label="Type søker"
                 bredde={'l'}

@@ -13,7 +13,7 @@ import {
     RessursStatus,
 } from '../typer/ressurs';
 import { useApp } from './AppContext';
-import { BehandlingSteg, IBehandling } from '../typer/behandling';
+import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 
 interface IHovedRessurser {
@@ -40,7 +40,8 @@ const initialState: IHovedRessurser = {
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
-    const { axiosRequest } = useApp();
+    const { axiosRequest, hentSaksbehandlerRolle } = useApp();
+    //const history = useHistory(); // TODO : Håndtere ingen tilgang
 
     React.useEffect(() => {
         if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
@@ -132,9 +133,23 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             : undefined;
     };
 
+    const erLesevisning = (): boolean => {
+        const saksbehandlerRolle = hentSaksbehandlerRolle();
+        const steg = hentStegPåÅpenBehandling();
+        if (saksbehandlerRolle && steg) {
+            return (
+                saksbehandlerRolle <= BehandlerRolle.VEILEDER ||
+                steg >= BehandlingSteg.GODKJENNE_VEDTAK
+            );
+        }
+        //history.push('/error');
+        return true;
+    };
+
     return {
         bruker: fagsakRessurser.bruker,
         fagsak: fagsakRessurser.fagsak,
+        erLesevisning: erLesevisning,
         hentStegPåÅpenBehandling,
         hentFagsak,
         hentLogg,

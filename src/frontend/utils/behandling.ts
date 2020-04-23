@@ -1,4 +1,4 @@
-import { BehandlerRolle, BehandlingSteg } from '../typer/behandling';
+import { BehandlerRolle } from '../typer/behandling';
 
 export const gruppeIdTilRolle = (gruppeId: string) => {
     switch (gruppeId) {
@@ -14,8 +14,4 @@ export const gruppeIdTilRolle = (gruppeId: string) => {
         default:
             return BehandlerRolle.SYSTEM;
     }
-};
-
-export const erLesevisning = (rolle: BehandlerRolle, steg: BehandlingSteg): boolean => {
-    return rolle <= BehandlerRolle.VEILEDER || steg >= BehandlingSteg.GODKJENNE_VEDTAK;
 };
