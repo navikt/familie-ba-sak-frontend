@@ -16,11 +16,10 @@ import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
 import { useApp } from '../../../context/AppContext';
 import { BehandlingSteg } from '../../../typer/behandling';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import RegistrerSøknadLeseversjon from './RegistrerSøknadLeseversjon';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
     const { axiosRequest } = useApp();
-    const { fagsak, settFagsak, erLesevisning } = useFagsakRessurser();
+    const { fagsak, settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknad, erSøknadGyldig } = useSøknad();
@@ -94,7 +93,6 @@ const RegistrerSøknad: React.FunctionComponent = () => {
             )}
 
             <br />
-            {erLesevisning() && <RegistrerSøknadLeseversjon søknad={søknad} />}
 
             {feilmelding && <Feilmelding children={feilmelding} />}
             <div style={{ display: 'flex' }}>

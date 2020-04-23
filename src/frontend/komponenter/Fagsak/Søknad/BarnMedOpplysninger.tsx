@@ -5,6 +5,7 @@ import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { Textarea } from 'nav-frontend-skjema';
 import CheckboxFelt from '../../Felleskomponenter/InputMedLesevisning/CheckboxFelt';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import TextareaFelt from '../../Felleskomponenter/InputMedLesevisning/TextareaFelt';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -71,7 +72,8 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                         }}
                     />
 
-                    <Textarea
+                    <TextareaFelt
+                        visLeseversjon={erLesevisning()}
                         label={'Tilleggsopplysninger'}
                         placeholder={'Skriv her'}
                         value={barn.tilleggsopplysninger ?? ''}
