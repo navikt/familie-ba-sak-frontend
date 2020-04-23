@@ -29,10 +29,10 @@
   },
   "dependencies": {
     "@navikt/boxed-list-with-links": "^1.0.2",
-    "@navikt/familie-backend": "^5.0.2",
+    "@navikt/familie-backend": "^5.0.3",
     "@navikt/familie-header": "1.0.2",
     "@navikt/familie-ikoner": "^3.0.3",
-    "@navikt/familie-typer": "^3.0.2",
+    "@navikt/familie-typer": "^3.0.3",
     "@navikt/familie-visittkort": "^2.1.4",
     "@navikt/fnrvalidator": "^1.1.0",
     "@navikt/nap-header": "^1.0.8",

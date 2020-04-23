@@ -34,8 +34,6 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'warn',
         '@typescript-eslint/explicit-function-return-type': 'off',
         'react-app/react-hooks/exhaustive-deps': 'off',
-        'jsx-a11y/interactive-supports-focus': 'off',
-        'jsx-a11y/click-events-have-key-events': 'off',
     },
     settings: {
         react: {

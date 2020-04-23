@@ -1,0 +1,110 @@
+.visoppgaver {
+    padding: 1rem;
+}
+
+.filterskjema {
+    display: flex;
+    flex-direction: column;
+
+    &__content {
+        margin-top: 2rem;
+    }
+
+    &__filtre {
+        display: flex;
+        &__input{
+            padding-right: 2rem;
+        }
+    }
+
+    &__button {
+        width: 10rem;
+    }
+    
+    &__tilbakestill {
+        margin-left: 2rem;
+    }
+}
+.oppgavelist{
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+table.tabell{
+    margin-top: 50px;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+@titleFontSize: 1.1rem;
+@titleMarginV: 30px;
+@headerHeight: ~"calc("@titleFontSize ~"+" @titleMarginV ~")";
+@filterFormHeight: 30rem;
+@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~" )";
+
+table.tabell tbody{
+    display:block;
+    min-width: max-content;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: @tableBodyHeight;
+}
+
+table.tabell thead tr{
+    display:block;
+}
+
+table.tabell th, table.tabell td{
+    text-align: left;
+}
+
+.regdato {
+    min-width: 135px;
+}
+
+.oppgavetype {
+    min-width: 215px;
+}
+
+.gjelder {
+    min-width: 150px;
+}
+
+.frist {
+    min-width: 90px;
+}
+
+.prioritet {
+    min-width: 120px;
+}
+
+.beskrivelse {
+    width: 318px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0;
+}
+
+.bruker {
+    min-width: 135px;
+}
+
+.enhet {
+    min-width: 155px;
+}
+
+.saksbehandler {
+    min-width: 225px;
+}
+
+.handlinger {
+    min-width: 275px;
+}
+
+.handlinger > a {
+    color: #0067c5;
+    text-decoration: none;
+    padding-right: 15px;
+}
