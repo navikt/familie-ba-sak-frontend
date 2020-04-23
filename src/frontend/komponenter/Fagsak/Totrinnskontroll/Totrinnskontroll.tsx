@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
+import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { Systemtittel } from 'nav-frontend-typografi';
 import { IFagsak } from '../../../typer/fagsak';
 import {
@@ -23,7 +23,7 @@ interface IProps {
 }
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fagsak }) => {
-    const { axiosRequest } = useApp();
+    const { axiosRequest, hentSaksbehandlerRolle } = useApp();
     const { settFagsak } = useFagsakRessurser();
 
     const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
@@ -32,7 +32,9 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
         settSkalViseModal(innsendtVedtak.status === RessursStatus.SUKSESS);
     }, [innsendtVedtak.status]);
 
-    const skalViseSkjema = aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
+    const skalViseSkjema =
+        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
+        aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
 
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
         settInnsendtVedtak(byggHenterRessurs());
@@ -62,9 +64,9 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
     };
 
     return (
-        <div className="totrinnskontroll">
+        <div>
             {skalViseSkjema && (
-                <>
+                <div className="totrinnskontroll">
                     <div className="totrinnskontroll-tittel">
                         <Info className="ikon" />
                         <Systemtittel>Totrinnskontroll</Systemtittel>
@@ -73,7 +75,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
                         sendInnVedtak={sendInnVedtak}
                         innsendtVedtak={innsendtVedtak}
                     />
-                </>
+                </div>
             )}
             {skalViseModal && (
                 <UIModalWrapper
