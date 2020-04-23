@@ -46,7 +46,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     } = useVilkårsvurdering();
     const { erLesevisning } = useFagsakRessurser();
 
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(false);
+    const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
@@ -106,28 +106,30 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         />
                     </div>
                     <div style={{ flexGrow: 1 }} />
-                    <div className={'flex--space'}>
-                        <IkonKnapp
-                            onClick={() => toggleForm(true)}
-                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                        >
-                            {!ekspandertVilkår
-                                ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
-                                    ? 'Vurder'
-                                    : 'Endre'
-                                : 'Lukk'}
-                            {ekspandertVilkår ? <PennFylt /> : <Penn />}
-                        </IkonKnapp>
-                        <IkonKnapp
-                            onClick={() =>
-                                fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
-                            }
-                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                        >
-                            Slett
-                            <Slett />
-                        </IkonKnapp>
-                    </div>
+                    {!erLesevisning() && (
+                        <div className={'flex--space'}>
+                            <IkonKnapp
+                                onClick={() => toggleForm(true)}
+                                id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                            >
+                                {!ekspandertVilkår
+                                    ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                        ? 'Vurder'
+                                        : 'Endre'
+                                    : 'Lukk'}
+                                {ekspandertVilkår ? <PennFylt /> : <Penn />}
+                            </IkonKnapp>
+                            <IkonKnapp
+                                onClick={() =>
+                                    fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
+                                }
+                                id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                            >
+                                Slett
+                                <Slett />
+                            </IkonKnapp>
+                        </div>
+                    )}
                 </div>
 
                 {ekspandertVilkår && (
