@@ -586,10 +586,10 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-header@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-1.0.2.tgz#ea48dd3a503da1ad293971d5c08e8e48efb2d973"
-  integrity sha512-l8C4ZNa1Z5UIrS2WE8xkAr0+GD/r10USmAEErnBPRvG4EO5N7/pABh/DUOdAVkYwI5BbYs9X4ZboIGh8bT1xCA==
+"@navikt/familie-header@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-1.0.3.tgz#343f70b0637bd15d95a2db2c4324861feb14f08c"
+  integrity sha512-J0DRtnO6FgYYIdq2pFt6qWghEcNvbIUTEZEcOgf0DHSaVWDCAqfEwhLeoazKrhuaPq5NvFxfRGFQfSx1DjvPdQ==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/familie-ikoner" "^3.0.3"
@@ -616,13 +616,6 @@
   integrity sha512-DfEm15CQgzc/vqkJvoB62MdH7K6kKVPttbrmio6EZh99YM08Lx1IxbUqDU0tkwZ9zmleF38pwBwna+CBOd56Qw==
   dependencies:
     "@navikt/familie-typer" "^3.0.3"
-
-"@navikt/familie-typer@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.2.tgz#000ce6fc1c8bb7061abb2d284ff4621763a4ed6b"
-  integrity sha512-C/R5lZTGIERP4twDZfJYV4uszaV6dCMwc39qSfSOyrY9+0NBMmhF1gG1/ZGKZ/CqF+nTzL4vrO2oyqThT+p93w==
-  dependencies:
-    react "^16.12.0"
 
 "@navikt/familie-typer@^3.0.3":
   version "3.0.3"
@@ -8444,15 +8437,6 @@ react-tooltip@^3.11.4:
   integrity sha512-nTc1yHHaPCHHURvMpf/VNF17pIZiU4zwUGFJBUVr1fZkezFC7E0VPMMVrCfDjt+IpwTHICyzlyx+1FiQ7lw5LQ==
   dependencies:
     prop-types "^15.6.0"
-
-react@^16.12.0:
-  version "16.13.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.13.0.tgz#d046eabcdf64e457bbeed1e792e235e1b9934cf7"
-  integrity sha512-TSavZz2iSLkq5/oiE7gnFzmURKZMltmi193rm5HEoUDAXpzT9Kzw6oNZnGoai/4+fUnm7FqS5dwgUL34TujcWQ==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
 
 react@^16.13.1:
   version "16.13.1"
