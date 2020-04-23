@@ -3,6 +3,8 @@ import { ISøknadDTO } from '../../../typer/søknad';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 import { Checkbox, Input, Textarea } from 'nav-frontend-skjema';
+import CheckboxFelt from '../../Felleskomponenter/InputMedLesevisning/CheckboxFelt';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     settSøknad: (søknad: ISøknadDTO) => void;
@@ -10,11 +12,13 @@ interface IProps {
 }
 
 const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) => {
+    const { erLesevisning } = useFagsakRessurser();
     return (
         <PanelBase className={'søknad__panel'}>
             <Undertittel children={'2.3 Hva har bruker søkt om?'} />
             <br />
-            <Checkbox
+            <CheckboxFelt
+                visLeseversjon={erLesevisning()}
                 label={'Søker oppholder seg ikke i Norge'}
                 checked={!søknad.søkerMedOpplysninger.oppholderSegINorge}
                 onChange={() => {
