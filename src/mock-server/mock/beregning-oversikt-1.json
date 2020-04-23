@@ -13,7 +13,7 @@
             "navn": "Jenta Barnesen",
             "kjønn": "KVINNE"
           },
-          "stønadstype": "ORDINÆR_BARNETRYGD",
+          "ytelseType": "ORDINÆR_BARNETRYGD",
           "utbetaltPerMnd": 1054
         },
         {
@@ -24,7 +24,7 @@
             "navn": "Gutten Barnesen",
             "kjønn": "MANN"
           },
-          "stønadstype": "ORDINÆR_BARNETRYGD",
+          "ytelseType": "ORDINÆR_BARNETRYGD",
           "utbetaltPerMnd": 1054
         },
         {
@@ -35,7 +35,7 @@
             "navn": "Mor Moresen",
             "kjønn": "KVINNE"
           },
-          "stønadstype": "UTVIDET_BARNETRYGD",
+          "ytelseType": "UTVIDET_BARNETRYGD",
           "utbetaltPerMnd": 1054
         },
         {
@@ -46,11 +46,11 @@
             "navn": "Mor Moresen",
             "kjønn": "KVINNE"
           },
-          "stønadstype": "SMÅBARNSTILLEGG",
+          "ytelseType": "SMÅBARNSTILLEGG",
           "utbetaltPerMnd": 660
         }
       ],
-      "stønadstype": [
+      "ytelseTyper": [
         "ORDINÆR_BARNETRYGD",
         "ORDINÆR_BARNETRYGD",
         "UTVIDET_BARNETRYGD",
@@ -72,11 +72,11 @@
             "navn": "Gutten Barnesen",
             "kjønn": "MANN"
           },
-          "stønadstype": "ORDINÆR_BARNETRYGD",
+          "ytelseType": "ORDINÆR_BARNETRYGD",
           "utbetaltPerMnd": 1054
         }
       ],
-      "stønadstype": [
+      "ytelseTyper": [
         "ORDINÆR_BARNETRYGD"
       ],
       "antallBarn": 1,

@@ -21,7 +21,7 @@ const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
 
     const kolonneClassnames = classNames('tilkjentytelse-kolonne', { åpen: åpentElement });
     const radClassnames = classNames('tilkjentytelse-rad', { åpen: åpentElement });
-    const distinkteStønadstyper = [...new Set(beregning.stønadstype)];
+    const distinkteStønadstyper = [...new Set(beregning.ytelseTyper)];
 
     function isSpaceOrEnterKey(e: React.KeyboardEvent<HTMLDivElement>) {
         return e.key === 'Enter' || e.key === ' ';
