@@ -4,14 +4,13 @@ import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { IVilkårResultat, Resultat, IVilkårConfig, resultatTilUi } from '../../../../typer/vilkår';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
-import { RadioGruppe, Radio, TextareaControlled, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import {
     vilkårResultatFeilmeldingId,
     vilkårBegrunnelseFeilmeldingId,
     vilkårFeilmeldingId,
 } from './GeneriskVilkår';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
-import { Knapp } from 'nav-frontend-knapper';
 import { IPerson } from '../../../../typer/person';
 import classNames from 'classnames';
 import { Undertekst, Normaltekst } from 'nav-frontend-typografi';
@@ -24,6 +23,7 @@ import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import RadioGruppeFelt from '../../../Felleskomponenter/InputMedLesevisning/RadioGruppeFelt';
 import TextareaControlledFelt from '../../../Felleskomponenter/InputMedLesevisning/TextareaControlledFelt';
 import KnappFelt from '../../../Felleskomponenter/InputMedLesevisning/KnappFelt';
+import { Collapse } from 'react-collapse';
 
 interface IProps {
     person: IPerson;
@@ -87,7 +87,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         <li
             className={classNames(
                 'generisk-vilkår__en-periode',
-                ekspandertVilkår ? 'aapen' : 'lukket',
                 `resultat__${
                     vilkårResultat.verdi.resultat.verdi !== Resultat.KANSKJE
                         ? vilkårResultat.verdi.resultat.verdi.toLowerCase()
@@ -132,7 +131,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     )}
                 </div>
 
-                {ekspandertVilkår && (
+                <Collapse isOpened={ekspandertVilkår}>
                     <div className={'generisk-vilkår__ekspandert'}>
                         <RadioGruppeFelt
                             verdi={redigerbartVilkår.verdi.resultat.verdi}
@@ -228,7 +227,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             Avbryt
                         </KnappFelt>
                     </div>
-                )}
+                </Collapse>
             </SkjemaGruppe>
         </li>
     );

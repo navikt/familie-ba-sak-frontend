@@ -7,6 +7,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import classNames from 'classnames';
 import { kategorier } from '../../../typer/behandling';
 import { nyPeriode, periodeToString } from '../../../typer/periode';
+import { Collapse } from 'react-collapse';
 
 interface IProps {
     beregning: IOppsummeringBeregning;
@@ -51,7 +52,9 @@ const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
             </Kolonne>
             <Kolonne classes={kolonneClassnames}>{beregning.antallBarn}</Kolonne>
             <Kolonne classes={kolonneClassnames}>{formaterBeløp(beregning.utbetaltPerMnd)}</Kolonne>
-            {åpentElement && <BeregningDetalj beregningDetaljer={beregning.beregningDetaljer} />}
+            <Collapse isOpened={åpentElement}>
+                <BeregningDetalj beregningDetaljer={beregning.beregningDetaljer} />
+            </Collapse>
         </div>
     );
 };
