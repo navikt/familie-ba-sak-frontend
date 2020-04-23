@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ISøknadDTO } from '../../../typer/søknad';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
-import { Checkbox, Input, Textarea } from 'nav-frontend-skjema';
+import { Input, Textarea } from 'nav-frontend-skjema';
 import CheckboxFelt from '../../Felleskomponenter/InputMedLesevisning/CheckboxFelt';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
@@ -33,7 +33,8 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
             />
 
             <br />
-            <Checkbox
+            <CheckboxFelt
+                visLeseversjon={erLesevisning()}
                 label={'Søker har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'}
                 checked={!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder}
                 onChange={() => {
@@ -68,7 +69,8 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                     />
 
                     <br />
-                    <Checkbox
+                    <CheckboxFelt
+                        visLeseversjon={erLesevisning()}
                         label={'Søker skal ikke oppholde seg i Norge de neste 12 månedene'}
                         checked={!søknad.søkerMedOpplysninger.skalOppholdeSegINorgeNeste12Måneder}
                         onChange={() => {

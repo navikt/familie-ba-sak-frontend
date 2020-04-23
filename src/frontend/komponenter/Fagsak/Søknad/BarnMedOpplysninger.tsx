@@ -2,7 +2,9 @@ import * as React from 'react';
 import moment from 'moment';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { Checkbox, Textarea } from 'nav-frontend-skjema';
+import { Textarea } from 'nav-frontend-skjema';
+import CheckboxFelt from '../../Felleskomponenter/InputMedLesevisning/CheckboxFelt';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -10,13 +12,15 @@ interface IProps {
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { settBarn } = useSøknad();
+    const { erLesevisning } = useFagsakRessurser();
     const alder = barn.fødselsdato
         ? moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years')
         : 'ukjent';
 
     return (
         <div>
-            <Checkbox
+            <CheckboxFelt
+                visLeseversjon={erLesevisning()}
                 id={`barn-${barn.ident}`}
                 label={`${barn.navn ?? 'ukjent'} (${alder} år) ${barn.ident}`}
                 checked={barn.inkludertISøknaden}
@@ -29,7 +33,8 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             />
             {barn.inkludertISøknaden && (
                 <div className={'søknad__panel--innrykk'}>
-                    <Checkbox
+                    <CheckboxFelt
+                        visLeseversjon={erLesevisning()}
                         label={'5.1 Barnet bor ikke fast sammen med søker'}
                         checked={!barn.borMedSøker}
                         onChange={() => {
@@ -40,7 +45,8 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                         }}
                     />
 
-                    <Checkbox
+                    <CheckboxFelt
+                        visLeseversjon={erLesevisning()}
                         label={'5.5.1 Barnet oppholder seg i utlandet'}
                         checked={!barn.oppholderSegINorge}
                         onChange={() => {
@@ -51,7 +57,8 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                         }}
                     />
 
-                    <Checkbox
+                    <CheckboxFelt
+                        visLeseversjon={erLesevisning()}
                         label={
                             '5.5.2 Barnet har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'
                         }
