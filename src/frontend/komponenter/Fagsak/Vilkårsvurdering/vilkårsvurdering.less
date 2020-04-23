@@ -13,11 +13,16 @@
             position: relative;
             margin: .5rem 0;
             padding: @itemPadding 0 @itemPadding 2.25rem;
-    
-            &.aapen:before {
+
+
+            .ReactCollapse--collapse {
+                transition: height 400ms ease-out;
+            }
+
+            &:before {
                 position: absolute;
                 content: '';
-                height: calc(100% - @tekstMargin - @itemPadding - 2rem);
+                height: calc(100% - @tekstMargin - @itemPadding - 2.8rem);
                 width: 4px;
                 border-radius: 2px;
                 background: @navGra60;

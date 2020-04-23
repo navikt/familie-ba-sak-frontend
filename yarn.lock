@@ -546,10 +546,10 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
-"@navikt/familie-backend@^5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.2.tgz#36a6514db1cf14dcc6b87434277dd887bdfb81a8"
-  integrity sha512-JsxZJH9wIaiSU3lgaeFCW4au7QQARusYPTS+SrWIJJSozaOcjJokGA8YTgWAhE621wg1aCoa3yN03kn1c4mGWw==
+"@navikt/familie-backend@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.3.tgz#7eef9dc908863619ed63af5122228766c281e665"
+  integrity sha512-0q2PDg+QsHvLkrbmn8Lsx2mcsrwBi/QKTBVRMIBvyXng0DUlxyJu+WzGNwonhzH0zH9upbXOa7ai3lZKUj2bJQ==
   dependencies:
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.2"
@@ -586,10 +586,10 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-header@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-1.0.3.tgz#343f70b0637bd15d95a2db2c4324861feb14f08c"
-  integrity sha512-J0DRtnO6FgYYIdq2pFt6qWghEcNvbIUTEZEcOgf0DHSaVWDCAqfEwhLeoazKrhuaPq5NvFxfRGFQfSx1DjvPdQ==
+"@navikt/familie-header@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-1.0.2.tgz#ea48dd3a503da1ad293971d5c08e8e48efb2d973"
+  integrity sha512-l8C4ZNa1Z5UIrS2WE8xkAr0+GD/r10USmAEErnBPRvG4EO5N7/pABh/DUOdAVkYwI5BbYs9X4ZboIGh8bT1xCA==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/familie-ikoner" "^3.0.3"
@@ -8325,6 +8325,11 @@ react-axe@^3.4.1:
   dependencies:
     axe-core "^3.5.0"
     requestidlecallback "^0.3.0"
+
+react-collapse@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-5.0.1.tgz#f763b7207aee73baa1ff778b2d0b4ffb49d900a0"
+  integrity sha512-cN2tkxBWizhPQ2JHfe0aUSJtmMthKA17NZkTElpiQ2snQAAi1hssXZ2fv88rAPNNvG5ss4t0PbOZT0TIl9Lk3Q==
 
 react-confetti@^5.0.1:
   version "5.0.1"

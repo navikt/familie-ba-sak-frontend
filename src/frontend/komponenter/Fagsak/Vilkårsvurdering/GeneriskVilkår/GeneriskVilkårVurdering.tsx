@@ -20,6 +20,7 @@ import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PennFylt from '../../../../ikoner/PennFylt';
 import Penn from '../../../../ikoner/Penn';
 import Slett from '../../../../ikoner/Slett';
+import { Collapse } from 'react-collapse';
 
 interface IProps {
     person: IPerson;
@@ -80,7 +81,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         <li
             className={classNames(
                 'generisk-vilkår__en-periode',
-                ekspandertVilkår ? 'aapen' : 'lukket',
                 `resultat__${
                     vilkårResultat.verdi.resultat.verdi !== Resultat.KANSKJE
                         ? vilkårResultat.verdi.resultat.verdi.toLowerCase()
@@ -123,7 +123,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     </div>
                 </div>
 
-                {ekspandertVilkår && (
+                <Collapse isOpened={ekspandertVilkår}>
                     <div className={'generisk-vilkår__ekspandert'}>
                         <RadioGruppe
                             legend={
@@ -209,7 +209,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             Avbryt
                         </Knapp>
                     </div>
-                )}
+                </Collapse>
             </SkjemaGruppe>
         </li>
     );
