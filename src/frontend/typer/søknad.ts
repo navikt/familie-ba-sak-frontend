@@ -26,8 +26,8 @@ export interface IBarnMedOpplysninger {
     borMedSøker: boolean;
     harOppholdtSegINorgeSiste12Måneder: boolean;
     tilleggsopplysninger?: string;
-    navn: string;
-    fødselsdato: string;
+    navn?: string;
+    fødselsdato?: string;
 }
 
 export enum TypeSøker {

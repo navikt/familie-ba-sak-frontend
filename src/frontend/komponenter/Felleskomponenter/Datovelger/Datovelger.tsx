@@ -28,13 +28,11 @@ const Datovelger: React.FC<IProps> = ({
             <NavDatovelger
                 disabled={disabled}
                 id={id}
+                visÅrVelger={true}
                 input={{ name: id, id: `input_${id}`, placeholder }}
                 locale={'nb'}
                 valgtDato={valgtDato}
                 onChange={onChange}
-                avgrensninger={{
-                    helgedagerIkkeTillatt: true,
-                }}
             />
         </div>
     );

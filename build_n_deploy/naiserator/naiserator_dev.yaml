@@ -25,8 +25,8 @@ spec:
   istio:
     enabled: false
   ingresses:
-    - https://familie-ba-sak-frontend.nais.preprod.local
     - https://barnetrygd.nais.preprod.local
+    - https://barnetrygd.dev-fss.nais.io
   vault:
     enabled: true
   webproxy: true

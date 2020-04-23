@@ -2,18 +2,14 @@ import { Element, Undertekst } from 'nav-frontend-typografi';
 import React from 'react';
 
 import { IPerson } from '../../../../typer/person';
-import { IVilkårConfig, IVilkårResultat, VilkårType, Resultat } from '../../../../typer/vilkår';
+import { IVilkårConfig, IVilkårResultat, VilkårType } from '../../../../typer/vilkår';
 import { IFelt } from '../../../../typer/felt';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import Advarsel from '../../../../ikoner/Advarsel';
 import DashedHr from '../../../Felleskomponenter/DashedHr/DashedHr';
 import Pluss from '../../../../ikoner/Pluss';
-import { useHistory } from 'react-router';
-import { useApp } from '../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import { erLesevisning } from '../../../../utils/behandling';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -41,31 +37,15 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { leggTilVilkår } = useVilkårsvurdering();
-    const history = useHistory();
-
-    const { hentSaksbehandlerRolle } = useApp();
-    const { hentStegPåÅpenBehandling } = useFagsakRessurser();
-    const visLeseversjon = (): boolean => {
-        const saksbehandlerRolle = hentSaksbehandlerRolle();
-        const steg = hentStegPåÅpenBehandling();
-        if (saksbehandlerRolle && steg) {
-            return erLesevisning(saksbehandlerRolle, steg);
-        }
-        history.push('/error');
-        return true;
-    };
+    const { erLesevisning } = useFagsakRessurser();
 
     return (
         <div className={'generisk-vilkår'}>
             <br />
             <div className={'horisontal-sentrert-div'}>
-                {vilkårResultater.filter(
-                    (vilkårResultat: IFelt<IVilkårResultat>) =>
-                        vilkårResultat.verdi.resultat.verdi !== Resultat.KANSKJE
-                ).length === 0 && <Advarsel heigth={24} width={24} />}
                 <Element children={vilkårFraConfig.tittel} />
                 <Undertekst children={vilkårFraConfig.lovreferanse} />
-                {!visLeseversjon() && (
+                {!erLesevisning() && (
                     <UtførKnapp
                         onClick={() =>
                             leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)
@@ -87,7 +67,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             person={person}
                             vilkårResultat={vilkårResultat}
                             visFeilmeldinger={visFeilmeldinger}
-                            visLeseversjon={visLeseversjon()}
+                            visLeseversjon={erLesevisning()}
                         />
                     );
                 })}

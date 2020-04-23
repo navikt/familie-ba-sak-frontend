@@ -1,4 +1,3 @@
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
@@ -9,12 +8,7 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import BehandlingVilkårSkjema from './VilkårsvurderingSkjema';
-import {
-    IRestPersonResultat,
-    IRestVilkårResultat,
-    IVilkårResultat,
-    Resultat,
-} from '../../../typer/vilkår';
+import { IVilkårResultat } from '../../../typer/vilkår';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
 
@@ -67,26 +61,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
             }}
             senderInn={senderInn}
         >
-            {aktivBehandling.personResultater.length !== 0 &&
-                aktivBehandling.personResultater.filter((personResultat: IRestPersonResultat) => {
-                    return (
-                        personResultat.vilkårResultater.filter(
-                            (vilkårResultat: IRestVilkårResultat) =>
-                                vilkårResultat.resultat !== Resultat.KANSKJE
-                        ).length > 0
-                    );
-                }).length > 0 && (
-                    <>
-                        <br />
-                        <AlertStripeAdvarsel
-                            children={
-                                'Det finnes allerede en vilkårsvurdering på behandlingen. Vi har fylt ut gjeldende vurdering.'
-                            }
-                        />
-                        <br />
-                    </>
-                )}
-
             <BehandlingVilkårSkjema
                 opprettelseFeilmelding={opprettelseFeilmelding}
                 visFeilmeldinger={visFeilmeldinger}
