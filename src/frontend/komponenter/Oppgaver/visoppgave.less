@@ -25,9 +25,14 @@
         margin-left: 2rem;
     }
 }
+.oppgavelist{
+    overflow-x: auto;
+    overflow-y: hidden;
+}
 
 table.tabell{
     margin-top: 50px;
+    width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
 }
@@ -40,8 +45,9 @@ table.tabell{
 
 table.tabell tbody{
     display:block;
-    width: 100%;
-    overflow: auto;
+    min-width: max-content;
+    overflow-y: auto;
+    overflow-x: hidden;
     height: @tableBodyHeight;
 }
 
