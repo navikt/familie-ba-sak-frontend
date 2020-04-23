@@ -20,13 +20,14 @@ import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PennFylt from '../../../../ikoner/PennFylt';
 import Penn from '../../../../ikoner/Penn';
 import Slett from '../../../../ikoner/Slett';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import RadioGruppeFelt from '../../../Felleskomponenter/InputMedLesevisning/RadioGruppeFelt';
 
 interface IProps {
     person: IPerson;
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: IFelt<IVilkårResultat>;
     visFeilmeldinger: boolean;
-    visLeseversjon: boolean;
 }
 
 const GeneriskVilkårVurdering: React.FC<IProps> = ({
@@ -41,6 +42,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         fjernEllerNullstillPeriodeForVilkår,
         settVilkårForPeriodeResultat,
     } = useVilkårsvurdering();
+    const { erLesevisning } = useFagsakRessurser();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
@@ -128,7 +130,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
                 {ekspandertVilkår && (
                     <div className={'generisk-vilkår__ekspandert'}>
-                        <RadioGruppe
+                        <RadioGruppeFelt
+                            verdi={redigerbartVilkår.verdi.resultat.verdi}
+                            visLeseversjon={erLesevisning()}
                             legend={
                                 vilkårFraConfig.spørsmål
                                     ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
@@ -154,7 +158,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI}
                                 onChange={() => radioOnChange(Resultat.NEI)}
                             />
-                        </RadioGruppe>
+                        </RadioGruppeFelt>
 
                         <FastsettPeriode
                             redigerbartVilkår={redigerbartVilkår}
