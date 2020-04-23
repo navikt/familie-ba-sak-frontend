@@ -22,6 +22,8 @@ import Penn from '../../../../ikoner/Penn';
 import Slett from '../../../../ikoner/Slett';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import RadioGruppeFelt from '../../../Felleskomponenter/InputMedLesevisning/RadioGruppeFelt';
+import TextareaControlledFelt from '../../../Felleskomponenter/InputMedLesevisning/TextareaControlledFelt';
+import KnappFelt from '../../../Felleskomponenter/InputMedLesevisning/KnappFelt';
 
 interface IProps {
     person: IPerson;
@@ -166,7 +168,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             visFeilmeldinger={skalViseFeilmeldinger()}
                         />
 
-                        <TextareaControlled
+                        <TextareaControlledFelt
+                            visLeseversjon={erLesevisning()}
                             defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                             id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                             label={'Begrunnelse'}
@@ -193,7 +196,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             }}
                         />
 
-                        <Knapp
+                        <KnappFelt
+                            visLeseversjon={erLesevisning()}
                             onClick={() => {
                                 const erVilkårGyldig: boolean =
                                     redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
@@ -211,10 +215,16 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             type={'standard'}
                         >
                             Ferdig
-                        </Knapp>
-                        <Knapp onClick={() => toggleForm(false)} mini={true} type={'flat'}>
+                        </KnappFelt>
+
+                        <KnappFelt
+                            visLeseversjon={erLesevisning()}
+                            onClick={() => toggleForm(false)}
+                            mini={true}
+                            type={'flat'}
+                        >
                             Avbryt
-                        </Knapp>
+                        </KnappFelt>
                     </div>
                 )}
             </SkjemaGruppe>
