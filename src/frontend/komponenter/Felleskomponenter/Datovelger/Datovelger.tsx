@@ -1,6 +1,6 @@
 import React from 'react';
 import { Label } from 'nav-frontend-skjema';
-import { Datovelger, ISODateString } from 'nav-datovelger';
+import { Datovelger as NavDatovelger, ISODateString } from 'nav-datovelger';
 import 'nav-datovelger/lib/styles/datovelger';
 
 interface IProps {
@@ -10,20 +10,22 @@ interface IProps {
     onChange: (dato?: ISODateString) => void;
     placeholder?: string;
     valgtDato?: string;
+    className?: string;
 }
 
-const Datovegler: React.FC<IProps> = ({
+const Datovelger: React.FC<IProps> = ({
     disabled,
     id,
     label,
     onChange,
     placeholder,
     valgtDato,
+    className = '',
 }) => {
     return (
-        <div>
+        <div className={className}>
             <Label children={label} htmlFor={id} />
-            <Datovelger
+            <NavDatovelger
                 disabled={disabled}
                 id={id}
                 input={{ name: id, id: `input_${id}`, placeholder }}
@@ -38,4 +40,4 @@ const Datovegler: React.FC<IProps> = ({
     );
 };
 
-export default Datovegler;
+export default Datovelger;

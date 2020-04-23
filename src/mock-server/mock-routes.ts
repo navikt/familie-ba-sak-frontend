@@ -34,6 +34,7 @@ app.get('/user/profile', (_: Request, res: Response) => {
     res.send({
         displayName: 'Test Testersen',
         enhet: '8888',
+        navIdent: 'Z991144',
     });
 });
 
@@ -80,6 +81,10 @@ app.post('/familie-ba-sak/api/fagsaker/sok', (req: Request, res: Response) => {
             500
         );
     }
+});
+
+app.get('/familie-ba-sak/api/oppgave', (_, res) => {
+    setTimeout(() => res.send(lesMockFil(`oppgaver.json`)), 500);
 });
 
 export default app;

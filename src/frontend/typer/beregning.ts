@@ -7,14 +7,14 @@ export interface IOppsummeringBeregning {
     periodeTom: string;
     sakstype: BehandlingKategori;
     beregningDetaljer: IBeregningDetalj[];
-    stønadstype: YtelseType[];
+    ytelseTyper: YtelseType[];
     antallBarn: number;
     utbetaltPerMnd: number;
 }
 
 export interface IBeregningDetalj {
     person: IPerson;
-    stønadstype: YtelseType;
+    ytelseType: YtelseType;
     utbetaltPerMnd: number;
 }
 
