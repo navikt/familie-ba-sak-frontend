@@ -1,10 +1,10 @@
-export enum TotrinnskontrollStatus {
+export enum TotrinnskontrollBeslutning {
     IKKE_VURDERT = 'IKKE_VURDERT',
     GODKJENT = 'GODKJENT',
     UNDERKJENT = 'UNDERKJENT',
 }
 
 export interface ITotrinnskontrollData {
-    status: TotrinnskontrollStatus;
+    beslutning: TotrinnskontrollBeslutning;
     begrunnelse: string;
 }

@@ -1,6 +1,6 @@
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { ITotrinnskontrollData, TotrinnskontrollStatus } from '../../../typer/totrinnskontroll';
+import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import { IFagsak } from '../../../typer/fagsak';
@@ -15,8 +15,8 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     sendInnVedtak,
 }) => {
     const [totrinnskontrollStatus, settTotrinnskontrollStatus] = React.useState<
-        TotrinnskontrollStatus
-    >(TotrinnskontrollStatus.IKKE_VURDERT);
+        TotrinnskontrollBeslutning
+    >(TotrinnskontrollBeslutning.IKKE_VURDERT);
     const [totrinnskontrollBegrunnelse, settTotrinnskontrollBegrunnelse] = React.useState<string>(
         ''
     );
@@ -37,26 +37,28 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     label={'Godkjent'}
                     name={`godkjent`}
                     className="totrinnskontroll-radio"
-                    checked={totrinnskontrollStatus === TotrinnskontrollStatus.GODKJENT}
-                    onChange={() => settTotrinnskontrollStatus(TotrinnskontrollStatus.GODKJENT)}
+                    checked={totrinnskontrollStatus === TotrinnskontrollBeslutning.GODKJENT}
+                    onChange={() => settTotrinnskontrollStatus(TotrinnskontrollBeslutning.GODKJENT)}
                     disabled={senderInn}
                 />
                 <Radio
                     label={'Vurdér på nytt'}
                     name={`underkjent`}
                     className="totrinnskontroll-radio"
-                    checked={totrinnskontrollStatus === TotrinnskontrollStatus.UNDERKJENT}
-                    onChange={() => settTotrinnskontrollStatus(TotrinnskontrollStatus.UNDERKJENT)}
+                    checked={totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT}
+                    onChange={() =>
+                        settTotrinnskontrollStatus(TotrinnskontrollBeslutning.UNDERKJENT)
+                    }
                     disabled={senderInn}
                 />
             </RadioGruppe>
-            {totrinnskontrollStatus === TotrinnskontrollStatus.UNDERKJENT && (
+            {totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT && (
                 <div className={'totrinnskontroll-begrunnelse'}>
                     <TextareaControlled
                         defaultValue={totrinnskontrollBegrunnelse}
                         value={totrinnskontrollBegrunnelse}
                         placeholder={'Begrunnelse'}
-                        onBlur={(event: any) => settTotrinnskontrollBegrunnelse(event.target.value)}
+                        onBlur={event => settTotrinnskontrollBegrunnelse(event.target.value)}
                     />
                 </div>
             )}
@@ -67,16 +69,16 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 onClick={() => {
                     if (!senderInn) {
                         sendInnVedtak({
-                            status: totrinnskontrollStatus,
+                            beslutning: totrinnskontrollStatus,
                             begrunnelse:
-                                totrinnskontrollStatus === TotrinnskontrollStatus.UNDERKJENT
+                                totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
                                     ? totrinnskontrollBegrunnelse
                                     : '',
                         });
                     }
                 }}
                 children={
-                    totrinnskontrollStatus === TotrinnskontrollStatus.UNDERKJENT
+                    totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
                         ? 'Send til saksbehandler'
                         : 'Godkjenn vedtaket'
                 }

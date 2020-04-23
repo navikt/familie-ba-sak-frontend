@@ -13,8 +13,9 @@ import { useApp } from '../../../context/AppContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { AxiosError } from 'axios';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
-import { ITotrinnskontrollData, TotrinnskontrollStatus } from '../../../typer/totrinnskontroll';
+import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 import Info from '../../../ikoner/Info';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 
 interface IProps {
     aktivBehandling: IBehandling | undefined;
@@ -26,15 +27,19 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
     const { settFagsak } = useFagsakRessurser();
 
     const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
+    const [skalViseModal, settSkalViseModal] = React.useState<boolean>(false);
+    React.useEffect(() => {
+        settSkalViseModal(innsendtVedtak.status === RessursStatus.SUKSESS);
+    }, [innsendtVedtak.status]);
 
     const skalViseSkjema = aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
 
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
         settInnsendtVedtak(byggHenterRessurs());
         const manglerBegrunnelse =
-            totrinnskontrollData.status === TotrinnskontrollStatus.UNDERKJENT &&
+            totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.UNDERKJENT &&
             !totrinnskontrollData.begrunnelse;
-        if (totrinnskontrollData.status === TotrinnskontrollStatus.IKKE_VURDERT) {
+        if (totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
             settInnsendtVedtak(byggFeiletRessurs('Du må gjøre et valg'));
         } else if (manglerBegrunnelse) {
             settInnsendtVedtak(byggFeiletRessurs('Mangler begrunnelse'));
@@ -58,14 +63,27 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
 
     return (
         <div className="totrinnskontroll">
-            <div className="totrinnskontroll-tittel">
-                <Info className="ikon" />
-                <Systemtittel>Totrinnskontroll</Systemtittel>
-            </div>
             {skalViseSkjema && (
-                <Totrinnskontrollskjema
-                    sendInnVedtak={sendInnVedtak}
-                    innsendtVedtak={innsendtVedtak}
+                <>
+                    <div className="totrinnskontroll-tittel">
+                        <Info className="ikon" />
+                        <Systemtittel>Totrinnskontroll</Systemtittel>
+                    </div>
+                    <Totrinnskontrollskjema
+                        sendInnVedtak={sendInnVedtak}
+                        innsendtVedtak={innsendtVedtak}
+                    />
+                </>
+            )}
+            {skalViseModal && (
+                <UIModalWrapper
+                    modal={{
+                        tittel: 'Beslutning innsendt',
+                        content: 'Din beslutning er innsendt',
+                        lukkKnapp: true,
+                        onClose: () => settSkalViseModal(false),
+                        visModal: skalViseModal,
+                    }}
                 />
             )}
         </div>

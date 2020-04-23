@@ -61,6 +61,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     }, [fagsak, axiosRequest]);
 
     const visSubmitKnapp =
+        aktivBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
         aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
         aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
 

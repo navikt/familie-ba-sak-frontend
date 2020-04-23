@@ -1,16 +1,16 @@
-import { IFagsak, FagsakStatus } from '../../frontend/typer/fagsak';
-import { Ressurs, byggSuksessRessurs } from '../../frontend/typer/ressurs';
+import { FagsakStatus, IFagsak } from '../../frontend/typer/fagsak';
+import { byggSuksessRessurs, Ressurs, RessursStatus } from '../../frontend/typer/ressurs';
 import {
-    IBehandling,
-    BehandlingSteg,
     BehandlingKategori,
-    BehandlingUnderkategori,
-    BehandlingStatus,
-    Behandlingstype,
     BehandlingResultat,
+    BehandlingStatus,
+    BehandlingSteg,
+    Behandlingstype,
+    BehandlingUnderkategori,
+    IBehandling,
 } from '../../frontend/typer/behandling';
-import { PersonType, IPerson } from '../../frontend/typer/person';
-import { IRestPersonResultat, VilkårType, Resultat } from '../../frontend/typer/vilkår';
+import { IPerson, PersonType } from '../../frontend/typer/person';
+import { IRestPersonResultat, Resultat, VilkårType } from '../../frontend/typer/vilkår';
 import { kjønnType } from '@navikt/familie-typer';
 
 export const mockFagsak3 = (id: number, søkerFødselsnummer: string): Ressurs<IFagsak> | null => {
@@ -24,6 +24,20 @@ export const mockFagsak3 = (id: number, søkerFødselsnummer: string): Ressurs<I
     };
 
     return byggSuksessRessurs<IFagsak>(fagsak);
+};
+
+export const oppdaterBehandlingsstatusPaaFagsak = (
+    fagsak: Ressurs<IFagsak> | null,
+    behandlingStatus: BehandlingStatus
+) => {
+    if (fagsak === null || fagsak.status !== RessursStatus.SUKSESS) {
+        return fagsak;
+    }
+
+    fagsak.data.behandlinger = fagsak.data.behandlinger.map(behandling => {
+        return behandling.aktiv ? { ...behandling, status: behandlingStatus } : behandling;
+    });
+    return fagsak;
 };
 
 export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: string): IBehandling => {

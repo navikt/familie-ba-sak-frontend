@@ -28,6 +28,7 @@ export enum BehandlingStatus {
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     SENDT_TIL_BESLUTTER = 'SENDT_TIL_BESLUTTER',
     GODKJENT = 'GODKJENT',
+    UNDERKJENT_AV_BESLUTTER = 'UNDERKJENT_AV_BESLUTTER',
     LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG = 'LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG',
     SENDT_TIL_IVERKSETTING = 'SENDT_TIL_IVERKSETTING',
     IVERKSATT = 'IVERKSATT',
@@ -116,6 +117,7 @@ export const behandlingsstatuser: INøkkelPar = {
     OPPRETTET: { id: 'OPPRETTET', navn: 'Opprettet' },
     UNDER_BEHANDLING: { id: 'UNDER_BEHANDLING', navn: 'Under behandling' },
     SENDT_TIL_BESLUTTER: { id: 'SENDT_TIL_BESLUTTER', navn: 'Sendt til beslutter' },
+    UNDERKJENT_AV_BESLUTTER: { id: 'UNDERKJENT_AV_BESLUTTER', navn: 'Underkjent av beslutter' },
     GODKJENT: { id: 'GODKJENT', navn: 'Godkjent' },
     LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG: {
         id: 'LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG',

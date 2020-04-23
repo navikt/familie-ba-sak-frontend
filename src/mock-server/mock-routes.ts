@@ -2,7 +2,11 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
 import { vedtakHtml } from './mock/vedtak';
-import { mockFagsak3 } from './mock/fagsak';
+import { mockFagsak3, oppdaterBehandlingsstatusPaaFagsak } from './mock/fagsak';
+import { BehandlingStatus } from '../frontend/typer/behandling';
+import { TotrinnskontrollBeslutning } from '../frontend/typer/totrinnskontroll';
+import { Ressurs } from '../frontend/typer/ressurs';
+import { IFagsak } from '../frontend/typer/fagsak';
 
 const delayMs = 20;
 const app = express();
@@ -80,6 +84,36 @@ app.post('/familie-ba-sak/api/fagsaker/sok', (req: Request, res: Response) => {
             500
         );
     }
+});
+
+app.post('/familie-ba-sak/api/fagsaker/:id/iverksett-vedtak', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const fagsak: Ressurs<IFagsak> | null =
+        id === '3'
+            ? mockFagsak3(parseInt(id, 10), '12345678910')
+            : JSON.parse(lesMockFil(`fagsak-${id}.json`));
+    const beslutning: TotrinnskontrollBeslutning = req.body.beslutning;
+    const nyStatus =
+        beslutning === TotrinnskontrollBeslutning.UNDERKJENT
+            ? BehandlingStatus.UNDERKJENT_AV_BESLUTTER
+            : BehandlingStatus.GODKJENT;
+    setTimeout(() => res.send(oppdaterBehandlingsstatusPaaFagsak(fagsak, nyStatus)), delayMs);
+});
+
+app.post('/familie-ba-sak/api/fagsaker/:id/send-til-beslutter', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const fagsak: Ressurs<IFagsak> | null =
+        id === '3'
+            ? mockFagsak3(parseInt(id, 10), '12345678910')
+            : JSON.parse(lesMockFil(`fagsak-${id}.json`));
+
+    setTimeout(
+        () =>
+            res.send(
+                oppdaterBehandlingsstatusPaaFagsak(fagsak, BehandlingStatus.SENDT_TIL_BESLUTTER)
+            ),
+        delayMs
+    );
 });
 
 export default app;
