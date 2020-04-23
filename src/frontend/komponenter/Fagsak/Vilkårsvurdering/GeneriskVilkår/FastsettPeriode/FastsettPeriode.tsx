@@ -70,7 +70,6 @@ const FastsettPeriode: React.FC<IProps> = ({
                         valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
                     />
                 </div>
-                {console.log('val' + redigerbartVilkår.verdi.periode.verdi.tom)}
                 {(!erLesevisning() || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
                         <DatovelgerFelt

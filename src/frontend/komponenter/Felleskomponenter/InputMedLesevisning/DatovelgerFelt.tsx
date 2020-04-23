@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Lesefelt from './Lesefelt';
 import { DatovelgerProps } from '../Datovelger/Datovelger';
-import { Datovelger } from 'nav-datovelger';
+import Datovelger from '../Datovelger/Datovelger';
 
 interface IProps extends DatovelgerProps {
     visLeseversjon: boolean;

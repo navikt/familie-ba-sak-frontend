@@ -137,13 +137,10 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         const saksbehandlerRolle = hentSaksbehandlerRolle();
         const steg = hentStegPåÅpenBehandling();
         if (saksbehandlerRolle && steg) {
-            /*
             return (
                 saksbehandlerRolle <= BehandlerRolle.VEILEDER ||
                 steg >= BehandlingSteg.GODKJENNE_VEDTAK
             );
-             */
-            return true;
         }
         //history.push('/error');
         return true;
