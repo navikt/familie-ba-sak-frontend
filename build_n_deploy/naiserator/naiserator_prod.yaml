@@ -26,7 +26,6 @@ spec:
     enabled: false
   ingresses:
     - https://barnetrygd.nais.adeo.no
-    - https://barnetrygd.prod-fss.nais.io
   vault:
     enabled: true
   webproxy: true
