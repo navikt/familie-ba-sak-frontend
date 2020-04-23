@@ -66,7 +66,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         saksbehandler?: string
     ): Promise<Ressurs<IOppgave[]>> => {
         interface LooseObject {
-            [key: string]: any;
+            [key: string]: string;
         }
         const searchParams: LooseObject = {};
 

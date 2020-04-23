@@ -10,13 +10,15 @@ interface IProps {
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { settBarn } = useSøknad();
-    const alder = moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years');
+    const alder = barn.fødselsdato
+        ? moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years')
+        : 'ukjent';
 
     return (
         <div>
             <Checkbox
                 id={`barn-${barn.ident}`}
-                label={`${barn.navn} (${alder} år) ${barn.ident}`}
+                label={`${barn.navn ?? 'ukjent'} (${alder} år) ${barn.ident}`}
                 checked={barn.inkludertISøknaden}
                 onChange={() => {
                     settBarn({
