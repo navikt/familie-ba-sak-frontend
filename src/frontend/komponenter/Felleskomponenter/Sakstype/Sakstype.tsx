@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Select } from 'nav-frontend-skjema';
 import {
     BehandlingKategori,
     kategorier,
     underkategorier,
     BehandlingUnderkategori,
 } from '../../../typer/behandling';
+import SelectFelt from '../InputMedLesevisning/SelectFelt';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     kategori: BehandlingKategori;
@@ -19,9 +20,11 @@ const Sakstype: React.FunctionComponent<IProps> = ({
     underkategori,
     underkategoriOnChange,
 }) => {
+    const { erLesevisning } = useFagsakRessurser();
     return (
         <>
-            <Select
+            <SelectFelt
+                visLeseversjon={erLesevisning()}
                 bredde={'l'}
                 label="Kategori"
                 onChange={event => kategoriOnChange(event.target.value as BehandlingKategori)}
@@ -34,10 +37,11 @@ const Sakstype: React.FunctionComponent<IProps> = ({
                         </option>
                     );
                 })}
-            </Select>
+            </SelectFelt>
 
             <br />
-            <Select
+            <SelectFelt
+                visLeseversjon={erLesevisning()}
                 bredde={'l'}
                 label="Underkategori"
                 onChange={event =>
@@ -52,7 +56,7 @@ const Sakstype: React.FunctionComponent<IProps> = ({
                         </option>
                     );
                 })}
-            </Select>
+            </SelectFelt>
         </>
     );
 };
