@@ -39,3 +39,4 @@ const Datovelger: React.FC<IProps> = ({
 };
 
 export default Datovelger;
+export { IProps as DatovelgerProps };

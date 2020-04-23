@@ -9,6 +9,8 @@ import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { ISODateString } from 'nav-datovelger';
+import DatovelgerFelt from '../../../../Felleskomponenter/InputMedLesevisning/DatovelgerFelt';
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 
 interface IProps {
     redigerbartVilkår: IFelt<IVilkårResultat>;
@@ -21,6 +23,7 @@ const FastsettPeriode: React.FC<IProps> = ({
     validerOgSettRedigerbartVilkår,
     visFeilmeldinger,
 }) => {
+    const { erLesevisning } = useFagsakRessurser();
     const [fastsettTom, settFastsettTom] = useState<boolean>(
         redigerbartVilkår.verdi.periode.verdi.tom &&
             redigerbartVilkår.verdi.periode.verdi.tom !== ''
@@ -42,7 +45,8 @@ const FastsettPeriode: React.FC<IProps> = ({
             <Normaltekst children={'Fastsett periode'} />
             <div className={'fastsett-periode__flex'}>
                 <div>
-                    <Datovelger
+                    <DatovelgerFelt
+                        visLeseversjon={erLesevisning()}
                         id={`${vilkårPeriodeFeilmeldingId(
                             redigerbartVilkår.verdi
                         )}__fastsett-periode-fom`}
@@ -66,36 +70,18 @@ const FastsettPeriode: React.FC<IProps> = ({
                         valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
                     />
                 </div>
-
-                <div>
-                    <Datovelger
-                        disabled={!fastsettTom}
-                        id={`${vilkårPeriodeFeilmeldingId(
-                            redigerbartVilkår.verdi
-                        )}__fastsett-periode-tom`}
-                        label={'T.o.m.'}
-                        placeholder={datoformatNorsk.DATO}
-                        onChange={(dato?: ISODateString) => {
-                            validerOgSettRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    periode: {
-                                        ...redigerbartVilkår.verdi.periode,
-                                        verdi: nyPeriode(
-                                            redigerbartVilkår.verdi.periode.verdi.fom,
-                                            dato
-                                        ),
-                                    },
-                                },
-                            });
-                        }}
-                        valgtDato={redigerbartVilkår.verdi.periode.verdi.tom}
-                    />
-                    <Checkbox
-                        checked={fastsettTom}
-                        onChange={() => {
-                            if (redigerbartVilkår.verdi.periode.verdi.tom !== '' && fastsettTom) {
+                {console.log('val' + redigerbartVilkår.verdi.periode.verdi.tom)}
+                {(!erLesevisning() || redigerbartVilkår.verdi.periode.verdi.tom) && (
+                    <div>
+                        <DatovelgerFelt
+                            visLeseversjon={erLesevisning()}
+                            disabled={!fastsettTom}
+                            id={`${vilkårPeriodeFeilmeldingId(
+                                redigerbartVilkår.verdi
+                            )}__fastsett-periode-tom`}
+                            label={'T.o.m.'}
+                            placeholder={datoformatNorsk.DATO}
+                            onChange={(dato?: ISODateString) => {
                                 validerOgSettRedigerbartVilkår({
                                     ...redigerbartVilkår,
                                     verdi: {
@@ -104,17 +90,43 @@ const FastsettPeriode: React.FC<IProps> = ({
                                             ...redigerbartVilkår.verdi.periode,
                                             verdi: nyPeriode(
                                                 redigerbartVilkår.verdi.periode.verdi.fom,
-                                                undefined
+                                                dato
                                             ),
                                         },
                                     },
                                 });
-                            }
-                            settFastsettTom(!fastsettTom);
-                        }}
-                        label={'Har en sluttdato'}
-                    />
-                </div>
+                            }}
+                            valgtDato={redigerbartVilkår.verdi.periode.verdi.tom}
+                        />
+                        {!erLesevisning() && (
+                            <Checkbox
+                                checked={fastsettTom}
+                                onChange={() => {
+                                    if (
+                                        redigerbartVilkår.verdi.periode.verdi.tom !== '' &&
+                                        fastsettTom
+                                    ) {
+                                        validerOgSettRedigerbartVilkår({
+                                            ...redigerbartVilkår,
+                                            verdi: {
+                                                ...redigerbartVilkår.verdi,
+                                                periode: {
+                                                    ...redigerbartVilkår.verdi.periode,
+                                                    verdi: nyPeriode(
+                                                        redigerbartVilkår.verdi.periode.verdi.fom,
+                                                        undefined
+                                                    ),
+                                                },
+                                            },
+                                        });
+                                    }
+                                    settFastsettTom(!fastsettTom);
+                                }}
+                                label={'Har en sluttdato'}
+                            />
+                        )}
+                    </div>
+                )}
             </div>
         </SkjemaGruppe>
     );
