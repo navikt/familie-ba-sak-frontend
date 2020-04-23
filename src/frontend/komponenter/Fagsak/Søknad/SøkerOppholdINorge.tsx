@@ -5,6 +5,8 @@ import { Undertittel } from 'nav-frontend-typografi';
 import { Input, Textarea } from 'nav-frontend-skjema';
 import CheckboxFelt from '../../Felleskomponenter/InputMedLesevisning/CheckboxFelt';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import TextareaFelt from '../../Felleskomponenter/InputMedLesevisning/TextareaFelt';
+import InputFelt from '../../Felleskomponenter/InputMedLesevisning/InputFelt';
 
 interface IProps {
     settSøknad: (søknad: ISøknadDTO) => void;
@@ -52,7 +54,8 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
             <br />
             {!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder && (
                 <div className={'søknad__panel--innrykk'}>
-                    <Input
+                    <InputFelt
+                        visLeseversjon={erLesevisning()}
                         label={'Når kom søker til Norge?'}
                         bredde={'S'}
                         value={søknad.søkerMedOpplysninger.komTilNorge}
@@ -86,7 +89,8 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                     />
 
                     <br />
-                    <Textarea
+                    <TextareaFelt
+                        visLeseversjon={erLesevisning()}
                         label={'8 Tilleggsopplysninger'}
                         value={søknad.søkerMedOpplysninger.tilleggsopplysninger ?? ''}
                         placeholder={'Skriv her'}
