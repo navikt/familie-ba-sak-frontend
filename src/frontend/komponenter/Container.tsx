@@ -35,7 +35,7 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                     exact={true}
                                     path={'/'}
                                     render={() => {
-                                        return <Redirect from="/" to="/fagsak/ny-fagsak" />;
+                                        return <Redirect from={'/'} to={'/oppgaver'} />;
                                     }}
                                 />
                                 <Route
