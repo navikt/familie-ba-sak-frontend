@@ -91,7 +91,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             tittel={'Vedtaksbrev'}
             forrigeOnClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
-            nesteKnappTittel={'Send til beslutter'}
+            nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
         >
