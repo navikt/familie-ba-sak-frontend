@@ -67,26 +67,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
             }}
             senderInn={senderInn}
         >
-            {aktivBehandling.personResultater.length !== 0 &&
-                aktivBehandling.personResultater.filter((personResultat: IRestPersonResultat) => {
-                    return (
-                        personResultat.vilkårResultater.filter(
-                            (vilkårResultat: IRestVilkårResultat) =>
-                                vilkårResultat.resultat !== Resultat.KANSKJE
-                        ).length > 0
-                    );
-                }).length > 0 && (
-                    <>
-                        <br />
-                        <AlertStripeAdvarsel
-                            children={
-                                'Det finnes allerede en vilkårsvurdering på behandlingen. Vi har fylt ut gjeldende vurdering.'
-                            }
-                        />
-                        <br />
-                    </>
-                )}
-
             <BehandlingVilkårSkjema
                 opprettelseFeilmelding={opprettelseFeilmelding}
                 visFeilmeldinger={visFeilmeldinger}

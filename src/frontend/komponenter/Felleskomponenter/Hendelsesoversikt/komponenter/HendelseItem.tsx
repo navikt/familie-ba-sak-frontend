@@ -1,7 +1,7 @@
 import { Hendelse } from '../typer';
 
 import React from 'react';
-import { BehandlerRolle } from '../../../../typer/behandling';
+import { BehandlerRolle, behandlerRoller } from '../../../../typer/behandling';
 
 interface IHendelseItemProps {
     hendelse: Hendelse;
@@ -14,7 +14,7 @@ const HendelseItem = ({ hendelse }: IHendelseItemProps) => (
         <p className={'hendelsesdato'}>{`${hendelse.dato}`}</p>
         <p className={'hendelsesdato'}>{`${hendelse.utførtAv} ${
             hendelse.rolle !== BehandlerRolle.SYSTEM
-                ? `(${BehandlerRolle[hendelse.rolle].toString().toLowerCase()})`
+                ? `(${behandlerRoller[hendelse.rolle].navn})`
                 : ''
         }`}</p>
     </li>
