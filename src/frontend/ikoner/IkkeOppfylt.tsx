@@ -6,7 +6,11 @@ interface IIkkeOppfylt {
     width?: number;
 }
 
-const IkkeOppfylt: React.FunctionComponent<IIkkeOppfylt> = ({ className, heigth, width }) => {
+const IkkeOppfylt: React.FunctionComponent<IIkkeOppfylt> = ({
+    className,
+    heigth = 24,
+    width = 24,
+}) => {
     return (
         <svg
             aria-labelledby={'ikkeOppfylt'}

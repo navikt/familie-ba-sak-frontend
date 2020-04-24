@@ -2,7 +2,11 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
 import { vedtakHtml } from './mock/vedtak';
-import { mockFagsak3 } from './mock/fagsak';
+import { hentMockFagsak, oppdaterBehandlingsstatusPaaFagsak } from './mock/fagsak';
+import { BehandlingStatus } from '../frontend/typer/behandling';
+import { TotrinnskontrollBeslutning } from '../frontend/typer/totrinnskontroll';
+import { Ressurs } from '../frontend/typer/ressurs';
+import { IFagsak } from '../frontend/typer/fagsak';
 
 const delayMs = 20;
 const app = express();
@@ -13,17 +17,22 @@ const lesMockFil = (filnavn: string) => {
     return fs.readFileSync(path.join(__dirname, '/mock/' + filnavn), 'UTF-8');
 };
 
+const byggOkFagsak = (res: Response, content: Ressurs<IFagsak>) => {
+    setTimeout(() => res.send(content), delayMs);
+};
+
+const bygg404 = (res: Response) => {
+    res.status(404).send('Not found');
+};
+
 app.get('/familie-ba-sak/api/fagsaker/:id', (req: Request, res: Response) => {
     const { id } = req.params;
-    setTimeout(
-        () =>
-            res.send(
-                id === '3'
-                    ? mockFagsak3(parseInt(id, 10), '12345678910')
-                    : lesMockFil(`fagsak-${id}.json`)
-            ),
-        delayMs
-    );
+    const fagsak = hentMockFagsak(id);
+    if (fagsak !== null) {
+        byggOkFagsak(res, fagsak);
+    } else {
+        bygg404(res);
+    }
 });
 
 app.get('/familie-ba-sak/api/person', (_: Request, res: Response) => {
@@ -35,6 +44,7 @@ app.get('/user/profile', (_: Request, res: Response) => {
         displayName: 'Test Testersen',
         enhet: '8888',
         navIdent: 'Z991144',
+        groups: ['9449c153-5a1e-44a7-84c6-7cc7a8867233'],
     });
 });
 
@@ -50,11 +60,11 @@ app.get('/familie-ba-sak/api/dokument/vedtak-html/3', (_: Request, res: Response
 });
 
 app.post('/familie-ba-sak/api/behandlinger', (_: Request, res: Response) => {
-    setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
+    setTimeout(() => res.send(hentMockFagsak('1')), delayMs);
 });
 
 app.post('/familie-ba-sak/api/fagsaker/1/vedtak', (_: Request, res: Response) => {
-    setTimeout(() => res.send(lesMockFil(`fagsak-1.json`)), delayMs);
+    setTimeout(() => res.send(hentMockFagsak('1')), delayMs);
 });
 
 app.get('/familie-ba-sak/api/logg/2', (_: Request, res: Response) => {
@@ -80,6 +90,35 @@ app.post('/familie-ba-sak/api/fagsaker/sok', (req: Request, res: Response) => {
                 }),
             500
         );
+    }
+});
+
+app.post('/familie-ba-sak/api/fagsaker/:id/iverksett-vedtak', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const fagsak = hentMockFagsak(id);
+    if (fagsak !== null) {
+        const nyStatus =
+            req.body.beslutning === TotrinnskontrollBeslutning.UNDERKJENT
+                ? BehandlingStatus.UNDERKJENT_AV_BESLUTTER
+                : BehandlingStatus.GODKJENT;
+
+        byggOkFagsak(res, oppdaterBehandlingsstatusPaaFagsak(fagsak, nyStatus));
+    } else {
+        bygg404(res);
+    }
+    setTimeout(() => res.send(), delayMs);
+});
+
+app.post('/familie-ba-sak/api/fagsaker/:id/send-til-beslutter', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const fagsak = hentMockFagsak(id);
+    if (fagsak !== null) {
+        byggOkFagsak(
+            res,
+            oppdaterBehandlingsstatusPaaFagsak(fagsak, BehandlingStatus.SENDT_TIL_BESLUTTER)
+        );
+    } else {
+        bygg404(res);
     }
 });
 

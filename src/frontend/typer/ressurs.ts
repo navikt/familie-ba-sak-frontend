@@ -33,6 +33,12 @@ export const byggTomRessurs = <T>(): Ressurs<T> => {
     };
 };
 
+export const byggHenterRessurs = <T>(): Ressurs<T> => {
+    return {
+        status: RessursStatus.HENTER,
+    };
+};
+
 export const byggFeiletRessurs = <T>(melding: string, error?: Error): Ressurs<T> => {
     return {
         errorMelding: error ? error.message : undefined,

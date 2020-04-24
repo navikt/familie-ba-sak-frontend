@@ -23,7 +23,6 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal }) => {
         >
             <div className="uimodal__content">
                 <Undertittel children={tittel} />
-                <br />
                 <Normaltekst>{content}</Normaltekst>
             </div>
             {actions && <div className="uimodal__actions"> {actions} </div>}
