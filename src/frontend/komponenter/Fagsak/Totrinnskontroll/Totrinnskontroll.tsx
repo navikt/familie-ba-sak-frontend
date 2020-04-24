@@ -106,6 +106,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
                         visModal: modalVerdi.skalVises,
                         actions: [
                             <Knapp
+                                key={'saksoversikt'}
                                 mini={true}
                                 onClick={() => {
                                     settModalVerdi(initiellModalVerdi);
@@ -114,6 +115,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
                                 children={'Gå til saksoversikten'}
                             />,
                             <Knapp
+                                key={'oppgavebenk'}
                                 type={'hoved'}
                                 mini={true}
                                 onClick={() => {

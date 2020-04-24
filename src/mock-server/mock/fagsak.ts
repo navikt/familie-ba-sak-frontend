@@ -12,6 +12,23 @@ import {
 import { IPerson, PersonType } from '../../frontend/typer/person';
 import { IRestPersonResultat, Resultat, VilkårType } from '../../frontend/typer/vilkår';
 import { kjønnType } from '@navikt/familie-typer';
+import fs from 'fs';
+import path from 'path';
+
+const lesMockFil = (filnavn: string) => {
+    return fs.readFileSync(path.join(__dirname, filnavn), 'UTF-8');
+};
+export const hentMockFagsak = (id: string) => {
+    try {
+        const fagsak: Ressurs<IFagsak> | null =
+            id === '3'
+                ? mockFagsak3(parseInt(id, 10), '12345678910')
+                : JSON.parse(lesMockFil(`fagsak-${id}.json`));
+        return fagsak;
+    } catch (e) {
+        return null;
+    }
+};
 
 export const mockFagsak3 = (id: number, søkerFødselsnummer: string): Ressurs<IFagsak> | null => {
     const fagsak: IFagsak = {
@@ -27,10 +44,10 @@ export const mockFagsak3 = (id: number, søkerFødselsnummer: string): Ressurs<I
 };
 
 export const oppdaterBehandlingsstatusPaaFagsak = (
-    fagsak: Ressurs<IFagsak> | null,
+    fagsak: Ressurs<IFagsak>,
     behandlingStatus: BehandlingStatus
 ) => {
-    if (fagsak === null || fagsak.status !== RessursStatus.SUKSESS) {
+    if (fagsak.status !== RessursStatus.SUKSESS) {
         return fagsak;
     }
 
