@@ -71,6 +71,13 @@ export interface IBehandling {
     vedtakForBehandling: IVedtakForBehandling[];
 }
 
+export const behandlerRoller: INøkkelPar = {
+    SYSTEM: { id: 'SYSTEM', navn: 'System' },
+    VEILEDER: { id: 'VEILEDER', navn: 'Veileder' },
+    SAKSBEHANDLER: { id: 'SAKSBEHANDLER', navn: 'Saksbehandler' },
+    BESLUTTER: { id: 'BESLUTTER', navn: 'Beslutter' },
+};
+
 export const behandlingstyper: INøkkelPar = {
     FØRSTEGANGSBEHANDLING: {
         id: 'FØRSTEGANGSBEHANDLING',
