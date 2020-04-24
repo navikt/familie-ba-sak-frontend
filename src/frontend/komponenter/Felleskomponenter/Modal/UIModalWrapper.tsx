@@ -1,6 +1,5 @@
 import Modal from 'nav-frontend-modal';
 import { Undertittel } from 'nav-frontend-typografi';
-import Normaltekst from 'nav-frontend-typografi/lib/normaltekst';
 import * as React from 'react';
 import { useApp, IModal } from '../../../context/AppContext';
 
@@ -8,9 +7,9 @@ interface IProps {
     modal?: IModal;
 }
 
-const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal }) => {
+const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) => {
     const useAppModal = useApp().modal;
-    const { tittel, content, visModal, onClose, lukkKnapp, actions } = modal ? modal : useAppModal;
+    const { tittel, visModal, onClose, lukkKnapp, actions } = modal ? modal : useAppModal;
 
     return (
         <Modal
@@ -23,9 +22,9 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal }) => {
         >
             <div className="uimodal__content">
                 <Undertittel children={tittel} />
-                <Normaltekst>{content}</Normaltekst>
+                <div className="uimodal__content--inner-content">{children}</div>
+                {actions && <div className="uimodal__content--actions"> {actions} </div>}
             </div>
-            {actions && <div className="uimodal__actions"> {actions} </div>}
         </Modal>
     );
 };
