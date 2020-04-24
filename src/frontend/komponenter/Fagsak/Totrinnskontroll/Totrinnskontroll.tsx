@@ -99,9 +99,6 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
                 <UIModalWrapper
                     modal={{
                         tittel: 'Totrinnsvurdering',
-                        content: (
-                            <TotrinnskontrollModalInnhold beslutning={modalVerdi.beslutning} />
-                        ),
                         lukkKnapp: false,
                         visModal: modalVerdi.skalVises,
                         actions: [
@@ -126,7 +123,9 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
                             />,
                         ],
                     }}
-                />
+                >
+                    <TotrinnskontrollModalInnhold beslutning={modalVerdi.beslutning} />
+                </UIModalWrapper>
             )}
         </div>
     );

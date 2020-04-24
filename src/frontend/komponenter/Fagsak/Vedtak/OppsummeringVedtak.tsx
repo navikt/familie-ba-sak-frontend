@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 
@@ -12,6 +12,8 @@ import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useApp } from '../../../context/AppContext';
 import { aktivVedtak } from '../../../api/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import { Knapp } from 'nav-frontend-knapper';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -25,6 +27,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
+    const [visModal, settVisModal] = React.useState<boolean>(false);
 
     const [submitFeil, settSubmitFeil] = React.useState('');
     const [senderInn, settSenderInn] = React.useState(false);
@@ -71,6 +74,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         }).then((response: Ressurs<IFagsak>) => {
             settSenderInn(false);
             if (response.status === RessursStatus.SUKSESS) {
+                settVisModal(true);
                 settFagsak(response);
             } else if (
                 response.status === RessursStatus.FEILET ||
@@ -87,7 +91,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             tittel={'Vedtaksbrev'}
             forrigeOnClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
-            nesteKnappTittel={'Send til beslutter'}
+            nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
         >
@@ -104,6 +108,38 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
                 {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
             </div>
+            {visModal && (
+                <UIModalWrapper
+                    modal={{
+                        tittel: 'Totrinnsvurdering',
+                        lukkKnapp: false,
+                        visModal: visModal,
+                        actions: [
+                            <Knapp
+                                key={'saksoversikt'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisModal(false);
+                                    history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                }}
+                                children={'Gå til saksoversikten'}
+                            />,
+                            <Knapp
+                                key={'oppgavebenk'}
+                                type={'hoved'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisModal(false);
+                                    history.push('/oppgaver');
+                                }}
+                                children={'Gå til Oppgavebenken'}
+                            />,
+                        ],
+                    }}
+                >
+                    <Normaltekst>Behandlingen er nå sendt til totrinnskontroll</Normaltekst>
+                </UIModalWrapper>
+            )}
         </Skjemasteg>
     );
 };

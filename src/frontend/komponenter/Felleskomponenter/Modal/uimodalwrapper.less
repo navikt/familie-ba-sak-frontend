@@ -4,15 +4,19 @@
     position: relative;
 
     &__content {
-        margin-top: 1rem;
-    }
+        padding: 1rem 2rem;
 
-    &__actions {
-        position: absolute;
-        bottom: 1rem;
+        &--inner-content {
+            margin-top: 1rem;
+        }
 
-        .knapp:not(:first-child) {
-            margin-left: 1rem;
+        &--actions {
+            position: absolute;
+            bottom: 2rem;
+
+            .knapp:not(:first-child) {
+                margin-left: 1rem;
+            }
         }
     }
 }

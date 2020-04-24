@@ -49,7 +49,6 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
 
                 {forrigeOnClick ? (
                     <Knapp
-                        type={'hoved'}
                         onClick={() => {
                             forrigeOnClick();
                         }}

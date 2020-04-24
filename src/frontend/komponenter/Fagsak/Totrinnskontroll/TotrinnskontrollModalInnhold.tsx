@@ -10,21 +10,21 @@ interface IProps {
 const TotrinnskontrollModalInnhold: React.FunctionComponent<IProps> = ({ beslutning }) => {
     if (beslutning === TotrinnskontrollBeslutning.UNDERKJENT) {
         return (
-            <p className={'totrinnsvurdering-modal-innhold'}>
+            <div className={'totrinnsvurdering-modal-innhold'}>
                 <IkkeOppfylt />
-                <p className={'totrinnsvurdering-modal-tekst'}>
+                <div className={'totrinnsvurdering-modal-tekst'}>
                     Behandlingen er ikke godkjent og er sendt tilbake til beslutter
-                </p>
-            </p>
+                </div>
+            </div>
         );
     } else if (beslutning === TotrinnskontrollBeslutning.GODKJENT) {
         return (
-            <p className={'totrinnsvurdering-modal-innhold'}>
+            <div className={'totrinnsvurdering-modal-innhold'}>
                 <Oppfylt />
-                <p className={'totrinnsvurdering-modal-tekst'}>
+                <div className={'totrinnsvurdering-modal-tekst'}>
                     Behandlingen er godkjent, og vedtaket iverksatt
-                </p>
-            </p>
+                </div>
+            </div>
         );
     } else {
         return <p />;
