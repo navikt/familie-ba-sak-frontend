@@ -15,6 +15,7 @@ import {
 import { useApp } from './AppContext';
 import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
+import { tilFeilside } from '../utils/commons';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
@@ -41,7 +42,6 @@ const initialState: IHovedRessurser = {
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
     const { axiosRequest, hentSaksbehandlerRolle } = useApp();
-    //const history = useHistory(); // TODO : Håndtere ingen tilgang
 
     React.useEffect(() => {
         if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
@@ -128,6 +128,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         settFagsakRessurser({ ...fagsakRessurser, fagsak: modifisertFagsak });
 
     const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
+        console.log(fagsakRessurser);
         return fagsakRessurser.åpenBehandling.status === RessursStatus.SUKSESS
             ? fagsakRessurser.åpenBehandling.data.steg
             : undefined;
@@ -135,14 +136,16 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
 
     const erLesevisning = (): boolean => {
         const saksbehandlerRolle = hentSaksbehandlerRolle();
-        const steg = hentStegPåÅpenBehandling();
-        if (saksbehandlerRolle && steg) {
+        const steg = hentStegPåÅpenBehandling(); // TODO: Bug, rolle er av og til undefined
+        console.log(saksbehandlerRolle);
+        console.log(steg);
+        if (1 > 2 && saksbehandlerRolle && steg) {
             return (
-                saksbehandlerRolle <= BehandlerRolle.VEILEDER ||
+                (saksbehandlerRolle && saksbehandlerRolle <= BehandlerRolle.VEILEDER) ||
                 steg >= BehandlingSteg.GODKJENNE_VEDTAK
             );
         }
-        //history.push('/error');
+        tilFeilside();
         return true;
     };
 

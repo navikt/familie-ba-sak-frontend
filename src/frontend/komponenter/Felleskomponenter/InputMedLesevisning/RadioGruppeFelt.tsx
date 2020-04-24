@@ -11,7 +11,7 @@ interface IProps extends SkjemaGruppeProps {
 
 class RadioGruppeFelt extends Component<IProps> {
     render() {
-        const { visLeseversjon, verdi, legend, feil, feilmeldingId, children } = this.props; // TODO: Map gjennom Radio-children og finn checked verdi?
+        const { visLeseversjon, verdi, legend, feil, feilmeldingId, children } = this.props;
         return visLeseversjon ? (
             <Lesefelt label={legend} verdi={verdi} />
         ) : (
