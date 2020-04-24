@@ -1,6 +1,6 @@
 import { BehandlerRolle } from '../typer/behandling';
 
-// TODO: Dette må trekkes ut i config/backend slik at rolle/id er riktig ift. miljø
+// TODO: Dette bør trekkes ut i config/backend slik at rolle/id er riktig ift. miljø
 export const gruppeIdTilRolle = (gruppeId: string) => {
     switch (gruppeId) {
         case '199c2b39-e535-4ae8-ac59-8ccbee7991ae':

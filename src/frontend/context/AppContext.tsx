@@ -9,7 +9,7 @@ import { BehandlerRolle } from '../typer/behandling';
 import { gruppeIdTilRolle } from '../utils/behandling';
 
 export interface IModal {
-    content: string;
+    content: string | JSX.Element;
     lukkKnapp: boolean;
     onClose?: () => void;
     tittel: string;

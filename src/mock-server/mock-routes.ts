@@ -39,6 +39,7 @@ app.get('/user/profile', (_: Request, res: Response) => {
         displayName: 'Test Testersen',
         enhet: '8888',
         navIdent: 'Z991144',
+        groups: ['9449c153-5a1e-44a7-84c6-7cc7a8867233'],
     });
 });
 

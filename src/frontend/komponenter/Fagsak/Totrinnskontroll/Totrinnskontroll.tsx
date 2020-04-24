@@ -16,20 +16,37 @@ import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 import Info from '../../../ikoner/Info';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import { Knapp } from 'nav-frontend-knapper';
+import { useHistory } from 'react-router';
+import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 
 interface IProps {
     aktivBehandling: IBehandling | undefined;
     fagsak: IFagsak;
 }
 
+interface IModalVerdier {
+    skalVises: boolean;
+    beslutning: TotrinnskontrollBeslutning;
+}
+
+const initiellModalVerdi = {
+    skalVises: false,
+    beslutning: TotrinnskontrollBeslutning.IKKE_VURDERT,
+};
+
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fagsak }) => {
     const { axiosRequest, hentSaksbehandlerRolle } = useApp();
     const { settFagsak } = useFagsakRessurser();
+    const history = useHistory();
 
     const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
-    const [skalViseModal, settSkalViseModal] = React.useState<boolean>(false);
+    const [modalVerdi, settModalVerdi] = React.useState<IModalVerdier>(initiellModalVerdi);
     React.useEffect(() => {
-        settSkalViseModal(innsendtVedtak.status === RessursStatus.SUKSESS);
+        settModalVerdi({
+            ...modalVerdi,
+            skalVises: innsendtVedtak.status === RessursStatus.SUKSESS,
+        });
     }, [innsendtVedtak.status]);
 
     const skalViseSkjema =
@@ -38,6 +55,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
 
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
         settInnsendtVedtak(byggHenterRessurs());
+        settModalVerdi({ ...modalVerdi, beslutning: totrinnskontrollData.beslutning });
         const manglerBegrunnelse =
             totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.UNDERKJENT &&
             !totrinnskontrollData.begrunnelse;
@@ -57,8 +75,8 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
                         settFagsak(response);
                     }
                 })
-                .catch((_error: AxiosError) => {
-                    settInnsendtVedtak(byggFeiletRessurs('Ukjent feil, sende inn vedtak.', _error));
+                .catch((error: AxiosError) => {
+                    settInnsendtVedtak(byggFeiletRessurs('Ukjent feil, sende inn vedtak.', error));
                 });
         }
     };
@@ -77,14 +95,34 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
                     />
                 </div>
             )}
-            {skalViseModal && (
+            {modalVerdi && (
                 <UIModalWrapper
                     modal={{
-                        tittel: 'Beslutning innsendt',
-                        content: 'Din beslutning er innsendt',
-                        lukkKnapp: true,
-                        onClose: () => settSkalViseModal(false),
-                        visModal: skalViseModal,
+                        tittel: 'Totrinnsvurdering',
+                        content: (
+                            <TotrinnskontrollModalInnhold beslutning={modalVerdi.beslutning} />
+                        ),
+                        lukkKnapp: false,
+                        visModal: modalVerdi.skalVises,
+                        actions: [
+                            <Knapp
+                                mini={true}
+                                onClick={() => {
+                                    settModalVerdi(initiellModalVerdi);
+                                    history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                }}
+                                children={'Gå til saksoversikten'}
+                            />,
+                            <Knapp
+                                type={'hoved'}
+                                mini={true}
+                                onClick={() => {
+                                    settModalVerdi(initiellModalVerdi);
+                                    history.push('/oppgaver');
+                                }}
+                                children={'Gå til Oppgavebenken'}
+                            />,
+                        ],
                     }}
                 />
             )}

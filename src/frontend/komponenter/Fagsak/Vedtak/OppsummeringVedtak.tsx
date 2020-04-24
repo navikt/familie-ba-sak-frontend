@@ -2,7 +2,6 @@ import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Feilmelding } from 'nav-frontend-typografi';
 import * as React from 'react';
-import Confetti from 'react-confetti';
 import { useHistory } from 'react-router';
 
 import { BehandlingStatus } from '../../../typer/behandling';
