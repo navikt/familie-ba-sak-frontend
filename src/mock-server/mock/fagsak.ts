@@ -1,17 +1,34 @@
-import { IFagsak, FagsakStatus } from '../../frontend/typer/fagsak';
-import { Ressurs, byggSuksessRessurs } from '../../frontend/typer/ressurs';
+import { FagsakStatus, IFagsak } from '../../frontend/typer/fagsak';
+import { byggSuksessRessurs, Ressurs, RessursStatus } from '../../frontend/typer/ressurs';
 import {
-    IBehandling,
-    BehandlingSteg,
     BehandlingKategori,
-    BehandlingUnderkategori,
-    BehandlingStatus,
-    Behandlingstype,
     BehandlingResultat,
+    BehandlingStatus,
+    BehandlingSteg,
+    Behandlingstype,
+    BehandlingUnderkategori,
+    IBehandling,
 } from '../../frontend/typer/behandling';
-import { PersonType, IPerson } from '../../frontend/typer/person';
-import { IRestPersonResultat, VilkårType, Resultat } from '../../frontend/typer/vilkår';
+import { IPerson, PersonType } from '../../frontend/typer/person';
+import { IRestPersonResultat, Resultat, VilkårType } from '../../frontend/typer/vilkår';
 import { kjønnType } from '@navikt/familie-typer';
+import fs from 'fs';
+import path from 'path';
+
+const lesMockFil = (filnavn: string) => {
+    return fs.readFileSync(path.join(__dirname, filnavn), 'UTF-8');
+};
+export const hentMockFagsak = (id: string) => {
+    try {
+        const fagsak: Ressurs<IFagsak> | null =
+            id === '3'
+                ? mockFagsak3(parseInt(id, 10), '12345678910')
+                : JSON.parse(lesMockFil(`fagsak-${id}.json`));
+        return fagsak;
+    } catch (e) {
+        return null;
+    }
+};
 
 export const mockFagsak3 = (id: number, søkerFødselsnummer: string): Ressurs<IFagsak> | null => {
     const fagsak: IFagsak = {
@@ -24,6 +41,20 @@ export const mockFagsak3 = (id: number, søkerFødselsnummer: string): Ressurs<I
     };
 
     return byggSuksessRessurs<IFagsak>(fagsak);
+};
+
+export const oppdaterBehandlingsstatusPaaFagsak = (
+    fagsak: Ressurs<IFagsak>,
+    behandlingStatus: BehandlingStatus
+) => {
+    if (fagsak.status !== RessursStatus.SUKSESS) {
+        return fagsak;
+    }
+
+    fagsak.data.behandlinger = fagsak.data.behandlinger.map(behandling => {
+        return behandling.aktiv ? { ...behandling, status: behandlingStatus } : behandling;
+    });
+    return fagsak;
 };
 
 export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: string): IBehandling => {

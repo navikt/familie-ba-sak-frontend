@@ -3,6 +3,7 @@ import * as React from 'react';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import Logg from './Logg';
+import Totrinnskontroll from '../Totrinnskontroll/Totrinnskontroll';
 
 interface IProps {
     fagsak: IFagsak;
@@ -13,7 +14,7 @@ const Høyremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return (
         <div className={'høyremeny'}>
-            <div className={'høyremeny__totrinn'}>TOTRINNSKONTROLL</div>
+            <Totrinnskontroll aktivBehandling={aktivBehandling} fagsak={fagsak} />
             <Logg aktivBehandling={aktivBehandling} />
         </div>
     );

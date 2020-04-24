@@ -31,6 +31,7 @@
                     }
                 ],
                 "underkategori": "ORDINÆR",
+                "samletResultat": "IKKE_VURDERT",
                 "personResultater": [
                     {
                         "personIdent": "12345678921",

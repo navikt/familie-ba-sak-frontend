@@ -6,7 +6,7 @@ interface IOppfylt {
     width?: number;
 }
 
-const Oppfylt: React.FunctionComponent<IOppfylt> = ({ className, heigth, width }) => {
+const Oppfylt: React.FunctionComponent<IOppfylt> = ({ className, heigth = 24, width = 24 }) => {
     return (
         <svg
             aria-labelledby={'oppfylt'}
