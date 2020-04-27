@@ -6,7 +6,7 @@ import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
 import { IPar } from '../../../typer/common';
 import classNames from 'classnames';
-import SelectFelt from '../../Felleskomponenter/InputMedLesevisning/SelectFelt';
+import SelectLesbar from '../../Felleskomponenter/InputMedLesevisning/SelectLesbar';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
@@ -40,7 +40,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
 
             <br />
 
-            <SelectFelt
+            <SelectLesbar
                 visLeseversjon={erLesevisning()}
                 name="type søker"
                 label="Type søker"
@@ -80,7 +80,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
                             </option>
                         );
                     })}
-            </SelectFelt>
+            </SelectLesbar>
         </PanelBase>
     );
 };

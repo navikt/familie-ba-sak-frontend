@@ -5,7 +5,7 @@ import {
     underkategorier,
     BehandlingUnderkategori,
 } from '../../../typer/behandling';
-import SelectFelt from '../InputMedLesevisning/SelectFelt';
+import SelectLesbar from '../InputMedLesevisning/SelectLesbar';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
@@ -23,7 +23,7 @@ const Sakstype: React.FunctionComponent<IProps> = ({
     const { erLesevisning } = useFagsakRessurser();
     return (
         <>
-            <SelectFelt
+            <SelectLesbar
                 visLeseversjon={erLesevisning()}
                 bredde={'l'}
                 label="Kategori"
@@ -37,10 +37,10 @@ const Sakstype: React.FunctionComponent<IProps> = ({
                         </option>
                     );
                 })}
-            </SelectFelt>
+            </SelectLesbar>
 
             <br />
-            <SelectFelt
+            <SelectLesbar
                 visLeseversjon={erLesevisning()}
                 bredde={'l'}
                 label="Underkategori"
@@ -56,7 +56,7 @@ const Sakstype: React.FunctionComponent<IProps> = ({
                         </option>
                     );
                 })}
-            </SelectFelt>
+            </SelectLesbar>
         </>
     );
 };

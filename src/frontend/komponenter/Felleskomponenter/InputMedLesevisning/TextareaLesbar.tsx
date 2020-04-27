@@ -7,7 +7,7 @@ interface IProps extends TextareaProps {
     visLeseversjon: boolean;
 }
 
-class TextareaFelt extends Component<IProps> {
+class TextareaLesbar extends Component<IProps> {
     render() {
         const { visLeseversjon, name, label, value, onChange, children } = this.props;
         return visLeseversjon ? (
@@ -24,4 +24,4 @@ class TextareaFelt extends Component<IProps> {
     }
 }
 
-export default TextareaFelt;
+export default TextareaLesbar;

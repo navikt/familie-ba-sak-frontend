@@ -7,7 +7,7 @@ interface IProps extends DatovelgerProps {
     visLeseversjon: boolean;
 }
 
-class DatovelgerFelt extends Component<IProps> {
+class DatovelgerLesbar extends Component<IProps> {
     render() {
         const { visLeseversjon, id, label, placeholder, onChange, valgtDato } = this.props;
         return visLeseversjon ? (
@@ -23,4 +23,4 @@ class DatovelgerFelt extends Component<IProps> {
         );
     }
 }
-export default DatovelgerFelt;
+export default DatovelgerLesbar;

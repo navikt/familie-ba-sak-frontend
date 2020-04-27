@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
-import { Input, InputProps } from 'nav-frontend-skjema';
+import { TextareaControlled, TextareaControlledProps } from 'nav-frontend-skjema';
 import Lesefelt from './Lesefelt';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-interface IProps extends InputProps {
+interface IProps extends TextareaControlledProps {
     visLeseversjon: boolean;
 }
 
-class InputFelt extends Component<IProps> {
+class TextareaControlledLesbar extends Component<IProps> {
     render() {
         const {
             visLeseversjon,
+            defaultValue,
+            id,
             label,
-            bredde,
-            value,
             placeholder,
-            onChange,
-            children,
+            textareaClass,
+            value,
+            feil,
+            onBlur,
         } = this.props;
         return visLeseversjon ? (
             value == '' ? (
@@ -25,17 +27,18 @@ class InputFelt extends Component<IProps> {
                 <Lesefelt label={label} verdi={value} />
             )
         ) : (
-            <Input
+            <TextareaControlled
+                defaultValue={defaultValue}
+                id={id}
                 label={label}
-                bredde={bredde}
-                value={value}
                 placeholder={placeholder}
-                onChange={onChange}
-            >
-                {children}
-            </Input>
+                textareaClass={textareaClass}
+                value={value}
+                feil={feil}
+                onBlur={onBlur}
+            />
         );
     }
 }
 
-export default InputFelt;
+export default TextareaControlledLesbar;

@@ -16,7 +16,7 @@ import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
 import { useApp } from '../../../context/AppContext';
 import { BehandlingSteg } from '../../../typer/behandling';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import KnappFelt from '../../Felleskomponenter/InputMedLesevisning/KnappFelt';
+import KnappLesbar from '../../Felleskomponenter/InputMedLesevisning/KnappLesbar';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
     const { axiosRequest } = useApp();
@@ -110,7 +110,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                         children={'Neste'}
                     />
                 ) : (
-                    <KnappFelt
+                    <KnappLesbar
                         visLeseversjon={erLesevisning()}
                         onClick={() => {
                             if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig()) {

@@ -24,9 +24,9 @@ import { periodeToString } from '../../../../typer/periode';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Slett from '../../../../ikoner/Slett';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import RadioGruppeFelt from '../../../Felleskomponenter/InputMedLesevisning/RadioGruppeFelt';
-import TextareaControlledFelt from '../../../Felleskomponenter/InputMedLesevisning/TextareaControlledFelt';
-import KnappFelt from '../../../Felleskomponenter/InputMedLesevisning/KnappFelt';
+import RadioGruppeLesbar from '../../../Felleskomponenter/InputMedLesevisning/RadioGruppeLesbar';
+import TextareaControlledLesbar from '../../../Felleskomponenter/InputMedLesevisning/TextareaControlledLesbar';
+import KnappLesbar from '../../../Felleskomponenter/InputMedLesevisning/KnappLesbar';
 import { Collapse } from 'react-collapse';
 import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
 
@@ -127,7 +127,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
                 <Collapse isOpened={ekspandertVilkår}>
                     <div className={'generisk-vilkår__ekspandert'}>
-                        <RadioGruppeFelt
+                        <RadioGruppeLesbar
                             verdi={resultater[redigerbartVilkår.verdi.resultat.verdi].navn}
                             visLeseversjon={erLesevisning()}
                             legend={
@@ -155,7 +155,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI}
                                 onChange={() => radioOnChange(Resultat.NEI)}
                             />
-                        </RadioGruppeFelt>
+                        </RadioGruppeLesbar>
 
                         <FastsettPeriode
                             redigerbartVilkår={redigerbartVilkår}
@@ -163,7 +163,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             visFeilmeldinger={skalViseFeilmeldinger()}
                         />
 
-                        <TextareaControlledFelt
+                        <TextareaControlledLesbar
                             visLeseversjon={erLesevisning()}
                             defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                             id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
@@ -193,7 +193,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
                         <div className={'generisk-vilkår__ekspandert--knapperad'}>
                             <div>
-                                <KnappFelt
+                                <KnappLesbar
                                     visLeseversjon={erLesevisning()}
                                     onClick={() => {
                                         const erVilkårGyldig: boolean =
@@ -215,15 +215,15 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     type={'standard'}
                                 >
                                     Ferdig
-                                </KnappFelt>
-                                <KnappFelt
+                                </KnappLesbar>
+                                <KnappLesbar
                                     visLeseversjon={erLesevisning()}
                                     onClick={() => toggleForm(false)}
                                     mini={true}
                                     type={'flat'}
                                 >
                                     Avbryt
-                                </KnappFelt>
+                                </KnappLesbar>
                             </div>
 
                             <IkonKnapp

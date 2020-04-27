@@ -5,7 +5,7 @@ interface IProps extends KnappBaseProps {
     visLeseversjon: boolean;
 }
 
-class KnappFelt extends Component<IProps> {
+class KnappLesbar extends Component<IProps> {
     render() {
         const { visLeseversjon, onClick, mini, type, spinner, children } = this.props;
         return (
@@ -18,4 +18,4 @@ class KnappFelt extends Component<IProps> {
     }
 }
 
-export default KnappFelt;
+export default KnappLesbar;

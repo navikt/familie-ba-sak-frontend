@@ -2,10 +2,10 @@ import * as React from 'react';
 import { ISøknadDTO } from '../../../typer/søknad';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
-import CheckboxFelt from '../../Felleskomponenter/InputMedLesevisning/CheckboxFelt';
+import CheckboxLesbar from '../../Felleskomponenter/InputMedLesevisning/CheckboxLesbar';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import TextareaFelt from '../../Felleskomponenter/InputMedLesevisning/TextareaFelt';
-import InputFelt from '../../Felleskomponenter/InputMedLesevisning/InputFelt';
+import TextareaLesbar from '../../Felleskomponenter/InputMedLesevisning/TextareaLesbar';
+import InputLesbar from '../../Felleskomponenter/InputMedLesevisning/InputLesbar';
 import MinimumOpplysningAlternativ from '../../Felleskomponenter/InputMedLesevisning/IngenOpplysningerValgt';
 
 interface IProps {
@@ -27,7 +27,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                     søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder,
                 ]}
             />
-            <CheckboxFelt
+            <CheckboxLesbar
                 visLeseversjon={erLesevisning()}
                 label={'Søker oppholder seg ikke i Norge'}
                 checked={!søknad.søkerMedOpplysninger.oppholderSegINorge}
@@ -42,7 +42,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                 }}
             />
 
-            <CheckboxFelt
+            <CheckboxLesbar
                 visLeseversjon={erLesevisning()}
                 label={'Søker har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'}
                 checked={!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder}
@@ -60,7 +60,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
 
             {!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder && (
                 <div className={'søknad__panel--innrykk'}>
-                    <InputFelt
+                    <InputLesbar
                         visLeseversjon={erLesevisning()}
                         label={'Når kom søker til Norge?'}
                         bredde={'S'}
@@ -77,7 +77,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         }}
                     />
 
-                    <CheckboxFelt
+                    <CheckboxLesbar
                         visLeseversjon={erLesevisning()}
                         label={'Søker skal ikke oppholde seg i Norge de neste 12 månedene'}
                         checked={!søknad.søkerMedOpplysninger.skalOppholdeSegINorgeNeste12Måneder}
@@ -93,7 +93,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         }}
                     />
 
-                    <TextareaFelt
+                    <TextareaLesbar
                         visLeseversjon={erLesevisning()}
                         label={'8 Tilleggsopplysninger'}
                         value={søknad.søkerMedOpplysninger.tilleggsopplysninger ?? ''}

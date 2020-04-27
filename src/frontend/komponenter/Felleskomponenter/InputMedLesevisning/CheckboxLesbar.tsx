@@ -6,7 +6,7 @@ interface IProps extends CheckboxProps {
     visLeseversjon: boolean;
 }
 
-class CheckboxFelt extends Component<IProps> {
+class CheckboxLesbar extends Component<IProps> {
     render() {
         const { visLeseversjon, label, checked, onChange } = this.props;
         return visLeseversjon ? (
@@ -17,4 +17,4 @@ class CheckboxFelt extends Component<IProps> {
     }
 }
 
-export default CheckboxFelt;
+export default CheckboxLesbar;

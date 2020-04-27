@@ -6,7 +6,7 @@ interface IProps extends SelectProps {
     visLeseversjon: boolean;
 }
 
-class SelectFelt extends Component<IProps> {
+class SelectLesbar extends Component<IProps> {
     render() {
         const { visLeseversjon, name, label, bredde, value, onChange, children } = this.props;
         return visLeseversjon ? (
@@ -19,4 +19,4 @@ class SelectFelt extends Component<IProps> {
     }
 }
 
-export default SelectFelt;
+export default SelectLesbar;

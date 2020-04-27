@@ -9,7 +9,7 @@ import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { ISODateString } from 'nav-datovelger';
-import DatovelgerFelt from '../../../../Felleskomponenter/InputMedLesevisning/DatovelgerFelt';
+import DatovelgerLesbar from '../../../../Felleskomponenter/InputMedLesevisning/DatovelgerLesbar';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 
 interface IProps {
@@ -45,7 +45,7 @@ const FastsettPeriode: React.FC<IProps> = ({
             <Normaltekst children={'Fastsett periode'} />
             <div className={'fastsett-periode__flex'}>
                 <div>
-                    <DatovelgerFelt
+                    <DatovelgerLesbar
                         visLeseversjon={erLesevisning()}
                         id={`${vilkårPeriodeFeilmeldingId(
                             redigerbartVilkår.verdi
@@ -72,7 +72,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                 </div>
                 {(!erLesevisning() || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
-                        <DatovelgerFelt
+                        <DatovelgerLesbar
                             visLeseversjon={erLesevisning()}
                             disabled={!fastsettTom}
                             id={`${vilkårPeriodeFeilmeldingId(
