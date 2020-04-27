@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
-import { IVilkårResultat, Resultat, IVilkårConfig, resultatTilUi } from '../../../../typer/vilkår';
+import {
+    IVilkårResultat,
+    Resultat,
+    IVilkårConfig,
+    resultatTilUi,
+    resultater,
+} from '../../../../typer/vilkår';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -122,7 +128,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                 <Collapse isOpened={ekspandertVilkår}>
                     <div className={'generisk-vilkår__ekspandert'}>
                         <RadioGruppeFelt
-                            verdi={redigerbartVilkår.verdi.resultat.verdi}
+                            verdi={resultater[redigerbartVilkår.verdi.resultat.verdi].navn}
                             visLeseversjon={erLesevisning()}
                             legend={
                                 vilkårFraConfig.spørsmål
