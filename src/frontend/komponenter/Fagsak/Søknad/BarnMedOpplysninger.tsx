@@ -19,7 +19,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
         : 'ukjent';
 
     return (
-        <div>
+        <div className={'søknad__panel--gruppebarn'}>
             <CheckboxFelt
                 visLeseversjon={erLesevisning()}
                 id={`barn-${barn.ident}`}

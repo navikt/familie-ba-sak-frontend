@@ -10,7 +10,7 @@ class CheckboxFelt extends Component<IProps> {
     render() {
         const { visLeseversjon, label, checked, onChange } = this.props;
         return visLeseversjon ? (
-            checked && <Normaltekst className={'skjemaelement'} children={label} />
+            checked && <Normaltekst className={'skjemaelement lese-felt'} children={label} />
         ) : (
             <Checkbox label={label} checked={checked} onChange={onChange} />
         );
