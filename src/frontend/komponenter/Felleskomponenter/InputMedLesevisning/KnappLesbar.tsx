@@ -4,13 +4,11 @@ import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 const KnappLesbar: React.FC<KnappBaseProps> = ({ onClick, mini, type, spinner, children }) => {
     const { erLesevisning } = useFagsakRessurser();
-    return (
-        !erLesevisning() && (
-            <Knapp onClick={onClick} mini={mini} type={type} spinner={spinner}>
-                {children}
-            </Knapp>
-        )
-    );
+    return !erLesevisning() ? (
+        <Knapp onClick={onClick} mini={mini} type={type} spinner={spinner}>
+            {children}
+        </Knapp>
+    ) : null;
 };
 
 export default KnappLesbar;

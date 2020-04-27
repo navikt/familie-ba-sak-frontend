@@ -6,7 +6,9 @@ import { useFagsakRessurser } from '../../../context/FagsakContext';
 const CheckboxLesbar: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
     const { erLesevisning } = useFagsakRessurser();
     return erLesevisning() ? (
-        checked && <Normaltekst className={'skjemaelement lese-felt'} children={label} />
+        checked ? (
+            <Normaltekst className={'skjemaelement lese-felt'} children={label} />
+        ) : null
     ) : (
         <Checkbox label={label} checked={checked} onChange={onChange} />
     );
