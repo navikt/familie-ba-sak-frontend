@@ -5,7 +5,7 @@ import SøknadType from './SøknadType';
 import SøkerOppholdINorge from './SøkerOppholdINorge';
 import AnnenPart from './AnnenPart';
 import Barna from './Barna';
-import { Knapp } from 'nav-frontend-knapper';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
@@ -98,35 +98,49 @@ const RegistrerSøknad: React.FunctionComponent = () => {
             {feilmelding && <Feilmelding children={feilmelding} />}
             <div style={{ display: 'flex' }}>
                 <div style={{ flex: 1 }} />
+                {erLesevisning() ? (
+                    <Hovedknapp
+                        onClick={() => {
+                            if (fagsak.status === RessursStatus.SUKSESS) {
+                                history.push(`/fagsak/${fagsak.data.id}/vilkaarsvurdering`);
+                            } else {
+                                settFeilmelding('Kunne ikke finne id på fagsak.');
+                            }
+                        }}
+                        children={'Neste'}
+                    />
+                ) : (
+                    <KnappFelt
+                        visLeseversjon={erLesevisning()}
+                        onClick={() => {
+                            if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig()) {
+                                const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
+                                settSenderInn(true);
 
-                <KnappFelt
-                    visLeseversjon={erLesevisning()}
-                    onClick={() => {
-                        if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig()) {
-                            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
-                            settSenderInn(true);
+                                axiosRequest<IFagsak, ISøknadDTO>({
+                                    method: 'POST',
+                                    data: søknad,
+                                    url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
+                                }).then((response: Ressurs<IFagsak>) => {
+                                    settSenderInn(false);
+                                    if (response.status === RessursStatus.SUKSESS) {
+                                        settFagsak(response);
 
-                            axiosRequest<IFagsak, ISøknadDTO>({
-                                method: 'POST',
-                                data: søknad,
-                                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
-                            }).then((response: Ressurs<IFagsak>) => {
-                                settSenderInn(false);
-                                if (response.status === RessursStatus.SUKSESS) {
-                                    settFagsak(response);
-
-                                    history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
-                                } else if (response.status === RessursStatus.FEILET) {
-                                    settFeilmelding(response.melding);
-                                } else {
-                                    settFeilmelding('Registrering av søknaden feilet');
-                                }
-                            });
-                        }
-                    }}
-                    children={'Bekreft og fortsett'}
-                    spinner={senderInn}
-                />
+                                        history.push(
+                                            `/fagsak/${response.data.id}/vilkaarsvurdering`
+                                        );
+                                    } else if (response.status === RessursStatus.FEILET) {
+                                        settFeilmelding(response.melding);
+                                    } else {
+                                        settFeilmelding('Registrering av søknaden feilet');
+                                    }
+                                });
+                            }
+                        }}
+                        children={'Bekreft og fortsett'}
+                        spinner={senderInn}
+                    />
+                )}
             </div>
         </div>
     );

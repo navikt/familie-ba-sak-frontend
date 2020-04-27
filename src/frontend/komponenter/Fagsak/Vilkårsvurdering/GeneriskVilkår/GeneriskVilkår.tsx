@@ -56,24 +56,20 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             person={person}
                             vilkårResultat={vilkårResultat}
                             visFeilmeldinger={visFeilmeldinger}
-                            visLeseversjon={erLesevisning()}
                         />
                     );
                 })}
             </ul>
             <DashedHr />
 
-            {!erLesevisning() && (
-                <UtførKnapp
-                    onClick={() =>
-                        leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)
-                    }
-                    id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
-                >
-                    Legg til periode
-                    <Pluss />
-                </UtførKnapp>
-            )}
+            <UtførKnapp
+                visLeseversjon={erLesevisning()}
+                onClick={() => leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)}
+                id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
+            >
+                Legg til periode
+                <Pluss />
+            </UtførKnapp>
         </div>
     );
 };

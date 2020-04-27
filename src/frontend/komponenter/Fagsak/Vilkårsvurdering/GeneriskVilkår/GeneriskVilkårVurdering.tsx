@@ -16,8 +16,6 @@ import classNames from 'classnames';
 import { Undertekst, Normaltekst } from 'nav-frontend-typografi';
 import { periodeToString } from '../../../../typer/periode';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import PennFylt from '../../../../ikoner/PennFylt';
-import Penn from '../../../../ikoner/Penn';
 import Slett from '../../../../ikoner/Slett';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import RadioGruppeFelt from '../../../Felleskomponenter/InputMedLesevisning/RadioGruppeFelt';
@@ -223,6 +221,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             </div>
 
                             <IkonKnapp
+                                visLeseversjon={erLesevisning()}
                                 onClick={() =>
                                     fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
                                 }

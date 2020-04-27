@@ -20,7 +20,7 @@ interface IVedtakProps {
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
-    const { settFagsak } = useFagsakRessurser();
+    const { settFagsak, erLesevisning } = useFagsakRessurser();
     const [makeItRain, settMakeItRain] = React.useState(false);
 
     const history = useHistory();
@@ -61,8 +61,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     }, [fagsak, axiosRequest]);
 
     const visSubmitKnapp =
-        aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
-        aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
+        !erLesevisning() &&
+        (aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
+            aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER);
 
     const sendInn = () => {
         settSenderInn(true);
