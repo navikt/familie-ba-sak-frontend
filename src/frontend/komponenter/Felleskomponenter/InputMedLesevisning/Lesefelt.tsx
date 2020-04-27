@@ -2,8 +2,8 @@ import React from 'react';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {
-    label?: string;
-    verdi: string;
+    label?: React.ReactNode;
+    verdi?: string | string[] | number;
 }
 
 const Lesefelt: React.FC<IProps> = ({ label, verdi }) => {

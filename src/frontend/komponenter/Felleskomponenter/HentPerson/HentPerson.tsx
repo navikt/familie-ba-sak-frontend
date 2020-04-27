@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Input } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IPerson } from '../../../typer/person';

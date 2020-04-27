@@ -22,7 +22,7 @@ class InputFelt extends Component<IProps> {
             value == '' ? (
                 <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
             ) : (
-                <Lesefelt label={label} verdi={value} /> // TODO: Eller bør man vise "Ingen tilleggsopplysninger oppgitt"?
+                <Lesefelt label={label} verdi={value} />
             )
         ) : (
             <Input
