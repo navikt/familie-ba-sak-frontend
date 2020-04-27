@@ -128,7 +128,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         settFagsakRessurser({ ...fagsakRessurser, fagsak: modifisertFagsak });
 
     const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
-        console.log(fagsakRessurser);
         return fagsakRessurser.åpenBehandling.status === RessursStatus.SUKSESS
             ? fagsakRessurser.åpenBehandling.data.steg
             : undefined;
@@ -137,15 +136,15 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const erLesevisning = (): boolean => {
         const saksbehandlerRolle = hentSaksbehandlerRolle();
         const steg = hentStegPåÅpenBehandling(); // TODO: Bug, rolle er av og til undefined
-        console.log(saksbehandlerRolle);
-        console.log(steg);
-        if (1 > 2 && saksbehandlerRolle && steg) {
+        console.log('STEG: ' + steg);
+        console.log('ROLLE:' + saksbehandlerRolle);
+        if (saksbehandlerRolle && steg) {
             return (
                 (saksbehandlerRolle && saksbehandlerRolle <= BehandlerRolle.VEILEDER) ||
                 steg >= BehandlingSteg.GODKJENNE_VEDTAK
             );
         }
-        tilFeilside();
+        //tilFeilside();
         return true;
     };
 

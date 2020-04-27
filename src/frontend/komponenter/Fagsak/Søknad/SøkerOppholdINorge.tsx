@@ -2,11 +2,11 @@ import * as React from 'react';
 import { ISøknadDTO } from '../../../typer/søknad';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
-import { Input, Textarea } from 'nav-frontend-skjema';
 import CheckboxFelt from '../../Felleskomponenter/InputMedLesevisning/CheckboxFelt';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import TextareaFelt from '../../Felleskomponenter/InputMedLesevisning/TextareaFelt';
 import InputFelt from '../../Felleskomponenter/InputMedLesevisning/InputFelt';
+import MinimumOpplysningAlternativ from '../../Felleskomponenter/InputMedLesevisning/IngenOpplysningerValgt';
 
 interface IProps {
     settSøknad: (søknad: ISøknadDTO) => void;
@@ -15,9 +15,18 @@ interface IProps {
 
 const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) => {
     const { erLesevisning } = useFagsakRessurser();
+    console.log(søknad.søkerMedOpplysninger.oppholderSegINorge);
+    console.log(søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder);
+
     return (
         <PanelBase className={'søknad__panel'}>
             <Undertittel children={'2.3 Hva har bruker søkt om?'} />
+            <MinimumOpplysningAlternativ
+                minimumOpplysning={[
+                    søknad.søkerMedOpplysninger.oppholderSegINorge,
+                    søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder,
+                ]}
+            />
             <br />
             <CheckboxFelt
                 visLeseversjon={erLesevisning()}

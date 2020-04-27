@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TextareaControlled, TextareaControlledProps } from 'nav-frontend-skjema';
 import Lesefelt from './Lesefelt';
+import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps extends TextareaControlledProps {
     visLeseversjon: boolean;
@@ -20,7 +21,11 @@ class TextareaControlledFelt extends Component<IProps> {
             onBlur,
         } = this.props;
         return visLeseversjon ? (
-            value !== '' && <Lesefelt label={label} verdi={value} /> // TODO: Håndtering av feilmeldinger
+            value == '' ? (
+                <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
+            ) : (
+                <Lesefelt label={label} verdi={value} />
+            )
         ) : (
             <TextareaControlled
                 defaultValue={defaultValue}

@@ -10,7 +10,7 @@ const Lesefelt: React.FC<IProps> = ({ label, verdi }) => {
     return (
         <div className={'lese-felt'}>
             {label !== undefined && <Element children={label} />}
-            <Normaltekst children={verdi} />
+            <Normaltekst className={'skjemaelement'} children={verdi} />
         </div>
     );
 };
