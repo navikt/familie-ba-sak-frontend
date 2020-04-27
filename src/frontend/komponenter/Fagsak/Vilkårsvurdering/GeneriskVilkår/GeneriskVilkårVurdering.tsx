@@ -129,7 +129,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     <div className={'generisk-vilkår__ekspandert'}>
                         <RadioGruppeLesbar
                             verdi={resultater[redigerbartVilkår.verdi.resultat.verdi].navn}
-                            visLeseversjon={erLesevisning()}
                             legend={
                                 vilkårFraConfig.spørsmål
                                     ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
@@ -164,7 +163,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         />
 
                         <TextareaControlledLesbar
-                            visLeseversjon={erLesevisning()}
                             defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                             id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                             label={'Begrunnelse'}
@@ -194,7 +192,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         <div className={'generisk-vilkår__ekspandert--knapperad'}>
                             <div>
                                 <KnappLesbar
-                                    visLeseversjon={erLesevisning()}
                                     onClick={() => {
                                         const erVilkårGyldig: boolean =
                                             redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
@@ -217,7 +214,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     Ferdig
                                 </KnappLesbar>
                                 <KnappLesbar
-                                    visLeseversjon={erLesevisning()}
                                     onClick={() => toggleForm(false)}
                                     mini={true}
                                     type={'flat'}
@@ -227,7 +223,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             </div>
 
                             <IkonKnapp
-                                visLeseversjon={erLesevisning()}
                                 onClick={() =>
                                     fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
                                 }

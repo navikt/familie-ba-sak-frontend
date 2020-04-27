@@ -36,7 +36,6 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
         <div className={'hentperson'}>
             <div className={'hentperson__inputogknapp'}>
                 <InputLesbar
-                    visLeseversjon={erLesevisning()}
                     id={'hent-person'}
                     label={'Ident'}
                     bredde={'XL'}

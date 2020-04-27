@@ -111,7 +111,6 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                     />
                 ) : (
                     <KnappLesbar
-                        visLeseversjon={erLesevisning()}
                         onClick={() => {
                             if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig()) {
                                 const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);

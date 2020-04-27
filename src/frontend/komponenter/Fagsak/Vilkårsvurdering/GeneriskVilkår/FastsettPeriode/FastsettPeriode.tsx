@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
-import Datovelger from '../../../../Felleskomponenter/Datovelger/Datovelger';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { ISODateString } from 'nav-datovelger';
@@ -46,7 +45,6 @@ const FastsettPeriode: React.FC<IProps> = ({
             <div className={'fastsett-periode__flex'}>
                 <div>
                     <DatovelgerLesbar
-                        visLeseversjon={erLesevisning()}
                         id={`${vilkårPeriodeFeilmeldingId(
                             redigerbartVilkår.verdi
                         )}__fastsett-periode-fom`}
@@ -73,7 +71,6 @@ const FastsettPeriode: React.FC<IProps> = ({
                 {(!erLesevisning() || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
                         <DatovelgerLesbar
-                            visLeseversjon={erLesevisning()}
                             disabled={!fastsettTom}
                             id={`${vilkårPeriodeFeilmeldingId(
                                 redigerbartVilkår.verdi

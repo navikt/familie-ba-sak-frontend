@@ -1,20 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Checkbox, CheckboxProps } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-interface IProps extends CheckboxProps {
-    visLeseversjon: boolean;
-}
-
-class CheckboxLesbar extends Component<IProps> {
-    render() {
-        const { visLeseversjon, label, checked, onChange } = this.props;
-        return visLeseversjon ? (
-            checked && <Normaltekst className={'skjemaelement lese-felt'} children={label} />
-        ) : (
-            <Checkbox label={label} checked={checked} onChange={onChange} />
-        );
-    }
-}
+const CheckboxLesbar: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
+    const { erLesevisning } = useFagsakRessurser();
+    return erLesevisning() ? (
+        checked && <Normaltekst className={'skjemaelement lese-felt'} children={label} />
+    ) : (
+        <Checkbox label={label} checked={checked} onChange={onChange} />
+    );
+};
 
 export default CheckboxLesbar;

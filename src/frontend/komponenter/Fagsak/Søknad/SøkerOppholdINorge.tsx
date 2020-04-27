@@ -3,7 +3,6 @@ import { ISøknadDTO } from '../../../typer/søknad';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 import CheckboxLesbar from '../../Felleskomponenter/InputMedLesevisning/CheckboxLesbar';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import TextareaLesbar from '../../Felleskomponenter/InputMedLesevisning/TextareaLesbar';
 import InputLesbar from '../../Felleskomponenter/InputMedLesevisning/InputLesbar';
 import MinimumOpplysningAlternativ from '../../Felleskomponenter/InputMedLesevisning/IngenOpplysningerValgt';
@@ -14,10 +13,6 @@ interface IProps {
 }
 
 const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) => {
-    const { erLesevisning } = useFagsakRessurser();
-    console.log(søknad.søkerMedOpplysninger.oppholderSegINorge);
-    console.log(søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder);
-
     return (
         <PanelBase className={'søknad__opphold'}>
             <Undertittel children={'2.3 Hva har bruker søkt om?'} />
@@ -28,7 +23,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                 ]}
             />
             <CheckboxLesbar
-                visLeseversjon={erLesevisning()}
                 label={'Søker oppholder seg ikke i Norge'}
                 checked={!søknad.søkerMedOpplysninger.oppholderSegINorge}
                 onChange={() => {
@@ -43,7 +37,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
             />
 
             <CheckboxLesbar
-                visLeseversjon={erLesevisning()}
                 label={'Søker har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'}
                 checked={!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder}
                 onChange={() => {
@@ -61,7 +54,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
             {!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder && (
                 <div className={'søknad__panel--innrykk'}>
                     <InputLesbar
-                        visLeseversjon={erLesevisning()}
                         label={'Når kom søker til Norge?'}
                         bredde={'S'}
                         value={søknad.søkerMedOpplysninger.komTilNorge}
@@ -78,7 +70,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                     />
 
                     <CheckboxLesbar
-                        visLeseversjon={erLesevisning()}
                         label={'Søker skal ikke oppholde seg i Norge de neste 12 månedene'}
                         checked={!søknad.søkerMedOpplysninger.skalOppholdeSegINorgeNeste12Måneder}
                         onChange={() => {
@@ -94,7 +85,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                     />
 
                     <TextareaLesbar
-                        visLeseversjon={erLesevisning()}
                         label={'8 Tilleggsopplysninger'}
                         value={søknad.søkerMedOpplysninger.tilleggsopplysninger ?? ''}
                         placeholder={'Skriv her'}

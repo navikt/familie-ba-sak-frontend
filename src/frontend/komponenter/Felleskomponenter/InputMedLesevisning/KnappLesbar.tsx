@@ -1,21 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Knapp, KnappBaseProps } from 'nav-frontend-knapper';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-interface IProps extends KnappBaseProps {
-    visLeseversjon: boolean;
-}
-
-class KnappLesbar extends Component<IProps> {
-    render() {
-        const { visLeseversjon, onClick, mini, type, spinner, children } = this.props;
-        return (
-            !visLeseversjon && (
-                <Knapp onClick={onClick} mini={mini} type={type} spinner={spinner}>
-                    {children}
-                </Knapp>
-            )
-        );
-    }
-}
+const KnappLesbar: React.FC<KnappBaseProps> = ({ onClick, mini, type, spinner, children }) => {
+    const { erLesevisning } = useFagsakRessurser();
+    return (
+        !erLesevisning() && (
+            <Knapp onClick={onClick} mini={mini} type={type} spinner={spinner}>
+                {children}
+            </Knapp>
+        )
+    );
+};
 
 export default KnappLesbar;

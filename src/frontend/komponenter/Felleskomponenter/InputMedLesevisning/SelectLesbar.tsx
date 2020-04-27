@@ -1,22 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Select, SelectProps } from 'nav-frontend-skjema';
 import Lesefelt from './Lesefelt';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-interface IProps extends SelectProps {
-    visLeseversjon: boolean;
-}
+const SelectLesbar: React.FC<SelectProps> = ({
+    name,
+    label,
+    bredde,
+    value,
+    onChange,
+    children,
+}) => {
+    const { erLesevisning } = useFagsakRessurser();
 
-class SelectLesbar extends Component<IProps> {
-    render() {
-        const { visLeseversjon, name, label, bredde, value, onChange, children } = this.props;
-        return visLeseversjon ? (
-            <Lesefelt label={label} verdi={value} />
-        ) : (
-            <Select name={name} label={label} bredde={bredde} value={value} onChange={onChange}>
-                {children}
-            </Select>
-        );
-    }
-}
+    return erLesevisning() ? (
+        <Lesefelt label={label} verdi={value} />
+    ) : (
+        <Select name={name} label={label} bredde={bredde} value={value} onChange={onChange}>
+            {children}
+        </Select>
+    );
+};
 
 export default SelectLesbar;

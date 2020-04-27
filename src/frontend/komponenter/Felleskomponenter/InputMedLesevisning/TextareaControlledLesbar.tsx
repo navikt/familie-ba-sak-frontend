@@ -1,44 +1,39 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { TextareaControlled, TextareaControlledProps } from 'nav-frontend-skjema';
 import Lesefelt from './Lesefelt';
 import { Normaltekst } from 'nav-frontend-typografi';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-interface IProps extends TextareaControlledProps {
-    visLeseversjon: boolean;
-}
+const TextareaControlledLesbar: React.FC<TextareaControlledProps> = ({
+    defaultValue,
+    id,
+    label,
+    placeholder,
+    textareaClass,
+    value,
+    feil,
+    onBlur,
+}) => {
+    const { erLesevisning } = useFagsakRessurser();
 
-class TextareaControlledLesbar extends Component<IProps> {
-    render() {
-        const {
-            visLeseversjon,
-            defaultValue,
-            id,
-            label,
-            placeholder,
-            textareaClass,
-            value,
-            feil,
-            onBlur,
-        } = this.props;
-        return visLeseversjon ? (
-            value == '' ? (
-                <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
-            ) : (
-                <Lesefelt label={label} verdi={value} />
-            )
+    return erLesevisning() ? (
+        value == '' ? (
+            <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
         ) : (
-            <TextareaControlled
-                defaultValue={defaultValue}
-                id={id}
-                label={label}
-                placeholder={placeholder}
-                textareaClass={textareaClass}
-                value={value}
-                feil={feil}
-                onBlur={onBlur}
-            />
-        );
-    }
-}
+            <Lesefelt label={label} verdi={value} />
+        )
+    ) : (
+        <TextareaControlled
+            defaultValue={defaultValue}
+            id={id}
+            label={label}
+            placeholder={placeholder}
+            textareaClass={textareaClass}
+            value={value}
+            feil={feil}
+            onBlur={onBlur}
+        />
+    );
+};
 
 export default TextareaControlledLesbar;

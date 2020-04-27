@@ -1,27 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Textarea, TextareaProps } from 'nav-frontend-skjema';
 import Lesefelt from './Lesefelt';
 import { Normaltekst } from 'nav-frontend-typografi';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-interface IProps extends TextareaProps {
-    visLeseversjon: boolean;
-}
+const TextareaLesbar: React.FC<TextareaProps> = ({ name, label, value, onChange, children }) => {
+    const { erLesevisning } = useFagsakRessurser();
 
-class TextareaLesbar extends Component<IProps> {
-    render() {
-        const { visLeseversjon, name, label, value, onChange, children } = this.props;
-        return visLeseversjon ? (
-            value == '' ? (
-                <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
-            ) : (
-                <Lesefelt label={label} verdi={value} />
-            )
+    return erLesevisning() ? (
+        value == '' ? (
+            <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
         ) : (
-            <Textarea name={name} label={label} value={value} onChange={onChange}>
-                {children}
-            </Textarea>
-        );
-    }
-}
+            <Lesefelt label={label} verdi={value} />
+        )
+    ) : (
+        <Textarea name={name} label={label} value={value} onChange={onChange}>
+            {children}
+        </Textarea>
+    );
+};
 
 export default TextareaLesbar;
