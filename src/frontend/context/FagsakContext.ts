@@ -136,11 +136,10 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const erLesevisning = (): boolean => {
         const saksbehandlerRolle = hentSaksbehandlerRolle() ?? tilFeilside();
         const steg = hentStegPåÅpenBehandling();
-        console.log(steg);
-        console.log(saksbehandlerRolle);
+        const stegNummer: BehandlingSteg = steg && BehandlingSteg[steg];
         return (
             saksbehandlerRolle <= BehandlerRolle.VEILEDER ||
-            (steg != undefined && steg >= BehandlingSteg.BESLUTTE_VEDTAK)
+            (steg != undefined && stegNummer >= BehandlingSteg.BESLUTTE_VEDTAK)
         );
     };
 
