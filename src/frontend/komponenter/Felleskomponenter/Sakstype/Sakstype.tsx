@@ -6,7 +6,6 @@ import {
     BehandlingUnderkategori,
 } from '../../../typer/behandling';
 import SelectLesbar from '../InputMedLesevisning/SelectLesbar';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     kategori: BehandlingKategori;
@@ -20,11 +19,9 @@ const Sakstype: React.FunctionComponent<IProps> = ({
     underkategori,
     underkategoriOnChange,
 }) => {
-    const { erLesevisning } = useFagsakRessurser();
     return (
         <>
             <SelectLesbar
-                visLeseversjon={erLesevisning()}
                 bredde={'l'}
                 label="Kategori"
                 onChange={event => kategoriOnChange(event.target.value as BehandlingKategori)}
@@ -41,7 +38,6 @@ const Sakstype: React.FunctionComponent<IProps> = ({
 
             <br />
             <SelectLesbar
-                visLeseversjon={erLesevisning()}
                 bredde={'l'}
                 label="Underkategori"
                 onChange={event =>

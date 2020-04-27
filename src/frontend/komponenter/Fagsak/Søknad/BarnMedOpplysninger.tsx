@@ -3,7 +3,6 @@ import moment from 'moment';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import CheckboxLesbar from '../../Felleskomponenter/InputMedLesevisning/CheckboxLesbar';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import TextareaLesbar from '../../Felleskomponenter/InputMedLesevisning/TextareaLesbar';
 
 interface IProps {
@@ -12,7 +11,6 @@ interface IProps {
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { settBarn } = useSøknad();
-    const { erLesevisning } = useFagsakRessurser();
     const alder = barn.fødselsdato
         ? moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years')
         : 'ukjent';
@@ -20,7 +18,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     return (
         <div className={'søknad__panel--gruppebarn'}>
             <CheckboxLesbar
-                visLeseversjon={erLesevisning()}
                 id={`barn-${barn.ident}`}
                 label={`${barn.navn ?? 'ukjent'} (${alder} år) ${barn.ident}`}
                 checked={barn.inkludertISøknaden}
@@ -34,7 +31,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             {barn.inkludertISøknaden && (
                 <div className={'søknad__panel--innrykk'}>
                     <CheckboxLesbar
-                        visLeseversjon={erLesevisning()}
                         label={'5.1 Barnet bor ikke fast sammen med søker'}
                         checked={!barn.borMedSøker}
                         onChange={() => {
@@ -46,7 +42,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
 
                     <CheckboxLesbar
-                        visLeseversjon={erLesevisning()}
                         label={'5.5.1 Barnet oppholder seg i utlandet'}
                         checked={!barn.oppholderSegINorge}
                         onChange={() => {
@@ -58,7 +53,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
 
                     <CheckboxLesbar
-                        visLeseversjon={erLesevisning()}
                         label={
                             '5.5.2 Barnet har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'
                         }
@@ -72,7 +66,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
 
                     <TextareaLesbar
-                        visLeseversjon={erLesevisning()}
                         label={'Tilleggsopplysninger'}
                         placeholder={'Skriv her'}
                         value={barn.tilleggsopplysninger ?? ''}

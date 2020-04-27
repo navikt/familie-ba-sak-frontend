@@ -9,7 +9,6 @@ import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/Vilk
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DashedHr from '../../../Felleskomponenter/DashedHr/DashedHr';
 import Pluss from '../../../../ikoner/Pluss';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -37,7 +36,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { leggTilVilkår } = useVilkårsvurdering();
-    const { erLesevisning } = useFagsakRessurser();
 
     return (
         <div className={'generisk-vilkår'}>
@@ -63,7 +61,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
             <DashedHr />
 
             <UtførKnapp
-                visLeseversjon={erLesevisning()}
                 onClick={() => leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)}
                 id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
             >
