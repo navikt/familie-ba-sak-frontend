@@ -116,15 +116,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     : 'Lukk'}
                                 {ekspandertVilkår ? <PennFylt /> : <Penn />}
                             </IkonKnapp>
-                            <IkonKnapp
-                                onClick={() =>
-                                    fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
-                                }
-                                id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                            >
-                                Slett
-                                <Slett />
-                            </IkonKnapp>
                         </div>
                     )}
                 </div>
@@ -195,35 +186,51 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             }}
                         />
 
-                        <KnappFelt
-                            visLeseversjon={erLesevisning()}
-                            onClick={() => {
-                                const erVilkårGyldig: boolean =
-                                    redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
-                                        .valideringsstatus === Valideringsstatus.OK;
+                        <div className={'generisk-vilkår__ekspandert--knapperad'}>
+                            <div>
+                                <KnappFelt
+                                    visLeseversjon={erLesevisning()}
+                                    onClick={() => {
+                                        const erVilkårGyldig: boolean =
+                                            redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
+                                                .valideringsstatus === Valideringsstatus.OK;
 
-                                settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
-                                if (erVilkårGyldig) {
-                                    settEkspandertVilkår(false);
-                                    settVisFeilmeldingerForEttVilkår(false);
-                                } else {
-                                    settVisFeilmeldingerForEttVilkår(true);
+                                        settVilkårForPeriodeResultat(
+                                            person.personIdent,
+                                            redigerbartVilkår
+                                        );
+                                        if (erVilkårGyldig) {
+                                            settEkspandertVilkår(false);
+                                            settVisFeilmeldingerForEttVilkår(false);
+                                        } else {
+                                            settVisFeilmeldingerForEttVilkår(true);
+                                        }
+                                    }}
+                                    mini={true}
+                                    type={'standard'}
+                                >
+                                    Ferdig
+                                </KnappFelt>
+                                <KnappFelt
+                                    visLeseversjon={erLesevisning()}
+                                    onClick={() => toggleForm(false)}
+                                    mini={true}
+                                    type={'flat'}
+                                >
+                                    Avbryt
+                                </KnappFelt>
+                            </div>
+
+                            <IkonKnapp
+                                onClick={() =>
+                                    fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
                                 }
-                            }}
-                            mini={true}
-                            type={'standard'}
-                        >
-                            Ferdig
-                        </KnappFelt>
-
-                        <KnappFelt
-                            visLeseversjon={erLesevisning()}
-                            onClick={() => toggleForm(false)}
-                            mini={true}
-                            type={'flat'}
-                        >
-                            Avbryt
-                        </KnappFelt>
+                                id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                            >
+                                Slett
+                                <Slett />
+                            </IkonKnapp>
+                        </div>
                     </div>
                 </Collapse>
             </SkjemaGruppe>

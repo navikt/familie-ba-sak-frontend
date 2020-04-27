@@ -2,7 +2,6 @@ import * as React from 'react';
 import moment from 'moment';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { Textarea } from 'nav-frontend-skjema';
 import CheckboxFelt from '../../Felleskomponenter/InputMedLesevisning/CheckboxFelt';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import TextareaFelt from '../../Felleskomponenter/InputMedLesevisning/TextareaFelt';
