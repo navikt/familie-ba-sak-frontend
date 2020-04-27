@@ -19,7 +19,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
     console.log(søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder);
 
     return (
-        <PanelBase className={'søknad__panel'}>
+        <PanelBase className={'søknad__opphold'}>
             <Undertittel children={'2.3 Hva har bruker søkt om?'} />
             <MinimumOpplysningAlternativ
                 minimumOpplysning={[
@@ -27,7 +27,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                     søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder,
                 ]}
             />
-            <br />
             <CheckboxFelt
                 visLeseversjon={erLesevisning()}
                 label={'Søker oppholder seg ikke i Norge'}
@@ -43,7 +42,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                 }}
             />
 
-            <br />
             <CheckboxFelt
                 visLeseversjon={erLesevisning()}
                 label={'Søker har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'}
@@ -60,7 +58,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                 }}
             />
 
-            <br />
             {!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder && (
                 <div className={'søknad__panel--innrykk'}>
                     <InputFelt
@@ -80,7 +77,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         }}
                     />
 
-                    <br />
                     <CheckboxFelt
                         visLeseversjon={erLesevisning()}
                         label={'Søker skal ikke oppholde seg i Norge de neste 12 månedene'}
@@ -97,7 +93,6 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         }}
                     />
 
-                    <br />
                     <TextareaFelt
                         visLeseversjon={erLesevisning()}
                         label={'8 Tilleggsopplysninger'}
