@@ -134,18 +134,14 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     };
 
     const erLesevisning = (): boolean => {
-        const saksbehandlerRolle = hentSaksbehandlerRolle();
+        const saksbehandlerRolle = hentSaksbehandlerRolle() ?? tilFeilside();
         const steg = hentStegPåÅpenBehandling(); // TODO: Bug, rolle er av og til undefined
         console.log('STEG: ' + steg);
         console.log('ROLLE:' + saksbehandlerRolle);
-        if (saksbehandlerRolle && steg) {
-            return (
-                (saksbehandlerRolle && saksbehandlerRolle <= BehandlerRolle.VEILEDER) ||
-                steg >= BehandlingSteg.GODKJENNE_VEDTAK
-            );
-        }
-        //tilFeilside();
-        return true;
+        return (
+            saksbehandlerRolle <= BehandlerRolle.VEILEDER ||
+            (steg != undefined && steg <= BehandlingSteg.GODKJENNE_VEDTAK)
+        );
     };
 
     return {

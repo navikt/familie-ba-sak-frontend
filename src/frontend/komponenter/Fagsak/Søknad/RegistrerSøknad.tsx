@@ -66,7 +66,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
         <div className={'søknad'}>
             <Sidetittel children={'Informasjon fra søknaden'} />
             <br />
-            {søknadErLastetFraBackend && (
+            {søknadErLastetFraBackend && !erLesevisning() && (
                 <>
                     <br />
                     <AlertStripeAdvarsel
