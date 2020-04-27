@@ -61,7 +61,9 @@ const initialFiltre = (innloggetSaksbehandler?: ISaksbehandler): IOppgaverFiltre
                       .map(v => v.toString())
                       .concat(innloggetSaksbehandler.displayName)
                 : Object.values(SaksbehandlerFilter).map(v => v.toString()),
-            selectedValue: SaksbehandlerFilter.Alle,
+            selectedValue: innloggetSaksbehandler
+                ? innloggetSaksbehandler.displayName
+                : SaksbehandlerFilter.Alle,
         },
     };
 };
@@ -120,6 +122,9 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                           .map(v => v.toString())
                           .concat(innloggetSaksbehandler.displayName)
                     : Object.values(SaksbehandlerFilter).map(v => v.toString()),
+                selectedValue: innloggetSaksbehandler
+                    ? innloggetSaksbehandler.displayName
+                    : SaksbehandlerFilter.Alle,
             },
         });
     }, [innloggetSaksbehandler]);

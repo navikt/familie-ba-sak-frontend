@@ -1,8 +1,7 @@
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import Confetti from 'react-confetti';
 import { useHistory } from 'react-router';
 
 import { BehandlingStatus } from '../../../typer/behandling';
@@ -13,6 +12,8 @@ import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useApp } from '../../../context/AppContext';
 import { aktivVedtak } from '../../../api/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import { Knapp } from 'nav-frontend-knapper';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -21,12 +22,12 @@ interface IVedtakProps {
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
     const { settFagsak, erLesevisning } = useFagsakRessurser();
-    const [makeItRain, settMakeItRain] = React.useState(false);
 
     const history = useHistory();
 
     const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
+    const [visModal, settVisModal] = React.useState<boolean>(false);
 
     const [submitFeil, settSubmitFeil] = React.useState('');
     const [senderInn, settSenderInn] = React.useState(false);
@@ -62,30 +63,20 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const visSubmitKnapp =
         !erLesevisning() &&
-        (aktivBehandling?.status === BehandlingStatus.OPPRETTET ||
-            aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER);
+        (aktivBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
+            aktivBehandling?.status === BehandlingStatus.OPPRETTET);
 
     const sendInn = () => {
         settSenderInn(true);
         settSubmitFeil('');
         axiosRequest<IFagsak, void>({
             method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/${
-                aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
-                    ? 'iverksett-vedtak'
-                    : 'send-til-beslutter'
-            }`,
+            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/send-til-beslutter`,
         }).then((response: Ressurs<IFagsak>) => {
             settSenderInn(false);
             if (response.status === RessursStatus.SUKSESS) {
+                settVisModal(true);
                 settFagsak(response);
-
-                if (aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER) {
-                    settMakeItRain(true);
-                    setTimeout(() => {
-                        settMakeItRain(false);
-                    }, 10000);
-                }
             } else if (
                 response.status === RessursStatus.FEILET ||
                 response.status === RessursStatus.IKKE_TILGANG
@@ -101,16 +92,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             tittel={'Vedtaksbrev'}
             forrigeOnClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
-            nesteKnappTittel={
-                aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER
-                    ? 'Iverksett'
-                    : 'Send til beslutter'
-            }
+            nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
         >
             <div className="oppsummering">
-                {makeItRain && <Confetti />}
                 {errorMessage === undefined ? (
                     <div>
                         <br />
@@ -123,6 +109,38 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
                 {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
             </div>
+            {visModal && (
+                <UIModalWrapper
+                    modal={{
+                        tittel: 'Totrinnsvurdering',
+                        lukkKnapp: false,
+                        visModal: visModal,
+                        actions: [
+                            <Knapp
+                                key={'saksoversikt'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisModal(false);
+                                    history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                }}
+                                children={'Gå til saksoversikten'}
+                            />,
+                            <Knapp
+                                key={'oppgavebenk'}
+                                type={'hoved'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisModal(false);
+                                    history.push('/oppgaver');
+                                }}
+                                children={'Gå til Oppgavebenken'}
+                            />,
+                        ],
+                    }}
+                >
+                    <Normaltekst>Behandlingen er nå sendt til totrinnskontroll</Normaltekst>
+                </UIModalWrapper>
+            )}
         </Skjemasteg>
     );
 };
