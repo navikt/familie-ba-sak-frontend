@@ -24,6 +24,7 @@ import RadioGruppeFelt from '../../../Felleskomponenter/InputMedLesevisning/Radi
 import TextareaControlledFelt from '../../../Felleskomponenter/InputMedLesevisning/TextareaControlledFelt';
 import KnappFelt from '../../../Felleskomponenter/InputMedLesevisning/KnappFelt';
 import { Collapse } from 'react-collapse';
+import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
 
 interface IProps {
     person: IPerson;
@@ -114,7 +115,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                         ? 'Vurder'
                                         : 'Endre'
                                     : 'Lukk'}
-                                {ekspandertVilkår ? <PennFylt /> : <Penn />}
+                                <Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />
                             </IkonKnapp>
                         </div>
                     )}
