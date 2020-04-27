@@ -138,7 +138,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         const steg = hentStegPåÅpenBehandling();
         return (
             saksbehandlerRolle <= BehandlerRolle.VEILEDER ||
-            (steg != undefined && steg <= BehandlingSteg.GODKJENNE_VEDTAK)
+            (steg != undefined && steg >= BehandlingSteg.GODKJENNE_VEDTAK)
         );
     };
 
