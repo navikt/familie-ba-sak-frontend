@@ -146,7 +146,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     return {
         bruker: fagsakRessurser.bruker,
         fagsak: fagsakRessurser.fagsak,
-        erLesevisning: erLesevisning,
+        erLesevisning,
         hentStegPåÅpenBehandling,
         hentFagsak,
         hentLogg,
