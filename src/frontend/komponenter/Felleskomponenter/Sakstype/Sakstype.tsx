@@ -5,7 +5,7 @@ import {
     underkategorier,
     BehandlingUnderkategori,
 } from '../../../typer/behandling';
-import SelectLesbar from '../InputMedLesevisning/SelectLesbar';
+import FamilieSelect from '../InputMedLesevisning/FamilieSelect';
 
 interface IProps {
     kategori: BehandlingKategori;
@@ -21,7 +21,7 @@ const Sakstype: React.FunctionComponent<IProps> = ({
 }) => {
     return (
         <>
-            <SelectLesbar
+            <FamilieSelect
                 bredde={'l'}
                 label="Kategori"
                 onChange={event => kategoriOnChange(event.target.value as BehandlingKategori)}
@@ -34,10 +34,10 @@ const Sakstype: React.FunctionComponent<IProps> = ({
                         </option>
                     );
                 })}
-            </SelectLesbar>
+            </FamilieSelect>
 
             <br />
-            <SelectLesbar
+            <FamilieSelect
                 bredde={'l'}
                 label="Underkategori"
                 onChange={event =>
@@ -52,7 +52,7 @@ const Sakstype: React.FunctionComponent<IProps> = ({
                         </option>
                     );
                 })}
-            </SelectLesbar>
+            </FamilieSelect>
         </>
     );
 };

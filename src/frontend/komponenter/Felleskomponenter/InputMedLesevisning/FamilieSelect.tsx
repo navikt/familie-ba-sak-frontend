@@ -3,7 +3,7 @@ import { Select, SelectProps } from 'nav-frontend-skjema';
 import Lesefelt from './Lesefelt';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-const SelectLesbar: React.FC<SelectProps> = ({
+const FamilieSelect: React.FC<SelectProps> = ({
     name,
     label,
     bredde,
@@ -22,4 +22,4 @@ const SelectLesbar: React.FC<SelectProps> = ({
     );
 };
 
-export default SelectLesbar;
+export default FamilieSelect;

@@ -6,7 +6,7 @@ import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
 import { IPar } from '../../../typer/common';
 import classNames from 'classnames';
-import SelectLesbar from '../../Felleskomponenter/InputMedLesevisning/SelectLesbar';
+import FamilieSelect from '../../Felleskomponenter/InputMedLesevisning/FamilieSelect';
 
 interface IProps {
     settSøknad: (søknad: ISøknadDTO) => void;
@@ -37,7 +37,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
 
             <br />
 
-            <SelectLesbar
+            <FamilieSelect
                 name="type søker"
                 label="Type søker"
                 bredde={'l'}
@@ -76,7 +76,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
                             </option>
                         );
                     })}
-            </SelectLesbar>
+            </FamilieSelect>
         </PanelBase>
     );
 };

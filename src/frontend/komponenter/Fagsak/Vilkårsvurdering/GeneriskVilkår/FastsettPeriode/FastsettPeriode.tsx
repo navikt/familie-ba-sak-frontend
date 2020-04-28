@@ -8,7 +8,7 @@ import { datoformatNorsk } from '../../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { ISODateString } from 'nav-datovelger';
-import DatovelgerLesbar from '../../../../Felleskomponenter/InputMedLesevisning/DatovelgerLesbar';
+import FamilieDatovelger from '../../../../Felleskomponenter/InputMedLesevisning/FamilieDatovelger';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 
 interface IProps {
@@ -44,7 +44,7 @@ const FastsettPeriode: React.FC<IProps> = ({
             <Normaltekst children={'Fastsett periode'} />
             <div className={'fastsett-periode__flex'}>
                 <div>
-                    <DatovelgerLesbar
+                    <FamilieDatovelger
                         id={`${vilkårPeriodeFeilmeldingId(
                             redigerbartVilkår.verdi
                         )}__fastsett-periode-fom`}
@@ -70,7 +70,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                 </div>
                 {(!erLesevisning() || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
-                        <DatovelgerLesbar
+                        <FamilieDatovelger
                             disabled={!fastsettTom}
                             id={`${vilkårPeriodeFeilmeldingId(
                                 redigerbartVilkår.verdi

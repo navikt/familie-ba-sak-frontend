@@ -7,7 +7,7 @@ import { useFagsakRessurser } from '../../../context/FagsakContext';
 interface IProps extends SkjemaGruppeProps {
     verdi?: string;
 }
-const RadioGruppeLesbar: React.FC<IProps> = ({ verdi, legend, feil, feilmeldingId, children }) => {
+const FamilieRadioGruppe: React.FC<IProps> = ({ verdi, legend, feil, feilmeldingId, children }) => {
     const { erLesevisning } = useFagsakRessurser();
     return erLesevisning() ? (
         <Lesefelt label={legend} verdi={verdi} />
@@ -18,4 +18,4 @@ const RadioGruppeLesbar: React.FC<IProps> = ({ verdi, legend, feil, feilmeldingI
     );
 };
 
-export default RadioGruppeLesbar;
+export default FamilieRadioGruppe;

@@ -3,7 +3,7 @@ import { Checkbox, CheckboxProps } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-const CheckboxLesbar: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
+const FamilieCheckbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
     const { erLesevisning } = useFagsakRessurser();
     return erLesevisning() ? (
         checked ? (
@@ -14,4 +14,4 @@ const CheckboxLesbar: React.FC<CheckboxProps> = ({ label, checked, onChange }) =
     );
 };
 
-export default CheckboxLesbar;
+export default FamilieCheckbox;

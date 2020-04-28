@@ -1,18 +1,12 @@
 import React from 'react';
-import { Input, InputProps } from 'nav-frontend-skjema';
+import { Textarea, TextareaProps } from 'nav-frontend-skjema';
 import Lesefelt from './Lesefelt';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-const InputLesbar: React.FC<InputProps> = ({
-    label,
-    bredde,
-    value,
-    placeholder,
-    onChange,
-    children,
-}) => {
+const FamilieTextarea: React.FC<TextareaProps> = ({ name, label, value, onChange, children }) => {
     const { erLesevisning } = useFagsakRessurser();
+
     return erLesevisning() ? (
         value == '' ? (
             <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
@@ -20,16 +14,10 @@ const InputLesbar: React.FC<InputProps> = ({
             <Lesefelt label={label} verdi={value} />
         )
     ) : (
-        <Input
-            label={label}
-            bredde={bredde}
-            value={value}
-            placeholder={placeholder}
-            onChange={onChange}
-        >
+        <Textarea name={name} label={label} value={value} onChange={onChange}>
             {children}
-        </Input>
+        </Textarea>
     );
 };
 
-export default InputLesbar;
+export default FamilieTextarea;

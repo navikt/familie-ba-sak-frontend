@@ -1,21 +1,18 @@
 import React from 'react';
-import { TextareaControlled, TextareaControlledProps } from 'nav-frontend-skjema';
+import { Input, InputProps } from 'nav-frontend-skjema';
 import Lesefelt from './Lesefelt';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-const TextareaControlledLesbar: React.FC<TextareaControlledProps> = ({
-    defaultValue,
-    id,
+const FamilieInput: React.FC<InputProps> = ({
     label,
-    placeholder,
-    textareaClass,
+    bredde,
     value,
-    feil,
-    onBlur,
+    placeholder,
+    onChange,
+    children,
 }) => {
     const { erLesevisning } = useFagsakRessurser();
-
     return erLesevisning() ? (
         value == '' ? (
             <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
@@ -23,17 +20,16 @@ const TextareaControlledLesbar: React.FC<TextareaControlledProps> = ({
             <Lesefelt label={label} verdi={value} />
         )
     ) : (
-        <TextareaControlled
-            defaultValue={defaultValue}
-            id={id}
+        <Input
             label={label}
-            placeholder={placeholder}
-            textareaClass={textareaClass}
+            bredde={bredde}
             value={value}
-            feil={feil}
-            onBlur={onBlur}
-        />
+            placeholder={placeholder}
+            onChange={onChange}
+        >
+            {children}
+        </Input>
     );
 };
 
-export default TextareaControlledLesbar;
+export default FamilieInput;

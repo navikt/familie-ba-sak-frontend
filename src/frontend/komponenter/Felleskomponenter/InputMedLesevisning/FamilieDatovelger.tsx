@@ -3,7 +3,7 @@ import Lesefelt from './Lesefelt';
 import Datovelger, { DatovelgerProps } from '../Datovelger/Datovelger';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-const DatovelgerLesbar: React.FC<DatovelgerProps> = ({
+const FamilieDatovelger: React.FC<DatovelgerProps> = ({
     id,
     label,
     placeholder,
@@ -23,4 +23,4 @@ const DatovelgerLesbar: React.FC<DatovelgerProps> = ({
         />
     );
 };
-export default DatovelgerLesbar;
+export default FamilieDatovelger;

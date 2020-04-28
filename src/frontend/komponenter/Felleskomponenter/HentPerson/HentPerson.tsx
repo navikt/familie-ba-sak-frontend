@@ -9,7 +9,7 @@ import { identValidator, validerFelt, lagInitiellFelt } from '../../../utils/val
 import classNames from 'classnames';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import { useApp } from '../../../context/AppContext';
-import InputLesbar from '../InputMedLesevisning/InputLesbar';
+import FamilieInput from '../InputMedLesevisning/FamilieInput';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
@@ -35,7 +35,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
     return (
         <div className={'hentperson'}>
             <div className={'hentperson__inputogknapp'}>
-                <InputLesbar
+                <FamilieInput
                     id={'hent-person'}
                     label={'Ident'}
                     bredde={'XL'}
