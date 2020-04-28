@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Input } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IPerson } from '../../../typer/person';
@@ -10,6 +9,8 @@ import { identValidator, validerFelt, lagInitiellFelt } from '../../../utils/val
 import classNames from 'classnames';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import { useApp } from '../../../context/AppContext';
+import FamilieInput from '../InputMedLesevisning/FamilieInput';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     person: Ressurs<IPerson>;
@@ -18,6 +19,7 @@ interface IProps {
 
 const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => {
     const { axiosRequest } = useApp();
+    const { erLesevisning } = useFagsakRessurser();
     const [ident, settIdent] = React.useState<IFelt<string>>(lagInitiellFelt('', identValidator));
 
     React.useEffect(() => {
@@ -33,7 +35,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
     return (
         <div className={'hentperson'}>
             <div className={'hentperson__inputogknapp'}>
-                <Input
+                <FamilieInput
                     id={'hent-person'}
                     label={'Ident'}
                     bredde={'XL'}
@@ -48,36 +50,38 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
                         ident.feilmelding
                     }
                 />
-                <Knapp
-                    onClick={() => {
-                        if (
-                            ident.valideringsstatus === Valideringsstatus.OK ||
-                            process.env.NODE_ENV === 'development'
-                        ) {
-                            settPerson({ status: RessursStatus.HENTER });
-                            axiosRequest<IPerson, void>({
-                                method: 'GET',
-                                url: '/familie-ba-sak/api/person',
-                                headers: {
-                                    personIdent: ident.verdi,
-                                },
-                            })
-                                .then((hentetPerson: Ressurs<IPerson>) => {
-                                    settPerson(hentetPerson);
+                {!erLesevisning() && (
+                    <Knapp
+                        onClick={() => {
+                            if (
+                                ident.valideringsstatus === Valideringsstatus.OK ||
+                                process.env.NODE_ENV === 'development'
+                            ) {
+                                settPerson({ status: RessursStatus.HENTER });
+                                axiosRequest<IPerson, void>({
+                                    method: 'GET',
+                                    url: '/familie-ba-sak/api/person',
+                                    headers: {
+                                        personIdent: ident.verdi,
+                                    },
                                 })
-                                .catch(() => {
-                                    settPerson({
-                                        status: RessursStatus.FEILET,
-                                        melding: 'Ukjent feil ved henting av person',
+                                    .then((hentetPerson: Ressurs<IPerson>) => {
+                                        settPerson(hentetPerson);
+                                    })
+                                    .catch(() => {
+                                        settPerson({
+                                            status: RessursStatus.FEILET,
+                                            melding: 'Ukjent feil ved henting av person',
+                                        });
                                     });
-                                });
-                        } else {
-                            settVisFeilmelding(true);
-                        }
-                    }}
-                    children={'Hent'}
-                    spinner={person.status === RessursStatus.HENTER}
-                />
+                            } else {
+                                settVisFeilmelding(true);
+                            }
+                        }}
+                        children={'Hent'}
+                        spinner={person.status === RessursStatus.HENTER}
+                    />
+                )}
             </div>
 
             {person.status === RessursStatus.SUKSESS && (

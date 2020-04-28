@@ -13,7 +13,7 @@ const Pluss: React.FunctionComponent<IPluss> = ({ className, heigth = 24, width 
             className={className}
             height={heigth}
             width={width}
-            viewBox="0 0 24 24"
+            viewBox="0 0 16 16"
             xmlns="http://www.w3.org/2000/svg"
         >
             <title id={'Pluss'}>Pluss ikon</title>

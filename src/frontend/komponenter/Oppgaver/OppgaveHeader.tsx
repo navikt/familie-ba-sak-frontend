@@ -4,7 +4,7 @@ import { Input } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
 import useFagsakApi from '../Fagsak/useFagsakApi';
 
-const OppgaveHeader: React.FunctionComponent = props => {
+const OppgaveHeader: React.FunctionComponent = () => {
     const [personIdent, settPersonIdent] = React.useState('');
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
