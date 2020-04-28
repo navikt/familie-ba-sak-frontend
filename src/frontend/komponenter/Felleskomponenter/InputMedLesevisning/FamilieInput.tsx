@@ -14,7 +14,7 @@ const FamilieInput: React.FC<InputProps> = ({
 }) => {
     const { erLesevisning } = useFagsakRessurser();
     return erLesevisning() ? (
-        value == '' ? (
+        value === '' ? (
             <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
         ) : (
             <Lesefelt label={label} verdi={value} />

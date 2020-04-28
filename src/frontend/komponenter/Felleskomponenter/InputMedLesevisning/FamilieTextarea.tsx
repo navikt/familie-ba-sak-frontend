@@ -8,7 +8,7 @@ const FamilieTextarea: React.FC<TextareaProps> = ({ name, label, value, onChange
     const { erLesevisning } = useFagsakRessurser();
 
     return erLesevisning() ? (
-        value == '' ? (
+        value === '' ? (
             <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
         ) : (
             <Lesefelt label={label} verdi={value} />
