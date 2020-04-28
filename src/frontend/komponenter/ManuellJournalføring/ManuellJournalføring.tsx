@@ -7,13 +7,19 @@ import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper'
 import { IPerson } from '../../typer/person';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { useApp } from '../../context/AppContext';
-import { IRestOppdaterJournalpost, Journalstatus } from '../../typer/oppgave';
+import {
+    IRestOppdaterJournalpost,
+    Journalstatus,
+    dokumenttyper,
+    Dokumenttype,
+} from '../../typer/oppgave';
 import {
     Input,
     RadioGruppe,
     Radio,
     FeiloppsummeringFeil,
     Feiloppsummering,
+    Select,
 } from 'nav-frontend-skjema';
 import Datovelger from '../Felleskomponenter/Datovelger/Datovelger';
 import { datoformat } from '../../utils/formatter';
@@ -33,10 +39,12 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
     const history = useHistory();
     const { hentDataForManuellJournalføring, dataForManuellJournalføring } = useOppgaver();
 
-    const [dokumentType, settDokumenttype] = useState('');
-    const [annetInnhold, settAnnetInnhold] = useState('');
+    const [dokumenttype, settDokumenttype] = useState<Dokumenttype>(
+        Dokumenttype.SØKNAD_OM_BARNETRYGD
+    );
+    const [dokumentVarianter, settDokumentVarianter] = useState('');
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
-    const [mottattDato, settMottattDato] = useState<string>(
+    const [datoMottatt, settDatoMottatt] = useState<string>(
         moment(undefined).format(datoformat.ISO_DAG)
     );
     const [senderInn, settSenderInn] = useState(false);
@@ -62,6 +70,14 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                 data: dataForManuellJournalføring.data.person,
             });
         }
+
+        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
+            settDatoMottatt(
+                moment(dataForManuellJournalføring.data.journalpost.datoMottatt).format(
+                    datoformat.ISO_DAG
+                )
+            );
+        }
     }, [dataForManuellJournalføring.status]);
 
     const validerSkjema = () => {
@@ -74,14 +90,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
             });
         }
 
-        if (dokumentType === '') {
-            accFeilmeldinger.push({
-                feilmelding: 'Du må sette dokumenttype for dokumentet',
-                skjemaelementId: 'manuell-journalføring-dokumenttype',
-            });
-        }
-
-        if (annetInnhold === '') {
+        if (dokumentVarianter.length === 0 && dokumentVarianter[0] === '') {
             accFeilmeldinger.push({
                 feilmelding: 'Du må sette annet innhold for dokumentet',
                 skjemaelementId: 'manuell-journalføring-annet-innhold',
@@ -130,9 +139,11 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                         navn: person.data.navn,
                                         id: person.data.personIdent,
                                     },
-                                    mottattDato,
-                                    dokumentType,
-                                    annetInnhold,
+                                    datoMottatt,
+                                    dokumenttype: dokumenttyper[dokumenttype].navn,
+                                    dokumentVarianter: dokumentVarianter
+                                        .split(',')
+                                        .map(item => item.trim()),
                                     knyttTilFagsak,
                                 },
                             })
@@ -167,25 +178,33 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                     />
                     <br />
 
-                    <Input
-                        bredde={'XL'}
+                    <Select
+                        bredde={'xl'}
                         id={'manuell-journalføring-dokumenttype'}
                         label={'Dokumenttype'}
-                        value={dokumentType}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            settDokumenttype(event.target.value);
+                        value={dokumenttype}
+                        onChange={event => {
+                            settDokumenttype(event.target.value as Dokumenttype);
                             validerSkjema();
                         }}
-                    />
+                    >
+                        {Object.keys(dokumenttyper).map((key: string) => {
+                            return (
+                                <option aria-selected={dokumenttype === key} key={key} value={key}>
+                                    {dokumenttyper[key].navn}
+                                </option>
+                            );
+                        })}
+                    </Select>
 
                     <br />
                     <Datovelger
                         id={'manuell-journalføring-mottatt-dato'}
                         label={'Mottatt dato'}
-                        valgtDato={mottattDato}
+                        valgtDato={datoMottatt}
                         onChange={(dato?: ISODateString) => {
                             if (dato) {
-                                settMottattDato(dato);
+                                settDatoMottatt(dato);
                             }
                         }}
                     />
@@ -195,9 +214,9 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                         bredde={'XL'}
                         id={'manuell-journalføring-annet-innhold'}
                         label={'Annet innhold'}
-                        value={annetInnhold}
+                        value={dokumentVarianter}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            settAnnetInnhold(event.target.value);
+                            settDokumentVarianter(event.target.value);
                             validerSkjema();
                         }}
                     />

@@ -1,4 +1,5 @@
 import { IPerson } from './person';
+import { INøkkelPar } from './common';
 
 export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;
@@ -7,6 +8,7 @@ export interface IDataForManuellJournalføring {
 }
 
 export interface IJournalpost {
+    datoMottatt?: string;
     journalpostId: string;
     journalposttype: Journalposttype;
     journalstatus: Journalstatus;
@@ -149,16 +151,23 @@ export enum PrioritetFilter {
     LAV = 'Lav',
 }
 
-export enum DokumentType {
-    TEST,
+export enum Dokumenttype {
+    SØKNAD_OM_BARNETRYGD = 'SØKNAD_OM_BARNETRYGD',
 }
+
+export const dokumenttyper: INøkkelPar = {
+    SØKNAD_OM_BARNETRYGD: {
+        id: 'SØKNAD_OM_BARNETRYGD',
+        navn: 'Søknad om barnetrygd',
+    },
+};
 
 export interface IRestOppdaterJournalpost {
     bruker: INavnOgIdent;
     avsender: INavnOgIdent;
-    dokumentType: string;
-    mottattDato: string;
-    annetInnhold: string;
+    dokumenttype: string;
+    datoMottatt: string;
+    dokumentVarianter: string[];
     knyttTilFagsak: boolean;
 }
 
