@@ -68,7 +68,8 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
                     type={'advarsel'}
                 />
             );
-        case RessursStatus.SUKSESS:
+        case RessursStatus.SUKSESS: {
+            const harAndeler = tilkjentYtelseRessurs.data.length > 0;
             return (
                 <div className="tilkjentytelse">
                     <Skjemasteg
@@ -78,25 +79,36 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
                         nesteOnClick={nesteOnClick}
                         maxWidthStyle={'80rem'}
                     >
-                        <div className="tilkjentytelse-informasjon">
-                            <Undertittel>
-                                Vilkårene for barnetrygd er oppfylt f.o.m.{' '}
-                                {startdato(tilkjentYtelseRessurs.data)}
-                            </Undertittel>
-                            <Ingress>Se detaljer under periode.</Ingress>
-                        </div>
-                        <div role="table">
-                            <OppsummeringsradHeader />
-                            {tilkjentYtelseRessurs.data
-                                .slice()
-                                .reverse()
-                                .map((beregning, index) => {
-                                    return <Oppsummeringsrad beregning={beregning} key={index} />;
-                                })}
-                        </div>
+                        {harAndeler ? (
+                            <div className="tilkjentytelse-informasjon">
+                                <Undertittel>
+                                    Vilkårene for barnetrygd er oppfylt f.o.m.{' '}
+                                    {startdato(tilkjentYtelseRessurs.data)}
+                                </Undertittel>
+                                <Ingress>Se detaljer under periode.</Ingress>
+                            </div>
+                        ) : (
+                            <div className="tilkjentytelse-informasjon">
+                                <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
+                            </div>
+                        )}
+                        {harAndeler && (
+                            <div role="table">
+                                <OppsummeringsradHeader />
+                                {tilkjentYtelseRessurs.data
+                                    .slice()
+                                    .reverse()
+                                    .map((beregning, index) => {
+                                        return (
+                                            <Oppsummeringsrad beregning={beregning} key={index} />
+                                        );
+                                    })}
+                            </div>
+                        )}
                     </Skjemasteg>
                 </div>
             );
+        }
         default:
             return <AlertStripe children={'En ukjent feil oppstod'} type={'advarsel'} />;
     }
