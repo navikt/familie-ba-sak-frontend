@@ -122,6 +122,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                                 onClick={() => {
                                     settVisModal(false);
                                     history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                    window.location.reload();
                                 }}
                                 children={'Gå til saksoversikten'}
                             />,
