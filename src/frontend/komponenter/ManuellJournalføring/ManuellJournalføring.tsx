@@ -63,7 +63,8 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
     React.useEffect(() => {
         if (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.data.person !== undefined
+            dataForManuellJournalføring.data.person !== undefined &&
+            dataForManuellJournalføring.data.person !== null
         ) {
             settPerson({
                 status: RessursStatus.SUKSESS,
