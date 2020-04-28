@@ -23,6 +23,7 @@ import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { IPersonBeregning } from '../../../typer/beregning';
 import { useApp } from '../../../context/AppContext';
+import FamilieKnapp from '../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
 
 interface IProps {
     fagsak: IFagsak;
@@ -83,7 +84,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     />
                 </div>
             ) : (
-                <Knapp
+                <FamilieKnapp
                     mini={true}
                     onClick={() => {
                         history.push(`/fagsak/${fagsak.id}/ny-behandling`);
