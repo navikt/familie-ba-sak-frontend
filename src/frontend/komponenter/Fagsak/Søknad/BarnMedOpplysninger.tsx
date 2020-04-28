@@ -2,7 +2,8 @@ import * as React from 'react';
 import moment from 'moment';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { Checkbox, Textarea } from 'nav-frontend-skjema';
+import FamilieCheckbox from '../../Felleskomponenter/InputMedLesevisning/FamilieCheckbox';
+import FamilieTextarea from '../../Felleskomponenter/InputMedLesevisning/FamilieTextarea';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -15,8 +16,8 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
         : 'ukjent';
 
     return (
-        <div>
-            <Checkbox
+        <div className={'søknad__panel--gruppebarn'}>
+            <FamilieCheckbox
                 id={`barn-${barn.ident}`}
                 label={`${barn.navn ?? 'ukjent'} (${alder} år) ${barn.ident}`}
                 checked={barn.inkludertISøknaden}
@@ -29,7 +30,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             />
             {barn.inkludertISøknaden && (
                 <div className={'søknad__panel--innrykk'}>
-                    <Checkbox
+                    <FamilieCheckbox
                         label={'5.1 Barnet bor ikke fast sammen med søker'}
                         checked={!barn.borMedSøker}
                         onChange={() => {
@@ -40,7 +41,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                         }}
                     />
 
-                    <Checkbox
+                    <FamilieCheckbox
                         label={'5.5.1 Barnet oppholder seg i utlandet'}
                         checked={!barn.oppholderSegINorge}
                         onChange={() => {
@@ -51,7 +52,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                         }}
                     />
 
-                    <Checkbox
+                    <FamilieCheckbox
                         label={
                             '5.5.2 Barnet har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'
                         }
@@ -64,7 +65,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                         }}
                     />
 
-                    <Textarea
+                    <FamilieTextarea
                         label={'Tilleggsopplysninger'}
                         placeholder={'Skriv her'}
                         value={barn.tilleggsopplysninger ?? ''}

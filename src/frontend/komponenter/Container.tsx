@@ -20,12 +20,12 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
     const { autentisert } = useApp();
 
     return (
-        <FagsakProvider>
-            <UIModalWrapper />
-            {autentisert ? (
-                <>
-                    <div className={'container'} role="main">
-                        <Router>
+        <Router>
+            <FagsakProvider>
+                <UIModalWrapper />
+                {autentisert ? (
+                    <>
+                        <div className={'container'} role="main">
                             <HeaderMedSøk
                                 brukerNavn={innloggetSaksbehandler?.displayName}
                                 brukerEnhet={innloggetSaksbehandler?.enhet}
@@ -70,13 +70,13 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                     />
                                 </OppgaverProvider>
                             </Switch>
-                        </Router>
-                    </div>
-                </>
-            ) : (
-                <UgyldigSesjon />
-            )}
-        </FagsakProvider>
+                        </div>
+                    </>
+                ) : (
+                    <UgyldigSesjon />
+                )}
+            </FagsakProvider>
+        </Router>
     );
 };
 

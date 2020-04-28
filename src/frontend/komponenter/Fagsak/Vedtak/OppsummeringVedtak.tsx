@@ -21,7 +21,7 @@ interface IVedtakProps {
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
-    const { settFagsak } = useFagsakRessurser();
+    const { settFagsak, erLesevisning } = useFagsakRessurser();
 
     const history = useHistory();
 
@@ -62,8 +62,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     }, [fagsak, axiosRequest]);
 
     const visSubmitKnapp =
-        aktivBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
-        aktivBehandling?.status === BehandlingStatus.OPPRETTET;
+        !erLesevisning() &&
+        (aktivBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
+            aktivBehandling?.status === BehandlingStatus.OPPRETTET);
 
     const sendInn = () => {
         settSenderInn(true);
@@ -121,6 +122,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                                 onClick={() => {
                                     settVisModal(false);
                                     history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                    window.location.reload();
                                 }}
                                 children={'Gå til saksoversikten'}
                             />,

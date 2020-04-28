@@ -33,6 +33,13 @@ export const byggTomRessurs = <T>(): Ressurs<T> => {
     };
 };
 
+export const byggDataRessurs = <T>(ressursData: T): Ressurs<T> => {
+    return {
+        data: ressursData,
+        status: RessursStatus.SUKSESS,
+    };
+};
+
 export const byggHenterRessurs = <T>(): Ressurs<T> => {
     return {
         status: RessursStatus.HENTER,
