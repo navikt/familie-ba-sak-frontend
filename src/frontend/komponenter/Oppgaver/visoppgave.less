@@ -43,8 +43,9 @@ table.tabell{
 @titleFontSize: 1.1rem;
 @titleMarginV: 30px;
 @headerHeight: ~"calc("@titleFontSize ~"+" @titleMarginV ~")";
+@oppgaveHeaderHeight: 5rem;
 @filterFormHeight: 30rem;
-@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~" )";
+@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~"-" @oppgaveHeaderHeight ~" )";
 
 table.tabell tbody{
     display:block;
