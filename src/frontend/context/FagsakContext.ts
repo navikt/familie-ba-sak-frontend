@@ -140,7 +140,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         if (
             rolle &&
             rolle >= BehandlerRolle.SAKSBEHANDLER &&
-            stegNummer < BehandlingSteg.BESLUTTE_VEDTAK
+            !(stegNummer >= BehandlingSteg.BESLUTTE_VEDTAK)
         ) {
             return false;
         } else if (rolle && rolle >= BehandlerRolle.VEILEDER) {

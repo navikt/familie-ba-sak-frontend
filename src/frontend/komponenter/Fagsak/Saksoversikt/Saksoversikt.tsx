@@ -88,6 +88,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     mini={true}
                     onClick={() => {
                         history.push(`/fagsak/${fagsak.id}/ny-behandling`);
+                        window.location.reload();
                     }}
                     children={'Opprett behandling'}
                 />
