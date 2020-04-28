@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSøknad } from '../../../context/SøknadContext';
-import { Sidetittel, Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Sidetittel } from 'nav-frontend-typografi';
 import SøknadType from './SøknadType';
 import SøkerOppholdINorge from './SøkerOppholdINorge';
 import AnnenPart from './AnnenPart';

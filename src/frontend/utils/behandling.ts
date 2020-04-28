@@ -1,8 +1,9 @@
 import { BehandlerRolle } from '../typer/behandling';
 
 export const gruppeIdTilRolle = (gruppeId: string) => {
+    const host = window.location.host;
     const rolleConfig =
-        process.env.NODE_ENV === 'production'
+        host === 'barnetrygd.nais.adeo.no' || host === 'barnetrygd.prod-fss.nais.io'
             ? new Map([
                   ['199c2b39-e535-4ae8-ac59-8ccbee7991ae', BehandlerRolle.VEILEDER],
                   ['847e3d72-9dc1-41c3-80ff-f5d4acdd5d46', BehandlerRolle.SAKSBEHANDLER],
