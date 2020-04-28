@@ -9,7 +9,11 @@ class IngenOpplysningerValgt extends Component<IProps> {
     render() {
         const { minimumOpplysning } = this.props;
         const harOpplysningerÅVise = minimumOpplysning.filter(Boolean);
-        return !harOpplysningerÅVise && <Normaltekst children={'Ingen opplysninger valgt.'} />;
+        return (
+            harOpplysningerÅVise.length == 0 && (
+                <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger valgt.'} />
+            )
+        );
     }
 }
 

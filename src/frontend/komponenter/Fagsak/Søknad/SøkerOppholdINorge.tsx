@@ -18,8 +18,8 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
             <Undertittel children={'2.3 Hva har bruker søkt om?'} />
             <MinimumOpplysningAlternativ
                 minimumOpplysning={[
-                    søknad.søkerMedOpplysninger.oppholderSegINorge,
-                    søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder,
+                    !søknad.søkerMedOpplysninger.oppholderSegINorge,
+                    !søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder,
                 ]}
             />
             <FamilieCheckbox
