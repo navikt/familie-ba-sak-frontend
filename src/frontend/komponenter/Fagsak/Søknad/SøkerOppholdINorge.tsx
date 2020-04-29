@@ -2,7 +2,10 @@ import * as React from 'react';
 import { ISøknadDTO } from '../../../typer/søknad';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
-import { Checkbox, Input, Textarea } from 'nav-frontend-skjema';
+import FamilieCheckbox from '../../Felleskomponenter/InputMedLesevisning/FamilieCheckbox';
+import FamilieTextarea from '../../Felleskomponenter/InputMedLesevisning/FamilieTextarea';
+import FamilieInput from '../../Felleskomponenter/InputMedLesevisning/FamilieInput';
+import MinimumOpplysningAlternativ from '../../Felleskomponenter/InputMedLesevisning/IngenOpplysningerValgt';
 
 interface IProps {
     settSøknad: (søknad: ISøknadDTO) => void;
@@ -11,10 +14,15 @@ interface IProps {
 
 const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) => {
     return (
-        <PanelBase className={'søknad__panel'}>
+        <PanelBase className={'søknad__opphold'}>
             <Undertittel children={'2.3 Hva har bruker søkt om?'} />
-            <br />
-            <Checkbox
+            <MinimumOpplysningAlternativ
+                minimumOpplysning={[
+                    !søknad.søkerMedOpplysninger.oppholderSegINorge,
+                    !søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder,
+                ]}
+            />
+            <FamilieCheckbox
                 label={'Søker oppholder seg ikke i Norge'}
                 checked={!søknad.søkerMedOpplysninger.oppholderSegINorge}
                 onChange={() => {
@@ -28,8 +36,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                 }}
             />
 
-            <br />
-            <Checkbox
+            <FamilieCheckbox
                 label={'Søker har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'}
                 checked={!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder}
                 onChange={() => {
@@ -44,10 +51,9 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                 }}
             />
 
-            <br />
             {!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder && (
                 <div className={'søknad__panel--innrykk'}>
-                    <Input
+                    <FamilieInput
                         label={'Når kom søker til Norge?'}
                         bredde={'S'}
                         value={søknad.søkerMedOpplysninger.komTilNorge}
@@ -63,8 +69,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         }}
                     />
 
-                    <br />
-                    <Checkbox
+                    <FamilieCheckbox
                         label={'Søker skal ikke oppholde seg i Norge de neste 12 månedene'}
                         checked={!søknad.søkerMedOpplysninger.skalOppholdeSegINorgeNeste12Måneder}
                         onChange={() => {
@@ -79,8 +84,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         }}
                     />
 
-                    <br />
-                    <Textarea
+                    <FamilieTextarea
                         label={'8 Tilleggsopplysninger'}
                         value={søknad.søkerMedOpplysninger.tilleggsopplysninger ?? ''}
                         placeholder={'Skriv her'}

@@ -11,6 +11,7 @@ import BehandlingVilkårSkjema from './VilkårsvurderingSkjema';
 import { IVilkårResultat } from '../../../typer/vilkår';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     fagsak: IFagsak;
@@ -22,6 +23,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
         hentVilkårMedFeil,
         vilkårsvurdering,
     } = useVilkårsvurdering();
+    const { erLesevisning } = useFagsakRessurser();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -53,7 +55,9 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 history.push(`/fagsak/${fagsak.id}/registrer-soknad`);
             }}
             nesteOnClick={() => {
-                if (erVilkårsvurderingenGyldig()) {
+                if (erLesevisning()) {
+                    history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
+                } else if (erVilkårsvurderingenGyldig()) {
                     opprettEllerOppdaterVilkårsvurdering(vilkårsvurdering, fagsak);
                 } else {
                     settVisFeilmeldinger(true);

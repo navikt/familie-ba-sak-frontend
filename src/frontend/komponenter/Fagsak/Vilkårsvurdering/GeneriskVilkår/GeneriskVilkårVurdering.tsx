@@ -1,26 +1,34 @@
 import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
-import { IVilkårResultat, Resultat, IVilkårConfig, resultatTilUi } from '../../../../typer/vilkår';
+import {
+    IVilkårResultat,
+    Resultat,
+    IVilkårConfig,
+    resultatTilUi,
+    resultater,
+} from '../../../../typer/vilkår';
 import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
-import { RadioGruppe, Radio, TextareaControlled, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import {
     vilkårResultatFeilmeldingId,
     vilkårBegrunnelseFeilmeldingId,
     vilkårFeilmeldingId,
 } from './GeneriskVilkår';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
-import { Knapp } from 'nav-frontend-knapper';
 import { IPerson } from '../../../../typer/person';
 import classNames from 'classnames';
 import { Undertekst, Normaltekst } from 'nav-frontend-typografi';
 import { periodeToString } from '../../../../typer/periode';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import PennFylt from '../../../../ikoner/PennFylt';
-import Penn from '../../../../ikoner/Penn';
 import Slett from '../../../../ikoner/Slett';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import FamilieRadioGruppe from '../../../Felleskomponenter/InputMedLesevisning/FamilieRadioGruppe';
+import FamilieTextareaControlled from '../../../Felleskomponenter/InputMedLesevisning/FamilieTextareaControlled';
+import FamilieKnapp from '../../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
 import { Collapse } from 'react-collapse';
+import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
 
 interface IProps {
     person: IPerson;
@@ -39,8 +47,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         fjernEllerNullstillPeriodeForVilkår,
         settVilkårForPeriodeResultat,
     } = useVilkårsvurdering();
+    const { erLesevisning } = useFagsakRessurser();
 
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(false);
+    const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
@@ -99,33 +108,27 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         />
                     </div>
                     <div style={{ flexGrow: 1 }} />
-                    <div className={'flex--space'}>
-                        <IkonKnapp
-                            onClick={() => toggleForm(true)}
-                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                        >
-                            {!ekspandertVilkår
-                                ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
-                                    ? 'Vurder'
-                                    : 'Endre'
-                                : 'Lukk'}
-                            {ekspandertVilkår ? <PennFylt /> : <Penn />}
-                        </IkonKnapp>
-                        <IkonKnapp
-                            onClick={() =>
-                                fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
-                            }
-                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                        >
-                            Slett
-                            <Slett />
-                        </IkonKnapp>
-                    </div>
+                    {!erLesevisning() && (
+                        <div className={'flex--space'}>
+                            <IkonKnapp
+                                onClick={() => toggleForm(true)}
+                                id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                            >
+                                {!ekspandertVilkår
+                                    ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                        ? 'Vurder'
+                                        : 'Endre'
+                                    : 'Lukk'}
+                                <Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />
+                            </IkonKnapp>
+                        </div>
+                    )}
                 </div>
 
                 <Collapse isOpened={ekspandertVilkår}>
                     <div className={'generisk-vilkår__ekspandert'}>
-                        <RadioGruppe
+                        <FamilieRadioGruppe
+                            verdi={resultater[redigerbartVilkår.verdi.resultat.verdi].navn}
                             legend={
                                 vilkårFraConfig.spørsmål
                                     ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
@@ -151,7 +154,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI}
                                 onChange={() => radioOnChange(Resultat.NEI)}
                             />
-                        </RadioGruppe>
+                        </FamilieRadioGruppe>
 
                         <FastsettPeriode
                             redigerbartVilkår={redigerbartVilkår}
@@ -159,7 +162,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             visFeilmeldinger={skalViseFeilmeldinger()}
                         />
 
-                        <TextareaControlled
+                        <FamilieTextareaControlled
                             defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                             id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                             label={'Begrunnelse'}
@@ -186,28 +189,49 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             }}
                         />
 
-                        <Knapp
-                            onClick={() => {
-                                const erVilkårGyldig: boolean =
-                                    redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
-                                        .valideringsstatus === Valideringsstatus.OK;
+                        <div className={'generisk-vilkår__ekspandert--knapperad'}>
+                            <div>
+                                <FamilieKnapp
+                                    onClick={() => {
+                                        const erVilkårGyldig: boolean =
+                                            redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
+                                                .valideringsstatus === Valideringsstatus.OK;
 
-                                settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
-                                if (erVilkårGyldig) {
-                                    settEkspandertVilkår(false);
-                                    settVisFeilmeldingerForEttVilkår(false);
-                                } else {
-                                    settVisFeilmeldingerForEttVilkår(true);
+                                        settVilkårForPeriodeResultat(
+                                            person.personIdent,
+                                            redigerbartVilkår
+                                        );
+                                        if (erVilkårGyldig) {
+                                            settEkspandertVilkår(false);
+                                            settVisFeilmeldingerForEttVilkår(false);
+                                        } else {
+                                            settVisFeilmeldingerForEttVilkår(true);
+                                        }
+                                    }}
+                                    mini={true}
+                                    type={'standard'}
+                                >
+                                    Ferdig
+                                </FamilieKnapp>
+                                <FamilieKnapp
+                                    onClick={() => toggleForm(false)}
+                                    mini={true}
+                                    type={'flat'}
+                                >
+                                    Avbryt
+                                </FamilieKnapp>
+                            </div>
+
+                            <IkonKnapp
+                                onClick={() =>
+                                    fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
                                 }
-                            }}
-                            mini={true}
-                            type={'standard'}
-                        >
-                            Ferdig
-                        </Knapp>
-                        <Knapp onClick={() => toggleForm(false)} mini={true} type={'flat'}>
-                            Avbryt
-                        </Knapp>
+                                id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                            >
+                                Slett
+                                <Slett />
+                            </IkonKnapp>
+                        </div>
                     </div>
                 </Collapse>
             </SkjemaGruppe>

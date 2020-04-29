@@ -3,6 +3,7 @@ import { IPeriode, nyPeriode } from './periode';
 import { IPerson, PersonType } from './person';
 import { IFelt, nyttFelt } from './felt';
 import { erUtfylt, erPeriodeGyldig, erResultatGyldig } from '../utils/validators';
+import { INøkkelPar } from './common';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -21,6 +22,21 @@ export const resultatTilUi = (resultat: Resultat) => {
         default:
             return 'Ukjent resultat';
     }
+};
+
+export const resultater: INøkkelPar = {
+    JA: {
+        id: 'JA',
+        navn: 'Ja',
+    },
+    NEI: {
+        id: 'NEI',
+        navn: 'Nei',
+    },
+    KANSKJE: {
+        id: 'Kanskje',
+        navn: 'Kanskje',
+    },
 };
 
 export enum VilkårType {

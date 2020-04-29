@@ -43,15 +43,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
             <div className={'horisontal-sentrert-div'}>
                 <Element children={vilkårFraConfig.tittel} />
                 <Undertekst children={vilkårFraConfig.lovreferanse} />
-                <UtførKnapp
-                    onClick={() =>
-                        leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)
-                    }
-                    id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
-                >
-                    Legg til periode
-                    <Pluss />
-                </UtførKnapp>
             </div>
             <DashedHr />
             <ul className={'vilkårsvurdering__list'}>
@@ -68,6 +59,14 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 })}
             </ul>
             <DashedHr />
+
+            <UtførKnapp
+                onClick={() => leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)}
+                id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
+            >
+                Legg til periode
+                <Pluss />
+            </UtførKnapp>
         </div>
     );
 };

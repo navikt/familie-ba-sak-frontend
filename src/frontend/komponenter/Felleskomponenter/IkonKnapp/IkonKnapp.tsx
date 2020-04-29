@@ -1,6 +1,7 @@
 import React from 'react';
 import { randomUUID } from '../../../utils/commons';
 import KnappBase from 'nav-frontend-knapper';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     id: string;
@@ -8,7 +9,8 @@ interface IProps {
 }
 
 const IkonKnapp: React.FC<IProps> = ({ id, children, onClick }) => {
-    return (
+    const { erLesevisning } = useFagsakRessurser();
+    return !erLesevisning() ? (
         <KnappBase
             aria-label={`utfør_${randomUUID()}`}
             className={'ikon-knapp'}
@@ -19,7 +21,7 @@ const IkonKnapp: React.FC<IProps> = ({ id, children, onClick }) => {
         >
             {children}
         </KnappBase>
-    );
+    ) : null;
 };
 
 export default IkonKnapp;

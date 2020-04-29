@@ -46,6 +46,7 @@ const useFagsakApi = (
                     settFagsak(response);
 
                     history.push(`/fagsak/${response.data.id}/saksoversikt`);
+                    window.location.reload();
                     return;
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
