@@ -1,3 +1,5 @@
+@import (reference) '~nav-frontend-core/less/_variabler';
+
 .visoppgaver {
     padding: 1rem;
     &__hr{
@@ -34,7 +36,7 @@
 }
 
 table.tabell{
-    margin-top: 50px;
+    margin-top: 1rem;
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
@@ -43,9 +45,10 @@ table.tabell{
 @titleFontSize: 1.1rem;
 @titleMarginV: 30px;
 @headerHeight: ~"calc("@titleFontSize ~"+" @titleMarginV ~")";
-@oppgaveHeaderHeight: 5rem;
+@oppgaveHeaderHeight: ~"calc("50px ~"+" 2.1rem ~")";
+@oppgavelistHeaderHeight: 3rem;
 @filterFormHeight: 30rem;
-@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~"-" @oppgaveHeaderHeight ~" )";
+@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~"-" @oppgaveHeaderHeight ~"-" @oppgavelistHeaderHeight ~" )";
 
 table.tabell tbody{
     display:block;
@@ -141,4 +144,24 @@ table.tabell th, table.tabell td{
 .feilmelding{
     margin-top: 10px;
     float: right;
+}
+
+.oppgavelistHeader{
+    margin-top: 50px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+
+    &__tittel{
+        margin-top: 0;
+        margin-bottom: 0;
+        flex: 1 0 0px;
+    }
+
+    &__navigator{
+        color: @navMorkGra;
+        &__felt{
+            padding: 0 1rem 0 1rem;
+        }
+    }
 }

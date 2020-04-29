@@ -13,6 +13,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IOppgave[]>>(
         byggTomRessurs<IOppgave[]>()
     );
+
+    const [sideindeks, settSideindeks] = React.useState(-1);
+
+    const sideLimit = 15;
+
     const { axiosRequest } = useApp();
 
     const hentDataForManuellJournalføring = (oppgaveId: string) => {
@@ -28,7 +33,25 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
+    const hentSidetall = () =>
+        oppgaver.status === RessursStatus.SUKSESS
+            ? Math.floor((oppgaver.data.length - 1) / sideLimit) + 1
+            : 0;
+
+    const nesteSide = () => sideindeks < hentSidetall() - 1 && settSideindeks(sideindeks + 1);
+
+    const forrigeSide = () => sideindeks > 0 && settSideindeks(sideindeks - 1);
+
+    const hentOppgaveSide = () =>
+        oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length > 0
+            ? oppgaver.data.slice(
+                  sideindeks * sideLimit,
+                  Math.min((sideindeks + 1) * sideLimit, oppgaver.data.length)
+              )
+            : [];
+
     const hentOppgaver = (
+        limit?: number,
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
@@ -42,33 +65,42 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             saksbehandler !== Object.keys(SaksbehandlerFilter)[1]
                 ? saksbehandler
                 : undefined;
-        hentOppgaverFraBackend(behandlingstema, oppgavetype, enhet, saksbehandlerForBackend).then(
-            (oppgaverRessurs: Ressurs<IOppgave[]>) => {
-                if (oppgaverRessurs.status === RessursStatus.SUKSESS) {
-                    const filteredOppgaver = filterOppgaver(
-                        oppgaverRessurs,
-                        prioritet,
-                        frist,
-                        registrertDato,
-                        saksbehandler
-                    );
-                    settOppgaver(filteredOppgaver);
-                    return filteredOppgaver;
-                }
+        hentOppgaverFraBackend(
+            limit,
+            behandlingstema,
+            oppgavetype,
+            enhet,
+            prioritet,
+            frist,
+            registrertDato,
+            saksbehandlerForBackend
+        ).then((oppgaverRessurs: Ressurs<IOppgave[]>) => {
+            settOppgaver(oppgaverRessurs);
+            if (oppgaverRessurs.status === RessursStatus.SUKSESS) {
+                settSideindeks(oppgaverRessurs.data.length > 0 ? 0 : -1);
             }
-        );
+            return oppgaverRessurs;
+        });
     };
 
     const hentOppgaverFraBackend = (
+        limit?: number,
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
+        prioritet?: string,
+        frist?: string,
+        registrertDato?: string,
         saksbehandler?: string
     ): Promise<Ressurs<IOppgave[]>> => {
         interface LooseObject {
             [key: string]: string;
         }
         const searchParams: LooseObject = {};
+
+        if (limit !== undefined) {
+            searchParams['limit'] = limit.toString();
+        }
 
         if (behandlingstema !== undefined) {
             searchParams['behandlingstema'] = behandlingstema;
@@ -80,6 +112,18 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         if (enhet !== undefined) {
             searchParams['enhet'] = enhet;
+        }
+
+        if (prioritet !== undefined) {
+            searchParams['prioritet'] = prioritet;
+        }
+
+        if (registrertDato !== undefined) {
+            searchParams['registrertDato'] = registrertDato;
+        }
+
+        if (frist !== undefined) {
+            searchParams['frist'] = frist;
         }
 
         if (saksbehandler !== undefined) {
@@ -99,6 +143,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             url: `/familie-ba-sak/api/oppgave${query}`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
+                console.log(oppgaverRes);
                 return oppgaverRes;
             })
             .catch((error: AxiosError) => {
@@ -106,48 +151,17 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
-    const filterOppgaver = (
-        oppgaverRes: Ressurs<IOppgave[]>,
-        prioritet?: string,
-        frist?: string,
-        registrertDato?: string,
-        saksbehandler?: string
-    ): Ressurs<IOppgave[]> => {
-        if (oppgaverRes.status === RessursStatus.SUKSESS) {
-            return {
-                status: RessursStatus.SUKSESS,
-                data: oppgaverRes.data.filter(
-                    oppgave =>
-                        // if "prioritet" parameter is set, only accept the oppgave with the same prioritet value
-                        (!prioritet || oppgave.prioritet === prioritet.toString()) &&
-                        // if "frist" parameter is set, only accept the oppgave with the same frist value
-                        (!frist || oppgave.fristFerdigstillelse === frist) &&
-                        // if "registrertDato" parameter is set, only accept the oppgave with the same opprettetTidspunkt,
-                        // because the opprettetTidspunkt field of oppgave is in a complete time format like YYYY-MM-DD HH:MM:SS
-                        // we have to take the first part of the field by substring()
-                        (!registrertDato ||
-                            oppgave.opprettetTidspunkt.substring(0, 10) === registrertDato) &&
-                        // if "saksbehandler" parameter is set, we need to check the tilordnedRessurs of oppgave
-                        (!saksbehandler ||
-                            // if "saksbehandler" is set to 'Alle', all oppgave will be accepted
-                            saksbehandler === Object.keys(SaksbehandlerFilter)[0] ||
-                            // if "saksbehandler" is set to 'AlleUfordelte', all oppgave without tilordnedRessurs will be accepted
-                            (saksbehandler === Object.keys(SaksbehandlerFilter)[1] &&
-                                !oppgave.tilordnetRessurs) ||
-                            // if "saksbehandler" is set to other values, only oppgave with tilordnedRessurs === saksbehandler will be accepted
-                            saksbehandler === oppgave.tilordnetRessurs)
-                ),
-            };
-        } else {
-            return oppgaverRes;
-        }
-    };
-
     return {
         dataForManuellJournalføring,
         oppgaver,
         hentDataForManuellJournalføring,
         hentOppgaver,
+        sideLimit,
+        sideindeks,
+        nesteSide,
+        forrigeSide,
+        hentSidetall,
+        hentOppgaveSide,
     };
 });
 

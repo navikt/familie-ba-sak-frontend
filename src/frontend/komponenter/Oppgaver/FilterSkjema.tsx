@@ -187,6 +187,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                 <Knapp
                     onClick={() => {
                         hentOppgaver(
+                            150,
                             getBehandlingstema(filtre.behandlingstema),
                             getOppgavetype(filtre.oppgavetype),
                             getEnhet(filtre.enhet),
