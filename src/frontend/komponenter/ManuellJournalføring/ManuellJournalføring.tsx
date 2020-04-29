@@ -12,6 +12,8 @@ import {
     Journalstatus,
     dokumenttyper,
     Dokumenttype,
+    ILogiskVedlegg,
+    IDokumentInfo,
 } from '../../typer/oppgave';
 import {
     Input,
@@ -28,6 +30,10 @@ import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import { Undertittel } from 'nav-frontend-typografi';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 import { ISODateString } from 'nav-datovelger';
+import Lukknapp from 'nav-frontend-lukknapp';
+import { Knapp } from 'nav-frontend-knapper';
+import { randomUUID } from '../../utils/commons';
+import PanelBase from 'nav-frontend-paneler';
 
 interface IProps {
     innloggetSaksbehandler?: ISaksbehandler;
@@ -42,7 +48,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
     const [dokumenttype, settDokumenttype] = useState<Dokumenttype>(
         Dokumenttype.SØKNAD_OM_BARNETRYGD
     );
-    const [dokumentVarianter, settDokumentVarianter] = useState('');
+    const [logiskeVedlegg, settLogiskeVedlegg] = useState<ILogiskVedlegg[]>([]);
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
     const [datoMottatt, settDatoMottatt] = useState<string>(
         moment(undefined).format(datoformat.ISO_DAG)
@@ -78,6 +84,12 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                     datoformat.ISO_DAG
                 )
             );
+
+            if (dataForManuellJournalføring.data.journalpost.dokumenter) {
+                settLogiskeVedlegg(
+                    dataForManuellJournalføring.data.journalpost.dokumenter[0].logiskeVedlegg ?? []
+                );
+            }
         }
     }, [dataForManuellJournalføring.status]);
 
@@ -91,7 +103,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
             });
         }
 
-        if (dokumentVarianter.length === 0 && dokumentVarianter[0] === '') {
+        if (logiskeVedlegg.length === 0) {
             accFeilmeldinger.push({
                 feilmelding: 'Du må sette annet innhold for dokumentet',
                 skjemaelementId: 'manuell-journalføring-annet-innhold',
@@ -124,6 +136,9 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                             accFeilmeldinger.length === 0 &&
                             person.status === RessursStatus.SUKSESS
                         ) {
+                            const dokumenter: IDokumentInfo[] | undefined =
+                                dataForManuellJournalføring.data.journalpost.dokumenter;
+
                             settSenderInn(true);
                             axiosRequest<string, IRestOppdaterJournalpost>({
                                 method: 'PUT',
@@ -142,10 +157,12 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                     },
                                     datoMottatt,
                                     dokumenttype: dokumenttyper[dokumenttype].navn,
-                                    dokumentVarianter: dokumentVarianter
-                                        .split(',')
-                                        .map(item => item.trim()),
+                                    eksisterendeLogiskeVedlegg: dokumenter
+                                        ? dokumenter[0].logiskeVedlegg
+                                        : [],
+                                    logiskeVedlegg,
                                     knyttTilFagsak,
+                                    navIdent: innloggetSaksbehandler?.navIdent ?? '',
                                 },
                             })
                                 .then((fagsakId: Ressurs<string>) => {
@@ -211,16 +228,65 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                     />
 
                     <br />
-                    <Input
-                        bredde={'XL'}
-                        id={'manuell-journalføring-annet-innhold'}
-                        label={'Annet innhold'}
-                        value={dokumentVarianter}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            settDokumentVarianter(event.target.value);
-                            validerSkjema();
-                        }}
-                    />
+                    <PanelBase className={'panel--gra'}>
+                        <Undertittel children={'Annet innhold'} />
+                        {logiskeVedlegg.map((logiskVedlegg: ILogiskVedlegg, index: number) => {
+                            return (
+                                <div key={index} className={'journalføring__logisk-vedlegg'}>
+                                    <Input
+                                        label={'Tittel'}
+                                        value={logiskVedlegg.tittel}
+                                        bredde={'XXL'}
+                                        onChange={event => {
+                                            settLogiskeVedlegg(
+                                                logiskeVedlegg.map((lVedlegg: ILogiskVedlegg) => {
+                                                    if (
+                                                        lVedlegg.logiskVedleggId ===
+                                                        logiskVedlegg.logiskVedleggId
+                                                    ) {
+                                                        return {
+                                                            ...lVedlegg,
+                                                            tittel: event.target.value,
+                                                        };
+                                                    } else {
+                                                        return lVedlegg;
+                                                    }
+                                                })
+                                            );
+                                        }}
+                                    />
+                                    <Lukknapp
+                                        onClick={() => {
+                                            settLogiskeVedlegg(
+                                                logiskeVedlegg.filter(
+                                                    (lVedlegg: ILogiskVedlegg) =>
+                                                        lVedlegg.logiskVedleggId !==
+                                                        logiskVedlegg.logiskVedleggId
+                                                )
+                                            );
+                                        }}
+                                    />
+                                </div>
+                            );
+                        })}
+
+                        <br />
+                        <Knapp
+                            mini={true}
+                            onClick={() => {
+                                settLogiskeVedlegg([
+                                    ...logiskeVedlegg,
+                                    {
+                                        logiskVedleggId: randomUUID(),
+                                        tittel: '',
+                                    },
+                                ]);
+                            }}
+                        >
+                            Legg til innhold
+                        </Knapp>
+                    </PanelBase>
+                    <br />
                     <br />
 
                     <RadioGruppe legend={'Knytt til fagsak'}>

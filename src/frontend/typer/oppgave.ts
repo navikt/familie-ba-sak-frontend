@@ -37,6 +37,7 @@ export interface IDokumentInfo {
     brevkode?: string;
     dokumentstatus?: Dokumentstatus;
     dokumentvarianter?: IDokumentvariant[];
+    logiskeVedlegg: ILogiskVedlegg[];
 }
 
 export interface IDokumentvariant {
@@ -72,19 +73,19 @@ enum Dokumentstatus {
 }
 
 export interface IOppgave {
-    id: string;
-    tildeltEnhetsnr: string;
-    journalpostId: string;
-    saksreferanse: string;
     aktoerId: string;
-    tilordnetRessurs: string;
-    beskrivelse: string;
     behandlingstema: string;
-    oppgavetype: string;
+    beskrivelse: string;
     fristFerdigstillelse: string;
+    id: string;
+    journalpostId: string;
+    oppgavetype: string;
     opprettetTidspunkt: string;
     prioritet: string;
+    saksreferanse: string;
     status: string;
+    tildeltEnhetsnr: string;
+    tilordnetRessurs: string;
 }
 
 export enum EnhetFilter {
@@ -155,6 +156,11 @@ export enum Dokumenttype {
     SØKNAD_OM_BARNETRYGD = 'SØKNAD_OM_BARNETRYGD',
 }
 
+export enum LogiskeVedleggTyper {
+    OPPHOLDSTILLATELSE = 'OPPHOLDSTILLATELSE',
+    PASS_OG_ID_PAPIRER = 'PASS_OG_ID_PAPIRER',
+}
+
 export const dokumenttyper: INøkkelPar = {
     SØKNAD_OM_BARNETRYGD: {
         id: 'SØKNAD_OM_BARNETRYGD',
@@ -162,13 +168,31 @@ export const dokumenttyper: INøkkelPar = {
     },
 };
 
+export const logiskeVedleggTyper: INøkkelPar = {
+    OPPHOLDSTILLATELSE: {
+        id: 'OPPHOLDSTILLATELSE',
+        navn: 'Oppholdstillatelse',
+    },
+    PASS_OG_ID_PAPIRER: {
+        id: 'PASS_OG_ID_PAPIRER',
+        navn: 'Pass/ID-papirer og annet',
+    },
+};
+
 export interface IRestOppdaterJournalpost {
-    bruker: INavnOgIdent;
     avsender: INavnOgIdent;
-    dokumenttype: string;
+    bruker: INavnOgIdent;
     datoMottatt: string;
-    dokumentVarianter: string[];
+    dokumenttype: string;
+    eksisterendeLogiskeVedlegg: ILogiskVedlegg[];
     knyttTilFagsak: boolean;
+    logiskeVedlegg: ILogiskVedlegg[];
+    navIdent: string;
+}
+
+export interface ILogiskVedlegg {
+    logiskVedleggId: string;
+    tittel: string;
 }
 
 export interface INavnOgIdent {
