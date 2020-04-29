@@ -72,6 +72,22 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
+    const tilbakestillFordelingPåOppgave = (oppgave: IOppgave) => {
+        return axiosRequest<string, void>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/oppgave/${oppgave.id}/tilbakestill`,
+        })
+            .then((oppgaverRes: Ressurs<string>) => {
+                return oppgaverRes;
+            })
+            .catch((error: AxiosError) => {
+                return byggFeiletRessurs(
+                    'Ukjent feil ved tilbakestilling av fordeling på oppgave',
+                    error
+                );
+            });
+    };
+
     const hentOppgaverFraBackend = (
         behandlingstema?: string,
         oppgavetype?: string,
@@ -162,6 +178,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         hentDataForManuellJournalføring,
         hentOppgaver,
         fordelOppgave,
+        tilbakestillFordelingPåOppgave,
     };
 });
 

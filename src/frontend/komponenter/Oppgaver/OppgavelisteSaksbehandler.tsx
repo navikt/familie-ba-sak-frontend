@@ -11,7 +11,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     oppgave,
     innloggetSaksbehandler,
 }) => {
-    const { fordelOppgave } = useOppgaver();
+    const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
     if (oppgave.tilordnetRessurs) {
         return (
             <div className={'kolonne'}>
@@ -19,8 +19,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                 <button
                     key={'tilbakestill'}
                     onClick={() => {
-                        // TODO oppdater endepunkt til tilbakestill
-                        fordelOppgave(oppgave, 'E148211');
+                        tilbakestillFordelingPåOppgave(oppgave);
                     }}
                     children={'Tilbakestill'}
                 />
