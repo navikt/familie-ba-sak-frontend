@@ -8,7 +8,7 @@ import {
 } from '../../typer/oppgave';
 import { RessursStatus } from '../../typer/ressurs';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { Flatknapp } from 'nav-frontend-knapper';
+import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -20,7 +20,7 @@ const getEnheter = (enhetId: string) => {
 };
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { fordelOppgave, oppgaver } = useOppgaver();
+    const { oppgaver } = useOppgaver();
 
     return (
         <div className="oppgavelist">
@@ -78,14 +78,10 @@ const OppgaveList: React.FunctionComponent = () => {
                                 <td className={'bruker'}>{oppg.aktoerId}</td>
                                 <td className={'enhet'}>{getEnheter(oppg.tildeltEnhetsnr)}</td>
                                 <td className={'saksbehandler'}>
-                                    {oppg.tilordnetRessurs ? oppg.tilordnetRessurs : 'Ikke tildelt'}
-                                    <Flatknapp
-                                        onClick={() => {
-                                            fordelOppgave(oppg, 'E148211');
-                                        }}
-                                    >
-                                        Plukk
-                                    </Flatknapp>
+                                    <OppgavelisteSaksbehandler
+                                        oppgave={oppg}
+                                        innloggetSaksbehandler={'E148211'}
+                                    />
                                 </td>
                                 <td className={'handlinger'}>
                                     {OppgavetypeFilter[
