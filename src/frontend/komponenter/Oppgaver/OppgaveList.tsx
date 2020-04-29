@@ -27,7 +27,9 @@ const OppgaveList: React.FunctionComponent = () => {
                 <thead className="tabell__head">
                     <tr className="tabell__head__tr">
                         <th className={'regdato'}>Reg. dato</th>
-                        <th className={'oppgavetype'}>Oppgavetype</th>
+                        <th>
+                            <div className={'oppgavetype'}>Oppgavetype</div>
+                        </th>
                         <th className={'gjelder'}>Gjelder</th>
                         <th className={'frist'}>Frist</th>
                         <th className={'prioritet'}>Prioritet</th>
@@ -47,12 +49,14 @@ const OppgaveList: React.FunctionComponent = () => {
                                 <td className={'regdato'}>
                                     {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
                                 </td>
-                                <td className={'oppgavetype'}>
-                                    {
-                                        OppgavetypeFilter[
-                                            oppg.oppgavetype as keyof typeof OppgavetypeFilter
-                                        ]
-                                    }
+                                <td>
+                                    <div className={'oppgavetype'}>
+                                        {
+                                            OppgavetypeFilter[
+                                                oppg.oppgavetype as keyof typeof OppgavetypeFilter
+                                            ]
+                                        }
+                                    </div>
                                 </td>
                                 <td className={'gjelder'}>
                                     {oppg.behandlingstema
