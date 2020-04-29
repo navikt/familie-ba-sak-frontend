@@ -1,10 +1,12 @@
 import React from 'react';
 import { IOppgave } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
+import { ISaksbehandler } from '../../typer/saksbehandler';
+import AlertStripe from 'nav-frontend-alertstriper';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
-    innloggetSaksbehandler: string;
+    innloggetSaksbehandler?: ISaksbehandler;
 }
 
 const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehandler> = ({
@@ -12,6 +14,9 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     innloggetSaksbehandler,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
+    if (innloggetSaksbehandler == null) {
+        return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
+    }
     if (oppgave.tilordnetRessurs) {
         return (
             <div className={'kolonne'}>
@@ -32,7 +37,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                 <button
                     key={'plukk'}
                     onClick={() => {
-                        fordelOppgave(oppgave, innloggetSaksbehandler);
+                        fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent);
                     }}
                     children={'Plukk'}
                 />

@@ -9,6 +9,7 @@ import {
 import { RessursStatus } from '../../typer/ressurs';
 import { useOppgaver } from '../../context/OppgaverContext';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
+import { ISaksbehandler } from '../../typer/saksbehandler';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -19,7 +20,11 @@ const getEnheter = (enhetId: string) => {
     return index < 0 ? enhetId : Object.values(EnhetFilter)[index];
 };
 
-const OppgaveList: React.FunctionComponent = () => {
+interface IOppgaveListProps {
+    innloggetSaksbehandler?: ISaksbehandler;
+}
+
+const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaksbehandler }) => {
     const { oppgaver } = useOppgaver();
 
     return (
@@ -80,7 +85,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                 <td className={'saksbehandler'}>
                                     <OppgavelisteSaksbehandler
                                         oppgave={oppg}
-                                        innloggetSaksbehandler={'E148211'}
+                                        innloggetSaksbehandler={innloggetSaksbehandler}
                                     />
                                 </td>
                                 <td className={'handlinger'}>
