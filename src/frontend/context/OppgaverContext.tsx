@@ -59,6 +59,19 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         );
     };
 
+    const fordelOppgave = (oppgave: IOppgave, saksbehandler: string) => {
+        return axiosRequest<string, void>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
+        })
+            .then((oppgaverRes: Ressurs<string>) => {
+                return oppgaverRes;
+            })
+            .catch((error: AxiosError) => {
+                return byggFeiletRessurs('Ukjent feil ved fordeling av oppgave', error);
+            });
+    };
+
     const hentOppgaverFraBackend = (
         behandlingstema?: string,
         oppgavetype?: string,
@@ -148,6 +161,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         oppgaver,
         hentDataForManuellJournalføring,
         hentOppgaver,
+        fordelOppgave,
     };
 });
 
