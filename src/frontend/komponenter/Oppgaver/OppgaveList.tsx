@@ -24,12 +24,41 @@ const getEnheter = (enhetId: string) => {
 const OppgaveList: React.FunctionComponent = () => {
     const {
         oppgaver,
+        sortOppgave,
         hentOppgaveSide,
         sideindeks,
         forrigeSide,
         nesteSide,
         hentSidetall,
     } = useOppgaver();
+
+    interface IFeltOrder {
+        [key: string]: boolean;
+    }
+
+    const initFeltOrder: IFeltOrder = {
+        opprettetTidspunkt: true,
+        oppgavetype: true,
+        behandlingstema: true,
+        fristFerdigstillelse: true,
+        prioritet: true,
+        tildeltEnhetsnr: true,
+        tilordnetRessurs: true,
+    };
+
+    const [feltOrder, settFeltOrder] = React.useState<IFeltOrder>(initFeltOrder);
+
+    const onClickFelt = (felt: string) => {
+        sortOppgave(felt, feltOrder[felt]);
+        settFeltOrder({
+            ...feltOrder,
+            [felt]: !feltOrder[felt],
+        });
+    };
+
+    React.useEffect(() => {
+        settFeltOrder(initFeltOrder);
+    }, [oppgaver.status]);
 
     return (
         <div>
@@ -81,19 +110,58 @@ const OppgaveList: React.FunctionComponent = () => {
                     <table className="tabell">
                         <thead className="tabell__head">
                             <tr className="tabell__head__tr">
-                                <th className={'regdato'}>Reg. dato</th>
-                                <th>
-                                    <div className={'oppgavetype'}>Oppgavetype</div>
+                                <th className={'regdato'}>
+                                    <Lenke
+                                        href="#"
+                                        onClick={() => onClickFelt('opprettetTidspunkt')}
+                                    >
+                                        Reg. dato
+                                    </Lenke>
                                 </th>
-                                <th className={'gjelder'}>Gjelder</th>
-                                <th className={'frist'}>Frist</th>
-                                <th className={'prioritet'}>Prioritet</th>
+                                <th>
+                                    <div className={'oppgavetype'}>
+                                        <Lenke href="#" onClick={() => onClickFelt('oppgavetype')}>
+                                            Oppgavetype
+                                        </Lenke>
+                                    </div>
+                                </th>
+                                <th className={'gjelder'}>
+                                    <Lenke href="#" onClick={() => onClickFelt('behandlingstema')}>
+                                        Gjelder
+                                    </Lenke>
+                                </th>
+                                <th className={'frist'}>
+                                    <Lenke
+                                        href="#"
+                                        onClick={() => onClickFelt('fristFerdigstillelse')}
+                                    >
+                                        Frist
+                                    </Lenke>
+                                </th>
+                                <th className={'prioritet'}>
+                                    <Lenke href="#" onClick={() => onClickFelt('prioritet')}>
+                                        Prioritet
+                                    </Lenke>
+                                </th>
                                 <th>
                                     <div className={'beskrivelse'}>Beskrivelse</div>
                                 </th>
                                 <th className={'bruker'}>Bruker</th>
-                                <th className={'enhet'}>Enhet</th>
-                                <th className={'saksbehandler'}>Saksbehandler</th>
+                                <th>
+                                    <div className={'enhet'}>
+                                        <Lenke
+                                            href="#"
+                                            onClick={() => onClickFelt('tildeltEnhetsnr')}
+                                        >
+                                            Enhet
+                                        </Lenke>
+                                    </div>
+                                </th>
+                                <th className={'saksbehandler'}>
+                                    <Lenke href="#" onClick={() => onClickFelt('tilordnetRessurs')}>
+                                        Saksbehandler
+                                    </Lenke>
+                                </th>
                                 <th className={'handlinger'}>Handlinger</th>
                             </tr>
                         </thead>
@@ -133,7 +201,11 @@ const OppgaveList: React.FunctionComponent = () => {
                                         <div className={'beskrivelse'}>{oppg.beskrivelse}</div>
                                     </td>
                                     <td className={'bruker'}>{oppg.aktoerId}</td>
-                                    <td className={'enhet'}>{getEnheter(oppg.tildeltEnhetsnr)}</td>
+                                    <td>
+                                        <div className={'enhet'}>
+                                            {getEnheter(oppg.tildeltEnhetsnr)}
+                                        </div>
+                                    </td>
                                     <td className={'saksbehandler'}>
                                         {oppg.tilordnetRessurs
                                             ? oppg.tilordnetRessurs

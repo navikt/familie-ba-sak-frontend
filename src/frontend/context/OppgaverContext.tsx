@@ -5,6 +5,11 @@ import React from 'react';
 import { IOppgave, SaksbehandlerFilter, IDataForManuellJournalføring } from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
+import moment from 'moment';
+
+export const oppgaveSideLimit = 15;
+
+export const oppgaveGjengCap = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
@@ -16,9 +21,83 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const [sideindeks, settSideindeks] = React.useState(-1);
 
-    const sideLimit = 15;
-
     const { axiosRequest } = useApp();
+
+    const sortOppgave = (felt: string, ascendant: boolean) => {
+        if (oppgaver.status !== RessursStatus.SUKSESS) {
+            return;
+        }
+
+        type OppgaveMedIndeks = {
+            oppgave: IOppgave;
+            indeks: number;
+        };
+
+        const oppgaveMedIndeks: OppgaveMedIndeks[] = oppgaver.data.map((v, i) => {
+            return {
+                oppgave: v,
+                indeks: i,
+            };
+        });
+
+        const compareTid = (a: string, b: string) => {
+            if (a.substring(0, 10) === b.substring(0, 10)) {
+                return 0;
+            }
+
+            const aValid = moment(a.substring(0, 10), 'YYYY-MM-DD', true).isValid();
+            const bValid = moment(b.substring(0, 10), 'YYYY-MM-DD', true).isValid();
+
+            if (!aValid && !bValid) {
+                return 0;
+            }
+
+            const aBefore = ascendant ? -1 : 1;
+            const aAfter = ascendant ? 1 : -1;
+            return moment(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
+                moment(b.substring(0, 10), 'YYYY-MM-DD')
+            )
+                ? aBefore
+                : aAfter;
+        };
+
+        const compareOppgave = (a: IOppgave, b: IOppgave) => {
+            if (felt === 'opprettetTidspunkt' || felt === 'fristFerdigstillelse') {
+                return compareTid(a[felt], b[felt]);
+            }
+
+            if (!a[felt] && !b[felt]) {
+                return 0;
+            }
+
+            if (!a[felt]) {
+                return ascendant ? 1 : -1;
+            }
+
+            if (!b[felt]) {
+                return ascendant ? -1 : 1;
+            }
+
+            if (a[felt] === b[felt]) {
+                return 0;
+            }
+            return ascendant ? a[felt].localeCompare(b[felt]) : b[felt].localeCompare(a[felt]);
+        };
+
+        const stablizedCompareOppgave = (a: OppgaveMedIndeks, b: OppgaveMedIndeks) => {
+            const result = compareOppgave(a.oppgave, b.oppgave);
+            return result !== 0 ? result : a.indeks - b.indeks;
+        };
+
+        const sortedMedIndeks = oppgaveMedIndeks.sort(stablizedCompareOppgave);
+
+        settOppgaver({
+            status: oppgaver.status,
+            data: sortedMedIndeks.map(
+                (oppgaveMedIndeks: OppgaveMedIndeks) => oppgaveMedIndeks.oppgave
+            ),
+        });
+    };
 
     const hentDataForManuellJournalføring = (oppgaveId: string) => {
         axiosRequest<IDataForManuellJournalføring, void>({
@@ -35,7 +114,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const hentSidetall = () =>
         oppgaver.status === RessursStatus.SUKSESS
-            ? Math.floor((oppgaver.data.length - 1) / sideLimit) + 1
+            ? Math.floor((oppgaver.data.length - 1) / oppgaveSideLimit) + 1
             : 0;
 
     const nesteSide = () => sideindeks < hentSidetall() - 1 && settSideindeks(sideindeks + 1);
@@ -45,8 +124,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const hentOppgaveSide = () =>
         oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length > 0
             ? oppgaver.data.slice(
-                  sideindeks * sideLimit,
-                  Math.min((sideindeks + 1) * sideLimit, oppgaver.data.length)
+                  sideindeks * oppgaveSideLimit,
+                  Math.min((sideindeks + 1) * oppgaveSideLimit, oppgaver.data.length)
               )
             : [];
 
@@ -143,7 +222,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             url: `/familie-ba-sak/api/oppgave${query}`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
-                console.log(oppgaverRes);
                 return oppgaverRes;
             })
             .catch((error: AxiosError) => {
@@ -156,7 +234,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         oppgaver,
         hentDataForManuellJournalføring,
         hentOppgaver,
-        sideLimit,
+        sortOppgave,
         sideindeks,
         nesteSide,
         forrigeSide,

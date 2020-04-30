@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from 'nav-frontend-skjema';
-import { useOppgaver } from '../../context/OppgaverContext';
+import { useOppgaver, oppgaveGjengCap } from '../../context/OppgaverContext';
 import {
     OppgavetypeFilter,
     EnhetFilter,
@@ -187,7 +187,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                 <Knapp
                     onClick={() => {
                         hentOppgaver(
-                            150,
+                            oppgaveGjengCap,
                             getBehandlingstema(filtre.behandlingstema),
                             getOppgavetype(filtre.oppgavetype),
                             getEnhet(filtre.enhet),

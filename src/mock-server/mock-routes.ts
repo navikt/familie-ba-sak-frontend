@@ -123,7 +123,6 @@ app.post('/familie-ba-sak/api/fagsaker/:id/send-til-beslutter', (req: Request, r
 });
 
 app.get('/familie-ba-sak/api/oppgave', (req, res) => {
-    console.log(req.query);
     const { limit } = req.query;
     const lmt = parseInt(limit) || 0;
     const mockRess = JSON.parse(lesMockFil(`oppgaver.json`));
