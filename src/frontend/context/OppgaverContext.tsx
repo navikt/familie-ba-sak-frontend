@@ -2,16 +2,33 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 
-import { IOppgave, SaksbehandlerFilter, IDataForManuellJournalføring } from '../typer/oppgave';
+import {
+    IOppgave,
+    SaksbehandlerFilter,
+    IDataForManuellJournalføring,
+    OppgavetypeFilter,
+} from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
+import { useHistory } from 'react-router';
+import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
+    const history = useHistory();
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IOppgave[]>>(
         byggTomRessurs<IOppgave[]>()
+    );
+
+    const { opprettEllerHentFagsak } = useFagsakApi(
+        _ => {
+            'Feilmelding';
+        },
+        _ => {
+            'Feilmelding';
+        }
     );
     const { axiosRequest } = useApp();
 
@@ -65,6 +82,17 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
         })
             .then((oppgaverRes: Ressurs<string>) => {
+                if (
+                    OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
+                    OppgavetypeFilter.JFR
+                ) {
+                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                } else {
+                    opprettEllerHentFagsak({
+                        personIdent: null,
+                        aktørId: oppgave.aktoerId,
+                    });
+                }
                 return oppgaverRes;
             })
             .catch((error: AxiosError) => {

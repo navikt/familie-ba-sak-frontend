@@ -23,6 +23,7 @@ const OpprettFagsak: React.FunctionComponent = () => {
                 nesteOnClick={() => {
                     opprettEllerHentFagsak({
                         personIdent,
+                        aktørId: null,
                     });
                 }}
                 nesteKnappTittel={'Fortsett'}

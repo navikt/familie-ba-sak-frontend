@@ -32,6 +32,7 @@ const OppgaveHeader: React.FunctionComponent = () => {
                     onClick={() => {
                         opprettEllerHentFagsak({
                             personIdent,
+                            aktørId: null,
                         });
                     }}
                     children={'Fortsett'}
