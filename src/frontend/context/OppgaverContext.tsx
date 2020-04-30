@@ -55,6 +55,14 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 return 0;
             }
 
+            if (!aValid) {
+                return ascendant ? 1 : -1;
+            }
+
+            if (!bValid) {
+                return ascendant ? -1 : 1;
+            }
+
             const aBefore = ascendant ? -1 : 1;
             const aAfter = ascendant ? 1 : -1;
             return moment(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
