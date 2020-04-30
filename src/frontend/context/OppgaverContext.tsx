@@ -23,6 +23,9 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const { axiosRequest } = useApp();
 
+    //Stable sort algorithm makes sorting by multiple fields easier. However,
+    //Javascript does not specify the sort algorithm. To make sure the sort algorithm implemented
+    //by browsers are stable, we have to wrap it with the function below.
     const sortOppgave = (felt: string, ascendant: boolean) => {
         if (oppgaver.status !== RessursStatus.SUKSESS) {
             return;
