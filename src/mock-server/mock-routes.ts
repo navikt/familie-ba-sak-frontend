@@ -126,4 +126,14 @@ app.get('/familie-ba-sak/api/oppgave', (_, res) => {
     setTimeout(() => res.send(lesMockFil(`oppgaver.json`)), 500);
 });
 
+app.post('/familie-ba-sak/api/oppgave/:id/fordel', (req: Request, res: Response) => {
+    const { id } = req.params;
+    setTimeout(() => res.send({ status: 'SUKSESS', data: id }), delayMs);
+});
+
+app.post('/familie-ba-sak/api/oppgave/:id/tilbakestill', (req: Request, res: Response) => {
+    const { id } = req.params;
+    setTimeout(() => res.send({ status: 'SUKSESS', data: id }), delayMs);
+});
+
 export default app;

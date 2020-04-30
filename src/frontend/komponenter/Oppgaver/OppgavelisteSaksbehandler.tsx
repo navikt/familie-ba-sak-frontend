@@ -3,6 +3,8 @@ import { IOppgave } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 import AlertStripe from 'nav-frontend-alertstriper';
+import { Ressurs, RessursStatus } from '../../typer/ressurs';
+import { Feilmelding } from 'nav-frontend-typografi';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
@@ -14,9 +16,15 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     innloggetSaksbehandler,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
+    const [feilmelding, setFeilmelding] = React.useState<string>();
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
     }
+
+    if (feilmelding) {
+        return <Feilmelding>{feilmelding}</Feilmelding>;
+    }
+
     if (oppgave.tilordnetRessurs) {
         return (
             <div className={'kolonne'}>
@@ -24,7 +32,13 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                 <button
                     key={'tilbakestill'}
                     onClick={() => {
-                        tilbakestillFordelingPåOppgave(oppgave);
+                        tilbakestillFordelingPåOppgave(oppgave).then(
+                            (oppgaveResponse: Ressurs<string>) => {
+                                if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                    setFeilmelding(oppgaveResponse.melding);
+                                }
+                            }
+                        );
                     }}
                     children={'Tilbakestill'}
                 />
@@ -37,7 +51,13 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                 <button
                     key={'plukk'}
                     onClick={() => {
-                        fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent);
+                        fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
+                            (oppgaveResponse: Ressurs<string>) => {
+                                if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                    setFeilmelding(oppgaveResponse.melding);
+                                }
+                            }
+                        );
                     }}
                     children={'Plukk'}
                 />

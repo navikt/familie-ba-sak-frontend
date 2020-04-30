@@ -76,7 +76,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         );
     };
 
-    const fordelOppgave = (oppgave: IOppgave, saksbehandler: string) => {
+    const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
         return axiosRequest<string, void>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
@@ -96,11 +96,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 return oppgaverRes;
             })
             .catch((error: AxiosError) => {
-                return byggFeiletRessurs('Ukjent feil ved fordeling av oppgave', error);
+                return byggFeiletRessurs<string>('Ukjent feil ved fordeling av oppgave', error);
             });
     };
 
-    const tilbakestillFordelingPåOppgave = (oppgave: IOppgave) => {
+    const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<string>> => {
         return axiosRequest<string, void>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/tilbakestill`,
@@ -109,8 +109,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 return oppgaverRes;
             })
             .catch((error: AxiosError) => {
-                return byggFeiletRessurs(
-                    'Ukjent feil ved tilbakestilling av fordeling på oppgave',
+                return byggFeiletRessurs<string>(
+                    'Ukjent feil ved tilbakestilling av oppgave',
                     error
                 );
             });
