@@ -69,7 +69,7 @@ const OppgaveList: React.FunctionComponent = () => {
                 <div className={'oppgavelistHeader__navigator'}>
                     |
                     <span className={'oppgavelistHeader__navigator__felt'}>
-                        Vise {hentOppgaveSide().length} av{' '}
+                        Viser {hentOppgaveSide().length} av{' '}
                         {oppgaver.status === RessursStatus.SUKSESS ? oppgaver.data.length : 0}{' '}
                         oppgaver
                     </span>
