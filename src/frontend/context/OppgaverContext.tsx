@@ -9,7 +9,7 @@ import moment from 'moment';
 
 export const oppgaveSideLimit = 15;
 
-export const oppgaveGjengCap = 150;
+export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
