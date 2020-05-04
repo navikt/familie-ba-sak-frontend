@@ -17,12 +17,16 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
     const [feilmelding, setFeilmelding] = React.useState<string>();
+    const [erTilbakestilt, setErTilbakestilt] = React.useState<boolean>(false);
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
     }
 
     if (feilmelding) {
-        return <Feilmelding>{feilmelding}</Feilmelding>;
+        return <Feilmelding className={'kolonne'}>{feilmelding}</Feilmelding>;
+    }
+    if (erTilbakestilt) {
+        return <div className={'kolonne'}>Saksbehandler er tilbakestilt</div>;
     }
 
     const oppgaveTypeErStøttet = [
@@ -46,6 +50,8 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                                 (oppgaveResponse: Ressurs<string>) => {
                                     if (oppgaveResponse.status === RessursStatus.FEILET) {
                                         setFeilmelding(oppgaveResponse.melding);
+                                    } else {
+                                        setErTilbakestilt(true);
                                     }
                                 }
                             );
