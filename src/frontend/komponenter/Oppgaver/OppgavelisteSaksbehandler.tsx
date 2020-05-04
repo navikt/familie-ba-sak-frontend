@@ -1,5 +1,5 @@
 import React from 'react';
-import { IOppgave } from '../../typer/oppgave';
+import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 import AlertStripe from 'nav-frontend-alertstriper';
@@ -25,42 +25,55 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         return <Feilmelding>{feilmelding}</Feilmelding>;
     }
 
+    const oppgaveTypeErStøttet = [
+        OppgavetypeFilter.JFR,
+        OppgavetypeFilter.BEH_SAK,
+        OppgavetypeFilter.BEH_UND_VED,
+        OppgavetypeFilter.GOD_VED,
+    ].find(
+        type => OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] === type
+    );
+
     if (oppgave.tilordnetRessurs) {
         return (
             <div className={'kolonne'}>
                 <div>{oppgave.tilordnetRessurs}</div>
-                <button
-                    key={'tilbakestill'}
-                    onClick={() => {
-                        tilbakestillFordelingPåOppgave(oppgave).then(
-                            (oppgaveResponse: Ressurs<string>) => {
-                                if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                    setFeilmelding(oppgaveResponse.melding);
+                {oppgaveTypeErStøttet && (
+                    <button
+                        key={'tilbakestill'}
+                        onClick={() => {
+                            tilbakestillFordelingPåOppgave(oppgave).then(
+                                (oppgaveResponse: Ressurs<string>) => {
+                                    if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                        setFeilmelding(oppgaveResponse.melding);
+                                    }
                                 }
-                            }
-                        );
-                    }}
-                    children={'Tilbakestill'}
-                />
+                            );
+                        }}
+                        children={'Tilbakestill'}
+                    />
+                )}
             </div>
         );
     } else {
         return (
             <div className={'kolonne'}>
                 <div>Ikke tildelt</div>
-                <button
-                    key={'plukk'}
-                    onClick={() => {
-                        fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                            (oppgaveResponse: Ressurs<string>) => {
-                                if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                    setFeilmelding(oppgaveResponse.melding);
+                {oppgaveTypeErStøttet && (
+                    <button
+                        key={'plukk'}
+                        onClick={() => {
+                            fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
+                                (oppgaveResponse: Ressurs<string>) => {
+                                    if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                        setFeilmelding(oppgaveResponse.melding);
+                                    }
                                 }
-                            }
-                        );
-                    }}
-                    children={'Plukk'}
-                />
+                            );
+                        }}
+                        children={'Plukk'}
+                    />
+                )}
             </div>
         );
     }
