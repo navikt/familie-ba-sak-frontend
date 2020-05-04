@@ -7,11 +7,11 @@ import { IPerson } from '../../../typer/person';
 import { ISøknadDTO } from '../../../typer/søknad';
 
 interface IProps {
-    settSøknad: (søknad: ISøknadDTO) => void;
+    settSøknadOgValider: (søknad: ISøknadDTO) => void;
     søknad: ISøknadDTO;
 }
 
-const AnnenPart: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) => {
+const AnnenPart: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const [annenPart, settAnnenPart] = React.useState<Ressurs<IPerson>>({
         status: RessursStatus.IKKE_HENTET,
     });
@@ -24,7 +24,7 @@ const AnnenPart: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) =>
                 person={annenPart}
                 settPerson={(person: Ressurs<IPerson>) => {
                     if (person.status === RessursStatus.SUKSESS) {
-                        settSøknad({
+                        settSøknadOgValider({
                             ...søknad,
                             annenPartIdent: person.data.personIdent,
                         });

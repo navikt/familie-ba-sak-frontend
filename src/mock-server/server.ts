@@ -28,7 +28,7 @@ app.get('/*', (_: Request, res: Response) => {
     res.end();
 });
 
-const server = app.listen(port, 'localhost', function onStart(err) {
+const server = app.listen(port, 'localhost', function onStart(err: Error) {
     if (err) {
         console.log(err);
     }

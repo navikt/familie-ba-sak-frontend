@@ -4,15 +4,17 @@ import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 import FamilieCheckbox from '../../Felleskomponenter/InputMedLesevisning/FamilieCheckbox';
 import FamilieTextarea from '../../Felleskomponenter/InputMedLesevisning/FamilieTextarea';
-import FamilieInput from '../../Felleskomponenter/InputMedLesevisning/FamilieInput';
 import MinimumOpplysningAlternativ from '../../Felleskomponenter/InputMedLesevisning/IngenOpplysningerValgt';
+import FamilieDatovelger from '../../Felleskomponenter/InputMedLesevisning/FamilieDatovelger';
+import { datoformatNorsk } from '../../../utils/formatter';
+import { ISODateString } from 'nav-datovelger';
 
 interface IProps {
-    settSøknad: (søknad: ISøknadDTO) => void;
+    settSøknadOgValider: (søknad: ISøknadDTO) => void;
     søknad: ISøknadDTO;
 }
 
-const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) => {
+const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     return (
         <PanelBase className={'søknad__opphold'}>
             <Undertittel children={'2.3 Hva har bruker søkt om?'} />
@@ -26,7 +28,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                 label={'Søker oppholder seg ikke i Norge'}
                 checked={!søknad.søkerMedOpplysninger.oppholderSegINorge}
                 onChange={() => {
-                    settSøknad({
+                    settSøknadOgValider({
                         ...søknad,
                         søkerMedOpplysninger: {
                             ...søknad.søkerMedOpplysninger,
@@ -40,7 +42,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                 label={'Søker har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'}
                 checked={!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder}
                 onChange={() => {
-                    settSøknad({
+                    settSøknadOgValider({
                         ...søknad,
                         søkerMedOpplysninger: {
                             ...søknad.søkerMedOpplysninger,
@@ -53,17 +55,17 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
 
             {!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder && (
                 <div className={'søknad__panel--innrykk'}>
-                    <FamilieInput
+                    <FamilieDatovelger
+                        id={'søker-kom-til-norge'}
                         label={'Når kom søker til Norge?'}
-                        bredde={'S'}
-                        value={søknad.søkerMedOpplysninger.komTilNorge}
-                        placeholder={'MM.YY'}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            settSøknad({
+                        valgtDato={søknad.søkerMedOpplysninger.komTilNorge}
+                        placeholder={datoformatNorsk.DATO}
+                        onChange={(dato?: ISODateString) => {
+                            settSøknadOgValider({
                                 ...søknad,
                                 søkerMedOpplysninger: {
                                     ...søknad.søkerMedOpplysninger,
-                                    komTilNorge: event.target.value,
+                                    komTilNorge: dato,
                                 },
                             });
                         }}
@@ -73,7 +75,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         label={'Søker skal ikke oppholde seg i Norge de neste 12 månedene'}
                         checked={!søknad.søkerMedOpplysninger.skalOppholdeSegINorgeNeste12Måneder}
                         onChange={() => {
-                            settSøknad({
+                            settSøknadOgValider({
                                 ...søknad,
                                 søkerMedOpplysninger: {
                                     ...søknad.søkerMedOpplysninger,
@@ -90,7 +92,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknad, sø
                         placeholder={'Skriv her'}
                         maxLength={500}
                         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                            settSøknad({
+                            settSøknadOgValider({
                                 ...søknad,
                                 søkerMedOpplysninger: {
                                     ...søknad.søkerMedOpplysninger,
