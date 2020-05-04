@@ -157,6 +157,9 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                     },
                                     datoMottatt,
                                     dokumentTittel: dokumenttyper[dokumenttype].navn,
+                                    dokumentInfoId: dokumenter
+                                        ? dokumenter[0].dokumentInfoId ?? ''
+                                        : '',
                                     eksisterendeLogiskeVedlegg: dokumenter
                                         ? dokumenter[0].logiskeVedlegg
                                         : [],

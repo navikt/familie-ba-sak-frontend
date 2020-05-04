@@ -35,6 +35,7 @@ export interface IJournalpostBruker {
 export interface IDokumentInfo {
     tittel?: string;
     brevkode?: string;
+    dokumentInfoId?: string;
     dokumentstatus?: Dokumentstatus;
     dokumentvarianter?: IDokumentvariant[];
     logiskeVedlegg: ILogiskVedlegg[];
@@ -194,6 +195,7 @@ export interface IRestOppdaterJournalpost {
     bruker: INavnOgIdent;
     datoMottatt: string;
     dokumentTittel: string;
+    dokumentInfoId: string;
     eksisterendeLogiskeVedlegg: ILogiskVedlegg[];
     knyttTilFagsak: boolean;
     logiskeVedlegg: ILogiskVedlegg[];
