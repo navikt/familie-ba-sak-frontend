@@ -62,7 +62,7 @@ const OppgaveList: React.FunctionComponent = () => {
 
     return (
         <div>
-            {sideindeks >= 0 && (
+            {oppgaver.status === RessursStatus.SUKSESS && sideindeks >= 0 && (
                 <div className={'oppgavelist-header'}>
                     <Systemtittel className={'oppgavelist-header__tittel'}>
                         Oppgaveliste - visning
