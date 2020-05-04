@@ -62,8 +62,8 @@ const OppgaveList: React.FunctionComponent = () => {
 
     return (
         <div>
-            <div className={'oppgavelistHeader'}>
-                <Systemtittel className={'oppgavelistHeader__tittel'}>
+            <div className={'oppgavelist-header'}>
+                <Systemtittel className={'oppgavelist-header__tittel'}>
                     Oppgaveliste - visning
                 </Systemtittel>
                 <div className={'oppgavelistHeader__navigator'}>
