@@ -14,7 +14,7 @@ const VisOppgaver: React.FunctionComponent<IVisOppgaverProps> = props => {
             <OppgaveHeader>Oppgavebenk</OppgaveHeader>
             <hr className={'visoppgaver__hr'} />
             <FilterSkjema innloggetSaksbehandler={props.innloggetSaksbehandler} />
-            <OppgaveList />
+            <OppgaveList innloggetSaksbehandler={props.innloggetSaksbehandler} />
         </div>
     );
 };

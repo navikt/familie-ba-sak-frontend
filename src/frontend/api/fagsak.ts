@@ -9,7 +9,8 @@ export const aktivVedtak = (fagsak: IFagsak) =>
     aktivBehandling(fagsak)?.vedtakForBehandling.find(v => v.aktiv);
 
 export interface IOpprettEllerHentFagsakData {
-    personIdent: string;
+    personIdent: string | null;
+    aktørId: string | null;
 }
 
 export interface IOpprettBehandlingData {

@@ -112,6 +112,20 @@ table.tabell th, table.tabell td{
 
 .saksbehandler {
     min-width: 225px;
+
+    .kolonne {
+        display: flex;
+
+        *:nth-child(1) {
+            width: 5rem;
+            margin-right: 2.5rem;
+            text-align: left;
+        }
+        *:nth-child(2) {
+            color: #0067c5;
+            text-align: left;
+        }
+    }
 }
 
 .handlinger {
