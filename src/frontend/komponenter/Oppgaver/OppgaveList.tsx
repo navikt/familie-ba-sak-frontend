@@ -48,7 +48,7 @@ const OppgaveList: React.FunctionComponent = () => {
 
     const [feltOrder, settFeltOrder] = React.useState<IFeltOrder>(initFeltOrder);
 
-    const onClickFelt = (felt: string) => {
+    const onColumnSort = (felt: string) => {
         sortOppgave(felt, feltOrder[felt]);
         settFeltOrder({
             ...feltOrder,
