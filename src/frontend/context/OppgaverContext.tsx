@@ -168,9 +168,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             saksbehandlerForBackend
         ).then((oppgaverRessurs: Ressurs<IOppgave[]>) => {
             settOppgaver(oppgaverRessurs);
-            if (oppgaverRessurs.status === RessursStatus.SUKSESS) {
-                settSideindeks(oppgaverRessurs.data.length > 0 ? 0 : -1);
-            }
+            settSideindeks(
+                oppgaverRessurs.status === RessursStatus.SUKSESS && oppgaverRessurs.data.length > 0
+                    ? 0
+                    : -1
+            );
             return oppgaverRessurs;
         });
     };
