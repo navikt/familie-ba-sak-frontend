@@ -158,7 +158,8 @@ export enum PrioritetFilter {
 }
 
 export enum Dokumenttype {
-    SØKNAD_OM_BARNETRYGD = 'SØKNAD_OM_BARNETRYGD',
+    SØKNAD_OM_ORDINÆR_BARNETRYGD = 'SØKNAD_OM_ORDINÆR_BARNETRYGD',
+    SØKNAD_OM_UTVIDET_BARNETRYGD = 'SØKNAD_OM_UTVIDET_BARNETRYGD',
 }
 
 export enum LogiskeVedleggTyper {
@@ -167,9 +168,13 @@ export enum LogiskeVedleggTyper {
 }
 
 export const dokumenttyper: INøkkelPar = {
-    SØKNAD_OM_BARNETRYGD: {
-        id: 'SØKNAD_OM_BARNETRYGD',
-        navn: 'Søknad om barnetrygd',
+    SØKNAD_OM_ORDINÆR_BARNETRYGD: {
+        id: 'SØKNAD_OM_ORDINÆR_BARNETRYGD',
+        navn: 'Søknad om ordinær barnetrygd',
+    },
+    SØKNAD_OM_UTVIDET_BARNETRYGD: {
+        id: 'SØKNAD_OM_UTVIDET_BARNETRYGD',
+        navn: 'Søknad om utvidet barnetrygd',
     },
 };
 
@@ -188,7 +193,7 @@ export interface IRestOppdaterJournalpost {
     avsender: INavnOgIdent;
     bruker: INavnOgIdent;
     datoMottatt: string;
-    dokumenttype: string;
+    dokumentTittel: string;
     eksisterendeLogiskeVedlegg: ILogiskVedlegg[];
     knyttTilFagsak: boolean;
     logiskeVedlegg: ILogiskVedlegg[];

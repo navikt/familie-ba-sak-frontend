@@ -46,7 +46,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
     const { hentDataForManuellJournalføring, dataForManuellJournalføring } = useOppgaver();
 
     const [dokumenttype, settDokumenttype] = useState<Dokumenttype>(
-        Dokumenttype.SØKNAD_OM_BARNETRYGD
+        Dokumenttype.SØKNAD_OM_ORDINÆR_BARNETRYGD
     );
     const [logiskeVedlegg, settLogiskeVedlegg] = useState<ILogiskVedlegg[]>([]);
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
@@ -156,7 +156,7 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                         id: person.data.personIdent,
                                     },
                                     datoMottatt,
-                                    dokumenttype: dokumenttyper[dokumenttype].navn,
+                                    dokumentTittel: dokumenttyper[dokumenttype].navn,
                                     eksisterendeLogiskeVedlegg: dokumenter
                                         ? dokumenter[0].logiskeVedlegg
                                         : [],
