@@ -2,9 +2,16 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 
-import { IOppgave, SaksbehandlerFilter, IDataForManuellJournalføring } from '../typer/oppgave';
+import {
+    IOppgave,
+    SaksbehandlerFilter,
+    IDataForManuellJournalføring,
+    OppgavetypeFilter,
+} from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
+import { useHistory } from 'react-router';
+import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import moment from 'moment';
 
 export const oppgaveSideLimit = 15;
@@ -15,8 +22,18 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
+    const history = useHistory();
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IOppgave[]>>(
         byggTomRessurs<IOppgave[]>()
+    );
+
+    const { opprettEllerHentFagsak } = useFagsakApi(
+        _ => {
+            'Feilmelding';
+        },
+        _ => {
+            'Feilmelding';
+        }
     );
 
     const [sideindeks, settSideindeks] = React.useState(-1);
@@ -177,6 +194,46 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         });
     };
 
+    const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
+        return axiosRequest<string, void>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
+        })
+            .then((oppgaverRes: Ressurs<string>) => {
+                if (
+                    OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
+                    OppgavetypeFilter.JFR
+                ) {
+                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                } else {
+                    opprettEllerHentFagsak({
+                        personIdent: null,
+                        aktørId: oppgave.aktoerId,
+                    });
+                }
+                return oppgaverRes;
+            })
+            .catch((error: AxiosError) => {
+                return byggFeiletRessurs<string>('Ukjent feil ved fordeling av oppgave', error);
+            });
+    };
+
+    const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<string>> => {
+        return axiosRequest<string, void>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/oppgave/${oppgave.id}/tilbakestill`,
+        })
+            .then((oppgaverRes: Ressurs<string>) => {
+                return oppgaverRes;
+            })
+            .catch((error: AxiosError) => {
+                return byggFeiletRessurs<string>(
+                    'Ukjent feil ved tilbakestilling av oppgave',
+                    error
+                );
+            });
+    };
+
     const hentOppgaverFraBackend = (
         limit?: number,
         behandlingstema?: string,
@@ -255,6 +312,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         forrigeSide,
         hentSidetall,
         hentOppgaveSide,
+        fordelOppgave,
+        tilbakestillFordelingPåOppgave,
     };
 });
 
