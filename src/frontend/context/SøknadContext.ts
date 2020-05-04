@@ -54,37 +54,55 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
         }
     }, [bruker.status]);
 
-    const erSøknadGyldig = (): boolean => {
-        let søknadenErGyldig = true;
-        if (process.env.NODE_ENV === 'development') {
-            return true;
+    const validerSøknad = (validerSøknad: ISøknadDTO): boolean => {
+        const søknadFeilmeldinger: FeiloppsummeringFeil[] = [];
+
+        if (
+            !validerSøknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder &&
+            (validerSøknad.søkerMedOpplysninger.komTilNorge === '' ||
+                !validerSøknad.søkerMedOpplysninger.komTilNorge)
+        ) {
+            søknadFeilmeldinger.push({
+                skjemaelementId: 'søker-kom-til-norge',
+                feilmelding: 'Dato for når søker kom til Norge må settes',
+            });
         }
 
         if (
-            søknad.barnaMedOpplysninger.filter(
+            validerSøknad.barnaMedOpplysninger.filter(
                 (barn: IBarnMedOpplysninger) => barn.inkludertISøknaden
             ).length === 0
         ) {
-            søknadenErGyldig = false;
-            settFeilmeldinger([
-                ...feilmeldinger,
-                { skjemaelementId: 'barna', feilmelding: 'Ingen av barna er valgt.' },
-            ]);
+            søknadFeilmeldinger.push({
+                skjemaelementId: 'barna',
+                feilmelding: 'Ingen av barna er valgt.',
+            });
         }
 
-        return søknadenErGyldig;
+        console.log('søknadFeilmeldinger', søknadFeilmeldinger);
+        settFeilmeldinger(søknadFeilmeldinger);
+
+        return søknadFeilmeldinger.length === 0;
     };
 
     const settBarn = (barn: IBarnMedOpplysninger): void => {
-        settSøknad({
+        const nySøknad = {
             ...søknad,
             barnaMedOpplysninger: søknad.barnaMedOpplysninger.map((it: IBarnMedOpplysninger) =>
                 it.ident === barn.ident ? barn : it
             ),
-        });
+        };
+
+        settSøknad(nySøknad);
+        validerSøknad(nySøknad);
     };
 
-    return { feilmeldinger, søknad, settBarn, settSøknad, erSøknadGyldig };
+    const settSøknadOgValider = (søknad: ISøknadDTO) => {
+        settSøknad(søknad);
+        validerSøknad(søknad);
+    };
+
+    return { feilmeldinger, søknad, settBarn, settSøknadOgValider, erSøknadGyldig: validerSøknad };
 });
 
 export { SøknadProvider, useSøknad };

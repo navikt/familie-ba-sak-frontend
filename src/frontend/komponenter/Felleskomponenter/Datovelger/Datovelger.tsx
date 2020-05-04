@@ -23,7 +23,7 @@ const Datovelger: React.FC<IProps> = ({
     className = '',
 }) => {
     return (
-        <div className={className}>
+        <div id={id} className={className}>
             <Label children={label} htmlFor={id} />
             <NavDatovelger
                 disabled={disabled}
