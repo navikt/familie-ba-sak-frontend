@@ -108,6 +108,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 (oppgaveMedIndeks: OppgaveMedIndeks) => oppgaveMedIndeks.oppgave
             ),
         });
+
+        settSideindeks(sortedMedIndeks.length > 0 ? 0 : -1);
     };
 
     const hentDataForManuellJournalføring = (oppgaveId: string) => {

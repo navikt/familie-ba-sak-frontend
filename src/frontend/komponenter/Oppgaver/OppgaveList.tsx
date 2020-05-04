@@ -7,7 +7,7 @@ import {
     IOppgave,
 } from '../../typer/oppgave';
 import { RessursStatus } from '../../typer/ressurs';
-import { useOppgaver } from '../../context/OppgaverContext';
+import { useOppgaver, oppgaveSideLimit } from '../../context/OppgaverContext';
 import { Systemtittel } from 'nav-frontend-typografi';
 import Lenke from 'nav-frontend-lenker';
 import Alertstripe from 'nav-frontend-alertstriper';
@@ -62,48 +62,57 @@ const OppgaveList: React.FunctionComponent = () => {
 
     return (
         <div>
-            <div className={'oppgavelist-header'}>
-                <Systemtittel className={'oppgavelist-header__tittel'}>
-                    Oppgaveliste - visning
-                </Systemtittel>
-                <div className={'oppgavelistHeader__navigator'}>
-                    |
-                    <span className={'oppgavelistHeader__navigator__felt'}>
-                        Viser {hentOppgaveSide().length} av{' '}
-                        {oppgaver.status === RessursStatus.SUKSESS ? oppgaver.data.length : 0}{' '}
-                        oppgaver
-                    </span>
-                    |
-                    <span className={'oppgavelistHeader__navigator__felt'}>
-                        Side {sideindeks + 1} av {hentSidetall()}
-                    </span>
-                    |
-                    <span className={'oppgavelistHeader__navigator__felt'}>
-                        {sideindeks <= 0 ? (
-                            'Forrige'
-                        ) : (
-                            <Lenke href="#" onClick={() => forrigeSide()}>
-                                Forrige
-                            </Lenke>
-                        )}{' '}
-                        {sideindeks >= hentSidetall() - 1 ? (
-                            'Neste'
-                        ) : (
-                            <Lenke href="#" onClick={() => nesteSide()}>
-                                Neste
-                            </Lenke>
-                        )}
-                    </span>
+            {sideindeks >= 0 && (
+                <div className={'oppgavelist-header'}>
+                    <Systemtittel className={'oppgavelist-header__tittel'}>
+                        Oppgaveliste - visning
+                    </Systemtittel>
+                    <div className={'oppgavelist-header__navigator'}>
+                        |
+                        <span className={'oppgavelist-header__navigator__felt'}>
+                            Viser {sideindeks * oppgaveSideLimit + 1} -{' '}
+                            {sideindeks * oppgaveSideLimit + hentOppgaveSide().length} av{' '}
+                            {oppgaver.status === RessursStatus.SUKSESS ? oppgaver.data.length : 0}{' '}
+                            oppgaver
+                        </span>
+                        |
+                        <span className={'oppgavelist-header__navigator__felt'}>
+                            Side {sideindeks + 1} av {hentSidetall()}
+                        </span>
+                        |
+                        <span className={'oppgavelist-header__navigator__felt'}>
+                            {sideindeks <= 0 ? (
+                                'Forrige'
+                            ) : (
+                                <Lenke href="#" onClick={() => forrigeSide()}>
+                                    Forrige
+                                </Lenke>
+                            )}{' '}
+                            {sideindeks >= hentSidetall() - 1 ? (
+                                'Neste'
+                            ) : (
+                                <Lenke href="#" onClick={() => nesteSide()}>
+                                    Neste
+                                </Lenke>
+                            )}
+                        </span>
+                    </div>
                 </div>
-            </div>
+            )}
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length === 0 && (
-                <Alertstripe type="info">Ingen oppgave</Alertstripe>
+                <Alertstripe type="info" className="oppgavelist-info">
+                    Ingen oppgave
+                </Alertstripe>
             )}
             {oppgaver.status === RessursStatus.FEILET && (
-                <Alertstripe type="feil">{oppgaver.melding}</Alertstripe>
+                <Alertstripe type="feil" className="oppgavelist-info">
+                    {oppgaver.melding}
+                </Alertstripe>
             )}
             {oppgaver.status === RessursStatus.HENTER && (
-                <Alertstripe type="info">Henter...</Alertstripe>
+                <Alertstripe type="info" className="oppgavelist-info">
+                    Henter...
+                </Alertstripe>
             )}
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length > 0 && (
                 <div className="oppgavelist">
@@ -113,33 +122,33 @@ const OppgaveList: React.FunctionComponent = () => {
                                 <th className={'regdato'}>
                                     <Lenke
                                         href="#"
-                                        onClick={() => onClickFelt('opprettetTidspunkt')}
+                                        onClick={() => onColumnSort('opprettetTidspunkt')}
                                     >
                                         Reg. dato
                                     </Lenke>
                                 </th>
                                 <th>
                                     <div className={'oppgavetype'}>
-                                        <Lenke href="#" onClick={() => onClickFelt('oppgavetype')}>
+                                        <Lenke href="#" onClick={() => onColumnSort('oppgavetype')}>
                                             Oppgavetype
                                         </Lenke>
                                     </div>
                                 </th>
                                 <th className={'gjelder'}>
-                                    <Lenke href="#" onClick={() => onClickFelt('behandlingstema')}>
+                                    <Lenke href="#" onClick={() => onColumnSort('behandlingstema')}>
                                         Gjelder
                                     </Lenke>
                                 </th>
                                 <th className={'frist'}>
                                     <Lenke
                                         href="#"
-                                        onClick={() => onClickFelt('fristFerdigstillelse')}
+                                        onClick={() => onColumnSort('fristFerdigstillelse')}
                                     >
                                         Frist
                                     </Lenke>
                                 </th>
                                 <th className={'prioritet'}>
-                                    <Lenke href="#" onClick={() => onClickFelt('prioritet')}>
+                                    <Lenke href="#" onClick={() => onColumnSort('prioritet')}>
                                         Prioritet
                                     </Lenke>
                                 </th>
@@ -151,14 +160,17 @@ const OppgaveList: React.FunctionComponent = () => {
                                     <div className={'enhet'}>
                                         <Lenke
                                             href="#"
-                                            onClick={() => onClickFelt('tildeltEnhetsnr')}
+                                            onClick={() => onColumnSort('tildeltEnhetsnr')}
                                         >
                                             Enhet
                                         </Lenke>
                                     </div>
                                 </th>
                                 <th className={'saksbehandler'}>
-                                    <Lenke href="#" onClick={() => onClickFelt('tilordnetRessurs')}>
+                                    <Lenke
+                                        href="#"
+                                        onClick={() => onColumnSort('tilordnetRessurs')}
+                                    >
                                         Saksbehandler
                                     </Lenke>
                                 </th>
