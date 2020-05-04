@@ -13,7 +13,7 @@ const TotrinnskontrollModalInnhold: React.FunctionComponent<IProps> = ({ beslutn
             <div className={'totrinnsvurdering-modal-innhold'}>
                 <IkkeOppfylt />
                 <div className={'totrinnsvurdering-modal-tekst'}>
-                    Behandlingen er ikke godkjent og er sendt tilbake til beslutter
+                    Behandlingen er ikke godkjent og er sendt tilbake til saksbehandler
                 </div>
             </div>
         );
