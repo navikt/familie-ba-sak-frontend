@@ -12,6 +12,11 @@ import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../ty
 import { useApp } from './AppContext';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
+import moment from 'moment';
+
+export const oppgaveSideLimit = 15;
+
+export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
@@ -30,7 +35,99 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             'Feilmelding';
         }
     );
+
+    const [sideindeks, settSideindeks] = React.useState(-1);
+
     const { axiosRequest } = useApp();
+
+    //Stable sort algorithm makes sorting by multiple fields easier. However,
+    //Javascript does not specify the sort algorithm. To make sure the sort algorithm implemented
+    //by browsers are stable, we have to wrap it with the function below.
+    const sortOppgave = (felt: string, ascendant: boolean) => {
+        if (oppgaver.status !== RessursStatus.SUKSESS) {
+            return;
+        }
+
+        type OppgaveMedIndeks = {
+            oppgave: IOppgave;
+            indeks: number;
+        };
+
+        const oppgaveMedIndeks: OppgaveMedIndeks[] = oppgaver.data.map((v, i) => {
+            return {
+                oppgave: v,
+                indeks: i,
+            };
+        });
+
+        const compareTid = (a: string, b: string) => {
+            if (a.substring(0, 10) === b.substring(0, 10)) {
+                return 0;
+            }
+
+            const aValid = moment(a.substring(0, 10), 'YYYY-MM-DD', true).isValid();
+            const bValid = moment(b.substring(0, 10), 'YYYY-MM-DD', true).isValid();
+
+            if (!aValid && !bValid) {
+                return 0;
+            }
+
+            if (!aValid) {
+                return ascendant ? 1 : -1;
+            }
+
+            if (!bValid) {
+                return ascendant ? -1 : 1;
+            }
+
+            const aBefore = ascendant ? -1 : 1;
+            const aAfter = ascendant ? 1 : -1;
+            return moment(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
+                moment(b.substring(0, 10), 'YYYY-MM-DD')
+            )
+                ? aBefore
+                : aAfter;
+        };
+
+        const compareOppgave = (a: IOppgave, b: IOppgave) => {
+            if (felt === 'opprettetTidspunkt' || felt === 'fristFerdigstillelse') {
+                return compareTid(a[felt], b[felt]);
+            }
+
+            if (!a[felt] && !b[felt]) {
+                return 0;
+            }
+
+            if (!a[felt]) {
+                return ascendant ? 1 : -1;
+            }
+
+            if (!b[felt]) {
+                return ascendant ? -1 : 1;
+            }
+
+            if (a[felt] === b[felt]) {
+                return 0;
+            }
+            return ascendant ? a[felt].localeCompare(b[felt]) : b[felt].localeCompare(a[felt]);
+        };
+
+        const stablizedCompareOppgave = (a: OppgaveMedIndeks, b: OppgaveMedIndeks) => {
+            const result = compareOppgave(a.oppgave, b.oppgave);
+            return result !== 0 ? result : a.indeks - b.indeks;
+        };
+
+        const sortedMedIndeks = oppgaveMedIndeks.sort(stablizedCompareOppgave);
+
+        settOppgaver({
+            status: oppgaver.status,
+            data: sortedMedIndeks.map(
+                (oppgaveMedIndeks: OppgaveMedIndeks) => oppgaveMedIndeks.oppgave
+            ),
+        });
+
+        settSideindeks(sortedMedIndeks.length > 0 ? 0 : -1);
+    };
 
     const hentDataForManuellJournalføring = (oppgaveId: string) => {
         axiosRequest<IDataForManuellJournalføring, void>({
@@ -45,7 +142,25 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
+    const hentSidetall = () =>
+        oppgaver.status === RessursStatus.SUKSESS
+            ? Math.floor((oppgaver.data.length - 1) / oppgaveSideLimit) + 1
+            : 0;
+
+    const nesteSide = () => sideindeks < hentSidetall() - 1 && settSideindeks(sideindeks + 1);
+
+    const forrigeSide = () => sideindeks > 0 && settSideindeks(sideindeks - 1);
+
+    const hentOppgaveSide = () =>
+        oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length > 0
+            ? oppgaver.data.slice(
+                  sideindeks * oppgaveSideLimit,
+                  Math.min((sideindeks + 1) * oppgaveSideLimit, oppgaver.data.length)
+              )
+            : [];
+
     const hentOppgaver = (
+        limit?: number,
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
@@ -59,21 +174,24 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             saksbehandler !== Object.keys(SaksbehandlerFilter)[1]
                 ? saksbehandler
                 : undefined;
-        hentOppgaverFraBackend(behandlingstema, oppgavetype, enhet, saksbehandlerForBackend).then(
-            (oppgaverRessurs: Ressurs<IOppgave[]>) => {
-                if (oppgaverRessurs.status === RessursStatus.SUKSESS) {
-                    const filteredOppgaver = filterOppgaver(
-                        oppgaverRessurs,
-                        prioritet,
-                        frist,
-                        registrertDato,
-                        saksbehandler
-                    );
-                    settOppgaver(filteredOppgaver);
-                    return filteredOppgaver;
-                }
-            }
-        );
+        hentOppgaverFraBackend(
+            limit,
+            behandlingstema,
+            oppgavetype,
+            enhet,
+            prioritet,
+            frist,
+            registrertDato,
+            saksbehandlerForBackend
+        ).then((oppgaverRessurs: Ressurs<IOppgave[]>) => {
+            settOppgaver(oppgaverRessurs);
+            settSideindeks(
+                oppgaverRessurs.status === RessursStatus.SUKSESS && oppgaverRessurs.data.length > 0
+                    ? 0
+                    : -1
+            );
+            return oppgaverRessurs;
+        });
     };
 
     const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
@@ -117,15 +235,23 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     const hentOppgaverFraBackend = (
+        limit?: number,
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
+        prioritet?: string,
+        frist?: string,
+        registrertDato?: string,
         saksbehandler?: string
     ): Promise<Ressurs<IOppgave[]>> => {
         interface LooseObject {
             [key: string]: string;
         }
         const searchParams: LooseObject = {};
+
+        if (limit !== undefined) {
+            searchParams['limit'] = limit.toString();
+        }
 
         if (behandlingstema !== undefined) {
             searchParams['behandlingstema'] = behandlingstema;
@@ -137,6 +263,18 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         if (enhet !== undefined) {
             searchParams['enhet'] = enhet;
+        }
+
+        if (prioritet !== undefined) {
+            searchParams['prioritet'] = prioritet;
+        }
+
+        if (registrertDato !== undefined) {
+            searchParams['registrertDato'] = registrertDato;
+        }
+
+        if (frist !== undefined) {
+            searchParams['frist'] = frist;
         }
 
         if (saksbehandler !== undefined) {
@@ -163,48 +301,17 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
-    const filterOppgaver = (
-        oppgaverRes: Ressurs<IOppgave[]>,
-        prioritet?: string,
-        frist?: string,
-        registrertDato?: string,
-        saksbehandler?: string
-    ): Ressurs<IOppgave[]> => {
-        if (oppgaverRes.status === RessursStatus.SUKSESS) {
-            return {
-                status: RessursStatus.SUKSESS,
-                data: oppgaverRes.data.filter(
-                    oppgave =>
-                        // if "prioritet" parameter is set, only accept the oppgave with the same prioritet value
-                        (!prioritet || oppgave.prioritet === prioritet.toString()) &&
-                        // if "frist" parameter is set, only accept the oppgave with the same frist value
-                        (!frist || oppgave.fristFerdigstillelse === frist) &&
-                        // if "registrertDato" parameter is set, only accept the oppgave with the same opprettetTidspunkt,
-                        // because the opprettetTidspunkt field of oppgave is in a complete time format like YYYY-MM-DD HH:MM:SS
-                        // we have to take the first part of the field by substring()
-                        (!registrertDato ||
-                            oppgave.opprettetTidspunkt.substring(0, 10) === registrertDato) &&
-                        // if "saksbehandler" parameter is set, we need to check the tilordnedRessurs of oppgave
-                        (!saksbehandler ||
-                            // if "saksbehandler" is set to 'Alle', all oppgave will be accepted
-                            saksbehandler === Object.keys(SaksbehandlerFilter)[0] ||
-                            // if "saksbehandler" is set to 'AlleUfordelte', all oppgave without tilordnedRessurs will be accepted
-                            (saksbehandler === Object.keys(SaksbehandlerFilter)[1] &&
-                                !oppgave.tilordnetRessurs) ||
-                            // if "saksbehandler" is set to other values, only oppgave with tilordnedRessurs === saksbehandler will be accepted
-                            saksbehandler === oppgave.tilordnetRessurs)
-                ),
-            };
-        } else {
-            return oppgaverRes;
-        }
-    };
-
     return {
         dataForManuellJournalføring,
         oppgaver,
         hentDataForManuellJournalføring,
         hentOppgaver,
+        sortOppgave,
+        sideindeks,
+        nesteSide,
+        forrigeSide,
+        hentSidetall,
+        hentOppgaveSide,
         fordelOppgave,
         tilbakestillFordelingPåOppgave,
     };

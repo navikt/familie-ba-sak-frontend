@@ -16,8 +16,8 @@ const OppgaveHeader: React.FunctionComponent = () => {
 
     return (
         <div>
-            <div className={'oppgaveHeader'}>
-                <Systemtittel className={'oppgaveHeader__tittel'}>Oppgavebenken</Systemtittel>
+            <div className={'oppgave-header'}>
+                <Systemtittel className={'oppgave-header__tittel'}>Oppgavebenken</Systemtittel>
                 <Input
                     label={'Opprett eller hent fagsak'}
                     value={personIdent}
@@ -25,7 +25,7 @@ const OppgaveHeader: React.FunctionComponent = () => {
                     onChange={event => {
                         settPersonIdent(event.target.value);
                     }}
-                    className={'oppgaveHeader__fnrInput'}
+                    className={'oppgave-header__fnrInput'}
                 />
                 <Knapp
                     type={'hoved'}
@@ -36,7 +36,7 @@ const OppgaveHeader: React.FunctionComponent = () => {
                         });
                     }}
                     children={'Fortsett'}
-                    className={'oppgaveHeader__opprettFagsakKnapp'}
+                    className={'oppgave-header__opprettFagsakKnapp'}
                     spinner={senderInn}
                 />
             </div>

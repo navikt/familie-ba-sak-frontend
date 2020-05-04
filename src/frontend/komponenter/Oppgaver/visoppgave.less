@@ -1,3 +1,5 @@
+@import (reference) '~nav-frontend-core/less/_variabler';
+
 .visoppgaver {
     padding: 1rem;
     &__hr{
@@ -34,7 +36,7 @@
 }
 
 table.tabell{
-    margin-top: 50px;
+    margin-top: 1rem;
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
@@ -43,9 +45,10 @@ table.tabell{
 @titleFontSize: 1.1rem;
 @titleMarginV: 30px;
 @headerHeight: ~"calc("@titleFontSize ~"+" @titleMarginV ~")";
-@oppgaveHeaderHeight: 5rem;
+@oppgaveHeaderHeight: ~"calc("50px ~"+" 2.1rem ~")";
+@oppgavelistHeaderHeight: 3rem;
 @filterFormHeight: 30rem;
-@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~"-" @oppgaveHeaderHeight ~" )";
+@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~"-" @oppgaveHeaderHeight ~"-" @oppgavelistHeaderHeight ~" )";
 
 table.tabell tbody{
     display:block;
@@ -68,7 +71,11 @@ table.tabell th, table.tabell td{
 }
 
 .oppgavetype {
-    min-width: 215px;
+    width: 215px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0;
 }
 
 .gjelder {
@@ -96,7 +103,11 @@ table.tabell th, table.tabell td{
 }
 
 .enhet {
-    min-width: 155px;
+    width: 123px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0;
 }
 
 .saksbehandler {
@@ -127,7 +138,7 @@ table.tabell th, table.tabell td{
     padding-right: 15px;
 }
 
-.oppgaveHeader{
+.oppgave-header{
     display: flex;
     flex-direction: row;
 
@@ -151,4 +162,28 @@ table.tabell th, table.tabell td{
 .feilmelding{
     margin-top: 10px;
     float: right;
+}
+
+.oppgavelist-header{
+    margin-top: 50px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+
+    &__tittel{
+        margin-top: 0;
+        margin-bottom: 0;
+        flex: 1 0 0px;
+    }
+
+    &__navigator{
+        color: @navMorkGra;
+        &__felt{
+            padding: 0 1rem 0 1rem;
+        }
+    }
+}
+
+.oppgavelist-info{
+    margin-top: 12px;
 }
