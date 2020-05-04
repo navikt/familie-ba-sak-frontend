@@ -5,7 +5,7 @@ import { vedtakHtml } from './mock/vedtak';
 import { hentMockFagsak, oppdaterBehandlingsstatusPaaFagsak } from './mock/fagsak';
 import { BehandlingStatus } from '../frontend/typer/behandling';
 import { TotrinnskontrollBeslutning } from '../frontend/typer/totrinnskontroll';
-import { Ressurs } from '../frontend/typer/ressurs';
+import { Ressurs, RessursStatus } from '../frontend/typer/ressurs';
 import { IFagsak } from '../frontend/typer/fagsak';
 
 const delayMs = 20;
@@ -122,8 +122,29 @@ app.post('/familie-ba-sak/api/fagsaker/:id/send-til-beslutter', (req: Request, r
     }
 });
 
-app.get('/familie-ba-sak/api/oppgave', (_, res) => {
-    setTimeout(() => res.send(lesMockFil(`oppgaver.json`)), 500);
+app.get('/familie-ba-sak/api/oppgave', (req, res) => {
+    const { limit } = req.query;
+    const lmt = parseInt(limit) || 0;
+    const mockRess = JSON.parse(lesMockFil(`oppgaver.json`));
+    setTimeout(
+        () =>
+            res.send({
+                ...mockRess,
+                data: mockRess.data.slice(0, Math.min(lmt, mockRess.data.length)),
+            }),
+        500
+    );
+});
+
+app.get('/familie-ba-sak/api/debug/error', (_, res) => {
+    setTimeout(
+        () =>
+            res.send({
+                status: RessursStatus.FEILET,
+                melding: 'API feil (debug)',
+            }),
+        500
+    );
 });
 
 export default app;

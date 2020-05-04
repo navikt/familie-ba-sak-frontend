@@ -73,6 +73,11 @@ enum Dokumentstatus {
 }
 
 export interface IOppgave {
+    [key: string]: string;
+    id: string;
+    tildeltEnhetsnr: string;
+    journalpostId: string;
+    saksreferanse: string;
     aktoerId: string;
     behandlingstema: string;
     beskrivelse: string;
