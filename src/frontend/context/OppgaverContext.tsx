@@ -206,6 +206,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 ) {
                     history.push(`/oppgaver/journalfør/${oppgave.id}`);
                 } else {
+                    // TODO: Ikke opprett fagsak når man plukker oppgave som vi ikke støtter
                     opprettEllerHentFagsak({
                         personIdent: null,
                         aktørId: oppgave.aktoerId,
