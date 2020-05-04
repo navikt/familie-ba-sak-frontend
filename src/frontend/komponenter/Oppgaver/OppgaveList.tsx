@@ -101,7 +101,7 @@ const OppgaveList: React.FunctionComponent = () => {
             )}
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length === 0 && (
                 <Alertstripe type="advarsel" className="oppgavelist-info">
-                    Ingen oppgave
+                    Ingen oppgaver
                 </Alertstripe>
             )}
             {oppgaver.status === RessursStatus.FEILET && (
