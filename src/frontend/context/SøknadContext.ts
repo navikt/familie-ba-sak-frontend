@@ -79,7 +79,6 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
             });
         }
 
-        console.log('søknadFeilmeldinger', søknadFeilmeldinger);
         settFeilmeldinger(søknadFeilmeldinger);
 
         return søknadFeilmeldinger.length === 0;

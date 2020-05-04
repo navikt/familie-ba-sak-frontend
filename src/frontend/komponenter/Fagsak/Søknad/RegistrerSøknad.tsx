@@ -30,7 +30,6 @@ const RegistrerSøknad: React.FunctionComponent = () => {
 
     const [senderInn, settSenderInn] = React.useState(false);
 
-    console.log(feilmeldinger);
     const nesteAction = () => {
         if (fagsak.status === RessursStatus.SUKSESS && feilmeldinger.length === 0) {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
