@@ -128,7 +128,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                             </table>
                         </div>
                         <div className={'saksoversikt__opphør'}>
-                            <Undertittel children={'Opphør utbetalinger for migrert fagsak'} />
+                            <Undertittel children={'Opphør utbetalinger for fagsak'} />
                             <Input
                                 bredde={'S'}
                                 label={'Fra og med-dato'}
