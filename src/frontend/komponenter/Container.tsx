@@ -21,15 +21,15 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
 
     return (
         <Router>
-            <FagsakProvider>
-                <UIModalWrapper />
-                {autentisert ? (
-                    <>
-                        <div className={'container'} role="main">
-                            <HeaderMedSøk
-                                brukerNavn={innloggetSaksbehandler?.displayName}
-                                brukerEnhet={innloggetSaksbehandler?.enhet}
-                            />
+            <UIModalWrapper />
+            {autentisert ? (
+                <>
+                    <div className={'container'} role="main">
+                        <HeaderMedSøk
+                            brukerNavn={innloggetSaksbehandler?.displayName}
+                            brukerEnhet={innloggetSaksbehandler?.enhet}
+                        />
+                        <FagsakProvider>
                             <Switch>
                                 <Route
                                     exact={true}
@@ -70,12 +70,12 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                     />
                                 </OppgaverProvider>
                             </Switch>
-                        </div>
-                    </>
-                ) : (
-                    <UgyldigSesjon />
-                )}
-            </FagsakProvider>
+                        </FagsakProvider>
+                    </div>
+                </>
+            ) : (
+                <UgyldigSesjon />
+            )}
         </Router>
     );
 };

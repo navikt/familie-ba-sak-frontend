@@ -22,7 +22,8 @@ const RegistrerSøknad: React.FunctionComponent = () => {
     const { fagsak, settFagsak, erLesevisning } = useFagsakRessurser();
     const history = useHistory();
 
-    const { feilmeldinger, søknad, settSøknad, erSøknadGyldig } = useSøknad();
+    const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();
+    const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
 
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
@@ -30,7 +31,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
     const [senderInn, settSenderInn] = React.useState(false);
 
     const nesteAction = () => {
-        if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig()) {
+        if (fagsak.status === RessursStatus.SUKSESS && feilmeldinger.length === 0) {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
             settSenderInn(true);
 
@@ -50,6 +51,8 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                     settFeilmelding('Registrering av søknaden feilet');
                 }
             });
+        } else {
+            settVisFeilmeldinger(true);
         }
     };
 
@@ -70,7 +73,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                 }).then((response: Ressurs<ISøknadDTO>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settSøknadErLastetFraBackend(true);
-                        settSøknad({
+                        settSøknadOgValider({
                             ...response.data,
                             barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
                                 (barnMedOpplysninger: IBarnMedOpplysninger) => ({
@@ -115,15 +118,15 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                     </>
                 )}
 
-                <SøknadType settSøknad={settSøknad} søknad={søknad} />
+                <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
-                <SøkerOppholdINorge settSøknad={settSøknad} søknad={søknad} />
+                <SøkerOppholdINorge settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
-                <AnnenPart settSøknad={settSøknad} søknad={søknad} />
+                <AnnenPart settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
                 <Barna søknad={søknad} />
 
-                {feilmeldinger.length > 0 && (
+                {feilmeldinger.length > 0 && visFeilmeldinger && (
                     <Feiloppsummering
                         tittel={'For å gå videre må du rette opp følgende:'}
                         feil={feilmeldinger}

@@ -9,11 +9,11 @@ import classNames from 'classnames';
 import FamilieSelect from '../../Felleskomponenter/InputMedLesevisning/FamilieSelect';
 
 interface IProps {
-    settSøknad: (søknad: ISøknadDTO) => void;
+    settSøknadOgValider: (søknad: ISøknadDTO) => void;
     søknad: ISøknadDTO;
 }
 
-const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) => {
+const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     return (
         <PanelBase className={classNames('søknad__panel', 'panel--gra')}>
             <Undertittel children={'1 Hva har bruker søkt om?'} />
@@ -21,14 +21,14 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
             <Sakstype
                 kategori={søknad.kategori}
                 kategoriOnChange={(behandlingKategori: BehandlingKategori): void =>
-                    settSøknad({
+                    settSøknadOgValider({
                         ...søknad,
                         kategori: behandlingKategori,
                     })
                 }
                 underkategori={søknad.underkategori}
                 underkategoriOnChange={(behandlingUnderkategori: BehandlingUnderkategori): void =>
-                    settSøknad({
+                    settSøknadOgValider({
                         ...søknad,
                         underkategori: behandlingUnderkategori,
                     })
@@ -44,12 +44,12 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknad, søknad }) 
                 value={søknad.typeSøker}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                     if ((event.target.value as TypeSøker) === søknad.typeSøker) {
-                        settSøknad({
+                        settSøknadOgValider({
                             ...søknad,
                             typeSøker: TypeSøker.ORDINÆR,
                         });
                     } else {
-                        settSøknad({
+                        settSøknadOgValider({
                             ...søknad,
                             typeSøker: event.target.value as TypeSøker,
                         });

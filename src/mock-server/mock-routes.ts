@@ -147,4 +147,14 @@ app.get('/familie-ba-sak/api/debug/error', (_, res) => {
     );
 });
 
+app.post('/familie-ba-sak/api/oppgave/:id/fordel', (req: Request, res: Response) => {
+    const { id } = req.params;
+    setTimeout(() => res.send({ status: 'SUKSESS', data: id }), delayMs);
+});
+
+app.post('/familie-ba-sak/api/oppgave/:id/tilbakestill', (req: Request, res: Response) => {
+    const { id } = req.params;
+    setTimeout(() => res.send({ status: 'SUKSESS', data: id }), delayMs);
+});
+
 export default app;
