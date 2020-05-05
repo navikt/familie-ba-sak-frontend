@@ -193,7 +193,7 @@ export const logiskeVedleggTyper: INøkkelPar = {
 export interface IRestOppdaterJournalpost {
     avsender: INavnOgIdent;
     bruker: INavnOgIdent;
-    datoMottatt: string;
+    datoMottatt?: string;
     dokumentTittel: string;
     dokumentInfoId: string;
     eksisterendeLogiskeVedlegg: ILogiskVedlegg[];
