@@ -1,9 +1,44 @@
 @import (reference) '~nav-frontend-core/less/_variabler';
 
+@oppgavePageHeight: ~"calc("100vh ~"-" 30px ~"-" 1.1rem~")";
+@oppgavePageWidth: ~"calc("100vw ~"-" 1rem~")";
+
 .visoppgaver {
-    padding: 1rem;
+    margin-left: 1rem;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: @oppgavePageWidth;
+    height: @oppgavePageHeight;
+    display: block;
     &__hr{
         margin-top: 2rem;
+    }
+}
+
+.oppgave-header{
+    display: flex;
+    flex-direction: row;
+
+    &__tittel{
+        margin-top:auto;
+        margin-bottom: auto;
+        flex: 1 0 0;
+    }
+    
+    &__fnrInput{
+        padding-top: 1rem;
+        width: 13rem;
+    }
+
+    &__opprettFagsakKnapp{
+        margin-left: 1rem;
+        margin-top: auto;
+        align-self:flex-start;
+    }
+
+    &__feilmelding{
+        margin-top: 1rem;
+        float: right;
     }
 }
 
@@ -12,7 +47,7 @@
     flex-direction: column;
 
     &__content {
-        margin-top: 2rem;
+        margin-top: 1.2rem;
     }
 
     &__filtre {
@@ -23,153 +58,121 @@
     }
 
     &__button {
-        width: 10rem;
-    }
-    
-    &__tilbakestill {
-        margin-left: 2rem;
+        min-width: 10rem;
+        margin-top: 1.5rem;
+        margin-right: 2rem;
     }
 }
+
+@oppgavelistWidth: ~"calc(" ~"@{oppgavePageWidth} - " 1.2rem~")";
+@tabellRegDatoWidth: 10rem;
+@tabellOppgavetypeWidth: 10rem;
+@tabellGjelderWidth: 8rem;
+@tabellFristWidth: 10rem;
+@tabellPrioritetWidth: 8rem;
+@tabellBrukerWidth: 10rem;
+@tabellEnhetWidth: 10rem;
+@tabellSaksbehandlerWidth: 10rem;
+@tabellHandlingerWidth: 10rem;
+
+@tabellBeskrivelseWidthMin: 18rem;
+@tabellBeskrivelseWidthCalc: ~"calc(" ~"@{oppgavelistWidth}" ~"-" 86rem ~")";
+@tabellBeskrivelseWidth: ~"max(@{tabellBeskrivelseWidthMin}, @{tabellBeskrivelseWidthCalc})";
+
 .oppgavelist{
-    overflow-x: auto;
-    overflow-y: hidden;
-}
+    width: @oppgavelistWidth;
+    &__header{
+        margin-top: 2.4rem;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
 
-table.tabell{
-    margin-top: 1rem;
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
+        &__tittel{
+            margin-top: 0;
+            margin-bottom: 0;
+            flex: 1 0 0;
+        }
+    
+        &__navigator{
+            color: @navMorkGra;
+            padding-right: 2rem;
+            &__felt{
+                padding: 0 1rem 0 1rem;
+            }
+        }
+    }
 
-@titleFontSize: 1.1rem;
-@titleMarginV: 30px;
-@headerHeight: ~"calc("@titleFontSize ~"+" @titleMarginV ~")";
-@oppgaveHeaderHeight: ~"calc("50px ~"+" 2.1rem ~")";
-@oppgavelistHeaderHeight: 3rem;
-@filterFormHeight: 30rem;
-@tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~"-" @oppgaveHeaderHeight ~"-" @oppgavelistHeaderHeight ~" )";
+    &__info{
+        margin-top: 1rem;
+    }
 
-table.tabell tbody{
-    display:block;
-    min-width: max-content;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: @tableBodyHeight;
-}
+    &__feilmelding{
+        margin-top: 0.8rem;
+        float: right;
+    }
 
-table.tabell thead tr{
-    display:block;
+    &__tabell{
+        &__regdato {
+            width: @tabellRegDatoWidth;
+        }
+        
+        &__oppgavetype {
+            width: @tabellOppgavetypeWidth;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0;
+        }
+        
+        &__gjelder {
+            width: @tabellGjelderWidth;
+        }
+        
+        &__frist {
+            width: @tabellFristWidth;
+        }
+        
+        &__prioritet {
+            width: @tabellPrioritetWidth;
+        }
+        
+        &__beskrivelse {
+            width: @tabellBeskrivelseWidth;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0;
+        }
+        
+        &__bruker {
+            width: @tabellBrukerWidth;
+        }
+        
+        &__enhet {
+            width: @tabellEnhetWidth;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0;
+        }
+        
+        &__saksbehandler {
+            width: @tabellSaksbehandlerWidth;
+        }
+        
+        &__handlinger {
+            width: @tabellHandlingerWidth;
+        }
+        
+        &__handlinger > a {
+            color: #0067c5;
+            text-decoration: none;
+            padding-right: 1rem;
+        }        
+    }
 }
 
 table.tabell th, table.tabell td{
     text-align: left;
-}
-
-.regdato {
-    min-width: 135px;
-}
-
-.oppgavetype {
-    width: 215px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    padding: 0;
-}
-
-.gjelder {
-    min-width: 150px;
-}
-
-.frist {
-    min-width: 90px;
-}
-
-.prioritet {
-    min-width: 120px;
-}
-
-.beskrivelse {
-    width: 318px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    padding: 0;
-}
-
-.bruker {
-    min-width: 135px;
-}
-
-.enhet {
-    width: 123px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    padding: 0;
-}
-
-.saksbehandler {
-    min-width: 225px;
-}
-
-.handlinger {
-    min-width: 275px;
-}
-
-.handlinger > a {
-    color: #0067c5;
-    text-decoration: none;
-    padding-right: 15px;
-}
-
-.oppgave-header{
-    display: flex;
-    flex-direction: row;
-
-    &__tittel{
-        margin-top:auto;
-        margin-bottom: auto;
-        flex: 1 0 0px;
-    }
-    
-    &__fnrInput{
-        width: 200px;
-    }
-
-    &__opprettFagsakKnapp{
-        margin-left: 1rem;
-        margin-top: auto;
-        align-self:flex-start;
-    }
-}
-
-.feilmelding{
-    margin-top: 10px;
-    float: right;
-}
-
-.oppgavelist-header{
-    margin-top: 50px;
-    margin-bottom: 8px;
-    display: flex;
-    flex-direction: row;
-
-    &__tittel{
-        margin-top: 0;
-        margin-bottom: 0;
-        flex: 1 0 0px;
-    }
-
-    &__navigator{
-        color: @navMorkGra;
-        &__felt{
-            padding: 0 1rem 0 1rem;
-        }
-    }
-}
-
-.oppgavelist-info{
-    margin-top: 12px;
 }

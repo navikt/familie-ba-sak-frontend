@@ -61,26 +61,26 @@ const OppgaveList: React.FunctionComponent = () => {
     }, [oppgaver.status]);
 
     return (
-        <div>
-            {oppgaver.status === RessursStatus.SUKSESS && sideindeks >= 0 && (
-                <div className={'oppgavelist-header'}>
-                    <Systemtittel className={'oppgavelist-header__tittel'}>
-                        Oppgaveliste - visning
-                    </Systemtittel>
-                    <div className={'oppgavelist-header__navigator'}>
+        <div className={'oppgavelist'}>
+            <div className={'oppgavelist__header'}>
+                <Systemtittel className={'oppgavelist__header__tittel'}>
+                    Oppgaveliste - visning
+                </Systemtittel>
+                {oppgaver.status === RessursStatus.SUKSESS && sideindeks >= 0 && (
+                    <div className={'oppgavelist__header__navigator'}>
                         |
-                        <span className={'oppgavelist-header__navigator__felt'}>
+                        <span className={'oppgavelist__header__navigator__felt'}>
                             Viser {sideindeks * oppgaveSideLimit + 1} -{' '}
                             {sideindeks * oppgaveSideLimit + hentOppgaveSide().length} av{' '}
                             {oppgaver.status === RessursStatus.SUKSESS ? oppgaver.data.length : 0}{' '}
                             oppgaver
                         </span>
                         |
-                        <span className={'oppgavelist-header__navigator__felt'}>
+                        <span className={'oppgavelist__header__navigator__felt'}>
                             Side {sideindeks + 1} av {hentSidetall()}
                         </span>
                         |
-                        <span className={'oppgavelist-header__navigator__felt'}>
+                        <span className={'oppgavelist__header__navigator__felt'}>
                             {sideindeks <= 0 ? (
                                 'Forrige'
                             ) : (
@@ -97,94 +97,72 @@ const OppgaveList: React.FunctionComponent = () => {
                             )}
                         </span>
                     </div>
-                </div>
-            )}
-            {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length === 0 && (
-                <Alertstripe type="advarsel" className="oppgavelist-info">
-                    Ingen oppgaver
-                </Alertstripe>
-            )}
-            {oppgaver.status === RessursStatus.FEILET && (
-                <Alertstripe type="feil" className="oppgavelist-info">
-                    {oppgaver.melding}
-                </Alertstripe>
-            )}
-            {oppgaver.status === RessursStatus.HENTER && (
-                <Alertstripe type="info" className="oppgavelist-info">
-                    Henter...
-                </Alertstripe>
-            )}
-            {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length > 0 && (
-                <div className="oppgavelist">
-                    <table className="tabell">
-                        <thead className="tabell__head">
-                            <tr className="tabell__head__tr">
-                                <th className={'regdato'}>
-                                    <Lenke
-                                        href="#"
-                                        onClick={() => onColumnSort('opprettetTidspunkt')}
-                                    >
-                                        Reg. dato
+                )}
+            </div>
+            <div>
+                <table className="tabell">
+                    <thead className="tabell__head">
+                        <tr className="tabell__head__tr">
+                            <th className={'oppgavelist__tabell__regdato'}>
+                                <Lenke href="#" onClick={() => onColumnSort('opprettetTidspunkt')}>
+                                    Reg. dato
+                                </Lenke>
+                            </th>
+                            <th>
+                                <div className={'oppgavelist__tabell__oppgavetype'}>
+                                    <Lenke href="#" onClick={() => onColumnSort('oppgavetype')}>
+                                        Oppgavetype
                                     </Lenke>
-                                </th>
-                                <th>
-                                    <div className={'oppgavetype'}>
-                                        <Lenke href="#" onClick={() => onColumnSort('oppgavetype')}>
-                                            Oppgavetype
-                                        </Lenke>
-                                    </div>
-                                </th>
-                                <th className={'gjelder'}>
-                                    <Lenke href="#" onClick={() => onColumnSort('behandlingstema')}>
-                                        Gjelder
+                                </div>
+                            </th>
+                            <th className={'oppgavelist__tabell__gjelder'}>
+                                <Lenke href="#" onClick={() => onColumnSort('behandlingstema')}>
+                                    Gjelder
+                                </Lenke>
+                            </th>
+                            <th className={'oppgavelist__tabell__frist'}>
+                                <Lenke
+                                    href="#"
+                                    onClick={() => onColumnSort('fristFerdigstillelse')}
+                                >
+                                    Frist
+                                </Lenke>
+                            </th>
+                            <th className={'oppgavelist__tabell__prioritet'}>
+                                <Lenke href="#" onClick={() => onColumnSort('prioritet')}>
+                                    Prioritet
+                                </Lenke>
+                            </th>
+                            <th className={'oppgavelist__tabell__bruker'}>Bruker</th>
+                            <th>
+                                <div className={'oppgavelist__tabell__enhet'}>
+                                    <Lenke href="#" onClick={() => onColumnSort('tildeltEnhetsnr')}>
+                                        Enhet
                                     </Lenke>
-                                </th>
-                                <th className={'frist'}>
-                                    <Lenke
-                                        href="#"
-                                        onClick={() => onColumnSort('fristFerdigstillelse')}
-                                    >
-                                        Frist
-                                    </Lenke>
-                                </th>
-                                <th className={'prioritet'}>
-                                    <Lenke href="#" onClick={() => onColumnSort('prioritet')}>
-                                        Prioritet
-                                    </Lenke>
-                                </th>
-                                <th>
-                                    <div className={'beskrivelse'}>Beskrivelse</div>
-                                </th>
-                                <th className={'bruker'}>Bruker</th>
-                                <th>
-                                    <div className={'enhet'}>
-                                        <Lenke
-                                            href="#"
-                                            onClick={() => onColumnSort('tildeltEnhetsnr')}
-                                        >
-                                            Enhet
-                                        </Lenke>
-                                    </div>
-                                </th>
-                                <th className={'saksbehandler'}>
-                                    <Lenke
-                                        href="#"
-                                        onClick={() => onColumnSort('tilordnetRessurs')}
-                                    >
-                                        Saksbehandler
-                                    </Lenke>
-                                </th>
-                                <th className={'handlinger'}>Handlinger</th>
-                            </tr>
-                        </thead>
+                                </div>
+                            </th>
+                            <th className={'oppgavelist__tabell__saksbehandler'}>
+                                <Lenke href="#" onClick={() => onColumnSort('tilordnetRessurs')}>
+                                    Saksbehandler
+                                </Lenke>
+                            </th>
+                            <th className={'oppgavelist__tabell__handlinger'}>Handlinger</th>
+                            <th>
+                                <div className={'oppgavelist__tabell__beskrivelse'}>
+                                    Beskrivelse
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length > 0 && (
                         <tbody className="tabell__body">
                             {hentOppgaveSide().map((oppg: IOppgave, index) => (
                                 <tr key={index}>
-                                    <td className={'regdato'}>
+                                    <td className={'oppgavelist__tabell__regdato'}>
                                         {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
                                     </td>
                                     <td>
-                                        <div className={'oppgavetype'}>
+                                        <div className={'oppgavelist__tabell__oppgavetype'}>
                                             {
                                                 OppgavetypeFilter[
                                                     oppg.oppgavetype as keyof typeof OppgavetypeFilter
@@ -192,38 +170,37 @@ const OppgaveList: React.FunctionComponent = () => {
                                             }
                                         </div>
                                     </td>
-                                    <td className={'gjelder'}>
+                                    <td className={'oppgavelist__tabell__gjelder'}>
                                         {oppg.behandlingstema
                                             ? GjelderFilter[
                                                   oppg.behandlingstema as keyof typeof GjelderFilter
                                               ]
                                             : 'Ikke satt'}
                                     </td>
-                                    <td className={'frist'}>
+                                    <td className={'oppgavelist__tabell__frist'}>
                                         {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
                                     </td>
-                                    <td className={'prioritet'}>
+                                    <td className={'oppgavelist__tabell__prioritet'}>
                                         {
                                             PrioritetFilter[
                                                 oppg.prioritet as keyof typeof PrioritetFilter
                                             ]
                                         }
                                     </td>
-                                    <td>
-                                        <div className={'beskrivelse'}>{oppg.beskrivelse}</div>
+                                    <td className={'oppgavelist__tabell__bruker'}>
+                                        {oppg.aktoerId}
                                     </td>
-                                    <td className={'bruker'}>{oppg.aktoerId}</td>
                                     <td>
-                                        <div className={'enhet'}>
+                                        <div className={'oppgavelist__tabell__enhet'}>
                                             {getEnheter(oppg.tildeltEnhetsnr)}
                                         </div>
                                     </td>
-                                    <td className={'saksbehandler'}>
+                                    <td className={'oppgavelist__tabell__saksbehandler'}>
                                         {oppg.tilordnetRessurs
                                             ? oppg.tilordnetRessurs
                                             : 'Ikke tildelt'}
                                     </td>
-                                    <td className={'handlinger'}>
+                                    <td className={'oppgavelist__tabell__handlinger'}>
                                         {OppgavetypeFilter[
                                             oppg.oppgavetype as keyof typeof OppgavetypeFilter
                                         ] === OppgavetypeFilter.JFR && (
@@ -232,11 +209,31 @@ const OppgaveList: React.FunctionComponent = () => {
                                             </a>
                                         )}
                                     </td>
+                                    <td>
+                                        <div className={'oppgavelist__tabell__beskrivelse'}>
+                                            {oppg.beskrivelse}
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
-                    </table>
-                </div>
+                    )}
+                </table>
+            </div>
+            {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length === 0 && (
+                <Alertstripe type="advarsel" className="oppgavelist__info">
+                    Ingen oppgaver
+                </Alertstripe>
+            )}
+            {oppgaver.status === RessursStatus.FEILET && (
+                <Alertstripe type="feil" className="oppgavelist__info">
+                    {oppgaver.melding}
+                </Alertstripe>
+            )}
+            {oppgaver.status === RessursStatus.HENTER && (
+                <Alertstripe type="info" className="oppgavelist__info">
+                    Henter...
+                </Alertstripe>
             )}
         </div>
     );
