@@ -10,7 +10,6 @@ import { useHistory } from 'react-router';
 import {
     behandlingsstatuser,
     BehandlingStatus,
-    Behandlingstype,
     behandlingstyper,
     IBehandling,
     kategorier,
@@ -128,38 +127,36 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 </tbody>
                             </table>
                         </div>
-                        {gjeldendeBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD && (
-                            <div className={'saksoversikt__opphør'}>
-                                <Undertittel children={'Opphør utbetalinger for migrert fagsak'} />
-                                <Input
-                                    bredde={'S'}
-                                    label={'Fra og med-dato'}
-                                    placeholder={'MM.YY'}
-                                    value={opphørsdato}
-                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                        setOpphørsdato(event.target.value)
-                                    }
-                                />
-                                <Knapp
-                                    mini={true}
-                                    onClick={() => {
-                                        // eslint-disable-next-line
-                                        axiosRequest<any, any>({
-                                            method: 'POST',
-                                            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,
-                                            data: {
-                                                opphørsdato: moment(
-                                                    opphørsdato,
-                                                    datoformat.MÅNED,
-                                                    true
-                                                ).format('YYYY-MM-DD'),
-                                            },
-                                        });
-                                    }}
-                                    children={'Opphør utbetaling'}
-                                />
-                            </div>
-                        )}
+                        <div className={'saksoversikt__opphør'}>
+                            <Undertittel children={'Opphør utbetalinger for migrert fagsak'} />
+                            <Input
+                                bredde={'S'}
+                                label={'Fra og med-dato'}
+                                placeholder={'MM.YY'}
+                                value={opphørsdato}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                                    setOpphørsdato(event.target.value)
+                                }
+                            />
+                            <Knapp
+                                mini={true}
+                                onClick={() => {
+                                    // eslint-disable-next-line
+                                    axiosRequest<any, any>({
+                                        method: 'POST',
+                                        url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,
+                                        data: {
+                                            opphørsdato: moment(
+                                                opphørsdato,
+                                                datoformat.MÅNED,
+                                                true
+                                            ).format('YYYY-MM-DD'),
+                                        },
+                                    });
+                                }}
+                                children={'Opphør utbetaling'}
+                            />
+                        </div>
                     </div>
                 )}
 
