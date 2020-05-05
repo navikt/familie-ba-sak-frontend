@@ -23,13 +23,9 @@ import {
     Feiloppsummering,
     Select,
 } from 'nav-frontend-skjema';
-import Datovelger from '../Felleskomponenter/Datovelger/Datovelger';
-import { datoformat } from '../../utils/formatter';
-import moment from 'moment';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import { Undertittel } from 'nav-frontend-typografi';
 import { ISaksbehandler } from '../../typer/saksbehandler';
-import { ISODateString } from 'nav-datovelger';
 import Lukknapp from 'nav-frontend-lukknapp';
 import { Knapp } from 'nav-frontend-knapper';
 import { randomUUID } from '../../utils/commons';
@@ -50,9 +46,6 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
     );
     const [logiskeVedlegg, settLogiskeVedlegg] = useState<ILogiskVedlegg[]>([]);
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
-    const [datoMottatt, settDatoMottatt] = useState<string>(
-        moment(undefined).format(datoformat.ISO_DAG)
-    );
     const [senderInn, settSenderInn] = useState(false);
     const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
 
@@ -79,12 +72,6 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
         }
 
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
-            settDatoMottatt(
-                moment(dataForManuellJournalføring.data.journalpost.datoMottatt).format(
-                    datoformat.ISO_DAG
-                )
-            );
-
             if (dataForManuellJournalføring.data.journalpost.dokumenter) {
                 settLogiskeVedlegg(
                     dataForManuellJournalføring.data.journalpost.dokumenter[0].logiskeVedlegg ?? []
@@ -100,13 +87,6 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
             accFeilmeldinger.push({
                 feilmelding: 'Du må knytte bruker til journalposten',
                 skjemaelementId: 'hent-person',
-            });
-        }
-
-        if (logiskeVedlegg.length === 0) {
-            accFeilmeldinger.push({
-                feilmelding: 'Du må sette annet innhold for dokumentet',
-                skjemaelementId: 'manuell-journalføring-annet-innhold',
             });
         }
 
@@ -155,7 +135,8 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                                         navn: person.data.navn,
                                         id: person.data.personIdent,
                                     },
-                                    datoMottatt,
+                                    datoMottatt:
+                                        dataForManuellJournalføring.data.journalpost.datoMottatt,
                                     dokumentTittel: dokumenttyper[dokumenttype].navn,
                                     dokumentInfoId: dokumenter
                                         ? dokumenter[0].dokumentInfoId ?? ''
@@ -219,24 +200,13 @@ const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => 
                     </Select>
 
                     <br />
-                    <Datovelger
-                        id={'manuell-journalføring-mottatt-dato'}
-                        label={'Mottatt dato'}
-                        valgtDato={datoMottatt}
-                        onChange={(dato?: ISODateString) => {
-                            if (dato) {
-                                settDatoMottatt(dato);
-                            }
-                        }}
-                    />
-
-                    <br />
                     <PanelBase className={'panel--gra'}>
                         <Undertittel children={'Annet innhold'} />
                         {logiskeVedlegg.map((logiskVedlegg: ILogiskVedlegg, index: number) => {
                             return (
                                 <div key={index} className={'journalføring__logisk-vedlegg'}>
                                     <Input
+                                        className={'journalføring__logisk-vedlegg--input'}
                                         label={'Tittel'}
                                         value={logiskVedlegg.tittel}
                                         bredde={'XXL'}
