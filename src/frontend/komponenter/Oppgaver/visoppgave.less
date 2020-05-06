@@ -87,16 +87,18 @@
         display: flex;
         flex-direction: row;
         width: 100%;
+        position: relative;
 
         &__tittel{
             margin-top: 0;
             margin-bottom: 0;
-            flex: 1 0 0;
         }
     
         &__navigator{
             color: @navMorkGra;
-            padding-right: 2rem;
+            padding-left: 2rem;
+            position: absolute;
+            bottom: 0;
             &__felt{
                 padding: 0 1rem 0 1rem;
             }

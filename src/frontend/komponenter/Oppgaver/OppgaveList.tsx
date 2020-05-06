@@ -7,12 +7,13 @@ import {
     IOppgave,
 } from '../../typer/oppgave';
 import { RessursStatus } from '../../typer/ressurs';
-import { useOppgaver, oppgaveSideLimit } from '../../context/OppgaverContext';
+import { useOppgaver } from '../../context/OppgaverContext';
 import { Systemtittel } from 'nav-frontend-typografi';
 import Lenke from 'nav-frontend-lenker';
 import Alertstripe from 'nav-frontend-alertstriper';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ISaksbehandler } from '../../typer/saksbehandler';
+import OppgavelisteNavigator from './OppgavelisteNavigator';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -28,15 +29,7 @@ interface IOppgaveListProps {
 }
 
 const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaksbehandler }) => {
-    const {
-        oppgaver,
-        sortOppgave,
-        hentOppgaveSide,
-        sideindeks,
-        forrigeSide,
-        nesteSide,
-        hentSidetall,
-    } = useOppgaver();
+    const { oppgaver, sortOppgave, hentOppgaveSide } = useOppgaver();
 
     interface IFeltOrder {
         [key: string]: boolean;
@@ -72,38 +65,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                 <Systemtittel className={'oppgavelist__header__tittel'}>
                     Oppgaveliste - visning
                 </Systemtittel>
-                {oppgaver.status === RessursStatus.SUKSESS && sideindeks >= 0 && (
-                    <div className={'oppgavelist__header__navigator'}>
-                        |
-                        <span className={'oppgavelist__header__navigator__felt'}>
-                            Viser {sideindeks * oppgaveSideLimit + 1} -{' '}
-                            {sideindeks * oppgaveSideLimit + hentOppgaveSide().length} av{' '}
-                            {oppgaver.status === RessursStatus.SUKSESS ? oppgaver.data.length : 0}{' '}
-                            oppgaver
-                        </span>
-                        |
-                        <span className={'oppgavelist__header__navigator__felt'}>
-                            Side {sideindeks + 1} av {hentSidetall()}
-                        </span>
-                        |
-                        <span className={'oppgavelist__header__navigator__felt'}>
-                            {sideindeks <= 0 ? (
-                                'Forrige'
-                            ) : (
-                                <Lenke href="#" onClick={() => forrigeSide()}>
-                                    Forrige
-                                </Lenke>
-                            )}{' '}
-                            {sideindeks >= hentSidetall() - 1 ? (
-                                'Neste'
-                            ) : (
-                                <Lenke href="#" onClick={() => nesteSide()}>
-                                    Neste
-                                </Lenke>
-                            )}
-                        </span>
-                    </div>
-                )}
+                <OppgavelisteNavigator />
             </div>
             <div>
                 <table className="tabell">
