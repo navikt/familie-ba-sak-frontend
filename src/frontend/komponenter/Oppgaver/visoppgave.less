@@ -30,17 +30,6 @@
         margin-left: 2rem;
     }
 }
-.oppgavelist{
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-table.tabell{
-    margin-top: 1rem;
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
 
 @titleFontSize: 1.1rem;
 @titleMarginV: 30px;
@@ -50,20 +39,33 @@ table.tabell{
 @filterFormHeight: 30rem;
 @tableBodyHeight: ~"calc("100vh ~"-" @headerHeight ~"-" @filterFormHeight ~"-" @oppgaveHeaderHeight ~"-" @oppgavelistHeaderHeight ~" )";
 
-table.tabell tbody{
-    display:block;
-    min-width: max-content;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: @tableBodyHeight;
-}
 
-table.tabell thead tr{
-    display:block;
-}
+.oppgavelist{
+    overflow-x: auto;
+    overflow-y: hidden;
 
-table.tabell th, table.tabell td{
-    text-align: left;
+    table.tabell{
+        margin-top: 1rem;
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+    
+    table.tabell tbody{
+        display:block;
+        min-width: max-content;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: @tableBodyHeight;
+    }
+    
+    table.tabell thead tr{
+        display:block;
+    }
+    
+    table.tabell th, table.tabell td{
+        text-align: left;
+    }
 }
 
 .regdato {

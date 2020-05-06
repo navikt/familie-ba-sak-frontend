@@ -1,4 +1,9 @@
-import { BehandlingSteg, IBehandling, Behandlingstype } from '../../../typer/behandling';
+import {
+    BehandlingSteg,
+    IBehandling,
+    Behandlingstype,
+    BehandlingResultat,
+} from '../../../typer/behandling';
 
 export interface ISide {
     id: string;
@@ -50,6 +55,8 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
 
 export const visSide = (side: ISide, aktivBehandling?: IBehandling) => {
     if (!aktivBehandling) {
+        return !side.steg && side.steg !== 0;
+    } else if (aktivBehandling.samletResultat === BehandlingResultat.OPPHØRT) {
         return !side.steg && side.steg !== 0;
     } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;

@@ -141,8 +141,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                             <Knapp
                                 mini={true}
                                 onClick={() => {
-                                    // eslint-disable-next-line
-                                    axiosRequest<any, any>({
+                                    axiosRequest<void, { opphørsdato: string }>({
                                         method: 'POST',
                                         url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,
                                         data: {
