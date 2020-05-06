@@ -65,17 +65,17 @@
 }
 
 @oppgavelistWidth: ~"calc(" ~"@{oppgavePageWidth} - " 1.2rem~")";
-@tabellRegDatoWidth: 10rem;
+@tabellRegDatoWidth: 6rem;
 @tabellOppgavetypeWidth: 10rem;
-@tabellGjelderWidth: 8rem;
-@tabellFristWidth: 10rem;
-@tabellPrioritetWidth: 8rem;
-@tabellBrukerWidth: 12rem;
-@tabellEnhetWidth: 10rem;
-@tabellSaksbehandlerWidth: 10rem;
-@tabellHandlingerWidth: 10rem;
+@tabellGjelderWidth: 6rem;
+@tabellFristWidth: 6rem;
+@tabellPrioritetWidth: 5rem;
+@tabellBrukerWidth: 7rem;
+@tabellEnhetWidth: 6rem;
+@tabellSaksbehandlerWidth: 12rem;
+@tabellHandlingerWidth: 8rem;
 
-@tabellBeskrivelseWidthMin: 18rem;
+@tabellBeskrivelseWidthMin: 19rem;
 @tabellBeskrivelseWidthCalc: ~"calc(" ~"@{oppgavelistWidth}" ~"-" 88rem ~")";
 @tabellBeskrivelseWidth: ~"max(@{tabellBeskrivelseWidthMin}, @{tabellBeskrivelseWidthCalc})";
 
@@ -163,6 +163,19 @@
         
         &__saksbehandler {
             width: @tabellSaksbehandlerWidth;
+            .kolonne {
+                display: flex;
+        
+                *:nth-child(1) {
+                    width: 5rem;
+                    margin-right: 2.5rem;
+                    text-align: left;
+                }
+                *:nth-child(2) {
+                    color: #0067c5;
+                    text-align: left;
+                }
+            }
         }
         
         &__handlinger {

@@ -109,10 +109,15 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                 <table className="tabell">
                     <thead className="tabell__head">
                         <tr className="tabell__head__tr">
-                            <th className={'oppgavelist__tabell__regdato'}>
-                                <Lenke href="#" onClick={() => onColumnSort('opprettetTidspunkt')}>
-                                    Reg. dato
-                                </Lenke>
+                            <th>
+                                <div className={'oppgavelist__tabell__regdato'}>
+                                    <Lenke
+                                        href="#"
+                                        onClick={() => onColumnSort('opprettetTidspunkt')}
+                                    >
+                                        Reg. dato
+                                    </Lenke>
+                                </div>
                             </th>
                             <th>
                                 <div className={'oppgavelist__tabell__oppgavetype'}>
@@ -121,25 +126,33 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                     </Lenke>
                                 </div>
                             </th>
-                            <th className={'oppgavelist__tabell__gjelder'}>
-                                <Lenke href="#" onClick={() => onColumnSort('behandlingstema')}>
-                                    Gjelder
-                                </Lenke>
+                            <th>
+                                <div className={'oppgavelist__tabell__gjelder'}>
+                                    <Lenke href="#" onClick={() => onColumnSort('behandlingstema')}>
+                                        Gjelder
+                                    </Lenke>
+                                </div>
                             </th>
-                            <th className={'oppgavelist__tabell__frist'}>
-                                <Lenke
-                                    href="#"
-                                    onClick={() => onColumnSort('fristFerdigstillelse')}
-                                >
-                                    Frist
-                                </Lenke>
+                            <th>
+                                <div className={'oppgavelist__tabell__frist'}>
+                                    <Lenke
+                                        href="#"
+                                        onClick={() => onColumnSort('fristFerdigstillelse')}
+                                    >
+                                        Frist
+                                    </Lenke>
+                                </div>
                             </th>
-                            <th className={'oppgavelist__tabell__prioritet'}>
-                                <Lenke href="#" onClick={() => onColumnSort('prioritet')}>
-                                    Prioritet
-                                </Lenke>
+                            <th>
+                                <div className={'oppgavelist__tabell__prioritet'}>
+                                    <Lenke href="#" onClick={() => onColumnSort('prioritet')}>
+                                        Prioritet
+                                    </Lenke>
+                                </div>
                             </th>
-                            <th className={'oppgavelist__tabell__bruker'}>Bruker</th>
+                            <th>
+                                <div className={'oppgavelist__tabell__bruker'}>Bruker</div>
+                            </th>
                             <th>
                                 <div className={'oppgavelist__tabell__enhet'}>
                                     <Lenke href="#" onClick={() => onColumnSort('tildeltEnhetsnr')}>
@@ -147,12 +160,19 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                     </Lenke>
                                 </div>
                             </th>
-                            <th className={'oppgavelist__tabell__saksbehandler'}>
-                                <Lenke href="#" onClick={() => onColumnSort('tilordnetRessurs')}>
-                                    Saksbehandler
-                                </Lenke>
+                            <th>
+                                <div className={'oppgavelist__tabell__saksbehandler'}>
+                                    <Lenke
+                                        href="#"
+                                        onClick={() => onColumnSort('tilordnetRessurs')}
+                                    >
+                                        Saksbehandler
+                                    </Lenke>
+                                </div>
                             </th>
-                            <th className={'oppgavelist__tabell__handlinger'}>Handlinger</th>
+                            <th>
+                                <div className={'oppgavelist__tabell__handlinger'}>Handlinger</div>
+                            </th>
                             <th>
                                 <div className={'oppgavelist__tabell__beskrivelse'}>
                                     Beskrivelse
@@ -164,8 +184,10 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                         <tbody className="tabell__body">
                             {hentOppgaveSide().map((oppg: IOppgave, index) => (
                                 <tr key={index}>
-                                    <td className={'oppgavelist__tabell__regdato'}>
-                                        {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
+                                    <td>
+                                        <div className={'oppgavelist__tabell__regdato'}>
+                                            {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
+                                        </div>
                                     </td>
                                     <td>
                                         <div className={'oppgavelist__tabell__oppgavetype'}>
@@ -176,45 +198,57 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                             }
                                         </div>
                                     </td>
-                                    <td className={'oppgavelist__tabell__gjelder'}>
-                                        {oppg.behandlingstema
-                                            ? GjelderFilter[
-                                                  oppg.behandlingstema as keyof typeof GjelderFilter
-                                              ]
-                                            : 'Ikke satt'}
+                                    <td>
+                                        <div className={'oppgavelist__tabell__gjelder'}>
+                                            {oppg.behandlingstema
+                                                ? GjelderFilter[
+                                                      oppg.behandlingstema as keyof typeof GjelderFilter
+                                                  ]
+                                                : 'Ikke satt'}
+                                        </div>
                                     </td>
-                                    <td className={'oppgavelist__tabell__frist'}>
-                                        {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
+                                    <td>
+                                        <div className={'oppgavelist__tabell__frist'}>
+                                            {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
+                                        </div>
                                     </td>
-                                    <td className={'oppgavelist__tabell__prioritet'}>
-                                        {
-                                            PrioritetFilter[
-                                                oppg.prioritet as keyof typeof PrioritetFilter
-                                            ]
-                                        }
+                                    <td>
+                                        <div className={'oppgavelist__tabell__prioritet'}>
+                                            {
+                                                PrioritetFilter[
+                                                    oppg.prioritet as keyof typeof PrioritetFilter
+                                                ]
+                                            }
+                                        </div>
                                     </td>
-                                    <td className={'oppgavelist__tabell__bruker'}>
-                                        {oppg.aktoerId}
+                                    <td>
+                                        <div className={'oppgavelist__tabell__bruker'}>
+                                            {oppg.aktoerId}
+                                        </div>
                                     </td>
                                     <td>
                                         <div className={'oppgavelist__tabell__enhet'}>
                                             {getEnheter(oppg.tildeltEnhetsnr)}
                                         </div>
                                     </td>
-                                    <td className={'oppgavelist__tabell__saksbehandler'}>
-                                        <OppgavelisteSaksbehandler
-                                            oppgave={oppg}
-                                            innloggetSaksbehandler={innloggetSaksbehandler}
-                                        />
+                                    <td>
+                                        <div className={'oppgavelist__tabell__saksbehandler'}>
+                                            <OppgavelisteSaksbehandler
+                                                oppgave={oppg}
+                                                innloggetSaksbehandler={innloggetSaksbehandler}
+                                            />
+                                        </div>
                                     </td>
-                                    <td className={'oppgavelist__tabell__handlinger'}>
-                                        {OppgavetypeFilter[
-                                            oppg.oppgavetype as keyof typeof OppgavetypeFilter
-                                        ] === OppgavetypeFilter.JFR && (
-                                            <a href={`/oppgaver/journalfør/${oppg.id}`}>
-                                                Gå til oppg
-                                            </a>
-                                        )}
+                                    <td>
+                                        <div className={'oppgavelist__tabell__handlinger'}>
+                                            {OppgavetypeFilter[
+                                                oppg.oppgavetype as keyof typeof OppgavetypeFilter
+                                            ] === OppgavetypeFilter.JFR && (
+                                                <a href={`/oppgaver/journalfør/${oppg.id}`}>
+                                                    Gå til oppg
+                                                </a>
+                                            )}
+                                        </div>
                                     </td>
                                     <td>
                                         <div className={'oppgavelist__tabell__beskrivelse'}>
