@@ -111,6 +111,28 @@
         margin-top: 0.8rem;
         float: right;
     }
+    table.tabell{
+        margin-top: 1rem;
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+    
+    table.tabell tbody{
+        display:block;
+        min-width: max-content;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: @tableBodyHeight;
+    }
+    
+    table.tabell thead tr{
+        display:block;
+    }
+    
+    table.tabell th, table.tabell td{
+        text-align: left;
+    }
 
     &__tabell{
         &__regdato {
