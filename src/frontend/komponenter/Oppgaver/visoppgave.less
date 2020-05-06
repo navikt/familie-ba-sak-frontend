@@ -70,13 +70,13 @@
 @tabellGjelderWidth: 8rem;
 @tabellFristWidth: 10rem;
 @tabellPrioritetWidth: 8rem;
-@tabellBrukerWidth: 10rem;
+@tabellBrukerWidth: 12rem;
 @tabellEnhetWidth: 10rem;
 @tabellSaksbehandlerWidth: 10rem;
 @tabellHandlingerWidth: 10rem;
 
 @tabellBeskrivelseWidthMin: 18rem;
-@tabellBeskrivelseWidthCalc: ~"calc(" ~"@{oppgavelistWidth}" ~"-" 86rem ~")";
+@tabellBeskrivelseWidthCalc: ~"calc(" ~"@{oppgavelistWidth}" ~"-" 88rem ~")";
 @tabellBeskrivelseWidth: ~"max(@{tabellBeskrivelseWidthMin}, @{tabellBeskrivelseWidthCalc})";
 
 .oppgavelist{
@@ -111,25 +111,7 @@
         margin-top: 0.8rem;
         float: right;
     }
-    table.tabell{
-        margin-top: 1rem;
-        width: 100%;
-        table-layout: fixed;
-        border-collapse: collapse;
-    }
-    
-    table.tabell tbody{
-        display:block;
-        min-width: max-content;
-        overflow-y: auto;
-        overflow-x: hidden;
-        height: @tableBodyHeight;
-    }
-    
-    table.tabell thead tr{
-        display:block;
-    }
-    
+
     table.tabell th, table.tabell td{
         text-align: left;
     }
@@ -193,8 +175,4 @@
             padding-right: 1rem;
         }        
     }
-}
-
-table.tabell th, table.tabell td{
-    text-align: left;
 }
