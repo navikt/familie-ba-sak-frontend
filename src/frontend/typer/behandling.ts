@@ -39,6 +39,7 @@ export enum Behandlingstype {
     FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
     MIGRERING_FRA_INFOTRYGD = 'MIGRERING_FRA_INFOTRYGD',
     REVURDERING = 'REVURDERING',
+    TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
 }
 
 export enum BehandlingResultat {
@@ -91,6 +92,10 @@ export const behandlingstyper: INøkkelPar = {
         id: 'REVURDERING',
         navn: 'Revurdering',
     },
+    TEKNISK_OPPHØR: {
+        id: 'TEKNISK_OPPHØR',
+        navn: 'Teknisk opphør',
+    },
 };
 
 export const kategorier: INøkkelPar = {
@@ -117,6 +122,7 @@ export const underkategorier: INøkkelPar = {
 
 export const behandlingsresultater: INøkkelPar = {
     INNVILGET: { id: 'INNVILGET', navn: 'Innvilget' },
+    IKKE_VURDERT: { id: 'IKKE_VURDERT', navn: 'Ikke vurdert' },
     AVSLÅTT: { id: 'AVSLÅTT', navn: 'Avslått' },
     OPPHØRT: { id: 'OPPHØRT', navn: 'Opphørt' },
 };
