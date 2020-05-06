@@ -65,14 +65,14 @@
 }
 
 @oppgavelistWidth: ~"calc(" ~"@{oppgavePageWidth} - " 1.2rem~")";
-@tabellRegDatoWidth: 6rem;
+@tabellOpprettetTidspunktWidth: 6rem;
 @tabellOppgavetypeWidth: 10rem;
-@tabellGjelderWidth: 6rem;
-@tabellFristWidth: 6rem;
+@tabellBehandlingstemaWidth: 6rem;
+@tabellFristFerdigstillelseWidth: 6rem;
 @tabellPrioritetWidth: 5rem;
-@tabellBrukerWidth: 7rem;
-@tabellEnhetWidth: 6rem;
-@tabellSaksbehandlerWidth: 12rem;
+@tabellAktoerIdWidth: 7rem;
+@tabellTildeltEnhetsnrWidth: 6rem;
+@tabellTilordnetRessursWidth: 12rem;
 @tabellHandlingerWidth: 8rem;
 
 @tabellBeskrivelseWidthMin: 19rem;
@@ -119,8 +119,8 @@
     }
 
     &__tabell{
-        &__regdato {
-            width: @tabellRegDatoWidth;
+        &__opprettetTidspunkt {
+            width: @tabellOpprettetTidspunktWidth;
         }
         
         &__oppgavetype {
@@ -131,40 +131,32 @@
             padding: 0;
         }
         
-        &__gjelder {
-            width: @tabellGjelderWidth;
+        &__behandlingstema {
+            width: @tabellBehandlingstemaWidth;
         }
         
-        &__frist {
-            width: @tabellFristWidth;
+        &__fristFerdigstillelse {
+            width: @tabellFristFerdigstillelseWidth;
         }
         
         &__prioritet {
             width: @tabellPrioritetWidth;
         }
         
-        &__beskrivelse {
-            width: @tabellBeskrivelseWidth;
+        &__aktoerId {
+            width: @tabellAktoerIdWidth;
+        }
+        
+        &__tildeltEnhetsnr {
+            width: @tabellTildeltEnhetsnrWidth;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
             padding: 0;
         }
         
-        &__bruker {
-            width: @tabellBrukerWidth;
-        }
-        
-        &__enhet {
-            width: @tabellEnhetWidth;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            padding: 0;
-        }
-        
-        &__saksbehandler {
-            width: @tabellSaksbehandlerWidth;
+        &__tilordnetRessurs {
+            width: @tabellTilordnetRessursWidth;
             .kolonne {
                 display: flex;
         
@@ -189,5 +181,13 @@
             text-decoration: none;
             padding-right: 1rem;
         }        
+        
+        &__beskrivelse {
+            width: @tabellBeskrivelseWidth;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0;
+        }
     }
 }
