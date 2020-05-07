@@ -7,6 +7,7 @@ import {
     SaksbehandlerFilter,
     IDataForManuellJournalføring,
     OppgavetypeFilter,
+    IFinnOppgaveRequest,
 } from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
@@ -244,54 +245,32 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         registrertDato?: string,
         saksbehandler?: string
     ): Promise<Ressurs<IOppgave[]>> => {
-        interface LooseObject {
-            [key: string]: string;
-        }
-        const searchParams: LooseObject = {};
-
-        if (limit !== undefined) {
-            searchParams['limit'] = limit.toString();
-        }
-
-        if (behandlingstema !== undefined) {
-            searchParams['behandlingstema'] = behandlingstema;
-        }
-
-        if (oppgavetype !== undefined) {
-            searchParams['oppgavetype'] = oppgavetype;
-        }
-
-        if (enhet !== undefined) {
-            searchParams['enhet'] = enhet;
-        }
-
-        if (prioritet !== undefined) {
-            searchParams['prioritet'] = prioritet;
-        }
-
-        if (registrertDato !== undefined) {
-            searchParams['registrertDato'] = registrertDato;
-        }
-
-        if (frist !== undefined) {
-            searchParams['frist'] = frist;
-        }
-
-        if (saksbehandler !== undefined) {
-            searchParams['saksbehandler'] = saksbehandler;
-        }
-
-        let query = new URLSearchParams(searchParams).toString();
-        query = query === '' ? query : '?' + query;
+        const finnOppgaveRequest: IFinnOppgaveRequest = {
+            behandlingstema: behandlingstema,
+            oppgavetype: oppgavetype,
+            enhet: enhet,
+            saksbehandler: saksbehandler,
+            journalpostId: undefined,
+            prioritet: prioritet,
+            opprettetFomTidspunkt: registrertDato,
+            opprettetTomTidspunkt: undefined,
+            fristFomDato: undefined,
+            fristTomDato: frist,
+            aktivFomDato: undefined,
+            aktivTomDato: undefined,
+            limit: limit,
+            offset: 0,
+        };
 
         settOppgaver({
             ...oppgaver,
             status: RessursStatus.HENTER,
         });
 
-        return axiosRequest<IOppgave[], void>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/oppgave${query}`,
+        return axiosRequest<IOppgave[], IFinnOppgaveRequest>({
+            data: finnOppgaveRequest,
+            method: 'POST',
+            url: `/familie-ba-sak/api/hent-oppgaver`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
                 return oppgaverRes;

@@ -91,6 +91,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         role="columnheader"
                                         aria-sort={getAriaSort(felt)}
                                         className={getSortLenkClassName(felt)}
+                                        key={felt}
                                     >
                                         <div
                                             className={
@@ -103,7 +104,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         </div>
                                     </th>
                                 ) : (
-                                    <th>
+                                    <th key={felt}>
                                         <div
                                             className={
                                                 'oppgavelist__tabell-' + oppgaveFeltMap.get(felt)

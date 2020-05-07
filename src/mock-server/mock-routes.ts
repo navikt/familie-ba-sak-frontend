@@ -122,8 +122,8 @@ app.post('/familie-ba-sak/api/fagsaker/:id/send-til-beslutter', (req: Request, r
     }
 });
 
-app.get('/familie-ba-sak/api/oppgave', (req, res) => {
-    const { limit } = req.query;
+app.post('/familie-ba-sak/api/hent-oppgaver', (req, res) => {
+    const { limit } = req.body;
     const lmt = parseInt(limit) || 0;
     const mockRess = JSON.parse(lesMockFil(`oppgaver.json`));
     setTimeout(

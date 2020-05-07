@@ -7,6 +7,23 @@ export interface IDataForManuellJournalføring {
     person?: IPerson;
 }
 
+export interface IFinnOppgaveRequest {
+    behandlingstema: string | undefined;
+    oppgavetype: string | undefined;
+    enhet: string | undefined;
+    saksbehandler: string | undefined;
+    journalpostId: string | undefined;
+    prioritet: string | undefined;
+    opprettetFomTidspunkt: string | undefined;
+    opprettetTomTidspunkt: string | undefined;
+    fristFomDato: string | undefined;
+    fristTomDato: string | undefined;
+    aktivFomDato: string | undefined;
+    aktivTomDato: string | undefined;
+    limit: number | undefined;
+    offset: number | undefined;
+}
+
 export interface IJournalpost {
     datoMottatt?: string;
     journalpostId: string;
@@ -83,14 +100,10 @@ export interface IOppgave {
     behandlingstema: string;
     beskrivelse: string;
     fristFerdigstillelse: string;
-    id: string;
-    journalpostId: string;
     oppgavetype: string;
     opprettetTidspunkt: string;
     prioritet: string;
-    saksreferanse: string;
     status: string;
-    tildeltEnhetsnr: string;
     tilordnetRessurs: string;
 }
 
