@@ -79,7 +79,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
         <div className={'oppgavelist'}>
             <div className={'oppgavelist__header'}>
                 <Systemtittel className={'oppgavelist__header__tittel'}>
-                    Oppgaveliste - visning
+                    Oppgaveliste
                 </Systemtittel>
                 <OppgavelisteNavigator />
             </div>
