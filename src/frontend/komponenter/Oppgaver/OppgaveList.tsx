@@ -94,7 +94,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                     >
                                         <div
                                             className={
-                                                'oppgavelist__tabell__' + oppgaveFeltMap.get(felt)
+                                                'oppgavelist__tabell-' + oppgaveFeltMap.get(felt)
                                             }
                                         >
                                             <Lenke href="#" onClick={() => onColumnSort(felt)}>
@@ -106,7 +106,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                     <th>
                                         <div
                                             className={
-                                                'oppgavelist__tabell__' + oppgaveFeltMap.get(felt)
+                                                'oppgavelist__tabell-' + oppgaveFeltMap.get(felt)
                                             }
                                         >
                                             {feltLabelMap.get(felt)}
@@ -121,12 +121,12 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                             {hentOppgaveSide().map((oppg: IOppgave, index) => (
                                 <tr key={index}>
                                     <td>
-                                        <div className={'oppgavelist__tabell__opprettetTidspunkt'}>
+                                        <div className={'oppgavelist__tabell-opprettetTidspunkt'}>
                                             {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={'oppgavelist__tabell__oppgavetype'}>
+                                        <div className={'oppgavelist__tabell-oppgavetype'}>
                                             {
                                                 OppgavetypeFilter[
                                                     oppg.oppgavetype as keyof typeof OppgavetypeFilter
@@ -135,7 +135,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={'oppgavelist__tabell__behandlingstema'}>
+                                        <div className={'oppgavelist__tabell-behandlingstema'}>
                                             {oppg.behandlingstema
                                                 ? GjelderFilter[
                                                       oppg.behandlingstema as keyof typeof GjelderFilter
@@ -144,14 +144,12 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         </div>
                                     </td>
                                     <td>
-                                        <div
-                                            className={'oppgavelist__tabell__fristFerdigstillelse'}
-                                        >
+                                        <div className={'oppgavelist__tabell-fristFerdigstillelse'}>
                                             {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={'oppgavelist__tabell__prioritet'}>
+                                        <div className={'oppgavelist__tabell-prioritet'}>
                                             {
                                                 PrioritetFilter[
                                                     oppg.prioritet as keyof typeof PrioritetFilter
@@ -160,17 +158,17 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={'oppgavelist__tabell__aktoerId'}>
+                                        <div className={'oppgavelist__tabell-aktoerId'}>
                                             {oppg.aktoerId}
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={'oppgavelist__tabell__tildeltEnhetsnr'}>
+                                        <div className={'oppgavelist__tabell-tildeltEnhetsnr'}>
                                             {getEnheter(oppg.tildeltEnhetsnr)}
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={'oppgavelist__tabell__tilordnetRessurs'}>
+                                        <div className={'oppgavelist__tabell-tilordnetRessurs'}>
                                             <OppgavelisteSaksbehandler
                                                 oppgave={oppg}
                                                 innloggetSaksbehandler={innloggetSaksbehandler}
@@ -178,7 +176,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={'oppgavelist__tabell__handlinger'}>
+                                        <div className={'oppgavelist__tabell-handlinger'}>
                                             {OppgavetypeFilter[
                                                 oppg.oppgavetype as keyof typeof OppgavetypeFilter
                                             ] === OppgavetypeFilter.JFR && (
@@ -189,7 +187,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={'oppgavelist__tabell__beskrivelse'}>
+                                        <div className={'oppgavelist__tabell-beskrivelse'}>
                                             {oppg.beskrivelse}
                                         </div>
                                     </td>
