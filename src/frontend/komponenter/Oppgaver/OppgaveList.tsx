@@ -48,7 +48,10 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
     );
 
     const onColumnSort = (felt: ListFelt) => {
-        sortOppgave(oppgaveFeltMap.get(felt)!, feltSortOrder.get(felt) !== FeltSortOrder.ASCENDANT);
+        sortOppgave(
+            oppgaveFeltMap.get(felt) || 'ugjydigVerdi',
+            feltSortOrder.get(felt) !== FeltSortOrder.ASCENDANT
+        );
         settFeltSortOrder(
             new Map<ListFelt, FeltSortOrder>([
                 ...initFeltOrder,
@@ -62,10 +65,11 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
         );
     };
 
-    const getAriaSort = (felt: ListFelt) => ariaSortMap.get(feltSortOrder.get(felt)!);
+    const getAriaSort = (felt: ListFelt) =>
+        ariaSortMap.get(feltSortOrder.get(felt) || FeltSortOrder.NONE);
 
     const getSortLenkClassName = (felt: ListFelt) =>
-        sortLenkClassNameMap.get(feltSortOrder.get(felt)!);
+        sortLenkClassNameMap.get(feltSortOrder.get(felt) || FeltSortOrder.NONE);
 
     React.useEffect(() => {
         settFeltSortOrder(initFeltOrder);
