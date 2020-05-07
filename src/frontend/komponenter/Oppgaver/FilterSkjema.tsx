@@ -208,7 +208,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                         settFrist('');
                         settRegistrertDato('');
                     }}
-                    className="filterskjema__tilbakestill"
+                    className="filterskjema__button"
                 >
                     Tilbakestill filtrering
                 </Knapp>

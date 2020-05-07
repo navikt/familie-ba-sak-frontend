@@ -41,7 +41,10 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 />
             </div>
             {visFeilmeldinger && (
-                <Feilmelding children={opprettelseFeilmelding} className={'feilmelding'} />
+                <Feilmelding
+                    children={opprettelseFeilmelding}
+                    className={'oppgave-header__feilmelding'}
+                />
             )}
         </div>
     );
