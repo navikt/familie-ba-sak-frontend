@@ -11,7 +11,6 @@ import { useOppgaver, oppgaveSideLimit } from '../../context/OppgaverContext';
 import { Systemtittel } from 'nav-frontend-typografi';
 import Lenke from 'nav-frontend-lenker';
 import Alertstripe from 'nav-frontend-alertstriper';
-import { useOppgaver } from '../../context/OppgaverContext';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 
