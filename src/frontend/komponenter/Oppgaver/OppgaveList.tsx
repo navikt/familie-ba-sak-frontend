@@ -78,9 +78,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
     return (
         <div className={'oppgavelist'}>
             <div className={'oppgavelist__header'}>
-                <Systemtittel className={'oppgavelist__header__tittel'}>
-                    Oppgaveliste
-                </Systemtittel>
+                <Systemtittel className={'oppgavelist__header__tittel'}>Oppgaveliste</Systemtittel>
                 <OppgavelisteNavigator />
             </div>
             <div>

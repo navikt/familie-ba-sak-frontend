@@ -1,7 +1,6 @@
 import React from 'react';
 import { FagsakProvider } from '../context/FagsakContext';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import OpprettFagsak from './Fagsak/OpprettFagsak/OpprettFagsak';
 import FagsakContainer from './Fagsak/FagsakContainer';
 import { useApp } from '../context/AppContext';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
@@ -37,11 +36,6 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                     render={() => {
                                         return <Redirect from={'/'} to={'/oppgaver'} />;
                                     }}
-                                />
-                                <Route
-                                    exact={true}
-                                    path="/fagsak/ny-fagsak"
-                                    component={OpprettFagsak}
                                 />
                                 <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
 
