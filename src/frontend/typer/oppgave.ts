@@ -13,7 +13,6 @@ export interface IFinnOppgaveRequest {
     enhet: string | undefined;
     saksbehandler: string | undefined;
     journalpostId: string | undefined;
-    prioritet: string | undefined;
     opprettetFomTidspunkt: string | undefined;
     opprettetTomTidspunkt: string | undefined;
     fristFomDato: string | undefined;

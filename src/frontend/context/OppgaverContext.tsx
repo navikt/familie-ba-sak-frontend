@@ -165,7 +165,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
-        prioritet?: string,
         frist?: string,
         registrertDato?: string,
         saksbehandler?: string
@@ -180,7 +179,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             behandlingstema,
             oppgavetype,
             enhet,
-            prioritet,
             frist,
             registrertDato,
             saksbehandlerForBackend
@@ -240,7 +238,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
-        prioritet?: string,
         frist?: string,
         registrertDato?: string,
         saksbehandler?: string
@@ -251,9 +248,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             enhet: enhet,
             saksbehandler: saksbehandler,
             journalpostId: undefined,
-            prioritet: prioritet,
-            opprettetFomTidspunkt: registrertDato,
-            opprettetTomTidspunkt: registrertDato,
+            opprettetFomTidspunkt: `${registrertDato}T00:00:00.000`,
+            opprettetTomTidspunkt: `${registrertDato}T:23:59:59.999`,
             fristFomDato: frist,
             fristTomDato: frist,
             aktivFomDato: undefined,
