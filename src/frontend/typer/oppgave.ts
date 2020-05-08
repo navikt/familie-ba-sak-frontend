@@ -8,19 +8,19 @@ export interface IDataForManuellJournalføring {
 }
 
 export interface IFinnOppgaveRequest {
-    behandlingstema: string | undefined;
-    oppgavetype: string | undefined;
-    enhet: string | undefined;
-    saksbehandler: string | undefined;
-    journalpostId: string | undefined;
-    opprettetFomTidspunkt: string | undefined;
-    opprettetTomTidspunkt: string | undefined;
-    fristFomDato: string | undefined;
-    fristTomDato: string | undefined;
-    aktivFomDato: string | undefined;
-    aktivTomDato: string | undefined;
-    limit: number | undefined;
-    offset: number | undefined;
+    behandlingstema?: string;
+    oppgavetype?: string;
+    enhet?: string;
+    saksbehandler?: string;
+    journalpostId?: string;
+    opprettetFomTidspunkt?: string;
+    opprettetTomTidspunkt?: string;
+    fristFomDato?: string;
+    fristTomDato?: string;
+    aktivFomDato?: string;
+    aktivTomDato?: string;
+    limit?: number;
+    offset?: number;
 }
 
 export interface IJournalpost {
