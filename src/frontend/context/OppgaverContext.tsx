@@ -266,7 +266,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         return axiosRequest<IOppgave[], IFinnOppgaveRequest>({
             data: finnOppgaveRequest,
             method: 'POST',
-            url: `/familie-ba-sak/api/hent-oppgaver`,
+            url: `/familie-ba-sak/api/oppgave/hent-oppgaver`,
         })
             .then((oppgaverRes: Ressurs<IOppgave[]>) => {
                 return oppgaverRes;
