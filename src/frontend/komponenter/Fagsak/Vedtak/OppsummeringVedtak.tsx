@@ -14,6 +14,9 @@ import { aktivVedtak } from '../../../api/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import { Knapp } from 'nav-frontend-knapper';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+// @ts-ignore
+import { Document, Page } from 'react-pdf';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -26,6 +29,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     const history = useHistory();
 
     const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
+    const [antallSider, setAntallSider] = React.useState<number>(0);
+    const [pdf, setPDF] = React.useState<Blob>(new Blob());
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
@@ -37,13 +42,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtak(fagsak);
         if (aktivtVedtak) {
-            axiosRequest<string, void>({
+            axiosRequest<ArrayBuffer, void>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/dokument/vedtak-html/${aktivtVedtak?.id}`,
             })
-                .then((response: Ressurs<string>) => {
+                .then((response: Ressurs<ArrayBuffer>) => {
                     if (response.status === RessursStatus.SUKSESS) {
-                        setBrev(response.data);
+                        setPDF(new Blob([response.data], { type: 'application/pdf' }));
+                        setBrev(response.melding || response.status);
                         setErrorMessage(undefined);
                     } else if (response.status === RessursStatus.FEILET) {
                         setErrorMessage(response.melding);
@@ -87,6 +93,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         });
     };
 
+    const onDocumentLoadSuccess = (numPages: number) => {
+        setAntallSider(numPages);
+    };
+
     return (
         <Skjemasteg
             tittel={'Vedtaksbrev'}
@@ -98,10 +108,31 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         >
             <div className="oppsummering">
                 {errorMessage === undefined ? (
-                    <div>
-                        <br />
+                    <div className="flexContainer">
                         <iframe title="Vedtaksbrev" className="iframe" srcDoc={brev} />
                         <br />
+                        {pdf.type === 'application/pdf' && (
+                            <div /*style={style.PDF}*/>
+                                <Document
+                                    file={pdf}
+                                    onLoadSuccess={onDocumentLoadSuccess}
+                                    error={'Kunne ikke laste inn PDF-fil.'}
+                                    noData={<NavFrontendSpinner />}
+                                    loading={<NavFrontendSpinner />}
+                                >
+                                    <br />
+                                    {Array.from(new Array(antallSider), (_el, index) => (
+                                        <>
+                                            <Page
+                                                key={`page_${index + 1}`}
+                                                pageNumber={index + 1}
+                                            />
+                                            <br />
+                                        </>
+                                    ))}
+                                </Document>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <AlertStripe type="feil">{errorMessage}</AlertStripe>

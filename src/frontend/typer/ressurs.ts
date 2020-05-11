@@ -16,6 +16,7 @@ export type Ressurs<T> =
     | {
           data: T;
           status: RessursStatus.SUKSESS;
+          melding?: string;
       }
     | {
           melding: string;
