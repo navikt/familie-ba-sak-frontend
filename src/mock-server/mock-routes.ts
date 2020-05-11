@@ -122,15 +122,21 @@ app.post('/familie-ba-sak/api/fagsaker/:id/send-til-beslutter', (req: Request, r
     }
 });
 
-app.get('/familie-ba-sak/api/oppgave', (req, res) => {
-    const { limit } = req.query;
+app.post('/familie-ba-sak/api/oppgave/hent-oppgaver', (req, res) => {
+    const { limit } = req.body;
     const lmt = parseInt(limit) || 0;
     const mockRess = JSON.parse(lesMockFil(`oppgaver.json`));
     setTimeout(
         () =>
             res.send({
                 ...mockRess,
-                data: mockRess.data.slice(0, Math.min(lmt, mockRess.data.length)),
+                data: {
+                    antallTreffTotalt: mockRess.data.antallTreffTotalt,
+                    oppgaver: mockRess.data.oppgaver.slice(
+                        0,
+                        Math.min(lmt, mockRess.data.oppgaver.length)
+                    ),
+                },
             }),
         500
     );

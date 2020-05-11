@@ -91,6 +91,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         role="columnheader"
                                         aria-sort={getAriaSort(felt)}
                                         className={getSortLenkClassName(felt)}
+                                        key={felt}
                                     >
                                         <div
                                             className={
@@ -103,7 +104,7 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                                         </div>
                                     </th>
                                 ) : (
-                                    <th>
+                                    <th key={felt}>
                                         <div
                                             className={
                                                 'oppgavelist__tabell-' + oppgaveFeltMap.get(felt)
@@ -116,88 +117,95 @@ const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaks
                             })}
                         </tr>
                     </thead>
-                    {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length > 0 && (
-                        <tbody className="tabell__body">
-                            {hentOppgaveSide().map((oppg: IOppgave, index) => (
-                                <tr key={index}>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-opprettetTidspunkt'}>
-                                            {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-oppgavetype'}>
-                                            {
-                                                OppgavetypeFilter[
+                    {oppgaver.status === RessursStatus.SUKSESS &&
+                        oppgaver.data.oppgaver.length > 0 && (
+                            <tbody className="tabell__body">
+                                {hentOppgaveSide().map((oppg: IOppgave, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            <div
+                                                className={'oppgavelist__tabell-opprettetTidspunkt'}
+                                            >
+                                                {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={'oppgavelist__tabell-oppgavetype'}>
+                                                {
+                                                    OppgavetypeFilter[
+                                                        oppg.oppgavetype as keyof typeof OppgavetypeFilter
+                                                    ]
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={'oppgavelist__tabell-behandlingstema'}>
+                                                {oppg.behandlingstema
+                                                    ? GjelderFilter[
+                                                          oppg.behandlingstema as keyof typeof GjelderFilter
+                                                      ]
+                                                    : 'Ikke satt'}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div
+                                                className={
+                                                    'oppgavelist__tabell-fristFerdigstillelse'
+                                                }
+                                            >
+                                                {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={'oppgavelist__tabell-prioritet'}>
+                                                {
+                                                    PrioritetFilter[
+                                                        oppg.prioritet as keyof typeof PrioritetFilter
+                                                    ]
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={'oppgavelist__tabell-aktoerId'}>
+                                                {oppg.aktoerId}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={'oppgavelist__tabell-tildeltEnhetsnr'}>
+                                                {getEnheter(oppg.tildeltEnhetsnr)}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={'oppgavelist__tabell-tilordnetRessurs'}>
+                                                <OppgavelisteSaksbehandler
+                                                    oppgave={oppg}
+                                                    innloggetSaksbehandler={innloggetSaksbehandler}
+                                                />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={'oppgavelist__tabell-handlinger'}>
+                                                {OppgavetypeFilter[
                                                     oppg.oppgavetype as keyof typeof OppgavetypeFilter
-                                                ]
-                                            }
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-behandlingstema'}>
-                                            {oppg.behandlingstema
-                                                ? GjelderFilter[
-                                                      oppg.behandlingstema as keyof typeof GjelderFilter
-                                                  ]
-                                                : 'Ikke satt'}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-fristFerdigstillelse'}>
-                                            {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-prioritet'}>
-                                            {
-                                                PrioritetFilter[
-                                                    oppg.prioritet as keyof typeof PrioritetFilter
-                                                ]
-                                            }
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-aktoerId'}>
-                                            {oppg.aktoerId}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-tildeltEnhetsnr'}>
-                                            {getEnheter(oppg.tildeltEnhetsnr)}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-tilordnetRessurs'}>
-                                            <OppgavelisteSaksbehandler
-                                                oppgave={oppg}
-                                                innloggetSaksbehandler={innloggetSaksbehandler}
-                                            />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-handlinger'}>
-                                            {OppgavetypeFilter[
-                                                oppg.oppgavetype as keyof typeof OppgavetypeFilter
-                                            ] === OppgavetypeFilter.JFR && (
-                                                <a href={`/oppgaver/journalfør/${oppg.id}`}>
-                                                    Gå til oppg
-                                                </a>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={'oppgavelist__tabell-beskrivelse'}>
-                                            {oppg.beskrivelse}
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    )}
+                                                ] === OppgavetypeFilter.JFR && (
+                                                    <a href={`/oppgaver/journalfør/${oppg.id}`}>
+                                                        Gå til oppg
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={'oppgavelist__tabell-beskrivelse'}>
+                                                {oppg.beskrivelse}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        )}
                 </table>
             </div>
-            {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length === 0 && (
+            {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
                 <Alertstripe type="advarsel" className="oppgavelist__info">
                     Ingen oppgaver
                 </Alertstripe>
