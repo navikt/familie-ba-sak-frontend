@@ -21,7 +21,9 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
                     <span className={'oppgavelist__header__navigator__felt'}>
                         Viser {sideindeks * oppgaveSideLimit + 1} -{' '}
                         {sideindeks * oppgaveSideLimit + hentOppgaveSide().length} av{' '}
-                        {oppgaver.status === RessursStatus.SUKSESS ? oppgaver.data.length : 0}{' '}
+                        {oppgaver.status === RessursStatus.SUKSESS
+                            ? oppgaver.data.oppgaver.length
+                            : 0}{' '}
                         oppgaver
                     </span>
                     |

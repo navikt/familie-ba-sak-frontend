@@ -6,7 +6,6 @@ import {
     EnhetFilter,
     SaksbehandlerFilter,
     GjelderFilter,
-    PrioritetFilter,
 } from '../../typer/oppgave';
 import { Knapp } from 'nav-frontend-knapper';
 import './visoppgave.less';

@@ -89,6 +89,11 @@ enum Dokumentstatus {
     KASSERT,
 }
 
+export interface IHentOppgaveDto {
+    antallTreffTotalt: number;
+    oppgaver: IOppgave[];
+}
+
 export interface IOppgave {
     [key: string]: string;
     id: string;
