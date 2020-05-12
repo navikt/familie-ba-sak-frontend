@@ -1,8 +1,10 @@
 .oppsummering {
+    margin-top: 0.5em;
+
     & .iframe {
         width: 100%;
         min-height: calc(100vh - 20rem);
-        margin-bottom: 1rem;
+        background-color: white;
         border: none;
     }
 
@@ -16,13 +18,9 @@
         display: flex;
         flex-wrap: wrap;
         background-color: #F5F5F5;
-        border: 1px solid @navMorkGra;
+        border: 1px solid @navGra20;
         border-top: none;
-    }
-
-    & .visningsTabs{
-        border: 1px solid @navMorkGra;
-        background-color: white;
+        overflow: hidden;
     }
 
     & .pdf {

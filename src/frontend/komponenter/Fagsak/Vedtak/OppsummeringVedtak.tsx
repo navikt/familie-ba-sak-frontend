@@ -116,7 +116,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 <Tabs
                     tabs={[{ label: 'PDF' }, { label: 'HTML' }]}
                     onChange={(_event, index) => setVisPdf(index === 0)}
-                    className="visningsTabs"
                 />
                 {errorMessage === undefined ? (
                     <div className="flexContainer">
