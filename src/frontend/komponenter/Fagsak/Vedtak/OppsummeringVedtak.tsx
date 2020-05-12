@@ -18,6 +18,7 @@ import Tabs from 'nav-frontend-tabs';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 // @ts-ignore
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
+import { IDokument } from '../../../typer/dokument';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -44,16 +45,17 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtak(fagsak);
         if (aktivtVedtak) {
-            axiosRequest<string, void>({
+            axiosRequest<IDokument, void>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/dokument/vedtak-html/${aktivtVedtak?.id}`,
             })
-                .then((response: Ressurs<string>) => {
+                .then((response: Ressurs<IDokument>) => {
                     if (response.status === RessursStatus.SUKSESS) {
-                        const s = `data:application/pdf;base64,${response.data}`;
-                        console.log('pdf: ' + s);
-                        setPdf(s);
-                        setBrev(response.melding || response.status);
+                        setPdf(`data:application/pdf;base64,${response.data.pdfBase64}`);
+                        setBrev(
+                            response.data.html ||
+                                '<HTML lang="nb"><H1>HTML ikke tilgjengelig</H1></HTML>'
+                        );
                         setErrorMessage(undefined);
                     } else if (response.status === RessursStatus.FEILET) {
                         setErrorMessage(response.melding);
