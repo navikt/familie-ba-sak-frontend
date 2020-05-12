@@ -14,9 +14,10 @@ import { aktivVedtak } from '../../../api/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import { Knapp } from 'nav-frontend-knapper';
+import Tabs from 'nav-frontend-tabs';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 // @ts-ignore
-import { Document, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -28,9 +29,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const history = useHistory();
 
-    const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
+    const [visPdf, setVisPdf] = React.useState<boolean>(true);
     const [antallSider, setAntallSider] = React.useState<number>(0);
-    const [pdf, setPDF] = React.useState<Blob>(new Blob());
+    const [pdf, setPdf] = React.useState<string>('');
+    const [html, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
@@ -42,13 +44,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtak(fagsak);
         if (aktivtVedtak) {
-            axiosRequest<ArrayBuffer, void>({
+            axiosRequest<string, void>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/dokument/vedtak-html/${aktivtVedtak?.id}`,
             })
-                .then((response: Ressurs<ArrayBuffer>) => {
+                .then((response: Ressurs<string>) => {
                     if (response.status === RessursStatus.SUKSESS) {
-                        setPDF(new Blob([response.data], { type: 'application/pdf' }));
+                        const s = `data:application/pdf;base64,${response.data}`;
+                        console.log('pdf: ' + s);
+                        setPdf(s);
                         setBrev(response.melding || response.status);
                         setErrorMessage(undefined);
                     } else if (response.status === RessursStatus.FEILET) {
@@ -93,8 +97,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         });
     };
 
-    const onDocumentLoadSuccess = (numPages: number) => {
-        setAntallSider(numPages);
+    const onDocumentLoadSuccess = (pdfInfo: { numPages: React.SetStateAction<number> }) => {
+        setAntallSider(pdfInfo.numPages);
     };
 
     return (
@@ -107,12 +111,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             maxWidthStyle="100%"
         >
             <div className="oppsummering">
+                <Tabs
+                    tabs={[{ label: 'PDF' }, { label: 'HTML' }]}
+                    onChange={(_event, index) => setVisPdf(index === 0)}
+                    className="visningsTabs"
+                />
                 {errorMessage === undefined ? (
                     <div className="flexContainer">
-                        <iframe title="Vedtaksbrev" className="iframe" srcDoc={brev} />
-                        <br />
-                        {pdf.type === 'application/pdf' && (
-                            <div /*style={style.PDF}*/>
+                        {!visPdf && <iframe title="Vedtaksbrev" className="iframe" srcDoc={html} />}
+                        {visPdf && (
+                            <div className="pdf">
                                 <Document
                                     file={pdf}
                                     onLoadSuccess={onDocumentLoadSuccess}

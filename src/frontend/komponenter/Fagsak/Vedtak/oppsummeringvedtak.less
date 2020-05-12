@@ -2,9 +2,8 @@
     & .iframe {
         width: 100%;
         min-height: calc(100vh - 20rem);
-        background-color: white;
-        border: 1px solid @navMorkGra;
         margin-bottom: 1rem;
+        border: none;
     }
 
     &__navigering {
@@ -13,9 +12,22 @@
     }
 
     & .flexContainer {
-            height: 80%;
-            display: flex;
-            flexWrap: wrap;
-            justifyContent: space-between;
+        height: 95%;
+        display: flex;
+        flex-wrap: wrap;
+        background-color: #F5F5F5;
+        border: 1px solid @navMorkGra;
+        border-top: none;
+    }
+
+    & .visningsTabs{
+        border: 1px solid @navMorkGra;
+        background-color: white;
+    }
+
+    & .pdf {
+        margin: auto;
+        display: block;
+        overflow: visible;
     }
 }
