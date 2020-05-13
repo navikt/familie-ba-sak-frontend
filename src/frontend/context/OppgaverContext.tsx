@@ -7,6 +7,8 @@ import {
     SaksbehandlerFilter,
     IDataForManuellJournalføring,
     OppgavetypeFilter,
+    IFinnOppgaveRequest,
+    IHentOppgaveDto,
 } from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
@@ -23,8 +25,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         byggTomRessurs<IDataForManuellJournalføring>()
     );
     const history = useHistory();
-    const [oppgaver, settOppgaver] = React.useState<Ressurs<IOppgave[]>>(
-        byggTomRessurs<IOppgave[]>()
+    const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
+        byggTomRessurs<IHentOppgaveDto>()
     );
 
     const { opprettEllerHentFagsak } = useFagsakApi(
@@ -53,7 +55,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             indeks: number;
         };
 
-        const oppgaveMedIndeks: OppgaveMedIndeks[] = oppgaver.data.map((v, i) => {
+        const oppgaveMedIndeks: OppgaveMedIndeks[] = oppgaver.data.oppgaver.map((v, i) => {
             return {
                 oppgave: v,
                 indeks: i,
@@ -121,9 +123,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         settOppgaver({
             status: oppgaver.status,
-            data: sortedMedIndeks.map(
-                (oppgaveMedIndeks: OppgaveMedIndeks) => oppgaveMedIndeks.oppgave
-            ),
+            data: {
+                ...oppgaver.data,
+                oppgaver: sortedMedIndeks.map(
+                    (oppgaveMedIndeks: OppgaveMedIndeks) => oppgaveMedIndeks.oppgave
+                ),
+            },
         });
 
         settSideindeks(sortedMedIndeks.length > 0 ? 0 : -1);
@@ -144,7 +149,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const hentSidetall = () =>
         oppgaver.status === RessursStatus.SUKSESS
-            ? Math.floor((oppgaver.data.length - 1) / oppgaveSideLimit) + 1
+            ? Math.floor((oppgaver.data.oppgaver.length - 1) / oppgaveSideLimit) + 1
             : 0;
 
     const nesteSide = () => sideindeks < hentSidetall() - 1 && settSideindeks(sideindeks + 1);
@@ -152,10 +157,10 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const forrigeSide = () => sideindeks > 0 && settSideindeks(sideindeks - 1);
 
     const hentOppgaveSide = () =>
-        oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.length > 0
-            ? oppgaver.data.slice(
+        oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
+            ? oppgaver.data.oppgaver.slice(
                   sideindeks * oppgaveSideLimit,
-                  Math.min((sideindeks + 1) * oppgaveSideLimit, oppgaver.data.length)
+                  Math.min((sideindeks + 1) * oppgaveSideLimit, oppgaver.data.oppgaver.length)
               )
             : [];
 
@@ -164,11 +169,15 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
-        prioritet?: string,
         frist?: string,
         registrertDato?: string,
         saksbehandler?: string
     ) => {
+        settOppgaver({
+            ...oppgaver,
+            status: RessursStatus.HENTER,
+        });
+
         const saksbehandlerForBackend =
             saksbehandler !== Object.keys(SaksbehandlerFilter)[0] &&
             saksbehandler !== Object.keys(SaksbehandlerFilter)[1]
@@ -179,14 +188,14 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             behandlingstema,
             oppgavetype,
             enhet,
-            prioritet,
             frist,
             registrertDato,
             saksbehandlerForBackend
-        ).then((oppgaverRessurs: Ressurs<IOppgave[]>) => {
+        ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
             settOppgaver(oppgaverRessurs);
             settSideindeks(
-                oppgaverRessurs.status === RessursStatus.SUKSESS && oppgaverRessurs.data.length > 0
+                oppgaverRessurs.status === RessursStatus.SUKSESS &&
+                    oppgaverRessurs.data.oppgaver.length > 0
                     ? 0
                     : -1
             );
@@ -239,61 +248,32 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
-        prioritet?: string,
         frist?: string,
         registrertDato?: string,
         saksbehandler?: string
-    ): Promise<Ressurs<IOppgave[]>> => {
-        interface LooseObject {
-            [key: string]: string;
-        }
-        const searchParams: LooseObject = {};
+    ): Promise<Ressurs<IHentOppgaveDto>> => {
+        const finnOppgaveRequest: IFinnOppgaveRequest = {
+            behandlingstema: behandlingstema,
+            oppgavetype: oppgavetype,
+            enhet: enhet,
+            saksbehandler: saksbehandler,
+            journalpostId: undefined,
+            opprettetFomTidspunkt: registrertDato ? `${registrertDato}T00:00:00.000` : undefined,
+            opprettetTomTidspunkt: registrertDato ? `${registrertDato}T23:59:59.999` : undefined,
+            fristFomDato: frist,
+            fristTomDato: frist,
+            aktivFomDato: undefined,
+            aktivTomDato: undefined,
+            limit: limit,
+            offset: 0,
+        };
 
-        if (limit !== undefined) {
-            searchParams['limit'] = limit.toString();
-        }
-
-        if (behandlingstema !== undefined) {
-            searchParams['behandlingstema'] = behandlingstema;
-        }
-
-        if (oppgavetype !== undefined) {
-            searchParams['oppgavetype'] = oppgavetype;
-        }
-
-        if (enhet !== undefined) {
-            searchParams['enhet'] = enhet;
-        }
-
-        if (prioritet !== undefined) {
-            searchParams['prioritet'] = prioritet;
-        }
-
-        if (registrertDato !== undefined) {
-            searchParams['registrertDato'] = registrertDato;
-        }
-
-        if (frist !== undefined) {
-            searchParams['frist'] = frist;
-        }
-
-        if (saksbehandler !== undefined) {
-            searchParams['saksbehandler'] = saksbehandler;
-        }
-
-        let query = new URLSearchParams(searchParams).toString();
-        query = query === '' ? query : '?' + query;
-
-        settOppgaver({
-            ...oppgaver,
-            status: RessursStatus.HENTER,
-        });
-
-        return axiosRequest<IOppgave[], void>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/oppgave${query}`,
+        return axiosRequest<IHentOppgaveDto, IFinnOppgaveRequest>({
+            data: finnOppgaveRequest,
+            method: 'POST',
+            url: `/familie-ba-sak/api/oppgave/hent-oppgaver`,
         })
-            .then((oppgaverRes: Ressurs<IOppgave[]>) => {
+            .then((oppgaverRes: Ressurs<IHentOppgaveDto>) => {
                 return oppgaverRes;
             })
             .catch((error: AxiosError) => {

@@ -7,6 +7,22 @@ export interface IDataForManuellJournalføring {
     person?: IPerson;
 }
 
+export interface IFinnOppgaveRequest {
+    behandlingstema?: string;
+    oppgavetype?: string;
+    enhet?: string;
+    saksbehandler?: string;
+    journalpostId?: string;
+    opprettetFomTidspunkt?: string;
+    opprettetTomTidspunkt?: string;
+    fristFomDato?: string;
+    fristTomDato?: string;
+    aktivFomDato?: string;
+    aktivTomDato?: string;
+    limit?: number;
+    offset?: number;
+}
+
 export interface IJournalpost {
     datoMottatt?: string;
     journalpostId: string;
@@ -73,6 +89,11 @@ enum Dokumentstatus {
     KASSERT,
 }
 
+export interface IHentOppgaveDto {
+    antallTreffTotalt: number;
+    oppgaver: IOppgave[];
+}
+
 export interface IOppgave {
     [key: string]: string;
     id: string;
@@ -83,14 +104,10 @@ export interface IOppgave {
     behandlingstema: string;
     beskrivelse: string;
     fristFerdigstillelse: string;
-    id: string;
-    journalpostId: string;
     oppgavetype: string;
     opprettetTidspunkt: string;
     prioritet: string;
-    saksreferanse: string;
     status: string;
-    tildeltEnhetsnr: string;
     tilordnetRessurs: string;
 }
 

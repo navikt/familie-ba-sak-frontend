@@ -6,7 +6,6 @@ import {
     EnhetFilter,
     SaksbehandlerFilter,
     GjelderFilter,
-    PrioritetFilter,
 } from '../../typer/oppgave';
 import { Knapp } from 'nav-frontend-knapper';
 import './visoppgave.less';
@@ -47,12 +46,6 @@ const initialFiltre = (innloggetSaksbehandler?: ISaksbehandler): IOppgaverFiltre
             values: Object.values(GjelderFilter).map(v => v.toString()),
             selectedValue: GjelderFilter.Alle,
         },
-        prioritet: {
-            name: 'prioritet',
-            label: 'Prioritet',
-            values: Object.values(PrioritetFilter).map(v => v.toString()),
-            selectedValue: PrioritetFilter.Alle,
-        },
         saksbehandler: {
             name: 'saksbehandler',
             label: 'Saksbehandler',
@@ -85,11 +78,6 @@ const getEnhet = (filter: IOppgaverFilter) => {
         : Object.values(EnhetFilter)
               [index].toString()
               .substring(0, 4);
-};
-
-const getPrioritet = (filter: IOppgaverFilter) => {
-    const index = filter.values.findIndex(v => v === filter.selectedValue);
-    return index === 0 ? undefined : Object.keys(PrioritetFilter)[index];
 };
 
 const getDato = (dato?: string) => {
@@ -191,7 +179,6 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                             getBehandlingstema(filtre.behandlingstema),
                             getOppgavetype(filtre.oppgavetype),
                             getEnhet(filtre.enhet),
-                            getPrioritet(filtre.prioritet),
                             getDato(frist),
                             getDato(registrertDato),
                             getSaksbehandler(filtre.saksbehandler, innloggetSaksbehandler)
@@ -208,7 +195,7 @@ const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSa
                         settFrist('');
                         settRegistrertDato('');
                     }}
-                    className="filterskjema__tilbakestill"
+                    className="filterskjema__button"
                 >
                     Tilbakestill filtrering
                 </Knapp>
