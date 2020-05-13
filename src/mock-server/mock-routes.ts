@@ -17,6 +17,11 @@ const lesMockFil = (filnavn: string) => {
     return fs.readFileSync(path.join(__dirname, '/mock/' + filnavn), 'UTF-8');
 };
 
+const lesMockFilBase64 = (filnavn: string) => {
+    const filRaw = fs.readFileSync(path.join(__dirname, '/mock/' + filnavn));
+    return filRaw.toString('base64');
+};
+
 const byggOkFagsak = (res: Response, content: Ressurs<IFagsak>) => {
     setTimeout(() => res.send(content), delayMs);
 };
@@ -161,6 +166,22 @@ app.post('/familie-ba-sak/api/oppgave/:id/fordel', (req: Request, res: Response)
 app.post('/familie-ba-sak/api/oppgave/:id/tilbakestill', (req: Request, res: Response) => {
     const { id } = req.params;
     setTimeout(() => res.send({ status: 'SUKSESS', data: id }), delayMs);
+});
+
+app.get('/familie-ba-sak/api/dokument/vedtaksbrev/:id', (_, res) => {
+    const pdfData = lesMockFilBase64('mockvedtak.pdf');
+
+    setTimeout(
+        () =>
+            res.send({
+                status: RessursStatus.SUKSESS,
+                data: {
+                    pdfBase64: pdfData,
+                    html: '<HTML lang="nb"><H1>Barnetrygd Vedtaksbrev (Mocked)</H1></HTML>',
+                },
+            }),
+        200
+    );
 });
 
 export default app;

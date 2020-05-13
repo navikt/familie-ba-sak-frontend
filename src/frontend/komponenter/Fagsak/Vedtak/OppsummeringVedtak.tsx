@@ -15,10 +15,8 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import { Knapp } from 'nav-frontend-knapper';
 import Tabs from 'nav-frontend-tabs';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-// @ts-ignore
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import { IDokument } from '../../../typer/dokument';
+import PdfFrame from './PdfFrame';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -31,7 +29,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     const history = useHistory();
 
     const [visPdf, setVisPdf] = React.useState<boolean>(true);
-    const [antallSider, setAntallSider] = React.useState<number>(0);
     const [pdf, setPdf] = React.useState<string>('');
     const [html, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
@@ -47,7 +44,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         if (aktivtVedtak) {
             axiosRequest<IDokument, void>({
                 method: 'GET',
-                url: `/familie-ba-sak/api/dokument/vedtak-html/${aktivtVedtak?.id}`,
+                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
             })
                 .then((response: Ressurs<IDokument>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -99,10 +96,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         });
     };
 
-    const onDocumentLoadSuccess = (pdfInfo: { numPages: React.SetStateAction<number> }) => {
-        setAntallSider(pdfInfo.numPages);
-    };
-
     return (
         <Skjemasteg
             tittel={'Vedtaksbrev'}
@@ -120,28 +113,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 {errorMessage === undefined ? (
                     <div className="flexContainer">
                         {!visPdf && <iframe title="Vedtaksbrev" className="iframe" srcDoc={html} />}
-                        {visPdf && (
-                            <div className="pdf">
-                                <Document
-                                    file={pdf}
-                                    onLoadSuccess={onDocumentLoadSuccess}
-                                    error={'Kunne ikke laste inn PDF-fil.'}
-                                    noData={<NavFrontendSpinner />}
-                                    loading={<NavFrontendSpinner />}
-                                >
-                                    <br />
-                                    {Array.from(new Array(antallSider), (_el, index) => (
-                                        <>
-                                            <Page
-                                                key={`page_${index + 1}`}
-                                                pageNumber={index + 1}
-                                            />
-                                            <br />
-                                        </>
-                                    ))}
-                                </Document>
-                            </div>
-                        )}
+                        {visPdf && <PdfFrame pdfData={pdf} />}
                     </div>
                 ) : (
                     <AlertStripe type="feil">{errorMessage}</AlertStripe>

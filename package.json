@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=production node node_dist/backend/server.js",
-    "start:mock": "tsc && NODE_ENV=development node node_dist/mock-server/server.js",
+    "start:mock": "tsc && yarn copy-pdf-mock && NODE_ENV=development node node_dist/mock-server/server.js",
     "start:dev": "tsc && NODE_ENV=development node node_dist/backend/server.js",
     "build": "yarn build:prod",
     "build:prod": "tsc && yarn lint && webpack --config ./build_n_deploy/webpack/webpack.prod.js",
@@ -15,7 +15,8 @@
     "test": "jest",
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
-    "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix"
+    "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
+    "copy-pdf-mock": "copyfiles -u 1 src/**/**/*.pdf node_dist"
   },
   "husky": {
     "hooks": {
@@ -50,6 +51,7 @@
     "@types/react-collapse": "^5.0.0",
     "@types/react-dom": "^16.9.4",
     "@types/react-modal": "^3.10.5",
+    "@types/react-pdf": "^4.0.3",
     "@types/react-router-dom": "^5.1.2",
     "@types/redis": "^2.8.16",
     "@types/request-promise": "^4.1.44",
