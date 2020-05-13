@@ -41,12 +41,13 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                 url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
             }).then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
+                console.log(response);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
 
                     history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
                 } else if (response.status === RessursStatus.FEILET) {
-                    settFeilmelding(response.melding);
+                    settFeilmelding(response.funksjonellFeilmelding);
                 } else {
                     settFeilmelding('Registrering av søknaden feilet');
                 }
