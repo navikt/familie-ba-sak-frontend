@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSøknad } from '../../../context/SøknadContext';
-import { Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import SøknadType from './SøknadType';
 import SøkerOppholdINorge from './SøkerOppholdINorge';
 import AnnenPart from './AnnenPart';
@@ -11,11 +11,13 @@ import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { useHistory } from 'react-router';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
+import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
 import { useApp } from '../../../context/AppContext';
 import { BehandlingSteg } from '../../../typer/behandling';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import { Knapp } from 'nav-frontend-knapper';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
     const { axiosRequest } = useApp();
@@ -30,23 +32,31 @@ const RegistrerSøknad: React.FunctionComponent = () => {
 
     const [senderInn, settSenderInn] = React.useState(false);
 
-    const nesteAction = () => {
+    const [visModal, settVisModal] = React.useState<boolean>(false);
+
+    const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
         if (fagsak.status === RessursStatus.SUKSESS && feilmeldinger.length === 0) {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
             settSenderInn(true);
 
-            axiosRequest<IFagsak, ISøknadDTO>({
+            axiosRequest<IFagsak, IRestRegistrerSøknad>({
                 method: 'POST',
-                data: søknad,
-                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
+                data: { søknad, bekreftEndringerViaFrontend },
+                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag/v2`,
             }).then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-
                     history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
                 } else if (response.status === RessursStatus.FEILET) {
-                    settFeilmelding(response.melding);
+                    if (
+                        response.melding ==
+                        'Saksbehandler forsøker å fjerne vilkår fra vilkårsvurdering'
+                    ) {
+                        settVisModal(true);
+                    } else {
+                        settFeilmelding(response.melding);
+                    }
                 } else {
                     settFeilmelding('Registrering av søknaden feilet');
                 }
@@ -99,7 +109,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                         settFeilmelding('Kunne ikke finne id på fagsak.');
                     }
                 } else {
-                    nesteAction();
+                    nesteAction(false);
                 }
             }}
             nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
@@ -137,6 +147,40 @@ const RegistrerSøknad: React.FunctionComponent = () => {
 
                 {feilmelding && <Feilmelding children={feilmelding} />}
             </div>
+
+            {visModal && (
+                <UIModalWrapper
+                    modal={{
+                        tittel: 'Advarsel om fjerning av vilkår',
+                        lukkKnapp: false,
+                        visModal: visModal,
+                        actions: [
+                            <Knapp
+                                key={'nei'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisModal(false);
+                                }}
+                                children={'Nei'}
+                            />,
+                            <Knapp
+                                key={'ja'}
+                                type={'hoved'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisModal(false);
+                                    nesteAction(true);
+                                }}
+                                children={'Ja'}
+                            />,
+                        ],
+                    }}
+                >
+                    <Normaltekst>
+                        advarseltekst m/vilkår og spørsmål om man er sikker på at man vil fjerne
+                    </Normaltekst>
+                </UIModalWrapper>
+            )}
         </Skjemasteg>
     );
 };

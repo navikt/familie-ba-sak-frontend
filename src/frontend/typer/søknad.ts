@@ -1,6 +1,11 @@
 import { BehandlingKategori, BehandlingUnderkategori } from './behandling';
 import { INøkkelPar } from './common';
 
+export interface IRestRegistrerSøknad {
+    søknad: ISøknadDTO;
+    bekreftEndringerViaFrontend: boolean;
+}
+
 export interface ISøknadDTO {
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
