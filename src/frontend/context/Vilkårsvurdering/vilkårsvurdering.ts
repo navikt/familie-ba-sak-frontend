@@ -24,12 +24,13 @@ import {
 import { datoformat } from '../../utils/formatter';
 import { randomUUID } from '../../utils/commons';
 import { IPerson } from '../../typer/person';
-import { IFelt } from '../../typer/felt';
+import { IFelt, Valideringsstatus } from '../../typer/felt';
 import {
     lagInitiellFelt,
     erUtfylt,
     erPeriodeGyldig,
     erResultatGyldig,
+    ikkeValider,
 } from '../../utils/validators';
 import { validerVilkår, kjørValidering } from './validering';
 import { hentPeriode, hentResultat, hentBegrunnelse } from './utils';
@@ -422,10 +423,12 @@ export const mapFraRestVilkårsvurderingTilUi = (
                         personResultat.vilkårResultater.map((vilkårResultat: IRestVilkårResultat) =>
                             lagInitiellFelt(
                                 {
-                                    begrunnelse: lagInitiellFelt(
-                                        vilkårResultat.begrunnelse,
-                                        erUtfylt
-                                    ),
+                                    begrunnelse: {
+                                        feilmelding: '',
+                                        valideringsFunksjon: ikkeValider,
+                                        valideringsstatus: Valideringsstatus.OK,
+                                        verdi: vilkårResultat.begrunnelse,
+                                    },
                                     id: randomUUID(),
                                     periode: lagInitiellFelt(
                                         nyPeriode(
