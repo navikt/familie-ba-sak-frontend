@@ -14,8 +14,6 @@ import { aktivVedtak } from '../../../api/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import { Knapp } from 'nav-frontend-knapper';
-import Tabs from 'nav-frontend-tabs';
-import { IDokument } from '../../../typer/dokument';
 import PdfFrame from './PdfFrame';
 
 interface IVedtakProps {
@@ -28,9 +26,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const history = useHistory();
 
-    const [visPdf, setVisPdf] = React.useState<boolean>(true);
     const [pdf, setPdf] = React.useState<string>('');
-    const [html, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
@@ -41,18 +37,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtak(fagsak);
+        const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
         if (aktivtVedtak) {
-            axiosRequest<IDokument, void>({
-                method: 'POST',
+            axiosRequest<string, void>({
+                method: httpMethod,
                 url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
             })
-                .then((response: Ressurs<IDokument>) => {
+                .then((response: Ressurs<string>) => {
                     if (response.status === RessursStatus.SUKSESS) {
-                        setPdf(`data:application/pdf;base64,${response.data.pdfBase64}`);
-                        setBrev(
-                            response.data.html ||
-                                '<HTML lang="nb"><H1>HTML ikke tilgjengelig</H1></HTML>'
-                        );
+                        setPdf(`data:application/pdf;base64,${response.data}`);
                         setErrorMessage(undefined);
                     } else if (response.status === RessursStatus.FEILET) {
                         setErrorMessage(response.melding);
@@ -106,15 +99,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             maxWidthStyle="100%"
         >
             <div className="oppsummering">
-                <Tabs
-                    tabs={[{ label: 'PDF' }, { label: 'HTML' }]}
-                    onChange={(_event, index) => setVisPdf(index === 0)}
-                />
                 {errorMessage === undefined ? (
-                    <div className="flexContainer">
-                        {!visPdf && <iframe title="Vedtaksbrev" className="iframe" srcDoc={html} />}
-                        {visPdf && <PdfFrame pdfData={pdf} />}
-                    </div>
+                    <PdfFrame pdfData={pdf} />
                 ) : (
                     <AlertStripe type="feil">{errorMessage}</AlertStripe>
                 )}

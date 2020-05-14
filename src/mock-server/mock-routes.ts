@@ -175,10 +175,20 @@ app.post('/familie-ba-sak/api/dokument/vedtaksbrev/:id', (_, res) => {
         () =>
             res.send({
                 status: RessursStatus.SUKSESS,
-                data: {
-                    pdfBase64: pdfData,
-                    html: '<HTML lang="nb"><H1>Barnetrygd Vedtaksbrev (Mocked)</H1></HTML>',
-                },
+                data: pdfData,
+            }),
+        200
+    );
+});
+
+app.get('/familie-ba-sak/api/dokument/vedtaksbrev/:id', (_, res) => {
+    const pdfData = lesMockFilBase64('mockvedtak.pdf');
+
+    setTimeout(
+        () =>
+            res.send({
+                status: RessursStatus.SUKSESS,
+                data: pdfData,
             }),
         200
     );

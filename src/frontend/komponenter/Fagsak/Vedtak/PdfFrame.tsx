@@ -14,7 +14,7 @@ const PdfFrame: React.FunctionComponent<IPdfFrameProps> = ({ pdfData }) => {
     };
 
     return (
-        <div className="pdf">
+        <div className="pdf-frame">
             <Document
                 file={pdfData}
                 onLoadSuccess={onDocumentLoadSuccess}
@@ -24,10 +24,10 @@ const PdfFrame: React.FunctionComponent<IPdfFrameProps> = ({ pdfData }) => {
             >
                 <br />
                 {Array.from(new Array(antallSider), (_el, index) => (
-                    <>
+                    <div key={index + 1}>
                         <Page key={`page_${index + 1}`} pageNumber={index + 1} />
                         <br />
-                    </>
+                    </div>
                 ))}
             </Document>
         </div>
