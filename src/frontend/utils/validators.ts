@@ -54,6 +54,9 @@ export const erResultatGyldig = (felt: IFelt<Resultat>): IFelt<Resultat> => {
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
 export const erUtfylt = (felt: IFelt<string>): IFelt<string> => {
+    if (felt.verdi === '') {
+        return feil(felt, ikkeUtfyltFelt);
+    }
     return ok(felt);
 };
 
@@ -71,4 +74,8 @@ export const validerFelt = <T>(nyVerdi: T, felt: IFelt<T>): IFelt<T> => {
         ...felt,
         verdi: nyVerdi,
     });
+};
+
+export const ikkeValider = <T>(felt: IFelt<T>): IFelt<T> => {
+    return ok(felt);
 };
