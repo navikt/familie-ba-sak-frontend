@@ -27,6 +27,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
     const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
+    const [funksjonellFeilmelding, settFunksjonellFeilmelding] = React.useState('');
 
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
@@ -49,13 +50,11 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                     settFagsak(response);
                     history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
                 } else if (response.status === RessursStatus.FEILET) {
-                    if (
-                        response.melding ==
-                        'Saksbehandler forsøker å fjerne vilkår fra vilkårsvurdering'
-                    ) {
+                    if (response.melding.includes('fjerne vilkår')) {
+                        settFunksjonellFeilmelding(response.funksjonellFeilmelding);
                         settVisModal(true);
                     } else {
-                        settFeilmelding(response.melding);
+                        settFeilmelding(response.funksjonellFeilmelding);
                     }
                 } else {
                     settFeilmelding('Registrering av søknaden feilet');
@@ -100,6 +99,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
 
     return (
         <Skjemasteg
+            className={'søknad'}
             tittel={'Informasjon fra søknaden'}
             nesteOnClick={() => {
                 if (erLesevisning()) {
@@ -115,43 +115,42 @@ const RegistrerSøknad: React.FunctionComponent = () => {
             nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
             senderInn={senderInn}
         >
-            <div className={'søknad'}>
-                {søknadErLastetFraBackend && !erLesevisning() && (
-                    <>
-                        <br />
-                        <AlertStripeAdvarsel
-                            children={
-                                'En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.'
-                            }
-                        />
-                        <br />
-                    </>
-                )}
-
-                <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-
-                <SøkerOppholdINorge settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-
-                <AnnenPart settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-
-                <Barna søknad={søknad} />
-
-                {feilmeldinger.length > 0 && visFeilmeldinger && (
-                    <Feiloppsummering
-                        tittel={'For å gå videre må du rette opp følgende:'}
-                        feil={feilmeldinger}
+            {søknadErLastetFraBackend && !erLesevisning() && (
+                <>
+                    <br />
+                    <AlertStripeAdvarsel
+                        children={
+                            'En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.'
+                        }
                     />
-                )}
+                    <br />
+                </>
+            )}
 
-                <br />
+            <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
-                {feilmelding && <Feilmelding children={feilmelding} />}
-            </div>
+            <SøkerOppholdINorge settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+
+            <AnnenPart settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+
+            <Barna søknad={søknad} />
+
+            {feilmeldinger.length > 0 && visFeilmeldinger && (
+                <Feiloppsummering
+                    tittel={'For å gå videre må du rette opp følgende:'}
+                    feil={feilmeldinger}
+                />
+            )}
+
+            <br />
+
+            {feilmelding && <Feilmelding children={feilmelding} />}
 
             {visModal && (
                 <UIModalWrapper
                     modal={{
-                        tittel: 'Advarsel om fjerning av vilkår',
+                        className: 'søknad-modal',
+                        tittel: 'Er du sikker på at du vil gå videre?',
                         lukkKnapp: false,
                         visModal: visModal,
                         actions: [
@@ -176,8 +175,8 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                         ],
                     }}
                 >
-                    <Normaltekst>
-                        advarseltekst m/vilkår og spørsmål om man er sikker på at man vil fjerne
+                    <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
+                        {funksjonellFeilmelding}
                     </Normaltekst>
                 </UIModalWrapper>
             )}
