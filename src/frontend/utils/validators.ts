@@ -52,18 +52,8 @@ export const erResultatGyldig = (felt: IFelt<Resultat>): IFelt<Resultat> => {
     return felt.verdi !== Resultat.KANSKJE ? ok(felt) : feil(felt, 'Resultat er ikke satt');
 };
 
-export const erGyldigBegrunnelse = (felt: IFelt<string>): IFelt<string> => {
-    if (felt.verdi === '') {
-        return feil(felt, 'Begrunnelse er påkrevd. Vennligst fyll ut en begrunnelse til vedtaket.');
-    }
-    return ok(felt);
-};
-
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
 export const erUtfylt = (felt: IFelt<string>): IFelt<string> => {
-    if (felt.verdi === '') {
-        return feil(felt, ikkeUtfyltFelt);
-    }
     return ok(felt);
 };
 
