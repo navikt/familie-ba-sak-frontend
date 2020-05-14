@@ -44,7 +44,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         if (aktivtVedtak) {
             axiosRequest<IDokument, void>({
                 method: 'POST',
-                url: `/familie-ba-sak/api/dokument/genere_vedtaksbrev/${aktivtVedtak?.id}`,
+                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
             })
                 .then((response: Ressurs<IDokument>) => {
                     if (response.status === RessursStatus.SUKSESS) {

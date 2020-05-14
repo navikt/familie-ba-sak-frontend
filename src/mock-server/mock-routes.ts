@@ -168,7 +168,7 @@ app.post('/familie-ba-sak/api/oppgave/:id/tilbakestill', (req: Request, res: Res
     setTimeout(() => res.send({ status: 'SUKSESS', data: id }), delayMs);
 });
 
-app.post('/familie-ba-sak/api/dokument/genere_vedtaksbrev/:id', (_, res) => {
+app.post('/familie-ba-sak/api/dokument/vedtaksbrev/:id', (_, res) => {
     const pdfData = lesMockFilBase64('mockvedtak.pdf');
 
     setTimeout(
