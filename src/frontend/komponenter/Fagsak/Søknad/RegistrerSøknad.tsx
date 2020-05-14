@@ -27,7 +27,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
     const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
-    const [funksjonellFeilmelding, settFunksjonellFeilmelding] = React.useState('');
+    const [frontendllFeilmelding, settFrontendFeilmelding] = React.useState('');
 
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
@@ -51,10 +51,10 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                     history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
                 } else if (response.status === RessursStatus.FEILET) {
                     if (response.melding.includes('fjerne vilkår')) {
-                        settFunksjonellFeilmelding(response.funksjonellFeilmelding);
+                        settFrontendFeilmelding(response.frontendFeilmelding);
                         settVisModal(true);
                     } else {
-                        settFeilmelding(response.funksjonellFeilmelding);
+                        settFeilmelding(response.frontendFeilmelding);
                     }
                 } else {
                     settFeilmelding('Registrering av søknaden feilet');
@@ -176,7 +176,7 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                     }}
                 >
                     <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
-                        {funksjonellFeilmelding}
+                        {frontendllFeilmelding}
                     </Normaltekst>
                 </UIModalWrapper>
             )}

@@ -24,7 +24,7 @@ export type Ressurs<T> =
     | {
           errorMelding?: string;
           melding: string;
-          funksjonellFeilmelding: string;
+          frontendFeilmelding: string;
           status: RessursStatus.FEILET;
       };
 
@@ -49,13 +49,13 @@ export const byggHenterRessurs = <T>(): Ressurs<T> => {
 
 export const byggFeiletRessurs = <T>(
     melding: string,
-    funksjonellFeilmelding: string,
+    frontendFeilmelding: string,
     error?: Error
 ): Ressurs<T> => {
     return {
         errorMelding: error ? error.message : undefined,
         melding,
-        funksjonellFeilmelding,
+        frontendFeilmelding,
         status: RessursStatus.FEILET,
     };
 };
