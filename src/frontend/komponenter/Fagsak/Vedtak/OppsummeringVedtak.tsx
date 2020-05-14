@@ -43,8 +43,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         const aktivtVedtak = aktivVedtak(fagsak);
         if (aktivtVedtak) {
             axiosRequest<IDokument, void>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
+                method: 'POST',
+                url: `/familie-ba-sak/api/dokument/genere_vedtaksbrev/${aktivtVedtak?.id}`,
             })
                 .then((response: Ressurs<IDokument>) => {
                     if (response.status === RessursStatus.SUKSESS) {
