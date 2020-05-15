@@ -20,8 +20,13 @@ import { hentAlder } from '../../utils/formatter';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
+import { ISaksbehandler } from '../../typer/saksbehandler';
 
-const FagsakContainer: React.FunctionComponent = () => {
+interface IProps {
+    innloggetSaksbehandler?: ISaksbehandler;
+}
+
+const FagsakContainer: React.FunctionComponent<IProps> = () => {
     const { fagsakId } = useParams();
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();

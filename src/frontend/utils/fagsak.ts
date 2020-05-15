@@ -1,8 +1,9 @@
 import moment from 'moment';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { IPersonResultat, IVilkårResultat, Resultat } from '../typer/vilkår';
 import { IFelt } from '../typer/felt';
+import { IVedtakForBehandling } from '../typer/vedtak';
+import { IPersonResultat, IVilkårResultat, Resultat } from '../typer/vilkår';
 
 export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
     if (fagsak.behandlinger.length === 0) {
@@ -16,6 +17,12 @@ export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | und
 
 export const hentAktivBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
     return fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv === true);
+};
+
+export const hentAktivVedtakPåBehandlig = (
+    behandling: IBehandling
+): IVedtakForBehandling | undefined => {
+    return behandling.vedtakForBehandling.find((vedtak: IVedtakForBehandling) => vedtak.aktiv);
 };
 
 /**

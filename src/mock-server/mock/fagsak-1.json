@@ -9,7 +9,7 @@
                 "aktiv": true,
                 "behandlingId": 2,
                 "type": "REVURDERING",
-                "status": "OPPRETTET",
+                "status": "SENDT_TIL_BESLUTTER",
                 "steg": "BEHANDLING_AVSLUTTET",
                 "kategori": "NASJONAL",
                 "opprettetTidspunkt": "2020-02-01T12:00:00.00",
@@ -95,7 +95,7 @@
                 "vedtakForBehandling": [
                     {
                         "aktiv": true,
-                        "ansvarligSaksbehandler": "Henning.Hakonsen@trygdeetaten.no",
+                        "ansvarligSaksbehandler": "Hanne Gunby",
                         "vedtaksdato": "2020-02-14",
                         "personBeregninger": [
                         {
@@ -133,7 +133,8 @@
                     ], 
                         "id": "3"
                     }
-                ]
+                ],
+                "endretAv": "VL"
             },
             {
                 "aktiv": false,

@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
-
+import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPerson } from '../typer/person';
@@ -12,10 +12,9 @@ import {
     Ressurs,
     RessursStatus,
 } from '../typer/ressurs';
-import { useApp } from './AppContext';
-import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
-import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { tilFeilside } from '../utils/commons';
+import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
+import { useApp } from './AppContext';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;

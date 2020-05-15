@@ -9,7 +9,7 @@ import Container from './Container';
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 
 const App: React.FC = () => {
-    const [innloggetSaksbehandler, settInnloggetSaksbehandler] = React.useState<
+    const [autentisertSaksbehandler, settInnloggetSaksbehandler] = React.useState<
         ISaksbehandler | undefined
     >(undefined);
 
@@ -20,9 +20,9 @@ const App: React.FC = () => {
     }, []);
 
     return (
-        <ErrorBoundary innloggetSaksbehandler={innloggetSaksbehandler}>
-            <AppProvider innloggetSaksbehandler={innloggetSaksbehandler}>
-                <Container innloggetSaksbehandler={innloggetSaksbehandler} />
+        <ErrorBoundary autentisertSaksbehandler={autentisertSaksbehandler}>
+            <AppProvider autentisertSaksbehandler={autentisertSaksbehandler}>
+                <Container innloggetSaksbehandler={autentisertSaksbehandler} />
             </AppProvider>
         </ErrorBoundary>
     );
