@@ -1,10 +1,9 @@
-import 'nav-frontend-tabell-style';
-
 import Alertstripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
+import 'nav-frontend-tabell-style';
 import { Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
-
+import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
     EnhetFilter,
@@ -14,7 +13,6 @@ import {
     PrioritetFilter,
 } from '../../typer/oppgave';
 import { RessursStatus } from '../../typer/ressurs';
-import { ISaksbehandler } from '../../typer/saksbehandler';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import {
@@ -36,12 +34,9 @@ const getEnheter = (enhetId: string) => {
     return index < 0 ? enhetId : Object.values(EnhetFilter)[index];
 };
 
-interface IOppgaveListProps {
-    innloggetSaksbehandler?: ISaksbehandler;
-}
-
-const OppgaveList: React.FunctionComponent<IOppgaveListProps> = ({ innloggetSaksbehandler }) => {
+const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, sortOppgave, hentOppgaveSide } = useOppgaver();
+    const { innloggetSaksbehandler } = useApp();
 
     const [feltSortOrder, settFeltSortOrder] = React.useState<Map<ListFelt, FeltSortOrder>>(
         initFeltOrder
