@@ -30,7 +30,7 @@ export const sider: ISide[] = [
         id: 'BEHANDLINGRESULTAT',
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
-        steg: BehandlingSteg.VILKÅRSVURDERING,
+        steg: BehandlingSteg.SEND_TIL_BESLUTTER,
     },
     { id: 'VEDTAK', href: 'vedtak', navn: 'Vedtak', steg: BehandlingSteg.SEND_TIL_BESLUTTER },
 ];
