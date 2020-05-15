@@ -1,6 +1,10 @@
+import { AxiosError } from 'axios';
+import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
+import { useHistory } from 'react-router';
+import { useApp } from '../../../context/AppContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
-import { Systemtittel } from 'nav-frontend-typografi';
 import { IFagsak } from '../../../typer/fagsak';
 import {
     byggFeiletRessurs,
@@ -9,16 +13,12 @@ import {
     Ressurs,
     RessursStatus,
 } from '../../../typer/ressurs';
-import { useApp } from '../../../context/AppContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { AxiosError } from 'axios';
-import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
-import Info from '../../../ikoner/Info';
+import { hentAktivBehandlingPåFagsak, hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-import { Knapp } from 'nav-frontend-knapper';
-import { useHistory } from 'react-router';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
+import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilBeslutterSkjema';
+import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 
 interface IProps {
     aktivBehandling: IBehandling | undefined;
@@ -36,7 +36,7 @@ const initiellModalVerdi = {
 };
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fagsak }) => {
-    const { axiosRequest, hentSaksbehandlerRolle } = useApp();
+    const { axiosRequest, hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
@@ -51,7 +51,17 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
 
     const skalViseSkjema =
         BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER;
+        aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER &&
+        history.location.pathname.includes('vedtak');
+
+    const kanBeslutte =
+        innloggetSaksbehandler?.email !== hentAktivBehandlingPåFagsak(fagsak)?.endretAv ?? false;
+
+    const ansvarligSaksbehandler = aktivBehandling
+        ? hentAktivVedtakPåBehandlig(aktivBehandling)?.ansvarligSaksbehandler
+        : 'UKJENT SAKSBEHANDLER';
+
+    const opprettetTidspunkt = hentAktivBehandlingPåFagsak(fagsak)?.opprettetTidspunkt;
 
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
         settInnsendtVedtak(byggHenterRessurs());
@@ -83,18 +93,18 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
 
     return (
         <div>
-            {skalViseSkjema && (
-                <div className="totrinnskontroll">
-                    <div className="totrinnskontroll-tittel">
-                        <Info className="ikon" />
-                        <Systemtittel>Totrinnskontroll</Systemtittel>
-                    </div>
+            {skalViseSkjema &&
+                (kanBeslutte ? (
                     <Totrinnskontrollskjema
                         sendInnVedtak={sendInnVedtak}
                         innsendtVedtak={innsendtVedtak}
                     />
-                </div>
-            )}
+                ) : (
+                    <TotrinnskontrollSendtTilBeslutterSkjema
+                        ansvarligSaksbehandler={ansvarligSaksbehandler}
+                        opprettetTidspunkt={opprettetTidspunkt}
+                    />
+                ))}
             {modalVerdi && (
                 <UIModalWrapper
                     modal={{

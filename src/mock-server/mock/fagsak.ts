@@ -144,6 +144,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         status: BehandlingStatus.SENDT_TIL_BESLUTTER,
         personResultater: [søkerPersonResultat, barnPersonResultat],
         vedtakForBehandling: [],
+        endretAv: 'VL',
     };
 
     return behandling;

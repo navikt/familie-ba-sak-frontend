@@ -1,6 +1,6 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import createUseContext from 'constate';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { håndterRessurs, loggFeil, preferredAxios } from '../api/axios';
 import { Ressurs } from '../typer/ressurs';
@@ -23,12 +23,19 @@ const initalState: IModal = {
 };
 
 interface IProps {
-    innloggetSaksbehandler: ISaksbehandler | undefined;
+    autentisertSaksbehandler: ISaksbehandler | undefined;
 }
 
-const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IProps) => {
+const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IProps) => {
     const [autentisert, settAutentisert] = React.useState(true);
+    const [innloggetSaksbehandler, settInnloggetSaksbehandler] = React.useState(
+        autentisertSaksbehandler
+    );
     const [modal, settModal] = React.useState<IModal>(initalState);
+
+    useEffect(() => {
+        settInnloggetSaksbehandler(autentisertSaksbehandler);
+    }, [autentisertSaksbehandler]);
 
     const åpneModal = () => {
         settModal({
@@ -81,6 +88,7 @@ const [AppProvider, useApp] = createUseContext(({ innloggetSaksbehandler }: IPro
         axiosRequest,
         hentSaksbehandlerRolle,
         autentisert,
+        innloggetSaksbehandler,
         åpneModal,
         lukkModal,
         modal,

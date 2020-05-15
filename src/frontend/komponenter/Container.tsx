@@ -37,7 +37,14 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                         return <Redirect from={'/'} to={'/oppgaver'} />;
                                     }}
                                 />
-                                <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
+                                <Route
+                                    path="/fagsak/:fagsakId"
+                                    render={() => (
+                                        <FagsakContainer
+                                            innloggetSaksbehandler={innloggetSaksbehandler}
+                                        />
+                                    )}
+                                />
 
                                 <OppgaverProvider>
                                     <Route
