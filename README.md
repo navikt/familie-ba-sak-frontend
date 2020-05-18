@@ -38,6 +38,7 @@ Spørsmål knyttet til koden eller prosjektet kan rettes til:
 
 * Henning Håkonsen, `henning.hakonsen@nav.no`
 
+
 ## For NAV-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen #team-familie.
