@@ -2,6 +2,7 @@ import Modal from 'nav-frontend-modal';
 import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useApp, IModal } from '../../../context/AppContext';
+import classNames = require('classnames');
 
 interface IProps {
     modal?: IModal;
@@ -9,12 +10,14 @@ interface IProps {
 
 const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) => {
     const useAppModal = useApp().modal;
-    const { tittel, visModal, onClose, lukkKnapp, actions } = modal ? modal : useAppModal;
+    const { tittel, visModal, onClose, lukkKnapp, actions, className } = modal
+        ? modal
+        : useAppModal;
 
     return (
         <Modal
             appElement={document.body}
-            className="uimodal"
+            className={classNames(className, 'uimodal')}
             isOpen={visModal}
             onRequestClose={(): void => onClose && onClose()}
             contentLabel="ui-modal"

@@ -41,7 +41,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     };
     return (
         <SkjemaGruppe
-            className={'vilkår__skjemagruppe'}
+            className={'vilkårsvurdering__skjemagruppe'}
             feil={
                 visFeilmeldinger && opprettelseFeilmelding !== ''
                     ? opprettelseFeilmelding

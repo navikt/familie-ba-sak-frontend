@@ -1,8 +1,8 @@
 import { randomUUID } from '../utils/commons';
 import { IPeriode, nyPeriode } from './periode';
 import { IPerson, PersonType } from './person';
-import { IFelt, nyttFelt } from './felt';
-import { erUtfylt, erPeriodeGyldig, erResultatGyldig } from '../utils/validators';
+import { IFelt, nyttFelt, Valideringsstatus } from './felt';
+import { erPeriodeGyldig, erResultatGyldig, ikkeValider } from '../utils/validators';
 import { INøkkelPar } from './common';
 
 export enum Resultat {
@@ -48,7 +48,12 @@ export enum VilkårType {
 }
 
 export const lagTomtFeltMedVilkår = (vilkårType: VilkårType): IVilkårResultat => ({
-    begrunnelse: nyttFelt('', erUtfylt),
+    begrunnelse: {
+        feilmelding: '',
+        valideringsFunksjon: ikkeValider,
+        valideringsstatus: Valideringsstatus.OK,
+        verdi: '',
+    },
     id: randomUUID(),
     periode: nyttFelt(nyPeriode(), erPeriodeGyldig),
     resultat: nyttFelt(Resultat.KANSKJE, erResultatGyldig),
