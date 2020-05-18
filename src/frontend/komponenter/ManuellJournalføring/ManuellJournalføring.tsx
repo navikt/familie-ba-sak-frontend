@@ -1,43 +1,38 @@
-import React, { useState } from 'react';
-import { useParams, useHistory } from 'react-router';
-import { useOppgaver } from '../../context/OppgaverContext';
-import { RessursStatus, Ressurs, byggTomRessurs } from '../../typer/ressurs';
-import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { IPerson } from '../../typer/person';
-import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { useApp } from '../../context/AppContext';
+import { Knapp } from 'nav-frontend-knapper';
+import Lukknapp from 'nav-frontend-lukknapp';
+import PanelBase from 'nav-frontend-paneler';
 import {
-    IRestOppdaterJournalpost,
-    Journalstatus,
-    dokumenttyper,
-    Dokumenttype,
-    ILogiskVedlegg,
-    IDokumentInfo,
-} from '../../typer/oppgave';
-import {
-    Input,
-    RadioGruppe,
-    Radio,
-    FeiloppsummeringFeil,
     Feiloppsummering,
+    FeiloppsummeringFeil,
+    Input,
+    Radio,
+    RadioGruppe,
     Select,
 } from 'nav-frontend-skjema';
-import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import { Undertittel } from 'nav-frontend-typografi';
-import { ISaksbehandler } from '../../typer/saksbehandler';
-import Lukknapp from 'nav-frontend-lukknapp';
-import { Knapp } from 'nav-frontend-knapper';
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router';
+import { useApp } from '../../context/AppContext';
+import { useOppgaver } from '../../context/OppgaverContext';
+import {
+    Dokumenttype,
+    dokumenttyper,
+    IDokumentInfo,
+    ILogiskVedlegg,
+    IRestOppdaterJournalpost,
+    Journalstatus,
+} from '../../typer/oppgave';
+import { IPerson } from '../../typer/person';
+import { byggTomRessurs, Ressurs, RessursStatus } from '../../typer/ressurs';
 import { randomUUID } from '../../utils/commons';
-import PanelBase from 'nav-frontend-paneler';
+import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
+import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
+import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 
-interface IProps {
-    innloggetSaksbehandler?: ISaksbehandler;
-}
-
-const ManuellJournalføring: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
+const ManuellJournalføring: React.FC = () => {
     const { oppgaveId } = useParams();
-    const { axiosRequest } = useApp();
+    const { axiosRequest, innloggetSaksbehandler } = useApp();
     const history = useHistory();
     const { hentDataForManuellJournalføring, dataForManuellJournalføring } = useOppgaver();
 

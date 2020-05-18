@@ -1,25 +1,23 @@
-import * as React from 'react';
-
-import { RessursStatus } from '../../typer/ressurs';
-import { Route, Switch, useParams } from 'react-router-dom';
-
+import { kjønnType } from '@navikt/familie-typer';
+import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
-import BehandleVilkår from './Vilkårsvurdering/Vilkårsvurdering';
+import * as React from 'react';
+import { Route, Switch, useParams } from 'react-router-dom';
+import { useFagsakRessurser } from '../../context/FagsakContext';
+import { SøknadProvider } from '../../context/SøknadContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { RessursStatus } from '../../typer/ressurs';
+import { hentAlder } from '../../utils/formatter';
+import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
+import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
-import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import Visittkort from '@navikt/familie-visittkort';
-import { kjønnType } from '@navikt/familie-typer';
-import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
-import { SøknadProvider } from '../../context/SøknadContext';
-import { hentAlder } from '../../utils/formatter';
-import { useFagsakRessurser } from '../../context/FagsakContext';
-import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
+import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
+import BehandleVilkår from './Vilkårsvurdering/Vilkårsvurdering';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();

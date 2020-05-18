@@ -74,6 +74,7 @@ export interface IBehandling {
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
+    endretAv: string;
 }
 
 export const behandlerRoller: INøkkelPar = {

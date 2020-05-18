@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Select } from 'nav-frontend-skjema';
-import { useOppgaver, maksAntallOppgaver } from '../../context/OppgaverContext';
-import {
-    OppgavetypeFilter,
-    EnhetFilter,
-    SaksbehandlerFilter,
-    GjelderFilter,
-} from '../../typer/oppgave';
-import { Knapp } from 'nav-frontend-knapper';
-import './visoppgave.less';
-import { ISaksbehandler } from '../../typer/saksbehandler';
-import { RessursStatus } from '../../typer/ressurs';
 import moment from 'moment';
-import Datovelger from '../Felleskomponenter/Datovelger/Datovelger';
+import { Knapp } from 'nav-frontend-knapper';
+import { Select } from 'nav-frontend-skjema';
+import React, { useEffect, useState } from 'react';
+import { maksAntallOppgaver, useOppgaver } from '../../context/OppgaverContext';
+import {
+    EnhetFilter,
+    GjelderFilter,
+    OppgavetypeFilter,
+    SaksbehandlerFilter,
+} from '../../typer/oppgave';
+import { RessursStatus } from '../../typer/ressurs';
+import { ISaksbehandler } from '../../typer/saksbehandler';
 import { datoformatNorsk } from '../../utils/formatter';
+import Datovelger from '../Felleskomponenter/Datovelger/Datovelger';
+import './visoppgave.less';
+import { useApp } from '../../context/AppContext';
 
 type IOppgaverFilter = {
     name: string;
@@ -90,12 +91,9 @@ const getSaksbehandler = (filter: IOppgaverFilter, innloggetSaksbehandler?: ISak
     return index < 2 ? Object.keys(SaksbehandlerFilter)[index] : innloggetSaksbehandler?.navIdent;
 };
 
-interface IFilterSkjemaProps {
-    innloggetSaksbehandler?: ISaksbehandler;
-}
-
-const FilterSkjema: React.FunctionComponent<IFilterSkjemaProps> = ({ innloggetSaksbehandler }) => {
+const FilterSkjema: React.FunctionComponent = () => {
     const { hentOppgaver, oppgaver } = useOppgaver();
+    const { innloggetSaksbehandler } = useApp();
     const [filtre, settFiltre] = useState<IOppgaverFiltre>(initialFiltre(innloggetSaksbehandler));
     const [frist, settFrist] = useState<string | undefined>('');
     const [registrertDato, settRegistrertDato] = useState<string | undefined>('');
