@@ -13,10 +13,13 @@
         justify-content: space-between;
     }
 }
+@pdfFrameHeightMin: 40rem;
+@pdfFrameHeightCalc: ~"calc("100vh ~"-" 17rem ~")";
+@pdfFrameHeight: ~"max(@{pdfFrameHeightCalc}, @{pdfFrameHeightMin})";
 
 .pdf-frame{
-    height: 74vh;
-    width: 50vw;
+    height: @pdfFrameHeight;
+    width: 60rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;

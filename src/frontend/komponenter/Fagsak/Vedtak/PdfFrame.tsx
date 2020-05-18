@@ -21,11 +21,12 @@ const PdfFrame: React.FunctionComponent<IPdfFrameProps> = ({ pdfData }) => {
                 error={'Kunne ikke laste inn PDF-fil.'}
                 noData={<NavFrontendSpinner />}
                 loading={<NavFrontendSpinner />}
+                className={'pdf-frame__document'}
             >
                 <br />
                 {Array.from(new Array(antallSider), (_el, index) => (
                     <div key={index + 1}>
-                        <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+                        <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={1.5} />
                         <br />
                     </div>
                 ))}
