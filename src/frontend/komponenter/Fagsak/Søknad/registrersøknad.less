@@ -1,21 +1,30 @@
 .søknad {
-    max-width: 40rem;
-    margin: 0 auto;
+  max-width: 40rem;
+  margin: 0 auto;
 
-    &__panel {
-        &--innrykk {
-            padding-left: 2rem;
-        }
-        &--gruppebarn {
-            > .lese-felt:first-of-type {
-                font-weight: bold;
-            }
-        }
+  &__panel {
+    &--innrykk {
+      padding-left: 2rem;
     }
 
-    &__barn, &__opphold {
-        & .skjemaelement {
-            margin: 1rem 0;
-        }
+    &--gruppebarn {
+      > .lese-felt:first-of-type {
+        font-weight: bold;
+      }
     }
+  }
+
+  &__barn, &__opphold {
+    & .skjemaelement {
+      margin: 1rem 0;
+    }
+  }
+
+}
+
+.søknad-modal {
+  &__fjern-vilkår-advarsel {
+    white-space: pre-wrap;
+    padding-bottom: 3.5rem;
+  }
 }

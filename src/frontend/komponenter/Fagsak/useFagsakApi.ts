@@ -163,7 +163,7 @@ const useFagsakApi = (
                         history.push(`/fagsak/${fagsak.id}/vedtak`);
                     }
                 } else if (response.status === RessursStatus.FEILET) {
-                    settFeilmelding(response.melding);
+                    settFeilmelding(response.frontendFeilmelding);
                     settVisFeilmeldinger(true);
                 } else {
                     settFeilmelding('Opprettelse av vilkårsvurdering feilet');

@@ -35,12 +35,14 @@ export const håndterRessurs = <T>(
             typetRessurs = {
                 errorMelding: ressurs.errorMelding,
                 melding: ressurs.melding,
+                frontendFeilmelding: ressurs.frontendFeilmelding,
                 status: RessursStatus.FEILET,
             };
             break;
         default:
             typetRessurs = {
-                melding: 'Mest sannsynlig ukjent api feil',
+                melding: 'En feil har oppstått!',
+                frontendFeilmelding: 'En feil har oppstått!',
                 status: RessursStatus.FEILET,
             };
             break;
