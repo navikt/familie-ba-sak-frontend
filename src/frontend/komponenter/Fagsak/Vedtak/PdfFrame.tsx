@@ -3,7 +3,7 @@ import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
 interface IPdfFrameProps {
-    pdfData: string;
+    file: string;
 }
 
 const PdfFrame: React.FunctionComponent<IPdfFrameProps> = ({ pdfData }) => {
