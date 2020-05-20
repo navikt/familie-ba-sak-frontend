@@ -6,7 +6,7 @@ interface IPdfFrameProps {
     file: string;
 }
 
-const PdfFrame: React.FunctionComponent<IPdfFrameProps> = ({ pdfData }) => {
+const PdfFrame: React.FunctionComponent<IPdfFrameProps> = ({ file }) => {
     const [antallSider, setAntallSider] = React.useState<number>(0);
 
     const onDocumentLoadSuccess = (pdfInfo: { numPages: React.SetStateAction<number> }) => {
@@ -16,7 +16,7 @@ const PdfFrame: React.FunctionComponent<IPdfFrameProps> = ({ pdfData }) => {
     return (
         <div className="pdf-frame">
             <Document
-                file={pdfData}
+                file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
                 error={'Kunne ikke laste inn PDF-fil.'}
                 noData={<NavFrontendSpinner />}

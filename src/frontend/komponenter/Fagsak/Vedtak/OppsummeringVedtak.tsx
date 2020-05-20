@@ -48,7 +48,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                         setPdf(`data:application/pdf;base64,${response.data}`);
                         setErrorMessage(undefined);
                     } else if (response.status === RessursStatus.FEILET) {
-                        setErrorMessage(response.melding);
+                        setErrorMessage(response.frontendFeilmelding);
                     } else {
                         setErrorMessage('Ukjent feil, kunne ikke generere forhåndsvisning.');
                     }
@@ -100,7 +100,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         >
             <div className="oppsummering">
                 {errorMessage === undefined ? (
-                    <PdfFrame pdfData={pdf} />
+                    <PdfFrame file={pdf} />
                 ) : (
                     <AlertStripe type="feil">{errorMessage}</AlertStripe>
                 )}
