@@ -7,7 +7,6 @@ import { useHistory } from 'react-router';
 import { BehandlingStatus } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useApp } from '../../../context/AppContext';
 import { aktivVedtak } from '../../../api/fagsak';
@@ -21,7 +20,7 @@ interface IVedtakProps {
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
-    const { settFagsak, erLesevisning } = useFagsakRessurser();
+    const { settFagsak, erLesevisning, åpenBehandling } = useFagsakRessurser();
 
     const history = useHistory();
 
@@ -31,8 +30,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const [submitFeil, settSubmitFeil] = React.useState('');
     const [senderInn, settSenderInn] = React.useState(false);
-
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtak(fagsak);
@@ -63,8 +60,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const visSubmitKnapp =
         !erLesevisning() &&
-        (aktivBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
-            aktivBehandling?.status === BehandlingStatus.OPPRETTET);
+        (åpenBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
+            åpenBehandling?.status === BehandlingStatus.OPPRETTET);
 
     const sendInn = () => {
         settSenderInn(true);

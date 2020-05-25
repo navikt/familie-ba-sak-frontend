@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useHistory } from 'react-router';
 
 import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
@@ -23,7 +22,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
         hentVilkårMedFeil,
         vilkårsvurdering,
     } = useVilkårsvurdering();
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning, åpenBehandling } = useFagsakRessurser();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -34,12 +33,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
         settOpprettelseFeilmelding
     );
 
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-
-    if (!aktivBehandling) {
+    if (!åpenBehandling) {
         return (
             <div>
-                <Normaltekst>Ingen aktiv behandling</Normaltekst>
+                <Normaltekst>Kan ikke finne behandling.</Normaltekst>
             </div>
         );
     }
@@ -68,7 +65,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <BehandlingVilkårSkjema
                 opprettelseFeilmelding={opprettelseFeilmelding}
                 visFeilmeldinger={visFeilmeldinger}
-                behandlingstype={aktivBehandling.type}
+                behandlingstype={åpenBehandling!!.type}
             />
 
             {hentVilkårMedFeil().length > 0 && visFeilmeldinger && (

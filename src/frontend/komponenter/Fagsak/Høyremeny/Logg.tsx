@@ -11,17 +11,17 @@ import moment from 'moment';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
-    aktivBehandling: IBehandling | undefined;
+    åpenBehandling: IBehandling | undefined;
 }
 
-const Logg = ({ aktivBehandling }: IProps) => {
+const Logg = ({ åpenBehandling }: IProps) => {
     const { logg, hentLogg } = useFagsakRessurser();
 
     React.useEffect(() => {
-        if (aktivBehandling) {
-            hentLogg(aktivBehandling?.behandlingId);
+        if (åpenBehandling) {
+            hentLogg(åpenBehandling?.behandlingId);
         }
-    }, [aktivBehandling?.steg]);
+    }, [åpenBehandling?.steg]);
 
     return (
         <Hendelsesoversikt

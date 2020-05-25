@@ -21,7 +21,7 @@ import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilB
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 
 interface IProps {
-    aktivBehandling: IBehandling | undefined;
+    åpenBehandling: IBehandling | undefined;
     fagsak: IFagsak;
 }
 
@@ -35,7 +35,7 @@ const initiellModalVerdi = {
     beslutning: TotrinnskontrollBeslutning.IKKE_VURDERT,
 };
 
-const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fagsak }) => {
+const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsak }) => {
     const { axiosRequest, hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
@@ -51,14 +51,14 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
 
     const skalViseSkjema =
         BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        aktivBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER &&
+        åpenBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER &&
         history.location.pathname.includes('vedtak');
 
     const kanBeslutte =
         innloggetSaksbehandler?.email !== hentAktivBehandlingPåFagsak(fagsak)?.endretAv ?? false;
 
-    const ansvarligSaksbehandler = aktivBehandling
-        ? hentAktivVedtakPåBehandlig(aktivBehandling)?.ansvarligSaksbehandler
+    const ansvarligSaksbehandler = åpenBehandling
+        ? hentAktivVedtakPåBehandlig(åpenBehandling)?.ansvarligSaksbehandler
         : 'UKJENT SAKSBEHANDLER';
 
     const opprettetTidspunkt = hentAktivBehandlingPåFagsak(fagsak)?.opprettetTidspunkt;
@@ -70,9 +70,16 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ aktivBehandling, fa
             totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.UNDERKJENT &&
             !totrinnskontrollData.begrunnelse;
         if (totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
-            settInnsendtVedtak(byggFeiletRessurs('Du må gjøre et valg'));
+            settInnsendtVedtak(
+                byggFeiletRessurs(
+                    'Totrinnskontroll ikke vurdert ved innsending',
+                    'Du må gjøre et valg'
+                )
+            );
         } else if (manglerBegrunnelse) {
-            settInnsendtVedtak(byggFeiletRessurs('Mangler begrunnelse'));
+            settInnsendtVedtak(
+                byggFeiletRessurs('Mangler begrunnelse ved innsending', 'Mangler begrunnelse')
+            );
         } else {
             axiosRequest<IFagsak, ITotrinnskontrollData>({
                 method: 'POST',

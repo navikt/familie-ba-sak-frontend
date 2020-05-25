@@ -21,7 +21,7 @@ import { Knapp } from 'nav-frontend-knapper';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
     const { axiosRequest } = useApp();
-    const { fagsak, settFagsak, erLesevisning } = useFagsakRessurser();
+    const { fagsak, settFagsak, erLesevisning, åpenBehandling } = useFagsakRessurser();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();
@@ -67,12 +67,9 @@ const RegistrerSøknad: React.FunctionComponent = () => {
 
     React.useEffect(() => {
         if (fagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
-
             if (
-                aktivBehandling &&
-                parseInt(BehandlingSteg[aktivBehandling.steg], 10) >=
-                    BehandlingSteg.VILKÅRSVURDERING
+                åpenBehandling &&
+                parseInt(BehandlingSteg[åpenBehandling.steg], 10) >= BehandlingSteg.VILKÅRSVURDERING
             ) {
                 axiosRequest<ISøknadDTO, void>({
                     method: 'GET',

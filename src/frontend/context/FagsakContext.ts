@@ -6,23 +6,16 @@ import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPerson } from '../typer/person';
-import {
-    byggDataRessurs,
-    byggFeiletRessurs,
-    byggTomRessurs,
-    Ressurs,
-    RessursStatus,
-} from '../typer/ressurs';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { tilFeilside } from '../utils/commons';
 import { hentAktivBehandlingPåFagsak, hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
-import { useHistory } from 'react-router';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
     fagsak: Ressurs<IFagsak>;
     logg: Ressurs<ILogg[]>;
-    åpenBehandling: Ressurs<IBehandling>;
+    åpenBehandling?: IBehandling;
 }
 
 const initialState: IHovedRessurser = {
@@ -35,16 +28,12 @@ const initialState: IHovedRessurser = {
     logg: {
         status: RessursStatus.IKKE_HENTET,
     },
-    åpenBehandling: {
-        status: RessursStatus.IKKE_HENTET,
-    },
 };
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
     const { axiosRequest, hentSaksbehandlerRolle } = useApp();
     const { behandlingId } = useParams();
-    const { history } = useHistory();
 
     React.useEffect(() => {
         if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
@@ -75,40 +64,48 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             fagsak: {
                 status: RessursStatus.HENTER,
             },
-            åpenBehandling: {
-                status: RessursStatus.HENTER,
-            },
         });
         axiosRequest<IFagsak, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/${fagsakId}`,
         })
             .then((hentetFagsak: Ressurs<IFagsak>) => {
-                const aktivBehandling =
-                    hentetFagsak.status === RessursStatus.SUKSESS &&
-                    hentAktivBehandlingPåFagsak(hentetFagsak.data);
-                if (aktivBehandling && !behandlingId) {
-                    history.push();
-                }
-                const åpenBehandling =
-                    hentetFagsak.status === RessursStatus.SUKSESS &&
-                    hentBehandlingPåFagsak(hentetFagsak.data, parseInt(behandlingId));
-
                 settFagsakRessurser({
                     ...fagsakRessurser,
                     fagsak: hentetFagsak,
-                    åpenBehandling: åpenBehandling
-                        ? byggDataRessurs(åpenBehandling)
-                        : byggTomRessurs(),
+                    åpenBehandling: bestemÅpenBehandling(hentetFagsak),
                 });
             })
             .catch((error: AxiosError) => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
-                    fagsak: byggFeiletRessurs('Ukjent ved innhenting av fagsak', error),
-                    åpenBehandling: byggFeiletRessurs('Ukjent ved innhenting av fagsak', error),
+                    fagsak: byggFeiletRessurs(
+                        'Ukjent ved innhenting av fagsak',
+                        'Ukjent ved innhenting av fagsak',
+                        error
+                    ),
+                    åpenBehandling: undefined,
                 });
             });
+    };
+
+    const bestemÅpenBehandling = (fagsak: Ressurs<IFagsak>): IBehandling | undefined => {
+        const aktivBehandling =
+            fagsak.status === RessursStatus.SUKSESS && hentAktivBehandlingPåFagsak(fagsak.data);
+        const åpenBehandling =
+            fagsak.status === RessursStatus.SUKSESS &&
+            behandlingId &&
+            hentBehandlingPåFagsak(fagsak.data, parseInt(behandlingId));
+
+        if (åpenBehandling) {
+            return åpenBehandling;
+        } else if (behandlingId) {
+            return undefined;
+        } else if (aktivBehandling) {
+            return aktivBehandling;
+        } else {
+            return undefined;
+        }
     };
 
     const hentLogg = (behandlingId: number): void => {
@@ -128,7 +125,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             .catch(() => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
-                    logg: byggFeiletRessurs('Feil ved lasting av logg'),
+                    logg: byggFeiletRessurs('Feil ved lasting av logg', 'Feil ved lasting av logg'),
                 });
             });
     };
@@ -137,9 +134,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         settFagsakRessurser({ ...fagsakRessurser, fagsak: modifisertFagsak });
 
     const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
-        return fagsakRessurser.åpenBehandling.status === RessursStatus.SUKSESS
-            ? fagsakRessurser.åpenBehandling.data.steg
-            : undefined;
+        return fagsakRessurser.åpenBehandling?.steg;
     };
 
     const erLesevisning = (): boolean => {
@@ -163,6 +158,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     return {
         bruker: fagsakRessurser.bruker,
         fagsak: fagsakRessurser.fagsak,
+        åpenBehandling: fagsakRessurser.åpenBehandling,
         erLesevisning,
         hentStegPåÅpenBehandling,
         hentFagsak,

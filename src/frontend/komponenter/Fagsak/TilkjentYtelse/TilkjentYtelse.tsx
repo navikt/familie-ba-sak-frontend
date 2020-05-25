@@ -2,7 +2,6 @@ import { IFagsak } from '../../../typer/fagsak';
 import { Ingress, Undertittel } from 'nav-frontend-typografi';
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { AxiosError } from 'axios';
@@ -12,6 +11,7 @@ import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SystemetLaster from '../../Felleskomponenter/SystemetLaster/SystemetLaster';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -19,17 +19,17 @@ interface ITilkjentYtelseProps {
 
 const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
+    const { åpenBehandling } = useFagsakRessurser();
     const history = useHistory();
     const [tilkjentYtelseRessurs, setTilkjentYtelseRessurs] = React.useState<
         Ressurs<IOppsummeringBeregning[]>
     >({ status: RessursStatus.IKKE_HENTET });
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
 
     React.useEffect(() => {
         setTilkjentYtelseRessurs({ status: RessursStatus.HENTER });
         axiosRequest<IOppsummeringBeregning[], void>({
             method: 'GET',
-            url: `/familie-ba-sak/api/vedtak/oversikt/${aktivBehandling?.behandlingId}`,
+            url: `/familie-ba-sak/api/vedtak/oversikt/${åpenBehandling?.behandlingId}`,
         })
             .then((response: Ressurs<IOppsummeringBeregning[]>) => {
                 setTilkjentYtelseRessurs(response);

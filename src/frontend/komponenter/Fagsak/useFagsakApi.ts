@@ -83,9 +83,15 @@ const useFagsakApi = (
                         settVisFeilmeldinger(true);
                         settFeilmelding('Opprettelse av behandling feilet');
                     } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
-                        history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
+                        history.push(
+                            `/fagsak/${response.data.id}/${aktivBehandling &&
+                                aktivBehandling.behandlingId}/vilkaarsvurdering`
+                        );
                     } else {
-                        history.push(`/fagsak/${response.data.id}/registrer-soknad`);
+                        history.push(
+                            `/fagsak/${response.data.id}/${aktivBehandling &&
+                                aktivBehandling.behandlingId}/registrer-soknad`
+                        );
                     }
 
                     return;
@@ -157,10 +163,20 @@ const useFagsakApi = (
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
 
+                    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
+                        response.data
+                    );
+
                     if (erBehandlingenInnvilget(vilkårsvurdering)) {
-                        history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
+                        history.push(
+                            `/fagsak/${fagsak.id}/${aktivBehandling &&
+                                aktivBehandling.behandlingId}/tilkjent-ytelse`
+                        );
                     } else {
-                        history.push(`/fagsak/${fagsak.id}/vedtak`);
+                        history.push(
+                            `/fagsak/${fagsak.id}/${aktivBehandling &&
+                                aktivBehandling.behandlingId}/vedtak`
+                        );
                     }
                 } else if (response.status === RessursStatus.FEILET) {
                     settFeilmelding(response.frontendFeilmelding);
