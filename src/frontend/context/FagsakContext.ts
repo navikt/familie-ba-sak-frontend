@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
@@ -33,7 +33,8 @@ const initialState: IHovedRessurser = {
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
     const { axiosRequest, hentSaksbehandlerRolle } = useApp();
-    const { behandlingId } = useParams();
+    const history = useHistory();
+    const behandlingId = history.location.pathname.split('/')[3];
 
     React.useEffect(() => {
         if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
@@ -96,10 +97,12 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             fagsak.status === RessursStatus.SUKSESS &&
             behandlingId &&
             hentBehandlingPåFagsak(fagsak.data, parseInt(behandlingId));
-
+        console.log(åpenBehandling);
+        console.log(behandlingId);
         if (åpenBehandling) {
             return åpenBehandling;
         } else if (behandlingId) {
+            tilFeilside();
             return undefined;
         } else if (aktivBehandling) {
             return aktivBehandling;
