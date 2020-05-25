@@ -15,17 +15,23 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
         <nav className={'venstremeny'}>
             {Object.values(sider)
                 .filter((side: ISide) => visSide(side, åpenBehandling))
-                .map((side: ISide, index: number) => (
-                    <Link
-                        active={erSidenInaktiv(side, åpenBehandling?.steg)}
-                        key={side.id}
-                        id={side.id}
-                        to={`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/${side.href}`}
-                        className={'venstremeny__link'}
-                    >
-                        {`${side.steg ? `${index}. ` : ''}${side.navn}`}
-                    </Link>
-                ))}
+                .map((side: ISide, index: number) => {
+                    const tilPath =
+                        side.id == 'SAKSOVERSIKT'
+                            ? `/fagsak/${fagsak.id}/${side.href}`
+                            : `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/${side.href}`;
+                    return (
+                        <Link
+                            active={erSidenInaktiv(side, åpenBehandling?.steg)}
+                            key={side.id}
+                            id={side.id}
+                            to={tilPath}
+                            className={'venstremeny__link'}
+                        >
+                            {`${side.steg ? `${index}. ` : ''}${side.navn}`}
+                        </Link>
+                    );
+                })}
         </nav>
     );
 };
