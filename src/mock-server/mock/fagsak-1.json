@@ -9,12 +9,13 @@
                 "aktiv": true,
                 "behandlingId": 2,
                 "type": "REVURDERING",
-                "status": "SENDT_TIL_BESLUTTER",
+                "status": "FERDIGSTILT",
                 "steg": "BEHANDLING_AVSLUTTET",
                 "kategori": "NASJONAL",
                 "opprettetTidspunkt": "2020-02-01T12:00:00.00",
-                "resultat": "INNVILGET",
                 "begrunnelse": "Mock begrunnelse",
+                "underkategori": "UTVIDET",
+                "samletResultat": "IKKE_VURDERT",
                 "personer": [
                     {
                         "type": "SØKER",
@@ -38,8 +39,6 @@
                         "personIdent": "12345678912"
                     }
                 ],
-                "underkategori": "UTVIDET",
-                "samletResultat": "IKKE_VURDERT",
                 "personResultater": [
                     {
                         "personIdent": "12345678911",
@@ -143,7 +142,8 @@
                 "status": "FERDIGSTILT",
                 "kategori": "NASJONAL",
                 "opprettetTidspunkt": "2020-02-01T12:00:00.00",
-                "resultat": "INNVILGET",
+                "samletResultat": "INNVILGET",
+                "underkategori": "ORDINÆR",
                 "begrunnelse": "Mock begrunnelse",
                 "personer": [
                     {
@@ -161,7 +161,6 @@
                         "personIdent": "12345678911"
                     }
                 ],
-                "underkategori": "ORDINÆR",
                 "personResultater": [
                     {
                         "personIdent": "12345678911",

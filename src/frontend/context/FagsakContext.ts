@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
+import { useParams } from 'react-router';
 import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
@@ -13,8 +14,9 @@ import {
     RessursStatus,
 } from '../typer/ressurs';
 import { tilFeilside } from '../utils/commons';
-import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
+import { hentAktivBehandlingPåFagsak, hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
+import { useHistory } from 'react-router';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
@@ -41,6 +43,8 @@ const initialState: IHovedRessurser = {
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
     const { axiosRequest, hentSaksbehandlerRolle } = useApp();
+    const { behandlingId } = useParams();
+    const { history } = useHistory();
 
     React.useEffect(() => {
         if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
@@ -83,12 +87,18 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 const aktivBehandling =
                     hentetFagsak.status === RessursStatus.SUKSESS &&
                     hentAktivBehandlingPåFagsak(hentetFagsak.data);
+                if (aktivBehandling && !behandlingId) {
+                    history.push();
+                }
+                const åpenBehandling =
+                    hentetFagsak.status === RessursStatus.SUKSESS &&
+                    hentBehandlingPåFagsak(hentetFagsak.data, parseInt(behandlingId));
 
                 settFagsakRessurser({
                     ...fagsakRessurser,
                     fagsak: hentetFagsak,
-                    åpenBehandling: aktivBehandling
-                        ? byggDataRessurs(aktivBehandling)
+                    åpenBehandling: åpenBehandling
+                        ? byggDataRessurs(åpenBehandling)
                         : byggTomRessurs(),
                 });
             })

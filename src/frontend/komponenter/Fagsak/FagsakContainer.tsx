@@ -88,7 +88,7 @@ const FagsakContainer: React.FunctionComponent = () => {
 
                                         <Route
                                             exact={true}
-                                            path="/fagsak/:fagsakId/registrer-soknad"
+                                            path="/fagsak/:fagsakId/:behandlingId/registrer-soknad"
                                             render={() => {
                                                 return (
                                                     <SøknadProvider>
@@ -99,7 +99,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         />
                                         <Route
                                             exact={true}
-                                            path="/fagsak/:fagsakId/vilkaarsvurdering"
+                                            path="/fagsak/:fagsakId/:behandlingId/vilkaarsvurdering"
                                             render={() => {
                                                 return (
                                                     <VilkårsvurderingProvider fagsak={fagsak.data}>
@@ -110,14 +110,14 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         />
                                         <Route
                                             exact={true}
-                                            path="/fagsak/:fagsakId/tilkjent-ytelse"
+                                            path="/fagsak/:fagsakId/:behandlingId/tilkjent-ytelse"
                                             render={() => {
                                                 return <TilkjentYtelse fagsak={fagsak.data} />;
                                             }}
                                         />
                                         <Route
                                             exact={true}
-                                            path="/fagsak/:fagsakId/vedtak"
+                                            path="/fagsak/:fagsakId/:behandlingId/vedtak"
                                             render={() => {
                                                 return <OppsummeringVedtak fagsak={fagsak.data} />;
                                             }}

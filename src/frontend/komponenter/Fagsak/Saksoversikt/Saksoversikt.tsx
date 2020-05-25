@@ -1,27 +1,26 @@
-import 'nav-frontend-tabell-style';
-import { Input } from 'nav-frontend-skjema';
-import { Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
-import * as React from 'react';
-import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
-
 import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
+import { Input } from 'nav-frontend-skjema';
+import 'nav-frontend-tabell-style';
+import { Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import * as React from 'react';
 import { useHistory } from 'react-router';
+import { useApp } from '../../../context/AppContext';
 import {
+    behandlingsresultater,
     behandlingsstatuser,
     BehandlingStatus,
     behandlingstyper,
     IBehandling,
     kategorier,
     underkategorier,
-    behandlingsresultater,
 } from '../../../typer/behandling';
+import { IPersonBeregning } from '../../../typer/beregning';
+import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import { IPersonBeregning } from '../../../typer/beregning';
-import { useApp } from '../../../context/AppContext';
 import FamilieKnapp from '../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
 
 interface IProps {
@@ -55,6 +54,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
               (vedtak: IVedtakForBehandling) => vedtak.aktiv === true
           )
         : undefined;
+
+    const onClickRow = () => {
+        return true;
+    };
 
     return (
         <div className={'saksoversikt'}>
@@ -183,7 +186,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     );
 
                                     return (
-                                        <tr key={behandling.behandlingId}>
+                                        <tr key={behandling.behandlingId} onClick={onClickRow}>
                                             <td
                                                 children={`${
                                                     behandlingstyper[behandling.type].navn
