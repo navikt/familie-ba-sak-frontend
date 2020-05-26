@@ -1,14 +1,30 @@
 .oppsummering {
+    margin-top: 0.5em;
+
     & .iframe {
         width: 100%;
         min-height: calc(100vh - 20rem);
         background-color: white;
-        border: 1px solid @navMorkGra;
-        margin-bottom: 1rem;
+        border: none;
     }
 
     &__navigering {
         display: flex;
         justify-content: space-between;
     }
+}
+@pdfFrameHeightMin: 40rem;
+@pdfFrameHeightCalc: ~"calc("100vh ~"-" 17rem ~")";
+@pdfFrameHeight: ~"max(@{pdfFrameHeightCalc}, @{pdfFrameHeightMin})";
+
+.pdf-frame{
+    height: @pdfFrameHeight;
+    width: 60rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: @navLysGra;
+    border: 1px solid @navGra80;
+    overflow: auto;
 }
