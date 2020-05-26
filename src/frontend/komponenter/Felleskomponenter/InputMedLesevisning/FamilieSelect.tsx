@@ -1,19 +1,21 @@
 import { Select, SelectProps } from 'nav-frontend-skjema';
 import React from 'react';
-import { useBehandling } from '../../../context/BehandlingContext';
 import Lesefelt from './Lesefelt';
 
-const FamilieSelect: React.FC<SelectProps> = ({
+interface IFamilieSelectProps extends SelectProps {
+    erLesevisning: boolean;
+}
+
+const FamilieSelect: React.FC<IFamilieSelectProps> = ({
     name,
     label,
     bredde,
     value,
     onChange,
     children,
+    erLesevisning,
 }) => {
-    const { erLesevisning } = useBehandling();
-
-    return erLesevisning() ? (
+    return erLesevisning ? (
         <Lesefelt label={label} verdi={value} />
     ) : (
         <Select name={name} label={label} bredde={bredde} value={value} onChange={onChange}>

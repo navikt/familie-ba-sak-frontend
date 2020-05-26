@@ -21,7 +21,6 @@ import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import FamilieKnapp from '../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
 
 interface IProps {
     fagsak: IFagsak;
@@ -86,11 +85,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     />
                 </div>
             ) : (
-                <FamilieKnapp
+                <Knapp
                     mini={true}
                     onClick={() => {
                         history.push(`/fagsak/${fagsak.id}/ny-behandling`);
-                        window.location.reload();
                     }}
                     children={'Opprett behandling'}
                 />

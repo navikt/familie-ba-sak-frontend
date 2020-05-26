@@ -1,27 +1,26 @@
+import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-
 import {
     IOpprettBehandlingData,
     IOpprettEllerHentFagsakData,
     IRestVilkårsvurdering,
 } from '../../api/fagsak';
+import { useApp } from '../../context/AppContext';
+import { useFagsakRessurser } from '../../context/FagsakContext';
+import { hentBegrunnelse, hentPeriode, hentResultat } from '../../context/Vilkårsvurdering/utils';
 import { Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IFelt } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
-import { hentAktivBehandlingPåFagsak, erBehandlingenInnvilget } from '../../utils/fagsak';
-import { useFagsakRessurser } from '../../context/FagsakContext';
-import { useApp } from '../../context/AppContext';
 import {
     IPersonResultat,
-    vilkårConfig,
+    IRestVilkårResultat,
     IVilkårConfig,
     IVilkårResultat,
-    IRestVilkårResultat,
+    vilkårConfig,
 } from '../../typer/vilkår';
-import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
-import { hentResultat, hentBegrunnelse, hentPeriode } from '../../context/Vilkårsvurdering/utils';
+import { erBehandlingenInnvilget, hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -44,10 +43,7 @@ const useFagsakApi = (
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-
                     history.push(`/fagsak/${response.data.id}/saksoversikt`);
-                    window.location.reload();
-                    return;
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
                     settFeilmelding(response.melding);

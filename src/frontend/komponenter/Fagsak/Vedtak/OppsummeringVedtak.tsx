@@ -13,6 +13,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import PdfFrame from './PdfFrame';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -25,7 +26,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     const history = useHistory();
 
-    const [brev, setBrev] = React.useState<string>('Genererer forhåndsvisning...');
+    const [pdf, setPdf] = React.useState<string>('');
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
@@ -34,17 +35,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
 
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtak(fagsak);
+        const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
         if (aktivtVedtak) {
             axiosRequest<string, void>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/dokument/vedtak-html/${aktivtVedtak?.id}`,
+                method: httpMethod,
+                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
             })
                 .then((response: Ressurs<string>) => {
                     if (response.status === RessursStatus.SUKSESS) {
-                        setBrev(response.data);
+                        setPdf(`data:application/pdf;base64,${response.data}`);
                         setErrorMessage(undefined);
                     } else if (response.status === RessursStatus.FEILET) {
-                        setErrorMessage(response.melding);
+                        setErrorMessage(response.frontendFeilmelding);
                     } else {
                         setErrorMessage('Ukjent feil, kunne ikke generere forhåndsvisning.');
                     }
@@ -96,11 +98,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         >
             <div className="oppsummering">
                 {errorMessage === undefined ? (
-                    <div>
-                        <br />
-                        <iframe title="Vedtaksbrev" className="iframe" srcDoc={brev} />
-                        <br />
-                    </div>
+                    <PdfFrame file={pdf} />
                 ) : (
                     <AlertStripe type="feil">{errorMessage}</AlertStripe>
                 )}

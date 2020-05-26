@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {
     BehandlingKategori,
+    BehandlingUnderkategori,
     kategorier,
     underkategorier,
-    BehandlingUnderkategori,
 } from '../../../typer/behandling';
 import FamilieSelect from '../InputMedLesevisning/FamilieSelect';
 
@@ -12,12 +12,14 @@ interface IProps {
     kategoriOnChange: (behandlingKategori: BehandlingKategori) => void;
     underkategori: BehandlingUnderkategori;
     underkategoriOnChange: (value: BehandlingUnderkategori) => void;
+    erLesevisning?: boolean;
 }
 const Sakstype: React.FunctionComponent<IProps> = ({
     kategori,
     kategoriOnChange,
     underkategori,
     underkategoriOnChange,
+    erLesevisning = false,
 }) => {
     return (
         <>
@@ -26,6 +28,7 @@ const Sakstype: React.FunctionComponent<IProps> = ({
                 label="Kategori"
                 onChange={event => kategoriOnChange(event.target.value as BehandlingKategori)}
                 value={kategori}
+                erLesevisning={erLesevisning}
             >
                 {Object.keys(kategorier).map((key: string) => {
                     return (
@@ -44,6 +47,7 @@ const Sakstype: React.FunctionComponent<IProps> = ({
                     underkategoriOnChange(event.target.value as BehandlingUnderkategori)
                 }
                 value={underkategori}
+                erLesevisning={erLesevisning}
             >
                 {Object.keys(underkategorier).map((key: string) => {
                     return (
