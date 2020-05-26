@@ -1,7 +1,7 @@
-import React from 'react';
 import { Select, SelectProps } from 'nav-frontend-skjema';
+import React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
 import Lesefelt from './Lesefelt';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 const FamilieSelect: React.FC<SelectProps> = ({
     name,
@@ -11,7 +11,7 @@ const FamilieSelect: React.FC<SelectProps> = ({
     onChange,
     children,
 }) => {
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
 
     return erLesevisning() ? (
         <Lesefelt label={label} verdi={value} />

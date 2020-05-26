@@ -1,17 +1,17 @@
-import { IFagsak } from '../../../typer/fagsak';
-import { Ingress, Undertittel } from 'nav-frontend-typografi';
-import AlertStripe from 'nav-frontend-alertstriper';
-import * as React from 'react';
-import { useApp } from '../../../context/AppContext';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { AxiosError } from 'axios';
+import AlertStripe from 'nav-frontend-alertstriper';
+import { Ingress, Undertittel } from 'nav-frontend-typografi';
+import * as React from 'react';
 import { useHistory } from 'react-router';
+import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
 import { IOppsummeringBeregning } from '../../../typer/beregning';
-import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
+import { IFagsak } from '../../../typer/fagsak';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SystemetLaster from '../../Felleskomponenter/SystemetLaster/SystemetLaster';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -19,7 +19,7 @@ interface ITilkjentYtelseProps {
 
 const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
-    const { åpenBehandling } = useFagsakRessurser();
+    const { åpenBehandling } = useBehandling();
     const history = useHistory();
     const [tilkjentYtelseRessurs, setTilkjentYtelseRessurs] = React.useState<
         Ressurs<IOppsummeringBeregning[]>

@@ -1,7 +1,7 @@
 import React from 'react';
-import Lesefelt from './Lesefelt';
+import { useBehandling } from '../../../context/BehandlingContext';
 import Datovelger, { DatovelgerProps } from '../Datovelger/Datovelger';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import Lesefelt from './Lesefelt';
 
 const FamilieDatovelger: React.FC<DatovelgerProps> = ({
     id,
@@ -10,7 +10,7 @@ const FamilieDatovelger: React.FC<DatovelgerProps> = ({
     onChange,
     valgtDato,
 }) => {
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
     return erLesevisning() ? (
         <Lesefelt label={label} verdi={valgtDato} />
     ) : (

@@ -4,20 +4,15 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { SøknadProvider } from '../../context/SøknadContext';
-import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { RessursStatus } from '../../typer/ressurs';
 import { hentAlder } from '../../utils/formatter';
 import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
+import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import RegistrerSøknad from './Søknad/RegistrerSøknad';
-import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
-import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
-import BehandleVilkår from './Vilkårsvurdering/Vilkårsvurdering';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -87,39 +82,9 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         />
 
                                         <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/:behandlingId/registrer-soknad"
+                                            path="/fagsak/:fagsakId/:behandlingId"
                                             render={() => {
-                                                return (
-                                                    <SøknadProvider>
-                                                        <RegistrerSøknad />
-                                                    </SøknadProvider>
-                                                );
-                                            }}
-                                        />
-                                        <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/:behandlingId/vilkaarsvurdering"
-                                            render={() => {
-                                                return (
-                                                    <VilkårsvurderingProvider fagsak={fagsak.data}>
-                                                        <BehandleVilkår fagsak={fagsak.data} />
-                                                    </VilkårsvurderingProvider>
-                                                );
-                                            }}
-                                        />
-                                        <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/:behandlingId/tilkjent-ytelse"
-                                            render={() => {
-                                                return <TilkjentYtelse fagsak={fagsak.data} />;
-                                            }}
-                                        />
-                                        <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/:behandlingId/vedtak"
-                                            render={() => {
-                                                return <OppsummeringVedtak fagsak={fagsak.data} />;
+                                                return <BehandlingContainer fagsak={fagsak.data} />;
                                             }}
                                         />
                                     </Switch>

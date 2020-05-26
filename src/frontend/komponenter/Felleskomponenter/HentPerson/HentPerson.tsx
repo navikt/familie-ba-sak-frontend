@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { Knapp } from 'nav-frontend-knapper';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { IPerson } from '../../../typer/person';
-import PanelBase from 'nav-frontend-paneler';
-import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
-import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import { identValidator, validerFelt, lagInitiellFelt } from '../../../utils/validators';
 import classNames from 'classnames';
+import { Knapp } from 'nav-frontend-knapper';
+import PanelBase from 'nav-frontend-paneler';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
+import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { IFelt, Valideringsstatus } from '../../../typer/felt';
+import { IPerson } from '../../../typer/person';
+import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
+import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
 import FamilieInput from '../InputMedLesevisning/FamilieInput';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
     person: Ressurs<IPerson>;
@@ -19,7 +19,7 @@ interface IProps {
 
 const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => {
     const { axiosRequest } = useApp();
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
     const [ident, settIdent] = React.useState<IFelt<string>>(lagInitiellFelt('', identValidator));
 
     React.useEffect(() => {
@@ -72,6 +72,8 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
                                         settPerson({
                                             status: RessursStatus.FEILET,
                                             melding: 'Ukjent feil ved henting av person',
+                                            frontendFeilmelding:
+                                                'Ukjent feil ved henting av person',
                                         });
                                     });
                             } else {

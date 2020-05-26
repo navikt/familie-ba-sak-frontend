@@ -1,14 +1,14 @@
-import React from 'react';
 import { RadioGruppe } from 'nav-frontend-skjema';
-import Lesefelt from './Lesefelt';
 import { SkjemaGruppeProps } from 'nav-frontend-skjema/src/skjema-gruppe';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
+import Lesefelt from './Lesefelt';
 
 interface IProps extends SkjemaGruppeProps {
     verdi?: string;
 }
 const FamilieRadioGruppe: React.FC<IProps> = ({ verdi, legend, feil, feilmeldingId, children }) => {
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
     return erLesevisning() ? (
         <Lesefelt label={legend} verdi={verdi} />
     ) : (

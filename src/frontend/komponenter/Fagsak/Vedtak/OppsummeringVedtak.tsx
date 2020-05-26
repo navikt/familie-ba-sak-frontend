@@ -1,18 +1,18 @@
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
-
+import { aktivVedtak } from '../../../api/fagsak';
+import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { BehandlingStatus } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { useApp } from '../../../context/AppContext';
-import { aktivVedtak } from '../../../api/fagsak';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-import { Knapp } from 'nav-frontend-knapper';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -20,7 +20,8 @@ interface IVedtakProps {
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
-    const { settFagsak, erLesevisning, åpenBehandling } = useFagsakRessurser();
+    const { settFagsak } = useFagsakRessurser();
+    const { erLesevisning, åpenBehandling } = useBehandling();
 
     const history = useHistory();
 

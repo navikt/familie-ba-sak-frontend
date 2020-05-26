@@ -1,27 +1,29 @@
-import * as React from 'react';
-import { useSøknad } from '../../../context/SøknadContext';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
+import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
-import SøknadType from './SøknadType';
-import SøkerOppholdINorge from './SøkerOppholdINorge';
+import * as React from 'react';
+import { useHistory } from 'react-router';
+import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useSøknad } from '../../../context/SøknadContext';
+import { BehandlingSteg } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
+import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import AnnenPart from './AnnenPart';
 import Barna from './Barna';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { Feiloppsummering } from 'nav-frontend-skjema';
-import { useHistory } from 'react-router';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
-import { useApp } from '../../../context/AppContext';
-import { BehandlingSteg } from '../../../typer/behandling';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-import { Knapp } from 'nav-frontend-knapper';
+import SøkerOppholdINorge from './SøkerOppholdINorge';
+import SøknadType from './SøknadType';
 
 const RegistrerSøknad: React.FunctionComponent = () => {
     const { axiosRequest } = useApp();
-    const { fagsak, settFagsak, erLesevisning, åpenBehandling } = useFagsakRessurser();
+    const { fagsak, settFagsak } = useFagsakRessurser();
+    const { erLesevisning, åpenBehandling } = useBehandling();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();

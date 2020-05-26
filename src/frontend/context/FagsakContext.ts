@@ -1,21 +1,16 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
-import { useHistory, useParams } from 'react-router';
-import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPerson } from '../typer/person';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
-import { tilFeilside } from '../utils/commons';
-import { hentAktivBehandlingPåFagsak, hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
     fagsak: Ressurs<IFagsak>;
     logg: Ressurs<ILogg[]>;
-    åpenBehandling?: IBehandling;
 }
 
 const initialState: IHovedRessurser = {
@@ -32,9 +27,7 @@ const initialState: IHovedRessurser = {
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
-    const { axiosRequest, hentSaksbehandlerRolle } = useApp();
-    const history = useHistory();
-    const behandlingId = history.location.pathname.split('/')[3];
+    const { axiosRequest } = useApp();
 
     React.useEffect(() => {
         if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
@@ -74,7 +67,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
                     fagsak: hentetFagsak,
-                    åpenBehandling: bestemÅpenBehandling(hentetFagsak),
                 });
             })
             .catch((error: AxiosError) => {
@@ -85,30 +77,8 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                         'Ukjent ved innhenting av fagsak',
                         error
                     ),
-                    åpenBehandling: undefined,
                 });
             });
-    };
-
-    const bestemÅpenBehandling = (fagsak: Ressurs<IFagsak>): IBehandling | undefined => {
-        const aktivBehandling =
-            fagsak.status === RessursStatus.SUKSESS && hentAktivBehandlingPåFagsak(fagsak.data);
-        const åpenBehandling =
-            fagsak.status === RessursStatus.SUKSESS &&
-            behandlingId &&
-            hentBehandlingPåFagsak(fagsak.data, parseInt(behandlingId));
-        console.log(åpenBehandling);
-        console.log(behandlingId);
-        if (åpenBehandling) {
-            return åpenBehandling;
-        } else if (behandlingId) {
-            tilFeilside();
-            return undefined;
-        } else if (aktivBehandling) {
-            return aktivBehandling;
-        } else {
-            return undefined;
-        }
     };
 
     const hentLogg = (behandlingId: number): void => {
@@ -136,34 +106,9 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const settFagsak = (modifisertFagsak: Ressurs<IFagsak>): void =>
         settFagsakRessurser({ ...fagsakRessurser, fagsak: modifisertFagsak });
 
-    const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
-        return fagsakRessurser.åpenBehandling?.steg;
-    };
-
-    const erLesevisning = (): boolean => {
-        const rolle = hentSaksbehandlerRolle();
-        const steg = hentStegPåÅpenBehandling();
-        const stegNummer: BehandlingSteg = steg && BehandlingSteg[steg];
-        if (
-            rolle &&
-            rolle >= BehandlerRolle.SAKSBEHANDLER &&
-            !(stegNummer >= BehandlingSteg.BESLUTTE_VEDTAK)
-        ) {
-            return false;
-        } else if (rolle && rolle >= BehandlerRolle.VEILEDER) {
-            return true;
-        } else {
-            tilFeilside();
-            return true;
-        }
-    };
-
     return {
         bruker: fagsakRessurser.bruker,
         fagsak: fagsakRessurser.fagsak,
-        åpenBehandling: fagsakRessurser.åpenBehandling,
-        erLesevisning,
-        hentStegPåÅpenBehandling,
         hentFagsak,
         hentLogg,
         logg: fagsakRessurser.logg,

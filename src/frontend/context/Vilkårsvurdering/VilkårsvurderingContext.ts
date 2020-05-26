@@ -1,25 +1,25 @@
 import constate from 'constate';
 import * as React from 'react';
+import { IFelt, Valideringsstatus } from '../../typer/felt';
+import { PersonType } from '../../typer/person';
 import {
     IPersonResultat,
     IVilkårResultat,
-    VilkårType,
     lagTomtFeltMedVilkår,
+    VilkårType,
 } from '../../typer/vilkår';
+import { lagInitiellFelt } from '../../utils/validators';
+import { useBehandling } from '../BehandlingContext';
+import { kjørValidering, validerVilkår } from './validering';
 import {
-    lagNyVilkårsvurderingMedNyttVilkår,
     hentVilkårsvurderingMedEkstraVilkår,
+    lagNyVilkårsvurderingMedNyttVilkår,
     mapFraRestVilkårsvurderingTilUi,
     slåSammenVilkårForPerson,
 } from './vilkårsvurdering';
-import { kjørValidering, validerVilkår } from './validering';
-import { Valideringsstatus, IFelt } from '../../typer/felt';
-import { PersonType } from '../../typer/person';
-import { lagInitiellFelt } from '../../utils/validators';
-import { useFagsakRessurser } from '../FagsakContext';
 
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(() => {
-    const { åpenBehandling } = useFagsakRessurser();
+    const { åpenBehandling } = useBehandling();
 
     const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
         åpenBehandling
