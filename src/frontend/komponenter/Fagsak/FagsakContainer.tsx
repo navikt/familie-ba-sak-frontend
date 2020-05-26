@@ -13,6 +13,7 @@ import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { BehandlingProvider } from '../../context/BehandlingContext';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -37,7 +38,7 @@ const FagsakContainer: React.FunctionComponent = () => {
             switch (bruker.status) {
                 case RessursStatus.SUKSESS:
                     return (
-                        <>
+                        <BehandlingProvider>
                             <Visittkort
                                 navn={
                                     bruker.status === RessursStatus.SUKSESS
@@ -80,7 +81,6 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                 );
                                             }}
                                         />
-
                                         <Route
                                             path="/fagsak/:fagsakId/:behandlingId"
                                             render={() => {
@@ -93,7 +93,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                     <Høyremeny fagsak={fagsak.data} />
                                 </div>
                             </div>
-                        </>
+                        </BehandlingProvider>
                     );
                 case RessursStatus.HENTER:
                     return <SystemetLaster />;

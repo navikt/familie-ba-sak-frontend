@@ -2,14 +2,14 @@ import * as React from 'react';
 import { sider, erSidenInaktiv, ISide, visSide } from './sider';
 import Link from './Link';
 import { IFagsak } from '../../../typer/fagsak';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useBehandling } from '../../../context/BehandlingContext';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { åpenBehandling } = useFagsakRessurser();
+    const { åpenBehandling } = useBehandling();
 
     return (
         <nav className={'venstremeny'}>

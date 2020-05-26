@@ -21,6 +21,7 @@ import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { useBehandling } from '../../../context/BehandlingContext';
 
 interface IProps {
     fagsak: IFagsak;
@@ -30,6 +31,11 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
     const history = useHistory();
     const [opphørsdato, setOpphørsdato] = React.useState('');
+
+    const { bestemÅpenBehandling } = useBehandling();
+    React.useEffect(() => {
+        bestemÅpenBehandling(undefined);
+    }, [fagsak.status]);
 
     const behandlingshistorikk = fagsak.behandlinger.filter(
         (behandling: IBehandling) => behandling.status === BehandlingStatus.FERDIGSTILT

@@ -1,6 +1,5 @@
 import createUseContext from 'constate';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useState } from 'react';
 import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
 import { RessursStatus } from '../typer/ressurs';
 import { tilFeilside } from '../utils/commons';
@@ -11,15 +10,13 @@ import { useFagsakRessurser } from './FagsakContext';
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<IBehandling | undefined>(undefined);
     const { hentSaksbehandlerRolle } = useApp();
-    const { behandlingId } = useParams();
     const { fagsak } = useFagsakRessurser();
 
-    useEffect(() => {
+    const bestemÅpenBehandling = (behandlingId: string | undefined) => {
         if (fagsak.status === RessursStatus.SUKSESS) {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
             const åpenBehandling =
-                fagsak.status === behandlingId &&
-                hentBehandlingPåFagsak(fagsak.data, parseInt(behandlingId, 10));
+                behandlingId && hentBehandlingPåFagsak(fagsak.data, parseInt(behandlingId, 10));
             if (åpenBehandling) {
                 settÅpenBehandling(åpenBehandling);
             } else if (behandlingId) {
@@ -32,7 +29,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         } else {
             settÅpenBehandling(undefined);
         }
-    }, [fagsak.status, behandlingId]);
+    };
 
     const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
         return åpenBehandling?.steg;
@@ -56,7 +53,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         }
     };
 
-    return { åpenBehandling, erLesevisning };
+    return { åpenBehandling, erLesevisning, bestemÅpenBehandling };
 });
 
 export { BehandlingProvider, useBehandling };
