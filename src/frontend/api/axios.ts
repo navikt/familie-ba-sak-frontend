@@ -8,7 +8,7 @@ import { slackKanaler } from '../typer/slack';
 axios.defaults.baseURL = window.location.origin;
 export const preferredAxios = axios;
 
-export const håndterRessurs = <T>(
+export const håndterApiRessurs = <T>(
     ressurs: ApiRessurs<T>,
     innloggetSaksbehandler?: ISaksbehandler
 ): Ressurs<T> => {
@@ -25,7 +25,7 @@ export const håndterRessurs = <T>(
             break;
         case RessursStatus.IKKE_TILGANG:
             typetRessurs = {
-                frontendFeilmelding: ressurs.frontendFeilmelding ?? 'En feil har oppstått!',
+                frontendFeilmelding: ressurs.frontendFeilmelding ?? 'Ikke tilgang',
                 status: RessursStatus.IKKE_TILGANG,
             };
             break;

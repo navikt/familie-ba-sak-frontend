@@ -5,6 +5,7 @@ export enum RessursStatus {
     IKKE_TILGANG = 'IKKE_TILGANG',
     SUKSESS = 'SUKSESS',
 }
+
 export type ApiRessurs<T> = {
     data: T;
     status: RessursStatus;

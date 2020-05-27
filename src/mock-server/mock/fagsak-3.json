@@ -9,7 +9,7 @@
                 "aktiv": true,
                 "behandlingId": 1012651,
                 "type": "FØRSTEGANGSBEHANDLING",
-                "status": "FER",
+                "status": "OPPRETTET",
                 "steg": "VILKÅRSVURDERING",
                 "kategori": "NASJONAL",
                 "personer": [

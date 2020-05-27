@@ -2,7 +2,7 @@ import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import createUseContext from 'constate';
 import React, { useEffect } from 'react';
 
-import { håndterRessurs, loggFeil, preferredAxios } from '../api/axios';
+import { håndterApiRessurs, loggFeil, preferredAxios } from '../api/axios';
 import { Ressurs, ApiRessurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { BehandlerRolle } from '../typer/behandling';
@@ -57,7 +57,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             .then((response: AxiosResponse<ApiRessurs<T>>) => {
                 const responsRessurs: ApiRessurs<T> = response.data;
 
-                return håndterRessurs(responsRessurs, innloggetSaksbehandler);
+                return håndterApiRessurs(responsRessurs, innloggetSaksbehandler);
             })
             .catch((error: AxiosError) => {
                 if (error.message.includes('401')) {
@@ -66,7 +66,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
                 loggFeil(error, innloggetSaksbehandler);
 
                 const responsRessurs: ApiRessurs<T> = error.response?.data;
-                return håndterRessurs(responsRessurs, innloggetSaksbehandler);
+                return håndterApiRessurs(responsRessurs, innloggetSaksbehandler);
             });
     };
 
