@@ -36,7 +36,11 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
             })
             .catch((_error: AxiosError) => {
                 setTilkjentYtelseRessurs(
-                    byggFeiletRessurs('Ukjent feil, Kunne ikke generere forhåndsvisning.', _error)
+                    byggFeiletRessurs(
+                        'Ukjent feil, Kunne ikke generere forhåndsvisning.',
+                        'Ukjent feil, Kunne ikke generere forhåndsvisning.',
+                        _error
+                    )
                 );
             });
     }, []);
@@ -48,11 +52,11 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
     };
 
     const nesteOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/vedtak`);
+        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
     };
 
     const forrigeOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/vilkaarsvurdering`);
+        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
     };
 
     switch (tilkjentYtelseRessurs.status) {

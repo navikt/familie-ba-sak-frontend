@@ -80,13 +80,11 @@ const useFagsakApi = (
                         settFeilmelding('Opprettelse av behandling feilet');
                     } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
                         history.push(
-                            `/fagsak/${response.data.id}/${aktivBehandling &&
-                                aktivBehandling.behandlingId}/vilkaarsvurdering`
+                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
                         );
                     } else {
                         history.push(
-                            `/fagsak/${response.data.id}/${aktivBehandling &&
-                                aktivBehandling.behandlingId}/registrer-soknad`
+                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
                         );
                     }
 
@@ -165,13 +163,11 @@ const useFagsakApi = (
 
                     if (erBehandlingenInnvilget(vilkårsvurdering)) {
                         history.push(
-                            `/fagsak/${fagsak.id}/${aktivBehandling &&
-                                aktivBehandling.behandlingId}/tilkjent-ytelse`
+                            `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/tilkjent-ytelse`
                         );
                     } else {
                         history.push(
-                            `/fagsak/${fagsak.id}/${aktivBehandling &&
-                                aktivBehandling.behandlingId}/vedtak`
+                            `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/vedtak`
                         );
                     }
                 } else if (response.status === RessursStatus.FEILET) {

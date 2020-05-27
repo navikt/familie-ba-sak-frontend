@@ -93,7 +93,13 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                     }
                 })
                 .catch((error: AxiosError) => {
-                    settInnsendtVedtak(byggFeiletRessurs('Ukjent feil, sende inn vedtak.', error));
+                    settInnsendtVedtak(
+                        byggFeiletRessurs(
+                            'Ukjent feil, sende inn vedtak.',
+                            'Ukjent feil, sende inn vedtak.',
+                            error
+                        )
+                    );
                 });
         }
     };

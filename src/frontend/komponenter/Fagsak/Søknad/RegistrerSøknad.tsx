@@ -50,7 +50,9 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-                    history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
+                    history.push(
+                        `/fagsak/${response.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
+                    );
                 } else if (response.status === RessursStatus.FEILET) {
                     if (response.melding.includes('fjerne vilkår')) {
                         settFrontendFeilmelding(response.frontendFeilmelding);
@@ -103,7 +105,9 @@ const RegistrerSøknad: React.FunctionComponent = () => {
             nesteOnClick={() => {
                 if (erLesevisning()) {
                     if (fagsak.status === RessursStatus.SUKSESS) {
-                        history.push(`/fagsak/${fagsak.data.id}/vilkaarsvurdering`);
+                        history.push(
+                            `/fagsak/${fagsak.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
+                        );
                     } else {
                         settFeilmelding('Kunne ikke finne id på fagsak.');
                     }

@@ -23,12 +23,12 @@ import { Undertekst, Normaltekst } from 'nav-frontend-typografi';
 import { periodeToString } from '../../../../typer/periode';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Slett from '../../../../ikoner/Slett';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import FamilieRadioGruppe from '../../../Felleskomponenter/InputMedLesevisning/FamilieRadioGruppe';
 import FamilieTextareaControlled from '../../../Felleskomponenter/InputMedLesevisning/FamilieTextareaControlled';
 import FamilieKnapp from '../../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
 import { Collapse } from 'react-collapse';
 import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
+import { useBehandling } from '../../../../context/BehandlingContext';
 
 interface IProps {
     person: IPerson;
@@ -47,7 +47,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         fjernEllerNullstillPeriodeForVilkår,
         settVilkårForPeriodeResultat,
     } = useVilkårsvurdering();
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);

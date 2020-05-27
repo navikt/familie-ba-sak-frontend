@@ -48,11 +48,15 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
         <Skjemasteg
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
-                history.push(`/fagsak/${fagsak.id}/registrer-soknad`);
+                history.push(
+                    `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
+                );
             }}
             nesteOnClick={() => {
                 if (erLesevisning()) {
-                    history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
+                    history.push(
+                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
+                    );
                 } else if (erVilkårsvurderingenGyldig()) {
                     opprettEllerOppdaterVilkårsvurdering(vilkårsvurdering, fagsak);
                 } else {
