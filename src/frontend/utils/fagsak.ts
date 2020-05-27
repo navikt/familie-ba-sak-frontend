@@ -19,6 +19,14 @@ export const hentAktivBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | und
     return fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv === true);
 };
 
+export const hentBehandlingPåFagsak = (
+    fagsak: IFagsak,
+    behandlingId: number
+): IBehandling | undefined => {
+    return fagsak.behandlinger.find(
+        (behandling: IBehandling) => behandling.behandlingId === behandlingId
+    );
+};
 export const hentAktivVedtakPåBehandlig = (
     behandling: IBehandling
 ): IVedtakForBehandling | undefined => {

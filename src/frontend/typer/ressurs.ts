@@ -6,6 +6,14 @@ export enum RessursStatus {
     SUKSESS = 'SUKSESS',
 }
 
+export type ApiRessurs<T> = {
+    data: T;
+    status: RessursStatus;
+    melding: string;
+    frontendFeilmelding?: string;
+    stacktrace: string;
+};
+
 export type Ressurs<T> =
     | {
           status: RessursStatus.IKKE_HENTET;
@@ -18,12 +26,10 @@ export type Ressurs<T> =
           status: RessursStatus.SUKSESS;
       }
     | {
-          melding: string;
+          frontendFeilmelding: string;
           status: RessursStatus.IKKE_TILGANG;
       }
     | {
-          errorMelding?: string;
-          melding: string;
           frontendFeilmelding: string;
           status: RessursStatus.FEILET;
       };
@@ -34,10 +40,10 @@ export const byggTomRessurs = <T>(): Ressurs<T> => {
     };
 };
 
-export const byggDataRessurs = <T>(ressursData: T): Ressurs<T> => {
+export const byggDataRessurs = <T>(data: T): Ressurs<T> => {
     return {
-        data: ressursData,
         status: RessursStatus.SUKSESS,
+        data,
     };
 };
 
@@ -47,14 +53,8 @@ export const byggHenterRessurs = <T>(): Ressurs<T> => {
     };
 };
 
-export const byggFeiletRessurs = <T>(
-    melding: string,
-    frontendFeilmelding: string,
-    error?: Error
-): Ressurs<T> => {
+export const byggFeiletRessurs = <T>(frontendFeilmelding: string): Ressurs<T> => {
     return {
-        errorMelding: error ? error.message : undefined,
-        melding,
         frontendFeilmelding,
         status: RessursStatus.FEILET,
     };

@@ -13,7 +13,6 @@ export interface ISide {
 }
 
 export const sider: ISide[] = [
-    { id: 'SAKSOVERSIKT', href: 'saksoversikt', navn: 'Saksoversikt' },
     {
         id: 'REGISTRERE_SØKNAD',
         href: 'registrer-soknad',
@@ -53,12 +52,12 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
         : false;
 };
 
-export const visSide = (side: ISide, aktivBehandling?: IBehandling) => {
-    if (!aktivBehandling) {
+export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
+    if (!åpenBehandling) {
         return !side.steg && side.steg !== 0;
-    } else if (aktivBehandling.samletResultat === BehandlingResultat.OPPHØRT) {
+    } else if (åpenBehandling.samletResultat === BehandlingResultat.OPPHØRT) {
         return !side.steg && side.steg !== 0;
-    } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
+    } else if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
     } else {
         return true;

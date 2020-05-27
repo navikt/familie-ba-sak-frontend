@@ -1,11 +1,11 @@
-import React from 'react';
 import { Textarea, TextareaProps } from 'nav-frontend-skjema';
-import Lesefelt from './Lesefelt';
 import { Normaltekst } from 'nav-frontend-typografi';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
+import Lesefelt from './Lesefelt';
 
 const FamilieTextarea: React.FC<TextareaProps> = ({ name, label, value, onChange, children }) => {
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
 
     return erLesevisning() ? (
         value === '' ? (

@@ -1,29 +1,28 @@
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Feiloppsummering } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useHistory } from 'react-router';
-
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import { IVilkårResultat } from '../../../typer/vilkår';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
-import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import BehandlingVilkårSkjema from './VilkårsvurderingSkjema';
-import { IVilkårResultat } from '../../../typer/vilkår';
-import { Feiloppsummering } from 'nav-frontend-skjema';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import BehandlingVilkårSkjema from './VilkårsvurderingSkjema';
+import { IBehandling } from '../../../typer/behandling';
 
 interface IProps {
     fagsak: IFagsak;
+    åpenBehandling: IBehandling;
 }
 
-const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
+const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehandling }) => {
     const {
         erVilkårsvurderingenGyldig,
         hentVilkårMedFeil,
         vilkårsvurdering,
     } = useVilkårsvurdering();
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -34,29 +33,23 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
         settOpprettelseFeilmelding
     );
 
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-
-    if (!aktivBehandling) {
-        return (
-            <div>
-                <Normaltekst>Ingen aktiv behandling</Normaltekst>
-            </div>
-        );
-    }
-
     if (vilkårsvurdering.length === 0) {
-        return <div>Finner ingen vilkår på behandlingen. Det er sansynligvis noe feil.</div>;
+        return <div>Finner ingen vilkår på behandlingen.</div>;
     }
 
     return (
         <Skjemasteg
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
-                history.push(`/fagsak/${fagsak.id}/registrer-soknad`);
+                history.push(
+                    `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
+                );
             }}
             nesteOnClick={() => {
                 if (erLesevisning()) {
-                    history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`);
+                    history.push(
+                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
+                    );
                 } else if (erVilkårsvurderingenGyldig()) {
                     opprettEllerOppdaterVilkårsvurdering(vilkårsvurdering, fagsak);
                 } else {
@@ -68,7 +61,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <BehandlingVilkårSkjema
                 opprettelseFeilmelding={opprettelseFeilmelding}
                 visFeilmeldinger={visFeilmeldinger}
-                behandlingstype={aktivBehandling.type}
+                behandlingstype={åpenBehandling.type}
             />
 
             {hentVilkårMedFeil().length > 0 && visFeilmeldinger && (

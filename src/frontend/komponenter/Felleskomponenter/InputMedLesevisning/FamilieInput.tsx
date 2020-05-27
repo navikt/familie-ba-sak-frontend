@@ -1,8 +1,8 @@
-import React from 'react';
 import { Input, InputProps } from 'nav-frontend-skjema';
-import Lesefelt from './Lesefelt';
 import { Normaltekst } from 'nav-frontend-typografi';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
+import Lesefelt from './Lesefelt';
 
 const FamilieInput: React.FC<InputProps> = ({
     label,
@@ -12,7 +12,7 @@ const FamilieInput: React.FC<InputProps> = ({
     onChange,
     children,
 }) => {
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
     return erLesevisning() ? (
         value === '' ? (
             <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />

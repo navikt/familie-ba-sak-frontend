@@ -1,27 +1,33 @@
-import * as React from 'react';
-import { useSøknad } from '../../../context/SøknadContext';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
+import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
-import SøknadType from './SøknadType';
-import SøkerOppholdINorge from './SøkerOppholdINorge';
+import * as React from 'react';
+import { useHistory } from 'react-router';
+import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useSøknad } from '../../../context/SøknadContext';
+import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
+import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import AnnenPart from './AnnenPart';
 import Barna from './Barna';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { Feiloppsummering } from 'nav-frontend-skjema';
-import { useHistory } from 'react-router';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
-import { useApp } from '../../../context/AppContext';
-import { BehandlingSteg } from '../../../typer/behandling';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-import { Knapp } from 'nav-frontend-knapper';
+import SøkerOppholdINorge from './SøkerOppholdINorge';
+import SøknadType from './SøknadType';
 
-const RegistrerSøknad: React.FunctionComponent = () => {
+interface IProps {
+    åpenBehandling: IBehandling;
+}
+
+const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { axiosRequest } = useApp();
-    const { fagsak, settFagsak, erLesevisning } = useFagsakRessurser();
+    const { fagsak, settFagsak } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();
@@ -48,9 +54,12 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-                    history.push(`/fagsak/${response.data.id}/vilkaarsvurdering`);
+                    history.push(
+                        `/fagsak/${response.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
+                    );
                 } else if (response.status === RessursStatus.FEILET) {
-                    if (response.melding.includes('fjerne vilkår')) {
+                    // TODO: Her sjekker vi om feilmeldingen gjelder valideringsfeil
+                    if (response.frontendFeilmelding.includes('Du har gjort endringer')) {
                         settFrontendFeilmelding(response.frontendFeilmelding);
                         settVisModal(true);
                     } else {
@@ -67,12 +76,9 @@ const RegistrerSøknad: React.FunctionComponent = () => {
 
     React.useEffect(() => {
         if (fagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
-
             if (
-                aktivBehandling &&
-                parseInt(BehandlingSteg[aktivBehandling.steg], 10) >=
-                    BehandlingSteg.VILKÅRSVURDERING
+                åpenBehandling &&
+                parseInt(BehandlingSteg[åpenBehandling.steg], 10) >= BehandlingSteg.VILKÅRSVURDERING
             ) {
                 axiosRequest<ISøknadDTO, void>({
                     method: 'GET',
@@ -104,7 +110,9 @@ const RegistrerSøknad: React.FunctionComponent = () => {
             nesteOnClick={() => {
                 if (erLesevisning()) {
                     if (fagsak.status === RessursStatus.SUKSESS) {
-                        history.push(`/fagsak/${fagsak.data.id}/vilkaarsvurdering`);
+                        history.push(
+                            `/fagsak/${fagsak.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
+                        );
                     } else {
                         settFeilmelding('Kunne ikke finne id på fagsak.');
                     }

@@ -1,28 +1,28 @@
-import 'nav-frontend-tabell-style';
-import { Input } from 'nav-frontend-skjema';
-import { Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
-import * as React from 'react';
-import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
-
 import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
+import { Input } from 'nav-frontend-skjema';
+import 'nav-frontend-tabell-style';
+import { Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import * as React from 'react';
 import { useHistory } from 'react-router';
+import { useApp } from '../../../context/AppContext';
 import {
+    behandlingsresultater,
     behandlingsstatuser,
     BehandlingStatus,
     behandlingstyper,
     IBehandling,
     kategorier,
     underkategorier,
-    behandlingsresultater,
 } from '../../../typer/behandling';
+import { IPersonBeregning } from '../../../typer/beregning';
+import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import { IPersonBeregning } from '../../../typer/beregning';
-import { useApp } from '../../../context/AppContext';
-import FamilieKnapp from '../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
+import { useBehandling } from '../../../context/BehandlingContext';
+import Lenke from 'nav-frontend-lenker';
 
 interface IProps {
     fagsak: IFagsak;
@@ -32,6 +32,11 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
     const history = useHistory();
     const [opphørsdato, setOpphørsdato] = React.useState('');
+
+    const { bestemÅpenBehandling } = useBehandling();
+    React.useEffect(() => {
+        bestemÅpenBehandling(undefined);
+    }, [fagsak.status]);
 
     const behandlingshistorikk = fagsak.behandlinger.filter(
         (behandling: IBehandling) => behandling.status === BehandlingStatus.FERDIGSTILT
@@ -83,11 +88,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     />
                 </div>
             ) : (
-                <FamilieKnapp
+                <Knapp
                     mini={true}
                     onClick={() => {
                         history.push(`/fagsak/${fagsak.id}/ny-behandling`);
-                        window.location.reload();
                     }}
                     children={'Opprett behandling'}
                 />
@@ -184,11 +188,13 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
                                     return (
                                         <tr key={behandling.behandlingId}>
-                                            <td
-                                                children={`${
-                                                    behandlingstyper[behandling.type].navn
-                                                }`}
-                                            />
+                                            <td>
+                                                <Lenke
+                                                    href={`/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad`}
+                                                >
+                                                    {behandlingstyper[behandling.type].navn}
+                                                </Lenke>
+                                            </td>
                                             <td
                                                 children={`${
                                                     behandling

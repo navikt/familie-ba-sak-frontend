@@ -1,8 +1,8 @@
-import React from 'react';
 import { TextareaControlled, TextareaControlledProps } from 'nav-frontend-skjema';
-import Lesefelt from './Lesefelt';
 import { Normaltekst } from 'nav-frontend-typografi';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
+import Lesefelt from './Lesefelt';
 
 const FamilieTextareaControlled: React.FC<TextareaControlledProps> = ({
     defaultValue,
@@ -14,7 +14,7 @@ const FamilieTextareaControlled: React.FC<TextareaControlledProps> = ({
     feil,
     onBlur,
 }) => {
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
 
     return erLesevisning() ? (
         value === '' ? (

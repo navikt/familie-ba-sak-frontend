@@ -1,28 +1,29 @@
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
-
-import { BehandlingStatus } from '../../../typer/behandling';
+import { aktivVedtakPåBehandling } from '../../../api/fagsak';
+import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { useApp } from '../../../context/AppContext';
-import { aktivVedtak } from '../../../api/fagsak';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-import { Knapp } from 'nav-frontend-knapper';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import PdfFrame from './PdfFrame';
 
 interface IVedtakProps {
     fagsak: IFagsak;
+    åpenBehandling: IBehandling;
 }
 
-const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
-    const { axiosRequest } = useApp();
-    const { settFagsak, erLesevisning } = useFagsakRessurser();
+const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
+    const { axiosRequest, innloggetSaksbehandler } = useApp();
+    const { settFagsak } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
 
     const history = useHistory();
 
@@ -33,10 +34,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     const [submitFeil, settSubmitFeil] = React.useState('');
     const [senderInn, settSenderInn] = React.useState(false);
 
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-
     React.useEffect(() => {
-        const aktivtVedtak = aktivVedtak(fagsak);
+        const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
         const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
         if (aktivtVedtak) {
             axiosRequest<string, void>({
@@ -61,30 +60,28 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 'Vi finner ingen aktive vedtak på behandlingen, vennligst gå tilbake og fastsett vedtak.'
             );
         }
-    }, [fagsak, axiosRequest]);
+    }, [åpenBehandling]);
 
     const visSubmitKnapp =
         !erLesevisning() &&
-        (aktivBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
-            aktivBehandling?.status === BehandlingStatus.OPPRETTET);
+        (åpenBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
+            åpenBehandling?.status === BehandlingStatus.OPPRETTET);
 
     const sendInn = () => {
         settSenderInn(true);
         settSubmitFeil('');
         axiosRequest<IFagsak, void>({
             method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/send-til-beslutter`,
+            url: `/familie-ba-sak/api/fagsaker/${
+                fagsak.id
+            }/send-til-beslutter?behandlendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
         }).then((response: Ressurs<IFagsak>) => {
             settSenderInn(false);
             if (response.status === RessursStatus.SUKSESS) {
                 settVisModal(true);
                 settFagsak(response);
-            } else if (
-                response.status === RessursStatus.FEILET ||
-                response.status === RessursStatus.IKKE_TILGANG
-            ) {
-                settSubmitFeil(response.melding);
-                settSenderInn(false);
+            } else if (response.status === RessursStatus.FEILET) {
+                settSubmitFeil(response.frontendFeilmelding);
             }
         });
     };
@@ -92,7 +89,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     return (
         <Skjemasteg
             tittel={'Vedtaksbrev'}
-            forrigeOnClick={() => history.push(`/fagsak/${fagsak.id}/tilkjent-ytelse`)}
+            forrigeOnClick={() =>
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`)
+            }
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
             nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}

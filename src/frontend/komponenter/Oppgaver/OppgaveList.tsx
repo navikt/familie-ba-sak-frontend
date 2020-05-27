@@ -207,7 +207,7 @@ const OppgaveList: React.FunctionComponent = () => {
             )}
             {oppgaver.status === RessursStatus.FEILET && (
                 <Alertstripe type="feil" className="oppgavelist__info">
-                    {oppgaver.melding}
+                    {oppgaver.frontendFeilmelding}
                 </Alertstripe>
             )}
             {oppgaver.status === RessursStatus.HENTER && (

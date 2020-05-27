@@ -9,7 +9,7 @@ import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { ISODateString } from 'nav-datovelger';
 import FamilieDatovelger from '../../../../Felleskomponenter/InputMedLesevisning/FamilieDatovelger';
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { useBehandling } from '../../../../../context/BehandlingContext';
 
 interface IProps {
     redigerbartVilkår: IFelt<IVilkårResultat>;
@@ -22,7 +22,7 @@ const FastsettPeriode: React.FC<IProps> = ({
     validerOgSettRedigerbartVilkår,
     visFeilmeldinger,
 }) => {
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
     const [fastsettTom, settFastsettTom] = useState<boolean>(
         redigerbartVilkår.verdi.periode.verdi.tom &&
             redigerbartVilkår.verdi.periode.verdi.tom !== ''

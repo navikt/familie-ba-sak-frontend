@@ -1,4 +1,4 @@
-import { Ressurs, RessursStatus } from '../typer/ressurs';
+import { Ressurs, RessursStatus, ApiRessurs } from '../typer/ressurs';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { captureException, configureScope, withScope } from '@sentry/core';
 
@@ -8,8 +8,8 @@ import { slackKanaler } from '../typer/slack';
 axios.defaults.baseURL = window.location.origin;
 export const preferredAxios = axios;
 
-export const håndterRessurs = <T>(
-    ressurs: Ressurs<T>,
+export const håndterApiRessurs = <T>(
+    ressurs: ApiRessurs<T>,
     innloggetSaksbehandler?: ISaksbehandler
 ): Ressurs<T> => {
     let typetRessurs: Ressurs<T> = {
@@ -24,24 +24,20 @@ export const håndterRessurs = <T>(
             };
             break;
         case RessursStatus.IKKE_TILGANG:
-            loggFeil(undefined, innloggetSaksbehandler, ressurs.melding);
             typetRessurs = {
-                melding: ressurs.melding,
+                frontendFeilmelding: ressurs.frontendFeilmelding ?? 'Ikke tilgang',
                 status: RessursStatus.IKKE_TILGANG,
             };
             break;
         case RessursStatus.FEILET:
             loggFeil(undefined, innloggetSaksbehandler, ressurs.melding);
             typetRessurs = {
-                errorMelding: ressurs.errorMelding,
-                melding: ressurs.melding,
-                frontendFeilmelding: ressurs.frontendFeilmelding,
+                frontendFeilmelding: ressurs.frontendFeilmelding ?? 'En feil har oppstått!',
                 status: RessursStatus.FEILET,
             };
             break;
         default:
             typetRessurs = {
-                melding: 'En feil har oppstått!',
                 frontendFeilmelding: 'En feil har oppstått!',
                 status: RessursStatus.FEILET,
             };

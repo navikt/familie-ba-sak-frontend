@@ -1,10 +1,10 @@
-import React from 'react';
 import { Checkbox, CheckboxProps } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
 
 const FamilieCheckbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
-    const { erLesevisning } = useFagsakRessurser();
+    const { erLesevisning } = useBehandling();
     return erLesevisning() ? (
         checked ? (
             <Normaltekst className={'skjemaelement lese-felt'} children={label} />

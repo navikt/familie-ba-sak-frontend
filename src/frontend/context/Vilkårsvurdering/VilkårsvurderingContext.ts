@@ -1,38 +1,33 @@
 import constate from 'constate';
 import * as React from 'react';
-
-import { IFagsak } from '../../typer/fagsak';
+import { IFelt, Valideringsstatus } from '../../typer/felt';
+import { PersonType } from '../../typer/person';
 import {
     IPersonResultat,
     IVilkårResultat,
-    VilkårType,
     lagTomtFeltMedVilkår,
+    VilkårType,
 } from '../../typer/vilkår';
+import { lagInitiellFelt } from '../../utils/validators';
+import { kjørValidering, validerVilkår } from './validering';
 import {
-    lagNyVilkårsvurderingMedNyttVilkår,
     hentVilkårsvurderingMedEkstraVilkår,
+    lagNyVilkårsvurderingMedNyttVilkår,
     mapFraRestVilkårsvurderingTilUi,
     slåSammenVilkårForPerson,
 } from './vilkårsvurdering';
-import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
-import { kjørValidering, validerVilkår } from './validering';
-import { Valideringsstatus, IFelt } from '../../typer/felt';
 import { IBehandling } from '../../typer/behandling';
-import { PersonType } from '../../typer/person';
-import { lagInitiellFelt } from '../../utils/validators';
 
 interface IProps {
-    fagsak: IFagsak;
+    åpenBehandling: IBehandling;
 }
 
-const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ fagsak }: IProps) => {
-    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(fagsak);
-
+const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehandling }: IProps) => {
     const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
-        aktivBehandling
+        åpenBehandling
             ? mapFraRestVilkårsvurderingTilUi(
-                  aktivBehandling.personResultater,
-                  aktivBehandling.personer
+                  åpenBehandling.personResultater,
+                  åpenBehandling.personer
               ).sort((personResultat: IPersonResultat) =>
                   personResultat.person.type === PersonType.SØKER ? -1 : 1
               )
