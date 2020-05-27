@@ -18,7 +18,7 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { bestemÅpenBehandling } = useBehandling();
     React.useEffect(() => {
         bestemÅpenBehandling(behandlingId);
-    }, [fagsak.status, behandlingId]);
+    }, [fagsak, behandlingId]);
 
     return (
         <Switch>
