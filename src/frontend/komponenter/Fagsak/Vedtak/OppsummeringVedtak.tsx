@@ -20,7 +20,7 @@ interface IVedtakProps {
 }
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
-    const { axiosRequest } = useApp();
+    const { axiosRequest, innloggetSaksbehandler } = useApp();
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning, åpenBehandling } = useBehandling();
 
@@ -71,7 +71,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
         settSubmitFeil('');
         axiosRequest<IFagsak, void>({
             method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/send-til-beslutter`,
+            url: `/familie-ba-sak/api/fagsaker/${
+                fagsak.id
+            }/send-til-beslutter?behandlendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
         }).then((response: Ressurs<IFagsak>) => {
             settSenderInn(false);
             if (response.status === RessursStatus.SUKSESS) {
