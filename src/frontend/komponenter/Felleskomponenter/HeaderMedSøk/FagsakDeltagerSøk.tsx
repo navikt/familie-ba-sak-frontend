@@ -43,7 +43,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                     response.status === RessursStatus.FEILET ||
                     response.status === RessursStatus.IKKE_TILGANG
                 ) {
-                    settSøkfeil(response.melding);
+                    settSøkfeil(response.frontendFeilmelding);
                 }
             })
             .catch(error => {

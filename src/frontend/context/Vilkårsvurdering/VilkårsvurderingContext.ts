@@ -9,7 +9,6 @@ import {
     VilkårType,
 } from '../../typer/vilkår';
 import { lagInitiellFelt } from '../../utils/validators';
-import { useBehandling } from '../BehandlingContext';
 import { kjørValidering, validerVilkår } from './validering';
 import {
     hentVilkårsvurderingMedEkstraVilkår,
@@ -17,10 +16,13 @@ import {
     mapFraRestVilkårsvurderingTilUi,
     slåSammenVilkårForPerson,
 } from './vilkårsvurdering';
+import { IBehandling } from '../../typer/behandling';
 
-const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(() => {
-    const { åpenBehandling } = useBehandling();
+interface IProps {
+    åpenBehandling: IBehandling;
+}
 
+const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehandling }: IProps) => {
     const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
         åpenBehandling
             ? mapFraRestVilkårsvurderingTilUi(

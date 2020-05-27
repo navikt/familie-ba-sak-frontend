@@ -49,7 +49,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                             tilbakestillFordelingPåOppgave(oppgave).then(
                                 (oppgaveResponse: Ressurs<string>) => {
                                     if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                        setFeilmelding(oppgaveResponse.melding);
+                                        setFeilmelding(oppgaveResponse.frontendFeilmelding);
                                     } else {
                                         setErTilbakestilt(true);
                                     }
@@ -72,7 +72,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                             fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
                                 (oppgaveResponse: Ressurs<string>) => {
                                     if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                        setFeilmelding(oppgaveResponse.melding);
+                                        setFeilmelding(oppgaveResponse.frontendFeilmelding);
                                     }
                                 }
                             );

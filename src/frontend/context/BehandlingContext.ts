@@ -1,14 +1,20 @@
 import createUseContext from 'constate';
 import { useState } from 'react';
 import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
-import { RessursStatus } from '../typer/ressurs';
+import {
+    RessursStatus,
+    Ressurs,
+    byggTomRessurs,
+    byggFeiletRessurs,
+    byggDataRessurs,
+} from '../typer/ressurs';
 import { tilFeilside } from '../utils/commons';
 import { hentAktivBehandlingPåFagsak, hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
-    const [åpenBehandling, settÅpenBehandling] = useState<IBehandling | undefined>(undefined);
+    const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsak } = useFagsakRessurser();
 
@@ -17,22 +23,25 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
             const åpenBehandling =
                 behandlingId && hentBehandlingPåFagsak(fagsak.data, parseInt(behandlingId, 10));
+
             if (åpenBehandling) {
-                settÅpenBehandling(åpenBehandling);
+                settÅpenBehandling(byggDataRessurs(åpenBehandling));
             } else if (behandlingId) {
-                settÅpenBehandling(undefined);
+                settÅpenBehandling(
+                    byggFeiletRessurs(`Finner ikke behandling med id ${behandlingId}`)
+                );
             } else if (aktivBehandling) {
-                settÅpenBehandling(aktivBehandling);
+                settÅpenBehandling(byggDataRessurs(aktivBehandling));
             } else {
-                settÅpenBehandling(undefined);
+                settÅpenBehandling(byggFeiletRessurs('Fagsaken har ingen behandlinger'));
             }
-        } else {
-            settÅpenBehandling(undefined);
         }
     };
 
     const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
-        return åpenBehandling?.steg;
+        return åpenBehandling.status === RessursStatus.SUKSESS
+            ? åpenBehandling.data.steg
+            : undefined;
     };
 
     const erLesevisning = (): boolean => {

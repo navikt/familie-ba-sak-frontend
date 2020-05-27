@@ -46,7 +46,7 @@ const useFagsakApi = (
                     history.push(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
-                    settFeilmelding(response.melding);
+                    settFeilmelding(response.frontendFeilmelding);
                 } else {
                     settVisFeilmeldinger(true);
                     settFeilmelding('Opprettelse av fagsak feilet');
@@ -91,7 +91,7 @@ const useFagsakApi = (
                     return;
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
-                    settFeilmelding(response.melding);
+                    settFeilmelding(response.frontendFeilmelding);
                 } else {
                     settVisFeilmeldinger(true);
                     settFeilmelding('Opprettelse av behandling feilet');

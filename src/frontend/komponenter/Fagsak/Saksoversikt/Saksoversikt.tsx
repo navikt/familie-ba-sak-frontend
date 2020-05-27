@@ -22,6 +22,7 @@ import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { useBehandling } from '../../../context/BehandlingContext';
+import Lenke from 'nav-frontend-lenker';
 
 interface IProps {
     fagsak: IFagsak;
@@ -59,10 +60,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
               (vedtak: IVedtakForBehandling) => vedtak.aktiv === true
           )
         : undefined;
-
-    const onClickRow = () => {
-        return true;
-    };
 
     return (
         <div className={'saksoversikt'}>
@@ -190,12 +187,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                     );
 
                                     return (
-                                        <tr key={behandling.behandlingId} onClick={onClickRow}>
-                                            <td
-                                                children={`${
-                                                    behandlingstyper[behandling.type].navn
-                                                }`}
-                                            />
+                                        <tr key={behandling.behandlingId}>
+                                            <td>
+                                                <Lenke
+                                                    href={`/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad`}
+                                                >
+                                                    {behandlingstyper[behandling.type].navn}
+                                                </Lenke>
+                                            </td>
                                             <td
                                                 children={`${
                                                     behandling

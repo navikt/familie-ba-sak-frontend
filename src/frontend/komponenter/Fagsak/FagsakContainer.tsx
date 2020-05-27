@@ -111,7 +111,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                 />
             );
         case RessursStatus.FEILET:
-            return <AlertStripe children={fagsak.melding} type={'feil'} />;
+            return <AlertStripe children={fagsak.frontendFeilmelding} type={'feil'} />;
         default:
             return <div />;
     }

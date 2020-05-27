@@ -13,7 +13,6 @@ export interface ISide {
 }
 
 export const sider: ISide[] = [
-    { id: 'SAKSOVERSIKT', href: 'saksoversikt', navn: 'Saksoversikt' },
     {
         id: 'REGISTRERE_SØKNAD',
         href: 'registrer-soknad',

@@ -27,7 +27,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     const feilmelding =
         innsendtVedtak.status === RessursStatus.FEILET ||
         innsendtVedtak.status === RessursStatus.IKKE_TILGANG
-            ? innsendtVedtak.melding
+            ? innsendtVedtak.frontendFeilmelding
             : '';
     return (
         <div className="totrinnskontroll">

@@ -1,5 +1,4 @@
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -10,18 +9,20 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
 import BehandlingVilkårSkjema from './VilkårsvurderingSkjema';
+import { IBehandling } from '../../../typer/behandling';
 
 interface IProps {
     fagsak: IFagsak;
+    åpenBehandling: IBehandling;
 }
 
-const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
+const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehandling }) => {
     const {
         erVilkårsvurderingenGyldig,
         hentVilkårMedFeil,
         vilkårsvurdering,
     } = useVilkårsvurdering();
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { erLesevisning } = useBehandling();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -32,16 +33,8 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
         settOpprettelseFeilmelding
     );
 
-    if (!åpenBehandling) {
-        return (
-            <div>
-                <Normaltekst>Kan ikke finne behandling.</Normaltekst>
-            </div>
-        );
-    }
-
     if (vilkårsvurdering.length === 0) {
-        return <div>Finner ingen vilkår på behandlingen. Det er sansynligvis noe feil.</div>;
+        return <div>Finner ingen vilkår på behandlingen.</div>;
     }
 
     return (
@@ -68,7 +61,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <BehandlingVilkårSkjema
                 opprettelseFeilmelding={opprettelseFeilmelding}
                 visFeilmeldinger={visFeilmeldinger}
-                behandlingstype={åpenBehandling!!.type}
+                behandlingstype={åpenBehandling.type}
             />
 
             {hentVilkårMedFeil().length > 0 && visFeilmeldinger && (

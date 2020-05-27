@@ -8,7 +8,7 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import { BehandlingSteg } from '../../../typer/behandling';
+import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
@@ -20,10 +20,14 @@ import Barna from './Barna';
 import SøkerOppholdINorge from './SøkerOppholdINorge';
 import SøknadType from './SøknadType';
 
-const RegistrerSøknad: React.FunctionComponent = () => {
+interface IProps {
+    åpenBehandling: IBehandling;
+}
+
+const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { axiosRequest } = useApp();
     const { fagsak, settFagsak } = useFagsakRessurser();
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { erLesevisning } = useBehandling();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();
@@ -54,7 +58,8 @@ const RegistrerSøknad: React.FunctionComponent = () => {
                         `/fagsak/${response.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
                     );
                 } else if (response.status === RessursStatus.FEILET) {
-                    if (response.melding.includes('fjerne vilkår')) {
+                    // TODO: Her sjekker vi om feilmeldingen gjelder valideringsfeil
+                    if (response.frontendFeilmelding.includes('Du har gjort endringer')) {
                         settFrontendFeilmelding(response.frontendFeilmelding);
                         settVisModal(true);
                     } else {

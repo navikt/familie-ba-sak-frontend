@@ -4,7 +4,6 @@ import { Ingress, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
-import { useBehandling } from '../../../context/BehandlingContext';
 import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
@@ -12,14 +11,18 @@ import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SystemetLaster from '../../Felleskomponenter/SystemetLaster/SystemetLaster';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
+import { IBehandling } from '../../../typer/behandling';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
+    åpenBehandling: IBehandling;
 }
 
-const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak }) => {
+const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
+    fagsak,
+    åpenBehandling,
+}) => {
     const { axiosRequest } = useApp();
-    const { åpenBehandling } = useBehandling();
     const history = useHistory();
     const [tilkjentYtelseRessurs, setTilkjentYtelseRessurs] = React.useState<
         Ressurs<IOppsummeringBeregning[]>
@@ -36,11 +39,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
             })
             .catch((_error: AxiosError) => {
                 setTilkjentYtelseRessurs(
-                    byggFeiletRessurs(
-                        'Ukjent feil, Kunne ikke generere forhåndsvisning.',
-                        'Ukjent feil, Kunne ikke generere forhåndsvisning.',
-                        _error
-                    )
+                    byggFeiletRessurs('Ukjent feil, Kunne ikke generere forhåndsvisning.', _error)
                 );
             });
     }, []);
@@ -64,7 +63,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ fagsak 
         case RessursStatus.IKKE_HENTET:
             return <SystemetLaster />;
         case RessursStatus.FEILET:
-            return <AlertStripe children={tilkjentYtelseRessurs.melding} type={'feil'} />;
+            return (
+                <AlertStripe children={tilkjentYtelseRessurs.frontendFeilmelding} type={'feil'} />
+            );
         case RessursStatus.IKKE_TILGANG:
             return (
                 <AlertStripe

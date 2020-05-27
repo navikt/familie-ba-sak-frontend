@@ -110,7 +110,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
             {person.status === RessursStatus.FEILET && (
                 <>
                     <br />
-                    <Feilmelding children={person.melding} />
+                    <Feilmelding children={person.frontendFeilmelding} />
                 </>
             )}
         </div>

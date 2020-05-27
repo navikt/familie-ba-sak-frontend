@@ -4,11 +4,11 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
-import { aktivVedtak } from '../../../api/fagsak';
+import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { BehandlingStatus } from '../../../typer/behandling';
+import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
@@ -17,12 +17,13 @@ import PdfFrame from './PdfFrame';
 
 interface IVedtakProps {
     fagsak: IFagsak;
+    åpenBehandling: IBehandling;
 }
 
-const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) => {
+const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
     const { settFagsak } = useFagsakRessurser();
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { erLesevisning } = useBehandling();
 
     const history = useHistory();
 
@@ -34,7 +35,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
     const [senderInn, settSenderInn] = React.useState(false);
 
     React.useEffect(() => {
-        const aktivtVedtak = aktivVedtak(fagsak);
+        const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
         const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
         if (aktivtVedtak) {
             axiosRequest<string, void>({
@@ -59,7 +60,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
                 'Vi finner ingen aktive vedtak på behandlingen, vennligst gå tilbake og fastsett vedtak.'
             );
         }
-    }, [fagsak, axiosRequest]);
+    }, [åpenBehandling]);
 
     const visSubmitKnapp =
         !erLesevisning() &&
@@ -79,12 +80,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak }) =
             if (response.status === RessursStatus.SUKSESS) {
                 settVisModal(true);
                 settFagsak(response);
-            } else if (
-                response.status === RessursStatus.FEILET ||
-                response.status === RessursStatus.IKKE_TILGANG
-            ) {
-                settSubmitFeil(response.melding);
-                settSenderInn(false);
+            } else if (response.status === RessursStatus.FEILET) {
+                settSubmitFeil(response.frontendFeilmelding);
             }
         });
     };

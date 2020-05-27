@@ -18,12 +18,11 @@ export type Ressurs<T> =
           status: RessursStatus.SUKSESS;
       }
     | {
-          melding: string;
+          frontendFeilmelding: string;
           status: RessursStatus.IKKE_TILGANG;
       }
     | {
-          errorMelding?: string;
-          melding: string;
+          melding?: string; // Teknisk melding som bare skal brukes til logging
           frontendFeilmelding: string;
           status: RessursStatus.FEILET;
       };
@@ -34,20 +33,22 @@ export const byggTomRessurs = <T>(): Ressurs<T> => {
     };
 };
 
+export const byggDataRessurs = <T>(data: T): Ressurs<T> => {
+    return {
+        status: RessursStatus.SUKSESS,
+        data,
+    };
+};
+
 export const byggHenterRessurs = <T>(): Ressurs<T> => {
     return {
         status: RessursStatus.HENTER,
     };
 };
 
-export const byggFeiletRessurs = <T>(
-    melding: string,
-    frontendFeilmelding: string,
-    error?: Error
-): Ressurs<T> => {
+export const byggFeiletRessurs = <T>(frontendFeilmelding: string, error?: Error): Ressurs<T> => {
     return {
-        errorMelding: error ? error.message : undefined,
-        melding,
+        melding: error ? error.message : undefined,
         frontendFeilmelding,
         status: RessursStatus.FEILET,
     };

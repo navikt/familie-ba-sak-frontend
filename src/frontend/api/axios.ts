@@ -24,24 +24,20 @@ export const håndterRessurs = <T>(
             };
             break;
         case RessursStatus.IKKE_TILGANG:
-            loggFeil(undefined, innloggetSaksbehandler, ressurs.melding);
             typetRessurs = {
-                melding: ressurs.melding,
+                frontendFeilmelding: ressurs.frontendFeilmelding,
                 status: RessursStatus.IKKE_TILGANG,
             };
             break;
         case RessursStatus.FEILET:
             loggFeil(undefined, innloggetSaksbehandler, ressurs.melding);
             typetRessurs = {
-                errorMelding: ressurs.errorMelding,
-                melding: ressurs.melding,
                 frontendFeilmelding: ressurs.frontendFeilmelding,
                 status: RessursStatus.FEILET,
             };
             break;
         default:
             typetRessurs = {
-                melding: 'En feil har oppstått!',
                 frontendFeilmelding: 'En feil har oppstått!',
                 status: RessursStatus.FEILET,
             };
