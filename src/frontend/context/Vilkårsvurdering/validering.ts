@@ -1,6 +1,6 @@
-import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
+import { feil, IFelt, ok, Valideringsstatus } from '../../typer/felt';
 import { IPeriode } from '../../typer/periode';
-import { Valideringsstatus, feil, IFelt, ok } from '../../typer/felt';
+import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
     nyttVilkårResultat: IFelt<IVilkårResultat>

@@ -1,10 +1,9 @@
 import moment from 'moment';
-
 import { IPersonBeregning } from '../typer/beregning';
-import { feil, IFelt, ok, Valideringsstatus, ValiderIFelt } from '../typer/felt';
-import { datoformat } from './formatter';
-import { IPeriode, stringToMoment, TIDENES_MORGEN, TIDENES_ENDE } from '../typer/periode';
+import { feil, IFelt, ok, ValiderIFelt, Valideringsstatus } from '../typer/felt';
+import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { Resultat } from '../typer/vilkår';
+import { datoformat } from './formatter';
 
 export type IIdentFelt = IFelt<string>;
 
@@ -40,10 +39,12 @@ export const erGyldigMånedDato = (felt: IFelt<IPersonBeregning>): IFelt<IPerson
 };
 
 export const erPeriodeGyldig = (felt: IFelt<IPeriode>): IFelt<IPeriode> => {
-    return moment(felt.verdi.fom).isValid() &&
-        stringToMoment(felt.verdi.fom, TIDENES_MORGEN).isBefore(
-            stringToMoment(felt.verdi.tom, TIDENES_ENDE)
-        )
+    const fom = felt.verdi.fom;
+    const tom = felt.verdi.tom;
+
+    return fom &&
+        moment(fom).isValid() &&
+        stringToMoment(fom, TIDENES_MORGEN).isBefore(stringToMoment(tom, TIDENES_ENDE))
         ? ok(felt)
         : feil(felt, 'Ugyldig periode');
 };
