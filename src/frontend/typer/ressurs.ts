@@ -5,6 +5,13 @@ export enum RessursStatus {
     IKKE_TILGANG = 'IKKE_TILGANG',
     SUKSESS = 'SUKSESS',
 }
+export type ApiRessurs<T> = {
+    data: T;
+    status: RessursStatus;
+    melding: string;
+    frontendFeilmelding?: string;
+    stacktrace: string;
+};
 
 export type Ressurs<T> =
     | {
@@ -22,7 +29,6 @@ export type Ressurs<T> =
           status: RessursStatus.IKKE_TILGANG;
       }
     | {
-          melding?: string; // Teknisk melding som bare skal brukes til logging
           frontendFeilmelding: string;
           status: RessursStatus.FEILET;
       };
@@ -46,9 +52,8 @@ export const byggHenterRessurs = <T>(): Ressurs<T> => {
     };
 };
 
-export const byggFeiletRessurs = <T>(frontendFeilmelding: string, error?: Error): Ressurs<T> => {
+export const byggFeiletRessurs = <T>(frontendFeilmelding: string): Ressurs<T> => {
     return {
-        melding: error ? error.message : undefined,
         frontendFeilmelding,
         status: RessursStatus.FEILET,
     };

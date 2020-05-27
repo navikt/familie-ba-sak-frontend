@@ -142,8 +142,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
                 settDataForManuellJournalføring(hentetDataForManuellJournalføring);
             })
-            .catch((error: AxiosError) => {
-                settOppgaver(byggFeiletRessurs('Ukjent feil ved henting av oppgave', error));
+            .catch((_error: AxiosError) => {
+                settOppgaver(byggFeiletRessurs('Ukjent feil ved henting av oppgave'));
             });
     };
 
@@ -222,8 +222,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 }
                 return oppgaverRes;
             })
-            .catch((error: AxiosError) => {
-                return byggFeiletRessurs<string>('Ukjent feil ved fordeling av oppgave', error);
+            .catch((_error: AxiosError) => {
+                return byggFeiletRessurs<string>('Ukjent feil ved fordeling av oppgave');
             });
     };
 
@@ -235,11 +235,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             .then((oppgaverRes: Ressurs<string>) => {
                 return oppgaverRes;
             })
-            .catch((error: AxiosError) => {
-                return byggFeiletRessurs<string>(
-                    'Ukjent feil ved tilbakestilling av oppgave',
-                    error
-                );
+            .catch((_error: AxiosError) => {
+                return byggFeiletRessurs<string>('Ukjent feil ved tilbakestilling av oppgave');
             });
     };
 
@@ -276,8 +273,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             .then((oppgaverRes: Ressurs<IHentOppgaveDto>) => {
                 return oppgaverRes;
             })
-            .catch((error: AxiosError) => {
-                return byggFeiletRessurs('Ukjent ved innhenting av oppgaver', error);
+            .catch((_error: AxiosError) => {
+                return byggFeiletRessurs('Ukjent ved innhenting av oppgaver');
             });
     };
 

@@ -97,6 +97,8 @@ const FagsakContainer: React.FunctionComponent = () => {
                     );
                 case RessursStatus.HENTER:
                     return <SystemetLaster />;
+                case RessursStatus.FEILET:
+                    return <AlertStripe children={bruker.frontendFeilmelding} type={'feil'} />;
                 default:
                     return <div />;
             }

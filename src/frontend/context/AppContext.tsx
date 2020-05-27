@@ -3,7 +3,7 @@ import createUseContext from 'constate';
 import React, { useEffect } from 'react';
 
 import { håndterRessurs, loggFeil, preferredAxios } from '../api/axios';
-import { Ressurs } from '../typer/ressurs';
+import { Ressurs, ApiRessurs } from '../typer/ressurs';
 import { ISaksbehandler } from '../typer/saksbehandler';
 import { BehandlerRolle } from '../typer/behandling';
 import { gruppeIdTilRolle } from '../utils/behandling';
@@ -54,8 +54,8 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     ): Promise<Ressurs<T>> => {
         return preferredAxios
             .request(config)
-            .then((response: AxiosResponse<Ressurs<T>>) => {
-                const responsRessurs: Ressurs<T> = response.data;
+            .then((response: AxiosResponse<ApiRessurs<T>>) => {
+                const responsRessurs: ApiRessurs<T> = response.data;
 
                 return håndterRessurs(responsRessurs, innloggetSaksbehandler);
             })
@@ -65,7 +65,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
                 }
                 loggFeil(error, innloggetSaksbehandler);
 
-                const responsRessurs: Ressurs<T> = error.response?.data;
+                const responsRessurs: ApiRessurs<T> = error.response?.data;
                 return håndterRessurs(responsRessurs, innloggetSaksbehandler);
             });
     };

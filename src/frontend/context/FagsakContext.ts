@@ -69,14 +69,10 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                     fagsak: hentetFagsak,
                 });
             })
-            .catch((error: AxiosError) => {
+            .catch((_error: AxiosError) => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
-                    fagsak: byggFeiletRessurs(
-                        'Ukjent ved innhenting av fagsak',
-                        'Ukjent ved innhenting av fagsak',
-                        error
-                    ),
+                    fagsak: byggFeiletRessurs('Ukjent ved innhenting av fagsak'),
                 });
             });
     };
@@ -98,7 +94,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             .catch(() => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
-                    logg: byggFeiletRessurs('Feil ved lasting av logg', 'Feil ved lasting av logg'),
+                    logg: byggFeiletRessurs('Feil ved lasting av logg'),
                 });
             });
     };

@@ -70,16 +70,9 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
             totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.UNDERKJENT &&
             !totrinnskontrollData.begrunnelse;
         if (totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
-            settInnsendtVedtak(
-                byggFeiletRessurs(
-                    'Totrinnskontroll ikke vurdert ved innsending',
-                    'Du må gjøre et valg'
-                )
-            );
+            settInnsendtVedtak(byggFeiletRessurs('Totrinnskontroll ikke vurdert ved innsending'));
         } else if (manglerBegrunnelse) {
-            settInnsendtVedtak(
-                byggFeiletRessurs('Mangler begrunnelse ved innsending', 'Mangler begrunnelse')
-            );
+            settInnsendtVedtak(byggFeiletRessurs('Mangler begrunnelse ved innsending'));
         } else {
             axiosRequest<IFagsak, ITotrinnskontrollData>({
                 method: 'POST',
@@ -92,14 +85,8 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                         settFagsak(response);
                     }
                 })
-                .catch((error: AxiosError) => {
-                    settInnsendtVedtak(
-                        byggFeiletRessurs(
-                            'Ukjent feil, sende inn vedtak.',
-                            'Ukjent feil, sende inn vedtak.',
-                            error
-                        )
-                    );
+                .catch((_error: AxiosError) => {
+                    settInnsendtVedtak(byggFeiletRessurs('Ukjent feil, sende inn vedtak.'));
                 });
         }
     };

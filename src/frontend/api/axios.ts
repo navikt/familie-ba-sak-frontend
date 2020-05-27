@@ -1,4 +1,4 @@
-import { Ressurs, RessursStatus } from '../typer/ressurs';
+import { Ressurs, RessursStatus, ApiRessurs } from '../typer/ressurs';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { captureException, configureScope, withScope } from '@sentry/core';
 
@@ -9,7 +9,7 @@ axios.defaults.baseURL = window.location.origin;
 export const preferredAxios = axios;
 
 export const håndterRessurs = <T>(
-    ressurs: Ressurs<T>,
+    ressurs: ApiRessurs<T>,
     innloggetSaksbehandler?: ISaksbehandler
 ): Ressurs<T> => {
     let typetRessurs: Ressurs<T> = {
@@ -25,14 +25,14 @@ export const håndterRessurs = <T>(
             break;
         case RessursStatus.IKKE_TILGANG:
             typetRessurs = {
-                frontendFeilmelding: ressurs.frontendFeilmelding,
+                frontendFeilmelding: ressurs.frontendFeilmelding ?? 'En feil har oppstått!',
                 status: RessursStatus.IKKE_TILGANG,
             };
             break;
         case RessursStatus.FEILET:
             loggFeil(undefined, innloggetSaksbehandler, ressurs.melding);
             typetRessurs = {
-                frontendFeilmelding: ressurs.frontendFeilmelding,
+                frontendFeilmelding: ressurs.frontendFeilmelding ?? 'En feil har oppstått!',
                 status: RessursStatus.FEILET,
             };
             break;
