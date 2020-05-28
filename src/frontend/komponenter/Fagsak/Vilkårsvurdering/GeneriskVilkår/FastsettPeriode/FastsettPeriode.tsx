@@ -1,15 +1,14 @@
+import { ISODateString } from 'nav-datovelger';
 import { Checkbox, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
-
+import { useBehandling } from '../../../../../context/BehandlingContext';
+import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
-import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
-import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
-import { ISODateString } from 'nav-datovelger';
 import FamilieDatovelger from '../../../../Felleskomponenter/InputMedLesevisning/FamilieDatovelger';
-import { useBehandling } from '../../../../../context/BehandlingContext';
+import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 
 interface IProps {
     redigerbartVilkår: IFelt<IVilkårResultat>;

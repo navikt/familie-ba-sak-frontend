@@ -86,6 +86,25 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         return visFeilmeldinger || visFeilmeldingerForEttVilkår;
     };
 
+    const onClickVilkårFerdig = () => {
+        const feilmelding = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person).verdi
+            .periode.feilmelding;
+        const status = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person).verdi
+            .periode.valideringsstatus;
+        const erVilkårGyldig: boolean =
+            redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person).valideringsstatus ===
+            Valideringsstatus.OK;
+        redigerbartVilkår.verdi.periode.feilmelding = feilmelding;
+        redigerbartVilkår.verdi.periode.valideringsstatus = status;
+        settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
+        if (erVilkårGyldig) {
+            settEkspandertVilkår(false);
+            settVisFeilmeldingerForEttVilkår(false);
+        } else {
+            settVisFeilmeldingerForEttVilkår(true);
+        }
+    };
+
     return (
         <li
             className={classNames(
@@ -192,22 +211,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         <div className={'generisk-vilkår__ekspandert--knapperad'}>
                             <div>
                                 <FamilieKnapp
-                                    onClick={() => {
-                                        const erVilkårGyldig: boolean =
-                                            redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
-                                                .valideringsstatus === Valideringsstatus.OK;
-
-                                        settVilkårForPeriodeResultat(
-                                            person.personIdent,
-                                            redigerbartVilkår
-                                        );
-                                        if (erVilkårGyldig) {
-                                            settEkspandertVilkår(false);
-                                            settVisFeilmeldingerForEttVilkår(false);
-                                        } else {
-                                            settVisFeilmeldingerForEttVilkår(true);
-                                        }
-                                    }}
+                                    onClick={onClickVilkårFerdig}
                                     mini={true}
                                     type={'standard'}
                                 >
