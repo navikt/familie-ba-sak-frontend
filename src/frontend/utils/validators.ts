@@ -1,10 +1,10 @@
 import moment from 'moment';
-
 import { IPersonBeregning } from '../typer/beregning';
-import { feil, IFelt, ok, Valideringsstatus, ValiderIFelt } from '../typer/felt';
-import { datoformat } from './formatter';
-import { IPeriode, stringToMoment, TIDENES_MORGEN, TIDENES_ENDE } from '../typer/periode';
+import { feil, IFelt, ok, ValiderIFelt, Valideringsstatus } from '../typer/felt';
+import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
+import { IPerson, PersonType } from '../typer/person';
 import { Resultat } from '../typer/vilkår';
+import { datoformat } from './formatter';
 
 export type IIdentFelt = IFelt<string>;
 
@@ -39,13 +39,37 @@ export const erGyldigMånedDato = (felt: IFelt<IPersonBeregning>): IFelt<IPerson
         : feil(felt, 'Ugyldig dato');
 };
 
-export const erPeriodeGyldig = (felt: IFelt<IPeriode>): IFelt<IPeriode> => {
-    return moment(felt.verdi.fom).isValid() &&
-        stringToMoment(felt.verdi.fom, TIDENES_MORGEN).isBefore(
-            stringToMoment(felt.verdi.tom, TIDENES_ENDE)
-        )
-        ? ok(felt)
-        : feil(felt, 'Ugyldig periode');
+const barnsVilkårErMellom0og18År = (fom: string, person: IPerson, tom?: string) => {
+    const fødselsdato = moment(person.fødselsdato);
+    const fødselsdatoPluss18 = moment(person.fødselsdato).add(18, 'years');
+    const fomDato = moment(fom);
+    const tomDato = tom ? moment(tom) : undefined;
+    return (
+        fomDato.isSameOrAfter(fødselsdato) &&
+        (tomDato ? tomDato.isSameOrBefore(fødselsdatoPluss18) : true)
+    );
+};
+
+export const erPeriodeGyldig = (felt: IFelt<IPeriode>, person?: IPerson): IFelt<IPeriode> => {
+    const fom = felt.verdi.fom;
+    const tom = felt.verdi.tom;
+
+    if (fom) {
+        const fomDatoErGylding = moment(fom).isValid();
+        const fomDatoErFørTomDato = stringToMoment(fom, TIDENES_MORGEN).isBefore(
+            stringToMoment(tom, TIDENES_ENDE)
+        );
+        const periodeErInnenfqor18år =
+            person && person.type === PersonType.BARN
+                ? barnsVilkårErMellom0og18År(fom, person, tom)
+                : true;
+
+        return fomDatoErGylding && fomDatoErFørTomDato && periodeErInnenfqor18år
+            ? ok(felt)
+            : feil(felt, 'Ugyldig periode');
+    } else {
+        return feil(felt, 'Mangler fra og med dato');
+    }
 };
 
 export const erResultatGyldig = (felt: IFelt<Resultat>): IFelt<Resultat> => {

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Label } from 'nav-frontend-skjema';
 import { Datovelger as NavDatovelger, ISODateString } from 'nav-datovelger';
 import 'nav-datovelger/lib/styles/datovelger';
+import { Label } from 'nav-frontend-skjema';
+import React from 'react';
 
 interface IProps {
     disabled?: boolean;

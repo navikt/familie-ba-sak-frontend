@@ -1,3 +1,5 @@
+import { IPerson } from './person';
+
 export enum Valideringsstatus {
     FEIL = 'FEIL',
     ADVARSEL = 'ADVARSEL',
@@ -23,7 +25,7 @@ export const feil = <T>(felt: IFelt<T>, feilmelding: string): IFelt<T> => {
     };
 };
 
-export type ValiderIFelt<T> = (felt: IFelt<T>) => IFelt<T>;
+export type ValiderIFelt<T> = (felt: IFelt<T>, person?: IPerson) => IFelt<T>;
 
 export interface IFelt<T> {
     feilmelding: string;

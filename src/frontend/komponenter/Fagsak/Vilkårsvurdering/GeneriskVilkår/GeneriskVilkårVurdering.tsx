@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
+import classNames from 'classnames';
 import deepEqual from 'deep-equal';
+import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
+import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Normaltekst, Undertekst } from 'nav-frontend-typografi';
+import React, { useState } from 'react';
+import { Collapse } from 'react-collapse';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
+import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import Slett from '../../../../ikoner/Slett';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
+import { periodeToString } from '../../../../typer/periode';
+import { IPerson } from '../../../../typer/person';
 import {
+    IVilkårConfig,
     IVilkårResultat,
     Resultat,
-    IVilkårConfig,
-    resultatTilUi,
     resultater,
+    resultatTilUi,
 } from '../../../../typer/vilkår';
-import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
-import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import {
-    vilkårResultatFeilmeldingId,
-    vilkårBegrunnelseFeilmeldingId,
-    vilkårFeilmeldingId,
-} from './GeneriskVilkår';
-import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
-import { IPerson } from '../../../../typer/person';
-import classNames from 'classnames';
-import { Undertekst, Normaltekst } from 'nav-frontend-typografi';
-import { periodeToString } from '../../../../typer/periode';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import Slett from '../../../../ikoner/Slett';
+import FamilieKnapp from '../../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
 import FamilieRadioGruppe from '../../../Felleskomponenter/InputMedLesevisning/FamilieRadioGruppe';
 import FamilieTextareaControlled from '../../../Felleskomponenter/InputMedLesevisning/FamilieTextareaControlled';
-import FamilieKnapp from '../../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
-import { Collapse } from 'react-collapse';
-import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
-import { useBehandling } from '../../../../context/BehandlingContext';
+import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
+import {
+    vilkårBegrunnelseFeilmeldingId,
+    vilkårFeilmeldingId,
+    vilkårResultatFeilmeldingId,
+} from './GeneriskVilkår';
 
 interface IProps {
     person: IPerson;
@@ -84,6 +84,18 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
     const skalViseFeilmeldinger = () => {
         return visFeilmeldinger || visFeilmeldingerForEttVilkår;
+    };
+
+    const onClickVilkårFerdig = () => {
+        const validertVilkår = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person);
+
+        settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
+        if (validertVilkår.valideringsstatus === Valideringsstatus.OK) {
+            settEkspandertVilkår(false);
+            settVisFeilmeldingerForEttVilkår(false);
+        } else {
+            settVisFeilmeldingerForEttVilkår(true);
+        }
     };
 
     return (
@@ -192,22 +204,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         <div className={'generisk-vilkår__ekspandert--knapperad'}>
                             <div>
                                 <FamilieKnapp
-                                    onClick={() => {
-                                        const erVilkårGyldig: boolean =
-                                            redigerbartVilkår.valideringsFunksjon(redigerbartVilkår)
-                                                .valideringsstatus === Valideringsstatus.OK;
-
-                                        settVilkårForPeriodeResultat(
-                                            person.personIdent,
-                                            redigerbartVilkår
-                                        );
-                                        if (erVilkårGyldig) {
-                                            settEkspandertVilkår(false);
-                                            settVisFeilmeldingerForEttVilkår(false);
-                                        } else {
-                                            settVisFeilmeldingerForEttVilkår(true);
-                                        }
-                                    }}
+                                    onClick={onClickVilkårFerdig}
                                     mini={true}
                                     type={'standard'}
                                 >
