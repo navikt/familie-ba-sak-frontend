@@ -87,17 +87,10 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     };
 
     const onClickVilkårFerdig = () => {
-        const feilmelding = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person).verdi
-            .periode.feilmelding;
-        const status = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person).verdi
-            .periode.valideringsstatus;
-        const erVilkårGyldig: boolean =
-            redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person).valideringsstatus ===
-            Valideringsstatus.OK;
-        redigerbartVilkår.verdi.periode.feilmelding = feilmelding;
-        redigerbartVilkår.verdi.periode.valideringsstatus = status;
+        const validertVilkår = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person);
+
         settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
-        if (erVilkårGyldig) {
+        if (validertVilkår.valideringsstatus === Valideringsstatus.OK) {
             settEkspandertVilkår(false);
             settVisFeilmeldingerForEttVilkår(false);
         } else {

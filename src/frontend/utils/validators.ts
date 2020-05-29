@@ -68,7 +68,7 @@ export const erPeriodeGyldig = (felt: IFelt<IPeriode>, person?: IPerson): IFelt<
             ? ok(felt)
             : feil(felt, 'Ugyldig periode');
     } else {
-        return feil(felt, 'Mangler FOM-dato');
+        return feil(felt, 'Mangler fra og med dato');
     }
 };
 
