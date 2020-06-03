@@ -429,7 +429,7 @@ export const mapFraRestVilkårsvurderingTilUi = (
                                         valideringsstatus: Valideringsstatus.OK,
                                         verdi: vilkårResultat.begrunnelse,
                                     },
-                                    id: randomUUID(),
+                                    id: vilkårResultat.id,
                                     periode: lagInitiellFelt(
                                         nyPeriode(
                                             vilkårResultat.periodeFom,

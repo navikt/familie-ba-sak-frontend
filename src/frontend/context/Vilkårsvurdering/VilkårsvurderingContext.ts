@@ -7,6 +7,7 @@ import {
     IVilkårResultat,
     lagTomtFeltMedVilkår,
     VilkårType,
+    IRestPersonResultat,
 } from '../../typer/vilkår';
 import { lagInitiellFelt } from '../../utils/validators';
 import { kjørValidering, validerVilkår } from './validering';
@@ -33,6 +34,19 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
               )
             : []
     );
+
+    const settVilkårsvurderingFraApi = (personResultater: IRestPersonResultat[]) => {
+        settVilkårsvurdering(
+            åpenBehandling
+                ? mapFraRestVilkårsvurderingTilUi(
+                      personResultater,
+                      åpenBehandling.personer
+                  ).sort((personResultat: IPersonResultat) =>
+                      personResultat.person.type === PersonType.SØKER ? -1 : 1
+                  )
+                : []
+        );
+    };
 
     const settVilkårForPeriodeResultat = (
         personIdent: string,
@@ -64,7 +78,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                                 acc: IFelt<IVilkårResultat>[],
                                 vilkårResultat: IFelt<IVilkårResultat>
                             ) => {
-                                if (vilkårResultat.verdi.id !== id) {
+                                if (vilkårResultat.verdi.id !== parseInt(id, 10)) {
                                     acc = [...acc, vilkårResultat];
                                 } else {
                                     if (
@@ -132,6 +146,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
         leggTilVilkår,
         settVilkårForPeriodeResultat,
         settVilkårsvurdering,
+        settVilkårsvurderingFraApi,
         vilkårsvurdering,
     };
 });

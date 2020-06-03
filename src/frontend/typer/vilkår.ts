@@ -69,7 +69,7 @@ export interface IPersonResultat {
 
 export interface IVilkårResultat {
     begrunnelse: IFelt<string>;
-    id: string;
+    id: number;
     periode: IFelt<IPeriode>;
     resultat: IFelt<Resultat>;
     vilkårType: VilkårType;
@@ -82,11 +82,12 @@ export interface IRestPersonResultat {
 }
 
 export interface IRestVilkårResultat {
-    vilkårType: VilkårType;
     begrunnelse: string;
-    resultat: Resultat;
+    id: number;
     periodeFom?: string;
     periodeTom?: string;
+    resultat: Resultat;
+    vilkårType: VilkårType;
 }
 
 type IVilkårsconfig = {

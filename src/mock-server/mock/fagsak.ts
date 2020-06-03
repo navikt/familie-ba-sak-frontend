@@ -80,6 +80,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         personIdent: søker.personIdent,
         vilkårResultater: [
             {
+                id: 1,
                 vilkårType: VilkårType.LOVLIG_OPPHOLD,
                 resultat: Resultat.KANSKJE,
                 periodeFom: '2000-01-01',
@@ -93,6 +94,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         personIdent: barn.personIdent,
         vilkårResultater: [
             {
+                id: 2,
                 vilkårType: VilkårType.BOSATT_I_RIKET,
                 resultat: Resultat.KANSKJE,
                 periodeFom: undefined,
@@ -100,6 +102,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 begrunnelse: '',
             },
             {
+                id: 3,
                 vilkårType: VilkårType.LOVLIG_OPPHOLD,
                 resultat: Resultat.KANSKJE,
                 periodeFom: undefined,
@@ -107,6 +110,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 begrunnelse: '',
             },
             {
+                id: 4,
                 vilkårType: VilkårType.GIFT_PARTNERSKAP,
                 resultat: Resultat.KANSKJE,
                 periodeFom: undefined,
@@ -114,6 +118,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 begrunnelse: '',
             },
             {
+                id: 5,
                 vilkårType: VilkårType.UNDER_18_ÅR,
                 resultat: Resultat.KANSKJE,
                 periodeFom: undefined,
@@ -121,6 +126,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 begrunnelse: '',
             },
             {
+                id: 6,
                 vilkårType: VilkårType.BOR_MED_SØKER,
                 resultat: Resultat.KANSKJE,
                 periodeFom: undefined,

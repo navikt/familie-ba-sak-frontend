@@ -18,6 +18,9 @@ import {
     Resultat,
     resultater,
     resultatTilUi,
+    IPersonResultat,
+    IRestPersonResultat,
+    IRestVilkårResultat,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import FamilieKnapp from '../../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
@@ -29,6 +32,9 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './GeneriskVilkår';
+import { useApp } from '../../../../context/AppContext';
+import { Ressurs, RessursStatus } from '../../../../typer/ressurs';
+import { håndterApiRessurs } from '../../../../api/axios';
 
 interface IProps {
     person: IPerson;
@@ -46,8 +52,12 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     const {
         fjernEllerNullstillPeriodeForVilkår,
         settVilkårForPeriodeResultat,
+        vilkårsvurdering,
+        settVilkårsvurderingFraApi,
     } = useVilkårsvurdering();
-    const { erLesevisning } = useBehandling();
+    const { axiosRequest } = useApp();
+
+    const { erLesevisning, åpenBehandling } = useBehandling();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
@@ -89,13 +99,43 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     const onClickVilkårFerdig = () => {
         const validertVilkår = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person);
 
-        settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
+        const vilkårsvurderingForPerson = vilkårsvurdering.find(
+            (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
+        );
+
+        if (vilkårsvurderingForPerson && åpenBehandling.status === RessursStatus.SUKSESS) {
+            axiosRequest<IRestPersonResultat[], IRestPersonResultat>({
+                method: 'PUT',
+                url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling.data.behandlingId}/${redigerbartVilkår.verdi.id}`,
+                data: {
+                    personIdent: vilkårsvurderingForPerson.personIdent,
+                    vilkårResultater: [
+                        {
+                            begrunnelse: redigerbartVilkår.verdi.begrunnelse.verdi,
+                            id: redigerbartVilkår.verdi.id,
+                            periodeFom: redigerbartVilkår.verdi.periode.verdi.fom,
+                            periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
+                            resultat: redigerbartVilkår.verdi.resultat.verdi,
+                            vilkårType: redigerbartVilkår.verdi.vilkårType,
+                        },
+                    ],
+                },
+            }).then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
+                if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
+                    settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
+                    settEkspandertVilkår(false);
+                }
+                console.log(nyVilkårsvurdering);
+            });
+        }
+
+        /*settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
         if (validertVilkår.valideringsstatus === Valideringsstatus.OK) {
             settEkspandertVilkår(false);
             settVisFeilmeldingerForEttVilkår(false);
         } else {
             settVisFeilmeldingerForEttVilkår(true);
-        }
+        }*/
     };
 
     return (
@@ -221,7 +261,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
                             <IkonKnapp
                                 onClick={() =>
-                                    fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
+                                    //fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
+                                    console.log('TODO')
                                 }
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                             >
