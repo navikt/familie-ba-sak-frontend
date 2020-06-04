@@ -12,14 +12,15 @@ import Slett from '../../../../ikoner/Slett';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { periodeToString } from '../../../../typer/periode';
 import { IPerson } from '../../../../typer/person';
+import { Ressurs, RessursStatus } from '../../../../typer/ressurs';
 import {
+    IPersonResultat,
+    IRestPersonResultat,
     IVilkårConfig,
     IVilkårResultat,
     Resultat,
     resultater,
     resultatTilUi,
-    IPersonResultat,
-    IRestPersonResultat,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import FamilieKnapp from '../../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
@@ -31,7 +32,6 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './GeneriskVilkår';
-import { Ressurs, RessursStatus } from '../../../../typer/ressurs';
 
 interface IProps {
     person: IPerson;
@@ -46,7 +46,13 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     vilkårResultat,
     visFeilmeldinger,
 }) => {
-    const { vilkårsvurdering, settVilkårsvurderingFraApi, putVilkår } = useVilkårsvurdering();
+    const {
+        vilkårsvurdering,
+        settVilkårsvurderingFraApi,
+        putVilkår,
+        lagrerVilkår,
+        settLagrerVilkår,
+    } = useVilkårsvurdering();
 
     const { erLesevisning } = useBehandling();
 
@@ -107,6 +113,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         ) {
             putVilkår(vilkårsvurderingForPerson, redigerbartVilkår)
                 .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
+                    settLagrerVilkår(false);
                     if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
                         settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
                         settEkspandertVilkår(false);
@@ -129,6 +136,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     }
                 })
                 .catch(() => {
+                    settLagrerVilkår(false);
                     settVisFeilmeldingerForEttVilkår(true);
                     settRedigerbartVilkår({
                         ...redigerbartVilkår,
@@ -260,6 +268,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     onClick={onClickVilkårFerdig}
                                     mini={true}
                                     type={'standard'}
+                                    spinner={lagrerVilkår}
                                 >
                                     Ferdig
                                 </FamilieKnapp>

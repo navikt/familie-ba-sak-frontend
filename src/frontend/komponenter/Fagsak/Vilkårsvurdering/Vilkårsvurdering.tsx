@@ -21,6 +21,8 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         erVilkårsvurderingenGyldig,
         hentVilkårMedFeil,
         vilkårsvurdering,
+        validererVilkårsvurdering,
+        settValidererVilkårsvurdering,
     } = useVilkårsvurdering();
     const { erLesevisning } = useBehandling();
 

@@ -96,6 +96,7 @@ const useFagsakApi = (
         fagsak: IFagsak
     ) => {
         const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+        settSenderInn(true);
 
         axiosRequest<IFagsak, void>({
             method: 'POST',

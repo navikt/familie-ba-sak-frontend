@@ -1,13 +1,13 @@
 import constate from 'constate';
 import * as React from 'react';
+import { IBehandling } from '../../typer/behandling';
+import { IFagsak } from '../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { PersonType } from '../../typer/person';
-import { IPersonResultat, IVilkårResultat, IRestPersonResultat } from '../../typer/vilkår';
-import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
-import { IBehandling } from '../../typer/behandling';
-import { useApp } from '../AppContext';
+import { IPersonResultat, IRestPersonResultat, IVilkårResultat } from '../../typer/vilkår';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
-import { IFagsak } from '../../typer/fagsak';
+import { useApp } from '../AppContext';
+import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 
 interface IProps {
     fagsak: IFagsak;
@@ -17,6 +17,7 @@ interface IProps {
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
     ({ fagsak, åpenBehandling }: IProps) => {
         const { axiosRequest } = useApp();
+        const [lagrerVilkår, settLagrerVilkår] = React.useState(false);
 
         const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
             åpenBehandling
@@ -47,7 +48,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             redigerbartVilkår: IFelt<IVilkårResultat>
         ) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-
+            settLagrerVilkår(true);
             return axiosRequest<IRestPersonResultat[], IRestPersonResultat>({
                 method: 'PUT',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
@@ -98,6 +99,8 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
         };
 
         return {
+            lagrerVilkår,
+            settLagrerVilkår,
             erVilkårsvurderingenGyldig,
             hentVilkårMedFeil,
             putVilkår,
