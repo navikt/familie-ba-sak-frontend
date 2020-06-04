@@ -1,13 +1,12 @@
 import { Element, Undertekst } from 'nav-frontend-typografi';
 import React from 'react';
-
+import Pluss from '../../../../ikoner/Pluss';
+import { IFelt } from '../../../../typer/felt';
 import { IPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import { IFelt } from '../../../../typer/felt';
-import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
-import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DashedHr from '../../../Felleskomponenter/DashedHr/DashedHr';
-import Pluss from '../../../../ikoner/Pluss';
+import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -60,7 +59,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
             <UtførKnapp
                 onClick={() => {
                     //leggTilVilkår(person.personIdent, vilkårFraConfig.key as VilkårType)
-                    console.log('TODO');
+                    console.log(
+                        'TODO: Avklart midlertidig manglende funksjonalitet med funksjonelle'
+                    );
                 }}
                 id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
             >

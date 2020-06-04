@@ -284,7 +284,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             <IkonKnapp
                                 onClick={() =>
                                     //fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
-                                    console.log('TODO')
+                                    console.log(
+                                        'TODO: Avklart midlertidig manglende funksjonalitet med funksjonelle'
+                                    )
                                 }
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                             >
