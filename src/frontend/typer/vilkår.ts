@@ -1,4 +1,3 @@
-import { randomUUID } from '../utils/commons';
 import { IPeriode, nyPeriode } from './periode';
 import { IPerson, PersonType } from './person';
 import { IFelt, nyttFelt, Valideringsstatus } from './felt';
@@ -54,7 +53,7 @@ export const lagTomtFeltMedVilkår = (vilkårType: VilkårType): IVilkårResulta
         valideringsstatus: Valideringsstatus.OK,
         verdi: '',
     },
-    id: randomUUID(),
+    id: 1,
     periode: nyttFelt(nyPeriode(), erPeriodeGyldig),
     resultat: nyttFelt(Resultat.KANSKJE, erResultatGyldig),
     vilkårType,

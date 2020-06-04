@@ -20,7 +20,6 @@ import {
     resultatTilUi,
     IPersonResultat,
     IRestPersonResultat,
-    IRestVilkårResultat,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import FamilieKnapp from '../../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
@@ -32,9 +31,7 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './GeneriskVilkår';
-import { useApp } from '../../../../context/AppContext';
 import { Ressurs, RessursStatus } from '../../../../typer/ressurs';
-import { håndterApiRessurs } from '../../../../api/axios';
 
 interface IProps {
     person: IPerson;
@@ -49,15 +46,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     vilkårResultat,
     visFeilmeldinger,
 }) => {
-    const {
-        fjernEllerNullstillPeriodeForVilkår,
-        settVilkårForPeriodeResultat,
-        vilkårsvurdering,
-        settVilkårsvurderingFraApi,
-    } = useVilkårsvurdering();
-    const { axiosRequest } = useApp();
+    const { vilkårsvurdering, settVilkårsvurderingFraApi, putVilkår } = useVilkårsvurdering();
 
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { erLesevisning } = useBehandling();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
@@ -103,39 +94,53 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
         );
 
-        if (vilkårsvurderingForPerson && åpenBehandling.status === RessursStatus.SUKSESS) {
-            axiosRequest<IRestPersonResultat[], IRestPersonResultat>({
-                method: 'PUT',
-                url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling.data.behandlingId}/${redigerbartVilkår.verdi.id}`,
-                data: {
-                    personIdent: vilkårsvurderingForPerson.personIdent,
-                    vilkårResultater: [
-                        {
-                            begrunnelse: redigerbartVilkår.verdi.begrunnelse.verdi,
-                            id: redigerbartVilkår.verdi.id,
-                            periodeFom: redigerbartVilkår.verdi.periode.verdi.fom,
-                            periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
-                            resultat: redigerbartVilkår.verdi.resultat.verdi,
-                            vilkårType: redigerbartVilkår.verdi.vilkårType,
-                        },
-                    ],
-                },
-            }).then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
-                if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
-                    settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
-                    settEkspandertVilkår(false);
-                }
-                console.log(nyVilkårsvurdering);
-            });
-        }
+        lagreVilkår(validertVilkår, vilkårsvurderingForPerson);
+    };
 
-        /*settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
-        if (validertVilkår.valideringsstatus === Valideringsstatus.OK) {
-            settEkspandertVilkår(false);
-            settVisFeilmeldingerForEttVilkår(false);
+    const lagreVilkår = (
+        validertVilkår: IFelt<IVilkårResultat>,
+        vilkårsvurderingForPerson: IPersonResultat | undefined
+    ) => {
+        if (
+            vilkårsvurderingForPerson &&
+            validertVilkår.valideringsstatus === Valideringsstatus.OK
+        ) {
+            putVilkår(vilkårsvurderingForPerson, redigerbartVilkår)
+                .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
+                    if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
+                        settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
+                        settEkspandertVilkår(false);
+                        settVisFeilmeldingerForEttVilkår(false);
+                    } else if (nyVilkårsvurdering.status === RessursStatus.FEILET) {
+                        settVisFeilmeldingerForEttVilkår(true);
+                        settRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            valideringsstatus: Valideringsstatus.FEIL,
+                            feilmelding: nyVilkårsvurdering.frontendFeilmelding,
+                        });
+                    } else {
+                        settVisFeilmeldingerForEttVilkår(true);
+                        settRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            valideringsstatus: Valideringsstatus.FEIL,
+                            feilmelding:
+                                'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
+                        });
+                    }
+                })
+                .catch(() => {
+                    settVisFeilmeldingerForEttVilkår(true);
+                    settRedigerbartVilkår({
+                        ...redigerbartVilkår,
+                        valideringsstatus: Valideringsstatus.FEIL,
+                        feilmelding:
+                            'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
+                    });
+                });
         } else {
             settVisFeilmeldingerForEttVilkår(true);
-        }*/
+            settRedigerbartVilkår(validertVilkår);
+        }
     };
 
     return (
@@ -149,7 +154,15 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                 }`
             )}
         >
-            <SkjemaGruppe feilmeldingId={vilkårFeilmeldingId(redigerbartVilkår.verdi)}>
+            <SkjemaGruppe
+                feilmeldingId={vilkårFeilmeldingId(redigerbartVilkår.verdi)}
+                feil={
+                    skalViseFeilmeldinger() &&
+                    redigerbartVilkår.valideringsstatus !== Valideringsstatus.OK
+                        ? redigerbartVilkår.feilmelding
+                        : undefined
+                }
+            >
                 <div className={'generisk-vilkår__en-periode--tittel'}>
                     <div className={'flex--space'}>
                         <Normaltekst
