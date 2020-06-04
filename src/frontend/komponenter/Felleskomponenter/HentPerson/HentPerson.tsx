@@ -4,7 +4,6 @@ import PanelBase from 'nav-frontend-paneler';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
-import { useBehandling } from '../../../context/BehandlingContext';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { IPerson } from '../../../typer/person';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
@@ -13,13 +12,17 @@ import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
 import FamilieInput from '../InputMedLesevisning/FamilieInput';
 
 interface IProps {
+    erLesevisning?: boolean;
     person: Ressurs<IPerson>;
     settPerson: (person: Ressurs<IPerson>) => void;
 }
 
-const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => {
+const HentPerson: React.FunctionComponent<IProps> = ({
+    erLesevisning = false,
+    person,
+    settPerson,
+}) => {
     const { axiosRequest } = useApp();
-    const { erLesevisning } = useBehandling();
     const [ident, settIdent] = React.useState<IFelt<string>>(lagInitiellFelt('', identValidator));
 
     React.useEffect(() => {
@@ -36,6 +39,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
         <div className={'hentperson'}>
             <div className={'hentperson__inputogknapp'}>
                 <FamilieInput
+                    erLesevisning={erLesevisning}
                     id={'hent-person'}
                     label={'Ident'}
                     bredde={'XL'}
@@ -50,7 +54,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
                         ident.feilmelding
                     }
                 />
-                {!erLesevisning() && (
+                {!erLesevisning && (
                     <Knapp
                         onClick={() => {
                             if (
@@ -71,7 +75,6 @@ const HentPerson: React.FunctionComponent<IProps> = ({ person, settPerson }) => 
                                     .catch(() => {
                                         settPerson({
                                             status: RessursStatus.FEILET,
-                                            melding: 'Ukjent feil ved henting av person',
                                             frontendFeilmelding:
                                                 'Ukjent feil ved henting av person',
                                         });
