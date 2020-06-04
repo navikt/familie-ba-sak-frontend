@@ -7016,10 +7016,10 @@ nav-frontend-skjema-style@^2.0.4:
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.0.4.tgz#b519aece05a134865d5bfd9634480780166dfb1e"
   integrity sha512-wrgAMxja18frONbjxY8soVVxrKUPktKlnzHIwRChOXPI7YIf8YzWHtYWhzCKYFdXqxyiZIgAz0DaX8JBmyIyqg==
 
-nav-frontend-skjema@^2.0.12:
-  version "2.0.12"
-  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-2.0.12.tgz#a86a51979bb58015ff069657bc4e5fd54809a96e"
-  integrity sha512-Vid5U3xs/HFfZVeixfHhqABOzFdja+GPq+k5h+Ma9UP3bXgGixnXKXMh8b6RW4wk5Hg8kXvgKlugKclKIbI0LA==
+nav-frontend-skjema@^2.0.19:
+  version "2.0.19"
+  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-2.0.19.tgz#0365e0c6b42eae04493a61f9b7dd8314d77a60c6"
+  integrity sha512-KisPjaMz6K1bmGF50zq5Qe2c5U6WcrcdnNa4jDgzqtPlZYXGcIVoMbhDhG/Ul4IHJly35/6qtkgDNS4wDEtm4w==
 
 nav-frontend-spinner-style@^0.2.5:
   version "0.2.5"
