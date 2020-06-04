@@ -3,17 +3,17 @@ import React from 'react';
 import Lesefelt from './Lesefelt';
 
 interface IFamilieSelectProps extends SelectProps {
-    erLesevisning: boolean;
+    erLesevisning?: boolean;
 }
 
 const FamilieSelect: React.FC<IFamilieSelectProps> = ({
-    name,
-    label,
     bredde,
-    value,
-    onChange,
     children,
-    erLesevisning,
+    erLesevisning = false,
+    label,
+    name,
+    onChange,
+    value,
 }) => {
     return erLesevisning ? (
         <Lesefelt label={label} verdi={value} />

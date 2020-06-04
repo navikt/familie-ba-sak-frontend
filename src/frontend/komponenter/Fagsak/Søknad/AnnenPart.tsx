@@ -5,6 +5,7 @@ import HentPerson from '../../Felleskomponenter/HentPerson/HentPerson';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { IPerson } from '../../../typer/person';
 import { ISøknadDTO } from '../../../typer/søknad';
+import { useBehandling } from '../../../context/BehandlingContext';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
@@ -12,6 +13,7 @@ interface IProps {
 }
 
 const AnnenPart: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
+    const { erLesevisning } = useBehandling();
     const [annenPart, settAnnenPart] = React.useState<Ressurs<IPerson>>({
         status: RessursStatus.IKKE_HENTET,
     });
@@ -21,6 +23,7 @@ const AnnenPart: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søk
             <Undertittel children={'3 Opplysninger om den andre forelderen'} />
             <br />
             <HentPerson
+                erLesevisning={erLesevisning()}
                 person={annenPart}
                 settPerson={(person: Ressurs<IPerson>) => {
                     if (person.status === RessursStatus.SUKSESS) {
