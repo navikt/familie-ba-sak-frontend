@@ -1,25 +1,12 @@
-import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import {
-    IOpprettBehandlingData,
-    IOpprettEllerHentFagsakData,
-    IRestVilkårsvurdering,
-} from '../../api/fagsak';
+import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { hentBegrunnelse, hentPeriode, hentResultat } from '../../context/Vilkårsvurdering/utils';
 import { Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { IFelt } from '../../typer/felt';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
-import {
-    IPersonResultat,
-    IRestVilkårResultat,
-    IVilkårConfig,
-    IVilkårResultat,
-    vilkårConfig,
-} from '../../typer/vilkår';
+import { IPersonResultat } from '../../typer/vilkår';
 import { erBehandlingenInnvilget, hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (
@@ -104,53 +91,16 @@ const useFagsakApi = (
             });
     };
 
-    const opprettEllerOppdaterVilkårsvurdering = (
+    const validerVilkårsvurderingOgSendInn = (
         vilkårsvurdering: IPersonResultat[],
         fagsak: IFagsak
     ) => {
-        // Basic validering av skjemaet
-        const feilmeldinger: FeiloppsummeringFeil[] = [];
-        vilkårsvurdering.filter((personResultat: IPersonResultat) =>
-            Object.values(vilkårConfig)
-                .filter((vc: IVilkårConfig) =>
-                    vc.parterDetteGjelderFor.includes(personResultat.person.type)
-                )
-                .forEach((vc: IVilkårConfig) => {
-                    if (
-                        personResultat.vilkårResultater.find(
-                            (vilkårResultat: IFelt<IVilkårResultat>) =>
-                                vilkårResultat.verdi.vilkårType === vc.key &&
-                                vilkårResultat.verdi.resultat !== undefined
-                        ) === undefined
-                    ) {
-                        feilmeldinger.push({
-                            skjemaelementId: `${vc.key}_${personResultat.personIdent}`,
-                            feilmelding: `Vilkåret '${vc.key}' er ikke vurdert for ${personResultat.person.navn}`,
-                        });
-                    }
-                })
-        );
-
+        const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
         settSenderInn(true);
-        axiosRequest<IFagsak, IRestVilkårsvurdering>({
-            data: {
-                personResultater: vilkårsvurdering.map((personResultat: IPersonResultat) => {
-                    return {
-                        personIdent: personResultat.personIdent,
-                        vilkårResultater: personResultat.vilkårResultater.map(
-                            (vilkårResultat: IFelt<IVilkårResultat>): IRestVilkårResultat => ({
-                                begrunnelse: hentBegrunnelse(vilkårResultat),
-                                periodeFom: hentPeriode(vilkårResultat).fom,
-                                periodeTom: hentPeriode(vilkårResultat).tom,
-                                resultat: hentResultat(vilkårResultat),
-                                vilkårType: vilkårResultat.verdi.vilkårType,
-                            })
-                        ),
-                    };
-                }),
-            },
-            method: 'PUT',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak`,
+
+        axiosRequest<IFagsak, void>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/valider`,
         })
             .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
@@ -174,20 +124,20 @@ const useFagsakApi = (
                     settFeilmelding(response.frontendFeilmelding);
                     settVisFeilmeldinger(true);
                 } else {
-                    settFeilmelding('Opprettelse av vilkårsvurdering feilet');
+                    settFeilmelding('Validering av vilkårsvurdering feilet');
                     settVisFeilmeldinger(true);
                 }
             })
             .catch(() => {
                 settSenderInn(false);
-                settFeilmelding('Opprettelse av vilkårsvurdering feilet');
+                settFeilmelding('Validering av vilkårsvurdering feilet');
             });
     };
 
     return {
         opprettBehandling,
         opprettEllerHentFagsak,
-        opprettEllerOppdaterVilkårsvurdering,
+        validerVilkårsvurderingOgSendInn,
         senderInn,
     };
 };

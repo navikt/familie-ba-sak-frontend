@@ -28,7 +28,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
     const history = useHistory();
-    const { opprettEllerOppdaterVilkårsvurdering, senderInn } = useFagsakApi(
+    const { validerVilkårsvurderingOgSendInn, senderInn } = useFagsakApi(
         settVisFeilmeldinger,
         settOpprettelseFeilmelding
     );
@@ -51,7 +51,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
                     );
                 } else if (erVilkårsvurderingenGyldig()) {
-                    opprettEllerOppdaterVilkårsvurdering(vilkårsvurdering, fagsak);
+                    validerVilkårsvurderingOgSendInn(vilkårsvurdering, fagsak);
                 } else {
                     settVisFeilmeldinger(true);
                 }

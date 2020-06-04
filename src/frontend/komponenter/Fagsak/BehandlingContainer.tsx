@@ -44,7 +44,10 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         path="/fagsak/:fagsakId/:behandlingId/vilkaarsvurdering"
                         render={() => {
                             return (
-                                <VilkårsvurderingProvider åpenBehandling={åpenBehandling.data}>
+                                <VilkårsvurderingProvider
+                                    fagsak={fagsak}
+                                    åpenBehandling={åpenBehandling.data}
+                                >
                                     <Vilkårsvurdering
                                         fagsak={fagsak}
                                         åpenBehandling={åpenBehandling.data}

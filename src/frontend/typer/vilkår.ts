@@ -1,4 +1,3 @@
-import { randomUUID } from '../utils/commons';
 import { IPeriode, nyPeriode } from './periode';
 import { IPerson, PersonType } from './person';
 import { IFelt, nyttFelt, Valideringsstatus } from './felt';
@@ -54,7 +53,7 @@ export const lagTomtFeltMedVilkår = (vilkårType: VilkårType): IVilkårResulta
         valideringsstatus: Valideringsstatus.OK,
         verdi: '',
     },
-    id: randomUUID(),
+    id: 1,
     periode: nyttFelt(nyPeriode(), erPeriodeGyldig),
     resultat: nyttFelt(Resultat.KANSKJE, erResultatGyldig),
     vilkårType,
@@ -69,7 +68,7 @@ export interface IPersonResultat {
 
 export interface IVilkårResultat {
     begrunnelse: IFelt<string>;
-    id: string;
+    id: number;
     periode: IFelt<IPeriode>;
     resultat: IFelt<Resultat>;
     vilkårType: VilkårType;
@@ -82,11 +81,12 @@ export interface IRestPersonResultat {
 }
 
 export interface IRestVilkårResultat {
-    vilkårType: VilkårType;
     begrunnelse: string;
-    resultat: Resultat;
+    id: number;
     periodeFom?: string;
     periodeTom?: string;
+    resultat: Resultat;
+    vilkårType: VilkårType;
 }
 
 type IVilkårsconfig = {

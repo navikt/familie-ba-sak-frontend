@@ -12,7 +12,10 @@ import Slett from '../../../../ikoner/Slett';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { periodeToString } from '../../../../typer/periode';
 import { IPerson } from '../../../../typer/person';
+import { Ressurs, RessursStatus } from '../../../../typer/ressurs';
 import {
+    IPersonResultat,
+    IRestPersonResultat,
     IVilkårConfig,
     IVilkårResultat,
     Resultat,
@@ -44,9 +47,13 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const {
-        fjernEllerNullstillPeriodeForVilkår,
-        settVilkårForPeriodeResultat,
+        vilkårsvurdering,
+        settVilkårsvurderingFraApi,
+        putVilkår,
+        lagrerVilkår,
+        settLagrerVilkår,
     } = useVilkårsvurdering();
+
     const { erLesevisning } = useBehandling();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
@@ -89,12 +96,58 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     const onClickVilkårFerdig = () => {
         const validertVilkår = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person);
 
-        settVilkårForPeriodeResultat(person.personIdent, redigerbartVilkår);
-        if (validertVilkår.valideringsstatus === Valideringsstatus.OK) {
-            settEkspandertVilkår(false);
-            settVisFeilmeldingerForEttVilkår(false);
+        const vilkårsvurderingForPerson = vilkårsvurdering.find(
+            (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
+        );
+
+        lagreVilkår(validertVilkår, vilkårsvurderingForPerson);
+    };
+
+    const lagreVilkår = (
+        validertVilkår: IFelt<IVilkårResultat>,
+        vilkårsvurderingForPerson: IPersonResultat | undefined
+    ) => {
+        if (
+            vilkårsvurderingForPerson &&
+            validertVilkår.valideringsstatus === Valideringsstatus.OK
+        ) {
+            putVilkår(vilkårsvurderingForPerson, redigerbartVilkår)
+                .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
+                    settLagrerVilkår(false);
+                    if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
+                        settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
+                        settEkspandertVilkår(false);
+                        settVisFeilmeldingerForEttVilkår(false);
+                    } else if (nyVilkårsvurdering.status === RessursStatus.FEILET) {
+                        settVisFeilmeldingerForEttVilkår(true);
+                        settRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            valideringsstatus: Valideringsstatus.FEIL,
+                            feilmelding: nyVilkårsvurdering.frontendFeilmelding,
+                        });
+                    } else {
+                        settVisFeilmeldingerForEttVilkår(true);
+                        settRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            valideringsstatus: Valideringsstatus.FEIL,
+                            feilmelding:
+                                'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
+                        });
+                    }
+                })
+                .catch(() => {
+                    settLagrerVilkår(false);
+                    settVisFeilmeldingerForEttVilkår(true);
+                    settRedigerbartVilkår({
+                        ...redigerbartVilkår,
+                        valideringsstatus: Valideringsstatus.FEIL,
+                        feilmelding:
+                            'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
+                    });
+                });
         } else {
             settVisFeilmeldingerForEttVilkår(true);
+            settRedigerbartVilkår(validertVilkår);
         }
     };
 
@@ -109,7 +162,15 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                 }`
             )}
         >
-            <SkjemaGruppe feilmeldingId={vilkårFeilmeldingId(redigerbartVilkår.verdi)}>
+            <SkjemaGruppe
+                feilmeldingId={vilkårFeilmeldingId(redigerbartVilkår.verdi)}
+                feil={
+                    skalViseFeilmeldinger() &&
+                    redigerbartVilkår.valideringsstatus !== Valideringsstatus.OK
+                        ? redigerbartVilkår.feilmelding
+                        : undefined
+                }
+            >
                 <div className={'generisk-vilkår__en-periode--tittel'}>
                     <div className={'flex--space'}>
                         <Normaltekst
@@ -207,6 +268,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     onClick={onClickVilkårFerdig}
                                     mini={true}
                                     type={'standard'}
+                                    spinner={lagrerVilkår}
                                 >
                                     Ferdig
                                 </FamilieKnapp>
@@ -221,7 +283,10 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
                             <IkonKnapp
                                 onClick={() =>
-                                    fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
+                                    //fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
+                                    console.log(
+                                        'TODO: Avklart midlertidig manglende funksjonalitet med funksjonelle'
+                                    )
                                 }
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                             >

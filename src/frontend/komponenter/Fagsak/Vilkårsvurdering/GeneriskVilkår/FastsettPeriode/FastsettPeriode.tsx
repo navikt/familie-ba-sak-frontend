@@ -28,7 +28,6 @@ const FastsettPeriode: React.FC<IProps> = ({
             ? true
             : false
     );
-
     return (
         <SkjemaGruppe
             feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
