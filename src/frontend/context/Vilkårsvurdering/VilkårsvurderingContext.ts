@@ -69,13 +69,14 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             });
         };
 
-        const deleteVilkår = (vilkårId: number) => {
+        const deleteVilkår = (personIdent: string, vilkårId: number) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
             settLagrerVilkår(true);
 
-            return axiosRequest<IRestPersonResultat[], void>({
+            return axiosRequest<IRestPersonResultat[], string>({
                 method: 'DELETE',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/${vilkårId}`,
+                data: personIdent,
             });
         };
 

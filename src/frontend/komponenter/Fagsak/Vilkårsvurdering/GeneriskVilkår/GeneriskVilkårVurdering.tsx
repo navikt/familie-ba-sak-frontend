@@ -289,7 +289,10 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
                             <IkonKnapp
                                 onClick={() => {
-                                    const promise = deleteVilkår(redigerbartVilkår.verdi.id);
+                                    const promise = deleteVilkår(
+                                        person.personIdent,
+                                        redigerbartVilkår.verdi.id
+                                    );
                                     håndterEndringPåVilkårsvurdering(promise);
                                 }}
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
