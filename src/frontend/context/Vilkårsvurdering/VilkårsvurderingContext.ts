@@ -49,6 +49,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
         ) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
             settLagrerVilkår(true);
+
             return axiosRequest<IRestPersonResultat[], IRestPersonResultat>({
                 method: 'PUT',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
@@ -65,6 +66,16 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
                         },
                     ],
                 },
+            });
+        };
+
+        const deleteVilkår = (vilkårId: number) => {
+            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+            settLagrerVilkår(true);
+
+            return axiosRequest<IRestPersonResultat[], void>({
+                method: 'DELETE',
+                url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/${vilkårId}`,
             });
         };
 
@@ -99,11 +110,12 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
         };
 
         return {
-            lagrerVilkår,
-            settLagrerVilkår,
+            deleteVilkår,
             erVilkårsvurderingenGyldig,
             hentVilkårMedFeil,
+            lagrerVilkår,
             putVilkår,
+            settLagrerVilkår,
             settVilkårsvurdering,
             settVilkårsvurderingFraApi,
             vilkårsvurdering,
