@@ -17,7 +17,7 @@ interface IProps {
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
     ({ fagsak, åpenBehandling }: IProps) => {
         const { axiosRequest } = useApp();
-        const [lagrerVilkår, settLagrerVilkår] = React.useState(false);
+        const [vurdererVilkår, settVurdererVilkår] = React.useState(false);
 
         const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
             åpenBehandling
@@ -48,7 +48,8 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             redigerbartVilkår: IFelt<IVilkårResultat>
         ) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-            settLagrerVilkår(true);
+            settVurdererVilkår(true);
+
             return axiosRequest<IRestPersonResultat[], IRestPersonResultat>({
                 method: 'PUT',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
@@ -65,6 +66,17 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
                         },
                     ],
                 },
+            });
+        };
+
+        const deleteVilkår = (personIdent: string, vilkårId: number) => {
+            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+            settVurdererVilkår(true);
+
+            return axiosRequest<IRestPersonResultat[], string>({
+                method: 'DELETE',
+                url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/${vilkårId}`,
+                data: personIdent,
             });
         };
 
@@ -99,11 +111,12 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
         };
 
         return {
-            lagrerVilkår,
-            settLagrerVilkår,
+            deleteVilkår,
             erVilkårsvurderingenGyldig,
             hentVilkårMedFeil,
+            vurdererVilkår,
             putVilkår,
+            settVurdererVilkår,
             settVilkårsvurdering,
             settVilkårsvurderingFraApi,
             vilkårsvurdering,

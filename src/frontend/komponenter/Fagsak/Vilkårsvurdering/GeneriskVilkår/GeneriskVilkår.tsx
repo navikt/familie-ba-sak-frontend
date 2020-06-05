@@ -64,10 +64,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     );
                 }}
                 id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
-            >
-                Legg til periode
-                <Pluss />
-            </UtførKnapp>
+                label={'Legg til periode'}
+                ikon={<Pluss />}
+            />
         </div>
     );
 };

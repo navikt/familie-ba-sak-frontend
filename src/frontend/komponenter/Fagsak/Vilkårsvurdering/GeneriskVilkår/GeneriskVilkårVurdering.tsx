@@ -50,8 +50,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         vilkårsvurdering,
         settVilkårsvurderingFraApi,
         putVilkår,
-        lagrerVilkår,
-        settLagrerVilkår,
+        deleteVilkår,
+        vurdererVilkår,
+        settVurdererVilkår,
     } = useVilkårsvurdering();
 
     const { erLesevisning } = useBehandling();
@@ -111,32 +112,30 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             vilkårsvurderingForPerson &&
             validertVilkår.valideringsstatus === Valideringsstatus.OK
         ) {
-            putVilkår(vilkårsvurderingForPerson, redigerbartVilkår)
-                .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
-                    settLagrerVilkår(false);
-                    if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
-                        settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
-                        settEkspandertVilkår(false);
-                        settVisFeilmeldingerForEttVilkår(false);
-                    } else if (nyVilkårsvurdering.status === RessursStatus.FEILET) {
-                        settVisFeilmeldingerForEttVilkår(true);
-                        settRedigerbartVilkår({
-                            ...redigerbartVilkår,
-                            valideringsstatus: Valideringsstatus.FEIL,
-                            feilmelding: nyVilkårsvurdering.frontendFeilmelding,
-                        });
-                    } else {
-                        settVisFeilmeldingerForEttVilkår(true);
-                        settRedigerbartVilkår({
-                            ...redigerbartVilkår,
-                            valideringsstatus: Valideringsstatus.FEIL,
-                            feilmelding:
-                                'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
-                        });
-                    }
-                })
-                .catch(() => {
-                    settLagrerVilkår(false);
+            const promise = putVilkår(vilkårsvurderingForPerson, redigerbartVilkår);
+            håndterEndringPåVilkårsvurdering(promise);
+        } else {
+            settVisFeilmeldingerForEttVilkår(true);
+            settRedigerbartVilkår(validertVilkår);
+        }
+    };
+
+    const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IRestPersonResultat[]>>) => {
+        promise
+            .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
+                settVurdererVilkår(false);
+                if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
+                    settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
+                    settEkspandertVilkår(false);
+                    settVisFeilmeldingerForEttVilkår(false);
+                } else if (nyVilkårsvurdering.status === RessursStatus.FEILET) {
+                    settVisFeilmeldingerForEttVilkår(true);
+                    settRedigerbartVilkår({
+                        ...redigerbartVilkår,
+                        valideringsstatus: Valideringsstatus.FEIL,
+                        feilmelding: nyVilkårsvurdering.frontendFeilmelding,
+                    });
+                } else {
                     settVisFeilmeldingerForEttVilkår(true);
                     settRedigerbartVilkår({
                         ...redigerbartVilkår,
@@ -144,11 +143,18 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         feilmelding:
                             'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                     });
+                }
+            })
+            .catch(() => {
+                settVurdererVilkår(false);
+                settVisFeilmeldingerForEttVilkår(true);
+                settRedigerbartVilkår({
+                    ...redigerbartVilkår,
+                    valideringsstatus: Valideringsstatus.FEIL,
+                    feilmelding:
+                        'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                 });
-        } else {
-            settVisFeilmeldingerForEttVilkår(true);
-            settRedigerbartVilkår(validertVilkår);
-        }
+            });
     };
 
     return (
@@ -186,14 +192,15 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             <IkonKnapp
                                 onClick={() => toggleForm(true)}
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                            >
-                                {!ekspandertVilkår
-                                    ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
-                                        ? 'Vurder'
-                                        : 'Endre'
-                                    : 'Lukk'}
-                                <Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />
-                            </IkonKnapp>
+                                label={
+                                    !ekspandertVilkår
+                                        ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                            ? 'Vurder'
+                                            : 'Endre'
+                                        : 'Lukk'
+                                }
+                                ikon={<Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
+                            />
                         </div>
                     )}
                 </div>
@@ -268,7 +275,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     onClick={onClickVilkårFerdig}
                                     mini={true}
                                     type={'standard'}
-                                    spinner={lagrerVilkår}
+                                    spinner={vurdererVilkår}
                                 >
                                     Ferdig
                                 </FamilieKnapp>
@@ -282,17 +289,18 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             </div>
 
                             <IkonKnapp
-                                onClick={() =>
-                                    //fjernEllerNullstillPeriodeForVilkår(vilkårResultat.verdi.id)
-                                    console.log(
-                                        'TODO: Avklart midlertidig manglende funksjonalitet med funksjonelle'
-                                    )
-                                }
+                                onClick={() => {
+                                    const promise = deleteVilkår(
+                                        person.personIdent,
+                                        redigerbartVilkår.verdi.id
+                                    );
+                                    håndterEndringPåVilkårsvurdering(promise);
+                                }}
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                            >
-                                Slett
-                                <Slett />
-                            </IkonKnapp>
+                                spinner={vurdererVilkår}
+                                label={'Slett'}
+                                ikon={<Slett />}
+                            />
                         </div>
                     </div>
                 </Collapse>
