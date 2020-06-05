@@ -51,8 +51,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         settVilkårsvurderingFraApi,
         putVilkår,
         deleteVilkår,
-        lagrerVilkår,
-        settLagrerVilkår,
+        vurdererVilkår,
+        settVurdererVilkår,
     } = useVilkårsvurdering();
 
     const { erLesevisning } = useBehandling();
@@ -123,7 +123,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IRestPersonResultat[]>>) => {
         promise
             .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
-                settLagrerVilkår(false);
+                settVurdererVilkår(false);
                 if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
                     settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
                     settEkspandertVilkår(false);
@@ -146,7 +146,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                 }
             })
             .catch(() => {
-                settLagrerVilkår(false);
+                settVurdererVilkår(false);
                 settVisFeilmeldingerForEttVilkår(true);
                 settRedigerbartVilkår({
                     ...redigerbartVilkår,
@@ -192,14 +192,15 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             <IkonKnapp
                                 onClick={() => toggleForm(true)}
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                            >
-                                {!ekspandertVilkår
-                                    ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
-                                        ? 'Vurder'
-                                        : 'Endre'
-                                    : 'Lukk'}
-                                <Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />
-                            </IkonKnapp>
+                                label={
+                                    !ekspandertVilkår
+                                        ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                            ? 'Vurder'
+                                            : 'Endre'
+                                        : 'Lukk'
+                                }
+                                ikon={<Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
+                            />
                         </div>
                     )}
                 </div>
@@ -274,7 +275,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     onClick={onClickVilkårFerdig}
                                     mini={true}
                                     type={'standard'}
-                                    spinner={lagrerVilkår}
+                                    spinner={vurdererVilkår}
                                 >
                                     Ferdig
                                 </FamilieKnapp>
@@ -296,10 +297,10 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     håndterEndringPåVilkårsvurdering(promise);
                                 }}
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                            >
-                                Slett
-                                <Slett />
-                            </IkonKnapp>
+                                spinner={vurdererVilkår}
+                                label={'Slett'}
+                                ikon={<Slett />}
+                            />
                         </div>
                     </div>
                 </Collapse>

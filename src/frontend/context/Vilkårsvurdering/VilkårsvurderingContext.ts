@@ -17,7 +17,7 @@ interface IProps {
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
     ({ fagsak, åpenBehandling }: IProps) => {
         const { axiosRequest } = useApp();
-        const [lagrerVilkår, settLagrerVilkår] = React.useState(false);
+        const [vurdererVilkår, settVurdererVilkår] = React.useState(false);
 
         const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
             åpenBehandling
@@ -48,7 +48,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             redigerbartVilkår: IFelt<IVilkårResultat>
         ) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-            settLagrerVilkår(true);
+            settVurdererVilkår(true);
 
             return axiosRequest<IRestPersonResultat[], IRestPersonResultat>({
                 method: 'PUT',
@@ -71,7 +71,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
 
         const deleteVilkår = (personIdent: string, vilkårId: number) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-            settLagrerVilkår(true);
+            settVurdererVilkår(true);
 
             return axiosRequest<IRestPersonResultat[], string>({
                 method: 'DELETE',
@@ -114,9 +114,9 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             deleteVilkår,
             erVilkårsvurderingenGyldig,
             hentVilkårMedFeil,
-            lagrerVilkår,
+            vurdererVilkår,
             putVilkår,
-            settLagrerVilkår,
+            settVurdererVilkår,
             settVilkårsvurdering,
             settVilkårsvurderingFraApi,
             vilkårsvurdering,
