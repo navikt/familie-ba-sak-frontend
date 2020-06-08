@@ -1,21 +1,21 @@
+import { IFelt, Valideringsstatus } from '../../typer/felt';
+import { diff, nyPeriode } from '../../typer/periode';
+import { IPerson } from '../../typer/person';
 import {
     IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
-    VilkårType,
     lagTomtFeltMedVilkår,
+    VilkårType,
 } from '../../typer/vilkår';
-import { nyPeriode, diff } from '../../typer/periode';
-import { IPerson } from '../../typer/person';
-import { IFelt, Valideringsstatus } from '../../typer/felt';
 import {
-    lagInitiellFelt,
     erPeriodeGyldig,
     erResultatGyldig,
     ikkeValider,
+    lagInitiellFelt,
 } from '../../utils/validators';
-import { validerVilkår, kjørValidering } from './validering';
+import { kjørValidering, validerVilkår } from './validering';
 
 export const sorterVilkårsvurderingForPerson = (
     vilkårResultater: IFelt<IVilkårResultat>[]
