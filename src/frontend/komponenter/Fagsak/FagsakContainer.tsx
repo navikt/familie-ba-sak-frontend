@@ -11,9 +11,9 @@ import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
-import { OpprettBehandlingProvider } from './OpprettBehandling/OpprettBehandlingProvider';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import { BehandlingProvider } from '../../context/BehandlingContext';
+import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -75,7 +75,10 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             path="/fagsak/:fagsakId/ny-behandling"
                                             render={() => {
                                                 return (
-                                                    <OpprettBehandlingProvider fagsak={fagsak.data}>
+                                                    <OpprettBehandlingProvider
+                                                        bruker={bruker.data}
+                                                        fagsak={fagsak.data}
+                                                    >
                                                         <OpprettBehandling fagsak={fagsak.data} />
                                                     </OpprettBehandlingProvider>
                                                 );

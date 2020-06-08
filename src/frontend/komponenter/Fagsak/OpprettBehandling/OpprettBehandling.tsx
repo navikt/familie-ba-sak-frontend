@@ -3,15 +3,19 @@ import * as React from 'react';
 import { IFagsak } from '../../../typer/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
-import { useOpprettBehandlingContext } from './OpprettBehandlingProvider';
 import OpprettBehandlingSkjema from './OpprettBehandlingSkjema';
+import {
+    useOpprettBehandling,
+    IOpprettBehandlingBarn,
+} from '../../../context/OpprettBehandlingContext';
+import { Behandlingstype } from '../../../typer/behandling';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const context = useOpprettBehandlingContext();
+    const { barna, behandlingstype, kategori, underkategori } = useOpprettBehandling();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -27,10 +31,22 @@ const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 tittel={'Opprett behandling'}
                 nesteOnClick={() => {
                     opprettBehandling({
-                        behandlingType: context.behandlingstype,
+                        behandlingType: behandlingstype,
                         søkersIdent: fagsak.søkerFødselsnummer,
-                        kategori: context.kategori,
-                        underkategori: context.underkategori,
+                        kategori: kategori,
+                        underkategori: underkategori,
+                        barnasIdenter:
+                            behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+                                ? barna
+                                      .filter(
+                                          (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
+                                              opprettBehandlingBarn.checked
+                                      )
+                                      .map(
+                                          (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
+                                              opprettBehandlingBarn.barn.personIdent
+                                      )
+                                : [],
                     });
                 }}
                 senderInn={senderInn}
