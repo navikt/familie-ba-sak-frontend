@@ -9,12 +9,9 @@ import {
     BehandlingUnderkategori,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import {
-    actions,
-    useOpprettBehandlingContext,
-    useOpprettBehandlingDispatch,
-} from './OpprettBehandlingProvider';
 import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
+import { useOpprettBehandling } from '../../../context/OpprettBehandlingContext';
+import VelgBarn from './VelgBarn';
 
 interface IOpprettBehandlingSkjema {
     fagsak: IFagsak;
@@ -27,8 +24,14 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
     opprettelseFeilmelding,
     visFeilmeldinger,
 }) => {
-    const context = useOpprettBehandlingContext();
-    const dispatch = useOpprettBehandlingDispatch();
+    const {
+        behandlingstype,
+        kategori,
+        settBehandlingstype,
+        settKategori,
+        settUnderkategori,
+        underkategori,
+    } = useOpprettBehandling();
 
     return (
         <SkjemaGruppe
@@ -43,12 +46,9 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                 bredde={'l'}
                 label="Velg behandlingstype"
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>): void =>
-                    dispatch({
-                        payload: event.target.value as Behandlingstype,
-                        type: actions.SETT_BEHANDLINGSTYPE,
-                    })
+                    settBehandlingstype(event.target.value as Behandlingstype)
                 }
-                value={context.behandlingstype}
+                value={behandlingstype}
             >
                 {Object.keys(behandlingstyper)
                     .filter(behandlingstype =>
@@ -58,11 +58,7 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                     )
                     .map((key: string) => {
                         return (
-                            <option
-                                aria-selected={context.behandlingstype === key}
-                                key={key}
-                                value={key}
-                            >
+                            <option aria-selected={behandlingstype === key} key={key} value={key}>
                                 {behandlingstyper[key].navn}
                             </option>
                         );
@@ -72,21 +68,17 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
             <br />
             <Undertittel children={'Velg sakstype'} />
             <Sakstype
-                kategori={context.kategori}
+                kategori={kategori}
                 kategoriOnChange={(behandlingKategori: BehandlingKategori): void =>
-                    dispatch({
-                        payload: behandlingKategori,
-                        type: actions.SETT_BEHANDLING_KATEGORI,
-                    })
+                    settKategori(behandlingKategori)
                 }
-                underkategori={context.underkategori}
+                underkategori={underkategori}
                 underkategoriOnChange={(behandlingUnderkategori: BehandlingUnderkategori): void =>
-                    dispatch({
-                        payload: behandlingUnderkategori,
-                        type: actions.SETT_BEHANDLING_UNDERKATEGORI,
-                    })
+                    settUnderkategori(behandlingUnderkategori)
                 }
             />
+
+            {behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD && <VelgBarn />}
         </SkjemaGruppe>
     );
 };
