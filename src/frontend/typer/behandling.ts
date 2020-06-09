@@ -2,6 +2,7 @@ import { INøkkelPar } from './common';
 import { IPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
 import { IRestPersonResultat } from './vilkår';
+import { ITotrinnskontroll } from './totrinnskontroll';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -64,6 +65,7 @@ export interface IBehandling {
     aktiv: boolean;
     begrunnelse: string;
     behandlingId: number;
+    endretAv: string;
     kategori: BehandlingKategori;
     opprettetTidspunkt: string;
     personResultater: IRestPersonResultat[];
@@ -71,10 +73,10 @@ export interface IBehandling {
     samletResultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;
+    totrinnskontroll?: ITotrinnskontroll;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
-    endretAv: string;
 }
 
 export const behandlerRoller: INøkkelPar = {

@@ -8,3 +8,10 @@ export interface ITotrinnskontrollData {
     beslutning: TotrinnskontrollBeslutning;
     begrunnelse: string;
 }
+
+export interface ITotrinnskontroll {
+    saksbehandler: string;
+    beslutter?: string;
+    godkjent: boolean;
+    opprettetTidspunkt: string;
+}

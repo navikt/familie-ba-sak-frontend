@@ -2,15 +2,20 @@ import { Normaltekst, Systemtittel, UndertekstBold } from 'nav-frontend-typograf
 import * as React from 'react';
 import GrønnHake from '../../../ikoner/GrønnHake';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { IBehandling } from '../../../typer/behandling';
 
 interface IProps {
-    ansvarligSaksbehandler: string | undefined;
-    opprettetTidspunkt: string | undefined;
+    åpenBehandling: IBehandling | undefined;
 }
+
 const TotrinnskontrollSendtTilBeslutterSkjema: React.FunctionComponent<IProps> = ({
-    ansvarligSaksbehandler,
-    opprettetTidspunkt,
+    åpenBehandling,
 }) => {
+    const totrinnskontroll = åpenBehandling && åpenBehandling.totrinnskontroll;
+
+    const saksbehandler = totrinnskontroll?.saksbehandler ?? 'UKJENT SAKSBEHANDLER';
+    const opprettetTidspunkt = totrinnskontroll?.opprettetTidspunkt ?? undefined;
+
     return (
         <div className="totrinnskontroll">
             <div className="totrinnskontroll-sendt-til-beslutter-skjema">
@@ -28,7 +33,7 @@ const TotrinnskontrollSendtTilBeslutterSkjema: React.FunctionComponent<IProps> =
                             'UKJENT OPPRETTELSESTIDSPUNKT'
                         )}
                     </Normaltekst>
-                    <Normaltekst>{ansvarligSaksbehandler}</Normaltekst>
+                    <Normaltekst>{saksbehandler}</Normaltekst>
                 </div>
                 <UndertekstBold>Vedtaket er sendt til godkjenning</UndertekstBold>
             </div>
