@@ -51,7 +51,7 @@
     "@types/react-collapse": "^5.0.0",
     "@types/react-dom": "^16.9.4",
     "@types/react-modal": "^3.10.5",
-    "@types/react-pdf": "^4.0.3",
+    "@types/react-pdf": "^4.0.5",
     "@types/react-router-dom": "^5.1.2",
     "@types/redis": "^2.8.16",
     "@types/request-promise": "^4.1.44",

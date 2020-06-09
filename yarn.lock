@@ -1127,10 +1127,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-pdf@^4.0.3":
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/@types/react-pdf/-/react-pdf-4.0.3.tgz#a95030f72208196ff61c80b40fe8dfe06de4bec0"
-  integrity sha512-Ru0kxZGN4RU3YygwS7whLTupTIwc/YZhllHCNhI2qn7rx1j3KkvOM55CUkXev5OcKrSVLVVa6+zCebNTSYx2HA==
+"@types/react-pdf@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@types/react-pdf/-/react-pdf-4.0.5.tgz#d0d380eaa7202c079fd38f392ea5cf3b1c3c81aa"
+  integrity sha512-8ZjzH8vu/SCxrqFclzWo7kGJLLJn29Gu2g+9NCkT9Ekw285i6rH6QNl+/dDVqeo1+ZnQfqo4bpXHoV4ZumzLHg==
   dependencies:
     "@types/pdfjs-dist" "*"
     "@types/react" "*"
