@@ -13,7 +13,6 @@ const TotrinnskontrollSendtTilBeslutterSkjema: React.FunctionComponent<IProps> =
 }) => {
     const totrinnskontroll = åpenBehandling && åpenBehandling.totrinnskontroll;
 
-    console.log(totrinnskontroll);
     const saksbehandler = totrinnskontroll?.saksbehandler ?? 'UKJENT SAKSBEHANDLER';
     const opprettetTidspunkt = totrinnskontroll?.opprettetTidspunkt ?? undefined;
 
