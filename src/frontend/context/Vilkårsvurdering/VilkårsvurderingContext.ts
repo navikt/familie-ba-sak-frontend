@@ -4,7 +4,13 @@ import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { PersonType } from '../../typer/person';
-import { IPersonResultat, IRestPersonResultat, IVilkårResultat } from '../../typer/vilkår';
+import {
+    IPersonResultat,
+    IRestNyttVilkår,
+    IRestPersonResultat,
+    IVilkårResultat,
+    VilkårType,
+} from '../../typer/vilkår';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { useApp } from '../AppContext';
 import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
@@ -80,6 +86,17 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             });
         };
 
+        const postVilkår = (personIdent: string, vilkårType: VilkårType) => {
+            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+            settVurdererVilkår(true);
+
+            return axiosRequest<IRestPersonResultat[], IRestNyttVilkår>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}`,
+                data: { personIdent, vilkårType },
+            });
+        };
+
         const erVilkårsvurderingenGyldig = (): boolean => {
             return (
                 vilkårsvurdering.filter((personResultat: IPersonResultat) => {
@@ -112,6 +129,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
 
         return {
             deleteVilkår,
+            postVilkår,
             erVilkårsvurderingenGyldig,
             hentVilkårMedFeil,
             vurdererVilkår,
