@@ -23,7 +23,7 @@ const OppgaveHeader: React.FunctionComponent = () => {
                     value={personIdent}
                     placeholder={'Skriv inn fnr/dnr 11 siffer'}
                     onChange={event => {
-                        settPersonIdent(event.target.value);
+                        settPersonIdent(event.target.value.trim());
                     }}
                     className={'oppgave-header__fnrInput'}
                 />
