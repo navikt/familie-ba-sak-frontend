@@ -51,7 +51,7 @@ export const loggFeil = (
     error?: AxiosError,
     innloggetSaksbehandler?: ISaksbehandler,
     feilmelding?: string
-) => {
+): void => {
     if (process.env.NODE_ENV !== 'development') {
         configureScope(scope => {
             scope.setUser({

@@ -35,6 +35,6 @@ const server = app.listen(port, 'localhost', function onStart(err: Error) {
     console.info('=== mock-server startet på http://localhost:%s/', port);
 });
 
-process.on('SIGTERM', function() {
+process.on('SIGTERM', function () {
     server.close();
 });

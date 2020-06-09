@@ -28,7 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
 moment.locale('nb');
 
 const rootElement = document.getElementById('app');
-const renderApp = (Component: React.ComponentType<{}>): void => {
+const renderApp = (Component: React.ComponentType): void => {
     ReactDOM.render(
         <AppContainer>
             <Component />
@@ -41,6 +41,7 @@ renderApp(App);
 
 if (module.hot) {
     module.hot.accept('./komponenter/App', () => {
+        // eslint-disable-next-line
         const NewApp = require('./komponenter/App').default;
         renderApp(NewApp);
     });

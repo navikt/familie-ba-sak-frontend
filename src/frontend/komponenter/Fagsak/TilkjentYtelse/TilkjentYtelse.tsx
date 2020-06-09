@@ -39,7 +39,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             })
             .catch((_error: AxiosError) => {
                 setTilkjentYtelseRessurs(
-                    byggFeiletRessurs('Ukjent feil, Kunne ikke generere forhåndsvisning.', _error)
+                    byggFeiletRessurs('Ukjent feil, Kunne ikke generere forhåndsvisning.')
                 );
             });
     }, []);

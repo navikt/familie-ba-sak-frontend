@@ -74,11 +74,7 @@ const getOppgavetype = (filter: IOppgaverFilter) => {
 
 const getEnhet = (filter: IOppgaverFilter) => {
     const index = filter.values.findIndex(v => v === filter.selectedValue);
-    return index === 0
-        ? undefined
-        : Object.values(EnhetFilter)
-              [index].toString()
-              .substring(0, 4);
+    return index === 0 ? undefined : Object.values(EnhetFilter)[index].toString().substring(0, 4);
 };
 
 const getDato = (dato?: string) => {
