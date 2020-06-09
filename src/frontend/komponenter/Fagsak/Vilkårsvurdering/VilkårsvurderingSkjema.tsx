@@ -33,10 +33,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
         const måned = (iDag.getMonth() + 2).toString();
         return [
             måned.length === 1 ? '0' + måned : måned,
-            iDag
-                .getFullYear()
-                .toString()
-                .substr(2),
+            iDag.getFullYear().toString().substr(2),
         ].join('.');
     };
     return (

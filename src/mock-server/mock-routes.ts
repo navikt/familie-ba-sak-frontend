@@ -14,7 +14,7 @@ app.use(express.json({ limit: '200mb' }));
 app.use(express.urlencoded({ limit: '200mb', extended: true }));
 
 const lesMockFil = (filnavn: string) => {
-    return fs.readFileSync(path.join(__dirname, '/mock/' + filnavn), 'UTF-8');
+    return fs.readFileSync(path.join(__dirname, '/mock/' + filnavn), 'utf-8');
 };
 
 const lesMockFilBase64 = (filnavn: string) => {

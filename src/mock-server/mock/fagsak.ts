@@ -16,9 +16,10 @@ import fs from 'fs';
 import path from 'path';
 
 const lesMockFil = (filnavn: string) => {
-    return fs.readFileSync(path.join(__dirname, filnavn), 'UTF-8');
+    return fs.readFileSync(path.join(__dirname, filnavn), 'utf-8');
 };
-export const hentMockFagsak = (id: string) => {
+
+export const hentMockFagsak = (id: string): Ressurs<IFagsak> | null => {
     try {
         const fagsak: Ressurs<IFagsak> | null =
             id === '3'

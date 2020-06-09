@@ -20,14 +20,14 @@ export const formaterIsoDato = (
     dato: string | undefined,
     tilFormat: datoformat,
     defaultString?: string
-) => {
+): string => {
     const momentDato = moment(dato);
     return momentDato.isValid() && dato
         ? momentDato.format(tilFormat)
         : dato || defaultString || '';
 };
 
-export const formaterDato = (dato: Moment, tilFormat: datoformat) => {
+export const formaterDato = (dato: Moment, tilFormat: datoformat): string => {
     return dato.isValid() ? dato.format(tilFormat) : '';
 };
 

@@ -119,8 +119,9 @@ const ManuellJournalføring: React.FC = () => {
                                 method: 'PUT',
                                 url: `/familie-ba-sak/api/journalpost/${
                                     dataForManuellJournalføring.data.journalpost.journalpostId
-                                }/ferdigstill/${oppgaveId}?journalfoerendeEnhet=${innloggetSaksbehandler?.enhet ??
-                                    '9999'}`,
+                                }/ferdigstill/${oppgaveId}?journalfoerendeEnhet=${
+                                    innloggetSaksbehandler?.enhet ?? '9999'
+                                }`,
                                 data: {
                                     bruker: {
                                         navn: person.data.navn,
