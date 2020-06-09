@@ -1,13 +1,11 @@
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { diff, nyPeriode } from '../../typer/periode';
-import { IPerson } from '../../typer/person';
+import { IPerson, PersonType } from '../../typer/person';
 import {
     IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
-    lagTomtFeltMedVilkår,
-    VilkårType,
 } from '../../typer/vilkår';
 import {
     erPeriodeGyldig,
@@ -16,6 +14,8 @@ import {
     lagInitiellFelt,
 } from '../../utils/validators';
 import { kjørValidering, validerVilkår } from './validering';
+import { datoformat } from '../../utils/formatter';
+import moment from 'moment';
 
 export const sorterVilkårsvurderingForPerson = (
     vilkårResultater: IFelt<IVilkårResultat>[]
@@ -25,26 +25,6 @@ export const sorterVilkårsvurderingForPerson = (
             a.verdi.vilkårType.localeCompare(b.verdi.vilkårType) ||
             diff(a.verdi.periode.verdi, b.verdi.periode.verdi)
     );
-};
-
-export const hentVilkårsvurderingMedEkstraVilkår = (
-    vilkårsvurdering: IPersonResultat[],
-    personIdent: string,
-    vilkårType: VilkårType
-): IPersonResultat[] => {
-    return vilkårsvurdering.map((personResultat: IPersonResultat) => {
-        if (personResultat.personIdent === personIdent) {
-            return {
-                ...personResultat,
-                vilkårResultater: [
-                    ...personResultat.vilkårResultater,
-                    lagInitiellFelt(lagTomtFeltMedVilkår(vilkårType), validerVilkår),
-                ],
-            };
-        } else {
-            return personResultat;
-        }
-    });
 };
 
 /**
@@ -100,5 +80,10 @@ export const mapFraRestVilkårsvurderingTilUi = (
                 };
             }
         })
+    ).sort((a: IPersonResultat, b: IPersonResultat) =>
+        moment(a.person.fødselsdato, datoformat.ISO_DAG).diff(
+            moment(b.person.fødselsdato, datoformat.ISO_DAG),
+            'day'
+        )
     );
 };
