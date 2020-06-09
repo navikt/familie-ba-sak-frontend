@@ -1,8 +1,8 @@
-import { IPeriode, nyPeriode } from './periode';
-import { IPerson, PersonType } from './person';
-import { IFelt, nyttFelt, Valideringsstatus } from './felt';
 import { erPeriodeGyldig, erResultatGyldig, ikkeValider } from '../utils/validators';
 import { INøkkelPar } from './common';
+import { IFelt, nyttFelt, Valideringsstatus } from './felt';
+import { IPeriode, nyPeriode } from './periode';
+import { IPerson, PersonType } from './person';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -78,6 +78,11 @@ export interface IVilkårResultat {
 export interface IRestPersonResultat {
     personIdent: string;
     vilkårResultater: IRestVilkårResultat[];
+}
+
+export interface IRestNyttVilkår {
+    personIdent: string;
+    vilkårType: string;
 }
 
 export interface IRestVilkårResultat {

@@ -1,6 +1,5 @@
 import moment, { Moment } from 'moment';
-
-import { datoformat, formaterIsoDato, datoformatNorsk } from '../utils/formatter';
+import { datoformat, datoformatNorsk, formaterIsoDato } from '../utils/formatter';
 
 export const TIDENES_MORGEN: Moment = moment(-8640000000000000);
 export const TIDENES_ENDE: Moment = moment(8640000000000000);
@@ -39,8 +38,8 @@ export const stringToMoment = (dato: string | undefined, defaultValue: Moment): 
 };
 
 export const diff = (første: IPeriode, annen: IPeriode) => {
-    return stringToMoment(første.fom, TIDENES_MORGEN).diff(
-        stringToMoment(annen.fom, TIDENES_MORGEN),
+    return stringToMoment(første.fom, TIDENES_ENDE).diff(
+        stringToMoment(annen.fom, TIDENES_ENDE),
         'day'
     );
 };
