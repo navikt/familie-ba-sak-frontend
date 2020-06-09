@@ -14,7 +14,7 @@ import {
     RessursStatus,
 } from '../../../typer/ressurs';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
-import { hentAktivBehandlingPåFagsak, hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilBeslutterSkjema';
@@ -57,12 +57,6 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
     const kanBeslutte =
         innloggetSaksbehandler?.email !== hentAktivBehandlingPåFagsak(fagsak)?.endretAv ?? false;
 
-    const ansvarligSaksbehandler = åpenBehandling
-        ? hentAktivVedtakPåBehandlig(åpenBehandling)?.ansvarligSaksbehandler
-        : 'UKJENT SAKSBEHANDLER';
-
-    const opprettetTidspunkt = hentAktivBehandlingPåFagsak(fagsak)?.opprettetTidspunkt;
-
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
         settInnsendtVedtak(byggHenterRessurs());
         settModalVerdi({ ...modalVerdi, beslutning: totrinnskontrollData.beslutning });
@@ -100,10 +94,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                         innsendtVedtak={innsendtVedtak}
                     />
                 ) : (
-                    <TotrinnskontrollSendtTilBeslutterSkjema
-                        ansvarligSaksbehandler={ansvarligSaksbehandler}
-                        opprettetTidspunkt={opprettetTidspunkt}
-                    />
+                    <TotrinnskontrollSendtTilBeslutterSkjema åpenBehandling={åpenBehandling} />
                 ))}
             {modalVerdi && (
                 <UIModalWrapper
