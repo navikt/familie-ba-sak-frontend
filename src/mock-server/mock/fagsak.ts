@@ -151,6 +151,12 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         personResultater: [søkerPersonResultat, barnPersonResultat],
         vedtakForBehandling: [],
         endretAv: 'VL',
+        totrinnskontroll: {
+            saksbehandler: 'Saksbehandler',
+            beslutter: 'Beslutter',
+            godkjent: true,
+            opprettetTidspunkt: '2020-03-19T10:08:56.8',
+        },
     };
 
     return behandling;
