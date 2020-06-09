@@ -15,9 +15,7 @@ export default (
     middleware?: WebpackDevMiddleware.WebpackDevMiddleware
 ) => {
     router.get('/version', (_: Request, res: Response) => {
-        res.status(200)
-            .send({ status: 'SUKSESS', data: packageJson.version })
-            .end();
+        res.status(200).send({ status: 'SUKSESS', data: packageJson.version }).end();
     });
     router.get('/error', (_: Request, res: Response) => {
         prometheusTellere.errorRoute.inc();
