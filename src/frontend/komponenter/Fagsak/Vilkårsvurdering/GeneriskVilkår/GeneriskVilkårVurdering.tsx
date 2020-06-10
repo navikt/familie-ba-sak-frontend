@@ -7,7 +7,10 @@ import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
-import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import {
+    useVilkårsvurdering,
+    VilkårSubmit,
+} from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Slett from '../../../../ikoner/Slett';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { periodeToString } from '../../../../typer/periode';
@@ -51,8 +54,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         settVilkårsvurderingFraApi,
         putVilkår,
         deleteVilkår,
-        vurdererVilkår,
-        settVurdererVilkår,
+        vilkårSubmit,
+        settVilkårSubmit,
     } = useVilkårsvurdering();
 
     const { erLesevisning } = useBehandling();
@@ -123,7 +126,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IRestPersonResultat[]>>) => {
         promise
             .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
-                settVurdererVilkår(false);
+                settVilkårSubmit(VilkårSubmit.NONE);
                 if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
                     settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
                     settEkspandertVilkår(false);
@@ -146,7 +149,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                 }
             })
             .catch(() => {
-                settVurdererVilkår(false);
+                settVilkårSubmit(VilkårSubmit.NONE);
                 settVisFeilmeldingerForEttVilkår(true);
                 settRedigerbartVilkår({
                     ...redigerbartVilkår,
@@ -275,7 +278,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     onClick={onClickVilkårFerdig}
                                     mini={true}
                                     type={'standard'}
-                                    spinner={vurdererVilkår}
+                                    spinner={vilkårSubmit === VilkårSubmit.PUT}
                                 >
                                     Ferdig
                                 </FamilieKnapp>
@@ -297,7 +300,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     håndterEndringPåVilkårsvurdering(promise);
                                 }}
                                 id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                                spinner={vurdererVilkår}
+                                spinner={vilkårSubmit === VilkårSubmit.DELETE}
                                 label={'Slett'}
                                 ikon={<Slett />}
                             />

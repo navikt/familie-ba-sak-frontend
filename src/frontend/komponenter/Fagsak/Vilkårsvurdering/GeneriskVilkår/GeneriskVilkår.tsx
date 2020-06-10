@@ -1,7 +1,10 @@
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertekst } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
-import { useVilkårsvurdering } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import {
+    useVilkårsvurdering,
+    VilkårSubmit,
+} from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IFelt } from '../../../../typer/felt';
 import { IPerson } from '../../../../typer/person';
@@ -44,9 +47,9 @@ const GeneriskVilkår: React.FC<IProps> = ({
 }) => {
     const {
         settVilkårsvurderingFraApi,
-        settVurdererVilkår,
+        settVilkårSubmit,
         postVilkår,
-        vurdererVilkår,
+        vilkårSubmit,
     } = useVilkårsvurdering();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
@@ -55,7 +58,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IRestPersonResultat[]>>) => {
         promise
             .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
-                settVurdererVilkår(false);
+                settVilkårSubmit(VilkårSubmit.NONE);
                 settVisFeilmeldingerForVilkår(false);
                 settFeilmelding('');
                 if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
@@ -71,7 +74,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 }
             })
             .catch(() => {
-                settVurdererVilkår(false);
+                settVilkårSubmit(VilkårSubmit.NONE);
             });
     };
 
@@ -117,7 +120,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
                         label={'Legg til periode'}
                         ikon={<Pluss />}
-                        spinner={vurdererVilkår}
+                        spinner={vilkårSubmit === VilkårSubmit.POST}
                     />
                 ) : null}
             </div>
