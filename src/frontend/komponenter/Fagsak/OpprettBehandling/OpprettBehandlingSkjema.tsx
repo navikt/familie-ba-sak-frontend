@@ -50,19 +50,13 @@ const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema>
                 }
                 value={behandlingstype}
             >
-                {Object.keys(behandlingstyper)
-                    .filter(behandlingstype =>
-                        fagsak.behandlinger.length === 0
-                            ? behandlingstyper.REVURDERING.id !== behandlingstype
-                            : behandlingstyper.REVURDERING.id === behandlingstype
-                    )
-                    .map((key: string) => {
-                        return (
-                            <option aria-selected={behandlingstype === key} key={key} value={key}>
-                                {behandlingstyper[key].navn}
-                            </option>
-                        );
-                    })}
+                {Object.keys(behandlingstyper).map((key: string) => {
+                    return (
+                        <option aria-selected={behandlingstype === key} key={key} value={key}>
+                            {behandlingstyper[key].navn}
+                        </option>
+                    );
+                })}
             </Select>
 
             <br />
