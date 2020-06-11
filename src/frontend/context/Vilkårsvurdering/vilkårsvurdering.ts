@@ -1,6 +1,6 @@
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { diff, nyPeriode } from '../../typer/periode';
-import { IPerson, PersonType } from '../../typer/person';
+import { IPerson } from '../../typer/person';
 import {
     IPersonResultat,
     IRestPersonResultat,

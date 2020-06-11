@@ -3,7 +3,6 @@ import { Response, Request, Router } from 'express';
 import path from 'path';
 import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
-import { slackNotify } from './slack/slack';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
 
 // eslint-disable-next-line
