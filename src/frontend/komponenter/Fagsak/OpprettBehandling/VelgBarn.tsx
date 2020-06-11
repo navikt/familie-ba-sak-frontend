@@ -1,13 +1,15 @@
-import React from 'react';
-import {
-    useOpprettBehandling,
-    IOpprettBehandlingBarn,
-} from '../../../context/OpprettBehandlingContext';
+import { FamilieCheckbox } from '@navikt/familie-form-element';
 import moment from 'moment';
-import FamilieCheckbox from '../../Felleskomponenter/InputMedLesevisning/FamilieCheckbox';
+import React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
+import {
+    IOpprettBehandlingBarn,
+    useOpprettBehandling,
+} from '../../../context/OpprettBehandlingContext';
 
 const VelgBarn: React.FC = () => {
     const { barna, settBarna } = useOpprettBehandling();
+    const { erLesevisning } = useBehandling();
 
     return (
         <>
@@ -19,6 +21,7 @@ const VelgBarn: React.FC = () => {
 
                 return (
                     <FamilieCheckbox
+                        erLesevisning={erLesevisning()}
                         key={barn.personIdent}
                         id={`opprettbehandling__barn-${barn.personIdent}`}
                         label={`${barn.navn ?? 'Navn ukjent'} (${alder}) ${barn.personIdent}`}
