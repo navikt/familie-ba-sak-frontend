@@ -636,6 +636,14 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
+"@navikt/familie-form-element@1.0.1-alpha.164":
+  version "1.0.1-alpha.164"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-element/-/familie-form-element-1.0.1-alpha.164.tgz#ba6f47cd075954fbc300eb826fe8b7d578cf2967"
+  integrity sha512-wk4UHcEM2zGLbxfcLro+kkz8GQ6/+7RrJRAftUXayJ59iZTLgs5O0JVj3jx6JJ9qrdmntMGpAhEyBsjUdYI0MA==
+  dependencies:
+    "@navikt/fnrvalidator" "^1.1.2"
+    nav-frontend-skjema "^3.0.6"
+
 "@navikt/familie-header@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.2.tgz#6fbad50ef6579e0879fc50c0170ad7af4e75a793"
