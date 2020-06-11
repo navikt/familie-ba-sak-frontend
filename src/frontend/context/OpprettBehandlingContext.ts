@@ -1,5 +1,5 @@
 import createUseContext from 'constate';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { BehandlingKategori, BehandlingUnderkategori, Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
@@ -24,17 +24,21 @@ const [OpprettBehandlingProvider, useOpprettBehandling] = createUseContext(
         );
         const [kategori, settKategori] = useState(BehandlingKategori.NASJONAL);
         const [underkategori, settUnderkategori] = useState(BehandlingUnderkategori.ORDINÆR);
-        const [barna, settBarna] = useState<IOpprettBehandlingBarn[]>(
-            bruker.familierelasjoner
-                .filter(
-                    (relasjon: IFamilieRelasjon) =>
-                        relasjon.relasjonRolle === FamilieRelasjonRolle.BARN
-                )
-                .map((barn: IFamilieRelasjon) => ({
-                    barn,
-                    checked: true,
-                }))
-        );
+        const [barna, settBarna] = useState<IOpprettBehandlingBarn[]>([]);
+
+        useEffect(() => {
+            settBarna(
+                bruker.familierelasjoner
+                    .filter(
+                        (relasjon: IFamilieRelasjon) =>
+                            relasjon.relasjonRolle === FamilieRelasjonRolle.BARN
+                    )
+                    .map((barn: IFamilieRelasjon) => ({
+                        barn,
+                        checked: true,
+                    }))
+            );
+        }, [bruker, fagsak]);
 
         return {
             barna,
