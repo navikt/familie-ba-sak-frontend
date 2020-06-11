@@ -1,8 +1,9 @@
-import * as React from 'react';
+import { FamilieCheckbox } from '@navikt/familie-form-element';
 import moment from 'moment';
+import * as React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import FamilieCheckbox from '../../Felleskomponenter/InputMedLesevisning/FamilieCheckbox';
 import FamilieTextarea from '../../Felleskomponenter/InputMedLesevisning/FamilieTextarea';
 
 interface IProps {
@@ -11,6 +12,7 @@ interface IProps {
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { settBarn } = useSøknad();
+    const { erLesevisning } = useBehandling();
     const alder = barn.fødselsdato
         ? moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years') + 'år'
         : 'Alder ukjent';
@@ -18,6 +20,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     return (
         <div className={'søknad__panel--gruppebarn'}>
             <FamilieCheckbox
+                erLesevisning={erLesevisning()}
                 id={`barn-${barn.ident}`}
                 label={`${barn.navn ?? 'Navn ukjent'} (${alder}) ${barn.ident}`}
                 checked={barn.inkludertISøknaden}
@@ -31,6 +34,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             {barn.inkludertISøknaden && (
                 <div className={'søknad__panel--innrykk'}>
                     <FamilieCheckbox
+                        erLesevisning={erLesevisning()}
                         label={'5.1 Barnet bor ikke fast sammen med søker'}
                         checked={!barn.borMedSøker}
                         onChange={() => {
@@ -42,6 +46,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
 
                     <FamilieCheckbox
+                        erLesevisning={erLesevisning()}
                         label={'5.5.1 Barnet oppholder seg i utlandet'}
                         checked={!barn.oppholderSegINorge}
                         onChange={() => {
@@ -53,6 +58,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
 
                     <FamilieCheckbox
+                        erLesevisning={erLesevisning()}
                         label={
                             '5.5.2 Barnet har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'
                         }
