@@ -3,7 +3,6 @@ import * as React from 'react';
 import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
-import { PersonType } from '../../typer/person';
 import {
     IPersonResultat,
     IRestNyttVilkår,
@@ -20,18 +19,23 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
+export enum VilkårSubmit {
+    PUT,
+    POST,
+    DELETE,
+    NONE,
+}
+
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
     ({ fagsak, åpenBehandling }: IProps) => {
         const { axiosRequest } = useApp();
-        const [vurdererVilkår, settVurdererVilkår] = React.useState(false);
+        const [vilkårSubmit, settVilkårSubmit] = React.useState(VilkårSubmit.NONE);
 
         const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
             åpenBehandling
                 ? mapFraRestVilkårsvurderingTilUi(
                       åpenBehandling.personResultater,
                       åpenBehandling.personer
-                  ).sort((personResultat: IPersonResultat) =>
-                      personResultat.person.type === PersonType.SØKER ? -1 : 1
                   )
                 : []
         );
@@ -39,12 +43,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
         const settVilkårsvurderingFraApi = (personResultater: IRestPersonResultat[]) => {
             settVilkårsvurdering(
                 åpenBehandling
-                    ? mapFraRestVilkårsvurderingTilUi(
-                          personResultater,
-                          åpenBehandling.personer
-                      ).sort((personResultat: IPersonResultat) =>
-                          personResultat.person.type === PersonType.SØKER ? -1 : 1
-                      )
+                    ? mapFraRestVilkårsvurderingTilUi(personResultater, åpenBehandling.personer)
                     : []
             );
         };
@@ -54,7 +53,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             redigerbartVilkår: IFelt<IVilkårResultat>
         ) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-            settVurdererVilkår(true);
+            settVilkårSubmit(VilkårSubmit.PUT);
 
             return axiosRequest<IRestPersonResultat[], IRestPersonResultat>({
                 method: 'PUT',
@@ -77,7 +76,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
 
         const deleteVilkår = (personIdent: string, vilkårId: number) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-            settVurdererVilkår(true);
+            settVilkårSubmit(VilkårSubmit.DELETE);
 
             return axiosRequest<IRestPersonResultat[], string>({
                 method: 'DELETE',
@@ -88,7 +87,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
 
         const postVilkår = (personIdent: string, vilkårType: VilkårType) => {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-            settVurdererVilkår(true);
+            settVilkårSubmit(VilkårSubmit.DELETE);
 
             return axiosRequest<IRestPersonResultat[], IRestNyttVilkår>({
                 method: 'POST',
@@ -132,9 +131,9 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             postVilkår,
             erVilkårsvurderingenGyldig,
             hentVilkårMedFeil,
-            vurdererVilkår,
+            vilkårSubmit,
             putVilkår,
-            settVurdererVilkår,
+            settVilkårSubmit,
             settVilkårsvurdering,
             settVilkårsvurderingFraApi,
             vilkårsvurdering,

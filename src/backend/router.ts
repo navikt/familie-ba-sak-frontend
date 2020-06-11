@@ -3,7 +3,6 @@ import { Response, Request, Router } from 'express';
 import path from 'path';
 import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
-import { slackNotify } from './slack/slack';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
 
 // eslint-disable-next-line
@@ -28,8 +27,11 @@ export default (
         res.status(200).send();
     });
 
-    router.post('/slack/notify/:kanal', (req: Request, res: Response) => {
-        slackNotify(req, res, req.params.kanal);
+    router.post('/slack/notify/:kanal', (_req: Request, res: Response) => {
+        res.status(200).send();
+
+        // Midlertidig disabler slack notifikasjoner til vi har løst cert feilen.
+        //slackNotify(req, res, req.params.kanal);
     });
 
     // APP
