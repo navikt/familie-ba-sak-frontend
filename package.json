@@ -16,7 +16,8 @@
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
-    "copy-pdf-mock": "copyfiles -u 1 src/**/**/*.pdf node_dist"
+    "copy-pdf-mock": "copyfiles -u 1 src/**/**/*.pdf node_dist",
+    "prepare": "yarn run snyk-protect"
   },
   "husky": {
     "hooks": {
@@ -110,7 +111,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "request-promise": "^4.2.5",
-    "uuid": "^8.1.0"
+    "uuid": "^8.1.0",
+    "snyk": "^1.339.1"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.10.1",
@@ -167,5 +169,6 @@
         "tsConfig": "<rootDir>/src/frontend/tsconfig.json"
       }
     }
-  }
+  },
+  "snyk": true
 }
