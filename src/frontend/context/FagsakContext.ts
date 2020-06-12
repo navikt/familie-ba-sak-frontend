@@ -9,7 +9,12 @@ import { useApp } from './AppContext';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { IBehandling, BehandlingSteg } from '../typer/behandling';
 import { useHistory } from 'react-router';
-import { sider, ISide } from '../komponenter/Felleskomponenter/Venstremeny/sider';
+import {
+    sider,
+    ISide,
+    finnSideForBehandlingssteg,
+    erViPåUdefinertFagsakSide,
+} from '../komponenter/Felleskomponenter/Venstremeny/sider';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
@@ -80,16 +85,11 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                         hentetFagsak.data
                     );
                     if (aktivBehandling) {
-                        const sideForSteg: ISide | undefined = Object.values(sider).find(
-                            (side: ISide) => side.steg === BehandlingSteg[aktivBehandling.steg]
+                        const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
+                            aktivBehandling.steg
                         );
 
-                        console.log(
-                            `/fagsak/${hentetFagsak.data.id}/${aktivBehandling.behandlingId}/vedtak`,
-                            aktivBehandling,
-                            sideForSteg
-                        );
-                        if (!history.location.pathname.includes('saksoversikt') && sideForSteg) {
+                        if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
                             history.push(
                                 `/fagsak/${hentetFagsak.data.id}/${aktivBehandling.behandlingId}/${sideForSteg.href}`
                             );
