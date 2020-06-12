@@ -43,6 +43,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 headers: {
                     personIdent: fagsakRessurser.fagsak.data.søkerFødselsnummer,
                 },
+                påvirkerSystemLaster: true,
             }).then((hentetPerson: Ressurs<IPerson>) => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
@@ -62,6 +63,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         axiosRequest<IFagsak, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/${fagsakId}`,
+            påvirkerSystemLaster: true,
         })
             .then((hentetFagsak: Ressurs<IFagsak>) => {
                 settFagsakRessurser({
@@ -87,6 +89,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         axiosRequest<ILogg[], void>({
             method: 'GET',
             url: `/familie-ba-sak/api/logg/${behandlingId}`,
+            påvirkerSystemLaster: true,
         })
             .then((hentetLogg: Ressurs<ILogg[]>) => {
                 settFagsakRessurser({ ...fagsakRessurser, logg: hentetLogg });

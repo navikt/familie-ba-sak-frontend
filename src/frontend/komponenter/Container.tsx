@@ -10,24 +10,28 @@ import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring';
 import VisOppgaver from './Oppgaver/VisOppgaver';
+import classNames from 'classnames';
+import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 
 interface IProps {
     innloggetSaksbehandler?: ISaksbehandler;
 }
 
 const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
-    const { autentisert } = useApp();
+    const { autentisert, systemetLaster } = useApp();
 
     return (
         <Router>
             <UIModalWrapper />
             {autentisert ? (
                 <>
-                    <div className={'container'} role="main">
+                    {systemetLaster() && <SystemetLaster />}
+                    <main className={classNames('container', systemetLaster() && 'blur')}>
                         <HeaderMedSøk
                             brukerNavn={innloggetSaksbehandler?.displayName}
                             brukerEnhet={innloggetSaksbehandler?.enhet}
                         />
+
                         <FagsakProvider>
                             <Switch>
                                 <Route
@@ -49,7 +53,7 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                 </OppgaverProvider>
                             </Switch>
                         </FagsakProvider>
-                    </div>
+                    </main>
                 </>
             ) : (
                 <UgyldigSesjon />

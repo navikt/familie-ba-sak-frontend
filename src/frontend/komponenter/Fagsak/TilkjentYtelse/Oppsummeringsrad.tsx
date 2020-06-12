@@ -14,7 +14,7 @@ interface IProps {
 }
 
 const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
-    const [åpentElement, setÅpentElement] = React.useState<boolean>(false);
+    const [åpentElement, setÅpentElement] = React.useState<boolean>(true);
 
     const oppdaterÅpentElement = (): void => {
         setÅpentElement(!åpentElement);

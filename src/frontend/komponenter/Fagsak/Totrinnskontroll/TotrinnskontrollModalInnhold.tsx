@@ -22,7 +22,7 @@ const TotrinnskontrollModalInnhold: React.FunctionComponent<IProps> = ({ beslutn
             <div className={'totrinnsvurdering-modal-innhold'}>
                 <Oppfylt />
                 <div className={'totrinnsvurdering-modal-tekst'}>
-                    Behandlingen er godkjent, og vedtaket iverksatt
+                    Behandlingen er godkjent, og vedtaket er iverksatt
                 </div>
             </div>
         );
