@@ -4,6 +4,7 @@ import Link from './Link';
 import { IFagsak } from '../../../typer/fagsak';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { RessursStatus } from '../../../typer/ressurs';
+import classNames from 'classnames';
 
 interface IProps {
     fagsak: IFagsak;
@@ -19,7 +20,7 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 key={'saksoversikt'}
                 id={'saksoversikt'}
                 to={`/fagsak/${fagsak.id}/saksoversikt`}
-                className={'venstremeny__link'}
+                className={classNames('venstremeny__link', 'hover-effekt')}
             >
                 {`Saksoversikt`}
             </Link>
@@ -38,7 +39,11 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                   key={side.id}
                                   id={side.id}
                                   to={tilPath}
-                                  className={'venstremeny__link'}
+                                  className={classNames(
+                                      'venstremeny__link',
+                                      erSidenInaktiv(side, åpenBehandling.data.steg) &&
+                                          'hover-effekt'
+                                  )}
                               >
                                   {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
                               </Link>

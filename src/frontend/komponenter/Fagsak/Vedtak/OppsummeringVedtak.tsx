@@ -109,7 +109,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             {visModal && (
                 <UIModalWrapper
                     modal={{
-                        tittel: 'Totrinnsvurdering',
+                        tittel: 'Totrinnskontroll',
                         lukkKnapp: false,
                         visModal: visModal,
                         actions: [
