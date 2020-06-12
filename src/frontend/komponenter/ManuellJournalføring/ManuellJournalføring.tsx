@@ -151,7 +151,7 @@ const ManuellJournalføring: React.FC = () => {
                                         fagsakId.status === RessursStatus.SUKSESS &&
                                         fagsakId.data !== ''
                                     ) {
-                                        history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
+                                        history.push(`/fagsak/${fagsakId.data}`);
                                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
                                         history.push('/oppgaver');
                                     }

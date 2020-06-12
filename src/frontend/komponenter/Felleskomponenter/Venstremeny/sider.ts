@@ -9,7 +9,7 @@ export interface ISide {
     id: string;
     href: string;
     navn: string;
-    steg?: BehandlingSteg;
+    steg: BehandlingSteg;
 }
 
 export const sider: ISide[] = [
