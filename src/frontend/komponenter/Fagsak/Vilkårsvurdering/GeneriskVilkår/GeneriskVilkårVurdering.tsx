@@ -248,8 +248,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         <FamilieTextareaControlled
                             defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                             id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
-                            label={'Begrunnelse'}
-                            placeholder={'Begrunn vurderingen'}
+                            label={'Begrunnelse (valgfri)'}
+                            placeholder={'Begrunn hvorfor det er gjort endriner på vilkåret.'}
                             textareaClass={'generisk-vilkår__ekspandert--begrunnelse'}
                             value={redigerbartVilkår.verdi.begrunnelse.verdi}
                             feil={

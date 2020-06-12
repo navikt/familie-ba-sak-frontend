@@ -6,7 +6,6 @@ import { Route, Switch, useParams } from 'react-router-dom';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { RessursStatus } from '../../typer/ressurs';
 import { hentAlder } from '../../utils/formatter';
-import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
