@@ -20,7 +20,7 @@ const AnnenPart: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søk
 
     return (
         <PanelBase>
-            <Undertittel children={'3 Opplysninger om den andre forelderen'} />
+            <Undertittel children={'Opplysninger om den andre forelderen'} />
             <br />
             <HentPerson
                 erLesevisning={erLesevisning()}
