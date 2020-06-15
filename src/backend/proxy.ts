@@ -1,4 +1,4 @@
-import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
+import { Client, getOnBehalfOfAccessToken, stdoutLogger } from '@navikt/familie-backend';
 import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -26,6 +26,7 @@ export const doProxy: any = () => {
         },
         secure: true,
         target: `${proxyUrl}`,
+        logProvider: () => stdoutLogger,
     });
 };
 

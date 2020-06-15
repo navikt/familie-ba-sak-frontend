@@ -1,9 +1,10 @@
 import { Client, ensureAuthenticated, logRequest, LOG_LEVEL } from '@navikt/familie-backend';
 import { Response, Request, Router } from 'express';
 import path from 'path';
-import { buildPath } from './config';
+import { buildPath, namespace } from './config';
 import { prometheusTellere } from './metrikker';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
+import { slackNotify } from './slack/slack';
 
 // eslint-disable-next-line
 const packageJson = require('../../package.json');
@@ -27,11 +28,12 @@ export default (
         res.status(200).send();
     });
 
-    router.post('/slack/notify/:kanal', (_req: Request, res: Response) => {
-        res.status(200).send();
-
-        // Midlertidig disabler slack notifikasjoner til vi har løst cert feilen.
-        //slackNotify(req, res, req.params.kanal);
+    router.post('/slack/notify/:kanal', (req: Request, res: Response) => {
+        if (namespace !== 'production') {
+            slackNotify(req, res, req.params.kanal);
+        } else {
+            res.status(200).send();
+        }
     });
 
     // APP
