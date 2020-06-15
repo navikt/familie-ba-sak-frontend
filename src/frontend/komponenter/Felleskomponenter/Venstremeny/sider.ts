@@ -9,7 +9,7 @@ export interface ISide {
     id: string;
     href: string;
     navn: string;
-    steg?: BehandlingSteg;
+    steg: BehandlingSteg;
 }
 
 export const sider: ISide[] = [
@@ -62,4 +62,15 @@ export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
     } else {
         return true;
     }
+};
+
+export const finnSideForBehandlingssteg = (steg: BehandlingSteg) => {
+    return Object.values(sider).find((side: ISide) => side.steg === BehandlingSteg[steg]);
+};
+
+export const erViPåUdefinertFagsakSide = (pathname: string) => {
+    return (
+        Object.values(sider).filter((side: ISide) => pathname.includes(side.href)).length === 0 &&
+        !pathname.includes('saksoversikt')
+    );
 };

@@ -6,6 +6,15 @@ import { ILogg } from '../typer/logg';
 import { IPerson } from '../typer/person';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
+import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
+import { IBehandling, BehandlingSteg } from '../typer/behandling';
+import { useHistory } from 'react-router';
+import {
+    sider,
+    ISide,
+    finnSideForBehandlingssteg,
+    erViPåUdefinertFagsakSide,
+} from '../komponenter/Felleskomponenter/Venstremeny/sider';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
@@ -28,6 +37,7 @@ const initialState: IHovedRessurser = {
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
     const { axiosRequest } = useApp();
+    const history = useHistory();
 
     React.useEffect(() => {
         if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
@@ -70,6 +80,22 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                     ...fagsakRessurser,
                     fagsak: hentetFagsak,
                 });
+                if (hentetFagsak.status === RessursStatus.SUKSESS) {
+                    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
+                        hentetFagsak.data
+                    );
+                    if (aktivBehandling) {
+                        const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
+                            aktivBehandling.steg
+                        );
+
+                        if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
+                            history.push(
+                                `/fagsak/${hentetFagsak.data.id}/${aktivBehandling.behandlingId}/${sideForSteg.href}`
+                            );
+                        }
+                    }
+                }
             })
             .catch((_error: AxiosError) => {
                 settFagsakRessurser({
