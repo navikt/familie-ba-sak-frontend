@@ -1,4 +1,4 @@
-import { FamilieCheckbox } from '@navikt/familie-form-element';
+import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import moment from 'moment';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';

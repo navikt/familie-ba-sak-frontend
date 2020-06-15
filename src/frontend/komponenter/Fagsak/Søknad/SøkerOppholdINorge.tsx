@@ -1,4 +1,4 @@
-import { FamilieCheckbox } from '@navikt/familie-form-element';
+import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { ISODateString } from 'nav-datovelger';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
