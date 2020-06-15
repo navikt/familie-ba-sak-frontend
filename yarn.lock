@@ -595,15 +595,14 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
-"@navikt/familie-backend@^5.0.4":
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.4.tgz#34cbea3adee04fff6332aeeb4de66de56b0f5b31"
-  integrity sha512-XncLyNN8TQuKBMqabsAKB/1Xw93/UprFY+Y/d+stFqz2bag7AhJe5IuHqmT/dvSWf642WNq+SeG68MXZTshJlQ==
+"@navikt/familie-backend@^5.0.9":
+  version "5.0.9"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.9.tgz#45c360b059f718f59d2a63b5b377d71598106b1f"
+  integrity sha512-Hcs+9PaP7ZuUGyF0L4rhBgjD66iTvZVpLmWfxnFc9gzhSk+vr3ZK75FtC5nADingq+h7WvSRlHsFv5ihjtPgJg==
   dependencies:
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.2"
     "@types/express-session" "^1.15.15"
-    "@types/moment-timezone" "^0.5.12"
     "@types/morgan" "^1.7.37"
     "@types/passport" "^1.0.1"
     "@types/redis" "^2.8.14"
@@ -635,6 +634,17 @@
     "@types/react-tooltip" "^3.11.0"
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
+
+"@navikt/familie-form-elements@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.5.tgz#348a4713b521d1584e3b8d8679fd3077b3d0a726"
+  integrity sha512-DbxR2QW3VHgA5FsDyaU9a4rKMIw6HvvC1vz6jA4ySFgnagbyd7brkwOs8r5DSrz63sO6X+P7U1CH7HWdh9guTA==
+  dependencies:
+    "@navikt/fnrvalidator" "^1.1.2"
+    nav-frontend-lenker "^1.0.37"
+    nav-frontend-lenker-style "^0.2.28"
+    nav-frontend-skjema "^3.0.6"
+    nav-frontend-skjema-style "^2.0.9"
 
 "@navikt/familie-header@^2.0.2":
   version "2.0.2"
@@ -1265,13 +1275,6 @@
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
-
-"@types/moment-timezone@^0.5.12":
-  version "0.5.13"
-  resolved "https://registry.yarnpkg.com/@types/moment-timezone/-/moment-timezone-0.5.13.tgz#0317ccc91eb4c7f4901704166166395c39276528"
-  integrity sha512-SWk1qM8DRssS5YR9L4eEX7WUhK/wc96aIr4nMa6p0kTk9YhGGOJjECVhIdPEj13fvJw72Xun69gScXSZ/UmcPg==
-  dependencies:
-    moment ">=2.14.0"
 
 "@types/morgan@^1.7.37":
   version "1.9.0"
@@ -7397,7 +7400,7 @@ moment-timezone@^0.5.27:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@>=2.14.0, moment@^2.25.3:
+"moment@>= 2.9.0", moment@^2.25.3:
   version "2.26.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.26.0.tgz#5e1f82c6bafca6e83e808b30c8705eed0dcbd39a"
   integrity sha512-oIixUO+OamkUkwjhAVE18rAMfRJNsNe/Stid/gwHSOfHrOtw9EhAY2AHvdKZ/k/MggcYELFCJz/Sn2pL8b8JMw==
@@ -7549,10 +7552,20 @@ nav-frontend-lenker-style@^0.2.27:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.27.tgz#a79c04b77eb20b37ffa62a2e4e73bb6e87d1149e"
   integrity sha512-ykZZUXhHvXdh6XPQnWMTEOAl+7FbEDdumtTa7Z2FaYRrnrOjHnqZdggF5jSUSbsmGk/I/vyUF2eyvti1rliQ9Q==
 
+nav-frontend-lenker-style@^0.2.28:
+  version "0.2.28"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.28.tgz#9b3e693ea01a460bcbc90a64c7d364d58403ab34"
+  integrity sha512-WEV4QcFt2pdFf6g8xNpzExVU8l/P66s5z0YRmUispVBflokLQlDqZT45G2FuAj+HXsse5GVumxSuKCfGabhtkg==
+
 nav-frontend-lenker@^1.0.36:
   version "1.0.36"
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.36.tgz#f357b17462b204cfc9df2144a2a64a8c37521018"
   integrity sha512-dW9V8uLSmt2NyN2QTondQf6dc3fR2MpKeVoI1ttQ1/oyA6XHUy5MrKIH1wCtay75CdMHz+KH4425dIPh+V3Rsg==
+
+nav-frontend-lenker@^1.0.37:
+  version "1.0.37"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.37.tgz#b89beb5f0ae0a09394baa6dc1f6a8b65020cc0c4"
+  integrity sha512-m5AHNynGBSTPjlZUkAoX9WS7uqz828FD2TIB5QVJ4bZuEUd+m/31HjXqCxEUhKbijSaT8zBFNqY1c6URY3tjWg==
 
 nav-frontend-lukknapp-style@^0.2.23:
   version "0.2.23"
@@ -7608,6 +7621,11 @@ nav-frontend-skjema-style@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.0.8.tgz#f39ddaff1f2092aa62c4106b1abf40cfb140bf4a"
   integrity sha512-K2x2m7VxzldUpaT85PJXNI/ImLaRfIMt5YWtuLAZ66UnR01X7YFYY40KCMk0N18jXik+fCYiGP2Xra/SahIfrQ==
+
+nav-frontend-skjema-style@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.0.9.tgz#afaa3e98db78834726c606e23d3b5ee61c86e9e9"
+  integrity sha512-WPQ1nvy5LH+R1IIVpMBUnasvU8+Bd0WvtOMBBPpIgTaZkt+xEh2p2QJGJXSTt+vmNxRk1wEwFybV5shX5o8KfQ==
 
 nav-frontend-skjema@^3.0.6:
   version "3.0.6"
@@ -10326,58 +10344,6 @@ snyk-try-require@1.3.1, snyk-try-require@^1.1.1, snyk-try-require@^1.3.1:
     lru-cache "^4.0.0"
     then-fs "^2.0.0"
 
-snyk@1.339.1, snyk@^1.339.1:
-  version "1.339.1"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.339.1.tgz#8e676f316daeaa816250385aedc9a11c182727e5"
-  integrity sha512-JJcXer6rc308JRnsBzvXskZhF0qmNjeAvK7uQGL2cKPd/cLEdh2RNGb2QgwrHyaRIOPseCiFVxE/QtOH61dqrg==
-  dependencies:
-    "@snyk/cli-interface" "2.6.0"
-    "@snyk/dep-graph" "1.18.3"
-    "@snyk/gemfile" "1.2.0"
-    "@snyk/graphlib" "2.1.9-patch"
-    "@snyk/inquirer" "6.2.2-patch"
-    "@snyk/lodash" "^4.17.15-patch"
-    "@snyk/ruby-semver" "2.2.0"
-    "@snyk/snyk-cocoapods-plugin" "2.3.0"
-    abbrev "^1.1.1"
-    ansi-escapes "3.2.0"
-    chalk "^2.4.2"
-    cli-spinner "0.2.10"
-    configstore "^5.0.1"
-    debug "^3.1.0"
-    diff "^4.0.1"
-    glob "^7.1.3"
-    ipaddr.js "^1.9.1"
-    needle "^2.5.0"
-    open "^7.0.3"
-    os-name "^3.0.0"
-    proxy-agent "^3.1.1"
-    proxy-from-env "^1.0.0"
-    semver "^6.0.0"
-    snyk-config "3.1.0"
-    snyk-docker-plugin "3.11.0"
-    snyk-go-plugin "1.14.2"
-    snyk-gradle-plugin "3.4.0"
-    snyk-module "3.1.0"
-    snyk-mvn-plugin "2.17.0"
-    snyk-nodejs-lockfile-parser "1.22.0"
-    snyk-nuget-plugin "1.18.1"
-    snyk-php-plugin "1.9.0"
-    snyk-policy "1.14.1"
-    snyk-python-plugin "1.17.1"
-    snyk-resolve "1.0.1"
-    snyk-resolve-deps "4.4.0"
-    snyk-sbt-plugin "2.11.0"
-    snyk-tree "^1.0.0"
-    snyk-try-require "1.3.1"
-    source-map-support "^0.5.11"
-    strip-ansi "^5.2.0"
-    tempfile "^2.0.0"
-    then-fs "^2.0.0"
-    update-notifier "^4.1.0"
-    uuid "^3.3.2"
-    wrap-ansi "^5.1.0"
-
 snyk@^1.336.0:
   version "1.336.0"
   resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.336.0.tgz#674056ea4f444d33cc23263845eea903d60b686c"
@@ -10412,6 +10378,58 @@ snyk@^1.336.0:
     snyk-gradle-plugin "3.4.0"
     snyk-module "3.1.0"
     snyk-mvn-plugin "2.15.2"
+    snyk-nodejs-lockfile-parser "1.22.0"
+    snyk-nuget-plugin "1.18.1"
+    snyk-php-plugin "1.9.0"
+    snyk-policy "1.14.1"
+    snyk-python-plugin "1.17.1"
+    snyk-resolve "1.0.1"
+    snyk-resolve-deps "4.4.0"
+    snyk-sbt-plugin "2.11.0"
+    snyk-tree "^1.0.0"
+    snyk-try-require "1.3.1"
+    source-map-support "^0.5.11"
+    strip-ansi "^5.2.0"
+    tempfile "^2.0.0"
+    then-fs "^2.0.0"
+    update-notifier "^4.1.0"
+    uuid "^3.3.2"
+    wrap-ansi "^5.1.0"
+
+snyk@^1.339.1:
+  version "1.339.1"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.339.1.tgz#8e676f316daeaa816250385aedc9a11c182727e5"
+  integrity sha512-JJcXer6rc308JRnsBzvXskZhF0qmNjeAvK7uQGL2cKPd/cLEdh2RNGb2QgwrHyaRIOPseCiFVxE/QtOH61dqrg==
+  dependencies:
+    "@snyk/cli-interface" "2.6.0"
+    "@snyk/dep-graph" "1.18.3"
+    "@snyk/gemfile" "1.2.0"
+    "@snyk/graphlib" "2.1.9-patch"
+    "@snyk/inquirer" "6.2.2-patch"
+    "@snyk/lodash" "^4.17.15-patch"
+    "@snyk/ruby-semver" "2.2.0"
+    "@snyk/snyk-cocoapods-plugin" "2.3.0"
+    abbrev "^1.1.1"
+    ansi-escapes "3.2.0"
+    chalk "^2.4.2"
+    cli-spinner "0.2.10"
+    configstore "^5.0.1"
+    debug "^3.1.0"
+    diff "^4.0.1"
+    glob "^7.1.3"
+    ipaddr.js "^1.9.1"
+    needle "^2.5.0"
+    open "^7.0.3"
+    os-name "^3.0.0"
+    proxy-agent "^3.1.1"
+    proxy-from-env "^1.0.0"
+    semver "^6.0.0"
+    snyk-config "3.1.0"
+    snyk-docker-plugin "3.11.0"
+    snyk-go-plugin "1.14.2"
+    snyk-gradle-plugin "3.4.0"
+    snyk-module "3.1.0"
+    snyk-mvn-plugin "2.17.0"
     snyk-nodejs-lockfile-parser "1.22.0"
     snyk-nuget-plugin "1.18.1"
     snyk-php-plugin "1.9.0"
