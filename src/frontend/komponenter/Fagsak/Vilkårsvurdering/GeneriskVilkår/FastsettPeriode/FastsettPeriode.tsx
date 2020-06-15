@@ -39,7 +39,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                     : ''
             }
         >
-            <Normaltekst children={'Fastsett periode'} />
+            {!erLesevisning() && <Normaltekst children={'Fastsett periode'} />}
             <div className={'fastsett-periode__flex'}>
                 <div>
                     <FamilieDatovelger
@@ -94,6 +94,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                         />
                         {!erLesevisning() && (
                             <Checkbox
+                                className={'fastsett-periode__flex--checkbox'}
                                 checked={fastsettTom}
                                 onChange={() => {
                                     if (
