@@ -1,3 +1,4 @@
+import { FamilieKnapp } from '@navikt/familie-form-elements';
 import classNames from 'classnames';
 import deepEqual from 'deep-equal';
 import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
@@ -26,7 +27,6 @@ import {
     resultatTilUi,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import FamilieKnapp from '../../../Felleskomponenter/InputMedLesevisning/FamilieKnapp';
 import FamilieRadioGruppe from '../../../Felleskomponenter/InputMedLesevisning/FamilieRadioGruppe';
 import FamilieTextareaControlled from '../../../Felleskomponenter/InputMedLesevisning/FamilieTextareaControlled';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
@@ -59,6 +59,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     } = useVilkårsvurdering();
 
     const { erLesevisning } = useBehandling();
+    const leseVisning = erLesevisning();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
@@ -275,6 +276,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         <div className={'generisk-vilkår__ekspandert--knapperad'}>
                             <div>
                                 <FamilieKnapp
+                                    erLesevisning={leseVisning}
                                     onClick={onClickVilkårFerdig}
                                     mini={true}
                                     type={'standard'}
@@ -283,6 +285,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     Ferdig
                                 </FamilieKnapp>
                                 <FamilieKnapp
+                                    erLesevisning={leseVisning}
                                     onClick={() => toggleForm(false)}
                                     mini={true}
                                     type={'flat'}

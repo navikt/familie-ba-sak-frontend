@@ -635,12 +635,14 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.5.tgz#348a4713b521d1584e3b8d8679fd3077b3d0a726"
-  integrity sha512-DbxR2QW3VHgA5FsDyaU9a4rKMIw6HvvC1vz6jA4ySFgnagbyd7brkwOs8r5DSrz63sO6X+P7U1CH7HWdh9guTA==
+"@navikt/familie-form-elements@1.0.6-alpha.2+a8ced8e":
+  version "1.0.6-alpha.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.6-alpha.2.tgz#11e41b35938cfd994cb4154d8b5853791a64ee91"
+  integrity sha512-a9WzAMVdFQdIoR/Z1n+KcfAOH3B/RInvZXOxI+5QgHpU2gCklAwiOO830xXP85+B7RbujlLPgsWKa7EK5J2bng==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
+    nav-frontend-knapper "^2.0.4"
+    nav-frontend-knapper-style "^0.3.38"
     nav-frontend-lenker "^1.0.37"
     nav-frontend-lenker-style "^0.2.28"
     nav-frontend-skjema "^3.0.6"
@@ -7542,10 +7544,20 @@ nav-frontend-knapper-style@^0.3.37:
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.37.tgz#16aae9abc3743a2b6c2e94f0778c765dfc0a8de8"
   integrity sha512-dlvxM6cALkQ4PDiHsh0QOU3nUts09frk+ZM/V9rgIGFp3Ne9xjHGyP79cv38jmD3TzGMAtC634ncKyo1W6kq3Q==
 
+nav-frontend-knapper-style@^0.3.38:
+  version "0.3.38"
+  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.38.tgz#4ad009a42cc6405dd41b1932f3f0839311dae57f"
+  integrity sha512-pqzIAakw2EU2aqsPpYLLfYO/3DEb7OuW+qcmM95u6h9pIOB+pbduwzoYjRDv11N9ylk5Nqt7oYmpildGVwwZbg==
+
 nav-frontend-knapper@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-2.0.3.tgz#a24a5dc99807e7ffc22d9a932fd256411b4aac59"
   integrity sha512-N78lgCLqVifyt9/BLQdVJTh+e9CgU+06qVaoVsoIcJLhKAF2Dh+dVyav6EnxQvOybJ6JshwQoLZ3Xe1Xd+O/Gw==
+
+nav-frontend-knapper@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-2.0.4.tgz#3d0c7f56f709abe8f990bf6fdc9f845a18ac4aac"
+  integrity sha512-vcAglzTWw8UzX1rY47EW9Nit6+q+d49IvEU/pmzBCz4ywqa2u29GTzqFCeyEzFq8/TCiVS68NZBtlUHXDgFrTQ==
 
 nav-frontend-lenker-style@^0.2.27:
   version "0.2.27"
