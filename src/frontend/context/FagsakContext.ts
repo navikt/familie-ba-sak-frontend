@@ -7,10 +7,9 @@ import { IPerson } from '../typer/person';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
-import { IBehandling, BehandlingSteg } from '../typer/behandling';
+import { IBehandling } from '../typer/behandling';
 import { useHistory } from 'react-router';
 import {
-    sider,
     ISide,
     finnSideForBehandlingssteg,
     erViPåUdefinertFagsakSide,
