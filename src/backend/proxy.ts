@@ -26,13 +26,7 @@ export const doProxy: any = () => {
         },
         secure: true,
         target: `${proxyUrl}`,
-        logProvider: () => ({
-            log: stdoutLogger.log,
-            debug: stdoutLogger.debug,
-            info: stdoutLogger.info,
-            warn: stdoutLogger.warn,
-            error: stdoutLogger.error,
-        }),
+        logProvider: () => stdoutLogger,
     });
 };
 
