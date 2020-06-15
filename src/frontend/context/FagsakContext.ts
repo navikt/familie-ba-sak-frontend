@@ -1,20 +1,19 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
+import { useHistory } from 'react-router';
+import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPerson } from '../typer/person';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
-import { useApp } from './AppContext';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
-import { IBehandling } from '../typer/behandling';
-import { useHistory } from 'react-router';
+import { useApp } from './AppContext';
 import {
     ISide,
     finnSideForBehandlingssteg,
     erViPåUdefinertFagsakSide,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
-
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
     fagsak: Ressurs<IFagsak>;

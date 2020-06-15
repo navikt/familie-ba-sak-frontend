@@ -635,6 +635,17 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
+"@navikt/familie-form-elements@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.5.tgz#348a4713b521d1584e3b8d8679fd3077b3d0a726"
+  integrity sha512-DbxR2QW3VHgA5FsDyaU9a4rKMIw6HvvC1vz6jA4ySFgnagbyd7brkwOs8r5DSrz63sO6X+P7U1CH7HWdh9guTA==
+  dependencies:
+    "@navikt/fnrvalidator" "^1.1.2"
+    nav-frontend-lenker "^1.0.37"
+    nav-frontend-lenker-style "^0.2.28"
+    nav-frontend-skjema "^3.0.6"
+    nav-frontend-skjema-style "^2.0.9"
+
 "@navikt/familie-header@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.2.tgz#6fbad50ef6579e0879fc50c0170ad7af4e75a793"
@@ -7541,10 +7552,20 @@ nav-frontend-lenker-style@^0.2.27:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.27.tgz#a79c04b77eb20b37ffa62a2e4e73bb6e87d1149e"
   integrity sha512-ykZZUXhHvXdh6XPQnWMTEOAl+7FbEDdumtTa7Z2FaYRrnrOjHnqZdggF5jSUSbsmGk/I/vyUF2eyvti1rliQ9Q==
 
+nav-frontend-lenker-style@^0.2.28:
+  version "0.2.28"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.28.tgz#9b3e693ea01a460bcbc90a64c7d364d58403ab34"
+  integrity sha512-WEV4QcFt2pdFf6g8xNpzExVU8l/P66s5z0YRmUispVBflokLQlDqZT45G2FuAj+HXsse5GVumxSuKCfGabhtkg==
+
 nav-frontend-lenker@^1.0.36:
   version "1.0.36"
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.36.tgz#f357b17462b204cfc9df2144a2a64a8c37521018"
   integrity sha512-dW9V8uLSmt2NyN2QTondQf6dc3fR2MpKeVoI1ttQ1/oyA6XHUy5MrKIH1wCtay75CdMHz+KH4425dIPh+V3Rsg==
+
+nav-frontend-lenker@^1.0.37:
+  version "1.0.37"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.37.tgz#b89beb5f0ae0a09394baa6dc1f6a8b65020cc0c4"
+  integrity sha512-m5AHNynGBSTPjlZUkAoX9WS7uqz828FD2TIB5QVJ4bZuEUd+m/31HjXqCxEUhKbijSaT8zBFNqY1c6URY3tjWg==
 
 nav-frontend-lukknapp-style@^0.2.23:
   version "0.2.23"
@@ -7600,6 +7621,11 @@ nav-frontend-skjema-style@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.0.8.tgz#f39ddaff1f2092aa62c4106b1abf40cfb140bf4a"
   integrity sha512-K2x2m7VxzldUpaT85PJXNI/ImLaRfIMt5YWtuLAZ66UnR01X7YFYY40KCMk0N18jXik+fCYiGP2Xra/SahIfrQ==
+
+nav-frontend-skjema-style@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.0.9.tgz#afaa3e98db78834726c606e23d3b5ee61c86e9e9"
+  integrity sha512-WPQ1nvy5LH+R1IIVpMBUnasvU8+Bd0WvtOMBBPpIgTaZkt+xEh2p2QJGJXSTt+vmNxRk1wEwFybV5shX5o8KfQ==
 
 nav-frontend-skjema@^3.0.6:
   version "3.0.6"
