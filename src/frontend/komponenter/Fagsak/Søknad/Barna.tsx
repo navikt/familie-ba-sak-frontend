@@ -14,7 +14,7 @@ const Barna: React.FunctionComponent<IProps> = ({ søknad }) => {
     const { erLesevisning } = useBehandling();
     return (
         <PanelBase key={'barna'} className={'søknad__barn'}>
-            <Undertittel children={'5 Opplysninger om barn under 18 år'} />
+            <Undertittel children={'Opplysninger om barn under 18 år'} />
 
             <br />
             {!erLesevisning() && <Element children={'Velg barn det søkes for'} />}

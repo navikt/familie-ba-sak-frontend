@@ -14,6 +14,7 @@ import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import { IFelt } from '../../../typer/felt';
+import { formaterPersonIdent } from '../../../utils/formatter';
 
 interface IVilkårsvurderingSkjema {
     opprettelseFeilmelding: string;
