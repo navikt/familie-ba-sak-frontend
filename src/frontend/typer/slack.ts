@@ -1,3 +1,3 @@
 export const slackKanaler = {
-    alert: 'team-familie-alerts',
+    alert: 'team-familie-test',
 };
