@@ -1,5 +1,4 @@
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
@@ -14,6 +13,8 @@ import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import { IFelt } from '../../../typer/felt';
+import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+
 interface IVilkårsvurderingSkjema {
     opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
@@ -36,60 +37,67 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
         ].join('.');
     };
     return (
-        <SkjemaGruppe
-            className={'vilkårsvurdering__skjemagruppe'}
-            feil={
-                visFeilmeldinger && opprettelseFeilmelding !== ''
-                    ? opprettelseFeilmelding
-                    : undefined
-            }
-        >
-            {vilkårsvurdering.map((personResultat: IPersonResultat) => {
-                return (
-                    <div key={personResultat.personIdent}>
-                        <Undertittel children={`Vurder vilkår for ${personResultat.person.navn}`} />
+        <div className={'vilkårsvurdering'}>
+            <SkjemaGruppe
+                className={'vilkårsvurdering__skjemagruppe'}
+                feil={
+                    visFeilmeldinger && opprettelseFeilmelding !== ''
+                        ? opprettelseFeilmelding
+                        : undefined
+                }
+            >
+                {vilkårsvurdering.map((personResultat: IPersonResultat) => {
+                    return (
+                        <div
+                            className={'vilkårsvurdering__skjemagruppe--person'}
+                            key={personResultat.personIdent}
+                        >
+                            <PersonInformasjon person={personResultat.person} tag={'h3'} />
 
-                        {Object.values(vilkårConfig)
-                            .filter((vc: IVilkårConfig) =>
-                                vc.parterDetteGjelderFor.includes(personResultat.person.type)
-                            )
-                            .map((vc: IVilkårConfig) => {
-                                const vilkårResultater: IFelt<
-                                    IVilkårResultat
-                                >[] = personResultat.vilkårResultater.filter(
-                                    (vilkårResultat: IFelt<IVilkårResultat>) =>
-                                        vilkårResultat.verdi.vilkårType === vc.key
-                                );
-
-                                if (vilkårResultater.length !== 0) {
-                                    return (
-                                        <GeneriskVilkår
-                                            key={`${personResultat.personIdent}_${vc.key}`}
-                                            person={personResultat.person}
-                                            vilkårResultater={vilkårResultater}
-                                            vilkårFraConfig={vc}
-                                            visFeilmeldinger={visFeilmeldinger}
-                                        />
+                            {Object.values(vilkårConfig)
+                                .filter((vc: IVilkårConfig) =>
+                                    vc.parterDetteGjelderFor.includes(personResultat.person.type)
+                                )
+                                .map((vc: IVilkårConfig) => {
+                                    const vilkårResultater: IFelt<
+                                        IVilkårResultat
+                                    >[] = personResultat.vilkårResultater.filter(
+                                        (vilkårResultat: IFelt<IVilkårResultat>) =>
+                                            vilkårResultat.verdi.vilkårType === vc.key
                                     );
-                                } else {
-                                    return undefined;
-                                }
-                            })}
-                    </div>
-                );
-            })}
 
-            <br />
+                                    if (vilkårResultater.length !== 0) {
+                                        return (
+                                            <GeneriskVilkår
+                                                key={`${personResultat.personIdent}_${vc.key}`}
+                                                person={personResultat.person}
+                                                vilkårResultater={vilkårResultater}
+                                                vilkårFraConfig={vc}
+                                                visFeilmeldinger={visFeilmeldinger}
+                                            />
+                                        );
+                                    } else {
+                                        return undefined;
+                                    }
+                                })}
+                        </div>
+                    );
+                })}
 
-            {behandlingstype === Behandlingstype.REVURDERING &&
-                !erBehandlingenInnvilget(vilkårsvurdering) && (
-                    <div className={'vilkår__skjemagruppe--opphørsdato'}>
-                        <Informasjonsbolk
-                            informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}
-                        />
-                    </div>
-                )}
-        </SkjemaGruppe>
+                <br />
+
+                {behandlingstype === Behandlingstype.REVURDERING &&
+                    !erBehandlingenInnvilget(vilkårsvurdering) && (
+                        <div className={'vilkår__skjemagruppe--opphørsdato'}>
+                            <Informasjonsbolk
+                                informasjon={[
+                                    { label: `Forventet opphørsmåned`, tekst: nesteMåned() },
+                                ]}
+                            />
+                        </div>
+                    )}
+            </SkjemaGruppe>
+        </div>
     );
 };
 

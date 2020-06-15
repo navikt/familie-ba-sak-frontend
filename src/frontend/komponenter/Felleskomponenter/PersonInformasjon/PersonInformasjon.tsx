@@ -6,14 +6,15 @@ import { hentAlder, formaterPersonIdent } from '../../../utils/formatter';
 
 interface IProps {
     person: IPerson;
+    tag?: string;
 }
 
-const PersonInformasjon: React.FunctionComponent<IProps> = ({ person }) => {
+const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, tag }) => {
     const alder = hentAlder(person.fødselsdato);
     return (
         <div className="personinformasjon">
             <FamilieIkonVelger className="familie-ikon" alder={alder} kjønn={person.kjønn} />
-            <Normaltekst>{`${person.navn} (${alder} år) | ${formaterPersonIdent(
+            <Normaltekst tag={tag}>{`${person.navn} (${alder} år) | ${formaterPersonIdent(
                 person.personIdent
             )} | ${person.type} `}</Normaltekst>
         </div>

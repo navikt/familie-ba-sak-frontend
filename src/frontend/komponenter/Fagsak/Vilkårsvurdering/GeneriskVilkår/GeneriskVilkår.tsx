@@ -86,9 +86,8 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     return (
-        <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
-            <div className={'generisk-vilkår'}>
-                <br />
+        <div className={'generisk-vilkår'}>
+            <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
                 <div className={'horisontal-sentrert-div'}>
                     <Element children={vilkårFraConfig.tittel} />
                     <Undertekst children={vilkårFraConfig.lovreferanse} />
@@ -123,8 +122,8 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         spinner={vilkårSubmit === VilkårSubmit.POST}
                     />
                 ) : null}
-            </div>
-        </SkjemaGruppe>
+            </SkjemaGruppe>
+        </div>
     );
 };
 

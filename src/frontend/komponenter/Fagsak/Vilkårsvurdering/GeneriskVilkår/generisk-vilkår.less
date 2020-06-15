@@ -1,6 +1,9 @@
 .generisk-vilkår {
-    width: 30rem;
-    padding: 1rem 0;
+    max-width: 60rem;
+    margin-top: 2rem;
+    & ~ .generisk-vilkår {
+        margin-top: 2.5rem;
+    }
 
     &__ekspandert {
         margin-top: .5rem;
