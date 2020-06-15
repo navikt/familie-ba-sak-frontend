@@ -5,6 +5,7 @@ import {
 } from '../../../context/OpprettBehandlingContext';
 import moment from 'moment';
 import FamilieCheckbox from '../../Felleskomponenter/InputMedLesevisning/FamilieCheckbox';
+import { formaterPersonIdent } from '../../../utils/formatter';
 
 const VelgBarn: React.FC = () => {
     const { barna, settBarna } = useOpprettBehandling();
@@ -21,7 +22,9 @@ const VelgBarn: React.FC = () => {
                     <FamilieCheckbox
                         key={barn.personIdent}
                         id={`opprettbehandling__barn-${barn.personIdent}`}
-                        label={`${barn.navn ?? 'Navn ukjent'} (${alder}) ${barn.personIdent}`}
+                        label={`${barn.navn ?? 'Navn ukjent'} (${alder}) ${formaterPersonIdent(
+                            barn.personIdent
+                        )}`}
                         checked={opprettBehandlingBarn.checked}
                         onChange={() => {
                             settBarna(
