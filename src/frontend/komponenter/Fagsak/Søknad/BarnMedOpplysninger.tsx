@@ -14,6 +14,7 @@ interface IProps {
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { settBarn } = useSøknad();
     const { erLesevisning } = useBehandling();
+    const lesevisning = erLesevisning();
     const alder = barn.fødselsdato
         ? moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years') + ' år'
         : 'Alder ukjent';
@@ -21,7 +22,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     return (
         <div className={'søknad__panel--gruppebarn'}>
             <FamilieCheckbox
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning}
                 id={`barn-${barn.ident}`}
                 label={`${barn.navn ?? 'Navn ukjent'} (${alder}) ${formaterPersonIdent(
                     barn.ident
@@ -37,7 +38,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             {barn.inkludertISøknaden && (
                 <div className={'søknad__panel--innrykk'}>
                     <FamilieCheckbox
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={lesevisning}
                         label={'Barnet bor ikke fast sammen med søker'}
                         checked={!barn.borMedSøker}
                         onChange={() => {
@@ -49,7 +50,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
 
                     <FamilieCheckbox
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={lesevisning}
                         label={'Barnet oppholder seg i utlandet'}
                         checked={!barn.oppholderSegINorge}
                         onChange={() => {
@@ -61,7 +62,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
 
                     <FamilieCheckbox
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={lesevisning}
                         label={
                             'Barnet har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'
                         }
