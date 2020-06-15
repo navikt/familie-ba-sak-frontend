@@ -17,6 +17,7 @@ interface IProps {
 
 const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
+    const lesevisning = erLesevisning();
     return (
         <PanelBase className={'søknad__opphold'}>
             <Undertittel children={'Opplysninger om søker'} />
@@ -27,7 +28,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgVal
                 ]}
             />
             <FamilieCheckbox
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning}
                 label={'Søker oppholder seg ikke i Norge'}
                 checked={!søknad.søkerMedOpplysninger.oppholderSegINorge}
                 onChange={() => {
@@ -42,7 +43,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgVal
             />
 
             <FamilieCheckbox
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning}
                 label={'Søker har ikke oppholdt seg sammenhengende i Norge de siste 12 månedene'}
                 checked={!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder}
                 onChange={() => {
@@ -76,7 +77,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgVal
                     />
 
                     <FamilieCheckbox
-                        erLesevisning={erLesevisning()}
+                        erLesevisning={lesevisning}
                         label={'Søker skal ikke oppholde seg i Norge de neste 12 månedene'}
                         checked={!søknad.søkerMedOpplysninger.skalOppholdeSegINorgeNeste12Måneder}
                         onChange={() => {
