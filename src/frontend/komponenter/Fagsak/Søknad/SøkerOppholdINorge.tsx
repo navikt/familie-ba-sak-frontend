@@ -1,4 +1,4 @@
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieDatovelger } from '@navikt/familie-form-elements';
 import { ISODateString } from 'nav-datovelger';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
@@ -6,7 +6,6 @@ import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISøknadDTO } from '../../../typer/søknad';
 import { datoformatNorsk } from '../../../utils/formatter';
-import FamilieDatovelger from '../../Felleskomponenter/InputMedLesevisning/FamilieDatovelger';
 import FamilieTextarea from '../../Felleskomponenter/InputMedLesevisning/FamilieTextarea';
 import MinimumOpplysningAlternativ from '../../Felleskomponenter/InputMedLesevisning/IngenOpplysningerValgt';
 
@@ -61,6 +60,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgVal
             {!søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder && (
                 <div className={'søknad__panel--innrykk'}>
                     <FamilieDatovelger
+                        erLesesvisning={lesevisning}
                         id={'søker-kom-til-norge'}
                         label={'Når kom søker til Norge?'}
                         valgtDato={søknad.søkerMedOpplysninger.komTilNorge}

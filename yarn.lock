@@ -635,18 +635,20 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@1.0.6-alpha.2+a8ced8e":
-  version "1.0.6-alpha.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.6-alpha.2.tgz#11e41b35938cfd994cb4154d8b5853791a64ee91"
-  integrity sha512-a9WzAMVdFQdIoR/Z1n+KcfAOH3B/RInvZXOxI+5QgHpU2gCklAwiOO830xXP85+B7RbujlLPgsWKa7EK5J2bng==
+"@navikt/familie-form-elements@1.0.7-alpha.0+a6ecc69":
+  version "1.0.7-alpha.0"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.7-alpha.0.tgz#2a6cafa44deb514c83fa669c47089b8774947b98"
+  integrity sha512-a4tOiuuqeJ6ZI5XciPcVt7svog76aEOC2ibFEHeQlMYSV3y/D3uywZCC43b3uNchOKs/GM5DkAaz9oysQr59SQ==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
+    nav-datovelger "^6.1.8"
     nav-frontend-knapper "^2.0.4"
     nav-frontend-knapper-style "^0.3.38"
     nav-frontend-lenker "^1.0.37"
     nav-frontend-lenker-style "^0.2.28"
     nav-frontend-skjema "^3.0.6"
     nav-frontend-skjema-style "^2.0.9"
+    react-day-picker "^7.4.8"
 
 "@navikt/familie-header@^2.0.2":
   version "2.0.2"
@@ -7496,6 +7498,13 @@ nav-datovelger@^6.1.7:
   version "6.1.7"
   resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-6.1.7.tgz#c83a684c87d6503d75cf993347db343828e47ba6"
   integrity sha512-wc0VLTgrmJQ3JF+xgra9PGBofq4FYHZo6XCEDDHgqE33yzN3E0n/zEGUlIuucpQ2Z0PkwVurvSpZEPlDig9sDQ==
+  dependencies:
+    focus-trap-react "^6.0.0"
+
+nav-datovelger@^6.1.8:
+  version "6.1.8"
+  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-6.1.8.tgz#d1140d7ada48ba7534fdbadb31dcf4a7ab217664"
+  integrity sha512-jkiCtwozgDZTzZl4WpBQIcapA+sJ5M+jKrbrZxyCZnWA09C5eEFEt7hTmaoxIhyYiqQ0gQGCr1wKkTTU2pcGLg==
   dependencies:
     focus-trap-react "^6.0.0"
 
