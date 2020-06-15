@@ -1,13 +1,12 @@
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Ingress, Undertittel } from 'nav-frontend-typografi';
+import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
 import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SystemetLaster from '../../Felleskomponenter/SystemetLaster/SystemetLaster';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
@@ -44,12 +43,6 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             });
     }, []);
 
-    const startdato = (oppsummeringBeregninger: IOppsummeringBeregning[]) => {
-        return oppsummeringBeregninger[0]
-            ? formaterIsoDato(oppsummeringBeregninger[0].periodeFom, datoformat.DATO_FORLENGET)
-            : '';
-    };
-
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
     };
@@ -85,19 +78,6 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                         maxWidthStyle={'80rem'}
                     >
                         {harAndeler ? (
-                            <div className="tilkjentytelse-informasjon">
-                                <Undertittel>
-                                    Vilkårene for barnetrygd er oppfylt f.o.m.{' '}
-                                    {startdato(tilkjentYtelseRessurs.data)}
-                                </Undertittel>
-                                <Ingress>Se detaljer under periode.</Ingress>
-                            </div>
-                        ) : (
-                            <div className="tilkjentytelse-informasjon">
-                                <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
-                            </div>
-                        )}
-                        {harAndeler && (
                             <div role="table">
                                 <OppsummeringsradHeader />
                                 {tilkjentYtelseRessurs.data
@@ -108,6 +88,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                                             <Oppsummeringsrad beregning={beregning} key={index} />
                                         );
                                     })}
+                            </div>
+                        ) : (
+                            <div className="tilkjentytelse-informasjon">
+                                <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
                             </div>
                         )}
                     </Skjemasteg>
