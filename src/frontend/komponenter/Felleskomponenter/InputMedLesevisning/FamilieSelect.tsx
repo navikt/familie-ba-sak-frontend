@@ -1,6 +1,6 @@
+import { FamilieLesefelt } from '@navikt/familie-form-elements';
 import { Select, SelectProps } from 'nav-frontend-skjema';
 import React from 'react';
-import Lesefelt from './Lesefelt';
 
 interface IFamilieSelectProps extends SelectProps {
     erLesevisning?: boolean;
@@ -16,7 +16,7 @@ const FamilieSelect: React.FC<IFamilieSelectProps> = ({
     value,
 }) => {
     return erLesevisning ? (
-        <Lesefelt label={label} verdi={value} />
+        <FamilieLesefelt label={label} verdi={value} />
     ) : (
         <Select name={name} label={label} bredde={bredde} value={value} onChange={onChange}>
             {children}

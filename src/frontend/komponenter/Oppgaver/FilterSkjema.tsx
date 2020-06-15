@@ -1,7 +1,9 @@
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { Select } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
+import { useApp } from '../../context/AppContext';
 import { maksAntallOppgaver, useOppgaver } from '../../context/OppgaverContext';
 import {
     EnhetFilter,
@@ -12,9 +14,7 @@ import {
 import { RessursStatus } from '../../typer/ressurs';
 import { ISaksbehandler } from '../../typer/saksbehandler';
 import { datoformatNorsk } from '../../utils/formatter';
-import Datovelger from '../Felleskomponenter/Datovelger/Datovelger';
 import './visoppgave.less';
-import { useApp } from '../../context/AppContext';
 
 type IOppgaverFilter = {
     name: string;
@@ -148,7 +148,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                 })}
             </div>
             <div className="filterskjema__filtre filterskjema__content">
-                <Datovelger
+                <FamilieDatovelger
                     id="frist"
                     label="Frist"
                     onChange={verdi => settFrist(verdi)}
@@ -156,7 +156,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     valgtDato={frist}
                     className="filterskjema__filtre__input"
                 />
-                <Datovelger
+                <FamilieDatovelger
                     id="registrertDato"
                     label="Registrert dato"
                     onChange={verdi => settRegistrertDato(verdi)}

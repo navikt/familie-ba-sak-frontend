@@ -2,7 +2,7 @@ import { TextareaControlled, TextareaControlledProps } from 'nav-frontend-skjema
 import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
-import Lesefelt from './Lesefelt';
+import { FamilieLesefelt } from '@navikt/familie-form-elements';
 
 const FamilieTextareaControlled: React.FC<TextareaControlledProps> = ({
     defaultValue,
@@ -20,7 +20,7 @@ const FamilieTextareaControlled: React.FC<TextareaControlledProps> = ({
         value === '' ? (
             <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
         ) : (
-            <Lesefelt label={label} verdi={value} />
+            <FamilieLesefelt label={label} verdi={value} />
         )
     ) : (
         <TextareaControlled

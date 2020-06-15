@@ -1,7 +1,7 @@
 import { Input, InputProps } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
-import Lesefelt from './Lesefelt';
+import { FamilieLesefelt } from '@navikt/familie-form-elements';
 
 interface IFamilieInputProps extends InputProps {
     erLesevisning?: boolean;
@@ -20,7 +20,7 @@ const FamilieInput: React.FC<IFamilieInputProps> = ({
         value === '' ? (
             <Normaltekst className={'skjemaelement'} children={'Ingen opplysninger oppgitt.'} />
         ) : (
-            <Lesefelt label={label} verdi={value} />
+            <FamilieLesefelt label={label} verdi={value} />
         )
     ) : (
         <Input
