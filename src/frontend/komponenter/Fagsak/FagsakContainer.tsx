@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { RessursStatus } from '../../typer/ressurs';
-import { hentAlder } from '../../utils/formatter';
+import { hentAlder, formaterPersonIdent } from '../../utils/formatter';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
@@ -44,7 +44,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         ? bruker.data.navn
                                         : 'Ukjent'
                                 }
-                                ident={fagsak.data.søkerFødselsnummer}
+                                ident={formaterPersonIdent(fagsak.data.søkerFødselsnummer)}
                                 alder={
                                     bruker.status === RessursStatus.SUKSESS
                                         ? hentAlder(bruker.data.fødselsdato)

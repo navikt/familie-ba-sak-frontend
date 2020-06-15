@@ -18,7 +18,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
     const { erLesevisning } = useBehandling();
     return (
         <PanelBase className={classNames('søknad__panel', 'panel--gra')}>
-            <Undertittel children={'1 Hva har bruker søkt om?'} />
+            <Undertittel children={'Hva har bruker søkt om?'} />
             <br />
             <Sakstype
                 kategori={søknad.kategori}

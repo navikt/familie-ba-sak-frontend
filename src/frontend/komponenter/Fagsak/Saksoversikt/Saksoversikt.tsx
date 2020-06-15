@@ -19,7 +19,7 @@ import { IPersonBeregning } from '../../../typer/beregning';
 import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { datoformat, formaterIsoDato, formaterPersonIdent } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { useBehandling } from '../../../context/BehandlingContext';
 import Lenke from 'nav-frontend-lenker';
@@ -121,7 +121,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                             return (
                                                 <tr key={personBeregning.personIdent}>
                                                     <td
-                                                        children={`${personBeregning.personIdent}`}
+                                                        children={`${formaterPersonIdent(
+                                                            personBeregning.personIdent
+                                                        )}`}
                                                     />
                                                     <td children={`${personBeregning.beløp}`} />
                                                     <td children={`${personBeregning.stønadFom}`} />

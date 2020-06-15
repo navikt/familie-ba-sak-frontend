@@ -19,7 +19,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgVal
     const { erLesevisning } = useBehandling();
     return (
         <PanelBase className={'søknad__opphold'}>
-            <Undertittel children={'2.3 Hva har bruker søkt om?'} />
+            <Undertittel children={'Opplysninger om søker'} />
             <MinimumOpplysningAlternativ
                 minimumOpplysning={[
                     !søknad.søkerMedOpplysninger.oppholderSegINorge,
@@ -92,7 +92,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgVal
                     />
 
                     <FamilieTextarea
-                        label={'8 Tilleggsopplysninger'}
+                        label={'Tilleggsopplysninger'}
                         value={søknad.søkerMedOpplysninger.tilleggsopplysninger ?? ''}
                         placeholder={'Skriv her'}
                         maxLength={500}

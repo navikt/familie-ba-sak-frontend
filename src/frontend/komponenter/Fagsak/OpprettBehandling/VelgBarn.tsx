@@ -6,6 +6,7 @@ import {
     IOpprettBehandlingBarn,
     useOpprettBehandling,
 } from '../../../context/OpprettBehandlingContext';
+import { formaterPersonIdent } from '../../../utils/formatter';
 
 const VelgBarn: React.FC = () => {
     const { barna, settBarna } = useOpprettBehandling();
@@ -24,7 +25,9 @@ const VelgBarn: React.FC = () => {
                         erLesevisning={erLesevisning()}
                         key={barn.personIdent}
                         id={`opprettbehandling__barn-${barn.personIdent}`}
-                        label={`${barn.navn ?? 'Navn ukjent'} (${alder}) ${barn.personIdent}`}
+                        label={`${barn.navn ?? 'Navn ukjent'} (${alder}) ${formaterPersonIdent(
+                            barn.personIdent
+                        )}`}
                         checked={opprettBehandlingBarn.checked}
                         onChange={() => {
                             settBarna(
