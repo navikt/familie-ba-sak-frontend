@@ -120,7 +120,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                                     settModalVerdi(initiellModalVerdi);
                                     history.push('/oppgaver');
                                 }}
-                                children={'Gå til Oppgavebenken'}
+                                children={'Gå til oppgavebenken'}
                             />,
                         ],
                     }}

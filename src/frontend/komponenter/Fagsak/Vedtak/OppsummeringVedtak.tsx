@@ -131,7 +131,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                                     settVisModal(false);
                                     history.push('/oppgaver');
                                 }}
-                                children={'Gå til Oppgavebenken'}
+                                children={'Gå til oppgavebenken'}
                             />,
                         ],
                     }}

@@ -2,23 +2,17 @@ import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { FagsakProvider } from '../context/FagsakContext';
-import { OppgaverProvider } from '../context/OppgaverContext';
-import { ISaksbehandler } from '../typer/saksbehandler';
-import FagsakContainer from './Fagsak/FagsakContainer';
+import { Oppgaver } from '../context/OppgaverContext';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring';
-import VisOppgaver from './Oppgaver/VisOppgaver';
 import classNames from 'classnames';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
+import FagsakContainer from './Fagsak/FagsakContainer';
 
-interface IProps {
-    innloggetSaksbehandler?: ISaksbehandler;
-}
-
-const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
-    const { autentisert, systemetLaster } = useApp();
+const Container: React.FC = () => {
+    const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
 
     return (
         <Router>
@@ -31,7 +25,6 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                             brukerNavn={innloggetSaksbehandler?.displayName}
                             brukerEnhet={innloggetSaksbehandler?.enhet}
                         />
-
                         <FagsakProvider>
                             <Switch>
                                 <Route
@@ -42,15 +35,12 @@ const Container: React.FC<IProps> = ({ innloggetSaksbehandler }) => {
                                     }}
                                 />
                                 <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
-
-                                <OppgaverProvider>
-                                    <Route exact={true} path="/oppgaver" component={VisOppgaver} />
-                                    <Route
-                                        exact={true}
-                                        path="/oppgaver/journalfør/:oppgaveId"
-                                        component={ManuellJournalføring}
-                                    />
-                                </OppgaverProvider>
+                                <Route exact={true} path="/oppgaver" component={Oppgaver} />
+                                <Route
+                                    exact={true}
+                                    path="/oppgaver/journalfør/:oppgaveId"
+                                    component={ManuellJournalføring}
+                                />
                             </Switch>
                         </FagsakProvider>
                     </main>
