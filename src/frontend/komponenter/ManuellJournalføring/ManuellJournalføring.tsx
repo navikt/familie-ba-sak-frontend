@@ -73,7 +73,7 @@ const ManuellJournalføringContent: React.FC = () => {
                     <Select
                         bredde={'xl'}
                         id={'manuell-journalføring-dokumenttype'}
-                        label={'Dokument tittel'}
+                        label={'Dokumenttittel'}
                         value={dokumenttype}
                         onChange={event => {
                             settDokumenttype(event.target.value as Dokumenttype);
