@@ -5,7 +5,6 @@ import React from 'react';
 import {
     IOppgave,
     SaksbehandlerFilter,
-    IDataForManuellJournalføring,
     OppgavetypeFilter,
     IFinnOppgaveRequest,
     IHentOppgaveDto,
@@ -15,15 +14,13 @@ import { useApp } from './AppContext';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import moment from 'moment';
+import VisOppgaver from '../komponenter/Oppgaver/VisOppgaver';
 
 export const oppgaveSideLimit = 15;
 
 export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
-    const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
-        byggTomRessurs<IDataForManuellJournalføring>()
-    );
     const history = useHistory();
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
         byggTomRessurs<IHentOppgaveDto>()
@@ -132,19 +129,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         });
 
         settSideindeks(sortedMedIndeks.length > 0 ? 0 : -1);
-    };
-
-    const hentDataForManuellJournalføring = (oppgaveId: string) => {
-        axiosRequest<IDataForManuellJournalføring, void>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
-        })
-            .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
-                settDataForManuellJournalføring(hentetDataForManuellJournalføring);
-            })
-            .catch((_error: AxiosError) => {
-                settOppgaver(byggFeiletRessurs('Ukjent feil ved henting av oppgave'));
-            });
     };
 
     const hentSidetall = () =>
@@ -279,9 +263,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     return {
-        dataForManuellJournalføring,
         oppgaver,
-        hentDataForManuellJournalføring,
         hentOppgaver,
         sortOppgave,
         sideindeks,
@@ -294,4 +276,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 });
 
-export { OppgaverProvider, useOppgaver };
+const Oppgaver: React.FC = () => {
+    return (
+        <OppgaverProvider>
+            <VisOppgaver />
+        </OppgaverProvider>
+    );
+};
+
+export { Oppgaver, useOppgaver };

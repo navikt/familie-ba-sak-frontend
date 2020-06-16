@@ -2,97 +2,47 @@ import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper'
 import { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
-import {
-    Feiloppsummering,
-    FeiloppsummeringFeil,
-    Input,
-    Radio,
-    RadioGruppe,
-    Select,
-} from 'nav-frontend-skjema';
-import { Undertittel } from 'nav-frontend-typografi';
-import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router';
-import { useApp } from '../../context/AppContext';
-import { useOppgaver } from '../../context/OppgaverContext';
-import {
-    Dokumenttype,
-    dokumenttyper,
-    IDokumentInfo,
-    ILogiskVedlegg,
-    IRestOppdaterJournalpost,
-    Journalstatus,
-} from '../../typer/oppgave';
+import { Feiloppsummering, Input, Radio, RadioGruppe, Select } from 'nav-frontend-skjema';
+import { Undertittel, Feilmelding } from 'nav-frontend-typografi';
+import React from 'react';
+import { useHistory } from 'react-router';
 import { IPerson } from '../../typer/person';
-import { byggTomRessurs, Ressurs, RessursStatus } from '../../typer/ressurs';
+import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { randomUUID } from '../../utils/commons';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
-import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
+import {
+    useManuellJournalføring,
+    ManuellJournalføringProvider,
+} from '../../context/ManuellJournalføringContext';
+import {
+    Journalstatus,
+    Dokumenttype,
+    dokumenttyper,
+    ILogiskVedlegg,
+} from '../../typer/manuell-journalføring';
 
-const ManuellJournalføring: React.FC = () => {
-    const { oppgaveId } = useParams();
-    const { axiosRequest, innloggetSaksbehandler } = useApp();
+const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
-    const { hentDataForManuellJournalføring, dataForManuellJournalføring } = useOppgaver();
-
-    const [dokumenttype, settDokumenttype] = useState<Dokumenttype>(
-        Dokumenttype.SØKNAD_OM_ORDINÆR_BARNETRYGD
-    );
-    const [logiskeVedlegg, settLogiskeVedlegg] = useState<ILogiskVedlegg[]>([]);
-    const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
-    const [senderInn, settSenderInn] = useState(false);
-    const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
-
-    const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
-
-    const [person, settPerson] = useState<Ressurs<IPerson>>(byggTomRessurs());
-
-    React.useEffect(() => {
-        if (oppgaveId) {
-            hentDataForManuellJournalføring(oppgaveId);
-        }
-    }, [oppgaveId]);
-
-    React.useEffect(() => {
-        if (
-            dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.data.person !== undefined &&
-            dataForManuellJournalføring.data.person !== null
-        ) {
-            settPerson({
-                status: RessursStatus.SUKSESS,
-                data: dataForManuellJournalføring.data.person,
-            });
-        }
-
-        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
-            if (dataForManuellJournalføring.data.journalpost.dokumenter) {
-                settLogiskeVedlegg(
-                    dataForManuellJournalføring.data.journalpost.dokumenter[0].logiskeVedlegg ?? []
-                );
-            }
-        }
-    }, [dataForManuellJournalføring.status]);
-
-    const validerSkjema = () => {
-        const accFeilmeldinger: FeiloppsummeringFeil[] = [];
-
-        if (person.status !== RessursStatus.SUKSESS) {
-            accFeilmeldinger.push({
-                feilmelding: 'Du må knytte bruker til journalposten',
-                skjemaelementId: 'hent-person',
-            });
-        }
-
-        settFeilmeldinger(accFeilmeldinger);
-        return accFeilmeldinger;
-    };
+    const {
+        dataForManuellJournalføring,
+        dokumenttype,
+        feilmeldinger,
+        innsendingsfeilmelding,
+        knyttTilFagsak,
+        logiskeVedlegg,
+        manueltJournalfør,
+        person,
+        senderInn,
+        settDokumenttype,
+        settKnyttTilFagsak,
+        settLogiskeVedlegg,
+        settPerson,
+        validerSkjema,
+        visFeilmeldinger,
+    } = useManuellJournalføring();
 
     switch (dataForManuellJournalføring.status) {
-        case RessursStatus.IKKE_HENTET:
-        case RessursStatus.HENTER:
-            return <SystemetLaster />;
         case RessursStatus.SUKSESS:
             return dataForManuellJournalføring.data.journalpost.journalstatus ===
                 Journalstatus.MOTTATT ? (
@@ -105,63 +55,7 @@ const ManuellJournalføring: React.FC = () => {
                     }}
                     nesteKnappTittel={'Journalfør'}
                     nesteOnClick={() => {
-                        const accFeilmeldinger = validerSkjema();
-
-                        if (
-                            accFeilmeldinger.length === 0 &&
-                            person.status === RessursStatus.SUKSESS
-                        ) {
-                            const dokumenter: IDokumentInfo[] | undefined =
-                                dataForManuellJournalføring.data.journalpost.dokumenter;
-
-                            settSenderInn(true);
-                            axiosRequest<string, IRestOppdaterJournalpost>({
-                                method: 'PUT',
-                                url: `/familie-ba-sak/api/journalpost/${
-                                    dataForManuellJournalføring.data.journalpost.journalpostId
-                                }/ferdigstill/${oppgaveId}?journalfoerendeEnhet=${
-                                    innloggetSaksbehandler?.enhet ?? '9999'
-                                }`,
-                                data: {
-                                    bruker: {
-                                        navn: person.data.navn,
-                                        id: person.data.personIdent,
-                                    },
-                                    avsender: {
-                                        navn: person.data.navn,
-                                        id: person.data.personIdent,
-                                    },
-                                    datoMottatt:
-                                        dataForManuellJournalføring.data.journalpost.datoMottatt,
-                                    dokumentTittel: dokumenttyper[dokumenttype].navn,
-                                    dokumentInfoId: dokumenter
-                                        ? dokumenter[0].dokumentInfoId ?? ''
-                                        : '',
-                                    eksisterendeLogiskeVedlegg: dokumenter
-                                        ? dokumenter[0].logiskeVedlegg
-                                        : [],
-                                    logiskeVedlegg,
-                                    knyttTilFagsak,
-                                    navIdent: innloggetSaksbehandler?.navIdent ?? '',
-                                },
-                            })
-                                .then((fagsakId: Ressurs<string>) => {
-                                    settSenderInn(false);
-                                    if (
-                                        fagsakId.status === RessursStatus.SUKSESS &&
-                                        fagsakId.data !== ''
-                                    ) {
-                                        history.push(`/fagsak/${fagsakId.data}`);
-                                    } else if (fagsakId.status === RessursStatus.SUKSESS) {
-                                        history.push('/oppgaver');
-                                    }
-                                })
-                                .catch(() => {
-                                    settSenderInn(false);
-                                });
-                        } else {
-                            settVisfeilmeldinger(true);
-                        }
+                        manueltJournalfør();
                     }}
                     senderInn={senderInn}
                 >
@@ -179,7 +73,7 @@ const ManuellJournalføring: React.FC = () => {
                     <Select
                         bredde={'xl'}
                         id={'manuell-journalføring-dokumenttype'}
-                        label={'Dokumenttype'}
+                        label={'Dokumenttittel'}
                         value={dokumenttype}
                         onChange={event => {
                             settDokumenttype(event.target.value as Dokumenttype);
@@ -279,15 +173,27 @@ const ManuellJournalføring: React.FC = () => {
                             feil={feilmeldinger}
                         />
                     )}
+
+                    {visFeilmeldinger && <Feilmelding children={innsendingsfeilmelding} />}
                 </Skjemasteg>
             ) : (
                 <AlertStripeAdvarsel
                     children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
                 />
             );
+        case RessursStatus.FEILET:
+            return <AlertStripeFeil children={dataForManuellJournalføring.frontendFeilmelding} />;
         default:
-            return <AlertStripeFeil children={'Uventet feil ved henting av oppgave'} />;
+            return <div />;
     }
+};
+
+const ManuellJournalføring: React.FC = () => {
+    return (
+        <ManuellJournalføringProvider>
+            <ManuellJournalføringContent />
+        </ManuellJournalføringProvider>
+    );
 };
 
 export default ManuellJournalføring;

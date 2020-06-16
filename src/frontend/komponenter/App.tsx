@@ -22,7 +22,7 @@ const App: React.FC = () => {
     return (
         <ErrorBoundary autentisertSaksbehandler={autentisertSaksbehandler}>
             <AppProvider autentisertSaksbehandler={autentisertSaksbehandler}>
-                <Container innloggetSaksbehandler={autentisertSaksbehandler} />
+                <Container />
             </AppProvider>
         </ErrorBoundary>
     );
