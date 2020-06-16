@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@navikt/boxed-list-with-links": "^1.0.2",
-    "@navikt/familie-form-elements": "1.0.7-alpha.0+a6ecc69",
+    "@navikt/familie-form-elements": "1.0.7-alpha.2+c2cb89d",
     "@navikt/familie-backend": "^5.0.9",
     "@navikt/familie-header": "^2.0.2",
     "@navikt/familie-ikoner": "^3.0.3",
