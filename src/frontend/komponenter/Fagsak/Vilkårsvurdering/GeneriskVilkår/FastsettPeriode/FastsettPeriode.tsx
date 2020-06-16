@@ -65,6 +65,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                 {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
                         <FamilieDatovelger
+                            erLesesvisning={lesevisning}
                             id={`${vilkårPeriodeFeilmeldingId(
                                 redigerbartVilkår.verdi
                             )}__fastsett-periode-tom`}
