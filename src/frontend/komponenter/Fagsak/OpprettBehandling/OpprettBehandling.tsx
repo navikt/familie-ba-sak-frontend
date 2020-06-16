@@ -52,7 +52,6 @@ const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 senderInn={senderInn}
             >
                 <OpprettBehandlingSkjema
-                    fagsak={fagsak}
                     opprettelseFeilmelding={opprettelseFeilmelding}
                     visFeilmeldinger={visFeilmeldinger}
                 />

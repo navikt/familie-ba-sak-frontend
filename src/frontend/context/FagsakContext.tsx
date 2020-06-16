@@ -14,6 +14,7 @@ import {
     finnSideForBehandlingssteg,
     erViPåUdefinertFagsakSide,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
+
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
     fagsak: Ressurs<IFagsak>;

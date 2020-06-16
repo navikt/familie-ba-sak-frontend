@@ -8,19 +8,16 @@ import {
     behandlingstyper,
     BehandlingUnderkategori,
 } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
 import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
 import { useOpprettBehandling } from '../../../context/OpprettBehandlingContext';
 import VelgBarn from './VelgBarn';
 
 interface IOpprettBehandlingSkjema {
-    fagsak: IFagsak;
     opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
 }
 
 const OpprettBehandlingSkjema: React.FunctionComponent<IOpprettBehandlingSkjema> = ({
-    fagsak,
     opprettelseFeilmelding,
     visFeilmeldinger,
 }) => {
