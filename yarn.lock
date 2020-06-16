@@ -635,10 +635,10 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@1.0.7-alpha.6+5cd0ee8":
-  version "1.0.7-alpha.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.7-alpha.6.tgz#13b4e96c9869ba812cb8f45181ce2c612256e389"
-  integrity sha512-xzER+kXOAse60z5htbM4Tx6PRPv2n1+XM7PBm9cgT+Ro3DZx02huWqeE2KEd78LYlNLb7kF8bwhd0MzVDJY9qA==
+"@navikt/familie-form-elements@1.0.7-alpha.7+bf5eb8c":
+  version "1.0.7-alpha.7"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.7-alpha.7.tgz#e6a872cd0d475be3bd415e7b451bdfa26eb6514f"
+  integrity sha512-+YbyMiUIB8oFq8WXGx6KGx+9NwZOffuB99YLIdDAQaMLxEPqHrjOGFFKsJUQ6f9zGK4sjGYwUbd5XUdPSFDqYw==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     nav-datovelger "^6.1.8"

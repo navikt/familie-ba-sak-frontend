@@ -1,4 +1,4 @@
-import { FamilieCheckbox, FamilieDatovelger } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieDatovelger, FamilieTextarea } from '@navikt/familie-form-elements';
 import { ISODateString } from 'nav-datovelger';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
@@ -6,7 +6,6 @@ import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISøknadDTO } from '../../../typer/søknad';
 import { datoformatNorsk } from '../../../utils/formatter';
-import FamilieTextarea from '../../Felleskomponenter/InputMedLesevisning/FamilieTextarea';
 import MinimumOpplysningAlternativ from '../../Felleskomponenter/InputMedLesevisning/IngenOpplysningerValgt';
 
 interface IProps {
@@ -93,6 +92,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgVal
                     />
 
                     <FamilieTextarea
+                        erLesevisning={lesevisning}
                         label={'Tilleggsopplysninger'}
                         value={søknad.søkerMedOpplysninger.tilleggsopplysninger ?? ''}
                         placeholder={'Skriv her'}
