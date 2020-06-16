@@ -635,10 +635,10 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@1.0.7-alpha.2+c2cb89d":
-  version "1.0.7-alpha.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.7-alpha.2.tgz#c6651070588ffebfa04638798596a4c72e7180af"
-  integrity sha512-Q3sDKdc4gQEIjHJ2aLOt+uJ8TPhrJ+5ARDt1ozFBtv9avGY9V2X/3UCgtF0YoeYKBqaWvWgTc8S3Zbq/uaBynw==
+"@navikt/familie-form-elements@1.0.7-alpha.4+fc7920b":
+  version "1.0.7-alpha.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.7-alpha.4.tgz#0477edb3da1bede0b4b0a7a12e8a98df664757dc"
+  integrity sha512-Ul2xuElJzb/Au1Faw+fkmv0tgf5m7AYmOXhVGjArXlaPe83elKNagRa37NBBEr9GvLNicXiDTeRoH9lBmvp0YA==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     nav-datovelger "^6.1.8"
@@ -646,8 +646,9 @@
     nav-frontend-knapper-style "^0.3.38"
     nav-frontend-lenker "^1.0.37"
     nav-frontend-lenker-style "^0.2.28"
-    nav-frontend-skjema "^3.0.6"
+    nav-frontend-skjema "^3.0.7"
     nav-frontend-skjema-style "^2.0.9"
+    nav-frontend-typografi "^2.0.21"
     react-day-picker "^7.4.8"
 
 "@navikt/familie-header@^2.0.2":
@@ -7653,6 +7654,11 @@ nav-frontend-skjema@^3.0.6:
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.6.tgz#553c44328fc68893e0dc7a5fc7d7f2b10441272c"
   integrity sha512-rSmmeey47ZZ/SfD+0ewo1ohsSGOvQ6e0ytmysRRVyZT1rz/ZavO2Qg4m5LlUXOYdYP7a71l93VNWaDOW0f0zTQ==
 
+nav-frontend-skjema@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.7.tgz#01cc7e615239a2ebbd78cf61bcafb727489116b1"
+  integrity sha512-FfJKrjE9ODIz233L/DIzudLBgobHwUNzpbU71jn4NS6j5IvBqAA2JM4RKPnfwVyUDgaBeidg5gE9Ca2Ex8zpDQ==
+
 nav-frontend-spinner-style@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/nav-frontend-spinner-style/-/nav-frontend-spinner-style-0.2.5.tgz#c782c63589776e768a45d6049047b1a60b6805be"
@@ -7689,6 +7695,11 @@ nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.17, nav-frontend-typ
   version "2.0.20"
   resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.20.tgz#fc98e0ee91ecc96f321ad8339f41ee7b872ee002"
   integrity sha512-EeajaM1ulBN2puGcTgL76ckcDlj+3zywEKpi6WMC6sV7bUqVHG7zSuS3f04FUioejBixn+jlgU0g1jZ3H1I+ZQ==
+
+nav-frontend-typografi@^2.0.21:
+  version "2.0.21"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.21.tgz#b2ec61fb43f68db1214d0e81a255939403b579a3"
+  integrity sha512-a9Q284KeYBOk0PRq2qXHwxvefCMvIuPduKo8aJe39RPMpCqTBtHsZuUAT9Avp9jAY4FdF5hHazB+hPs1YcMcmQ==
 
 nconf@^0.10.0:
   version "0.10.0"
