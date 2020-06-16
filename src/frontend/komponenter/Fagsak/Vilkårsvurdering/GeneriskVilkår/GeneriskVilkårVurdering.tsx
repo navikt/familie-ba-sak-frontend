@@ -1,4 +1,8 @@
-import { FamilieKnapp, FamilieRadioGruppe } from '@navikt/familie-form-elements';
+import {
+    FamilieKnapp,
+    FamilieRadioGruppe,
+    FamilieTextareaControlled,
+} from '@navikt/familie-form-elements';
 import classNames from 'classnames';
 import deepEqual from 'deep-equal';
 import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
@@ -27,7 +31,6 @@ import {
     resultatTilUi,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import FamilieTextareaControlled from '../../../Felleskomponenter/InputMedLesevisning/FamilieTextareaControlled';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
@@ -247,6 +250,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         />
 
                         <FamilieTextareaControlled
+                            erLesevisning={leseVisning}
                             defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                             id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                             label={'Begrunnelse (valgfri)'}

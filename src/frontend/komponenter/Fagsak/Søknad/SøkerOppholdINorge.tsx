@@ -20,6 +20,7 @@ const SøkerOppholdINorge: React.FunctionComponent<IProps> = ({ settSøknadOgVal
         <PanelBase className={'søknad__opphold'}>
             <Undertittel children={'Opplysninger om søker'} />
             <MinimumOpplysningAlternativ
+                erLesevisning={lesevisning}
                 minimumOpplysning={[
                     !søknad.søkerMedOpplysninger.oppholderSegINorge,
                     !søknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder,
