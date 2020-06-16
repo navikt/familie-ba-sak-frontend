@@ -5,7 +5,7 @@ import {
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import FamilieSelect from '../InputMedLesevisning/FamilieSelect';
+import { FamilieSelect } from '@navikt/familie-form-elements';
 
 interface IProps {
     kategori: BehandlingKategori;

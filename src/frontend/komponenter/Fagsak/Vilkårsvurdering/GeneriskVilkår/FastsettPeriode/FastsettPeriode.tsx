@@ -1,3 +1,4 @@
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { ISODateString } from 'nav-datovelger';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
@@ -7,7 +8,6 @@ import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
-import FamilieDatovelger from '../../../../Felleskomponenter/InputMedLesevisning/FamilieDatovelger';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 
 interface IProps {
@@ -22,6 +22,7 @@ const FastsettPeriode: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { erLesevisning } = useBehandling();
+    const lesevisning = erLesevisning();
     return (
         <SkjemaGruppe
             feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
@@ -33,10 +34,11 @@ const FastsettPeriode: React.FC<IProps> = ({
                     : ''
             }
         >
-            {!erLesevisning() && <Normaltekst children={'Fastsett periode'} />}
+            {!lesevisning && <Normaltekst children={'Fastsett periode'} />}
             <div className={'fastsett-periode__flex'}>
                 <div>
                     <FamilieDatovelger
+                        erLesesvisning={lesevisning}
                         id={`${vilkårPeriodeFeilmeldingId(
                             redigerbartVilkår.verdi
                         )}__fastsett-periode-fom`}
@@ -60,7 +62,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                         valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
                     />
                 </div>
-                {(!erLesevisning() || redigerbartVilkår.verdi.periode.verdi.tom) && (
+                {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
                         <FamilieDatovelger
                             id={`${vilkårPeriodeFeilmeldingId(

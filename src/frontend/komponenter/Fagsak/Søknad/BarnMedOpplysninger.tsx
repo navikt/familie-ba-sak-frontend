@@ -1,10 +1,9 @@
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { FamilieCheckbox, FamilieTextarea } from '@navikt/familie-form-elements';
 import moment from 'moment';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import FamilieTextarea from '../../Felleskomponenter/InputMedLesevisning/FamilieTextarea';
 import { formaterPersonIdent } from '../../../utils/formatter';
 
 interface IProps {
@@ -76,6 +75,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     />
 
                     <FamilieTextarea
+                        erLesevisning={lesevisning}
                         label={'Tilleggsopplysninger'}
                         placeholder={'Skriv her'}
                         value={barn.tilleggsopplysninger ?? ''}
