@@ -86,7 +86,7 @@
                                 "resultat": "JA",
                                 "begrunnelse": "Mock begrunnelse under 18 år",
                                 "periodeFom": "2020-02-01",
-                                "periodeTom": null
+                                "periodeTom": "2020-02-01"
                             }
                         ]
                     }
