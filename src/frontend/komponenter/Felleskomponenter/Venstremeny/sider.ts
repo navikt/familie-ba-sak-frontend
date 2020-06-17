@@ -71,6 +71,7 @@ export const finnSideForBehandlingssteg = (steg: BehandlingSteg) => {
 export const erViPåUdefinertFagsakSide = (pathname: string) => {
     return (
         Object.values(sider).filter((side: ISide) => pathname.includes(side.href)).length === 0 &&
-        !pathname.includes('saksoversikt')
+        !pathname.includes('saksoversikt') &&
+        !pathname.includes('ny-behandling')
     );
 };
