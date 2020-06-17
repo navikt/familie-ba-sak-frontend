@@ -25,8 +25,20 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     tittel,
     maxWidthStyle = '40rem',
 }) => {
+    React.useEffect(() => {
+        const element = document.getElementById('skjemasteg');
+
+        if (element) {
+            element.scrollIntoView({ block: 'start' });
+        }
+    }, [tittel]);
+
     return (
-        <div className={classNames('skjemasteg', className)} style={{ maxWidth: maxWidthStyle }}>
+        <div
+            id={'skjemasteg'}
+            className={classNames('skjemasteg', className)}
+            style={{ maxWidth: maxWidthStyle }}
+        >
             <Systemtittel children={tittel} />
 
             {children}
