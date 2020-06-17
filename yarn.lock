@@ -635,13 +635,13 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.7.tgz#0c2828529be562b3dedd045cee7410f26c2c09ed"
-  integrity sha512-Ga++MtSSILy7bAt5KB8Bc5V159AY83dnfREm7dVg/++nYOEmnt88VJjjR/QflLggfh9t/LCGVxyziJY89sadCQ==
+"@navikt/familie-form-elements@1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.8.tgz#a4e85e30058267e7e9120ec6087bc2161b57f585"
+  integrity sha512-tAoK9rFZbggfiZIrtyB9xbbcdVyiWknmV3NDlopqZUAwwp1Z5yVnT4VL/7Ni/nN1AvQQtF4/pSHIBtPf0pn9bQ==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
-    nav-datovelger "^6.1.8"
+    nav-datovelger "^6.1.9"
     nav-frontend-knapper "^2.0.4"
     nav-frontend-knapper-style "^0.3.38"
     nav-frontend-lenker "^1.0.37"
@@ -7502,10 +7502,10 @@ nav-datovelger@^6.1.7:
   dependencies:
     focus-trap-react "^6.0.0"
 
-nav-datovelger@^6.1.8:
-  version "6.1.8"
-  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-6.1.8.tgz#d1140d7ada48ba7534fdbadb31dcf4a7ab217664"
-  integrity sha512-jkiCtwozgDZTzZl4WpBQIcapA+sJ5M+jKrbrZxyCZnWA09C5eEFEt7hTmaoxIhyYiqQ0gQGCr1wKkTTU2pcGLg==
+nav-datovelger@^6.1.9:
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-6.1.9.tgz#ab99dd27c710d6299d9cff0ec4bde98f4f8e90a1"
+  integrity sha512-/85jt7ihtxn7qcVMmvyz00Z/RKCgPBdTTzVoviSTt9vkLy5o/PMircwCloq+BOJ8D0eq6aaNrs5TC689inKD8A==
   dependencies:
     focus-trap-react "^6.0.0"
 
