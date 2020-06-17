@@ -250,6 +250,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         />
 
                         <FamilieTextareaControlled
+                            tekstLesevisning={''}
                             erLesevisning={leseVisning}
                             defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                             id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
