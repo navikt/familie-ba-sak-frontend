@@ -15,6 +15,7 @@ import {
     IRestOppdaterJournalpost,
     dokumenttyper,
 } from '../typer/manuell-journalføring';
+import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();

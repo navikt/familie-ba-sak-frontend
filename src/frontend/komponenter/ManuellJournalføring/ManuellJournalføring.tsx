@@ -1,5 +1,5 @@
 import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
+import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
 import { Feiloppsummering, Input, Select } from 'nav-frontend-skjema';
@@ -23,8 +23,16 @@ import {
     Journalstatus,
 } from '../../typer/manuell-journalføring';
 import { FamilieCheckbox } from '@navikt/familie-form-elements/dist';
-import { IBehandling } from '../../typer/behandling';
+import {
+    BehandlingKategori,
+    Behandlingstype,
+    BehandlingUnderkategori,
+    IBehandling,
+} from '../../typer/behandling';
 import { datoformat, formaterDato } from '../../utils/formatter';
+import Pluss from '../../ikoner/Pluss';
+import useFagsakApi from '../Fagsak/useFagsakApi';
+import { IOpprettBehandlingBarn } from '../../context/OpprettBehandlingContext';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
@@ -45,6 +53,15 @@ const ManuellJournalføringContent: React.FC = () => {
         validerSkjema,
         visFeilmeldinger,
     } = useManuellJournalføring();
+
+    const { opprettEllerHentFagsak, opprettBehandling } = useFagsakApi(
+        _ => {
+            'Feilmelding';
+        },
+        _ => {
+            'Feilmelding';
+        }
+    );
 
     const behandlinger =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
@@ -158,7 +175,7 @@ const ManuellJournalføringContent: React.FC = () => {
                     </PanelBase>
                     <br />
                     <br />
-                    {behandlinger && behandlinger.length > 0 && (
+                    {behandlinger && behandlinger.length > 0 ? (
                         <table className="tabell">
                             <thead className="tabell__head">
                                 <tr className="tabell__head__tr">
@@ -205,6 +222,34 @@ const ManuellJournalføringContent: React.FC = () => {
                                 ))}
                             </tbody>
                         </table>
+                    ) : (
+                        <KnappBase // TODO: Bruke "Utførknapp"? Problem med at useBehandling lesevisning ikke er tilgjengelig
+                            aria-label={`utfør_opprettfagsakogbehandlingvedjournalføring}`}
+                            className={'ikon-knapp'}
+                            id={'d'}
+                            onClick={() => {
+                                // TODO: Her er jeg usikker på om vi bør lage en egen metode "opprettFagsakMedBehandling". Eksisterende metoder pusher nye sider og i tillegg blir det feil med opprettelse av behandling når man prøver begge i et jafs som her
+                                opprettEllerHentFagsak({
+                                    personIdent:
+                                        dataForManuellJournalføring.data.person?.personIdent, // TODO: Mulig vi skal benytte aktørid her i stedet? Må i så fall oppdatere mock
+                                    aktørId: null, //dataForManuellJournalføring.data.oppgave.aktoerId,
+                                });
+                                opprettBehandling({
+                                    // TODO: Fyll inn med ordentlig data
+                                    behandlingType: Behandlingstype.FØRSTEGANGSBEHANDLING,
+                                    søkersIdent:
+                                        dataForManuellJournalføring.data.person?.personIdent,
+                                    kategori: BehandlingKategori.NASJONAL,
+                                    underkategori: BehandlingUnderkategori.ORDINÆR,
+                                    barnasIdenter: [],
+                                });
+                            }}
+                            type="flat"
+                            kompakt={true}
+                        >
+                            <Pluss />
+                            {'Opprett ny behandling'}
+                        </KnappBase>
                     )}
 
                     {feilmeldinger.length > 0 && visFeilmeldinger && (
