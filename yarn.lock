@@ -7495,6 +7495,13 @@ nav-datovelger@^6.1.9:
   dependencies:
     focus-trap-react "^6.0.0"
 
+nav-datovelger@^6.1.9:
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-6.1.9.tgz#ab99dd27c710d6299d9cff0ec4bde98f4f8e90a1"
+  integrity sha512-/85jt7ihtxn7qcVMmvyz00Z/RKCgPBdTTzVoviSTt9vkLy5o/PMircwCloq+BOJ8D0eq6aaNrs5TC689inKD8A==
+  dependencies:
+    focus-trap-react "^6.0.0"
+
 nav-frontend-alertstriper-style@2.0.14:
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.14.tgz#66edde2d6eb0bbc06051b07080b0444ac08f6503"
@@ -7620,6 +7627,11 @@ nav-frontend-skjema@^3.0.6, nav-frontend-skjema@^3.0.7:
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.8.tgz#06dd89f20fc16ead49ebd8add4f3a8d193a581f4"
   integrity sha512-EcqjMvfhlfIyDsex60LClvbmrh2D1JLzfvQAiB/cT02quDgz1u2Ms0ldxYeu4aREAqVKi6AKnn/TlxD71jlNFQ==
 
+nav-frontend-skjema@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.7.tgz#01cc7e615239a2ebbd78cf61bcafb727489116b1"
+  integrity sha512-FfJKrjE9ODIz233L/DIzudLBgobHwUNzpbU71jn4NS6j5IvBqAA2JM4RKPnfwVyUDgaBeidg5gE9Ca2Ex8zpDQ==
+
 nav-frontend-spinner-style@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/nav-frontend-spinner-style/-/nav-frontend-spinner-style-0.2.5.tgz#c782c63589776e768a45d6049047b1a60b6805be"
@@ -7653,6 +7665,11 @@ nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.18, nav-
     nav-frontend-core "^5.0.1"
 
 nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.17, nav-frontend-typografi@^2.0.20, nav-frontend-typografi@^2.0.21:
+  version "2.0.21"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.21.tgz#b2ec61fb43f68db1214d0e81a255939403b579a3"
+  integrity sha512-a9Q284KeYBOk0PRq2qXHwxvefCMvIuPduKo8aJe39RPMpCqTBtHsZuUAT9Avp9jAY4FdF5hHazB+hPs1YcMcmQ==
+
+nav-frontend-typografi@^2.0.21:
   version "2.0.21"
   resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.21.tgz#b2ec61fb43f68db1214d0e81a255939403b579a3"
   integrity sha512-a9Q284KeYBOk0PRq2qXHwxvefCMvIuPduKo8aJe39RPMpCqTBtHsZuUAT9Avp9jAY4FdF5hHazB+hPs1YcMcmQ==
