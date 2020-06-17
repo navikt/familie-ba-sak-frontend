@@ -8,7 +8,10 @@ import {
     useOpprettBehandling,
     IOpprettBehandlingBarn,
 } from '../../../context/OpprettBehandlingContext';
-import { Behandlingstype } from '../../../typer/behandling';
+import { Behandlingstype, BehandlingSteg } from '../../../typer/behandling';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
 
 interface IProps {
     fagsak: IFagsak;
@@ -25,36 +28,54 @@ const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
         settOpprettelseFeilmelding
     );
 
+    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+    const aktivErÅpen = aktivBehandling
+        ? BehandlingSteg[aktivBehandling.steg] <= BehandlingSteg.BESLUTTE_VEDTAK
+        : false;
+
     return (
         <div className={'opprettbehandling'}>
             <Skjemasteg
                 tittel={'Opprett behandling'}
-                nesteOnClick={() => {
-                    opprettBehandling({
-                        behandlingType: behandlingstype,
-                        søkersIdent: fagsak.søkerFødselsnummer,
-                        kategori: kategori,
-                        underkategori: underkategori,
-                        barnasIdenter:
-                            behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                                ? barna
-                                      .filter(
-                                          (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
-                                              opprettBehandlingBarn.checked
-                                      )
-                                      .map(
-                                          (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
-                                              opprettBehandlingBarn.barn.personIdent
-                                      )
-                                : [],
-                    });
-                }}
+                nesteOnClick={
+                    !aktivErÅpen
+                        ? () => {
+                              opprettBehandling({
+                                  behandlingType: behandlingstype,
+                                  søkersIdent: fagsak.søkerFødselsnummer,
+                                  kategori: kategori,
+                                  underkategori: underkategori,
+                                  barnasIdenter:
+                                      behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+                                          ? barna
+                                                .filter(
+                                                    (
+                                                        opprettBehandlingBarn: IOpprettBehandlingBarn
+                                                    ) => opprettBehandlingBarn.checked
+                                                )
+                                                .map(
+                                                    (
+                                                        opprettBehandlingBarn: IOpprettBehandlingBarn
+                                                    ) => opprettBehandlingBarn.barn.personIdent
+                                                )
+                                          : [],
+                              });
+                          }
+                        : undefined
+                }
                 senderInn={senderInn}
             >
-                <OpprettBehandlingSkjema
-                    opprettelseFeilmelding={opprettelseFeilmelding}
-                    visFeilmeldinger={visFeilmeldinger}
-                />
+                {!aktivErÅpen ? (
+                    <OpprettBehandlingSkjema
+                        opprettelseFeilmelding={opprettelseFeilmelding}
+                        visFeilmeldinger={visFeilmeldinger}
+                    />
+                ) : (
+                    <AlertStripeInfo>
+                        Det finnes allerede en åpen behandling. Gå til{' '}
+                        {<Lenke href={`/fagsak/${fagsak.id}`} children={'behandling.'} />}
+                    </AlertStripeInfo>
+                )}
             </Skjemasteg>
         </div>
     );
