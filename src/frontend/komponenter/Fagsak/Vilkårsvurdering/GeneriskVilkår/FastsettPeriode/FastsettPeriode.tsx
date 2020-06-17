@@ -1,8 +1,8 @@
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { ISODateString } from 'nav-datovelger';
-import { Checkbox, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
-import React, { useState } from 'react';
+import React from 'react';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { nyPeriode } from '../../../../../typer/periode';
@@ -23,12 +23,6 @@ const FastsettPeriode: React.FC<IProps> = ({
 }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
-    const [fastsettTom, settFastsettTom] = useState<boolean>(
-        redigerbartVilkår.verdi.periode.verdi.tom &&
-            redigerbartVilkår.verdi.periode.verdi.tom !== ''
-            ? true
-            : false
-    );
     return (
         <SkjemaGruppe
             feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
@@ -71,11 +65,11 @@ const FastsettPeriode: React.FC<IProps> = ({
                 {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
                         <FamilieDatovelger
-                            disabled={!fastsettTom}
+                            erLesesvisning={lesevisning}
                             id={`${vilkårPeriodeFeilmeldingId(
                                 redigerbartVilkår.verdi
                             )}__fastsett-periode-tom`}
-                            label={'T.o.m.'}
+                            label={'T.o.m. (valgfri)'}
                             placeholder={datoformatNorsk.DATO}
                             onChange={(dato?: ISODateString) => {
                                 validerOgSettRedigerbartVilkår({
@@ -94,34 +88,6 @@ const FastsettPeriode: React.FC<IProps> = ({
                             }}
                             valgtDato={redigerbartVilkår.verdi.periode.verdi.tom}
                         />
-                        {!lesevisning && (
-                            <Checkbox
-                                className={'fastsett-periode__flex--checkbox'}
-                                checked={fastsettTom}
-                                onChange={() => {
-                                    if (
-                                        redigerbartVilkår.verdi.periode.verdi.tom !== '' &&
-                                        fastsettTom
-                                    ) {
-                                        validerOgSettRedigerbartVilkår({
-                                            ...redigerbartVilkår,
-                                            verdi: {
-                                                ...redigerbartVilkår.verdi,
-                                                periode: {
-                                                    ...redigerbartVilkår.verdi.periode,
-                                                    verdi: nyPeriode(
-                                                        redigerbartVilkår.verdi.periode.verdi.fom,
-                                                        undefined
-                                                    ),
-                                                },
-                                            },
-                                        });
-                                    }
-                                    settFastsettTom(!fastsettTom);
-                                }}
-                                label={'Har en sluttdato'}
-                            />
-                        )}
                     </div>
                 )}
             </div>
