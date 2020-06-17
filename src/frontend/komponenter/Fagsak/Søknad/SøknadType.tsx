@@ -6,8 +6,8 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
 import { IPar } from '../../../typer/common';
 import { ISøknadDTO, søknadstyper, TypeSøker } from '../../../typer/søknad';
-import FamilieSelect from '../../Felleskomponenter/InputMedLesevisning/FamilieSelect';
 import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
+import { FamilieSelect } from '@navikt/familie-form-elements';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
@@ -16,6 +16,7 @@ interface IProps {
 
 const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
+    const lesevisning = erLesevisning();
     return (
         <PanelBase className={classNames('søknad__panel', 'panel--gra')}>
             <Undertittel children={'Hva har bruker søkt om?'} />
@@ -35,7 +36,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                         underkategori: behandlingUnderkategori,
                     })
                 }
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning}
             />
 
             <br />
@@ -45,7 +46,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                 label="Type søker"
                 bredde={'l'}
                 value={søknad.typeSøker}
-                erLesevisning={erLesevisning()}
+                erLesevisning={lesevisning}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                     if ((event.target.value as TypeSøker) === søknad.typeSøker) {
                         settSøknadOgValider({

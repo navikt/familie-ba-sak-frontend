@@ -9,7 +9,7 @@ import { IPerson } from '../../../typer/person';
 import { Ressurs, RessursStatus } from '../../../typer/ressurs';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
 import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
-import FamilieInput from '../InputMedLesevisning/FamilieInput';
+import { FamilieInput } from '@navikt/familie-form-elements';
 
 interface IProps {
     erLesevisning?: boolean;
