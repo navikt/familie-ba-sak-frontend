@@ -33,36 +33,32 @@ const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
         ? BehandlingSteg[aktivBehandling.steg] <= BehandlingSteg.BESLUTTE_VEDTAK
         : false;
 
+    const nesteOnClick = () => {
+        opprettBehandling({
+            behandlingType: behandlingstype,
+            søkersIdent: fagsak.søkerFødselsnummer,
+            kategori: kategori,
+            underkategori: underkategori,
+            barnasIdenter:
+                behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+                    ? barna
+                          .filter(
+                              (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
+                                  opprettBehandlingBarn.checked
+                          )
+                          .map(
+                              (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
+                                  opprettBehandlingBarn.barn.personIdent
+                          )
+                    : [],
+        });
+    };
+
     return (
         <div className={'opprettbehandling'}>
             <Skjemasteg
                 tittel={'Opprett behandling'}
-                nesteOnClick={
-                    !aktivErÅpen
-                        ? () => {
-                              opprettBehandling({
-                                  behandlingType: behandlingstype,
-                                  søkersIdent: fagsak.søkerFødselsnummer,
-                                  kategori: kategori,
-                                  underkategori: underkategori,
-                                  barnasIdenter:
-                                      behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                                          ? barna
-                                                .filter(
-                                                    (
-                                                        opprettBehandlingBarn: IOpprettBehandlingBarn
-                                                    ) => opprettBehandlingBarn.checked
-                                                )
-                                                .map(
-                                                    (
-                                                        opprettBehandlingBarn: IOpprettBehandlingBarn
-                                                    ) => opprettBehandlingBarn.barn.personIdent
-                                                )
-                                          : [],
-                              });
-                          }
-                        : undefined
-                }
+                nesteOnClick={!aktivErÅpen ? nesteOnClick : undefined}
                 senderInn={senderInn}
             >
                 {!aktivErÅpen ? (
