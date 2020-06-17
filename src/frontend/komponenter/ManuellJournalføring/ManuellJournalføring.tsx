@@ -2,7 +2,7 @@ import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper'
 import { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
-import { Feiloppsummering, Input, Radio, RadioGruppe, Select } from 'nav-frontend-skjema';
+import { Feiloppsummering, Input, Select } from 'nav-frontend-skjema';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import moment from 'moment';
 import React from 'react';
@@ -33,13 +33,13 @@ const ManuellJournalføringContent: React.FC = () => {
         dokumenttype,
         feilmeldinger,
         innsendingsfeilmelding,
-        knyttTilFagsak,
+        tilknyttedeBehandlingIder,
         logiskeVedlegg,
         manueltJournalfør,
         person,
         senderInn,
         settDokumenttype,
-        settKnyttTilFagsak,
+        settTilknyttedeBehandlingIder,
         settLogiskeVedlegg,
         settPerson,
         validerSkjema,
@@ -173,10 +173,22 @@ const ManuellJournalføringContent: React.FC = () => {
                                         <td className={'behandlingliste__tabell--behandlingtype'}>
                                             <FamilieCheckbox
                                                 erLesevisning={false}
-                                                label={behandling.type} // TODO: Hvorfor vil ikke dette vises?
-                                                checked={true}
+                                                label={behandling.type}
+                                                checked={tilknyttedeBehandlingIder.includes(
+                                                    behandling.behandlingId.toString() // TODO: Eller bruke number?
+                                                )}
                                                 onChange={() => {
-                                                    console.log(behandling.type);
+                                                    const id = behandling.behandlingId.toString();
+                                                    const index = tilknyttedeBehandlingIder.indexOf(
+                                                        id
+                                                    );
+                                                    if (index > -1) {
+                                                        tilknyttedeBehandlingIder.splice(index, 1);
+                                                    } else {
+                                                        settTilknyttedeBehandlingIder(
+                                                            tilknyttedeBehandlingIder.concat(id)
+                                                        );
+                                                    }
                                                 }}
                                             />
                                         </td>
@@ -194,21 +206,6 @@ const ManuellJournalføringContent: React.FC = () => {
                             </tbody>
                         </table>
                     )}
-
-                    <RadioGruppe legend={'Knytt til fagsak'}>
-                        <Radio
-                            name={'ja'}
-                            label={'Ja'}
-                            checked={knyttTilFagsak}
-                            onChange={() => settKnyttTilFagsak(true)}
-                        />
-                        <Radio
-                            name={'nei'}
-                            label={'Nei'}
-                            checked={!knyttTilFagsak}
-                            onChange={() => settKnyttTilFagsak(false)}
-                        />
-                    </RadioGruppe>
 
                     {feilmeldinger.length > 0 && visFeilmeldinger && (
                         <Feiloppsummering

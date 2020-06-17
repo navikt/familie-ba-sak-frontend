@@ -34,6 +34,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         Dokumenttype.SØKNAD_OM_ORDINÆR_BARNETRYGD
     );
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
+    const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = useState<string[]>([]);
 
     React.useEffect(() => {
         if (
@@ -125,8 +126,8 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                     dokumentInfoId: dokumenter ? dokumenter[0].dokumentInfoId ?? '' : '',
                     eksisterendeLogiskeVedlegg: dokumenter ? dokumenter[0].logiskeVedlegg : [],
                     logiskeVedlegg: logiskeVedlegg,
-                    knyttTilFagsak: knyttTilFagsak,
-                    tilknyttedeBehandlingIder: [],
+                    knyttTilFagsak: tilknyttedeBehandlingIder.length > 0, // TODO: Midlertidig bakoverkompabilitet før flagg fjernes. Setter true hvis behandlinger å knytte til er valgt.
+                    tilknyttedeBehandlingIder: tilknyttedeBehandlingIder,
                     navIdent: innloggetSaksbehandler?.navIdent ?? '',
                 },
             })
@@ -158,6 +159,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         hentDataForManuellJournalføring,
         innsendingsfeilmelding,
         knyttTilFagsak,
+        tilknyttedeBehandlingIder,
         logiskeVedlegg,
         manueltJournalfør,
         person,
@@ -165,6 +167,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         settDokumenttype,
         settKnyttTilFagsak,
         settLogiskeVedlegg,
+        settTilknyttedeBehandlingIder,
         settPerson,
         validerSkjema,
         visFeilmeldinger,
