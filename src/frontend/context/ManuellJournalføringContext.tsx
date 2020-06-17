@@ -124,8 +124,9 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                     dokumentTittel: dokumenttyper[dokumenttype].navn,
                     dokumentInfoId: dokumenter ? dokumenter[0].dokumentInfoId ?? '' : '',
                     eksisterendeLogiskeVedlegg: dokumenter ? dokumenter[0].logiskeVedlegg : [],
-                    logiskeVedlegg,
-                    knyttTilFagsak,
+                    logiskeVedlegg: logiskeVedlegg,
+                    knyttTilFagsak: knyttTilFagsak,
+                    tilknyttedeBehandlingIder: [],
                     navIdent: innloggetSaksbehandler?.navIdent ?? '',
                 },
             })

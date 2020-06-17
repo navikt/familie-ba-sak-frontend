@@ -3,7 +3,8 @@ import { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
 import { Feiloppsummering, Input, Radio, RadioGruppe, Select } from 'nav-frontend-skjema';
-import { Undertittel, Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
+import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { IPerson } from '../../typer/person';
@@ -12,15 +13,18 @@ import { randomUUID } from '../../utils/commons';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import {
-    useManuellJournalføring,
     ManuellJournalføringProvider,
+    useManuellJournalføring,
 } from '../../context/ManuellJournalføringContext';
 import {
-    Journalstatus,
     Dokumenttype,
     dokumenttyper,
     ILogiskVedlegg,
+    Journalstatus,
 } from '../../typer/manuell-journalføring';
+import { FamilieCheckbox } from '@navikt/familie-form-elements/dist';
+import { IBehandling } from '../../typer/behandling';
+import { datoformat, formaterDato } from '../../utils/formatter';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
@@ -42,6 +46,9 @@ const ManuellJournalføringContent: React.FC = () => {
         visFeilmeldinger,
     } = useManuellJournalføring();
 
+    const behandlinger =
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+        dataForManuellJournalføring.data.fagsak?.behandlinger;
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return dataForManuellJournalføring.data.journalpost.journalstatus ===
@@ -151,6 +158,42 @@ const ManuellJournalføringContent: React.FC = () => {
                     </PanelBase>
                     <br />
                     <br />
+                    {behandlinger && behandlinger.length > 0 && (
+                        <table className="tabell">
+                            <thead className="tabell__head">
+                                <tr className="tabell__head__tr">
+                                    <th>{'Behandlingstype'}</th>
+                                    <th>{'Status'}</th>
+                                    <th>{'Dato'}</th>
+                                </tr>
+                            </thead>
+                            <tbody className="tabell__body">
+                                {behandlinger.map((behandling: IBehandling) => (
+                                    <tr>
+                                        <td className={'behandlingliste__tabell--behandlingtype'}>
+                                            <FamilieCheckbox
+                                                erLesevisning={false}
+                                                label={behandling.type} // TODO: Hvorfor vil ikke dette vises?
+                                                checked={true}
+                                                onChange={() => {
+                                                    console.log(behandling.type);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className={'behandlingliste__tabell--status'}>
+                                            {behandling.status}
+                                        </td>
+                                        <td className={'behandlingliste__tabell--dato'}>
+                                            {formaterDato(
+                                                moment(behandling.opprettetTidspunkt),
+                                                datoformat.DATO_FORKORTTET
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
 
                     <RadioGruppe legend={'Knytt til fagsak'}>
                         <Radio
