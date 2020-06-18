@@ -66,6 +66,7 @@ const ManuellJournalføringContent: React.FC = () => {
     const behandlinger =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
         dataForManuellJournalføring.data.fagsak?.behandlinger;
+
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return dataForManuellJournalføring.data.journalpost.journalstatus ===
@@ -191,16 +192,19 @@ const ManuellJournalføringContent: React.FC = () => {
                                             <FamilieCheckbox
                                                 erLesevisning={false}
                                                 label={behandling.type}
-                                                checked={tilknyttedeBehandlingIder.includes(
-                                                    behandling.behandlingId.toString() // TODO: Eller bruke number?
+                                                defaultChecked={tilknyttedeBehandlingIder.includes(
+                                                    behandling.behandlingId
                                                 )}
                                                 onChange={() => {
-                                                    const id = behandling.behandlingId.toString();
+                                                    const id = behandling.behandlingId;
                                                     const index = tilknyttedeBehandlingIder.indexOf(
                                                         id
                                                     );
                                                     if (index > -1) {
                                                         tilknyttedeBehandlingIder.splice(index, 1);
+                                                        settTilknyttedeBehandlingIder(
+                                                            tilknyttedeBehandlingIder
+                                                        );
                                                     } else {
                                                         settTilknyttedeBehandlingIder(
                                                             tilknyttedeBehandlingIder.concat(id)

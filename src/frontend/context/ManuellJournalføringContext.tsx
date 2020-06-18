@@ -8,14 +8,14 @@ import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import { IPerson } from '../typer/person';
 import { useHistory, useParams } from 'react-router';
 import {
-    IDataForManuellJournalføring,
-    ILogiskVedlegg,
     Dokumenttype,
-    IDokumentInfo,
-    IRestOppdaterJournalpost,
     dokumenttyper,
+    IDataForManuellJournalføring,
+    IDokumentInfo,
+    ILogiskVedlegg,
+    IRestOppdaterJournalpost,
 } from '../typer/manuell-journalføring';
-import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
+import { BehandlingStatus, IBehandling } from '../typer/behandling';
 
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
@@ -34,8 +34,25 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     const [dokumenttype, settDokumenttype] = useState<Dokumenttype>(
         Dokumenttype.SØKNAD_OM_ORDINÆR_BARNETRYGD
     );
+    const initTilknyttedeBehandlinger = () => {
+        const behandlinger =
+            dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+            dataForManuellJournalføring.data.fagsak?.behandlinger;
+
+        const åpneStatuser = [BehandlingStatus.OPPRETTET, BehandlingStatus.SENDT_TIL_BESLUTTER]; // TODO: Avklare hvilke statuser man må sjekke på
+        const åpenBehandling = behandlinger
+            ? behandlinger
+                  .filter((behandling: IBehandling) => åpneStatuser.includes(behandling.status))
+                  .map((åpen: IBehandling) => åpen.behandlingId)
+            : [];
+        // TODO: Kast feil hvis liste > 1?
+        return åpenBehandling;
+    };
+
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
-    const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = useState<string[]>([]);
+    const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = useState<number[]>(
+        initTilknyttedeBehandlinger()
+    );
 
     React.useEffect(() => {
         if (

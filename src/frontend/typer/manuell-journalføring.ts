@@ -116,7 +116,7 @@ export interface IRestOppdaterJournalpost {
     dokumentInfoId: string;
     eksisterendeLogiskeVedlegg: ILogiskVedlegg[];
     knyttTilFagsak: boolean;
-    tilknyttedeBehandlingIder: string[];
+    tilknyttedeBehandlingIder: number[];
     logiskeVedlegg: ILogiskVedlegg[];
     navIdent: string;
 }
