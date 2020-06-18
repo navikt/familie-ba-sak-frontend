@@ -1,38 +1,37 @@
+import { FamilieCheckbox } from '@navikt/familie-form-elements/dist';
+import moment from 'moment';
 import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
 import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
 import { Feiloppsummering, Input, Select } from 'nav-frontend-skjema';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
-import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router';
-import { IPerson } from '../../typer/person';
-import { Ressurs, RessursStatus } from '../../typer/ressurs';
-import { randomUUID } from '../../utils/commons';
-import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
-import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import {
     ManuellJournalføringProvider,
     useManuellJournalføring,
 } from '../../context/ManuellJournalføringContext';
-import {
-    Dokumenttype,
-    dokumenttyper,
-    ILogiskVedlegg,
-    Journalstatus,
-} from '../../typer/manuell-journalføring';
-import { FamilieCheckbox } from '@navikt/familie-form-elements/dist';
+import Pluss from '../../ikoner/Pluss';
 import {
     BehandlingKategori,
     Behandlingstype,
     BehandlingUnderkategori,
     IBehandling,
 } from '../../typer/behandling';
+import {
+    Dokumenttype,
+    dokumenttyper,
+    ILogiskVedlegg,
+    Journalstatus,
+} from '../../typer/manuell-journalføring';
+import { IPerson } from '../../typer/person';
+import { Ressurs, RessursStatus } from '../../typer/ressurs';
+import { randomUUID } from '../../utils/commons';
 import { datoformat, formaterDato } from '../../utils/formatter';
-import Pluss from '../../ikoner/Pluss';
 import useFagsakApi from '../Fagsak/useFagsakApi';
-import { IOpprettBehandlingBarn } from '../../context/OpprettBehandlingContext';
+import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
+import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
@@ -187,12 +186,12 @@ const ManuellJournalføringContent: React.FC = () => {
                             </thead>
                             <tbody className="tabell__body">
                                 {behandlinger.map((behandling: IBehandling) => (
-                                    <tr>
+                                    <tr key={behandling.behandlingId}>
                                         <td className={'behandlingliste__tabell--behandlingtype'}>
                                             <FamilieCheckbox
                                                 erLesevisning={false}
                                                 label={behandling.type}
-                                                defaultChecked={tilknyttedeBehandlingIder.includes(
+                                                checked={tilknyttedeBehandlingIder.includes(
                                                     behandling.behandlingId
                                                 )}
                                                 onChange={() => {
