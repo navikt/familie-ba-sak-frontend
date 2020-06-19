@@ -196,18 +196,22 @@ const ManuellJournalføringContent: React.FC = () => {
                                                 )}
                                                 onChange={() => {
                                                     const id = behandling.behandlingId;
-                                                    const index = tilknyttedeBehandlingIder.indexOf(
-                                                        id
-                                                    );
-                                                    if (index > -1) {
-                                                        tilknyttedeBehandlingIder.splice(index, 1);
+                                                    if (
+                                                        tilknyttedeBehandlingIder.includes(
+                                                            behandling.behandlingId
+                                                        )
+                                                    ) {
                                                         settTilknyttedeBehandlingIder(
-                                                            tilknyttedeBehandlingIder
+                                                            tilknyttedeBehandlingIder.filter(
+                                                                tilknyttedeBehandlingId =>
+                                                                    tilknyttedeBehandlingId !== id
+                                                            )
                                                         );
                                                     } else {
-                                                        settTilknyttedeBehandlingIder(
-                                                            tilknyttedeBehandlingIder.concat(id)
-                                                        );
+                                                        settTilknyttedeBehandlingIder([
+                                                            ...tilknyttedeBehandlingIder,
+                                                            id,
+                                                        ]);
                                                     }
                                                 }}
                                             />
