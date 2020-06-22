@@ -2,7 +2,13 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React, { useState } from 'react';
 
-import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '../typer/ressurs';
 import { useApp } from './AppContext';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import { IPerson } from '../typer/person';
@@ -35,7 +41,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     const [dokumenttype, settDokumenttype] = useState<Dokumenttype>(
         Dokumenttype.SØKNAD_OM_ORDINÆR_BARNETRYGD
     );
-    const initTilknyttedeBehandlinger = () => {
+    const hentAktivBehandlingForJournalføring = () => {
         let aktivBehandling = undefined;
         if (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
@@ -43,7 +49,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         ) {
             aktivBehandling = hentAktivBehandlingPåFagsak(dataForManuellJournalføring.data.fagsak);
         }
-        return aktivBehandling ? [aktivBehandling.behandlingId] : [];
+        return aktivBehandling;
     };
     const { fagsak } = useFagsakRessurser();
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
@@ -67,9 +73,10 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                     dataForManuellJournalføring.data.journalpost.dokumenter[0].logiskeVedlegg ?? []
                 );
             }
-            settTilknyttedeBehandlingIder(initTilknyttedeBehandlinger());
+            const aktivBehandling = hentAktivBehandlingForJournalføring();
+            settTilknyttedeBehandlingIder(aktivBehandling ? [aktivBehandling.behandlingId] : []);
         }
-    }, [dataForManuellJournalføring.status, fagsak]);
+    }, [dataForManuellJournalføring.status]);
 
     React.useEffect(() => {
         if (oppgaveId) {
@@ -78,6 +85,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     }, [oppgaveId, fagsak]);
 
     const hentDataForManuellJournalføring = (oppgaveId: string) => {
+        settDataForManuellJournalføring(byggHenterRessurs());
         axiosRequest<IDataForManuellJournalføring, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
@@ -167,6 +175,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     };
 
     return {
+        hentAktivBehandlingForJournalføring,
         dataForManuellJournalføring,
         dokumenttype,
         feilmeldinger,

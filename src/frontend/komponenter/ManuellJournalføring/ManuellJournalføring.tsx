@@ -34,11 +34,11 @@ import { datoformat, formaterDato } from '../../utils/formatter';
 import useFagsakApi from '../Fagsak/useFagsakApi';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
     const {
+        hentAktivBehandlingForJournalføring,
         dataForManuellJournalføring,
         dokumenttype,
         feilmeldinger,
@@ -204,26 +204,29 @@ const ManuellJournalføringContent: React.FC = () => {
                     </PanelBase>
                     <br />
                     <br />
-                    //TODO: Kommende opprett-div rendres kun hvis ikke finnes aktiv behandling
-                    <div>
-                        <AlertStripe type="info">
-                            Beskjed tilpasses om det ikke finnes behandlinger i det hele tatt eller
-                            bare ikke finens aktive.
-                        </AlertStripe>
-                        <KnappBase // TODO: Bruke "Utførknapp"? Problem med at useBehandling lesevisning ikke er tilgjengelig
-                            aria-label={`utfør_opprettfagsakogbehandlingvedjournalføring}`}
-                            className={'ikon-knapp'}
-                            id={'d'}
-                            onClick={() => {
-                                onClickOpprett(dataForManuellJournalføring.data);
-                            }}
-                            type="flat"
-                            kompakt={true}
-                        >
-                            <Pluss />
-                            {'Opprett ny behandling'}
-                        </KnappBase>
-                    </div>
+                    {!hentAktivBehandlingForJournalføring() && (
+                        <div className={'journalføring__opprett-behandling'}>
+                            <AlertStripe type="info">
+                                {(behandlinger && behandlinger.length > 0
+                                    ? 'Det finnes ingen åpne behandlinger på denne brukeren.'
+                                    : 'Det er ikke registrert tidligere behandlinger på denne brukeren.') +
+                                    ' For å koble dokumentasjonen til en behandling, "Opprett ny behandling", eller journalfør uten å opprette behandling. '}
+                            </AlertStripe>
+                            <KnappBase // TODO: Bruke "Utførknapp"? Problem med at useBehandling lesevisning ikke er tilgjengelig
+                                aria-label={`utfør_opprettfagsakogbehandlingvedjournalføring}`}
+                                className={'ikon-knapp'}
+                                id={'d'}
+                                onClick={() => {
+                                    onClickOpprett(dataForManuellJournalføring.data);
+                                }}
+                                type="flat"
+                                kompakt={true}
+                            >
+                                <Pluss />
+                                {'Opprett ny behandling'}
+                            </KnappBase>
+                        </div>
+                    )}
                     {behandlinger && behandlinger.length > 0 && (
                         <table className="tabell">
                             <thead className="tabell__head">
