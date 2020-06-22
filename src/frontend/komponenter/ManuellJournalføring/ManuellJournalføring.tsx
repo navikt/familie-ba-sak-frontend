@@ -6,7 +6,7 @@ import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
 import { Feiloppsummering, Input, Select } from 'nav-frontend-skjema';
-import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { useHistory } from 'react-router';
 import {
@@ -34,6 +34,7 @@ import { datoformat, formaterDato } from '../../utils/formatter';
 import useFagsakApi from '../Fagsak/useFagsakApi';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
+import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
@@ -55,6 +56,8 @@ const ManuellJournalføringContent: React.FC = () => {
         validerSkjema,
         visFeilmeldinger,
     } = useManuellJournalføring();
+
+    const [visModal, settVisModal] = React.useState<boolean>(false);
 
     const { opprettEllerHentFagsak, opprettBehandling } = useFagsakApi(
         _ => {
@@ -110,7 +113,11 @@ const ManuellJournalføringContent: React.FC = () => {
                     }}
                     nesteKnappTittel={'Journalfør'}
                     nesteOnClick={() => {
-                        manueltJournalfør();
+                        if (tilknyttedeBehandlingIder.length < 1) {
+                            settVisModal(true);
+                        } else {
+                            manueltJournalfør();
+                        }
                     }}
                     senderInn={senderInn}
                 >
@@ -289,6 +296,49 @@ const ManuellJournalføringContent: React.FC = () => {
                         />
                     )}
                     {visFeilmeldinger && <Feilmelding children={innsendingsfeilmelding} />}
+                    {visModal && (
+                        <UIModalWrapper
+                            modal={{
+                                className: 'søknad-modal',
+                                tittel: 'Ønsker du å journalføre uten å knytte til behandling?',
+                                lukkKnapp: false,
+                                visModal: visModal,
+                                actions: [
+                                    <Knapp
+                                        key={'ja'}
+                                        type={'hoved'}
+                                        mini={true}
+                                        onClick={() => {
+                                            settVisModal(false);
+                                            manueltJournalfør();
+                                        }}
+                                        children={'Ja, journalfør'}
+                                    />,
+                                    <Knapp
+                                        key={'nei'}
+                                        mini={true}
+                                        onClick={() => {
+                                            settVisModal(false);
+                                        }}
+                                        children={
+                                            behandlinger && behandlinger.length > 0
+                                                ? hentAktivBehandlingForJournalføring()
+                                                    ? 'Nei, velg behandling'
+                                                    : 'Nei, velg/opprett behandling'
+                                                : 'Nei, opprett behandling'
+                                        }
+                                    />,
+                                ],
+                            }}
+                        >
+                            <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
+                                Du har valgt å journalføre uten å knytte dokumentet til en spesifikk
+                                behandling. Journalposten knyttes kun til personen.
+                                <br />
+                                (Tilsvarende "Knytt til generell sak" i Gosys).
+                            </Normaltekst>
+                        </UIModalWrapper>
+                    )}
                 </Skjemasteg>
             ) : (
                 <AlertStripeAdvarsel
