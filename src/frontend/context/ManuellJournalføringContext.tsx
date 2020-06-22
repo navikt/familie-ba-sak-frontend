@@ -51,7 +51,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         }
         return aktivBehandling;
     };
-    const { fagsak } = useFagsakRessurser();
+    const { fagsak, hentFagsak } = useFagsakRessurser();
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = useState<number[]>([]);
 
@@ -156,7 +156,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                 .then((fagsakId: Ressurs<string>) => {
                     settSenderInn(false);
                     if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                        history.push(`/fagsak/${fagsakId.data}`);
+                        hentFagsak(fagsakId.data);
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
                         history.push('/oppgaver');
                     } else if (fagsakId.status === RessursStatus.FEILET) {
