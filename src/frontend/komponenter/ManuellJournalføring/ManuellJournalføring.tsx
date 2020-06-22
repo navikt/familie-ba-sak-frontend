@@ -77,8 +77,8 @@ const ManuellJournalføringContent: React.FC = () => {
     const onClickOpprett = (data: IDataForManuellJournalføring) => {
         opprettEllerHentFagsak(
             {
-                personIdent: data.person?.personIdent ?? null, // TODO: Mulig vi skal benytte aktørid her i stedet? Må i så fall oppdatere mock
-                aktørId: null, //dataForManuellJournalføring.data.oppgave.aktoerId,
+                personIdent: data.person?.personIdent ?? null,
+                aktørId: null,
             },
             false
         ).then(() => {
@@ -86,13 +86,18 @@ const ManuellJournalføringContent: React.FC = () => {
                 behandlinger && behandlinger.length > 0
                     ? Behandlingstype.REVURDERING
                     : Behandlingstype.FØRSTEGANGSBEHANDLING;
-            const søker = data.person?.personIdent ?? ''; // TODO: Kaste feil hvis ingen?
+            const søker = data.person?.personIdent ?? '';
+            if (søker === '') {
+                throw new Error(
+                    'Klarer ikke opprette behandling fordi søker ikke kan hentes fra fagsak.'
+                );
+            }
             opprettBehandling(
                 {
                     behandlingType: behandlingType,
                     søkersIdent: søker,
-                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides
-                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides
+                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
+                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
                     barnasIdenter: [],
                 },
                 false
@@ -219,7 +224,7 @@ const ManuellJournalføringContent: React.FC = () => {
                                     : 'Det er ikke registrert tidligere behandlinger på denne brukeren.') +
                                     ' For å koble dokumentasjonen til en behandling, "Opprett ny behandling", eller journalfør uten å opprette behandling. '}
                             </AlertStripe>
-                            <KnappBase // TODO: Bruke "Utførknapp"? Problem med at useBehandling lesevisning ikke er tilgjengelig
+                            <KnappBase
                                 aria-label={`utfør_opprettfagsakogbehandlingvedjournalføring}`}
                                 className={'ikon-knapp'}
                                 id={'d'}

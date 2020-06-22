@@ -148,7 +148,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                     dokumentInfoId: dokumenter ? dokumenter[0].dokumentInfoId ?? '' : '',
                     eksisterendeLogiskeVedlegg: dokumenter ? dokumenter[0].logiskeVedlegg : [],
                     logiskeVedlegg: logiskeVedlegg,
-                    knyttTilFagsak: tilknyttedeBehandlingIder.length > 0, // TODO: Midlertidig bakoverkompabilitet før flagg fjernes. Setter true hvis behandlinger å knytte til er valgt.
+                    knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,
                     tilknyttedeBehandlingIder: tilknyttedeBehandlingIder,
                     navIdent: innloggetSaksbehandler?.navIdent ?? '',
                 },
