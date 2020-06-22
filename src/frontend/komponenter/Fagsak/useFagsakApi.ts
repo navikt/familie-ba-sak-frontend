@@ -19,9 +19,10 @@ const useFagsakApi = (
     const history = useHistory();
     const [senderInn, settSenderInn] = useState(false);
 
-    const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {
+    const opprettEllerHentFagsak = async (data: IOpprettEllerHentFagsakData) => {
+        console.log('Oppretter/henter fagsak');
         settSenderInn(true);
-        axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
+        await axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
@@ -38,6 +39,7 @@ const useFagsakApi = (
                     settVisFeilmeldinger(true);
                     settFeilmelding('Opprettelse av fagsak feilet');
                 }
+                return response;
             })
             .catch(() => {
                 settSenderInn(false);
@@ -47,6 +49,8 @@ const useFagsakApi = (
     };
 
     const opprettBehandling = (data: IOpprettBehandlingData) => {
+        console.log('Oppretter behandling');
+
         settSenderInn(true);
         axiosRequest<IFagsak, IOpprettBehandlingData>({
             data,

@@ -22,6 +22,7 @@ import {
 import {
     Dokumenttype,
     dokumenttyper,
+    IDataForManuellJournalføring,
     ILogiskVedlegg,
     Journalstatus,
 } from '../../typer/manuell-journalføring';
@@ -64,7 +65,25 @@ const ManuellJournalføringContent: React.FC = () => {
 
     const behandlinger =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-        dataForManuellJournalføring.data.fagsak?.behandlinger;
+        dataForManuellJournalføring.data.fagsak?.behandlinger.sort((a, b) =>
+            moment(b.opprettetTidspunkt).diff(moment(a.opprettetTidspunkt))
+        );
+
+    const onClickOpprett = (data: IDataForManuellJournalføring) => {
+        opprettEllerHentFagsak({
+            personIdent: data.person?.personIdent ?? null, // TODO: Mulig vi skal benytte aktørid her i stedet? Må i så fall oppdatere mock
+            aktørId: null, //dataForManuellJournalføring.data.oppgave.aktoerId,
+        }).then(() => {
+            opprettBehandling({
+                // TODO: Fyll inn med ordentlig data
+                behandlingType: Behandlingstype.FØRSTEGANGSBEHANDLING,
+                søkersIdent: data.person?.personIdent ?? '',
+                kategori: BehandlingKategori.NASJONAL,
+                underkategori: BehandlingUnderkategori.ORDINÆR,
+                barnasIdenter: [],
+            });
+        });
+    };
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
@@ -235,21 +254,7 @@ const ManuellJournalføringContent: React.FC = () => {
                             className={'ikon-knapp'}
                             id={'d'}
                             onClick={() => {
-                                // TODO: Her er jeg usikker på om vi bør lage en egen metode "opprettFagsakMedBehandling". Eksisterende metoder pusher nye sider og i tillegg blir det feil med opprettelse av behandling når man prøver begge i et jafs som her
-                                opprettEllerHentFagsak({
-                                    personIdent:
-                                        dataForManuellJournalføring.data.person?.personIdent, // TODO: Mulig vi skal benytte aktørid her i stedet? Må i så fall oppdatere mock
-                                    aktørId: null, //dataForManuellJournalføring.data.oppgave.aktoerId,
-                                });
-                                opprettBehandling({
-                                    // TODO: Fyll inn med ordentlig data
-                                    behandlingType: Behandlingstype.FØRSTEGANGSBEHANDLING,
-                                    søkersIdent:
-                                        dataForManuellJournalføring.data.person?.personIdent,
-                                    kategori: BehandlingKategori.NASJONAL,
-                                    underkategori: BehandlingUnderkategori.ORDINÆR,
-                                    barnasIdenter: [],
-                                });
+                                onClickOpprett(dataForManuellJournalføring.data);
                             }}
                             type="flat"
                             kompakt={true}

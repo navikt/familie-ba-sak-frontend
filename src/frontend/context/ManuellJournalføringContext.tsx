@@ -15,7 +15,7 @@ import {
     ILogiskVedlegg,
     IRestOppdaterJournalpost,
 } from '../typer/manuell-journalføring';
-import { BehandlingStatus, IBehandling } from '../typer/behandling';
+import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
@@ -35,24 +35,18 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         Dokumenttype.SØKNAD_OM_ORDINÆR_BARNETRYGD
     );
     const initTilknyttedeBehandlinger = () => {
-        const behandlinger =
+        let aktivBehandling = undefined;
+        if (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.data.fagsak?.behandlinger;
-
-        const åpneStatuser = [BehandlingStatus.OPPRETTET, BehandlingStatus.SENDT_TIL_BESLUTTER]; // TODO: Avklare hvilke statuser man må sjekke på
-        const åpenBehandling = behandlinger
-            ? behandlinger
-                  .filter((behandling: IBehandling) => åpneStatuser.includes(behandling.status))
-                  .map((åpen: IBehandling) => åpen.behandlingId)
-            : [];
-        // TODO: Kast feil hvis liste > 1?
-        return åpenBehandling;
+            dataForManuellJournalføring.data.fagsak
+        ) {
+            aktivBehandling = hentAktivBehandlingPåFagsak(dataForManuellJournalføring.data.fagsak);
+        }
+        return aktivBehandling ? [aktivBehandling.behandlingId] : [];
     };
 
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
-    const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = useState<number[]>(
-        initTilknyttedeBehandlinger()
-    );
+    const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = useState<number[]>([]);
 
     React.useEffect(() => {
         if (
@@ -72,6 +66,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                     dataForManuellJournalføring.data.journalpost.dokumenter[0].logiskeVedlegg ?? []
                 );
             }
+            settTilknyttedeBehandlingIder(initTilknyttedeBehandlinger());
         }
     }, [dataForManuellJournalføring.status]);
 
