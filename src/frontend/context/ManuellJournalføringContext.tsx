@@ -16,6 +16,7 @@ import {
     IRestOppdaterJournalpost,
 } from '../typer/manuell-journalføring';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
+import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
@@ -44,7 +45,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         }
         return aktivBehandling ? [aktivBehandling.behandlingId] : [];
     };
-
+    const { fagsak } = useFagsakRessurser();
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = useState<number[]>([]);
 
@@ -68,13 +69,13 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
             }
             settTilknyttedeBehandlingIder(initTilknyttedeBehandlinger());
         }
-    }, [dataForManuellJournalføring.status]);
+    }, [dataForManuellJournalføring.status, fagsak]);
 
     React.useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
         }
-    }, [oppgaveId]);
+    }, [oppgaveId, fagsak]);
 
     const hentDataForManuellJournalføring = (oppgaveId: string) => {
         axiosRequest<IDataForManuellJournalføring, void>({
