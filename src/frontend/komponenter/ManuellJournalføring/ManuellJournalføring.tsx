@@ -1,6 +1,7 @@
 import { FamilieCheckbox } from '@navikt/familie-form-elements/dist';
 import moment from 'moment';
 import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
+import AlertStripe from 'nav-frontend-alertstriper';
 import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
@@ -33,6 +34,7 @@ import { datoformat, formaterDato } from '../../utils/formatter';
 import useFagsakApi from '../Fagsak/useFagsakApi';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
@@ -122,7 +124,6 @@ const ManuellJournalføringContent: React.FC = () => {
                         }}
                     />
                     <br />
-
                     <Select
                         bredde={'xl'}
                         id={'manuell-journalføring-dokumenttype'}
@@ -141,7 +142,6 @@ const ManuellJournalføringContent: React.FC = () => {
                             );
                         })}
                     </Select>
-
                     <br />
                     <PanelBase className={'panel--gra'}>
                         <Undertittel children={'Annet innhold'} />
@@ -204,7 +204,27 @@ const ManuellJournalføringContent: React.FC = () => {
                     </PanelBase>
                     <br />
                     <br />
-                    {behandlinger && behandlinger.length > 0 ? (
+                    //TODO: Kommende opprett-div rendres kun hvis ikke finnes aktiv behandling
+                    <div>
+                        <AlertStripe type="info">
+                            Beskjed tilpasses om det ikke finnes behandlinger i det hele tatt eller
+                            bare ikke finens aktive.
+                        </AlertStripe>
+                        <KnappBase // TODO: Bruke "Utførknapp"? Problem med at useBehandling lesevisning ikke er tilgjengelig
+                            aria-label={`utfør_opprettfagsakogbehandlingvedjournalføring}`}
+                            className={'ikon-knapp'}
+                            id={'d'}
+                            onClick={() => {
+                                onClickOpprett(dataForManuellJournalføring.data);
+                            }}
+                            type="flat"
+                            kompakt={true}
+                        >
+                            <Pluss />
+                            {'Opprett ny behandling'}
+                        </KnappBase>
+                    </div>
+                    {behandlinger && behandlinger.length > 0 && (
                         <table className="tabell">
                             <thead className="tabell__head">
                                 <tr className="tabell__head__tr">
@@ -258,29 +278,13 @@ const ManuellJournalføringContent: React.FC = () => {
                                 ))}
                             </tbody>
                         </table>
-                    ) : (
-                        <KnappBase // TODO: Bruke "Utførknapp"? Problem med at useBehandling lesevisning ikke er tilgjengelig
-                            aria-label={`utfør_opprettfagsakogbehandlingvedjournalføring}`}
-                            className={'ikon-knapp'}
-                            id={'d'}
-                            onClick={() => {
-                                onClickOpprett(dataForManuellJournalføring.data);
-                            }}
-                            type="flat"
-                            kompakt={true}
-                        >
-                            <Pluss />
-                            {'Opprett ny behandling'}
-                        </KnappBase>
                     )}
-
                     {feilmeldinger.length > 0 && visFeilmeldinger && (
                         <Feiloppsummering
                             tittel={'For å gå videre må du rette opp følgende:'}
                             feil={feilmeldinger}
                         />
                     )}
-
                     {visFeilmeldinger && <Feilmelding children={innsendingsfeilmelding} />}
                 </Skjemasteg>
             ) : (
