@@ -199,10 +199,13 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 ) {
                     history.push(`/oppgaver/journalfør/${oppgave.id}`);
                 } else {
-                    opprettEllerHentFagsak({
-                        personIdent: null,
-                        aktørId: oppgave.aktoerId,
-                    });
+                    opprettEllerHentFagsak(
+                        {
+                            personIdent: null,
+                            aktørId: oppgave.aktoerId,
+                        },
+                        true
+                    );
                 }
                 return oppgaverRes;
             })

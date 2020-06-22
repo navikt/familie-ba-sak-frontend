@@ -19,8 +19,10 @@ const useFagsakApi = (
     const history = useHistory();
     const [senderInn, settSenderInn] = useState(false);
 
-    const opprettEllerHentFagsak = async (data: IOpprettEllerHentFagsakData) => {
-        console.log('Oppretter/henter fagsak');
+    const opprettEllerHentFagsak = async (
+        data: IOpprettEllerHentFagsakData,
+        redirectEtterOpprettelseEllerHenting: boolean
+    ) => {
         settSenderInn(true);
         await axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
             data,
@@ -31,7 +33,9 @@ const useFagsakApi = (
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-                    history.push(`/fagsak/${response.data.id}/saksoversikt`);
+                    if (redirectEtterOpprettelseEllerHenting) {
+                        history.push(`/fagsak/${response.data.id}/saksoversikt`);
+                    }
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
                     settFeilmelding(response.frontendFeilmelding);
@@ -48,9 +52,7 @@ const useFagsakApi = (
             });
     };
 
-    const opprettBehandling = (data: IOpprettBehandlingData) => {
-        console.log('Oppretter behandling');
-
+    const opprettBehandling = (data: IOpprettBehandlingData, redirectEtterOpprettelse: boolean) => {
         settSenderInn(true);
         axiosRequest<IFagsak, IOpprettBehandlingData>({
             data,
@@ -73,7 +75,7 @@ const useFagsakApi = (
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
                         );
-                    } else {
+                    } else if (redirectEtterOpprettelse) {
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
                         );

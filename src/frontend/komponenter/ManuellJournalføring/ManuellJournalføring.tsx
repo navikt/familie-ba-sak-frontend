@@ -70,18 +70,28 @@ const ManuellJournalføringContent: React.FC = () => {
         );
 
     const onClickOpprett = (data: IDataForManuellJournalføring) => {
-        opprettEllerHentFagsak({
-            personIdent: data.person?.personIdent ?? null, // TODO: Mulig vi skal benytte aktørid her i stedet? Må i så fall oppdatere mock
-            aktørId: null, //dataForManuellJournalføring.data.oppgave.aktoerId,
-        }).then(() => {
-            opprettBehandling({
-                // TODO: Fyll inn med ordentlig data
-                behandlingType: Behandlingstype.FØRSTEGANGSBEHANDLING,
-                søkersIdent: data.person?.personIdent ?? '',
-                kategori: BehandlingKategori.NASJONAL,
-                underkategori: BehandlingUnderkategori.ORDINÆR,
-                barnasIdenter: [],
-            });
+        opprettEllerHentFagsak(
+            {
+                personIdent: data.person?.personIdent ?? null, // TODO: Mulig vi skal benytte aktørid her i stedet? Må i så fall oppdatere mock
+                aktørId: null, //dataForManuellJournalføring.data.oppgave.aktoerId,
+            },
+            false
+        ).then(() => {
+            const behandlingType =
+                behandlinger && behandlinger.length > 0
+                    ? Behandlingstype.REVURDERING
+                    : Behandlingstype.FØRSTEGANGSBEHANDLING;
+            const søker = data.person?.personIdent ?? ''; // TODO: Kaste feil hvis ingen?
+            opprettBehandling(
+                {
+                    behandlingType: behandlingType,
+                    søkersIdent: søker,
+                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides
+                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides
+                    barnasIdenter: [],
+                },
+                false
+            );
         });
     };
 

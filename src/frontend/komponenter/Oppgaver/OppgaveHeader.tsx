@@ -30,10 +30,13 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 <Knapp
                     type={'hoved'}
                     onClick={() => {
-                        opprettEllerHentFagsak({
-                            personIdent,
-                            aktørId: null,
-                        });
+                        opprettEllerHentFagsak(
+                            {
+                                personIdent,
+                                aktørId: null,
+                            },
+                            true
+                        );
                     }}
                     children={'Fortsett'}
                     className={'oppgave-header__opprettFagsakKnapp'}

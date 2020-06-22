@@ -30,24 +30,27 @@ const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <Skjemasteg
                 tittel={'Opprett behandling'}
                 nesteOnClick={() => {
-                    opprettBehandling({
-                        behandlingType: behandlingstype,
-                        søkersIdent: fagsak.søkerFødselsnummer,
-                        kategori: kategori,
-                        underkategori: underkategori,
-                        barnasIdenter:
-                            behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                                ? barna
-                                      .filter(
-                                          (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
-                                              opprettBehandlingBarn.checked
-                                      )
-                                      .map(
-                                          (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
-                                              opprettBehandlingBarn.barn.personIdent
-                                      )
-                                : [],
-                    });
+                    opprettBehandling(
+                        {
+                            behandlingType: behandlingstype,
+                            søkersIdent: fagsak.søkerFødselsnummer,
+                            kategori: kategori,
+                            underkategori: underkategori,
+                            barnasIdenter:
+                                behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+                                    ? barna
+                                          .filter(
+                                              (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
+                                                  opprettBehandlingBarn.checked
+                                          )
+                                          .map(
+                                              (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
+                                                  opprettBehandlingBarn.barn.personIdent
+                                          )
+                                    : [],
+                        },
+                        true
+                    );
                 }}
                 senderInn={senderInn}
             >
