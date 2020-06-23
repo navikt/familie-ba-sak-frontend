@@ -2,6 +2,10 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import classNames from 'classnames';
+import { useEffect } from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useHistory } from 'react-router';
+import { ISide, sider } from '../Venstremeny/sider';
 
 interface IProps {
     className?: string;
@@ -25,8 +29,28 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     tittel,
     maxWidthStyle = '40rem',
 }) => {
+    const history = useHistory();
+    const { forrigeÅpneSide } = useBehandling();
+
+    useEffect(() => {
+        const element = document.getElementById('skjemasteg');
+
+        const index: number = Object.values(sider).findIndex((side: ISide) =>
+            history.location.pathname.includes(side.href)
+        );
+        const forrigeSide: ISide | undefined = Object.values(sider)[index - 1];
+
+        if (element && forrigeSide && forrigeÅpneSide?.href.includes(forrigeSide.href)) {
+            element.scrollIntoView({ block: 'start' });
+        }
+    }, [forrigeÅpneSide]);
+
     return (
-        <div className={classNames('skjemasteg', className)} style={{ maxWidth: maxWidthStyle }}>
+        <div
+            id={'skjemasteg'}
+            className={classNames('skjemasteg', className)}
+            style={{ maxWidth: maxWidthStyle }}
+        >
             <Systemtittel children={tittel} />
 
             {children}
