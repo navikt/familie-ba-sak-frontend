@@ -22,6 +22,7 @@ import {
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
+import { IBehandling } from '../typer/behandling';
 
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
@@ -40,7 +41,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     const [dokumenttype, settDokumenttype] = useState<Dokumenttype>(
         Dokumenttype.SØKNAD_OM_ORDINÆR_BARNETRYGD
     );
-    const hentAktivBehandlingForJournalføring = () => {
+    const hentAktivBehandlingForJournalføring = (): IBehandling | undefined => {
         let aktivBehandling = undefined;
         if (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
@@ -50,7 +51,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         }
         return aktivBehandling;
     };
-    const { fagsak, hentFagsak } = useFagsakRessurser();
+    const { fagsak } = useFagsakRessurser();
     const [knyttTilFagsak, settKnyttTilFagsak] = useState(true);
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = useState<number[]>([]);
 
@@ -155,7 +156,15 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                 .then((fagsakId: Ressurs<string>) => {
                     settSenderInn(false);
                     if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                        hentFagsak(fagsakId.data);
+                        const aktivBehandling = hentAktivBehandlingForJournalføring();
+                        if (
+                            aktivBehandling &&
+                            tilknyttedeBehandlingIder.includes(aktivBehandling.behandlingId)
+                        ) {
+                            history.push(`/fagsak/${fagsakId.data}`);
+                        } else {
+                            history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
+                        }
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
                         history.push('/oppgaver');
                     } else if (fagsakId.status === RessursStatus.FEILET) {

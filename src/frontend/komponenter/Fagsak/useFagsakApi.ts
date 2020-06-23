@@ -47,7 +47,6 @@ const useFagsakApi = (
                     settVisFeilmeldinger(true);
                     settFeilmelding('Opprettelse av fagsak feilet');
                 }
-                return response;
             })
             .catch(() => {
                 settSenderInn(false);
@@ -56,7 +55,7 @@ const useFagsakApi = (
             });
     };
 
-    const opprettBehandling = (data: IOpprettBehandlingData, redirectEtterOpprettelse: boolean) => {
+    const opprettBehandling = (data: IOpprettBehandlingData) => {
         settSenderInn(true);
         axiosRequest<IFagsak, IOpprettBehandlingData>({
             data,
@@ -79,7 +78,7 @@ const useFagsakApi = (
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
                         );
-                    } else if (redirectEtterOpprettelse) {
+                    } else {
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
                         );

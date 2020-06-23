@@ -57,11 +57,11 @@ const ManuellJournalføringContent: React.FC = () => {
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = React.useState<string>(
-        ''
-    );
+    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = React.useState<
+        string | undefined
+    >(undefined);
 
-    const { opprettEllerHentFagsak, opprettBehandling, opprettFagsak } = useFagsakApi(
+    const { opprettBehandling, opprettFagsak } = useFagsakApi(
         _ => {
             'Feilmelding';
         },
@@ -94,16 +94,13 @@ const ManuellJournalføringContent: React.FC = () => {
                 behandlinger && behandlinger.length > 0
                     ? Behandlingstype.REVURDERING
                     : Behandlingstype.FØRSTEGANGSBEHANDLING;
-            opprettBehandling(
-                {
-                    behandlingType: behandlingType,
-                    søkersIdent: søker,
-                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
-                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
-                    barnasIdenter: [],
-                },
-                false
-            );
+            opprettBehandling({
+                behandlingType: behandlingType,
+                søkersIdent: søker,
+                kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
+                underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
+                barnasIdenter: [],
+            });
         }
     };
 
@@ -239,6 +236,9 @@ const ManuellJournalføringContent: React.FC = () => {
                                 <Pluss />
                                 {'Opprett ny behandling'}
                             </KnappBase>
+                            {opprettBehandlingFeilmelding !== undefined && (
+                                <Feilmelding>{opprettBehandlingFeilmelding}</Feilmelding>
+                            )}
                         </div>
                     )}
                     {behandlinger && behandlinger.length > 0 && (
