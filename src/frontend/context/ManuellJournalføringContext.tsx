@@ -1,17 +1,7 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import React, { useState } from 'react';
-
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    Ressurs,
-    RessursStatus,
-} from '../typer/ressurs';
-import { useApp } from './AppContext';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
-import { IPerson } from '../typer/person';
+import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import {
     Dokumenttype,
@@ -21,7 +11,16 @@ import {
     ILogiskVedlegg,
     IRestOppdaterJournalpost,
 } from '../typer/manuell-journalføring';
+import { IPerson } from '../typer/person';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '../typer/ressurs';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
+import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {

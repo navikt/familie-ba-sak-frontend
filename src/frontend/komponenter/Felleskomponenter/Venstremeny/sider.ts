@@ -1,8 +1,8 @@
 import {
-    BehandlingSteg,
-    IBehandling,
-    Behandlingstype,
     BehandlingResultat,
+    BehandlingSteg,
+    Behandlingstype,
+    IBehandling,
 } from '../../../typer/behandling';
 
 export interface ISide {

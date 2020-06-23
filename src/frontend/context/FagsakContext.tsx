@@ -2,6 +2,11 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 import { useHistory } from 'react-router';
+import {
+    erViPåUdefinertFagsakSide,
+    finnSideForBehandlingssteg,
+    ISide,
+} from '../komponenter/Felleskomponenter/Venstremeny/sider';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
@@ -9,11 +14,6 @@ import { IPerson } from '../typer/person';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
-import {
-    ISide,
-    finnSideForBehandlingssteg,
-    erViPåUdefinertFagsakSide,
-} from '../komponenter/Felleskomponenter/Venstremeny/sider';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
@@ -87,11 +87,12 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                         const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
                             aktivBehandling.steg
                         );
-
                         if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
                             history.push(
                                 `/fagsak/${hentetFagsak.data.id}/${aktivBehandling.behandlingId}/${sideForSteg.href}`
                             );
+                        } else {
+                            history.push(`/fagsak/${hentetFagsak.data.id}/saksoversikt`);
                         }
                     }
                 }

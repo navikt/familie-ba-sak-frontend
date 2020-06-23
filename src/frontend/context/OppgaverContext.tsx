@@ -1,20 +1,19 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
+import moment from 'moment';
 import React from 'react';
-
+import { useHistory } from 'react-router';
+import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
+import VisOppgaver from '../komponenter/Oppgaver/VisOppgaver';
 import {
-    IOppgave,
-    SaksbehandlerFilter,
-    OppgavetypeFilter,
     IFinnOppgaveRequest,
     IHentOppgaveDto,
+    IOppgave,
+    OppgavetypeFilter,
+    SaksbehandlerFilter,
 } from '../typer/oppgave';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
 import { useApp } from './AppContext';
-import { useHistory } from 'react-router';
-import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
-import moment from 'moment';
-import VisOppgaver from '../komponenter/Oppgaver/VisOppgaver';
 
 export const oppgaveSideLimit = 15;
 
@@ -199,13 +198,10 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 ) {
                     history.push(`/oppgaver/journalfør/${oppgave.id}`);
                 } else {
-                    opprettEllerHentFagsak(
-                        {
-                            personIdent: null,
-                            aktørId: oppgave.aktoerId,
-                        },
-                        true
-                    );
+                    opprettEllerHentFagsak({
+                        personIdent: null,
+                        aktørId: oppgave.aktoerId,
+                    });
                 }
                 return oppgaverRes;
             })

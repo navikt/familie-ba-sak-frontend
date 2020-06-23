@@ -1,7 +1,6 @@
 import { FamilieCheckbox } from '@navikt/familie-form-elements/dist';
 import moment from 'moment';
-import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
-import AlertStripe from 'nav-frontend-alertstriper';
+import AlertStripe, { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
 import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
@@ -33,8 +32,8 @@ import { randomUUID } from '../../utils/commons';
 import { datoformat, formaterDato } from '../../utils/formatter';
 import useFagsakApi from '../Fagsak/useFagsakApi';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
-import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
+import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
@@ -58,8 +57,11 @@ const ManuellJournalføringContent: React.FC = () => {
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = React.useState<string>(
+        ''
+    );
 
-    const { opprettEllerHentFagsak, opprettBehandling } = useFagsakApi(
+    const { opprettEllerHentFagsak, opprettBehandling, opprettFagsak } = useFagsakApi(
         _ => {
             'Feilmelding';
         },
@@ -74,24 +76,24 @@ const ManuellJournalføringContent: React.FC = () => {
             moment(b.opprettetTidspunkt).diff(moment(a.opprettetTidspunkt))
         );
 
-    const onClickOpprett = (data: IDataForManuellJournalføring) => {
-        opprettEllerHentFagsak(
-            {
-                personIdent: data.person?.personIdent ?? null,
-                aktørId: null,
-            },
-            false
-        ).then(() => {
+    const onClickOpprett = async (data: IDataForManuellJournalføring) => {
+        const søker = data.person?.personIdent ?? '';
+        if (søker === '') {
+            settOpprettBehandlingFeilmelding(
+                'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
+            );
+        } else {
+            if (!data.fagsak) {
+                await opprettFagsak({
+                    personIdent: data.person?.personIdent ?? null,
+                    aktørId: null,
+                });
+            }
+
             const behandlingType =
                 behandlinger && behandlinger.length > 0
                     ? Behandlingstype.REVURDERING
                     : Behandlingstype.FØRSTEGANGSBEHANDLING;
-            const søker = data.person?.personIdent ?? '';
-            if (søker === '') {
-                throw new Error(
-                    'Klarer ikke opprette behandling fordi søker ikke kan hentes fra fagsak.'
-                );
-            }
             opprettBehandling(
                 {
                     behandlingType: behandlingType,
@@ -102,7 +104,7 @@ const ManuellJournalføringContent: React.FC = () => {
                 },
                 false
             );
-        });
+        }
     };
 
     switch (dataForManuellJournalføring.status) {

@@ -1,7 +1,7 @@
-import { Systemtittel, Feilmelding } from 'nav-frontend-typografi';
-import React from 'react';
-import { Input } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
+import { Input } from 'nav-frontend-skjema';
+import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
+import React from 'react';
 import useFagsakApi from '../Fagsak/useFagsakApi';
 
 const OppgaveHeader: React.FunctionComponent = () => {
@@ -30,13 +30,10 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 <Knapp
                     type={'hoved'}
                     onClick={() => {
-                        opprettEllerHentFagsak(
-                            {
-                                personIdent,
-                                aktørId: null,
-                            },
-                            true
-                        );
+                        opprettEllerHentFagsak({
+                            personIdent,
+                            aktørId: null,
+                        });
                     }}
                     children={'Fortsett'}
                     className={'oppgave-header__opprettFagsakKnapp'}

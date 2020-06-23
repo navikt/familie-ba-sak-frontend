@@ -19,12 +19,18 @@ const useFagsakApi = (
     const history = useHistory();
     const [senderInn, settSenderInn] = useState(false);
 
-    const opprettEllerHentFagsak = async (
-        data: IOpprettEllerHentFagsakData,
-        redirectEtterOpprettelseEllerHenting: boolean
-    ) => {
+    const opprettFagsak = async (data: IOpprettEllerHentFagsakData) => {
         settSenderInn(true);
-        await axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
+        return axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
+            data,
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker`,
+        });
+    };
+
+    const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {
+        settSenderInn(true);
+        axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
@@ -33,9 +39,7 @@ const useFagsakApi = (
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-                    if (redirectEtterOpprettelseEllerHenting) {
-                        history.push(`/fagsak/${response.data.id}/saksoversikt`);
-                    }
+                    history.push(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
                     settFeilmelding(response.frontendFeilmelding);
@@ -145,6 +149,7 @@ const useFagsakApi = (
         opprettEllerHentFagsak,
         validerVilkårsvurderingOgSendInn,
         senderInn,
+        opprettFagsak,
     };
 };
 
