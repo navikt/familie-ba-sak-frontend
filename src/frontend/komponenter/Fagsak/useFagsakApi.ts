@@ -25,7 +25,24 @@ const useFagsakApi = (
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
-        });
+        })
+            .then((response: Ressurs<IFagsak>) => {
+                settSenderInn(false);
+                if (response.status === RessursStatus.SUKSESS) {
+                    settFagsak(response);
+                } else if (response.status === RessursStatus.FEILET) {
+                    settVisFeilmeldinger(true);
+                    settFeilmelding(response.frontendFeilmelding);
+                } else {
+                    settVisFeilmeldinger(true);
+                    settFeilmelding('Opprettelse av fagsak feilet');
+                }
+            })
+            .catch(() => {
+                settSenderInn(false);
+                settVisFeilmeldinger(true);
+                settFeilmelding('Opprettelse av fagsak feilet');
+            });
     };
 
     const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {

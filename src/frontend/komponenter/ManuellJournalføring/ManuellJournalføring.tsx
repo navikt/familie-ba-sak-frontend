@@ -297,7 +297,7 @@ const ManuellJournalføringContent: React.FC = () => {
                         </table>
                     )}
                     {feilmeldinger.length > 0 && visFeilmeldinger && (
-                        <Feiloppsummering
+                        <Feiloppsummering // TODO: Fanges det her opp feilmeldinger fra fagsakApi ved opprettelse av fagsak og behandling?
                             tittel={'For å gå videre må du rette opp følgende:'}
                             feil={feilmeldinger}
                         />
