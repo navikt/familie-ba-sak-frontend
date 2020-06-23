@@ -6,7 +6,7 @@ import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
 import { Feiloppsummering, Input, Select } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import {
     ManuellJournalføringProvider,
@@ -57,17 +57,12 @@ const ManuellJournalføringContent: React.FC = () => {
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = React.useState<
-        string | undefined
-    >(undefined);
+    const [journalføringFeilmelding, settJournalføringFeilmelding] = useState('');
+    const [visJournalføringFeilmelding, settVisJournalføringFeilmelding] = useState(false);
 
     const { opprettBehandling, opprettFagsak } = useFagsakApi(
-        _ => {
-            'Feilmelding';
-        },
-        _ => {
-            'Feilmelding';
-        }
+        settVisJournalføringFeilmelding,
+        settJournalføringFeilmelding
     );
 
     const behandlinger =
@@ -79,7 +74,7 @@ const ManuellJournalføringContent: React.FC = () => {
     const onClickOpprett = async (data: IDataForManuellJournalføring) => {
         const søker = data.person?.personIdent ?? '';
         if (søker === '') {
-            settOpprettBehandlingFeilmelding(
+            settJournalføringFeilmelding(
                 'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
             );
         } else {
@@ -90,17 +85,22 @@ const ManuellJournalføringContent: React.FC = () => {
                 });
             }
 
-            const behandlingType =
-                behandlinger && behandlinger.length > 0
-                    ? Behandlingstype.REVURDERING
-                    : Behandlingstype.FØRSTEGANGSBEHANDLING;
-            opprettBehandling({
-                behandlingType: behandlingType,
-                søkersIdent: søker,
-                kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
-                underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
-                barnasIdenter: [],
-            });
+            console.log('Feilmelding: ', journalføringFeilmelding);
+            console.log('Vis feilmelding:', visJournalføringFeilmelding);
+
+            if (!visJournalføringFeilmelding) {
+                const behandlingType =
+                    behandlinger && behandlinger.length > 0
+                        ? Behandlingstype.REVURDERING
+                        : Behandlingstype.FØRSTEGANGSBEHANDLING;
+                opprettBehandling({
+                    behandlingType: behandlingType,
+                    søkersIdent: søker,
+                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
+                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
+                    barnasIdenter: [],
+                });
+            }
         }
     };
 
@@ -236,8 +236,8 @@ const ManuellJournalføringContent: React.FC = () => {
                                 <Pluss />
                                 {'Opprett ny behandling'}
                             </KnappBase>
-                            {opprettBehandlingFeilmelding !== undefined && (
-                                <Feilmelding>{opprettBehandlingFeilmelding}</Feilmelding>
+                            {visJournalføringFeilmelding && (
+                                <Feilmelding>{journalføringFeilmelding}</Feilmelding>
                             )}
                         </div>
                     )}
@@ -297,7 +297,7 @@ const ManuellJournalføringContent: React.FC = () => {
                         </table>
                     )}
                     {feilmeldinger.length > 0 && visFeilmeldinger && (
-                        <Feiloppsummering
+                        <Feiloppsummering // TODO: Fanges det her opp feilmeldinger fra fagsakApi ved opprettelse av fagsak og behandling?
                             tittel={'For å gå videre må du rette opp følgende:'}
                             feil={feilmeldinger}
                         />
