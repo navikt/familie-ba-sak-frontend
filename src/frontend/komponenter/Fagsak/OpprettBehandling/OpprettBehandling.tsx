@@ -30,7 +30,7 @@ const OpprettBehandling: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
     const aktivErÅpen = aktivBehandling
-        ? BehandlingSteg[aktivBehandling.steg] <= BehandlingSteg.BESLUTTE_VEDTAK
+        ? aktivBehandling.steg !== BehandlingSteg.BEHANDLING_AVSLUTTET
         : false;
 
     const nesteOnClick = () => {
