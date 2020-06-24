@@ -2,19 +2,27 @@ import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Route, Switch, useHistory, useParams } from 'react-router-dom';
+import { BehandlingProvider } from '../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
+import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
+import { IBehandling } from '../../typer/behandling';
 import { RessursStatus } from '../../typer/ressurs';
-import { hentAlder, formaterPersonIdent } from '../../utils/formatter';
+import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
+import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
+import {
+    erViPåUdefinertFagsakSide,
+    finnSideForBehandlingssteg,
+    ISide,
+} from '../Felleskomponenter/Venstremeny/sider';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import { BehandlingProvider } from '../../context/BehandlingContext';
-import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
 
 const FagsakContainer: React.FunctionComponent = () => {
+    const history = useHistory();
     const { fagsakId } = useParams();
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
@@ -31,6 +39,28 @@ const FagsakContainer: React.FunctionComponent = () => {
             }
         }
     }, [fagsakId]);
+
+    React.useEffect(() => {
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
+                fagsak.data
+            );
+
+            if (aktivBehandling) {
+                const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
+                    aktivBehandling.steg
+                );
+
+                if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
+                    history.push(
+                        `/fagsak/${fagsak.data.id}/${aktivBehandling.behandlingId}/${sideForSteg.href}`
+                    );
+                    return;
+                }
+            }
+            history.push(`/fagsak/${fagsak.data.id}/saksoversikt`);
+        }
+    }, [fagsak.status]);
 
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:

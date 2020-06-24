@@ -30,6 +30,7 @@ const useFagsakApi = (
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
+
                     history.push(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
@@ -74,8 +75,6 @@ const useFagsakApi = (
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
                         );
                     }
-
-                    return;
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
                     settFeilmelding(response.frontendFeilmelding);

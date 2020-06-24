@@ -1,7 +1,7 @@
-import { Systemtittel, Feilmelding } from 'nav-frontend-typografi';
-import React from 'react';
-import { Input } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
+import { Input } from 'nav-frontend-skjema';
+import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
+import React from 'react';
 import useFagsakApi from '../Fagsak/useFagsakApi';
 
 const OppgaveHeader: React.FunctionComponent = () => {
