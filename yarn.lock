@@ -642,10 +642,10 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.8.tgz#a4e85e30058267e7e9120ec6087bc2161b57f585"
-  integrity sha512-tAoK9rFZbggfiZIrtyB9xbbcdVyiWknmV3NDlopqZUAwwp1Z5yVnT4VL/7Ni/nN1AvQQtF4/pSHIBtPf0pn9bQ==
+"@navikt/familie-form-elements@1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.11.tgz#fecb93dfd96805f2ab9fc57630925976ac58f426"
+  integrity sha512-VhU8E3R/Bv0y5AuBPJWVUYioCaTUXbTAHxbeVQANNSJ/2yz3AsG3CA1xY6i2lgh/t/x2ufswEXLqWXx/4pN8kQ==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     nav-datovelger "^6.1.9"
@@ -7495,13 +7495,6 @@ nav-datovelger@^6.1.9:
   dependencies:
     focus-trap-react "^6.0.0"
 
-nav-datovelger@^6.1.9:
-  version "6.1.9"
-  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-6.1.9.tgz#ab99dd27c710d6299d9cff0ec4bde98f4f8e90a1"
-  integrity sha512-/85jt7ihtxn7qcVMmvyz00Z/RKCgPBdTTzVoviSTt9vkLy5o/PMircwCloq+BOJ8D0eq6aaNrs5TC689inKD8A==
-  dependencies:
-    focus-trap-react "^6.0.0"
-
 nav-frontend-alertstriper-style@2.0.14:
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.14.tgz#66edde2d6eb0bbc06051b07080b0444ac08f6503"
@@ -7622,7 +7615,7 @@ nav-frontend-skjema-style@^2.0.8, nav-frontend-skjema-style@^2.0.9:
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.0.9.tgz#afaa3e98db78834726c606e23d3b5ee61c86e9e9"
   integrity sha512-WPQ1nvy5LH+R1IIVpMBUnasvU8+Bd0WvtOMBBPpIgTaZkt+xEh2p2QJGJXSTt+vmNxRk1wEwFybV5shX5o8KfQ==
 
-nav-frontend-skjema@^3.0.6, nav-frontend-skjema@^3.0.7:
+nav-frontend-skjema@^3.0.6:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.8.tgz#06dd89f20fc16ead49ebd8add4f3a8d193a581f4"
   integrity sha512-EcqjMvfhlfIyDsex60LClvbmrh2D1JLzfvQAiB/cT02quDgz1u2Ms0ldxYeu4aREAqVKi6AKnn/TlxD71jlNFQ==
@@ -7665,11 +7658,6 @@ nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.18, nav-
     nav-frontend-core "^5.0.1"
 
 nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.17, nav-frontend-typografi@^2.0.20, nav-frontend-typografi@^2.0.21:
-  version "2.0.21"
-  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.21.tgz#b2ec61fb43f68db1214d0e81a255939403b579a3"
-  integrity sha512-a9Q284KeYBOk0PRq2qXHwxvefCMvIuPduKo8aJe39RPMpCqTBtHsZuUAT9Avp9jAY4FdF5hHazB+hPs1YcMcmQ==
-
-nav-frontend-typografi@^2.0.21:
   version "2.0.21"
   resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.21.tgz#b2ec61fb43f68db1214d0e81a255939403b579a3"
   integrity sha512-a9Q284KeYBOk0PRq2qXHwxvefCMvIuPduKo8aJe39RPMpCqTBtHsZuUAT9Avp9jAY4FdF5hHazB+hPs1YcMcmQ==

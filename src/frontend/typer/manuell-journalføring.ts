@@ -1,11 +1,13 @@
 import { INøkkelPar } from './common';
 import { IOppgave } from './oppgave';
 import { IPerson } from './person';
+import { IFagsak } from './fagsak';
 
 export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;
     oppgave: IOppgave;
     person?: IPerson;
+    fagsak?: IFagsak;
 }
 
 export interface IJournalpost {
@@ -114,6 +116,7 @@ export interface IRestOppdaterJournalpost {
     dokumentInfoId: string;
     eksisterendeLogiskeVedlegg: ILogiskVedlegg[];
     knyttTilFagsak: boolean;
+    tilknyttedeBehandlingIder: number[];
     logiskeVedlegg: ILogiskVedlegg[];
     navIdent: string;
 }

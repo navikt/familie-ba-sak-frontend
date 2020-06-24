@@ -2,45 +2,117 @@ import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper'
 import { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
-import { Feiloppsummering, Input, Radio, RadioGruppe, Select } from 'nav-frontend-skjema';
-import { Undertittel, Feilmelding } from 'nav-frontend-typografi';
-import React from 'react';
+import { Input, Select } from 'nav-frontend-skjema';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+import {
+    ManuellJournalføringProvider,
+    useManuellJournalføring,
+} from '../../context/ManuellJournalføringContext';
+import {
+    BehandlingKategori,
+    Behandlingstype,
+    BehandlingUnderkategori,
+} from '../../typer/behandling';
+import { IFagsak } from '../../typer/fagsak';
+import {
+    Dokumenttype,
+    dokumenttyper,
+    IDataForManuellJournalføring,
+    ILogiskVedlegg,
+    Journalstatus,
+} from '../../typer/manuell-journalføring';
 import { IPerson } from '../../typer/person';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { randomUUID } from '../../utils/commons';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
+import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
-import {
-    useManuellJournalføring,
-    ManuellJournalføringProvider,
-} from '../../context/ManuellJournalføringContext';
-import {
-    Journalstatus,
-    Dokumenttype,
-    dokumenttyper,
-    ILogiskVedlegg,
-} from '../../typer/manuell-journalføring';
+import { KnyttTilBehandling } from './KnyttTilBehandling';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
     const {
         dataForManuellJournalføring,
         dokumenttype,
-        feilmeldinger,
-        innsendingsfeilmelding,
-        knyttTilFagsak,
+        hentAktivBehandlingForJournalføring,
         logiskeVedlegg,
         manueltJournalfør,
+        opprettBehandling,
+        opprettFagsak,
         person,
         senderInn,
+        settDataForManuellJournalføring,
         settDokumenttype,
-        settKnyttTilFagsak,
         settLogiskeVedlegg,
         settPerson,
+        tilknyttedeBehandlingIder,
         validerSkjema,
-        visFeilmeldinger,
     } = useManuellJournalføring();
+
+    const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = useState<
+        string | undefined
+    >(undefined);
+
+    const behandlinger =
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+        dataForManuellJournalføring.data.fagsak?.behandlinger;
+
+    const onClickOpprett = async (data: IDataForManuellJournalføring) => {
+        const søker = data.person?.personIdent ?? '';
+        if (søker === '') {
+            settOpprettBehandlingFeilmelding(
+                'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
+            );
+        } else {
+            const fagsak: IFagsak | undefined = !data.fagsak
+                ? await opprettFagsak({
+                      personIdent: data.person?.personIdent ?? null,
+                      aktørId: null,
+                  })
+                      .then((response: Ressurs<IFagsak>) =>
+                          response.status === RessursStatus.SUKSESS ? response.data : undefined
+                      )
+                      .catch(() => undefined)
+                : data.fagsak;
+
+            if (fagsak) {
+                const behandlingType =
+                    behandlinger && behandlinger.length > 0
+                        ? Behandlingstype.REVURDERING
+                        : Behandlingstype.FØRSTEGANGSBEHANDLING;
+
+                const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
+                    behandlingType: behandlingType,
+                    søkersIdent: søker,
+                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
+                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
+                    barnasIdenter: [],
+                }).then((response: Ressurs<IFagsak>) => response);
+
+                if (
+                    dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+                    fagsakMedBehandling.status === RessursStatus.SUKSESS
+                ) {
+                    settDataForManuellJournalføring({
+                        status: RessursStatus.SUKSESS,
+                        data: {
+                            ...dataForManuellJournalføring.data,
+                            fagsak: fagsakMedBehandling.data,
+                        },
+                    });
+                } else if (fagsakMedBehandling.status === RessursStatus.FEILET) {
+                    settOpprettBehandlingFeilmelding(fagsakMedBehandling.frontendFeilmelding);
+                } else {
+                    settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
+                }
+            } else {
+                settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
+            }
+        }
+    };
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
@@ -55,7 +127,11 @@ const ManuellJournalføringContent: React.FC = () => {
                     }}
                     nesteKnappTittel={'Journalfør'}
                     nesteOnClick={() => {
-                        manueltJournalfør();
+                        if (tilknyttedeBehandlingIder.length < 1) {
+                            settVisModal(true);
+                        } else {
+                            manueltJournalfør();
+                        }
                     }}
                     senderInn={senderInn}
                 >
@@ -69,7 +145,6 @@ const ManuellJournalføringContent: React.FC = () => {
                         }}
                     />
                     <br />
-
                     <Select
                         bredde={'xl'}
                         id={'manuell-journalføring-dokumenttype'}
@@ -88,7 +163,6 @@ const ManuellJournalføringContent: React.FC = () => {
                             );
                         })}
                     </Select>
-
                     <br />
                     <PanelBase className={'panel--gra'}>
                         <Undertittel children={'Annet innhold'} />
@@ -151,30 +225,55 @@ const ManuellJournalføringContent: React.FC = () => {
                     </PanelBase>
                     <br />
                     <br />
-
-                    <RadioGruppe legend={'Knytt til fagsak'}>
-                        <Radio
-                            name={'ja'}
-                            label={'Ja'}
-                            checked={knyttTilFagsak}
-                            onChange={() => settKnyttTilFagsak(true)}
-                        />
-                        <Radio
-                            name={'nei'}
-                            label={'Nei'}
-                            checked={!knyttTilFagsak}
-                            onChange={() => settKnyttTilFagsak(false)}
-                        />
-                    </RadioGruppe>
-
-                    {feilmeldinger.length > 0 && visFeilmeldinger && (
-                        <Feiloppsummering
-                            tittel={'For å gå videre må du rette opp følgende:'}
-                            feil={feilmeldinger}
-                        />
+                    <KnyttTilBehandling
+                        aktivBehandlingFinnes={hentAktivBehandlingForJournalføring() !== undefined}
+                        dataForManuellJournalføring={dataForManuellJournalføring.data}
+                        onClickOpprett={onClickOpprett}
+                        opprettBehandlingFeilmelding={opprettBehandlingFeilmelding}
+                    />
+                    {visModal && (
+                        <UIModalWrapper
+                            modal={{
+                                className: 'søknad-modal',
+                                tittel: 'Ønsker du å journalføre uten å knytte til behandling?',
+                                lukkKnapp: false,
+                                visModal: visModal,
+                                actions: [
+                                    <Knapp
+                                        key={'ja'}
+                                        type={'hoved'}
+                                        mini={true}
+                                        onClick={() => {
+                                            settVisModal(false);
+                                            manueltJournalfør();
+                                        }}
+                                        children={'Ja, journalfør'}
+                                    />,
+                                    <Knapp
+                                        key={'nei'}
+                                        mini={true}
+                                        onClick={() => {
+                                            settVisModal(false);
+                                        }}
+                                        children={
+                                            behandlinger && behandlinger.length > 0
+                                                ? hentAktivBehandlingForJournalføring()
+                                                    ? 'Nei, velg behandling'
+                                                    : 'Nei, velg/opprett behandling'
+                                                : 'Nei, opprett behandling'
+                                        }
+                                    />,
+                                ],
+                            }}
+                        >
+                            <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
+                                Du har valgt å journalføre uten å knytte dokumentet til en spesifikk
+                                behandling. Journalposten knyttes kun til personen.
+                                <br />
+                                (Tilsvarende "Knytt til generell sak" i Gosys).
+                            </Normaltekst>
+                        </UIModalWrapper>
                     )}
-
-                    {visFeilmeldinger && <Feilmelding children={innsendingsfeilmelding} />}
                 </Skjemasteg>
             ) : (
                 <AlertStripeAdvarsel
