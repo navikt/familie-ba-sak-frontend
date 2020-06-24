@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { Ressurs, RessursStatus } from '../../typer/ressurs';
+import { Ressurs, RessursStatus, byggFeiletRessurs } from '../../typer/ressurs';
 import { IPersonResultat } from '../../typer/vilkår';
 import { erBehandlingenInnvilget, hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
@@ -19,7 +19,9 @@ const useFagsakApi = (
     const history = useHistory();
     const [senderInn, settSenderInn] = useState(false);
 
-    const opprettFagsak = async (data: IOpprettEllerHentFagsakData) => {
+    const opprettEllerHentFagsak = async (
+        data: IOpprettEllerHentFagsakData
+    ): Promise<Ressurs<IFagsak>> => {
         settSenderInn(true);
         return axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
             data,
@@ -30,32 +32,7 @@ const useFagsakApi = (
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-                } else if (response.status === RessursStatus.FEILET) {
-                    settVisFeilmeldinger(true);
-                    settFeilmelding(response.frontendFeilmelding);
-                } else {
-                    settVisFeilmeldinger(true);
-                    settFeilmelding('Opprettelse av fagsak feilet');
-                }
-            })
-            .catch(() => {
-                settSenderInn(false);
-                settVisFeilmeldinger(true);
-                settFeilmelding('Opprettelse av fagsak feilet');
-            });
-    };
 
-    const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {
-        settSenderInn(true);
-        axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
-            data,
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker`,
-        })
-            .then((response: Ressurs<IFagsak>) => {
-                settSenderInn(false);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settFagsak(response);
                     history.push(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
@@ -64,15 +41,17 @@ const useFagsakApi = (
                     settVisFeilmeldinger(true);
                     settFeilmelding('Opprettelse av fagsak feilet');
                 }
+                return response;
             })
             .catch(() => {
                 settSenderInn(false);
                 settVisFeilmeldinger(true);
                 settFeilmelding('Opprettelse av fagsak feilet');
+                return byggFeiletRessurs('Opprettelse av fagsak feilet');
             });
     };
 
-    const opprettBehandling = (data: IOpprettBehandlingData) => {
+    const opprettBehandling = (data: IOpprettBehandlingData, redirect = true) => {
         settSenderInn(true);
         axiosRequest<IFagsak, IOpprettBehandlingData>({
             data,
@@ -92,13 +71,17 @@ const useFagsakApi = (
                         settVisFeilmeldinger(true);
                         settFeilmelding('Opprettelse av behandling feilet');
                     } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
-                        history.push(
-                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
-                        );
+                        if (redirect) {
+                            history.push(
+                                `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
+                            );
+                        }
                     } else {
-                        history.push(
-                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
-                        );
+                        if (redirect) {
+                            history.push(
+                                `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
+                            );
+                        }
                     }
 
                     return;
@@ -165,7 +148,6 @@ const useFagsakApi = (
         opprettEllerHentFagsak,
         validerVilkårsvurderingOgSendInn,
         senderInn,
-        opprettFagsak,
     };
 };
 

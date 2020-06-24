@@ -2,7 +2,7 @@ import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Route, Switch, useParams, useHistory } from 'react-router-dom';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { RessursStatus } from '../../typer/ressurs';
 import { hentAlder, formaterPersonIdent } from '../../utils/formatter';
@@ -13,8 +13,16 @@ import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import { BehandlingProvider } from '../../context/BehandlingContext';
 import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
+import { IBehandling } from '../../typer/behandling';
+import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
+import {
+    ISide,
+    finnSideForBehandlingssteg,
+    erViPåUdefinertFagsakSide,
+} from '../Felleskomponenter/Venstremeny/sider';
 
 const FagsakContainer: React.FunctionComponent = () => {
+    const history = useHistory();
     const { fagsakId } = useParams();
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
@@ -31,6 +39,29 @@ const FagsakContainer: React.FunctionComponent = () => {
             }
         }
     }, [fagsakId]);
+
+    React.useEffect(() => {
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
+                fagsak.data
+            );
+
+            if (aktivBehandling) {
+                const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
+                    aktivBehandling.steg
+                );
+
+                if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
+                    history.push(
+                        `/fagsak/${fagsak.data.id}/${aktivBehandling.behandlingId}/${sideForSteg.href}`
+                    );
+                }
+                /* TODO else {
+                    history.push(`/fagsak/${fagsak.data.id}/saksoversikt`);
+                }*/
+            }
+        }
+    }, [fagsak.status]);
 
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:

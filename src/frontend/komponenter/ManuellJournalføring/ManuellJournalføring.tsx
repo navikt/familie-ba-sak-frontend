@@ -30,40 +30,39 @@ import { IPerson } from '../../typer/person';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { randomUUID } from '../../utils/commons';
 import { datoformat, formaterDato } from '../../utils/formatter';
-import useFagsakApi from '../Fagsak/useFagsakApi';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { IFagsak } from '../../typer/fagsak';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
     const {
-        hentAktivBehandlingForJournalføring,
         dataForManuellJournalføring,
         dokumenttype,
         feilmeldinger,
+        hentAktivBehandlingForJournalføring,
         innsendingsfeilmelding,
-        tilknyttedeBehandlingIder,
         logiskeVedlegg,
         manueltJournalfør,
+        opprettBehandling,
+        opprettFagsak,
         person,
         senderInn,
+        settDataForManuellJournalføring,
         settDokumenttype,
-        settTilknyttedeBehandlingIder,
         settLogiskeVedlegg,
         settPerson,
+        settTilknyttedeBehandlingIder,
+        tilknyttedeBehandlingIder,
         validerSkjema,
         visFeilmeldinger,
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [journalføringFeilmelding, settJournalføringFeilmelding] = useState('');
-    const [visJournalføringFeilmelding, settVisJournalføringFeilmelding] = useState(false);
-
-    const { opprettBehandling, opprettFagsak } = useFagsakApi(
-        settVisJournalføringFeilmelding,
-        settJournalføringFeilmelding
-    );
+    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = useState<
+        string | undefined
+    >(undefined);
 
     const behandlinger =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
@@ -74,32 +73,53 @@ const ManuellJournalføringContent: React.FC = () => {
     const onClickOpprett = async (data: IDataForManuellJournalføring) => {
         const søker = data.person?.personIdent ?? '';
         if (søker === '') {
-            settJournalføringFeilmelding(
+            settOpprettBehandlingFeilmelding(
                 'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
             );
         } else {
-            if (!data.fagsak) {
-                await opprettFagsak({
-                    personIdent: data.person?.personIdent ?? null,
-                    aktørId: null,
-                });
-            }
+            const fagsak: IFagsak | undefined = !data.fagsak
+                ? await opprettFagsak({
+                      personIdent: data.person?.personIdent ?? null,
+                      aktørId: null,
+                  })
+                      .then((response: Ressurs<IFagsak>) =>
+                          response.status === RessursStatus.SUKSESS ? response.data : undefined
+                      )
+                      .catch(() => undefined)
+                : data.fagsak;
 
-            console.log('Feilmelding: ', journalføringFeilmelding);
-            console.log('Vis feilmelding:', visJournalføringFeilmelding);
-
-            if (!visJournalføringFeilmelding) {
+            if (fagsak) {
                 const behandlingType =
                     behandlinger && behandlinger.length > 0
                         ? Behandlingstype.REVURDERING
                         : Behandlingstype.FØRSTEGANGSBEHANDLING;
-                opprettBehandling({
+
+                const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
                     behandlingType: behandlingType,
                     søkersIdent: søker,
                     kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
                     underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
                     barnasIdenter: [],
-                });
+                }).then((response: Ressurs<IFagsak>) => response);
+
+                if (
+                    dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+                    fagsakMedBehandling.status === RessursStatus.SUKSESS
+                ) {
+                    settDataForManuellJournalføring({
+                        status: RessursStatus.SUKSESS,
+                        data: {
+                            ...dataForManuellJournalføring.data,
+                            fagsak: fagsakMedBehandling.data,
+                        },
+                    });
+                } else if (fagsakMedBehandling.status === RessursStatus.FEILET) {
+                    settOpprettBehandlingFeilmelding(fagsakMedBehandling.frontendFeilmelding);
+                } else {
+                    settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
+                }
+            } else {
+                settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
             }
         }
     };
@@ -236,8 +256,8 @@ const ManuellJournalføringContent: React.FC = () => {
                                 <Pluss />
                                 {'Opprett ny behandling'}
                             </KnappBase>
-                            {visJournalføringFeilmelding && (
-                                <Feilmelding>{journalføringFeilmelding}</Feilmelding>
+                            {opprettBehandlingFeilmelding && (
+                                <Feilmelding>{opprettBehandlingFeilmelding}</Feilmelding>
                             )}
                         </div>
                     )}
@@ -297,7 +317,7 @@ const ManuellJournalføringContent: React.FC = () => {
                         </table>
                     )}
                     {feilmeldinger.length > 0 && visFeilmeldinger && (
-                        <Feiloppsummering // TODO: Fanges det her opp feilmeldinger fra fagsakApi ved opprettelse av fagsak og behandling?
+                        <Feiloppsummering
                             tittel={'For å gå videre må du rette opp følgende:'}
                             feil={feilmeldinger}
                         />
