@@ -24,6 +24,12 @@ export enum FamilieRelasjonRolle {
     EKTE = 'EKTE',
 }
 
+export enum PersonTypeVisningsRangering {
+    SØKER = 1,
+    ANNENPART = 2,
+    BARN = 3,
+}
+
 // Interface
 export interface IPerson {
     fødselsdato: string;
