@@ -1,24 +1,21 @@
-import { FamilieCheckbox } from '@navikt/familie-form-elements/dist';
-import moment from 'moment';
-import AlertStripe, { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
-import KnappBase, { Knapp } from 'nav-frontend-knapper';
+import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
-import { Feiloppsummering, Input, Select } from 'nav-frontend-skjema';
-import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Input, Select } from 'nav-frontend-skjema';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import {
     ManuellJournalføringProvider,
     useManuellJournalføring,
 } from '../../context/ManuellJournalføringContext';
-import Pluss from '../../ikoner/Pluss';
 import {
     BehandlingKategori,
     Behandlingstype,
     BehandlingUnderkategori,
-    IBehandling,
 } from '../../typer/behandling';
+import { IFagsak } from '../../typer/fagsak';
 import {
     Dokumenttype,
     dokumenttyper,
@@ -29,20 +26,17 @@ import {
 import { IPerson } from '../../typer/person';
 import { Ressurs, RessursStatus } from '../../typer/ressurs';
 import { randomUUID } from '../../utils/commons';
-import { datoformat, formaterDato } from '../../utils/formatter';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { IFagsak } from '../../typer/fagsak';
+import { KnyttTilBehandling } from './KnyttTilBehandling';
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
     const {
         dataForManuellJournalføring,
         dokumenttype,
-        feilmeldinger,
         hentAktivBehandlingForJournalføring,
-        innsendingsfeilmelding,
         logiskeVedlegg,
         manueltJournalfør,
         opprettBehandling,
@@ -53,10 +47,8 @@ const ManuellJournalføringContent: React.FC = () => {
         settDokumenttype,
         settLogiskeVedlegg,
         settPerson,
-        settTilknyttedeBehandlingIder,
         tilknyttedeBehandlingIder,
         validerSkjema,
-        visFeilmeldinger,
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
@@ -66,9 +58,7 @@ const ManuellJournalføringContent: React.FC = () => {
 
     const behandlinger =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-        dataForManuellJournalføring.data.fagsak?.behandlinger.sort((a, b) =>
-            moment(b.opprettetTidspunkt).diff(moment(a.opprettetTidspunkt))
-        );
+        dataForManuellJournalføring.data.fagsak?.behandlinger;
 
     const onClickOpprett = async (data: IDataForManuellJournalføring) => {
         const søker = data.person?.personIdent ?? '';
@@ -235,94 +225,12 @@ const ManuellJournalføringContent: React.FC = () => {
                     </PanelBase>
                     <br />
                     <br />
-                    {!hentAktivBehandlingForJournalføring() && (
-                        <div className={'journalføring__opprett-behandling'}>
-                            <AlertStripe type="info">
-                                {(behandlinger && behandlinger.length > 0
-                                    ? 'Det finnes ingen åpne behandlinger på denne brukeren.'
-                                    : 'Det er ikke registrert tidligere behandlinger på denne brukeren.') +
-                                    ' For å koble dokumentasjonen til en behandling, "Opprett ny behandling", eller journalfør uten å opprette behandling. '}
-                            </AlertStripe>
-                            <KnappBase
-                                aria-label={`utfør_opprettfagsakogbehandlingvedjournalføring}`}
-                                className={'ikon-knapp'}
-                                id={'d'}
-                                onClick={() => {
-                                    onClickOpprett(dataForManuellJournalføring.data);
-                                }}
-                                type="flat"
-                                kompakt={true}
-                            >
-                                <Pluss />
-                                {'Opprett ny behandling'}
-                            </KnappBase>
-                            {opprettBehandlingFeilmelding && (
-                                <Feilmelding>{opprettBehandlingFeilmelding}</Feilmelding>
-                            )}
-                        </div>
-                    )}
-                    {behandlinger && behandlinger.length > 0 && (
-                        <table className="tabell">
-                            <thead className="tabell__head">
-                                <tr className="tabell__head__tr">
-                                    <th>{'Behandlingstype'}</th>
-                                    <th>{'Status'}</th>
-                                    <th>{'Dato'}</th>
-                                </tr>
-                            </thead>
-                            <tbody className="tabell__body">
-                                {behandlinger.map((behandling: IBehandling) => (
-                                    <tr key={behandling.behandlingId}>
-                                        <td className={'behandlingliste__tabell--behandlingtype'}>
-                                            <FamilieCheckbox
-                                                erLesevisning={false}
-                                                label={behandling.type}
-                                                checked={tilknyttedeBehandlingIder.includes(
-                                                    behandling.behandlingId
-                                                )}
-                                                onChange={() => {
-                                                    const id = behandling.behandlingId;
-                                                    if (
-                                                        tilknyttedeBehandlingIder.includes(
-                                                            behandling.behandlingId
-                                                        )
-                                                    ) {
-                                                        settTilknyttedeBehandlingIder(
-                                                            tilknyttedeBehandlingIder.filter(
-                                                                tilknyttedeBehandlingId =>
-                                                                    tilknyttedeBehandlingId !== id
-                                                            )
-                                                        );
-                                                    } else {
-                                                        settTilknyttedeBehandlingIder([
-                                                            ...tilknyttedeBehandlingIder,
-                                                            id,
-                                                        ]);
-                                                    }
-                                                }}
-                                            />
-                                        </td>
-                                        <td className={'behandlingliste__tabell--status'}>
-                                            {behandling.status}
-                                        </td>
-                                        <td className={'behandlingliste__tabell--dato'}>
-                                            {formaterDato(
-                                                moment(behandling.opprettetTidspunkt),
-                                                datoformat.DATO_FORKORTTET
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                    {feilmeldinger.length > 0 && visFeilmeldinger && (
-                        <Feiloppsummering
-                            tittel={'For å gå videre må du rette opp følgende:'}
-                            feil={feilmeldinger}
-                        />
-                    )}
-                    {visFeilmeldinger && <Feilmelding children={innsendingsfeilmelding} />}
+                    <KnyttTilBehandling
+                        aktivBehandlingFinnes={hentAktivBehandlingForJournalføring() !== undefined}
+                        dataForManuellJournalføring={dataForManuellJournalføring.data}
+                        onClickOpprett={onClickOpprett}
+                        opprettBehandlingFeilmelding={opprettBehandlingFeilmelding}
+                    />
                     {visModal && (
                         <UIModalWrapper
                             modal={{
