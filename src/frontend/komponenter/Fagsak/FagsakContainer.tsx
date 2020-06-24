@@ -90,7 +90,10 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 <div className={'fagsakcontainer__content--venstremeny'}>
                                     <Venstremeny fagsak={fagsak.data} />
                                 </div>
-                                <div className={'fagsakcontainer__content--main'}>
+                                <div
+                                    id={'fagsak-main'}
+                                    className={'fagsakcontainer__content--main'}
+                                >
                                     <Switch>
                                         <Route
                                             exact={true}

@@ -1,5 +1,5 @@
 import createUseContext from 'constate';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
 import {
     RessursStatus,
@@ -12,11 +12,24 @@ import { tilFeilside } from '../utils/commons';
 import { hentAktivBehandlingPåFagsak, hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
+import { useHistory } from 'react-router';
+import React from 'react';
+import { ISide, sider } from '../komponenter/Felleskomponenter/Venstremeny/sider';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsak } = useFagsakRessurser();
+
+    const history = useHistory();
+    const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
+    useEffect(() => {
+        settForrigeÅpneSide(
+            Object.values(sider).find((side: ISide) =>
+                history.location.pathname.includes(side.href)
+            )
+        );
+    }, [history.location.pathname]);
 
     const bestemÅpenBehandling = (behandlingId: string | undefined) => {
         if (fagsak.status === RessursStatus.SUKSESS) {
@@ -62,7 +75,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         }
     };
 
-    return { åpenBehandling, erLesevisning, bestemÅpenBehandling };
+    return { åpenBehandling, erLesevisning, bestemÅpenBehandling, forrigeÅpneSide };
 });
 
 export { BehandlingProvider, useBehandling };

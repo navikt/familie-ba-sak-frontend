@@ -106,15 +106,15 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     };
 
     return {
+        autentisert,
         axiosRequest,
         hentSaksbehandlerRolle,
-        autentisert,
         innloggetSaksbehandler,
-        åpneModal,
         lukkModal,
         modal,
         settModal,
         systemetLaster,
+        åpneModal,
     };
 });
 
