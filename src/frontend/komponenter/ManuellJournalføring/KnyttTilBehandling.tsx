@@ -7,19 +7,19 @@ import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import Pluss from '../../ikoner/Pluss';
-import { IBehandling } from '../../typer/behandling';
+import { BehandlingStatus, IBehandling } from '../../typer/behandling';
 import { IDataForManuellJournalføring } from '../../typer/manuell-journalføring';
 import { datoformat, formaterDato } from '../../utils/formatter';
 
 interface IKnyttTilBehandlingProps {
-    aktivBehandlingFinnes: boolean;
+    aktivBehandling: IBehandling | undefined;
     dataForManuellJournalføring: IDataForManuellJournalføring;
     onClickOpprett: (dataForManuellJournalføring: IDataForManuellJournalføring) => void;
     opprettBehandlingFeilmelding: string | undefined;
 }
 
 export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
-    aktivBehandlingFinnes,
+    aktivBehandling,
     dataForManuellJournalføring,
     onClickOpprett,
     opprettBehandlingFeilmelding,
@@ -27,6 +27,8 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
     const behandlinger = dataForManuellJournalføring.fagsak?.behandlinger.sort((a, b) =>
         moment(b.opprettetTidspunkt).diff(moment(a.opprettetTidspunkt))
     );
+    const visOpprettBehandlingKnapp =
+        !aktivBehandling || aktivBehandling.status === BehandlingStatus.FERDIGSTILT;
 
     const {
         tilknyttedeBehandlingIder,
@@ -38,7 +40,7 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
 
     return (
         <>
-            {!aktivBehandlingFinnes && (
+            {visOpprettBehandlingKnapp && (
                 <div className={'journalføring__opprett-behandling'}>
                     <AlertStripe type="info">
                         {(behandlinger && behandlinger.length > 0
