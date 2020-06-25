@@ -96,6 +96,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
+            skalViseNesteKnapp={errorMessage === undefined}
         >
             <div className="oppsummering">
                 {errorMessage === undefined ? (

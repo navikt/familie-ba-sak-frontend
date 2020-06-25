@@ -1,10 +1,10 @@
+import classNames from 'classnames';
 import { Knapp } from 'nav-frontend-knapper';
 import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import classNames from 'classnames';
 import { useEffect } from 'react';
-import { useBehandling } from '../../../context/BehandlingContext';
 import { useHistory } from 'react-router';
+import { useBehandling } from '../../../context/BehandlingContext';
 import { ISide, sider } from '../Venstremeny/sider';
 
 interface IProps {
@@ -16,6 +16,7 @@ interface IProps {
     senderInn: boolean;
     tittel: string;
     maxWidthStyle?: string;
+    skalViseNesteKnapp?: boolean;
 }
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
@@ -28,6 +29,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     senderInn,
     tittel,
     maxWidthStyle = '40rem',
+    skalViseNesteKnapp = true,
 }) => {
     const history = useHistory();
     const { forrigeÅpneSide } = useBehandling();
@@ -56,7 +58,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             {children}
 
             <div className={'skjemasteg__navigering'}>
-                {nesteOnClick && (
+                {nesteOnClick && skalViseNesteKnapp && (
                     <Knapp
                         type={'hoved'}
                         spinner={senderInn}
