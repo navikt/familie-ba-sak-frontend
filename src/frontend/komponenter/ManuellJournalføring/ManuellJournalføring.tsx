@@ -226,7 +226,7 @@ const ManuellJournalføringContent: React.FC = () => {
                     <br />
                     <br />
                     <KnyttTilBehandling
-                        aktivBehandlingFinnes={hentAktivBehandlingForJournalføring() !== undefined}
+                        aktivBehandling={hentAktivBehandlingForJournalføring()}
                         dataForManuellJournalføring={dataForManuellJournalføring.data}
                         onClickOpprett={onClickOpprett}
                         opprettBehandlingFeilmelding={opprettBehandlingFeilmelding}
