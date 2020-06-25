@@ -1,19 +1,18 @@
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { Behandlingstype } from '../../../typer/behandling';
+import { IFelt } from '../../../typer/felt';
 import {
     IPersonResultat,
+    IVilkårConfig,
     IVilkårResultat,
     vilkårConfig,
-    IVilkårConfig,
 } from '../../../typer/vilkår';
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
-import { IFelt } from '../../../typer/felt';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 
 interface IVilkårsvurderingSkjema {
     opprettelseFeilmelding: string;

@@ -1,12 +1,14 @@
+import moment from 'moment';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { diff, nyPeriode } from '../../typer/periode';
-import { IPerson } from '../../typer/person';
+import { IPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
     IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
 } from '../../typer/vilkår';
+import { datoformat } from '../../utils/formatter';
 import {
     erPeriodeGyldig,
     erResultatGyldig,
@@ -14,8 +16,6 @@ import {
     lagInitiellFelt,
 } from '../../utils/validators';
 import { kjørValidering, validerVilkår } from './validering';
-import { datoformat } from '../../utils/formatter';
-import moment from 'moment';
 
 export const sorterVilkårsvurderingForPerson = (
     vilkårResultater: IFelt<IVilkårResultat>[]
@@ -33,6 +33,7 @@ export const sorterVilkårsvurderingForPerson = (
  * @param personResultater perioder fra api
  * @param personer personer på behandlingen
  */
+
 export const mapFraRestVilkårsvurderingTilUi = (
     personResultater: IRestPersonResultat[],
     personer: IPerson[]
@@ -80,10 +81,22 @@ export const mapFraRestVilkårsvurderingTilUi = (
                 };
             }
         })
-    ).sort((a: IPersonResultat, b: IPersonResultat) =>
-        moment(a.person.fødselsdato, datoformat.ISO_DAG).diff(
-            moment(b.person.fødselsdato, datoformat.ISO_DAG),
+    ).sort((a: IPersonResultat, b: IPersonResultat) => {
+        if (
+            PersonTypeVisningsRangering[a.person.type] > PersonTypeVisningsRangering[b.person.type]
+        ) {
+            return 1;
+        }
+
+        if (
+            PersonTypeVisningsRangering[a.person.type] < PersonTypeVisningsRangering[b.person.type]
+        ) {
+            return -1;
+        }
+
+        return moment(b.person.fødselsdato, datoformat.ISO_DAG).diff(
+            moment(a.person.fødselsdato, datoformat.ISO_DAG),
             'day'
-        )
-    );
+        );
+    });
 };

@@ -6,15 +6,21 @@ import {
     IOpprettBehandlingBarn,
     useOpprettBehandling,
 } from '../../../context/OpprettBehandlingContext';
-import { formaterPersonIdent } from '../../../utils/formatter';
+import { datoformat, formaterPersonIdent } from '../../../utils/formatter';
 
 const VelgBarn: React.FC = () => {
     const { barna, settBarna } = useOpprettBehandling();
     const { erLesevisning } = useBehandling();
+    const sorterteBarn = barna.sort((a: IOpprettBehandlingBarn, b: IOpprettBehandlingBarn) => {
+        return moment(b.barn.fødselsdato, datoformat.ISO_DAG).diff(
+            moment(a.barn.fødselsdato, datoformat.ISO_DAG),
+            'day'
+        );
+    });
 
     return (
         <>
-            {barna.map((opprettBehandlingBarn: IOpprettBehandlingBarn) => {
+            {sorterteBarn.map((opprettBehandlingBarn: IOpprettBehandlingBarn) => {
                 const barn = opprettBehandlingBarn.barn;
                 const alder = barn.fødselsdato
                     ? moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years') + 'år'
