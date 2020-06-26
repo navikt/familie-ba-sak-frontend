@@ -40,28 +40,6 @@ const FagsakContainer: React.FunctionComponent = () => {
         }
     }, [fagsakId]);
 
-    React.useEffect(() => {
-        if (fagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
-                fagsak.data
-            );
-
-            if (aktivBehandling) {
-                const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
-                    aktivBehandling.steg
-                );
-
-                if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
-                    history.push(
-                        `/fagsak/${fagsak.data.id}/${aktivBehandling.behandlingId}/${sideForSteg.href}`
-                    );
-                    return;
-                }
-            }
-            history.push(`/fagsak/${fagsak.data.id}/saksoversikt`);
-        }
-    }, [fagsak.status]);
-
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
             switch (bruker.status) {
