@@ -2,19 +2,12 @@ import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
 import * as React from 'react';
-import { Route, Switch, useHistory, useParams } from 'react-router-dom';
+import { Route, Switch, useParams } from 'react-router-dom';
 import { BehandlingProvider } from '../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
-import { IBehandling } from '../../typer/behandling';
 import { RessursStatus } from '../../typer/ressurs';
-import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
-import {
-    erViPåUdefinertFagsakSide,
-    finnSideForBehandlingssteg,
-    ISide,
-} from '../Felleskomponenter/Venstremeny/sider';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
@@ -22,7 +15,6 @@ import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 
 const FagsakContainer: React.FunctionComponent = () => {
-    const history = useHistory();
     const { fagsakId } = useParams();
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
