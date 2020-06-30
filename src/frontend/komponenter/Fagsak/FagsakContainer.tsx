@@ -44,7 +44,6 @@ const FagsakContainer: React.FunctionComponent = () => {
             switch (bruker.status) {
                 case RessursStatus.SUKSESS:
                     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
-                    console.log(aktivBehandling);
                     return (
                         <BehandlingProvider>
                             <Visittkort

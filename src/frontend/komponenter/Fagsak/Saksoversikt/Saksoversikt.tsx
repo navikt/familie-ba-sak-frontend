@@ -4,7 +4,6 @@ import { Input } from 'nav-frontend-skjema';
 import 'nav-frontend-tabell-style';
 import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import {
@@ -27,7 +26,6 @@ interface IProps {
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
-    const history = useHistory();
     const [opphørsdato, setOpphørsdato] = React.useState('');
 
     const { bestemÅpenBehandling } = useBehandling();
