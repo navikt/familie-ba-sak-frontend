@@ -2,28 +2,25 @@ import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input } from 'nav-frontend-skjema';
 import 'nav-frontend-tabell-style';
-import { Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
 import {
-    behandlingsresultater,
     behandlingsstatuser,
     BehandlingStatus,
-    behandlingstyper,
     IBehandling,
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { IPersonBeregning } from '../../../typer/beregning';
-import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { datoformat, formaterIsoDato, formaterPersonIdent } from '../../../utils/formatter';
+import { datoformat } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import { useBehandling } from '../../../context/BehandlingContext';
-import Lenke from 'nav-frontend-lenker';
 import Behandlingshistorikk from './Behandlingshistorikk';
+import Utbetalinger from './Utbetalinger';
 
 interface IProps {
     fagsak: IFagsak;
@@ -64,11 +61,15 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return (
         <div className={'saksoversikt'}>
-            <Systemtittel children={'Saksoversikt'} />
+            <Systemtittel className={'tittel'} children={'Saksoversikt'} />
 
             <Informasjonsbolk
                 informasjon={[
-                    { label: `Vedtaksdato`, tekst: aktivVedtak?.vedtaksdato ?? 'Ikke satt' },
+                    {
+                        label: `Vedtaksdato`,
+                        tekst:
+                            moment(aktivVedtak?.vedtaksdato).format(datoformat.DATO) ?? 'Ikke satt',
+                    },
                     { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
                 ]}
             />
@@ -103,38 +104,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 aktivVedtak?.personBeregninger.length > 0 &&
                 gjeldendeBehandling?.status === BehandlingStatus.FERDIGSTILT && (
                     <div>
-                        <div className={'saksoversikt__utbetalinger'}>
-                            <Undertittel children={'Utbetalinger'} />
-                            <table className="tabell">
-                                <thead>
-                                    <tr>
-                                        <th children={'Person'} />
-                                        <th children={'Beløp'} />
-                                        <th children={'Periode'} />
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {aktivVedtak?.personBeregninger
-                                        .filter(
-                                            (personBeregning: IPersonBeregning) =>
-                                                personBeregning.ytelsePerioder.length > 0
-                                        )
-                                        .map((personBeregning: IPersonBeregning) => {
-                                            return (
-                                                <tr key={personBeregning.personIdent}>
-                                                    <td
-                                                        children={`${formaterPersonIdent(
-                                                            personBeregning.personIdent
-                                                        )}`}
-                                                    />
-                                                    <td children={`${personBeregning.beløp}`} />
-                                                    <td children={`${personBeregning.stønadFom}`} />
-                                                </tr>
-                                            );
-                                        })}
-                                </tbody>
-                            </table>
-                        </div>
+                        <Utbetalinger personbergninger={aktivVedtak.personBeregninger} />
                         <div className={'saksoversikt__opphør'}>
                             <Undertittel children={'Opphør utbetalinger for fagsak'} />
                             <Input

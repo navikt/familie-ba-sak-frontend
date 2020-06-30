@@ -694,10 +694,10 @@
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.3.tgz#8a3bec3d06cd6d2b92eb15b6de7aaecbf21d6c55"
   integrity sha512-rZwcfVZpKCz0Ib+OkqlCw8ObZaXMy+KZOxZcT/gYDSdq5g9jOfM6HkTrgKJwkon1fNyZytQHdYrSUchJ2OeHAA==
 
-"@navikt/familie-visittkort@^2.1.4":
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.4.tgz#10c133df89b830b8fe16563e75820249c40a1ee6"
-  integrity sha512-YSNkSzG/Ek31bWDHXFV2LFVY4fZkdFf4+IQCBosK3hxU6PxqfxAB62RnJmum80odp3u08Fy9kh2XHBz3DbKQhA==
+"@navikt/familie-visittkort@^2.1.5":
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.5.tgz#422216ce136a940cf35feb2028560e79e706f758"
+  integrity sha512-9p+fwdazNiiUspYFLTfOBgh7uUwxltGJzhPDQkngdYxLGGZ+W791iPofGLQGfy/IDSTdwmvv7v9THVXnUK9j1Q==
   dependencies:
     "@navikt/familie-clipboard" "^3.0.3"
     "@navikt/familie-ikoner" "^3.0.3"
