@@ -8,7 +8,6 @@ import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import {
-    behandlingsstatuser,
     BehandlingStatus,
     IBehandling,
     kategorier,
@@ -19,7 +18,7 @@ import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import Behandlingshistorikk from './Behandlingshistorikk';
+import Behandlinger from './Behandlinger';
 import Utbetalinger from './Utbetalinger';
 
 interface IProps {
@@ -73,32 +72,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
                 ]}
             />
-            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT ? (
-                <div className={'saksoversikt__aktivbehandling'}>
-                    <Undertittel children={'Aktiv behandling'} />
-                    <Informasjonsbolk
-                        informasjon={[
-                            { label: `Behandlingstype`, tekst: sakstype(aktivBehandling) },
-                            {
-                                label: `Behandlingsstatus`,
-                                tekst: aktivBehandling
-                                    ? behandlingsstatuser[aktivBehandling?.status].navn
-                                    : 'Ukjent',
-                            },
-                        ]}
-                    />
-                </div>
-            ) : (
-                <Knapp
-                    mini={true}
-                    onClick={() => {
-                        history.push(`/fagsak/${fagsak.id}/ny-behandling`);
-                    }}
-                    children={'Opprett behandling'}
-                />
-            )}
-
-            <Behandlingshistorikk fagsak={fagsak} behandlingshistorikk={behandlingshistorikk} />
 
             {aktivVedtak?.personBeregninger &&
                 aktivVedtak?.personBeregninger.length > 0 &&
@@ -136,6 +109,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         </div>
                     </div>
                 )}
+            <Behandlinger fagsak={fagsak} behandlingshistorikk={behandlingshistorikk} />
         </div>
     );
 };

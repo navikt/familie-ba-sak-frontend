@@ -12,10 +12,7 @@ interface IBehandlingshistorikkProps {
     behandlingshistorikk: IBehandling[];
 }
 
-const Behandlingshistorikk: React.FC<IBehandlingshistorikkProps> = ({
-    behandlingshistorikk,
-    fagsak,
-}) => {
+const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ behandlingshistorikk, fagsak }) => {
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
             <Undertittel children={'Behandlinger'} />
@@ -28,7 +25,6 @@ const Behandlingshistorikk: React.FC<IBehandlingshistorikkProps> = ({
                             <th children={'Resultat'} />
                             <th children={'Opprettet'} />
                             <th children={'Vedtaksdato'} />
-                            <th children={'Virkningstidspunkt'} />
                         </tr>
                     </thead>
                     <tbody>
@@ -74,19 +70,6 @@ const Behandlingshistorikk: React.FC<IBehandlingshistorikkProps> = ({
                                                     : 'Ukjent'
                                             }
                                         />
-                                        {/* TODO: hente reel virkningstidspunkt */}
-                                        <td
-                                            children={
-                                                aktivVedtakForBehandling &&
-                                                aktivVedtakForBehandling.personBeregninger[0]
-                                                    ? formaterIsoDato(
-                                                          aktivVedtakForBehandling
-                                                              .personBeregninger[0].stønadFom,
-                                                          datoformat.DATO
-                                                      )
-                                                    : 'Ukjent'
-                                            }
-                                        />
                                     </tr>
                                 );
                             })}
@@ -99,4 +82,4 @@ const Behandlingshistorikk: React.FC<IBehandlingshistorikkProps> = ({
     );
 };
 
-export default Behandlingshistorikk;
+export default Behandlinger;
