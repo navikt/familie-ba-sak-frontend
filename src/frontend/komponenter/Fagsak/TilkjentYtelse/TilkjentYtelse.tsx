@@ -8,9 +8,9 @@ import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import SystemetLaster from '../../Felleskomponenter/SystemetLaster/SystemetLaster';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
 import { IBehandling } from '../../../typer/behandling';
+import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -52,9 +52,6 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     };
 
     switch (tilkjentYtelseRessurs.status) {
-        case RessursStatus.HENTER:
-        case RessursStatus.IKKE_HENTET:
-            return <SystemetLaster />;
         case RessursStatus.FEILET:
             return (
                 <AlertStripe children={tilkjentYtelseRessurs.frontendFeilmelding} type={'feil'} />
@@ -69,33 +66,31 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         case RessursStatus.SUKSESS: {
             const harAndeler = tilkjentYtelseRessurs.data.length > 0;
             return (
-                <div className="tilkjentytelse">
-                    <Skjemasteg
-                        senderInn={false}
-                        tittel="Behandlingsresultat"
-                        forrigeOnClick={forrigeOnClick}
-                        nesteOnClick={nesteOnClick}
-                        maxWidthStyle={'80rem'}
-                    >
-                        {harAndeler ? (
-                            <div role="table">
-                                <OppsummeringsradHeader />
-                                {tilkjentYtelseRessurs.data
-                                    .slice()
-                                    .reverse()
-                                    .map((beregning, index) => {
-                                        return (
-                                            <Oppsummeringsrad beregning={beregning} key={index} />
-                                        );
-                                    })}
-                            </div>
-                        ) : (
-                            <div className="tilkjentytelse-informasjon">
-                                <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
-                            </div>
-                        )}
-                    </Skjemasteg>
-                </div>
+                <Skjemasteg
+                    className={'tilkjentytelse'}
+                    senderInn={false}
+                    tittel="Behandlingsresultat"
+                    forrigeOnClick={forrigeOnClick}
+                    nesteOnClick={nesteOnClick}
+                    maxWidthStyle={'80rem'}
+                >
+                    <TilkjentYtelseTidslinje />
+                    {harAndeler ? (
+                        <div role="table">
+                            <OppsummeringsradHeader />
+                            {tilkjentYtelseRessurs.data
+                                .slice()
+                                .reverse()
+                                .map((beregning, index) => {
+                                    return <Oppsummeringsrad beregning={beregning} key={index} />;
+                                })}
+                        </div>
+                    ) : (
+                        <div className="tilkjentytelse-informasjon">
+                            <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
+                        </div>
+                    )}
+                </Skjemasteg>
             );
         }
         default:

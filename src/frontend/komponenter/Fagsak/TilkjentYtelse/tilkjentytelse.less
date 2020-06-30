@@ -1,10 +1,28 @@
 .tilkjentytelse {
-  margin-left: 3rem;
-  margin-right: 3rem;
-}
+  & .tidslinje {
+    display: flex;
 
-.tilkjentytelse-informasjon {
-  padding: 0.8rem 0;
+    &__labels {
+      min-width: 10rem;
+
+      & .typo-normal:first-child {
+        margin-top: 3.625rem;
+      }
+
+      & .typo-normal:not(:first-child) {
+        margin-top: .5rem;
+      }
+    }
+
+    &__scroll {
+      overflow-x: auto; 
+      width: 100%; 
+
+      &--inner {
+        width: 1920px;
+      }
+    }
+  }
 }
 
 .tilkjentytelse-rad {

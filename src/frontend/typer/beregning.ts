@@ -25,7 +25,7 @@ export interface IPersonBeregning {
     stønadFom: string;
 }
 
-interface IYtelsePeriode {
+export interface IYtelsePeriode {
     beløp: number;
     stønadFom: string;
     stønadTom: string;
