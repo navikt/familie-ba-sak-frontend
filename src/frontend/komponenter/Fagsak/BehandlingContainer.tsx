@@ -8,7 +8,7 @@ import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../context/BehandlingContext';
-import { RessursStatus } from '../../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import AlertStripe from 'nav-frontend-alertstriper';
 

@@ -20,7 +20,7 @@ import Slett from '../../../../ikoner/Slett';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { periodeToString } from '../../../../typer/periode';
 import { IPerson } from '../../../../typer/person';
-import { Ressurs, RessursStatus } from '../../../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     IPersonResultat,
     IRestPersonResultat,

@@ -3,7 +3,7 @@ import { sider, erSidenInaktiv, ISide, visSide } from './sider';
 import Link from './Link';
 import { IFagsak } from '../../../typer/fagsak';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { RessursStatus } from '../../../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 import classNames from 'classnames';
 
 interface IProps {

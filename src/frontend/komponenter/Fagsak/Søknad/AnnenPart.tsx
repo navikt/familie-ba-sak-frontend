@@ -2,7 +2,7 @@ import * as React from 'react';
 import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 import HentPerson from '../../Felleskomponenter/HentPerson/HentPerson';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IPerson } from '../../../typer/person';
 import { ISøknadDTO } from '../../../typer/søknad';
 import { useBehandling } from '../../../context/BehandlingContext';

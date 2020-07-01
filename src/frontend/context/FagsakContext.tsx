@@ -4,7 +4,7 @@ import React from 'react';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPerson } from '../typer/person';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
 
 interface IHovedRessurser {

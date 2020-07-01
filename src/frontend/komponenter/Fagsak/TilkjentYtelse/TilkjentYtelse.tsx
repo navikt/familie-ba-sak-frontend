@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
 import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SystemetLaster from '../../Felleskomponenter/SystemetLaster/SystemetLaster';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';

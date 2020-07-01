@@ -1,4 +1,4 @@
-import { ISaksbehandler } from '../typer/saksbehandler';
+import { ISaksbehandler } from '@navikt/familie-typer';
 import { preferredAxios } from './axios';
 import { AxiosResponse } from 'axios';
 

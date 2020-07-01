@@ -6,7 +6,7 @@ import { Route, Switch, useParams } from 'react-router-dom';
 import { BehandlingProvider } from '../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
-import { RessursStatus } from '../../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';

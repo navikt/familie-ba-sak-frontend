@@ -4,7 +4,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import Logg from './Logg';
 import Totrinnskontroll from '../Totrinnskontroll/Totrinnskontroll';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { RessursStatus } from '../../../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 
 interface IProps {
     fagsak: IFagsak;
