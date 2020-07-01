@@ -67,6 +67,6 @@ export const byggSuksessRessurs = <T>(data: T): Ressurs<T> => {
     };
 };
 
-export const hentDataFraRessurs = <T>(ressurs: Ressurs<T>, defaultVerdi?: any): T => {
-    return ressurs.status === RessursStatus.SUKSESS ? ressurs.data : defaultVerdi;
+export const hentDataFraRessurs = <T>(ressurs: Ressurs<T>): T | undefined => {
+    return ressurs.status === RessursStatus.SUKSESS ? ressurs.data : undefined;
 };
