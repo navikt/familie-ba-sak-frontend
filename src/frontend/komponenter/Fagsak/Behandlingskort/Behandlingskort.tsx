@@ -1,19 +1,19 @@
 import classNames from 'classnames';
+import moment from 'moment';
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
 import {
     behandlingsresultater,
-    behandlingstyper,
     behandlingsstatuser,
+    behandlingstyper,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { useBehandling } from '../../../context/BehandlingContext';
 import { hentDataFraRessurs } from '../../../typer/ressurs';
-import { sakstype } from '../Saksoversikt/Saksoversikt';
-import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import { datoformat } from '../../../utils/formatter';
-import moment from 'moment';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
+import { datoformat } from '../../../utils/formatter';
+import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { sakstype } from '../Saksoversikt/Saksoversikt';
 
 interface IBehandlingskortProps {
     fagsak: IFagsak;
@@ -35,6 +35,8 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak }) => {
         åpenBehandling ? behandlingstyper[åpenBehandling.type].navn : 'ukjent'
     } (${åpenBehandlingIndex}/${antallBehandlinger}) - ${sakstype(åpenBehandling).toLowerCase()}`;
 
+    console.log(åpenBehandling);
+
     return (
         <div className={classNames('behandlingskort', behandlingsresultat)}>
             <Normaltekst className={'behandlingskort__tittel'}>{tittel}</Normaltekst>
@@ -50,19 +52,40 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak }) => {
                     },
                 ]}
             />
-            <Informasjonsbolk
-                informasjon={[
-                    {
-                        label: 'Opprettet',
-                        tekst: moment(åpenBehandling.opprettetTidspunkt).format(datoformat.DATO),
-                    },
-                    {
-                        label: 'Vedtaksdato',
-                        tekst:
-                            moment(aktivVedtak?.vedtaksdato).format(datoformat.DATO) ?? 'Ikke satt',
-                    },
-                ]}
-            />
+            <table className="behandlingskort__tabell">
+                <thead>
+                    <tr>
+                        <th>
+                            <Normaltekst children={'Opprettet'} />
+                        </th>
+                        <th>
+                            <Normaltekst children={'Vedtaksdato'} />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <Normaltekst
+                                children={moment(åpenBehandling.opprettetTidspunkt).format(
+                                    datoformat.DATO
+                                )}
+                            />
+                        </td>
+                        <td>
+                            <Normaltekst
+                                children={
+                                    moment(aktivVedtak?.vedtaksdato).format(datoformat.DATO) ??
+                                    'Ikke satt'
+                                }
+                            />
+                        </td>
+                        <td>
+                            <Normaltekst children={'4080 NFP Drammen'} />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     );
 };
