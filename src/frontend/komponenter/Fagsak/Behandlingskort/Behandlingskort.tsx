@@ -35,8 +35,6 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak }) => {
         åpenBehandling ? behandlingstyper[åpenBehandling.type].navn : 'ukjent'
     } (${åpenBehandlingIndex}/${antallBehandlinger}) - ${sakstype(åpenBehandling).toLowerCase()}`;
 
-    console.log(åpenBehandling);
-
     return (
         <div className={classNames('behandlingskort', behandlingsresultat)}>
             <Normaltekst className={'behandlingskort__tittel'}>{tittel}</Normaltekst>
@@ -79,9 +77,6 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak }) => {
                                     'Ikke satt'
                                 }
                             />
-                        </td>
-                        <td>
-                            <Normaltekst children={'4080 NFP Drammen'} />
                         </td>
                     </tr>
                 </tbody>
