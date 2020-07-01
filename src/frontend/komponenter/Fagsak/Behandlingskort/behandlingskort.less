@@ -1,19 +1,21 @@
 .behandlingskort {
-   &__box{
-        height: 12rem;
-        border-left: 0.5rem solid @navGra40;
-        &.innvilget {
-            border-color: @navGronnDarken40;
-        }
-        &.avslått {
-            border-color: @redErrorDarken20
-        }
-        &--header {
-            margin: 0 0.5rem;
-            border-bottom: 0.125rem solid @navGra40;
-            height: 3.5rem;
-            line-height: 3.5rem;
-        }
-   }
+    border: 1px solid @navGra40;
+    border-left: .5rem solid @navGra40;
+    border-radius: .25rem;
+    padding: .5rem;
+    margin: .5rem;
 
+    &__tittel {
+        border-bottom: 0.125rem solid @navGra40;
+        height: 3.5rem;
+        line-height: 3.5rem !important;
+    }
+
+    &.Innvilget {
+        border-left-color: @navGronnDarken40;
+    }
+
+    &.Avslått {
+        border-left-color: @redErrorDarken20
+    }
 }

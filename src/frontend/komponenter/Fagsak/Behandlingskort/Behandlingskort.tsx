@@ -1,45 +1,64 @@
 import classNames from 'classnames';
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { BehandlingResultat } from '../../../typer/behandling';
+import {
+    behandlingsresultater,
+    behandlingstyper,
+    behandlingsstatuser,
+} from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { hentDataFraRessurs } from '../../../typer/ressurs';
+import { sakstype } from '../Saksoversikt/Saksoversikt';
+import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
+import { datoformat } from '../../../utils/formatter';
+import moment from 'moment';
 
 interface IBehandlingskortProps {
     fagsak: IFagsak;
 }
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak }) => {
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-    console.log(aktivBehandling);
-
-    const behandlingsresultat = () => {
-        if (aktivBehandling) {
-            if (aktivBehandling.samletResultat === BehandlingResultat.INNVILGET) {
-                return 'innvilget';
-            } else if (
-                aktivBehandling.samletResultat === BehandlingResultat.AVSLÅTT ||
-                aktivBehandling.samletResultat === BehandlingResultat.OPPHØRT
-            ) {
-                return 'avslått';
-            }
-            return 'ikkeVurdert';
-        }
-        return '';
-    };
+    const åpenBehandling = hentDataFraRessurs(useBehandling().åpenBehandling);
 
     const antallBehandlinger = fagsak.behandlinger.length;
-    const aktivBehandlingIndex = fagsak.behandlinger.findIndex(() => aktivBehandling) + 1;
-    const headerText =
-        aktivBehandling?.type + ' (' + aktivBehandlingIndex + '/' + antallBehandlinger + ')';
+    const åpenBehandlingIndex = fagsak.behandlinger.findIndex(() => åpenBehandling) + 1;
+
+    const behandlingsresultat = åpenBehandling
+        ? behandlingsresultater[åpenBehandling.samletResultat].navn
+        : 'Ukjent';
+
+    const tittel = `${
+        behandlingstyper[åpenBehandling.type].navn
+    } (${åpenBehandlingIndex}/${antallBehandlinger}) - ${sakstype(åpenBehandling).toLowerCase()}`;
 
     return (
-        <div className={'behandlingskort'}>
-            <div className={classNames('behandlingskort__box', behandlingsresultat())}>
-                <div className={'behandlingskort__box--header'}>
-                    <Normaltekst>{headerText}</Normaltekst>
-                </div>
-            </div>
+        <div className={classNames('behandlingskort', behandlingsresultat)}>
+            <Normaltekst className={'behandlingskort__tittel'}>{tittel}</Normaltekst>
+            <Informasjonsbolk
+                informasjon={[
+                    {
+                        label: 'Behandlingsstatus',
+                        tekst: behandlingsstatuser[åpenBehandling.status].navn,
+                    },
+                    {
+                        label: 'Resultat',
+                        tekst: behandlingsresultat,
+                    },
+                ]}
+            />
+            <Informasjonsbolk
+                informasjon={[
+                    {
+                        label: 'Opprettet',
+                        tekst: moment(åpenBehandling.opprettetTidspunkt).format(datoformat.DATO),
+                    },
+                    {
+                        label: 'Resultat',
+                        tekst: behandlingsresultat,
+                    },
+                ]}
+            />
         </div>
     );
 };

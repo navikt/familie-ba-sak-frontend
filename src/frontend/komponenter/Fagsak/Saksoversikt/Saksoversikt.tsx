@@ -112,7 +112,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     );
 };
 
-const sakstype = (behandling?: IBehandling) => {
+export const sakstype = (behandling?: IBehandling) => {
     if (!behandling) {
         return 'Ikke satt';
     }
