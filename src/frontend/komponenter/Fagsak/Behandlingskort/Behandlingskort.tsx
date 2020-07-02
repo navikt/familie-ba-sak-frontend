@@ -2,14 +2,13 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { useBehandling } from '../../../context/BehandlingContext';
 import {
     behandlingsresultater,
     behandlingsstatuser,
     behandlingstyper,
+    IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { hentDataFraRessurs } from '../../../typer/ressurs';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { datoformat } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
@@ -17,15 +16,10 @@ import { sakstype } from '../Saksoversikt/Saksoversikt';
 
 interface IBehandlingskortProps {
     fagsak: IFagsak;
+    åpenBehandling: IBehandling;
 }
 
-const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak }) => {
-    const åpenBehandling = hentDataFraRessurs(useBehandling().åpenBehandling);
-
-    if (!åpenBehandling) {
-        return <div />;
-    }
-
+const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandling }) => {
     const antallBehandlinger = fagsak.behandlinger.length;
     const åpenBehandlingIndex = fagsak.behandlinger.findIndex(() => åpenBehandling) + 1;
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
