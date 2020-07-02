@@ -1,0 +1,31 @@
+.behandlingskort {
+    border: 1px solid @navGra40;
+    border-left: .5rem solid @navGra40;
+    border-radius: .25rem;
+    padding: .5rem;
+    margin: .5rem;
+
+    &__tittel {
+        border-bottom: 0.125rem solid @navGra40;
+        height: 3.5rem;
+        line-height: 3.5rem !important;
+    }
+
+    &.Innvilget {
+        border-left-color: @navGronnDarken40;
+    }
+
+    &.Avslått {
+        border-left-color: @redErrorDarken20
+    }
+
+    &__tabell {
+        width: 100%;
+        text-align: left;
+        padding-bottom: 1.5rem;
+        & th {
+            padding-left: 0;
+        }
+    }
+
+}

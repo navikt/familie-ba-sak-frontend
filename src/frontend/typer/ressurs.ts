@@ -66,3 +66,7 @@ export const byggSuksessRessurs = <T>(data: T): Ressurs<T> => {
         status: RessursStatus.SUKSESS,
     };
 };
+
+export const hentDataFraRessurs = <T>(ressurs: Ressurs<T>): T | undefined => {
+    return ressurs.status === RessursStatus.SUKSESS ? ressurs.data : undefined;
+};
