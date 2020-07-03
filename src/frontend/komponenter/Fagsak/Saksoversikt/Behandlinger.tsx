@@ -9,14 +9,13 @@ import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 
 interface IBehandlingshistorikkProps {
     fagsak: IFagsak;
-    behandlingshistorikk: IBehandling[];
 }
 
-const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ behandlingshistorikk, fagsak }) => {
+const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
             <Undertittel children={'Behandlinger'} />
-            {behandlingshistorikk.length > 0 ? (
+            {fagsak.behandlinger.length > 0 ? (
                 <table className="tabell">
                     <thead>
                         <tr>
