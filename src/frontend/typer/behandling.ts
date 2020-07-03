@@ -119,11 +119,11 @@ export const kategorier: INøkkelPar = {
 export const underkategorier: INøkkelPar = {
     ORDINÆR: {
         id: 'ORDINÆR',
-        navn: 'Ordinær barnetrygd',
+        navn: 'Ordinær',
     },
     UTVIDET: {
         id: 'UTVIDET',
-        navn: 'Utvidet barnetrygd',
+        navn: 'Utvidet',
     },
 };
 

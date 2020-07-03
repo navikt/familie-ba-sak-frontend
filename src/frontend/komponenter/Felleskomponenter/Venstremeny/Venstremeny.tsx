@@ -1,10 +1,10 @@
+import classNames from 'classnames';
 import * as React from 'react';
-import { sider, erSidenInaktiv, ISide, visSide } from './sider';
-import Link from './Link';
-import { IFagsak } from '../../../typer/fagsak';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
-import classNames from 'classnames';
+import { IFagsak } from '../../../typer/fagsak';
+import Link from './Link';
+import { erSidenInaktiv, ISide, sider, visSide } from './sider';
 
 interface IProps {
     fagsak: IFagsak;
@@ -15,16 +15,6 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return (
         <nav className={'venstremeny'}>
-            <Link
-                active={true}
-                key={'saksoversikt'}
-                id={'saksoversikt'}
-                to={`/fagsak/${fagsak.id}/saksoversikt`}
-                className={classNames('venstremeny__link', 'hover-effekt')}
-            >
-                {`Saksoversikt`}
-            </Link>
-
             {åpenBehandling.status === RessursStatus.SUKSESS
                 ? Object.values(sider)
                       .filter((side: ISide) => visSide(side, åpenBehandling.data))
