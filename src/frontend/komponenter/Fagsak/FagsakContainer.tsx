@@ -3,7 +3,7 @@ import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
@@ -44,6 +44,10 @@ const FagsakContainer: React.FunctionComponent = () => {
             switch (bruker.status) {
                 case RessursStatus.SUKSESS:
                     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
+                    const skalViseOpprettBehandlingKnapp =
+                        aktivBehandling === undefined ||
+                        (aktivBehandling &&
+                            aktivBehandling.status === BehandlingStatus.FERDIGSTILT);
                     return (
                         <BehandlingProvider>
                             <Visittkort
@@ -65,24 +69,31 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 }
                             >
                                 <div style={{ flex: 1 }}></div>
+                                <Normaltekst children={'Status på sak '} />
+                                <Element
+                                    className={'visittkort__status'}
+                                    children={
+                                  
+                                  
+                                  
+                                  
+                                  [fagsak.data.status].navn}
+                                />
                                 <Lenke
                                     className={'visittkort__lenke'}
                                     href={`/fagsak/${fagsak.data.id}/saksoversikt`}
                                 >
                                     <Normaltekst>Gå til saksoversikt</Normaltekst>
                                 </Lenke>
-                                {aktivBehandling &&
-                                    aktivBehandling.status === BehandlingStatus.FERDIGSTILT && (
-                                        <Knapp
-                                            mini={true}
-                                            onClick={() => {
-                                                history.push(
-                                                    `/fagsak/${fagsak.data.id}/ny-behandling`
-                                                );
-                                            }}
-                                            children={'Opprett behandling'}
-                                        />
-                                    )}
+                                {skalViseOpprettBehandlingKnapp && (
+                                    <Knapp
+                                        mini={true}
+                                        onClick={() => {
+                                            history.push(`/fagsak/${fagsak.data.id}/ny-behandling`);
+                                        }}
+                                        children={'Opprett behandling'}
+                                    />
+                                )}
                             </Visittkort>
                             <div className={'fagsakcontainer__content'}>
                                 <div className={'fagsakcontainer__content--venstremeny'}>
