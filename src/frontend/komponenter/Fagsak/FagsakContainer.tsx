@@ -19,6 +19,7 @@ import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { fagsakStatus } from '../../typer/fagsak';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -72,12 +73,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 <Normaltekst children={'Status på sak '} />
                                 <Element
                                     className={'visittkort__status'}
-                                    children={
-                                  
-                                  
-                                  
-                                  
-                                  [fagsak.data.status].navn}
+                                    children={fagsakStatus[fagsak.data.status].navn}
                                 />
                                 <Lenke
                                     className={'visittkort__lenke'}
