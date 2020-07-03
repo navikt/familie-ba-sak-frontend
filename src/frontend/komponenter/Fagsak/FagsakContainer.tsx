@@ -44,6 +44,10 @@ const FagsakContainer: React.FunctionComponent = () => {
             switch (bruker.status) {
                 case RessursStatus.SUKSESS:
                     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
+                    const skalViseOpprettBehandlingKnapp =
+                        aktivBehandling === undefined ||
+                        (aktivBehandling &&
+                            aktivBehandling.status === BehandlingStatus.FERDIGSTILT);
                     return (
                         <BehandlingProvider>
                             <Visittkort
@@ -71,18 +75,15 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 >
                                     <Normaltekst>Gå til saksoversikt</Normaltekst>
                                 </Lenke>
-                                {aktivBehandling &&
-                                    aktivBehandling.status === BehandlingStatus.FERDIGSTILT && (
-                                        <Knapp
-                                            mini={true}
-                                            onClick={() => {
-                                                history.push(
-                                                    `/fagsak/${fagsak.data.id}/ny-behandling`
-                                                );
-                                            }}
-                                            children={'Opprett behandling'}
-                                        />
-                                    )}
+                                {skalViseOpprettBehandlingKnapp && (
+                                    <Knapp
+                                        mini={true}
+                                        onClick={() => {
+                                            history.push(`/fagsak/${fagsak.data.id}/ny-behandling`);
+                                        }}
+                                        children={'Opprett behandling'}
+                                    />
+                                )}
                             </Visittkort>
                             <div className={'fagsakcontainer__content'}>
                                 <div className={'fagsakcontainer__content--venstremeny'}>
