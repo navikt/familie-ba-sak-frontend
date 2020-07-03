@@ -44,37 +44,19 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                     },
                 ]}
             />
-            <table className="behandlingskort__tabell">
-                <thead>
-                    <tr>
-                        <th>
-                            <Normaltekst children={'Opprettet'} />
-                        </th>
-                        <th>
-                            <Normaltekst children={'Vedtaksdato'} />
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <Normaltekst
-                                children={moment(åpenBehandling.opprettetTidspunkt).format(
-                                    datoformat.DATO
-                                )}
-                            />
-                        </td>
-                        <td>
-                            <Normaltekst
-                                children={
-                                    moment(aktivVedtak?.vedtaksdato).format(datoformat.DATO) ??
-                                    'Ikke satt'
-                                }
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <Informasjonsbolk
+                informasjon={[
+                    {
+                        label: 'Opprettet',
+                        tekst: moment(åpenBehandling.opprettetTidspunkt).format(datoformat.DATO),
+                    },
+                    {
+                        label: 'Vedtaksdato',
+                        tekst:
+                            moment(aktivVedtak?.vedtaksdato).format(datoformat.DATO) ?? 'Ikke satt',
+                    },
+                ]}
+            />
         </div>
     );
 };
