@@ -3,8 +3,8 @@ import createUseContext from 'constate';
 import React, { useEffect } from 'react';
 
 import { håndterApiRessurs, loggFeil, preferredAxios } from '../api/axios';
-import { Ressurs, ApiRessurs } from '../typer/ressurs';
-import { ISaksbehandler } from '../typer/saksbehandler';
+import { Ressurs, ApiRessurs } from '@navikt/familie-typer';
+import { ISaksbehandler } from '@navikt/familie-typer';
 import { BehandlerRolle } from '../typer/behandling';
 import { gruppeIdTilRolle } from '../utils/behandling';
 

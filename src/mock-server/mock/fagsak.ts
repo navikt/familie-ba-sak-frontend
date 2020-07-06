@@ -1,5 +1,5 @@
 import { FagsakStatus, IFagsak } from '../../frontend/typer/fagsak';
-import { byggSuksessRessurs, Ressurs, RessursStatus } from '../../frontend/typer/ressurs';
+import { byggSuksessRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     BehandlingKategori,
     BehandlingResultat,

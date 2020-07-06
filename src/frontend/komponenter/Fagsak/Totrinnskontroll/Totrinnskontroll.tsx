@@ -12,7 +12,7 @@ import {
     byggTomRessurs,
     Ressurs,
     RessursStatus,
-} from '../../../typer/ressurs';
+} from '@navikt/familie-typer';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';

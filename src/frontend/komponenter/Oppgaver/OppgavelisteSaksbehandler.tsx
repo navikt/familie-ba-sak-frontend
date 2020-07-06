@@ -1,9 +1,9 @@
 import React from 'react';
 import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { ISaksbehandler } from '../../typer/saksbehandler';
+import { ISaksbehandler } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Ressurs, RessursStatus } from '../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding } from 'nav-frontend-typografi';
 
 interface IOppgavelisteSaksbehandler {

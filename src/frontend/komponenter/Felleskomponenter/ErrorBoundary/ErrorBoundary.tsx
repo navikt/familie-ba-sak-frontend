@@ -3,7 +3,7 @@ import { configureScope, withScope, captureException } from '@sentry/core';
 import { slackNotify } from '../../../api/axios';
 import { slackKanaler } from '../../../typer/slack';
 import { showReportDialog } from '@sentry/browser';
-import { ISaksbehandler } from '../../../typer/saksbehandler';
+import { ISaksbehandler } from '@navikt/familie-typer';
 
 interface IProps {
     autentisertSaksbehandler?: ISaksbehandler;

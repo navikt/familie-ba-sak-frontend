@@ -10,9 +10,8 @@ import { Route, Switch, useParams } from 'react-router-dom';
 import { BehandlingProvider } from '../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
+import { RessursStatus } from '@navikt/familie-typer';
 import { BehandlingStatus } from '../../typer/behandling';
-import { fagsakStatus } from '../../typer/fagsak';
-import { RessursStatus } from '../../typer/ressurs';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
@@ -20,6 +19,7 @@ import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { fagsakStatus } from '../../typer/fagsak';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();

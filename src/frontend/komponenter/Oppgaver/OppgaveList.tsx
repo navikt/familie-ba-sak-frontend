@@ -12,7 +12,7 @@ import {
     OppgavetypeFilter,
     PrioritetFilter,
 } from '../../typer/oppgave';
-import { RessursStatus } from '../../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import {

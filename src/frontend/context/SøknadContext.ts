@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandling';
 import { FamilieRelasjonRolle, IFamilieRelasjon, IPerson } from '../typer/person';
-import { RessursStatus } from '../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, ISøknadDTO, TypeSøker } from '../typer/søknad';
 import { useFagsakRessurser } from './FagsakContext';
 
