@@ -4,7 +4,7 @@ import React from 'react';
 import { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { useHistory } from 'react-router';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../../context/AppContext';
 
 // eslint-disable-next-line

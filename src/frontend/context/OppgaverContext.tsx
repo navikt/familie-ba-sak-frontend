@@ -12,7 +12,7 @@ import {
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
-import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
 
 export const oppgaveSideLimit = 15;

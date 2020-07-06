@@ -8,7 +8,7 @@ import {
 import Pluss from '../../../../ikoner/Pluss';
 import { IFelt } from '../../../../typer/felt';
 import { IPerson } from '../../../../typer/person';
-import { Ressurs, RessursStatus } from '../../../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     IRestPersonResultat,
     IVilkårConfig,

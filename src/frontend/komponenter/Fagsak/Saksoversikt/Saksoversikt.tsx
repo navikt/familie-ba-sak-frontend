@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input } from 'nav-frontend-skjema';
 import 'nav-frontend-tabell-style';
-import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Element, Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -60,6 +60,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         <div className={'saksoversikt'}>
             <Systemtittel className={'tittel'} children={'Saksoversikt'} />
 
+            <Element children={'Løpende vedtak'} />
             <Informasjonsbolk
                 informasjon={[
                     {
@@ -107,7 +108,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         </div>
                     </div>
                 )}
-            <Behandlinger fagsak={fagsak} behandlingshistorikk={behandlingshistorikk} />
+            <Behandlinger fagsak={fagsak} />
         </div>
     );
 };

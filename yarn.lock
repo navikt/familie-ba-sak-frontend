@@ -694,6 +694,11 @@
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.3.tgz#8a3bec3d06cd6d2b92eb15b6de7aaecbf21d6c55"
   integrity sha512-rZwcfVZpKCz0Ib+OkqlCw8ObZaXMy+KZOxZcT/gYDSdq5g9jOfM6HkTrgKJwkon1fNyZytQHdYrSUchJ2OeHAA==
 
+"@navikt/familie-typer@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.4.tgz#1cbea49fe332f5939a56f006db5e53b61b9bda5f"
+  integrity sha512-DLmyE3eTGcID2MHrnCFmCwFfWOMMh+gswkGv2nD71uuGw1rDHWm33Ylr/D8p2N2HClQuHl1WvGNIKU4gIs+Gbw==
+
 "@navikt/familie-visittkort@^2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.5.tgz#422216ce136a940cf35feb2028560e79e706f758"

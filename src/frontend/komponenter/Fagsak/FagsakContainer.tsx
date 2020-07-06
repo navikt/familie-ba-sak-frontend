@@ -3,15 +3,15 @@ import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { BehandlingProvider } from '../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
+import { RessursStatus } from '@navikt/familie-typer';
 import { BehandlingStatus } from '../../typer/behandling';
-import { RessursStatus } from '../../typer/ressurs';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
@@ -19,6 +19,7 @@ import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { fagsakStatus } from '../../typer/fagsak';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
@@ -44,6 +45,10 @@ const FagsakContainer: React.FunctionComponent = () => {
             switch (bruker.status) {
                 case RessursStatus.SUKSESS:
                     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
+                    const skalViseOpprettBehandlingKnapp =
+                        aktivBehandling === undefined ||
+                        (aktivBehandling &&
+                            aktivBehandling.status === BehandlingStatus.FERDIGSTILT);
                     return (
                         <BehandlingProvider>
                             <Visittkort
@@ -65,24 +70,26 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 }
                             >
                                 <div style={{ flex: 1 }}></div>
+                                <Normaltekst children={'Status på sak '} />
+                                <Element
+                                    className={'visittkort__status'}
+                                    children={fagsakStatus[fagsak.data.status].navn}
+                                />
                                 <Lenke
                                     className={'visittkort__lenke'}
                                     href={`/fagsak/${fagsak.data.id}/saksoversikt`}
                                 >
                                     <Normaltekst>Gå til saksoversikt</Normaltekst>
                                 </Lenke>
-                                {aktivBehandling &&
-                                    aktivBehandling.status === BehandlingStatus.FERDIGSTILT && (
-                                        <Knapp
-                                            mini={true}
-                                            onClick={() => {
-                                                history.push(
-                                                    `/fagsak/${fagsak.data.id}/ny-behandling`
-                                                );
-                                            }}
-                                            children={'Opprett behandling'}
-                                        />
-                                    )}
+                                {skalViseOpprettBehandlingKnapp && (
+                                    <Knapp
+                                        mini={true}
+                                        onClick={() => {
+                                            history.push(`/fagsak/${fagsak.data.id}/ny-behandling`);
+                                        }}
+                                        children={'Opprett behandling'}
+                                    />
+                                )}
                             </Visittkort>
                             <div className={'fagsakcontainer__content'}>
                                 <div className={'fagsakcontainer__content--venstremeny'}>

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
+import { RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../../../typer/fagsak';
-import { RessursStatus } from '../../../typer/ressurs';
 import Link from './Link';
 import { erSidenInaktiv, ISide, sider, visSide } from './sider';
 

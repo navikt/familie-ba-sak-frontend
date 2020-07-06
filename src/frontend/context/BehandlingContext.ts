@@ -7,7 +7,7 @@ import {
     byggTomRessurs,
     byggFeiletRessurs,
     byggDataRessurs,
-} from '../typer/ressurs';
+} from '@navikt/familie-typer';
 import { tilFeilside } from '../utils/commons';
 import { hentAktivBehandlingPåFagsak, hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';

@@ -1,8 +1,8 @@
-import { Ressurs, RessursStatus, ApiRessurs } from '../typer/ressurs';
+import { Ressurs, RessursStatus, ApiRessurs } from '@navikt/familie-typer';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { captureException, configureScope, withScope } from '@sentry/core';
 
-import { ISaksbehandler } from '../typer/saksbehandler';
+import { ISaksbehandler } from '@navikt/familie-typer';
 import { slackKanaler } from '../typer/slack';
 
 axios.defaults.baseURL = window.location.origin;

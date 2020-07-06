@@ -10,7 +10,7 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import PdfFrame from './PdfFrame';

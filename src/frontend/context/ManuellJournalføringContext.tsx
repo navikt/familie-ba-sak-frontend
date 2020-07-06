@@ -18,7 +18,7 @@ import {
     byggTomRessurs,
     Ressurs,
     RessursStatus,
-} from '../typer/ressurs';
+} from '@navikt/familie-typer';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { IBehandling } from '../typer/behandling';
