@@ -22,6 +22,7 @@ export interface IHentOppgaveDto {
 export interface IOppgave {
     [key: string]: string;
     id: string;
+    fnr: string;
     tildeltEnhetsnr: string;
     journalpostId: string;
     saksreferanse: string;

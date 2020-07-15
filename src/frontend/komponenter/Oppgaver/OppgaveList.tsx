@@ -24,6 +24,7 @@ import {
     oppgaveFeltMap,
     sortLenkClassNameMap,
 } from './OppgaveListFelt';
+import { formaterPersonIdent } from '../../utils/formatter';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -161,8 +162,10 @@ const OppgaveList: React.FunctionComponent = () => {
                                             </div>
                                         </td>
                                         <td>
-                                            <div className={'oppgavelist__tabell-aktoerId'}>
-                                                {oppg.aktoerId}
+                                            <div className={'oppgavelist__tabell-bruker'}>
+                                                {oppg.fnr
+                                                    ? formaterPersonIdent(oppg.fnr)
+                                                    : 'Ukjent'}
                                             </div>
                                         </td>
                                         <td>
