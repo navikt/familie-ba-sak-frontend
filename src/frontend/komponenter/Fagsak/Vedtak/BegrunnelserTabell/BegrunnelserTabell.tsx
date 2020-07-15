@@ -82,8 +82,11 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({ begrunnelse, fagsa
                 <FamilieInput
                     bredde={'L'}
                     label={'Begrunnelse'}
-                    defaultValue={begrunnelse}
-                    value={mutableBegrunnelse}
+                    value={
+                        erLesevisning() && begrunnelse === undefined
+                            ? 'Ikke satt'
+                            : mutableBegrunnelse
+                    }
                     onChange={event => settMutableBegrunnelse(event.target.value)}
                     erLesevisning={erLesevisning()}
                 />
