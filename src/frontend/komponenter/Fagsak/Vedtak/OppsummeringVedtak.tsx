@@ -10,10 +10,18 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    Ressurs,
+    RessursStatus,
+    byggDataRessurs,
+    byggFeiletRessurs,
+    byggTomRessurs,
+} from '@navikt/familie-typer';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import PdfFrame from './PdfFrame';
+import BegrunnelserTabell from './BegrunnelserTabell/BegrunnelserTabell';
+import VedtaksbrevModal from './VedtaksbrevModal/VedtaksbrevModal';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -27,12 +35,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const history = useHistory();
 
-    const [pdf, setPdf] = React.useState<string>('');
-    const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
     const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [visVedtaksbrev, settVisVedtaksbrev] = React.useState(false);
 
     const [submitFeil, settSubmitFeil] = React.useState('');
     const [senderInn, settSenderInn] = React.useState(false);
+
+    const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
@@ -44,20 +53,27 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             })
                 .then((response: Ressurs<string>) => {
                     if (response.status === RessursStatus.SUKSESS) {
-                        setPdf(`data:application/pdf;base64,${response.data}`);
-                        setErrorMessage(undefined);
+                        settVedtaksbrev(
+                            byggDataRessurs(`data:application/pdf;base64,${response.data}`)
+                        );
                     } else if (response.status === RessursStatus.FEILET) {
-                        setErrorMessage(response.frontendFeilmelding);
+                        settVedtaksbrev(response);
                     } else {
-                        setErrorMessage('Ukjent feil, kunne ikke generere forhåndsvisning.');
+                        settVedtaksbrev(
+                            byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
+                        );
                     }
                 })
                 .catch((_error: AxiosError) => {
-                    setErrorMessage('Ukjent feil, Kunne ikke generere forhåndsvisning.');
+                    settVedtaksbrev(
+                        byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
+                    );
                 });
         } else {
-            setErrorMessage(
-                'Vi finner ingen aktive vedtak på behandlingen, vennligst gå tilbake og fastsett vedtak.'
+            settVedtaksbrev(
+                byggFeiletRessurs(
+                    'Vi finner ingen aktive vedtak på behandlingen, vennligst gå tilbake og fastsett vedtak.'
+                )
             );
         }
     }, [åpenBehandling]);
@@ -96,17 +112,32 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
-            skalViseNesteKnapp={errorMessage === undefined || errorMessage === ''}
+            skalViseNesteKnapp={vedtaksbrev.status === RessursStatus.SUKSESS}
         >
+            <VedtaksbrevModal
+                åpen={visVedtaksbrev}
+                onRequestClose={() => settVisVedtaksbrev(false)}
+                vedtaksbrev={vedtaksbrev}
+            />
+
+            <BegrunnelserTabell fagsak={fagsak} åpenBehandling={åpenBehandling} />
+
+            <Knapp
+                onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
+                children={'Vis vedtaksbrev'}
+            />
+
             <div className="oppsummering">
-                {errorMessage === undefined ? (
-                    <PdfFrame file={pdf} />
-                ) : (
-                    <AlertStripe type="feil">{errorMessage}</AlertStripe>
+                {vedtaksbrev.status === RessursStatus.SUKSESS && (
+                    <PdfFrame file={vedtaksbrev.data} />
+                )}
+                {vedtaksbrev.status === RessursStatus.FEILET && (
+                    <AlertStripe type="feil">{vedtaksbrev.frontendFeilmelding}</AlertStripe>
                 )}
 
                 {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
             </div>
+
             {visModal && (
                 <UIModalWrapper
                     modal={{
