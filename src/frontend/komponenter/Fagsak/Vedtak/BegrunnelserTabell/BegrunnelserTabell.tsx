@@ -3,10 +3,10 @@ import { IBehandling } from '../../../../typer/behandling';
 import { hentAktivVedtakPåBehandlig } from '../../../../utils/fagsak';
 import Lenke from 'nav-frontend-lenker';
 import { IPeriode, hentPeriodeNøkkel, periodeToString } from '../../../../typer/periode';
-import { Input } from 'nav-frontend-skjema';
-import { Knapp } from 'nav-frontend-knapper';
 import { IFagsak } from '../../../../typer/fagsak';
 import { useApp } from '../../../../context/AppContext';
+import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
+import { useBehandling } from '../../../../context/BehandlingContext';
 
 interface IBegrunnelserTabellProps {
     fagsak: IFagsak;
@@ -73,19 +73,22 @@ interface IBegrunnelseInputProps {
 
 const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({ begrunnelse, fagsakId, periode }) => {
     const { axiosRequest } = useApp();
+    const { erLesevisning } = useBehandling();
     const [mutableBegrunnelse, settMutableBegrunnelse] = React.useState(begrunnelse);
 
     return (
         <div className={'begrunnelse-input'}>
             <div className={'begrunnelse-input__med-knapp'}>
-                <Input
+                <FamilieInput
                     bredde={'L'}
                     label={'Begrunnelse'}
                     defaultValue={begrunnelse}
                     value={mutableBegrunnelse}
                     onChange={event => settMutableBegrunnelse(event.target.value)}
+                    erLesevisning={erLesevisning()}
                 />
-                <Knapp
+                <FamilieKnapp
+                    erLesevisning={erLesevisning()}
                     mini={true}
                     onClick={() =>
                         axiosRequest({
@@ -99,7 +102,7 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({ begrunnelse, fagsa
                     }
                 >
                     Sett begrunnelse
-                </Knapp>
+                </FamilieKnapp>
             </div>
         </div>
     );
