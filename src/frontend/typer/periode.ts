@@ -10,7 +10,7 @@ export interface IPeriode {
     tom?: string;
 }
 
-export const hentPeriodeNøkkel = (periode: IPeriode) => {
+export const hentPeriodeHash = (periode: IPeriode) => {
     return `${periode.fom}_${periode.tom}`;
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { IBehandling } from '../../../../typer/behandling';
 import { hentAktivVedtakPåBehandlig } from '../../../../utils/fagsak';
 import Lenke from 'nav-frontend-lenker';
-import { IPeriode, hentPeriodeNøkkel, periodeToString } from '../../../../typer/periode';
+import { IPeriode, hentPeriodeHash, periodeToString } from '../../../../typer/periode';
 import { IFagsak } from '../../../../typer/fagsak';
 import { useApp } from '../../../../context/AppContext';
 import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
@@ -41,11 +41,11 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ fagsak, åpenB
                                 };
                                 const begrunnelse =
                                     aktivVedtak?.stønadBrevMetadata?.begrunnelser[
-                                        hentPeriodeNøkkel(periode)
+                                        hentPeriodeHash(periode)
                                     ];
 
                                 return (
-                                    <tr key={hentPeriodeNøkkel(periode)}>
+                                    <tr key={hentPeriodeHash(periode)}>
                                         <td>{periodeToString(periode)}</td>
                                         <td>{`${beregning.utbetaltPerMnd} kr/mnd for ${beregning.antallBarn} barn`}</td>
                                         <td>
