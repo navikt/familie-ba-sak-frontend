@@ -158,6 +158,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             godkjent: true,
             opprettetTidspunkt: '2020-03-19T10:08:56.8',
         },
+        beregningOversikt: [],
     };
 
     return behandling;

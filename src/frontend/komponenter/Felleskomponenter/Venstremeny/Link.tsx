@@ -1,6 +1,7 @@
 import React, { ReactChild } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavHashLink as NavLink } from 'react-router-hash-link';
 import classNames from 'classnames';
+import { useLocation } from 'react-router';
 
 interface Props {
     children: ReactChild;
@@ -11,12 +12,26 @@ interface Props {
 }
 
 const Link: React.FC<Props> = ({ active = true, id, to, children, className }) => {
+    const location = useLocation();
     const onClick = (event: React.MouseEvent): void => {
         (event.target as HTMLElement).blur();
     };
 
     return active && to ? (
-        <NavLink id={id} to={to} tabIndex={0} onClick={onClick} className={className}>
+        <NavLink
+            id={id}
+            to={to}
+            tabIndex={0}
+            onClick={onClick}
+            activeClassName={''}
+            className={classNames(
+                className,
+                `${location.pathname}${location.hash}` === to ? 'active' : ''
+            )}
+            scroll={el => {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+        >
             {children}
         </NavLink>
     ) : (

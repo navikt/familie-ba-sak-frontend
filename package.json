@@ -55,6 +55,7 @@
     "@types/react-modal": "^3.10.5",
     "@types/react-pdf": "^4.0.5",
     "@types/react-router-dom": "^5.1.5",
+    "@types/react-router-hash-link": "^1.2.1",
     "@types/redis": "^2.8.22",
     "@types/request-promise": "^4.1.46",
     "@types/uuid": "^8.0.0",
@@ -96,7 +97,7 @@
     "nav-frontend-spinner": "^2.0.2",
     "nav-frontend-spinner-style": "^0.2.5",
     "nav-frontend-tabell-style": "^0.2.22",
-    "nav-frontend-tabs": "^0.0.40",
+    "nav-frontend-tabs": "^0.0.41",
     "nav-frontend-tabs-style": "^0.0.27",
     "nav-frontend-typografi": "^2.0.20",
     "nav-frontend-typografi-style": "^1.0.21",
@@ -111,8 +112,9 @@
     "react-pdf": "^4.1.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-router-hash-link": "^2.0.0",
     "request-promise": "^4.2.5",
-    "snyk": "^1.339.1",
+    "snyk": "^1.345.1",
     "uuid": "^8.1.0"
   },
   "devDependencies": {
