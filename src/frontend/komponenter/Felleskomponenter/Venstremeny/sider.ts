@@ -19,7 +19,7 @@ export interface ISide {
 
 export interface IUnderside {
     navn: string;
-    antallAksjonspunkter: number;
+    antallAksjonspunkter: () => number;
     hash: string;
 }
 
@@ -48,11 +48,12 @@ export const sider: ISide[] = [
                             personResultat.person.personIdent
                         )}`,
                         hash: `${index}_${personResultat.person.fødselsdato}`,
-                        antallAksjonspunkter: personResultat.vilkårResultater.filter(
-                            (vilkårResultat: IFelt<IVilkårResultat>) => {
-                                return vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE;
-                            }
-                        ).length,
+                        antallAksjonspunkter: () =>
+                            personResultat.vilkårResultater.filter(
+                                (vilkårResultat: IFelt<IVilkårResultat>) => {
+                                    return vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE;
+                                }
+                            ).length,
                     };
                 }
             );

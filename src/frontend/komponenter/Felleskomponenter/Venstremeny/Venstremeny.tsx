@@ -14,6 +14,8 @@ interface IProps {
 const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { åpenBehandling } = useBehandling();
 
+    console.log(åpenBehandling);
+
     return (
         <nav className={'venstremeny'}>
             {åpenBehandling.status === RessursStatus.SUKSESS
@@ -45,6 +47,7 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                       {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
                                   </Link>
                                   {undersider.map((underside: IUnderside) => {
+                                      const antallAksjonspunkter = underside.antallAksjonspunkter();
                                       return (
                                           <Link
                                               key={`${side.id}_${underside.hash}`}
@@ -56,10 +59,14 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                               )}
                                           >
                                               <>
-                                                  {underside.antallAksjonspunkter > 0 && (
+                                                  {antallAksjonspunkter > 0 ? (
                                                       <div className={'underside__sirkel-tall'}>
-                                                          {underside.antallAksjonspunkter}{' '}
+                                                          {antallAksjonspunkter}
                                                       </div>
+                                                  ) : (
+                                                      <div
+                                                          className={'underside__sirkel-plass'}
+                                                      ></div>
                                                   )}
                                                   <Normaltekst>{underside.navn}</Normaltekst>
                                               </>
