@@ -47,7 +47,6 @@ const VedtaksbrevModal: React.FC<IVedtaksbrevModalProps> = ({
                 <div className={'skjemamodal__document--pages'}>
                     {antallSider > 0 &&
                         [...Array(antallSider)].map((_: number, index: number) => {
-                            console.log(index);
                             return (
                                 <div key={index + 1}>
                                     <Page pageNumber={index + 1} />

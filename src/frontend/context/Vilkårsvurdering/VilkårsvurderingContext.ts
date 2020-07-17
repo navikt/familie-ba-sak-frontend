@@ -13,6 +13,7 @@ import {
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { useApp } from '../AppContext';
 import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
+import { useFagsakRessurser } from '../FagsakContext';
 
 interface IProps {
     fagsak: IFagsak;
@@ -29,6 +30,7 @@ export enum VilkårSubmit {
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
     ({ fagsak, åpenBehandling }: IProps) => {
         const { axiosRequest } = useApp();
+        const { oppdaterVilkårsvurdering } = useFagsakRessurser();
         const [vilkårSubmit, settVilkårSubmit] = React.useState(VilkårSubmit.NONE);
 
         const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
@@ -46,6 +48,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
                     ? mapFraRestVilkårsvurderingTilUi(personResultater, åpenBehandling.personer)
                     : []
             );
+            oppdaterVilkårsvurdering(personResultater, åpenBehandling.behandlingId);
         };
 
         const putVilkår = (
