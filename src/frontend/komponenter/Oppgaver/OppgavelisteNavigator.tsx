@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOppgaver, oppgaveSideLimit } from '../../context/OppgaverContext';
-import { RessursStatus } from '../../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 import Lenke from 'nav-frontend-lenker';
 
 const OppgavelisteNavigator: React.FunctionComponent = () => {

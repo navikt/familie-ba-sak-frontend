@@ -11,8 +11,8 @@ import {
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../../typer/oppgave';
-import { RessursStatus } from '../../typer/ressurs';
-import { ISaksbehandler } from '../../typer/saksbehandler';
+import { RessursStatus } from '@navikt/familie-typer';
+import { ISaksbehandler } from '@navikt/familie-typer';
 import { datoformatNorsk } from '../../utils/formatter';
 import './visoppgave.less';
 

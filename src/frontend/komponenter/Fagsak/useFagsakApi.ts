@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { Ressurs, RessursStatus } from '../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IPersonResultat } from '../../typer/vilkår';
 import { erBehandlingenInnvilget, hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import {

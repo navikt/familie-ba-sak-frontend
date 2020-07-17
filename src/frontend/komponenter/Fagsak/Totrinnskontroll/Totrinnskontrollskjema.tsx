@@ -4,7 +4,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import Info from '../../../ikoner/Info';
 import { IFagsak } from '../../../typer/fagsak';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 
 interface IProps {

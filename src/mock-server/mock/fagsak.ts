@@ -1,5 +1,5 @@
 import { FagsakStatus, IFagsak } from '../../frontend/typer/fagsak';
-import { byggSuksessRessurs, Ressurs, RessursStatus } from '../../frontend/typer/ressurs';
+import { byggSuksessRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     BehandlingKategori,
     BehandlingResultat,
@@ -158,6 +158,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             godkjent: true,
             opprettetTidspunkt: '2020-03-19T10:08:56.8',
         },
+        beregningOversikt: [],
     };
 
     return behandling;

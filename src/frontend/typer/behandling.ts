@@ -3,6 +3,7 @@ import { IPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
 import { IRestPersonResultat } from './vilkår';
 import { ITotrinnskontroll } from './totrinnskontroll';
+import { IOppsummeringBeregning } from './beregning';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -77,6 +78,7 @@ export interface IBehandling {
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
+    beregningOversikt: IOppsummeringBeregning[];
 }
 
 export const behandlerRoller: INøkkelPar = {
