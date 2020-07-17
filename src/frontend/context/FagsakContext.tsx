@@ -89,7 +89,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         axiosRequest<ILogg[], void>({
             method: 'GET',
             url: `/familie-ba-sak/api/logg/${behandlingId}`,
-            påvirkerSystemLaster: true,
         })
             .then((hentetLogg: Ressurs<ILogg[]>) => {
                 settFagsakRessurser({ ...fagsakRessurser, logg: hentetLogg });

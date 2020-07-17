@@ -55,6 +55,7 @@
     "@types/react-modal": "^3.10.5",
     "@types/react-pdf": "^4.0.5",
     "@types/react-router-dom": "^5.1.5",
+    "@types/react-router-hash-link": "^1.2.1",
     "@types/redis": "^2.8.22",
     "@types/request-promise": "^4.1.46",
     "@types/uuid": "^8.0.0",
@@ -111,6 +112,7 @@
     "react-pdf": "^4.1.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-router-hash-link": "^2.0.0",
     "request-promise": "^4.2.5",
     "snyk": "^1.339.1",
     "uuid": "^8.1.0"
