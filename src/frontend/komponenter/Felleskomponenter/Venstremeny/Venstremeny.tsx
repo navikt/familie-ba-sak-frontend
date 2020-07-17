@@ -14,8 +14,6 @@ interface IProps {
 const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { åpenBehandling } = useBehandling();
 
-    console.log(åpenBehandling);
-
     return (
         <nav className={'venstremeny'}>
             {åpenBehandling.status === RessursStatus.SUKSESS

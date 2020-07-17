@@ -7,7 +7,6 @@ import { IPerson } from '../typer/person';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
 import { IRestPersonResultat } from '../typer/vilkår';
-import { hentBehandlingPåFagsak } from '../utils/fagsak';
 import { IBehandling } from '../typer/behandling';
 
 interface IHovedRessurser {
