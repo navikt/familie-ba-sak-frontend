@@ -1490,7 +1490,7 @@
     "@types/pdfjs-dist" "*"
     "@types/react" "*"
 
-"@types/react-router-dom@^5.1.5":
+"@types/react-router-dom@*", "@types/react-router-dom@^5.1.5":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.1.5.tgz#7c334a2ea785dbad2b2dcdd83d2cf3d9973da090"
   integrity sha512-ArBM4B1g3BWLGbaGvwBGO75GNFbLDUthrDojV2vHLih/Tq8M+tgvY1DSwkuNrPSwdp/GUL93WSEpTZs8nVyJLw==
@@ -1498,6 +1498,14 @@
     "@types/history" "*"
     "@types/react" "*"
     "@types/react-router" "*"
+
+"@types/react-router-hash-link@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@types/react-router-hash-link/-/react-router-hash-link-1.2.1.tgz#fba7dc351cef2985791023018b7a5dbd0653c843"
+  integrity sha512-jdzPGE8jFGq7fHUpPaKrJvLW1Yhoe5MQCrmgeesC+eSLseMj3cGCTYMDA4BNWG8JQmwO8NTYt/oT3uBZ77pmBA==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-router-dom" "*"
 
 "@types/react-router@*":
   version "5.1.7"
@@ -7400,9 +7408,9 @@ lodash.uniq@^4.5.0:
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
 lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.5:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 log-symbols@^4.0.0:
   version "4.0.0"
@@ -9759,6 +9767,13 @@ react-router-dom@^5.2.0:
     react-router "5.2.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
+
+react-router-hash-link@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-router-hash-link/-/react-router-hash-link-2.0.0.tgz#c0baade5cb0957f4c6da4519f7992c825f1b3b35"
+  integrity sha512-vAiiHUhPcT5NYwKutvbAgHR2HXoESkTyaeXQaW1cmVwZujhmHEfaXRh28uS52jQaja/S+Xrc0aFizfljY7rvAw==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-router@5.2.0, react-router@^5.2.0:
   version "5.2.0"

@@ -38,8 +38,15 @@ export const mapFraRestVilkårsvurderingTilUi = (
     personResultater: IRestPersonResultat[],
     personer: IPerson[]
 ): IPersonResultat[] => {
-    return kjørValidering(
-        personResultater.map((personResultat: IRestPersonResultat) => {
+    return kjørValidering(mapFraRestPersonResultatTilPersonResultat(personResultater, personer));
+};
+
+export const mapFraRestPersonResultatTilPersonResultat = (
+    personResultater: IRestPersonResultat[],
+    personer: IPerson[]
+) => {
+    return personResultater
+        .map((personResultat: IRestPersonResultat) => {
             const person: IPerson | undefined = personer.find(
                 (person: IPerson) => person.personIdent === personResultat.personIdent
             );
@@ -81,22 +88,24 @@ export const mapFraRestVilkårsvurderingTilUi = (
                 };
             }
         })
-    ).sort((a: IPersonResultat, b: IPersonResultat) => {
-        if (
-            PersonTypeVisningsRangering[a.person.type] > PersonTypeVisningsRangering[b.person.type]
-        ) {
-            return 1;
-        }
+        .sort((a: IPersonResultat, b: IPersonResultat) => {
+            if (
+                PersonTypeVisningsRangering[a.person.type] >
+                PersonTypeVisningsRangering[b.person.type]
+            ) {
+                return 1;
+            }
 
-        if (
-            PersonTypeVisningsRangering[a.person.type] < PersonTypeVisningsRangering[b.person.type]
-        ) {
-            return -1;
-        }
+            if (
+                PersonTypeVisningsRangering[a.person.type] <
+                PersonTypeVisningsRangering[b.person.type]
+            ) {
+                return -1;
+            }
 
-        return moment(b.person.fødselsdato, datoformat.ISO_DAG).diff(
-            moment(a.person.fødselsdato, datoformat.ISO_DAG),
-            'day'
-        );
-    });
+            return moment(b.person.fødselsdato, datoformat.ISO_DAG).diff(
+                moment(a.person.fødselsdato, datoformat.ISO_DAG),
+                'day'
+            );
+        });
 };
