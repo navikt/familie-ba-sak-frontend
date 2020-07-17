@@ -72,7 +72,7 @@
     "helmet": "^3.22.0",
     "http-proxy-middleware": "^1.0.4",
     "lodash.throttle": "^4.1.1",
-    "moment": "^2.25.3",
+    "moment": "^2.27.0",
     "namecase": "^1.1.2",
     "nav-datovelger": "^6.1.9",
     "nav-frontend-alertstriper": "^3.0.17",
