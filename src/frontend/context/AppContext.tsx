@@ -95,9 +95,12 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         }, FEM_MINUTTER);
     };
 
+    useEffect(() => verifiserVersjon(), []);
+
     useEffect(() => {
-        verifiserVersjon();
-        settInnloggetSaksbehandler(autentisertSaksbehandler);
+        if (autentisertSaksbehandler) {
+            settInnloggetSaksbehandler(autentisertSaksbehandler);
+        }
     }, [autentisertSaksbehandler]);
 
     const åpneModal = () => {
