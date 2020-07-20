@@ -8040,10 +8040,10 @@ nav-frontend-skjema-style@^2.0.8, nav-frontend-skjema-style@^2.0.9:
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.0.9.tgz#afaa3e98db78834726c606e23d3b5ee61c86e9e9"
   integrity sha512-WPQ1nvy5LH+R1IIVpMBUnasvU8+Bd0WvtOMBBPpIgTaZkt+xEh2p2QJGJXSTt+vmNxRk1wEwFybV5shX5o8KfQ==
 
-nav-frontend-skjema@^3.0.6:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.8.tgz#06dd89f20fc16ead49ebd8add4f3a8d193a581f4"
-  integrity sha512-EcqjMvfhlfIyDsex60LClvbmrh2D1JLzfvQAiB/cT02quDgz1u2Ms0ldxYeu4aREAqVKi6AKnn/TlxD71jlNFQ==
+nav-frontend-skjema@^3.0.10:
+  version "3.0.16"
+  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.16.tgz#8bcbb947809ede1f801d4b7d19056e6813c1c1f4"
+  integrity sha512-ElFLNsOTdP5dVwhzlI4luPg5FQHImg7ycG3rucp/AnCdq1UiN0fvvlwubYAAivC4i8HtY/2BzLT2krJc6ysq3A==
 
 nav-frontend-skjema@^3.0.7:
   version "3.0.7"
