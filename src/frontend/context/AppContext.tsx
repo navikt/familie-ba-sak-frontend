@@ -9,6 +9,7 @@ import { BehandlerRolle } from '../typer/behandling';
 import { gruppeIdTilRolle } from '../utils/behandling';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';
+import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 
 const FEM_MINUTTER = 300000;
 
@@ -48,17 +49,18 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             method: 'GET',
         }).then((versjon: Ressurs<string>) => {
             if (versjon.status === RessursStatus.SUKSESS) {
-                if (appVersjon !== '' && appVersjon !== versjon.data) {
+                if (appVersjon === '' && appVersjon !== versjon.data) {
                     settModal({
                         tittel: 'Løsningen er utdatert',
                         innhold: () => {
                             return (
-                                <>
+                                <div className={'utdatert-losning'}>
+                                    <InformasjonSirkel />
                                     <Normaltekst>
                                         Det finnes en oppdatert versjon av løsningen. Det anbefales
                                         at du oppdaterer med en gang.
                                     </Normaltekst>
-                                </>
+                                </div>
                             );
                         },
                         lukkKnapp: true,
