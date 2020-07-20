@@ -6,17 +6,15 @@ import { prometheusTellere } from './metrikker';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
 import { slackNotify } from './slack/slack';
 
-// eslint-disable-next-line
-const packageJson = require('../../package.json');
-
 export default (
     authClient: Client,
     router: Router,
     middleware?: WebpackDevMiddleware.WebpackDevMiddleware
 ) => {
     router.get('/version', (_: Request, res: Response) => {
-        res.status(200).send({ status: 'SUKSESS', data: packageJson.version }).end();
+        res.status(200).send({ status: 'SUKSESS', data: process.env.APP_VERSION }).end();
     });
+
     router.get('/error', (_: Request, res: Response) => {
         prometheusTellere.errorRoute.inc();
         res.sendFile('error.html', { root: path.join(`assets/`) });
