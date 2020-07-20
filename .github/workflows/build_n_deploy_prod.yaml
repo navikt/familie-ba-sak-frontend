@@ -8,6 +8,7 @@ on:
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:${{ github.sha }}
   IMAGE_LATEST: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:latest
+  VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
   build:

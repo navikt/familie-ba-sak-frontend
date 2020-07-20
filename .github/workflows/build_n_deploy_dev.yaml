@@ -5,6 +5,7 @@ on:
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:${{ github.sha }}
+  VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
   build:
