@@ -32,7 +32,7 @@ spec:
   webproxy: true
   env:
     - name: APP_VERSION
-      value: {{ version }}
+      value: {{ VERSION }}
   resources:
     limits:
       cpu: 2000m

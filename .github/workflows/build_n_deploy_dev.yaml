@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: nais/deploy/actions/deploy@v1
         env:
-          VERSION: ${ VERSION }
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
+        var: VERSION=${VERSION}
