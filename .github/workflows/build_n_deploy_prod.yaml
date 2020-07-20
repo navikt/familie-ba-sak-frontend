@@ -35,12 +35,14 @@ jobs:
       - name: Deploy til dev-fss
         uses: nais/deploy/actions/deploy@v1
         env:
+          VERSION: ${ VERSION }
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
       - name: Deploy til prod-fss
         uses: nais/deploy/actions/deploy@v1
         env:
+          VERSION: ${ VERSION }
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_prod.yaml
