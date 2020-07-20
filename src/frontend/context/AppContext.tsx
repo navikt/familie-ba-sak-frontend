@@ -49,7 +49,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             method: 'GET',
         }).then((versjon: Ressurs<string>) => {
             if (versjon.status === RessursStatus.SUKSESS) {
-                if (appVersjon === '' && appVersjon !== versjon.data) {
+                if (appVersjon !== '' && appVersjon !== versjon.data) {
                     settModal({
                         tittel: 'Løsningen er utdatert',
                         innhold: () => {
