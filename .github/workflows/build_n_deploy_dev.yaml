@@ -33,4 +33,4 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
-        var: VERSION=${{ env.VERSION }}
+          VAR: VERSION=${{ env.VERSION }}

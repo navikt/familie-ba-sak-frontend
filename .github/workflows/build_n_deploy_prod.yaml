@@ -38,11 +38,11 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
-        var: VERSION=${{ env.VERSION }}
+          VAR: VERSION=${{ env.VERSION }}
       - name: Deploy til prod-fss
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_prod.yaml
-        var: VERSION=${{ env.VERSION }}
+          VAR: VERSION=${{ env.VERSION }}
