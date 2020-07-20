@@ -89,17 +89,14 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
                 settAppVersjon(versjon.data);
             }
         });
-    };
-
-    useEffect(() => {
-        verifiserVersjon();
 
         setTimeout(() => {
             verifiserVersjon();
         }, FEM_MINUTTER);
-    }, []);
+    };
 
     useEffect(() => {
+        verifiserVersjon();
         settInnloggetSaksbehandler(autentisertSaksbehandler);
     }, [autentisertSaksbehandler]);
 
