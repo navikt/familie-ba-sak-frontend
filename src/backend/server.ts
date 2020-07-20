@@ -6,6 +6,7 @@ import backend, {
     error,
     getLogTimestamp,
     info,
+    envVar,
 } from '@navikt/familie-backend';
 import bodyParser from 'body-parser';
 import express from 'express';
@@ -56,9 +57,9 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
             error(`${getLogTimestamp()}: server startup failed - ${err}`);
         }
         info(
-            `${getLogTimestamp()}: server startet på port ${port}. Build version: ${
-                process.env.APP_VERSION
-            }.`
+            `${getLogTimestamp()}: server startet på port ${port}. Build version: ${envVar(
+                'APP_VERSION'
+            )}.`
         );
     });
 });

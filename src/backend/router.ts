@@ -19,7 +19,7 @@ export default (
 ) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
-            .send({ status: 'SUKSESS', data: envVar('APP_VERSION', true) })
+            .send({ status: 'SUKSESS', data: envVar('APP_VERSION') })
             .end();
     });
 
