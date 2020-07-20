@@ -5,6 +5,7 @@ on:
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:${{ github.sha }}
+  VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
   build:
@@ -32,3 +33,4 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
+          VAR: VERSION=${{ env.VERSION }}

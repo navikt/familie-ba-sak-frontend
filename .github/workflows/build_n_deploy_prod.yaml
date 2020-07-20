@@ -8,6 +8,7 @@ on:
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:${{ github.sha }}
   IMAGE_LATEST: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:latest
+  VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
   build:
@@ -37,9 +38,11 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
+          VAR: VERSION=${{ env.VERSION }}
       - name: Deploy til prod-fss
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_prod.yaml
+          VAR: VERSION=${{ env.VERSION }}
