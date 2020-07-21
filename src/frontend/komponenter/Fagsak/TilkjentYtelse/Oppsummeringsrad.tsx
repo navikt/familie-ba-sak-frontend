@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { IOppsummeringBeregning, ytelsetype } from '../../../typer/beregning';
-import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
 import { datoformat, formaterBeløp } from '../../../utils/formatter';
 import BeregningDetalj from './BeregningDetalj';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
@@ -8,6 +7,7 @@ import classNames from 'classnames';
 import { kategorier } from '../../../typer/behandling';
 import { nyPeriode, periodeToString } from '../../../typer/periode';
 import { Collapse } from 'react-collapse';
+import Chevron from 'nav-frontend-chevron';
 
 interface IProps {
     beregning: IOppsummeringBeregning;
@@ -38,7 +38,9 @@ const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
             tabIndex={0}
         >
             <Kolonne classes={kolonneClassnames}>
-                <Chevron retning={åpentElement ? 'opp' : 'ned'} />
+                <div title={åpentElement ? 'lukk' : 'åpne'}>
+                    <Chevron type={åpentElement ? 'opp' : 'ned'} />
+                </div>
             </Kolonne>
             <Kolonne classes={kolonneClassnames}>
                 {periodeToString(
