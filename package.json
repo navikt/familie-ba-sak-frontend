@@ -42,7 +42,7 @@
     "@navikt/nap-popover": "^1.0.6",
     "@navikt/nap-user-panel": "^1.0.0",
     "@sentry/browser": "^5.17.0",
-    "@sentry/core": "^5.17.0",
+    "@sentry/core": "^5.18.1",
     "@types/classnames": "^2.2.10",
     "@types/deep-equal": "^1.0.1",
     "@types/express": "^4.17.6",
