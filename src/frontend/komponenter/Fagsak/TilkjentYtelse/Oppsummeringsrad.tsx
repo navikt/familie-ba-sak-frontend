@@ -38,7 +38,10 @@ const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
             tabIndex={0}
         >
             <Kolonne classes={kolonneClassnames}>
-                <div title={åpentElement ? 'Lukk' : 'Åpne'}>
+                <div
+                    aria-label={åpentElement ? 'Lukk' : 'Åpne'}
+                    title={åpentElement ? 'Lukk' : 'Åpne'}
+                >
                     <Chevron type={åpentElement ? 'opp' : 'ned'} />
                 </div>
             </Kolonne>
