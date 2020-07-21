@@ -24,6 +24,7 @@ import {
     oppgaveFeltMap,
     sortLenkClassNameMap,
 } from './OppgaveListFelt';
+import classNames from 'classnames';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -43,16 +44,18 @@ const OppgaveList: React.FunctionComponent = () => {
     );
 
     const onColumnSort = (felt: ListFelt) => {
+        const feltSort = feltSortOrder.get(felt);
+
         sortOppgave(
-            oppgaveFeltMap.get(felt) || 'ugjydigVerdi',
-            feltSortOrder.get(felt) !== FeltSortOrder.ASCENDANT
+            oppgaveFeltMap.get(felt) || 'ugyldigVerdi',
+            feltSort !== FeltSortOrder.ASCENDANT
         );
         settFeltSortOrder(
             new Map<ListFelt, FeltSortOrder>([
                 ...initFeltOrder,
                 [
                     felt,
-                    feltSortOrder.get(felt) === FeltSortOrder.ASCENDANT
+                    feltSort === FeltSortOrder.ASCENDANT
                         ? FeltSortOrder.DESCENDANT
                         : FeltSortOrder.ASCENDANT,
                 ],
@@ -66,6 +69,9 @@ const OppgaveList: React.FunctionComponent = () => {
     const getSortLenkClassName = (felt: ListFelt) =>
         sortLenkClassNameMap.get(feltSortOrder.get(felt) || FeltSortOrder.NONE);
 
+    const sortertClassName = (felt: ListFelt) =>
+        feltSortOrder.get(felt) !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
+
     React.useEffect(() => {
         settFeltSortOrder(initFeltOrder);
     }, [oppgaver.status]);
@@ -73,40 +79,31 @@ const OppgaveList: React.FunctionComponent = () => {
     return (
         <div className={'oppgavelist'}>
             <div className={'oppgavelist__header'}>
-                <Systemtittel className={'oppgavelist__header__tittel'}>Oppgaveliste</Systemtittel>
+                <Systemtittel>Oppgaveliste</Systemtittel>
                 <OppgavelisteNavigator />
             </div>
             <div>
                 <table className="tabell">
-                    <thead className="tabell__head">
-                        <tr className="tabell__head__tr">
+                    <thead>
+                        <tr>
                             {Object.values(ListFelt).map(felt => {
                                 return feltSortOrder.get(felt) ? (
                                     <th
                                         role="columnheader"
                                         aria-sort={getAriaSort(felt)}
-                                        className={getSortLenkClassName(felt)}
+                                        className={classNames(
+                                            getSortLenkClassName(felt),
+                                            oppgaveFeltMap.get(felt)
+                                        )}
                                         key={felt}
                                     >
-                                        <div
-                                            className={
-                                                'oppgavelist__tabell-' + oppgaveFeltMap.get(felt)
-                                            }
-                                        >
-                                            <Lenke href="#" onClick={() => onColumnSort(felt)}>
-                                                {feltLabelMap.get(felt)}
-                                            </Lenke>
-                                        </div>
+                                        <Lenke href="#" onClick={() => onColumnSort(felt)}>
+                                            {feltLabelMap.get(felt)}
+                                        </Lenke>
                                     </th>
                                 ) : (
-                                    <th key={felt}>
-                                        <div
-                                            className={
-                                                'oppgavelist__tabell-' + oppgaveFeltMap.get(felt)
-                                            }
-                                        >
-                                            {feltLabelMap.get(felt)}
-                                        </div>
+                                    <th key={felt} className={oppgaveFeltMap.get(felt)}>
+                                        {feltLabelMap.get(felt)}
                                     </th>
                                 );
                             })}
@@ -114,86 +111,79 @@ const OppgaveList: React.FunctionComponent = () => {
                     </thead>
                     {oppgaver.status === RessursStatus.SUKSESS &&
                         oppgaver.data.oppgaver.length > 0 && (
-                            <tbody className="tabell__body">
+                            <tbody>
                                 {hentOppgaveSide().map((oppg: IOppgave, index) => (
                                     <tr key={index}>
-                                        <td>
-                                            <div
-                                                className={'oppgavelist__tabell-opprettetTidspunkt'}
-                                            >
-                                                {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
-                                            </div>
+                                        <td
+                                            className={sortertClassName(
+                                                ListFelt.OPPRETTET_TIDSPUNKT
+                                            )}
+                                        >
+                                            {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
                                         </td>
-                                        <td>
-                                            <div className={'oppgavelist__tabell-oppgavetype'}>
-                                                {
-                                                    OppgavetypeFilter[
-                                                        oppg.oppgavetype as keyof typeof OppgavetypeFilter
-                                                    ]
-                                                }
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={'oppgavelist__tabell-behandlingstema'}>
-                                                {oppg.behandlingstema
-                                                    ? GjelderFilter[
-                                                          oppg.behandlingstema as keyof typeof GjelderFilter
-                                                      ]
-                                                    : 'Ikke satt'}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div
-                                                className={
-                                                    'oppgavelist__tabell-fristFerdigstillelse'
-                                                }
-                                            >
-                                                {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={'oppgavelist__tabell-prioritet'}>
-                                                {
-                                                    PrioritetFilter[
-                                                        oppg.prioritet as keyof typeof PrioritetFilter
-                                                    ]
-                                                }
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={'oppgavelist__tabell-aktoerId'}>
-                                                {oppg.aktoerId}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={'oppgavelist__tabell-tildeltEnhetsnr'}>
-                                                {getEnheter(oppg.tildeltEnhetsnr)}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={'oppgavelist__tabell-tilordnetRessurs'}>
-                                                <OppgavelisteSaksbehandler
-                                                    oppgave={oppg}
-                                                    innloggetSaksbehandler={innloggetSaksbehandler}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={'oppgavelist__tabell-handlinger'}>
-                                                {OppgavetypeFilter[
+                                        <td
+                                            className={classNames(
+                                                'oppgavetype',
+                                                sortertClassName(ListFelt.OPPGAVETYPE)
+                                            )}
+                                        >
+                                            {
+                                                OppgavetypeFilter[
                                                     oppg.oppgavetype as keyof typeof OppgavetypeFilter
-                                                ] === OppgavetypeFilter.JFR && (
-                                                    <a href={`/oppgaver/journalfør/${oppg.id}`}>
-                                                        Gå til oppg
-                                                    </a>
-                                                )}
-                                            </div>
+                                                ]
+                                            }
                                         </td>
-                                        <td>
-                                            <div className={'oppgavelist__tabell-beskrivelse'}>
-                                                {oppg.beskrivelse}
-                                            </div>
+                                        <td className={sortertClassName(ListFelt.BEHANDLINGSTEMA)}>
+                                            {oppg.behandlingstema
+                                                ? GjelderFilter[
+                                                      oppg.behandlingstema as keyof typeof GjelderFilter
+                                                  ]
+                                                : 'Ikke satt'}
                                         </td>
+                                        <td
+                                            className={sortertClassName(
+                                                ListFelt.FRIST_FERDIGSTILLELSE
+                                            )}
+                                        >
+                                            {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
+                                        </td>
+                                        <td className={sortertClassName(ListFelt.PRIORITET)}>
+                                            {
+                                                PrioritetFilter[
+                                                    oppg.prioritet as keyof typeof PrioritetFilter
+                                                ]
+                                            }
+                                        </td>
+                                        <td>{oppg.aktoerId}</td>
+                                        <td
+                                            className={classNames(
+                                                'tildelt-enhetsnr',
+                                                sortertClassName(ListFelt.TILDELT_ENHETSNR)
+                                            )}
+                                        >
+                                            {getEnheter(oppg.tildeltEnhetsnr)}
+                                        </td>
+                                        <td
+                                            className={classNames(
+                                                'tilordnet-ressurs',
+                                                sortertClassName(ListFelt.TILORDNET_RESSURS)
+                                            )}
+                                        >
+                                            <OppgavelisteSaksbehandler
+                                                oppgave={oppg}
+                                                innloggetSaksbehandler={innloggetSaksbehandler}
+                                            />
+                                        </td>
+                                        <td className={'handlinger'}>
+                                            {OppgavetypeFilter[
+                                                oppg.oppgavetype as keyof typeof OppgavetypeFilter
+                                            ] === OppgavetypeFilter.JFR && (
+                                                <a href={`/oppgaver/journalfør/${oppg.id}`}>
+                                                    Gå til oppg
+                                                </a>
+                                            )}
+                                        </td>
+                                        <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
                                     </tr>
                                 ))}
                             </tbody>

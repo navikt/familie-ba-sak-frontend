@@ -4,7 +4,7 @@ import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
-import VisOppgaver from '../komponenter/Oppgaver/VisOppgaver';
+import Oppgavebenk from '../komponenter/Oppgaver/Oppgavebenk';
 import {
     IFinnOppgaveRequest,
     IHentOppgaveDto,
@@ -130,14 +130,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         settSideindeks(sortedMedIndeks.length > 0 ? 0 : -1);
     };
 
-    const hentSidetall = () =>
-        oppgaver.status === RessursStatus.SUKSESS
-            ? Math.floor((oppgaver.data.oppgaver.length - 1) / oppgaveSideLimit) + 1
-            : 0;
-
-    const nesteSide = () => sideindeks < hentSidetall() - 1 && settSideindeks(sideindeks + 1);
-
-    const forrigeSide = () => sideindeks > 0 && settSideindeks(sideindeks - 1);
+    const settSide = (side: number) => settSideindeks(side);
 
     const hentOppgaveSide = () =>
         oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
@@ -262,15 +255,13 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     return {
-        oppgaver,
-        hentOppgaver,
-        sortOppgave,
-        sideindeks,
-        nesteSide,
-        forrigeSide,
-        hentSidetall,
-        hentOppgaveSide,
         fordelOppgave,
+        hentOppgaveSide,
+        hentOppgaver,
+        oppgaver,
+        settSide,
+        sideindeks,
+        sortOppgave,
         tilbakestillFordelingPåOppgave,
     };
 });
@@ -278,7 +269,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 const Oppgaver: React.FC = () => {
     return (
         <OppgaverProvider>
-            <VisOppgaver />
+            <Oppgavebenk />
         </OppgaverProvider>
     );
 };

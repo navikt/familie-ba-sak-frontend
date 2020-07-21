@@ -14,7 +14,6 @@ import {
 import { RessursStatus } from '@navikt/familie-typer';
 import { ISaksbehandler } from '@navikt/familie-typer';
 import { datoformatNorsk } from '../../utils/formatter';
-import './visoppgave.less';
 
 type IOppgaverFilter = {
     name: string;
@@ -113,11 +112,11 @@ const FilterSkjema: React.FunctionComponent = () => {
 
     return (
         <div className="filterskjema">
-            <div className="filterskjema__filtre filterskjema__content">
+            <div className="filterskjema__filtre">
                 {Object.values(filtre).map(filter => {
                     return (
                         <Select
-                            bredde={'l'}
+                            bredde={'m'}
                             label={filter.label}
                             onChange={event =>
                                 settFiltre({
@@ -130,7 +129,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                             }
                             key={filter.name}
                             value={filter.selectedValue}
-                            className="filterskjema__filtre__input"
+                            className="filterskjema__filtre--input"
                         >
                             {filter.values.map((value: string) => {
                                 return (
@@ -146,15 +145,13 @@ const FilterSkjema: React.FunctionComponent = () => {
                         </Select>
                     );
                 })}
-            </div>
-            <div className="filterskjema__filtre filterskjema__content">
                 <FamilieDatovelger
                     id="frist"
                     label="Frist"
                     onChange={verdi => settFrist(verdi)}
                     placeholder={datoformatNorsk.DATO}
                     valgtDato={frist}
-                    className="filterskjema__filtre__input"
+                    className="filterskjema__filtre--input"
                 />
                 <FamilieDatovelger
                     id="registrertDato"
@@ -162,10 +159,10 @@ const FilterSkjema: React.FunctionComponent = () => {
                     onChange={verdi => settRegistrertDato(verdi)}
                     placeholder={datoformatNorsk.DATO}
                     valgtDato={registrertDato}
-                    className="filterskjema__filtre__input"
+                    className="filterskjema__filtre--input"
                 />
             </div>
-            <div className="filterskjema__content">
+            <div className="filterskjema__actions">
                 <Knapp
                     onClick={() => {
                         hentOppgaver(
@@ -179,7 +176,6 @@ const FilterSkjema: React.FunctionComponent = () => {
                         );
                     }}
                     spinner={oppgaver.status === RessursStatus.HENTER}
-                    className="filterskjema__button"
                 >
                     Hent
                 </Knapp>
@@ -189,7 +185,6 @@ const FilterSkjema: React.FunctionComponent = () => {
                         settFrist('');
                         settRegistrertDato('');
                     }}
-                    className="filterskjema__button"
                 >
                     Tilbakestill filtrering
                 </Knapp>

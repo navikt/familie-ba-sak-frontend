@@ -1,52 +1,30 @@
 import React from 'react';
 import { useOppgaver, oppgaveSideLimit } from '../../context/OppgaverContext';
 import { RessursStatus } from '@navikt/familie-typer';
-import Lenke from 'nav-frontend-lenker';
+import Pagination from 'paginering';
 
 const OppgavelisteNavigator: React.FunctionComponent = () => {
-    const {
-        oppgaver,
-        hentOppgaveSide,
-        sideindeks,
-        forrigeSide,
-        nesteSide,
-        hentSidetall,
-    } = useOppgaver();
+    const { oppgaver, hentOppgaveSide, sideindeks, settSide } = useOppgaver();
 
-    return (
-        <div>
-            {oppgaver.status === RessursStatus.SUKSESS && sideindeks >= 0 && (
-                <div className={'oppgavelist__header__navigator'}>
-                    |
-                    <span className={'oppgavelist__header__navigator__felt'}>
-                        Viser {sideindeks * oppgaveSideLimit + 1} -{' '}
-                        {sideindeks * oppgaveSideLimit + hentOppgaveSide().length} av{' '}
-                        {oppgaver.status === RessursStatus.SUKSESS
-                            ? oppgaver.data.oppgaver.length
-                            : 0}{' '}
-                        oppgaver
-                    </span>
-                    |
-                    <span className={'oppgavelist__header__navigator__felt'}>
-                        Side {sideindeks + 1} av {hentSidetall()}
-                    </span>
-                    {hentSidetall() > 1 && <span>|</span>}
-                    <span className={'oppgavelist__header__navigator__felt'}>
-                        {sideindeks > 0 && (
-                            <Lenke href="#" onClick={() => forrigeSide()}>
-                                Forrige
-                            </Lenke>
-                        )}{' '}
-                        {sideindeks < hentSidetall() - 1 && (
-                            <Lenke href="#" onClick={() => nesteSide()}>
-                                Neste
-                            </Lenke>
-                        )}
-                    </span>
-                </div>
-            )}
+    return oppgaver.status === RessursStatus.SUKSESS && sideindeks >= 0 ? (
+        <div className={'navigator'}>
+            |
+            <span className={'navigator--felt'}>
+                Viser {sideindeks * oppgaveSideLimit + 1} -{' '}
+                {sideindeks * oppgaveSideLimit + hentOppgaveSide().length} av{' '}
+                {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt}{' '}
+                oppgaver)
+            </span>
+            |
+            <Pagination
+                className={'pagination'}
+                numberOfItems={oppgaver.data.oppgaver.length}
+                itemsPerPage={oppgaveSideLimit}
+                maxPageButtons={5}
+                onChange={(side: number) => settSide(side - 1)}
+            />
         </div>
-    );
+    ) : null;
 };
 
 export default OppgavelisteNavigator;
