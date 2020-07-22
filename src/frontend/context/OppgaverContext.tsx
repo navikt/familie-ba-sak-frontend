@@ -290,7 +290,9 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
             saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET
                 ? innloggetSaksbehandler?.navIdent
-                : undefined
+                : undefined,
+            saksbehandlerFilter !== SaksbehandlerFilter.Alle &&
+                saksbehandlerFilter !== SaksbehandlerFilter.INNLOGGET
         ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
             settOppgaver(oppgaverRessurs);
             settSideindeks(
@@ -308,7 +310,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         enhet?: string,
         frist?: string,
         registrertDato?: string,
-        saksbehandler?: string
+        tilordnetRessurs?: string,
+        tildeltRessurs?: boolean
     ): Promise<Ressurs<IHentOppgaveDto>> => {
         const erstattAlleMedUndefined = (filter: string | undefined) =>
             filter === 'ALLE' ? undefined : filter;
@@ -317,7 +320,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             behandlingstema: erstattAlleMedUndefined(behandlingstema),
             oppgavetype: erstattAlleMedUndefined(oppgavetype),
             enhet: erstattAlleMedUndefined(enhet)?.replace('E', ''),
-            saksbehandler,
+            tilordnetRessurs,
+            tildeltRessurs,
             opprettetFomTidspunkt:
                 registrertDato && registrertDato !== ''
                     ? `${registrertDato}T00:00:00.000`

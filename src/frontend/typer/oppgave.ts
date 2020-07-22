@@ -5,7 +5,6 @@ export interface IFinnOppgaveRequest {
     behandlingstema?: string;
     oppgavetype?: string;
     enhet?: string;
-    saksbehandler?: string;
     journalpostId?: string;
     opprettetFomTidspunkt?: string;
     opprettetTomTidspunkt?: string;
@@ -13,6 +12,8 @@ export interface IFinnOppgaveRequest {
     fristTomDato?: string;
     aktivFomDato?: string;
     aktivTomDato?: string;
+    tilordnetRessurs?: string;
+    tildeltRessurs?: boolean;
     limit?: number;
     offset?: number;
 }
