@@ -6,8 +6,8 @@ import { maksAntallOppgaver, useOppgaver } from '../../context/OppgaverContext';
 
 import { RessursStatus } from '@navikt/familie-typer';
 import { datoformatNorsk } from '../../utils/formatter';
-import { IOppgaveFelt } from './oppgavefelter';
 import { IPar } from '../../typer/common';
+import { IOppgaveFelt } from './oppgavefelter';
 
 const FilterSkjema: React.FunctionComponent = () => {
     const {
@@ -80,7 +80,7 @@ const FilterSkjema: React.FunctionComponent = () => {
             <div className="filterskjema__actions">
                 <Knapp
                     onClick={() => {
-                        hentOppgaver(maksAntallOppgaver);
+                        hentOppgaver();
                     }}
                     spinner={oppgaver.status === RessursStatus.HENTER}
                 >

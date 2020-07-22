@@ -277,13 +277,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
-    const hentOppgaver = (limit?: number) => {
+    const hentOppgaver = () => {
         settOppgaver(byggHenterRessurs());
 
         const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
 
         hentOppgaverFraBackend(
-            limit,
             hentOppgaveFelt('behandlingstema').filter?.selectedValue,
             hentOppgaveFelt('oppgavetype').filter?.selectedValue,
             hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
@@ -304,7 +303,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     const hentOppgaverFraBackend = (
-        limit?: number,
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
@@ -330,7 +328,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     : undefined,
             fristFomDato: frist && frist !== '' ? frist : undefined,
             fristTomDato: frist && frist !== '' ? frist : undefined,
-            limit,
+            limit: maksAntallOppgaver,
             offset: 0,
         };
 
