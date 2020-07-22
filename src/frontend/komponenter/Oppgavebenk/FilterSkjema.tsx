@@ -2,7 +2,7 @@ import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { Knapp } from 'nav-frontend-knapper';
 import { Select } from 'nav-frontend-skjema';
 import React from 'react';
-import { maksAntallOppgaver, useOppgaver } from '../../context/OppgaverContext';
+import { useOppgaver } from '../../context/OppgaverContext';
 
 import { RessursStatus } from '@navikt/familie-typer';
 import { datoformatNorsk } from '../../utils/formatter';
