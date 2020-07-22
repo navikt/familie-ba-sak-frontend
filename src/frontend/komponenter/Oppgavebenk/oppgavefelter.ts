@@ -152,13 +152,9 @@ export const initialOppgaveFelter = (
                 selectedValue: hentPar(
                     searchParams['tilordnetRessurs']?.toString(),
                     saksbehandlerFilter(innloggetSaksbehandler),
-                    innloggetSaksbehandler
-                        ? innloggetSaksbehandler.displayName
-                        : SaksbehandlerFilter.ALLE
+                    SaksbehandlerFilter.ALLE
                 ),
-                initialValue: innloggetSaksbehandler
-                    ? innloggetSaksbehandler.displayName
-                    : SaksbehandlerFilter.ALLE,
+                initialValue: SaksbehandlerFilter.ALLE,
                 nøkkelPar: saksbehandlerFilter(innloggetSaksbehandler),
             },
             order: FeltSortOrder.NONE,
