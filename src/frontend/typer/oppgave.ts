@@ -74,7 +74,7 @@ export const saksbehandlerFilter = (
 });
 
 export enum GjelderFilter {
-    Alle = 'Alle',
+    ALLE = 'ALLE',
     ab0270 = 'ab0270',
     ab0180 = 'ab0180',
     ab0096 = 'ab0096',
