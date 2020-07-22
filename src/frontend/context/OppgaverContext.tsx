@@ -240,32 +240,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
               )
             : [];
 
-    const hentOppgaver = (limit?: number) => {
-        settOppgaver(byggHenterRessurs());
-
-        const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
-
-        hentOppgaverFraBackend(
-            limit,
-            hentOppgaveFelt('behandlingstema').filter?.selectedValue,
-            hentOppgaveFelt('oppgavetype').filter?.selectedValue,
-            hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue?.replace('E', ''),
-            hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
-            hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
-            saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET
-                ? innloggetSaksbehandler?.navIdent
-                : saksbehandlerFilter
-        ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
-            settOppgaver(oppgaverRessurs);
-            settSideindeks(
-                oppgaverRessurs.status === RessursStatus.SUKSESS &&
-                    oppgaverRessurs.data.oppgaver.length > 0
-                    ? 0
-                    : -1
-            );
-        });
-    };
-
     const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
         return axiosRequest<string, void>({
             method: 'POST',
@@ -303,6 +277,32 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
+    const hentOppgaver = (limit?: number) => {
+        settOppgaver(byggHenterRessurs());
+
+        const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
+
+        hentOppgaverFraBackend(
+            limit,
+            hentOppgaveFelt('behandlingstema').filter?.selectedValue,
+            hentOppgaveFelt('oppgavetype').filter?.selectedValue,
+            hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
+            hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
+            hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
+            saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET
+                ? innloggetSaksbehandler?.navIdent
+                : saksbehandlerFilter
+        ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
+            settOppgaver(oppgaverRessurs);
+            settSideindeks(
+                oppgaverRessurs.status === RessursStatus.SUKSESS &&
+                    oppgaverRessurs.data.oppgaver.length > 0
+                    ? 0
+                    : -1
+            );
+        });
+    };
+
     const hentOppgaverFraBackend = (
         limit?: number,
         behandlingstema?: string,
@@ -318,7 +318,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         const finnOppgaveRequest: IFinnOppgaveRequest = {
             behandlingstema: erstattAlleMedUndefined(behandlingstema),
             oppgavetype: erstattAlleMedUndefined(oppgavetype),
-            enhet: erstattAlleMedUndefined(enhet),
+            enhet: erstattAlleMedUndefined(enhet)?.replace('E', ''),
             saksbehandler,
             opprettetFomTidspunkt:
                 registrertDato && registrertDato !== ''
