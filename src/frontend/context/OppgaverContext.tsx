@@ -4,7 +4,7 @@ import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
-import Oppgavebenk from '../komponenter/Oppgaver/Oppgavebenk';
+import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import {
     IFinnOppgaveRequest,
     IHentOppgaveDto,
@@ -25,7 +25,7 @@ import {
     initialOppgaveFelter,
     IOppgaveFelt,
     FeltSortOrder,
-} from '../komponenter/Oppgaver/oppgavefelter';
+} from '../komponenter/Oppgavebenk/oppgavefelter';
 
 export const oppgaveSideLimit = 15;
 

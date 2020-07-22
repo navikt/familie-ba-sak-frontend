@@ -6,11 +6,12 @@ import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
-    EnhetFilter,
-    GjelderFilter,
     IOppgave,
     OppgavetypeFilter,
     PrioritetFilter,
+    oppgaveTypeFilter,
+    gjelderFilter,
+    enhetFilter,
 } from '../../typer/oppgave';
 import { RessursStatus } from '@navikt/familie-typer';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
@@ -20,11 +21,6 @@ import classNames from 'classnames';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
-};
-
-const getEnheter = (enhetId: string) => {
-    const index = Object.keys(EnhetFilter).findIndex(k => k === `E${enhetId}`);
-    return index < 0 ? enhetId : Object.values(EnhetFilter)[index];
 };
 
 const OppgaveList: React.FunctionComponent = () => {
@@ -98,11 +94,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                                 sortertClassName(oppgaveFelter.oppgavetype)
                                             )}
                                         >
-                                            {
-                                                OppgavetypeFilter[
-                                                    oppg.oppgavetype as keyof typeof OppgavetypeFilter
-                                                ]
-                                            }
+                                            {oppgaveTypeFilter[oppg.oppgavetype].navn}
                                         </td>
                                         <td
                                             className={sortertClassName(
@@ -110,9 +102,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                             )}
                                         >
                                             {oppg.behandlingstema
-                                                ? GjelderFilter[
-                                                      oppg.behandlingstema as keyof typeof GjelderFilter
-                                                  ]
+                                                ? gjelderFilter[oppg.behandlingstema].navn
                                                 : 'Ikke satt'}
                                         </td>
                                         <td
@@ -137,7 +127,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                                 sortertClassName(oppgaveFelter.tildeltEnhetsnr)
                                             )}
                                         >
-                                            {getEnheter(oppg.tildeltEnhetsnr)}
+                                            {enhetFilter[`E${oppg.tildeltEnhetsnr}`].navn}
                                         </td>
                                         <td
                                             className={classNames(
@@ -151,9 +141,8 @@ const OppgaveList: React.FunctionComponent = () => {
                                             />
                                         </td>
                                         <td className={'handlinger'}>
-                                            {OppgavetypeFilter[
-                                                oppg.oppgavetype as keyof typeof OppgavetypeFilter
-                                            ] === OppgavetypeFilter.JFR && (
+                                            {oppgaveTypeFilter[oppg.oppgavetype].id ===
+                                                OppgavetypeFilter.JFR && (
                                                 <a href={`/oppgaver/journalfør/${oppg.id}`}>
                                                     Gå til oppg
                                                 </a>
