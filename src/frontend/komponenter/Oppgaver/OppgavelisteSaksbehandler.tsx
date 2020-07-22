@@ -4,7 +4,7 @@ import { useOppgaver } from '../../context/OppgaverContext';
 import { ISaksbehandler } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
@@ -18,6 +18,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
     const [feilmelding, setFeilmelding] = React.useState<string>();
     const [erTilbakestilt, setErTilbakestilt] = React.useState<boolean>(false);
+
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
     }
@@ -39,51 +40,47 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
             OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] === type
     );
 
-    if (oppgave.tilordnetRessurs) {
-        return (
-            <div className={'kolonne'}>
-                <div>{oppgave.tilordnetRessurs}</div>
-                {oppgaveTypeErStøttet && (
-                    <button
-                        key={'tilbakestill'}
-                        onClick={() => {
-                            tilbakestillFordelingPåOppgave(oppgave).then(
-                                (oppgaveResponse: Ressurs<string>) => {
-                                    if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                        setFeilmelding(oppgaveResponse.frontendFeilmelding);
-                                    } else {
-                                        setErTilbakestilt(true);
-                                    }
+    return oppgave.tilordnetRessurs ? (
+        <div className={'kolonne'}>
+            <Normaltekst>{oppgave.tilordnetRessurs}</Normaltekst>
+            {oppgaveTypeErStøttet && (
+                <button
+                    key={'tilbakestill'}
+                    onClick={() => {
+                        tilbakestillFordelingPåOppgave(oppgave).then(
+                            (oppgaveResponse: Ressurs<string>) => {
+                                if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                    setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                                } else {
+                                    setErTilbakestilt(true);
                                 }
-                            );
-                        }}
-                        children={'Tilbakestill'}
-                    />
-                )}
-            </div>
-        );
-    } else {
-        return (
-            <div className={'kolonne'}>
-                <div>Ikke tildelt</div>
-                {oppgaveTypeErStøttet && (
-                    <button
-                        key={'plukk'}
-                        onClick={() => {
-                            fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                                (oppgaveResponse: Ressurs<string>) => {
-                                    if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                        setFeilmelding(oppgaveResponse.frontendFeilmelding);
-                                    }
+                            }
+                        );
+                    }}
+                    children={'Tilbakestill'}
+                />
+            )}
+        </div>
+    ) : (
+        <div className={'kolonne'}>
+            <Normaltekst>Ikke tildelt</Normaltekst>
+            {oppgaveTypeErStøttet && (
+                <button
+                    key={'plukk'}
+                    onClick={() => {
+                        fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
+                            (oppgaveResponse: Ressurs<string>) => {
+                                if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                    setFeilmelding(oppgaveResponse.frontendFeilmelding);
                                 }
-                            );
-                        }}
-                        children={'Plukk'}
-                    />
-                )}
-            </div>
-        );
-    }
+                            }
+                        );
+                    }}
+                    children={'Plukk'}
+                />
+            )}
+        </div>
+    );
 };
 
 export default OppgavelisteSaksbehandler;

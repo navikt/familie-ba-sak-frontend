@@ -15,15 +15,7 @@ import {
 import { RessursStatus } from '@navikt/familie-typer';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
-import {
-    ariaSortMap,
-    feltLabelMap,
-    FeltSortOrder,
-    initFeltOrder,
-    ListFelt,
-    oppgaveFeltMap,
-    sortLenkClassNameMap,
-} from './OppgaveListFelt';
+import { ariaSortMap, FeltSortOrder, sortLenkClassNameMap, IOppgaveFelt } from './oppgavefelter';
 import classNames from 'classnames';
 
 const intDatoTilNorskDato = (intDato: string) => {
@@ -36,45 +28,20 @@ const getEnheter = (enhetId: string) => {
 };
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, sortOppgave, hentOppgaveSide } = useOppgaver();
+    const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide } = useOppgaver();
     const { innloggetSaksbehandler } = useApp();
 
-    const [feltSortOrder, settFeltSortOrder] = React.useState<Map<ListFelt, FeltSortOrder>>(
-        initFeltOrder
-    );
-
-    const onColumnSort = (felt: ListFelt) => {
-        const feltSort = feltSortOrder.get(felt);
-
-        sortOppgave(
-            oppgaveFeltMap.get(felt) || 'ugyldigVerdi',
-            feltSort !== FeltSortOrder.ASCENDANT
-        );
-        settFeltSortOrder(
-            new Map<ListFelt, FeltSortOrder>([
-                ...initFeltOrder,
-                [
-                    felt,
-                    feltSort === FeltSortOrder.ASCENDANT
-                        ? FeltSortOrder.DESCENDANT
-                        : FeltSortOrder.ASCENDANT,
-                ],
-            ])
-        );
+    const onColumnSort = (felt: IOppgaveFelt) => {
+        sortOppgave(felt.nøkkel, felt.order !== FeltSortOrder.ASCENDANT);
     };
 
-    const getAriaSort = (felt: ListFelt) =>
-        ariaSortMap.get(feltSortOrder.get(felt) || FeltSortOrder.NONE);
+    const getAriaSort = (felt: IOppgaveFelt) => ariaSortMap.get(felt.order || FeltSortOrder.NONE);
 
-    const getSortLenkClassName = (felt: ListFelt) =>
-        sortLenkClassNameMap.get(feltSortOrder.get(felt) || FeltSortOrder.NONE);
+    const getSortLenkClassName = (felt: IOppgaveFelt) =>
+        sortLenkClassNameMap.get(felt.order || FeltSortOrder.NONE);
 
-    const sortertClassName = (felt: ListFelt) =>
-        feltSortOrder.get(felt) !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
-
-    React.useEffect(() => {
-        settFeltSortOrder(initFeltOrder);
-    }, [oppgaver.status]);
+    const sortertClassName = (felt: IOppgaveFelt) =>
+        felt.order !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
 
     return (
         <div className={'oppgavelist'}>
@@ -86,24 +53,28 @@ const OppgaveList: React.FunctionComponent = () => {
                 <table className="tabell">
                     <thead>
                         <tr>
-                            {Object.values(ListFelt).map(felt => {
-                                return feltSortOrder.get(felt) ? (
+                            {Object.values(oppgaveFelter).map((felt: IOppgaveFelt) => {
+                                return felt.order ? (
                                     <th
                                         role="columnheader"
                                         aria-sort={getAriaSort(felt)}
                                         className={classNames(
                                             getSortLenkClassName(felt),
-                                            oppgaveFeltMap.get(felt)
+                                            felt.nøkkel
                                         )}
-                                        key={felt}
+                                        key={felt.nøkkel}
                                     >
                                         <Lenke href="#" onClick={() => onColumnSort(felt)}>
-                                            {feltLabelMap.get(felt)}
+                                            {felt.label}
                                         </Lenke>
                                     </th>
                                 ) : (
-                                    <th key={felt} className={oppgaveFeltMap.get(felt)}>
-                                        {feltLabelMap.get(felt)}
+                                    <th
+                                        role="columnheader"
+                                        key={felt.nøkkel}
+                                        className={felt.nøkkel}
+                                    >
+                                        {felt.label}
                                     </th>
                                 );
                             })}
@@ -116,7 +87,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                     <tr key={index}>
                                         <td
                                             className={sortertClassName(
-                                                ListFelt.OPPRETTET_TIDSPUNKT
+                                                oppgaveFelter.opprettetTidspunkt
                                             )}
                                         >
                                             {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
@@ -124,7 +95,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                         <td
                                             className={classNames(
                                                 'oppgavetype',
-                                                sortertClassName(ListFelt.OPPGAVETYPE)
+                                                sortertClassName(oppgaveFelter.oppgavetype)
                                             )}
                                         >
                                             {
@@ -133,7 +104,11 @@ const OppgaveList: React.FunctionComponent = () => {
                                                 ]
                                             }
                                         </td>
-                                        <td className={sortertClassName(ListFelt.BEHANDLINGSTEMA)}>
+                                        <td
+                                            className={sortertClassName(
+                                                oppgaveFelter.behandlingstema
+                                            )}
+                                        >
                                             {oppg.behandlingstema
                                                 ? GjelderFilter[
                                                       oppg.behandlingstema as keyof typeof GjelderFilter
@@ -142,23 +117,24 @@ const OppgaveList: React.FunctionComponent = () => {
                                         </td>
                                         <td
                                             className={sortertClassName(
-                                                ListFelt.FRIST_FERDIGSTILLELSE
+                                                oppgaveFelter.fristFerdigstillelse
                                             )}
                                         >
                                             {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
                                         </td>
-                                        <td className={sortertClassName(ListFelt.PRIORITET)}>
+                                        <td className={sortertClassName(oppgaveFelter.prioritet)}>
                                             {
                                                 PrioritetFilter[
                                                     oppg.prioritet as keyof typeof PrioritetFilter
                                                 ]
                                             }
                                         </td>
+                                        <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
                                         <td>{oppg.aktoerId}</td>
                                         <td
                                             className={classNames(
                                                 'tildelt-enhetsnr',
-                                                sortertClassName(ListFelt.TILDELT_ENHETSNR)
+                                                sortertClassName(oppgaveFelter.tildeltEnhetsnr)
                                             )}
                                         >
                                             {getEnheter(oppg.tildeltEnhetsnr)}
@@ -166,7 +142,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                         <td
                                             className={classNames(
                                                 'tilordnet-ressurs',
-                                                sortertClassName(ListFelt.TILORDNET_RESSURS)
+                                                sortertClassName(oppgaveFelter.tilordnetRessurs)
                                             )}
                                         >
                                             <OppgavelisteSaksbehandler
@@ -183,7 +159,6 @@ const OppgaveList: React.FunctionComponent = () => {
                                                 </a>
                                             )}
                                         </td>
-                                        <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
                                     </tr>
                                 ))}
                             </tbody>
