@@ -61,16 +61,16 @@ export const enhetFilter: INøkkelPar = {
 
 export enum SaksbehandlerFilter {
     INNLOGGET = 'INNLOGGET',
-    ALLE = 'ALLE',
-    ALLE_UFORDELTE = 'ALLE_UFORDELTE',
+    Alle = 'Alle',
+    AlleUfordelte = 'AlleUfordelte',
 }
 
 export const saksbehandlerFilter = (
     innloggetSaksbehandler: ISaksbehandler | undefined
 ): INøkkelPar => ({
     INNLOGGET: { id: 'INNLOGGET', navn: innloggetSaksbehandler?.displayName ?? 'INNLOGGET' },
-    ALLE: { id: 'ALLE', navn: 'Alle (fordelte og ufordelte)' },
-    ALLE_UFORDELTE: { id: 'ALLE_UFORDELTE', navn: 'Alle (ufordelte)' },
+    Alle: { id: 'Alle', navn: 'Alle (fordelte og ufordelte)' },
+    AlleUfordelte: { id: 'AlleUfordelte', navn: 'Alle (ufordelte)' },
 });
 
 export enum GjelderFilter {
