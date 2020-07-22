@@ -127,7 +127,9 @@ const OppgaveList: React.FunctionComponent = () => {
                                                 sortertClassName(oppgaveFelter.tildeltEnhetsnr)
                                             )}
                                         >
-                                            {enhetFilter[`E${oppg.tildeltEnhetsnr}`].navn}
+                                            {oppg.tildeltEnhetsnr
+                                                ? enhetFilter[`E${oppg.tildeltEnhetsnr}`].navn
+                                                : 'Ikke satt'}
                                         </td>
                                         <td
                                             className={classNames(
