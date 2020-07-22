@@ -249,7 +249,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             limit,
             hentOppgaveFelt('behandlingstema').filter?.selectedValue,
             hentOppgaveFelt('oppgavetype').filter?.selectedValue,
-            hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
+            hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue?.replace('E', ''),
             hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
             hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
             saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET
