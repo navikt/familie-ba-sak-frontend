@@ -319,15 +319,18 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             behandlingstema: erstattAlleMedUndefined(behandlingstema),
             oppgavetype: erstattAlleMedUndefined(oppgavetype),
             enhet: erstattAlleMedUndefined(enhet),
-            saksbehandler: saksbehandler,
-            journalpostId: undefined,
-            opprettetFomTidspunkt: registrertDato ? `${registrertDato}T00:00:00.000` : undefined,
-            opprettetTomTidspunkt: registrertDato ? `${registrertDato}T23:59:59.999` : undefined,
-            fristFomDato: frist,
-            fristTomDato: frist,
-            aktivFomDato: undefined,
-            aktivTomDato: undefined,
-            limit: limit,
+            saksbehandler,
+            opprettetFomTidspunkt:
+                registrertDato && registrertDato !== ''
+                    ? `${registrertDato}T00:00:00.000`
+                    : undefined,
+            opprettetTomTidspunkt:
+                registrertDato && registrertDato !== ''
+                    ? `${registrertDato}T23:59:59.999`
+                    : undefined,
+            fristFomDato: frist && frist !== '' ? frist : undefined,
+            fristTomDato: frist && frist !== '' ? frist : undefined,
+            limit,
             offset: 0,
         };
 
