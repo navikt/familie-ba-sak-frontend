@@ -128,7 +128,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                             )}
                                         >
                                             {oppg.tildeltEnhetsnr
-                                                ? enhetFilter[`E${oppg.tildeltEnhetsnr}`].navn
+                                                ? enhetFilter[`E${oppg.tildeltEnhetsnr}`]?.navn
                                                 : 'Ikke satt'}
                                         </td>
                                         <td
