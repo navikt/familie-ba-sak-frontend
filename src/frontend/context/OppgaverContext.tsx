@@ -290,7 +290,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
             saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET
                 ? innloggetSaksbehandler?.navIdent
-                : saksbehandlerFilter
+                : undefined
         ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
             settOppgaver(oppgaverRessurs);
             settSideindeks(
