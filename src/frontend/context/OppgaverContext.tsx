@@ -10,6 +10,7 @@ import {
     IHentOppgaveDto,
     IOppgave,
     OppgavetypeFilter,
+    SaksbehandlerFilter,
 } from '../typer/oppgave';
 import {
     byggFeiletRessurs,
@@ -242,6 +243,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const hentOppgaver = (limit?: number) => {
         settOppgaver(byggHenterRessurs());
 
+        const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
+
         hentOppgaverFraBackend(
             limit,
             hentOppgaveFelt('behandlingstema').filter?.selectedValue,
@@ -249,7 +252,9 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
             hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
             hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
-            hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue
+            saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET
+                ? innloggetSaksbehandler?.navIdent
+                : saksbehandlerFilter
         ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
             settOppgaver(oppgaverRessurs);
             settSideindeks(
