@@ -281,6 +281,17 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         settOppgaver(byggHenterRessurs());
 
         const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
+        let tildeltRessurs;
+        switch (saksbehandlerFilter) {
+            case SaksbehandlerFilter.FORDELTE:
+                tildeltRessurs = true;
+                break;
+            case SaksbehandlerFilter.UFORDELTE:
+                tildeltRessurs = false;
+                break;
+            default:
+                tildeltRessurs = undefined;
+        }
 
         hentOppgaverFraBackend(
             hentOppgaveFelt('behandlingstema').filter?.selectedValue,
@@ -291,8 +302,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET
                 ? innloggetSaksbehandler?.navIdent
                 : undefined,
-            saksbehandlerFilter !== SaksbehandlerFilter.Alle &&
-                saksbehandlerFilter !== SaksbehandlerFilter.INNLOGGET
+            tildeltRessurs
         ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
             settOppgaver(oppgaverRessurs);
             settSideindeks(

@@ -154,11 +154,11 @@ export const initialOppgaveFelter = (
                     saksbehandlerFilter(innloggetSaksbehandler),
                     innloggetSaksbehandler
                         ? innloggetSaksbehandler.displayName
-                        : SaksbehandlerFilter.Alle
+                        : SaksbehandlerFilter.ALLE
                 ),
                 initialValue: innloggetSaksbehandler
                     ? innloggetSaksbehandler.displayName
-                    : SaksbehandlerFilter.Alle,
+                    : SaksbehandlerFilter.ALLE,
                 nøkkelPar: saksbehandlerFilter(innloggetSaksbehandler),
             },
             order: FeltSortOrder.NONE,
