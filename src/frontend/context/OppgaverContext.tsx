@@ -94,6 +94,20 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         }
     };
 
+    const tilbakestillSortOrder = () => {
+        let midlertidigOppgaveFelter = oppgaveFelter;
+        Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
+            midlertidigOppgaveFelter = {
+                ...midlertidigOppgaveFelter,
+                [oppgaveFelt.nøkkel]: {
+                    ...oppgaveFelt,
+                    order: FeltSortOrder.NONE,
+                },
+            };
+            settOppgaveFelter(midlertidigOppgaveFelter);
+        });
+    };
+
     const settSortOrderPåOppgaveFelt = (felt: string) => {
         let midlertidigOppgaveFelter = oppgaveFelter;
         Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
@@ -279,6 +293,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const hentOppgaver = () => {
         settOppgaver(byggHenterRessurs());
+        tilbakestillSortOrder();
 
         const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
         let tildeltRessurs;
