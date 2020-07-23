@@ -665,14 +665,14 @@
     nav-frontend-typografi "^2.0.21"
     react-day-picker "^7.4.8"
 
-"@navikt/familie-header@^2.0.2":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.3.tgz#bdd6ed8a42104124f4bb3d14a7445769312ece52"
-  integrity sha512-CEkkLRyf8gi+MvlwOioZlsuwSWTCpkOdjIbgx0tmmq2XZfVocvPbSDnyJv8WacgOCofLmSAYTjjkWa5OUP7I1Q==
+"@navikt/familie-header@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.4.tgz#bdf286d3a6e8d5c0606622ef097cf830d258a03f"
+  integrity sha512-HPNIyjyeCwYj35MrZ7yRKJC4CVwRghwtlJqPqcN1doCFO3d1NDXv7g8TDuRUq/Oxchp7EZQPzl0H7oLW+tx2Ug==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
-    "@navikt/familie-ikoner" "^3.0.3"
-    "@navikt/familie-typer" "^3.0.3"
+    "@navikt/familie-ikoner" "^3.0.4"
+    "@navikt/familie-typer" "^3.0.4"
     "@navikt/nap-user-panel" "^1.0.0"
     classnames "^2.2.6"
     lodash.throttle "^4.1.1"
@@ -695,6 +695,13 @@
   integrity sha512-DfEm15CQgzc/vqkJvoB62MdH7K6kKVPttbrmio6EZh99YM08Lx1IxbUqDU0tkwZ9zmleF38pwBwna+CBOd56Qw==
   dependencies:
     "@navikt/familie-typer" "^3.0.3"
+
+"@navikt/familie-ikoner@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.0.4.tgz#da4f55be8eb0ec61b42304d79f7873d9166371eb"
+  integrity sha512-KUXzN6sKWBuTDzv7fULdrj8Z0E0m7euPOM7wNvRYBrAx36XiVCv6Rb+MtwaQzLp+TqIo79PyPiaYP7fqLUOEmw==
+  dependencies:
+    "@navikt/familie-typer" "^3.0.4"
 
 "@navikt/familie-typer@^3.0.3":
   version "3.0.3"
@@ -8032,7 +8039,7 @@ nav-frontend-lenker-style@^0.2.29:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.29.tgz#19c3b3d3356a06718950ffdebe68799bdc580fb5"
   integrity sha512-0LLaONtn0Rn+Tg5t+N9Elq2Qgmh9iF6zhbUJGDLLq50rjRtNkhmXqb7czlwhi7JuCCge+bdXEe2ai741oXRr/w==
 
-nav-frontend-lenker@^1.0.36, nav-frontend-lenker@^1.0.37:
+nav-frontend-lenker@^1.0.37:
   version "1.0.37"
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.37.tgz#b89beb5f0ae0a09394baa6dc1f6a8b65020cc0c4"
   integrity sha512-m5AHNynGBSTPjlZUkAoX9WS7uqz828FD2TIB5QVJ4bZuEUd+m/31HjXqCxEUhKbijSaT8zBFNqY1c6URY3tjWg==
