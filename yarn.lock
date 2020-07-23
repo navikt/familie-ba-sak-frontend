@@ -696,6 +696,13 @@
   dependencies:
     "@navikt/familie-typer" "^3.0.3"
 
+"@navikt/familie-ikoner@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.0.4.tgz#da4f55be8eb0ec61b42304d79f7873d9166371eb"
+  integrity sha512-KUXzN6sKWBuTDzv7fULdrj8Z0E0m7euPOM7wNvRYBrAx36XiVCv6Rb+MtwaQzLp+TqIo79PyPiaYP7fqLUOEmw==
+  dependencies:
+    "@navikt/familie-typer" "^3.0.4"
+
 "@navikt/familie-typer@^3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.3.tgz#8a3bec3d06cd6d2b92eb15b6de7aaecbf21d6c55"
@@ -706,14 +713,14 @@
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.4.tgz#1cbea49fe332f5939a56f006db5e53b61b9bda5f"
   integrity sha512-DLmyE3eTGcID2MHrnCFmCwFfWOMMh+gswkGv2nD71uuGw1rDHWm33Ylr/D8p2N2HClQuHl1WvGNIKU4gIs+Gbw==
 
-"@navikt/familie-visittkort@^2.1.5":
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.5.tgz#422216ce136a940cf35feb2028560e79e706f758"
-  integrity sha512-9p+fwdazNiiUspYFLTfOBgh7uUwxltGJzhPDQkngdYxLGGZ+W791iPofGLQGfy/IDSTdwmvv7v9THVXnUK9j1Q==
+"@navikt/familie-visittkort@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.6.tgz#c31959355d65e0023287c0650cc27c1ec12dfd04"
+  integrity sha512-3ZChNnbgEIUneorXrhWWaGTqzWdbe6i8BZtFWCjPXTNJNbT/ZPDtGS5B62Qyy5lSZXtm5ic9osV0BL0/SpPJlQ==
   dependencies:
     "@navikt/familie-clipboard" "^3.0.3"
-    "@navikt/familie-ikoner" "^3.0.3"
-    "@navikt/familie-typer" "^3.0.3"
+    "@navikt/familie-ikoner" "^3.0.4"
+    "@navikt/familie-typer" "^3.0.4"
     classnames "^2.2.6"
     nav-frontend-core "^4.0.11"
     nav-frontend-typografi "^2.0.17"
@@ -8032,7 +8039,7 @@ nav-frontend-lenker-style@^0.2.29:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.29.tgz#19c3b3d3356a06718950ffdebe68799bdc580fb5"
   integrity sha512-0LLaONtn0Rn+Tg5t+N9Elq2Qgmh9iF6zhbUJGDLLq50rjRtNkhmXqb7czlwhi7JuCCge+bdXEe2ai741oXRr/w==
 
-nav-frontend-lenker@^1.0.36, nav-frontend-lenker@^1.0.37:
+nav-frontend-lenker@^1.0.37:
   version "1.0.37"
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.37.tgz#b89beb5f0ae0a09394baa6dc1f6a8b65020cc0c4"
   integrity sha512-m5AHNynGBSTPjlZUkAoX9WS7uqz828FD2TIB5QVJ4bZuEUd+m/31HjXqCxEUhKbijSaT8zBFNqY1c6URY3tjWg==
