@@ -811,6 +811,13 @@
   dependencies:
     "@navikt/familie-typer" "^3.0.3"
 
+"@navikt/familie-ikoner@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.0.4.tgz#da4f55be8eb0ec61b42304d79f7873d9166371eb"
+  integrity sha512-KUXzN6sKWBuTDzv7fULdrj8Z0E0m7euPOM7wNvRYBrAx36XiVCv6Rb+MtwaQzLp+TqIo79PyPiaYP7fqLUOEmw==
+  dependencies:
+    "@navikt/familie-typer" "^3.0.4"
+
 "@navikt/familie-typer@^3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.3.tgz#8a3bec3d06cd6d2b92eb15b6de7aaecbf21d6c55"
