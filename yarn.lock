@@ -1694,10 +1694,17 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/redis@^2.8.14", "@types/redis@^2.8.22":
+"@types/redis@^2.8.14":
   version "2.8.22"
   resolved "https://registry.yarnpkg.com/@types/redis/-/redis-2.8.22.tgz#8935227cbe39080506b625276d64974ddbcb9ea4"
   integrity sha512-O21YLcAtcSzax8wy4CfxMNjIMNf5X2c1pKTXDWLMa2p77Igvy7wuNjWVv+Db93wTvRvLLev6oq3IE7gxNKFZyg==
+  dependencies:
+    "@types/node" "*"
+
+"@types/redis@^2.8.23":
+  version "2.8.25"
+  resolved "https://registry.yarnpkg.com/@types/redis/-/redis-2.8.25.tgz#046bfff24b82effa59d74744c6fcf8995be17479"
+  integrity sha512-e5N5Dg712aZ1CPi1Li0XalukPSWd2RTLYzmrMsQ84NkYQ7cqKHC+HroXM1WP65O1zRGfzld72/u9ikumEe+ylA==
   dependencies:
     "@types/node" "*"
 
