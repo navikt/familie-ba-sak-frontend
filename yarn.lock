@@ -780,10 +780,10 @@
     nav-frontend-typografi "^2.0.21"
     react-day-picker "^7.4.8"
 
-"@navikt/familie-header@^2.0.5":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.5.tgz#250fc30110b58b48656de3038203e50b2c838798"
-  integrity sha512-+utH0jbOJ8OBn9qAYzqF3g8JxVxTbjbDGgnDjm2+xbVq1ZPvb1B60RiG+bkTTFULKlMAQ9W7CugwFG2jzLJDVQ==
+"@navikt/familie-header@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.6.tgz#11a2920a69ff873277d577728354dac2042482cc"
+  integrity sha512-n3TZe50QRqecyp45E4eK5Pwdp9JT6/ItmATsiBqNiesbWx1wh0aApc/rniiXnNfhSjEfBDypF5yh2ZHTOSMpVA==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/familie-ikoner" "^3.0.4"
