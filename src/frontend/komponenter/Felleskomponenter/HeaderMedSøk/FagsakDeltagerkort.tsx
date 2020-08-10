@@ -63,7 +63,7 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
     const ingenTreff = !fagsakId;
 
     return (
-        <div className={`${ingenTreff ? 'gray-out' : ''}`}>
+        <div className={`'fagsakdeltagerkort' ${ingenTreff ? 'gray-out' : ''}`}>
             <Infokort
                 ikon={ikoner[`${rolle}_${kjønn}`]}
                 header={`${navn}(${ident})${rolleNavn[`${rolle}_${kjønn}`] || ''}`}
