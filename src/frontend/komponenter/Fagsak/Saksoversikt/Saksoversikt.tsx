@@ -15,7 +15,7 @@ import {
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { datoformat } from '../../../utils/formatter';
+import { datoformat, formaterIverksattDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import Behandlinger from './Behandlinger';
 import Utbetalinger from './Utbetalinger';
@@ -65,8 +65,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 informasjon={[
                     {
                         label: `Vedtaksdato`,
-                        tekst:
-                            moment(aktivVedtak?.vedtaksdato).format(datoformat.DATO) ?? 'Ikke satt',
+                        tekst: formaterIverksattDato(aktivVedtak?.vedtaksdato),
                     },
                     { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
                 ]}
