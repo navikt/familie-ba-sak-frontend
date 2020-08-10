@@ -1,4 +1,4 @@
-import './fagsakdeltagerskort.less';
+import './fagsakdeltagerkort.less';
 
 import React from 'react';
 
@@ -15,7 +15,7 @@ import { kjønnType } from '@navikt/familie-typer';
 
 import { FagsakDeltagerRolle } from '../../../typer/fagsakdeltager';
 
-export interface IFagsakDeltagerskortProps {
+export interface IFagsakDeltagerkortProps {
     navn: string;
     ident: string;
     rolle: FagsakDeltagerRolle;
@@ -26,7 +26,7 @@ export interface IFagsakDeltagerskortProps {
     children?: React.ReactNode | React.ReactNode[];
 }
 
-const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = ({
+const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
     navn,
     ident,
     rolle,
@@ -63,7 +63,7 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
     const ingenTreff = !fagsakId;
 
     return (
-        <div className={`${ingenTreff ? 'gray-out' : ''}`}>
+        <div className={`fagsakdeltagerkort ${ingenTreff ? 'ingentreff' : 'treff'}`}>
             <Infokort
                 ikon={ikoner[`${rolle}_${kjønn}`]}
                 header={`${navn}(${ident})${rolleNavn[`${rolle}_${kjønn}`] || ''}`}
@@ -76,4 +76,4 @@ const FagsakDeltagerskort: React.FunctionComponent<IFagsakDeltagerskortProps> = 
     );
 };
 
-export default FagsakDeltagerskort;
+export default FagsakDeltagerkort;
