@@ -7,7 +7,7 @@ import HendelseItem from './komponenter/HendelseItem';
 import Historikkknapp from './komponenter/Historikkknapp';
 import Meldingerknapp from './komponenter/Meldingerknapp';
 import classNames from 'classnames';
-import Brev from '../BrevModul/Brev';
+import Brev from './komponenter/Brev';
 
 export { Tabs as Hendelsetype, Hendelse };
 
