@@ -10,7 +10,7 @@ import {
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
-import { datoformat } from '../../../utils/formatter';
+import { datoformat, formaterIverksattDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { sakstype } from '../Saksoversikt/Saksoversikt';
 
@@ -52,8 +52,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                     },
                     {
                         label: 'Vedtaksdato',
-                        tekst:
-                            moment(aktivVedtak?.vedtaksdato).format(datoformat.DATO) ?? 'Ikke satt',
+                        tekst: formaterIverksattDato(aktivVedtak?.vedtaksdato),
                     },
                 ]}
             />
