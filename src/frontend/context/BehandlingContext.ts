@@ -60,11 +60,11 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const erLesevisning = (): boolean => {
         const rolle = hentSaksbehandlerRolle();
         const steg = hentStegPåÅpenBehandling();
-        const stegNummer: BehandlingSteg = steg && BehandlingSteg[steg];
         if (
             rolle &&
             rolle >= BehandlerRolle.SAKSBEHANDLER &&
-            !(stegNummer >= BehandlingSteg.BESLUTTE_VEDTAK)
+            steg &&
+            !(steg >= BehandlingSteg.BESLUTTE_VEDTAK)
         ) {
             return false;
         } else if (rolle && rolle >= BehandlerRolle.VEILEDER) {
