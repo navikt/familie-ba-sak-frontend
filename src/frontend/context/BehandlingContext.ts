@@ -1,6 +1,6 @@
 import createUseContext from 'constate';
 import { useState, useEffect } from 'react';
-import { BehandlerRolle, BehandlingSteg, IBehandling } from '../typer/behandling';
+import { BehandlerRolle, BehandlingSteg, IBehandling, hentStegNummer } from '../typer/behandling';
 import {
     RessursStatus,
     Ressurs,
@@ -60,11 +60,12 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const erLesevisning = (): boolean => {
         const rolle = hentSaksbehandlerRolle();
         const steg = hentStegPåÅpenBehandling();
+
         if (
             rolle &&
             rolle >= BehandlerRolle.SAKSBEHANDLER &&
             steg &&
-            !(steg >= BehandlingSteg.BESLUTTE_VEDTAK)
+            !(hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK))
         ) {
             return false;
         } else if (rolle && rolle >= BehandlerRolle.VEILEDER) {

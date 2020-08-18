@@ -3,6 +3,7 @@ import {
     BehandlingSteg,
     Behandlingstype,
     IBehandling,
+    hentStegNummer,
 } from '../../../typer/behandling';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
@@ -77,20 +78,15 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
         return false;
     }
 
-    /**
-     * Litt stygg cast for å gjøre tsc fornøyd.
-     * Skrives kanskje om når vi har mer logikk rundt hvilke steg som skal være aktive i en behandling senere.
-     *  */
-    return side.steg !== undefined
-        ? side.steg <= ((BehandlingSteg[steg] as unknown) as BehandlingSteg)
-        : false;
+    return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
 export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
+    const stegNummer = hentStegNummer(side.steg);
     if (!åpenBehandling) {
-        return !side.steg && side.steg !== 0;
+        return stegNummer !== 0;
     } else if (åpenBehandling.samletResultat === BehandlingResultat.OPPHØRT) {
-        return !side.steg && side.steg !== 0;
+        return stegNummer !== 0;
     } else if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
     } else {
@@ -99,6 +95,7 @@ export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
 };
 
 export const finnSideForBehandlingssteg = (steg: BehandlingSteg) => {
+    console.log(steg);
     return Object.values(sider).find((side: ISide) => side.steg === steg);
 };
 
