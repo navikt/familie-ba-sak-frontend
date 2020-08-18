@@ -8190,12 +8190,12 @@ nav-frontend-knapper-style@^1.0.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-1.0.1.tgz#5add853d28a5c5f9848aebdb2abefc99fe20e396"
   integrity sha512-J8HO93X/jiS9Jbvmr/byTjdgA69PLUYE/OF5Plc67/ZBDuJOoMhxnShr+EgFA6EXRrdq+D9SSfceFX1bRx9dWw==
 
-nav-frontend-knapper@^2.0.3, nav-frontend-knapper@^2.0.4:
+nav-frontend-knapper@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-2.0.4.tgz#3d0c7f56f709abe8f990bf6fdc9f845a18ac4aac"
   integrity sha512-vcAglzTWw8UzX1rY47EW9Nit6+q+d49IvEU/pmzBCz4ywqa2u29GTzqFCeyEzFq8/TCiVS68NZBtlUHXDgFrTQ==
 
-nav-frontend-knapper@^2.0.8:
+nav-frontend-knapper@^2.0.8, nav-frontend-knapper@^2.0.9:
   version "2.0.9"
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-2.0.9.tgz#7098a32942d08ed8b29188e21f5b5dcb4999f71d"
   integrity sha512-QwzFn/qkCQ5tNof2lUaLbGANXMFBNKCnEgO3TXR4/GIbo2FXNPiTYgGsDp8WogCUIfmZyHgo5hwRgcdft7ri+g==
