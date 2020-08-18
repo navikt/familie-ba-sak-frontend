@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import moment from 'moment';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
-import VisOppgaver from '../komponenter/Oppgaver/VisOppgaver';
+import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import {
     IFinnOppgaveRequest,
     IHentOppgaveDto,
@@ -12,8 +12,20 @@ import {
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
-import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import {
+    byggFeiletRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+    byggHenterRessurs,
+} from '@navikt/familie-typer';
 import { useApp } from './AppContext';
+import {
+    IOppgaveFelter,
+    initialOppgaveFelter,
+    IOppgaveFelt,
+    FeltSortOrder,
+} from '../komponenter/Oppgavebenk/oppgavefelter';
 
 export const oppgaveSideLimit = 15;
 
@@ -21,9 +33,111 @@ export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const history = useHistory();
+    const { axiosRequest, innloggetSaksbehandler } = useApp();
+
+    const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
         byggTomRessurs<IHentOppgaveDto>()
     );
+    const [oppgaveFelter, settOppgaveFelter] = useState<IOppgaveFelter>(
+        initialOppgaveFelter(innloggetSaksbehandler, history.location.search)
+    );
+
+    useEffect(() => {
+        settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler, history.location.search));
+    }, [innloggetSaksbehandler]);
+
+    useEffect(() => {
+        if (hentOppgaverVedSidelast && innloggetSaksbehandler) {
+            if (
+                Object.values(oppgaveFelter).filter(
+                    (oppgaveFelt: IOppgaveFelt) =>
+                        oppgaveFelt.filter?.initialValue !== oppgaveFelt.filter?.selectedValue
+                ).length > 0
+            ) {
+                hentOppgaver();
+            }
+            settHentOppgaverVedSidelast(false);
+        }
+    }, [oppgaveFelter]);
+
+    const hentOppgaveFelt = (nøkkel: string) => {
+        return oppgaveFelter[nøkkel];
+    };
+
+    const settVerdiPåOppgaveFelt = (oppgaveFelt: IOppgaveFelt, nyVerdi: string) => {
+        if (oppgaveFelt.filter) {
+            const oppdaterteOppgaveFelter = {
+                ...oppgaveFelter,
+                [oppgaveFelt.nøkkel]: {
+                    ...oppgaveFelt,
+                    filter: {
+                        ...oppgaveFelt.filter,
+                        selectedValue: nyVerdi,
+                    },
+                },
+            };
+            settOppgaveFelter(oppdaterteOppgaveFelter);
+
+            history.push({
+                search: Object.values(oppdaterteOppgaveFelter)
+                    .filter(
+                        (mapOppgaveFelt: IOppgaveFelt) =>
+                            mapOppgaveFelt.filter?.selectedValue !==
+                            mapOppgaveFelt.filter?.initialValue
+                    )
+                    .map((mapOppgaveFelt: IOppgaveFelt) => {
+                        return `${mapOppgaveFelt.nøkkel}=${mapOppgaveFelt?.filter?.selectedValue}`;
+                    })
+                    .join('&'),
+            });
+        }
+    };
+
+    const tilbakestillSortOrder = () => {
+        let midlertidigOppgaveFelter = oppgaveFelter;
+        Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
+            midlertidigOppgaveFelter = {
+                ...midlertidigOppgaveFelter,
+                [oppgaveFelt.nøkkel]: {
+                    ...oppgaveFelt,
+                    order: FeltSortOrder.NONE,
+                },
+            };
+            settOppgaveFelter(midlertidigOppgaveFelter);
+        });
+    };
+
+    const settSortOrderPåOppgaveFelt = (felt: string) => {
+        let midlertidigOppgaveFelter = oppgaveFelter;
+        Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
+            if (oppgaveFelt.nøkkel === felt) {
+                midlertidigOppgaveFelter = {
+                    ...midlertidigOppgaveFelter,
+                    [oppgaveFelt.nøkkel]: {
+                        ...oppgaveFelt,
+                        order:
+                            oppgaveFelt.order === FeltSortOrder.ASCENDANT
+                                ? FeltSortOrder.DESCENDANT
+                                : FeltSortOrder.ASCENDANT,
+                    },
+                };
+            } else if (oppgaveFelt.order && oppgaveFelt.order !== FeltSortOrder.NONE) {
+                midlertidigOppgaveFelter = {
+                    ...midlertidigOppgaveFelter,
+                    [oppgaveFelt.nøkkel]: {
+                        ...oppgaveFelt,
+                        order: FeltSortOrder.NONE,
+                    },
+                };
+            }
+            settOppgaveFelter(midlertidigOppgaveFelter);
+        });
+    };
+
+    const tilbakestillOppgaveFelter = () => {
+        settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
+    };
 
     const { opprettEllerHentFagsak } = useFagsakApi(
         _ => {
@@ -35,8 +149,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     );
 
     const [sideindeks, settSideindeks] = React.useState(-1);
-
-    const { axiosRequest } = useApp();
 
     //Stable sort algorithm makes sorting by multiple fields easier. However,
     //Javascript does not specify the sort algorithm. To make sure the sort algorithm implemented
@@ -128,16 +240,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         });
 
         settSideindeks(sortedMedIndeks.length > 0 ? 0 : -1);
+
+        settSortOrderPåOppgaveFelt(felt);
     };
 
-    const hentSidetall = () =>
-        oppgaver.status === RessursStatus.SUKSESS
-            ? Math.floor((oppgaver.data.oppgaver.length - 1) / oppgaveSideLimit) + 1
-            : 0;
-
-    const nesteSide = () => sideindeks < hentSidetall() - 1 && settSideindeks(sideindeks + 1);
-
-    const forrigeSide = () => sideindeks > 0 && settSideindeks(sideindeks - 1);
+    const settSide = (side: number) => settSideindeks(side);
 
     const hentOppgaveSide = () =>
         oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
@@ -146,45 +253,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                   Math.min((sideindeks + 1) * oppgaveSideLimit, oppgaver.data.oppgaver.length)
               )
             : [];
-
-    const hentOppgaver = (
-        limit?: number,
-        behandlingstema?: string,
-        oppgavetype?: string,
-        enhet?: string,
-        frist?: string,
-        registrertDato?: string,
-        saksbehandler?: string
-    ) => {
-        settOppgaver({
-            ...oppgaver,
-            status: RessursStatus.HENTER,
-        });
-
-        const saksbehandlerForBackend =
-            saksbehandler !== Object.keys(SaksbehandlerFilter)[0] &&
-            saksbehandler !== Object.keys(SaksbehandlerFilter)[1]
-                ? saksbehandler
-                : undefined;
-        hentOppgaverFraBackend(
-            limit,
-            behandlingstema,
-            oppgavetype,
-            enhet,
-            frist,
-            registrertDato,
-            saksbehandlerForBackend
-        ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
-            settOppgaver(oppgaverRessurs);
-            settSideindeks(
-                oppgaverRessurs.status === RessursStatus.SUKSESS &&
-                    oppgaverRessurs.data.oppgaver.length > 0
-                    ? 0
-                    : -1
-            );
-            return oppgaverRessurs;
-        });
-    };
 
     const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
         return axiosRequest<string, void>({
@@ -223,28 +291,73 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
+    const hentOppgaver = () => {
+        settOppgaver(byggHenterRessurs());
+        tilbakestillSortOrder();
+
+        const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
+        let tildeltRessurs;
+        switch (saksbehandlerFilter) {
+            case SaksbehandlerFilter.FORDELTE:
+                tildeltRessurs = true;
+                break;
+            case SaksbehandlerFilter.UFORDELTE:
+                tildeltRessurs = false;
+                break;
+            default:
+                tildeltRessurs = undefined;
+        }
+
+        hentOppgaverFraBackend(
+            hentOppgaveFelt('behandlingstema').filter?.selectedValue,
+            hentOppgaveFelt('oppgavetype').filter?.selectedValue,
+            hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
+            hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
+            hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
+            saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET
+                ? innloggetSaksbehandler?.navIdent
+                : undefined,
+            tildeltRessurs
+        ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
+            settOppgaver(oppgaverRessurs);
+            settSideindeks(
+                oppgaverRessurs.status === RessursStatus.SUKSESS &&
+                    oppgaverRessurs.data.oppgaver.length > 0
+                    ? 0
+                    : -1
+            );
+        });
+    };
+
     const hentOppgaverFraBackend = (
-        limit?: number,
         behandlingstema?: string,
         oppgavetype?: string,
         enhet?: string,
         frist?: string,
         registrertDato?: string,
-        saksbehandler?: string
+        tilordnetRessurs?: string,
+        tildeltRessurs?: boolean
     ): Promise<Ressurs<IHentOppgaveDto>> => {
+        const erstattAlleMedUndefined = (filter: string | undefined) =>
+            filter === 'ALLE' ? undefined : filter;
+
         const finnOppgaveRequest: IFinnOppgaveRequest = {
-            behandlingstema: behandlingstema,
-            oppgavetype: oppgavetype,
-            enhet: enhet,
-            saksbehandler: saksbehandler,
-            journalpostId: undefined,
-            opprettetFomTidspunkt: registrertDato ? `${registrertDato}T00:00:00.000` : undefined,
-            opprettetTomTidspunkt: registrertDato ? `${registrertDato}T23:59:59.999` : undefined,
-            fristFomDato: frist,
-            fristTomDato: frist,
-            aktivFomDato: undefined,
-            aktivTomDato: undefined,
-            limit: limit,
+            behandlingstema: erstattAlleMedUndefined(behandlingstema),
+            oppgavetype: erstattAlleMedUndefined(oppgavetype),
+            enhet: erstattAlleMedUndefined(enhet)?.replace('E', ''),
+            tilordnetRessurs,
+            tildeltRessurs,
+            opprettetFomTidspunkt:
+                registrertDato && registrertDato !== ''
+                    ? `${registrertDato}T00:00:00.000`
+                    : undefined,
+            opprettetTomTidspunkt:
+                registrertDato && registrertDato !== ''
+                    ? `${registrertDato}T23:59:59.999`
+                    : undefined,
+            fristFomDato: frist && frist !== '' ? frist : undefined,
+            fristTomDato: frist && frist !== '' ? frist : undefined,
+            limit: maksAntallOppgaver,
             offset: 0,
         };
 
@@ -262,23 +375,25 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     return {
-        oppgaver,
-        hentOppgaver,
-        sortOppgave,
-        sideindeks,
-        nesteSide,
-        forrigeSide,
-        hentSidetall,
-        hentOppgaveSide,
         fordelOppgave,
+        hentOppgaveSide,
+        hentOppgaver,
+        oppgaveFelter,
+        oppgaver,
+        settSide,
+        settSortOrderPåOppgaveFelt,
+        settVerdiPåOppgaveFelt,
+        sideindeks,
+        sortOppgave,
         tilbakestillFordelingPåOppgave,
+        tilbakestillOppgaveFelter,
     };
 });
 
 const Oppgaver: React.FC = () => {
     return (
         <OppgaverProvider>
-            <VisOppgaver />
+            <Oppgavebenk />
         </OppgaverProvider>
     );
 };

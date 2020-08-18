@@ -4,8 +4,10 @@ import React from 'react';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPerson } from '../typer/person';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '../typer/ressurs';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
+import { IRestPersonResultat } from '../typer/vilkår';
+import { IBehandling } from '../typer/behandling';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPerson>;
@@ -89,7 +91,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         axiosRequest<ILogg[], void>({
             method: 'GET',
             url: `/familie-ba-sak/api/logg/${behandlingId}`,
-            påvirkerSystemLaster: true,
         })
             .then((hentetLogg: Ressurs<ILogg[]>) => {
                 settFagsakRessurser({ ...fagsakRessurser, logg: hentetLogg });
@@ -105,9 +106,45 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const settFagsak = (modifisertFagsak: Ressurs<IFagsak>): void =>
         settFagsakRessurser({ ...fagsakRessurser, fagsak: modifisertFagsak });
 
+    const oppdaterVilkårsvurdering = (
+        restPersonResultater: IRestPersonResultat[],
+        behandlingId: number
+    ) => {
+        if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
+            const åpenBehandling = fagsakRessurser.fagsak.status
+                ? fagsakRessurser.fagsak.data.behandlinger.find(
+                      (behandling: IBehandling) => behandling.behandlingId === behandlingId
+                  )
+                : undefined;
+
+            settFagsakRessurser({
+                ...fagsakRessurser,
+                fagsak: {
+                    ...fagsakRessurser.fagsak,
+                    data: {
+                        ...fagsakRessurser.fagsak.data,
+                        behandlinger: fagsakRessurser.fagsak.data.behandlinger.map(
+                            (behandling: IBehandling) => {
+                                if (behandling.behandlingId === behandlingId && åpenBehandling) {
+                                    return {
+                                        ...åpenBehandling,
+                                        personResultater: restPersonResultater,
+                                    };
+                                } else {
+                                    return behandling;
+                                }
+                            }
+                        ),
+                    },
+                },
+            });
+        }
+    };
+
     return {
         bruker: fagsakRessurser.bruker,
         fagsak: fagsakRessurser.fagsak,
+        oppdaterVilkårsvurdering,
         hentFagsak,
         hentLogg,
         logg: fagsakRessurser.logg,

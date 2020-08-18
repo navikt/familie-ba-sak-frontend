@@ -10,6 +10,10 @@ export interface IPeriode {
     tom?: string;
 }
 
+export const hentPeriodeHash = (periode: IPeriode) => {
+    return `${periode.fom}_${periode.tom}`;
+};
+
 export const nyPeriode = (fom?: string, tom?: string): IPeriode => {
     return {
         fom: fom !== '' && fom !== null ? fom : undefined,

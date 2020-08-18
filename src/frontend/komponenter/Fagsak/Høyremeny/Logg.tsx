@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { RessursStatus } from '../../../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';

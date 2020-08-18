@@ -1,0 +1,128 @@
+@import (reference) '~nav-frontend-core/less/_variabler';
+
+@oppgavePageHeight: ~"calc("100vh ~"-" 30px ~"-" 1.1rem~")";
+
+.oppgavebenk {
+    padding: .5rem;
+    height: @oppgavePageHeight;
+    width: 100vw;
+    overflow: auto;
+
+    & hr {
+        margin-top: 2rem;
+    }
+}
+
+.oppgave-header {
+    display: flex;
+    justify-content: space-between;
+
+    &__opprett-fagsak {
+        & .knapp {
+            margin-top: 1rem;
+        }
+
+        & .feilmelding {
+            margin-top: 1rem;
+            float: right;
+        }
+    }
+
+    .filterskjema {
+        display: flex;
+        flex-direction: column;
+    
+        &__filtre {
+            display: flex;
+    
+            & > * {
+                margin-top: 1rem;
+            }
+    
+            &--input{
+                padding-right: 1.5rem;
+            }
+        }
+        
+        &__actions {
+            & .knapp {
+                margin-top: 1.5rem;
+                margin-right: 2rem;
+            }
+        }
+    }
+}
+
+.oppgavelist {
+    &__header {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    
+        .navigator {
+            color: @navMorkGra;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .pagination {
+                padding-left: 1rem;
+            }
+
+            &--felt {
+                padding: 0 1rem 0 1rem;
+            }
+        }
+    }
+
+    & .alertstripe {
+        margin-top: 0.8rem;
+    }
+
+    .tabell {
+        .oppgavetype {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0;
+        }
+        
+        .tildelt-enhetsnr {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0;
+        }
+        
+        .tilordnet-ressurs {
+            .kolonne {
+                display: flex;
+        
+                *:nth-child(1) {
+                    width: 5rem;
+                    margin-right: 2.5rem;
+                    text-align: left;
+                }
+                *:nth-child(2) {
+                    color: #0067c5;
+                    text-align: left;
+                }
+            }
+        }
+        
+        .handlinger > a {
+            color: #0067c5;
+            text-decoration: none;
+            padding-right: 1rem;
+        }        
+        
+        .beskrivelse {
+            max-width: 15rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0;
+        }
+    }
+}

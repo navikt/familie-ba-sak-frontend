@@ -6,7 +6,7 @@ import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
 import { IPerson } from '../../../typer/person';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
 import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
 import { FamilieInput } from '@navikt/familie-form-elements';

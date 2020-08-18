@@ -3,6 +3,7 @@ import { IPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
 import { IRestPersonResultat } from './vilkår';
 import { ITotrinnskontroll } from './totrinnskontroll';
+import { IOppsummeringBeregning } from './beregning';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -77,6 +78,7 @@ export interface IBehandling {
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
+    beregningOversikt: IOppsummeringBeregning[];
 }
 
 export const behandlerRoller: INøkkelPar = {
@@ -119,11 +121,11 @@ export const kategorier: INøkkelPar = {
 export const underkategorier: INøkkelPar = {
     ORDINÆR: {
         id: 'ORDINÆR',
-        navn: 'Ordinær barnetrygd',
+        navn: 'Ordinær',
     },
     UTVIDET: {
         id: 'UTVIDET',
-        navn: 'Utvidet barnetrygd',
+        navn: 'Utvidet',
     },
 };
 

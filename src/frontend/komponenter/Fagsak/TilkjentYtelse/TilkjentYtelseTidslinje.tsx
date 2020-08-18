@@ -5,7 +5,7 @@ import '@navikt/helse-frontend-tidslinje/lib/main.css';
 import { IPersonBeregning, IYtelsePeriode } from '../../../typer/beregning';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
-import { RessursStatus } from '../../../typer/ressurs';
+import { RessursStatus } from '@navikt/familie-typer';
 import { IPerson } from '../../../typer/person';
 import { Normaltekst } from 'nav-frontend-typografi';
 

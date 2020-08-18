@@ -1,10 +1,10 @@
 import { Søk } from '@navikt/familie-header';
-import FagsakDeltagerskort from './FagsakDeltagerskort';
+import FagsakDeltagerkort from './FagsakDeltagerkort';
 import React from 'react';
 import { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { useHistory } from 'react-router';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Ressurs, RessursStatus } from '../../../typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../../context/AppContext';
 
 // eslint-disable-next-line
@@ -75,7 +75,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                 resultat.length > 0 &&
                 resultat.map((deltager, index) => {
                     return (
-                        <FagsakDeltagerskort
+                        <FagsakDeltagerkort
                             navn={deltager.navn}
                             kjønn={deltager.kjønn}
                             ident={deltager.ident}

@@ -3,6 +3,7 @@ import { Input } from 'nav-frontend-skjema';
 import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import useFagsakApi from '../Fagsak/useFagsakApi';
+import FilterSkjema from './FilterSkjema';
 
 const OppgaveHeader: React.FunctionComponent = () => {
     const [personIdent, settPersonIdent] = React.useState('');
@@ -15,17 +16,21 @@ const OppgaveHeader: React.FunctionComponent = () => {
     );
 
     return (
-        <div>
-            <div className={'oppgave-header'}>
+        <div className={'oppgave-header'}>
+            <div>
                 <Systemtittel className={'oppgave-header__tittel'}>Oppgavebenken</Systemtittel>
+
+                <FilterSkjema />
+            </div>
+            <div className={'oppgave-header__opprett-fagsak'}>
                 <Input
                     label={'Opprett eller hent fagsak'}
                     value={personIdent}
+                    bredde={'XXL'}
                     placeholder={'Skriv inn fnr/dnr 11 siffer'}
                     onChange={event => {
                         settPersonIdent(event.target.value.trim());
                     }}
-                    className={'oppgave-header__fnrInput'}
                 />
                 <Knapp
                     type={'hoved'}
@@ -36,16 +41,10 @@ const OppgaveHeader: React.FunctionComponent = () => {
                         });
                     }}
                     children={'Fortsett'}
-                    className={'oppgave-header__opprettFagsakKnapp'}
                     spinner={senderInn}
                 />
+                {visFeilmeldinger && <Feilmelding children={opprettelseFeilmelding} />}
             </div>
-            {visFeilmeldinger && (
-                <Feilmelding
-                    children={opprettelseFeilmelding}
-                    className={'oppgave-header__feilmelding'}
-                />
-            )}
         </div>
     );
 };

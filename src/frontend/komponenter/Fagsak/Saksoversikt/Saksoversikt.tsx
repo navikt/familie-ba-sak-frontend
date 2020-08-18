@@ -2,27 +2,23 @@ import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input } from 'nav-frontend-skjema';
 import 'nav-frontend-tabell-style';
-import { Normaltekst, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Element, Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
 import {
-    behandlingsresultater,
-    behandlingsstatuser,
     BehandlingStatus,
-    behandlingstyper,
     IBehandling,
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { IPersonBeregning } from '../../../typer/beregning';
-import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { datoformat, formaterIsoDato, formaterPersonIdent } from '../../../utils/formatter';
+import { datoformat, formaterIverksattDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
-import { useBehandling } from '../../../context/BehandlingContext';
-import Lenke from 'nav-frontend-lenker';
+import Behandlinger from './Behandlinger';
+import Utbetalinger from './Utbetalinger';
 
 interface IProps {
     fagsak: IFagsak;
@@ -30,7 +26,6 @@ interface IProps {
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { axiosRequest } = useApp();
-    const history = useHistory();
     const [opphørsdato, setOpphørsdato] = React.useState('');
 
     const { bestemÅpenBehandling } = useBehandling();
@@ -63,76 +58,24 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return (
         <div className={'saksoversikt'}>
-            <Systemtittel children={'Saksoversikt'} />
+            <Systemtittel className={'tittel'} children={'Saksoversikt'} />
 
+            <Element children={'Løpende vedtak'} />
             <Informasjonsbolk
                 informasjon={[
-                    { label: `Status på sak`, tekst: fagsakStatus[fagsak.status].navn },
-                    { label: `Vedtaksdato`, tekst: aktivVedtak?.vedtaksdato ?? 'Ikke satt' },
+                    {
+                        label: `Vedtaksdato`,
+                        tekst: formaterIverksattDato(aktivVedtak?.vedtaksdato),
+                    },
                     { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
                 ]}
             />
-            {aktivBehandling && aktivBehandling?.status !== BehandlingStatus.FERDIGSTILT ? (
-                <div className={'saksoversikt__aktivbehandling'}>
-                    <Undertittel children={'Aktiv behandling'} />
-                    <Informasjonsbolk
-                        informasjon={[
-                            { label: `Behandlingstype`, tekst: sakstype(aktivBehandling) },
-                            {
-                                label: `Behandlingsstatus`,
-                                tekst: aktivBehandling
-                                    ? behandlingsstatuser[aktivBehandling?.status].navn
-                                    : 'Ukjent',
-                            },
-                        ]}
-                    />
-                </div>
-            ) : (
-                <Knapp
-                    mini={true}
-                    onClick={() => {
-                        history.push(`/fagsak/${fagsak.id}/ny-behandling`);
-                    }}
-                    children={'Opprett behandling'}
-                />
-            )}
 
             {aktivVedtak?.personBeregninger &&
                 aktivVedtak?.personBeregninger.length > 0 &&
                 gjeldendeBehandling?.status === BehandlingStatus.FERDIGSTILT && (
                     <div>
-                        <div className={'saksoversikt__utbetalinger'}>
-                            <Undertittel children={'Utbetalinger'} />
-                            <table className="tabell">
-                                <thead>
-                                    <tr>
-                                        <th children={'Person'} />
-                                        <th children={'Beløp'} />
-                                        <th children={'Periode'} />
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {aktivVedtak?.personBeregninger
-                                        .filter(
-                                            (personBeregning: IPersonBeregning) =>
-                                                personBeregning.ytelsePerioder.length > 0
-                                        )
-                                        .map((personBeregning: IPersonBeregning) => {
-                                            return (
-                                                <tr key={personBeregning.personIdent}>
-                                                    <td
-                                                        children={`${formaterPersonIdent(
-                                                            personBeregning.personIdent
-                                                        )}`}
-                                                    />
-                                                    <td children={`${personBeregning.beløp}`} />
-                                                    <td children={`${personBeregning.stønadFom}`} />
-                                                </tr>
-                                            );
-                                        })}
-                                </tbody>
-                            </table>
-                        </div>
+                        <Utbetalinger personbergninger={aktivVedtak.personBeregninger} />
                         <div className={'saksoversikt__opphør'}>
                             <Undertittel children={'Opphør utbetalinger for fagsak'} />
                             <Input
@@ -164,91 +107,12 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         </div>
                     </div>
                 )}
-
-            <div className={'saksoversikt__behandlingshistorikk'}>
-                <Undertittel children={'Behandlingshistorikk'} />
-                {behandlingshistorikk.length > 0 ? (
-                    <table className="tabell">
-                        <thead>
-                            <tr>
-                                <th children={'Behandlingstype'} />
-                                <th children={'Resultat'} />
-                                <th children={'Opprettet'} />
-                                <th children={'Vedtaksdato'} />
-                                <th children={'Virkningstidspunkt'} />
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {fagsak.behandlinger
-                                .sort((a, b) =>
-                                    moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
-                                )
-                                .map((behandling: IBehandling) => {
-                                    const aktivVedtakForBehandling = behandling.vedtakForBehandling.find(
-                                        (vedtak: IVedtakForBehandling) => vedtak.aktiv
-                                    );
-
-                                    return (
-                                        <tr key={behandling.behandlingId}>
-                                            <td>
-                                                <Lenke
-                                                    href={`/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad`}
-                                                >
-                                                    {behandlingstyper[behandling.type].navn}
-                                                </Lenke>
-                                            </td>
-                                            <td
-                                                children={`${
-                                                    behandling
-                                                        ? behandlingsresultater[
-                                                              behandling.samletResultat
-                                                          ].navn
-                                                        : 'Ukjent'
-                                                }`}
-                                            />
-                                            <td
-                                                children={`${formaterIsoDato(
-                                                    behandling.opprettetTidspunkt,
-                                                    datoformat.DATO
-                                                )}`}
-                                            />
-                                            <td
-                                                children={
-                                                    aktivVedtakForBehandling
-                                                        ? formaterIsoDato(
-                                                              aktivVedtakForBehandling.vedtaksdato,
-                                                              datoformat.DATO
-                                                          )
-                                                        : 'Ukjent'
-                                                }
-                                            />
-                                            {/* TODO: hente reel virkningstidspunkt */}
-                                            <td
-                                                children={
-                                                    aktivVedtakForBehandling &&
-                                                    aktivVedtakForBehandling.personBeregninger[0]
-                                                        ? formaterIsoDato(
-                                                              aktivVedtakForBehandling
-                                                                  .personBeregninger[0].stønadFom,
-                                                              datoformat.DATO
-                                                          )
-                                                        : 'Ukjent'
-                                                }
-                                            />
-                                        </tr>
-                                    );
-                                })}
-                        </tbody>
-                    </table>
-                ) : (
-                    <Normaltekst children={'Ingen tidligere behandlinger'} />
-                )}
-            </div>
+            <Behandlinger fagsak={fagsak} />
         </div>
     );
 };
 
-const sakstype = (behandling?: IBehandling) => {
+export const sakstype = (behandling?: IBehandling) => {
     if (!behandling) {
         return 'Ikke satt';
     }

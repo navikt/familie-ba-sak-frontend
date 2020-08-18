@@ -5,7 +5,7 @@ import { vedtakHtml } from './mock/vedtak';
 import { hentMockFagsak, oppdaterBehandlingsstatusPaaFagsak } from './mock/fagsak';
 import { BehandlingStatus } from '../frontend/typer/behandling';
 import { TotrinnskontrollBeslutning } from '../frontend/typer/totrinnskontroll';
-import { Ressurs, RessursStatus } from '../frontend/typer/ressurs';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../frontend/typer/fagsak';
 
 const delayMs = 20;

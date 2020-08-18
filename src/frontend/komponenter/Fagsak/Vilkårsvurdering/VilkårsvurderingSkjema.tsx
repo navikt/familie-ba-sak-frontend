@@ -45,11 +45,12 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                         : undefined
                 }
             >
-                {vilkårsvurdering.map((personResultat: IPersonResultat) => {
+                {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
                     return (
                         <div
                             className={'vilkårsvurdering__skjemagruppe--person'}
                             key={personResultat.personIdent}
+                            id={`${index}_${personResultat.person.fødselsdato}`}
                         >
                             <PersonInformasjon person={personResultat.person} tag={'h3'} />
 

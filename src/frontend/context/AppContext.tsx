@@ -1,12 +1,17 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import createUseContext from 'constate';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { håndterApiRessurs, loggFeil, preferredAxios } from '../api/axios';
-import { Ressurs, ApiRessurs } from '../typer/ressurs';
-import { ISaksbehandler } from '../typer/saksbehandler';
+import { Ressurs, ApiRessurs, RessursStatus } from '@navikt/familie-typer';
+import { ISaksbehandler } from '@navikt/familie-typer';
 import { BehandlerRolle } from '../typer/behandling';
 import { gruppeIdTilRolle } from '../utils/behandling';
+import { Normaltekst } from 'nav-frontend-typografi';
+import { Knapp } from 'nav-frontend-knapper';
+import InformasjonSirkel from '../ikoner/InformasjonSirkel';
+
+const FEM_MINUTTER = 300000;
 
 export interface IModal {
     className?: string;
@@ -15,6 +20,7 @@ export interface IModal {
     tittel: string;
     actions?: JSX.Element[] | JSX.Element;
     visModal: boolean;
+    innhold?: () => React.ReactNode;
 }
 
 const initalState: IModal = {
@@ -29,6 +35,7 @@ interface IProps {
 
 const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IProps) => {
     const [autentisert, settAutentisert] = React.useState(true);
+    const [appVersjon, settAppVersjon] = useState('');
     const [ressurserSomLaster, settRessurserSomLaster] = React.useState<string[]>([]);
 
     const [innloggetSaksbehandler, settInnloggetSaksbehandler] = React.useState(
@@ -36,8 +43,64 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     );
     const [modal, settModal] = React.useState<IModal>(initalState);
 
+    const verifiserVersjon = () => {
+        axiosRequest<string, void>({
+            url: '/version',
+            method: 'GET',
+        }).then((versjon: Ressurs<string>) => {
+            if (versjon.status === RessursStatus.SUKSESS) {
+                if (appVersjon !== '' && appVersjon !== versjon.data) {
+                    settModal({
+                        tittel: 'Løsningen er utdatert',
+                        innhold: () => {
+                            return (
+                                <div className={'utdatert-losning'}>
+                                    <InformasjonSirkel />
+                                    <Normaltekst>
+                                        Det finnes en oppdatert versjon av løsningen. Det anbefales
+                                        at du oppdaterer med en gang.
+                                    </Normaltekst>
+                                </div>
+                            );
+                        },
+                        lukkKnapp: true,
+                        visModal: true,
+                        onClose: () => lukkModal(),
+                        actions: [
+                            <Knapp
+                                key={'avbryt'}
+                                mini={true}
+                                onClick={() => lukkModal()}
+                                children={'Avbryt'}
+                            />,
+                            <Knapp
+                                key={'oppdater'}
+                                type={'hoved'}
+                                mini={true}
+                                onClick={() => {
+                                    window.location.reload();
+                                }}
+                                children={'Ok, oppdater'}
+                            />,
+                        ],
+                    });
+                }
+
+                settAppVersjon(versjon.data);
+            }
+        });
+
+        setTimeout(() => {
+            verifiserVersjon();
+        }, FEM_MINUTTER);
+    };
+
+    useEffect(() => verifiserVersjon(), []);
+
     useEffect(() => {
-        settInnloggetSaksbehandler(autentisertSaksbehandler);
+        if (autentisertSaksbehandler) {
+            settInnloggetSaksbehandler(autentisertSaksbehandler);
+        }
     }, [autentisertSaksbehandler]);
 
     const åpneModal = () => {

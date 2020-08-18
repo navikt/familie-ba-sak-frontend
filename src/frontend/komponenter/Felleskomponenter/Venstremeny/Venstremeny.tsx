@@ -1,10 +1,11 @@
-import * as React from 'react';
-import { sider, erSidenInaktiv, ISide, visSide } from './sider';
-import Link from './Link';
-import { IFagsak } from '../../../typer/fagsak';
-import { useBehandling } from '../../../context/BehandlingContext';
-import { RessursStatus } from '../../../typer/ressurs';
 import classNames from 'classnames';
+import * as React from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { RessursStatus } from '@navikt/familie-typer';
+import { IFagsak } from '../../../typer/fagsak';
+import Link from './Link';
+import { erSidenInaktiv, ISide, sider, visSide, IUnderside } from './sider';
+import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {
     fagsak: IFagsak;
@@ -15,16 +16,6 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return (
         <nav className={'venstremeny'}>
-            <Link
-                active={true}
-                key={'saksoversikt'}
-                id={'saksoversikt'}
-                to={`/fagsak/${fagsak.id}/saksoversikt`}
-                className={classNames('venstremeny__link', 'hover-effekt')}
-            >
-                {`Saksoversikt`}
-            </Link>
-
             {åpenBehandling.status === RessursStatus.SUKSESS
                 ? Object.values(sider)
                       .filter((side: ISide) => visSide(side, åpenBehandling.data))
@@ -33,20 +24,54 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                               side.id === 'SAKSOVERSIKT'
                                   ? `/fagsak/${fagsak.id}/${side.href}`
                                   : `/fagsak/${fagsak.id}/${åpenBehandling.data.behandlingId}/${side.href}`;
+
+                          const undersider: IUnderside[] = side.undersider
+                              ? side.undersider(åpenBehandling.data)
+                              : [];
+
                           return (
-                              <Link
-                                  active={erSidenInaktiv(side, åpenBehandling.data.steg)}
-                                  key={side.id}
-                                  id={side.id}
-                                  to={tilPath}
-                                  className={classNames(
-                                      'venstremeny__link',
-                                      erSidenInaktiv(side, åpenBehandling.data.steg) &&
-                                          'hover-effekt'
-                                  )}
-                              >
-                                  {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
-                              </Link>
+                              <>
+                                  <Link
+                                      active={erSidenInaktiv(side, åpenBehandling.data.steg)}
+                                      key={side.id}
+                                      id={side.id}
+                                      to={tilPath}
+                                      className={classNames(
+                                          'venstremeny__link',
+                                          erSidenInaktiv(side, åpenBehandling.data.steg) &&
+                                              'hover-effekt'
+                                      )}
+                                  >
+                                      {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
+                                  </Link>
+                                  {undersider.map((underside: IUnderside) => {
+                                      const antallAksjonspunkter = underside.antallAksjonspunkter();
+                                      return (
+                                          <Link
+                                              key={`${side.id}_${underside.hash}`}
+                                              id={`${side.id}_${underside.hash}`}
+                                              to={`${tilPath}#${underside.hash}`}
+                                              className={classNames(
+                                                  'venstremeny__link',
+                                                  'underside'
+                                              )}
+                                          >
+                                              <>
+                                                  {antallAksjonspunkter > 0 ? (
+                                                      <div className={'underside__sirkel-tall'}>
+                                                          {antallAksjonspunkter}
+                                                      </div>
+                                                  ) : (
+                                                      <div
+                                                          className={'underside__sirkel-plass'}
+                                                      ></div>
+                                                  )}
+                                                  <Normaltekst>{underside.navn}</Normaltekst>
+                                              </>
+                                          </Link>
+                                      );
+                                  })}
+                              </>
                           );
                       })
                 : null}

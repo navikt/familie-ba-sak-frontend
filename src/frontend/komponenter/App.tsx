@@ -2,7 +2,7 @@ import Modal from 'nav-frontend-modal';
 import * as React from 'react';
 import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
 import { AppProvider } from '../context/AppContext';
-import { ISaksbehandler } from '../typer/saksbehandler';
+import { ISaksbehandler } from '@navikt/familie-typer';
 import { hentInnloggetBruker } from '../api/saksbehandler';
 import Container from './Container';
 

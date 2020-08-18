@@ -27,6 +27,7 @@ export const hentBehandlingPåFagsak = (
         (behandling: IBehandling) => behandling.behandlingId === behandlingId
     );
 };
+
 export const hentAktivVedtakPåBehandlig = (
     behandling: IBehandling
 ): IVedtakForBehandling | undefined => {

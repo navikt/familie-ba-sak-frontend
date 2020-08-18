@@ -10,7 +10,7 @@ interface IProps {
 
 const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) => {
     const useAppModal = useApp().modal;
-    const { tittel, visModal, onClose, lukkKnapp, actions, className } = modal
+    const { tittel, visModal, onClose, lukkKnapp, actions, className, innhold } = modal
         ? modal
         : useAppModal;
 
@@ -25,7 +25,9 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
         >
             <div className="uimodal__content">
                 <Undertittel children={tittel} />
-                <div className="uimodal__content--inner-content">{children}</div>
+                <div className="uimodal__content--inner-content">
+                    {innhold ? innhold() : children}
+                </div>
                 {actions && <div className="uimodal__content--actions"> {actions} </div>}
             </div>
         </Modal>
