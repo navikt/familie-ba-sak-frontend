@@ -30,7 +30,6 @@
     ]
   },
   "dependencies": {
-    "@hot-loader/react-dom": "^16.13.0",
     "@navikt/boxed-list-with-links": "^1.0.2",
     "@navikt/familie-backend": "^5.0.9",
     "@navikt/familie-form-elements": "1.0.11",
@@ -109,6 +108,7 @@
     "react": "^16.13.1",
     "react-collapse": "^5.0.1",
     "react-day-picker": "^7.4.8",
+    "react-dom": "npm:@hot-loader/react-dom",
     "react-modal": "^3.11.2",
     "react-pdf": "^4.2.0",
     "react-router": "^5.2.0",
@@ -164,7 +164,7 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-merge": "^5.1.1"
+    "webpack-merge": "4.2.2"
   },
   "jest": {
     "preset": "ts-jest",

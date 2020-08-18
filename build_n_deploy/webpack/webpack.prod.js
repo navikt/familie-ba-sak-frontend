@@ -1,11 +1,11 @@
 const common = require('./webpack.common');
-const { mergeWithCustomize } = require('webpack-merge');
+const merge = require('webpack-merge');
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
-const config = mergeWithCustomize({
+const config = merge.strategy({
     'entry.familie-ba-sak': 'prepend',
     'module.rules': 'append',
 })(common, {

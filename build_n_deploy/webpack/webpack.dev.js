@@ -1,9 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-const { mergeWithCustomize } = require('webpack-merge');
+const merge = require('webpack-merge');
 const common = require('./webpack.common');
 
-const config = mergeWithCustomize({
+const config = merge.strategy({
     'entry.familie-ba-sak': 'prepend',
     'module.rules': 'append',
 })(common, {
