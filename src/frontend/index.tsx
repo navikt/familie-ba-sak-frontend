@@ -31,7 +31,9 @@ const rootElement = document.getElementById('app');
 const renderApp = (Component: React.ComponentType): void => {
     ReactDOM.render(
         <AppContainer>
-            <Component />
+            <React.StrictMode>
+                <Component />
+            </React.StrictMode>
         </AppContainer>,
         rootElement
     );

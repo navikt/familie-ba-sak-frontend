@@ -63,7 +63,12 @@ module.exports = {
             alwaysWriteToDisk: true,
         }),
         new TypeScriptTypeChecker({
-            tsconfig: path.join(__dirname, '../../tsconfig.json'),
+            typescript: {
+                configFile: path.join(__dirname, '../../src/frontend/tsconfig.json'),
+            },
+            eslint: {
+                files: './src/**/*.{ts,tsx,js,jsx}',
+            },
         }),
         new webpack.NoEmitOnErrorsPlugin(),
         new OptimizeCssAssetsPlugin(),
