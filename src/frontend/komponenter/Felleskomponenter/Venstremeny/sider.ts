@@ -95,7 +95,6 @@ export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
 };
 
 export const finnSideForBehandlingssteg = (steg: BehandlingSteg) => {
-    console.log(steg);
     return Object.values(sider).find((side: ISide) => side.steg === steg);
 };
 
