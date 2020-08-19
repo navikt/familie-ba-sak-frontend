@@ -32,8 +32,8 @@
   "dependencies": {
     "@navikt/boxed-list-with-links": "^1.0.2",
     "@navikt/familie-backend": "^5.0.9",
-    "@navikt/familie-form-elements": "1.0.11",
-    "@navikt/familie-header": "^2.0.6",
+    "@navikt/familie-form-elements": "1.0.12",
+    "@navikt/familie-header": "^2.0.7",
     "@navikt/familie-ikoner": "^3.0.4",
     "@navikt/familie-typer": "^3.0.4",
     "@navikt/familie-visittkort": "^2.1.5",
