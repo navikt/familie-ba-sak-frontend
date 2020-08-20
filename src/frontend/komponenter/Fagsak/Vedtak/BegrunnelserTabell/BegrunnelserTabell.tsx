@@ -1,12 +1,14 @@
-import React from 'react';
-import { IBehandling } from '../../../../typer/behandling';
-import { hentAktivVedtakPåBehandlig } from '../../../../utils/fagsak';
+import { FamilieSelect } from '@navikt/familie-form-elements';
 import Lenke from 'nav-frontend-lenker';
-import { IPeriode, hentPeriodeHash, periodeToString } from '../../../../typer/periode';
-import { IFagsak } from '../../../../typer/fagsak';
+import React from 'react';
 import { useApp } from '../../../../context/AppContext';
-import { FamilieInput, FamilieKnapp } from '@navikt/familie-form-elements';
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { IBehandling } from '../../../../typer/behandling';
+import { IPar } from '../../../../typer/common';
+import { IFagsak } from '../../../../typer/fagsak';
+import { hentPeriodeHash, IPeriode, periodeToString } from '../../../../typer/periode';
+import { bergunnelseTyper } from '../../../../typer/vedtak';
+import { hentAktivVedtakPåBehandlig } from '../../../../utils/fagsak';
 
 interface IBegrunnelserTabellProps {
     fagsak: IFagsak;
@@ -50,6 +52,10 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ fagsak, åpenB
                                         <td>{`${beregning.utbetaltPerMnd} kr/mnd for ${beregning.antallBarn} barn`}</td>
                                         <td>
                                             <BegrunnelseInput
+                                                begrunnelseId={
+                                                    Math.random().toString(36).substring(2, 15) +
+                                                    Math.random().toString(36).substring(2, 15)
+                                                }
                                                 begrunnelse={begrunnelse}
                                                 fagsakId={fagsak.id}
                                                 periode={periode}
@@ -66,31 +72,59 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ fagsak, åpenB
 };
 
 interface IBegrunnelseInputProps {
-    begrunnelse: string | undefined;
+    begrunnelseId: string;
+    begrunnelse: { [key: string]: string };
     fagsakId: number;
     periode: IPeriode;
 }
 
-const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({ begrunnelse, fagsakId, periode }) => {
+const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
+    begrunnelseId,
+    begrunnelse,
+    fagsakId,
+    periode,
+}) => {
     const { axiosRequest } = useApp();
     const { erLesevisning } = useBehandling();
     const [mutableBegrunnelse, settMutableBegrunnelse] = React.useState(begrunnelse);
 
+    const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+        axiosRequest({
+            method: 'PUT',
+            url: `/familie-ba-sak/api/fagsaker/${fagsakId}/legg-til-stønad-brev-begrunnelse`,
+            data: {
+                periode,
+                begrunnelse: value !== 'Velg behandlingsresultat' && value,
+                begrunnelseId: begrunnelseId,
+            },
+        });
+        //settMutableBegrunnelse(value);
+    };
+
     return (
         <div className={'begrunnelse-input'}>
             <div className={'begrunnelse-input__med-knapp'}>
-                <FamilieInput
-                    bredde={'L'}
-                    label={'Begrunnelse'}
-                    value={
-                        erLesevisning() && begrunnelse === undefined
-                            ? 'Ikke satt'
-                            : mutableBegrunnelse
-                    }
-                    onChange={event => settMutableBegrunnelse(event.target.value)}
-                    erLesevisning={erLesevisning()}
-                />
-                <FamilieKnapp
+                {erLesevisning() && mutableBegrunnelse ? (
+                    Object.entries(mutableBegrunnelse).map(([key, value]) => <div> {value} </div>)
+                ) : (
+                    <FamilieSelect
+                        name="begrunnelse"
+                        bredde={'l'}
+                        erLesevisning={erLesevisning()}
+                        onChange={event => onChangeBegrunnelse(event)}
+                    >
+                        <option>Velg behandlingsresultat</option>
+                        {Object.values(bergunnelseTyper).map((type: IPar) => {
+                            return (
+                                <option key={type.id} value={type.id}>
+                                    {type.navn}
+                                </option>
+                            );
+                        })}
+                    </FamilieSelect>
+                )}
+                {/*<FamilieKnapp
                     erLesevisning={erLesevisning()}
                     mini={true}
                     onClick={() =>
@@ -100,12 +134,15 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({ begrunnelse, fagsa
                             data: {
                                 periode,
                                 begrunnelse: mutableBegrunnelse,
+                                begrunnelseId:
+                                    Math.random().toString(36).substring(2, 15) +
+                                    Math.random().toString(36).substring(2, 15),
                             },
                         })
                     }
                 >
                     Sett begrunnelse
-                </FamilieKnapp>
+                </FamilieKnapp>*/}
             </div>
         </div>
     );
