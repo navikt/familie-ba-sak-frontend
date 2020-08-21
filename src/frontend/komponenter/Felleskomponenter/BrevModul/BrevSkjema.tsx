@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Knapp } from 'nav-frontend-knapper';
+import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/dist';
 import { IBrevData, TypeBrev, TypeMottaker } from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
@@ -8,16 +8,25 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../../../typer/fagsak';
 
 interface IProps {
-    innsendtBrev: Ressurs<IFagsak>;
     sendBrev: (brevData: IBrevData) => void;
+    innsendtBrev: Ressurs<IFagsak>;
+    hentForhåndsvisning: (brevData: IBrevData) => void;
+    hentetForhåndsvisning: Ressurs<string>;
 }
 
-const BrevSkjema = ({ sendBrev, innsendtBrev }: IProps) => {
+const BrevSkjema = ({
+    sendBrev,
+    innsendtBrev,
+    hentForhåndsvisning,
+    hentetForhåndsvisning,
+}: IProps) => {
     const [mottaker, settMottaker] = useState(TypeMottaker.SØKER);
     const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
     const [fritekst, settFritekst] = useState('');
 
     const senderInn = innsendtBrev.status === RessursStatus.HENTER;
+    const henterFohåndsvisning = hentetForhåndsvisning.status === RessursStatus.HENTER; // TODO: Egen for innsendt brev?
+
     const feilmelding =
         innsendtBrev.status === RessursStatus.FEILET ||
         innsendtBrev.status === RessursStatus.IKKE_TILGANG
@@ -73,19 +82,37 @@ const BrevSkjema = ({ sendBrev, innsendtBrev }: IProps) => {
             </div>
             <div>
                 <Knapp
-                    type={'hoved'}
+                    mini
                     spinner={senderInn}
                     disabled={senderInn}
                     onClick={() => {
                         if (!senderInn) {
                             sendBrev({
-                                mottaker: TypeMottaker.SØKER,
-                                brevmal: TypeBrev.OPPLYSNINGER,
+                                mottaker: mottaker,
+                                brevmal: brevmal,
+                                fritekst: fritekst,
                             });
                         }
                     }}
-                    children={'Send brev'}
-                />
+                >
+                    Send brev
+                </Knapp>
+                <Flatknapp
+                    mini
+                    spinner={henterFohåndsvisning}
+                    disabled={henterFohåndsvisning}
+                    onClick={() => {
+                        if (!henterFohåndsvisning) {
+                            hentForhåndsvisning({
+                                mottaker: mottaker,
+                                brevmal: brevmal,
+                                fritekst: fritekst,
+                            });
+                        }
+                    }}
+                >
+                    Forhåndsvis
+                </Flatknapp>
             </div>
         </SkjemaGruppe>
     );

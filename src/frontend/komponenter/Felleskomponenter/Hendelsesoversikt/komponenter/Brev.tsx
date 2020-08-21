@@ -5,6 +5,7 @@ import { useApp } from '../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { IFagsak } from '../../../../typer/fagsak';
 import {
+    byggDataRessurs,
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
@@ -14,13 +15,20 @@ import {
 import UIModalWrapper from '../../Modal/UIModalWrapper';
 import Brevskjema from '../../BrevModul/BrevSkjema';
 import { IBrevData } from '../../BrevModul/typer';
+import { useBehandling } from '../../../../context/BehandlingContext';
 
 const Brev = () => {
     const { axiosRequest } = useApp();
     const { settFagsak } = useFagsakRessurser();
+    const { åpenBehandling } = useBehandling();
 
     const [innsendtBrev, settInnsendtBrev] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
+    const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
+        byggTomRessurs()
+    );
     const [visModal, settVisModal] = React.useState(false);
+    const behandlingId =
+        åpenBehandling.status == RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const sendBrev = (brevData: IBrevData) => {
         settInnsendtBrev(byggHenterRessurs());
@@ -41,9 +49,41 @@ const Brev = () => {
             });
     };
 
+    const hentForhåndsvisning = (brevData: IBrevData) => {
+        settHentetForhåndsvisning(byggHenterRessurs());
+        axiosRequest<string, IBrevData>({
+            method: 'POST',
+            data: brevData,
+            url: `/familie-ba-sak/api/dokument/manuellebrev/innhente-opplysninger/${behandlingId}`, // TODO: Oppdatere "manuellebrev" til "generer" eller noe? Må kunne skille på send og generer
+        })
+            .then((response: Ressurs<string>) => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    settHentetForhåndsvisning(
+                        byggDataRessurs(`data:application/pdf;base64,${response.data}`)
+                    );
+                } else if (response.status === RessursStatus.FEILET) {
+                    settHentetForhåndsvisning(response);
+                } else {
+                    settHentetForhåndsvisning(
+                        byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
+                    );
+                }
+            })
+            .catch((_error: AxiosError) => {
+                settHentetForhåndsvisning(
+                    byggFeiletRessurs('Ukjent feil ved henting av forhåndsvisning.')
+                );
+            });
+    };
+
     return (
         <div className={'brev'}>
-            <Brevskjema sendBrev={sendBrev} innsendtBrev={innsendtBrev} />
+            <Brevskjema
+                sendBrev={sendBrev}
+                innsendtBrev={innsendtBrev}
+                hentForhåndsvisning={hentForhåndsvisning}
+                hentetForhåndsvisning={hentetForhåndsvisning}
+            />
             {visModal && (
                 <UIModalWrapper
                     modal={{
