@@ -8,19 +8,20 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../../../typer/fagsak';
 
 interface IProps {
-    sendtBrev: Ressurs<IFagsak>;
+    innsendtBrev: Ressurs<IFagsak>;
     sendBrev: (brevData: IBrevData) => void;
 }
 
-const BrevSkjema = ({ sendtBrev, sendBrev }: IProps) => {
+const BrevSkjema = ({ sendBrev, innsendtBrev }: IProps) => {
     const [mottaker, settMottaker] = useState(TypeMottaker.SØKER);
     const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
     const [fritekst, settFritekst] = useState('');
 
-    const senderInn = sendtBrev.status === RessursStatus.HENTER;
+    const senderInn = innsendtBrev.status === RessursStatus.HENTER;
     const feilmelding =
-        sendtBrev.status === RessursStatus.FEILET || sendtBrev.status === RessursStatus.IKKE_TILGANG
-            ? sendtBrev.frontendFeilmelding
+        innsendtBrev.status === RessursStatus.FEILET ||
+        innsendtBrev.status === RessursStatus.IKKE_TILGANG
+            ? innsendtBrev.frontendFeilmelding
             : '';
 
     return (

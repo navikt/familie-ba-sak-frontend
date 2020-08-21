@@ -43,7 +43,7 @@ const Brev = () => {
 
     return (
         <div className={'brev'}>
-            <Brevskjema sendBrev={sendBrev} sendtBrev={innsendtBrev} />
+            <Brevskjema sendBrev={sendBrev} innsendtBrev={innsendtBrev} />
             {visModal && (
                 <UIModalWrapper
                     modal={{
