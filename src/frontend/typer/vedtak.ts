@@ -14,7 +14,7 @@ export interface IVedtakForBehandling {
 export interface IRestStønadBrevBegrunnelse {
     id?: number;
     fom: string;
-    tom: string;
+    tom?: string;
     begrunnelse: string;
     årsak: string;
 }
