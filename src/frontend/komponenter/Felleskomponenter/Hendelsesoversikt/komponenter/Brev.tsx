@@ -16,6 +16,7 @@ import UIModalWrapper from '../../Modal/UIModalWrapper';
 import Brevskjema from '../../BrevModul/BrevSkjema';
 import { IBrevData } from '../../BrevModul/typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
+import PdfFrame from '../../../Fagsak/Vedtak/PdfFrame';
 
 const Brev = () => {
     const { axiosRequest } = useApp();
@@ -35,7 +36,7 @@ const Brev = () => {
         axiosRequest<IFagsak, IBrevData>({
             method: 'POST',
             data: brevData,
-            url: `/familie-ba-sak/api/fagsaker/${123}/pathforsendingavbrev`,
+            url: `/familie-ba-sak/api/dokument/send-brev/innhente-opplysninger/${behandlingId}`,
         })
             .then((response: Ressurs<IFagsak>) => {
                 settInnsendtBrev(response);
@@ -54,7 +55,7 @@ const Brev = () => {
         axiosRequest<string, IBrevData>({
             method: 'POST',
             data: brevData,
-            url: `/familie-ba-sak/api/dokument/manuellebrev/innhente-opplysninger/${behandlingId}`, // TODO: Oppdatere "manuellebrev" til "generer" eller noe? Må kunne skille på send og generer
+            url: `/familie-ba-sak/api/dokument/forhåndsvis-brev/innhente-opplysninger/${behandlingId}`,
         })
             .then((response: Ressurs<string>) => {
                 if (response.status === RessursStatus.SUKSESS) {
@@ -104,6 +105,9 @@ const Brev = () => {
                 >
                     Brevet er bestilt
                 </UIModalWrapper>
+            )}
+            {hentetForhåndsvisning.status === RessursStatus.SUKSESS && (
+                <PdfFrame file={hentetForhåndsvisning.data} />
             )}
         </div>
     );
