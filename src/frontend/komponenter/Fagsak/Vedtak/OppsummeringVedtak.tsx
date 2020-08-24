@@ -1,3 +1,10 @@
+import {
+    byggDataRessurs,
+    byggFeiletRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
@@ -8,19 +15,14 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { BegrunnelserProvider } from '../../../context/VedtakContext';
 import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import {
-    Ressurs,
-    RessursStatus,
-    byggDataRessurs,
-    byggFeiletRessurs,
-    byggTomRessurs,
-} from '@navikt/familie-typer';
+import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import PdfFrame from './PdfFrame';
 import BegrunnelserTabell from './BegrunnelserTabell/BegrunnelserTabell';
+import PdfFrame from './PdfFrame';
 import VedtaksbrevModal from './VedtaksbrevModal/VedtaksbrevModal';
 
 interface IVedtakProps {
@@ -43,6 +45,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
+    const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
+    /*const begrunnelser = aktivVedtak?.stønadBrevMetadata?.begrunnelser
+        ? aktivVedtak?.stønadBrevMetadata?.begrunnelser
+        : undefined;*/
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
         const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
@@ -120,7 +126,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                 vedtaksbrev={vedtaksbrev}
             />
 
-            <BegrunnelserTabell fagsak={fagsak} åpenBehandling={åpenBehandling} />
+            <BegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+                <BegrunnelserTabell
+                    fagsak={fagsak}
+                    åpenBehandling={åpenBehandling}
+                    aktivVedtak={aktivVedtak}
+                />
+            </BegrunnelserProvider>
 
             <Knapp
                 onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}

@@ -1,3 +1,4 @@
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertekst } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
@@ -8,7 +9,6 @@ import {
 import Pluss from '../../../../ikoner/Pluss';
 import { IFelt } from '../../../../typer/felt';
 import { IPerson } from '../../../../typer/person';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     IRestPersonResultat,
     IVilkårConfig,

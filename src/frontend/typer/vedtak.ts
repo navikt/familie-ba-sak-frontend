@@ -5,16 +5,18 @@ export interface IVedtakForBehandling {
     aktiv: boolean;
     ansvarligSaksbehandler: string;
     personBeregninger: IPersonBeregning[];
-    stønadBrevMetadata?: IStønadBrevMetadata;
+    stønadBrevBegrunnelser?: IRestStønadBrevBegrunnelse[];
     vedtaksdato: string;
     id: number;
     begrunnelse: Begrunnelse;
 }
 
-export interface IStønadBrevMetadata {
-    begrunnelser: {
-        [key: string]: string;
-    };
+export interface IRestStønadBrevBegrunnelse {
+    id?: number;
+    fom: string;
+    tom: string;
+    begrunnelse: string;
+    årsak: string;
 }
 
 export enum Begrunnelse {
