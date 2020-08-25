@@ -36,7 +36,9 @@ const Link: React.FC<Props> = ({ active = true, id, to, children, className }) =
         </NavLink>
     ) : (
         // eslint-disable-next-line
-        <a className={classNames('inactive', className)}>{children}</a>
+        <a key={id} className={classNames('inactive', className)}>
+            {children}
+        </a>
     );
 };
 

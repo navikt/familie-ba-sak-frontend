@@ -30,10 +30,9 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                               : [];
 
                           return (
-                              <>
+                              <React.Fragment key={side.id}>
                                   <Link
                                       active={erSidenInaktiv(side, åpenBehandling.data.steg)}
-                                      key={side.id}
                                       id={side.id}
                                       to={tilPath}
                                       className={classNames(
@@ -71,7 +70,7 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                           </Link>
                                       );
                                   })}
-                              </>
+                              </React.Fragment>
                           );
                       })
                 : null}

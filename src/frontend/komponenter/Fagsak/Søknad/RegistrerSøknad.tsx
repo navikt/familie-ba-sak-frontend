@@ -8,7 +8,7 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, IBehandling, hentStegNummer } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
@@ -78,7 +78,8 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
         if (fagsak.status === RessursStatus.SUKSESS) {
             if (
                 åpenBehandling &&
-                parseInt(BehandlingSteg[åpenBehandling.steg], 10) >= BehandlingSteg.VILKÅRSVURDERING
+                hentStegNummer(åpenBehandling.steg) >=
+                    hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
             ) {
                 axiosRequest<ISøknadDTO, void>({
                     method: 'GET',
