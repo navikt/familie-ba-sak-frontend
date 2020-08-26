@@ -17,6 +17,7 @@ import Brevskjema from '../../BrevModul/BrevSkjema';
 import { IBrevData } from '../../BrevModul/typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import PdfFrame from '../../../Fagsak/Vedtak/PdfFrame';
+import { hentStegNummer } from '../../../../typer/behandling';
 
 const Brev = () => {
     const { axiosRequest } = useApp();
@@ -30,6 +31,8 @@ const Brev = () => {
     const [visModal, settVisModal] = React.useState(false);
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
+    const behandlingSteg =
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.steg;
 
     const sendBrev = (brevData: IBrevData) => {
         settInnsendtBrev(byggHenterRessurs());
@@ -79,12 +82,14 @@ const Brev = () => {
 
     return (
         <div className={'brev'}>
-            <Brevskjema
-                sendBrev={sendBrev}
-                innsendtBrev={innsendtBrev}
-                hentForhåndsvisning={hentForhåndsvisning}
-                hentetForhåndsvisning={hentetForhåndsvisning}
-            />
+            {behandlingSteg && hentStegNummer(behandlingSteg) >= 2 && (
+                <Brevskjema
+                    sendBrev={sendBrev}
+                    innsendtBrev={innsendtBrev}
+                    hentForhåndsvisning={hentForhåndsvisning}
+                    hentetForhåndsvisning={hentetForhåndsvisning}
+                />
+            )}
             {visModal && (
                 <UIModalWrapper
                     modal={{
