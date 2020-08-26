@@ -1,5 +1,6 @@
 import { IPersonBeregning } from './beregning';
 import { INøkkelPar } from './common';
+import { BehandlingResultat } from './behandling';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
@@ -14,9 +15,9 @@ export interface IVedtakForBehandling {
 export interface IRestStønadBrevBegrunnelse {
     id?: number;
     fom: string;
-    tom: string;
-    begrunnelse?: string;
-    årsak?: string;
+    tom?: string;
+    resultat?: BehandlingResultat;
+    begrunnelse?: VedtakBegrunnelse;
 }
 
 export interface IRestVedtakBegrunnelse {
@@ -30,13 +31,13 @@ export enum Begrunnelse {
 }
 
 export enum VedtakBegrunnelse {
-    INNVILGET_BOSATT_I_RIKTET,
-    INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE,
-    INNVILGET_LOVLIG_OPPHOLD_EØS_BORGER,
-    INNVILGET_LOVLIG_OPPHOLD_AAREG,
-    INNVILGET_OMSORG_FOR_BARN,
-    INNVILGET_BOR_HOS_SØKER,
-    INNVILGET_FAST_OMSORG_FOR_BARN,
+    INNVILGET_BOSATT_I_RIKTET = 'INNVILGET_BOSATT_I_RIKTET',
+    INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE = 'INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE',
+    INNVILGET_LOVLIG_OPPHOLD_EØS_BORGER = 'INNVILGET_LOVLIG_OPPHOLD_EØS_BORGER',
+    INNVILGET_LOVLIG_OPPHOLD_AAREG = 'INNVILGET_LOVLIG_OPPHOLD_AAREG',
+    INNVILGET_OMSORG_FOR_BARN = 'INNVILGET_OMSORG_FOR_BARN',
+    INNVILGET_BOR_HOS_SØKER = 'INNVILGET_BOR_HOS_SØKER',
+    INNVILGET_FAST_OMSORG_FOR_BARN = 'INNVILGET_FAST_OMSORG_FOR_BARN',
 }
 
 export const bergunnelseTyper: INøkkelPar = {

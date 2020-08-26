@@ -3,12 +3,16 @@ import Lenke from 'nav-frontend-lenker';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useBegrunnelser } from '../../../../context/VedtakContext';
+import { useBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
-import { IBehandling } from '../../../../typer/behandling';
+import {
+    IBehandling,
+    BehandlingResultat,
+    behandlingsresultater,
+} from '../../../../typer/behandling';
 import { IPar } from '../../../../typer/common';
 import { periodeToString } from '../../../../typer/periode';
-import { bergunnelseTyper, IRestStønadBrevBegrunnelse } from '../../../../typer/vedtak';
+import { IRestStønadBrevBegrunnelse, VedtakBegrunnelse } from '../../../../typer/vedtak';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IBegrunnelserTabellProps {
@@ -63,6 +67,7 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ åpenBehandlin
                                                         id={begrunnelse.id}
                                                         fom={begrunnelse.fom}
                                                         tom={begrunnelse.tom}
+                                                        resultat={begrunnelse.resultat}
                                                         begrunnelse={begrunnelse.begrunnelse}
                                                     />
                                                 ) : (
@@ -82,8 +87,8 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ åpenBehandlin
                                                     leggTilBegrunnelse({
                                                         fom: beregning.periodeFom,
                                                         tom: beregning.periodeTom,
-                                                        begrunnelse: null,
-                                                        årsak: null,
+                                                        resultat: undefined,
+                                                        begrunnelse: undefined,
                                                     });
                                                 }}
                                                 label={'Legg til'}
@@ -102,30 +107,48 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ åpenBehandlin
 };
 
 interface IBegrunnelseInputProps {
-    begrunnelse?: string;
-    årsak?: string;
+    begrunnelse?: VedtakBegrunnelse;
     fom: string;
-    tom?: string;
     id: number;
+    resultat?: BehandlingResultat;
+    tom?: string;
 }
 
 const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
+    begrunnelse,
     fom,
-    tom,
     id,
-    begrunnelse = '',
-    årsak = '',
+    resultat,
+    tom,
 }) => {
     const { erLesevisning } = useBehandling();
-    const [mutableBegrunnelse, settMutableBegrunnelse] = React.useState(begrunnelse);
     const { endreBegrunnelse, vilkårBegrunnelser } = useBegrunnelser();
+
+    const onChangeResultat = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value ? event.target.value : '';
+        endreBegrunnelse({
+            id,
+            fom,
+            tom,
+            resultat: value as BehandlingResultat,
+            begrunnelse,
+        });
+    };
 
     const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
-        endreBegrunnelse({ id: id, fom: fom, tom: tom, begrunnelse: value, årsak: '' });
-        settMutableBegrunnelse(value);
+        endreBegrunnelse({
+            id,
+            fom,
+            tom,
+            resultat,
+            begrunnelse: value as VedtakBegrunnelse,
+        });
     };
 
+    console.log(vilkårBegrunnelser);
+    const begrunnelser = vilkårBegrunnelser && resultat && vilkårBegrunnelser[resultat];
+    console.log(begrunnelser, resultat);
     return (
         <div className={'begrunnelse-input'}>
             <FamilieSelect
@@ -133,35 +156,47 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
                 name="begrunnelse"
                 bredde={'l'}
                 erLesevisning={erLesevisning()}
-                onChange={event => onChangeBegrunnelse(event)}
-                value={mutableBegrunnelse}
+                onChange={onChangeResultat}
+                value={resultat}
             >
                 <option>Velg behandlingsresultat</option>
                 {vilkårBegrunnelser &&
-                    Array.of(vilkårBegrunnelser.resultater()).map((type: IPar) => {
-                        return (
-                            <option key={type.id} value={type.id}>
-                                {type.navn}
-                            </option>
-                        );
-                    })}
+                    Object.keys(vilkårBegrunnelser)
+                        .filter((behandlingResultat: string) => {
+                            return (
+                                vilkårBegrunnelser &&
+                                vilkårBegrunnelser[behandlingResultat as BehandlingResultat]
+                                    .length > 0
+                            );
+                        })
+                        .map((behandlingResultat: string) => {
+                            return behandlingsresultater[behandlingResultat] ? (
+                                <option
+                                    key={behandlingsresultater[behandlingResultat].id}
+                                    value={behandlingsresultater[behandlingResultat].id}
+                                >
+                                    {behandlingsresultater[behandlingResultat].navn}
+                                </option>
+                            ) : null;
+                        })}
             </FamilieSelect>
 
             <FamilieSelect
                 name="begrunnelse"
                 bredde={'l'}
                 erLesevisning={erLesevisning()}
-                onChange={event => onChangeBegrunnelse(event)}
-                value={mutableBegrunnelse}
+                onChange={onChangeBegrunnelse}
+                value={begrunnelse}
             >
-                <option>Velg behandlingsresultat</option>
-                {Object.values(bergunnelseTyper).map((type: IPar) => {
-                    return (
-                        <option key={type.id} value={type.id}>
-                            {type.navn}
-                        </option>
-                    );
-                })}
+                <option>Velg begrunnelse</option>
+                {begrunnelser &&
+                    begrunnelser.map((type: IPar) => {
+                        return (
+                            <option key={type.id} value={type.id}>
+                                {type.navn}
+                            </option>
+                        );
+                    })}
             </FamilieSelect>
         </div>
     );

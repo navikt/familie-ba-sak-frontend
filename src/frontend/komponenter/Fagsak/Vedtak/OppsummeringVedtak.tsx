@@ -15,7 +15,7 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { BegrunnelserProvider } from '../../../context/VedtakContext';
+import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelseContext';
 import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
@@ -126,13 +126,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                 vedtaksbrev={vedtaksbrev}
             />
 
-            <BegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                <BegrunnelserTabell
-                    fagsak={fagsak}
-                    åpenBehandling={åpenBehandling}
-                    aktivVedtak={aktivVedtak}
-                />
-            </BegrunnelserProvider>
+            <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+                <BegrunnelserTabell åpenBehandling={åpenBehandling} />
+            </VedtakBegrunnelserProvider>
 
             <Knapp
                 onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
