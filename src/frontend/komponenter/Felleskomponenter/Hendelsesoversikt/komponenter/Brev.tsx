@@ -29,7 +29,7 @@ const Brev = () => {
     );
     const [visModal, settVisModal] = React.useState(false);
     const behandlingId =
-        åpenBehandling.status == RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const sendBrev = (brevData: IBrevData) => {
         settInnsendtBrev(byggHenterRessurs());
@@ -55,7 +55,7 @@ const Brev = () => {
         axiosRequest<string, IBrevData>({
             method: 'POST',
             data: brevData,
-            url: `/familie-ba-sak/api/dokument/forhåndsvis-brev/innhente-opplysninger/${behandlingId}`,
+            url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/innhente-opplysninger/${behandlingId}`,
         })
             .then((response: Ressurs<string>) => {
                 if (response.status === RessursStatus.SUKSESS) {

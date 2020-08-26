@@ -73,23 +73,21 @@ const BrevSkjema = ({
                     );
                 })}
             </FamilieSelect>
-            <div className="input--xxl">
-                <FamilieTextarea
-                    disabled={senderInn || henterFohåndsvisning}
-                    erLesevisning={false}
-                    label={'Fritekst'}
-                    value={fritekst}
-                    maxLength={4000}
-                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                        const tekst = event.target.value;
-                        settFritekst(tekst);
-                        if (tekst !== '') {
-                            settFeilmelding(undefined);
-                        }
-                    }}
-                />
-            </div>
-            <div>
+            <FamilieTextarea
+                disabled={senderInn || henterFohåndsvisning}
+                erLesevisning={false}
+                label={'Fritekst'}
+                value={fritekst}
+                maxLength={4000}
+                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                    const tekst = event.target.value;
+                    settFritekst(tekst);
+                    if (tekst !== '') {
+                        settFeilmelding(undefined);
+                    }
+                }}
+            />
+            <div className="knapperekke">
                 <Knapp
                     mini
                     spinner={senderInn}
