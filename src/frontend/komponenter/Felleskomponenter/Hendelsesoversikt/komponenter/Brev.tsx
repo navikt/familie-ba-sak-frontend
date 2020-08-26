@@ -82,13 +82,15 @@ const Brev = () => {
 
     return (
         <div className={'brev'}>
-            {behandlingSteg && hentStegNummer(behandlingSteg) >= 2 && (
+            {behandlingSteg && hentStegNummer(behandlingSteg) >= 2 ? (
                 <Brevskjema
                     sendBrev={sendBrev}
                     innsendtBrev={innsendtBrev}
                     hentForhåndsvisning={hentForhåndsvisning}
                     hentetForhåndsvisning={hentetForhåndsvisning}
                 />
+            ) : (
+                'Søknad må være registrert for å sende ut brev manuelt' // TODO: Hvordan skal vi håndtere dette? Man skal jo også kunne sende ut ved revurdering og ikke søknad. Skal det tas i denne omgangen?
             )}
             {visModal && (
                 <UIModalWrapper
