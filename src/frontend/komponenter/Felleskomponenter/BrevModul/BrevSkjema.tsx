@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/dist';
 import { IBrevData, TypeBrev, TypeMottaker } from './typer';
@@ -23,15 +23,19 @@ const BrevSkjema = ({
     const [mottaker, settMottaker] = useState(TypeMottaker.SØKER);
     const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
     const [fritekst, settFritekst] = useState('');
+    const [feilmelding, settFeilmelding] = React.useState<string | undefined>(undefined);
 
     const senderInn = innsendtBrev.status === RessursStatus.HENTER;
-    const henterFohåndsvisning = hentetForhåndsvisning.status === RessursStatus.HENTER; // TODO: Egen for innsendt brev?
+    const henterFohåndsvisning = hentetForhåndsvisning.status === RessursStatus.HENTER;
 
-    const feilmelding =
-        innsendtBrev.status === RessursStatus.FEILET ||
-        innsendtBrev.status === RessursStatus.IKKE_TILGANG
-            ? innsendtBrev.frontendFeilmelding
-            : '';
+    useEffect(() => {
+        settFeilmelding(
+            innsendtBrev.status === RessursStatus.FEILET ||
+                innsendtBrev.status === RessursStatus.IKKE_TILGANG
+                ? innsendtBrev.frontendFeilmelding
+                : undefined
+        );
+    }, [innsendtBrev]);
 
     return (
         <SkjemaGruppe className={'brevskjema'} feil={feilmelding}>
@@ -71,12 +75,17 @@ const BrevSkjema = ({
             </FamilieSelect>
             <div className="input--xxl">
                 <FamilieTextarea
+                    disabled={senderInn || henterFohåndsvisning}
                     erLesevisning={false}
                     label={'Fritekst'}
                     value={fritekst}
                     maxLength={4000}
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                        settFritekst(event.target.value);
+                        const tekst = event.target.value;
+                        settFritekst(tekst);
+                        if (tekst !== '') {
+                            settFeilmelding(undefined);
+                        }
                     }}
                 />
             </div>
@@ -86,7 +95,9 @@ const BrevSkjema = ({
                     spinner={senderInn}
                     disabled={senderInn}
                     onClick={() => {
-                        if (!senderInn) {
+                        if (fritekst === '') {
+                            settFeilmelding('Friteksten kan ikke være tom');
+                        } else if (!senderInn) {
                             sendBrev({
                                 mottaker: mottaker,
                                 brevmal: brevmal,
@@ -102,7 +113,9 @@ const BrevSkjema = ({
                     spinner={henterFohåndsvisning}
                     disabled={henterFohåndsvisning}
                     onClick={() => {
-                        if (!henterFohåndsvisning) {
+                        if (fritekst === '') {
+                            settFeilmelding('Friteksten kan ikke være tom');
+                        } else if (!henterFohåndsvisning) {
                             hentForhåndsvisning({
                                 mottaker: mottaker,
                                 brevmal: brevmal,
