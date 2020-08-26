@@ -14,14 +14,29 @@ export interface IVedtakForBehandling {
 export interface IRestStønadBrevBegrunnelse {
     id?: number;
     fom: string;
-    tom?: string;
-    begrunnelse: string;
-    årsak: string;
+    tom: string;
+    begrunnelse?: string;
+    årsak?: string;
+}
+
+export interface IRestVedtakBegrunnelse {
+    id: VedtakBegrunnelse;
+    navn: string;
 }
 
 export enum Begrunnelse {
     INNVILGELSE = 'INNVILGELSE',
     REDUKSJON = 'REDUKSJON',
+}
+
+export enum VedtakBegrunnelse {
+    INNVILGET_BOSATT_I_RIKTET,
+    INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE,
+    INNVILGET_LOVLIG_OPPHOLD_EØS_BORGER,
+    INNVILGET_LOVLIG_OPPHOLD_AAREG,
+    INNVILGET_OMSORG_FOR_BARN,
+    INNVILGET_BOR_HOS_SØKER,
+    INNVILGET_FAST_OMSORG_FOR_BARN,
 }
 
 export const bergunnelseTyper: INøkkelPar = {

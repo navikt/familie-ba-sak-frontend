@@ -82,8 +82,8 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ åpenBehandlin
                                                     leggTilBegrunnelse({
                                                         fom: beregning.periodeFom,
                                                         tom: beregning.periodeTom,
-                                                        begrunnelse: '',
-                                                        årsak: '',
+                                                        begrunnelse: null,
+                                                        årsak: null,
                                                     });
                                                 }}
                                                 label={'Legg til'}
@@ -118,7 +118,7 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
 }) => {
     const { erLesevisning } = useBehandling();
     const [mutableBegrunnelse, settMutableBegrunnelse] = React.useState(begrunnelse);
-    const { endreBegrunnelse } = useBegrunnelser();
+    const { endreBegrunnelse, vilkårBegrunnelser } = useBegrunnelser();
 
     const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
@@ -137,13 +137,14 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
                 value={mutableBegrunnelse}
             >
                 <option>Velg behandlingsresultat</option>
-                {Object.values(bergunnelseTyper).map((type: IPar) => {
-                    return (
-                        <option key={type.id} value={type.id}>
-                            {type.navn}
-                        </option>
-                    );
-                })}
+                {vilkårBegrunnelser &&
+                    Array.of(vilkårBegrunnelser.resultater()).map((type: IPar) => {
+                        return (
+                            <option key={type.id} value={type.id}>
+                                {type.navn}
+                            </option>
+                        );
+                    })}
             </FamilieSelect>
 
             <FamilieSelect

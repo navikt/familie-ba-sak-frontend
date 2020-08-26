@@ -3,6 +3,7 @@ import constate from 'constate';
 import React from 'react';
 import { IFagsak } from '../typer/fagsak';
 import { IRestStønadBrevBegrunnelse, IVedtakForBehandling } from '../typer/vedtak';
+import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useApp } from './AppContext';
 
 interface IProps {
@@ -16,6 +17,31 @@ const [BegrunnelserProvider, useBegrunnelser] = constate(({ fagsak, aktivVedtak 
     const [begrunnelser, settBegrunnelser] = React.useState<IRestStønadBrevBegrunnelse[]>(
         aktivVedtak?.stønadBrevBegrunnelser ? aktivVedtak.stønadBrevBegrunnelser : []
     );
+
+    React.useEffect(() => {
+        hentBegrunnelseTekster();
+    }, []);
+
+    const hentBegrunnelseTekster = () => {
+        axiosRequest<Vilkårsbegrunnelser, void>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/vilkaarsvurdering//vilkaarsbegrunnelser`,
+        })
+            .then((begrunnelser: Ressurs<Vilkårsbegrunnelser>) => {
+                if (begrunnelser.status === RessursStatus.SUKSESS) {
+                    settVilkårbegrunnelser(begrunnelser.data);
+                } else if (begrunnelser.status === RessursStatus.FEILET) {
+                    //TODO: Håndter feil
+                } else {
+                    //TODO: Håndter feil
+                }
+            })
+            .catch(() => {
+                //TODO: Håndter feil
+            });
+    };
+
+    const [vilkårBegrunnelser, settVilkårbegrunnelser] = React.useState<Vilkårsbegrunnelser>();
 
     const håndterEndretBegrunnelser = (promise: Promise<Ressurs<IRestStønadBrevBegrunnelse[]>>) => {
         promise
@@ -37,7 +63,7 @@ const [BegrunnelserProvider, useBegrunnelser] = constate(({ fagsak, aktivVedtak 
         håndterEndretBegrunnelser(
             axiosRequest<IRestStønadBrevBegrunnelse[], IRestStønadBrevBegrunnelse>({
                 method: 'POST',
-                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/legg-til-stønad-brev-begrunnelse`,
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/stonad-brev-begrunnelse`,
                 data,
             })
         );
@@ -47,13 +73,20 @@ const [BegrunnelserProvider, useBegrunnelser] = constate(({ fagsak, aktivVedtak 
         håndterEndretBegrunnelser(
             axiosRequest<IRestStønadBrevBegrunnelse[], IRestStønadBrevBegrunnelse>({
                 method: 'PUT',
-                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/endre-stønad-brev-begrunnelse`,
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/stonad-brev-begrunnelse`,
                 data,
             })
         );
     };
 
-    return { begrunnelser, settBegrunnelser, leggTilBegrunnelse, endreBegrunnelse };
+    return {
+        begrunnelser,
+        settBegrunnelser,
+        leggTilBegrunnelse,
+        endreBegrunnelse,
+        hentBegrunnelseTekster,
+        vilkårBegrunnelser,
+    };
 });
 
 export { BegrunnelserProvider, useBegrunnelser };
