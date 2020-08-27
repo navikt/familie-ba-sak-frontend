@@ -5,10 +5,11 @@ import React from 'react';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
+import Slett from '../../../../ikoner/Slett';
 import {
-    IBehandling,
     BehandlingResultat,
     behandlingsresultater,
+    IBehandling,
 } from '../../../../typer/behandling';
 import { IPar } from '../../../../typer/common';
 import { periodeToString } from '../../../../typer/periode';
@@ -122,7 +123,7 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
     tom,
 }) => {
     const { erLesevisning } = useBehandling();
-    const { endreBegrunnelse, vilkårBegrunnelser } = useBegrunnelser();
+    const { endreBegrunnelse, vilkårBegrunnelser, slettBegrunnelse } = useBegrunnelser();
 
     const onChangeResultat = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
@@ -130,8 +131,9 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
             id,
             fom,
             tom,
-            resultat: value as BehandlingResultat,
-            begrunnelse,
+            resultat:
+                value !== 'Velg behandlingsresultat' ? (value as BehandlingResultat) : undefined,
+            begrunnelse: value !== 'Velg behandlingsresultat' ? begrunnelse : undefined,
         });
     };
 
@@ -142,13 +144,11 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
             fom,
             tom,
             resultat,
-            begrunnelse: value as VedtakBegrunnelse,
+            begrunnelse: value !== 'Velg begrunnelse' ? (value as VedtakBegrunnelse) : undefined,
         });
     };
 
-    console.log(vilkårBegrunnelser);
     const begrunnelser = vilkårBegrunnelser && resultat && vilkårBegrunnelser[resultat];
-    console.log(begrunnelser, resultat);
     return (
         <div className={'begrunnelse-input'}>
             <FamilieSelect
@@ -198,6 +198,21 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
                         );
                     })}
             </FamilieSelect>
+
+            <IkonKnapp
+                onClick={() => {
+                    slettBegrunnelse({
+                        id,
+                        fom,
+                        tom,
+                        resultat,
+                        begrunnelse,
+                    });
+                }}
+                id={`slett-knapp-${id}`}
+                label={'Slett'}
+                ikon={<Slett />}
+            />
         </div>
     );
 };

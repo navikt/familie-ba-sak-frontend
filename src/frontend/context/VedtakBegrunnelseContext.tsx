@@ -19,8 +19,6 @@ const [VedtakBegrunnelserProvider, useBegrunnelser] = constate(
             aktivVedtak?.stønadBrevBegrunnelser ? aktivVedtak.stønadBrevBegrunnelser : []
         );
 
-        console.log(begrunnelser);
-
         const [vilkårBegrunnelser, settVilkårbegrunnelser] = React.useState<Vilkårsbegrunnelser>();
 
         React.useEffect(() => {
@@ -74,6 +72,16 @@ const [VedtakBegrunnelserProvider, useBegrunnelser] = constate(
             );
         };
 
+        const slettBegrunnelse = (data: IRestStønadBrevBegrunnelse) => {
+            håndterEndretBegrunnelser(
+                axiosRequest<IRestStønadBrevBegrunnelse[], IRestStønadBrevBegrunnelse>({
+                    method: 'DELETE',
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/stonad-brev-begrunnelse`,
+                    data,
+                })
+            );
+        };
+
         const endreBegrunnelse = (data: IRestStønadBrevBegrunnelse) => {
             håndterEndretBegrunnelser(
                 axiosRequest<IRestStønadBrevBegrunnelse[], IRestStønadBrevBegrunnelse>({
@@ -89,6 +97,7 @@ const [VedtakBegrunnelserProvider, useBegrunnelser] = constate(
             settBegrunnelser,
             leggTilBegrunnelse,
             endreBegrunnelse,
+            slettBegrunnelse,
             hentBegrunnelseTekster,
             vilkårBegrunnelser,
         };
