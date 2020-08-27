@@ -2,8 +2,6 @@ import { AxiosError } from 'axios';
 import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import { useApp } from '../../../../context/AppContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import { IFagsak } from '../../../../typer/fagsak';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -21,10 +19,9 @@ import { hentStegNummer } from '../../../../typer/behandling';
 
 const Brev = () => {
     const { axiosRequest } = useApp();
-    const { settFagsak } = useFagsakRessurser();
     const { åpenBehandling } = useBehandling();
 
-    const [innsendtBrev, settInnsendtBrev] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
+    const [innsendtBrev, settInnsendtBrev] = React.useState<Ressurs<string>>(byggTomRessurs());
     const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
         byggTomRessurs()
     );
@@ -36,15 +33,14 @@ const Brev = () => {
 
     const sendBrev = (brevData: IBrevData) => {
         settInnsendtBrev(byggHenterRessurs());
-        axiosRequest<IFagsak, IBrevData>({
+        axiosRequest<string, IBrevData>({
             method: 'POST',
             data: brevData,
             url: `/familie-ba-sak/api/dokument/send-brev/innhente-opplysninger/${behandlingId}`,
         })
-            .then((response: Ressurs<IFagsak>) => {
+            .then((response: Ressurs<string>) => {
                 settInnsendtBrev(response);
                 if (response.status === RessursStatus.SUKSESS) {
-                    settFagsak(response);
                     settVisModal(true);
                 }
             })

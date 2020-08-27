@@ -5,11 +5,10 @@ import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/di
 import { IBrevData, TypeBrev, TypeMottaker } from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { IFagsak } from '../../../typer/fagsak';
 
 interface IProps {
     sendBrev: (brevData: IBrevData) => void;
-    innsendtBrev: Ressurs<IFagsak>;
+    innsendtBrev: Ressurs<string>;
     hentForhåndsvisning: (brevData: IBrevData) => void;
     hentetForhåndsvisning: Ressurs<string>;
 }
