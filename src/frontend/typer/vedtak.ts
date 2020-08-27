@@ -6,18 +6,23 @@ export interface IVedtakForBehandling {
     aktiv: boolean;
     ansvarligSaksbehandler: string;
     personBeregninger: IPersonBeregning[];
-    stønadBrevBegrunnelser?: IRestStønadBrevBegrunnelse[];
+    utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[];
     vedtaksdato: string;
     id: number;
     begrunnelse: Begrunnelse;
 }
 
-export interface IRestStønadBrevBegrunnelse {
+export interface IRestUtbetalingBegrunnelse {
     id?: number;
     fom: string;
     tom?: string;
     resultat?: BehandlingResultat;
-    begrunnelse?: VedtakBegrunnelse;
+    vedtakBegrunnelse?: VedtakBegrunnelse;
+}
+
+export interface IRestPutUtbetalingBegrunnelse {
+    resultat?: BehandlingResultat;
+    vedtakBegrunnelse?: VedtakBegrunnelse;
 }
 
 export interface IRestVedtakBegrunnelse {
