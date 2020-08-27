@@ -85,10 +85,11 @@ export enum BehandlingResultat {
 }
 
 export enum BehandlerRolle {
-    SYSTEM = 0,
+    UKJENT = 0,
     VEILEDER = 1,
     SAKSBEHANDLER = 2,
     BESLUTTER = 3,
+    SYSTEM = 4,
 }
 
 export interface IBehandling {
