@@ -45,7 +45,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             });
         };
 
-        const håndterEndretUtbetalinBegrunnelser = (
+        const håndterEndretUtbetalingBegrunnelser = (
             promise: Promise<Ressurs<IRestUtbetalingBegrunnelse[]>>,
             id?: number
         ) => {
@@ -63,7 +63,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
         };
 
         const leggTilUtbetalingBegrunnelse = (data: IRestUtbetalingBegrunnelse) => {
-            håndterEndretUtbetalinBegrunnelser(
+            håndterEndretUtbetalingBegrunnelser(
                 axiosRequest<IRestUtbetalingBegrunnelse[], IRestUtbetalingBegrunnelse>({
                     method: 'POST',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse`,
@@ -73,7 +73,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
         };
 
         const slettUtbetalingBegrunnelse = (utbetalingBegrunnelseId: number) => {
-            håndterEndretUtbetalinBegrunnelser(
+            håndterEndretUtbetalingBegrunnelser(
                 axiosRequest<IRestUtbetalingBegrunnelse[], IRestUtbetalingBegrunnelse>({
                     method: 'DELETE',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${utbetalingBegrunnelseId}`,
@@ -86,7 +86,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             utbetalingBegrunnelseId: number,
             data: IRestPutUtbetalingBegrunnelse
         ) => {
-            håndterEndretUtbetalinBegrunnelser(
+            håndterEndretUtbetalingBegrunnelser(
                 axiosRequest<IRestUtbetalingBegrunnelse[], IRestPutUtbetalingBegrunnelse>({
                     method: 'PUT',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${utbetalingBegrunnelseId}`,
