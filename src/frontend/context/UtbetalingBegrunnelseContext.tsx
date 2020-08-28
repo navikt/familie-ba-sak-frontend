@@ -1,11 +1,11 @@
-import { Ressurs, RessursStatus, byggTomRessurs } from '@navikt/familie-typer';
+import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import constate from 'constate';
 import React, { useState } from 'react';
 import { IFagsak } from '../typer/fagsak';
 import {
+    IRestPutUtbetalingBegrunnelse,
     IRestUtbetalingBegrunnelse,
     IVedtakForBehandling,
-    IRestPutUtbetalingBegrunnelse,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useApp } from './AppContext';
@@ -52,6 +52,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             promise.then((nyeBegrunnelser: Ressurs<IRestUtbetalingBegrunnelse[]>) => {
                 if (nyeBegrunnelser.status === RessursStatus.SUKSESS) {
                     settUtbetalingBegrunnelser(nyeBegrunnelser.data);
+                    settUtbetalingBegrunnelseFeilmelding({ id, feilmelding: '' });
                 } else if (nyeBegrunnelser.status === RessursStatus.FEILET) {
                     settUtbetalingBegrunnelseFeilmelding({
                         id,

@@ -1,15 +1,15 @@
-import { VedtakBegrunnelse } from '../../../../typer/vedtak';
-import { BehandlingResultat, behandlingsresultater } from '../../../../typer/behandling';
-import { useBehandling } from '../../../../context/BehandlingContext';
-import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
+import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import React from 'react';
-import { FamilieSelect } from '@navikt/familie-form-elements';
-import { IPar } from '../../../../typer/common';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import Slett from '../../../../ikoner/Slett';
 import { Feilmelding } from 'nav-frontend-typografi';
+import React from 'react';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
+import Slett from '../../../../ikoner/Slett';
+import { BehandlingResultat, behandlingsresultater } from '../../../../typer/behandling';
+import { IPar } from '../../../../typer/common';
+import { VedtakBegrunnelse } from '../../../../typer/vedtak';
+import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IBegrunnelseInputProps {
     vedtakBegrunnelse?: VedtakBegrunnelse;
@@ -30,8 +30,12 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
 
+    const [mutableVedtakBegrunnelse, settMutableVedBegrunnelse] = React.useState<string>('');
+    const [mutableResultat, setMutableResultat] = React.useState<string>('');
+
     const onChangeResultat = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
+        setMutableResultat(value);
         endreUtbetalingBegrunnelse(id, {
             resultat:
                 value !== 'Velg behandlingsresultat' ? (value as BehandlingResultat) : undefined,
@@ -41,6 +45,7 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
 
     const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
+        settMutableVedBegrunnelse(value);
         endreUtbetalingBegrunnelse(id, {
             resultat,
             vedtakBegrunnelse:
@@ -66,7 +71,7 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
                     bredde={'l'}
                     erLesevisning={erLesevisning()}
                     onChange={onChangeResultat}
-                    value={resultat}
+                    value={mutableResultat}
                 >
                     <option>Velg behandlingsresultat</option>
                     {vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
@@ -99,7 +104,7 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
                     bredde={'l'}
                     erLesevisning={erLesevisning()}
                     onChange={onChangeBegrunnelse}
-                    value={vedtakBegrunnelse}
+                    value={mutableVedtakBegrunnelse}
                 >
                     <option>Velg begrunnelse</option>
                     {begrunnelser &&
