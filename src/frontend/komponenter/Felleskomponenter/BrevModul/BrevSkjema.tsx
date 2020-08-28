@@ -5,6 +5,7 @@ import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/di
 import { IBrevData, TypeBrev, TypeMottaker } from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import PdfVisningModal from '../PdfVisningModal/PdfVisningModal';
 
 interface IProps {
     sendBrev: (brevData: IBrevData) => void;
@@ -23,6 +24,7 @@ const BrevSkjema = ({
     const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
     const [fritekst, settFritekst] = useState('');
     const [feilmelding, settFeilmelding] = React.useState<string | undefined>(undefined);
+    const [visForhåndsviningModal, settForhåndsviningModal] = useState(false);
 
     const senderInn = innsendtBrev.status === RessursStatus.HENTER;
     const henterFohåndsvisning = hentetForhåndsvisning.status === RessursStatus.HENTER;
@@ -35,6 +37,12 @@ const BrevSkjema = ({
                 : undefined
         );
     }, [innsendtBrev]);
+
+    useEffect(() => {
+        if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
+            settForhåndsviningModal(true);
+        }
+    }, [hentetForhåndsvisning]);
 
     return (
         <SkjemaGruppe className={'brevskjema'} feil={feilmelding}>
@@ -124,6 +132,11 @@ const BrevSkjema = ({
                     Forhåndsvis
                 </Flatknapp>
             </div>
+            <PdfVisningModal
+                åpen={visForhåndsviningModal}
+                onRequestClose={() => settForhåndsviningModal(false)}
+                pdfdata={hentetForhåndsvisning}
+            />
         </SkjemaGruppe>
     );
 };

@@ -14,7 +14,6 @@ import UIModalWrapper from '../../Modal/UIModalWrapper';
 import Brevskjema from '../../BrevModul/BrevSkjema';
 import { IBrevData } from '../../BrevModul/typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
-import PdfFrame from '../../../Fagsak/Vedtak/PdfFrame';
 import { hentStegNummer } from '../../../../typer/behandling';
 
 const Brev = () => {
@@ -108,9 +107,6 @@ const Brev = () => {
                 >
                     Brevet er bestilt
                 </UIModalWrapper>
-            )}
-            {hentetForhåndsvisning.status === RessursStatus.SUKSESS && (
-                <PdfFrame file={hentetForhåndsvisning.data} />
             )}
         </div>
     );

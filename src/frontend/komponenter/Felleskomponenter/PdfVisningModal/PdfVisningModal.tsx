@@ -6,29 +6,25 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
-interface IVedtaksbrevModalProps {
+interface IPdfVisningModalProps {
     åpen: boolean;
     onRequestClose: () => void;
-    vedtaksbrev: Ressurs<string>;
+    pdfdata: Ressurs<string>;
 }
 
-const VedtaksbrevModal: React.FC<IVedtaksbrevModalProps> = ({
-    onRequestClose,
-    åpen,
-    vedtaksbrev,
-}) => {
+const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({ onRequestClose, åpen, pdfdata }) => {
     const [antallSider, settAntallSider] = React.useState<number>(0);
 
     return (
         <Modal
-            className={'vedtaksbrev-modal'}
+            className={'pdfvisning-modal'}
             isOpen={åpen}
             contentLabel={'Vedtaksbrev'}
             onRequestClose={onRequestClose}
         >
             <Document
-                className={'vedtaksbrev-modal__dokument'}
-                file={vedtaksbrev.status === RessursStatus.SUKSESS ? vedtaksbrev.data : undefined}
+                className={'pdfvisning-modal__dokument'}
+                file={pdfdata.status === RessursStatus.SUKSESS ? pdfdata.data : undefined}
                 error={
                     <AlertStripeFeil
                         className={'skjemamodal__document--feil'}
@@ -60,4 +56,4 @@ const VedtaksbrevModal: React.FC<IVedtaksbrevModalProps> = ({
     );
 };
 
-export default VedtaksbrevModal;
+export default PdfVisningModal;
