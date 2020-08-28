@@ -21,7 +21,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import BegrunnelserTabell from './BegrunnelserTabell/BegrunnelserTabell';
+import UtbetalingBegrunnelseTabell from './BegrunnelserTabell/UtbetalingBegrunnelseTabell';
 import PdfFrame from './PdfFrame';
 import VedtaksbrevModal from './VedtaksbrevModal/VedtaksbrevModal';
 
@@ -46,9 +46,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
-    /*const begrunnelser = aktivVedtak?.stønadBrevMetadata?.begrunnelser
-        ? aktivVedtak?.stønadBrevMetadata?.begrunnelser
-        : undefined;*/
+
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
         const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
@@ -128,7 +126,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             />
 
             <UtbetalingBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                <BegrunnelserTabell åpenBehandling={åpenBehandling} />
+                <UtbetalingBegrunnelseTabell åpenBehandling={åpenBehandling} />
             </UtbetalingBegrunnelserProvider>
 
             <Knapp

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
@@ -5,16 +6,17 @@ import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
 import { periodeToString } from '../../../../typer/periode';
 import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import moment from 'moment';
 import { datoformat } from '../../../../utils/formatter';
-import BegrunnelseInput from './BegrunnelseInput';
+import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
 
-interface IBegrunnelserTabellProps {
+interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
 }
 
-const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ åpenBehandling }) => {
+const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
+    åpenBehandling,
+}) => {
     const harAndeler = åpenBehandling.beregningOversikt.length > 0;
     const {
         leggTilUtbetalingBegrunnelse,
@@ -63,7 +65,7 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ åpenBehandlin
                                     {utbetalingBegrunnelseForPeriode.map(
                                         (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
                                             return utbetalingBegrunnelse.id ? (
-                                                <BegrunnelseInput
+                                                <UtbetalingBegrunnelseInput
                                                     id={utbetalingBegrunnelse.id}
                                                     resultat={utbetalingBegrunnelse.resultat}
                                                     vedtakBegrunnelse={
@@ -90,12 +92,11 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ åpenBehandlin
                                         ikon={<Pluss />}
                                         spinner={false}
                                     />
-                                    {utbetalingBegrunnelseFeilmelding &&
-                                        !utbetalingBegrunnelseFeilmelding.id && (
-                                            <Feilmelding>
-                                                {utbetalingBegrunnelseFeilmelding.feilmelding}
-                                            </Feilmelding>
-                                        )}
+                                    {!utbetalingBegrunnelseFeilmelding.id && (
+                                        <Feilmelding>
+                                            {utbetalingBegrunnelseFeilmelding.feilmelding}
+                                        </Feilmelding>
+                                    )}
                                 </td>
                             </tr>
                         );
@@ -105,4 +106,4 @@ const BegrunnelserTabell: React.FC<IBegrunnelserTabellProps> = ({ åpenBehandlin
     ) : null;
 };
 
-export default BegrunnelserTabell;
+export default UtbetalingBegrunnelseTabell;

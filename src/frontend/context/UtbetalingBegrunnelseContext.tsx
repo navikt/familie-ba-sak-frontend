@@ -1,6 +1,6 @@
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import constate from 'constate';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IFagsak } from '../typer/fagsak';
 import {
     IRestPutUtbetalingBegrunnelse,
@@ -22,7 +22,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
         const [utbetalingBegrunnelseFeilmelding, settUtbetalingBegrunnelseFeilmelding] = useState<{
             id?: number;
             feilmelding: string;
-        }>();
+        }>({ id: undefined, feilmelding: '' });
 
         const [utbetalingBegrunnelser, settUtbetalingBegrunnelser] = React.useState<
             IRestUtbetalingBegrunnelse[]
@@ -32,7 +32,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             Ressurs<Vilkårsbegrunnelser>
         >(byggTomRessurs());
 
-        React.useEffect(() => {
+        useEffect(() => {
             hentVilkårBegrunnelseTekster();
         }, []);
 

@@ -11,13 +11,13 @@ import { IPar } from '../../../../typer/common';
 import { VedtakBegrunnelse } from '../../../../typer/vedtak';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
-interface IBegrunnelseInputProps {
+interface IUtbetalingsBegrunnelseInput {
     vedtakBegrunnelse?: VedtakBegrunnelse;
     id: number;
     resultat?: BehandlingResultat;
 }
 
-const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
+const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
     vedtakBegrunnelse,
     id,
     resultat,
@@ -126,11 +126,12 @@ const BegrunnelseInput: React.FC<IBegrunnelseInputProps> = ({
                     ikon={<Slett />}
                 />
             </div>
-            {utbetalingBegrunnelseFeilmelding && utbetalingBegrunnelseFeilmelding.id === id && (
-                <Feilmelding>{utbetalingBegrunnelseFeilmelding.feilmelding}</Feilmelding>
-            )}
+            {utbetalingBegrunnelseFeilmelding.feilmelding !== '' &&
+                utbetalingBegrunnelseFeilmelding.id === id && (
+                    <Feilmelding>{utbetalingBegrunnelseFeilmelding.feilmelding}</Feilmelding>
+                )}
         </div>
     );
 };
 
-export default BegrunnelseInput;
+export default UtbetalingBegrunnelseInput;
