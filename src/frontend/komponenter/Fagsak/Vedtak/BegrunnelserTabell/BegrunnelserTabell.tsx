@@ -1,23 +1,13 @@
-import { FamilieSelect } from '@navikt/familie-form-elements';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
-import { useBehandling } from '../../../../context/BehandlingContext';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
-import Slett from '../../../../ikoner/Slett';
-import {
-    BehandlingResultat,
-    behandlingsresultater,
-    IBehandling,
-} from '../../../../typer/behandling';
-import { IPar } from '../../../../typer/common';
+import { IBehandling } from '../../../../typer/behandling';
 import { periodeToString } from '../../../../typer/periode';
-import { IRestUtbetalingBegrunnelse, VedtakBegrunnelse } from '../../../../typer/vedtak';
+import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import moment from 'moment';
 import { datoformat } from '../../../../utils/formatter';
-import { RessursStatus } from '@navikt/familie-typer';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import BegrunnelseInput from './BegrunnelseInput';
 
 interface IBegrunnelserTabellProps {
