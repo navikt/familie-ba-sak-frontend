@@ -68,8 +68,8 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                 <UtbetalingBegrunnelseInput
                                                     id={utbetalingBegrunnelse.id}
                                                     resultat={utbetalingBegrunnelse.resultat}
-                                                    vedtakBegrunnelse={
-                                                        utbetalingBegrunnelse.vedtakBegrunnelse
+                                                    behandlingresultatOgVilkårBegrunnelse={
+                                                        utbetalingBegrunnelse.behandlingresultatOgVilkårBegrunnelse
                                                     }
                                                 />
                                             ) : (

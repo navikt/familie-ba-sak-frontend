@@ -17,16 +17,16 @@ export interface IRestUtbetalingBegrunnelse {
     fom: string;
     tom?: string;
     resultat?: BehandlingResultat;
-    vedtakBegrunnelse?: VedtakBegrunnelse;
+    behandlingresultatOgVilkårBegrunnelse?: BehandlingresultatOgVilkårBegrunnelse;
 }
 
 export interface IRestPutUtbetalingBegrunnelse {
     resultat?: BehandlingResultat;
-    vedtakBegrunnelse?: VedtakBegrunnelse;
+    behandlingresultatOgVilkårBegrunnelse?: BehandlingresultatOgVilkårBegrunnelse;
 }
 
 export interface IRestVedtakBegrunnelse {
-    id: VedtakBegrunnelse;
+    id: BehandlingresultatOgVilkårBegrunnelse;
     navn: string;
 }
 
@@ -35,7 +35,7 @@ export enum Begrunnelse {
     REDUKSJON = 'REDUKSJON',
 }
 
-export enum VedtakBegrunnelse {
+export enum BehandlingresultatOgVilkårBegrunnelse {
     INNVILGET_BOSATT_I_RIKTET = 'INNVILGET_BOSATT_I_RIKTET',
     INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE = 'INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE',
     INNVILGET_LOVLIG_OPPHOLD_EØS_BORGER = 'INNVILGET_LOVLIG_OPPHOLD_EØS_BORGER',

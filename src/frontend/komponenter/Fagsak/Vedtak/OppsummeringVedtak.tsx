@@ -21,7 +21,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import UtbetalingBegrunnelseTabell from './BegrunnelserTabell/UtbetalingBegrunnelseTabell';
+import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
 import PdfFrame from './PdfFrame';
 import VedtaksbrevModal from './VedtaksbrevModal/VedtaksbrevModal';
 

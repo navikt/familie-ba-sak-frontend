@@ -8,17 +8,17 @@ import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunn
 import Slett from '../../../../ikoner/Slett';
 import { BehandlingResultat, behandlingsresultater } from '../../../../typer/behandling';
 import { IPar } from '../../../../typer/common';
-import { VedtakBegrunnelse } from '../../../../typer/vedtak';
+import { BehandlingresultatOgVilkårBegrunnelse } from '../../../../typer/vedtak';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IUtbetalingsBegrunnelseInput {
-    vedtakBegrunnelse?: VedtakBegrunnelse;
+    behandlingresultatOgVilkårBegrunnelse?: BehandlingresultatOgVilkårBegrunnelse;
     id: number;
     resultat?: BehandlingResultat;
 }
 
 const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
-    vedtakBegrunnelse,
+    behandlingresultatOgVilkårBegrunnelse,
     id,
     resultat,
 }) => {
@@ -30,26 +30,35 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
 
-    const [mutableVedtakBegrunnelse, settMutableVedBegrunnelse] = React.useState<string>('');
-    const [mutableResultat, setMutableResultat] = React.useState<string>('');
+    const [mutableVedtakBegrunnelse, settMutableVedBegrunnelse] = React.useState<
+        BehandlingresultatOgVilkårBegrunnelse | undefined
+    >(behandlingresultatOgVilkårBegrunnelse);
+    const [mutableResultat, setMutableResultat] = React.useState<BehandlingResultat | undefined>(
+        resultat
+    );
 
     const onChangeResultat = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
-        setMutableResultat(value);
+        setMutableResultat(value as BehandlingResultat);
         endreUtbetalingBegrunnelse(id, {
             resultat:
                 value !== 'Velg behandlingsresultat' ? (value as BehandlingResultat) : undefined,
-            vedtakBegrunnelse: value !== 'Velg behandlingsresultat' ? vedtakBegrunnelse : undefined,
+            behandlingresultatOgVilkårBegrunnelse:
+                value !== 'Velg behandlingsresultat'
+                    ? behandlingresultatOgVilkårBegrunnelse
+                    : undefined,
         });
     };
 
     const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
-        settMutableVedBegrunnelse(value);
+        settMutableVedBegrunnelse(value as BehandlingresultatOgVilkårBegrunnelse);
         endreUtbetalingBegrunnelse(id, {
             resultat,
-            vedtakBegrunnelse:
-                value !== 'Velg begrunnelse' ? (value as VedtakBegrunnelse) : undefined,
+            behandlingresultatOgVilkårBegrunnelse:
+                value !== 'Velg begrunnelse'
+                    ? (value as BehandlingresultatOgVilkårBegrunnelse)
+                    : undefined,
         });
     };
 
