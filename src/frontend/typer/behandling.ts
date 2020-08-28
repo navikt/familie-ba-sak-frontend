@@ -16,18 +16,47 @@ export enum BehandlingUnderkategori {
 }
 
 export enum BehandlingSteg {
-    REGISTRERE_SØKNAD = 1,
-    REGISTRERE_PERSONGRUNNLAG = 1,
-    VILKÅRSVURDERING = 2,
-    SEND_TIL_BESLUTTER = 3,
-    BESLUTTE_VEDTAK = 4,
-    IVERKSETT_MOT_OPPDRAG = 5,
-    VENTE_PÅ_STATUS_FRA_ØKONOMI = 6,
-    JOURNALFØR_VEDTAKSBREV = 7,
-    DISTRIBUER_VEDTAKSBREV = 8,
-    FERDIGSTILLE_BEHANDLING = 9,
-    BEHANDLING_AVSLUTTET = 10,
+    REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
+    REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
+    VILKÅRSVURDERING = 'VILKÅRSVURDERING',
+    SEND_TIL_BESLUTTER = 'SEND_TIL_BESLUTTER',
+    BESLUTTE_VEDTAK = 'BESLUTTE_VEDTAK',
+    IVERKSETT_MOT_OPPDRAG = 'IVERKSETT_MOT_OPPDRAG',
+    VENTE_PÅ_STATUS_FRA_ØKONOMI = 'VENTE_PÅ_STATUS_FRA_ØKONOMI',
+    JOURNALFØR_VEDTAKSBREV = 'JOURNALFØR_VEDTAKSBREV',
+    DISTRIBUER_VEDTAKSBREV = 'DISTRIBUER_VEDTAKSBREV',
+    FERDIGSTILLE_BEHANDLING = 'FERDIGSTILLE_BEHANDLING',
+    BEHANDLING_AVSLUTTET = 'BEHANDLING_AVSLUTTET',
 }
+
+export const hentStegNummer = (steg: BehandlingSteg): number => {
+    switch (steg) {
+        case BehandlingSteg.REGISTRERE_SØKNAD:
+            return 1;
+        case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
+            return 1;
+        case BehandlingSteg.VILKÅRSVURDERING:
+            return 2;
+        case BehandlingSteg.SEND_TIL_BESLUTTER:
+            return 3;
+        case BehandlingSteg.BESLUTTE_VEDTAK:
+            return 4;
+        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
+            return 5;
+        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
+            return 6;
+        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
+            return 7;
+        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
+            return 8;
+        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
+            return 9;
+        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+            return 10;
+        default:
+            return 0;
+    }
+};
 
 export enum BehandlingStatus {
     OPPRETTET = 'OPPRETTET',
