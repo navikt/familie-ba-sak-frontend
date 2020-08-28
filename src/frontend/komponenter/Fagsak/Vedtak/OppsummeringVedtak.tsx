@@ -118,6 +118,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
+            className={'vedtaksbrev'}
             skalViseNesteKnapp={vedtaksbrev.status === RessursStatus.SUKSESS}
         >
             <VedtaksbrevModal
