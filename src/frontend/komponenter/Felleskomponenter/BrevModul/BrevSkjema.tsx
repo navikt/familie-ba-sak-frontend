@@ -38,6 +38,12 @@ const BrevSkjema = ({
         );
     }, [innsendtBrev]);
 
+    useEffect(() => {
+        if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
+            settForhåndsviningModal(true);
+        }
+    }, [hentetForhåndsvisning]);
+
     return (
         <SkjemaGruppe className={'brevskjema'} feil={feilmelding}>
             <FamilieSelect
@@ -115,7 +121,6 @@ const BrevSkjema = ({
                         if (fritekst === '') {
                             settFeilmelding('Friteksten kan ikke være tom');
                         } else if (!henterFohåndsvisning) {
-                            settForhåndsviningModal(true);
                             hentForhåndsvisning({
                                 mottaker: mottaker,
                                 brevmal: brevmal,
