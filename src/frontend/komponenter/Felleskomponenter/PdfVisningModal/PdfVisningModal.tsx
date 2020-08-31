@@ -19,8 +19,8 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({ onRequestClose, åpe
         <Modal
             className={'pdfvisning-modal'}
             isOpen={åpen}
-            contentLabel={'Vedtaksbrev'}
             onRequestClose={onRequestClose}
+            contentLabel={'pdfvisning'}
         >
             <Document
                 className={'pdfvisning-modal__dokument'}

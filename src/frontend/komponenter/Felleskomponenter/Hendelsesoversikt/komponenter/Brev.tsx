@@ -15,6 +15,7 @@ import Brevskjema from '../../BrevModul/BrevSkjema';
 import { IBrevData } from '../../BrevModul/typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { hentStegNummer } from '../../../../typer/behandling';
+import GrønnHake from '../../../../ikoner/GrønnHake';
 
 const Brev = () => {
     const { axiosRequest } = useApp();
@@ -85,7 +86,7 @@ const Brev = () => {
                     hentetForhåndsvisning={hentetForhåndsvisning}
                 />
             ) : (
-                'Søknad må være registrert for å sende ut brev manuelt' // TODO: Hvordan skal vi håndtere dette? Man skal jo også kunne sende ut ved revurdering og ikke søknad. Skal det tas i denne omgangen?
+                'Søknad må være registrert for å sende ut brev manuelt'
             )}
             {visModal && (
                 <UIModalWrapper
@@ -105,7 +106,7 @@ const Brev = () => {
                         ],
                     }}
                 >
-                    Brevet er bestilt
+                    <GrønnHake /> Brevet er bestilt på behandling {behandlingId}.
                 </UIModalWrapper>
             )}
         </div>
