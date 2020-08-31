@@ -24,7 +24,7 @@ const BrevSkjema = ({
     const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
     const [fritekst, settFritekst] = useState('');
     const [feilmelding, settFeilmelding] = React.useState<string | undefined>(undefined);
-    const [visForhåndsviningModal, settForhåndsviningModal] = useState(false);
+    const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
 
     const senderInn = innsendtBrev.status === RessursStatus.HENTER;
     const henterFohåndsvisning = hentetForhåndsvisning.status === RessursStatus.HENTER;
@@ -133,7 +133,7 @@ const BrevSkjema = ({
                 </Flatknapp>
             </div>
             <PdfVisningModal
-                åpen={visForhåndsviningModal}
+                åpen={visForhåndsvisningModal}
                 onRequestClose={() => settForhåndsviningModal(false)}
                 pdfdata={hentetForhåndsvisning}
             />
