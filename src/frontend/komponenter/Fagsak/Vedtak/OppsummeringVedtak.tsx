@@ -1,3 +1,10 @@
+import {
+    byggDataRessurs,
+    byggFeiletRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
@@ -8,19 +15,14 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { UtbetalingBegrunnelserProvider } from '../../../context/UtbetalingBegrunnelseContext';
 import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import {
-    Ressurs,
-    RessursStatus,
-    byggDataRessurs,
-    byggFeiletRessurs,
-    byggTomRessurs,
-} from '@navikt/familie-typer';
+import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
 import PdfFrame from './PdfFrame';
-import BegrunnelserTabell from './BegrunnelserTabell/BegrunnelserTabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 interface IVedtakProps {
@@ -42,6 +44,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const [senderInn, settSenderInn] = React.useState(false);
 
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
+
+    const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
 
     React.useEffect(() => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
@@ -112,6 +116,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
+            className={'vedtaksbrev'}
             skalViseNesteKnapp={vedtaksbrev.status === RessursStatus.SUKSESS}
         >
             <PdfVisningModal
@@ -120,7 +125,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                 pdfdata={vedtaksbrev}
             />
 
-            <BegrunnelserTabell fagsak={fagsak} åpenBehandling={åpenBehandling} />
+            <UtbetalingBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+                <UtbetalingBegrunnelseTabell åpenBehandling={åpenBehandling} />
+            </UtbetalingBegrunnelserProvider>
 
             <Knapp
                 onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}

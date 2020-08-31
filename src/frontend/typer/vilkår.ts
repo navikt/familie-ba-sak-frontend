@@ -3,6 +3,8 @@ import { INøkkelPar } from './common';
 import { IFelt, nyttFelt, Valideringsstatus } from './felt';
 import { IPeriode, nyPeriode } from './periode';
 import { IPerson, PersonType } from './person';
+import { IRestVedtakBegrunnelse } from './vedtak';
+import { BehandlingResultat } from './behandling';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -93,6 +95,10 @@ export interface IRestVilkårResultat {
     resultat: Resultat;
     vilkårType: VilkårType;
 }
+
+export type Vilkårsbegrunnelser = {
+    [key in BehandlingResultat]: IRestVedtakBegrunnelse[];
+};
 
 type IVilkårsconfig = {
     [key in VilkårType]: IVilkårConfig;
