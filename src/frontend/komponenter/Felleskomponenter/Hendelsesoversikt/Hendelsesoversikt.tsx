@@ -43,7 +43,7 @@ const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) =>
                 {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                     <ul className={'hendelsesoversikt__list'}>{hendelser?.map(tilHendelseItem)}</ul>
                 )}
-                {aktivTab === Tabs.Meldinger && hendelser.length > 0 && <Brev />}
+                {aktivTab === Tabs.Meldinger && <Brev />}
             </div>
         </div>
     );
