@@ -8,16 +8,16 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import PdfVisningModal from '../PdfVisningModal/PdfVisningModal';
 
 interface IProps {
-    sendBrev: (brevData: IBrevData) => void;
+    sendBrevOnClick: (brevData: IBrevData) => void;
     innsendtBrev: Ressurs<string>;
-    hentForhåndsvisning: (brevData: IBrevData) => void;
+    forhåndsvisningOnClick: (brevData: IBrevData) => void;
     hentetForhåndsvisning: Ressurs<string>;
 }
 
 const BrevSkjema = ({
-    sendBrev,
+    sendBrevOnClick,
     innsendtBrev,
-    hentForhåndsvisning,
+    forhåndsvisningOnClick,
     hentetForhåndsvisning,
 }: IProps) => {
     const [mottaker, settMottaker] = useState(TypeMottaker.SØKER);
@@ -103,7 +103,7 @@ const BrevSkjema = ({
                         if (fritekst === '') {
                             settFeilmelding('Friteksten kan ikke være tom');
                         } else if (!senderInn) {
-                            sendBrev({
+                            sendBrevOnClick({
                                 mottaker: mottaker,
                                 brevmal: brevmal,
                                 fritekst: fritekst,
@@ -121,7 +121,7 @@ const BrevSkjema = ({
                         if (fritekst === '') {
                             settFeilmelding('Friteksten kan ikke være tom');
                         } else if (!henterFohåndsvisning) {
-                            hentForhåndsvisning({
+                            forhåndsvisningOnClick({
                                 mottaker: mottaker,
                                 brevmal: brevmal,
                                 fritekst: fritekst,
