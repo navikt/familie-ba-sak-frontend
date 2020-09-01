@@ -3,11 +3,17 @@ import * as React from 'react';
 import { RessursStatus } from '@navikt/familie-typer';
 import UIModalWrapper from '../../Modal/UIModalWrapper';
 import Brevskjema from '../../BrevModul/BrevSkjema';
-import useBrevApi from '../useBrevApi';
+import useBrevModul from '../useBrevModul';
 import { useEffect } from 'react';
 
 const Brev = () => {
-    const { sendBrev, hentForhåndsvisning, innsendtBrev, hentetForhåndsvisning } = useBrevApi();
+    const {
+        sendBrev,
+        hentForhåndsvisning,
+        innsendtBrev,
+        hentetForhåndsvisning,
+        hentMuligeBrevMaler,
+    } = useBrevModul();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
     useEffect(() => {
@@ -23,6 +29,7 @@ const Brev = () => {
                 innsendtBrev={innsendtBrev}
                 forhåndsvisningOnClick={hentForhåndsvisning}
                 hentetForhåndsvisning={hentetForhåndsvisning}
+                brevMaler={hentMuligeBrevMaler()}
             />
             {visInnsendtBrevModal && (
                 <UIModalWrapper

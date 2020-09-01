@@ -7,12 +7,13 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { IBrevData } from '../BrevModul/typer';
+import { IBrevData, TypeBrev } from '../BrevModul/typer';
 import { AxiosError } from 'axios';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
+import { hentStegNummer } from '../../../typer/behandling';
 
-const useBrevApi = () => {
+const useBrevModul = () => {
     const { axiosRequest } = useApp();
     const { åpenBehandling } = useBehandling();
     const [innsendtBrev, settInnsendtBrev] = React.useState<Ressurs<string>>(byggTomRessurs());
@@ -22,6 +23,9 @@ const useBrevApi = () => {
 
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
+
+    const behandlingSteg =
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.steg;
 
     const sendBrev = (brevData: IBrevData) => {
         settInnsendtBrev(byggHenterRessurs());
@@ -65,12 +69,21 @@ const useBrevApi = () => {
             });
     };
 
+    const hentMuligeBrevMaler = () => {
+        const brevMaler = [];
+        if (behandlingSteg && hentStegNummer(behandlingSteg) >= 2) {
+            brevMaler.push(TypeBrev.OPPLYSNINGER);
+        }
+        return brevMaler;
+    };
+
     return {
         sendBrev,
         hentForhåndsvisning,
         innsendtBrev,
         hentetForhåndsvisning,
+        hentMuligeBrevMaler,
     };
 };
 
-export default useBrevApi;
+export default useBrevModul;

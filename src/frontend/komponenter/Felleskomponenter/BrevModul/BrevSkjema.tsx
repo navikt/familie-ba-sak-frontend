@@ -12,6 +12,7 @@ interface IProps {
     innsendtBrev: Ressurs<string>;
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
     hentetForhåndsvisning: Ressurs<string>;
+    brevMaler: TypeBrev[];
 }
 
 const BrevSkjema = ({
@@ -19,6 +20,7 @@ const BrevSkjema = ({
     innsendtBrev,
     forhåndsvisningOnClick,
     hentetForhåndsvisning,
+    brevMaler,
 }: IProps) => {
     const [mottaker, settMottaker] = useState(TypeMottaker.SØKER);
     const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
@@ -72,10 +74,10 @@ const BrevSkjema = ({
                     settBrevmal(event.target.value as TypeBrev);
                 }}
             >
-                {Object.entries(TypeBrev).map(([id, navn]) => {
+                {brevMaler.map(mal => {
                     return (
-                        <option aria-selected={id === brevmal} key={id} value={id}>
-                            {navn}
+                        <option aria-selected={mal === brevmal} key={mal} value={mal}>
+                            {mal}
                         </option>
                     );
                 })}
