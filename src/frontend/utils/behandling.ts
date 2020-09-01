@@ -14,5 +14,5 @@ export const gruppeIdTilRolle = (gruppeId: string) => {
                   ['d21e00a4-969d-4b28-8782-dc818abfae65', BehandlerRolle.SAKSBEHANDLER],
                   ['9449c153-5a1e-44a7-84c6-7cc7a8867233', BehandlerRolle.BESLUTTER],
               ]);
-    return rolleConfig.get(gruppeId) ?? BehandlerRolle.SYSTEM;
+    return rolleConfig.get(gruppeId) ?? BehandlerRolle.UKJENT;
 };

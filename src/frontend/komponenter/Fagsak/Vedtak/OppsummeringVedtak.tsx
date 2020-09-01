@@ -23,7 +23,7 @@ import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
 import PdfFrame from './PdfFrame';
-import VedtaksbrevModal from './VedtaksbrevModal/VedtaksbrevModal';
+import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -119,10 +119,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             className={'vedtaksbrev'}
             skalViseNesteKnapp={vedtaksbrev.status === RessursStatus.SUKSESS}
         >
-            <VedtaksbrevModal
+            <PdfVisningModal
                 åpen={visVedtaksbrev}
                 onRequestClose={() => settVisVedtaksbrev(false)}
-                vedtaksbrev={vedtaksbrev}
+                pdfdata={vedtaksbrev}
             />
 
             <UtbetalingBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>

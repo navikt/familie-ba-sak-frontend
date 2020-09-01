@@ -7,6 +7,7 @@ import HendelseItem from './komponenter/HendelseItem';
 import Historikkknapp from './komponenter/Historikkknapp';
 import Meldingerknapp from './komponenter/Meldingerknapp';
 import classNames from 'classnames';
+import Brev from './komponenter/Brev';
 
 export { Tabs as Hendelsetype, Hendelse };
 
@@ -42,6 +43,7 @@ const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) =>
                 {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                     <ul className={'hendelsesoversikt__list'}>{hendelser?.map(tilHendelseItem)}</ul>
                 )}
+                {aktivTab === Tabs.Meldinger && <Brev />}
             </div>
         </div>
     );
