@@ -92,8 +92,19 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     <Element children={vilkårFraConfig.tittel} />
                     <Undertekst children={vilkårFraConfig.lovreferanse} />
                 </div>
-                <DashedHr />
-                <ul className={'vilkårsvurdering__list'}>
+                <hr />
+
+                <table className={'tabell'}>
+                    <thead>
+                        <tr>
+                            <th>Vurdering</th>
+                            <th>Periode</th>
+                            <th>Begrunnelse</th>
+                            <th />
+                            <th />
+                            <th />
+                        </tr>
+                    </thead>
                     {vilkårResultater.map((vilkårResultat: IFelt<IVilkårResultat>) => {
                         return (
                             <GeneriskVilkårVurdering
@@ -105,7 +116,22 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             />
                         );
                     })}
-                </ul>
+                </table>
+
+                {/*<ul className={'vilkårsvurdering__list'}>
+                    {vilkårResultater.map((vilkårResultat: IFelt<IVilkårResultat>) => {
+                        return (
+                            <GeneriskVilkårVurdering
+                                key={`${person.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
+                                vilkårFraConfig={vilkårFraConfig}
+                                person={person}
+                                vilkårResultat={vilkårResultat}
+                                visFeilmeldinger={visFeilmeldinger}
+                            />
+                        );
+                    })}
+                </ul>*/}
+
                 <DashedHr />
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp

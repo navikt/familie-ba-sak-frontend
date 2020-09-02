@@ -19,7 +19,7 @@ import {
 import Slett from '../../../../ikoner/Slett';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { periodeToString } from '../../../../typer/periode';
-import { IPerson } from '../../../../typer/person';
+import { IPerson, PersonType } from '../../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     IPersonResultat,
@@ -37,6 +37,10 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './GeneriskVilkår';
+import AutomatiskVurdering from '../../../../ikoner/AutomatiskVurdering';
+import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
+import { datoformat } from '../../../../utils/formatter';
+import moment from 'moment';
 
 interface IProps {
     person: IPerson;
@@ -60,7 +64,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
         settVilkårSubmit,
     } = useVilkårsvurdering();
 
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, åpenBehandling } = useBehandling();
     const leseVisning = erLesevisning();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
@@ -163,7 +167,169 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             });
     };
 
-    return (
+    return person.type !== PersonType.ANNENPART ? (
+        <tbody>
+            <tr>
+                <td>
+                    <Normaltekst children={resultatTilUi(vilkårResultat.verdi.resultat.verdi)} />
+                </td>
+                <td>
+                    <Normaltekst children={periodeToString(vilkårResultat.verdi.periode.verdi)} />
+                </td>
+                <td>
+                    <Normaltekst
+                        className={'beskrivelse'}
+                        children={vilkårResultat.verdi.begrunnelse.verdi}
+                    />
+                </td>
+                <td>
+                    {!erLesevisning() && (
+                        <IkonKnapp
+                            onClick={() => toggleForm(true)}
+                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                            label={
+                                !ekspandertVilkår
+                                    ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                        ? 'Vurder'
+                                        : 'Endre'
+                                    : 'Lukk'
+                            }
+                            ikon={<Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
+                        />
+                    )}
+                </td>
+                <td>
+                    {vilkårResultat.verdi.endretAv === 'VL' ? (
+                        <AutomatiskVurdering />
+                    ) : (
+                        <ManuellVurdering />
+                    )}
+                </td>
+                <td>
+                    <i>
+                        {åpenBehandling.status === RessursStatus.SUKSESS
+                            ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
+                                ? 'Vurdert i denne behandlingen'
+                                : `Vurdert ${moment(vilkårResultat.verdi.endretTidspunkt).format(
+                                      datoformat.DATO_FORKORTTET
+                                  )}`
+                            : 'Ikke satt'}
+                    </i>
+                </td>
+            </tr>
+
+            {ekspandertVilkår && (
+                <tr className={'generisk-vilkår__ekspandert'}>
+                    <td colSpan={6}>
+                        <SkjemaGruppe className={'endre-vilkår'}>
+                            <FamilieRadioGruppe
+                                erLesevisning={leseVisning}
+                                verdi={resultater[redigerbartVilkår.verdi.resultat.verdi].navn}
+                                legend={
+                                    vilkårFraConfig.spørsmål
+                                        ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
+                                        : ''
+                                }
+                                feil={
+                                    redigerbartVilkår.verdi.resultat.valideringsstatus ===
+                                        Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                                        ? redigerbartVilkår.verdi.resultat.feilmelding
+                                        : ''
+                                }
+                                feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
+                            >
+                                <Radio
+                                    label={'Ja'}
+                                    name={`vilkår-spørsmål_ja_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                    checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.JA}
+                                    onChange={() => radioOnChange(Resultat.JA)}
+                                />
+                                <Radio
+                                    label={'Nei'}
+                                    name={`vilkår-spørsmål_nei_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                    checked={
+                                        redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI
+                                    }
+                                    onChange={() => radioOnChange(Resultat.NEI)}
+                                />
+                            </FamilieRadioGruppe>
+
+                            <FastsettPeriode
+                                redigerbartVilkår={redigerbartVilkår}
+                                validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
+                                visFeilmeldinger={skalViseFeilmeldinger()}
+                            />
+
+                            <FamilieTextareaControlled
+                                tekstLesevisning={''}
+                                erLesevisning={leseVisning}
+                                defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
+                                id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
+                                label={'Begrunnelse (valgfri)'}
+                                placeholder={'Begrunn hvorfor det er gjort endriner på vilkåret.'}
+                                textareaClass={'begrunnelse'}
+                                value={redigerbartVilkår.verdi.begrunnelse.verdi}
+                                feil={
+                                    redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
+                                        Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                                        ? redigerbartVilkår.verdi.begrunnelse.feilmelding
+                                        : ''
+                                }
+                                onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                                    validerOgSettRedigerbartVilkår({
+                                        ...redigerbartVilkår,
+                                        verdi: {
+                                            ...redigerbartVilkår.verdi,
+                                            begrunnelse: {
+                                                ...redigerbartVilkår.verdi.begrunnelse,
+                                                verdi: event?.target.value,
+                                            },
+                                        },
+                                    });
+                                }}
+                            />
+
+                            <div className={'knapperad'}>
+                                <div>
+                                    <FamilieKnapp
+                                        erLesevisning={leseVisning}
+                                        onClick={onClickVilkårFerdig}
+                                        mini={true}
+                                        type={'standard'}
+                                        spinner={vilkårSubmit === VilkårSubmit.PUT}
+                                    >
+                                        Ferdig
+                                    </FamilieKnapp>
+                                    <FamilieKnapp
+                                        erLesevisning={leseVisning}
+                                        onClick={() => toggleForm(false)}
+                                        mini={true}
+                                        type={'flat'}
+                                    >
+                                        Avbryt
+                                    </FamilieKnapp>
+                                </div>
+
+                                <IkonKnapp
+                                    onClick={() => {
+                                        const promise = deleteVilkår(
+                                            person.personIdent,
+                                            redigerbartVilkår.verdi.id
+                                        );
+                                        håndterEndringPåVilkårsvurdering(promise);
+                                    }}
+                                    id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                                    spinner={vilkårSubmit === VilkårSubmit.DELETE}
+                                    label={'Slett'}
+                                    ikon={<Slett />}
+                                />
+                            </div>
+                        </SkjemaGruppe>
+                    </td>
+                </tr>
+            )}
+        </tbody>
+    ) : (
         <li
             className={classNames(
                 'generisk-vilkår__en-periode',

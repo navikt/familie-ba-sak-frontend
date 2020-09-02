@@ -23,6 +23,7 @@ const FastsettPeriode: React.FC<IProps> = ({
 }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
+
     return (
         <SkjemaGruppe
             feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}

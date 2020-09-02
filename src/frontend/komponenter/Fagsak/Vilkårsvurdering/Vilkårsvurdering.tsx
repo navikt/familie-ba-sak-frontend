@@ -8,8 +8,9 @@ import { IVilkårResultat } from '../../../typer/vilkår';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
-import BehandlingVilkårSkjema from './VilkårsvurderingSkjema';
+import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
 import { IBehandling } from '../../../typer/behandling';
+import { Feilmelding } from 'nav-frontend-typografi';
 
 interface IProps {
     fagsak: IFagsak;
@@ -56,10 +57,11 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                     settVisFeilmeldinger(true);
                 }
             }}
+            maxWidthStyle={'80rem'}
             senderInn={senderInn}
+            className={'vilkårsvurdering'}
         >
-            <BehandlingVilkårSkjema
-                opprettelseFeilmelding={opprettelseFeilmelding}
+            <VilkårsvurderingSkjema
                 visFeilmeldinger={visFeilmeldinger}
                 behandlingstype={åpenBehandling.type}
             />
@@ -72,6 +74,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
                     }))}
                 />
+            )}
+
+            {visFeilmeldinger && opprettelseFeilmelding !== '' && (
+                <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
             )}
         </Skjemasteg>
     );
