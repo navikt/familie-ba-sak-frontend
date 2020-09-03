@@ -17,7 +17,6 @@ import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import AnnenPart from './AnnenPart';
 import Barna from './Barna';
-import SøkerOppholdINorge from './SøkerOppholdINorge';
 import SøknadType from './SøknadType';
 
 interface IProps {
@@ -137,8 +136,6 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             )}
 
             <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-
-            <SøkerOppholdINorge settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             <AnnenPart settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
