@@ -91,7 +91,6 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     {vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
                         Object.keys(vilkårBegrunnelser?.data)
                             .filter((behandlingResultat: string) => {
-                                console.log(behandlingsresultater[behandlingResultat]?.navn);
                                 return (
                                     vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
                                     vilkårBegrunnelser.data[
