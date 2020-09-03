@@ -150,7 +150,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     };
 
     const hentSaksbehandlerRolle = (): BehandlerRolle | undefined => {
-        let rolle = BehandlerRolle.SYSTEM;
+        let rolle = BehandlerRolle.UKJENT;
         if (innloggetSaksbehandler && innloggetSaksbehandler.groups) {
             innloggetSaksbehandler.groups.forEach((id: string) => {
                 rolle = rolle < gruppeIdTilRolle(id) ? gruppeIdTilRolle(id) : rolle;
