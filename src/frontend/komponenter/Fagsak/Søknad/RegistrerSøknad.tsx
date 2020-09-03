@@ -15,7 +15,6 @@ import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import AnnenPart from './AnnenPart';
 import Barna from './Barna';
 import SøknadType from './SøknadType';
 
@@ -136,8 +135,6 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             )}
 
             <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-
-            <AnnenPart settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             <Barna søknad={søknad} />
 
