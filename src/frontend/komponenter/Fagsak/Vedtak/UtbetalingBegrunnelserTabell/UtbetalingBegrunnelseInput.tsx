@@ -7,8 +7,10 @@ import { useBehandling } from '../../../../context/BehandlingContext';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
 import { BehandlingResultat, behandlingsresultater } from '../../../../typer/behandling';
-import { IPar } from '../../../../typer/common';
-import { BehandlingresultatOgVilkårBegrunnelse } from '../../../../typer/vedtak';
+import {
+    BehandlingresultatOgVilkårBegrunnelse,
+    IRestVedtakBegrunnelse,
+} from '../../../../typer/vedtak';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IUtbetalingsBegrunnelseInput {
@@ -75,10 +77,13 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
         <div className={'begrunnelse-input'}>
             <div className={'begrunnelse-input__flex'}>
                 <FamilieSelect
-                    className="begrunnelse-input__select"
-                    name="begrunnelse"
                     bredde={'m'}
+                    className="begrunnelse-input__select"
                     erLesevisning={erLesevisning()}
+                    lesevisningVerdi={
+                        mutableResultat ? behandlingsresultater[mutableResultat]?.navn : ''
+                    }
+                    name="begrunnelse"
                     onChange={onChangeResultat}
                     value={mutableResultat === null ? undefined : mutableResultat}
                 >
@@ -109,18 +114,29 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                 </FamilieSelect>
 
                 <FamilieSelect
-                    name="begrunnelse"
                     bredde={'l'}
                     erLesevisning={erLesevisning()}
+                    lesevisningVerdi={
+                        mutableVedtakBegrunnelse && begrunnelser
+                            ? begrunnelser.find(
+                                  (restVedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+                                      restVedtakBegrunnelse.id === mutableVedtakBegrunnelse
+                              )?.navn
+                            : ''
+                    }
+                    name="begrunnelse"
                     onChange={onChangeBegrunnelse}
                     value={mutableVedtakBegrunnelse === null ? undefined : mutableVedtakBegrunnelse}
                 >
                     <option>Velg begrunnelse</option>
                     {begrunnelser &&
-                        begrunnelser.map((type: IPar) => {
+                        begrunnelser.map((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                             return (
-                                <option key={type.id} value={type.id}>
-                                    {type.navn}
+                                <option
+                                    key={restVedtakBegrunnelse.id}
+                                    value={restVedtakBegrunnelse.id}
+                                >
+                                    {restVedtakBegrunnelse.navn}
                                 </option>
                             );
                         })}

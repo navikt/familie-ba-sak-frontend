@@ -765,12 +765,14 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.13.tgz#eeca81913076d1845799f7ca7472f920398bfc7b"
-  integrity sha512-j4EcHohwchtQOw7nkzrPv2U59VHs8XUfyBeBtREdeHVk9OZbuuHV8aFZQdY/HejxT0FD/z23o8L9rjeBQRwXiw==
+"@navikt/familie-form-elements@^1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.15.tgz#f63e6922094c67cef28bb0af97ca2d95b5006d2f"
+  integrity sha512-8Jbruku674oMRE/ykbncEUQvgrPJEjM62OPjQucKhpkwH8VcnFnE1hh59jjw9hy0viK32JAi8VeoidmmE/gDtg==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
+    "@types/classnames" "^2.2.10"
+    classnames "^2.2.6"
     nav-datovelger "^6.1.9"
     nav-frontend-knapper "^2.0.4"
     nav-frontend-knapper-style "^0.3.38"
