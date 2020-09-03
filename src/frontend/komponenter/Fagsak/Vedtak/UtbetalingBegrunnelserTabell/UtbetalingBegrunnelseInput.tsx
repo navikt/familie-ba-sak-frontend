@@ -77,10 +77,10 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                 <FamilieSelect
                     className="begrunnelse-input__select"
                     name="begrunnelse"
-                    bredde={'l'}
+                    bredde={'m'}
                     erLesevisning={erLesevisning()}
                     onChange={onChangeResultat}
-                    value={mutableResultat}
+                    value={mutableResultat === null ? undefined : mutableResultat}
                 >
                     <option>Velg behandlingsresultat</option>
                     {vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
@@ -113,7 +113,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     bredde={'l'}
                     erLesevisning={erLesevisning()}
                     onChange={onChangeBegrunnelse}
-                    value={mutableVedtakBegrunnelse}
+                    value={mutableVedtakBegrunnelse === null ? undefined : mutableVedtakBegrunnelse}
                 >
                     <option>Velg begrunnelse</option>
                     {begrunnelser &&

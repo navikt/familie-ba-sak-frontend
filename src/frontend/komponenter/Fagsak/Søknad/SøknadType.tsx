@@ -4,10 +4,8 @@ import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
-import { IPar } from '../../../typer/common';
-import { ISøknadDTO, søknadstyper, TypeSøker } from '../../../typer/søknad';
+import { ISøknadDTO } from '../../../typer/søknad';
 import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
-import { FamilieSelect } from '@navikt/familie-form-elements';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
@@ -40,48 +38,6 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
             />
 
             <br />
-
-            <FamilieSelect
-                name="type søker"
-                label="Type søker"
-                bredde={'l'}
-                value={søknad.typeSøker}
-                erLesevisning={lesevisning}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    if ((event.target.value as TypeSøker) === søknad.typeSøker) {
-                        settSøknadOgValider({
-                            ...søknad,
-                            typeSøker: TypeSøker.ORDINÆR,
-                        });
-                    } else {
-                        settSøknadOgValider({
-                            ...søknad,
-                            typeSøker: event.target.value as TypeSøker,
-                        });
-                    }
-                }}
-            >
-                <option
-                    aria-selected={TypeSøker.ORDINÆR === søknad.typeSøker}
-                    key={TypeSøker.ORDINÆR}
-                    value={TypeSøker.ORDINÆR}
-                >
-                    Velg type søker
-                </option>
-                {Object.values(søknadstyper)
-                    .filter((type: IPar) => type.id !== TypeSøker.ORDINÆR)
-                    .map((type: IPar) => {
-                        return (
-                            <option
-                                aria-selected={type.id === søknad.typeSøker}
-                                key={type.id}
-                                value={type.id}
-                            >
-                                {type.navn}
-                            </option>
-                        );
-                    })}
-            </FamilieSelect>
         </PanelBase>
     );
 };
