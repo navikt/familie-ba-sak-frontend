@@ -63,9 +63,13 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                 <td>{`${beregning.utbetaltPerMnd} kr/mnd for ${beregning.antallBarn} barn`}</td>
                                 <td>
                                     {utbetalingBegrunnelseForPeriode.map(
-                                        (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
+                                        (
+                                            utbetalingBegrunnelse: IRestUtbetalingBegrunnelse,
+                                            index: number
+                                        ) => {
                                             return utbetalingBegrunnelse.id ? (
                                                 <UtbetalingBegrunnelseInput
+                                                    key={index}
                                                     id={utbetalingBegrunnelse.id}
                                                     resultat={utbetalingBegrunnelse.resultat}
                                                     behandlingresultatOgVilkårBegrunnelse={
@@ -73,7 +77,9 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                     }
                                                 />
                                             ) : (
-                                                <Feilmelding>Begrunnelsen mangler id</Feilmelding>
+                                                <Feilmelding key={index}>
+                                                    Begrunnelsen mangler id
+                                                </Feilmelding>
                                             );
                                         }
                                     )}
