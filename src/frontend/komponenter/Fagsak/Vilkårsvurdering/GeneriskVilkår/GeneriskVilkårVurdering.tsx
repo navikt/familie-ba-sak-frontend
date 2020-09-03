@@ -29,6 +29,7 @@ import {
     Resultat,
     resultater,
     resultatTilUi,
+    VilkårType,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
@@ -41,6 +42,7 @@ import AutomatiskVurdering from '../../../../ikoner/AutomatiskVurdering';
 import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
 import { datoformat } from '../../../../utils/formatter';
 import moment from 'moment';
+import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 
 interface IProps {
     person: IPerson;
@@ -67,7 +69,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     const { erLesevisning, åpenBehandling } = useBehandling();
     const leseVisning = erLesevisning();
 
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(erLesevisning() || false);
+    const [ekspandertVilkår, settEkspandertVilkår] = useState(
+        erLesevisning() || false || vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+    );
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
@@ -169,9 +173,18 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
     return person.type !== PersonType.ANNENPART ? (
         <tbody>
-            <tr>
+            <tr className={ekspandertVilkår ? 'ekspandert' : ''}>
                 <td>
-                    <Normaltekst children={resultatTilUi(vilkårResultat.verdi.resultat.verdi)} />
+                    <div className={'vurdering'}>
+                        <VilkårResultatIkon
+                            resultat={vilkårResultat.verdi.resultat.verdi}
+                            width={20}
+                            heigth={20}
+                        />
+                        <Normaltekst
+                            children={resultatTilUi(vilkårResultat.verdi.resultat.verdi)}
+                        />
+                    </div>
                 </td>
                 <td>
                     <Normaltekst children={periodeToString(vilkårResultat.verdi.periode.verdi)} />
@@ -219,9 +232,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             </tr>
 
             {ekspandertVilkår && (
-                <tr className={'generisk-vilkår__ekspandert'}>
-                    <td colSpan={6}>
-                        <SkjemaGruppe className={'endre-vilkår'}>
+                <tr>
+                    <td colSpan={6} className={'td-ekspandert'}>
+                        <div className={'endre-vilkår'}>
                             <FamilieRadioGruppe
                                 erLesevisning={leseVisning}
                                 verdi={resultater[redigerbartVilkår.verdi.resultat.verdi].navn}
@@ -241,20 +254,47 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 <Radio
                                     label={'Ja'}
                                     name={`vilkår-spørsmål_ja_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                                    checked={redigerbartVilkår.verdi.resultat.verdi === Resultat.JA}
-                                    onChange={() => radioOnChange(Resultat.JA)}
+                                    checked={
+                                        redigerbartVilkår.verdi.vilkårType ===
+                                        VilkårType.GIFT_PARTNERSKAP
+                                            ? redigerbartVilkår.verdi.resultat.verdi ===
+                                              Resultat.NEI
+                                            : redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
+                                    }
+                                    onChange={() =>
+                                        radioOnChange(
+                                            redigerbartVilkår.verdi.vilkårType ===
+                                                VilkårType.GIFT_PARTNERSKAP
+                                                ? Resultat.NEI
+                                                : Resultat.JA
+                                        )
+                                    }
                                 />
                                 <Radio
                                     label={'Nei'}
                                     name={`vilkår-spørsmål_nei_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                                     checked={
-                                        redigerbartVilkår.verdi.resultat.verdi === Resultat.NEI
+                                        redigerbartVilkår.verdi.vilkårType ===
+                                        VilkårType.GIFT_PARTNERSKAP
+                                            ? redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
+                                            : redigerbartVilkår.verdi.resultat.verdi ===
+                                              Resultat.NEI
                                     }
-                                    onChange={() => radioOnChange(Resultat.NEI)}
+                                    onChange={() =>
+                                        radioOnChange(
+                                            redigerbartVilkår.verdi.vilkårType ===
+                                                VilkårType.GIFT_PARTNERSKAP
+                                                ? Resultat.JA
+                                                : Resultat.NEI
+                                        )
+                                    }
                                 />
                             </FamilieRadioGruppe>
 
                             <FastsettPeriode
+                                hjelpetekst={
+                                    'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet utifra dette.'
+                                }
                                 redigerbartVilkår={redigerbartVilkår}
                                 validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                                 visFeilmeldinger={skalViseFeilmeldinger()}
@@ -324,7 +364,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     ikon={<Slett />}
                                 />
                             </div>
-                        </SkjemaGruppe>
+                        </div>
                     </td>
                 </tr>
             )}

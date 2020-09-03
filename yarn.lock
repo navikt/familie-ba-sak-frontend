@@ -765,12 +765,14 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.13.tgz#eeca81913076d1845799f7ca7472f920398bfc7b"
-  integrity sha512-j4EcHohwchtQOw7nkzrPv2U59VHs8XUfyBeBtREdeHVk9OZbuuHV8aFZQdY/HejxT0FD/z23o8L9rjeBQRwXiw==
+"@navikt/familie-form-elements@^1.0.16":
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.16.tgz#f5df776a1c84fecd6e8d91b5b34a8ed370e7230a"
+  integrity sha512-qcAkhMksrb64TAvBXfe1x8Sg63OY4h7zhjNpnnMV3XgK3lCHBi/qmJMEXuq0Sm9e04f/bF68WkyZeV/U63Iwww==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
+    "@types/classnames" "^2.2.10"
+    classnames "^2.2.6"
     nav-datovelger "^6.1.9"
     nav-frontend-knapper "^2.0.4"
     nav-frontend-knapper-style "^0.3.38"
@@ -8417,6 +8419,16 @@ nav-frontend-core@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.1.tgz#f59d79da9342434cc89046bc289c90e2a5d53ea8"
   integrity sha512-wPcKfXcXvmqA3MPQwlU+nMvB3plJtxLBew4bNmcw5CJNIMtGPwGXEvcexVEIeEdCpJCvOZvwcWxaTc57x16eDA==
+
+nav-frontend-hjelpetekst-style@^2.0.25:
+  version "2.0.25"
+  resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-2.0.25.tgz#9fc964179cecdb8b30489dbafe0c8722525fbe7c"
+  integrity sha512-V2XQCFkwoXzjGz+KF0AxxCMzD8fbVPePg0/Fm5ivcJsG6E+Ls0QecXltP8DPL1zleuAX/6TX/kv3PLHMTO8yqw==
+
+nav-frontend-hjelpetekst@^2.0.32:
+  version "2.0.32"
+  resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst/-/nav-frontend-hjelpetekst-2.0.32.tgz#1c457a381d7d5c8872a54f90cb760019214f0890"
+  integrity sha512-S4iZyxBEsZD2Y0QLZfjd560rFgFyimebV1mnRtX0sc6XAf09VznxYB9ExBYc2i/0QKcHAOu2Hr4IY53ZcrCwcw==
 
 nav-frontend-ikoner-assets@2.0.3, nav-frontend-ikoner-assets@^2.0.3:
   version "2.0.3"

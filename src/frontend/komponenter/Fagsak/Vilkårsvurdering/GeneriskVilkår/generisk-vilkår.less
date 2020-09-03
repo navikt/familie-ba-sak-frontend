@@ -4,25 +4,38 @@
     .tabell {
         table-layout: fixed;
 
-        td {
-            border-bottom: 1px dashed #cccccc;
+        .ekspandert {
+            td {
+                border-bottom: none;
+            }
+        }
+
+        .td-ekspandert {
+            padding: 0 1rem 1rem 1.6rem;
         }
 
         th {
             &:nth-of-type(1) {
-                width: 6rem;
+                width: 10rem;
             }
             &:nth-of-type(2) {
                 width: 12rem;
             }
             &:nth-of-type(4) {
-                width: 8rem;
+                width: 7rem;
             }
             &:nth-of-type(5) {
                 width: 3rem;
             }
             &:nth-of-type(6) {
                 width: 15rem;
+            }
+        }
+
+        .vurdering {
+            display: flex;
+            :first-child {
+                margin-right: 1rem;
             }
         }
 
@@ -37,31 +50,27 @@
         margin-top: 2.5rem;
     }
 
-    &__ekspandert {
-        margin-top: .5rem;
+    .endre-vilkår {
+        max-width: 30rem;
+        border-left: 1px solid @navBlaLighten20;
+        padding-left: 2rem;
 
-        .endre-vilkår {
-            max-width: 30rem;
-            border-left: 2px solid @navBla;
-            padding-left: 2rem;
+        .skjemagruppe {
+            margin: 1rem 0;
+        }
+        
+        .begrunnelse {
+            min-height: 8rem !important;
+        }
 
-            .skjemagruppe {
-                margin: 1rem 0;
-            }
-            
-            .begrunnelse {
-                min-height: 8rem !important;
-            }
-    
-            .knapperad {
-                display: flex;
-                justify-content: space-between;
-                margin: 1rem 0;
-            }
-    
-            .knapp:not(:first-child) {
-                margin-left: 1rem;
-            }
+        .knapperad {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+        }
+
+        .knapp:not(:first-child) {
+            margin-left: 1rem;
         }
     }
 }

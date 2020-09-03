@@ -1,7 +1,6 @@
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { ISODateString } from 'nav-datovelger';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { SkjemaGruppe, Label } from 'nav-frontend-skjema';
 import React from 'react';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
@@ -9,14 +8,17 @@ import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
 
 interface IProps {
+    hjelpetekst?: string;
     redigerbartVilkår: IFelt<IVilkårResultat>;
     validerOgSettRedigerbartVilkår: (redigerbartVilkår: IFelt<IVilkårResultat>) => void;
     visFeilmeldinger: boolean;
 }
 
 const FastsettPeriode: React.FC<IProps> = ({
+    hjelpetekst,
     redigerbartVilkår,
     validerOgSettRedigerbartVilkår,
     visFeilmeldinger,
@@ -35,7 +37,16 @@ const FastsettPeriode: React.FC<IProps> = ({
                     : ''
             }
         >
-            {!lesevisning && <Normaltekst children={'Fastsett periode'} />}
+            {!lesevisning && (
+                <div className={'legend'}>
+                    <Label children={'Fastsett periode'} htmlFor={'fastsett-periode__flex'} />
+                    {hjelpetekst && (
+                        <Hjelpetekst tittel={'Hjelpetekst fastsett periode'}>
+                            {hjelpetekst}
+                        </Hjelpetekst>
+                    )}
+                </div>
+            )}
             <div className={'fastsett-periode__flex'}>
                 <div>
                     <FamilieDatovelger
@@ -43,7 +54,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                         id={`${vilkårPeriodeFeilmeldingId(
                             redigerbartVilkår.verdi
                         )}__fastsett-periode-fom`}
-                        label={'F.o.m.'}
+                        label={'F.o.m'}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
@@ -70,7 +81,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                             id={`${vilkårPeriodeFeilmeldingId(
                                 redigerbartVilkår.verdi
                             )}__fastsett-periode-tom`}
-                            label={'T.o.m. (valgfri)'}
+                            label={'T.o.m (valgfri)'}
                             placeholder={datoformatNorsk.DATO}
                             onChange={(dato?: ISODateString) => {
                                 validerOgSettRedigerbartVilkår({

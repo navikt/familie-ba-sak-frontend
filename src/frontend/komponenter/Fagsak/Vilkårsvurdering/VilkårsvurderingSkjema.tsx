@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { Behandlingstype } from '../../../typer/behandling';
 import { IFelt } from '../../../typer/felt';
@@ -7,11 +7,15 @@ import {
     IVilkårConfig,
     IVilkårResultat,
     vilkårConfig,
+    Resultat,
 } from '../../../typer/vilkår';
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
+import { Collapse } from 'react-collapse';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
@@ -23,6 +27,18 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     behandlingstype,
 }) => {
     const { vilkårsvurdering } = useVilkårsvurdering();
+    const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
+        vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
+            return {
+                ...personMapEkspandert,
+                [personResultat.personIdent]:
+                    personResultat.vilkårResultater.filter(
+                        (vilkårResultat: IFelt<IVilkårResultat>) =>
+                            vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                    ).length > 0,
+            };
+        }, {})
+    );
 
     const nesteMåned = () => {
         const iDag = new Date();
@@ -41,38 +57,66 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                         key={personResultat.personIdent}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        <PersonInformasjon
-                            person={personResultat.person}
-                            tag={'h3'}
-                            tekstType={'UNDERTITTEL'}
-                        />
-
-                        {Object.values(vilkårConfig)
-                            .filter((vc: IVilkårConfig) =>
-                                vc.parterDetteGjelderFor.includes(personResultat.person.type)
-                            )
-                            .map((vc: IVilkårConfig) => {
-                                const vilkårResultater: IFelt<
-                                    IVilkårResultat
-                                >[] = personResultat.vilkårResultater.filter(
-                                    (vilkårResultat: IFelt<IVilkårResultat>) =>
-                                        vilkårResultat.verdi.vilkårType === vc.key
-                                );
-
-                                if (vilkårResultater.length !== 0) {
-                                    return (
-                                        <GeneriskVilkår
-                                            key={`${personResultat.personIdent}_${vc.key}`}
-                                            person={personResultat.person}
-                                            vilkårResultater={vilkårResultater}
-                                            vilkårFraConfig={vc}
-                                            visFeilmeldinger={visFeilmeldinger}
-                                        />
-                                    );
-                                } else {
-                                    return undefined;
+                        <div className={'vilkårsvurdering__person--personlinje'}>
+                            <PersonInformasjon
+                                person={personResultat.person}
+                                tag={'h3'}
+                                tekstType={'UNDERTITTEL'}
+                            />
+                            <IkonKnapp
+                                id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}
+                                onClick={() =>
+                                    settPersonErEkspandert({
+                                        [personResultat.personIdent]: !personErEkspandert[
+                                            personResultat.personIdent
+                                        ],
+                                    })
                                 }
-                            })}
+                                label={
+                                    personErEkspandert[personResultat.personIdent]
+                                        ? 'Skjul vilkårsvurdering'
+                                        : 'Vis vilkårsvurdering'
+                                }
+                                ikon={
+                                    <Chevron
+                                        retning={
+                                            personErEkspandert[personResultat.personIdent]
+                                                ? 'opp'
+                                                : 'ned'
+                                        }
+                                    />
+                                }
+                            />
+                        </div>
+
+                        <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
+                            {Object.values(vilkårConfig)
+                                .filter((vc: IVilkårConfig) =>
+                                    vc.parterDetteGjelderFor.includes(personResultat.person.type)
+                                )
+                                .map((vc: IVilkårConfig) => {
+                                    const vilkårResultater: IFelt<
+                                        IVilkårResultat
+                                    >[] = personResultat.vilkårResultater.filter(
+                                        (vilkårResultat: IFelt<IVilkårResultat>) =>
+                                            vilkårResultat.verdi.vilkårType === vc.key
+                                    );
+
+                                    if (vilkårResultater.length !== 0) {
+                                        return (
+                                            <GeneriskVilkår
+                                                key={`${personResultat.personIdent}_${vc.key}`}
+                                                person={personResultat.person}
+                                                vilkårResultater={vilkårResultater}
+                                                vilkårFraConfig={vc}
+                                                visFeilmeldinger={visFeilmeldinger}
+                                            />
+                                        );
+                                    } else {
+                                        return undefined;
+                                    }
+                                })}
+                        </Collapse>
                     </div>
                 );
             })}
