@@ -3,7 +3,7 @@ import PanelBase from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
+import { BehandlingUnderkategori } from '../../../typer/behandling';
 import { ISøknadDTO } from '../../../typer/søknad';
 import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
 
@@ -20,13 +20,6 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
             <Undertittel children={'Hva har bruker søkt om?'} />
             <br />
             <Sakstype
-                kategori={søknad.kategori}
-                kategoriOnChange={(behandlingKategori: BehandlingKategori): void =>
-                    settSøknadOgValider({
-                        ...søknad,
-                        kategori: behandlingKategori,
-                    })
-                }
                 underkategori={søknad.underkategori}
                 underkategoriOnChange={(behandlingUnderkategori: BehandlingUnderkategori): void =>
                     settSøknadOgValider({
