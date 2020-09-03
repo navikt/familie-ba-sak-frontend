@@ -15,9 +15,7 @@ import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import AnnenPart from './AnnenPart';
 import Barna from './Barna';
-import SøkerOppholdINorge from './SøkerOppholdINorge';
 import SøknadType from './SøknadType';
 
 interface IProps {
@@ -49,7 +47,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             axiosRequest<IFagsak, IRestRegistrerSøknad>({
                 method: 'POST',
                 data: { søknad, bekreftEndringerViaFrontend },
-                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag/v2`,
+                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag/v3`,
             }).then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
@@ -85,7 +83,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                     method: 'GET',
                     url: `/familie-ba-sak/api/behandlinger/${
                         hentAktivBehandlingPåFagsak(fagsak.data)?.behandlingId
-                    }/søknad`,
+                    }/søknad/v3`,
                 }).then((response: Ressurs<ISøknadDTO>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settSøknadErLastetFraBackend(true);
@@ -137,10 +135,6 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             )}
 
             <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-
-            <SøkerOppholdINorge settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-
-            <AnnenPart settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             <Barna søknad={søknad} />
 
