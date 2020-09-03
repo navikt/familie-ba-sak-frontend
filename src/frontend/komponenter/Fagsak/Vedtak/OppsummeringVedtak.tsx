@@ -48,8 +48,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
 
     React.useEffect(() => {
+        hentVedtaksbrev();
+    }, [åpenBehandling]);
+
+    const hentVedtaksbrev = () => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
         const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
+
         if (aktivtVedtak) {
             axiosRequest<string, void>({
                 method: httpMethod,
@@ -80,7 +85,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                 )
             );
         }
-    }, [åpenBehandling]);
+    };
 
     const visSubmitKnapp =
         !erLesevisning() &&
@@ -125,7 +130,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                 pdfdata={vedtaksbrev}
             />
 
-            <UtbetalingBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+            <UtbetalingBegrunnelserProvider
+                fagsak={fagsak}
+                aktivVedtak={aktivVedtak}
+                hentVedtaksbrev={hentVedtaksbrev}
+            >
                 <UtbetalingBegrunnelseTabell åpenBehandling={åpenBehandling} />
             </UtbetalingBegrunnelserProvider>
 
