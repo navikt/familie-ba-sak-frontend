@@ -47,7 +47,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             axiosRequest<IFagsak, IRestRegistrerSøknad>({
                 method: 'POST',
                 data: { søknad, bekreftEndringerViaFrontend },
-                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag/v2`,
+                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag/v3`,
             }).then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
@@ -83,7 +83,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                     method: 'GET',
                     url: `/familie-ba-sak/api/behandlinger/${
                         hentAktivBehandlingPåFagsak(fagsak.data)?.behandlingId
-                    }/søknad`,
+                    }/søknad/v3`,
                 }).then((response: Ressurs<ISøknadDTO>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settSøknadErLastetFraBackend(true);
