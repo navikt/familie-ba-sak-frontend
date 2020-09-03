@@ -21,7 +21,7 @@ export const behandlingUnderkategori: INøkkelPar = {
         navn: 'Ordinær barnetrygd',
     },
     UTVIDET: {
-        id: 'NEI',
+        id: 'UTVIDET',
         navn: 'Utvidet barnetrygd',
     },
 };
