@@ -2,7 +2,20 @@
     display: flex;
     align-items: center;
 
-    > :first-child {
-        margin-right: 1rem;
+    .familie-ikon {
+        margin-right: 1.5rem;
+    }
+
+    .informasjonstekster {
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+
+        .navn {
+            max-width: 15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 }

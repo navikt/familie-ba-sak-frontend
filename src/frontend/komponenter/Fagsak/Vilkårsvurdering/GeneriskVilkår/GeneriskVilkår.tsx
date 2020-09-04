@@ -16,9 +16,9 @@ import {
     Resultat,
     VilkårType,
 } from '../../../../typer/vilkår';
-import DashedHr from '../../../Felleskomponenter/DashedHr/DashedHr';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
+import 'nav-frontend-tabell-style';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -92,8 +92,19 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     <Element children={vilkårFraConfig.tittel} />
                     <Undertekst children={vilkårFraConfig.lovreferanse} />
                 </div>
-                <DashedHr />
-                <ul className={'vilkårsvurdering__list'}>
+                <hr />
+
+                <table className={'tabell'}>
+                    <thead>
+                        <tr className={'tr-head'}>
+                            <th>Vurdering</th>
+                            <th>Periode</th>
+                            <th>Begrunnelse</th>
+                            <th />
+                            <th />
+                            <th />
+                        </tr>
+                    </thead>
                     {vilkårResultater.map((vilkårResultat: IFelt<IVilkårResultat>) => {
                         return (
                             <GeneriskVilkårVurdering
@@ -105,8 +116,8 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             />
                         );
                     })}
-                </ul>
-                <DashedHr />
+                </table>
+
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
                         onClick={() => {

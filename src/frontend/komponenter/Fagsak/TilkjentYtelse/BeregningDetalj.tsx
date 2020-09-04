@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { IBeregningDetalj, ytelsetype } from '../../../typer/beregning';
-import { formaterBeløp } from '../../../utils/formatter';
+import { formaterBeløp, formaterPersonIdent } from '../../../utils/formatter';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { PersonType } from '../../../typer/person';
 import classNames from 'classnames';
-import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 
 interface IProps {
     beregningDetaljer: IBeregningDetalj[];
@@ -60,7 +59,11 @@ const DetaljRad: React.FunctionComponent<IDetaljRadProps> = ({
         <div className="tilkjentytelse-detaljer-rad" role="row">
             <div className="tilkjentytelse-detaljer-kolonne" role="cell" />
             <div className={kolonneClassnames} role="cell">
-                {skalVisePersonalia && <PersonInformasjon person={beregningDetalj.person} />}
+                {skalVisePersonalia && (
+                    <Normaltekst>
+                        {formaterPersonIdent(beregningDetalj.person.personIdent)}
+                    </Normaltekst>
+                )}
             </div>
             <div className={kolonneClassnames} role="cell">
                 <Normaltekst>{ytelsetype[beregningDetalj.ytelseType].navn}</Normaltekst>

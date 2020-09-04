@@ -1,7 +1,6 @@
-import { erPeriodeGyldig, erResultatGyldig, ikkeValider } from '../utils/validators';
 import { INøkkelPar } from './common';
-import { IFelt, nyttFelt, Valideringsstatus } from './felt';
-import { IPeriode, nyPeriode } from './periode';
+import { IFelt } from './felt';
+import { IPeriode } from './periode';
 import { IPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse } from './vedtak';
 import { BehandlingResultat } from './behandling';
@@ -48,19 +47,6 @@ export enum VilkårType {
     LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
 }
 
-export const lagTomtFeltMedVilkår = (vilkårType: VilkårType): IVilkårResultat => ({
-    begrunnelse: {
-        feilmelding: '',
-        valideringsFunksjon: ikkeValider,
-        valideringsstatus: Valideringsstatus.OK,
-        verdi: '',
-    },
-    id: 1,
-    periode: nyttFelt(nyPeriode(), erPeriodeGyldig),
-    resultat: nyttFelt(Resultat.KANSKJE, erResultatGyldig),
-    vilkårType,
-});
-
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
@@ -74,6 +60,9 @@ export interface IVilkårResultat {
     periode: IFelt<IPeriode>;
     resultat: IFelt<Resultat>;
     vilkårType: VilkårType;
+    endretAv: string;
+    endretTidspunkt: string;
+    behandlingId: number;
 }
 
 // Vilkårsvurdering typer for api
@@ -94,6 +83,9 @@ export interface IRestVilkårResultat {
     periodeTom?: string;
     resultat: Resultat;
     vilkårType: VilkårType;
+    endretAv: string;
+    endretTidspunkt: string;
+    behandlingId: number;
 }
 
 export type Vilkårsbegrunnelser = {
@@ -135,7 +127,7 @@ export const vilkårConfig: IVilkårsconfig = {
         key: 'GIFT_PARTNERSKAP',
         lovreferanse: '§ 2, 4. LEDD',
         tittel: 'Ugift og ikke partnerskap',
-        spørsmål: () => 'Er barnet ugift og har ikke partnerskap',
+        spørsmål: () => 'Har barnet inngått ekteskap eller partnerskap?',
         parterDetteGjelderFor: [PersonType.BARN],
     },
     BOSATT_I_RIKET: {

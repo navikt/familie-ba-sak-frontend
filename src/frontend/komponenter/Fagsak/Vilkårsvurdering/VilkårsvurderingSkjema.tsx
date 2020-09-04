@@ -1,5 +1,4 @@
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-import React from 'react';
+import React, { useState } from 'react';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { Behandlingstype } from '../../../typer/behandling';
 import { IFelt } from '../../../typer/felt';
@@ -8,24 +7,38 @@ import {
     IVilkårConfig,
     IVilkårResultat,
     vilkårConfig,
+    Resultat,
 } from '../../../typer/vilkår';
 import { erBehandlingenInnvilget } from '../../../utils/fagsak';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
+import { Collapse } from 'react-collapse';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
 
 interface IVilkårsvurderingSkjema {
-    opprettelseFeilmelding: string;
     visFeilmeldinger: boolean;
     behandlingstype: Behandlingstype;
 }
 
 const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema> = ({
-    opprettelseFeilmelding,
     visFeilmeldinger,
     behandlingstype,
 }) => {
     const { vilkårsvurdering } = useVilkårsvurdering();
+    const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
+        vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
+            return {
+                ...personMapEkspandert,
+                [personResultat.personIdent]:
+                    personResultat.vilkårResultater.filter(
+                        (vilkårResultat: IFelt<IVilkårResultat>) =>
+                            vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                    ).length > 0,
+            };
+        }, {})
+    );
 
     const nesteMåned = () => {
         const iDag = new Date();
@@ -36,24 +49,48 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
         ].join('.');
     };
     return (
-        <div className={'vilkårsvurdering'}>
-            <SkjemaGruppe
-                className={'vilkårsvurdering__skjemagruppe'}
-                feil={
-                    visFeilmeldinger && opprettelseFeilmelding !== ''
-                        ? opprettelseFeilmelding
-                        : undefined
-                }
-            >
-                {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
-                    return (
-                        <div
-                            className={'vilkårsvurdering__skjemagruppe--person'}
-                            key={personResultat.personIdent}
-                            id={`${index}_${personResultat.person.fødselsdato}`}
-                        >
-                            <PersonInformasjon person={personResultat.person} tag={'h3'} />
+        <>
+            {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
+                return (
+                    <div
+                        className={'vilkårsvurdering__person'}
+                        key={personResultat.personIdent}
+                        id={`${index}_${personResultat.person.fødselsdato}`}
+                    >
+                        <div className={'vilkårsvurdering__person--personlinje'}>
+                            <PersonInformasjon
+                                person={personResultat.person}
+                                tag={'h3'}
+                                tekstType={'UNDERTITTEL'}
+                            />
+                            <IkonKnapp
+                                id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}
+                                onClick={() =>
+                                    settPersonErEkspandert({
+                                        [personResultat.personIdent]: !personErEkspandert[
+                                            personResultat.personIdent
+                                        ],
+                                    })
+                                }
+                                mini={true}
+                                label={
+                                    personErEkspandert[personResultat.personIdent]
+                                        ? 'Skjul vilkårsvurdering'
+                                        : 'Vis vilkårsvurdering'
+                                }
+                                ikon={
+                                    <Chevron
+                                        retning={
+                                            personErEkspandert[personResultat.personIdent]
+                                                ? 'opp'
+                                                : 'ned'
+                                        }
+                                    />
+                                }
+                            />
+                        </div>
 
+                        <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
                             {Object.values(vilkårConfig)
                                 .filter((vc: IVilkårConfig) =>
                                     vc.parterDetteGjelderFor.includes(personResultat.person.type)
@@ -80,24 +117,22 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                         return undefined;
                                     }
                                 })}
-                        </div>
-                    );
-                })}
+                        </Collapse>
+                    </div>
+                );
+            })}
 
-                <br />
+            <br />
 
-                {behandlingstype === Behandlingstype.REVURDERING &&
-                    !erBehandlingenInnvilget(vilkårsvurdering) && (
-                        <div className={'vilkår__skjemagruppe--opphørsdato'}>
-                            <Informasjonsbolk
-                                informasjon={[
-                                    { label: `Forventet opphørsmåned`, tekst: nesteMåned() },
-                                ]}
-                            />
-                        </div>
-                    )}
-            </SkjemaGruppe>
-        </div>
+            {behandlingstype === Behandlingstype.REVURDERING &&
+                !erBehandlingenInnvilget(vilkårsvurdering) && (
+                    <div className={'vilkår__skjemagruppe--opphørsdato'}>
+                        <Informasjonsbolk
+                            informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}
+                        />
+                    </div>
+                )}
+        </>
     );
 };
 

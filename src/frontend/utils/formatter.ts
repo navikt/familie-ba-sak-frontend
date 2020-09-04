@@ -13,7 +13,7 @@ export enum datoformat {
 }
 
 export enum datoformatNorsk {
-    DATO = 'DD.MM.ÅÅÅÅ',
+    DATO = 'ddmmåå',
 }
 
 export const formaterIsoDato = (

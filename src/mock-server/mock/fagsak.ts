@@ -87,6 +87,9 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 periodeFom: '2000-01-01',
                 periodeTom: undefined,
                 begrunnelse: '',
+                endretAv: 'VL',
+                endretTidspunkt: '2020-03-19T09:08:56.8',
+                behandlingId,
             },
         ],
     };
@@ -101,6 +104,9 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
+                endretAv: 'VL',
+                endretTidspunkt: '2020-03-19T09:08:56.8',
+                behandlingId,
             },
             {
                 id: 3,
@@ -109,6 +115,9 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
+                endretAv: 'VL',
+                endretTidspunkt: '2020-03-19T09:08:56.8',
+                behandlingId,
             },
             {
                 id: 4,
@@ -117,6 +126,9 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
+                endretAv: 'VL',
+                endretTidspunkt: '2020-03-19T09:08:56.8',
+                behandlingId,
             },
             {
                 id: 5,
@@ -125,6 +137,9 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
+                endretAv: 'VL',
+                endretTidspunkt: '2020-03-19T09:08:56.8',
+                behandlingId,
             },
             {
                 id: 6,
@@ -133,6 +148,9 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
+                endretAv: 'VL',
+                endretTidspunkt: '2020-03-19T09:08:56.8',
+                behandlingId,
             },
         ],
     };
