@@ -6,13 +6,14 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 
 interface IProps {
     id: string;
+    ikon: React.ReactChild;
+    label: string;
+    mini?: boolean;
     onClick: () => void;
     spinner?: boolean;
-    label: string;
-    ikon: React.ReactChild;
 }
 
-const IkonKnapp: React.FC<IProps> = ({ id, ikon, label, onClick, spinner }) => {
+const IkonKnapp: React.FC<IProps> = ({ id, ikon, mini, label, onClick, spinner }) => {
     const { erLesevisning } = useBehandling();
     return !erLesevisning() ? (
         <KnappBase
@@ -21,6 +22,7 @@ const IkonKnapp: React.FC<IProps> = ({ id, ikon, label, onClick, spinner }) => {
             id={id}
             onClick={onClick}
             type="flat"
+            mini={mini}
             kompakt={true}
         >
             {label}

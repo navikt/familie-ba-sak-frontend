@@ -205,6 +205,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                         : 'Endre'
                                     : 'Lukk'
                             }
+                            mini={true}
                             ikon={<Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
                         />
                     )}

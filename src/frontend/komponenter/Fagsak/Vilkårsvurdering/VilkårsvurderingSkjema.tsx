@@ -72,6 +72,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                         ],
                                     })
                                 }
+                                mini={true}
                                 label={
                                     personErEkspandert[personResultat.personIdent]
                                         ? 'Skjul vilkårsvurdering'
