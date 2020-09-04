@@ -291,7 +291,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 
                             <FastsettPeriode
                                 hjelpetekst={
-                                    'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet utifra dette.'
+                                    'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.'
                                 }
                                 redigerbartVilkår={redigerbartVilkår}
                                 validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}

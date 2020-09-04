@@ -118,20 +118,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     })}
                 </table>
 
-                {/*<ul className={'vilkårsvurdering__list'}>
-                    {vilkårResultater.map((vilkårResultat: IFelt<IVilkårResultat>) => {
-                        return (
-                            <GeneriskVilkårVurdering
-                                key={`${person.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
-                                vilkårFraConfig={vilkårFraConfig}
-                                person={person}
-                                vilkårResultat={vilkårResultat}
-                                visFeilmeldinger={visFeilmeldinger}
-                            />
-                        );
-                    })}
-                </ul>*/}
-
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
                         onClick={() => {
