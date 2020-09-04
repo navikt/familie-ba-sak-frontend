@@ -62,6 +62,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 person={personResultat.person}
                                 tag={'h3'}
                                 tekstType={'UNDERTITTEL'}
+                                width={'35rem'}
                             />
                             <IkonKnapp
                                 id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}
