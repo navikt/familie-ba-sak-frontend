@@ -6,17 +6,19 @@ import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
-    IOppgave,
-    OppgavetypeFilter,
-    PrioritetFilter,
-    oppgaveTypeFilter,
-    gjelderFilter,
     enhetFilter,
+    gjelderFilter,
+    IdentGruppe,
+    IOppgave,
+    IOppgaveIdent,
+    OppgavetypeFilter,
+    oppgaveTypeFilter,
+    PrioritetFilter,
 } from '../../typer/oppgave';
 import { RessursStatus } from '@navikt/familie-typer';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
-import { ariaSortMap, FeltSortOrder, sortLenkClassNameMap, IOppgaveFelt } from './oppgavefelter';
+import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import classNames from 'classnames';
 
 const intDatoTilNorskDato = (intDato: string) => {
@@ -120,7 +122,12 @@ const OppgaveList: React.FunctionComponent = () => {
                                             }
                                         </td>
                                         <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
-                                        <td>{oppg.fnr}</td>
+                                        <td>
+                                            {oppg.identer.find(
+                                                (ident: IOppgaveIdent) =>
+                                                    ident.gruppe == IdentGruppe.FOLKEREGISTERIDENT // TODO: Fiks: Sjekker mot value og ikke enumnavn?
+                                            )}
+                                        </td>
                                         <td
                                             className={classNames(
                                                 'tildelt-enhetsnr',

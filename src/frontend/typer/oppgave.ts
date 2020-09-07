@@ -25,8 +25,10 @@ export interface IHentOppgaveDto {
 
 export interface IOppgave {
     [key: string]: string;
+
     id: string;
-    fnr: string;
+    fnr: string; // TODO: Fjern
+    identer: IOppgaveIdent[];
     tildeltEnhetsnr: string;
     journalpostId: string;
     saksreferanse: string;
@@ -39,6 +41,19 @@ export interface IOppgave {
     prioritet: string;
     status: string;
     tilordnetRessurs: string;
+}
+
+export interface IOppgaveIdent {
+    ident: string;
+    gruppe: IdentGruppe;
+}
+
+export enum IdentGruppe {
+    AKTOERID = 'AktørId',
+    FOLKEREGISTERIDENT = 'Folkeregisterident',
+    NPID = 'NAV-Intern Ident',
+    ORGNR = 'Organisasjonsnummer',
+    SAMHANDLERNR = 'Samhandlernummer',
 }
 
 export enum EnhetFilter {
