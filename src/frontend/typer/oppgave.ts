@@ -24,10 +24,8 @@ export interface IHentOppgaveDto {
 }
 
 export interface IOppgave {
-    [key: string]: string;
-
+    [key: string]: any;
     id: string;
-    fnr: string; // TODO: Fjern
     identer: IOppgaveIdent[];
     tildeltEnhetsnr: string;
     journalpostId: string;
