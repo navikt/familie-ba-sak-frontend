@@ -120,7 +120,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                             }
                                         </td>
                                         <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
-                                        <td>{oppg.aktoerId}</td>
+                                        <td>{oppg.fnr}</td>
                                         <td
                                             className={classNames(
                                                 'tildelt-enhetsnr',
