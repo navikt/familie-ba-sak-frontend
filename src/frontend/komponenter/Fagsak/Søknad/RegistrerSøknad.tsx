@@ -17,6 +17,7 @@ import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import Barna from './Barna';
 import SøknadType from './SøknadType';
+import Annet from './Annet';
 import MålformVelger from './MålformVelger';
 
 interface IProps {
@@ -140,6 +141,8 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             <Barna søknad={søknad} />
 
             <MålformVelger settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+
+            <Annet settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             {feilmeldinger.length > 0 && visFeilmeldinger && (
                 <Feiloppsummering
