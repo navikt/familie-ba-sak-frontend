@@ -16,6 +16,7 @@ export interface IFagsak {
     saksnummer: string;
     status: FagsakStatus;
     søkerFødselsnummer: string;
+    underBehandling: boolean;
 }
 
 export const fagsakStatus: INøkkelPar = {

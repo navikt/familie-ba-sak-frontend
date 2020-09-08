@@ -36,7 +36,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                 informasjon={[
                     {
                         label: 'Behandlingsstatus',
-                        tekst: behandlingsstatuser[åpenBehandling.status].navn,
+                        tekst: behandlingsstatuser[åpenBehandling.status],
                     },
                     {
                         label: 'Resultat',
