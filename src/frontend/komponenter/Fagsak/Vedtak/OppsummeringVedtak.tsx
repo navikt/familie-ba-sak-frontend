@@ -87,10 +87,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
-    const visSubmitKnapp =
-        !erLesevisning() &&
-        (åpenBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
-            åpenBehandling?.status === BehandlingStatus.OPPRETTET);
+    const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const sendInn = () => {
         settSenderInn(true);

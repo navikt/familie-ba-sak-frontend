@@ -71,14 +71,10 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
 
 export enum BehandlingStatus {
     OPPRETTET = 'OPPRETTET',
-    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
-    SENDT_TIL_BESLUTTER = 'SENDT_TIL_BESLUTTER',
-    GODKJENT = 'GODKJENT',
-    UNDERKJENT_AV_BESLUTTER = 'UNDERKJENT_AV_BESLUTTER',
-    LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG = 'LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG',
-    SENDT_TIL_IVERKSETTING = 'SENDT_TIL_IVERKSETTING',
-    IVERKSATT = 'IVERKSATT',
-    FERDIGSTILT = 'FERDIGSTILT',
+    UTREDES = 'UTREDES',
+    FATTER_VEDTAK = 'FATTER_VEDTAK',
+    IVERKSETTER_VEDTAK = 'IVERKSETTER_VEDTAK',
+    AVSLUTTET = 'AVSLUTTET',
 }
 
 export enum Behandlingstype {
@@ -177,17 +173,14 @@ export const behandlingsresultater: INøkkelPar = {
     OPPHØRT: { id: 'OPPHØRT', navn: 'Opphørt' },
 };
 
-export const behandlingsstatuser: INøkkelPar = {
-    OPPRETTET: { id: 'OPPRETTET', navn: 'Opprettet' },
-    UNDER_BEHANDLING: { id: 'UNDER_BEHANDLING', navn: 'Under behandling' },
-    SENDT_TIL_BESLUTTER: { id: 'SENDT_TIL_BESLUTTER', navn: 'Sendt til beslutter' },
-    UNDERKJENT_AV_BESLUTTER: { id: 'UNDERKJENT_AV_BESLUTTER', navn: 'Underkjent av beslutter' },
-    GODKJENT: { id: 'GODKJENT', navn: 'Godkjent' },
-    LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG: {
-        id: 'LAGT_PA_KO_FOR_SENDING_MOT_OPPDRAG',
-        navn: 'Lagt på kø for sending mot oppdrag',
-    },
-    SENDT_TIL_IVERKSETTING: { id: 'SENDT_TIL_IVERKSETTING', navn: 'Sendt til iverksetting' },
-    IVERKSATT: { id: 'IVERKSATT', navn: 'Iverksatt' },
-    FERDIGSTILT: { id: 'FERDIGSTILT', navn: 'Ferdigstilt' },
+type Behandlingsstatuser = {
+    [key in BehandlingStatus]: string;
+};
+
+export const behandlingsstatuser: Behandlingsstatuser = {
+    OPPRETTET: 'Opprettet',
+    UTREDES: 'Utredes',
+    FATTER_VEDTAK: 'Fatter vedtak',
+    IVERKSETTER_VEDTAK: 'Iverksetter vedtak',
+    AVSLUTTET: 'Avsluttet',
 };
