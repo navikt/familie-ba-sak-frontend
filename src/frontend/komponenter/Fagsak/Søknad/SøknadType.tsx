@@ -32,14 +32,14 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                 verdi={behandlingUnderkategori[søknad.underkategori].navn}
             >
                 <Radio
-                    label={'Ordinær barnetrygd'}
-                    name={'ordinær-barnetrygd'}
+                    label={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR].navn}
+                    name={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR].id}
                     checked={søknad.underkategori === BehandlingUnderkategori.ORDINÆR}
                     onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
                 />
                 <Radio
-                    label={'Utvidet barnetrygd'}
-                    name={'utvidet-barnetrygd'}
+                    label={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET].navn}
+                    name={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET].id}
                     checked={søknad.underkategori === BehandlingUnderkategori.UTVIDET}
                     onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
                 />

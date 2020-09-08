@@ -13,6 +13,7 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
         underkategori: BehandlingUnderkategori.ORDINÆR,
         søkerMedOpplysninger: {
             ident: bruker?.personIdent ?? '',
+            målform: undefined,
         },
         barnaMedOpplysninger:
             bruker?.familierelasjoner
@@ -23,15 +24,13 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
                 .map(
                     (relasjon: IFamilieRelasjon): IBarnMedOpplysninger => ({
                         inkludertISøknaden: true,
-                        borMedSøker: true,
                         ident: relasjon.personIdent,
-                        oppholderSegINorge: true,
-                        harOppholdtSegINorgeSiste12Måneder: true,
-                        tilleggsopplysninger: '',
                         navn: relasjon.navn,
                         fødselsdato: relasjon.fødselsdato,
+                        manueltRegistrert: false,
                     })
                 ) ?? [],
+        endringAvOpplysningerBegrunnelse: '',
     };
 };
 
@@ -48,6 +47,13 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
 
     const validerSøknad = (validerSøknad: ISøknadDTO): boolean => {
         const søknadFeilmeldinger: FeiloppsummeringFeil[] = [];
+
+        if (validerSøknad.søkerMedOpplysninger.målform === undefined) {
+            søknadFeilmeldinger.push({
+                skjemaelementId: 'målform',
+                feilmelding: 'Målform er ikke valgt.',
+            });
+        }
 
         if (
             validerSøknad.barnaMedOpplysninger.filter(
