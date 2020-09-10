@@ -343,7 +343,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             filter === 'ALLE' ? undefined : filter;
 
         const finnOppgaveRequest: IFinnOppgaveRequest = {
-            tema: tema,
+            tema,
             behandlingstema: erstattAlleMedUndefined(behandlingstema),
             oppgavetype: erstattAlleMedUndefined(oppgavetype),
             enhet: erstattAlleMedUndefined(enhet)?.replace('E', ''),
