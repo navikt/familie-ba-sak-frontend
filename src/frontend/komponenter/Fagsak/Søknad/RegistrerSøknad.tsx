@@ -138,7 +138,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
 
             <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
-            <Barna søknad={søknad} />
+            <Barna settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             <MålformVelger settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 

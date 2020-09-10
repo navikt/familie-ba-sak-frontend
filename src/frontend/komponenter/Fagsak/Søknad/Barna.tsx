@@ -7,12 +7,14 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
 import { datoformat } from '../../../utils/formatter';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
+import LeggTilBarn from './LeggTilBarn';
 
 interface IProps {
+    settSøknadOgValider: (søknad: ISøknadDTO) => void;
     søknad: ISøknadDTO;
 }
 
-const Barna: React.FunctionComponent<IProps> = ({ søknad }) => {
+const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
     const sorterteBarnMedOpplysninger = søknad.barnaMedOpplysninger.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -23,7 +25,7 @@ const Barna: React.FunctionComponent<IProps> = ({ søknad }) => {
         }
     );
     return (
-        <PanelBase key={'barna'} className={'søknad__barn'}>
+        <PanelBase key={'barna'} className={'søknad__barna'}>
             <Undertittel children={'Opplysninger om barn under 18 år'} />
 
             <br />
@@ -35,6 +37,9 @@ const Barna: React.FunctionComponent<IProps> = ({ søknad }) => {
                         barn={barnMedOpplysninger}
                     />
                 ))}
+                {!erLesevisning() && (
+                    <LeggTilBarn settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+                )}
             </SkjemaGruppe>
         </PanelBase>
     );
