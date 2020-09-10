@@ -14,10 +14,21 @@
     }
 
     &__barn-rad {
+      display: flex;
+      align-items: center;
+
+      &__fjern-barn {
+        margin-left: 10px;
+      }
+
       > .lese-felt:first-of-type {
         font-weight: bold;
       }
     }
+
+    &__barn-rad:not(:first-child) {
+      margin-top: -1rem;
+      }
   }
 
   &__textarea {

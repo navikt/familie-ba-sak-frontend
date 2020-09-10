@@ -29,7 +29,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
             <Undertittel children={'Opplysninger om barn under 18 år'} />
 
             <br />
-            {!erLesevisning() && <Element children={'Velg barn det søkes for'} />}
+            {!erLesevisning() && <Element children={'Velg hvilke barn det er søkt om'} />}
             <SkjemaGruppe feilmeldingId={'barna'}>
                 {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                     <BarnMedOpplysninger

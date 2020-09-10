@@ -28,10 +28,10 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
     useEffect(() => {
         if (person.status === RessursStatus.SUKSESS) {
             const barn: IBarnMedOpplysninger = {
-                inkludertISøknaden: true,
                 ident: person.data.personIdent,
                 navn: person.data.navn,
                 fødselsdato: person.data.fødselsdato,
+                inkludertISøknaden: true,
                 manueltRegistrert: true,
             };
             søknad.barnaMedOpplysninger.push(barn);
