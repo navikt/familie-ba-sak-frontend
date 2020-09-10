@@ -16,6 +16,7 @@ import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import { Collapse } from 'react-collapse';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
+import { useBehandling } from '../../../context/BehandlingContext';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
@@ -26,6 +27,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     visFeilmeldinger,
     behandlingstype,
 }) => {
+    const { erLesevisning } = useBehandling();
     const { vilkårsvurdering } = useVilkårsvurdering();
     const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
         vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
@@ -65,6 +67,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 width={'35rem'}
                             />
                             <IkonKnapp
+                                erLesevisning={false}
                                 id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}
                                 onClick={() =>
                                     settPersonErEkspandert({

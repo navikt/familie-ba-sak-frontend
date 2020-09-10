@@ -194,21 +194,20 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     />
                 </td>
                 <td>
-                    {!erLesevisning() && (
-                        <IkonKnapp
-                            onClick={() => toggleForm(true)}
-                            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                            label={
-                                !ekspandertVilkår
-                                    ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
-                                        ? 'Vurder'
-                                        : 'Endre'
-                                    : 'Lukk'
-                            }
-                            mini={true}
-                            ikon={<Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
-                        />
-                    )}
+                    <IkonKnapp
+                        erLesevisning={erLesevisning()}
+                        onClick={() => toggleForm(true)}
+                        id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                        label={
+                            !ekspandertVilkår
+                                ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                    ? 'Vurder'
+                                    : 'Endre'
+                                : 'Lukk'
+                        }
+                        mini={true}
+                        ikon={<Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
+                    />
                 </td>
                 <td>
                     {vilkårResultat.verdi.endretAv === 'VL' ? (
@@ -219,13 +218,14 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                 </td>
                 <td>
                     <i>
-                        {åpenBehandling.status === RessursStatus.SUKSESS
+                        {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        vilkårResultat.verdi.erVurdert
                             ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
                                 ? 'Vurdert i denne behandlingen'
                                 : `Vurdert ${moment(vilkårResultat.verdi.endretTidspunkt).format(
                                       datoformat.DATO_FORKORTTET
                                   )}`
-                            : 'Ikke satt'}
+                            : 'Ikke vurdert'}
                     </i>
                 </td>
             </tr>
