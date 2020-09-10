@@ -1,7 +1,7 @@
 import moment from 'moment';
 import PanelBase from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertittel } from 'nav-frontend-typografi';
+import { Element, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
@@ -26,7 +26,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
     );
     return (
         <PanelBase key={'barna'} className={'søknad__barna'}>
-            <Undertittel children={'Opplysninger om barn under 18 år'} />
+            <Systemtittel children={'Opplysninger om barn under 18 år'} />
 
             <br />
             {!erLesevisning() && <Element children={'Velg hvilke barn det er søkt om'} />}
