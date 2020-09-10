@@ -123,10 +123,13 @@ const OppgaveList: React.FunctionComponent = () => {
                                         </td>
                                         <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
                                         <td>
-                                            {oppg.identer.find(
-                                                (ident: IOppgaveIdent) =>
-                                                    ident.gruppe === IdentGruppe.FOLKEREGISTERIDENT
-                                            )}
+                                            {
+                                                oppg.identer.find(
+                                                    (ident: IOppgaveIdent) =>
+                                                        ident.gruppe ===
+                                                        IdentGruppe.FOLKEREGISTERIDENT
+                                                )?.ident
+                                            }
                                         </td>
                                         <td
                                             className={classNames(

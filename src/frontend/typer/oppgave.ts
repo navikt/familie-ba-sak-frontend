@@ -49,11 +49,11 @@ export interface IOppgaveIdent {
 }
 
 export enum IdentGruppe {
-    AKTOERID = 'AktørId',
-    FOLKEREGISTERIDENT = 'Folkeregisterident',
-    NPID = 'NAV-Intern Ident',
-    ORGNR = 'Organisasjonsnummer',
-    SAMHANDLERNR = 'Samhandlernummer',
+    AKTOERID = 'AKTOERID',
+    FOLKEREGISTERIDENT = 'FOLKEREGISTERIDENT',
+    NPID = 'NPID',
+    ORGNR = 'ORGNR',
+    SAMHANDLERNR = 'SAMHANDLERNR',
 }
 
 export enum EnhetFilter {
