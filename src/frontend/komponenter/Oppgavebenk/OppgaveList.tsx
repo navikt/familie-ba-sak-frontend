@@ -125,7 +125,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                         <td>
                                             {oppg.identer.find(
                                                 (ident: IOppgaveIdent) =>
-                                                    ident.gruppe == IdentGruppe.FOLKEREGISTERIDENT // TODO: Fiks: Sjekker mot value og ikke enumnavn?
+                                                    ident.gruppe === IdentGruppe.FOLKEREGISTERIDENT
                                             )}
                                         </td>
                                         <td

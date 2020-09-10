@@ -2,6 +2,7 @@ import { INøkkelPar } from './common';
 import { ISaksbehandler } from '@navikt/familie-typer';
 
 export interface IFinnOppgaveRequest {
+    tema: string;
     behandlingstema?: string;
     oppgavetype?: string;
     enhet?: string;
@@ -24,6 +25,7 @@ export interface IHentOppgaveDto {
 }
 
 export interface IOppgave {
+    // eslint-disable-next-line
     [key: string]: any;
     id: string;
     identer: IOppgaveIdent[];
@@ -97,6 +99,8 @@ export enum GjelderFilter {
     ab0096 = 'ab0096',
     ab0058 = 'ab0058',
 }
+
+export const tema = 'BAR';
 
 export const gjelderFilter: INøkkelPar = {
     ALLE: { id: 'ALLE', navn: 'Alle' },
