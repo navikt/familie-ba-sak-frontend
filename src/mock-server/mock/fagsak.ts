@@ -38,6 +38,7 @@ export const mockFagsak3 = (id: number, søkerFødselsnummer: string): Ressurs<I
         opprettetTidspunkt: '2020-03-19T09:08:56.8',
         saksnummer: '1234',
         status: FagsakStatus.LØPENDE,
+        underBehandling: false,
         behandlinger: [mockBehandling(1, true, 'VILKÅRSVURDERING')],
     };
 
@@ -166,7 +167,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         opprettetTidspunkt: '2020-03-19T09:08:56.8',
         kategori: BehandlingKategori.NASJONAL,
         underkategori: BehandlingUnderkategori.ORDINÆR,
-        status: BehandlingStatus.SENDT_TIL_BESLUTTER,
+        status: BehandlingStatus.FATTER_VEDTAK,
         personResultater: [søkerPersonResultat, barnPersonResultat],
         vedtakForBehandling: [],
         endretAv: 'VL',

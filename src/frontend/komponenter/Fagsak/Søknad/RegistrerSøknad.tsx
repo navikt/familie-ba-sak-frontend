@@ -17,6 +17,8 @@ import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import Barna from './Barna';
 import SøknadType from './SøknadType';
+import Annet from './Annet';
+import MålformVelger from './MålformVelger';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -28,7 +30,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const { erLesevisning } = useBehandling();
     const history = useHistory();
 
-    const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();
+    const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig } = useSøknad();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
     const [frontendllFeilmelding, settFrontendFeilmelding] = React.useState('');
@@ -40,14 +42,14 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
-        if (fagsak.status === RessursStatus.SUKSESS && feilmeldinger.length === 0) {
+        if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig(søknad)) {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
             settSenderInn(true);
 
             axiosRequest<IFagsak, IRestRegistrerSøknad>({
                 method: 'POST',
                 data: { søknad, bekreftEndringerViaFrontend },
-                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag/v3`,
+                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
             }).then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
@@ -83,7 +85,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                     method: 'GET',
                     url: `/familie-ba-sak/api/behandlinger/${
                         hentAktivBehandlingPåFagsak(fagsak.data)?.behandlingId
-                    }/søknad/v3`,
+                    }/søknad`,
                 }).then((response: Ressurs<ISøknadDTO>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settSøknadErLastetFraBackend(true);
@@ -137,6 +139,10 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             <Barna søknad={søknad} />
+
+            <MålformVelger settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+
+            <Annet settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             {feilmeldinger.length > 0 && visFeilmeldinger && (
                 <Feiloppsummering

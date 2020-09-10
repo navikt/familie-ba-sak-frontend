@@ -47,8 +47,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
                     const skalViseOpprettBehandlingKnapp =
                         aktivBehandling === undefined ||
-                        (aktivBehandling &&
-                            aktivBehandling.status === BehandlingStatus.FERDIGSTILT);
+                        (aktivBehandling && aktivBehandling.status === BehandlingStatus.AVSLUTTET);
                     return (
                         <BehandlingProvider>
                             <Visittkort
