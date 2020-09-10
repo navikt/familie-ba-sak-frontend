@@ -350,6 +350,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 </div>
 
                                 <IkonKnapp
+                                    erLesevisning={erLesevisning()}
                                     onClick={() => {
                                         const promise = deleteVilkår(
                                             person.personIdent,
