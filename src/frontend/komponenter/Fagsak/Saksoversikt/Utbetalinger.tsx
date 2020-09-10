@@ -2,6 +2,7 @@ import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { IPersonBeregning } from '../../../typer/beregning';
 import { formaterPersonIdent } from '../../../utils/formatter';
+import { periodeToString } from '../../../typer/periode';
 
 interface IUtbetalingerProps {
     personbergninger: IPersonBeregning[];
@@ -34,7 +35,12 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ personbergninger }) => {
                                         )}`}
                                     />
                                     <td children={`${personBeregning.beløp}`} />
-                                    <td children={`${personBeregning.stønadFom}`} />
+                                    <td
+                                        children={`${periodeToString({
+                                            fom: personBeregning.stønadFom,
+                                            tom: personBeregning.stønadTom,
+                                        })}`}
+                                    />
                                 </tr>
                             );
                         })}
