@@ -2,7 +2,12 @@ import moment from 'moment';
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
-import { behandlingsresultater, behandlingstyper, IBehandling } from '../../../typer/behandling';
+import {
+    behandlingsresultater,
+    behandlingstyper,
+    IBehandling,
+    behandlingsstatuser,
+} from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
@@ -43,7 +48,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                 {behandlingstyper[behandling.type].navn}
                                             </Lenke>
                                         </td>
-                                        <td>{behandling.status}</td>
+                                        <td>{behandlingsstatuser[behandling.status]}</td>
                                         <td
                                             children={`${
                                                 behandling

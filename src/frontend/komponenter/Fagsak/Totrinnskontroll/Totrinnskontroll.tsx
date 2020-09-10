@@ -51,7 +51,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
 
     const skalViseSkjema =
         BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        åpenBehandling?.status === BehandlingStatus.SENDT_TIL_BESLUTTER &&
+        åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK &&
         history.location.pathname.includes('vedtak');
 
     const kanBeslutte =

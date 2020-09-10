@@ -105,8 +105,8 @@ app.post('/familie-ba-sak/api/fagsaker/:id/iverksett-vedtak', (req: Request, res
     if (fagsak !== null) {
         const nyStatus =
             req.body.beslutning === TotrinnskontrollBeslutning.UNDERKJENT
-                ? BehandlingStatus.UNDERKJENT_AV_BESLUTTER
-                : BehandlingStatus.GODKJENT;
+                ? BehandlingStatus.UTREDES
+                : BehandlingStatus.IVERKSETTER_VEDTAK;
 
         byggOkFagsak(res, oppdaterBehandlingsstatusPaaFagsak(fagsak, nyStatus));
     } else {
@@ -121,7 +121,7 @@ app.post('/familie-ba-sak/api/fagsaker/:id/send-til-beslutter', (req: Request, r
     if (fagsak !== null) {
         byggOkFagsak(
             res,
-            oppdaterBehandlingsstatusPaaFagsak(fagsak, BehandlingStatus.SENDT_TIL_BESLUTTER)
+            oppdaterBehandlingsstatusPaaFagsak(fagsak, BehandlingStatus.FATTER_VEDTAK)
         );
     } else {
         bygg404(res);
