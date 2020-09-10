@@ -78,7 +78,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
             {aktivVedtak?.personBeregninger &&
                 aktivVedtak?.personBeregninger.length > 0 &&
                 gjeldendeBehandling?.status === BehandlingStatus.AVSLUTTET && (
-                    <div>
+                    <>
                         <Utbetalinger personbergninger={aktivVedtak.personBeregninger} />
                         <div className={'saksoversikt__opphør'}>
                             <Undertittel children={'Opphør utbetalinger for fagsak'} />
@@ -109,7 +109,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 children={'Opphør utbetaling'}
                             />
                         </div>
-                    </div>
+                    </>
                 )}
             <Behandlinger fagsak={fagsak} />
         </div>
