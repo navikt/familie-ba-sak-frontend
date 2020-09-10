@@ -23,7 +23,7 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
                 )
                 .map(
                     (relasjon: IFamilieRelasjon): IBarnMedOpplysninger => ({
-                        inkludertISøknaden: true,
+                        inkludertISøknaden: false,
                         ident: relasjon.personIdent,
                         navn: relasjon.navn,
                         fødselsdato: relasjon.fødselsdato,
