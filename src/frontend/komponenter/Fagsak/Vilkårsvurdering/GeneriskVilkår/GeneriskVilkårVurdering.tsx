@@ -225,7 +225,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 : `Vurdert ${moment(vilkårResultat.verdi.endretTidspunkt).format(
                                       datoformat.DATO_FORKORTTET
                                   )}`
-                            : 'Ikke vurdert'}
+                            : ''}
                     </i>
                 </td>
             </tr>
