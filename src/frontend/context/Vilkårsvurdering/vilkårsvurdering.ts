@@ -81,6 +81,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     ),
                                     vilkårType: vilkårResultat.vilkårType,
                                     endretAv: vilkårResultat.endretAv,
+                                    erVurdert: vilkårResultat.erVurdert ?? false,
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                 },

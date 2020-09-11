@@ -65,6 +65,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 width={'35rem'}
                             />
                             <IkonKnapp
+                                erLesevisning={false}
                                 id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}
                                 onClick={() =>
                                     settPersonErEkspandert({

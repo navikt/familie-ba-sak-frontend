@@ -56,13 +56,14 @@ export interface IPersonResultat {
 
 export interface IVilkårResultat {
     begrunnelse: IFelt<string>;
+    behandlingId: number;
+    endretAv: string;
+    endretTidspunkt: string;
+    erVurdert: boolean;
     id: number;
     periode: IFelt<IPeriode>;
     resultat: IFelt<Resultat>;
     vilkårType: VilkårType;
-    endretAv: string;
-    endretTidspunkt: string;
-    behandlingId: number;
 }
 
 // Vilkårsvurdering typer for api
@@ -78,14 +79,15 @@ export interface IRestNyttVilkår {
 
 export interface IRestVilkårResultat {
     begrunnelse: string;
+    behandlingId: number;
+    endretAv: string;
+    endretTidspunkt: string;
+    erVurdert?: boolean;
     id: number;
     periodeFom?: string;
     periodeTom?: string;
     resultat: Resultat;
     vilkårType: VilkårType;
-    endretAv: string;
-    endretTidspunkt: string;
-    behandlingId: number;
 }
 
 export type Vilkårsbegrunnelser = {
