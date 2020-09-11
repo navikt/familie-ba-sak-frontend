@@ -23,6 +23,7 @@ export interface IPersonBeregning {
     ytelsePerioder: IYtelsePeriode[];
     beløp: number;
     stønadFom: string;
+    stønadTom: string;
 }
 
 interface IYtelsePeriode {
