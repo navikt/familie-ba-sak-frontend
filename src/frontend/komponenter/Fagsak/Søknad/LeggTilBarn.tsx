@@ -53,7 +53,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
             settPerson({ status: RessursStatus.HENTER });
             axiosRequest<IPerson, void>({
                 method: 'GET',
-                url: '/familie-ba-sak/api/person',
+                url: '/familie-ba-sak/api/person/enkel',
                 headers: {
                     personIdent: ident.verdi,
                 },
