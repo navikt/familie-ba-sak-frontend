@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Undertittel } from 'nav-frontend-typografi';
+import { Systemtittel } from 'nav-frontend-typografi';
 import PanelBase from 'nav-frontend-paneler';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISøknadDTO } from '../../../typer/søknad';
@@ -23,7 +23,7 @@ const Annet: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
 
     return (
         <PanelBase key={'annet'}>
-            <Undertittel children={'Annet'} />
+            <Systemtittel children={'Annet'} />
             <br />
             <FamilieTextarea
                 className={'søknad__textarea'}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Undertittel } from 'nav-frontend-typografi';
+import { Systemtittel } from 'nav-frontend-typografi';
 import PanelBase from 'nav-frontend-paneler';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISøknadDTO, Målform, målform } from '../../../typer/søknad';
@@ -27,7 +27,7 @@ const MålformVelger: React.FunctionComponent<IProps> = ({ settSøknadOgValider,
 
     return (
         <PanelBase key={'målform'}>
-            <Undertittel children={'Målform'} />
+            <Systemtittel children={'Målform'} />
             <br />
             <FamilieRadioGruppe
                 erLesevisning={lesevisning}
