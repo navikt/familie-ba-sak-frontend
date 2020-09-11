@@ -1,7 +1,6 @@
 import React from 'react';
 import { randomUUID } from '../../../utils/commons';
 import KnappBase from 'nav-frontend-knapper';
-import { useBehandling } from '../../../context/BehandlingContext';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
 interface IProps {
@@ -11,11 +10,19 @@ interface IProps {
     mini?: boolean;
     onClick: () => void;
     spinner?: boolean;
+    erLesevisning: boolean;
 }
 
-const IkonKnapp: React.FC<IProps> = ({ id, ikon, mini, label, onClick, spinner }) => {
-    const { erLesevisning } = useBehandling();
-    return !erLesevisning() ? (
+const IkonKnapp: React.FC<IProps> = ({
+    erLesevisning,
+    id,
+    ikon,
+    label,
+    mini,
+    onClick,
+    spinner,
+}) => {
+    return !erLesevisning ? (
         <KnappBase
             aria-label={`utfør_${randomUUID()}`}
             className={'ikon-knapp'}

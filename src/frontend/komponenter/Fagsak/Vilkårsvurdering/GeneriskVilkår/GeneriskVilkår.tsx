@@ -19,6 +19,7 @@ import {
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
 import 'nav-frontend-tabell-style';
+import { useBehandling } from '../../../../context/BehandlingContext';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -45,6 +46,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     vilkårResultater,
     visFeilmeldinger,
 }) => {
+    const { erLesevisning } = useBehandling();
     const {
         settVilkårsvurderingFraApi,
         settVilkårSubmit,
@@ -120,6 +122,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
+                        erLesevisning={erLesevisning()}
                         onClick={() => {
                             const promise = postVilkår(
                                 person.personIdent,
