@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
 import Pluss from '../../../ikoner/Pluss';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
@@ -25,24 +25,6 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
 
     const [person, settPerson] = React.useState<Ressurs<IPerson>>(byggTomRessurs());
 
-    useEffect(() => {
-        if (person.status === RessursStatus.SUKSESS) {
-            const barn: IBarnMedOpplysninger = {
-                ident: person.data.personIdent,
-                navn: person.data.navn,
-                fødselsdato: person.data.fødselsdato,
-                inkludertISøknaden: true,
-                manueltRegistrert: true,
-            };
-            søknad.barnaMedOpplysninger.push(barn);
-            settSøknadOgValider(søknad);
-
-            settVisModal(false);
-        } else if (person.status === RessursStatus.FEILET) {
-            settFeilmelding(person.frontendFeilmelding);
-        }
-    }, [person.status]);
-
     const leggTilOnClick = () => {
         const ident = validerFelt(inputValue, lagInitiellFelt('', identValidator));
 
@@ -57,16 +39,24 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                 headers: {
                     personIdent: ident.verdi,
                 },
-            })
-                .then((hentetPerson: Ressurs<IPerson>) => {
-                    settPerson(hentetPerson);
-                })
-                .catch(() => {
-                    settPerson({
-                        status: RessursStatus.FEILET,
-                        frontendFeilmelding: 'Ukjent feil ved henting av person',
-                    });
-                });
+            }).then((hentetPerson: Ressurs<IPerson>) => {
+                settPerson(hentetPerson);
+                if (hentetPerson.status === RessursStatus.SUKSESS) {
+                    const barn: IBarnMedOpplysninger = {
+                        ident: hentetPerson.data.personIdent,
+                        navn: hentetPerson.data.navn,
+                        fødselsdato: hentetPerson.data.fødselsdato,
+                        inkludertISøknaden: true,
+                        manueltRegistrert: true,
+                    };
+                    søknad.barnaMedOpplysninger.push(barn);
+                    settSøknadOgValider(søknad);
+
+                    settVisModal(false);
+                } else if (hentetPerson.status === RessursStatus.FEILET) {
+                    settFeilmelding(hentetPerson.frontendFeilmelding);
+                }
+            });
         } else {
             ident.valideringsstatus === Valideringsstatus.FEIL &&
                 settFeilmelding(ident.feilmelding);
