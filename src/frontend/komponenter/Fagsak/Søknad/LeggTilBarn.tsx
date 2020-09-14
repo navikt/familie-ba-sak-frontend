@@ -25,6 +25,12 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
 
     const [person, settPerson] = React.useState<Ressurs<IPerson>>(byggTomRessurs());
 
+    const onAvbryt = () => {
+        settVisModal(false);
+        settFeilmelding(undefined);
+        settInputValue('');
+    };
+
     const leggTilOnClick = () => {
         const ident = validerFelt(inputValue, lagInitiellFelt('', identValidator));
 
@@ -80,7 +86,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
                     tittel: 'Legg til barn',
                     visModal: visModal,
                     lukkKnapp: true,
-                    onClose: () => settVisModal(false),
+                    onClose: onAvbryt,
                     actions: [
                         <Knapp
                             key={'Legg til'}
@@ -89,14 +95,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
                             children={'Legg til'}
                             spinner={person.status === RessursStatus.HENTER}
                         />,
-                        <Flatknapp
-                            key={'Avbryt'}
-                            mini
-                            onClick={() => {
-                                settVisModal(false);
-                            }}
-                            children={'Avbryt'}
-                        />,
+                        <Flatknapp key={'Avbryt'} mini onClick={onAvbryt} children={'Avbryt'} />,
                     ],
                 }}
             >
