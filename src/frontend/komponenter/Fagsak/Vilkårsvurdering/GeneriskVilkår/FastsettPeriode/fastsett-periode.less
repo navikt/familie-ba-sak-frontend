@@ -1,6 +1,14 @@
 .fastsett-periode {
     margin: 1rem 0;
 
+    .legend {
+        display: flex;
+
+        :first-child {
+            margin-right: 1rem;
+        }
+    }
+
     &__flex {
         width: 23rem;
         display: flex;
@@ -8,6 +16,14 @@
 
         & .lese-element {
             width: 50%;
+        }
+
+        .skjemaelement__label {
+            color: @navMorkGra;
+            font-size: 16px;
+            font-weight: normal;
+            height: 22px;
+            line-height: 22px;
         }
     }
 }

@@ -16,6 +16,16 @@ export enum PersonType {
     BARN = 'BARN',
 }
 
+export type PersonTypeMap = {
+    [key in PersonType]: string;
+};
+
+export const personTypeMap: PersonTypeMap = {
+    SØKER: 'Søker',
+    ANNENPART: 'Annen part',
+    BARN: 'Barn',
+};
+
 export enum FamilieRelasjonRolle {
     BARN = 'BARN',
     FAR = 'FAR',

@@ -34,7 +34,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     }, [fagsak.status]);
 
     const behandlingshistorikk = fagsak.behandlinger.filter(
-        (behandling: IBehandling) => behandling.status === BehandlingStatus.FERDIGSTILT
+        (behandling: IBehandling) => behandling.status === BehandlingStatus.AVSLUTTET
     );
 
     let gjeldendeBehandling =
@@ -60,21 +60,25 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         <div className={'saksoversikt'}>
             <Systemtittel className={'tittel'} children={'Saksoversikt'} />
 
-            <Element children={'Løpende vedtak'} />
-            <Informasjonsbolk
-                informasjon={[
-                    {
-                        label: `Vedtaksdato`,
-                        tekst: formaterIverksattDato(aktivVedtak?.vedtaksdato),
-                    },
-                    { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
-                ]}
-            />
+            {fagsak.status === 'LØPENDE' && (
+                <>
+                    <Element children={'Løpende vedtak'} />
+                    <Informasjonsbolk
+                        informasjon={[
+                            {
+                                label: `Vedtaksdato`,
+                                tekst: formaterIverksattDato(aktivVedtak?.vedtaksdato),
+                            },
+                            { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
+                        ]}
+                    />
+                </>
+            )}
 
             {aktivVedtak?.personBeregninger &&
                 aktivVedtak?.personBeregninger.length > 0 &&
-                gjeldendeBehandling?.status === BehandlingStatus.FERDIGSTILT && (
-                    <div>
+                gjeldendeBehandling?.status === BehandlingStatus.AVSLUTTET && (
+                    <>
                         <Utbetalinger personbergninger={aktivVedtak.personBeregninger} />
                         <div className={'saksoversikt__opphør'}>
                             <Undertittel children={'Opphør utbetalinger for fagsak'} />
@@ -105,7 +109,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 children={'Opphør utbetaling'}
                             />
                         </div>
-                    </div>
+                    </>
                 )}
             <Behandlinger fagsak={fagsak} />
         </div>

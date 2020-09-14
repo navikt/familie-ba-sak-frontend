@@ -1,8 +1,9 @@
-import { erPeriodeGyldig, erResultatGyldig, ikkeValider } from '../utils/validators';
 import { INøkkelPar } from './common';
-import { IFelt, nyttFelt, Valideringsstatus } from './felt';
-import { IPeriode, nyPeriode } from './periode';
+import { IFelt } from './felt';
+import { IPeriode } from './periode';
 import { IPerson, PersonType } from './person';
+import { IRestVedtakBegrunnelse } from './vedtak';
+import { BehandlingResultat } from './behandling';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -46,19 +47,6 @@ export enum VilkårType {
     LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
 }
 
-export const lagTomtFeltMedVilkår = (vilkårType: VilkårType): IVilkårResultat => ({
-    begrunnelse: {
-        feilmelding: '',
-        valideringsFunksjon: ikkeValider,
-        valideringsstatus: Valideringsstatus.OK,
-        verdi: '',
-    },
-    id: 1,
-    periode: nyttFelt(nyPeriode(), erPeriodeGyldig),
-    resultat: nyttFelt(Resultat.KANSKJE, erResultatGyldig),
-    vilkårType,
-});
-
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
@@ -68,6 +56,10 @@ export interface IPersonResultat {
 
 export interface IVilkårResultat {
     begrunnelse: IFelt<string>;
+    behandlingId: number;
+    endretAv: string;
+    endretTidspunkt: string;
+    erVurdert: boolean;
     id: number;
     periode: IFelt<IPeriode>;
     resultat: IFelt<Resultat>;
@@ -87,12 +79,20 @@ export interface IRestNyttVilkår {
 
 export interface IRestVilkårResultat {
     begrunnelse: string;
+    behandlingId: number;
+    endretAv: string;
+    endretTidspunkt: string;
+    erVurdert?: boolean;
     id: number;
     periodeFom?: string;
     periodeTom?: string;
     resultat: Resultat;
     vilkårType: VilkårType;
 }
+
+export type Vilkårsbegrunnelser = {
+    [key in BehandlingResultat]: IRestVedtakBegrunnelse[];
+};
 
 type IVilkårsconfig = {
     [key in VilkårType]: IVilkårConfig;
@@ -129,7 +129,7 @@ export const vilkårConfig: IVilkårsconfig = {
         key: 'GIFT_PARTNERSKAP',
         lovreferanse: '§ 2, 4. LEDD',
         tittel: 'Ugift og ikke partnerskap',
-        spørsmål: () => 'Er barnet ugift og har ikke partnerskap',
+        spørsmål: () => 'Har barnet inngått ekteskap eller partnerskap?',
         parterDetteGjelderFor: [PersonType.BARN],
     },
     BOSATT_I_RIKET: {

@@ -28,10 +28,7 @@ app.get('/*', (_: Request, res: Response) => {
     res.end();
 });
 
-const server = app.listen(port, 'localhost', function onStart(err: Error) {
-    if (err) {
-        console.log(err);
-    }
+const server = app.listen(port, 'localhost', () => {
     console.info('=== mock-server startet på http://localhost:%s/', port);
 });
 

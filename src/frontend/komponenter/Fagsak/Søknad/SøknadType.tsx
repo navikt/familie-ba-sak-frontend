@@ -1,13 +1,11 @@
-import classNames from 'classnames';
-import PanelBase from 'nav-frontend-paneler';
-import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+import { Systemtittel } from 'nav-frontend-typografi';
+import PanelBase from 'nav-frontend-paneler';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandling';
-import { IPar } from '../../../typer/common';
-import { ISøknadDTO, søknadstyper, TypeSøker } from '../../../typer/søknad';
-import Sakstype from '../../Felleskomponenter/Sakstype/Sakstype';
-import { FamilieSelect } from '@navikt/familie-form-elements';
+import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../typer/behandling';
+import { ISøknadDTO } from '../../../typer/søknad';
+import { Radio } from 'nav-frontend-skjema';
+import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
@@ -17,71 +15,35 @@ interface IProps {
 const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
+
+    const radioOnChange = (underKategori: BehandlingUnderkategori) => {
+        settSøknadOgValider({
+            ...søknad,
+            underkategori: underKategori,
+        });
+    };
+
     return (
-        <PanelBase className={classNames('søknad__panel', 'panel--gra')}>
-            <Undertittel children={'Hva har bruker søkt om?'} />
+        <PanelBase>
+            <Systemtittel children={'Hva har bruker søkt om?'} />
             <br />
-            <Sakstype
-                kategori={søknad.kategori}
-                kategoriOnChange={(behandlingKategori: BehandlingKategori): void =>
-                    settSøknadOgValider({
-                        ...søknad,
-                        kategori: behandlingKategori,
-                    })
-                }
-                underkategori={søknad.underkategori}
-                underkategoriOnChange={(behandlingUnderkategori: BehandlingUnderkategori): void =>
-                    settSøknadOgValider({
-                        ...søknad,
-                        underkategori: behandlingUnderkategori,
-                    })
-                }
+            <FamilieRadioGruppe
                 erLesevisning={lesevisning}
-            />
-
-            <br />
-
-            <FamilieSelect
-                name="type søker"
-                label="Type søker"
-                bredde={'l'}
-                value={søknad.typeSøker}
-                erLesevisning={lesevisning}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    if ((event.target.value as TypeSøker) === søknad.typeSøker) {
-                        settSøknadOgValider({
-                            ...søknad,
-                            typeSøker: TypeSøker.ORDINÆR,
-                        });
-                    } else {
-                        settSøknadOgValider({
-                            ...søknad,
-                            typeSøker: event.target.value as TypeSøker,
-                        });
-                    }
-                }}
+                verdi={behandlingUnderkategori[søknad.underkategori].navn}
             >
-                <option
-                    aria-selected={TypeSøker.ORDINÆR === søknad.typeSøker}
-                    key={TypeSøker.ORDINÆR}
-                    value={TypeSøker.ORDINÆR}
-                >
-                    Velg type søker
-                </option>
-                {Object.values(søknadstyper)
-                    .filter((type: IPar) => type.id !== TypeSøker.ORDINÆR)
-                    .map((type: IPar) => {
-                        return (
-                            <option
-                                aria-selected={type.id === søknad.typeSøker}
-                                key={type.id}
-                                value={type.id}
-                            >
-                                {type.navn}
-                            </option>
-                        );
-                    })}
-            </FamilieSelect>
+                <Radio
+                    label={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR].navn}
+                    name={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR].id}
+                    checked={søknad.underkategori === BehandlingUnderkategori.ORDINÆR}
+                    onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
+                />
+                <Radio
+                    label={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET].navn}
+                    name={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET].id}
+                    checked={søknad.underkategori === BehandlingUnderkategori.UTVIDET}
+                    onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
+                />
+            </FamilieRadioGruppe>
         </PanelBase>
     );
 };

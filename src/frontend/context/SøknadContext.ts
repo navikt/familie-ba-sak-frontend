@@ -2,24 +2,18 @@ import createUseContext from 'constate';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 
-import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandling';
+import { BehandlingUnderkategori } from '../typer/behandling';
 import { FamilieRelasjonRolle, IFamilieRelasjon, IPerson } from '../typer/person';
 import { RessursStatus } from '@navikt/familie-typer';
-import { IBarnMedOpplysninger, ISøknadDTO, TypeSøker } from '../typer/søknad';
+import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
 import { useFagsakRessurser } from './FagsakContext';
 
 const initalState = (bruker?: IPerson): ISøknadDTO => {
     return {
-        kategori: BehandlingKategori.NASJONAL,
         underkategori: BehandlingUnderkategori.ORDINÆR,
-        typeSøker: TypeSøker.ORDINÆR,
         søkerMedOpplysninger: {
             ident: bruker?.personIdent ?? '',
-            oppholderSegINorge: true,
-            harOppholdtSegINorgeSiste12Måneder: true,
-            komTilNorge: '',
-            skalOppholdeSegINorgeNeste12Måneder: true,
-            tilleggsopplysninger: '',
+            målform: undefined,
         },
         barnaMedOpplysninger:
             bruker?.familierelasjoner
@@ -29,17 +23,14 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
                 )
                 .map(
                     (relasjon: IFamilieRelasjon): IBarnMedOpplysninger => ({
-                        inkludertISøknaden: true,
-                        borMedSøker: true,
+                        inkludertISøknaden: false,
                         ident: relasjon.personIdent,
-                        oppholderSegINorge: true,
-                        harOppholdtSegINorgeSiste12Måneder: true,
-                        tilleggsopplysninger: '',
                         navn: relasjon.navn,
                         fødselsdato: relasjon.fødselsdato,
+                        manueltRegistrert: false,
                     })
                 ) ?? [],
-        annenPartIdent: '',
+        endringAvOpplysningerBegrunnelse: '',
     };
 };
 
@@ -57,14 +48,10 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
     const validerSøknad = (validerSøknad: ISøknadDTO): boolean => {
         const søknadFeilmeldinger: FeiloppsummeringFeil[] = [];
 
-        if (
-            !validerSøknad.søkerMedOpplysninger.harOppholdtSegINorgeSiste12Måneder &&
-            (validerSøknad.søkerMedOpplysninger.komTilNorge === '' ||
-                !validerSøknad.søkerMedOpplysninger.komTilNorge)
-        ) {
+        if (validerSøknad.søkerMedOpplysninger.målform === undefined) {
             søknadFeilmeldinger.push({
-                skjemaelementId: 'søker-kom-til-norge',
-                feilmelding: 'Dato for når søker kom til Norge må settes',
+                skjemaelementId: 'målform',
+                feilmelding: 'Målform er ikke valgt.',
             });
         }
 

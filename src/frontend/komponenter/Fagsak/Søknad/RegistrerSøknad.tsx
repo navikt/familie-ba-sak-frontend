@@ -8,17 +8,17 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, IBehandling, hentStegNummer } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import AnnenPart from './AnnenPart';
 import Barna from './Barna';
-import SøkerOppholdINorge from './SøkerOppholdINorge';
 import SøknadType from './SøknadType';
+import Annet from './Annet';
+import MålformVelger from './MålformVelger';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -30,7 +30,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const { erLesevisning } = useBehandling();
     const history = useHistory();
 
-    const { feilmeldinger, søknad, settSøknadOgValider } = useSøknad();
+    const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig } = useSøknad();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
     const [frontendllFeilmelding, settFrontendFeilmelding] = React.useState('');
@@ -42,14 +42,14 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
-        if (fagsak.status === RessursStatus.SUKSESS && feilmeldinger.length === 0) {
+        if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig(søknad)) {
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
             settSenderInn(true);
 
             axiosRequest<IFagsak, IRestRegistrerSøknad>({
                 method: 'POST',
                 data: { søknad, bekreftEndringerViaFrontend },
-                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag/v2`,
+                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
             }).then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
@@ -78,7 +78,8 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
         if (fagsak.status === RessursStatus.SUKSESS) {
             if (
                 åpenBehandling &&
-                parseInt(BehandlingSteg[åpenBehandling.steg], 10) >= BehandlingSteg.VILKÅRSVURDERING
+                hentStegNummer(åpenBehandling.steg) >=
+                    hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
             ) {
                 axiosRequest<ISøknadDTO, void>({
                     method: 'GET',
@@ -106,7 +107,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     return (
         <Skjemasteg
             className={'søknad'}
-            tittel={'Informasjon fra søknaden'}
+            tittel={'Registrer opplysninger fra søknaden'}
             nesteOnClick={() => {
                 if (erLesevisning()) {
                     if (fagsak.status === RessursStatus.SUKSESS) {
@@ -137,11 +138,11 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
 
             <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
-            <SøkerOppholdINorge settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+            <Barna settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
-            <AnnenPart settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+            <MålformVelger settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
-            <Barna søknad={søknad} />
+            <Annet settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             {feilmeldinger.length > 0 && visFeilmeldinger && (
                 <Feiloppsummering

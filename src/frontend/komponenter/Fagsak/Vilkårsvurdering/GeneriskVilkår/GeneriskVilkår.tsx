@@ -1,3 +1,4 @@
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertekst } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
@@ -8,7 +9,6 @@ import {
 import Pluss from '../../../../ikoner/Pluss';
 import { IFelt } from '../../../../typer/felt';
 import { IPerson } from '../../../../typer/person';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     IRestPersonResultat,
     IVilkårConfig,
@@ -16,9 +16,10 @@ import {
     Resultat,
     VilkårType,
 } from '../../../../typer/vilkår';
-import DashedHr from '../../../Felleskomponenter/DashedHr/DashedHr';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
+import 'nav-frontend-tabell-style';
+import { useBehandling } from '../../../../context/BehandlingContext';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -45,6 +46,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     vilkårResultater,
     visFeilmeldinger,
 }) => {
+    const { erLesevisning } = useBehandling();
     const {
         settVilkårsvurderingFraApi,
         settVilkårSubmit,
@@ -92,8 +94,19 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     <Element children={vilkårFraConfig.tittel} />
                     <Undertekst children={vilkårFraConfig.lovreferanse} />
                 </div>
-                <DashedHr />
-                <ul className={'vilkårsvurdering__list'}>
+                <hr />
+
+                <table className={'tabell'}>
+                    <thead>
+                        <tr className={'tr-head'}>
+                            <th>Vurdering</th>
+                            <th>Periode</th>
+                            <th>Begrunnelse</th>
+                            <th />
+                            <th />
+                            <th />
+                        </tr>
+                    </thead>
                     {vilkårResultater.map((vilkårResultat: IFelt<IVilkårResultat>) => {
                         return (
                             <GeneriskVilkårVurdering
@@ -105,10 +118,11 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             />
                         );
                     })}
-                </ul>
-                <DashedHr />
+                </table>
+
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
+                        erLesevisning={erLesevisning()}
                         onClick={() => {
                             const promise = postVilkår(
                                 person.personIdent,

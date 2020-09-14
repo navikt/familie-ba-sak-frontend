@@ -7,6 +7,7 @@ import HendelseItem from './komponenter/HendelseItem';
 import Historikkknapp from './komponenter/Historikkknapp';
 import Meldingerknapp from './komponenter/Meldingerknapp';
 import classNames from 'classnames';
+import Brev from './komponenter/Brev';
 
 export { Tabs as Hendelsetype, Hendelse };
 
@@ -38,11 +39,12 @@ const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) =>
                     onClick={() => settAktivTab(Tabs.Dokumenter)}
                 />
             </div>
-            <div className={'hendelsesoversikt__content'}>
-                {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
+            {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
+                <div className={'historikk'}>
                     <ul className={'hendelsesoversikt__list'}>{hendelser?.map(tilHendelseItem)}</ul>
-                )}
-            </div>
+                </div>
+            )}
+            {aktivTab === Tabs.Meldinger && <Brev />}
         </div>
     );
 };

@@ -13,7 +13,8 @@ const HendelseItem = ({ hendelse }: IHendelseItemProps) => (
         {hendelse.beskrivelse && <p className={'hendelsesbeskrivelse'}>{hendelse.beskrivelse}</p>}
         <p className={'hendelsesdato'}>{`${hendelse.dato}`}</p>
         <p className={'hendelsesdato'}>{`${hendelse.utførtAv} ${
-            hendelse.rolle !== BehandlerRolle.SYSTEM
+            hendelse.rolle.toString() !== BehandlerRolle[BehandlerRolle.SYSTEM] &&
+            behandlerRoller[hendelse.rolle]
                 ? `(${behandlerRoller[hendelse.rolle].navn})`
                 : ''
         }`}</p>

@@ -1,18 +1,20 @@
 import moment from 'moment';
 import PanelBase from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertittel } from 'nav-frontend-typografi';
+import { Element, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
 import { datoformat } from '../../../utils/formatter';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
+import LeggTilBarn from './LeggTilBarn';
 
 interface IProps {
+    settSøknadOgValider: (søknad: ISøknadDTO) => void;
     søknad: ISøknadDTO;
 }
 
-const Barna: React.FunctionComponent<IProps> = ({ søknad }) => {
+const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
     const sorterteBarnMedOpplysninger = søknad.barnaMedOpplysninger.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -23,11 +25,11 @@ const Barna: React.FunctionComponent<IProps> = ({ søknad }) => {
         }
     );
     return (
-        <PanelBase key={'barna'} className={'søknad__barn'}>
-            <Undertittel children={'Opplysninger om barn under 18 år'} />
+        <PanelBase key={'barna'} className={'søknad__barna'}>
+            <Systemtittel children={'Opplysninger om barn under 18 år'} />
 
             <br />
-            {!erLesevisning() && <Element children={'Velg barn det søkes for'} />}
+            {!erLesevisning() && <Element children={'Velg hvilke barn det er søkt om'} />}
             <SkjemaGruppe feilmeldingId={'barna'}>
                 {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                     <BarnMedOpplysninger
@@ -35,6 +37,9 @@ const Barna: React.FunctionComponent<IProps> = ({ søknad }) => {
                         barn={barnMedOpplysninger}
                     />
                 ))}
+                {!erLesevisning() && (
+                    <LeggTilBarn settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+                )}
             </SkjemaGruppe>
         </PanelBase>
     );

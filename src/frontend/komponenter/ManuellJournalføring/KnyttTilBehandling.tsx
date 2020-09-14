@@ -28,7 +28,7 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
         moment(b.opprettetTidspunkt).diff(moment(a.opprettetTidspunkt))
     );
     const visOpprettBehandlingKnapp =
-        !aktivBehandling || aktivBehandling.status === BehandlingStatus.FERDIGSTILT;
+        !aktivBehandling || aktivBehandling.status === BehandlingStatus.AVSLUTTET;
 
     const {
         tilknyttedeBehandlingIder,

@@ -5,7 +5,7 @@ import { INøkkelPar } from './common';
 export enum FagsakStatus {
     OPPRETTET = 'OPPRETTET',
     LØPENDE = 'LØPENDE',
-    STANSET = 'STANSET',
+    AVSLUTTET = 'AVSLUTTET',
 }
 
 // Interface
@@ -16,6 +16,7 @@ export interface IFagsak {
     saksnummer: string;
     status: FagsakStatus;
     søkerFødselsnummer: string;
+    underBehandling: boolean;
 }
 
 export const fagsakStatus: INøkkelPar = {
@@ -27,8 +28,8 @@ export const fagsakStatus: INøkkelPar = {
         id: 'LØPENDE',
         navn: 'Løpende',
     },
-    STANSET: {
-        id: 'STANSET',
-        navn: 'Stanset',
+    AVSLUTTET: {
+        id: 'AVSLUTTET',
+        navn: 'Avsluttet',
     },
 };

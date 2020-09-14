@@ -47,8 +47,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
                     const skalViseOpprettBehandlingKnapp =
                         aktivBehandling === undefined ||
-                        (aktivBehandling &&
-                            aktivBehandling.status === BehandlingStatus.FERDIGSTILT);
+                        (aktivBehandling && aktivBehandling.status === BehandlingStatus.AVSLUTTET);
                     return (
                         <BehandlingProvider>
                             <Visittkort
@@ -73,7 +72,11 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 <Normaltekst children={'Status på sak '} />
                                 <Element
                                     className={'visittkort__status'}
-                                    children={fagsakStatus[fagsak.data.status].navn}
+                                    children={
+                                        fagsak.data.underBehandling
+                                            ? 'Under behandling'
+                                            : fagsakStatus[fagsak.data.status].navn
+                                    }
                                 />
                                 <Lenke
                                     className={'visittkort__lenke'}

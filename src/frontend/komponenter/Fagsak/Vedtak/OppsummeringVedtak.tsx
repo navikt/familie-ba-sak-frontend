@@ -1,3 +1,10 @@
+import {
+    byggDataRessurs,
+    byggFeiletRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
@@ -8,20 +15,15 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { UtbetalingBegrunnelserProvider } from '../../../context/UtbetalingBegrunnelseContext';
 import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import {
-    Ressurs,
-    RessursStatus,
-    byggDataRessurs,
-    byggFeiletRessurs,
-    byggTomRessurs,
-} from '@navikt/familie-typer';
+import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
 import PdfFrame from './PdfFrame';
-import BegrunnelserTabell from './BegrunnelserTabell/BegrunnelserTabell';
-import VedtaksbrevModal from './VedtaksbrevModal/VedtaksbrevModal';
+import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -43,9 +45,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
+    const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
+
     React.useEffect(() => {
+        hentVedtaksbrev();
+    }, [åpenBehandling]);
+
+    const hentVedtaksbrev = () => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
         const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
+
         if (aktivtVedtak) {
             axiosRequest<string, void>({
                 method: httpMethod,
@@ -76,12 +85,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                 )
             );
         }
-    }, [åpenBehandling]);
+    };
 
-    const visSubmitKnapp =
-        !erLesevisning() &&
-        (åpenBehandling?.status === BehandlingStatus.UNDERKJENT_AV_BESLUTTER ||
-            åpenBehandling?.status === BehandlingStatus.OPPRETTET);
+    const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const sendInn = () => {
         settSenderInn(true);
@@ -112,15 +118,22 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
+            className={'vedtaksbrev'}
             skalViseNesteKnapp={vedtaksbrev.status === RessursStatus.SUKSESS}
         >
-            <VedtaksbrevModal
+            <PdfVisningModal
                 åpen={visVedtaksbrev}
                 onRequestClose={() => settVisVedtaksbrev(false)}
-                vedtaksbrev={vedtaksbrev}
+                pdfdata={vedtaksbrev}
             />
 
-            <BegrunnelserTabell fagsak={fagsak} åpenBehandling={åpenBehandling} />
+            <UtbetalingBegrunnelserProvider
+                fagsak={fagsak}
+                aktivVedtak={aktivVedtak}
+                hentVedtaksbrev={hentVedtaksbrev}
+            >
+                <UtbetalingBegrunnelseTabell åpenBehandling={åpenBehandling} />
+            </UtbetalingBegrunnelserProvider>
 
             <Knapp
                 onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
