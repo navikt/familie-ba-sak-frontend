@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Undertittel } from 'nav-frontend-typografi';
+import { Systemtittel } from 'nav-frontend-typografi';
 import PanelBase from 'nav-frontend-paneler';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../typer/behandling';
@@ -25,7 +25,7 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
 
     return (
         <PanelBase>
-            <Undertittel children={'Hva har bruker søkt om?'} />
+            <Systemtittel children={'Hva har bruker søkt om?'} />
             <br />
             <FamilieRadioGruppe
                 erLesevisning={lesevisning}

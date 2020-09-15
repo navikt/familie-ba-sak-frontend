@@ -2,22 +2,35 @@
   max-width: 40rem;
   margin: 0 auto;
 
-  &__panel {
-    &--innrykk {
-      padding-left: 2rem;
+  .panel {
+    padding-left: 0;
+  }
+
+  .skjemagruppe {
+    padding-left: 1rem;
+  }
+
+  &__barna, &__opphold {
+    & .skjemaelement {
+      margin: 1rem 0;
     }
 
-    &--gruppebarn {
+    &__barn-rad {
+      display: flex;
+      align-items: center;
+
+      &__fjern-barn {
+        margin-left: 10px;
+      }
+
       > .lese-felt:first-of-type {
         font-weight: bold;
       }
     }
-  }
 
-  &__barn, &__opphold {
-    & .skjemaelement {
-      margin: 1rem 0;
-    }
+    &__barn-rad:not(:first-child) {
+      margin-top: -1rem;
+      }
   }
 
   &__textarea {

@@ -107,7 +107,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     return (
         <Skjemasteg
             className={'søknad'}
-            tittel={'Informasjon fra søknaden'}
+            tittel={'Registrer opplysninger fra søknaden'}
             nesteOnClick={() => {
                 if (erLesevisning()) {
                     if (fagsak.status === RessursStatus.SUKSESS) {
@@ -138,7 +138,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
 
             <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
-            <Barna søknad={søknad} />
+            <Barna settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 
             <MålformVelger settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
 

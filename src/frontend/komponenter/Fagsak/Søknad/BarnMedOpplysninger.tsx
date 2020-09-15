@@ -5,21 +5,26 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { formaterPersonIdent } from '../../../utils/formatter';
+import { Flatknapp } from 'nav-frontend-knapper';
+import Slett from '../../../ikoner/Slett';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
 }
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
-    const { settBarn } = useSøknad();
+    const { settBarn, søknad, settSøknadOgValider } = useSøknad();
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
     const alder = barn.fødselsdato
         ? moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years') + ' år'
         : 'Alder ukjent';
 
+    const finnBarnIndex = (ident: string) =>
+        søknad.barnaMedOpplysninger.findIndex(barn => barn.ident === ident);
+
     return (
-        <div className={'søknad__panel--gruppebarn'}>
+        <div className={'søknad__barna__barn-rad'}>
             <FamilieCheckbox
                 erLesevisning={lesevisning}
                 id={`barn-${barn.ident}`}
@@ -34,6 +39,19 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     });
                 }}
             />
+            {barn.manueltRegistrert && (
+                <Flatknapp
+                    className={'søknad__barna__barn-rad__fjern-barn'}
+                    mini
+                    onClick={() => {
+                        søknad.barnaMedOpplysninger.splice(finnBarnIndex(barn.ident), 1);
+                        settSøknadOgValider(søknad);
+                    }}
+                >
+                    <Slett />
+                    <span>Fjern barn</span>
+                </Flatknapp>
+            )}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Knapp } from 'nav-frontend-knapper';
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Innholdstittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
@@ -53,7 +53,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             className={classNames('skjemasteg', className)}
             style={{ maxWidth: maxWidthStyle }}
         >
-            <Systemtittel children={tittel} />
+            <Innholdstittel children={tittel} />
 
             {children}
 

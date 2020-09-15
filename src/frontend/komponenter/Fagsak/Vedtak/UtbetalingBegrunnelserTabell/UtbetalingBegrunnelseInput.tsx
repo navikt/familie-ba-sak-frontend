@@ -143,6 +143,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                 </FamilieSelect>
 
                 <IkonKnapp
+                    erLesevisning={erLesevisning()}
                     onClick={() => {
                         slettUtbetalingBegrunnelse(id);
                     }}

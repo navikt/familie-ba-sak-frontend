@@ -9,6 +9,7 @@ import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
 import { datoformat } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
+import { useBehandling } from '../../../../context/BehandlingContext';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -17,6 +18,7 @@ interface IUtbetalingBegrunnelseTabell {
 const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     åpenBehandling,
 }) => {
+    const { erLesevisning } = useBehandling();
     const harAndeler = åpenBehandling.beregningOversikt.length > 0;
     const {
         leggTilUtbetalingBegrunnelse,
@@ -84,6 +86,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                         }
                                     )}
                                     <IkonKnapp
+                                        erLesevisning={erLesevisning()}
                                         id={`legg-til-begrunnelse-${periodeToString({
                                             fom: beregning.periodeFom,
                                             tom: beregning.periodeTom,
