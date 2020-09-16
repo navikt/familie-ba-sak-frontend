@@ -150,6 +150,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     id={`slett-knapp-${id}`}
                     label={'Slett'}
                     ikon={<Slett />}
+                    knappPosisjon={'venstre'}
                 />
             </div>
             {utbetalingBegrunnelseFeilmelding.feilmelding !== '' &&

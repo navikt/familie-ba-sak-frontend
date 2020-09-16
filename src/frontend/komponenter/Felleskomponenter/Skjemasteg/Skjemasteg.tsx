@@ -67,6 +67,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                                 nesteOnClick();
                             }
                         }}
+                        mini={true}
                         children={nesteKnappTittel ?? 'Neste'}
                     />
                 )}
@@ -78,6 +79,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         onClick={() => {
                             forrigeOnClick();
                         }}
+                        mini={true}
                         children={forrigeKnappTittel ?? 'Forrige'}
                     />
                 ) : (

@@ -4,11 +4,11 @@ import {
     byggTomRessurs,
     Ressurs,
     RessursStatus,
+    byggHenterRessurs,
 } from '@navikt/familie-typer';
 import { AxiosError } from 'axios';
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst, Feilmelding } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
@@ -22,7 +22,6 @@ import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
-import PdfFrame from './PdfFrame';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 
 interface IVedtakProps {
@@ -47,15 +46,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
 
-    React.useEffect(() => {
-        hentVedtaksbrev();
-    }, [åpenBehandling]);
-
     const hentVedtaksbrev = () => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
         const httpMethod = visSubmitKnapp ? 'POST' : 'GET';
 
         if (aktivtVedtak) {
+            settVedtaksbrev(byggHenterRessurs());
             axiosRequest<string, void>({
                 method: httpMethod,
                 url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
@@ -119,11 +115,14 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             senderInn={senderInn}
             maxWidthStyle="100%"
             className={'vedtaksbrev'}
-            skalViseNesteKnapp={vedtaksbrev.status === RessursStatus.SUKSESS}
         >
             <PdfVisningModal
+                onRequestOpen={hentVedtaksbrev}
                 åpen={visVedtaksbrev}
-                onRequestClose={() => settVisVedtaksbrev(false)}
+                onRequestClose={() => {
+                    settVisVedtaksbrev(false);
+                    settVedtaksbrev(byggTomRessurs());
+                }}
                 pdfdata={vedtaksbrev}
             />
 
@@ -136,20 +135,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             </UtbetalingBegrunnelserProvider>
 
             <Knapp
+                mini={true}
                 onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
                 children={'Vis vedtaksbrev'}
             />
 
-            <div className="oppsummering">
-                {vedtaksbrev.status === RessursStatus.SUKSESS && (
-                    <PdfFrame file={vedtaksbrev.data} />
-                )}
-                {vedtaksbrev.status === RessursStatus.FEILET && (
-                    <AlertStripe type="feil">{vedtaksbrev.frontendFeilmelding}</AlertStripe>
-                )}
-
-                {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
-            </div>
+            {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
 
             {visModal && (
                 <UIModalWrapper
