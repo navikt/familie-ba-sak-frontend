@@ -32,7 +32,7 @@ const Slett: React.FunctionComponent<ISlett> = ({ className, heigth = 24, width 
                         <mask id="b" fill="white">
                             <use xlinkHref="#a" />
                         </mask>
-                        <use fill="#3E3832" fill-rule="nonzero" xlinkHref="#a" />
+                        <use fill="#3E3832" fillRule="nonzero" xlinkHref="#a" />
                         <rect width="24" height="24" fill="#0067C5" mask="url(#b)" />
                     </g>
                 </g>

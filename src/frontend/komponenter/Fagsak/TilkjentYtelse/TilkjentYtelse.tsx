@@ -65,14 +65,18 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 >
                     <TilkjentYtelseTidslinje />
                     {harAndeler ? (
-                        <div role="table">
-                            <OppsummeringsradHeader />
-                            {tilkjentYtelseRessurs.data
-                                .slice()
-                                .reverse()
-                                .map((beregning, index) => {
-                                    return <Oppsummeringsrad beregning={beregning} key={index} />;
-                                })}
+                        <div className={'tidslinje__informasjon-boks'}>
+                            <div role="table">
+                                <OppsummeringsradHeader />
+                                {tilkjentYtelseRessurs.data
+                                    .slice()
+                                    .reverse()
+                                    .map((beregning, index) => {
+                                        return (
+                                            <Oppsummeringsrad beregning={beregning} key={index} />
+                                        );
+                                    })}
+                            </div>
                         </div>
                     ) : (
                         <div className="tilkjentytelse-informasjon">
