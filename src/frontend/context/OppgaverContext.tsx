@@ -11,7 +11,6 @@ import {
     IOppgave,
     OppgavetypeFilter,
     SaksbehandlerFilter,
-    tema,
 } from '../typer/oppgave';
 import {
     byggFeiletRessurs,
@@ -343,7 +342,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             filter === 'ALLE' ? undefined : filter;
 
         const finnOppgaveRequest: IFinnOppgaveRequest = {
-            tema,
             behandlingstema: erstattAlleMedUndefined(behandlingstema),
             oppgavetype: erstattAlleMedUndefined(oppgavetype),
             enhet: erstattAlleMedUndefined(enhet)?.replace('E', ''),
