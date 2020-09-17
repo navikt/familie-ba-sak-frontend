@@ -1,11 +1,7 @@
 .ikon-knapp {
-    &.knapp {
+    .knapp {
         height: 25px;
         text-decoration: underline;
-    
-        & svg {
-            margin: auto auto auto .5rem;
-        }
     
         &:focus {
             outline: solid 2px @navBla;
@@ -15,5 +11,9 @@
             background-color: @navLysGra !important;
             text-decoration: unset;
         }
+    }
+
+    :first-child {
+        margin-right: .5rem;
     }
 }

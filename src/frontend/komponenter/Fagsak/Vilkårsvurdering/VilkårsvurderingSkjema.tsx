@@ -15,7 +15,7 @@ import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonI
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import { Collapse } from 'react-collapse';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
+import FamilieChevron from '../../../ikoner/FamilieChevron';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
@@ -81,7 +81,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                         : 'Vis vilkårsvurdering'
                                 }
                                 ikon={
-                                    <Chevron
+                                    <FamilieChevron
                                         retning={
                                             personErEkspandert[personResultat.personIdent]
                                                 ? 'opp'
