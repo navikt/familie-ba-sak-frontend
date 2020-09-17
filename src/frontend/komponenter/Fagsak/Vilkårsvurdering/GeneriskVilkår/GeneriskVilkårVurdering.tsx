@@ -4,7 +4,6 @@ import {
     FamilieTextareaControlled,
 } from '@navikt/familie-form-elements';
 import deepEqual from 'deep-equal';
-import Chevron from 'nav-datovelger/lib/elementer/ChevronSvg';
 import { Radio } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
@@ -41,6 +40,7 @@ import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
 import { datoformat } from '../../../../utils/formatter';
 import moment from 'moment';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
+import FamilieChevron from '../../../../ikoner/FamilieChevron';
 
 interface IProps {
     person: IPerson;
@@ -206,7 +206,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 : 'Lukk'
                         }
                         mini={true}
-                        ikon={<Chevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
+                        ikon={<FamilieChevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
                     />
                 </td>
                 <td>
@@ -360,7 +360,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     }}
                                     id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                                     spinner={vilkårSubmit === VilkårSubmit.DELETE}
-                                    label={'Slett'}
+                                    mini={true}
+                                    label={'Fjern'}
+                                    knappPosisjon={'venstre'}
                                     ikon={<Slett />}
                                 />
                             </div>

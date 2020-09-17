@@ -97,6 +97,8 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                 tom: beregning.periodeTom,
                                             });
                                         }}
+                                        knappPosisjon={'venstre'}
+                                        mini={true}
                                         label={'Legg til'}
                                         ikon={<Pluss />}
                                         spinner={false}

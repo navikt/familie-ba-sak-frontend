@@ -52,24 +52,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     };
 
     switch (tilkjentYtelseRessurs.status) {
-        case RessursStatus.FEILET:
-            return (
-                <AlertStripe children={tilkjentYtelseRessurs.frontendFeilmelding} type={'feil'} />
-            );
-        case RessursStatus.IKKE_TILGANG:
-            return (
-                <AlertStripe
-                    children={'Du har ikke tilgang til å se behandlingsresultat for denne saken'}
-                    type={'advarsel'}
-                />
-            );
         case RessursStatus.SUKSESS: {
             const harAndeler = tilkjentYtelseRessurs.data.length > 0;
             return (
                 <Skjemasteg
-                    className={'tilkjentytelse'}
                     senderInn={false}
                     tittel="Behandlingsresultat"
+                    className="tilkjentytelse"
                     forrigeOnClick={forrigeOnClick}
                     nesteOnClick={nesteOnClick}
                     maxWidthStyle={'80rem'}
@@ -93,8 +82,19 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 </Skjemasteg>
             );
         }
+        case RessursStatus.FEILET:
+            return (
+                <AlertStripe children={tilkjentYtelseRessurs.frontendFeilmelding} type={'feil'} />
+            );
+        case RessursStatus.IKKE_TILGANG:
+            return (
+                <AlertStripe
+                    children={'Du har ikke tilgang til å se behandlingsresultat for denne saken'}
+                    type={'advarsel'}
+                />
+            );
         default:
-            return <AlertStripe children={'En ukjent feil oppstod'} type={'advarsel'} />;
+            return null;
     }
 };
 export default TilkjentYtelse;

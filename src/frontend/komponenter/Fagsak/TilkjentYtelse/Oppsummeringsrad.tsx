@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { kategorier } from '../../../typer/behandling';
 import { nyPeriode, periodeToString } from '../../../typer/periode';
 import { Collapse } from 'react-collapse';
-import Chevron from 'nav-frontend-chevron';
+import FamilieChevron from '../../../ikoner/FamilieChevron';
 
 interface IProps {
     beregning: IOppsummeringBeregning;
@@ -42,7 +42,7 @@ const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
                     aria-label={åpentElement ? 'Lukk' : 'Åpne'}
                     title={åpentElement ? 'Lukk' : 'Åpne'}
                 >
-                    <Chevron type={åpentElement ? 'opp' : 'ned'} />
+                    <FamilieChevron retning={åpentElement ? 'opp' : 'ned'} />
                 </div>
             </Kolonne>
             <Kolonne classes={kolonneClassnames}>
