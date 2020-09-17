@@ -88,7 +88,9 @@ const OppgaveList: React.FunctionComponent = () => {
                                                 oppgaveFelter.opprettetTidspunkt
                                             )}
                                         >
-                                            {intDatoTilNorskDato(oppg.opprettetTidspunkt)}
+                                            {oppg.opprettetTidspunkt
+                                                ? intDatoTilNorskDato(oppg.opprettetTidspunkt)
+                                                : 'Ukjent'}
                                         </td>
                                         <td
                                             className={classNames(
@@ -96,7 +98,9 @@ const OppgaveList: React.FunctionComponent = () => {
                                                 sortertClassName(oppgaveFelter.oppgavetype)
                                             )}
                                         >
-                                            {oppgaveTypeFilter[oppg.oppgavetype].navn}
+                                            {oppg.oppgavetype
+                                                ? oppgaveTypeFilter[oppg.oppgavetype].navn
+                                                : 'Ukjent'}
                                         </td>
                                         <td
                                             className={sortertClassName(
@@ -112,7 +116,9 @@ const OppgaveList: React.FunctionComponent = () => {
                                                 oppgaveFelter.fristFerdigstillelse
                                             )}
                                         >
-                                            {intDatoTilNorskDato(oppg.fristFerdigstillelse)}
+                                            {oppg.fristFerdigstillelse
+                                                ? intDatoTilNorskDato(oppg.fristFerdigstillelse)
+                                                : 'Ukjent'}
                                         </td>
                                         <td className={sortertClassName(oppgaveFelter.prioritet)}>
                                             {
@@ -123,10 +129,13 @@ const OppgaveList: React.FunctionComponent = () => {
                                         </td>
                                         <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
                                         <td>
-                                            {oppg.identer.find(
-                                                (ident: IOppgaveIdent) =>
-                                                    ident.gruppe === IdentGruppe.FOLKEREGISTERIDENT
-                                            )?.ident ?? 'Ukjent'}
+                                            {oppg.identer
+                                                ? oppg.identer.find(
+                                                      (ident: IOppgaveIdent) =>
+                                                          ident.gruppe ===
+                                                          IdentGruppe.FOLKEREGISTERIDENT
+                                                  )?.ident
+                                                : 'Ukjent'}
                                         </td>
                                         <td
                                             className={classNames(
@@ -150,12 +159,14 @@ const OppgaveList: React.FunctionComponent = () => {
                                             />
                                         </td>
                                         <td className={'handlinger'}>
-                                            {oppgaveTypeFilter[oppg.oppgavetype].id ===
-                                                OppgavetypeFilter.JFR && (
-                                                <a href={`/oppgaver/journalfør/${oppg.id}`}>
-                                                    Gå til oppg
-                                                </a>
-                                            )}
+                                            {oppg.oppgavetype
+                                                ? oppgaveTypeFilter[oppg.oppgavetype].id ===
+                                                      OppgavetypeFilter.JFR && (
+                                                      <a href={`/oppgaver/journalfør/${oppg.id}`}>
+                                                          Gå til oppg
+                                                      </a>
+                                                  )
+                                                : 'Ukjent'}
                                         </td>
                                     </tr>
                                 ))}

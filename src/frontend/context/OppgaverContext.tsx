@@ -201,6 +201,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         const compareOppgave = (a: IOppgave, b: IOppgave) => {
             if (felt === 'opprettetTidspunkt' || felt === 'fristFerdigstillelse') {
+                // eslint-disable-next-line
                 return compareTid(a[felt], b[felt]);
             }
 
@@ -266,10 +267,13 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 ) {
                     history.push(`/oppgaver/journalfør/${oppgave.id}`);
                 } else {
-                    opprettEllerHentFagsak({
-                        personIdent: null,
-                        aktørId: oppgave.aktoerId,
-                    });
+                    if (oppgave.aktoerId)
+                        opprettEllerHentFagsak({
+                            personIdent: null,
+                            aktørId: oppgave.aktoerId,
+                        });
+                    else byggFeiletRessurs('Oppgave mangler aktørid');
+                    // TODO: Bruke identer?
                 }
                 return oppgaverRes;
             })
