@@ -103,6 +103,8 @@
     "nav-frontend-tabs-style": "^0.0.27",
     "nav-frontend-typografi": "^2.0.26",
     "nav-frontend-typografi-style": "^1.0.21",
+    "nav-frontend-toggle": "0.0.40",
+    "nav-frontend-toggle-style": "0.0.35",
     "node-fetch": "^2.6.1",
     "paginering": "^1.0.4",
     "prop-types": "^15.7.2",

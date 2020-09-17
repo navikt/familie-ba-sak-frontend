@@ -1,51 +1,47 @@
+.tilkjentytelse {
+  & .typo-normal:first-child {
+    margin-top: 3.625rem;
+  }
+
+  & .typo-normal:not(:first-child) {
+    margin-top: .5rem;
+  }
+}
+
 .tilkjentytelse-informasjon {
   padding: 0.8rem 0;
+}
 
-  .tilkjentytelse {
-    & .tidslinje {
-      display: flex;
+.tidslinje-header {
+  display: flex;
+  justify-content: space-between;
+}
 
-      &__labels {
-        min-width: 10rem;
+.tidslinje {
+  display: flex;
+  overflow: hidden;
 
-        &__etikett {
-          transform: translateX(100%);
-          color: #0067c5;
-          text-decoration: underline;
-          margin-top: -10px;
-        }
+  &__labels {
+    min-width: 10rem;
+  }
 
-        &__etikett:hover {
-          text-decoration: none;
-        }
+  &__etikett {
+    transform: translateX(100%);
+    margin-top: -10px;
 
-        &__informasjon-boks {
-          margin-top: 24px;
-          padding: 40px;
-          height: 281px;
-          border: 1px solid rgb(120, 112, 106);
-          box-shadow: 0px 0.8px 4px 2px rgba(0, 0, 0, 0.08);
-        }
+    &__label {
+      text-decoration: underline;
+      color: @navBla
+    }
 
-        &__labels {
-          min-width: 10rem;
+    &__label:hover {
+      text-decoration: none;
+    }
 
-          & .typo-normal:first-child  {
-            margin-top: 3.625rem;
-          }
-
-          & .typo-normal:not(:first-child) {
-            margin-top: .5rem;
-          }
-        }
-
-    &__scroll {
-      overflow-x: auto;
-      width: 100%;
-
-      &--inner {
-        width: 1920px;
-      }
+    &__label--aktiv {
+      text-decoration: none;
+      color: @fokusFarge;
+      font-weight: bold;
     }
   }
 }
@@ -125,14 +121,17 @@
       padding-left: 0.8rem;
       padding-right: 1.2rem;
     }
+
     & .tilkjentytelse-detaljer-kolonne:nth-child(2) {
       flex: 7;
       padding-right: 1.2rem;
     }
+
     & .tilkjentytelse-detaljer-kolonne:nth-child(3) {
       flex: 10;
       padding-right: 1.2rem;
     }
+
     & .tilkjentytelse-detaljer-kolonne:nth-child(4) {
       flex: 2;
       padding-right: 1.2rem;

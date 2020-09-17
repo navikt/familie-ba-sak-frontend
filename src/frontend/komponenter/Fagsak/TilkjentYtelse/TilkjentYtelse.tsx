@@ -11,6 +11,7 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
 import { IBehandling } from '../../../typer/behandling';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
+import { TidslinjeProvider } from '../../../context/TidslinjeContext';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -63,20 +64,18 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     nesteOnClick={nesteOnClick}
                     maxWidthStyle={'80rem'}
                 >
-                    <TilkjentYtelseTidslinje />
+                    <TidslinjeProvider>
+                        <TilkjentYtelseTidslinje />
+                    </TidslinjeProvider>
                     {harAndeler ? (
-                        <div className={'tidslinje__informasjon-boks'}>
-                            <div role="table">
-                                <OppsummeringsradHeader />
-                                {tilkjentYtelseRessurs.data
-                                    .slice()
-                                    .reverse()
-                                    .map((beregning, index) => {
-                                        return (
-                                            <Oppsummeringsrad beregning={beregning} key={index} />
-                                        );
-                                    })}
-                            </div>
+                        <div role="table">
+                            <OppsummeringsradHeader />
+                            {tilkjentYtelseRessurs.data
+                                .slice()
+                                .reverse()
+                                .map((beregning, index) => {
+                                    return <Oppsummeringsrad beregning={beregning} key={index} />;
+                                })}
                         </div>
                     ) : (
                         <div className="tilkjentytelse-informasjon">
