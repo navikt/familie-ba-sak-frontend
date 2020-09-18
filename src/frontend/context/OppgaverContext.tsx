@@ -272,7 +272,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                             aktørId: oppgave.aktoerId,
                         });
                     else byggFeiletRessurs('Oppgave mangler aktørid');
-                    // TODO: Bruke identer?
                 }
                 return oppgaverRes;
             })
