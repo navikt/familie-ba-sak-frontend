@@ -3,6 +3,8 @@ import { SyntheticEvent, useState } from 'react';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/components/types.internal';
 import moment from 'moment';
 import { ToggleKnappPureProps } from 'nav-frontend-toggle';
+import { IPersonBeregning, IYtelsePeriode } from '../typer/beregning';
+import { Periode } from '@navikt/helse-frontend-tidslinje/lib';
 
 export interface ITidslinjeSkala {
     id: number;
@@ -82,6 +84,26 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         }
     };
 
+    const genererRader = (personBeregninger?: IPersonBeregning[]): Periode[][] => {
+        return personBeregninger
+            ? personBeregninger.map((personBeregning: IPersonBeregning) => {
+                  return personBeregning.ytelsePerioder.map(
+                      (ytelsePeriode: IYtelsePeriode, index: number) => ({
+                          fom: new Date(ytelsePeriode.stønadFom),
+                          tom: new Date(ytelsePeriode.stønadTom),
+                          id: `${personBeregning.personIdent}_${index}`,
+                          status: 'suksess',
+                      })
+                  );
+              })
+            : [[]];
+    };
+
+    const sisteDatoIMnd = (måned: number, år: number): Date => {
+        // Måneden i Date objektet er 0-indeksert
+        return new Date(år, måned + 1, 0);
+    };
+
     return {
         aktivEtikett,
         settAktivEtikett,
@@ -90,6 +112,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         genererToggleKnapper,
         naviger,
         endreSkala,
+        genererRader,
+        sisteDatoIMnd,
     };
 });
 

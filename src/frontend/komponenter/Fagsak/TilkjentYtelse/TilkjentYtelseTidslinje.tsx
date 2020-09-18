@@ -1,34 +1,19 @@
 import React from 'react';
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
-import { IPersonBeregning, IYtelsePeriode } from '../../../typer/beregning';
+import { IPersonBeregning } from '../../../typer/beregning';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { RessursStatus } from '@navikt/familie-typer';
 import { IPerson } from '../../../typer/person';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import { Tidslinje, Periode } from '@navikt/helse-frontend-tidslinje/lib';
+import { Tidslinje } from '@navikt/helse-frontend-tidslinje/lib';
 import { formaterPersonIdent } from '../../../utils/formatter';
 import { ToggleGruppe } from 'nav-frontend-toggle';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
 import { Knapp } from 'nav-frontend-knapper';
 import TidslinjeEtikett from './TidslinjeEtikett';
 import { useTidslinje } from '../../../context/TidslinjeContext';
-
-const genererRader = (personBeregninger?: IPersonBeregning[]): Periode[][] => {
-    return personBeregninger
-        ? personBeregninger.map((personBeregning: IPersonBeregning) => {
-              return personBeregning.ytelsePerioder.map(
-                  (ytelsePeriode: IYtelsePeriode, index: number) => ({
-                      fom: new Date(ytelsePeriode.stønadFom),
-                      tom: new Date(ytelsePeriode.stønadTom),
-                      id: `${personBeregning.personIdent}_${index}`,
-                      status: 'suksess',
-                  })
-              );
-          })
-        : [[]];
-};
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();
@@ -38,6 +23,9 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         genererToggleKnapper,
         naviger,
         endreSkala,
+        genererRader,
+        aktivEtikett,
+        sisteDatoIMnd,
     } = useTidslinje();
 
     const aktivVedtak =
@@ -102,6 +90,15 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     EtikettKomponent={TidslinjeEtikett}
                     startDato={tidslinjeInput.startDato.toDate()}
                     sluttDato={tidslinjeInput.sluttDato.toDate()}
+                    aktivPeriode={
+                        aktivEtikett && {
+                            fom: aktivEtikett.dato,
+                            tom: sisteDatoIMnd(
+                                aktivEtikett.dato.getMonth(),
+                                aktivEtikett.dato.getFullYear()
+                            ),
+                        }
+                    }
                 />
             </div>
         </>
