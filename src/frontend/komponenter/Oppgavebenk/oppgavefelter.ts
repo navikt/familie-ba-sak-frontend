@@ -18,19 +18,6 @@ export enum FeltSortOrder {
     DESCENDANT = 'DESCENDANT',
 }
 
-export enum ListFelt {
-    OPPRETTET_TIDSPUNKT = 'OPPRETTET_TIDSPUNKT',
-    OPPGAVETYPE = 'OPPGAVETYPE',
-    BEHANDLINGSTEMA = 'BEHANDLINGSTEMA',
-    FRIST_FERDIGSTILLELSE = 'FRIST_FERDIGSTILLELSE',
-    PRIORITET = 'PRIORITET',
-    AKTOER_ID = 'AKTOER_ID',
-    TILDELT_ENHETSNR = 'TILDELT_ENHETSNR',
-    TILORDNET_RESSURS = 'TILORDNET_RESSURS',
-    HANDLINGER = 'HANDLINGER',
-    BESKRIVELSE = 'BESKRIVELSE',
-}
-
 export interface IOppgaveFilter {
     selectedValue?: string;
     initialValue?: string;
@@ -47,7 +34,7 @@ export interface IOppgaveFelt {
 
 export interface IOppgaveFelter {
     [key: string]: IOppgaveFelt;
-    aktoerId: IOppgaveFelt;
+    ident: IOppgaveFelt;
     behandlingstema: IOppgaveFelt;
     beskrivelse: IOppgaveFelt;
     fristFerdigstillelse: IOppgaveFelt;
@@ -125,8 +112,8 @@ export const initialOppgaveFelter = (
             nøkkel: 'beskrivelse',
             label: 'Beskrivelse',
         },
-        aktoerId: {
-            nøkkel: 'aktoer_id',
+        ident: {
+            nøkkel: 'ident',
             label: 'Bruker',
         },
         tildeltEnhetsnr: {

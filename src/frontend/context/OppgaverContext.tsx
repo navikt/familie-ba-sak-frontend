@@ -266,10 +266,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 ) {
                     history.push(`/oppgaver/journalfør/${oppgave.id}`);
                 } else {
-                    opprettEllerHentFagsak({
-                        personIdent: null,
-                        aktørId: oppgave.aktoerId,
-                    });
+                    if (oppgave.aktoerId)
+                        opprettEllerHentFagsak({
+                            personIdent: null,
+                            aktørId: oppgave.aktoerId,
+                        });
+                    else byggFeiletRessurs('Oppgave mangler aktørid');
                 }
                 return oppgaverRes;
             })
