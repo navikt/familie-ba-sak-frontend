@@ -76,6 +76,10 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         );
 
         if (valgtTidslinjeSkala) {
+            if (valgtTidslinjeSkala.id === TidslinjeSkala.TRE_ÅR) {
+                settAktivEtikett(undefined);
+            }
+
             settTidslinjeInput(({ sluttDato }) => ({
                 ...tidslinjeInput,
                 aktivSkala: valgtTidslinjeSkala,
