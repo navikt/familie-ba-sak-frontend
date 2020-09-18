@@ -22,7 +22,9 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, styl
             <span
                 className={classNames(
                     'tidslinje__etikett__label',
-                    aktivEtikett === etikett ? 'tidslinje__etikett__label--aktiv' : ''
+                    aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()
+                        ? 'tidslinje__etikett__label--aktiv'
+                        : ''
                 )}
             >
                 {etikett.label}

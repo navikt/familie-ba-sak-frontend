@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React from 'react';
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
 import { IPersonBeregning, IYtelsePeriode } from '../../../typer/beregning';
@@ -9,21 +9,11 @@ import { IPerson } from '../../../typer/person';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { Tidslinje, Periode } from '@navikt/helse-frontend-tidslinje/lib';
 import { formaterPersonIdent } from '../../../utils/formatter';
-import moment from 'moment';
-import { ToggleGruppe, ToggleKnappPureProps } from 'nav-frontend-toggle';
+import { ToggleGruppe } from 'nav-frontend-toggle';
+import FamilieChevron from '../../../ikoner/FamilieChevron';
+import { Knapp } from 'nav-frontend-knapper';
 import TidslinjeEtikett from './TidslinjeEtikett';
-
-interface ITidslinjeSkala {
-    id: number;
-    navn: string;
-    verdi: number;
-}
-
-enum TidslinjeSkala {
-    HALVT_ÅR,
-    ETT_ÅR,
-    TRE_ÅR,
-}
+import { useTidslinje } from '../../../context/TidslinjeContext';
 
 const genererRader = (personBeregninger?: IPersonBeregning[]): Periode[][] => {
     return personBeregninger
@@ -42,63 +32,51 @@ const genererRader = (personBeregninger?: IPersonBeregning[]): Periode[][] => {
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();
-    const [tidslinjeDato, settTidslinjeDato] = useState({
-        slutt: moment(),
-        start: moment().subtract(12, 'month'),
-    });
+    const {
+        tidslinjeInput,
+        genererFormatertÅrstall,
+        genererToggleKnapper,
+        naviger,
+        endreSkala,
+    } = useTidslinje();
+
     const aktivVedtak =
         åpenBehandling.status === RessursStatus.SUKSESS
             ? hentAktivVedtakPåBehandlig(åpenBehandling.data)
             : undefined;
 
     const tidslinjeRader = genererRader(aktivVedtak && aktivVedtak.personBeregninger);
-
-    const skalaer: ITidslinjeSkala[] = [
-        { id: TidslinjeSkala.HALVT_ÅR, navn: '6 mnd', verdi: 6 },
-        { id: TidslinjeSkala.ETT_ÅR, navn: '1 år', verdi: 12 },
-        { id: TidslinjeSkala.TRE_ÅR, navn: '3 år', verdi: 36 },
-    ];
-
     if (
         åpenBehandling.status !== RessursStatus.SUKSESS ||
         !aktivVedtak ||
         tidslinjeRader.length === 0
     )
         return null;
+
     const personer = åpenBehandling.data.personer;
-
-    const oppdaterTidslinjeDato = (antallMåneder: number) => {
-        settTidslinjeDato({
-            slutt: moment(),
-            start: moment().subtract(antallMåneder, 'month'),
-        });
-    };
-
-    const onToggleChange = (
-        _event: SyntheticEvent<EventTarget, Event>,
-        toggles: ToggleKnappPureProps[]
-    ) => {
-        const tidslinjeSkala: ITidslinjeSkala | undefined = skalaer.find(
-            skala =>
-                TidslinjeSkala[skala.id] ===
-                TidslinjeSkala[toggles.findIndex(toggle => toggle.pressed)]
-        );
-        tidslinjeSkala && oppdaterTidslinjeDato(tidslinjeSkala.verdi);
-    };
 
     return (
         <>
             <div className={'tidslinje-header'}>
-                <Undertittel>{`${tidslinjeDato.start.year()} - ${tidslinjeDato.slutt.year()} `}</Undertittel>
-                <ToggleGruppe
-                    defaultToggles={skalaer.map(skala => ({
-                        children: skala.navn,
-                        pressed: skala.id === TidslinjeSkala.ETT_ÅR,
-                    }))}
-                    kompakt
-                    minstEn
-                    onChange={onToggleChange}
-                />
+                <Undertittel>{genererFormatertÅrstall()}</Undertittel>
+                <div className={'tidslinje-header__controls'}>
+                    <ToggleGruppe
+                        defaultToggles={genererToggleKnapper()}
+                        kompakt
+                        minstEn
+                        onChange={endreSkala}
+                    />
+                    <div className={'tidslinje-header__navigering'}>
+                        <Knapp kompakt onClick={() => naviger('venstre')}>
+                            <FamilieChevron retning={'venstre'} />
+                            <span className="sr-only">Knapp</span>
+                        </Knapp>
+                        <Knapp kompakt onClick={() => naviger('høyre')}>
+                            <FamilieChevron />
+                            <span className="sr-only">Knapp</span>
+                        </Knapp>
+                    </div>
+                </div>
             </div>
             <div className={'tidslinje'}>
                 <div className={'tidslinje__labels'}>
@@ -122,8 +100,8 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     rader={tidslinjeRader}
                     direction={'right'}
                     EtikettKomponent={TidslinjeEtikett}
-                    startDato={tidslinjeDato.start.toDate()}
-                    sluttDato={tidslinjeDato.slutt.toDate()}
+                    startDato={tidslinjeInput.startDato.toDate()}
+                    sluttDato={tidslinjeInput.sluttDato.toDate()}
                 />
             </div>
         </>
