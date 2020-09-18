@@ -9,16 +9,9 @@ import { IPerson } from '../../../typer/person';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { Tidslinje, Periode } from '@navikt/helse-frontend-tidslinje/lib';
 import { formaterPersonIdent } from '../../../utils/formatter';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/components/types.internal';
-import { useTidslinje } from '../../../context/TidslinjeContext';
-import classNames from 'classnames';
 import moment from 'moment';
 import { ToggleGruppe, ToggleKnappPureProps } from 'nav-frontend-toggle';
-
-interface IEtikettProp {
-    etikett: Skalaetikett;
-    style: { [key: string]: string };
-}
+import TidslinjeEtikett from './TidslinjeEtikett';
 
 interface ITidslinjeSkala {
     id: number;
@@ -31,27 +24,6 @@ enum TidslinjeSkala {
     ETT_ÅR,
     TRE_ÅR,
 }
-
-export const Etikett: React.FunctionComponent<IEtikettProp> = ({ etikett, style }) => {
-    const { aktivEtikett, settAktivEtikett } = useTidslinje();
-
-    const onEtikettClick = () => {
-        settAktivEtikett(etikett);
-    };
-
-    return (
-        <button style={style} className={'tidslinje__etikett'} onClick={onEtikettClick}>
-            <span
-                className={classNames(
-                    'tidslinje__etikett__label',
-                    aktivEtikett === etikett ? 'tidslinje__etikett__label--aktiv' : ''
-                )}
-            >
-                {etikett.label}
-            </span>
-        </button>
-    );
-};
 
 const genererRader = (personBeregninger?: IPersonBeregning[]): Periode[][] => {
     return personBeregninger
@@ -149,7 +121,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                 <Tidslinje
                     rader={tidslinjeRader}
                     direction={'right'}
-                    EtikettKomponent={Etikett}
+                    EtikettKomponent={TidslinjeEtikett}
                     startDato={tidslinjeDato.start.toDate()}
                     sluttDato={tidslinjeDato.slutt.toDate()}
                 />
