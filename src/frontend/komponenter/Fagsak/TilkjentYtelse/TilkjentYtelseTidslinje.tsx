@@ -67,13 +67,13 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                         onChange={endreSkala}
                     />
                     <div className={'tidslinje-header__navigering'}>
-                        <Knapp kompakt onClick={() => naviger('venstre')}>
+                        <Knapp mini kompakt onClick={() => naviger('venstre')}>
                             <FamilieChevron retning={'venstre'} />
-                            <span className="sr-only">Knapp</span>
+                            <span className="sr-only">Naviger til venstre i tidslinjen</span>
                         </Knapp>
-                        <Knapp kompakt onClick={() => naviger('høyre')}>
+                        <Knapp mini kompakt onClick={() => naviger('høyre')}>
                             <FamilieChevron />
-                            <span className="sr-only">Knapp</span>
+                            <span className="sr-only">Naviger til høyre i tidslinjen</span>
                         </Knapp>
                     </div>
                 </div>

@@ -21,7 +21,7 @@ const getRotationTransform = (retning?: FamilieChevronRetning): string | undefin
 };
 
 // Default farge er @navBlå
-const FamilieChevron: React.FC<Props> = ({ retning, farge = '#0067C5' }) => {
+const FamilieChevron: React.FC<Props> = ({ retning }) => {
     const rotation = getRotationTransform(retning);
     const style = rotation
         ? {
@@ -40,7 +40,6 @@ const FamilieChevron: React.FC<Props> = ({ retning, farge = '#0067C5' }) => {
             <title>FamilieChevron</title>
             <path
                 d="M1.5 24a1 1 0 0 1-.646-1.764L12.953 12 .853 1.764A1 1 0 1 1 2.146.236l13 11a1.005 1.005 0 0 1 0 1.528l-13 11a1.003 1.003 0 0 1-.645.236"
-                fill={farge}
                 fillRule="evenodd"
             />
         </svg>
