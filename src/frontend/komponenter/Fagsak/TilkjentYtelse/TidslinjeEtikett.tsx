@@ -21,6 +21,7 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, styl
 
     return (
         <button
+            aria-label={etikett.label}
             disabled={isDisabled}
             style={style}
             className={'tidslinje__etikett'}
