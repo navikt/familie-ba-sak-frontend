@@ -54,10 +54,6 @@
       color: @navBla
     }
 
-    &__label:hover {
-      text-decoration: none;
-    }
-
     &__label--aktiv {
       text-decoration: none;
       color: @fokusFarge;
@@ -71,7 +67,12 @@
       color: @navMorkGra;
       cursor: default;
     }
+  }
 
+  &__etikett:hover, &__etikett:focus {
+    > span {
+      text-decoration: none;
+    }
   }
 }
 
