@@ -26,20 +26,20 @@ export interface IHentOppgaveDto {
 export interface IOppgave {
     // eslint-disable-next-line
     [key: string]: any;
-    id?: string;
+    id: string;
     identer?: IOppgaveIdent[];
-    tildeltEnhetsnr?: string;
-    journalpostId?: string;
-    saksreferanse?: string;
-    aktoerId?: string;
-    behandlingstema?: string;
-    beskrivelse?: string;
-    fristFerdigstillelse?: string;
-    oppgavetype?: string;
-    opprettetTidspunkt?: string;
-    prioritet?: string;
-    status?: string;
-    tilordnetRessurs?: string;
+    tildeltEnhetsnr: string;
+    journalpostId: string;
+    saksreferanse: string;
+    aktoerId: string;
+    behandlingstema: string;
+    beskrivelse: string;
+    fristFerdigstillelse: string;
+    oppgavetype: string;
+    opprettetTidspunkt: string;
+    prioritet: string;
+    status: string;
+    tilordnetRessurs: string;
 }
 
 export interface IOppgaveIdent {

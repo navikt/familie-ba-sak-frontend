@@ -201,7 +201,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         const compareOppgave = (a: IOppgave, b: IOppgave) => {
             if (felt === 'opprettetTidspunkt' || felt === 'fristFerdigstillelse') {
-                // eslint-disable-next-line
                 return compareTid(a[felt], b[felt]);
             }
 
