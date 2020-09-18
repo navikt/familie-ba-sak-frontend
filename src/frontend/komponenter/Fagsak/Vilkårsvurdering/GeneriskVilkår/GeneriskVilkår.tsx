@@ -122,6 +122,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
+                        className={'generisk-vilkår__legg-til-knapp'}
                         erLesevisning={erLesevisning()}
                         onClick={() => {
                             const promise = postVilkår(
@@ -131,8 +132,10 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             håndterNyPeriodeVilkårsvurdering(promise);
                         }}
                         id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
-                        label={'Legg til periode'}
                         ikon={<Pluss />}
+                        knappPosisjon={'venstre'}
+                        label={'Legg til periode'}
+                        mini={true}
                         spinner={vilkårSubmit === VilkårSubmit.POST}
                     />
                 ) : null}

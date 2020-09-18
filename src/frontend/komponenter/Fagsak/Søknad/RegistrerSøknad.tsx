@@ -151,8 +151,6 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                 />
             )}
 
-            <br />
-
             {feilmelding && <Feilmelding children={feilmelding} />}
 
             {visModal && (

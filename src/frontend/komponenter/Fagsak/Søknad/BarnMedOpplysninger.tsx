@@ -5,8 +5,8 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { formaterPersonIdent } from '../../../utils/formatter';
-import { Flatknapp } from 'nav-frontend-knapper';
 import Slett from '../../../ikoner/Slett';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -39,18 +39,21 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     });
                 }}
             />
+
             {barn.manueltRegistrert && (
-                <Flatknapp
+                <IkonKnapp
+                    erLesevisning={erLesevisning()}
+                    id={`fjern__${barn.ident}`}
                     className={'søknad__barna__barn-rad__fjern-barn'}
-                    mini
+                    mini={true}
+                    ikon={<Slett />}
+                    knappPosisjon={'venstre'}
                     onClick={() => {
                         søknad.barnaMedOpplysninger.splice(finnBarnIndex(barn.ident), 1);
                         settSøknadOgValider(søknad);
                     }}
-                >
-                    <Slett />
-                    <span>Fjern barn</span>
-                </Flatknapp>
+                    label={'Fjern barn'}
+                />
             )}
         </div>
     );

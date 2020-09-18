@@ -8,7 +8,6 @@ import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import SystemetLaster from '../../Felleskomponenter/SystemetLaster/SystemetLaster';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
 import { IBehandling } from '../../../typer/behandling';
 
@@ -52,9 +51,35 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     };
 
     switch (tilkjentYtelseRessurs.status) {
-        case RessursStatus.HENTER:
-        case RessursStatus.IKKE_HENTET:
-            return <SystemetLaster />;
+        case RessursStatus.SUKSESS: {
+            const harAndeler = tilkjentYtelseRessurs.data.length > 0;
+            return (
+                <Skjemasteg
+                    senderInn={false}
+                    tittel="Behandlingsresultat"
+                    className="tilkjentytelse"
+                    forrigeOnClick={forrigeOnClick}
+                    nesteOnClick={nesteOnClick}
+                    maxWidthStyle={'80rem'}
+                >
+                    {harAndeler ? (
+                        <div role="table">
+                            <OppsummeringsradHeader />
+                            {tilkjentYtelseRessurs.data
+                                .slice()
+                                .reverse()
+                                .map((beregning, index) => {
+                                    return <Oppsummeringsrad beregning={beregning} key={index} />;
+                                })}
+                        </div>
+                    ) : (
+                        <div className="tilkjentytelse-informasjon">
+                            <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
+                        </div>
+                    )}
+                </Skjemasteg>
+            );
+        }
         case RessursStatus.FEILET:
             return (
                 <AlertStripe children={tilkjentYtelseRessurs.frontendFeilmelding} type={'feil'} />
@@ -66,40 +91,8 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     type={'advarsel'}
                 />
             );
-        case RessursStatus.SUKSESS: {
-            const harAndeler = tilkjentYtelseRessurs.data.length > 0;
-            return (
-                <div className="tilkjentytelse">
-                    <Skjemasteg
-                        senderInn={false}
-                        tittel="Behandlingsresultat"
-                        forrigeOnClick={forrigeOnClick}
-                        nesteOnClick={nesteOnClick}
-                        maxWidthStyle={'80rem'}
-                    >
-                        {harAndeler ? (
-                            <div role="table">
-                                <OppsummeringsradHeader />
-                                {tilkjentYtelseRessurs.data
-                                    .slice()
-                                    .reverse()
-                                    .map((beregning, index) => {
-                                        return (
-                                            <Oppsummeringsrad beregning={beregning} key={index} />
-                                        );
-                                    })}
-                            </div>
-                        ) : (
-                            <div className="tilkjentytelse-informasjon">
-                                <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
-                            </div>
-                        )}
-                    </Skjemasteg>
-                </div>
-            );
-        }
         default:
-            return <AlertStripe children={'En ukjent feil oppstod'} type={'advarsel'} />;
+            return null;
     }
 };
 export default TilkjentYtelse;
