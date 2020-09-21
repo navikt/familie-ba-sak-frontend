@@ -24,8 +24,10 @@ export interface IHentOppgaveDto {
 }
 
 export interface IOppgave {
-    [key: string]: string;
+    // eslint-disable-next-line
+    [key: string]: any;
     id: string;
+    identer?: IOppgaveIdent[];
     tildeltEnhetsnr: string;
     journalpostId: string;
     saksreferanse: string;
@@ -38,6 +40,19 @@ export interface IOppgave {
     prioritet: string;
     status: string;
     tilordnetRessurs: string;
+}
+
+export interface IOppgaveIdent {
+    ident: string;
+    gruppe: IdentGruppe;
+}
+
+export enum IdentGruppe {
+    AKTOERID = 'AKTOERID',
+    FOLKEREGISTERIDENT = 'FOLKEREGISTERIDENT',
+    NPID = 'NPID',
+    ORGNR = 'ORGNR',
+    SAMHANDLERNR = 'SAMHANDLERNR',
 }
 
 export enum EnhetFilter {
