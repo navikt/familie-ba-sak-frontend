@@ -18,6 +18,11 @@ export enum TidslinjeSkala {
     TRE_ÅR,
 }
 
+export enum NavigeringsRetning {
+    VENSTRE = 'VENSTRE',
+    HØYRE = 'HØYRE',
+}
+
 const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     const tidslinjeSkalaer: ITidslinjeSkala[] = [
         { id: TidslinjeSkala.HALVT_ÅR, navn: '6 mnd', måneder: 6 },
@@ -28,7 +33,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     const [aktivEtikett, settAktivEtikett] = useState<Skalaetikett | undefined>(undefined);
 
     const [tidslinjeInput, settTidslinjeInput] = useState({
-        aktivSkala: tidslinjeSkalaer[1],
+        aktivSkala: tidslinjeSkalaer[TidslinjeSkala.ETT_ÅR],
         sluttDato: moment(),
         startDato: moment().subtract(12, 'month'),
     });
@@ -49,8 +54,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         }));
     };
 
-    const naviger = (retning: 'venstre' | 'høyre') => {
-        if (retning === 'venstre') {
+    const naviger = (retning: NavigeringsRetning) => {
+        if (retning === NavigeringsRetning.VENSTRE) {
             settTidslinjeInput(({ sluttDato, startDato, aktivSkala }) => ({
                 ...tidslinjeInput,
                 sluttDato: sluttDato.clone().subtract(aktivSkala.måneder, 'month'),
@@ -103,11 +108,6 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             : [[]];
     };
 
-    const sisteDatoIMnd = (måned: number, år: number): Date => {
-        // Måneden i Date objektet er 0-indeksert
-        return new Date(år, måned + 1, 0);
-    };
-
     return {
         aktivEtikett,
         settAktivEtikett,
@@ -117,7 +117,6 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         naviger,
         endreSkala,
         genererRader,
-        sisteDatoIMnd,
     };
 });
 

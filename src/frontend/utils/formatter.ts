@@ -53,3 +53,8 @@ export const formaterPersonIdent = (personIdent: string) => {
         ? `${personIdent.slice(0, 6)} ${personIdent.slice(6, personIdent.length)}`
         : `${personIdent.slice(0, 3)} ${personIdent.slice(3, 6)} ${personIdent.slice(6, 9)}`;
 };
+
+export const sisteDatoIMnd = (måned: number, år: number): Date => {
+    // Måneden i Date objektet er 0-indeksert
+    return new Date(år, måned + 1, 0);
+};

@@ -8,12 +8,12 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { IPerson } from '../../../typer/person';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { Tidslinje } from '@navikt/helse-frontend-tidslinje/lib';
-import { formaterPersonIdent } from '../../../utils/formatter';
+import { formaterPersonIdent, sisteDatoIMnd } from '../../../utils/formatter';
 import { ToggleGruppe } from 'nav-frontend-toggle';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
 import { Knapp } from 'nav-frontend-knapper';
 import TidslinjeEtikett from './TidslinjeEtikett';
-import { useTidslinje } from '../../../context/TidslinjeContext';
+import { NavigeringsRetning, useTidslinje } from '../../../context/TidslinjeContext';
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();
@@ -25,7 +25,6 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         endreSkala,
         genererRader,
         aktivEtikett,
-        sisteDatoIMnd,
     } = useTidslinje();
 
     const aktivVedtak =
@@ -55,11 +54,11 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                         onChange={endreSkala}
                     />
                     <div className={'tidslinje-header__navigering'}>
-                        <Knapp mini kompakt onClick={() => naviger('venstre')}>
+                        <Knapp mini kompakt onClick={() => naviger(NavigeringsRetning.VENSTRE)}>
                             <FamilieChevron retning={'venstre'} />
                             <span className="sr-only">Naviger til venstre i tidslinjen</span>
                         </Knapp>
-                        <Knapp mini kompakt onClick={() => naviger('høyre')}>
+                        <Knapp mini kompakt onClick={() => naviger(NavigeringsRetning.HØYRE)}>
                             <FamilieChevron />
                             <span className="sr-only">Naviger til høyre i tidslinjen</span>
                         </Knapp>

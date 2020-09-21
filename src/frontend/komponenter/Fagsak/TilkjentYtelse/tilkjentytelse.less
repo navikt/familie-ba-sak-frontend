@@ -1,10 +1,15 @@
 .tilkjentytelse {
-  & .typo-normal:first-child {
-    margin-top: 3.625rem;
+  & .typo-normal {
+    &:first-child {
+      margin-top: 3.625rem;
+    }
   }
 
-  & .typo-normal:not(:first-child) {
-    margin-top: .5rem;
+
+  & .typo-normal{
+    &:not(:first-child) {
+      margin-top: .5rem;
+    }
   }
 }
 
@@ -28,12 +33,11 @@
     }
   }
 
-  &__navigering > button {
-    height: 28px;
-  }
 
-  &__navigering > button:first-child {
-    margin-right: 10px;
+  &__navigering > button{
+    &:first-child {
+      margin-right: 10px;
+    }
   }
 }
 
