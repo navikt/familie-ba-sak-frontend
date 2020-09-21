@@ -1,16 +1,5 @@
 .tilkjentytelse {
-  & .typo-normal {
-    &:first-child {
-      margin-top: 3.625rem;
-    }
-  }
 
-
-  & .typo-normal {
-    &:not(:first-child) {
-      margin-top: .5rem;
-    }
-  }
 }
 
 .tilkjentytelse-informasjonsboks {
@@ -32,6 +21,10 @@
     &__info {
       display: flex;
       flex-direction: column;
+
+      > p {
+        padding-bottom: 8px;
+      }
 
       &__totalbeløp {
         margin: 17px;
@@ -72,6 +65,19 @@
 .tidslinje {
   display: flex;
   overflow: hidden;
+
+  & .typo-normal {
+    &:first-child {
+      margin-top: 3.625rem;
+    }
+  }
+
+
+  & .typo-normal {
+    &:not(:first-child) {
+      margin-top: .5rem;
+    }
+  }
 
   &__labels {
     min-width: 10rem;
@@ -129,6 +135,19 @@
       }
     }
   }
+}
+
+.tilkjentytelse-oppsummeringsboks {
+  text-align: left;
+
+  * th, td {
+    padding: 0 40px 8px 0;
+  }
+
+  * th {
+    padding-bottom: 14px;
+  };
+
 }
 
 .tilkjentytelse-rad {

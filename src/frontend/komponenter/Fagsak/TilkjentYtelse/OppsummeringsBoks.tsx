@@ -46,12 +46,18 @@ const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                     }}
                 />
             </div>
-            <table>
+            <table className={'tilkjentytelse-oppsummeringsboks'}>
                 <thead>
                     <tr>
-                        <th>Person</th>
-                        <th>Sats</th>
-                        <th>Beløp</th>
+                        <th>
+                            <Normaltekst>Person</Normaltekst>
+                        </th>
+                        <th>
+                            <Normaltekst>Sats</Normaltekst>
+                        </th>
+                        <th>
+                            <Normaltekst>Beløp</Normaltekst>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,12 +66,22 @@ const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                             return (
                                 <tr key={index}>
                                     <td>
-                                        {`${detalj.person.navn} | ${formaterPersonIdent(
+                                        <Normaltekst>{`${
+                                            detalj.person.navn
+                                        } | ${formaterPersonIdent(
                                             detalj.person.personIdent
-                                        )}`}
+                                        )}`}</Normaltekst>
                                     </td>
-                                    <td>{ytelsetype[detalj.ytelseType].navn}</td>
-                                    <td>{formaterBeløp(detalj.utbetaltPerMnd)}</td>
+                                    <td>
+                                        <Normaltekst>
+                                            {ytelsetype[detalj.ytelseType].navn}
+                                        </Normaltekst>
+                                    </td>
+                                    <td>
+                                        <Normaltekst>
+                                            {formaterBeløp(detalj.utbetaltPerMnd)}
+                                        </Normaltekst>
+                                    </td>
                                 </tr>
                             );
                         });
