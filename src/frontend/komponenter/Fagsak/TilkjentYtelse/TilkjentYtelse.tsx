@@ -1,6 +1,5 @@
 import { AxiosError } from 'axios';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
@@ -8,10 +7,11 @@ import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
+import { OppsummeringsBoks } from './OppsummeringsBoks';
 import { IBehandling } from '../../../typer/behandling';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-import { TidslinjeProvider } from '../../../context/TidslinjeContext';
+import { useTidslinje } from '../../../context/TidslinjeContext';
+import moment from 'moment';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -24,6 +24,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
 }) => {
     const { axiosRequest } = useApp();
     const history = useHistory();
+    const { aktivEtikett } = useTidslinje();
     const [tilkjentYtelseRessurs, setTilkjentYtelseRessurs] = React.useState<
         Ressurs<IOppsummeringBeregning[]>
     >({ status: RessursStatus.IKKE_HENTET });
@@ -52,9 +53,29 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
     };
 
+    const filtrerPerioderForAktivEtikett = (
+        tilkjentYtelseRessursData: IOppsummeringBeregning[]
+    ): IOppsummeringBeregning[] => {
+        return aktivEtikett
+            ? tilkjentYtelseRessursData.filter(periode => {
+                  const periodeFomÅr = moment(periode.periodeFom).year();
+                  const periodeFomMåned = moment(periode.periodeFom).month();
+                  const periodeTomÅr = moment(periode.periodeTom).year();
+                  const periodeTomMåned = moment(periode.periodeTom).month();
+                  const aktivEtikettÅr = aktivEtikett.dato.getFullYear();
+                  const aktivEtikettMåned = aktivEtikett.dato.getMonth() + 1;
+
+                  return (
+                      (aktivEtikettÅr > periodeFomÅr && aktivEtikettÅr < periodeTomÅr) ||
+                      (aktivEtikettÅr === periodeFomÅr && aktivEtikettMåned >= periodeFomMåned) ||
+                      (aktivEtikettÅr === periodeTomÅr && aktivEtikettMåned <= periodeTomMåned)
+                  );
+              })
+            : [];
+    };
+
     switch (tilkjentYtelseRessurs.status) {
         case RessursStatus.SUKSESS: {
-            const harAndeler = tilkjentYtelseRessurs.data.length > 0;
             return (
                 <Skjemasteg
                     senderInn={false}
@@ -64,23 +85,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     nesteOnClick={nesteOnClick}
                     maxWidthStyle={'80rem'}
                 >
-                    <TidslinjeProvider>
-                        <TilkjentYtelseTidslinje />
-                    </TidslinjeProvider>
-                    {harAndeler ? (
-                        <div role="table">
-                            <OppsummeringsradHeader />
-                            {tilkjentYtelseRessurs.data
-                                .slice()
-                                .reverse()
-                                .map((beregning, index) => {
-                                    return <Oppsummeringsrad beregning={beregning} key={index} />;
-                                })}
-                        </div>
-                    ) : (
-                        <div className="tilkjentytelse-informasjon">
-                            <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
-                        </div>
+                    <TilkjentYtelseTidslinje />
+                    {aktivEtikett && (
+                        <OppsummeringsBoks
+                            perioder={filtrerPerioderForAktivEtikett(tilkjentYtelseRessurs.data)}
+                            aktivEtikett={aktivEtikett}
+                        />
                     )}
                 </Skjemasteg>
             );

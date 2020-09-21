@@ -6,9 +6,37 @@
   }
 
 
-  & .typo-normal{
+  & .typo-normal {
     &:not(:first-child) {
       margin-top: .5rem;
+    }
+  }
+}
+
+.tilkjentytelse-informasjonsboks {
+  border: 1px solid @navGra60;
+  box-shadow: 0 0.8px 4px 2px rgba(0, 0, 0, 0.08);
+  min-height: 281px;
+  padding: 2.5rem;
+
+  & > * {
+    color: @navMorkGra;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 2rem;
+
+    &__info {
+      display: flex;
+      flex-direction: column;
+
+      &__totalbeløp {
+        margin: 17px;
+        font-weight: bold;
+      }
     }
   }
 }
@@ -82,20 +110,7 @@
 
 .tilkjentytelse-rad {
   display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  border-bottom: 1px solid @navGra20;
-  cursor: pointer;
 
-  &.åpen {
-    border: 2px solid @navDypBlaLighten20;
-  }
-
-  &.tilkjentytelse-header-rad {
-    border-bottom: 1px solid @navGra80;
-  }
 
   & .tilkjentytelse-kolonne:nth-child(1) {
     max-width: 40px;

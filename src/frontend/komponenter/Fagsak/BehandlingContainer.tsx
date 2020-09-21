@@ -11,6 +11,7 @@ import { useBehandling } from '../../context/BehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
 import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import AlertStripe from 'nav-frontend-alertstriper';
+import { TidslinjeProvider } from '../../context/TidslinjeContext';
 
 interface IProps {
     fagsak: IFagsak;
@@ -61,10 +62,12 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         path="/fagsak/:fagsakId/:behandlingId/tilkjent-ytelse"
                         render={() => {
                             return (
-                                <TilkjentYtelse
-                                    fagsak={fagsak}
-                                    åpenBehandling={åpenBehandling.data}
-                                />
+                                <TidslinjeProvider>
+                                    <TilkjentYtelse
+                                        fagsak={fagsak}
+                                        åpenBehandling={åpenBehandling.data}
+                                    />
+                                </TidslinjeProvider>
                             );
                         }}
                     />
