@@ -10,6 +10,8 @@ import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
 import { IBehandling } from '../../../typer/behandling';
+import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
+import { TidslinjeProvider } from '../../../context/TidslinjeContext';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -62,6 +64,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     nesteOnClick={nesteOnClick}
                     maxWidthStyle={'80rem'}
                 >
+                    <TidslinjeProvider>
+                        <TilkjentYtelseTidslinje />
+                    </TidslinjeProvider>
                     {harAndeler ? (
                         <div role="table">
                             <OppsummeringsradHeader />

@@ -38,12 +38,12 @@ const Oppsummeringsrad: React.FunctionComponent<IProps> = ({ beregning }) => {
             tabIndex={0}
         >
             <Kolonne classes={kolonneClassnames}>
-                <div
+                <span
                     aria-label={åpentElement ? 'Lukk' : 'Åpne'}
                     title={åpentElement ? 'Lukk' : 'Åpne'}
                 >
                     <FamilieChevron retning={åpentElement ? 'opp' : 'ned'} />
-                </div>
+                </span>
             </Kolonne>
             <Kolonne classes={kolonneClassnames}>
                 {periodeToString(

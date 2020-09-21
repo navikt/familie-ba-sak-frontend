@@ -1,5 +1,83 @@
+.tilkjentytelse {
+  & .typo-normal {
+    &:first-child {
+      margin-top: 3.625rem;
+    }
+  }
+
+
+  & .typo-normal{
+    &:not(:first-child) {
+      margin-top: .5rem;
+    }
+  }
+}
+
 .tilkjentytelse-informasjon {
   padding: 0.8rem 0;
+}
+
+.tidslinje-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    > div:first-child {
+      margin-bottom: 1rem;
+    }
+  }
+
+
+  &__navigering > button{
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.tidslinje {
+  display: flex;
+  overflow: hidden;
+
+  &__labels {
+    min-width: 10rem;
+  }
+
+  &__etikett {
+    transform: translateX(100%);
+    margin-top: -10px;
+
+    &__label {
+      text-decoration: underline;
+      color: @navBla
+    }
+
+    &__label--aktiv {
+      text-decoration: none;
+      color: @fokusFarge;
+      font-weight: bold;
+      border-left: 1px solid @navGra20;
+      padding-left: 5px;
+    }
+
+    &__label--disabled {
+      text-decoration: none;
+      color: @navMorkGra;
+      cursor: default;
+    }
+  }
+
+  &__etikett:hover, &__etikett:focus {
+    > span {
+      text-decoration: none;
+    }
+  }
 }
 
 .tilkjentytelse-rad {
@@ -77,14 +155,17 @@
       padding-left: 0.8rem;
       padding-right: 1.2rem;
     }
+
     & .tilkjentytelse-detaljer-kolonne:nth-child(2) {
       flex: 7;
       padding-right: 1.2rem;
     }
+
     & .tilkjentytelse-detaljer-kolonne:nth-child(3) {
       flex: 10;
       padding-right: 1.2rem;
     }
+
     & .tilkjentytelse-detaljer-kolonne:nth-child(4) {
       flex: 2;
       padding-right: 1.2rem;
