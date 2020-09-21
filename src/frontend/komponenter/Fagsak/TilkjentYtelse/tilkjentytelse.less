@@ -80,30 +80,53 @@
   &__etikett {
     transform: translateX(100%);
     margin-top: -10px;
+    padding: 3px;
 
-    &__label {
+    > span {
       text-decoration: underline;
       color: @navBla
     }
 
-    &__label--aktiv {
-      text-decoration: none;
-      color: @fokusFarge;
-      font-weight: bold;
-      border-left: 1px solid @navGra20;
-      padding-left: 5px;
+    &:focus {
+      background-color: @fokusFarge;
+
+      > span {
+        color: #fff;
+      }
     }
 
-    &__label--disabled {
-      text-decoration: none;
-      color: @navMorkGra;
-      cursor: default;
+    &:hover {
+      background-color: transparent;
+      > span {
+        text-decoration: none;
+        color: @navBla;
+      }
     }
-  }
 
-  &__etikett:hover, &__etikett:focus {
-    > span {
-      text-decoration: none;
+    &--aktiv {
+      &:focus {
+        background-color: transparent;
+
+        > span {
+          color: @navDypBla;
+        }
+      }
+
+      > span {
+        text-decoration: none;
+        font-weight: bold;
+        border-left: 1px solid @navGra20;
+        padding-left: 5px;
+        color: @navDypBla;
+      }
+    }
+
+    &--disabled {
+      > span {
+        text-decoration: none;
+        color: @navMorkGra;
+        cursor: default;
+      }
     }
   }
 }

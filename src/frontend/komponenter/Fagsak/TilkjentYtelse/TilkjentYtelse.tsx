@@ -63,7 +63,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                   const periodeTomÅr = moment(periode.periodeTom).year();
                   const periodeTomMåned = moment(periode.periodeTom).month();
                   const aktivEtikettÅr = aktivEtikett.dato.getFullYear();
-                  const aktivEtikettMåned = aktivEtikett.dato.getMonth() + 1;
+                  const aktivEtikettMåned = aktivEtikett.dato.getMonth();
 
                   return (
                       (aktivEtikettÅr > periodeFomÅr && aktivEtikettÅr < periodeTomÅr) ||
