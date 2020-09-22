@@ -4,7 +4,7 @@ import {
     formaterBeløp,
     formaterMånedTilString,
     formaterPersonIdent,
-    hentAlderIString,
+    hentAlderSomString,
 } from '../../../utils/formatter';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { useTidslinje } from '../../../context/TidslinjeContext';
@@ -35,8 +35,7 @@ const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
 
                     {perioder.length > 0 ? (
                         <Normaltekst>
-                            {' '}
-                            Totalt utbetalt i mnd{' '}
+                            Totalt utbetalt i mnd
                             <span
                                 className={
                                     'tilkjentytelse-informasjonsboks__header__info__totalbeløp'
@@ -78,7 +77,7 @@ const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                                         <td>
                                             <Normaltekst>{`${
                                                 detalj.person.navn
-                                            } (${hentAlderIString(
+                                            } (${hentAlderSomString(
                                                 detalj.person.fødselsdato
                                             )}) | ${formaterPersonIdent(
                                                 detalj.person.personIdent

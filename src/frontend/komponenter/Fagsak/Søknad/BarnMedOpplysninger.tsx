@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { formaterPersonIdent, hentAlderIString } from '../../../utils/formatter';
+import { formaterPersonIdent, hentAlderSomString } from '../../../utils/formatter';
 import Slett from '../../../ikoner/Slett';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
@@ -24,7 +24,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             <FamilieCheckbox
                 erLesevisning={lesevisning}
                 id={`barn-${barn.ident}`}
-                label={`${barn.navn ?? 'Navn ukjent'} (${hentAlderIString(
+                label={`${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
                     barn.fødselsdato
                 )}) | ${formaterPersonIdent(barn.ident)}`}
                 checked={barn.inkludertISøknaden}

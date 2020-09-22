@@ -39,7 +39,7 @@ export const hentAlder = (dato: string): number => {
     return momentDato.isValid() ? moment().diff(momentDato, 'years') : 0;
 };
 
-export const hentAlderIString = (fødselsdato: string | undefined) => {
+export const hentAlderSomString = (fødselsdato: string | undefined) => {
     return fødselsdato
         ? moment().diff(moment(fødselsdato, 'YYYY-MM-DD'), 'years') + ' år'
         : 'Alder ukjent';
