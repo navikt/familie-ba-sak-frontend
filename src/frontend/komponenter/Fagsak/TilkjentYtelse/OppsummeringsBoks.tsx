@@ -4,6 +4,7 @@ import {
     formaterBeløp,
     formaterMånedTilString,
     formaterPersonIdent,
+    hentAlderIString,
 } from '../../../utils/formatter';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { useTidslinje } from '../../../context/TidslinjeContext';
@@ -77,7 +78,9 @@ const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                                         <td>
                                             <Normaltekst>{`${
                                                 detalj.person.navn
-                                            } | ${formaterPersonIdent(
+                                            } (${hentAlderIString(
+                                                detalj.person.fødselsdato
+                                            )}) | ${formaterPersonIdent(
                                                 detalj.person.personIdent
                                             )}`}</Normaltekst>
                                         </td>
