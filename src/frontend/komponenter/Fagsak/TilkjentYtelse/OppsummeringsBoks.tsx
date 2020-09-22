@@ -31,14 +31,22 @@ const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                             aktivEtikett.dato.getMonth() + 1
                         )} ${aktivEtikett.dato.getFullYear()}`}
                     </Element>
-                    <Normaltekst>
-                        Totalt utbetalt i mnd
-                        <span
-                            className={'tilkjentytelse-informasjonsboks__header__info__totalbeløp'}
-                        >
-                            {`${perioder.reduce(summerTotalBeløpForPeriode, 0)} kr`}
-                        </span>
-                    </Normaltekst>
+
+                    {perioder.length > 0 ? (
+                        <Normaltekst>
+                            {' '}
+                            Totalt utbetalt i mnd{' '}
+                            <span
+                                className={
+                                    'tilkjentytelse-informasjonsboks__header__info__totalbeløp'
+                                }
+                            >
+                                {`${perioder.reduce(summerTotalBeløpForPeriode, 0)} kr`}
+                            </span>
+                        </Normaltekst>
+                    ) : (
+                        <Normaltekst>Ingen utbetalinger</Normaltekst>
+                    )}
                 </div>
                 <Xknapp
                     onClick={() => {
@@ -46,48 +54,50 @@ const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                     }}
                 />
             </div>
-            <table className={'tilkjentytelse-oppsummeringsboks'}>
-                <thead>
-                    <tr>
-                        <th>
-                            <Normaltekst>Person</Normaltekst>
-                        </th>
-                        <th>
-                            <Normaltekst>Sats</Normaltekst>
-                        </th>
-                        <th>
-                            <Normaltekst>Beløp</Normaltekst>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {perioder.map(periode => {
-                        return periode.beregningDetaljer.map((detalj, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>
-                                        <Normaltekst>{`${
-                                            detalj.person.navn
-                                        } | ${formaterPersonIdent(
-                                            detalj.person.personIdent
-                                        )}`}</Normaltekst>
-                                    </td>
-                                    <td>
-                                        <Normaltekst>
-                                            {ytelsetype[detalj.ytelseType].navn}
-                                        </Normaltekst>
-                                    </td>
-                                    <td>
-                                        <Normaltekst>
-                                            {formaterBeløp(detalj.utbetaltPerMnd)}
-                                        </Normaltekst>
-                                    </td>
-                                </tr>
-                            );
-                        });
-                    })}
-                </tbody>
-            </table>
+            {perioder.length !== 0 && (
+                <table className={'tilkjentytelse-oppsummeringsboks'}>
+                    <thead>
+                        <tr>
+                            <th>
+                                <Normaltekst>Person</Normaltekst>
+                            </th>
+                            <th>
+                                <Normaltekst>Sats</Normaltekst>
+                            </th>
+                            <th>
+                                <Normaltekst>Beløp</Normaltekst>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {perioder.map(periode => {
+                            return periode.beregningDetaljer.map((detalj, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <Normaltekst>{`${
+                                                detalj.person.navn
+                                            } | ${formaterPersonIdent(
+                                                detalj.person.personIdent
+                                            )}`}</Normaltekst>
+                                        </td>
+                                        <td>
+                                            <Normaltekst>
+                                                {ytelsetype[detalj.ytelseType].navn}
+                                            </Normaltekst>
+                                        </td>
+                                        <td>
+                                            <Normaltekst>
+                                                {formaterBeløp(detalj.utbetaltPerMnd)}
+                                            </Normaltekst>
+                                        </td>
+                                    </tr>
+                                );
+                            });
+                        })}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 };
