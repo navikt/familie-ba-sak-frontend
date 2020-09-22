@@ -55,7 +55,7 @@ const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                 />
             </div>
             {perioder.length !== 0 && (
-                <table className={'tilkjentytelse-oppsummeringsboks'}>
+                <table>
                     <thead>
                         <tr>
                             <th>
