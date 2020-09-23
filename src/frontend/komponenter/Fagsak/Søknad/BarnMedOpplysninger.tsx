@@ -1,10 +1,9 @@
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
-import moment from 'moment';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { formaterPersonIdent } from '../../../utils/formatter';
+import { formaterPersonIdent, hentAlderSomString } from '../../../utils/formatter';
 import Slett from '../../../ikoner/Slett';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
@@ -16,9 +15,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { settBarn, søknad, settSøknadOgValider } = useSøknad();
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
-    const alder = barn.fødselsdato
-        ? moment().diff(moment(barn.fødselsdato, 'YYYY-MM-DD'), 'years') + ' år'
-        : 'Alder ukjent';
 
     const finnBarnIndex = (ident: string) =>
         søknad.barnaMedOpplysninger.findIndex(barn => barn.ident === ident);
@@ -28,9 +24,9 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             <FamilieCheckbox
                 erLesevisning={lesevisning}
                 id={`barn-${barn.ident}`}
-                label={`${barn.navn ?? 'Navn ukjent'} (${alder}) | ${formaterPersonIdent(
-                    barn.ident
-                )}`}
+                label={`${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
+                    barn.fødselsdato
+                )}) | ${formaterPersonIdent(barn.ident)}`}
                 checked={barn.inkludertISøknaden}
                 onChange={() => {
                     settBarn({

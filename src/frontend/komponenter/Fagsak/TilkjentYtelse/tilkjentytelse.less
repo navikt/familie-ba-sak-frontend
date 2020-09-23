@@ -1,22 +1,3 @@
-.tilkjentytelse {
-  & .typo-normal {
-    &:first-child {
-      margin-top: 3.625rem;
-    }
-  }
-
-
-  & .typo-normal{
-    &:not(:first-child) {
-      margin-top: .5rem;
-    }
-  }
-}
-
-.tilkjentytelse-informasjon {
-  padding: 0.8rem 0;
-}
-
 .tidslinje-header {
   display: flex;
   justify-content: space-between;
@@ -33,7 +14,6 @@
     }
   }
 
-
   &__navigering > button{
     &:first-child {
       margin-right: 10px;
@@ -45,6 +25,18 @@
   display: flex;
   overflow: hidden;
 
+  & .typo-normal {
+    &:first-child {
+      margin-top: 3.625rem;
+    }
+  }
+
+  & .typo-normal {
+    &:not(:first-child) {
+      margin-top: .5rem;
+    }
+  }
+
   &__labels {
     min-width: 10rem;
   }
@@ -52,144 +44,101 @@
   &__etikett {
     transform: translateX(100%);
     margin-top: -10px;
+    padding: 3px;
 
-    &__label {
+    > span {
       text-decoration: underline;
       color: @navBla
     }
 
-    &__label--aktiv {
-      text-decoration: none;
-      color: @fokusFarge;
-      font-weight: bold;
-      border-left: 1px solid @navGra20;
-      padding-left: 5px;
+    &:focus {
+      background-color: @fokusFarge;
+
+      > span {
+        color: #fff;
+      }
     }
 
-    &__label--disabled {
-      text-decoration: none;
-      color: @navMorkGra;
+    &:hover {
+      background-color: transparent;
+      > span {
+        text-decoration: none;
+        color: @navBla;
+      }
+    }
+
+    &--aktiv {
+      &:focus {
+        background-color: transparent;
+
+        > span {
+          color: @navDypBla;
+        }
+      }
+
+      > span {
+        text-decoration: none;
+        font-weight: bold;
+        border-left: 1px solid @navGra20;
+        padding-left: 5px;
+        color: @navDypBla;
+      }
+    }
+
+    &--disabled {
       cursor: default;
-    }
-  }
 
-  &__etikett:hover, &__etikett:focus {
-    > span {
-      text-decoration: none;
+      &:hover {
+        > span {
+          color: @navMorkGra;
+        }
+      }
+
+      > span {
+        text-decoration: none;
+        color: @navMorkGra;
+      }
     }
   }
 }
 
-.tilkjentytelse-rad {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  border-bottom: 1px solid @navGra20;
-  cursor: pointer;
+.tilkjentytelse-informasjonsboks {
+  border: 1px solid @navGra60;
+  box-shadow: 0 0.8px 4px 2px rgba(0, 0, 0, 0.08);
+  min-height: 17rem;
+  padding: 2.5rem;
+  text-align: left;
 
-  &.åpen {
-    border: 2px solid @navDypBlaLighten20;
+  > * {
+    color: @navMorkGra;
   }
 
-  &.tilkjentytelse-header-rad {
-    border-bottom: 1px solid @navGra80;
+  * th, td {
+    padding: 0 40px 8px 0;
   }
 
-  & .tilkjentytelse-kolonne:nth-child(1) {
-    max-width: 40px;
-    padding-left: 0.8rem;
-    padding-right: 1.2rem;
+  * th {
+    padding-bottom: 14px;
   }
 
-  & .tilkjentytelse-kolonne:nth-child(2) {
-    flex: 4;
-  }
-
-  & .tilkjentytelse-kolonne:nth-child(3) {
-    flex: 3;
-    padding-right: 1.2rem;
-  }
-
-  & .tilkjentytelse-kolonne:nth-child(4) {
-    flex: 8;
-  }
-
-  & .tilkjentytelse-kolonne:nth-child(5) {
-    flex: 2;
-    text-align: center;
-    padding-right: 1.2rem;
-  }
-
-  & .tilkjentytelse-kolonne:nth-child(6) {
-    flex: 2;
-    padding-right: 1.2rem;
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  & .tilkjentytelse-kolonne {
-    box-sizing: border-box;
-    flex-grow: 1;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    overflow: visible;
-    list-style: none;
-
-    &.åpen {
-      background-color: @navBlaLighten80;
-    }
-
-  }
-
-  & .tilkjentytelse-detaljer-rad {
+  &__header {
     display: flex;
-    flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
-    width: 100%;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 2rem;
 
-    & .tilkjentytelse-detaljer-kolonne:nth-child(1) {
-      max-width: 40px;
-      padding-left: 0.8rem;
-      padding-right: 1.2rem;
-    }
+    &__info {
+      display: flex;
+      flex-direction: column;
 
-    & .tilkjentytelse-detaljer-kolonne:nth-child(2) {
-      flex: 7;
-      padding-right: 1.2rem;
-    }
+      > p {
+        padding-bottom: 8px;
+      }
 
-    & .tilkjentytelse-detaljer-kolonne:nth-child(3) {
-      flex: 10;
-      padding-right: 1.2rem;
-    }
-
-    & .tilkjentytelse-detaljer-kolonne:nth-child(4) {
-      flex: 2;
-      padding-right: 1.2rem;
-      text-align: right;
-      white-space: nowrap;
-    }
-  }
-
-  & .tilkjentytelse-detaljer-kolonne {
-    box-sizing: border-box;
-    flex-grow: 1;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    overflow: hidden;
-    list-style: none;
-
-    &.familierelasjon-separator {
-      border-bottom: 1px dashed @navGra20;
-    }
-
-    & .familie-ikon {
-      height: 20px;
-      width: 20px;
-      margin-right: 0.5rem;
+      &__totalbeløp {
+        margin: 1rem;
+        font-weight: bold;
+      }
     }
   }
 }
