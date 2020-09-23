@@ -7,7 +7,7 @@ import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { OppsummeringsBoks } from './OppsummeringsBoks';
+import { Oppsummeringsboks } from './Oppsummeringsboks';
 import { IBehandling } from '../../../typer/behandling';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useTidslinje } from '../../../context/TidslinjeContext';
@@ -57,21 +57,25 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         tilkjentYtelseRessursData: IOppsummeringBeregning[]
     ): IOppsummeringBeregning[] => {
         return aktivEtikett
-            ? tilkjentYtelseRessursData.filter(periode => {
-                  const periodeFomÅr = moment(periode.periodeFom).year();
-                  const periodeFomMåned = moment(periode.periodeFom).month();
-                  const periodeTomÅr = moment(periode.periodeTom).year();
-                  const periodeTomMåned = moment(periode.periodeTom).month();
-                  const aktivEtikettÅr = aktivEtikett.dato.getFullYear();
-                  const aktivEtikettMåned = aktivEtikett.dato.getMonth();
-
-                  return (
-                      (aktivEtikettÅr > periodeFomÅr && aktivEtikettÅr < periodeTomÅr) ||
-                      (aktivEtikettÅr === periodeFomÅr && aktivEtikettMåned >= periodeFomMåned) ||
-                      (aktivEtikettÅr === periodeTomÅr && aktivEtikettMåned <= periodeTomMåned)
-                  );
-              })
+            ? tilkjentYtelseRessursData.filter(periode =>
+                  periodeOverlapperMedValgtMåned(periode, aktivEtikett.dato)
+              )
             : [];
+    };
+
+    const periodeOverlapperMedValgtMåned = (periode: IOppsummeringBeregning, dato: Date) => {
+        const periodeFomÅr = moment(periode.periodeFom).year();
+        const periodeFomMåned = moment(periode.periodeFom).month();
+        const periodeTomÅr = moment(periode.periodeTom).year();
+        const periodeTomMåned = moment(periode.periodeTom).month();
+        const aktivEtikettÅr = dato.getFullYear();
+        const aktivEtikettMåned = dato.getMonth();
+
+        return (
+            (aktivEtikettÅr > periodeFomÅr && aktivEtikettÅr < periodeTomÅr) ||
+            (aktivEtikettÅr === periodeFomÅr && aktivEtikettMåned >= periodeFomMåned) ||
+            (aktivEtikettÅr === periodeTomÅr && aktivEtikettMåned <= periodeTomMåned)
+        );
     };
 
     switch (tilkjentYtelseRessurs.status) {
@@ -87,7 +91,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 >
                     <TilkjentYtelseTidslinje />
                     {aktivEtikett && (
-                        <OppsummeringsBoks
+                        <Oppsummeringsboks
                             perioder={filtrerPerioderForAktivEtikett(tilkjentYtelseRessurs.data)}
                             aktivEtikett={aktivEtikett}
                         />

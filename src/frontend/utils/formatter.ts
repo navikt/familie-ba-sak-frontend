@@ -10,6 +10,7 @@ export enum datoformat {
     ISO_DAG = 'YYYY-MM-DD',
     DATO_TID = 'DD.MM.YY HH:mm',
     TID = 'HH:mm',
+    MÅNED_NAVN = 'MMMM YYYY',
 }
 
 export enum datoformatNorsk {
@@ -63,35 +64,4 @@ export const formaterPersonIdent = (personIdent: string) => {
 export const sisteDatoIMnd = (måned: number, år: number): Date => {
     // Måneden i Date objektet er 0-indeksert
     return new Date(år, måned + 1, 0);
-};
-
-export const formaterMånedTilString = (måned: number): string => {
-    switch (måned) {
-        case 1:
-            return 'Januar';
-        case 2:
-            return 'Februar';
-        case 3:
-            return 'Mars';
-        case 4:
-            return 'April';
-        case 5:
-            return 'Mai';
-        case 6:
-            return 'Juni';
-        case 7:
-            return 'Juli';
-        case 8:
-            return 'August';
-        case 9:
-            return 'September';
-        case 10:
-            return 'Oktober';
-        case 11:
-            return 'November';
-        case 12:
-            return 'Desember';
-        default:
-            return 'Ugyldig måned';
-    }
 };

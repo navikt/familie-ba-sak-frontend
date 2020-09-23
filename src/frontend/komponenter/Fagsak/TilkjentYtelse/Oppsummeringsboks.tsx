@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { IOppsummeringBeregning, ytelsetype } from '../../../typer/beregning';
 import {
+    datoformat,
     formaterBeløp,
-    formaterMånedTilString,
+    formaterIsoDato,
     formaterPersonIdent,
     hentAlderSomString,
 } from '../../../utils/formatter';
@@ -16,22 +17,23 @@ interface IProps {
     aktivEtikett: Skalaetikett;
 }
 
-const summerTotalBeløpForPeriode = (sum: number, periode: IOppsummeringBeregning) => {
+const summerTotalbeløpForPeriode = (sum: number, periode: IOppsummeringBeregning) => {
     return sum + periode.utbetaltPerMnd;
 };
 
 const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEtikett }) => {
     const { settAktivEtikett } = useTidslinje();
 
+    const månedNavnOgÅr = () => {
+        const navn = formaterIsoDato(aktivEtikett.dato.toDateString(), datoformat.MÅNED_NAVN);
+        return navn[0].toUpperCase() + navn.substr(1);
+    };
+
     return (
         <div className={'tilkjentytelse-informasjonsboks'}>
             <div className={'tilkjentytelse-informasjonsboks__header'}>
                 <div className={'tilkjentytelse-informasjonsboks__header__info'}>
-                    <Element>
-                        {`${formaterMånedTilString(
-                            aktivEtikett.dato.getMonth() + 1
-                        )} ${aktivEtikett.dato.getFullYear()}`}
-                    </Element>
+                    <Element>{månedNavnOgÅr()}</Element>
 
                     {perioder.length > 0 ? (
                         <Normaltekst>
@@ -41,7 +43,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                                     'tilkjentytelse-informasjonsboks__header__info__totalbeløp'
                                 }
                             >
-                                {`${perioder.reduce(summerTotalBeløpForPeriode, 0)} kr`}
+                                {`${perioder.reduce(summerTotalbeløpForPeriode, 0)} kr`}
                             </span>
                         </Normaltekst>
                     ) : (
@@ -103,4 +105,4 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
         </div>
     );
 };
-export { OppsummeringsBoks };
+export { Oppsummeringsboks };

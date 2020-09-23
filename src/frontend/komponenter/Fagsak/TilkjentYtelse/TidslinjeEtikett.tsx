@@ -19,6 +19,8 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, styl
 
     const isDisabled = tidslinjeInput.aktivSkala.id === TidslinjeSkala.TRE_ÅR;
 
+    console.log(isDisabled);
+
     return (
         <button
             aria-label={etikett.label}
@@ -29,7 +31,7 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, styl
                 aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()
                     ? 'tidslinje__etikett--aktiv'
                     : '',
-                isDisabled ? 'tidslinje__etikett__label--disabled' : ''
+                isDisabled ? 'tidslinje__etikett--disabled' : ''
             )}
             onClick={onEtikettClick}
         >
