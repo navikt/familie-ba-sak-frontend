@@ -9,17 +9,15 @@ import { IPerson } from '../../../typer/person';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { Tidslinje } from '@navikt/helse-frontend-tidslinje/lib';
 import { formaterPersonIdent, sisteDatoIMnd } from '../../../utils/formatter';
-import FamilieChevron from '../../../ikoner/FamilieChevron';
-import { Flatknapp } from 'nav-frontend-knapper';
 import TidslinjeEtikett from './TidslinjeEtikett';
-import { NavigeringsRetning, useTidslinje } from '../../../context/TidslinjeContext';
+import { useTidslinje } from '../../../context/TidslinjeContext';
 import Vinduvelger from './VinduVelger';
+import TidslinjeNavigering from './TidslinjeNavigering';
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();
     const {
         genererFormatertÅrstall,
-        naviger,
         genererRader,
         aktivEtikett,
         aktivtTidslinjeVindu,
@@ -46,26 +44,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                 <Undertittel>{genererFormatertÅrstall()}</Undertittel>
                 <div className={'tidslinje-header__controls'}>
                     <Vinduvelger />
-                    <div className={'tidslinje-header__navigering'}>
-                        <Flatknapp
-                            title={'Naviger til venstre'}
-                            mini
-                            kompakt
-                            onClick={() => naviger(NavigeringsRetning.VENSTRE)}
-                        >
-                            <FamilieChevron title={'Naviger til venstre'} retning={'venstre'} />
-                            <span className="sr-only">Naviger til venstre i tidslinjen</span>
-                        </Flatknapp>
-                        <Flatknapp
-                            title={'Naviger til høyre'}
-                            mini
-                            kompakt
-                            onClick={() => naviger(NavigeringsRetning.HØYRE)}
-                        >
-                            <FamilieChevron title={'Naviger til høyre'} />
-                            <span className="sr-only">Naviger til høyre i tidslinjen</span>
-                        </Flatknapp>
-                    </div>
+                    <TidslinjeNavigering />
                 </div>
             </div>
             <div className={'tidslinje'}>
