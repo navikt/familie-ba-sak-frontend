@@ -9,22 +9,20 @@ import { IPerson } from '../../../typer/person';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { Tidslinje } from '@navikt/helse-frontend-tidslinje/lib';
 import { formaterPersonIdent, sisteDatoIMnd } from '../../../utils/formatter';
-import { ToggleGruppe } from 'nav-frontend-toggle';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
-import { Knapp } from 'nav-frontend-knapper';
+import { Flatknapp } from 'nav-frontend-knapper';
 import TidslinjeEtikett from './TidslinjeEtikett';
 import { NavigeringsRetning, useTidslinje } from '../../../context/TidslinjeContext';
+import Vinduvelger from './VinduVelger';
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();
     const {
-        tidslinjeInput,
         genererFormatertÅrstall,
-        genererToggleKnapper,
         naviger,
-        endreSkala,
         genererRader,
         aktivEtikett,
+        aktivtTidslinjeVindu,
     } = useTidslinje();
 
     const aktivVedtak =
@@ -47,14 +45,9 @@ const TilkjentYtelseTidslinje: React.FC = () => {
             <div className={'tidslinje-header'}>
                 <Undertittel>{genererFormatertÅrstall()}</Undertittel>
                 <div className={'tidslinje-header__controls'}>
-                    <ToggleGruppe
-                        defaultToggles={genererToggleKnapper()}
-                        kompakt
-                        minstEn
-                        onChange={endreSkala}
-                    />
+                    <Vinduvelger />
                     <div className={'tidslinje-header__navigering'}>
-                        <Knapp
+                        <Flatknapp
                             title={'Naviger til venstre'}
                             mini
                             kompakt
@@ -62,8 +55,8 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                         >
                             <FamilieChevron title={'Naviger til venstre'} retning={'venstre'} />
                             <span className="sr-only">Naviger til venstre i tidslinjen</span>
-                        </Knapp>
-                        <Knapp
+                        </Flatknapp>
+                        <Flatknapp
                             title={'Naviger til høyre'}
                             mini
                             kompakt
@@ -71,7 +64,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                         >
                             <FamilieChevron title={'Naviger til høyre'} />
                             <span className="sr-only">Naviger til høyre i tidslinjen</span>
-                        </Knapp>
+                        </Flatknapp>
                     </div>
                 </div>
             </div>
@@ -97,8 +90,8 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     rader={tidslinjeRader}
                     direction={'right'}
                     EtikettKomponent={TidslinjeEtikett}
-                    startDato={tidslinjeInput.startDato.toDate()}
-                    sluttDato={tidslinjeInput.sluttDato.toDate()}
+                    startDato={aktivtTidslinjeVindu.startDato.toDate()}
+                    sluttDato={aktivtTidslinjeVindu.sluttDato.toDate()}
                     aktivPeriode={
                         aktivEtikett && {
                             fom: aktivEtikett.dato,
