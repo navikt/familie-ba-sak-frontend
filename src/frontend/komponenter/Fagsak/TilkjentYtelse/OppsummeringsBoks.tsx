@@ -20,7 +20,7 @@ const summerTotalBeløpForPeriode = (sum: number, periode: IOppsummeringBeregnin
     return sum + periode.utbetaltPerMnd;
 };
 
-const OppsummeringsBoks: React.FunctionComponent<IProps> = ({ perioder, aktivEtikett }) => {
+const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEtikett }) => {
     const { settAktivEtikett } = useTidslinje();
 
     return (
