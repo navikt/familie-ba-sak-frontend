@@ -1,9 +1,9 @@
 import createUseContext from 'constate';
 import { useState } from 'react';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/components/types.internal';
 import moment from 'moment';
 import { IPersonBeregning, IYtelsePeriode } from '../typer/beregning';
-import { Periode } from '@navikt/helse-frontend-tidslinje/lib';
+import { Periode } from '@navikt/helse-frontend-tidslinje';
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 export interface ITidslinjeVindu {
     id: number;

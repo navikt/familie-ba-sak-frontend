@@ -7,7 +7,7 @@ import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { RessursStatus } from '@navikt/familie-typer';
 import { IPerson } from '../../../typer/person';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import { Tidslinje } from '@navikt/helse-frontend-tidslinje/lib';
+import { Tidslinje } from '@navikt/helse-frontend-tidslinje';
 import { formaterPersonIdent, sisteDatoIMnd } from '../../../utils/formatter';
 import TidslinjeEtikett from './TidslinjeEtikett';
 import { useTidslinje } from '../../../context/TidslinjeContext';

@@ -9,8 +9,8 @@ import {
 } from '../../../utils/formatter';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { useTidslinje } from '../../../context/TidslinjeContext';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/components/types.internal';
 import { Xknapp } from 'nav-frontend-ikonknapper';
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 interface IProps {
     perioder: IOppsummeringBeregning[];
