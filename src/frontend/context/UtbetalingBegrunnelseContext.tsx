@@ -38,6 +38,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
 
         useEffect(() => {
             hentVilkårBegrunnelseTekster();
+            hentUtbetalingBegrunnelserFraForrigeVedtak();
         }, []);
 
         useEffect(() => {
@@ -70,6 +71,19 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
                         feilmelding: fagsak.frontendFeilmelding,
                     });
                 }
+            });
+        };
+
+        const hentUtbetalingBegrunnelserFraForrigeVedtak = () => {
+            axiosRequest<IRestUtbetalingBegrunnelse[], void>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/forrige-vedtak`,
+            }).then((utbetalingBegrunnelser: Ressurs<IRestUtbetalingBegrunnelse[]>) => {
+                const forrigeBegrunnelser =
+                    utbetalingBegrunnelser.status === RessursStatus.SUKSESS
+                        ? utbetalingBegrunnelser.data
+                        : [];
+                settUtbetalingBegrunnelser(forrigeBegrunnelser);
             });
         };
 
@@ -110,6 +124,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
         return {
             endreUtbetalingBegrunnelse,
             hentVilkårBegrunnelseTekster,
+            hentUtbetalingBegrunnelserFraForrigeVedtak,
             leggTilUtbetalingBegrunnelse,
             settUtbetalingBegrunnelser,
             slettUtbetalingBegrunnelse,

@@ -16,6 +16,7 @@ export interface IBeregningDetalj {
     person: IPerson;
     ytelseType: YtelseType;
     utbetaltPerMnd: number;
+    endring: boolean;
 }
 
 export interface IPersonBeregning {
