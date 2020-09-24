@@ -10,6 +10,7 @@ import { datoformat } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { IOppsummeringBeregning } from '../../../../typer/beregning';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -25,6 +26,16 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
         utbetalingBegrunnelser,
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
+
+    const førsteEndring = åpenBehandling.beregningOversikt.find(
+        (b: IOppsummeringBeregning) => b.endring
+    );
+
+    const erFørFørsteEndring = (beregning: IOppsummeringBeregning) =>
+        førsteEndring
+            ? moment(beregning.periodeTom, datoformat.ISO_DAG) <
+              moment(førsteEndring.periodeFom, datoformat.ISO_DAG)
+            : true;
 
     return harAndeler ? (
         <table className={'tabell'}>
@@ -77,6 +88,10 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                     behandlingresultatOgVilkårBegrunnelse={
                                                         utbetalingBegrunnelse.behandlingresultatOgVilkårBegrunnelse
                                                     }
+                                                    erLesevisning={
+                                                        erLesevisning() ||
+                                                        erFørFørsteEndring(beregning)
+                                                    }
                                                 />
                                             ) : (
                                                 <Feilmelding key={index}>
@@ -86,7 +101,9 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                         }
                                     )}
                                     <IkonKnapp
-                                        erLesevisning={erLesevisning()}
+                                        erLesevisning={
+                                            erLesevisning() || erFørFørsteEndring(beregning)
+                                        }
                                         id={`legg-til-begrunnelse-${periodeToString({
                                             fom: beregning.periodeFom,
                                             tom: beregning.periodeTom,
