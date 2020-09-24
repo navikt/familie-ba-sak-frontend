@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/components/types.internal';
-import { TidslinjeSkala, useTidslinje } from '../../../context/TidslinjeContext';
+import { TidslinjeVindu, useTidslinje } from '../../../context/TidslinjeContext';
 import classNames from 'classnames';
 
 interface IEtikettProp {
@@ -11,15 +11,22 @@ interface IEtikettProp {
 }
 
 const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, style }) => {
-    const { aktivEtikett, settAktivEtikett, tidslinjeInput } = useTidslinje();
+    const { aktivEtikett, settAktivEtikett, aktivtTidslinjeVindu } = useTidslinje();
 
     const onEtikettClick = () => {
         settAktivEtikett(etikett);
     };
 
-    const isDisabled = tidslinjeInput.aktivSkala.id === TidslinjeSkala.TRE_ÅR;
+    useEffect(() => {
+        if (
+            etikett.dato.getFullYear() === new Date().getFullYear() &&
+            etikett.dato.getMonth() === new Date().getMonth()
+        ) {
+            settAktivEtikett(etikett);
+        }
+    }, []);
 
-    console.log(isDisabled);
+    const isDisabled = aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR;
 
     return (
         <button

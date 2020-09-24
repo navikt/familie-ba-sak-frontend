@@ -1,18 +1,17 @@
 import createUseContext from 'constate';
-import { SyntheticEvent, useState } from 'react';
+import { useState } from 'react';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/components/types.internal';
 import moment from 'moment';
-import { ToggleKnappPureProps } from 'nav-frontend-toggle';
 import { IPersonBeregning, IYtelsePeriode } from '../typer/beregning';
 import { Periode } from '@navikt/helse-frontend-tidslinje/lib';
 
-export interface ITidslinjeSkala {
+export interface ITidslinjeVindu {
     id: number;
-    navn: string;
+    label: string;
     måneder: number;
 }
 
-export enum TidslinjeSkala {
+export enum TidslinjeVindu {
     HALVT_ÅR,
     ETT_ÅR,
     TRE_ÅR,
@@ -24,73 +23,55 @@ export enum NavigeringsRetning {
 }
 
 const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
-    const tidslinjeSkalaer: ITidslinjeSkala[] = [
-        { id: TidslinjeSkala.HALVT_ÅR, navn: '6 mnd', måneder: 6 },
-        { id: TidslinjeSkala.ETT_ÅR, navn: '1 år', måneder: 12 },
-        { id: TidslinjeSkala.TRE_ÅR, navn: '3 år', måneder: 36 },
+    const tidslinjeVinduer: ITidslinjeVindu[] = [
+        { id: TidslinjeVindu.HALVT_ÅR, label: '6 mnd', måneder: 6 },
+        { id: TidslinjeVindu.ETT_ÅR, label: '1 år', måneder: 12 },
+        { id: TidslinjeVindu.TRE_ÅR, label: '3 år', måneder: 36 },
     ];
 
     const [aktivEtikett, settAktivEtikett] = useState<Skalaetikett | undefined>(undefined);
 
-    const [tidslinjeInput, settTidslinjeInput] = useState({
-        aktivSkala: tidslinjeSkalaer[TidslinjeSkala.ETT_ÅR],
+    const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
+        vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
         sluttDato: moment(),
         startDato: moment().subtract(12, 'month'),
     });
 
     const genererFormatertÅrstall = () => {
-        const startÅr = tidslinjeInput.startDato.year();
-        const sluttÅr = tidslinjeInput.sluttDato.year();
+        const startÅr = aktivtTidslinjeVindu.startDato.year();
+        const sluttÅr = aktivtTidslinjeVindu.sluttDato.year();
 
         if (startÅr !== sluttÅr) {
             return `${startÅr} - ${sluttÅr}`;
         } else return sluttÅr;
     };
 
-    const genererToggleKnapper = () => {
-        return tidslinjeSkalaer.map(skala => ({
-            children: skala.navn,
-            pressed: skala.id === TidslinjeSkala.ETT_ÅR,
-        }));
-    };
-
     const naviger = (retning: NavigeringsRetning) => {
         if (retning === NavigeringsRetning.VENSTRE) {
-            settTidslinjeInput(({ sluttDato, startDato, aktivSkala }) => ({
-                ...tidslinjeInput,
-                sluttDato: sluttDato.clone().subtract(aktivSkala.måneder, 'month'),
-                startDato: startDato.clone().subtract(aktivSkala.måneder, 'month'),
+            settAktivtTidslinjeVindu(({ sluttDato, startDato, vindu }) => ({
+                ...aktivtTidslinjeVindu,
+                sluttDato: sluttDato.clone().subtract(vindu.måneder, 'month'),
+                startDato: startDato.clone().subtract(vindu.måneder, 'month'),
             }));
         } else {
-            settTidslinjeInput(({ sluttDato, startDato, aktivSkala }) => ({
-                ...tidslinjeInput,
-                sluttDato: sluttDato.clone().add(aktivSkala.måneder, 'month'),
-                startDato: startDato.clone().add(aktivSkala.måneder, 'month'),
+            settAktivtTidslinjeVindu(({ sluttDato, startDato, vindu }) => ({
+                ...aktivtTidslinjeVindu,
+                sluttDato: sluttDato.clone().add(vindu.måneder, 'month'),
+                startDato: startDato.clone().add(vindu.måneder, 'month'),
             }));
         }
     };
 
-    const endreSkala = (
-        _event: SyntheticEvent<EventTarget, Event>,
-        toggles: ToggleKnappPureProps[]
-    ) => {
-        const valgtTidslinjeSkala: ITidslinjeSkala | undefined = tidslinjeSkalaer.find(
-            skala =>
-                TidslinjeSkala[skala.id] ===
-                TidslinjeSkala[toggles.findIndex(toggle => toggle.pressed)]
-        );
-
-        if (valgtTidslinjeSkala) {
-            if (valgtTidslinjeSkala.id === TidslinjeSkala.TRE_ÅR) {
-                settAktivEtikett(undefined);
-            }
-
-            settTidslinjeInput(({ sluttDato }) => ({
-                ...tidslinjeInput,
-                aktivSkala: valgtTidslinjeSkala,
-                startDato: sluttDato.clone().subtract(valgtTidslinjeSkala.måneder, 'month'),
-            }));
+    const endreTidslinjeVindu = (vindu: ITidslinjeVindu) => {
+        if (vindu.id === TidslinjeVindu.TRE_ÅR) {
+            settAktivEtikett(undefined);
         }
+
+        settAktivtTidslinjeVindu(({ sluttDato }) => ({
+            ...aktivtTidslinjeVindu,
+            vindu: vindu,
+            startDato: sluttDato.clone().subtract(vindu.måneder, 'month'),
+        }));
     };
 
     const genererRader = (personBeregninger?: IPersonBeregning[]): Periode[][] => {
@@ -111,11 +92,11 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     return {
         aktivEtikett,
         settAktivEtikett,
-        tidslinjeInput,
         genererFormatertÅrstall,
-        genererToggleKnapper,
+        tidslinjeVinduer,
+        aktivtTidslinjeVindu,
         naviger,
-        endreSkala,
+        endreTidslinjeVindu,
         genererRader,
     };
 });
