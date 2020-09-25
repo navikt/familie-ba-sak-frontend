@@ -56,6 +56,15 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                     },
                 ]}
             />
+
+            <Informasjonsbolk
+                informasjon={[
+                    {
+                        label: 'Enhet',
+                        tekst: åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetNavn,
+                    },
+                ]}
+            />
         </div>
     );
 };
