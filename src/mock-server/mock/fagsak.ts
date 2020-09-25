@@ -159,6 +159,11 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
     const behandling: IBehandling = {
         behandlingId,
         aktiv,
+        arbeidsfordelingPåBehandling: {
+            behandlendeEnhetId: '4820',
+            behandlendeEnhetNavn: 'enhet navn',
+            manueltOverstyrt: false,
+        },
         steg: (steg as unknown) as BehandlingSteg,
         type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         personer: [barn, søker],
