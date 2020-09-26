@@ -118,7 +118,7 @@
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.0.0",
     "request-promise": "^4.2.5",
-    "snyk": "^1.376.0",
+    "snyk": "^1.389.0",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
