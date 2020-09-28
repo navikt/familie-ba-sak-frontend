@@ -58,7 +58,10 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ fagsak }) => {
     );
 
     return behandling ? (
-        <LenkepanelBase className={classNames('fagsak-panel', 'fagsak-lenkepanel')} href="#">
+        <LenkepanelBase
+            className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
+            href={`/fagsak/${fagsak.id}/${behandling.behandlingId}`}
+        >
             <Innholdstabell fagsak={fagsak} behandling={behandling} />
         </LenkepanelBase>
     ) : (

@@ -10,6 +10,7 @@ import {
     kategorier,
     underkategorier,
     BehandlingStatus,
+    behandlingOpprinnelse,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
@@ -56,11 +57,13 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                 datoformat.DATO
                                             )}`}
                                         />
-                                        <td>Årsak</td>
+                                        <td>
+                                            {behandlingOpprinnelse[behandling.opprinnelse].navn}
+                                        </td>
                                         <td>
                                             {behandling.status !== BehandlingStatus.AVSLUTTET ? (
                                                 <Lenke
-                                                    href={`/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad`}
+                                                    href={`/fagsak/${fagsak.id}/${behandling.behandlingId}`}
                                                 >
                                                     {behandlingstyper[behandling.type].navn}
                                                 </Lenke>
@@ -78,7 +81,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                           aktivVedtakForBehandling.vedtaksdato,
                                                           datoformat.DATO
                                                       )
-                                                    : 'Ukjent'
+                                                    : '-'
                                             }
                                         />
                                         <td>
@@ -90,13 +93,13 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                         ? behandlingsresultater[
                                                               behandling.samletResultat
                                                           ].navn
-                                                        : 'Ukjent'}
+                                                        : '-'}
                                                 </Lenke>
                                             ) : behandling ? (
                                                 behandlingsresultater[behandling.samletResultat]
                                                     .navn
                                             ) : (
-                                                'Ukjent'
+                                                '-'
                                             )}
                                         </td>
                                     </tr>
