@@ -68,7 +68,6 @@
                 "vedtakForBehandling": [
                     {
                         "aktiv": true,
-                        "ansvarligSaksbehandler": "Henning.Hakonsen@trygdeetaten.no",
                         "vedtaksdato": "2020-02-14",
                         "personBeregninger": [
                             {
