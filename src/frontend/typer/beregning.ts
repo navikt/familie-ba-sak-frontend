@@ -14,9 +14,10 @@ export interface IOppsummeringBeregning {
 }
 
 export enum BeregningEndringType {
-    UENDRET = 'UENDRET',
     ENDRET = 'ENDRET',
-    SATS = 'SATS',
+    ENDRET_SATS = 'ENDRET_SATS',
+    UENDRET = 'UENDRET',
+    UENDRET_SATS = 'UENDRET_SATS',
 }
 
 export interface IBeregningDetalj {

@@ -28,7 +28,9 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     } = useUtbetalingBegrunnelser();
 
     const førsteEndring = åpenBehandling.beregningOversikt.find(
-        (b: IOppsummeringBeregning) => b.endring == BeregningEndringType.ENDRET
+        (b: IOppsummeringBeregning) =>
+            b.endring === BeregningEndringType.ENDRET ||
+            b.endring === BeregningEndringType.ENDRET_SATS
     );
 
     const erFørFørsteEndring = (beregning: IOppsummeringBeregning) =>
@@ -36,6 +38,13 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
             ? moment(beregning.periodeTom, datoformat.ISO_DAG) <
               moment(førsteEndring.periodeFom, datoformat.ISO_DAG)
             : true;
+
+    const erSatsendring = (beregning: IOppsummeringBeregning) =>
+        beregning.endring === BeregningEndringType.ENDRET_SATS ||
+        beregning.endring === BeregningEndringType.UENDRET_SATS;
+
+    const lesevisningForRad = (beregning: IOppsummeringBeregning) =>
+        erLesevisning() || erFørFørsteEndring(beregning) || erSatsendring(beregning);
 
     return harAndeler ? (
         <table className={'tabell'}>
@@ -88,10 +97,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                     behandlingresultatOgVilkårBegrunnelse={
                                                         utbetalingBegrunnelse.behandlingresultatOgVilkårBegrunnelse
                                                     }
-                                                    erLesevisning={
-                                                        erLesevisning() ||
-                                                        erFørFørsteEndring(beregning)
-                                                    }
+                                                    erLesevisning={lesevisningForRad(beregning)}
                                                 />
                                             ) : (
                                                 <Feilmelding key={index}>
@@ -101,9 +107,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                         }
                                     )}
                                     <IkonKnapp
-                                        erLesevisning={
-                                            erLesevisning() || erFørFørsteEndring(beregning)
-                                        }
+                                        erLesevisning={lesevisningForRad(beregning)}
                                         id={`legg-til-begrunnelse-${periodeToString({
                                             fom: beregning.periodeFom,
                                             tom: beregning.periodeTom,
