@@ -1,6 +1,6 @@
 import moment from 'moment';
 import Lenke from 'nav-frontend-lenker';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import {
     behandlingsresultater,
@@ -11,6 +11,7 @@ import {
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import classNames from 'classnames';
 
 interface IBehandlingshistorikkProps {
     fagsak: IFagsak;
@@ -19,9 +20,11 @@ interface IBehandlingshistorikkProps {
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
-            <Undertittel children={'Behandlinger'} />
+            <Systemtittel children={'Behandlinger'} />
             {fagsak.behandlinger.length > 0 ? (
-                <table className="tabell">
+                <table
+                    className={classNames('tabell', 'saksoversikt__behandlingshistorikk__tabell')}
+                >
                     <thead>
                         <tr>
                             <th children={'Type'} />

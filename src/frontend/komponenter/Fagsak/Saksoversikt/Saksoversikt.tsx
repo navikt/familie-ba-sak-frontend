@@ -1,8 +1,7 @@
 import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input } from 'nav-frontend-skjema';
-import 'nav-frontend-tabell-style';
-import { Element, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Element, Innholdstittel, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -59,7 +58,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return (
         <div className={'saksoversikt'}>
-            <Systemtittel className={'tittel'} children={'Saksoversikt'} />
+            <Innholdstittel className={'tittel'} children={'Saksoversikt'} />
 
             <FagsakLenkepanel fagsak={fagsak} />
 

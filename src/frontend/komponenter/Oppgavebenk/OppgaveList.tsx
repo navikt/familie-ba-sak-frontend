@@ -1,6 +1,5 @@
 import Alertstripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
-import 'nav-frontend-tabell-style';
 import { Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { useApp } from '../../context/AppContext';

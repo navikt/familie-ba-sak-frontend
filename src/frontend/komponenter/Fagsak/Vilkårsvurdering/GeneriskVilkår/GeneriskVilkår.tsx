@@ -18,7 +18,6 @@ import {
 } from '../../../../typer/vilkår';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
-import 'nav-frontend-tabell-style';
 import { useBehandling } from '../../../../context/BehandlingContext';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
