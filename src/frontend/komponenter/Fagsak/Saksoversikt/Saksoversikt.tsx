@@ -19,6 +19,7 @@ import { datoformat, formaterIverksattDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import Behandlinger from './Behandlinger';
 import Utbetalinger from './Utbetalinger';
+import FagsakLenkepanel from './FagsakLenkepanel';
 
 interface IProps {
     fagsak: IFagsak;
@@ -59,6 +60,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     return (
         <div className={'saksoversikt'}>
             <Systemtittel className={'tittel'} children={'Saksoversikt'} />
+
+            <FagsakLenkepanel fagsak={fagsak} />
 
             {fagsak.status === 'LØPENDE' && (
                 <>

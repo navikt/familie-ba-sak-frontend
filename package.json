@@ -87,6 +87,8 @@
     "nav-frontend-js-utils": "^1.0.9",
     "nav-frontend-knapper": "^2.0.9",
     "nav-frontend-knapper-style": "^1.0.1",
+    "nav-frontend-lenkepanel": "^1.0.47",
+    "nav-frontend-lenkepanel-style": "^0.3.31",
     "nav-frontend-lenker": "^1.0.38",
     "nav-frontend-lenker-style": "^0.2.29",
     "nav-frontend-lukknapp": "^1.0.31",
