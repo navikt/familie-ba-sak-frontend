@@ -10,7 +10,7 @@ import { datoformat } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { IOppsummeringBeregning } from '../../../../typer/beregning';
+import { BeregningEndringType, IOppsummeringBeregning } from '../../../../typer/beregning';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -28,7 +28,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     } = useUtbetalingBegrunnelser();
 
     const førsteEndring = åpenBehandling.beregningOversikt.find(
-        (b: IOppsummeringBeregning) => b.endring
+        (b: IOppsummeringBeregning) => b.endring == BeregningEndringType.ENDRET
     );
 
     const erFørFørsteEndring = (beregning: IOppsummeringBeregning) =>

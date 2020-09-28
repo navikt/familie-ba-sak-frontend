@@ -10,7 +10,13 @@ export interface IOppsummeringBeregning {
     ytelseTyper: YtelseType[];
     antallBarn: number;
     utbetaltPerMnd: number;
-    endring: boolean;
+    endring: BeregningEndringType;
+}
+
+export enum BeregningEndringType {
+    UENDRET = 'UENDRET',
+    ENDRET = 'ENDRET',
+    SATS = 'SATS',
 }
 
 export interface IBeregningDetalj {
