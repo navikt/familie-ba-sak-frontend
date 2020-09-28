@@ -24,6 +24,7 @@ import { fagsakStatus } from '../../typer/fagsak';
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams();
     const history = useHistory();
+    const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
@@ -95,9 +96,11 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 )}
                             </Visittkort>
                             <div className={'fagsakcontainer__content'}>
-                                <div className={'fagsakcontainer__content--venstremeny'}>
-                                    <Venstremeny fagsak={fagsak.data} />
-                                </div>
+                                {!erPåSaksoversikt && (
+                                    <div className={'fagsakcontainer__content--venstremeny'}>
+                                        <Venstremeny fagsak={fagsak.data} />
+                                    </div>
+                                )}
                                 <div
                                     id={'fagsak-main'}
                                     className={'fagsakcontainer__content--main'}
@@ -132,9 +135,11 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         />
                                     </Switch>
                                 </div>
-                                <div className={'fagsakcontainer__content--høyremeny'}>
-                                    <Høyremeny fagsak={fagsak.data} />
-                                </div>
+                                {!erPåSaksoversikt && (
+                                    <div className={'fagsakcontainer__content--høyremeny'}>
+                                        <Høyremeny fagsak={fagsak.data} />
+                                    </div>
+                                )}
                             </div>
                         </BehandlingProvider>
                     );
