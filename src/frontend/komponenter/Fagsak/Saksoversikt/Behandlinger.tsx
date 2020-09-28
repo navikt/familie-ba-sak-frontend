@@ -27,10 +27,13 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                 >
                     <thead>
                         <tr>
+                            <th children={'Opprettet'} />
+                            <th children={'Årsak/hendelse'} />
                             <th children={'Type'} />
+                            <th children={'Fagsaktype'} />
+                            <th children={'Gjelder'} />
                             <th children={'Status'} />
                             <th children={'Resultat'} />
-                            <th children={'Opprettet'} />
                             <th children={'Vedtaksdato'} />
                         </tr>
                     </thead>
@@ -44,6 +47,13 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
 
                                 return (
                                     <tr key={behandling.behandlingId}>
+                                        <td
+                                            children={`${formaterIsoDato(
+                                                behandling.opprettetTidspunkt,
+                                                datoformat.DATO
+                                            )}`}
+                                        />
+                                        <td>Årsak</td>
                                         <td>
                                             <Lenke
                                                 href={`/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad`}
@@ -51,6 +61,8 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                 {behandlingstyper[behandling.type].navn}
                                             </Lenke>
                                         </td>
+                                        <td>Fagsaktype</td>
+                                        <td>Gjelder</td>
                                         <td>{behandlingsstatuser[behandling.status]}</td>
                                         <td
                                             children={`${
@@ -61,12 +73,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                     : 'Ukjent'
                                             }`}
                                         />
-                                        <td
-                                            children={`${formaterIsoDato(
-                                                behandling.opprettetTidspunkt,
-                                                datoformat.DATO
-                                            )}`}
-                                        />
+
                                         <td
                                             children={
                                                 aktivVedtakForBehandling
