@@ -5,13 +5,13 @@ import { formaterPersonIdent } from '../../../utils/formatter';
 import { periodeToString } from '../../../typer/periode';
 
 interface IUtbetalingerProps {
-    personbergninger: IPersonBeregning[];
+    personberegninger: IPersonBeregning[];
 }
 
-const Utbetalinger: React.FC<IUtbetalingerProps> = ({ personbergninger }) => {
+const Utbetalinger: React.FC<IUtbetalingerProps> = ({ personberegninger }) => {
     return (
         <div className={'saksoversikt__utbetalinger'}>
-            <Undertittel children={'Utbetalinger'} />
+            <Undertittel>Løpende månedlig utbetaling</Undertittel>
             <table className="tabell">
                 <thead>
                     <tr>
@@ -21,7 +21,7 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ personbergninger }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {personbergninger
+                    {personberegninger
                         .filter(
                             (personBeregning: IPersonBeregning) =>
                                 personBeregning.ytelsePerioder.length > 0
