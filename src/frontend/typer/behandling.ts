@@ -15,17 +15,6 @@ export enum BehandlingUnderkategori {
     UTVIDET = 'UTVIDET',
 }
 
-export const behandlingUnderkategori: INøkkelPar = {
-    ORDINÆR: {
-        id: 'ORDINÆR',
-        navn: 'Ordinær barnetrygd',
-    },
-    UTVIDET: {
-        id: 'UTVIDET',
-        navn: 'Utvidet barnetrygd',
-    },
-};
-
 export enum BehandlingSteg {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',

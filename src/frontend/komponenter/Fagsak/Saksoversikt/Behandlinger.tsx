@@ -7,6 +7,9 @@ import {
     behandlingstyper,
     IBehandling,
     behandlingsstatuser,
+    kategorier,
+    underkategorier,
+    BehandlingStatus,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
@@ -33,8 +36,8 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                             <th children={'Fagsaktype'} />
                             <th children={'Gjelder'} />
                             <th children={'Status'} />
-                            <th children={'Resultat'} />
                             <th children={'Vedtaksdato'} />
+                            <th children={'Resultat'} />
                         </tr>
                     </thead>
                     <tbody>
@@ -55,25 +58,19 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                         />
                                         <td>Årsak</td>
                                         <td>
-                                            <Lenke
-                                                href={`/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad`}
-                                            >
-                                                {behandlingstyper[behandling.type].navn}
-                                            </Lenke>
+                                            {behandling.status !== BehandlingStatus.AVSLUTTET ? (
+                                                <Lenke
+                                                    href={`/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad`}
+                                                >
+                                                    {behandlingstyper[behandling.type].navn}
+                                                </Lenke>
+                                            ) : (
+                                                behandlingstyper[behandling.type].navn
+                                            )}
                                         </td>
-                                        <td>Fagsaktype</td>
-                                        <td>Gjelder</td>
+                                        <td>{kategorier[behandling.kategori].navn}</td>
+                                        <td>{underkategorier[behandling.underkategori].navn}</td>
                                         <td>{behandlingsstatuser[behandling.status]}</td>
-                                        <td
-                                            children={`${
-                                                behandling
-                                                    ? behandlingsresultater[
-                                                          behandling.samletResultat
-                                                      ].navn
-                                                    : 'Ukjent'
-                                            }`}
-                                        />
-
                                         <td
                                             children={
                                                 aktivVedtakForBehandling
@@ -84,6 +81,24 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                     : 'Ukjent'
                                             }
                                         />
+                                        <td>
+                                            {behandling.status === BehandlingStatus.AVSLUTTET ? (
+                                                <Lenke
+                                                    href={`/fagsak/${fagsak.id}/${behandling.behandlingId}`}
+                                                >
+                                                    {behandling
+                                                        ? behandlingsresultater[
+                                                              behandling.samletResultat
+                                                          ].navn
+                                                        : 'Ukjent'}
+                                                </Lenke>
+                                            ) : behandling ? (
+                                                behandlingsresultater[behandling.samletResultat]
+                                                    .navn
+                                            ) : (
+                                                'Ukjent'
+                                            )}
+                                        </td>
                                     </tr>
                                 );
                             })}
