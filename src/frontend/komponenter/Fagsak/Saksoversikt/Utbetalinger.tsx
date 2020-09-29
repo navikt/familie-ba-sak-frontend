@@ -1,51 +1,44 @@
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
-import { IPersonBeregning } from '../../../typer/beregning';
-import { formaterPersonIdent } from '../../../utils/formatter';
-import { periodeToString } from '../../../typer/periode';
+import { IBeregningDetalj, IOppsummeringBeregning } from '../../../typer/beregning';
+import PersonUtbetaling from './PersonUtbetaling';
+import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 
 interface IUtbetalingerProps {
-    personberegninger: IPersonBeregning[];
+    beregningsOversikt: IOppsummeringBeregning[];
 }
 
-const Utbetalinger: React.FC<IUtbetalingerProps> = ({ personberegninger }) => {
+const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningsOversikt }) => {
+    const inneværendeBeregningsOversiktMåned = beregningsOversikt.find(periode =>
+        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
+    );
+
+    const beregningDetaljerGruppertPåPerson =
+        inneværendeBeregningsOversiktMåned?.beregningDetaljer.reduce(
+            (acc: { [key: string]: IBeregningDetalj[] }, beregningDetalj) => {
+                const beregningDetaljerForPerson = acc[beregningDetalj.person.personIdent] ?? [];
+                return {
+                    ...acc,
+                    [beregningDetalj.person.personIdent]: [
+                        ...beregningDetaljerForPerson,
+                        beregningDetalj,
+                    ],
+                };
+            },
+            {}
+        ) ?? {};
+
     return (
         <div className={'saksoversikt__utbetalinger'}>
             <Undertittel>Løpende månedlig utbetaling</Undertittel>
-            <table className="tabell">
-                <thead>
-                    <tr>
-                        <th children={'Barn'} />
-                        <th children={'Beløp'} />
-                        <th children={'Periode'} />
-                    </tr>
-                </thead>
-                <tbody>
-                    {personberegninger
-                        .filter(
-                            (personBeregning: IPersonBeregning) =>
-                                personBeregning.ytelsePerioder.length > 0
-                        )
-                        .map((personBeregning: IPersonBeregning) => {
-                            return (
-                                <tr key={personBeregning.personIdent}>
-                                    <td
-                                        children={`${formaterPersonIdent(
-                                            personBeregning.personIdent
-                                        )}`}
-                                    />
-                                    <td children={`${personBeregning.beløp}`} />
-                                    <td
-                                        children={`${periodeToString({
-                                            fom: personBeregning.stønadFom,
-                                            tom: personBeregning.stønadTom,
-                                        })}`}
-                                    />
-                                </tr>
-                            );
-                        })}
-                </tbody>
-            </table>
+
+            <ul>
+                {Object.values(beregningDetaljerGruppertPåPerson).map(
+                    beregningDetaljerForPerson => {
+                        return <PersonUtbetaling beregningDetaljer={beregningDetaljerForPerson} />;
+                    }
+                )}
+            </ul>
         </div>
     );
 };

@@ -11,7 +11,7 @@ import { Oppsummeringsboks } from './Oppsummeringsboks';
 import { IBehandling } from '../../../typer/behandling';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useTidslinje } from '../../../context/TidslinjeContext';
-import moment from 'moment';
+import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -58,17 +58,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     ): IOppsummeringBeregning[] => {
         return aktivEtikett
             ? tilkjentYtelseRessursData.filter(periode =>
-                  periodeOverlapperMedValgtMåned(periode, aktivEtikett.dato)
+                  periodeOverlapperMedValgtDato(
+                      periode.periodeFom,
+                      periode.periodeTom,
+                      aktivEtikett.dato
+                  )
               )
             : [];
-    };
-
-    const periodeOverlapperMedValgtMåned = (periode: IOppsummeringBeregning, dato: Date) => {
-        return (
-            moment(dato).isBetween(periode.periodeFom, periode.periodeTom) ||
-            moment(dato).isSame(periode.periodeFom) ||
-            moment(dato).isSame(periode.periodeFom)
-        );
     };
 
     switch (tilkjentYtelseRessurs.status) {

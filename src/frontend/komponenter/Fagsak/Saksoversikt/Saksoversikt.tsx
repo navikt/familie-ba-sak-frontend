@@ -12,7 +12,6 @@ import {
     underkategorier,
 } from '../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
-import { IVedtakForBehandling } from '../../../typer/vedtak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat } from '../../../utils/formatter';
 import Behandlinger from './Behandlinger';
@@ -49,11 +48,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const aktivVedtak = gjeldendeBehandling
-        ? gjeldendeBehandling.vedtakForBehandling.find(
-              (vedtak: IVedtakForBehandling) => vedtak.aktiv === true
-          )
-        : undefined;
+    const beregningOversikt = gjeldendeBehandling?.beregningOversikt ?? [];
 
     return (
         <div className={'saksoversikt'}>
@@ -61,9 +56,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
             <FagsakLenkepanel fagsak={fagsak} />
 
-            {fagsak.status === FagsakStatus.LØPENDE && (
+            {fagsak.status === FagsakStatus.LØPENDE && beregningOversikt.length > 0 && (
                 <>
-                    <Utbetalinger personberegninger={aktivVedtak?.personBeregninger ?? []} />
+                    <Utbetalinger beregningsOversikt={beregningOversikt} />
                     <div className={'saksoversikt__opphør'}>
                         <Undertittel children={'Opphør utbetalinger for fagsak'} />
                         <Input
