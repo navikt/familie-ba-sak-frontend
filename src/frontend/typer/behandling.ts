@@ -111,6 +111,7 @@ export enum BehandlerRolle {
 
 export interface IBehandling {
     aktiv: boolean;
+    arbeidsfordelingPåBehandling: IArbeidsfordelingPåBehandling;
     begrunnelse: string;
     behandlingId: number;
     endretAv: string;
@@ -127,6 +128,12 @@ export interface IBehandling {
     vedtakForBehandling: IVedtakForBehandling[];
     beregningOversikt: IOppsummeringBeregning[];
     opprinnelse: BehandlingOpprinnelse;
+}
+
+export interface IArbeidsfordelingPåBehandling {
+    behandlendeEnhetId: string;
+    behandlendeEnhetNavn: string;
+    manueltOverstyrt: boolean;
 }
 
 export const behandlerRoller: INøkkelPar = {
