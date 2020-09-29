@@ -43,6 +43,7 @@ export enum BehandlingresultatOgVilkårBegrunnelse {
     INNVILGET_OMSORG_FOR_BARN = 'INNVILGET_OMSORG_FOR_BARN',
     INNVILGET_BOR_HOS_SØKER = 'INNVILGET_BOR_HOS_SØKER',
     INNVILGET_FAST_OMSORG_FOR_BARN = 'INNVILGET_FAST_OMSORG_FOR_BARN',
+    SATSENDRING = 'SATSENDRING',
 }
 
 export const bergunnelseTyper: INøkkelPar = {
