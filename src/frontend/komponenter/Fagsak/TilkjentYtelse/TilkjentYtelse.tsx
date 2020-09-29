@@ -64,17 +64,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     };
 
     const periodeOverlapperMedValgtMåned = (periode: IOppsummeringBeregning, dato: Date) => {
-        const periodeFomÅr = moment(periode.periodeFom).year();
-        const periodeFomMåned = moment(periode.periodeFom).month();
-        const periodeTomÅr = moment(periode.periodeTom).year();
-        const periodeTomMåned = moment(periode.periodeTom).month();
-        const aktivEtikettÅr = dato.getFullYear();
-        const aktivEtikettMåned = dato.getMonth();
-
         return (
-            (aktivEtikettÅr > periodeFomÅr && aktivEtikettÅr < periodeTomÅr) ||
-            (aktivEtikettÅr === periodeFomÅr && aktivEtikettMåned >= periodeFomMåned) ||
-            (aktivEtikettÅr === periodeTomÅr && aktivEtikettMåned <= periodeTomMåned)
+            moment(dato).isBetween(periode.periodeFom, periode.periodeTom) ||
+            moment(dato).isSame(periode.periodeFom) ||
+            moment(dato).isSame(periode.periodeFom)
         );
     };
 
