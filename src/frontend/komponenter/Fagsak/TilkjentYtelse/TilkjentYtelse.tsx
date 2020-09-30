@@ -67,7 +67,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         return (
             moment(dato).isBetween(periode.periodeFom, periode.periodeTom) ||
             moment(dato).isSame(periode.periodeFom) ||
-            moment(dato).isSame(periode.periodeFom)
+            moment(dato).isSame(periode.periodeTom)
         );
     };
 
