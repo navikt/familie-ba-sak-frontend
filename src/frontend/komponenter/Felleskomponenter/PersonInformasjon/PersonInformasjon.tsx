@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IPerson, personTypeMap } from '../../../typer/person';
-import { FamilieIkonVelger } from '@navikt/familie-ikoner';
+import { FamilieIkonVelger } from '@navikt/familie-ikoner/src';
 import Clipboard from '@navikt/familie-clipboard';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { hentAlder, formaterPersonIdent } from '../../../utils/formatter';
@@ -21,42 +21,48 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     const alder = hentAlder(person.fødselsdato);
 
     return (
-        <div className="personinformasjon" style={{ width }}>
-            <div className={'familie-ikon'}>
-                <FamilieIkonVelger alder={alder} kjønn={person.kjønn} />
-            </div>
+        <div className={'personinformasjon'} style={{ width }}>
+            {tekstType === 'UNDERTITTEL' && (
+                <>
+                    <FamilieIkonVelger
+                        className={'familie-ikon'}
+                        alder={alder}
+                        kjønn={person.kjønn}
+                    />
+                    <Undertittel
+                        className={'navn'}
+                        tag={tag}
+                    >{`${person.navn} (${alder} år)`}</Undertittel>
+                    <Undertittel>&ensp;|&ensp;</Undertittel>
+                    <Clipboard>
+                        <Undertittel>{formaterPersonIdent(person.personIdent)}</Undertittel>
+                    </Clipboard>
+                    <Undertittel>&ensp;|&ensp;</Undertittel>
+                    <Undertittel>{`${personTypeMap[person.type]} `}</Undertittel>
+                </>
+            )}
 
-            <div className={'informasjonstekster'}>
-                {tekstType === 'UNDERTITTEL' && (
-                    <>
-                        <Undertittel
-                            className={'navn'}
-                            tag={tag}
-                        >{`${person.navn} (${alder} år)`}</Undertittel>
-                        <Undertittel>/</Undertittel>
-                        <Clipboard>
-                            <Undertittel>{formaterPersonIdent(person.personIdent)}</Undertittel>
-                        </Clipboard>
-                        <Undertittel>/</Undertittel>
-                        <Undertittel>{`${personTypeMap[person.type]} `}</Undertittel>
-                    </>
-                )}
-
-                {tekstType === 'NORMALTEKST' && (
-                    <>
-                        <Normaltekst
-                            className={'navn'}
-                            tag={tag}
-                        >{`${person.navn} (${alder} år)`}</Normaltekst>
-                        <Normaltekst>/</Normaltekst>
-                        <Clipboard>
-                            <Normaltekst>{formaterPersonIdent(person.personIdent)}</Normaltekst>
-                        </Clipboard>
-                        <Normaltekst>/</Normaltekst>
-                        <Normaltekst>{`${personTypeMap[person.type]} `}</Normaltekst>
-                    </>
-                )}
-            </div>
+            {tekstType === 'NORMALTEKST' && (
+                <>
+                    <FamilieIkonVelger
+                        className={'familie-ikon--for-normaltekst'}
+                        width={24}
+                        height={24}
+                        alder={alder}
+                        kjønn={person.kjønn}
+                    />
+                    <Normaltekst
+                        className={'navn'}
+                        tag={tag}
+                    >{`${person.navn} (${alder} år)`}</Normaltekst>
+                    <Normaltekst>&ensp;|&ensp;</Normaltekst>
+                    <Clipboard>
+                        <Normaltekst>{formaterPersonIdent(person.personIdent)}</Normaltekst>
+                    </Clipboard>
+                    <Normaltekst>&ensp;|&ensp;</Normaltekst>
+                    <Normaltekst>{`${personTypeMap[person.type]} `}</Normaltekst>
+                </>
+            )}
         </div>
     );
 };
