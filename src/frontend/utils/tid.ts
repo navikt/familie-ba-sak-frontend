@@ -8,6 +8,6 @@ export const periodeOverlapperMedValgtDato = (
     return (
         moment(valgtDato).isBetween(periodeFom, periodeTom) ||
         moment(valgtDato).isSame(periodeFom) ||
-        moment(valgtDato).isSame(periodeFom)
+        moment(valgtDato).isSame(periodeTom)
     );
 };
