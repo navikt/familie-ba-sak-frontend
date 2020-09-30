@@ -1,4 +1,4 @@
-import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { LenkepanelBase } from 'nav-frontend-lenkepanel';
@@ -18,33 +18,33 @@ interface IInnholdstabell {
 const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
     return (
         <table>
-            <thead>
+            <thead className={'fagsak-panel__tabell-header'}>
                 <tr>
                     <th>
-                        <Systemtittel>Fagsaktype</Systemtittel>
+                        <Normaltekst>Fagsaktype</Normaltekst>
                     </th>
                     <th>
-                        <Systemtittel>Gjelder</Systemtittel>
+                        <Normaltekst>Gjelder</Normaltekst>
                     </th>
                     <th>
-                        <Systemtittel>Status</Systemtittel>
+                        <Normaltekst>Status</Normaltekst>
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody className={'fagsak-panel__tabell-body'}>
                 <tr>
                     <td>
-                        <Undertittel>
+                        <Normaltekst>
                             {behandling ? kategorier[behandling.kategori].navn : '-'}
-                        </Undertittel>
+                        </Normaltekst>
                     </td>
                     <td>
-                        <Undertittel>
+                        <Normaltekst>
                             {behandling ? underkategorier[behandling.underkategori].navn : '-'}
-                        </Undertittel>
+                        </Normaltekst>
                     </td>
                     <td>
-                        <Undertittel>{fagsakStatus[fagsak.status].navn}</Undertittel>
+                        <Normaltekst>{fagsakStatus[fagsak.status].navn}</Normaltekst>
                     </td>
                 </tr>
             </tbody>
