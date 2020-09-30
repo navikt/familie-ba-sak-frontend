@@ -3,24 +3,42 @@
     margin: 6.8rem;
     color: @navMorkGra;
 
-    & .tittel {
+    & .typo-innholdstittel {
         margin: 5rem auto 2.5rem auto;
+        font-size: 1.875rem;
+    }
+
+    & .typo-systemtittel {
+        font-size: 1.25rem;
     }
 
     &__utbetalinger {
-        padding: 1rem 0;
-    }
+        padding: 5rem 0;
+        max-width: 39rem;
 
-    &__aktivbehandling {
-        padding: 1rem 0;
+        > ul {
+            list-style: none;
+            padding: 0;
+        }
 
-        & .knapp {
-            margin: 1rem 0;
+        &__ytelser {
+            margin: 1rem 0 2rem 1.6rem;
+        }
+
+        &__ytelselinje {
+            display: flex;
+            justify-content: space-between;
+
+            & .typo-element {
+                font-weight: 400;
+                font-size: 1.125rem;
+            }
         }
     }
 
     &__behandlingshistorikk {
-        padding: 2.5rem 0;
+        margin: 5rem 0;
+
         &__tabell {
             margin-top: 2rem;
         }
@@ -49,8 +67,14 @@
         width: 100%;
     }
 
-    .typo-undertittel {
-        font-weight: normal;
+    & .typo-systemtittel {
+        font-size: 1.25rem;
+        font-weight: 400;
+    }
+    & .typo-undertittel {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 10px;
     }
 }
 

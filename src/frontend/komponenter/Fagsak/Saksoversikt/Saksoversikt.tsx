@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input } from 'nav-frontend-skjema';
-import { Innholdstittel, Undertittel } from 'nav-frontend-typografi';
+import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -52,7 +52,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return (
         <div className={'saksoversikt'}>
-            <Innholdstittel className={'tittel'} children={'Saksoversikt'} />
+            <Innholdstittel children={'Saksoversikt'} />
 
             <FagsakLenkepanel fagsak={fagsak} />
 
@@ -60,7 +60,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 <>
                     <Utbetalinger beregningsOversikt={beregningOversikt} />
                     <div className={'saksoversikt__opphør'}>
-                        <Undertittel children={'Opphør utbetalinger for fagsak'} />
+                        <Systemtittel children={'Opphør utbetalinger for fagsak'} />
                         <Input
                             bredde={'S'}
                             label={'Fra og med-dato'}

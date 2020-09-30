@@ -1,4 +1,4 @@
-import { Undertittel } from 'nav-frontend-typografi';
+import { Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { IBeregningDetalj, IOppsummeringBeregning } from '../../../typer/beregning';
 import PersonUtbetaling from './PersonUtbetaling';
@@ -30,8 +30,7 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningsOversikt }) => {
 
     return (
         <div className={'saksoversikt__utbetalinger'}>
-            <Undertittel>Løpende månedlig utbetaling</Undertittel>
-
+            <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
             <ul>
                 {Object.values(beregningDetaljerGruppertPåPerson).map(
                     beregningDetaljerForPerson => {

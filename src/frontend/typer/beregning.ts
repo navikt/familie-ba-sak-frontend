@@ -42,11 +42,15 @@ export enum YtelseType {
 export const ytelsetype: INøkkelPar = {
     ORDINÆR_BARNETRYGD: {
         id: 'ORDINÆR_BARNETRYGD',
-        navn: 'Ordinær barnetrygd',
+        navn: 'Ordinær (fra 6 år)',
+    },
+    ORDINÆR_BARNETRYGD_UNDER_6_ÅR: {
+        id: 'ORDINÆR_BARNETRYGD_UNDER_6_ÅR',
+        navn: 'Ordinær (under 6 år)',
     },
     UTVIDET_BARNETRYGD: {
         id: 'UTVIDET_BARNETRYGD',
-        navn: 'Utvidet barnetrygd',
+        navn: 'Utvidet',
     },
     SMÅBARNSTILLEGG: {
         id: 'SMÅBARNSTILLEGG',

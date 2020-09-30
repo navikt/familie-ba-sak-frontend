@@ -21,30 +21,30 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
             <thead>
                 <tr>
                     <th>
-                        <Undertittel>Fagsaktype</Undertittel>
+                        <Systemtittel>Fagsaktype</Systemtittel>
                     </th>
                     <th>
-                        <Undertittel>Gjelder</Undertittel>
+                        <Systemtittel>Gjelder</Systemtittel>
                     </th>
                     <th>
-                        <Undertittel>Status</Undertittel>
+                        <Systemtittel>Status</Systemtittel>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        <Systemtittel>
+                        <Undertittel>
                             {behandling ? kategorier[behandling.kategori].navn : '-'}
-                        </Systemtittel>
+                        </Undertittel>
                     </td>
                     <td>
-                        <Systemtittel>
+                        <Undertittel>
                             {behandling ? underkategorier[behandling.underkategori].navn : '-'}
-                        </Systemtittel>
+                        </Undertittel>
                     </td>
                     <td>
-                        <Systemtittel>{fagsakStatus[fagsak.status].navn}</Systemtittel>
+                        <Undertittel>{fagsakStatus[fagsak.status].navn}</Undertittel>
                     </td>
                 </tr>
             </tbody>
