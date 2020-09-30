@@ -5,9 +5,10 @@ export const periodeOverlapperMedValgtDato = (
     periodeTom: string,
     valgtDato: Date
 ) => {
+    const valgtDatoToMoment = moment(valgtDato.toDateString());
     return (
-        moment(valgtDato).isBetween(periodeFom, periodeTom) ||
-        moment(valgtDato).isSame(periodeFom) ||
-        moment(valgtDato).isSame(periodeTom)
+        valgtDatoToMoment.isBetween(periodeFom, periodeTom) ||
+        valgtDatoToMoment.isSame(periodeFom) ||
+        valgtDatoToMoment.isSame(periodeTom)
     );
 };
