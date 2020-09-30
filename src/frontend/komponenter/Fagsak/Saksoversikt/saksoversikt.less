@@ -19,19 +19,40 @@
         > ul {
             list-style: none;
             padding: 0;
+            margin: 2rem 0;
+
+            p {
+                font-size: 1.125rem;
+            }
+
+            > li {
+                margin-bottom: 1rem;
+            }
+
+            > hr {
+                border: none;
+                border-top: 1px solid @navGra80;
+                margin-left: 2rem;
+            }
         }
 
         &__ytelser {
-            margin: 1rem 0 2rem 1.6rem;
+            margin: 0.5rem 0 2rem 2rem;
         }
 
         &__ytelselinje {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 1rem;
+        }
 
-            & .typo-element {
-                font-weight: 400;
-                font-size: 1.125rem;
+        &__totallinje {
+            margin-left: 2rem;
+            display: flex;
+            justify-content: space-between;
+
+            > p:last-child {
+                font-weight: 700;
             }
         }
     }

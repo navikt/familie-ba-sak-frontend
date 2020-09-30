@@ -1,4 +1,4 @@
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { IBeregningDetalj, IOppsummeringBeregning } from '../../../typer/beregning';
 import PersonUtbetaling from './PersonUtbetaling';
@@ -37,6 +37,13 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningsOversikt }) => {
                         return <PersonUtbetaling beregningDetaljer={beregningDetaljerForPerson} />;
                     }
                 )}
+                <li className={'saksoversikt__utbetalinger__totallinje'}>
+                    <Normaltekst>Totalt utbetalt/mnd</Normaltekst>
+                    <Normaltekst>{`${
+                        inneværendeBeregningsOversiktMåned?.utbetaltPerMnd ?? '-'
+                    } kr`}</Normaltekst>
+                </li>
+                <hr />
             </ul>
         </div>
     );

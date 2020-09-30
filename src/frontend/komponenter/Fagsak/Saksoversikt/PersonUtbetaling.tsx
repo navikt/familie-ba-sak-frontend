@@ -2,7 +2,7 @@ import React from 'react';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
 import { IBeregningDetalj, ytelsetype } from '../../../typer/beregning';
-import { Element } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IPersonUtbetalingProps {
     beregningDetaljer: IBeregningDetalj[];
@@ -16,13 +16,15 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ beregningDetaljer 
                 {beregningDetaljer.map(beregningDetaljer => {
                     return (
                         <div className={'saksoversikt__utbetalinger__ytelselinje'}>
-                            <Element>{ytelsetype[beregningDetaljer.ytelseType].navn}</Element>
-                            <Element>{`${beregningDetaljer.utbetaltPerMnd} kr`}</Element>
+                            <Normaltekst>
+                                {ytelsetype[beregningDetaljer.ytelseType].navn}
+                            </Normaltekst>
+                            <Normaltekst>{`${beregningDetaljer.utbetaltPerMnd} kr`}</Normaltekst>
                         </div>
                     );
                 })}
+                <DashedHr />
             </div>
-            <DashedHr />
         </li>
     );
 };
