@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IPerson, personTypeMap } from '../../../typer/person';
-import { FamilieIkonVelger } from '@navikt/familie-ikoner/src';
+import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 import Clipboard from '@navikt/familie-clipboard';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { hentAlder, formaterPersonIdent } from '../../../utils/formatter';
