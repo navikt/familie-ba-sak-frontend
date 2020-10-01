@@ -16,9 +16,9 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ beregningDetaljer 
         <li>
             <PersonInformasjon person={beregningDetaljer[0].person} />
             <div className={'saksoversikt__utbetalinger__ytelser'}>
-                {beregningDetaljer.map(beregningDetaljer => {
+                {beregningDetaljer.map((beregningDetaljer, index) => {
                     return (
-                        <div className={'saksoversikt__utbetalinger__ytelselinje'}>
+                        <div key={index} className={'saksoversikt__utbetalinger__ytelselinje'}>
                             <Normaltekst>
                                 {beregningDetaljer.ytelseType === YtelseType.ORDINÆR_BARNETRYGD
                                     ? genererTekstForOrdinær(beregningDetaljer.utbetaltPerMnd)

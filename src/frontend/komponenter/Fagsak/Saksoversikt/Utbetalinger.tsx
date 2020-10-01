@@ -1,4 +1,4 @@
-import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { IBeregningDetalj, IOppsummeringBeregning } from '../../../typer/beregning';
 import PersonUtbetaling from './PersonUtbetaling';
@@ -30,11 +30,15 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningsOversikt }) => {
 
     return (
         <div className={'saksoversikt__utbetalinger'}>
-            <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
             <ul>
                 {Object.values(beregningDetaljerGruppertPåPerson).map(
-                    beregningDetaljerForPerson => {
-                        return <PersonUtbetaling beregningDetaljer={beregningDetaljerForPerson} />;
+                    (beregningDetaljerForPerson, index) => {
+                        return (
+                            <PersonUtbetaling
+                                key={index}
+                                beregningDetaljer={beregningDetaljerForPerson}
+                            />
+                        );
                     }
                 )}
                 <li className={'saksoversikt__utbetalinger__totallinje'}>
