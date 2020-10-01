@@ -62,7 +62,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
             {fagsak.status === FagsakStatus.LØPENDE &&
                 (beregningOversiktInneværendeMåned ? (
-                    beregningOversiktInneværendeMåned?.utbetaltPerMnd === 0 &&
+                    beregningOversiktInneværendeMåned?.utbetaltPerMnd < 1 &&
                     gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
                         <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                             Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra NAV
