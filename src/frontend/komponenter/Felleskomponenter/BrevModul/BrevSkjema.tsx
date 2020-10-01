@@ -83,6 +83,7 @@ const BrevSkjema = ({
                 })}
             </FamilieSelect>
             <FamilieTextarea
+                className={'tekstfelt'}
                 disabled={senderInn || henterFohåndsvisning}
                 erLesevisning={false}
                 label={'Fritekst'}
