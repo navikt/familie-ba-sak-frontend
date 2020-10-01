@@ -2,19 +2,14 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { IBeregningDetalj, IOppsummeringBeregning } from '../../../typer/beregning';
 import PersonUtbetaling from './PersonUtbetaling';
-import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 
 interface IUtbetalingerProps {
-    beregningsOversikt: IOppsummeringBeregning[];
+    beregningOversikt?: IOppsummeringBeregning;
 }
 
-const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningsOversikt }) => {
-    const inneværendeBeregningsOversiktMåned = beregningsOversikt.find(periode =>
-        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
-    );
-
+const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningOversikt }) => {
     const beregningDetaljerGruppertPåPerson =
-        inneværendeBeregningsOversiktMåned?.beregningDetaljer.reduce(
+        beregningOversikt?.beregningDetaljer.reduce(
             (acc: { [key: string]: IBeregningDetalj[] }, beregningDetalj) => {
                 const beregningDetaljerForPerson = acc[beregningDetalj.person.personIdent] ?? [];
                 return {
@@ -43,9 +38,7 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningsOversikt }) => {
                 )}
                 <li className={'saksoversikt__utbetalinger__totallinje'}>
                     <Normaltekst>Totalt utbetalt/mnd</Normaltekst>
-                    <Normaltekst>{`${
-                        inneværendeBeregningsOversiktMåned?.utbetaltPerMnd ?? '-'
-                    } kr`}</Normaltekst>
+                    <Normaltekst>{`${beregningOversikt?.utbetaltPerMnd ?? '-'} kr`}</Normaltekst>
                 </li>
                 <hr />
             </ul>

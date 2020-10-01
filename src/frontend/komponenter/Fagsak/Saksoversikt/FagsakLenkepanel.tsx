@@ -2,7 +2,12 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { LenkepanelBase } from 'nav-frontend-lenkepanel';
-import { IBehandling, kategorier, underkategorier } from '../../../typer/behandling';
+import {
+    BehandlingStatus,
+    IBehandling,
+    kategorier,
+    underkategorier,
+} from '../../../typer/behandling';
 import Panel from 'nav-frontend-paneler';
 import classNames from 'classnames';
 
@@ -52,6 +57,12 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
     );
 };
 
+const genererHoverTekst = (behandling: IBehandling) => {
+    return behandling.status === BehandlingStatus.AVSLUTTET
+        ? 'Gå til gjeldende vedtak'
+        : 'Gå til åpen behandling';
+};
+
 const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ fagsak }) => {
     const behandling: IBehandling | undefined = fagsak.behandlinger.find(
         behandling => behandling.aktiv
@@ -59,6 +70,7 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ fagsak }) => {
 
     return behandling ? (
         <LenkepanelBase
+            title={genererHoverTekst(behandling)}
             className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
             href={`/fagsak/${fagsak.id}/${behandling.behandlingId}`}
         >

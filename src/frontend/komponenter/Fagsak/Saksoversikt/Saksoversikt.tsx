@@ -16,6 +16,7 @@ import Utbetalinger from './Utbetalinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import AlertStripe from 'nav-frontend-alertstriper';
 import Opphør from './Opphør';
+import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 
 interface IProps {
     fagsak: IFagsak;
@@ -45,6 +46,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     }
 
     const beregningOversikt = gjeldendeBehandling?.beregningOversikt ?? [];
+    const beregningOversiktInneværendeMåned = beregningOversikt.find(periode =>
+        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
+    );
 
     return (
         <div className={'saksoversikt'}>
@@ -53,25 +57,29 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <FagsakLenkepanel fagsak={fagsak} />
 
             {fagsak.status === FagsakStatus.LØPENDE && (
-                <>
-                    <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
-                    {beregningOversikt.length > 0 ? (
-                        <>
-                            <Utbetalinger beregningsOversikt={beregningOversikt} />
-                            <Opphør fagsak={fagsak} />
-                        </>
-                    ) : gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
+                <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
+            )}
+
+            {fagsak.status === FagsakStatus.LØPENDE &&
+                (beregningOversiktInneværendeMåned ? (
+                    beregningOversiktInneværendeMåned?.utbetaltPerMnd === 0 &&
+                    gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
                         <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                             Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra NAV
                         </AlertStripe>
                     ) : (
-                        <AlertStripe className={'saksoversikt__alert'} type={'feil'}>
-                            Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt
-                            brukerstøtte hvis problemet vedvarer.
-                        </AlertStripe>
-                    )}
-                </>
-            )}
+                        <>
+                            <Utbetalinger beregningOversikt={beregningOversiktInneværendeMåned} />
+                            <Opphør fagsak={fagsak} />
+                        </>
+                    )
+                ) : (
+                    <AlertStripe className={'saksoversikt__alert'} type={'feil'}>
+                        Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt
+                        brukerstøtte hvis problemet vedvarer.
+                    </AlertStripe>
+                ))}
+
             <Behandlinger fagsak={fagsak} />
         </div>
     );

@@ -55,6 +55,6 @@ export const ytelsetype: INøkkelPar = {
 };
 
 export const satsBeløp = {
-    ORDINÆR_FRA_6_ÅR: 1054,
     ORDINÆR_UNDER_6_ÅR: 1354,
+    ORDINÆR_FRA_6_ÅR: 1054,
 };
