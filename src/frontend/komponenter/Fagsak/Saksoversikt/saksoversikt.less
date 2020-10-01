@@ -87,21 +87,22 @@
     border: 1px solid @navGra60;
     width: 39rem;
 
-    > table {
+    &__tabell {
         width: 100%;
-    }
 
-    &__tabell-header {
-        p {
-            font-size: 1.25rem;
-            font-weight: 400;
+        > thead {
+            p {
+                font-size: 1.25rem;
+                font-weight: 400;
+            }
         }
-    }
-    &__tabell-body {
-        p {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-top: 0.6rem;
+
+        > tbody {
+            p {
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-top: 0.6rem;
+            }
         }
     }
 }

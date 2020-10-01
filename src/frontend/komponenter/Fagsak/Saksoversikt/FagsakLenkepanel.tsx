@@ -22,8 +22,8 @@ interface IInnholdstabell {
 
 const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
     return (
-        <table>
-            <thead className={'fagsak-panel__tabell-header'}>
+        <table className={'fagsak-panel__tabell'}>
+            <thead>
                 <tr>
                     <th>
                         <Normaltekst>Fagsaktype</Normaltekst>
@@ -36,7 +36,7 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
                     </th>
                 </tr>
             </thead>
-            <tbody className={'fagsak-panel__tabell-body'}>
+            <tbody>
                 <tr>
                     <td>
                         <Normaltekst>
@@ -64,21 +64,21 @@ const genererHoverTekst = (behandling: IBehandling) => {
 };
 
 const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ fagsak }) => {
-    const behandling: IBehandling | undefined = fagsak.behandlinger.find(
+    const aktivBehandling: IBehandling | undefined = fagsak.behandlinger.find(
         behandling => behandling.aktiv
     );
 
-    return behandling ? (
+    return aktivBehandling ? (
         <LenkepanelBase
-            title={genererHoverTekst(behandling)}
+            title={genererHoverTekst(aktivBehandling)}
             className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
-            href={`/fagsak/${fagsak.id}/${behandling.behandlingId}`}
+            href={`/fagsak/${fagsak.id}/${aktivBehandling.behandlingId}`}
         >
-            <Innholdstabell fagsak={fagsak} behandling={behandling} />
+            <Innholdstabell fagsak={fagsak} behandling={aktivBehandling} />
         </LenkepanelBase>
     ) : (
         <Panel className={'fagsak-panel'}>
-            <Innholdstabell fagsak={fagsak} behandling={behandling} />
+            <Innholdstabell fagsak={fagsak} behandling={aktivBehandling} />
         </Panel>
     );
 };
