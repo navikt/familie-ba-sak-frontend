@@ -1,7 +1,7 @@
 import React from 'react';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
-import { IBeregningDetalj, ytelsetype } from '../../../typer/beregning';
+import { IBeregningDetalj, satsBeløp, ytelsetype, YtelseType } from '../../../typer/beregning';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IPersonUtbetalingProps {
@@ -9,6 +9,9 @@ interface IPersonUtbetalingProps {
 }
 
 const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ beregningDetaljer }) => {
+    const genererTekstForOrdinær = (beløp: number) =>
+        beløp === satsBeløp.ORDINÆR_UNDER_6_ÅR ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
+
     return (
         <li>
             <PersonInformasjon person={beregningDetaljer[0].person} />
@@ -17,7 +20,9 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ beregningDetaljer 
                     return (
                         <div className={'saksoversikt__utbetalinger__ytelselinje'}>
                             <Normaltekst>
-                                {ytelsetype[beregningDetaljer.ytelseType].navn}
+                                {beregningDetaljer.ytelseType === YtelseType.ORDINÆR_BARNETRYGD
+                                    ? genererTekstForOrdinær(beregningDetaljer.utbetaltPerMnd)
+                                    : ytelsetype[beregningDetaljer.ytelseType].navn}
                             </Normaltekst>
                             <Normaltekst>{`${beregningDetaljer.utbetaltPerMnd} kr`}</Normaltekst>
                         </div>
