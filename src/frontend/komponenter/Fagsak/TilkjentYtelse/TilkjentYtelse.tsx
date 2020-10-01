@@ -1,12 +1,7 @@
-import { AxiosError } from 'axios';
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
-import { useApp } from '../../../context/AppContext';
-import { IOppsummeringBeregning } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
 import { IBehandling } from '../../../typer/behandling';
@@ -22,27 +17,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     fagsak,
     åpenBehandling,
 }) => {
-    const { axiosRequest } = useApp();
     const history = useHistory();
-    const [tilkjentYtelseRessurs, setTilkjentYtelseRessurs] = React.useState<
-        Ressurs<IOppsummeringBeregning[]>
-    >({ status: RessursStatus.IKKE_HENTET });
-
-    React.useEffect(() => {
-        setTilkjentYtelseRessurs({ status: RessursStatus.HENTER });
-        axiosRequest<IOppsummeringBeregning[], void>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/vedtak/oversikt/${åpenBehandling?.behandlingId}`,
-        })
-            .then((response: Ressurs<IOppsummeringBeregning[]>) => {
-                setTilkjentYtelseRessurs(response);
-            })
-            .catch((_error: AxiosError) => {
-                setTilkjentYtelseRessurs(
-                    byggFeiletRessurs('Ukjent feil, Kunne ikke generere forhåndsvisning.')
-                );
-            });
-    }, []);
 
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
@@ -52,52 +27,35 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
     };
 
-    switch (tilkjentYtelseRessurs.status) {
-        case RessursStatus.SUKSESS: {
-            const harAndeler = tilkjentYtelseRessurs.data.length > 0;
-            return (
-                <Skjemasteg
-                    senderInn={false}
-                    tittel="Behandlingsresultat"
-                    className="tilkjentytelse"
-                    forrigeOnClick={forrigeOnClick}
-                    nesteOnClick={nesteOnClick}
-                    maxWidthStyle={'80rem'}
-                >
-                    <TidslinjeProvider>
-                        <TilkjentYtelseTidslinje />
-                    </TidslinjeProvider>
-                    {harAndeler ? (
-                        <div role="table">
-                            <OppsummeringsradHeader />
-                            {tilkjentYtelseRessurs.data
-                                .slice()
-                                .reverse()
-                                .map((beregning, index) => {
-                                    return <Oppsummeringsrad beregning={beregning} key={index} />;
-                                })}
-                        </div>
-                    ) : (
-                        <div className="tilkjentytelse-informasjon">
-                            <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
-                        </div>
-                    )}
-                </Skjemasteg>
-            );
-        }
-        case RessursStatus.FEILET:
-            return (
-                <AlertStripe children={tilkjentYtelseRessurs.frontendFeilmelding} type={'feil'} />
-            );
-        case RessursStatus.IKKE_TILGANG:
-            return (
-                <AlertStripe
-                    children={'Du har ikke tilgang til å se behandlingsresultat for denne saken'}
-                    type={'advarsel'}
-                />
-            );
-        default:
-            return null;
-    }
+    return (
+        <Skjemasteg
+            senderInn={false}
+            tittel="Behandlingsresultat"
+            className="tilkjentytelse"
+            forrigeOnClick={forrigeOnClick}
+            nesteOnClick={nesteOnClick}
+            maxWidthStyle={'80rem'}
+        >
+            <TidslinjeProvider>
+                <TilkjentYtelseTidslinje />
+            </TidslinjeProvider>
+            {åpenBehandling.beregningOversikt.length > 0 ? (
+                <div role="table">
+                    <OppsummeringsradHeader />
+                    {åpenBehandling.beregningOversikt
+                        .slice()
+                        .reverse()
+                        .map((beregning, index) => {
+                            return <Oppsummeringsrad beregning={beregning} key={index} />;
+                        })}
+                </div>
+            ) : (
+                <div className="tilkjentytelse-informasjon">
+                    <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
+                </div>
+            )}
+        </Skjemasteg>
+    );
 };
+
 export default TilkjentYtelse;

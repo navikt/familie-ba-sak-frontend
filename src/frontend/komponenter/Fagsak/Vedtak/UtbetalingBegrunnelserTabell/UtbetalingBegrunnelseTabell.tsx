@@ -30,8 +30,8 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     const erFørFørsteEndring = (beregning: IOppsummeringBeregning) => {
         const førsteEndring = åpenBehandling.beregningOversikt.find(
             (b: IOppsummeringBeregning) =>
-                b.endring === BeregningEndringType.ENDRET ||
-                b.endring === BeregningEndringType.ENDRET_SATS
+                b.endring.type === BeregningEndringType.ENDRET ||
+                b.endring.type === BeregningEndringType.ENDRET_SATS
         );
         return førsteEndring
             ? moment(beregning.periodeTom, datoformat.ISO_DAG) <
@@ -40,8 +40,8 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     };
 
     const erSatsendring = (beregning: IOppsummeringBeregning) =>
-        beregning.endring === BeregningEndringType.ENDRET_SATS ||
-        beregning.endring === BeregningEndringType.UENDRET_SATS;
+        beregning.endring.type === BeregningEndringType.ENDRET_SATS ||
+        beregning.endring.type === BeregningEndringType.UENDRET_SATS;
 
     const lesevisningForRad = (beregning: IOppsummeringBeregning) =>
         erLesevisning() || erFørFørsteEndring(beregning) || erSatsendring(beregning);
@@ -63,6 +63,10 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                             moment(b.periodeFom, datoformat.ISO_DAG),
                             'day'
                         )
+                    )
+                    .filter(
+                        (beregningRad: IOppsummeringBeregning) =>
+                            beregningRad.endring.trengerBegrunnelse
                     )
                     .map(beregningRad => {
                         const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(

@@ -10,8 +10,6 @@ import {
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
-import { useBehandling } from './BehandlingContext';
-import { BeregningEndringType, IOppsummeringBeregning } from '../typer/beregning';
 
 interface IProps {
     aktivVedtak?: IVedtakForBehandling;
@@ -24,11 +22,6 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
         const { axiosRequest } = useApp();
 
         const { settFagsak } = useFagsakRessurser();
-        const { åpenBehandling } = useBehandling();
-        const beregningOversikt =
-            åpenBehandling.status === RessursStatus.SUKSESS
-                ? åpenBehandling.data.beregningOversikt
-                : [];
 
         const [utbetalingBegrunnelseFeilmelding, settUtbetalingBegrunnelseFeilmelding] = useState<{
             id?: number;
@@ -45,33 +38,6 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
 
         useEffect(() => {
             hentVilkårBegrunnelseTekster();
-            if (beregningOversikt !== undefined) {
-                const uendrede = beregningOversikt
-                    .filter(
-                        (b: IOppsummeringBeregning) =>
-                            b.endring === BeregningEndringType.UENDRET_SATS ||
-                            b.endring === BeregningEndringType.UENDRET
-                    )
-                    .map((satsendring: IOppsummeringBeregning) => {
-                        return {
-                            fom: satsendring.periodeFom,
-                            tom: satsendring.periodeTom,
-                        };
-                    });
-                const satsendringer = beregningOversikt
-                    .filter(
-                        (b: IOppsummeringBeregning) =>
-                            b.endring === BeregningEndringType.ENDRET_SATS
-                    )
-                    .map((satsendring: IOppsummeringBeregning) => {
-                        return {
-                            fom: satsendring.periodeFom,
-                            tom: satsendring.periodeTom,
-                        };
-                    });
-                settUendrede(uendrede);
-                settSatsendringer(satsendringer);
-            }
         }, []);
 
         useEffect(() => {
@@ -105,26 +71,6 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
                     });
                 }
             });
-        };
-
-        const settUendrede = (data: IRestUtbetalingBegrunnelse[]) => {
-            håndterEndretUtbetalingBegrunnelser(
-                axiosRequest<IFagsak, IRestUtbetalingBegrunnelse[]>({
-                    method: 'POST',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/uendrede`,
-                    data,
-                })
-            );
-        };
-
-        const settSatsendringer = (data: IRestUtbetalingBegrunnelse[]) => {
-            håndterEndretUtbetalingBegrunnelser(
-                axiosRequest<IFagsak, IRestUtbetalingBegrunnelse[]>({
-                    method: 'POST',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/satsendringer`,
-                    data,
-                })
-            );
         };
 
         const leggTilUtbetalingBegrunnelse = (data: IRestUtbetalingBegrunnelse) => {
