@@ -8,11 +8,6 @@ import { IFagsak } from '../../typer/fagsak';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IPersonResultat } from '../../typer/vilkår';
 import { erBehandlingenInnvilget, hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
-import {
-    ISide,
-    finnSideForBehandlingssteg,
-    erViPåUdefinertFagsakSide,
-} from '../Felleskomponenter/Venstremeny/sider';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -39,21 +34,11 @@ const useFagsakApi = (
                     const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
                         response.data
                     );
-
-                    if (aktivBehandling) {
-                        const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
-                            aktivBehandling.steg
-                        );
-
-                        if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
-                            history.push(
-                                `/fagsak/${response.data.id}/${aktivBehandling.behandlingId}/${sideForSteg.href}`
-                            );
-                            return;
-                        }
-                    }
-
-                    history.push(`/fagsak/${response.data.id}/saksoversikt`);
+                    aktivBehandling
+                        ? history.push(
+                              `/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`
+                          )
+                        : history.push(`/fagsak/${response.data.id}/saksoversikt`);
                 } else if (response.status === RessursStatus.FEILET) {
                     settVisFeilmeldinger(true);
                     settFeilmelding(response.frontendFeilmelding);

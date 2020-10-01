@@ -1,26 +1,66 @@
 .saksoversikt {
-    max-width: 40rem;
-    margin: 0 auto;
+    max-width: 65rem;
+    margin: 6.8rem;
+    color: @navMorkGra;
 
-    & .tittel {
-        padding-top: 2.5rem;
-        padding-bottom: 1.5rem;
+    & .typo-innholdstittel {
+        margin: 5rem auto 2.5rem auto;
+        font-size: 1.875rem;
+    }
+
+    & .typo-systemtittel {
+        font-size: 1.25rem;
+        margin-top: 5rem;
     }
 
     &__utbetalinger {
-        padding: 1rem 0;
-    }
+        max-width: 39rem;
+        margin-top: 2rem;
 
-    &__aktivbehandling {
-        padding: 1rem 0;
+        > ul {
+            list-style: none;
+            padding: 0;
 
-        & .knapp {
-            margin: 1rem 0;
+            p {
+                font-size: 1.125rem;
+            }
+
+            > li {
+                margin-bottom: 1rem;
+            }
+
+            > hr {
+                border: none;
+                border-top: 1px solid @navGra80;
+                margin-left: 2rem;
+            }
+        }
+
+        &__ytelser {
+            margin: 0.5rem 0 2rem 2rem;
+        }
+
+        &__ytelselinje {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        &__totallinje {
+            margin-left: 2rem;
+            display: flex;
+            justify-content: space-between;
+
+            > p:last-child {
+                font-weight: 700;
+            }
         }
     }
 
     &__behandlingshistorikk {
-        padding: 2.5rem 0;
+        &__tabell {
+            margin-top: 2rem;
+        }
     }
 
     &__opphør {
@@ -33,5 +73,42 @@
         & .skjemaelement {
             margin-top: 1rem;
         }
+    }
+
+    &__alert {
+        width: 39rem;
+        margin-top: 2rem;
+    }
+}
+
+.fagsak-panel {
+    text-align: left;
+    padding: 2rem !important;
+    border: 1px solid @navGra60;
+    width: 39rem;
+
+    &__tabell {
+        width: 100%;
+
+        > thead {
+            p {
+                font-size: 1.25rem;
+                font-weight: 400;
+            }
+        }
+
+        > tbody {
+            p {
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-top: 0.6rem;
+            }
+        }
+    }
+}
+
+.fagsak-lenkepanel {
+    &:hover {
+        border-color: @navBla;
     }
 }

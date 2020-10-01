@@ -1,7 +1,8 @@
 import { FagsakStatus, IFagsak } from '../../frontend/typer/fagsak';
-import { byggSuksessRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs, kjønnType, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     BehandlingKategori,
+    BehandlingOpprinnelse,
     BehandlingResultat,
     BehandlingStatus,
     BehandlingSteg,
@@ -11,7 +12,6 @@ import {
 } from '../../frontend/typer/behandling';
 import { IPerson, PersonType } from '../../frontend/typer/person';
 import { IRestPersonResultat, Resultat, VilkårType } from '../../frontend/typer/vilkår';
-import { kjønnType } from '@navikt/familie-typer';
 import fs from 'fs';
 import path from 'path';
 
@@ -183,6 +183,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             opprettetTidspunkt: '2020-03-19T10:08:56.8',
         },
         beregningOversikt: [],
+        opprinnelse: BehandlingOpprinnelse.MANUELL,
     };
 
     return behandling;

@@ -1,51 +1,47 @@
-import { Undertittel } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
-import { IPersonBeregning } from '../../../typer/beregning';
-import { formaterPersonIdent } from '../../../utils/formatter';
-import { periodeToString } from '../../../typer/periode';
+import { IBeregningDetalj, IOppsummeringBeregning } from '../../../typer/beregning';
+import PersonUtbetaling from './PersonUtbetaling';
 
 interface IUtbetalingerProps {
-    personbergninger: IPersonBeregning[];
+    beregningOversikt?: IOppsummeringBeregning;
 }
 
-const Utbetalinger: React.FC<IUtbetalingerProps> = ({ personbergninger }) => {
+const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningOversikt }) => {
+    const beregningDetaljerGruppertPåPerson =
+        beregningOversikt?.beregningDetaljer.reduce(
+            (acc: { [key: string]: IBeregningDetalj[] }, beregningDetalj) => {
+                const beregningDetaljerForPerson = acc[beregningDetalj.person.personIdent] ?? [];
+                return {
+                    ...acc,
+                    [beregningDetalj.person.personIdent]: [
+                        ...beregningDetaljerForPerson,
+                        beregningDetalj,
+                    ],
+                };
+            },
+            {}
+        ) ?? {};
+
     return (
         <div className={'saksoversikt__utbetalinger'}>
-            <Undertittel children={'Utbetalinger'} />
-            <table className="tabell">
-                <thead>
-                    <tr>
-                        <th children={'Barn'} />
-                        <th children={'Beløp'} />
-                        <th children={'Periode'} />
-                    </tr>
-                </thead>
-                <tbody>
-                    {personbergninger
-                        .filter(
-                            (personBeregning: IPersonBeregning) =>
-                                personBeregning.ytelsePerioder.length > 0
-                        )
-                        .map((personBeregning: IPersonBeregning) => {
-                            return (
-                                <tr key={personBeregning.personIdent}>
-                                    <td
-                                        children={`${formaterPersonIdent(
-                                            personBeregning.personIdent
-                                        )}`}
-                                    />
-                                    <td children={`${personBeregning.beløp}`} />
-                                    <td
-                                        children={`${periodeToString({
-                                            fom: personBeregning.stønadFom,
-                                            tom: personBeregning.stønadTom,
-                                        })}`}
-                                    />
-                                </tr>
-                            );
-                        })}
-                </tbody>
-            </table>
+            <ul>
+                {Object.values(beregningDetaljerGruppertPåPerson).map(
+                    (beregningDetaljerForPerson, index) => {
+                        return (
+                            <PersonUtbetaling
+                                key={index}
+                                beregningDetaljer={beregningDetaljerForPerson}
+                            />
+                        );
+                    }
+                )}
+                <li className={'saksoversikt__utbetalinger__totallinje'}>
+                    <Normaltekst>Totalt utbetalt/mnd</Normaltekst>
+                    <Normaltekst>{`${beregningOversikt?.utbetaltPerMnd ?? '-'} kr`}</Normaltekst>
+                </li>
+                <hr />
+            </ul>
         </div>
     );
 };
