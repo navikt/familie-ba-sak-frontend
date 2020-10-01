@@ -52,7 +52,8 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                               to={`${tilPath}#${underside.hash}`}
                                               className={classNames(
                                                   'venstremeny__link',
-                                                  'underside'
+                                                  'underside',
+                                                  'hover-effekt'
                                               )}
                                           >
                                               <>
