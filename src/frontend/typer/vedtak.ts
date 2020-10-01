@@ -4,7 +4,6 @@ import { BehandlingResultat } from './behandling';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
-    ansvarligSaksbehandler: string;
     personBeregninger: IPersonBeregning[];
     utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[];
     vedtaksdato: string;
