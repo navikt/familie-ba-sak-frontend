@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Systemtittel } from 'nav-frontend-typografi';
 import PanelBase from 'nav-frontend-paneler';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../typer/behandling';
+import { BehandlingUnderkategori, underkategorier } from '../../../typer/behandling';
 import { ISøknadDTO } from '../../../typer/søknad';
 import { Radio } from 'nav-frontend-skjema';
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
@@ -29,17 +29,17 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
             <br />
             <FamilieRadioGruppe
                 erLesevisning={lesevisning}
-                verdi={behandlingUnderkategori[søknad.underkategori].navn}
+                verdi={underkategorier[søknad.underkategori].navn}
             >
                 <Radio
-                    label={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR].navn}
-                    name={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR].id}
+                    label={underkategorier[BehandlingUnderkategori.ORDINÆR].navn}
+                    name={underkategorier[BehandlingUnderkategori.ORDINÆR].id}
                     checked={søknad.underkategori === BehandlingUnderkategori.ORDINÆR}
                     onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
                 />
                 <Radio
-                    label={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET].navn}
-                    name={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET].id}
+                    label={underkategorier[BehandlingUnderkategori.UTVIDET].navn}
+                    name={underkategorier[BehandlingUnderkategori.UTVIDET].id}
                     checked={søknad.underkategori === BehandlingUnderkategori.UTVIDET}
                     onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
                 />
