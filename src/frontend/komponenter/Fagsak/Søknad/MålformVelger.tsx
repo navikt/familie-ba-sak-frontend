@@ -31,7 +31,11 @@ const MålformVelger: React.FunctionComponent<IProps> = ({ settSøknadOgValider,
             <br />
             <FamilieRadioGruppe
                 erLesevisning={lesevisning}
-                verdi={søknad.søkerMedOpplysninger.målform}
+                verdi={
+                    søknad.søkerMedOpplysninger.målform
+                        ? målform[søknad.søkerMedOpplysninger.målform].navn
+                        : undefined
+                }
             >
                 <Radio
                     label={målform[Målform.NB].navn}
