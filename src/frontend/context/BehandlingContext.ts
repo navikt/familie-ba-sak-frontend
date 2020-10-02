@@ -18,6 +18,7 @@ import {
     finnSideForBehandlingssteg,
     ISide,
     sider,
+    erViPåUlovligSteg,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
@@ -93,11 +94,14 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
                 åpenBehandling.data.steg
             );
 
-            if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
+            if (
+                (erViPåUdefinertFagsakSide(history.location.pathname) ||
+                    erViPåUlovligSteg(history.location.pathname, sideForSteg)) &&
+                sideForSteg
+            ) {
                 history.push(
                     `/fagsak/${fagsak.data.id}/${åpenBehandling.data.behandlingId}/${sideForSteg.href}`
                 );
-                return;
             }
         }
     };

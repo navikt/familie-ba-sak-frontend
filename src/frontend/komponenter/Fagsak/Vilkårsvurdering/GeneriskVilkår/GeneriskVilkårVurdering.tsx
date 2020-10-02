@@ -20,7 +20,6 @@ import { IPerson } from '../../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     IPersonResultat,
-    IRestPersonResultat,
     IVilkårConfig,
     IVilkårResultat,
     Resultat,
@@ -41,6 +40,8 @@ import { datoformat } from '../../../../utils/formatter';
 import moment from 'moment';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
+import { IFagsak } from '../../../../typer/fagsak';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
 
 interface IProps {
     person: IPerson;
@@ -57,7 +58,6 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
 }) => {
     const {
         vilkårsvurdering,
-        settVilkårsvurderingFraApi,
         putVilkår,
         deleteVilkår,
         vilkårSubmit,
@@ -65,6 +65,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     } = useVilkårsvurdering();
 
     const { erLesevisning, åpenBehandling } = useBehandling();
+    const { settFagsak } = useFagsakRessurser();
     const leseVisning = erLesevisning();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(
@@ -127,25 +128,25 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             const promise = putVilkår(vilkårsvurderingForPerson, redigerbartVilkår);
             håndterEndringPåVilkårsvurdering(promise);
         } else {
-            settVisFeilmeldingerForEttVilkår(true);
             settRedigerbartVilkår(validertVilkår);
+            settVisFeilmeldingerForEttVilkår(true);
         }
     };
 
-    const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IRestPersonResultat[]>>) => {
+    const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IFagsak>>) => {
         promise
-            .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
+            .then((oppdatertFagsak: Ressurs<IFagsak>) => {
                 settVilkårSubmit(VilkårSubmit.NONE);
-                if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
-                    settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
-                    settEkspandertVilkår(false);
+                if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
                     settVisFeilmeldingerForEttVilkår(false);
-                } else if (nyVilkårsvurdering.status === RessursStatus.FEILET) {
+                    settFagsak(oppdatertFagsak);
+                    settEkspandertVilkår(false);
+                } else if (oppdatertFagsak.status === RessursStatus.FEILET) {
                     settVisFeilmeldingerForEttVilkår(true);
                     settRedigerbartVilkår({
                         ...redigerbartVilkår,
                         valideringsstatus: Valideringsstatus.FEIL,
-                        feilmelding: nyVilkårsvurdering.frontendFeilmelding,
+                        feilmelding: oppdatertFagsak.frontendFeilmelding,
                     });
                 } else {
                     settVisFeilmeldingerForEttVilkår(true);
@@ -159,13 +160,13 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             })
             .catch(() => {
                 settVilkårSubmit(VilkårSubmit.NONE);
-                settVisFeilmeldingerForEttVilkår(true);
                 settRedigerbartVilkår({
                     ...redigerbartVilkår,
                     valideringsstatus: Valideringsstatus.FEIL,
                     feilmelding:
                         'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                 });
+                settVisFeilmeldingerForEttVilkår(true);
             });
     };
 
