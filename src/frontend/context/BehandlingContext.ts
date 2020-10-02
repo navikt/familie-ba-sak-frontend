@@ -94,11 +94,11 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
                 åpenBehandling.data.steg
             );
 
-            if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
-                history.push(
-                    `/fagsak/${fagsak.data.id}/${åpenBehandling.data.behandlingId}/${sideForSteg.href}`
-                );
-            } else if (erViPåUlovligSteg(history.location.pathname, sideForSteg) && sideForSteg) {
+            if (
+                (erViPåUdefinertFagsakSide(history.location.pathname) ||
+                    erViPåUlovligSteg(history.location.pathname, sideForSteg)) &&
+                sideForSteg
+            ) {
                 history.push(
                     `/fagsak/${fagsak.data.id}/${åpenBehandling.data.behandlingId}/${sideForSteg.href}`
                 );
