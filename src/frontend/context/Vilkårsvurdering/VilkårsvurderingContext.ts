@@ -13,7 +13,6 @@ import {
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { useApp } from '../AppContext';
 import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
-import { useFagsakRessurser } from '../FagsakContext';
 
 interface IProps {
     fagsak: IFagsak;
