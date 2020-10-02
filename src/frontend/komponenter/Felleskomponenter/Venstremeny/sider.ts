@@ -108,3 +108,19 @@ export const erViPåUdefinertFagsakSide = (pathname: string) => {
         !pathname.includes('ny-behandling')
     );
 };
+
+export const erViPåUlovligSteg = (pathname: string, behandlingSide?: ISide) => {
+    if (!behandlingSide) return false;
+
+    const ønsketSteg: ISide | undefined = Object.values(sider).find((side: ISide) =>
+        pathname.includes(side.href)
+    );
+
+    if (ønsketSteg) {
+        if (hentStegNummer(ønsketSteg?.steg) > hentStegNummer(behandlingSide.steg)) {
+            return true;
+        }
+    }
+
+    return false;
+};
