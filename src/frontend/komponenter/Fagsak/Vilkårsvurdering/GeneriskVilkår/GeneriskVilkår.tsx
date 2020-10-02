@@ -51,19 +51,19 @@ const GeneriskVilkår: React.FC<IProps> = ({
     const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IFagsak>>) => {
         promise
             .then((oppdatertFagsak: Ressurs<IFagsak>) => {
-                settVilkårSubmit(VilkårSubmit.NONE);
                 settVisFeilmeldingerForVilkår(false);
+                settVilkårSubmit(VilkårSubmit.NONE);
                 settFeilmelding('');
                 if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
                     settFagsak(oppdatertFagsak);
                 } else if (oppdatertFagsak.status === RessursStatus.FEILET) {
-                    settVisFeilmeldingerForVilkår(true);
                     settFeilmelding(oppdatertFagsak.frontendFeilmelding);
-                } else {
                     settVisFeilmeldingerForVilkår(true);
+                } else {
                     settFeilmelding(
                         'En ukjent feil har oppstått, vi har ikke klart å legge til periode.'
                     );
+                    settVisFeilmeldingerForVilkår(true);
                 }
             })
             .catch(() => {

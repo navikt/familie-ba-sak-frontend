@@ -128,8 +128,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             const promise = putVilkår(vilkårsvurderingForPerson, redigerbartVilkår);
             håndterEndringPåVilkårsvurdering(promise);
         } else {
-            settVisFeilmeldingerForEttVilkår(true);
             settRedigerbartVilkår(validertVilkår);
+            settVisFeilmeldingerForEttVilkår(true);
         }
     };
 
@@ -138,9 +138,9 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             .then((oppdatertFagsak: Ressurs<IFagsak>) => {
                 settVilkårSubmit(VilkårSubmit.NONE);
                 if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
+                    settVisFeilmeldingerForEttVilkår(false);
                     settFagsak(oppdatertFagsak);
                     settEkspandertVilkår(false);
-                    settVisFeilmeldingerForEttVilkår(false);
                 } else if (oppdatertFagsak.status === RessursStatus.FEILET) {
                     settVisFeilmeldingerForEttVilkår(true);
                     settRedigerbartVilkår({
@@ -160,13 +160,13 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             })
             .catch(() => {
                 settVilkårSubmit(VilkårSubmit.NONE);
-                settVisFeilmeldingerForEttVilkår(true);
                 settRedigerbartVilkår({
                     ...redigerbartVilkår,
                     valideringsstatus: Valideringsstatus.FEIL,
                     feilmelding:
                         'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                 });
+                settVisFeilmeldingerForEttVilkår(true);
             });
     };
 
