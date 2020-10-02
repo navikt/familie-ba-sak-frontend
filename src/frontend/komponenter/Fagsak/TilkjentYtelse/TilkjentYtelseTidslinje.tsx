@@ -13,6 +13,7 @@ import TidslinjeEtikett from './TidslinjeEtikett';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import Vinduvelger from './VinduVelger';
 import TidslinjeNavigering from './TidslinjeNavigering';
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();
@@ -68,10 +69,12 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                 <Tidslinje
                     rader={tidslinjeRader}
                     direction={'right'}
-                    EtikettKomponent={TidslinjeEtikett}
+                    etikettRender={(etikett: Skalaetikett, style: { [key: string]: string }) => (
+                        <TidslinjeEtikett etikett={etikett} style={style} />
+                    )}
                     startDato={aktivtTidslinjeVindu.startDato.toDate()}
                     sluttDato={aktivtTidslinjeVindu.sluttDato.toDate()}
-                    aktivPeriode={
+                    aktivtUtsnitt={
                         aktivEtikett && {
                             fom: aktivEtikett.dato,
                             tom: sisteDatoIMnd(

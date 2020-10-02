@@ -28,11 +28,25 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, styl
 
     const isDisabled = aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR;
 
+    let klikkbarBredde = 0;
+
+    switch (aktivtTidslinjeVindu.vindu.id) {
+        case TidslinjeVindu.HALVT_ÅR:
+            klikkbarBredde = 100 / 6 - 1;
+            break;
+        case TidslinjeVindu.ETT_ÅR:
+            klikkbarBredde = 100 / 12 - 1;
+            break;
+        default:
+            break;
+    }
+
     return (
         <button
             aria-label={etikett.label}
             disabled={isDisabled}
-            style={style}
+            key={etikett.label}
+            style={{ width: `${klikkbarBredde}%`, ...style }}
             className={classNames(
                 'tidslinje__etikett',
                 aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()
