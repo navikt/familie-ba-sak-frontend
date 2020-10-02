@@ -52,7 +52,8 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                               to={`${tilPath}#${underside.hash}`}
                                               className={classNames(
                                                   'venstremeny__link',
-                                                  'underside'
+                                                  'underside',
+                                                  'hover-effekt'
                                               )}
                                           >
                                               <>
@@ -61,9 +62,7 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                                           {antallAksjonspunkter}
                                                       </div>
                                                   ) : (
-                                                      <div
-                                                          className={'underside__sirkel-plass'}
-                                                      ></div>
+                                                      <div className={'underside__sirkel-plass'} />
                                                   )}
                                                   <Normaltekst>{underside.navn}</Normaltekst>
                                               </>

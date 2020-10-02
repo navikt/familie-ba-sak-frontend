@@ -2,8 +2,8 @@ import {
     BehandlingResultat,
     BehandlingSteg,
     Behandlingstype,
-    IBehandling,
     hentStegNummer,
+    IBehandling,
 } from '../../../typer/behandling';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
@@ -95,6 +95,9 @@ export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
 };
 
 export const finnSideForBehandlingssteg = (steg: BehandlingSteg) => {
+    if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
+        return Object.values(sider).find((side: ISide) => side.id === 'VEDTAK');
+    }
     return Object.values(sider).find((side: ISide) => side.steg === steg);
 };
 

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/components/types.internal';
-import { TidslinjeSkala, useTidslinje } from '../../../context/TidslinjeContext';
+import { TidslinjeVindu, useTidslinje } from '../../../context/TidslinjeContext';
 import classNames from 'classnames';
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 interface IEtikettProp {
     etikett: Skalaetikett;
@@ -11,33 +11,38 @@ interface IEtikettProp {
 }
 
 const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, style }) => {
-    const { aktivEtikett, settAktivEtikett, tidslinjeInput } = useTidslinje();
+    const { aktivEtikett, settAktivEtikett, aktivtTidslinjeVindu } = useTidslinje();
 
     const onEtikettClick = () => {
         settAktivEtikett(etikett);
     };
 
-    const isDisabled = tidslinjeInput.aktivSkala.id === TidslinjeSkala.TRE_ÅR;
+    useEffect(() => {
+        if (
+            etikett.dato.getFullYear() === new Date().getFullYear() &&
+            etikett.dato.getMonth() === new Date().getMonth()
+        ) {
+            settAktivEtikett(etikett);
+        }
+    }, []);
+
+    const isDisabled = aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR;
 
     return (
         <button
             aria-label={etikett.label}
             disabled={isDisabled}
             style={style}
-            className={'tidslinje__etikett'}
+            className={classNames(
+                'tidslinje__etikett',
+                aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()
+                    ? 'tidslinje__etikett--aktiv'
+                    : '',
+                isDisabled ? 'tidslinje__etikett--disabled' : ''
+            )}
             onClick={onEtikettClick}
         >
-            <span
-                className={classNames(
-                    'tidslinje__etikett__label',
-                    isDisabled ? 'tidslinje__etikett__label--disabled' : '',
-                    aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()
-                        ? 'tidslinje__etikett__label--aktiv'
-                        : ''
-                )}
-            >
-                {etikett.label}
-            </span>
+            <span>{etikett.label}</span>
         </button>
     );
 };

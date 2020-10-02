@@ -1,20 +1,24 @@
 import createUseContext from 'constate';
-import { useState, useEffect } from 'react';
-import { BehandlerRolle, BehandlingSteg, IBehandling, hentStegNummer } from '../typer/behandling';
+import React, { useEffect, useState } from 'react';
+import { BehandlerRolle, BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
 import {
-    RessursStatus,
-    Ressurs,
-    byggTomRessurs,
-    byggFeiletRessurs,
     byggDataRessurs,
+    byggFeiletRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
 } from '@navikt/familie-typer';
 import { tilFeilside } from '../utils/commons';
 import { hentAktivBehandlingPåFagsak, hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 import { useHistory } from 'react-router';
-import React from 'react';
-import { ISide, sider } from '../komponenter/Felleskomponenter/Venstremeny/sider';
+import {
+    erViPåUdefinertFagsakSide,
+    finnSideForBehandlingssteg,
+    ISide,
+    sider,
+} from '../komponenter/Felleskomponenter/Venstremeny/sider';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
@@ -30,6 +34,10 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
             )
         );
     }, [history.location.pathname]);
+
+    useEffect(() => {
+        automatiskNavigeringTilSideForSteg();
+    }, [åpenBehandling]);
 
     const bestemÅpenBehandling = (behandlingId: string | undefined) => {
         if (fagsak.status === RessursStatus.SUKSESS) {
@@ -76,7 +84,30 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         }
     };
 
-    return { åpenBehandling, erLesevisning, bestemÅpenBehandling, forrigeÅpneSide };
+    const automatiskNavigeringTilSideForSteg = () => {
+        if (
+            åpenBehandling.status === RessursStatus.SUKSESS &&
+            fagsak.status === RessursStatus.SUKSESS
+        ) {
+            const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
+                åpenBehandling.data.steg
+            );
+
+            if (erViPåUdefinertFagsakSide(history.location.pathname) && sideForSteg) {
+                history.push(
+                    `/fagsak/${fagsak.data.id}/${åpenBehandling.data.behandlingId}/${sideForSteg.href}`
+                );
+                return;
+            }
+        }
+    };
+
+    return {
+        åpenBehandling,
+        erLesevisning,
+        bestemÅpenBehandling,
+        forrigeÅpneSide,
+    };
 });
 
 export { BehandlingProvider, useBehandling };

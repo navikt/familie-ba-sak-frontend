@@ -1,33 +1,28 @@
 import moment from 'moment';
-import { Knapp } from 'nav-frontend-knapper';
-import { Input } from 'nav-frontend-skjema';
-import 'nav-frontend-tabell-style';
-import { Element, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import {
+    BehandlingKategori,
     BehandlingStatus,
     IBehandling,
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
-import { IVedtakForBehandling } from '../../../typer/vedtak';
+import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import { datoformat, formaterIverksattDato } from '../../../utils/formatter';
-import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import Behandlinger from './Behandlinger';
 import Utbetalinger from './Utbetalinger';
+import FagsakLenkepanel from './FagsakLenkepanel';
+import AlertStripe from 'nav-frontend-alertstriper';
+import Opphør from './Opphør';
+import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { axiosRequest } = useApp();
-    const [opphørsdato, setOpphørsdato] = React.useState('');
-
     const { bestemÅpenBehandling } = useBehandling();
     React.useEffect(() => {
         bestemÅpenBehandling(undefined);
@@ -50,67 +45,41 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const aktivVedtak = gjeldendeBehandling
-        ? gjeldendeBehandling.vedtakForBehandling.find(
-              (vedtak: IVedtakForBehandling) => vedtak.aktiv === true
-          )
-        : undefined;
+    const beregningOversikt = gjeldendeBehandling?.beregningOversikt ?? [];
+    const beregningOversiktInneværendeMåned = beregningOversikt.find(periode =>
+        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
+    );
 
     return (
         <div className={'saksoversikt'}>
-            <Systemtittel className={'tittel'} children={'Saksoversikt'} />
+            <Innholdstittel children={'Saksoversikt'} />
 
-            {fagsak.status === 'LØPENDE' && (
-                <>
-                    <Element children={'Løpende vedtak'} />
-                    <Informasjonsbolk
-                        informasjon={[
-                            {
-                                label: `Vedtaksdato`,
-                                tekst: formaterIverksattDato(aktivVedtak?.vedtaksdato),
-                            },
-                            { label: `Sakstype`, tekst: sakstype(gjeldendeBehandling) },
-                        ]}
-                    />
-                </>
+            <FagsakLenkepanel fagsak={fagsak} />
+
+            {fagsak.status === FagsakStatus.LØPENDE && (
+                <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
             )}
 
-            {aktivVedtak?.personBeregninger &&
-                aktivVedtak?.personBeregninger.length > 0 &&
-                gjeldendeBehandling?.status === BehandlingStatus.AVSLUTTET && (
-                    <>
-                        <Utbetalinger personbergninger={aktivVedtak.personBeregninger} />
-                        <div className={'saksoversikt__opphør'}>
-                            <Undertittel children={'Opphør utbetalinger for fagsak'} />
-                            <Input
-                                bredde={'S'}
-                                label={'Fra og med-dato'}
-                                placeholder={'MM.YY'}
-                                value={opphørsdato}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                    setOpphørsdato(event.target.value)
-                                }
-                            />
-                            <Knapp
-                                mini={true}
-                                onClick={() => {
-                                    axiosRequest<void, { opphørsdato: string }>({
-                                        method: 'POST',
-                                        url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opphoer-migrert-vedtak/v2`,
-                                        data: {
-                                            opphørsdato: moment(
-                                                opphørsdato,
-                                                datoformat.MÅNED,
-                                                true
-                                            ).format('YYYY-MM-DD'),
-                                        },
-                                    });
-                                }}
-                                children={'Opphør utbetaling'}
-                            />
-                        </div>
-                    </>
-                )}
+            {fagsak.status === FagsakStatus.LØPENDE &&
+                (beregningOversiktInneværendeMåned ? (
+                    beregningOversiktInneværendeMåned?.utbetaltPerMnd < 1 &&
+                    gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
+                        <AlertStripe className={'saksoversikt__alert'} type={'info'}>
+                            Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra NAV
+                        </AlertStripe>
+                    ) : (
+                        <>
+                            <Utbetalinger beregningOversikt={beregningOversiktInneværendeMåned} />
+                            <Opphør fagsak={fagsak} />
+                        </>
+                    )
+                ) : (
+                    <AlertStripe className={'saksoversikt__alert'} type={'feil'}>
+                        Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt
+                        brukerstøtte hvis problemet vedvarer.
+                    </AlertStripe>
+                ))}
+
             <Behandlinger fagsak={fagsak} />
         </div>
     );

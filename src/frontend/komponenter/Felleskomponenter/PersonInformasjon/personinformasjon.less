@@ -1,21 +1,24 @@
 .personinformasjon {
     display: flex;
+    flex: 1;
     align-items: center;
 
     .familie-ikon {
         margin-right: 1.5rem;
+
+        &--for-normaltekst {
+            margin-right: 0.5rem;
+        }
     }
 
-    .informasjonstekster {
-        display: flex;
-        flex: 1;
-        justify-content: space-between;
+    .typo-normal {
+        font-weight: 600;
+    }
 
-        .navn {
-            max-width: 15rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .navn {
+        max-width: 15rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

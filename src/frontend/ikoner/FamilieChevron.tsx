@@ -5,6 +5,7 @@ export type FamilieChevronRetning = 'opp' | 'ned' | 'høyre' | 'venstre';
 export interface Props {
     retning?: FamilieChevronRetning;
     farge?: string;
+    title?: string;
 }
 
 const getRotationTransform = (retning?: FamilieChevronRetning): string | undefined => {
@@ -21,7 +22,7 @@ const getRotationTransform = (retning?: FamilieChevronRetning): string | undefin
 };
 
 // Default farge er @navBlå
-const FamilieChevron: React.FC<Props> = ({ retning }) => {
+const FamilieChevron: React.FC<Props> = ({ retning, title = 'FamilieChevron' }) => {
     const rotation = getRotationTransform(retning);
     const style = rotation
         ? {
@@ -37,7 +38,7 @@ const FamilieChevron: React.FC<Props> = ({ retning }) => {
             role="presentation"
             aria-hidden="true"
         >
-            <title>FamilieChevron</title>
+            <title>{title}</title>
             <path
                 d="M1.5 24a1 1 0 0 1-.646-1.764L12.953 12 .853 1.764A1 1 0 1 1 2.146.236l13 11a1.005 1.005 0 0 1 0 1.528l-13 11a1.003 1.003 0 0 1-.645.236"
                 fillRule="evenodd"

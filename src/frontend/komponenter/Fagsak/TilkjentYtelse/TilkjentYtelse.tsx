@@ -1,12 +1,13 @@
-import { Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { IFagsak } from '../../../typer/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { Oppsummeringsrad, OppsummeringsradHeader } from './Oppsummeringsrad';
+import { Oppsummeringsboks } from './Oppsummeringsboks';
 import { IBehandling } from '../../../typer/behandling';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-import { TidslinjeProvider } from '../../../context/TidslinjeContext';
+import { useTidslinje } from '../../../context/TidslinjeContext';
+import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
+import { IOppsummeringBeregning } from '../../../typer/beregning';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -18,7 +19,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     åpenBehandling,
 }) => {
     const history = useHistory();
-
+    const { aktivEtikett } = useTidslinje();
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
     };
@@ -27,6 +28,19 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
     };
 
+    const filtrerPerioderForAktivEtikett = (
+        beregningOversikt: IOppsummeringBeregning[]
+    ): IOppsummeringBeregning[] => {
+        return aktivEtikett
+            ? beregningOversikt.filter(periode =>
+                  periodeOverlapperMedValgtDato(
+                      periode.periodeFom,
+                      periode.periodeTom,
+                      aktivEtikett.dato
+                  )
+              )
+            : [];
+    };
     return (
         <Skjemasteg
             senderInn={false}
@@ -36,23 +50,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            <TidslinjeProvider>
-                <TilkjentYtelseTidslinje />
-            </TidslinjeProvider>
-            {åpenBehandling.beregningOversikt.length > 0 ? (
-                <div role="table">
-                    <OppsummeringsradHeader />
-                    {åpenBehandling.beregningOversikt
-                        .slice()
-                        .reverse()
-                        .map((beregning, index) => {
-                            return <Oppsummeringsrad beregning={beregning} key={index} />;
-                        })}
-                </div>
-            ) : (
-                <div className="tilkjentytelse-informasjon">
-                    <Undertittel>Vilkårene for barnetrygd er ikke oppfylt.</Undertittel>
-                </div>
+            <TilkjentYtelseTidslinje />
+            {aktivEtikett && (
+                <Oppsummeringsboks
+                    perioder={filtrerPerioderForAktivEtikett(åpenBehandling.beregningOversikt)}
+                    aktivEtikett={aktivEtikett}
+                />
             )}
         </Skjemasteg>
     );

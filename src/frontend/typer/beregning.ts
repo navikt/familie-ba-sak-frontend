@@ -55,11 +55,11 @@ export enum YtelseType {
 export const ytelsetype: INøkkelPar = {
     ORDINÆR_BARNETRYGD: {
         id: 'ORDINÆR_BARNETRYGD',
-        navn: 'Ordinær barnetrygd',
+        navn: 'Ordinær',
     },
     UTVIDET_BARNETRYGD: {
         id: 'UTVIDET_BARNETRYGD',
-        navn: 'Utvidet barnetrygd',
+        navn: 'Utvidet',
     },
     SMÅBARNSTILLEGG: {
         id: 'SMÅBARNSTILLEGG',
@@ -67,4 +67,7 @@ export const ytelsetype: INøkkelPar = {
     },
 };
 
-export const ordinærBeløp = 1054;
+export const satsBeløp = {
+    ORDINÆR_UNDER_6_ÅR: 1354,
+    ORDINÆR_FRA_6_ÅR: 1054,
+};

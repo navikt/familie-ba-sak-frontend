@@ -10,21 +10,31 @@ export enum BehandlingKategori {
     EØS = 'EØS',
 }
 
+export enum BehandlingOpprinnelse {
+    MANUELL = 'MANUELL',
+    AUTOMATISK_VED_FØDSELSHENDELSE = 'AUTOMATISK_VED_FØDSELSHENDELSE',
+    AUTOMATISK_VED_JOURNALFØRING = 'AUTOMATISK_VED_JOURNALFØRING',
+}
+
+export const behandlingOpprinnelse: INøkkelPar = {
+    MANUELL: {
+        id: BehandlingOpprinnelse.MANUELL,
+        navn: 'Manuell',
+    },
+    AUTOMATISK_VED_FØDSELSHENDELSE: {
+        id: BehandlingOpprinnelse.AUTOMATISK_VED_FØDSELSHENDELSE,
+        navn: 'Fødselshendelse',
+    },
+    AUTOMATISK_VED_JOURNALFØRING: {
+        id: BehandlingOpprinnelse.AUTOMATISK_VED_JOURNALFØRING,
+        navn: 'Journalføring',
+    },
+};
+
 export enum BehandlingUnderkategori {
     ORDINÆR = 'ORDINÆR',
     UTVIDET = 'UTVIDET',
 }
-
-export const behandlingUnderkategori: INøkkelPar = {
-    ORDINÆR: {
-        id: 'ORDINÆR',
-        navn: 'Ordinær barnetrygd',
-    },
-    UTVIDET: {
-        id: 'UTVIDET',
-        navn: 'Utvidet barnetrygd',
-    },
-};
 
 export enum BehandlingSteg {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
@@ -101,6 +111,7 @@ export enum BehandlerRolle {
 
 export interface IBehandling {
     aktiv: boolean;
+    arbeidsfordelingPåBehandling: IArbeidsfordelingPåBehandling;
     begrunnelse: string;
     behandlingId: number;
     endretAv: string;
@@ -116,6 +127,13 @@ export interface IBehandling {
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
     beregningOversikt: IOppsummeringBeregning[];
+    opprinnelse: BehandlingOpprinnelse;
+}
+
+export interface IArbeidsfordelingPåBehandling {
+    behandlendeEnhetId: string;
+    behandlendeEnhetNavn: string;
+    manueltOverstyrt: boolean;
 }
 
 export const behandlerRoller: INøkkelPar = {

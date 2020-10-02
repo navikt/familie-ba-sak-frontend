@@ -10,6 +10,7 @@ export enum datoformat {
     ISO_DAG = 'YYYY-MM-DD',
     DATO_TID = 'DD.MM.YY HH:mm',
     TID = 'HH:mm',
+    MÅNED_NAVN = 'MMMM YYYY',
 }
 
 export enum datoformatNorsk {
@@ -37,6 +38,12 @@ export const formaterIverksattDato = (dato: string | undefined) =>
 export const hentAlder = (dato: string): number => {
     const momentDato = moment(dato);
     return momentDato.isValid() ? moment().diff(momentDato, 'years') : 0;
+};
+
+export const hentAlderSomString = (fødselsdato: string | undefined) => {
+    return fødselsdato
+        ? moment().diff(moment(fødselsdato, 'YYYY-MM-DD'), 'years') + ' år'
+        : 'Alder ukjent';
 };
 
 export const formaterBeløp = (beløp: number): string => {
