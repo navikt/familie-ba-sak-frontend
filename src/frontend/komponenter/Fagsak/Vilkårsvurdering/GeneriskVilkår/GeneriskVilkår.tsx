@@ -9,16 +9,12 @@ import {
 import Pluss from '../../../../ikoner/Pluss';
 import { IFelt } from '../../../../typer/felt';
 import { IPerson } from '../../../../typer/person';
-import {
-    IRestPersonResultat,
-    IVilkårConfig,
-    IVilkårResultat,
-    Resultat,
-    VilkårType,
-} from '../../../../typer/vilkår';
+import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { IFagsak } from '../../../../typer/fagsak';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -46,32 +42,28 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
 }) => {
     const { erLesevisning } = useBehandling();
-    const {
-        settVilkårsvurderingFraApi,
-        settVilkårSubmit,
-        postVilkår,
-        vilkårSubmit,
-    } = useVilkårsvurdering();
+    const { settFagsak } = useFagsakRessurser();
+    const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
     const [feilmelding, settFeilmelding] = useState('');
 
-    const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IRestPersonResultat[]>>) => {
+    const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IFagsak>>) => {
         promise
-            .then((nyVilkårsvurdering: Ressurs<IRestPersonResultat[]>) => {
-                settVilkårSubmit(VilkårSubmit.NONE);
+            .then((oppdatertFagsak: Ressurs<IFagsak>) => {
                 settVisFeilmeldingerForVilkår(false);
+                settVilkårSubmit(VilkårSubmit.NONE);
                 settFeilmelding('');
-                if (nyVilkårsvurdering.status === RessursStatus.SUKSESS) {
-                    settVilkårsvurderingFraApi(nyVilkårsvurdering.data);
-                } else if (nyVilkårsvurdering.status === RessursStatus.FEILET) {
+                if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
+                    settFagsak(oppdatertFagsak);
+                } else if (oppdatertFagsak.status === RessursStatus.FEILET) {
+                    settFeilmelding(oppdatertFagsak.frontendFeilmelding);
                     settVisFeilmeldingerForVilkår(true);
-                    settFeilmelding(nyVilkårsvurdering.frontendFeilmelding);
                 } else {
-                    settVisFeilmeldingerForVilkår(true);
                     settFeilmelding(
                         'En ukjent feil har oppstått, vi har ikke klart å legge til periode.'
                     );
+                    settVisFeilmeldingerForVilkår(true);
                 }
             })
             .catch(() => {

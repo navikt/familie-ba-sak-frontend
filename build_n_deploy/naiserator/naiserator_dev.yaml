@@ -25,8 +25,7 @@ spec:
   istio:
     enabled: false
   ingresses:
-    - https://barnetrygd.nais.preprod.local
-    - https://barnetrygd.dev-fss.nais.io
+    - https://barnetrygd.dev.adeo.no
   vault:
     enabled: true
   webproxy: true

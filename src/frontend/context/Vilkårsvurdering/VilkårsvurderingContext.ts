@@ -13,7 +13,6 @@ import {
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import { useApp } from '../AppContext';
 import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
-import { useFagsakRessurser } from '../FagsakContext';
 
 interface IProps {
     fagsak: IFagsak;
@@ -30,7 +29,6 @@ export enum VilkårSubmit {
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
     ({ fagsak, åpenBehandling }: IProps) => {
         const { axiosRequest } = useApp();
-        const { oppdaterVilkårsvurdering } = useFagsakRessurser();
         const [vilkårSubmit, settVilkårSubmit] = React.useState(VilkårSubmit.NONE);
 
         const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
@@ -42,14 +40,16 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
                 : []
         );
 
-        const settVilkårsvurderingFraApi = (personResultater: IRestPersonResultat[]) => {
+        React.useEffect(() => {
             settVilkårsvurdering(
                 åpenBehandling
-                    ? mapFraRestVilkårsvurderingTilUi(personResultater, åpenBehandling.personer)
+                    ? mapFraRestVilkårsvurderingTilUi(
+                          åpenBehandling.personResultater,
+                          åpenBehandling.personer
+                      )
                     : []
             );
-            oppdaterVilkårsvurdering(personResultater, åpenBehandling.behandlingId);
-        };
+        }, [åpenBehandling]);
 
         const putVilkår = (
             vilkårsvurderingForPerson: IPersonResultat,
@@ -58,7 +58,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
             settVilkårSubmit(VilkårSubmit.PUT);
 
-            return axiosRequest<IRestPersonResultat[], IRestPersonResultat>({
+            return axiosRequest<IFagsak, IRestPersonResultat>({
                 method: 'PUT',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
                 data: {
@@ -84,7 +84,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
             settVilkårSubmit(VilkårSubmit.DELETE);
 
-            return axiosRequest<IRestPersonResultat[], string>({
+            return axiosRequest<IFagsak, string>({
                 method: 'DELETE',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/${vilkårId}`,
                 data: personIdent,
@@ -95,7 +95,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
             settVilkårSubmit(VilkårSubmit.DELETE);
 
-            return axiosRequest<IRestPersonResultat[], IRestNyttVilkår>({
+            return axiosRequest<IFagsak, IRestNyttVilkår>({
                 method: 'POST',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}`,
                 data: { personIdent, vilkårType },
@@ -141,7 +141,6 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(
             putVilkår,
             settVilkårSubmit,
             settVilkårsvurdering,
-            settVilkårsvurderingFraApi,
             vilkårsvurdering,
         };
     }
