@@ -4,6 +4,7 @@ import * as React from 'react';
 export interface IInformasjon {
     label: string;
     tekst: string;
+    tekstTitle?: string;
 }
 
 interface IProps {
@@ -17,7 +18,13 @@ const Informasjonsbolk: React.FunctionComponent<IProps> = ({ informasjon }) => {
                 return <Normaltekst key={info.label + info.tekst} children={info.label} />;
             })}
             {informasjon.map((info: IInformasjon) => {
-                return <Element key={info.tekst + info.label} children={info.tekst} />;
+                return (
+                    <Element
+                        title={info.tekstTitle}
+                        key={info.tekst + info.label}
+                        children={info.tekst}
+                    />
+                );
             })}
         </div>
     );
