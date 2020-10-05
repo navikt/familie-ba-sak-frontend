@@ -3,7 +3,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
-import { useBehandling } from '../../../../context/BehandlingContext';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
 import { BehandlingResultat, behandlingsresultater } from '../../../../typer/behandling';
@@ -17,14 +16,15 @@ interface IUtbetalingsBegrunnelseInput {
     behandlingresultatOgVilkårBegrunnelse?: BehandlingresultatOgVilkårBegrunnelse;
     id: number;
     resultat?: BehandlingResultat;
+    erLesevisning: boolean;
 }
 
 const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
     behandlingresultatOgVilkårBegrunnelse,
     id,
     resultat,
+    erLesevisning,
 }) => {
-    const { erLesevisning } = useBehandling();
     const {
         endreUtbetalingBegrunnelse,
         vilkårBegrunnelser,
@@ -79,7 +79,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                 <FamilieSelect
                     bredde={'m'}
                     className="begrunnelse-input__select"
-                    erLesevisning={erLesevisning()}
+                    erLesevisning={erLesevisning}
                     lesevisningVerdi={
                         mutableResultat ? behandlingsresultater[mutableResultat]?.navn : ''
                     }
@@ -115,7 +115,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
 
                 <FamilieSelect
                     bredde={'l'}
-                    erLesevisning={erLesevisning()}
+                    erLesevisning={erLesevisning}
                     lesevisningVerdi={
                         mutableVedtakBegrunnelse && begrunnelser
                             ? begrunnelser.find(
@@ -143,7 +143,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                 </FamilieSelect>
 
                 <IkonKnapp
-                    erLesevisning={erLesevisning()}
+                    erLesevisning={erLesevisning}
                     onClick={() => {
                         slettUtbetalingBegrunnelse(id);
                     }}

@@ -10,6 +10,7 @@ import { datoformat } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { BeregningEndringType, IOppsummeringBeregning } from '../../../../typer/beregning';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -25,6 +26,25 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
         utbetalingBegrunnelser,
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
+
+    const erFørFørsteEndring = (beregning: IOppsummeringBeregning) => {
+        const førsteEndring = åpenBehandling.beregningOversikt.find(
+            (b: IOppsummeringBeregning) =>
+                b.endring.type === BeregningEndringType.ENDRET ||
+                b.endring.type === BeregningEndringType.ENDRET_SATS
+        );
+        return førsteEndring
+            ? moment(beregning.periodeTom, datoformat.ISO_DAG) <
+                  moment(førsteEndring.periodeFom, datoformat.ISO_DAG)
+            : true;
+    };
+
+    const erSatsendring = (beregning: IOppsummeringBeregning) =>
+        beregning.endring.type === BeregningEndringType.ENDRET_SATS ||
+        beregning.endring.type === BeregningEndringType.UENDRET_SATS;
+
+    const lesevisningForRad = (beregning: IOppsummeringBeregning) =>
+        erLesevisning() || erFørFørsteEndring(beregning) || erSatsendring(beregning);
 
     return harAndeler ? (
         <table className={'tabell'}>
@@ -44,25 +64,29 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                             'day'
                         )
                     )
-                    .map(beregning => {
+                    .filter(
+                        (beregningRad: IOppsummeringBeregning) =>
+                            beregningRad.endring.trengerBegrunnelse
+                    )
+                    .map(beregningRad => {
                         const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
                             (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
                                 return (
-                                    utbetalingBegrunnelse.fom === beregning.periodeFom &&
-                                    utbetalingBegrunnelse.tom === beregning.periodeTom
+                                    utbetalingBegrunnelse.fom === beregningRad.periodeFom &&
+                                    utbetalingBegrunnelse.tom === beregningRad.periodeTom
                                 );
                             }
                         );
 
                         return (
-                            <tr key={beregning.periodeFom}>
+                            <tr key={beregningRad.periodeFom}>
                                 <td>
                                     {periodeToString({
-                                        fom: beregning.periodeFom,
-                                        tom: beregning.periodeTom,
+                                        fom: beregningRad.periodeFom,
+                                        tom: beregningRad.periodeTom,
                                     })}
                                 </td>
-                                <td>{`${beregning.utbetaltPerMnd} kr/mnd for ${beregning.antallBarn} barn`}</td>
+                                <td>{`${beregningRad.utbetaltPerMnd} kr/mnd for ${beregningRad.antallBarn} barn`}</td>
                                 <td>
                                     {utbetalingBegrunnelseForPeriode.map(
                                         (
@@ -77,6 +101,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                     behandlingresultatOgVilkårBegrunnelse={
                                                         utbetalingBegrunnelse.behandlingresultatOgVilkårBegrunnelse
                                                     }
+                                                    erLesevisning={lesevisningForRad(beregningRad)}
                                                 />
                                             ) : (
                                                 <Feilmelding key={index}>
@@ -86,15 +111,15 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                         }
                                     )}
                                     <IkonKnapp
-                                        erLesevisning={erLesevisning()}
+                                        erLesevisning={lesevisningForRad(beregningRad)}
                                         id={`legg-til-begrunnelse-${periodeToString({
-                                            fom: beregning.periodeFom,
-                                            tom: beregning.periodeTom,
+                                            fom: beregningRad.periodeFom,
+                                            tom: beregningRad.periodeTom,
                                         })}`}
                                         onClick={() => {
                                             leggTilUtbetalingBegrunnelse({
-                                                fom: beregning.periodeFom,
-                                                tom: beregning.periodeTom,
+                                                fom: beregningRad.periodeFom,
+                                                tom: beregningRad.periodeTom,
                                             });
                                         }}
                                         knappPosisjon={'venstre'}
