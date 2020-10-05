@@ -27,24 +27,12 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
 
-    const erFørFørsteEndring = (beregning: IOppsummeringBeregning) => {
-        const førsteEndring = åpenBehandling.beregningOversikt.find(
-            (b: IOppsummeringBeregning) =>
-                b.endring.type === BeregningEndringType.ENDRET ||
-                b.endring.type === BeregningEndringType.ENDRET_SATS
-        );
-        return førsteEndring
-            ? moment(beregning.periodeTom, datoformat.ISO_DAG) <
-                  moment(førsteEndring.periodeFom, datoformat.ISO_DAG)
-            : true;
-    };
-
     const erSatsendring = (beregning: IOppsummeringBeregning) =>
         beregning.endring.type === BeregningEndringType.ENDRET_SATS ||
         beregning.endring.type === BeregningEndringType.UENDRET_SATS;
 
     const lesevisningForRad = (beregning: IOppsummeringBeregning) =>
-        erLesevisning() || erFørFørsteEndring(beregning) || erSatsendring(beregning);
+        erLesevisning() || erSatsendring(beregning);
 
     return harAndeler ? (
         <table className={'tabell'}>
