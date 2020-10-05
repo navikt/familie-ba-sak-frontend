@@ -130,16 +130,22 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                 >
                     <option>Velg begrunnelse</option>
                     {begrunnelser &&
-                        begrunnelser.map((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
-                            return (
-                                <option
-                                    key={restVedtakBegrunnelse.id}
-                                    value={restVedtakBegrunnelse.id}
-                                >
-                                    {restVedtakBegrunnelse.navn}
-                                </option>
-                            );
-                        })}
+                        begrunnelser
+                            .filter(
+                                (restVedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+                                    restVedtakBegrunnelse.id !==
+                                    BehandlingresultatOgVilkårBegrunnelse.SATSENDRING
+                            )
+                            .map((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
+                                return (
+                                    <option
+                                        key={restVedtakBegrunnelse.id}
+                                        value={restVedtakBegrunnelse.id}
+                                    >
+                                        {restVedtakBegrunnelse.navn}
+                                    </option>
+                                );
+                            })}
                 </FamilieSelect>
 
                 <IkonKnapp
