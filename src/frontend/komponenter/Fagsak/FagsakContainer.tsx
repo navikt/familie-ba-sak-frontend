@@ -22,7 +22,7 @@ import Saksoversikt from './Saksoversikt/Saksoversikt';
 import { fagsakStatus } from '../../typer/fagsak';
 
 const FagsakContainer: React.FunctionComponent = () => {
-    const { fagsakId } = useParams();
+    const { fagsakId } = useParams<{ fagsakId: string }>();
     const history = useHistory();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
 

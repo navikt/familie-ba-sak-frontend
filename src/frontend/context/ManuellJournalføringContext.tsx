@@ -28,7 +28,7 @@ import { IFagsak } from '../typer/fagsak';
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
     const history = useHistory();
-    const { oppgaveId } = useParams();
+    const { oppgaveId } = useParams<{ oppgaveId: string }>();
 
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
