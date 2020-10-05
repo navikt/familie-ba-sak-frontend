@@ -10,11 +10,12 @@ import {
     IdentGruppe,
     IOppgave,
     IOppgaveIdent,
+    ITilgangDTO,
     OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
 } from '../../typer/oppgave';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
@@ -25,7 +26,14 @@ const intDatoTilNorskDato = (intDato: string) => {
 };
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide } = useOppgaver();
+    const {
+        oppgaver,
+        sortOppgave,
+        oppgaveFelter,
+        hentOppgaveSide,
+        gåTilOppgave,
+        tilgangssjekk,
+    } = useOppgaver();
     const { innloggetSaksbehandler } = useApp();
 
     const onColumnSort = (felt: IOppgaveFelt) => {
@@ -161,9 +169,33 @@ const OppgaveList: React.FunctionComponent = () => {
                                             {oppg.oppgavetype
                                                 ? oppgaveTypeFilter[oppg.oppgavetype].id ===
                                                       OppgavetypeFilter.JFR && (
-                                                      <a href={`/oppgaver/journalfør/${oppg.id}`}>
-                                                          Gå til oppg
-                                                      </a>
+                                                      <button
+                                                          key={'tiloppg'}
+                                                          onClick={() => {
+                                                              tilgangssjekk(oppg.aktoerId).then(
+                                                                  (res: Ressurs<ITilgangDTO>) => {
+                                                                      if (
+                                                                          res.status ===
+                                                                          RessursStatus.SUKSESS
+                                                                      ) {
+                                                                          if (
+                                                                              res.data
+                                                                                  .saksbehandlerHarTilgang
+                                                                          ) {
+                                                                              gåTilOppgave(oppg.id);
+                                                                          } else {
+                                                                              alert('foo!');
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              );
+                                                              /*
+                                                                dersom tilgang er ok, kall fordelOppgave.
+                                                                dersom ikke, vis modal med melding.
+                                                              */
+                                                          }}
+                                                          children={'Gå til oppg'}
+                                                      />
                                                   )
                                                 : 'Ukjent'}
                                         </td>

@@ -68,6 +68,10 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                 <button
                     key={'plukk'}
                     onClick={() => {
+                        /*
+                        dersom tilgang er ok, kall fordelOppgave.
+                        dersom ikke, vis modal med melding.
+                        */
                         fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
                             (oppgaveResponse: Ressurs<string>) => {
                                 if (oppgaveResponse.status === RessursStatus.FEILET) {

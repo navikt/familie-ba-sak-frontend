@@ -47,6 +47,18 @@ export interface IOppgaveIdent {
     gruppe: IdentGruppe;
 }
 
+export interface ITilgangDTO {
+    saksbehandlerHarTilgang: boolean;
+    adressebeskyttelsegradering: Adressebeskyttelsegradering;
+}
+
+export enum Adressebeskyttelsegradering {
+    STRENGT_FORTROLIG_UTLAND = 'STRENGT_FORTROLIG_UTLAND',
+    FORTROLIG = 'FORTROLIG',
+    STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
+    UGRADERT = 'UGRADERT',
+}
+
 export enum IdentGruppe {
     AKTOERID = 'AKTOERID',
     FOLKEREGISTERIDENT = 'FOLKEREGISTERIDENT',
