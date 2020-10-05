@@ -7,10 +7,9 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 interface IEtikettProp {
     etikett: Skalaetikett;
-    style: { [key: string]: string };
 }
 
-const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, style }) => {
+const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) => {
     const { aktivEtikett, settAktivEtikett, aktivtTidslinjeVindu } = useTidslinje();
 
     const onEtikettClick = () => {
@@ -46,7 +45,7 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, styl
             aria-label={etikett.label}
             disabled={isDisabled}
             key={etikett.label}
-            style={{ width: `${klikkbarBredde}%`, ...style }}
+            style={{ width: `${klikkbarBredde}%` }}
             className={classNames(
                 'tidslinje__etikett',
                 aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()

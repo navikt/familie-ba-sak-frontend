@@ -81,8 +81,8 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                 <Tidslinje
                     rader={tidslinjeRader}
                     direction={'right'}
-                    etikettRender={(etikett: Skalaetikett, style: { [key: string]: string }) => (
-                        <TidslinjeEtikett etikett={etikett} style={style} />
+                    etikettRender={(etikett: Skalaetikett) => (
+                        <TidslinjeEtikett etikett={etikett} />
                     )}
                     startDato={aktivtTidslinjeVindu.startDato.toDate()}
                     sluttDato={aktivtTidslinjeVindu.sluttDato.toDate()}
