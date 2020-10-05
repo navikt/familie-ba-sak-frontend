@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { behandlingId } = useParams();
+    const { behandlingId } = useParams<{ behandlingId: string }>();
     const { bestemÅpenBehandling, åpenBehandling } = useBehandling();
 
     React.useEffect(() => {
