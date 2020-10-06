@@ -9,10 +9,10 @@ import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 
 interface IProps {
-    onClick: () => void;
+    onListElementClick: () => void;
 }
 
-const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
+const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
     const [visModal, settVisModal] = useState(false);
 
     const { åpenBehandling, erLesevisning } = useBehandling();
@@ -42,7 +42,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
                 mini={true}
                 onClick={() => {
                     settVisModal(true);
-                    onClick();
+                    onListElementClick();
                 }}
             >
                 Endre behandlende enhet

@@ -33,16 +33,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
                 <Normaltekst>Gå til saksoversikt</Normaltekst>
             </Lenke>
 
-            <Behandlingsmeny />
-            {/*skalViseOpprettBehandlingKnapp && (
-                <Knapp
-                    mini={true}
-                    onClick={() => {
-                        history.push(`/fagsak/${fagsak.id}/ny-behandling`);
-                    }}
-                    children={'Opprett behandling'}
-                />
-                )*/}
+            <Behandlingsmeny fagsak={fagsak} />
         </Visittkort>
     );
 };
