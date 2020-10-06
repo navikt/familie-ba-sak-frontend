@@ -14,7 +14,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilBeslutterSkjema';
@@ -54,8 +53,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK &&
         history.location.pathname.includes('vedtak');
 
-    const kanBeslutte =
-        innloggetSaksbehandler?.email !== hentAktivBehandlingPåFagsak(fagsak)?.endretAv ?? false;
+    const kanBeslutte = innloggetSaksbehandler?.email !== åpenBehandling?.endretAv ?? false;
 
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
         settInnsendtVedtak(byggHenterRessurs());

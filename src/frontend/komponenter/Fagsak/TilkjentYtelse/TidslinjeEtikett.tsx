@@ -31,7 +31,6 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) =>
         <button
             aria-label={etikett.label}
             disabled={isDisabled}
-            key={etikett.label}
             className={classNames(
                 'tidslinje-container__etikett',
                 aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()
