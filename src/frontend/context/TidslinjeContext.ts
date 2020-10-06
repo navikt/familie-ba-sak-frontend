@@ -30,6 +30,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     ];
 
     const [aktivEtikett, settAktivEtikett] = useState<Skalaetikett | undefined>(undefined);
+    const [initiellAktivEtikettErSatt, setInitiellAktivEtikettErSatt] = useState<boolean>(false);
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
@@ -65,6 +66,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     const endreTidslinjeVindu = (vindu: ITidslinjeVindu) => {
         if (vindu.id === TidslinjeVindu.TRE_ÅR) {
             settAktivEtikett(undefined);
+            setInitiellAktivEtikettErSatt(false);
         }
 
         settAktivtTidslinjeVindu(({ sluttDato }) => ({
@@ -98,6 +100,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         naviger,
         endreTidslinjeVindu,
         genererRader,
+        initiellAktivEtikettErSatt,
+        setInitiellAktivEtikettErSatt,
     };
 });
 
