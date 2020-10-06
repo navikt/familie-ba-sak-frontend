@@ -1,26 +1,28 @@
 import Alertstripe from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Systemtittel, Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
     enhetFilter,
     gjelderFilter,
-    IdentGruppe,
     IOppgave,
-    IOppgaveIdent,
-    ITilgangDTO,
     OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
+    adressebeskyttelsestyper,
+    ITilgangModal,
 } from '../../typer/oppgave';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { fnr } from '../../utils/behandling';
+import { RessursStatus } from '@navikt/familie-typer';
+import { fnr } from '../../utils/oppgave';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import classNames from 'classnames';
+import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
+import IkkeOppfylt from '../../ikoner/IkkeOppfylt';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -33,9 +35,13 @@ const OppgaveList: React.FunctionComponent = () => {
         oppgaveFelter,
         hentOppgaveSide,
         gåTilOppgave,
-        tilgangssjekk,
+        sjekkTilgang,
     } = useOppgaver();
     const { innloggetSaksbehandler } = useApp();
+    const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [addressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<string>(
+        ''
+    );
 
     const onColumnSort = (felt: IOppgaveFelt) => {
         sortOppgave(felt.nøkkel, felt.order !== FeltSortOrder.ASCENDANT);
@@ -136,15 +142,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                             }
                                         </td>
                                         <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
-                                        <td>
-                                            {oppg.identer
-                                                ? oppg.identer.find(
-                                                      (ident: IOppgaveIdent) =>
-                                                          ident.gruppe ===
-                                                          IdentGruppe.FOLKEREGISTERIDENT
-                                                  )?.ident
-                                                : 'Ukjent'}
-                                        </td>
+                                        <td>{fnr(oppg) || 'Ukjent'}</td>
                                         <td
                                             className={classNames(
                                                 'tildelt-enhetsnr',
@@ -173,27 +171,20 @@ const OppgaveList: React.FunctionComponent = () => {
                                                       <button
                                                           key={'tiloppg'}
                                                           onClick={() => {
-                                                              tilgangssjekk(fnr(oppg) || '').then(
-                                                                  (res: Ressurs<ITilgangDTO>) => {
-                                                                      if (
-                                                                          res.status ===
-                                                                          RessursStatus.SUKSESS
-                                                                      ) {
-                                                                          if (
-                                                                              res.data
-                                                                                  .saksbehandlerHarTilgang
-                                                                          ) {
-                                                                              gåTilOppgave(oppg.id);
-                                                                          } else {
-                                                                              alert('foo!');
-                                                                          }
+                                                              sjekkTilgang(oppg).then(
+                                                                  (res: ITilgangModal) => {
+                                                                      if (res !== undefined) {
+                                                                          settAdressebeskyttelsegradering(
+                                                                              res.adressebeskyttelsegradering
+                                                                          );
+                                                                          settVisModal(
+                                                                              res.visModal
+                                                                          );
+                                                                      } else {
+                                                                          gåTilOppgave(oppg.id);
                                                                       }
                                                                   }
                                                               );
-                                                              /*
-                                                                dersom tilgang er ok, kall fordelOppgave.
-                                                                dersom ikke, vis modal med melding.
-                                                              */
                                                           }}
                                                           children={'Gå til oppg'}
                                                       />
@@ -220,6 +211,33 @@ const OppgaveList: React.FunctionComponent = () => {
                 <Alertstripe type="info" className="oppgavelist__info">
                     Henter...
                 </Alertstripe>
+            )}
+            {visModal && (
+                <UIModalWrapper
+                    modal={{
+                        tittel: 'Diskresjonskode',
+                        lukkKnapp: false,
+                        visModal: visModal,
+                        actions: [
+                            <Knapp
+                                key={'Avbryt'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisModal(false);
+                                    //history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                    //window.location.reload();
+                                }}
+                                children={'Avbryt'}
+                            />,
+                        ],
+                    }}
+                >
+                    <Normaltekst>
+                        <IkkeOppfylt heigth={20} className={'ikke-oppfylt-ikon'} width={20} />
+                        Bruker har diskresjonskode{' '}
+                        {adressebeskyttelsestyper[addressebeskyttelsegradering].navn}
+                    </Normaltekst>
+                </UIModalWrapper>
             )}
         </div>
     );

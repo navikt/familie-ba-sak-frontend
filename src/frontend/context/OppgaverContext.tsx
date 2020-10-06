@@ -10,6 +10,7 @@ import {
     IHentOppgaveDto,
     IOppgave,
     ITilgangDTO,
+    ITilgangModal,
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
@@ -21,6 +22,7 @@ import {
     byggHenterRessurs,
 } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
+import { fnr } from '../utils/oppgave';
 import {
     IOppgaveFelter,
     initialOppgaveFelter,
@@ -281,18 +283,42 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
+    interface ITilgangRequestDTO {
+        brukerIdent: string;
+    }
+
     const tilgangssjekk = (brukerIdent: string): Promise<Ressurs<ITilgangDTO>> => {
         console.log(brukerIdent);
-        return axiosRequest<ITilgangDTO, string>({
+        return axiosRequest<ITilgangDTO, ITilgangRequestDTO>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
-            data: brukerIdent,
+            data: { brukerIdent },
         });
     };
 
     const gåTilOppgave = (id: string): string => {
         history.push(`/oppgaver/journalfør/${id}`);
         return id;
+    };
+
+    const sjekkTilgang = async (oppg: IOppgave): Promise<ITilgangModal> => {
+        const fnr2 = fnr(oppg);
+        if (fnr2 !== undefined) {
+            return tilgangssjekk(fnr2).then((res: Ressurs<ITilgangDTO>) => {
+                if (res.status === RessursStatus.SUKSESS) {
+                    if (res.data.saksbehandlerHarTilgang) {
+                        return;
+                    } else {
+                        return {
+                            adressebeskyttelsegradering: res.data.adressebeskyttelsegradering,
+                            visModal: true,
+                        };
+                    }
+                }
+            });
+        } else {
+            console.log('Oppgaven inneholder ikke en folkeregisterident.');
+        }
     };
 
     const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<string>> => {
@@ -394,6 +420,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     return {
         fordelOppgave,
         gåTilOppgave,
+        sjekkTilgang,
         tilgangssjekk,
         hentOppgaveSide,
         hentOppgaver,

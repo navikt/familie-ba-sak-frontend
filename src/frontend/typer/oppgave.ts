@@ -52,12 +52,38 @@ export interface ITilgangDTO {
     adressebeskyttelsegradering: Adressebeskyttelsegradering;
 }
 
+export type ITilgangModal =
+    | {
+          adressebeskyttelsegradering: Adressebeskyttelsegradering;
+          visModal: boolean;
+      }
+    | undefined;
+
 export enum Adressebeskyttelsegradering {
+    STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
     STRENGT_FORTROLIG_UTLAND = 'STRENGT_FORTROLIG_UTLAND',
     FORTROLIG = 'FORTROLIG',
-    STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
     UGRADERT = 'UGRADERT',
 }
+
+export const adressebeskyttelsestyper: INøkkelPar = {
+    STRENGT_FORTROLIG: {
+        id: 'STRENGT_FORTROLIG',
+        navn: 'strengt fortrolig',
+    },
+    STRENGT_FORTROLIG_UTLAND: {
+        id: 'STRENGT_FORTROLIG_UTLAND',
+        navn: 'strengt fortrolig utland',
+    },
+    FORTROLIG: {
+        id: 'FORTROLIG',
+        navn: 'fortrolig',
+    },
+    UGRADERT: {
+        id: 'UGRADERT',
+        navn: 'ugradert',
+    },
+};
 
 export enum IdentGruppe {
     AKTOERID = 'AKTOERID',
