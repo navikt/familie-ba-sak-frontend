@@ -286,7 +286,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         return axiosRequest<ITilgangDTO, string>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
-            data: 'foo',
+            data: brukerIdent,
         });
     };
 

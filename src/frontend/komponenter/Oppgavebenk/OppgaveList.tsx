@@ -16,6 +16,7 @@ import {
     PrioritetFilter,
 } from '../../typer/oppgave';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { fnr } from '../../utils/behandling';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
@@ -172,7 +173,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                                       <button
                                                           key={'tiloppg'}
                                                           onClick={() => {
-                                                              tilgangssjekk(oppg.aktoerId).then(
+                                                              tilgangssjekk(fnr(oppg) || '').then(
                                                                   (res: Ressurs<ITilgangDTO>) => {
                                                                       if (
                                                                           res.status ===

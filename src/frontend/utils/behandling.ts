@@ -1,4 +1,6 @@
 import { BehandlerRolle } from '../typer/behandling';
+import { IdentGruppe, IOppgaveIdent } from '../typer/oppgave';
+import { IOppgave } from '../typer/oppgave';
 
 export const gruppeIdTilRolle = (gruppeId: string) => {
     const host = window.location.host;
@@ -15,4 +17,12 @@ export const gruppeIdTilRolle = (gruppeId: string) => {
                   ['9449c153-5a1e-44a7-84c6-7cc7a8867233', BehandlerRolle.BESLUTTER],
               ]);
     return rolleConfig.get(gruppeId) ?? BehandlerRolle.UKJENT;
+};
+
+export const fnr = (oppg: IOppgave) => {
+    return oppg.identer
+        ? oppg.identer.find(
+              (ident: IOppgaveIdent) => ident.gruppe === IdentGruppe.FOLKEREGISTERIDENT
+          )?.ident
+        : 'Ukjent';
 };
