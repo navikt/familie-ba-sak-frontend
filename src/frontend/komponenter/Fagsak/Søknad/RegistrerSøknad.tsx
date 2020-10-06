@@ -12,7 +12,6 @@ import { BehandlingSteg, IBehandling, hentStegNummer } from '../../../typer/beha
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import Barna from './Barna';
@@ -42,14 +41,13 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
-        if (fagsak.status === RessursStatus.SUKSESS && erSøknadGyldig(søknad)) {
-            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
+        if (åpenBehandling && erSøknadGyldig(søknad)) {
             settSenderInn(true);
 
             axiosRequest<IFagsak, IRestRegistrerSøknad>({
                 method: 'POST',
                 data: { søknad, bekreftEndringerViaFrontend },
-                url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
+                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
             }).then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
@@ -75,34 +73,30 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     };
 
     React.useEffect(() => {
-        if (fagsak.status === RessursStatus.SUKSESS) {
-            if (
-                åpenBehandling &&
-                hentStegNummer(åpenBehandling.steg) >=
-                    hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
-            ) {
-                axiosRequest<ISøknadDTO, void>({
-                    method: 'GET',
-                    url: `/familie-ba-sak/api/behandlinger/${
-                        hentAktivBehandlingPåFagsak(fagsak.data)?.behandlingId
-                    }/søknad`,
-                }).then((response: Ressurs<ISøknadDTO>) => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        settSøknadErLastetFraBackend(true);
-                        settSøknadOgValider({
-                            ...response.data,
-                            barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
-                                (barnMedOpplysninger: IBarnMedOpplysninger) => ({
-                                    ...barnMedOpplysninger,
-                                    checked: true,
-                                })
-                            ),
-                        });
-                    }
-                });
-            }
+        if (
+            åpenBehandling &&
+            hentStegNummer(åpenBehandling.steg) >= hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
+        ) {
+            axiosRequest<ISøknadDTO, void>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/søknad`,
+                påvirkerSystemLaster: true,
+            }).then((response: Ressurs<ISøknadDTO>) => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    settSøknadErLastetFraBackend(true);
+                    settSøknadOgValider({
+                        ...response.data,
+                        barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
+                            (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                                ...barnMedOpplysninger,
+                                checked: true,
+                            })
+                        ),
+                    });
+                }
+            });
         }
-    }, [fagsak.status]);
+    }, [åpenBehandling]);
 
     return (
         <Skjemasteg
