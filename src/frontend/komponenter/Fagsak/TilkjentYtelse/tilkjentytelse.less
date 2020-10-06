@@ -62,8 +62,15 @@
   }
 }
 
-.tidslinje {
+
+
+.tidslinje-container {
   display: flex;
+
+  & .tidslinje {
+    margin: 0;
+    overflow-x: hidden;
+  }
 
   & .typo-normal {
     &:first-child {
@@ -83,6 +90,7 @@
 
   &__etikett {
     padding: 3px;
+    width: 90%;
     text-align: left;
 
     > span {

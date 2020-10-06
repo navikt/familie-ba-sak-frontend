@@ -64,8 +64,8 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     <TidslinjeNavigering />
                 </div>
             </div>
-            <div className={'tidslinje'}>
-                <div className={'tidslinje__labels'}>
+            <div className={'tidslinje-container'}>
+                <div className={'tidslinje-container__labels'}>
                     {mapPersonberegningerTilPersoner()
                         .sort((personA, personB) =>
                             sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)
