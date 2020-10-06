@@ -29,6 +29,13 @@ const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
     }, [åpenBehandling]);
 
     const endreEnhet = (behandlingId: number) => {
+        if (begrunnelse === '') {
+            settSubmitRessurs(
+                byggFeiletRessurs('Du må skrive en begrunnelse for endring av enhet')
+            );
+            return;
+        }
+
         if (enhetId !== undefined) {
             settSubmitRessurs(byggHenterRessurs());
 
@@ -58,6 +65,7 @@ const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
                 : undefined
         );
         settBegrunnelse('');
+        settSubmitRessurs(byggTomRessurs());
     };
 
     return {
@@ -67,6 +75,7 @@ const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
         fjernState,
         settBegrunnelse,
         settEnhetId,
+        settSubmitRessurs,
         submitRessurs,
     };
 };

@@ -1,5 +1,5 @@
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
@@ -23,6 +23,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
         enhetId,
         fjernState,
         settEnhetId,
+        settSubmitRessurs,
         submitRessurs,
     } = useEndreBehandlendeEnhet(() => settVisModal(false));
 
@@ -30,26 +31,37 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
         (enhet: IArbeidsfordelingsenhet) => enhet.enhetId === enhetId
     );
 
-    const lukkBehandlendeEnhet = () => {
+    const lukkBehandlendeEnhetModal = () => {
         fjernState();
         settVisModal(false);
     };
 
     return (
         <>
+            <KnappBase
+                mini={true}
+                onClick={() => {
+                    settVisModal(true);
+                    onClick();
+                }}
+            >
+                Endre behandlende enhet
+            </KnappBase>
+
             <UIModalWrapper
                 modal={{
                     actions: [
                         <Knapp
                             key={'avbryt'}
                             mini={true}
-                            onClick={lukkBehandlendeEnhet}
+                            onClick={lukkBehandlendeEnhetModal}
                             children={'Avbryt'}
                         />,
                         <Knapp
                             key={'bekreft'}
                             type={'hoved'}
                             mini={true}
+                            disabled={submitRessurs.status === RessursStatus.HENTER}
                             onClick={() => {
                                 if (åpenBehandling.status === RessursStatus.SUKSESS) {
                                     endreEnhet(åpenBehandling.data.behandlingId);
@@ -59,7 +71,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
                             spinner={submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
-                    onClose: lukkBehandlendeEnhet,
+                    onClose: lukkBehandlendeEnhetModal,
                     lukkKnapp: true,
                     tittel: 'Endre behandlende enhet for valgt behandling',
                     visModal,
@@ -73,7 +85,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
                     }
                 >
                     <FamilieSelect
-                        bredde={'xl'}
+                        bredde={'fullbredde'}
                         erLesevisning={erLesevisning()}
                         lesevisningVerdi={valgtArbeidsfordelingsenhet?.enhetNavn}
                         name="enhet"
@@ -81,6 +93,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
                         value={enhetId}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                             settEnhetId(event.target.value);
+                            settSubmitRessurs(byggTomRessurs());
                         }}
                     >
                         {behandendeEnheter.map((enhet: IArbeidsfordelingsenhet) => {
@@ -89,6 +102,11 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
                                     aria-selected={enhetId === enhet.enhetId}
                                     key={enhet.enhetId}
                                     value={enhet.enhetId}
+                                    disabled={
+                                        åpenBehandling.status === RessursStatus.SUKSESS &&
+                                        åpenBehandling.data.arbeidsfordelingPåBehandling
+                                            .behandlendeEnhetId === enhet.enhetId
+                                    }
                                 >
                                     {`${enhet.enhetId} ${enhet.enhetNavn}`}
                                 </option>
@@ -104,20 +122,11 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onClick }) => {
                         maxLength={4000}
                         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
                             settBegrunnelse(event.target.value);
+                            settSubmitRessurs(byggTomRessurs());
                         }}
                     />
                 </SkjemaGruppe>
             </UIModalWrapper>
-
-            <KnappBase
-                mini={true}
-                onClick={() => {
-                    settVisModal(true);
-                    onClick();
-                }}
-            >
-                Endre behandlende enhet
-            </KnappBase>
         </>
     );
 };

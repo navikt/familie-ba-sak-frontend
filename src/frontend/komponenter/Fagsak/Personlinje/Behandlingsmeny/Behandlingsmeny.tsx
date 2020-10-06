@@ -21,6 +21,7 @@ const Behandlingsmeny: React.FC = () => {
             >
                 Behandlingsmeny
             </Menyknapp>
+
             <Popover
                 id={'behandlingsmeny-arialabel-popover'}
                 ankerEl={anker}
