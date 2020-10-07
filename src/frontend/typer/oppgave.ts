@@ -52,12 +52,11 @@ export interface ITilgangDTO {
     adressebeskyttelsegradering: Adressebeskyttelsegradering;
 }
 
-export type ITilgangModal =
-    | {
-          adressebeskyttelsegradering: Adressebeskyttelsegradering;
-          visModal: boolean;
-      }
-    | undefined;
+export type ITilgangModal = {
+    saksbehandlerHarTilgang: boolean;
+    adressebeskyttelsegradering?: Adressebeskyttelsegradering;
+    tilgangskontrollFeilet: boolean;
+};
 
 export enum Adressebeskyttelsegradering {
     STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',

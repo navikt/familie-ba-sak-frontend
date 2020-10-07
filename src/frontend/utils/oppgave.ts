@@ -1,8 +1,9 @@
 import { IdentGruppe, IOppgaveIdent } from '../typer/oppgave';
-import { IOppgave } from '../typer/oppgave';
 
-export const fnr = (oppg: IOppgave) => {
-    return oppg.identer?.find(
-        (ident: IOppgaveIdent) => ident.gruppe === IdentGruppe.FOLKEREGISTERIDENT
-    )?.ident;
+export const fnr = (identer: IOppgaveIdent[] | undefined) => {
+    const ident = identer?.find((ident: IOppgaveIdent) => ident.gruppe === IdentGruppe.NPID);
+    // if (ident === undefined) {
+    //     throw new Error('Oppgaven inneholder ikke en folkeregisterident.');
+    // }
+    return ident?.ident;
 };

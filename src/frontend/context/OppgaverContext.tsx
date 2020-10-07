@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
@@ -10,23 +10,23 @@ import {
     IHentOppgaveDto,
     IOppgave,
     ITilgangDTO,
+    ITilgangModal,
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
 import {
     byggFeiletRessurs,
+    byggHenterRessurs,
     byggTomRessurs,
     Ressurs,
     RessursStatus,
-    byggHenterRessurs,
 } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
-import { fnr } from '../utils/oppgave';
 import {
-    IOppgaveFelter,
+    FeltSortOrder,
     initialOppgaveFelter,
     IOppgaveFelt,
-    FeltSortOrder,
+    IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
 
 export const oppgaveSideLimit = 15;
@@ -291,7 +291,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         return axiosRequest<ITilgangDTO, ITilgangRequestDTO>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
-            data: { brukerIdent },
+            data: { brukerIdent: brukerIdent },
         });
     };
 
@@ -300,17 +300,24 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         return id;
     };
 
-    const sjekkTilgang = async (oppg: IOppgave): Promise<ITilgangDTO | undefined> => {
-        const fnr2 = fnr(oppg);
-        if (fnr2 !== undefined) {
-            return tilgangssjekk(fnr2).then((res: Ressurs<ITilgangDTO>) => {
-                if (res.status === RessursStatus.SUKSESS) {
-                    return res.data;
-                }
+    const sjekkTilgang = async (brukerIdent: string): Promise<ITilgangModal | undefined> => {
+        return tilgangssjekk(brukerIdent)
+            .then((res: Ressurs<ITilgangDTO>) => {
+                return {
+                    tilgangskontrollFeilet: res.status !== RessursStatus.SUKSESS,
+                    saksbehandlerHarTilgang:
+                        res.status === RessursStatus.SUKSESS
+                            ? res.data.saksbehandlerHarTilgang
+                            : false,
+                    adressebeskyttelsegradering:
+                        res.status === RessursStatus.SUKSESS
+                            ? res.data.adressebeskyttelsegradering
+                            : undefined,
+                };
+            })
+            .catch((_reason: any) => {
+                return undefined;
             });
-        } else {
-            console.log('Oppgaven inneholder ikke en folkeregisterident.');
-        }
     };
 
     const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<string>> => {

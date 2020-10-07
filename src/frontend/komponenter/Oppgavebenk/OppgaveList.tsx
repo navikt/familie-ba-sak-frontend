@@ -13,7 +13,7 @@ import {
     oppgaveTypeFilter,
     PrioritetFilter,
     adressebeskyttelsestyper,
-    ITilgangDTO,
+    ITilgangModal,
 } from '../../typer/oppgave';
 import { RessursStatus } from '@navikt/familie-typer';
 import { fnr } from '../../utils/oppgave';
@@ -142,7 +142,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                             }
                                         </td>
                                         <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
-                                        <td>{fnr(oppg) || 'Ukjent'}</td>
+                                        <td>{fnr(oppg.identer) || 'Ukjent'}</td>
                                         <td
                                             className={classNames(
                                                 'tildelt-enhetsnr',
@@ -175,21 +175,25 @@ const OppgaveList: React.FunctionComponent = () => {
                                                       <button
                                                           key={'tiloppg'}
                                                           onClick={() => {
-                                                              sjekkTilgang(oppg).then(
+                                                              const brukerIdent = '11111111111'; //fnr(oppg.identer)
+                                                              sjekkTilgang(brukerIdent).then(
                                                                   (
-                                                                      res: ITilgangDTO | undefined
+                                                                      res: ITilgangModal | undefined
                                                                   ) => {
-                                                                      if (res !== undefined) {
-                                                                          if (
-                                                                              res.saksbehandlerHarTilgang
-                                                                          ) {
-                                                                              gåTilOppgave(oppg.id);
-                                                                          } else {
-                                                                              settAdressebeskyttelsegradering(
-                                                                                  res.adressebeskyttelsegradering
-                                                                              );
-                                                                              settVisModal(true);
-                                                                          }
+                                                                      if (
+                                                                          res === undefined ||
+                                                                          res.tilgangskontrollFeilet
+                                                                      ) {
+                                                                          //Todo
+                                                                      } else if (
+                                                                          res.saksbehandlerHarTilgang
+                                                                      ) {
+                                                                          gåTilOppgave(oppg.id);
+                                                                      } else {
+                                                                          settAdressebeskyttelsegradering(
+                                                                              res.adressebeskyttelsegradering!
+                                                                          );
+                                                                          settVisModal(true);
                                                                       }
                                                                   }
                                                               );
