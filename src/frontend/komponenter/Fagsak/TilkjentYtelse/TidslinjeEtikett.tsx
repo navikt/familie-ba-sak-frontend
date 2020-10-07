@@ -7,11 +7,16 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 interface IEtikettProp {
     etikett: Skalaetikett;
-    style: { [key: string]: string };
 }
 
-const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, style }) => {
-    const { aktivEtikett, settAktivEtikett, aktivtTidslinjeVindu } = useTidslinje();
+const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) => {
+    const {
+        aktivEtikett,
+        settAktivEtikett,
+        aktivtTidslinjeVindu,
+        initiellAktivEtikettErSatt,
+        setInitiellAktivEtikettErSatt,
+    } = useTidslinje();
 
     const onEtikettClick = () => {
         settAktivEtikett(etikett);
@@ -19,12 +24,14 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, styl
 
     useEffect(() => {
         if (
+            !initiellAktivEtikettErSatt &&
             etikett.dato.getFullYear() === new Date().getFullYear() &&
             etikett.dato.getMonth() === new Date().getMonth()
         ) {
             settAktivEtikett(etikett);
+            setInitiellAktivEtikettErSatt(true);
         }
-    }, []);
+    }, [etikett]);
 
     const isDisabled = aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR;
 
@@ -32,13 +39,12 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett, styl
         <button
             aria-label={etikett.label}
             disabled={isDisabled}
-            style={style}
             className={classNames(
-                'tidslinje__etikett',
+                'tidslinje-container__etikett',
                 aktivEtikett && aktivEtikett.dato.toDateString() === etikett.dato.toDateString()
-                    ? 'tidslinje__etikett--aktiv'
+                    ? 'tidslinje-container__etikett--aktiv'
                     : '',
-                isDisabled ? 'tidslinje__etikett--disabled' : ''
+                isDisabled ? 'tidslinje-container__etikett--disabled' : ''
             )}
             onClick={onEtikettClick}
         >
