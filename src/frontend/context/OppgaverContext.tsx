@@ -10,7 +10,6 @@ import {
     IHentOppgaveDto,
     IOppgave,
     ITilgangDTO,
-    ITilgangModal,
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
@@ -301,19 +300,12 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         return id;
     };
 
-    const sjekkTilgang = async (oppg: IOppgave): Promise<ITilgangModal> => {
+    const sjekkTilgang = async (oppg: IOppgave): Promise<ITilgangDTO | undefined> => {
         const fnr2 = fnr(oppg);
         if (fnr2 !== undefined) {
             return tilgangssjekk(fnr2).then((res: Ressurs<ITilgangDTO>) => {
                 if (res.status === RessursStatus.SUKSESS) {
-                    if (res.data.saksbehandlerHarTilgang) {
-                        return;
-                    } else {
-                        return {
-                            adressebeskyttelsegradering: res.data.adressebeskyttelsegradering,
-                            visModal: true,
-                        };
-                    }
+                    return res.data;
                 }
             });
         } else {

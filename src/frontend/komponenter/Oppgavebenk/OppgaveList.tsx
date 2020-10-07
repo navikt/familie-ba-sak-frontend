@@ -13,7 +13,7 @@ import {
     oppgaveTypeFilter,
     PrioritetFilter,
     adressebeskyttelsestyper,
-    ITilgangModal,
+    ITilgangDTO,
 } from '../../typer/oppgave';
 import { RessursStatus } from '@navikt/familie-typer';
 import { fnr } from '../../utils/oppgave';
@@ -162,6 +162,10 @@ const OppgaveList: React.FunctionComponent = () => {
                                             <OppgavelisteSaksbehandler
                                                 oppgave={oppg}
                                                 innloggetSaksbehandler={innloggetSaksbehandler}
+                                                settAdressebeskyttelsegradering={
+                                                    settAdressebeskyttelsegradering
+                                                }
+                                                settVisTilgangsKontrollModal={settVisModal}
                                             />
                                         </td>
                                         <td className={'handlinger'}>
@@ -172,16 +176,20 @@ const OppgaveList: React.FunctionComponent = () => {
                                                           key={'tiloppg'}
                                                           onClick={() => {
                                                               sjekkTilgang(oppg).then(
-                                                                  (res: ITilgangModal) => {
+                                                                  (
+                                                                      res: ITilgangDTO | undefined
+                                                                  ) => {
                                                                       if (res !== undefined) {
-                                                                          settAdressebeskyttelsegradering(
-                                                                              res.adressebeskyttelsegradering
-                                                                          );
-                                                                          settVisModal(
-                                                                              res.visModal
-                                                                          );
-                                                                      } else {
-                                                                          gåTilOppgave(oppg.id);
+                                                                          if (
+                                                                              res.saksbehandlerHarTilgang
+                                                                          ) {
+                                                                              gåTilOppgave(oppg.id);
+                                                                          } else {
+                                                                              settAdressebeskyttelsegradering(
+                                                                                  res.adressebeskyttelsegradering
+                                                                              );
+                                                                              settVisModal(true);
+                                                                          }
                                                                       }
                                                                   }
                                                               );

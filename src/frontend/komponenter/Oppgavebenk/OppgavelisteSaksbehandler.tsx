@@ -1,35 +1,27 @@
 import React from 'react';
-import {
-    IOppgave,
-    ITilgangModal,
-    OppgavetypeFilter,
-    adressebeskyttelsestyper,
-} from '../../typer/oppgave';
+import { IOppgave, ITilgangDTO, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { ISaksbehandler } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
-import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
-import { Knapp } from 'nav-frontend-knapper';
-import IkkeOppfylt from '../../ikoner/IkkeOppfylt';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
     innloggetSaksbehandler?: ISaksbehandler;
+    settVisTilgangsKontrollModal: (value: React.SetStateAction<boolean>) => void;
+    settAdressebeskyttelsegradering: (value: React.SetStateAction<string>) => void;
 }
 
 const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehandler> = ({
     oppgave,
     innloggetSaksbehandler,
+    settVisTilgangsKontrollModal,
+    settAdressebeskyttelsegradering,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave, sjekkTilgang } = useOppgaver();
     const [feilmelding, setFeilmelding] = React.useState<string>();
     const [erTilbakestilt, setErTilbakestilt] = React.useState<boolean>(false);
-    const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [addressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<string>(
-        ''
-    );
 
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
@@ -80,50 +72,27 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                 <button
                     key={'plukk'}
                     onClick={() => {
-                        sjekkTilgang(oppgave).then((res: ITilgangModal) => {
+                        sjekkTilgang(oppgave).then((res: ITilgangDTO | undefined) => {
                             if (res !== undefined) {
-                                settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
-                                settVisModal(res.visModal);
-                            } else {
-                                fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                                    (oppgaveResponse: Ressurs<string>) => {
-                                        if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                            setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                                if (res.saksbehandlerHarTilgang) {
+                                    fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
+                                        (oppgaveResponse: Ressurs<string>) => {
+                                            if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                                setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                                            }
                                         }
-                                    }
-                                );
+                                    );
+                                } else {
+                                    settAdressebeskyttelsegradering(
+                                        res.adressebeskyttelsegradering
+                                    );
+                                    settVisTilgangsKontrollModal(true);
+                                }
                             }
                         });
                     }}
                     children={'Plukk'}
                 />
-            )}
-            {visModal && (
-                <UIModalWrapper
-                    modal={{
-                        tittel: 'Diskresjonskode',
-                        lukkKnapp: false,
-                        visModal: visModal,
-                        actions: [
-                            <Knapp
-                                key={'Avbryt'}
-                                mini={true}
-                                onClick={() => {
-                                    settVisModal(false);
-                                    //history.push(`/fagsak/${fagsak.id}/saksoversikt`);
-                                    //window.location.reload();
-                                }}
-                                children={'Avbryt'}
-                            />,
-                        ],
-                    }}
-                >
-                    <Normaltekst>
-                        <IkkeOppfylt heigth={20} className={'ikke-oppfylt-ikon'} width={20} />
-                        Bruker har diskresjonskode{' '}
-                        {adressebeskyttelsestyper[addressebeskyttelsegradering].navn}
-                    </Normaltekst>
-                </UIModalWrapper>
             )}
         </div>
     );
