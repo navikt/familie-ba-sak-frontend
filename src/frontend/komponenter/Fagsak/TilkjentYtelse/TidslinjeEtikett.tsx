@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
 import { TidslinjeVindu, useTidslinje } from '../../../context/TidslinjeContext';
@@ -22,14 +22,16 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) =>
         settAktivEtikett(etikett);
     };
 
-    if (
-        !initiellAktivEtikettErSatt &&
-        etikett.dato.getFullYear() === new Date().getFullYear() &&
-        etikett.dato.getMonth() === new Date().getMonth()
-    ) {
-        settAktivEtikett(etikett);
-        setInitiellAktivEtikettErSatt(true);
-    }
+    useEffect(() => {
+        if (
+            !initiellAktivEtikettErSatt &&
+            etikett.dato.getFullYear() === new Date().getFullYear() &&
+            etikett.dato.getMonth() === new Date().getMonth()
+        ) {
+            settAktivEtikett(etikett);
+            setInitiellAktivEtikettErSatt(true);
+        }
+    }, [etikett]);
 
     const isDisabled = aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR;
 
