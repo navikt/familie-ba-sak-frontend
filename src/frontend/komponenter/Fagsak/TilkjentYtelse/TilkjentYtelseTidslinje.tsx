@@ -40,19 +40,18 @@ const TilkjentYtelseTidslinje: React.FC = () => {
     const personer = åpenBehandling.data.personer;
 
     const mapPersonberegningerTilPersoner = (): IPerson[] => {
-        const personBeregningerTilPersoner: IPerson[] = [];
-
-        aktivVedtak?.personBeregninger
+        return aktivVedtak?.personBeregninger
             .map((personBeregning: IPersonBeregning) => {
                 return personer.find(
                     (person: IPerson) => person.personIdent === personBeregning.personIdent
                 );
             })
-            .forEach(person => {
-                person && personBeregningerTilPersoner.push(person);
-            });
-
-        return personBeregningerTilPersoner;
+            .reduce((acc: IPerson[], person) => {
+                if (person) {
+                    return [...acc, person];
+                }
+                return acc;
+            }, []);
     };
 
     return (
