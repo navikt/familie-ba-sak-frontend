@@ -1,13 +1,18 @@
 .høyremeny {
     display: flex;
     flex-direction: column;
-    min-width: 25rem;
-    max-width: 30vw;
+    width: 25rem;
     height: calc(100vh - 8rem);
+
     &__totrinn {
         flex-grow: 1;
         opacity: 0.5;
         text-align: center;
         margin: 50% 0;
+    }
+
+    .hendelsesbeskrivelse {
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 }

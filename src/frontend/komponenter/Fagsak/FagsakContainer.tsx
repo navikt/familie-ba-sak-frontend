@@ -1,9 +1,4 @@
-import { kjønnType } from '@navikt/familie-typer';
-import Visittkort from '@navikt/familie-visittkort';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import Lenke from 'nav-frontend-lenker';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useHistory } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
@@ -11,15 +6,12 @@ import { BehandlingProvider } from '../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
-import { BehandlingStatus } from '../../typer/behandling';
-import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
-import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
-import { fagsakStatus } from '../../typer/fagsak';
+import Personlinje from './Personlinje/Personlinje';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams<{ fagsakId: string }>();
@@ -45,56 +37,10 @@ const FagsakContainer: React.FunctionComponent = () => {
         case RessursStatus.SUKSESS:
             switch (bruker.status) {
                 case RessursStatus.SUKSESS:
-                    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
-                    const skalViseOpprettBehandlingKnapp =
-                        aktivBehandling === undefined ||
-                        (aktivBehandling && aktivBehandling.status === BehandlingStatus.AVSLUTTET);
                     return (
                         <BehandlingProvider>
-                            <Visittkort
-                                navn={
-                                    bruker.status === RessursStatus.SUKSESS
-                                        ? bruker.data.navn
-                                        : 'Ukjent'
-                                }
-                                ident={formaterPersonIdent(fagsak.data.søkerFødselsnummer)}
-                                alder={
-                                    bruker.status === RessursStatus.SUKSESS
-                                        ? hentAlder(bruker.data.fødselsdato)
-                                        : 0
-                                }
-                                kjønn={
-                                    bruker.status === RessursStatus.SUKSESS
-                                        ? bruker.data.kjønn
-                                        : kjønnType.UKJENT
-                                }
-                            >
-                                <div style={{ flex: 1 }}></div>
-                                <Normaltekst children={'Status på sak '} />
-                                <Element
-                                    className={'visittkort__status'}
-                                    children={
-                                        fagsak.data.underBehandling
-                                            ? 'Under behandling'
-                                            : fagsakStatus[fagsak.data.status].navn
-                                    }
-                                />
-                                <Lenke
-                                    className={'visittkort__lenke'}
-                                    href={`/fagsak/${fagsak.data.id}/saksoversikt`}
-                                >
-                                    <Normaltekst>Gå til saksoversikt</Normaltekst>
-                                </Lenke>
-                                {skalViseOpprettBehandlingKnapp && (
-                                    <Knapp
-                                        mini={true}
-                                        onClick={() => {
-                                            history.push(`/fagsak/${fagsak.data.id}/ny-behandling`);
-                                        }}
-                                        children={'Opprett behandling'}
-                                    />
-                                )}
-                            </Visittkort>
+                            <Personlinje bruker={bruker.data} fagsak={fagsak.data} />
+
                             <div className={'fagsakcontainer__content'}>
                                 {!erPåSaksoversikt && (
                                     <div className={'fagsakcontainer__content--venstremeny'}>
