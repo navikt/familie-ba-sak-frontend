@@ -3,12 +3,20 @@ import { Input } from 'nav-frontend-skjema';
 import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import useFagsakApi from '../Fagsak/useFagsakApi';
+import { useOppgaver } from '../../context/OppgaverContext';
 import FilterSkjema from './FilterSkjema';
+import TilgangModal from './TilgangModal';
+import { ITilgangModal } from '../../typer/oppgave';
 
 const OppgaveHeader: React.FunctionComponent = () => {
+    const { sjekkTilgang } = useOppgaver();
     const [personIdent, settPersonIdent] = React.useState('');
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+    const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [addressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<string>(
+        ''
+    );
 
     const { opprettEllerHentFagsak, senderInn } = useFagsakApi(
         settVisFeilmeldinger,
@@ -35,7 +43,7 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 <Knapp
                     type={'hoved'}
                     onClick={() => {
-                        /*sjekkTilgang(personIdent).then((res: ITilgangModal) => {
+                        sjekkTilgang(personIdent).then((res: ITilgangModal) => {
                             if (res.saksbehandlerHarTilgang) {
                                 opprettEllerHentFagsak({
                                     personIdent,
@@ -43,12 +51,8 @@ const OppgaveHeader: React.FunctionComponent = () => {
                                 });
                             } else {
                                 settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
-                                settVisTilgangsKontrollModal(true);
+                                settVisModal(true);
                             }
-                        });*/
-                        opprettEllerHentFagsak({
-                            personIdent,
-                            aktørId: null,
                         });
                     }}
                     children={'Fortsett'}
@@ -56,6 +60,11 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 />
                 {visFeilmeldinger && <Feilmelding children={opprettelseFeilmelding} />}
             </div>
+            <TilgangModal
+                åpen={visModal}
+                onRequestClose={() => settVisModal(false)}
+                adressebeskyttelsegradering={addressebeskyttelsegradering}
+            ></TilgangModal>
         </div>
     );
 };

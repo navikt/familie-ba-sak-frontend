@@ -7,23 +7,24 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import { fnr } from '../../utils/oppgave';
 import { loggFeil } from '../../api/axios';
+import TilgangModal from './TilgangModal';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
     innloggetSaksbehandler?: ISaksbehandler;
-    settVisTilgangsKontrollModal: (value: React.SetStateAction<boolean>) => void;
-    settAdressebeskyttelsegradering: (value: React.SetStateAction<string>) => void;
 }
 
 const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehandler> = ({
     oppgave,
     innloggetSaksbehandler,
-    settVisTilgangsKontrollModal,
-    settAdressebeskyttelsegradering,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave, sjekkTilgang } = useOppgaver();
     const [feilmelding, setFeilmelding] = React.useState<string>();
     const [erTilbakestilt, setErTilbakestilt] = React.useState<boolean>(false);
+    const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [addressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<string>(
+        ''
+    );
 
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
@@ -91,13 +92,18 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                                 );
                             } else {
                                 settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
-                                settVisTilgangsKontrollModal(true);
+                                settVisModal(true);
                             }
                         });
                     }}
                     children={'Plukk'}
                 />
             )}
+            <TilgangModal
+                åpen={visModal}
+                onRequestClose={() => settVisModal(false)}
+                adressebeskyttelsegradering={addressebeskyttelsegradering}
+            ></TilgangModal>
         </div>
     );
 };

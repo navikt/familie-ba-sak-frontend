@@ -1,7 +1,6 @@
 import Alertstripe from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
-import { Systemtittel, Normaltekst } from 'nav-frontend-typografi';
+import { Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { useHistory } from 'react-router';
@@ -13,7 +12,6 @@ import {
     OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
-    adressebeskyttelsestyper,
     ITilgangModal,
 } from '../../typer/oppgave';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -22,9 +20,8 @@ import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import classNames from 'classnames';
-import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
-import IkkeOppfylt from '../../ikoner/IkkeOppfylt';
 import { loggFeil } from '../../api/axios';
+import TilgangModal from './TilgangModal';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -176,10 +173,6 @@ const OppgaveList: React.FunctionComponent = () => {
                                             <OppgavelisteSaksbehandler
                                                 oppgave={oppg}
                                                 innloggetSaksbehandler={innloggetSaksbehandler}
-                                                settAdressebeskyttelsegradering={
-                                                    settAdressebeskyttelsegradering
-                                                }
-                                                settVisTilgangsKontrollModal={settVisModal}
                                             />
                                         </td>
                                         <td className={'handlinger'}>
@@ -217,33 +210,11 @@ const OppgaveList: React.FunctionComponent = () => {
                     Henter...
                 </Alertstripe>
             )}
-            {visModal && (
-                <UIModalWrapper
-                    modal={{
-                        tittel: 'Diskresjonskode',
-                        lukkKnapp: false,
-                        visModal: visModal,
-                        actions: [
-                            <Knapp
-                                key={'Avbryt'}
-                                mini={true}
-                                onClick={() => {
-                                    settVisModal(false);
-                                    //history.push(`/fagsak/${fagsak.id}/saksoversikt`);
-                                    //window.location.reload();
-                                }}
-                                children={'Avbryt'}
-                            />,
-                        ],
-                    }}
-                >
-                    <Normaltekst>
-                        <IkkeOppfylt heigth={20} className={'ikke-oppfylt-ikon'} width={20} />
-                        Bruker har diskresjonskode{' '}
-                        {adressebeskyttelsestyper[addressebeskyttelsegradering].navn}
-                    </Normaltekst>
-                </UIModalWrapper>
-            )}
+            <TilgangModal
+                åpen={visModal}
+                onRequestClose={() => settVisModal(false)}
+                adressebeskyttelsegradering={addressebeskyttelsegradering}
+            ></TilgangModal>
         </div>
     );
 };
