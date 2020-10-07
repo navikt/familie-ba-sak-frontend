@@ -62,30 +62,36 @@
   }
 }
 
-.tidslinje {
+
+
+.tidslinje-container {
   display: flex;
-  overflow: hidden;
+
+  & .tidslinje {
+    margin: 0;
+    overflow-x: hidden;
+  }
 
   & .typo-normal {
     &:first-child {
-      margin-top: 4.31rem;
+      margin-top: 5.2rem;
     }
   }
 
   & .typo-normal {
     &:not(:first-child) {
-      margin-top: 1.56rem;
+      margin-top: 1.7rem;
     }
   }
 
   &__labels {
-    min-width: 6rem;
+    min-width: 7rem;
   }
 
   &__etikett {
-    transform: translateX(100%);
-    margin-top: -15px;
     padding: 3px;
+    width: 90%;
+    text-align: left;
 
     > span {
       text-decoration: underline;

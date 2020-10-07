@@ -2,6 +2,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { IBeregningDetalj, IOppsummeringBeregning } from '../../../typer/beregning';
 import PersonUtbetaling from './PersonUtbetaling';
+import { sorterFødselsdato } from '../../../utils/formatter';
 
 interface IUtbetalingerProps {
     beregningOversikt?: IOppsummeringBeregning;
@@ -9,8 +10,11 @@ interface IUtbetalingerProps {
 
 const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningOversikt }) => {
     const beregningDetaljerGruppertPåPerson =
-        beregningOversikt?.beregningDetaljer.reduce(
-            (acc: { [key: string]: IBeregningDetalj[] }, beregningDetalj) => {
+        beregningOversikt?.beregningDetaljer
+            .sort((detaljA, detaljB) =>
+                sorterFødselsdato(detaljA.person.fødselsdato, detaljB.person.fødselsdato)
+            )
+            .reduce((acc: { [key: string]: IBeregningDetalj[] }, beregningDetalj) => {
                 const beregningDetaljerForPerson = acc[beregningDetalj.person.personIdent] ?? [];
                 return {
                     ...acc,
@@ -19,9 +23,7 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningOversikt }) => {
                         beregningDetalj,
                     ],
                 };
-            },
-            {}
-        ) ?? {};
+            }, {}) ?? {};
 
     return (
         <div className={'saksoversikt__utbetalinger'}>
