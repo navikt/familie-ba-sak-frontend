@@ -1,6 +1,6 @@
 import { RessursStatus } from '@navikt/familie-typer';
 import { Menyknapp } from 'nav-frontend-ikonknapper';
-import KnappBase, { Knapp } from 'nav-frontend-knapper';
+import KnappBase from 'nav-frontend-knapper';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
