@@ -28,6 +28,7 @@ import {
     IOppgaveFelt,
     IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
+import { loggFeil } from '../api/axios';
 
 export const oppgaveSideLimit = 15;
 
@@ -286,38 +287,22 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         brukerIdent: string;
     }
 
-    const tilgangssjekk = (brukerIdent: string): Promise<Ressurs<ITilgangDTO>> => {
-        console.log(brukerIdent);
+    const sjekkTilgang = async (brukerIdent: string): Promise<ITilgangModal> => {
         return axiosRequest<ITilgangDTO, ITilgangRequestDTO>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
             data: { brukerIdent: brukerIdent },
+        }).then((res: Ressurs<ITilgangDTO>) => {
+            if (res.status !== RessursStatus.SUKSESS) {
+                loggFeil(undefined, undefined, 'RessursStatus er ikke SUKSESS');
+                throw new Error('RessursStatus er ikke SUKSESS');
+            }
+
+            return {
+                saksbehandlerHarTilgang: res.data.saksbehandlerHarTilgang,
+                adressebeskyttelsegradering: res.data.adressebeskyttelsegradering,
+            };
         });
-    };
-
-    const gåTilOppgave = (id: string): string => {
-        history.push(`/oppgaver/journalfør/${id}`);
-        return id;
-    };
-
-    const sjekkTilgang = async (brukerIdent: string): Promise<ITilgangModal | undefined> => {
-        return tilgangssjekk(brukerIdent)
-            .then((res: Ressurs<ITilgangDTO>) => {
-                return {
-                    tilgangskontrollFeilet: res.status !== RessursStatus.SUKSESS,
-                    saksbehandlerHarTilgang:
-                        res.status === RessursStatus.SUKSESS
-                            ? res.data.saksbehandlerHarTilgang
-                            : false,
-                    adressebeskyttelsegradering:
-                        res.status === RessursStatus.SUKSESS
-                            ? res.data.adressebeskyttelsegradering
-                            : undefined,
-                };
-            })
-            .catch((_reason: any) => {
-                return undefined;
-            });
     };
 
     const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<string>> => {
@@ -418,9 +403,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     return {
         fordelOppgave,
-        gåTilOppgave,
         sjekkTilgang,
-        tilgangssjekk,
         hentOppgaveSide,
         hentOppgaver,
         oppgaveFelter,

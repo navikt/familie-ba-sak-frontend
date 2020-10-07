@@ -35,6 +35,17 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 <Knapp
                     type={'hoved'}
                     onClick={() => {
+                        /*sjekkTilgang(personIdent).then((res: ITilgangModal) => {
+                            if (res.saksbehandlerHarTilgang) {
+                                opprettEllerHentFagsak({
+                                    personIdent,
+                                    aktørId: null,
+                                });
+                            } else {
+                                settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
+                                settVisTilgangsKontrollModal(true);
+                            }
+                        });*/
                         opprettEllerHentFagsak({
                             personIdent,
                             aktørId: null,

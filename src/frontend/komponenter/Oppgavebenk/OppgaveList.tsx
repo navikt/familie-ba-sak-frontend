@@ -4,6 +4,7 @@ import Lenke from 'nav-frontend-lenker';
 import { Systemtittel, Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { useHistory } from 'react-router';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
     enhetFilter,
@@ -23,21 +24,16 @@ import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from '
 import classNames from 'classnames';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import IkkeOppfylt from '../../ikoner/IkkeOppfylt';
+import { loggFeil } from '../../api/axios';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
 };
 
 const OppgaveList: React.FunctionComponent = () => {
-    const {
-        oppgaver,
-        sortOppgave,
-        oppgaveFelter,
-        hentOppgaveSide,
-        gåTilOppgave,
-        sjekkTilgang,
-    } = useOppgaver();
+    const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide, sjekkTilgang } = useOppgaver();
     const { innloggetSaksbehandler } = useApp();
+    const history = useHistory();
     const [visModal, settVisModal] = React.useState<boolean>(false);
     const [addressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<string>(
         ''
@@ -54,6 +50,24 @@ const OppgaveList: React.FunctionComponent = () => {
 
     const sortertClassName = (felt: IOppgaveFelt) =>
         felt.order !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
+
+    const visTilgangsmodalEllerSendVidere = (oppgave: IOppgave) => {
+        const brukerIdent = fnr(oppgave.identer);
+
+        if (brukerIdent === undefined) {
+            loggFeil(undefined, undefined, 'Oppgaven har ingen identer');
+            throw new Error('Oppgaven har ingen identer');
+        }
+
+        sjekkTilgang(brukerIdent).then((res: ITilgangModal) => {
+            if (res.saksbehandlerHarTilgang) {
+                history.push(`/oppgaver/journalfør/${oppgave.id}`);
+            } else {
+                settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
+                settVisModal(true);
+            }
+        });
+    };
 
     return (
         <div className={'oppgavelist'}>
@@ -175,28 +189,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                                       <button
                                                           key={'tiloppg'}
                                                           onClick={() => {
-                                                              const brukerIdent = '11111111111'; //fnr(oppg.identer)
-                                                              sjekkTilgang(brukerIdent).then(
-                                                                  (
-                                                                      res: ITilgangModal | undefined
-                                                                  ) => {
-                                                                      if (
-                                                                          res === undefined ||
-                                                                          res.tilgangskontrollFeilet
-                                                                      ) {
-                                                                          //Todo
-                                                                      } else if (
-                                                                          res.saksbehandlerHarTilgang
-                                                                      ) {
-                                                                          gåTilOppgave(oppg.id);
-                                                                      } else {
-                                                                          settAdressebeskyttelsegradering(
-                                                                              res.adressebeskyttelsegradering!
-                                                                          );
-                                                                          settVisModal(true);
-                                                                      }
-                                                                  }
-                                                              );
+                                                              visTilgangsmodalEllerSendVidere(oppg);
                                                           }}
                                                           children={'Gå til oppg'}
                                                       />

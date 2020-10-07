@@ -54,8 +54,7 @@ export interface ITilgangDTO {
 
 export type ITilgangModal = {
     saksbehandlerHarTilgang: boolean;
-    adressebeskyttelsegradering?: Adressebeskyttelsegradering;
-    tilgangskontrollFeilet: boolean;
+    adressebeskyttelsegradering: Adressebeskyttelsegradering;
 };
 
 export enum Adressebeskyttelsegradering {

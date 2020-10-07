@@ -1,10 +1,12 @@
 import React from 'react';
-import { IOppgave, ITilgangDTO, OppgavetypeFilter } from '../../typer/oppgave';
+import { IOppgave, ITilgangModal, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { ISaksbehandler } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+import { fnr } from '../../utils/oppgave';
+import { loggFeil } from '../../api/axios';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
@@ -72,22 +74,24 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                 <button
                     key={'plukk'}
                     onClick={() => {
-                        sjekkTilgang(oppgave).then((res: ITilgangDTO | undefined) => {
-                            if (res !== undefined) {
-                                if (res.saksbehandlerHarTilgang) {
-                                    fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                                        (oppgaveResponse: Ressurs<string>) => {
-                                            if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                                setFeilmelding(oppgaveResponse.frontendFeilmelding);
-                                            }
+                        const brukerIdent = fnr(oppgave.identer);
+
+                        if (brukerIdent === undefined) {
+                            loggFeil(undefined, undefined, 'Oppgaven har ingen identer');
+                            throw new Error('Oppgaven har ingen identer');
+                        }
+                        sjekkTilgang(brukerIdent).then((res: ITilgangModal) => {
+                            if (res.saksbehandlerHarTilgang) {
+                                fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
+                                    (oppgaveResponse: Ressurs<string>) => {
+                                        if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                            setFeilmelding(oppgaveResponse.frontendFeilmelding);
                                         }
-                                    );
-                                } else {
-                                    settAdressebeskyttelsegradering(
-                                        res.adressebeskyttelsegradering
-                                    );
-                                    settVisTilgangsKontrollModal(true);
-                                }
+                                    }
+                                );
+                            } else {
+                                settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
+                                settVisTilgangsKontrollModal(true);
                             }
                         });
                     }}
