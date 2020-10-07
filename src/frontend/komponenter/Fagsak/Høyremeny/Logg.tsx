@@ -4,7 +4,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
-import { useHistory } from 'react-router-dom';
 import { IBehandling } from '../../../typer/behandling';
 import { ILogg } from '../../../typer/logg';
 import { datoformat } from '../../../utils/formatter';
@@ -16,14 +15,13 @@ interface IProps {
 }
 
 const Logg = ({ åpenBehandling }: IProps) => {
-    const history = useHistory();
     const { logg, hentLogg } = useFagsakRessurser();
 
     React.useEffect(() => {
         if (åpenBehandling) {
             hentLogg(åpenBehandling?.behandlingId);
         }
-    }, [history.location]);
+    }, [åpenBehandling]);
 
     return (
         <Hendelsesoversikt
