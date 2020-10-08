@@ -1,5 +1,5 @@
 import React from 'react';
-import { IOppgave, ITilgangModal, OppgavetypeFilter } from '../../typer/oppgave';
+import { IOppgave, ITilgangDTO, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { ISaksbehandler } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
@@ -81,7 +81,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                             loggFeil(undefined, undefined, 'Oppgaven har ingen identer');
                             throw new Error('Oppgaven har ingen identer');
                         }
-                        sjekkTilgang(brukerIdent).then((res: ITilgangModal) => {
+                        sjekkTilgang(brukerIdent).then((res: ITilgangDTO) => {
                             if (res.saksbehandlerHarTilgang) {
                                 fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
                                     (oppgaveResponse: Ressurs<string>) => {

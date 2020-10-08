@@ -12,7 +12,7 @@ import {
     OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
-    ITilgangModal,
+    ITilgangDTO,
 } from '../../typer/oppgave';
 import { RessursStatus } from '@navikt/familie-typer';
 import { fnr } from '../../utils/oppgave';
@@ -56,7 +56,7 @@ const OppgaveList: React.FunctionComponent = () => {
             throw new Error('Oppgaven har ingen identer');
         }
 
-        sjekkTilgang(brukerIdent).then((res: ITilgangModal) => {
+        sjekkTilgang(brukerIdent).then((res: ITilgangDTO) => {
             if (res.saksbehandlerHarTilgang) {
                 history.push(`/oppgaver/journalfør/${oppgave.id}`);
             } else {

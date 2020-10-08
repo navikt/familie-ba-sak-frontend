@@ -52,11 +52,6 @@ export interface ITilgangDTO {
     adressebeskyttelsegradering: Adressebeskyttelsegradering;
 }
 
-export type ITilgangModal = {
-    saksbehandlerHarTilgang: boolean;
-    adressebeskyttelsegradering: Adressebeskyttelsegradering;
-};
-
 export enum Adressebeskyttelsegradering {
     STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
     STRENGT_FORTROLIG_UTLAND = 'STRENGT_FORTROLIG_UTLAND',

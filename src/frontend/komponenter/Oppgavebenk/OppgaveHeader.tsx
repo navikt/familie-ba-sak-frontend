@@ -6,7 +6,7 @@ import useFagsakApi from '../Fagsak/useFagsakApi';
 import { useOppgaver } from '../../context/OppgaverContext';
 import FilterSkjema from './FilterSkjema';
 import TilgangModal from '../Felleskomponenter/TilgangModal/TilgangModal';
-import { ITilgangModal } from '../../typer/oppgave';
+import { ITilgangDTO } from '../../typer/oppgave';
 
 const OppgaveHeader: React.FunctionComponent = () => {
     const { sjekkTilgang } = useOppgaver();
@@ -43,7 +43,7 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 <Knapp
                     type={'hoved'}
                     onClick={() => {
-                        sjekkTilgang(personIdent).then((res: ITilgangModal) => {
+                        sjekkTilgang(personIdent).then((res: ITilgangDTO) => {
                             if (res.saksbehandlerHarTilgang) {
                                 opprettEllerHentFagsak({
                                     personIdent,

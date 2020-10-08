@@ -10,7 +10,6 @@ import {
     IHentOppgaveDto,
     IOppgave,
     ITilgangDTO,
-    ITilgangModal,
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
@@ -287,7 +286,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         brukerIdent: string;
     }
 
-    const sjekkTilgang = async (brukerIdent: string): Promise<ITilgangModal> => {
+    const sjekkTilgang = async (brukerIdent: string): Promise<ITilgangDTO> => {
         return axiosRequest<ITilgangDTO, ITilgangRequestDTO>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
