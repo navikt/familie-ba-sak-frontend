@@ -202,3 +202,9 @@ export const behandlingsstatuser: Behandlingsstatuser = {
     IVERKSETTER_VEDTAK: 'Iverksetter vedtak',
     AVSLUTTET: 'Avsluttet',
 };
+
+export enum BegrunnelseType {
+    INNVILGET = 'INNVILGET',
+    REDUKSJON = 'REDUKSJON',
+    SATS = 'SATS',
+}
