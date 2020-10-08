@@ -203,6 +203,21 @@ export const behandlingsstatuser: Behandlingsstatuser = {
     AVSLUTTET: 'Avsluttet',
 };
 
+export const begrunnelsetyper: INøkkelPar = {
+    INNVILGET: {
+        id: 'INNVILGET',
+        navn: 'Innvilget',
+    },
+    REDUKSJON: {
+        id: 'REDUKSJON',
+        navn: 'Reduksjon',
+    },
+    SATS: {
+        id: 'SATS',
+        navn: 'Sats',
+    },
+};
+
 export enum BegrunnelseType {
     INNVILGET = 'INNVILGET',
     REDUKSJON = 'REDUKSJON',

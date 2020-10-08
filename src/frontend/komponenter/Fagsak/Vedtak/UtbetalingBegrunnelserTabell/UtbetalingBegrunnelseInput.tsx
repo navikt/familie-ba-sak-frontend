@@ -5,7 +5,12 @@ import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
-import { BehandlingResultat, behandlingsresultater } from '../../../../typer/behandling';
+import {
+    BegrunnelseType,
+    begrunnelsetyper,
+    BehandlingResultat,
+    behandlingsresultater,
+} from '../../../../typer/behandling';
 import {
     BehandlingresultatOgVilkårBegrunnelse,
     IRestVedtakBegrunnelse,
@@ -65,9 +70,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
     };
 
     const begrunnelser =
-        vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
-        resultat &&
-        vilkårBegrunnelser.data[resultat];
+        vilkårBegrunnelser?.status === RessursStatus.SUKSESS && vilkårBegrunnelser.data;
 
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
@@ -90,24 +93,21 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     <option>Velg behandlingsresultat</option>
                     {vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
                         Object.keys(vilkårBegrunnelser?.data)
-                            .filter((behandlingResultat: string) => {
+                            .filter((begrunnelsetype: string) => {
                                 return (
                                     vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
-                                    vilkårBegrunnelser.data[
-                                        behandlingResultat as BehandlingResultat
-                                    ] &&
-                                    vilkårBegrunnelser.data[
-                                        behandlingResultat as BehandlingResultat
-                                    ].length > 0
+                                    vilkårBegrunnelser.data[begrunnelsetype as BegrunnelseType] &&
+                                    vilkårBegrunnelser.data[begrunnelsetype as BegrunnelseType]
+                                        .length > 0
                                 );
                             })
-                            .map((behandlingResultat: string) => {
-                                return behandlingsresultater[behandlingResultat] ? (
+                            .map((begrunnelsetype: string) => {
+                                return begrunnelsetyper[begrunnelsetype] ? (
                                     <option
-                                        key={behandlingsresultater[behandlingResultat].id}
-                                        value={behandlingsresultater[behandlingResultat].id}
+                                        key={begrunnelsetyper[begrunnelsetype].id}
+                                        value={begrunnelsetyper[begrunnelsetype].id}
                                     >
-                                        {behandlingsresultater[behandlingResultat].navn}
+                                        {begrunnelsetyper[begrunnelsetype].navn}
                                     </option>
                                 ) : null;
                             })}
