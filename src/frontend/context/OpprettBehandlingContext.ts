@@ -17,10 +17,8 @@ export interface IOpprettBehandlingBarn {
 
 const [OpprettBehandlingProvider, useOpprettBehandling] = createUseContext(
     ({ bruker, fagsak }: IProps) => {
-        const [behandlingstype, settBehandlingstype] = useState(
-            fagsak.behandlinger.length === 0
-                ? Behandlingstype.FØRSTEGANGSBEHANDLING
-                : Behandlingstype.REVURDERING
+        const [behandlingstype, settBehandlingstype] = useState<Behandlingstype | undefined>(
+            undefined
         );
         const [kategori, settKategori] = useState(BehandlingKategori.NASJONAL);
         const [underkategori, settUnderkategori] = useState(BehandlingUnderkategori.ORDINÆR);

@@ -54,7 +54,7 @@ const useFagsakApi = (
             });
     };
 
-    const opprettBehandling = (data: IOpprettBehandlingData) => {
+    const opprettBehandling = (data: IOpprettBehandlingData, lukkModal: () => void) => {
         settSenderInn(true);
         axiosRequest<IFagsak, IOpprettBehandlingData>({
             data,
@@ -74,10 +74,12 @@ const useFagsakApi = (
                         settVisFeilmeldinger(true);
                         settFeilmelding('Opprettelse av behandling feilet');
                     } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
+                        lukkModal();
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
                         );
                     } else {
+                        lukkModal();
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
                         );

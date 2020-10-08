@@ -33,7 +33,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
                 <Normaltekst>Gå til saksoversikt</Normaltekst>
             </Lenke>
 
-            <Behandlingsmeny fagsak={fagsak} />
+            <Behandlingsmeny fagsak={fagsak} bruker={bruker} />
         </Visittkort>
     );
 };
