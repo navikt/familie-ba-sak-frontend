@@ -25,6 +25,8 @@ const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
     useEffect(() => {
         if (åpenBehandling.status === RessursStatus.SUKSESS) {
             settEnhetId(åpenBehandling.data.arbeidsfordelingPåBehandling.behandlendeEnhetId);
+            settBegrunnelse('');
+            settSubmitRessurs(byggTomRessurs());
         }
     }, [åpenBehandling]);
 
@@ -50,6 +52,7 @@ const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
                 if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
                     settFagsak(oppdatertFagsak);
                     settSubmitRessurs(byggTomRessurs());
+                    settBegrunnelse('');
                     lukkModal();
                 } else if (oppdatertFagsak.status === RessursStatus.FEILET) {
                     settSubmitRessurs(byggFeiletRessurs(oppdatertFagsak.frontendFeilmelding));
