@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { behandlingId } = useParams();
+    const { behandlingId } = useParams<{ behandlingId: string }>();
     const { bestemÅpenBehandling, åpenBehandling } = useBehandling();
 
     React.useEffect(() => {
@@ -45,10 +45,7 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         path="/fagsak/:fagsakId/:behandlingId/vilkaarsvurdering"
                         render={() => {
                             return (
-                                <VilkårsvurderingProvider
-                                    fagsak={fagsak}
-                                    åpenBehandling={åpenBehandling.data}
-                                >
+                                <VilkårsvurderingProvider åpenBehandling={åpenBehandling.data}>
                                     <Vilkårsvurdering
                                         fagsak={fagsak}
                                         åpenBehandling={åpenBehandling.data}

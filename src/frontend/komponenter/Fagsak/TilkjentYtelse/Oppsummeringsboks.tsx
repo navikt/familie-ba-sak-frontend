@@ -6,6 +6,7 @@ import {
     formaterIsoDato,
     formaterPersonIdent,
     hentAlderSomString,
+    sorterFødselsdato,
 } from '../../../utils/formatter';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { useTidslinje } from '../../../context/TidslinjeContext';
@@ -73,31 +74,38 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                     </thead>
                     <tbody>
                         {perioder.map(periode => {
-                            return periode.beregningDetaljer.map((detalj, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>
-                                            <Normaltekst>{`${
-                                                detalj.person.navn
-                                            } (${hentAlderSomString(
-                                                detalj.person.fødselsdato
-                                            )}) | ${formaterPersonIdent(
-                                                detalj.person.personIdent
-                                            )}`}</Normaltekst>
-                                        </td>
-                                        <td>
-                                            <Normaltekst>
-                                                {ytelsetype[detalj.ytelseType].navn}
-                                            </Normaltekst>
-                                        </td>
-                                        <td>
-                                            <Normaltekst>
-                                                {formaterBeløp(detalj.utbetaltPerMnd)}
-                                            </Normaltekst>
-                                        </td>
-                                    </tr>
-                                );
-                            });
+                            return periode.beregningDetaljer
+                                .sort((detaljA, detaljB) =>
+                                    sorterFødselsdato(
+                                        detaljA.person.fødselsdato,
+                                        detaljB.person.fødselsdato
+                                    )
+                                )
+                                .map((detalj, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>
+                                                <Normaltekst>{`${
+                                                    detalj.person.navn
+                                                } (${hentAlderSomString(
+                                                    detalj.person.fødselsdato
+                                                )}) | ${formaterPersonIdent(
+                                                    detalj.person.personIdent
+                                                )}`}</Normaltekst>
+                                            </td>
+                                            <td>
+                                                <Normaltekst>
+                                                    {ytelsetype[detalj.ytelseType].navn}
+                                                </Normaltekst>
+                                            </td>
+                                            <td>
+                                                <Normaltekst>
+                                                    {formaterBeløp(detalj.utbetaltPerMnd)}
+                                                </Normaltekst>
+                                            </td>
+                                        </tr>
+                                    );
+                                });
                         })}
                     </tbody>
                 </table>

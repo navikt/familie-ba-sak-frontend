@@ -65,3 +65,6 @@ export const sisteDatoIMnd = (måned: number, år: number): Date => {
     // Måneden i Date objektet er 0-indeksert
     return new Date(år, måned + 1, 0);
 };
+
+export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>
+    moment(fødselsDatoA).isBefore(fødselsDatoB) ? 1 : -1;

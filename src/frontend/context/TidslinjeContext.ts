@@ -30,11 +30,12 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     ];
 
     const [aktivEtikett, settAktivEtikett] = useState<Skalaetikett | undefined>(undefined);
+    const [initiellAktivEtikettErSatt, setInitiellAktivEtikettErSatt] = useState<boolean>(false);
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
-        sluttDato: moment(),
-        startDato: moment().subtract(12, 'month'),
+        sluttDato: moment().endOf('month'),
+        startDato: moment().subtract(12, 'month').endOf('month'),
     });
 
     const genererFormatertÅrstall = () => {
@@ -50,14 +51,14 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         if (retning === NavigeringsRetning.VENSTRE) {
             settAktivtTidslinjeVindu(({ sluttDato, startDato, vindu }) => ({
                 ...aktivtTidslinjeVindu,
-                sluttDato: sluttDato.clone().subtract(vindu.måneder, 'month'),
-                startDato: startDato.clone().subtract(vindu.måneder, 'month'),
+                sluttDato: sluttDato.clone().subtract(vindu.måneder, 'month').endOf('month'),
+                startDato: startDato.clone().subtract(vindu.måneder, 'month').endOf('month'),
             }));
         } else {
             settAktivtTidslinjeVindu(({ sluttDato, startDato, vindu }) => ({
                 ...aktivtTidslinjeVindu,
-                sluttDato: sluttDato.clone().add(vindu.måneder, 'month'),
-                startDato: startDato.clone().add(vindu.måneder, 'month'),
+                sluttDato: sluttDato.clone().add(vindu.måneder, 'month').endOf('month'),
+                startDato: startDato.clone().add(vindu.måneder, 'month').endOf('month'),
             }));
         }
     };
@@ -65,12 +66,13 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     const endreTidslinjeVindu = (vindu: ITidslinjeVindu) => {
         if (vindu.id === TidslinjeVindu.TRE_ÅR) {
             settAktivEtikett(undefined);
+            setInitiellAktivEtikettErSatt(false);
         }
 
         settAktivtTidslinjeVindu(({ sluttDato }) => ({
             ...aktivtTidslinjeVindu,
             vindu: vindu,
-            startDato: sluttDato.clone().subtract(vindu.måneder, 'month'),
+            startDato: sluttDato.clone().subtract(vindu.måneder, 'month').endOf('month'),
         }));
     };
 
@@ -98,6 +100,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         naviger,
         endreTidslinjeVindu,
         genererRader,
+        initiellAktivEtikettErSatt,
+        setInitiellAktivEtikettErSatt,
     };
 });
 

@@ -8,11 +8,12 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { IPerson } from '../../../typer/person';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { Tidslinje } from '@navikt/helse-frontend-tidslinje';
-import { formaterPersonIdent, sisteDatoIMnd } from '../../../utils/formatter';
+import { formaterPersonIdent, sisteDatoIMnd, sorterFødselsdato } from '../../../utils/formatter';
 import TidslinjeEtikett from './TidslinjeEtikett';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import Vinduvelger from './VinduVelger';
 import TidslinjeNavigering from './TidslinjeNavigering';
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();
@@ -38,6 +39,21 @@ const TilkjentYtelseTidslinje: React.FC = () => {
 
     const personer = åpenBehandling.data.personer;
 
+    const mapPersonberegningerTilPersoner = (): IPerson[] => {
+        return aktivVedtak?.personBeregninger
+            .map((personBeregning: IPersonBeregning) => {
+                return personer.find(
+                    (person: IPerson) => person.personIdent === personBeregning.personIdent
+                );
+            })
+            .reduce((acc: IPerson[], person) => {
+                if (person) {
+                    return [...acc, person];
+                }
+                return acc;
+            }, []);
+    };
+
     return (
         <>
             <div className={'tidslinje-header'}>
@@ -47,31 +63,29 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     <TidslinjeNavigering />
                 </div>
             </div>
-            <div className={'tidslinje'}>
-                <div className={'tidslinje__labels'}>
-                    {aktivVedtak.personBeregninger.map(
-                        (personBeregning: IPersonBeregning, index: number) => {
-                            const person: IPerson | undefined = personer.find(
-                                (person: IPerson) =>
-                                    person.personIdent === personBeregning.personIdent
-                            );
+            <div className={'tidslinje-container'}>
+                <div className={'tidslinje-container__labels'}>
+                    {mapPersonberegningerTilPersoner()
+                        .sort((personA, personB) =>
+                            sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)
+                        )
+                        .map((person, index) => {
                             return (
-                                person && (
-                                    <Normaltekst key={index} title={person.navn}>
-                                        {formaterPersonIdent(person.personIdent)}
-                                    </Normaltekst>
-                                )
+                                <Normaltekst key={index} title={person.navn}>
+                                    {formaterPersonIdent(person.personIdent)}
+                                </Normaltekst>
                             );
-                        }
-                    )}
+                        })}
                 </div>
                 <Tidslinje
                     rader={tidslinjeRader}
                     direction={'right'}
-                    EtikettKomponent={TidslinjeEtikett}
+                    etikettRender={(etikett: Skalaetikett) => (
+                        <TidslinjeEtikett etikett={etikett} />
+                    )}
                     startDato={aktivtTidslinjeVindu.startDato.toDate()}
                     sluttDato={aktivtTidslinjeVindu.sluttDato.toDate()}
-                    aktivPeriode={
+                    aktivtUtsnitt={
                         aktivEtikett && {
                             fom: aktivEtikett.dato,
                             tom: sisteDatoIMnd(

@@ -14,13 +14,13 @@ import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 const FEM_MINUTTER = 300000;
 
 export interface IModal {
+    actions?: JSX.Element[] | JSX.Element;
     className?: string;
+    innhold?: () => React.ReactNode;
     lukkKnapp: boolean;
     onClose?: () => void;
     tittel: string;
-    actions?: JSX.Element[] | JSX.Element;
     visModal: boolean;
-    innhold?: () => React.ReactNode;
 }
 
 const initalState: IModal = {

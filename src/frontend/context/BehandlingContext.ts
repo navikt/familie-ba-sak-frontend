@@ -9,7 +9,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 import { tilFeilside } from '../utils/commons';
-import { hentAktivBehandlingPåFagsak, hentBehandlingPåFagsak } from '../utils/fagsak';
+import { hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 import { useHistory } from 'react-router';
@@ -42,7 +42,6 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const bestemÅpenBehandling = (behandlingId: string | undefined) => {
         if (fagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak.data);
             const åpenBehandling =
                 behandlingId && hentBehandlingPåFagsak(fagsak.data, parseInt(behandlingId, 10));
 
@@ -52,10 +51,8 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
                 settÅpenBehandling(
                     byggFeiletRessurs(`Finner ikke behandling med id ${behandlingId}`)
                 );
-            } else if (aktivBehandling) {
-                settÅpenBehandling(byggDataRessurs(aktivBehandling));
             } else {
-                settÅpenBehandling(byggFeiletRessurs('Fagsaken har ingen behandlinger'));
+                settÅpenBehandling(byggTomRessurs());
             }
         }
     };

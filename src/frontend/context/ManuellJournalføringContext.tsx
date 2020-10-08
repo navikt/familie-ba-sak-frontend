@@ -28,7 +28,7 @@ import { IFagsak } from '../typer/fagsak';
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
     const history = useHistory();
-    const { oppgaveId } = useParams();
+    const { oppgaveId } = useParams<{ oppgaveId: string }>();
 
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
@@ -184,16 +184,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                 .then((fagsakId: Ressurs<string>) => {
                     settSenderInn(false);
                     if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                        const aktivBehandling = hentAktivBehandlingForJournalføring();
-
-                        if (
-                            aktivBehandling &&
-                            tilknyttedeBehandlingIder.includes(aktivBehandling.behandlingId)
-                        ) {
-                            history.push(`/fagsak/${fagsakId.data}`);
-                        } else {
-                            history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
-                        }
+                        history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
                         history.push('/oppgaver');
                     } else if (fagsakId.status === RessursStatus.FEILET) {
