@@ -21,7 +21,7 @@ import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import classNames from 'classnames';
 import { loggFeil } from '../../api/axios';
-import TilgangModal from './TilgangModal';
+import TilgangModal from '../Felleskomponenter/TilgangModal/TilgangModal';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;

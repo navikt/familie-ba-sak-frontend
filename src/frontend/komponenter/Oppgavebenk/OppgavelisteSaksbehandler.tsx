@@ -7,7 +7,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import { fnr } from '../../utils/oppgave';
 import { loggFeil } from '../../api/axios';
-import TilgangModal from './TilgangModal';
+import TilgangModal from '../Felleskomponenter/TilgangModal/TilgangModal';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;

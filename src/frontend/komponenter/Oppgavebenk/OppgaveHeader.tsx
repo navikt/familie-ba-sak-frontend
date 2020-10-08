@@ -5,7 +5,7 @@ import React from 'react';
 import useFagsakApi from '../Fagsak/useFagsakApi';
 import { useOppgaver } from '../../context/OppgaverContext';
 import FilterSkjema from './FilterSkjema';
-import TilgangModal from './TilgangModal';
+import TilgangModal from '../Felleskomponenter/TilgangModal/TilgangModal';
 import { ITilgangModal } from '../../typer/oppgave';
 
 const OppgaveHeader: React.FunctionComponent = () => {
