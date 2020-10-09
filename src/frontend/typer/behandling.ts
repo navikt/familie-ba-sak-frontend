@@ -218,7 +218,7 @@ export const begrunnelsetyper: INøkkelPar = {
     },
 };
 
-export enum BegrunnelseType {
+export enum VedtakBegrunnelseType {
     INNVILGET = 'INNVILGET',
     REDUKSJON = 'REDUKSJON',
     SATS = 'SATS',

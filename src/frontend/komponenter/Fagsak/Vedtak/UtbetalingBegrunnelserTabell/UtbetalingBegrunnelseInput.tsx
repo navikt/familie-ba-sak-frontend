@@ -6,28 +6,28 @@ import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
 import {
-    BegrunnelseType,
+    VedtakBegrunnelseType,
     begrunnelsetyper,
-    BehandlingResultat,
     behandlingsresultater,
 } from '../../../../typer/behandling';
 import {
-    BehandlingresultatOgVilkårBegrunnelse,
+    VedtakBegrunnelse,
     IRestVedtakBegrunnelse,
+    BegrunnelseType,
 } from '../../../../typer/vedtak';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IUtbetalingsBegrunnelseInput {
-    behandlingresultatOgVilkårBegrunnelse?: BehandlingresultatOgVilkårBegrunnelse;
+    vedtakBegrunnelse?: VedtakBegrunnelse;
     id: number;
-    resultat?: BehandlingResultat;
+    begrunnelseType?: BegrunnelseType;
     erLesevisning: boolean;
 }
 
 const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
-    behandlingresultatOgVilkårBegrunnelse,
+    vedtakBegrunnelse,
     id,
-    resultat,
+    begrunnelseType,
     erLesevisning,
 }) => {
     const {
@@ -38,34 +38,28 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
     } = useUtbetalingBegrunnelser();
 
     const [mutableVedtakBegrunnelse, settMutableVedBegrunnelse] = React.useState<
-        BehandlingresultatOgVilkårBegrunnelse | undefined
-    >(behandlingresultatOgVilkårBegrunnelse);
-    const [mutableResultat, setMutableResultat] = React.useState<BehandlingResultat | undefined>(
-        resultat
-    );
+        VedtakBegrunnelse | undefined
+    >(vedtakBegrunnelse);
+    const [mutableBegrunnelseType, setMutableBegrunnelseType] = React.useState<
+        BegrunnelseType | undefined
+    >(begrunnelseType);
 
     const onChangeResultat = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
-        setMutableResultat(value as BehandlingResultat);
+        setMutableBegrunnelseType(value as BegrunnelseType);
         endreUtbetalingBegrunnelse(id, {
-            resultat:
-                value !== 'Velg behandlingsresultat' ? (value as BehandlingResultat) : undefined,
-            behandlingresultatOgVilkårBegrunnelse:
-                value !== 'Velg behandlingsresultat'
-                    ? behandlingresultatOgVilkårBegrunnelse
-                    : undefined,
+            begrunnelseType: value !== 'Velg utfallstype' ? (value as BegrunnelseType) : undefined,
+            vedtakBegrunnelse: value !== 'Velg behandlingsresultat' ? vedtakBegrunnelse : undefined,
         });
     };
 
     const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
-        settMutableVedBegrunnelse(value as BehandlingresultatOgVilkårBegrunnelse);
+        settMutableVedBegrunnelse(value as VedtakBegrunnelse);
         endreUtbetalingBegrunnelse(id, {
-            resultat,
-            behandlingresultatOgVilkårBegrunnelse:
-                value !== 'Velg begrunnelse'
-                    ? (value as BehandlingresultatOgVilkårBegrunnelse)
-                    : undefined,
+            begrunnelseType,
+            vedtakBegrunnelse:
+                value !== 'Velg begrunnelse' ? (value as VedtakBegrunnelse) : undefined,
         });
     };
 
@@ -84,11 +78,13 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     className="begrunnelse-input__select"
                     erLesevisning={erLesevisning}
                     lesevisningVerdi={
-                        mutableResultat ? behandlingsresultater[mutableResultat]?.navn : ''
+                        mutableBegrunnelseType
+                            ? behandlingsresultater[mutableBegrunnelseType]?.navn
+                            : ''
                     }
                     name="begrunnelse"
                     onChange={onChangeResultat}
-                    value={mutableResultat === null ? undefined : mutableResultat}
+                    value={mutableBegrunnelseType === null ? undefined : mutableBegrunnelseType}
                 >
                     <option>Velg behandlingsresultat</option>
                     {vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
@@ -96,9 +92,12 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                             .filter((begrunnelsetype: string) => {
                                 return (
                                     vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
-                                    vilkårBegrunnelser.data[begrunnelsetype as BegrunnelseType] &&
-                                    vilkårBegrunnelser.data[begrunnelsetype as BegrunnelseType]
-                                        .length > 0
+                                    vilkårBegrunnelser.data[
+                                        begrunnelsetype as VedtakBegrunnelseType
+                                    ] &&
+                                    vilkårBegrunnelser.data[
+                                        begrunnelsetype as VedtakBegrunnelseType
+                                    ].length > 0
                                 );
                             })
                             .map((begrunnelsetype: string) => {
@@ -118,7 +117,8 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     erLesevisning={erLesevisning}
                     lesevisningVerdi={
                         mutableVedtakBegrunnelse && begrunnelser
-                            ? begrunnelser.find(
+                            ? begrunnelser[BegrunnelseType.REDUKSJON].find(
+                                  // TODO: bruk valgte state
                                   (restVedtakBegrunnelse: IRestVedtakBegrunnelse) =>
                                       restVedtakBegrunnelse.id === mutableVedtakBegrunnelse
                               )?.navn
@@ -130,11 +130,10 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                 >
                     <option>Velg begrunnelse</option>
                     {begrunnelser &&
-                        begrunnelser
+                        begrunnelser[BegrunnelseType.REDUKSJON] // TODO: Bruk valgte state
                             .filter(
                                 (restVedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                                    restVedtakBegrunnelse.id !==
-                                    BehandlingresultatOgVilkårBegrunnelse.SATSENDRING
+                                    restVedtakBegrunnelse.id !== VedtakBegrunnelse.SATSENDRING
                             )
                             .map((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                                 return (
