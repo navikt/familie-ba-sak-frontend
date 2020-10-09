@@ -81,18 +81,22 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                             loggFeil(undefined, undefined, 'Oppgaven har ingen identer');
                             throw new Error('Oppgaven har ingen identer');
                         }
-                        sjekkTilgang(brukerIdent).then((res: ITilgangDTO) => {
-                            if (res.saksbehandlerHarTilgang) {
-                                fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                                    (oppgaveResponse: Ressurs<string>) => {
-                                        if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                            setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                        sjekkTilgang(brukerIdent).then((res: Ressurs<ITilgangDTO>) => {
+                            if (res.status === RessursStatus.SUKSESS) {
+                                if (res.data.saksbehandlerHarTilgang) {
+                                    fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
+                                        (oppgaveResponse: Ressurs<string>) => {
+                                            if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                                setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                                            }
                                         }
-                                    }
-                                );
-                            } else {
-                                settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
-                                settVisModal(true);
+                                    );
+                                } else {
+                                    settAdressebeskyttelsegradering(
+                                        res.data.adressebeskyttelsegradering
+                                    );
+                                    settVisModal(true);
+                                }
                             }
                         });
                     }}

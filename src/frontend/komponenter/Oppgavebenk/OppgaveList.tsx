@@ -14,7 +14,7 @@ import {
     PrioritetFilter,
     ITilgangDTO,
 } from '../../typer/oppgave';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { fnr } from '../../utils/oppgave';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
@@ -56,12 +56,14 @@ const OppgaveList: React.FunctionComponent = () => {
             throw new Error('Oppgaven har ingen identer');
         }
 
-        sjekkTilgang(brukerIdent).then((res: ITilgangDTO) => {
-            if (res.saksbehandlerHarTilgang) {
-                history.push(`/oppgaver/journalfør/${oppgave.id}`);
-            } else {
-                settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
-                settVisModal(true);
+        sjekkTilgang(brukerIdent).then((res: Ressurs<ITilgangDTO>) => {
+            if (res.status === RessursStatus.SUKSESS) {
+                if (res.data.saksbehandlerHarTilgang) {
+                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                } else {
+                    settAdressebeskyttelsegradering(res.data.adressebeskyttelsegradering);
+                    settVisModal(true);
+                }
             }
         });
     };

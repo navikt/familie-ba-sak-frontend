@@ -27,7 +27,6 @@ import {
     IOppgaveFelt,
     IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
-import { loggFeil } from '../api/axios';
 
 export const oppgaveSideLimit = 15;
 
@@ -286,21 +285,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         brukerIdent: string;
     }
 
-    const sjekkTilgang = async (brukerIdent: string): Promise<ITilgangDTO> => {
+    const sjekkTilgang = async (brukerIdent: string): Promise<Ressurs<ITilgangDTO>> => {
         return axiosRequest<ITilgangDTO, ITilgangRequestDTO>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
-            data: { brukerIdent: brukerIdent },
-        }).then((res: Ressurs<ITilgangDTO>) => {
-            if (res.status !== RessursStatus.SUKSESS) {
-                loggFeil(undefined, undefined, 'RessursStatus er ikke SUKSESS');
-                throw new Error('RessursStatus er ikke SUKSESS');
-            }
-
-            return {
-                saksbehandlerHarTilgang: res.data.saksbehandlerHarTilgang,
-                adressebeskyttelsegradering: res.data.adressebeskyttelsegradering,
-            };
+            data: { brukerIdent },
         });
     };
 

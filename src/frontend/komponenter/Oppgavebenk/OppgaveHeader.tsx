@@ -7,6 +7,7 @@ import { useOppgaver } from '../../context/OppgaverContext';
 import FilterSkjema from './FilterSkjema';
 import TilgangModal from '../Felleskomponenter/TilgangModal/TilgangModal';
 import { ITilgangDTO } from '../../typer/oppgave';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 const OppgaveHeader: React.FunctionComponent = () => {
     const { sjekkTilgang } = useOppgaver();
@@ -43,15 +44,19 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 <Knapp
                     type={'hoved'}
                     onClick={() => {
-                        sjekkTilgang(personIdent).then((res: ITilgangDTO) => {
-                            if (res.saksbehandlerHarTilgang) {
-                                opprettEllerHentFagsak({
-                                    personIdent,
-                                    aktørId: null,
-                                });
-                            } else {
-                                settAdressebeskyttelsegradering(res.adressebeskyttelsegradering);
-                                settVisModal(true);
+                        sjekkTilgang(personIdent).then((res: Ressurs<ITilgangDTO>) => {
+                            if (res.status === RessursStatus.SUKSESS) {
+                                if (res.data.saksbehandlerHarTilgang) {
+                                    opprettEllerHentFagsak({
+                                        personIdent,
+                                        aktørId: null,
+                                    });
+                                } else {
+                                    settAdressebeskyttelsegradering(
+                                        res.data.adressebeskyttelsegradering
+                                    );
+                                    settVisModal(true);
+                                }
                             }
                         });
                     }}
