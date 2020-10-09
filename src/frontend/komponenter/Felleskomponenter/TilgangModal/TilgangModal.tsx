@@ -2,7 +2,6 @@ import React from 'react';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import UIModalWrapper from '../Modal/UIModalWrapper';
-import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 import IkkeOppfylt from '../../../ikoner/IkkeOppfylt';
 import { adressebeskyttelsestyper } from '../../../typer/oppgave';
@@ -22,25 +21,19 @@ const TilgangModal: React.FC<ITilgangModalProps> = ({
         <UIModalWrapper
             modal={{
                 tittel: 'Diskresjonskode',
-                lukkKnapp: false,
+                lukkKnapp: true,
                 visModal: åpen,
-                actions: [
-                    <Knapp
-                        key={'Avbryt'}
-                        mini={true}
-                        onClick={onRequestClose}
-                        children={'Avbryt'}
-                    />,
-                ],
+                onClose: onRequestClose,
             }}
         >
             <Normaltekst>
                 <IkkeOppfylt heigth={20} className={'tilgangmodal-ikke-oppfylt-ikon'} width={20} />
                 Bruker har diskresjonskode
-                {' ' +
-                    (adressebeskyttelsegradering !== ''
+                {` ${
+                    adressebeskyttelsegradering !== ''
                         ? adressebeskyttelsestyper[adressebeskyttelsegradering].navn
-                        : '')}
+                        : ''
+                }`}
             </Normaltekst>
         </UIModalWrapper>
     );
