@@ -98,6 +98,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     <FamilieSelect
                         erLesevisning={false}
                         value={behandlingstype}
+                        name={'Behandling'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                             settVisFeilmeldinger(false);
                             settBehandlingstype(
@@ -110,12 +111,19 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     >
                         <option value={''}>Velg</option>
                         <option
+                            aria-selected={
+                                behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
+                            }
                             disabled={!førstegangsbehandlingEnabled}
                             value={Behandlingstype.FØRSTEGANGSBEHANDLING}
                         >
                             Førstegangsbehandling
                         </option>
-                        <option disabled={!revurderingEnabled} value={Behandlingstype.REVURDERING}>
+                        <option
+                            aria-selected={behandlingstype === Behandlingstype.REVURDERING}
+                            disabled={!revurderingEnabled}
+                            value={Behandlingstype.REVURDERING}
+                        >
                             Revurdering
                         </option>
                     </FamilieSelect>
