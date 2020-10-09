@@ -10,6 +10,7 @@ import { gruppeIdTilRolle } from '../utils/behandling';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
+import { Adressebeskyttelsegradering, IRestTilgang } from '../typer/common';
 
 const FEM_MINUTTER = 300000;
 
@@ -42,6 +43,11 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         autentisertSaksbehandler
     );
     const [modal, settModal] = React.useState<IModal>(initalState);
+
+    const [visTilgangModal, settVisTilgangModal] = React.useState<boolean>(false);
+    const [adressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<
+        Adressebeskyttelsegradering
+    >(Adressebeskyttelsegradering.UGRADERT);
 
     const verifiserVersjon = () => {
         axiosRequest<string, void>({
@@ -114,6 +120,22 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         settModal(initalState);
     };
 
+    const sjekkTilgang = async (brukerIdent: string): Promise<boolean> => {
+        return axiosRequest<IRestTilgang, { brukerIdent: string }>({
+            method: 'POST',
+            url: '/familie-ba-sak/api/tilgang',
+            data: { brukerIdent },
+        }).then((res: Ressurs<IRestTilgang>) => {
+            if (res.status === RessursStatus.SUKSESS) {
+                settVisTilgangModal(!res.data.saksbehandlerHarTilgang);
+                settAdressebeskyttelsegradering(res.data.adressebeskyttelsegradering);
+                return res.data.saksbehandlerHarTilgang;
+            } else {
+                return false;
+            }
+        });
+    };
+
     const axiosRequest = async <T, D>(
         config: AxiosRequestConfig & { data?: D; påvirkerSystemLaster?: boolean }
     ): Promise<Ressurs<T>> => {
@@ -178,6 +200,11 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         settModal,
         systemetLaster,
         åpneModal,
+        visTilgangModal,
+        settVisTilgangModal,
+        adressebeskyttelsegradering,
+        settAdressebeskyttelsegradering,
+        sjekkTilgang,
     };
 });
 

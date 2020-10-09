@@ -1,13 +1,13 @@
 import React from 'react';
-import { IOppgave, ITilgangDTO, OppgavetypeFilter } from '../../typer/oppgave';
+import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
+import { useApp } from '../../context/AppContext';
 import { ISaksbehandler } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
-import { fnr } from '../../utils/oppgave';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import { loggFeil } from '../../api/axios';
-import TilgangModal from '../Felleskomponenter/TilgangModal/TilgangModal';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
@@ -18,13 +18,10 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     oppgave,
     innloggetSaksbehandler,
 }) => {
-    const { fordelOppgave, tilbakestillFordelingPåOppgave, sjekkTilgang } = useOppgaver();
+    const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
     const [feilmelding, setFeilmelding] = React.useState<string>();
     const [erTilbakestilt, setErTilbakestilt] = React.useState<boolean>(false);
-    const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [addressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<string>(
-        ''
-    );
+    const { sjekkTilgang } = useApp();
 
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
@@ -74,40 +71,26 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
             {oppgaveTypeErStøttet && (
                 <button
                     key={'plukk'}
-                    onClick={() => {
-                        const brukerIdent = fnr(oppgave.identer);
+                    onClick={async () => {
+                        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
 
                         if (brukerIdent === undefined) {
                             loggFeil(undefined, undefined, 'Oppgaven har ingen identer');
                             throw new Error('Oppgaven har ingen identer');
                         }
-                        sjekkTilgang(brukerIdent).then((res: Ressurs<ITilgangDTO>) => {
-                            if (res.status === RessursStatus.SUKSESS) {
-                                if (res.data.saksbehandlerHarTilgang) {
-                                    fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                                        (oppgaveResponse: Ressurs<string>) => {
-                                            if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                                setFeilmelding(oppgaveResponse.frontendFeilmelding);
-                                            }
-                                        }
-                                    );
-                                } else {
-                                    settAdressebeskyttelsegradering(
-                                        res.data.adressebeskyttelsegradering
-                                    );
-                                    settVisModal(true);
+                        if (await sjekkTilgang(brukerIdent)) {
+                            fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
+                                (oppgaveResponse: Ressurs<string>) => {
+                                    if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                        setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                                    }
                                 }
-                            }
-                        });
+                            );
+                        }
                     }}
                     children={'Plukk'}
                 />
             )}
-            <TilgangModal
-                åpen={visModal}
-                onRequestClose={() => settVisModal(false)}
-                adressebeskyttelsegradering={addressebeskyttelsegradering}
-            ></TilgangModal>
         </div>
     );
 };

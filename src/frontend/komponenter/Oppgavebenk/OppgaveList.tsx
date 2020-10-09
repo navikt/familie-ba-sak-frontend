@@ -12,29 +12,23 @@ import {
     OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
-    ITilgangDTO,
 } from '../../typer/oppgave';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { fnr } from '../../utils/oppgave';
+import { RessursStatus } from '@navikt/familie-typer';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import classNames from 'classnames';
 import { loggFeil } from '../../api/axios';
-import TilgangModal from '../Felleskomponenter/TilgangModal/TilgangModal';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
 };
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide, sjekkTilgang } = useOppgaver();
-    const { innloggetSaksbehandler } = useApp();
+    const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide } = useOppgaver();
+    const { innloggetSaksbehandler, sjekkTilgang } = useApp();
     const history = useHistory();
-    const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [addressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<string>(
-        ''
-    );
 
     const onColumnSort = (felt: IOppgaveFelt) => {
         sortOppgave(felt.nøkkel, felt.order !== FeltSortOrder.ASCENDANT);
@@ -48,24 +42,17 @@ const OppgaveList: React.FunctionComponent = () => {
     const sortertClassName = (felt: IOppgaveFelt) =>
         felt.order !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
 
-    const visTilgangsmodalEllerSendVidere = (oppgave: IOppgave) => {
-        const brukerIdent = fnr(oppgave.identer);
+    const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
+        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
 
         if (brukerIdent === undefined) {
             loggFeil(undefined, undefined, 'Oppgaven har ingen identer');
             throw new Error('Oppgaven har ingen identer');
         }
 
-        sjekkTilgang(brukerIdent).then((res: Ressurs<ITilgangDTO>) => {
-            if (res.status === RessursStatus.SUKSESS) {
-                if (res.data.saksbehandlerHarTilgang) {
-                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
-                } else {
-                    settAdressebeskyttelsegradering(res.data.adressebeskyttelsegradering);
-                    settVisModal(true);
-                }
-            }
-        });
+        if (await sjekkTilgang(brukerIdent)) {
+            history.push(`/oppgaver/journalfør/${oppgave.id}`);
+        }
     };
 
     return (
@@ -155,7 +142,9 @@ const OppgaveList: React.FunctionComponent = () => {
                                             }
                                         </td>
                                         <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
-                                        <td>{fnr(oppg.identer) || 'Ukjent'}</td>
+                                        <td>
+                                            {hentFnrFraOppgaveIdenter(oppg.identer) || 'Ukjent'}
+                                        </td>
                                         <td
                                             className={classNames(
                                                 'tildelt-enhetsnr',
@@ -212,11 +201,6 @@ const OppgaveList: React.FunctionComponent = () => {
                     Henter...
                 </Alertstripe>
             )}
-            <TilgangModal
-                åpen={visModal}
-                onRequestClose={() => settVisModal(false)}
-                adressebeskyttelsegradering={addressebeskyttelsegradering}
-            ></TilgangModal>
         </div>
     );
 };

@@ -9,7 +9,6 @@ import {
     IFinnOppgaveRequest,
     IHentOppgaveDto,
     IOppgave,
-    ITilgangDTO,
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
@@ -281,18 +280,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
-    interface ITilgangRequestDTO {
-        brukerIdent: string;
-    }
-
-    const sjekkTilgang = async (brukerIdent: string): Promise<Ressurs<ITilgangDTO>> => {
-        return axiosRequest<ITilgangDTO, ITilgangRequestDTO>({
-            method: 'POST',
-            url: '/familie-ba-sak/api/tilgang',
-            data: { brukerIdent },
-        });
-    };
-
     const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<string>> => {
         return axiosRequest<string, void>({
             method: 'POST',
@@ -391,7 +378,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     return {
         fordelOppgave,
-        sjekkTilgang,
         hentOppgaveSide,
         hentOppgaver,
         oppgaveFelter,

@@ -10,13 +10,26 @@ import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring
 import classNames from 'classnames';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import FagsakContainer from './Fagsak/FagsakContainer';
+import TilgangModal from './Felleskomponenter/TilgangModal/TilgangModal';
 
 const Container: React.FC = () => {
-    const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
+    const {
+        autentisert,
+        systemetLaster,
+        innloggetSaksbehandler,
+        visTilgangModal,
+        settVisTilgangModal,
+        adressebeskyttelsegradering,
+    } = useApp();
 
     return (
         <Router>
             <UIModalWrapper />
+            <TilgangModal
+                åpen={visTilgangModal}
+                onRequestClose={() => settVisTilgangModal(false)}
+                adressebeskyttelsegradering={adressebeskyttelsegradering}
+            ></TilgangModal>
             {autentisert ? (
                 <>
                     {systemetLaster() && <SystemetLaster />}

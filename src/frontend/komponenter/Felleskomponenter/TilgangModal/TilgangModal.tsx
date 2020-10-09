@@ -4,12 +4,12 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import UIModalWrapper from '../Modal/UIModalWrapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 import IkkeOppfylt from '../../../ikoner/IkkeOppfylt';
-import { adressebeskyttelsestyper } from '../../../typer/oppgave';
+import { Adressebeskyttelsegradering, adressebeskyttelsestyper } from '../../../typer/common';
 
 interface ITilgangModalProps {
     åpen: boolean;
     onRequestClose: () => void;
-    adressebeskyttelsegradering: string;
+    adressebeskyttelsegradering: Adressebeskyttelsegradering;
 }
 
 const TilgangModal: React.FC<ITilgangModalProps> = ({
@@ -29,11 +29,7 @@ const TilgangModal: React.FC<ITilgangModalProps> = ({
             <Normaltekst>
                 <IkkeOppfylt heigth={20} className={'tilgangmodal-ikke-oppfylt-ikon'} width={20} />
                 Bruker har diskresjonskode
-                {` ${
-                    adressebeskyttelsegradering !== ''
-                        ? adressebeskyttelsestyper[adressebeskyttelsegradering].navn
-                        : ''
-                }`}
+                {` ${adressebeskyttelsestyper[adressebeskyttelsegradering].navn}`}
             </Normaltekst>
         </UIModalWrapper>
     );
