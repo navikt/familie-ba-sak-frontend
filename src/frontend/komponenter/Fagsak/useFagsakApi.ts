@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IPersonResultat } from '../../typer/vilkår';
 import { erBehandlingenInnvilget, hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
@@ -54,9 +54,9 @@ const useFagsakApi = (
             });
     };
 
-    const opprettBehandling = (data: IOpprettBehandlingData, lukkModal: () => void) => {
+    const opprettBehandling = (data: IOpprettBehandlingData): Promise<Ressurs<IFagsak>> => {
         settSenderInn(true);
-        axiosRequest<IFagsak, IOpprettBehandlingData>({
+        return axiosRequest<IFagsak, IOpprettBehandlingData>({
             data,
             method: 'POST',
             url: '/familie-ba-sak/api/behandlinger',
@@ -74,12 +74,10 @@ const useFagsakApi = (
                         settVisFeilmeldinger(true);
                         settFeilmelding('Opprettelse av behandling feilet');
                     } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
-                        lukkModal();
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
                         );
                     } else {
-                        lukkModal();
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
                         );
@@ -91,11 +89,13 @@ const useFagsakApi = (
                     settVisFeilmeldinger(true);
                     settFeilmelding('Opprettelse av behandling feilet');
                 }
+                return response;
             })
             .catch(() => {
                 settSenderInn(false);
                 settVisFeilmeldinger(true);
                 settFeilmelding('Opprettelse av behandling feilet');
+                return byggFeiletRessurs('Opprettelse av behandling feilet');
             });
     };
 

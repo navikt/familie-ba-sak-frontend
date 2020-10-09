@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { IFagsak } from '../../../../typer/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
-import OpprettBehandling from './OpprettBehandling';
+import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 
 interface IProps {
     fagsak: IFagsak;

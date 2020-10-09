@@ -2,16 +2,12 @@ import { FamilieSelect } from '@navikt/familie-form-elements';
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
-import UIModalWrapper from '../../../Felleskomponenter/Modal/UIModalWrapper';
-import {
-    BehandlingKategori,
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingUnderkategori,
-} from '../../../../typer/behandling';
-import { FagsakStatus, IFagsak } from '../../../../typer/fagsak';
-import useFagsakApi from '../../useFagsakApi';
-import { hentAktivBehandlingPåFagsak } from '../../../../utils/fagsak';
+import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
+import { BehandlingStatus, Behandlingstype } from '../../../../../typer/behandling';
+import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
+import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
+import useOpprettBehandling from './useOpprettBehandling';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 interface IProps {
     onListElementClick: () => void;
@@ -20,11 +16,6 @@ interface IProps {
 
 const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => {
     const [visModal, settVisModal] = useState(false);
-    const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
-    const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
-    const [behandlingstype, settBehandlingstype] = useState<Behandlingstype | undefined>(undefined);
-
-    const { opprettBehandling } = useFagsakApi(settVisFeilmeldinger, settOpprettelseFeilmelding);
 
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
     const kanOppretteBehandling =
@@ -33,29 +24,18 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
         fagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
     const revurderingEnabled = fagsak.behandlinger.length > 0 && kanOppretteBehandling;
 
-    const lukkOpprettBehandlingModal = () => {
-        settBehandlingstype(undefined);
-        settVisFeilmeldinger(false);
-        settVisModal(false);
-    };
+    const {
+        fjernState,
+        onBekreft,
+        settBehandlingstype,
+        behandlingstype,
+        settSubmitRessurs,
+        submitRessurs,
+    } = useOpprettBehandling(() => settVisModal(false));
 
-    const onBekreft = () => {
-        if (!behandlingstype) {
-            settOpprettelseFeilmelding(
-                'Velg type behandling som skal opprettes fra nedtrekkslisten'
-            );
-            settVisFeilmeldinger(true);
-        } else {
-            opprettBehandling(
-                {
-                    behandlingType: behandlingstype,
-                    søkersIdent: fagsak.søkerFødselsnummer,
-                    kategori: BehandlingKategori.NASJONAL,
-                    underkategori: BehandlingUnderkategori.ORDINÆR,
-                },
-                lukkOpprettBehandlingModal
-            );
-        }
+    const lukkOpprettBehandlingModal = () => {
+        fjernState();
+        settVisModal(false);
     };
 
     return (
@@ -83,9 +63,10 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                             key={'bekreft'}
                             type={'hoved'}
                             mini={true}
-                            disabled={false}
-                            onClick={() => onBekreft()}
+                            onClick={() => onBekreft(fagsak.søkerFødselsnummer)}
                             children={'Bekreft'}
+                            spinner={submitRessurs.status === RessursStatus.HENTER}
+                            disabled={submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
                     onClose: lukkOpprettBehandlingModal,
@@ -94,20 +75,25 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     visModal,
                 }}
             >
-                <SkjemaGruppe>
+                <SkjemaGruppe
+                    feil={
+                        submitRessurs.status === RessursStatus.FEILET
+                            ? submitRessurs.frontendFeilmelding
+                            : ''
+                    }
+                >
                     <FamilieSelect
                         erLesevisning={false}
                         value={behandlingstype}
                         name={'Behandling'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                            settVisFeilmeldinger(false);
+                            settSubmitRessurs(byggTomRessurs());
                             settBehandlingstype(
                                 event.target.value
                                     ? (event.target.value as Behandlingstype)
                                     : undefined
                             );
                         }}
-                        feil={visFeilmeldinger ? opprettelseFeilmelding : ''}
                     >
                         <option value={''}>Velg</option>
                         <option
