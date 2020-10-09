@@ -1,9 +1,9 @@
 import React from 'react';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
+import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import UIModalWrapper from '../Modal/UIModalWrapper';
 import { Normaltekst } from 'nav-frontend-typografi';
-import IkkeOppfylt from '../../../ikoner/IkkeOppfylt';
 import { Adressebeskyttelsegradering, adressebeskyttelsestyper } from '../../../typer/common';
 
 interface ITilgangModalProps {
@@ -27,7 +27,7 @@ const TilgangModal: React.FC<ITilgangModalProps> = ({
             }}
         >
             <Normaltekst>
-                <IkkeOppfylt heigth={20} className={'tilgangmodal-ikke-oppfylt-ikon'} width={20} />
+                <IkkeTilgang heigth={20} className={'tilgangmodal-ikke-oppfylt-ikon'} width={20} />
                 Bruker har diskresjonskode
                 {` ${adressebeskyttelsestyper[adressebeskyttelsegradering].navn}`}
             </Normaltekst>
