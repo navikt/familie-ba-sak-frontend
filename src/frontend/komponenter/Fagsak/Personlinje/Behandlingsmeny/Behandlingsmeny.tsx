@@ -5,16 +5,13 @@ import React, { useState } from 'react';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { IFagsak } from '../../../../typer/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
-import { IPerson } from '../../../../typer/person';
-import { OpprettBehandlingProvider } from '../../../../context/OpprettBehandlingContext';
 import OpprettBehandling from './OpprettBehandling';
 
 interface IProps {
     fagsak: IFagsak;
-    bruker: IPerson;
 }
 
-const Behandlingsmeny: React.FC<IProps> = ({ fagsak, bruker }) => {
+const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
     const { åpenBehandling } = useBehandling();
 
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
@@ -56,12 +53,10 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak, bruker }) => {
                         </li>
                     )}
                     <li>
-                        <OpprettBehandlingProvider bruker={bruker} fagsak={fagsak}>
-                            <OpprettBehandling
-                                onListElementClick={() => settAnker(undefined)}
-                                fagsak={fagsak}
-                            />
-                        </OpprettBehandlingProvider>
+                        <OpprettBehandling
+                            onListElementClick={() => settAnker(undefined)}
+                            fagsak={fagsak}
+                        />
                     </li>
                 </ul>
             </Popover>

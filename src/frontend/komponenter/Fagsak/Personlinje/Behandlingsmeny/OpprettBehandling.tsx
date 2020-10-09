@@ -3,15 +3,15 @@ import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import UIModalWrapper from '../../../Felleskomponenter/Modal/UIModalWrapper';
-import { Behandlingstype } from '../../../../typer/behandling';
-import { FagsakStatus, IFagsak } from '../../../../typer/fagsak';
-import { useBehandling } from '../../../../context/BehandlingContext';
-import { RessursStatus } from '@navikt/familie-typer';
 import {
-    IOpprettBehandlingBarn,
-    useOpprettBehandling,
-} from '../../../../context/OpprettBehandlingContext';
+    BehandlingKategori,
+    BehandlingStatus,
+    Behandlingstype,
+    BehandlingUnderkategori,
+} from '../../../../typer/behandling';
+import { FagsakStatus, IFagsak } from '../../../../typer/fagsak';
 import useFagsakApi from '../../useFagsakApi';
+import { hentAktivBehandlingPåFagsak } from '../../../../utils/fagsak';
 
 interface IProps {
     onListElementClick: () => void;
@@ -22,21 +22,16 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
     const [visModal, settVisModal] = useState(false);
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+    const [behandlingstype, settBehandlingstype] = useState<Behandlingstype | undefined>(undefined);
 
-    const åpenBehandling = useBehandling();
-    const {
-        barna,
-        behandlingstype,
-        settBehandlingstype,
-        kategori,
-        underkategori,
-    } = useOpprettBehandling();
     const { opprettBehandling } = useFagsakApi(settVisFeilmeldinger, settOpprettelseFeilmelding);
 
-    const harÅpenBehandling = åpenBehandling.åpenBehandling.status === RessursStatus.SUKSESS;
+    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+    const kanOppretteBehandling =
+        !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
     const førstegangsbehandlingEnabled =
-        !(fagsak.status === FagsakStatus.LØPENDE) && !harÅpenBehandling;
-    const revurderingEnabled = fagsak.behandlinger.length > 0 && !harÅpenBehandling;
+        fagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
+    const revurderingEnabled = fagsak.behandlinger.length > 0 && kanOppretteBehandling;
 
     const lukkOpprettBehandlingModal = () => {
         settBehandlingstype(undefined);
@@ -55,20 +50,8 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                 {
                     behandlingType: behandlingstype,
                     søkersIdent: fagsak.søkerFødselsnummer,
-                    kategori: kategori,
-                    underkategori: underkategori,
-                    barnasIdenter:
-                        behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                            ? barna
-                                  .filter(
-                                      (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
-                                          opprettBehandlingBarn.checked
-                                  )
-                                  .map(
-                                      (opprettBehandlingBarn: IOpprettBehandlingBarn) =>
-                                          opprettBehandlingBarn.barn.personIdent
-                                  )
-                            : [],
+                    kategori: BehandlingKategori.NASJONAL,
+                    underkategori: BehandlingUnderkategori.ORDINÆR,
                 },
                 lukkOpprettBehandlingModal
             );
