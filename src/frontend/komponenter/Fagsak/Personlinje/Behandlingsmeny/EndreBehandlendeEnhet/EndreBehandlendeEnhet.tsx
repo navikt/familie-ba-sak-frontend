@@ -73,7 +73,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                     ],
                     onClose: lukkBehandlendeEnhetModal,
                     lukkKnapp: true,
-                    tittel: 'Endre behandlende enhet for valgt behandling',
+                    tittel: 'Endre enhet for denne behandlingen',
                     visModal,
                 }}
             >
@@ -91,6 +91,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                         name="enhet"
                         placeholder={'Enhet'}
                         value={enhetId}
+                        label={'Velg ny enhet'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                             settEnhetId(event.target.value);
                             settSubmitRessurs(byggTomRessurs());
