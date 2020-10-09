@@ -10,25 +10,22 @@ export enum BehandlingKategori {
     EØS = 'EØS',
 }
 
-export enum BehandlingOpprinnelse {
-    MANUELL = 'MANUELL',
-    AUTOMATISK_VED_FØDSELSHENDELSE = 'AUTOMATISK_VED_FØDSELSHENDELSE',
-    AUTOMATISK_VED_JOURNALFØRING = 'AUTOMATISK_VED_JOURNALFØRING',
+export enum BehandlingÅrsak {
+    SØKNAD = 'SØKNAD',
+    FØDSELSHENDELSE = 'FØDSELSHENDELSE',
+    ÅRLIG_KONTROLL = 'ÅRLIG_KONTROLL',
+    DØDSFALL = 'DØDSFALL',
+    NYE_OPPLYSNINGER = 'NYE_OPPLYSNINGER',
+    TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
 }
 
-export const behandlingOpprinnelse: INøkkelPar = {
-    MANUELL: {
-        id: BehandlingOpprinnelse.MANUELL,
-        navn: 'Manuell',
-    },
-    AUTOMATISK_VED_FØDSELSHENDELSE: {
-        id: BehandlingOpprinnelse.AUTOMATISK_VED_FØDSELSHENDELSE,
-        navn: 'Fødselshendelse',
-    },
-    AUTOMATISK_VED_JOURNALFØRING: {
-        id: BehandlingOpprinnelse.AUTOMATISK_VED_JOURNALFØRING,
-        navn: 'Journalføring',
-    },
+export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
+    SØKNAD: 'Søknad',
+    FØDSELSHENDELSE: 'Fødselshendelse',
+    ÅRLIG_KONTROLL: 'Årlig kontroll',
+    DØDSFALL: 'Dødsfall',
+    NYE_OPPLYSNINGER: 'Nye opplysninger',
+    TEKNISK_OPPHØR: 'Teknisk opphør',
 };
 
 export enum BehandlingUnderkategori {
@@ -127,7 +124,8 @@ export interface IBehandling {
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
     beregningOversikt: IOppsummeringBeregning[];
-    opprinnelse: BehandlingOpprinnelse;
+    årsak: BehandlingÅrsak;
+    skalBehandlesAutomatisk: boolean;
 }
 
 export interface IArbeidsfordelingPåBehandling {
