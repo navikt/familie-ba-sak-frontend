@@ -14,12 +14,12 @@ export interface IRestUtbetalingBegrunnelse {
     id?: number;
     fom: string;
     tom?: string;
-    begrunnelseType?: BegrunnelseType;
+    vedtakBegrunnelseType?: BegrunnelseType;
     vedtakBegrunnelse?: VedtakBegrunnelse;
 }
 
 export interface IRestPutUtbetalingBegrunnelse {
-    begrunnelseType?: BegrunnelseType;
+    vedtakBegrunnelseType?: BegrunnelseType;
     vedtakBegrunnelse?: VedtakBegrunnelse;
 }
 

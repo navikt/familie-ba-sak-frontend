@@ -85,7 +85,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                 key={index}
                                                 id={utbetalingBegrunnelse.id}
                                                 begrunnelseType={
-                                                    utbetalingBegrunnelse.begrunnelseType
+                                                    utbetalingBegrunnelse.vedtakBegrunnelseType
                                                 }
                                                 vedtakBegrunnelse={
                                                     utbetalingBegrunnelse.vedtakBegrunnelse

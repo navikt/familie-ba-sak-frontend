@@ -44,11 +44,11 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
         BegrunnelseType | undefined
     >(begrunnelseType);
 
-    const onChangeResultat = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const onChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
         setMutableBegrunnelseType(value as BegrunnelseType);
         endreUtbetalingBegrunnelse(id, {
-            begrunnelseType: value !== 'Velg utfallstype' ? (value as BegrunnelseType) : undefined,
+            vedtakBegrunnelseType: BegrunnelseType.INNVILGELSE, //value !== 'Velg utfallstype' ? (value as BegrunnelseType) : undefined,
             vedtakBegrunnelse: value !== 'Velg behandlingsresultat' ? vedtakBegrunnelse : undefined,
         });
     };
@@ -57,7 +57,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
         const value = event.target.value ? event.target.value : '';
         settMutableVedBegrunnelse(value as VedtakBegrunnelse);
         endreUtbetalingBegrunnelse(id, {
-            begrunnelseType,
+            vedtakBegrunnelseType: begrunnelseType,
             vedtakBegrunnelse:
                 value !== 'Velg begrunnelse' ? (value as VedtakBegrunnelse) : undefined,
         });
@@ -83,7 +83,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                             : ''
                     }
                     name="begrunnelse"
-                    onChange={onChangeResultat}
+                    onChange={onChangeType}
                     value={mutableBegrunnelseType === null ? undefined : mutableBegrunnelseType}
                 >
                     <option>Velg behandlingsresultat</option>
