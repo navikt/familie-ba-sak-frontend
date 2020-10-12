@@ -16,7 +16,7 @@ export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | und
 };
 
 export const hentAktivBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
-    return fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv === true);
+    return fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
 };
 
 export const hentBehandlingPåFagsak = (

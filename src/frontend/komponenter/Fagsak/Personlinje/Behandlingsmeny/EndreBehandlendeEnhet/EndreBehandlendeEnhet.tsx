@@ -85,11 +85,9 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                     }
                 >
                     <FamilieSelect
-                        bredde={'fullbredde'}
                         erLesevisning={erLesevisning()}
                         lesevisningVerdi={valgtArbeidsfordelingsenhet?.enhetNavn}
                         name="enhet"
-                        placeholder={'Enhet'}
                         value={enhetId}
                         label={'Velg ny enhet'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {

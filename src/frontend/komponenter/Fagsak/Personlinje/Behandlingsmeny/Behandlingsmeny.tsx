@@ -1,26 +1,17 @@
 import { RessursStatus } from '@navikt/familie-typer';
 import { Menyknapp } from 'nav-frontend-ikonknapper';
-import KnappBase from 'nav-frontend-knapper';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { BehandlingStatus } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../../utils/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
+import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-    const skalViseOpprettBehandlingKnapp =
-        aktivBehandling === undefined ||
-        (aktivBehandling && aktivBehandling.status === BehandlingStatus.AVSLUTTET);
-
-    const history = useHistory();
     const { åpenBehandling } = useBehandling();
 
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
@@ -61,19 +52,12 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             />
                         </li>
                     )}
-                    {skalViseOpprettBehandlingKnapp && (
-                        <li>
-                            <KnappBase
-                                mini={true}
-                                onClick={() => {
-                                    settAnker(undefined);
-                                    history.push(`/fagsak/${fagsak.id}/ny-behandling`);
-                                }}
-                            >
-                                Opprett behandling
-                            </KnappBase>
-                        </li>
-                    )}
+                    <li>
+                        <OpprettBehandling
+                            onListElementClick={() => settAnker(undefined)}
+                            fagsak={fagsak}
+                        />
+                    </li>
                 </ul>
             </Popover>
         </>

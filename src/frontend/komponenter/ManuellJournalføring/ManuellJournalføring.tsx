@@ -89,7 +89,6 @@ const ManuellJournalføringContent: React.FC = () => {
                     søkersIdent: søker,
                     kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
                     underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
-                    barnasIdenter: [],
                 }).then((response: Ressurs<IFagsak>) => response);
 
                 if (
