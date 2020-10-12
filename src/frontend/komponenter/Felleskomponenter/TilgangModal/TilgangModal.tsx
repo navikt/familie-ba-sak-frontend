@@ -29,7 +29,7 @@ const TilgangModal: React.FC<ITilgangModalProps> = ({
             <Normaltekst>
                 <IkkeTilgang heigth={20} className={'tilgangmodal-ikke-oppfylt-ikon'} width={20} />
                 Bruker har diskresjonskode
-                {` ${adressebeskyttelsestyper[adressebeskyttelsegradering].navn}`}
+                {` ${adressebeskyttelsestyper[adressebeskyttelsegradering]}`}
             </Normaltekst>
         </UIModalWrapper>
     );

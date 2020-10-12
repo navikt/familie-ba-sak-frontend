@@ -27,21 +27,9 @@ export enum Adressebeskyttelsegradering {
     UGRADERT = 'UGRADERT',
 }
 
-export const adressebeskyttelsestyper: INøkkelPar = {
-    STRENGT_FORTROLIG: {
-        id: 'STRENGT_FORTROLIG',
-        navn: 'strengt fortrolig',
-    },
-    STRENGT_FORTROLIG_UTLAND: {
-        id: 'STRENGT_FORTROLIG_UTLAND',
-        navn: 'strengt fortrolig utland',
-    },
-    FORTROLIG: {
-        id: 'FORTROLIG',
-        navn: 'fortrolig',
-    },
-    UGRADERT: {
-        id: 'UGRADERT',
-        navn: 'ugradert',
-    },
+export const adressebeskyttelsestyper: Record<Adressebeskyttelsegradering, string> = {
+    STRENGT_FORTROLIG: 'strengt fortrolig',
+    STRENGT_FORTROLIG_UTLAND: 'strengt fortrolig utland',
+    FORTROLIG: 'fortrolig',
+    UGRADERT: 'ugradert',
 };
