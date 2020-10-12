@@ -1,29 +1,22 @@
 import React from 'react';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
+import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import UIModalWrapper from '../Modal/UIModalWrapper';
 import { Normaltekst } from 'nav-frontend-typografi';
-import { Adressebeskyttelsegradering, adressebeskyttelsestyper } from '../../../typer/common';
+import { adressebeskyttelsestyper } from '../../../typer/common';
 
-interface ITilgangModalProps {
-    åpen: boolean;
-    onRequestClose: () => void;
-    adressebeskyttelsegradering: Adressebeskyttelsegradering;
-}
+const TilgangModal: React.FC = () => {
+    const { visTilgangModal, settVisTilgangModal, adressebeskyttelsegradering } = useApp();
 
-const TilgangModal: React.FC<ITilgangModalProps> = ({
-    åpen,
-    onRequestClose,
-    adressebeskyttelsegradering,
-}) => {
     return (
         <UIModalWrapper
             modal={{
                 tittel: 'Diskresjonskode',
                 lukkKnapp: true,
-                visModal: åpen,
-                onClose: onRequestClose,
+                visModal: visTilgangModal,
+                onClose: () => settVisTilgangModal(false),
             }}
         >
             <Normaltekst>

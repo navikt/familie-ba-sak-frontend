@@ -13,23 +13,12 @@ import FagsakContainer from './Fagsak/FagsakContainer';
 import TilgangModal from './Felleskomponenter/TilgangModal/TilgangModal';
 
 const Container: React.FC = () => {
-    const {
-        autentisert,
-        systemetLaster,
-        innloggetSaksbehandler,
-        visTilgangModal,
-        settVisTilgangModal,
-        adressebeskyttelsegradering,
-    } = useApp();
+    const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
 
     return (
         <Router>
             <UIModalWrapper />
-            <TilgangModal
-                åpen={visTilgangModal}
-                onRequestClose={() => settVisTilgangModal(false)}
-                adressebeskyttelsegradering={adressebeskyttelsegradering}
-            ></TilgangModal>
+            <TilgangModal />
             {autentisert ? (
                 <>
                     {systemetLaster() && <SystemetLaster />}
