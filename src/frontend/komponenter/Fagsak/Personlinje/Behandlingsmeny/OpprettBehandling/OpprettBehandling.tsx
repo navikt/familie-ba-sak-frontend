@@ -46,6 +46,8 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
         submitRessurs,
         settSelectedBehandlingÅrsak,
         selectedBehandlingÅrsak,
+        visValideringsFeil,
+        settVisValideringsfeil,
     } = useOpprettBehandling(() => settVisModal(false));
 
     const lukkOpprettBehandlingModal = () => {
@@ -104,12 +106,22 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     }
                 >
                     <FamilieSelect
+                        feil={
+                            visValideringsFeil.behandlingstype &&
+                            'Velg type behandling som skal opprettes fra nedtrekkslisten'
+                        }
                         erLesevisning={false}
                         value={selectedBehandlingstype}
                         name={'Behandling'}
                         label={'Velg type behandling'}
                         onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
                             settSubmitRessurs(byggTomRessurs());
+                            settVisValideringsfeil(visValideringsFeil => {
+                                return {
+                                    ...visValideringsFeil,
+                                    behandlingstype: false,
+                                };
+                            });
                             settSelectedBehandlingstype(event.target.value);
                         }}
                     >
@@ -135,12 +147,22 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     </FamilieSelect>
 
                     <FamilieSelect
+                        feil={
+                            visValideringsFeil.behandlingÅrsak &&
+                            'Velg årsak for opprettelse av behandlingen fra nedtrekkslisten'
+                        }
                         erLesevisning={false}
                         value={selectedBehandlingÅrsak}
                         name={'Behandlingsårsak'}
                         label={'Velg årsak'}
                         onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
                             settSubmitRessurs(byggTomRessurs());
+                            settVisValideringsfeil(visValideringsFeil => {
+                                return {
+                                    ...visValideringsFeil,
+                                    behandlingÅrsak: false,
+                                };
+                            });
                             settSelectedBehandlingÅrsak(event.target.value);
                         }}
                     >
