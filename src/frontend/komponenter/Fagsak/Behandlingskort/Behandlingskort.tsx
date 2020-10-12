@@ -1,11 +1,12 @@
 import classNames from 'classnames';
 import moment from 'moment';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import {
     behandlingsresultater,
     behandlingsstatuser,
     behandlingstyper,
+    behandlingÅrsak,
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
@@ -31,7 +32,9 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
 
     return (
         <div className={classNames('behandlingskort', behandlingsresultat)}>
-            <Normaltekst className={'behandlingskort__tittel'}>{tittel}</Normaltekst>
+            <Undertittel className={'behandlingskort__tittel'}>{tittel}</Undertittel>
+            <Normaltekst>{behandlingÅrsak[åpenBehandling.årsak]}</Normaltekst>
+            <hr />
             <Informasjonsbolk
                 informasjon={[
                     {
