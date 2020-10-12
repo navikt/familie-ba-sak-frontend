@@ -7,19 +7,19 @@ export interface IVedtakForBehandling {
     utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[];
     vedtaksdato: string;
     id: number;
-    begrunnelse: BegrunnelseType;
+    begrunnelse: VedtakBegrunnelseType;
 }
 
 export interface IRestUtbetalingBegrunnelse {
     id?: number;
     fom: string;
     tom?: string;
-    vedtakBegrunnelseType?: BegrunnelseType;
+    vedtakBegrunnelseType?: VedtakBegrunnelseType;
     vedtakBegrunnelse?: VedtakBegrunnelse;
 }
 
 export interface IRestPutUtbetalingBegrunnelse {
-    vedtakBegrunnelseType?: BegrunnelseType;
+    vedtakBegrunnelseType?: VedtakBegrunnelseType;
     vedtakBegrunnelse?: VedtakBegrunnelse;
 }
 
@@ -50,14 +50,23 @@ export enum VedtakBegrunnelse {
     SATSENDRING = 'SATSENDRING',
 }
 
-export enum BegrunnelseType {
+export const begrunnelsetyper: INøkkelPar = {
+    INNVILGELSE: {
+        id: 'INNVILGELSE',
+        navn: 'Innvilgelse',
+    },
+    REDUKSJON: {
+        id: 'REDUKSJON',
+        navn: 'Reduksjon',
+    },
+    SATSENDRING: {
+        id: 'SATSENDRING',
+        navn: 'Satsendring',
+    },
+};
+
+export enum VedtakBegrunnelseType {
     INNVILGELSE = 'INNVILGELSE',
     REDUKSJON = 'REDUKSJON',
     SATSENDRING = 'SATSENDRING',
 }
-
-export const bergunnelseTyper: INøkkelPar = {
-    INNVILGELSE: { id: 'INNVILGELSE', navn: 'Innvilgelse' },
-    REDUKSJON: { id: 'REDUKSJON', navn: 'Reduksjon' },
-    SATSENDRING: { id: 'SATSENDRING', navn: 'Satsendring' },
-};

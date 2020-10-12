@@ -202,24 +202,3 @@ export const behandlingsstatuser: Behandlingsstatuser = {
     IVERKSETTER_VEDTAK: 'Iverksetter vedtak',
     AVSLUTTET: 'Avsluttet',
 };
-
-export const begrunnelsetyper: INøkkelPar = {
-    INNVILGET: {
-        id: 'INNVILGET',
-        navn: 'Innvilget',
-    },
-    REDUKSJON: {
-        id: 'REDUKSJON',
-        navn: 'Reduksjon',
-    },
-    SATS: {
-        id: 'SATS',
-        navn: 'Sats',
-    },
-};
-
-export enum VedtakBegrunnelseType {
-    INNVILGET = 'INNVILGET',
-    REDUKSJON = 'REDUKSJON',
-    SATS = 'SATS',
-}

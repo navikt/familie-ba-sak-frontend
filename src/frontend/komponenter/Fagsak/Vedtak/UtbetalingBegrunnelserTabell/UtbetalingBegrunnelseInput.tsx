@@ -5,22 +5,19 @@ import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
-import {
-    VedtakBegrunnelseType,
-    begrunnelsetyper,
-    behandlingsresultater,
-} from '../../../../typer/behandling';
+import { behandlingsresultater } from '../../../../typer/behandling';
 import {
     VedtakBegrunnelse,
     IRestVedtakBegrunnelse,
-    BegrunnelseType,
+    VedtakBegrunnelseType,
+    begrunnelsetyper,
 } from '../../../../typer/vedtak';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IUtbetalingsBegrunnelseInput {
     vedtakBegrunnelse?: VedtakBegrunnelse;
     id: number;
-    begrunnelseType?: BegrunnelseType;
+    begrunnelseType?: VedtakBegrunnelseType;
     erLesevisning: boolean;
 }
 
@@ -40,16 +37,17 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
     const [mutableVedtakBegrunnelse, settMutableVedBegrunnelse] = React.useState<
         VedtakBegrunnelse | undefined
     >(vedtakBegrunnelse);
-    const [mutableBegrunnelseType, setMutableBegrunnelseType] = React.useState<
-        BegrunnelseType | undefined
+    const [mutableVedtakBegrunnelseType, settMutableVedtakBegrunnelseType] = React.useState<
+        VedtakBegrunnelseType | undefined
     >(begrunnelseType);
 
     const onChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
-        setMutableBegrunnelseType(value as BegrunnelseType);
+        settMutableVedtakBegrunnelseType(value as VedtakBegrunnelseType);
         endreUtbetalingBegrunnelse(id, {
-            vedtakBegrunnelseType: BegrunnelseType.INNVILGELSE, //value !== 'Velg utfallstype' ? (value as BegrunnelseType) : undefined,
-            vedtakBegrunnelse: value !== 'Velg behandlingsresultat' ? vedtakBegrunnelse : undefined,
+            vedtakBegrunnelseType:
+                value !== 'Velg begrunnelsetype' ? (value as VedtakBegrunnelseType) : undefined,
+            vedtakBegrunnelse: value !== 'Velg begrunnelsetype' ? vedtakBegrunnelse : undefined,
         });
     };
 
@@ -78,17 +76,22 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     className="begrunnelse-input__select"
                     erLesevisning={erLesevisning}
                     lesevisningVerdi={
-                        mutableBegrunnelseType
-                            ? behandlingsresultater[mutableBegrunnelseType]?.navn
+                        mutableVedtakBegrunnelseType
+                            ? behandlingsresultater[mutableVedtakBegrunnelseType]?.navn
                             : ''
                     }
                     name="begrunnelse"
                     onChange={onChangeType}
-                    value={mutableBegrunnelseType === null ? undefined : mutableBegrunnelseType}
+                    value={
+                        mutableVedtakBegrunnelseType === null
+                            ? undefined
+                            : mutableVedtakBegrunnelseType
+                    }
                 >
-                    <option>Velg behandlingsresultat</option>
+                    <option>Velg begrunnelsetype</option>
                     {vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
                         Object.keys(vilkårBegrunnelser?.data)
+                            .filter((key: string) => key !== VedtakBegrunnelse.SATSENDRING)
                             .filter((begrunnelsetype: string) => {
                                 return (
                                     vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
@@ -117,11 +120,12 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     erLesevisning={erLesevisning}
                     lesevisningVerdi={
                         mutableVedtakBegrunnelse && begrunnelser
-                            ? begrunnelser[BegrunnelseType.REDUKSJON].find(
-                                  // TODO: bruk valgte state
-                                  (restVedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                                      restVedtakBegrunnelse.id === mutableVedtakBegrunnelse
-                              )?.navn
+                            ? Object.values(begrunnelser)
+                                  .flat()
+                                  .find(
+                                      (restVedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+                                          restVedtakBegrunnelse.id === mutableVedtakBegrunnelse
+                                  )?.navn
                             : ''
                     }
                     name="begrunnelse"
@@ -130,12 +134,9 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                 >
                     <option>Velg begrunnelse</option>
                     {begrunnelser &&
-                        begrunnelser[BegrunnelseType.REDUKSJON] // TODO: Bruk valgte state
-                            .filter(
-                                (restVedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                                    restVedtakBegrunnelse.id !== VedtakBegrunnelse.SATSENDRING
-                            )
-                            .map((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
+                        mutableVedtakBegrunnelseType &&
+                        begrunnelser[mutableVedtakBegrunnelseType].map(
+                            (restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                                 return (
                                     <option
                                         key={restVedtakBegrunnelse.id}
@@ -144,7 +145,8 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                                         {restVedtakBegrunnelse.navn}
                                     </option>
                                 );
-                            })}
+                            }
+                        )}
                 </FamilieSelect>
 
                 <IkonKnapp
