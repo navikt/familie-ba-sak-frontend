@@ -34,7 +34,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
 
-    const [mutableVedtakBegrunnelse, settMutableVedBegrunnelse] = React.useState<
+    const [mutableVedtakBegrunnelse, settMutableVedtakBegrunnelse] = React.useState<
         VedtakBegrunnelse | undefined
     >(vedtakBegrunnelse);
     const [mutableVedtakBegrunnelseType, settMutableVedtakBegrunnelseType] = React.useState<
@@ -53,9 +53,9 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
 
     const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value ? event.target.value : '';
-        settMutableVedBegrunnelse(value as VedtakBegrunnelse);
+        settMutableVedtakBegrunnelse(value as VedtakBegrunnelse);
         endreUtbetalingBegrunnelse(id, {
-            vedtakBegrunnelseType: begrunnelseType,
+            vedtakBegrunnelseType: mutableVedtakBegrunnelseType,
             vedtakBegrunnelse:
                 value !== 'Velg begrunnelse' ? (value as VedtakBegrunnelse) : undefined,
         });
