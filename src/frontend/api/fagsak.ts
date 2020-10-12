@@ -5,13 +5,7 @@ import {
     BehandlingUnderkategori,
     IBehandling,
 } from '../typer/behandling';
-import { IFagsak } from '../typer/fagsak';
 import { IRestPersonResultat } from '../typer/vilkår';
-
-export const aktivBehandling = (fagsak: IFagsak) => fagsak.behandlinger.find(b => b.aktiv);
-
-export const aktivVedtak = (fagsak: IFagsak) =>
-    aktivBehandling(fagsak)?.vedtakForBehandling.find(v => v.aktiv);
 
 export const aktivVedtakPåBehandling = (behandling?: IBehandling) =>
     behandling?.vedtakForBehandling.find(v => v.aktiv);
@@ -22,7 +16,6 @@ export interface IOpprettEllerHentFagsakData {
 }
 
 export interface IOpprettBehandlingData {
-    barnasIdenter: string[];
     behandlingType: Behandlingstype;
     søkersIdent: string;
     kategori: BehandlingKategori;

@@ -4,12 +4,10 @@ import { useHistory } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { BehandlingProvider } from '../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { OpprettBehandlingProvider } from '../../context/OpprettBehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
-import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import Personlinje from './Personlinje/Personlinje';
 
@@ -57,20 +55,6 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             path="/fagsak/:fagsakId/saksoversikt"
                                             render={() => {
                                                 return <Saksoversikt fagsak={fagsak.data} />;
-                                            }}
-                                        />
-                                        <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/ny-behandling"
-                                            render={() => {
-                                                return (
-                                                    <OpprettBehandlingProvider
-                                                        bruker={bruker.data}
-                                                        fagsak={fagsak.data}
-                                                    >
-                                                        <OpprettBehandling fagsak={fagsak.data} />
-                                                    </OpprettBehandlingProvider>
-                                                );
                                             }}
                                         />
                                         <Route
