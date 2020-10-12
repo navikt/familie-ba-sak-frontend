@@ -95,7 +95,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                             );
                         }}
                     >
-                        <option value={''}>Velg</option>
+                        <option value={undefined}>Velg</option>
                         <option
                             aria-selected={
                                 behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
