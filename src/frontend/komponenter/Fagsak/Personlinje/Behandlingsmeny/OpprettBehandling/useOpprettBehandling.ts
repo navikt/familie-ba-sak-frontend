@@ -9,12 +9,18 @@ import {
     BehandlingKategori,
     Behandlingstype,
     BehandlingUnderkategori,
+    BehandlingÅrsak,
 } from '../../../../../typer/behandling';
 import useFagsakApi from '../../../useFagsakApi';
 
 const useOpprettBehandling = (lukkModal: () => void) => {
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
-    const [behandlingstype, settBehandlingstype] = useState<Behandlingstype | undefined>(undefined);
+    const [selectedBehandlingstype, settSelectedBehandlingstype] = useState<Behandlingstype | ''>(
+        ''
+    );
+    const [selectedBehandlingÅrsak, settSelectedBehandlingÅrsak] = useState<BehandlingÅrsak | ''>(
+        ''
+    );
 
     const { opprettBehandling } = useFagsakApi(
         _ => {
@@ -26,19 +32,25 @@ const useOpprettBehandling = (lukkModal: () => void) => {
     );
 
     const fjernState = () => {
-        settBehandlingstype(undefined);
+        settSelectedBehandlingstype('');
+        settSelectedBehandlingÅrsak('');
         settSubmitRessurs(byggTomRessurs());
     };
 
     const onBekreft = (søkersIdent: string) => {
-        if (!behandlingstype) {
+        if (!selectedBehandlingstype) {
             settSubmitRessurs(
                 byggFeiletRessurs('Velg type behandling som skal opprettes fra nedtrekkslisten')
+            );
+        } else if (!selectedBehandlingÅrsak) {
+            settSubmitRessurs(
+                byggFeiletRessurs('Velg årsak for opprettelse av behandlingen fra nedtrekkslisten')
             );
         } else {
             settSubmitRessurs(byggHenterRessurs());
             opprettBehandling({
-                behandlingType: behandlingstype,
+                behandlingType: selectedBehandlingstype,
+                behandlingÅrsak: selectedBehandlingÅrsak,
                 søkersIdent,
                 kategori: BehandlingKategori.NASJONAL,
                 underkategori: BehandlingUnderkategori.ORDINÆR,
@@ -54,10 +66,12 @@ const useOpprettBehandling = (lukkModal: () => void) => {
     return {
         onBekreft,
         fjernState,
-        settBehandlingstype,
-        behandlingstype,
         settSubmitRessurs,
         submitRessurs,
+        settSelectedBehandlingstype,
+        selectedBehandlingstype,
+        selectedBehandlingÅrsak,
+        settSelectedBehandlingÅrsak,
     };
 };
 
