@@ -32,7 +32,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
 
     return (
         <div className={classNames('behandlingskort', behandlingsresultat)}>
-            <Undertittel className={'behandlingskort__tittel'}>{tittel}</Undertittel>
+            <Undertittel>{tittel}</Undertittel>
             <Normaltekst>{behandlingÅrsak[åpenBehandling.årsak]}</Normaltekst>
             <hr />
             <Informasjonsbolk
