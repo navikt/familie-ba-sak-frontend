@@ -3,7 +3,12 @@ import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
-import { BehandlingStatus, Behandlingstype } from '../../../../../typer/behandling';
+import {
+    BehandlingStatus,
+    Behandlingstype,
+    behandlingÅrsak,
+    BehandlingÅrsak,
+} from '../../../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 import useOpprettBehandling from './useOpprettBehandling';
@@ -12,6 +17,14 @@ import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 interface IProps {
     onListElementClick: () => void;
     fagsak: IFagsak;
+}
+
+interface BehandlingstypeSelect extends HTMLSelectElement {
+    value: Behandlingstype | '';
+}
+
+interface BehandlingÅrsakSelect extends HTMLSelectElement {
+    value: BehandlingÅrsak | '';
 }
 
 const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => {
@@ -27,10 +40,12 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
     const {
         fjernState,
         onBekreft,
-        settBehandlingstype,
-        behandlingstype,
+        settSelectedBehandlingstype,
+        selectedBehandlingstype,
         settSubmitRessurs,
         submitRessurs,
+        settSelectedBehandlingÅrsak,
+        selectedBehandlingÅrsak,
     } = useOpprettBehandling(() => settVisModal(false));
 
     const lukkOpprettBehandlingModal = () => {
@@ -56,7 +71,10 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         <Flatknapp
                             key={'avbryt'}
                             mini={true}
-                            onClick={lukkOpprettBehandlingModal}
+                            onClick={() => {
+                                fjernState();
+                                lukkOpprettBehandlingModal();
+                            }}
                             children={'Avbryt'}
                         />,
                         <Knapp
@@ -69,7 +87,10 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                             disabled={submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
-                    onClose: lukkOpprettBehandlingModal,
+                    onClose: () => {
+                        fjernState();
+                        lukkOpprettBehandlingModal();
+                    },
                     lukkKnapp: true,
                     tittel: 'Opprett ny behandling',
                     visModal,
@@ -84,21 +105,20 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                 >
                     <FamilieSelect
                         erLesevisning={false}
-                        value={behandlingstype}
+                        value={selectedBehandlingstype}
                         name={'Behandling'}
-                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                        label={'Velg type behandling'}
+                        onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
                             settSubmitRessurs(byggTomRessurs());
-                            settBehandlingstype(
-                                event.target.value
-                                    ? (event.target.value as Behandlingstype)
-                                    : undefined
-                            );
+                            settSelectedBehandlingstype(event.target.value);
                         }}
                     >
-                        <option value={undefined}>Velg</option>
+                        <option disabled={true} value={''}>
+                            Velg
+                        </option>
                         <option
                             aria-selected={
-                                behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
+                                selectedBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
                             }
                             disabled={!førstegangsbehandlingEnabled}
                             value={Behandlingstype.FØRSTEGANGSBEHANDLING}
@@ -106,12 +126,38 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                             Førstegangsbehandling
                         </option>
                         <option
-                            aria-selected={behandlingstype === Behandlingstype.REVURDERING}
+                            aria-selected={selectedBehandlingstype === Behandlingstype.REVURDERING}
                             disabled={!revurderingEnabled}
                             value={Behandlingstype.REVURDERING}
                         >
                             Revurdering
                         </option>
+                    </FamilieSelect>
+
+                    <FamilieSelect
+                        erLesevisning={false}
+                        value={selectedBehandlingÅrsak}
+                        name={'Behandlingsårsak'}
+                        label={'Velg årsak'}
+                        onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
+                            settSubmitRessurs(byggTomRessurs());
+                            settSelectedBehandlingÅrsak(event.target.value);
+                        }}
+                    >
+                        <option disabled={true} value={''}>
+                            Velg
+                        </option>
+                        {Object.values(BehandlingÅrsak).map(årsak => {
+                            return (
+                                <option
+                                    key={årsak}
+                                    aria-selected={selectedBehandlingÅrsak === årsak}
+                                    value={årsak}
+                                >
+                                    {behandlingÅrsak[årsak]}
+                                </option>
+                            );
+                        })}
                     </FamilieSelect>
                 </SkjemaGruppe>
             </UIModalWrapper>
