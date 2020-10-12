@@ -14,6 +14,7 @@ import {
     BehandlingKategori,
     Behandlingstype,
     BehandlingUnderkategori,
+    BehandlingÅrsak,
 } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import {
@@ -89,7 +90,7 @@ const ManuellJournalføringContent: React.FC = () => {
                     søkersIdent: søker,
                     kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
                     underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
-                    barnasIdenter: [],
+                    behandlingÅrsak: BehandlingÅrsak.SØKNAD,
                 }).then((response: Ressurs<IFagsak>) => response);
 
                 if (

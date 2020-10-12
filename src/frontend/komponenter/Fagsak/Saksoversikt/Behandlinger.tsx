@@ -10,7 +10,7 @@ import {
     kategorier,
     underkategorier,
     BehandlingStatus,
-    behandlingOpprinnelse,
+    behandlingÅrsak,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
@@ -57,9 +57,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                 datoformat.DATO
                                             )}`}
                                         />
-                                        <td>
-                                            {behandlingOpprinnelse[behandling.opprinnelse].navn}
-                                        </td>
+                                        <td>{behandlingÅrsak[behandling.årsak]}</td>
                                         <td>
                                             {behandling.status !== BehandlingStatus.AVSLUTTET ? (
                                                 <Lenke

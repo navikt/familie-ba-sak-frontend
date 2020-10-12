@@ -10,6 +10,7 @@ import {
 } from '../../../typer/behandling';
 import Panel from 'nav-frontend-paneler';
 import classNames from 'classnames';
+import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 
 interface IBehandlingLenkepanel {
     fagsak: IFagsak;
@@ -64,9 +65,7 @@ const genererHoverTekst = (behandling: IBehandling) => {
 };
 
 const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ fagsak }) => {
-    const aktivBehandling: IBehandling | undefined = fagsak.behandlinger.find(
-        behandling => behandling.aktiv
-    );
+    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(fagsak);
 
     return aktivBehandling ? (
         <LenkepanelBase
