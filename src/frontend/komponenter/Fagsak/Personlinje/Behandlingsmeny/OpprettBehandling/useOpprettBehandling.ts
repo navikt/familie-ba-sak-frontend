@@ -21,6 +21,10 @@ const useOpprettBehandling = (lukkModal: () => void) => {
     const [selectedBehandlingÅrsak, settSelectedBehandlingÅrsak] = useState<BehandlingÅrsak | ''>(
         ''
     );
+    const [valideringsFeil, settValideringsfeil] = useState({
+        behandlingstype: '',
+        behandlingÅrsak: '',
+    });
 
     const { opprettBehandling } = useFagsakApi(
         _ => {
@@ -35,17 +39,22 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         settSelectedBehandlingstype('');
         settSelectedBehandlingÅrsak('');
         settSubmitRessurs(byggTomRessurs());
+        settValideringsfeil({
+            behandlingÅrsak: '',
+            behandlingstype: '',
+        });
     };
 
     const onBekreft = (søkersIdent: string) => {
-        if (!selectedBehandlingstype) {
-            settSubmitRessurs(
-                byggFeiletRessurs('Velg type behandling som skal opprettes fra nedtrekkslisten')
-            );
-        } else if (!selectedBehandlingÅrsak) {
-            settSubmitRessurs(
-                byggFeiletRessurs('Velg årsak for opprettelse av behandlingen fra nedtrekkslisten')
-            );
+        if (!selectedBehandlingstype || !selectedBehandlingÅrsak) {
+            settValideringsfeil({
+                behandlingÅrsak: !selectedBehandlingÅrsak
+                    ? 'Velg type behandling som skal opprettes fra nedtrekkslisten'
+                    : '',
+                behandlingstype: !selectedBehandlingstype
+                    ? 'Velg årsak for opprettelse av behandlingen fra nedtrekkslisten'
+                    : '',
+            });
         } else {
             settSubmitRessurs(byggHenterRessurs());
             opprettBehandling({
@@ -72,6 +81,8 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         selectedBehandlingstype,
         selectedBehandlingÅrsak,
         settSelectedBehandlingÅrsak,
+        valideringsFeil,
+        settValideringsfeil,
     };
 };
 
