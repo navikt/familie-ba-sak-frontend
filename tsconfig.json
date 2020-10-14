@@ -4,7 +4,8 @@
         "outDir": "node_dist",
         "baseUrl": "./src",
         "rootDir": "./src",
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "types": ["express-session"]
     },
     "include": ["./src/backend", "./src/mock-server", "./src/mock-server/**/*.json"],
     "exclude": ["./src/frontend"],
