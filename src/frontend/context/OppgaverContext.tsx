@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
@@ -14,17 +14,17 @@ import {
 } from '../typer/oppgave';
 import {
     byggFeiletRessurs,
+    byggHenterRessurs,
     byggTomRessurs,
     Ressurs,
     RessursStatus,
-    byggHenterRessurs,
 } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
 import {
-    IOppgaveFelter,
+    FeltSortOrder,
     initialOppgaveFelter,
     IOppgaveFelt,
-    FeltSortOrder,
+    IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
 
 export const oppgaveSideLimit = 15;

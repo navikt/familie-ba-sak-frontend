@@ -1,10 +1,12 @@
 import React from 'react';
 import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
+import { useApp } from '../../context/AppContext';
 import { ISaksbehandler } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
@@ -18,6 +20,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
     const [feilmelding, setFeilmelding] = React.useState<string>();
     const [erTilbakestilt, setErTilbakestilt] = React.useState<boolean>(false);
+    const { sjekkTilgang } = useApp();
 
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
@@ -67,14 +70,18 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
             {oppgaveTypeErStøttet && (
                 <button
                     key={'plukk'}
-                    onClick={() => {
-                        fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                            (oppgaveResponse: Ressurs<string>) => {
-                                if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                    setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                    onClick={async () => {
+                        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
+
+                        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
+                            fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
+                                (oppgaveResponse: Ressurs<string>) => {
+                                    if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                        setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                                    }
                                 }
-                            }
-                        );
+                            );
+                        }
                     }}
                     children={'Plukk'}
                 />

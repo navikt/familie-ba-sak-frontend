@@ -3,12 +3,14 @@ import { Input } from 'nav-frontend-skjema';
 import { Feilmelding, Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import useFagsakApi from '../Fagsak/useFagsakApi';
+import { useApp } from '../../context/AppContext';
 import FilterSkjema from './FilterSkjema';
 
 const OppgaveHeader: React.FunctionComponent = () => {
     const [personIdent, settPersonIdent] = React.useState('');
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+    const { sjekkTilgang } = useApp();
 
     const { opprettEllerHentFagsak, senderInn } = useFagsakApi(
         settVisFeilmeldinger,
@@ -34,11 +36,13 @@ const OppgaveHeader: React.FunctionComponent = () => {
                 />
                 <Knapp
                     type={'hoved'}
-                    onClick={() => {
-                        opprettEllerHentFagsak({
-                            personIdent,
-                            aktørId: null,
-                        });
+                    onClick={async () => {
+                        if (await sjekkTilgang(personIdent)) {
+                            opprettEllerHentFagsak({
+                                personIdent,
+                                aktørId: null,
+                            });
+                        }
                     }}
                     children={'Fortsett'}
                     spinner={senderInn}
