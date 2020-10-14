@@ -49,6 +49,10 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         Adressebeskyttelsegradering
     >(Adressebeskyttelsegradering.UGRADERT);
 
+    const [modalSpinnerBeskrivelse, settModalSpinnerBeskrivelse] = React.useState<{
+        beskrivelse: string;
+    }>({ beskrivelse: '' });
+
     const verifiserVersjon = () => {
         axiosRequest<string, void>({
             url: '/version',
@@ -125,6 +129,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
             data: { brukerIdent },
+            modalSpinnerData: { beskrivelse: 'Sjekker tilgang...' },
         }).then((res: Ressurs<IRestTilgang>) => {
             if (res.status === RessursStatus.SUKSESS) {
                 settVisTilgangModal(!res.data.saksbehandlerHarTilgang);
@@ -137,17 +142,18 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     };
 
     const axiosRequest = async <T, D>(
-        config: AxiosRequestConfig & { data?: D; påvirkerSystemLaster?: boolean }
+        config: AxiosRequestConfig & { data?: D; modalSpinnerData?: { beskrivelse: string } }
     ): Promise<Ressurs<T>> => {
         const ressursId = `${config.method}_${config.url}`;
-        config.påvirkerSystemLaster && settRessurserSomLaster([...ressurserSomLaster, ressursId]);
+        config.modalSpinnerData && settModalSpinnerBeskrivelse(config.modalSpinnerData);
+        config.modalSpinnerData && settRessurserSomLaster([...ressurserSomLaster, ressursId]);
 
         return preferredAxios
             .request(config)
             .then((response: AxiosResponse<ApiRessurs<T>>) => {
                 const responsRessurs: ApiRessurs<T> = response.data;
 
-                config.påvirkerSystemLaster && fjernRessursSomLaster(ressursId);
+                config.modalSpinnerData && fjernRessursSomLaster(ressursId);
                 return håndterApiRessurs(responsRessurs, innloggetSaksbehandler);
             })
             .catch((error: AxiosError) => {
@@ -156,7 +162,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
                 }
                 loggFeil(error, innloggetSaksbehandler);
 
-                config.påvirkerSystemLaster && fjernRessursSomLaster(ressursId);
+                config.modalSpinnerData && fjernRessursSomLaster(ressursId);
 
                 const responsRessurs: ApiRessurs<T> = error.response?.data;
                 return håndterApiRessurs(responsRessurs, innloggetSaksbehandler);
@@ -205,6 +211,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         adressebeskyttelsegradering,
         settAdressebeskyttelsegradering,
         sjekkTilgang,
+        modalSpinnerBeskrivelse,
     };
 });
 

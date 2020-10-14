@@ -8,7 +8,7 @@ import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring';
 import classNames from 'classnames';
-import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
+import BackendRequestModalSpinner from './Felleskomponenter/BackendRequestModalSpinner/BackendRequestModalSpinner';
 import FagsakContainer from './Fagsak/FagsakContainer';
 import TilgangModal from './Felleskomponenter/TilgangModal/TilgangModal';
 
@@ -21,7 +21,7 @@ const Container: React.FC = () => {
             <TilgangModal />
             {autentisert ? (
                 <>
-                    {systemetLaster() && <SystemetLaster />}
+                    {systemetLaster() && <BackendRequestModalSpinner />}
                     <main className={classNames('container', systemetLaster() && 'blur')}>
                         <HeaderMedSøk
                             brukerNavn={innloggetSaksbehandler?.displayName}

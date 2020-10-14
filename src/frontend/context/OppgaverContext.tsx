@@ -258,6 +258,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         return axiosRequest<string, void>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
+            modalSpinnerData: { beskrivelse: 'Fordeler oppgave...' },
         })
             .then((oppgaverRes: Ressurs<string>) => {
                 if (

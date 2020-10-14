@@ -89,7 +89,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         axiosRequest<IDataForManuellJournalføring, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
-            påvirkerSystemLaster: true,
+            modalSpinnerData: { beskrivelse: 'Henter oppgave...' },
         })
             .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
                 settDataForManuellJournalføring(hentetDataForManuellJournalføring);

@@ -1,4 +1,4 @@
-.systemet-laster {
+.modal-spinner {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -7,14 +7,24 @@
     &__content {
         left: calc(50% - 7.5rem);
         position: absolute;
-        top: 20%;
+        top: 30%;
         width: 15rem;
         text-align: center;
+        color: @navBla;
 
         &--spinner {
-            margin-top: 3rem;
+            margin-bottom: 2rem;
             height: 10rem;
             width: 10rem;
+
+                circle:nth-child(2) {
+                    stroke: #b0d3e7;
+                }
+
+                circle:nth-child(3) {
+                    stroke: @navBla;
+                }
+            
         }
     }
 }

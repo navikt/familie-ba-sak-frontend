@@ -80,7 +80,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             axiosRequest<ISøknadDTO, void>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/søknad`,
-                påvirkerSystemLaster: true,
+                modalSpinnerData: { beskrivelse: 'Hent søknad...' },
             }).then((response: Ressurs<ISøknadDTO>) => {
                 if (response.status === RessursStatus.SUKSESS) {
                     settSøknadErLastetFraBackend(true);
