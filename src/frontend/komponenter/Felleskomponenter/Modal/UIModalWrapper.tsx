@@ -14,7 +14,6 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
         ? modal
         : useAppModal;
 
-    console.log(innhold);
     return (
         <Modal
             appElement={document.body}
