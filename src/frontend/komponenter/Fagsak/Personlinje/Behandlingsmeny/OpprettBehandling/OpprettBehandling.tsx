@@ -46,6 +46,8 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
         submitRessurs,
         settSelectedBehandlingÅrsak,
         selectedBehandlingÅrsak,
+        valideringsFeil,
+        settValideringsfeil,
     } = useOpprettBehandling(() => settVisModal(false));
 
     const lukkOpprettBehandlingModal = () => {
@@ -104,12 +106,19 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     }
                 >
                     <FamilieSelect
+                        feil={valideringsFeil.behandlingstype}
                         erLesevisning={false}
                         value={selectedBehandlingstype}
                         name={'Behandling'}
                         label={'Velg type behandling'}
                         onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
                             settSubmitRessurs(byggTomRessurs());
+                            settValideringsfeil(valideringsFeil => {
+                                return {
+                                    ...valideringsFeil,
+                                    behandlingstype: '',
+                                };
+                            });
                             settSelectedBehandlingstype(event.target.value);
                         }}
                     >
@@ -135,12 +144,19 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     </FamilieSelect>
 
                     <FamilieSelect
+                        feil={valideringsFeil.behandlingÅrsak}
                         erLesevisning={false}
                         value={selectedBehandlingÅrsak}
                         name={'Behandlingsårsak'}
                         label={'Velg årsak'}
                         onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
                             settSubmitRessurs(byggTomRessurs());
+                            settValideringsfeil(valideringsFeil => {
+                                return {
+                                    ...valideringsFeil,
+                                    behandlingÅrsak: '',
+                                };
+                            });
                             settSelectedBehandlingÅrsak(event.target.value);
                         }}
                     >
