@@ -43,7 +43,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 headers: {
                     personIdent: fagsakRessurser.fagsak.data.søkerFødselsnummer,
                 },
-                modalSpinnerData: { beskrivelse: 'Henter fagsak...' },
+                påvirkerSystemLaster: true,
             }).then((hentetPerson: Ressurs<IPerson>) => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
@@ -63,7 +63,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         axiosRequest<IFagsak, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/${fagsakId}`,
-            modalSpinnerData: { beskrivelse: 'Henter fagsak...' },
+            påvirkerSystemLaster: true,
         })
             .then((hentetFagsak: Ressurs<IFagsak>) => {
                 settFagsakRessurser({
