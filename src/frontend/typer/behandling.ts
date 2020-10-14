@@ -150,6 +150,10 @@ export const behandlingstyper: INøkkelPar = {
         id: 'MIGRERING_FRA_INFOTRYGD',
         navn: 'Migrering fra infotrygd',
     },
+    MIGRERING_FRA_INFOTRYGD_OPPHØRT: {
+        id: 'MIGRERING_FRA_INFOTRYGD',
+        navn: 'Opphør migrering fra infotrygd',
+    },
     REVURDERING: {
         id: 'REVURDERING',
         navn: 'Revurdering',
@@ -157,6 +161,10 @@ export const behandlingstyper: INøkkelPar = {
     TEKNISK_OPPHØR: {
         id: 'TEKNISK_OPPHØR',
         navn: 'Teknisk opphør',
+    },
+    KLAGE: {
+        id: 'KLAGE',
+        navn: 'Klage',
     },
 };
 

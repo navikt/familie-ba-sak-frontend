@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
 import Pluss from '../../../ikoner/Pluss';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
-import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
 import { Valideringsstatus } from '../../../typer/felt';
@@ -21,13 +21,12 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
 
     const [visModal, settVisModal] = useState<boolean>(false);
     const [inputValue, settInputValue] = useState<string>('');
-    const [feilmelding, settFeilmelding] = useState<string | undefined>();
 
     const [person, settPerson] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
 
     const onAvbryt = () => {
         settVisModal(false);
-        settFeilmelding(undefined);
+        settPerson(byggTomRessurs());
         settInputValue('');
     };
 
@@ -69,26 +68,26 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                                 });
 
                                 settVisModal(false);
-                            } else if (hentetPerson.status === RessursStatus.FEILET) {
-                                settFeilmelding(hentetPerson.frontendFeilmelding);
                             }
                         });
                     } else {
-                        settFeilmelding(
-                            `Barnet kan ikke legges til på grunn av diskresjonskode ${
-                                adressebeskyttelsestyper[
-                                    ressurs.data.adressebeskyttelsegradering
-                                ] ?? 'ukjent'
-                            }`
+                        settPerson(
+                            byggFeiletRessurs(
+                                `Barnet kan ikke legges til på grunn av diskresjonskode ${
+                                    adressebeskyttelsestyper[
+                                        ressurs.data.adressebeskyttelsegradering
+                                    ] ?? 'ukjent'
+                                }`
+                            )
                         );
                     }
                 } else if (ressurs.status === RessursStatus.FEILET) {
-                    settFeilmelding(ressurs.frontendFeilmelding);
+                    settPerson(ressurs);
                 }
             });
         } else {
             ident.valideringsstatus === Valideringsstatus.FEIL &&
-                settFeilmelding(ident.feilmelding);
+                settPerson(byggFeiletRessurs(ident.feilmelding));
         }
     };
 
@@ -126,10 +125,14 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                     label={'Fødselsnummer'}
                     placeholder={'11 siffer'}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        settFeilmelding(undefined);
+                        settPerson(byggTomRessurs());
                         settInputValue(event.target.value);
                     }}
-                    feil={feilmelding}
+                    feil={
+                        person.status === RessursStatus.FEILET
+                            ? person.frontendFeilmelding
+                            : undefined
+                    }
                 />
             </UIModalWrapper>
         </>

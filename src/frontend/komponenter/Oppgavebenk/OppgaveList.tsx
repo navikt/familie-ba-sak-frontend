@@ -3,18 +3,18 @@ import Lenke from 'nav-frontend-lenker';
 import { Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { useHistory } from 'react-router';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
     enhetFilter,
     gjelderFilter,
-    IdentGruppe,
     IOppgave,
-    IOppgaveIdent,
     OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
 } from '../../typer/oppgave';
 import { RessursStatus } from '@navikt/familie-typer';
+import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
@@ -26,7 +26,8 @@ const intDatoTilNorskDato = (intDato: string) => {
 
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide } = useOppgaver();
-    const { innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler, sjekkTilgang } = useApp();
+    const history = useHistory();
 
     const onColumnSort = (felt: IOppgaveFelt) => {
         sortOppgave(felt.nøkkel, felt.order !== FeltSortOrder.ASCENDANT);
@@ -39,6 +40,14 @@ const OppgaveList: React.FunctionComponent = () => {
 
     const sortertClassName = (felt: IOppgaveFelt) =>
         felt.order !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
+
+    const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
+        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
+
+        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
+            history.push(`/oppgaver/journalfør/${oppgave.id}`);
+        }
+    };
 
     return (
         <div className={'oppgavelist'}>
@@ -128,13 +137,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                         </td>
                                         <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
                                         <td>
-                                            {oppg.identer
-                                                ? oppg.identer.find(
-                                                      (ident: IOppgaveIdent) =>
-                                                          ident.gruppe ===
-                                                          IdentGruppe.FOLKEREGISTERIDENT
-                                                  )?.ident
-                                                : 'Ukjent'}
+                                            {hentFnrFraOppgaveIdenter(oppg.identer) || 'Ukjent'}
                                         </td>
                                         <td
                                             className={classNames(
@@ -161,9 +164,13 @@ const OppgaveList: React.FunctionComponent = () => {
                                             {oppg.oppgavetype
                                                 ? oppgaveTypeFilter[oppg.oppgavetype].id ===
                                                       OppgavetypeFilter.JFR && (
-                                                      <a href={`/oppgaver/journalfør/${oppg.id}`}>
-                                                          Gå til oppg
-                                                      </a>
+                                                      <button
+                                                          key={'tiloppg'}
+                                                          onClick={() => {
+                                                              visTilgangsmodalEllerSendVidere(oppg);
+                                                          }}
+                                                          children={'Gå til oppg'}
+                                                      />
                                                   )
                                                 : 'Ukjent'}
                                         </td>

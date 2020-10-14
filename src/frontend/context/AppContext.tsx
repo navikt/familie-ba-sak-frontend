@@ -10,6 +10,8 @@ import { gruppeIdTilRolle } from '../utils/behandling';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
+import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
+import IkkeTilgang from '../ikoner/IkkeTilgang';
 
 const FEM_MINUTTER = 300000;
 
@@ -114,6 +116,43 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         settModal(initalState);
     };
 
+    const sjekkTilgang = async (brukerIdent: string): Promise<boolean> => {
+        return axiosRequest<IRestTilgang, { brukerIdent: string }>({
+            method: 'POST',
+            url: '/familie-ba-sak/api/tilgang',
+            data: { brukerIdent },
+            påvirkerSystemLaster: true,
+        }).then((ressurs: Ressurs<IRestTilgang>) => {
+            if (ressurs.status === RessursStatus.SUKSESS) {
+                settModal({
+                    tittel: 'Diskresjonskode',
+                    lukkKnapp: true,
+                    visModal: !ressurs.data.saksbehandlerHarTilgang,
+                    onClose: () => lukkModal(),
+                    innhold: () => {
+                        return (
+                            <Normaltekst>
+                                <IkkeTilgang
+                                    heigth={20}
+                                    className={'tilgangmodal-ikke-oppfylt-ikon'}
+                                    width={20}
+                                />
+                                {`Bruker har diskresjonskode ${
+                                    adressebeskyttelsestyper[
+                                        ressurs.data.adressebeskyttelsegradering
+                                    ]
+                                }`}
+                            </Normaltekst>
+                        );
+                    },
+                });
+                return ressurs.data.saksbehandlerHarTilgang;
+            } else {
+                return false;
+            }
+        });
+    };
+
     const axiosRequest = async <T, D>(
         config: AxiosRequestConfig & { data?: D; påvirkerSystemLaster?: boolean }
     ): Promise<Ressurs<T>> => {
@@ -178,6 +217,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         settModal,
         systemetLaster,
         åpneModal,
+        sjekkTilgang,
     };
 });
 

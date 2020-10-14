@@ -57,9 +57,11 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                         (familierelasjonMaskert: IFamilierelasjonMaskert) =>
                             familierelasjonMaskert.relasjonRolle === FamilieRelasjonRolle.BARN
                     )
-                    .map((familierelasjonMaskert: IFamilierelasjonMaskert) => {
+                    .map((familierelasjonMaskert: IFamilierelasjonMaskert, index: number) => {
                         return (
-                            <StyledBarnMedDiskresjonskode>
+                            <StyledBarnMedDiskresjonskode
+                                key={`${index}_${familierelasjonMaskert.relasjonRolle}`}
+                            >
                                 <RødError heigth={24} width={24} />
                                 {`Bruker har barn med diskresjonskode ${
                                     adressebeskyttelsestyper[
