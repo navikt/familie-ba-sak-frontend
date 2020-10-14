@@ -125,6 +125,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
             data: { brukerIdent },
+            påvirkerSystemLaster: true,
         }).then((res: Ressurs<IRestTilgang>) => {
             if (res.status === RessursStatus.SUKSESS) {
                 settVisTilgangModal(!res.data.saksbehandlerHarTilgang);
