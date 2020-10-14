@@ -3,6 +3,7 @@ import {
     BehandlingKategori,
     Behandlingstype,
     BehandlingUnderkategori,
+    BehandlingÅrsak,
     IBehandling,
 } from '../typer/behandling';
 import { IRestPersonResultat } from '../typer/vilkår';
@@ -20,6 +21,7 @@ export interface IOpprettBehandlingData {
     søkersIdent: string;
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
+    behandlingÅrsak: BehandlingÅrsak;
 }
 
 export interface IRestVilkårsvurdering {

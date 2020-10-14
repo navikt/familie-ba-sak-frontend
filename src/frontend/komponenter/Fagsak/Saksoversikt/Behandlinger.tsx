@@ -32,7 +32,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                     <thead>
                         <tr>
                             <th children={'Opprettet'} />
-                            <th children={'Årsak/hendelse'} />
+                            <th children={'Årsak'} />
                             <th children={'Type'} />
                             <th children={'Fagsaktype'} />
                             <th children={'Gjelder'} />

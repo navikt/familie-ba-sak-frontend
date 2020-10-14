@@ -9,12 +9,22 @@ import {
     BehandlingKategori,
     Behandlingstype,
     BehandlingUnderkategori,
+    BehandlingÅrsak,
 } from '../../../../../typer/behandling';
 import useFagsakApi from '../../../useFagsakApi';
 
 const useOpprettBehandling = (lukkModal: () => void) => {
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
-    const [behandlingstype, settBehandlingstype] = useState<Behandlingstype | undefined>(undefined);
+    const [selectedBehandlingstype, settSelectedBehandlingstype] = useState<Behandlingstype | ''>(
+        ''
+    );
+    const [selectedBehandlingÅrsak, settSelectedBehandlingÅrsak] = useState<BehandlingÅrsak | ''>(
+        ''
+    );
+    const [valideringsFeil, settValideringsfeil] = useState({
+        behandlingstype: '',
+        behandlingÅrsak: '',
+    });
 
     const { opprettBehandling } = useFagsakApi(
         _ => {
@@ -26,19 +36,30 @@ const useOpprettBehandling = (lukkModal: () => void) => {
     );
 
     const fjernState = () => {
-        settBehandlingstype(undefined);
+        settSelectedBehandlingstype('');
+        settSelectedBehandlingÅrsak('');
         settSubmitRessurs(byggTomRessurs());
+        settValideringsfeil({
+            behandlingÅrsak: '',
+            behandlingstype: '',
+        });
     };
 
     const onBekreft = (søkersIdent: string) => {
-        if (!behandlingstype) {
-            settSubmitRessurs(
-                byggFeiletRessurs('Velg type behandling som skal opprettes fra nedtrekkslisten')
-            );
+        if (!selectedBehandlingstype || !selectedBehandlingÅrsak) {
+            settValideringsfeil({
+                behandlingÅrsak: !selectedBehandlingÅrsak
+                    ? 'Velg type behandling som skal opprettes fra nedtrekkslisten'
+                    : '',
+                behandlingstype: !selectedBehandlingstype
+                    ? 'Velg årsak for opprettelse av behandlingen fra nedtrekkslisten'
+                    : '',
+            });
         } else {
             settSubmitRessurs(byggHenterRessurs());
             opprettBehandling({
-                behandlingType: behandlingstype,
+                behandlingType: selectedBehandlingstype,
+                behandlingÅrsak: selectedBehandlingÅrsak,
                 søkersIdent,
                 kategori: BehandlingKategori.NASJONAL,
                 underkategori: BehandlingUnderkategori.ORDINÆR,
@@ -54,10 +75,14 @@ const useOpprettBehandling = (lukkModal: () => void) => {
     return {
         onBekreft,
         fjernState,
-        settBehandlingstype,
-        behandlingstype,
         settSubmitRessurs,
         submitRessurs,
+        settSelectedBehandlingstype,
+        selectedBehandlingstype,
+        selectedBehandlingÅrsak,
+        settSelectedBehandlingÅrsak,
+        valideringsFeil,
+        settValideringsfeil,
     };
 };
 
