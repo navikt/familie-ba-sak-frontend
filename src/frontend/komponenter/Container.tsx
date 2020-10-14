@@ -10,7 +10,6 @@ import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring
 import classNames from 'classnames';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import FagsakContainer from './Fagsak/FagsakContainer';
-import TilgangModal from './Felleskomponenter/TilgangModal/TilgangModal';
 
 const Container: React.FC = () => {
     const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
@@ -18,7 +17,6 @@ const Container: React.FC = () => {
     return (
         <Router>
             <UIModalWrapper />
-            <TilgangModal />
             {autentisert ? (
                 <>
                     {systemetLaster() && <SystemetLaster />}

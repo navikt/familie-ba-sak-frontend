@@ -10,7 +10,8 @@ import { gruppeIdTilRolle } from '../utils/behandling';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
-import { Adressebeskyttelsegradering, IRestTilgang } from '../typer/common';
+import { adressebeskyttelsestyper, IRestTilgang } from '../typer/common';
+import IkkeTilgang from '../ikoner/IkkeTilgang';
 
 const FEM_MINUTTER = 300000;
 
@@ -43,11 +44,6 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         autentisertSaksbehandler
     );
     const [modal, settModal] = React.useState<IModal>(initalState);
-
-    const [visTilgangModal, settVisTilgangModal] = React.useState<boolean>(false);
-    const [adressebeskyttelsegradering, settAdressebeskyttelsegradering] = React.useState<
-        Adressebeskyttelsegradering
-    >(Adressebeskyttelsegradering.UGRADERT);
 
     const verifiserVersjon = () => {
         axiosRequest<string, void>({
@@ -126,11 +122,31 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             url: '/familie-ba-sak/api/tilgang',
             data: { brukerIdent },
             påvirkerSystemLaster: true,
-        }).then((res: Ressurs<IRestTilgang>) => {
-            if (res.status === RessursStatus.SUKSESS) {
-                settVisTilgangModal(!res.data.saksbehandlerHarTilgang);
-                settAdressebeskyttelsegradering(res.data.adressebeskyttelsegradering);
-                return res.data.saksbehandlerHarTilgang;
+        }).then((ressurs: Ressurs<IRestTilgang>) => {
+            if (ressurs.status === RessursStatus.SUKSESS) {
+                settModal({
+                    tittel: 'Diskresjonskode',
+                    lukkKnapp: true,
+                    visModal: !ressurs.data.saksbehandlerHarTilgang,
+                    onClose: () => lukkModal(),
+                    innhold: () => {
+                        return (
+                            <Normaltekst>
+                                <IkkeTilgang
+                                    heigth={20}
+                                    className={'tilgangmodal-ikke-oppfylt-ikon'}
+                                    width={20}
+                                />
+                                {`Bruker har diskresjonskode ${
+                                    adressebeskyttelsestyper[
+                                        ressurs.data.adressebeskyttelsegradering
+                                    ]
+                                }`}
+                            </Normaltekst>
+                        );
+                    },
+                });
+                return ressurs.data.saksbehandlerHarTilgang;
             } else {
                 return false;
             }
@@ -201,10 +217,6 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         settModal,
         systemetLaster,
         åpneModal,
-        visTilgangModal,
-        settVisTilgangModal,
-        adressebeskyttelsegradering,
-        settAdressebeskyttelsegradering,
         sjekkTilgang,
     };
 });

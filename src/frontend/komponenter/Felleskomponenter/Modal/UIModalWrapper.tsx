@@ -14,6 +14,7 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
         ? modal
         : useAppModal;
 
+    console.log(innhold);
     return (
         <Modal
             appElement={document.body}
@@ -26,7 +27,7 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
             <div className="uimodal__content">
                 <Undertittel children={tittel} />
                 <div className="uimodal__content--inner-content">
-                    {innhold ? innhold : children}
+                    {innhold ? innhold() : children}
                 </div>
                 {actions && <div className="uimodal__content--actions"> {actions} </div>}
             </div>
