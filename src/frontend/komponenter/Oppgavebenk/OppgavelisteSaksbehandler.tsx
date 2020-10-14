@@ -7,7 +7,6 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import { loggFeil } from '../../api/axios';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
@@ -72,13 +71,9 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                 <button
                     key={'plukk'}
                     onClick={async () => {
-                        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
+                        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
 
-                        if (brukerIdent === undefined) {
-                            loggFeil(undefined, undefined, 'Oppgaven har ingen identer');
-                            throw new Error('Oppgaven har ingen identer');
-                        }
-                        if (await sjekkTilgang(brukerIdent)) {
+                        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
                             fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
                                 (oppgaveResponse: Ressurs<string>) => {
                                     if (oppgaveResponse.status === RessursStatus.FEILET) {

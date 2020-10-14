@@ -19,7 +19,6 @@ import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import classNames from 'classnames';
-import { loggFeil } from '../../api/axios';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -43,14 +42,9 @@ const OppgaveList: React.FunctionComponent = () => {
         felt.order !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
 
     const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
-        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
+        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
 
-        if (brukerIdent === undefined) {
-            loggFeil(undefined, undefined, 'Oppgaven har ingen identer');
-            throw new Error('Oppgaven har ingen identer');
-        }
-
-        if (await sjekkTilgang(brukerIdent)) {
+        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
             history.push(`/oppgaver/journalfør/${oppgave.id}`);
         }
     };
