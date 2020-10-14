@@ -4,7 +4,7 @@ import moment from 'moment';
 import { IPersonBeregning, IYtelsePeriode } from '../typer/beregning';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
-import { IPerson } from '../typer/person';
+import { IGrunnlagPerson } from '../typer/person';
 
 export interface ITidslinjeVindu {
     id: number;
@@ -93,19 +93,19 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     };
 
     const mapPersonberegningerTilPersoner = (
-        personer: IPerson[],
+        personer: IGrunnlagPerson[],
         personberegninger?: IPersonBeregning[]
-    ): IPerson[] => {
+    ): IGrunnlagPerson[] => {
         if (!personberegninger) {
             return [];
         }
         return personberegninger
             .map((personBeregning: IPersonBeregning) => {
                 return personer.find(
-                    (person: IPerson) => person.personIdent === personBeregning.personIdent
+                    (person: IGrunnlagPerson) => person.personIdent === personBeregning.personIdent
                 );
             })
-            .reduce((acc: IPerson[], person) => {
+            .reduce((acc: IGrunnlagPerson[], person) => {
                 if (person) {
                     return [...acc, person];
                 }
@@ -114,14 +114,14 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
     };
 
     const mapPersonerTilPersonberegninger = (
-        personer: IPerson[],
+        personer: IGrunnlagPerson[],
         personberegninger?: IPersonBeregning[]
     ): IPersonBeregning[] => {
         if (!personberegninger) {
             return [];
         }
         return personer
-            .map((person: IPerson) => {
+            .map((person: IGrunnlagPerson) => {
                 return personberegninger.find(
                     (personberegning: IPersonBeregning) =>
                         person.personIdent === personberegning.personIdent

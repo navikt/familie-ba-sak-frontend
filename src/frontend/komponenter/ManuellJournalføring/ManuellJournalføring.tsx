@@ -24,7 +24,7 @@ import {
     ILogiskVedlegg,
     Journalstatus,
 } from '../../typer/manuell-journalføring';
-import { IPerson } from '../../typer/person';
+import { IPersonInfo } from '../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { randomUUID } from '../../utils/commons';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
@@ -140,7 +140,7 @@ const ManuellJournalføringContent: React.FC = () => {
                     <Undertittel children={'Bruker'} />
                     <HentPerson
                         person={person}
-                        settPerson={(hentetPerson: Ressurs<IPerson>) => {
+                        settPerson={(hentetPerson: Ressurs<IPersonInfo>) => {
                             settPerson(hentetPerson);
                             validerSkjema();
                         }}

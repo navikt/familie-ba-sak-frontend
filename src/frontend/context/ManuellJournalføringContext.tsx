@@ -11,7 +11,7 @@ import {
     ILogiskVedlegg,
     IRestOppdaterJournalpost,
 } from '../typer/manuell-journalføring';
-import { IPerson } from '../typer/person';
+import { IPersonInfo } from '../typer/person';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -33,7 +33,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
-    const [person, settPerson] = useState<Ressurs<IPerson>>(byggTomRessurs());
+    const [person, settPerson] = useState<Ressurs<IPersonInfo>>(byggTomRessurs());
     const [logiskeVedlegg, settLogiskeVedlegg] = useState<ILogiskVedlegg[]>([]);
     const [senderInn, settSenderInn] = useState(false);
     const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);

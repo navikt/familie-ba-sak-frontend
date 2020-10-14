@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { IFelt, Valideringsstatus } from '../../typer/felt';
 import { diff, nyPeriode } from '../../typer/periode';
-import { IPerson, PersonTypeVisningsRangering } from '../../typer/person';
+import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
     IPersonResultat,
     IRestPersonResultat,
@@ -36,19 +36,19 @@ export const sorterVilkårsvurderingForPerson = (
 
 export const mapFraRestVilkårsvurderingTilUi = (
     personResultater: IRestPersonResultat[],
-    personer: IPerson[]
+    personer: IGrunnlagPerson[]
 ): IPersonResultat[] => {
     return kjørValidering(mapFraRestPersonResultatTilPersonResultat(personResultater, personer));
 };
 
 export const mapFraRestPersonResultatTilPersonResultat = (
     personResultater: IRestPersonResultat[],
-    personer: IPerson[]
+    personer: IGrunnlagPerson[]
 ) => {
     return personResultater
         .map((personResultat: IRestPersonResultat) => {
-            const person: IPerson | undefined = personer.find(
-                (person: IPerson) => person.personIdent === personResultat.personIdent
+            const person: IGrunnlagPerson | undefined = personer.find(
+                (person: IGrunnlagPerson) => person.personIdent === personResultat.personIdent
             );
 
             if (person === undefined) {

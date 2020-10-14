@@ -1,12 +1,12 @@
 import { INøkkelPar } from './common';
 import { IOppgave } from './oppgave';
-import { IPerson } from './person';
+import { IPersonInfo } from './person';
 import { IFagsak } from './fagsak';
 
 export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;
     oppgave: IOppgave;
-    person?: IPerson;
+    person?: IPersonInfo;
     fagsak?: IFagsak;
 }
 

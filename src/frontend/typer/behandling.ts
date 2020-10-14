@@ -1,5 +1,5 @@
 import { INøkkelPar } from './common';
-import { IPerson } from './person';
+import { IGrunnlagPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
 import { IRestPersonResultat } from './vilkår';
 import { ITotrinnskontroll } from './totrinnskontroll';
@@ -115,7 +115,7 @@ export interface IBehandling {
     kategori: BehandlingKategori;
     opprettetTidspunkt: string;
     personResultater: IRestPersonResultat[];
-    personer: IPerson[];
+    personer: IGrunnlagPerson[];
     samletResultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;

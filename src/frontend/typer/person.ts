@@ -41,18 +41,53 @@ export enum PersonTypeVisningsRangering {
 }
 
 // Interface
-export interface IPerson {
+export interface IGrunnlagPerson {
     fødselsdato: string;
     kjønn: kjønnType;
     navn: string;
     personIdent: string;
-    familierelasjoner: IFamilieRelasjon[];
     type: PersonType;
 }
 
-export interface IFamilieRelasjon {
+export interface IPersonInfo {
+    adressebeskyttelseGradering: Adressebeskyttelsegradering;
+    familierelasjoner: IFamilierelasjon[];
+    familierelasjonerMaskert: IFamilierelasjonMaskert[];
+    fødselsdato: string;
+    kjønn: kjønnType;
+    navn: string;
+    personIdent: string;
+    type: PersonType;
+}
+
+export interface IFamilierelasjon {
+    adressebeskyttelseGradering: Adressebeskyttelsegradering;
+    fødselsdato: string;
+    navn: string;
     personIdent: string;
     relasjonRolle: FamilieRelasjonRolle;
-    navn: string;
-    fødselsdato: string;
 }
+
+export interface IFamilierelasjonMaskert {
+    adressebeskyttelseGradering: Adressebeskyttelsegradering;
+    relasjonRolle: FamilieRelasjonRolle;
+}
+
+export interface IRestTilgang {
+    saksbehandlerHarTilgang: boolean;
+    adressebeskyttelsegradering: Adressebeskyttelsegradering;
+}
+
+export enum Adressebeskyttelsegradering {
+    STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
+    STRENGT_FORTROLIG_UTLAND = 'STRENGT_FORTROLIG_UTLAND',
+    FORTROLIG = 'FORTROLIG',
+    UGRADERT = 'UGRADERT',
+}
+
+export const adressebeskyttelsestyper: Record<Adressebeskyttelsegradering, string> = {
+    STRENGT_FORTROLIG: 'strengt fortrolig',
+    STRENGT_FORTROLIG_UTLAND: 'strengt fortrolig utland',
+    FORTROLIG: 'fortrolig',
+    UGRADERT: 'ugradert',
+};

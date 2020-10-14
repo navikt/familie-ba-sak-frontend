@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { IPerson, personTypeMap } from '../../../typer/person';
+import { IGrunnlagPerson, personTypeMap } from '../../../typer/person';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 import Clipboard from '@navikt/familie-clipboard';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { hentAlder, formaterPersonIdent } from '../../../utils/formatter';
 
 interface IProps {
-    person: IPerson;
+    person: IGrunnlagPerson;
     tag?: string;
     tekstType?: 'UNDERTITTEL' | 'NORMALTEKST';
     width?: string;

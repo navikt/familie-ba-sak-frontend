@@ -1,6 +1,6 @@
 import { INøkkelPar } from './common';
 import { BehandlingKategori } from './behandling';
-import { IPerson } from './person';
+import { IGrunnlagPerson } from './person';
 
 export interface IOppsummeringBeregning {
     periodeFom: string;
@@ -26,7 +26,7 @@ export enum BeregningEndringType {
 }
 
 export interface IBeregningDetalj {
-    person: IPerson;
+    person: IGrunnlagPerson;
     ytelseType: YtelseType;
     utbetaltPerMnd: number;
 }

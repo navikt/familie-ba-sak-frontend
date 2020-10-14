@@ -4,12 +4,12 @@ import Lenke from 'nav-frontend-lenker';
 import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
-import { IPerson } from '../../../typer/person';
+import { IPersonInfo } from '../../../typer/person';
 import { formaterPersonIdent, hentAlder } from '../../../utils/formatter';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
 interface IProps {
-    bruker: IPerson;
+    bruker: IPersonInfo;
     fagsak: IFagsak;
 }
 
