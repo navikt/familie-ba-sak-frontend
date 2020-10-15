@@ -128,7 +128,10 @@ const useFagsakApi = (
                             `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/vedtak`
                         );
                     }
-                } else if (response.status === RessursStatus.FEILET) {
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL
+                ) {
                     settFeilmelding(response.frontendFeilmelding);
                     settVisFeilmeldinger(true);
                 } else {

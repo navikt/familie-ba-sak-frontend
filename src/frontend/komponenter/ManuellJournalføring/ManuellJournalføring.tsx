@@ -22,10 +22,9 @@ import {
     dokumenttyper,
     IDataForManuellJournalføring,
     ILogiskVedlegg,
-    Journalstatus,
 } from '../../typer/manuell-journalføring';
 import { IPersonInfo } from '../../typer/person';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Journalstatus, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { randomUUID } from '../../utils/commons';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';

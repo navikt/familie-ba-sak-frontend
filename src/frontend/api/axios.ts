@@ -36,6 +36,13 @@ export const håndterApiRessurs = <T>(
                 status: RessursStatus.FEILET,
             };
             break;
+        case RessursStatus.FUNKSJONELL_FEIL:
+            typetRessurs = {
+                frontendFeilmelding:
+                    ressurs.frontendFeilmelding ?? 'En funksjonell feil har oppstått!',
+                status: RessursStatus.FUNKSJONELL_FEIL,
+            };
+            break;
         default:
             typetRessurs = {
                 frontendFeilmelding: 'En feil har oppstått!',

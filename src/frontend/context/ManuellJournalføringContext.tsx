@@ -7,7 +7,6 @@ import {
     Dokumenttype,
     dokumenttyper,
     IDataForManuellJournalføring,
-    IDokumentInfo,
     ILogiskVedlegg,
     IRestOppdaterJournalpost,
 } from '../typer/manuell-journalføring';
@@ -16,6 +15,7 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
+    IDokumentInfo,
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';

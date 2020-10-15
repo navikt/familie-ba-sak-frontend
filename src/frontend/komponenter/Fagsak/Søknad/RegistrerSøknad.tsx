@@ -32,7 +32,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig } = useSøknad();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
-    const [frontendllFeilmelding, settFrontendFeilmelding] = React.useState('');
+    const [frontendFeilmelding, settFrontendFeilmelding] = React.useState('');
 
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
@@ -55,14 +55,11 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                     history.push(
                         `/fagsak/${response.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
                     );
+                } else if (response.status === RessursStatus.FUNKSJONELL_FEIL) {
+                    settFrontendFeilmelding(response.frontendFeilmelding);
+                    settVisModal(true);
                 } else if (response.status === RessursStatus.FEILET) {
-                    // TODO: Her sjekker vi om feilmeldingen gjelder valideringsfeil
-                    if (response.frontendFeilmelding.includes('Du har gjort endringer')) {
-                        settFrontendFeilmelding(response.frontendFeilmelding);
-                        settVisModal(true);
-                    } else {
-                        settFeilmelding(response.frontendFeilmelding);
-                    }
+                    settFeilmelding(response.frontendFeilmelding);
                 } else {
                     settFeilmelding('Registrering av søknaden feilet');
                 }
@@ -177,7 +174,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                     }}
                 >
                     <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
-                        {frontendllFeilmelding}
+                        {frontendFeilmelding}
                     </Normaltekst>
                 </UIModalWrapper>
             )}
