@@ -145,6 +145,15 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
                             </Normaltekst>
                         );
                     },
+                    actions: [
+                        <Knapp
+                            key={'lukk'}
+                            type={'hoved'}
+                            mini={true}
+                            onClick={lukkModal}
+                            children={'Lukk'}
+                        />,
+                    ],
                 });
                 return ressurs.data.saksbehandlerHarTilgang;
             } else {
