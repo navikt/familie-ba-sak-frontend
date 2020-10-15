@@ -1,11 +1,11 @@
 import { feil, IFelt, ok, Valideringsstatus } from '../../typer/felt';
 import { IPeriode } from '../../typer/periode';
-import { IPerson } from '../../typer/person';
+import { IGrunnlagPerson } from '../../typer/person';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
     nyttVilkårResultat: IFelt<IVilkårResultat>,
-    person?: IPerson
+    person?: IGrunnlagPerson
 ): IFelt<IVilkårResultat> => {
     const nyPeriode: IFelt<IPeriode> = nyttVilkårResultat.verdi.periode.valideringsFunksjon(
         nyttVilkårResultat.verdi.periode,

@@ -9,7 +9,6 @@ import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
 import { useBehandling } from '../../context/BehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
-import SystemetLaster from '../Felleskomponenter/SystemetLaster/SystemetLaster';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
 
@@ -82,8 +81,6 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     />
                 </Switch>
             );
-        case RessursStatus.HENTER:
-            return <SystemetLaster />;
         case RessursStatus.IKKE_TILGANG:
             return (
                 <AlertStripe

@@ -3,12 +3,12 @@ import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 
 import { BehandlingUnderkategori } from '../typer/behandling';
-import { FamilieRelasjonRolle, IFamilieRelasjon, IPerson } from '../typer/person';
+import { FamilieRelasjonRolle, IFamilierelasjon, IPersonInfo } from '../typer/person';
 import { RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
 import { useFagsakRessurser } from './FagsakContext';
 
-const initalState = (bruker?: IPerson): ISøknadDTO => {
+const initalState = (bruker?: IPersonInfo): ISøknadDTO => {
     return {
         underkategori: BehandlingUnderkategori.ORDINÆR,
         søkerMedOpplysninger: {
@@ -18,11 +18,11 @@ const initalState = (bruker?: IPerson): ISøknadDTO => {
         barnaMedOpplysninger:
             bruker?.familierelasjoner
                 .filter(
-                    (relasjon: IFamilieRelasjon) =>
+                    (relasjon: IFamilierelasjon) =>
                         relasjon.relasjonRolle === FamilieRelasjonRolle.BARN
                 )
                 .map(
-                    (relasjon: IFamilieRelasjon): IBarnMedOpplysninger => ({
+                    (relasjon: IFamilierelasjon): IBarnMedOpplysninger => ({
                         inkludertISøknaden: false,
                         ident: relasjon.personIdent,
                         navn: relasjon.navn,

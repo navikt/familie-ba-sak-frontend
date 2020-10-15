@@ -1,7 +1,7 @@
 import { INøkkelPar } from './common';
 import { IFelt } from './felt';
 import { IPeriode } from './periode';
-import { IPerson, PersonType } from './person';
+import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 
 export enum Resultat {
@@ -50,7 +50,7 @@ export enum VilkårType {
 export interface IPersonResultat {
     personIdent: string;
     vilkårResultater: IFelt<IVilkårResultat>[];
-    person: IPerson;
+    person: IGrunnlagPerson;
 }
 
 export interface IVilkårResultat {

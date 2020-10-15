@@ -8,7 +8,7 @@ import {
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IFelt } from '../../../../typer/felt';
-import { IPerson } from '../../../../typer/person';
+import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
@@ -29,7 +29,7 @@ export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =
     `vilkår-periode_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
 
 interface IProps {
-    person: IPerson;
+    person: IGrunnlagPerson;
     vilkårResultater: IFelt<IVilkårResultat>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;

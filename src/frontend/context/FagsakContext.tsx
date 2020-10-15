@@ -3,12 +3,12 @@ import createUseContext from 'constate';
 import React from 'react';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
-import { IPerson } from '../typer/person';
+import { IPersonInfo } from '../typer/person';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
 
 interface IHovedRessurser {
-    bruker: Ressurs<IPerson>;
+    bruker: Ressurs<IPersonInfo>;
     fagsak: Ressurs<IFagsak>;
     logg: Ressurs<ILogg[]>;
 }
@@ -37,14 +37,14 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                     status: RessursStatus.HENTER,
                 },
             });
-            axiosRequest<IPerson, void>({
+            axiosRequest<IPersonInfo, void>({
                 method: 'GET',
                 url: '/familie-ba-sak/api/person',
                 headers: {
                     personIdent: fagsakRessurser.fagsak.data.søkerFødselsnummer,
                 },
                 påvirkerSystemLaster: true,
-            }).then((hentetPerson: Ressurs<IPerson>) => {
+            }).then((hentetPerson: Ressurs<IPersonInfo>) => {
                 settFagsakRessurser({
                     ...fagsakRessurser,
                     bruker: hentetPerson,

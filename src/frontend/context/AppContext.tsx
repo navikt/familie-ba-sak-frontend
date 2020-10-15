@@ -10,7 +10,7 @@ import { gruppeIdTilRolle } from '../utils/behandling';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
-import { adressebeskyttelsestyper, IRestTilgang } from '../typer/common';
+import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
 import IkkeTilgang from '../ikoner/IkkeTilgang';
 
 const FEM_MINUTTER = 300000;

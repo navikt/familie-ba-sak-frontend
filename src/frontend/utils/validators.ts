@@ -2,7 +2,7 @@ import moment from 'moment';
 import { IPersonBeregning } from '../typer/beregning';
 import { feil, IFelt, ok, ValiderIFelt, Valideringsstatus } from '../typer/felt';
 import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
-import { IPerson, PersonType } from '../typer/person';
+import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Resultat } from '../typer/vilkår';
 import { datoformat } from './formatter';
 
@@ -39,7 +39,7 @@ export const erGyldigMånedDato = (felt: IFelt<IPersonBeregning>): IFelt<IPerson
         : feil(felt, 'Ugyldig dato');
 };
 
-const barnsVilkårErMellom0og18År = (fom: string, person: IPerson, tom?: string) => {
+const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?: string) => {
     const fødselsdato = moment(person.fødselsdato);
     const fødselsdatoPluss18 = moment(person.fødselsdato).add(18, 'years');
     const fomDato = moment(fom);
@@ -50,7 +50,10 @@ const barnsVilkårErMellom0og18År = (fom: string, person: IPerson, tom?: string
     );
 };
 
-export const erPeriodeGyldig = (felt: IFelt<IPeriode>, person?: IPerson): IFelt<IPeriode> => {
+export const erPeriodeGyldig = (
+    felt: IFelt<IPeriode>,
+    person?: IGrunnlagPerson
+): IFelt<IPeriode> => {
     const fom = felt.verdi.fom;
     const tom = felt.verdi.tom;
 

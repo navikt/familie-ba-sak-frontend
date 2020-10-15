@@ -5,7 +5,7 @@ import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
 import { IFelt, Valideringsstatus } from '../../../typer/felt';
-import { IPerson } from '../../../typer/person';
+import { IPersonInfo } from '../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
 import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
@@ -13,8 +13,8 @@ import { FamilieInput } from '@navikt/familie-form-elements';
 
 interface IProps {
     erLesevisning?: boolean;
-    person: Ressurs<IPerson>;
-    settPerson: (person: Ressurs<IPerson>) => void;
+    person: Ressurs<IPersonInfo>;
+    settPerson: (person: Ressurs<IPersonInfo>) => void;
 }
 
 const HentPerson: React.FunctionComponent<IProps> = ({
@@ -62,14 +62,14 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                                 process.env.NODE_ENV === 'development'
                             ) {
                                 settPerson({ status: RessursStatus.HENTER });
-                                axiosRequest<IPerson, void>({
+                                axiosRequest<IPersonInfo, void>({
                                     method: 'GET',
                                     url: '/familie-ba-sak/api/person',
                                     headers: {
                                         personIdent: ident.verdi,
                                     },
                                 })
-                                    .then((hentetPerson: Ressurs<IPerson>) => {
+                                    .then((hentetPerson: Ressurs<IPersonInfo>) => {
                                         settPerson(hentetPerson);
                                     })
                                     .catch(() => {
