@@ -31,6 +31,11 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
     };
 
     const leggTilOnClick = () => {
+        if (s√∏knad.barnaMedOpplysninger.find(barn => barn.ident === inputValue)) {
+            settPerson(byggFeiletRessurs('Barnet er allerede lagt til'));
+            return;
+        }
+
         const ident = validerFelt(inputValue, lagInitiellFelt('', identValidator));
 
         if (
@@ -110,14 +115,15 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
                     lukkKnapp: true,
                     onClose: onAvbryt,
                     actions: [
+                        <Flatknapp key={'Avbryt'} mini onClick={onAvbryt} children={'Avbryt'} />,
                         <Knapp
+                            type={'hoved'}
                             key={'Legg til'}
                             mini
                             onClick={leggTilOnClick}
                             children={'Legg til'}
                             spinner={person.status === RessursStatus.HENTER}
                         />,
-                        <Flatknapp key={'Avbryt'} mini onClick={onAvbryt} children={'Avbryt'} />,
                     ],
                 }}
             >

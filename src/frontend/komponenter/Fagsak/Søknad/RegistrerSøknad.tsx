@@ -32,7 +32,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig } = useSøknad();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
-    const [frontendllFeilmelding, settFrontendFeilmelding] = React.useState('');
+    const [frontendFeilmelding, settFrontendFeilmelding] = React.useState('');
 
     const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
@@ -177,7 +177,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                     }}
                 >
                     <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
-                        {frontendllFeilmelding}
+                        {frontendFeilmelding}
                     </Normaltekst>
                 </UIModalWrapper>
             )}
