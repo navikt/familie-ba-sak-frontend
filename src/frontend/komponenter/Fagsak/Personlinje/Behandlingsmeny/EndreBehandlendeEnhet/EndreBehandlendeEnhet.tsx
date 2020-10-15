@@ -1,5 +1,5 @@
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
@@ -102,9 +102,9 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                                     key={enhet.enhetId}
                                     value={enhet.enhetId}
                                     disabled={
-                                        åpenBehandling.status === RessursStatus.SUKSESS &&
-                                        åpenBehandling.data.arbeidsfordelingPåBehandling
-                                            .behandlendeEnhetId === enhet.enhetId
+                                        hentDataFraRessurs(åpenBehandling)
+                                            ?.arbeidsfordelingPåBehandling.behandlendeEnhetId ===
+                                        enhet.enhetId
                                     }
                                 >
                                     {`${enhet.enhetId} ${enhet.enhetNavn}`}

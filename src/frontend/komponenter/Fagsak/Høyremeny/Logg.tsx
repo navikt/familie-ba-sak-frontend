@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-typer';
 
 import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
@@ -25,24 +25,18 @@ const Logg = ({ åpenBehandling }: IProps) => {
 
     return (
         <Hendelsesoversikt
-            hendelser={
-                logg.status === RessursStatus.SUKSESS
-                    ? logg.data.map(
-                          (loggElement: ILogg): Hendelse => {
-                              return {
-                                  id: loggElement.id.toString(),
-                                  dato: moment(loggElement.opprettetTidspunkt).format(
-                                      datoformat.DATO_TID
-                                  ),
-                                  utførtAv: loggElement.opprettetAv,
-                                  rolle: loggElement.rolle,
-                                  tittel: loggElement.tittel,
-                                  beskrivelse: loggElement.tekst,
-                              };
-                          }
-                      )
-                    : []
-            }
+            hendelser={hentDataFraRessursMedFallback(logg, []).map(
+                (loggElement: ILogg): Hendelse => {
+                    return {
+                        id: loggElement.id.toString(),
+                        dato: moment(loggElement.opprettetTidspunkt).format(datoformat.DATO_TID),
+                        utførtAv: loggElement.opprettetAv,
+                        rolle: loggElement.rolle,
+                        tittel: loggElement.tittel,
+                        beskrivelse: loggElement.tekst,
+                    };
+                }
+            )}
         />
     );
 };

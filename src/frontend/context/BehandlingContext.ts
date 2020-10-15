@@ -5,6 +5,7 @@ import {
     byggDataRessurs,
     byggFeiletRessurs,
     byggTomRessurs,
+    hentDataFraRessurs,
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
@@ -58,9 +59,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     };
 
     const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
-        return åpenBehandling.status === RessursStatus.SUKSESS
-            ? åpenBehandling.data.steg
-            : undefined;
+        return hentDataFraRessurs(åpenBehandling)?.steg;
     };
 
     const erLesevisning = (): boolean => {
