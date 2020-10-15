@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
 import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
