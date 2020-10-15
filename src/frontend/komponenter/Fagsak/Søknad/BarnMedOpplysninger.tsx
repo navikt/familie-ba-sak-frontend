@@ -17,7 +17,9 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const lesevisning = erLesevisning();
 
     const finnBarnIndex = (ident: string) =>
-        søknad.barnaMedOpplysninger.findIndex(barn => barn.ident === ident);
+        søknad.barnaMedOpplysninger.findIndex(
+            barn => barn.manueltRegistrert && barn.ident === ident
+        );
 
     return (
         <div className={'søknad__barna__barn-rad'}>
