@@ -2,78 +2,13 @@ import { INøkkelPar } from './common';
 import { IOppgave } from './oppgave';
 import { IPersonInfo } from './person';
 import { IFagsak } from './fagsak';
+import { IJournalpost } from '@navikt/familie-typer';
 
 export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;
     oppgave: IOppgave;
     person?: IPersonInfo;
     fagsak?: IFagsak;
-}
-
-export interface IJournalpost {
-    datoMottatt?: string;
-    journalpostId: string;
-    journalposttype: Journalposttype;
-    journalstatus: Journalstatus;
-    tema?: string;
-    behandlingstema?: string;
-    sak?: IJournalpostSak;
-    bruker?: IJournalpostBruker;
-    journalforendeEnhet?: string;
-    kanal?: string;
-    dokumenter?: IDokumentInfo[];
-}
-
-export interface IJournalpostSak {
-    arkivsaksnummer?: string;
-    arkivsaksystem?: string;
-    fagsakId?: string;
-    fagsaksystem?: string;
-}
-
-export interface IJournalpostBruker {
-    id: string;
-}
-
-export interface IDokumentInfo {
-    tittel?: string;
-    brevkode?: string;
-    dokumentInfoId?: string;
-    dokumentstatus?: Dokumentstatus;
-    dokumentvarianter?: IDokumentvariant[];
-    logiskeVedlegg: ILogiskVedlegg[];
-}
-
-export interface IDokumentvariant {
-    variantformat: string;
-}
-
-enum Journalposttype {
-    I,
-    U,
-    N,
-}
-
-export enum Journalstatus {
-    MOTTATT = 'MOTTATT',
-    JOURNALFOERT = 'JOURNALFOERT',
-    FERDIGSTILT = 'FERDIGSTILT',
-    EKSPEDERT = 'EKSPEDERT',
-    UNDER_ARBEID = 'UNDER_ARBEID',
-    FEILREGISTRERT = 'FEILREGISTRERT',
-    UTGAAR = 'UTGAAR',
-    AVBRUTT = 'AVBRUTT',
-    UKJENT_BRUKER = 'UKJENT_BRUKER',
-    RESERVERT = 'RESERVERT',
-    OPPLASTING_DOKUMENT = 'OPPLASTING_DOKUMENT',
-    UKJENT = 'UKJENT',
-}
-
-enum Dokumentstatus {
-    FERDIGSTILT,
-    AVBRUTT,
-    UNDER_REDIGERING,
-    KASSERT,
 }
 
 export enum Dokumenttype {

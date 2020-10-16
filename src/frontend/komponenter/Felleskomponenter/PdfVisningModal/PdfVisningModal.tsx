@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Modal from 'nav-frontend-modal';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { hentDataFraRessursMedFallback, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
@@ -55,7 +55,7 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
             return (
                 <Document
                     className={'pdfvisning-modal__dokument'}
-                    file={pdfdata.status === RessursStatus.SUKSESS ? pdfdata.data : undefined}
+                    file={hentDataFraRessursMedFallback(pdfdata, undefined)}
                     error={
                         <AlertStripeFeil
                             className={'pdfvisning-modal__document--feil'}

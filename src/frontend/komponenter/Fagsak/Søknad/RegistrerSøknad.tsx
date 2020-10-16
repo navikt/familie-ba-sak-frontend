@@ -55,14 +55,11 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                     history.push(
                         `/fagsak/${response.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
                     );
+                } else if (response.status === RessursStatus.FUNKSJONELL_FEIL) {
+                    settFrontendFeilmelding(response.frontendFeilmelding);
+                    settVisModal(true);
                 } else if (response.status === RessursStatus.FEILET) {
-                    // TODO: Her sjekker vi om feilmeldingen gjelder valideringsfeil
-                    if (response.frontendFeilmelding.includes('Du har gjort endringer')) {
-                        settFrontendFeilmelding(response.frontendFeilmelding);
-                        settVisModal(true);
-                    } else {
-                        settFeilmelding(response.frontendFeilmelding);
-                    }
+                    settFeilmelding(response.frontendFeilmelding);
                 } else {
                     settFeilmelding('Registrering av søknaden feilet');
                 }
