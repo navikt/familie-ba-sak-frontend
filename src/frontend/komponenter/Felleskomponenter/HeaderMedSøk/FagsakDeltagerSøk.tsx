@@ -81,7 +81,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                             ident={deltager.ident}
                             rolle={deltager.rolle}
                             fagsakId={deltager.fagsakId?.toString()}
-                            adressebeskyttelseGradering={deltager.adressebeskyttelseGradering}
+                            adressebeskyttelsegradering={deltager.adressebeskyttelsegradering}
                             harTilgang={deltager.harTilgang}
                             index={index}
                             key={index}

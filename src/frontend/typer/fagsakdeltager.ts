@@ -13,7 +13,7 @@ export interface IFagsakDeltager {
     rolle: FagsakDeltagerRolle;
     kjønn?: kjønnType;
     fagsakId?: number;
-    adressebeskyttelseGradering?: Adressebeskyttelsegradering;
+    adressebeskyttelsegradering?: Adressebeskyttelsegradering;
     harTilgang: boolean;
 }
 

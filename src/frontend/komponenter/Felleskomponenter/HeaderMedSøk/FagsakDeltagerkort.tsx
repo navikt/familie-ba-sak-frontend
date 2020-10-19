@@ -11,9 +11,10 @@ import {
     NøytralPersonIkon,
 } from '@navikt/familie-ikoner';
 
+import IkkeTilgang from '../../../ikoner/IkkeTilgang';
+import { adressebeskyttelsestyper } from '../../../typer/person';
 import { kjønnType } from '@navikt/familie-typer';
 import { Adressebeskyttelsegradering } from '../../../../../node_dist/frontend/typer/person';
-
 import { FagsakDeltagerRolle } from '../../../typer/fagsakdeltager';
 
 export interface IFagsakDeltagerkortProps {
@@ -23,7 +24,7 @@ export interface IFagsakDeltagerkortProps {
     index: number;
     kjønn?: kjønnType;
     fagsakId?: string;
-    adressebeskyttelseGradering?: Adressebeskyttelsegradering;
+    adressebeskyttelsegradering?: Adressebeskyttelsegradering;
     harTilgang: boolean;
     onClick?: (index: number) => void;
     children?: React.ReactNode | React.ReactNode[];
@@ -36,8 +37,9 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
     index,
     kjønn,
     fagsakId,
+    adressebeskyttelsegradering,
+    harTilgang,
     onClick,
-    children,
 }) => {
     type IkonerMap = Record<string, React.ReactNode>;
     type RolleNavnMap = Record<string, string>;
@@ -68,13 +70,25 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
     return (
         <div className={`fagsakdeltagerkort ${ingenTreff ? 'ingentreff' : 'treff'}`}>
             <Infokort
-                ikon={ikoner[`${rolle}_${kjønn}`]}
-                header={`${navn}(${ident})${rolleNavn[`${rolle}_${kjønn}`] || ''}`}
+                ikon={
+                    harTilgang ? (
+                        ikoner[`${rolle}_${kjønn}`]
+                    ) : (
+                        <IkkeTilgang heigth={30} width={30} />
+                    )
+                }
+                header={
+                    harTilgang
+                        ? `${navn} (${ident})${rolleNavn[`${rolle}_${kjønn}`] || ''}`
+                        : `Personen har diskresjonskode ${
+                              adressebeskyttelsegradering
+                                  ? adressebeskyttelsestyper[adressebeskyttelsegradering]
+                                  : ''
+                          }`
+                }
                 index={index}
                 onClick={onClick}
-            >
-                {children}
-            </Infokort>
+            />
         </div>
     );
 };
