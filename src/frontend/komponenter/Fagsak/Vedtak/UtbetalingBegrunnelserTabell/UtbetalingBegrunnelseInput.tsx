@@ -81,7 +81,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     erLesevisning={erLesevisning}
                     lesevisningVerdi={
                         mutableVedtakBegrunnelseType
-                            ? behandlingsresultater[mutableVedtakBegrunnelseType]?.navn
+                            ? begrunnelsetyper[mutableVedtakBegrunnelseType]?.navn
                             : ''
                     }
                     name="begrunnelse"
