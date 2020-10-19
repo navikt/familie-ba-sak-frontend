@@ -80,13 +80,18 @@ const FilterSkjema: React.FunctionComponent = () => {
             <div className="filterskjema__actions">
                 <Knapp
                     type={'hoved'}
+                    mini
                     onClick={() => {
                         hentOppgaver();
                     }}
                     spinner={oppgaver.status === RessursStatus.HENTER}
                     children={'Hent'}
                 />
-                <Knapp onClick={tilbakestillOppgaveFelter} children={'Tilbakestill filtrering'} />
+                <Knapp
+                    onClick={tilbakestillOppgaveFelter}
+                    mini
+                    children={'Tilbakestill filtrering'}
+                />
             </div>
         </div>
     );
