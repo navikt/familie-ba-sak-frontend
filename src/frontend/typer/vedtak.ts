@@ -14,7 +14,7 @@ export interface IRestUtbetalingBegrunnelse {
     id?: number;
     fom: string;
     tom?: string;
-    vedtakBegrunnelseType?: VedtakBegrunnelseType;
+    begrunnelseType?: VedtakBegrunnelseType;
     vedtakBegrunnelse?: VedtakBegrunnelse;
 }
 
