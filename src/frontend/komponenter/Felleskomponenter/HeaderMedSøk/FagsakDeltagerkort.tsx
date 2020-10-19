@@ -12,16 +12,19 @@ import {
 } from '@navikt/familie-ikoner';
 
 import { kjønnType } from '@navikt/familie-typer';
+import { Adressebeskyttelsegradering } from '../../../../../node_dist/frontend/typer/person';
 
 import { FagsakDeltagerRolle } from '../../../typer/fagsakdeltager';
 
 export interface IFagsakDeltagerkortProps {
-    navn: string;
+    navn?: string;
     ident: string;
     rolle: FagsakDeltagerRolle;
     index: number;
     kjønn?: kjønnType;
     fagsakId?: string;
+    adressebeskyttelseGradering?: Adressebeskyttelsegradering;
+    harTilgang: boolean;
     onClick?: (index: number) => void;
     children?: React.ReactNode | React.ReactNode[];
 }
