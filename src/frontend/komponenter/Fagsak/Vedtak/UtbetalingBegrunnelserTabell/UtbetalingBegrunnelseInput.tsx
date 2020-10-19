@@ -95,7 +95,6 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     <option>{defaultVelgBehandlingsresultat}</option>
                     {vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
                         Object.keys(vilkårBegrunnelser?.data)
-                            .filter((key: string) => key !== VedtakBegrunnelse.SATSENDRING)
                             .filter((begrunnelsetype: string) => {
                                 return (
                                     vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&

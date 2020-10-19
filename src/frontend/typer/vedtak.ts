@@ -47,7 +47,7 @@ export enum VedtakBegrunnelse {
     REDUKSJON_UNDER_6_ÅR = 'REDUKSJON_UNDER_6_ÅR',
     REDUKSJON_DELT_BOSTED_ENIGHET = 'REDUKSJON_DELT_BOSTED_ENIGHET',
     REDUKSJON_DELT_BOSTED_UENIGHET = 'REDUKSJON_DELT_BOSTED_UENIGHET',
-    SATSENDRING = 'SATSENDRING',
+    INNVILGET_SATSENDRING = 'INNVILGET_SATSENDRING',
 }
 
 export const begrunnelsetyper: INøkkelPar = {
@@ -59,14 +59,9 @@ export const begrunnelsetyper: INøkkelPar = {
         id: 'REDUKSJON',
         navn: 'Reduksjon',
     },
-    SATSENDRING: {
-        id: 'SATSENDRING',
-        navn: 'Satsendring',
-    },
 };
 
 export enum VedtakBegrunnelseType {
     INNVILGELSE = 'INNVILGELSE',
     REDUKSJON = 'REDUKSJON',
-    SATSENDRING = 'SATSENDRING',
 }
