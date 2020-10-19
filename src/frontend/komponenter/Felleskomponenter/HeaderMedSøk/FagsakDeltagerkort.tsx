@@ -24,7 +24,7 @@ export interface IFagsakDeltagerkortProps {
     index: number;
     kjønn?: kjønnType;
     fagsakId?: string;
-    adressebeskyttelsegradering?: Adressebeskyttelsegradering;
+    adressebeskyttelseGradering?: Adressebeskyttelsegradering;
     harTilgang: boolean;
     onClick?: (index: number) => void;
     children?: React.ReactNode | React.ReactNode[];
@@ -37,7 +37,7 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
     index,
     kjønn,
     fagsakId,
-    adressebeskyttelsegradering,
+    adressebeskyttelseGradering,
     harTilgang,
     onClick,
 }) => {
@@ -81,8 +81,8 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
                     harTilgang
                         ? `${navn} (${ident})${rolleNavn[`${rolle}_${kjønn}`] || ''}`
                         : `Personen har diskresjonskode ${
-                              adressebeskyttelsegradering
-                                  ? adressebeskyttelsestyper[adressebeskyttelsegradering]
+                              adressebeskyttelseGradering
+                                  ? adressebeskyttelsestyper[adressebeskyttelseGradering]
                                   : ''
                           }`
                 }

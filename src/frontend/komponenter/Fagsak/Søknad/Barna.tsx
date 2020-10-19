@@ -65,7 +65,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                                 <RødError heigth={24} width={24} />
                                 {`Bruker har barn med diskresjonskode ${
                                     adressebeskyttelsestyper[
-                                        familierelasjonMaskert.adressebeskyttelsegradering
+                                        familierelasjonMaskert.adressebeskyttelseGradering
                                     ] ?? 'ukjent'
                                 }`}
                             </StyledBarnMedDiskresjonskode>

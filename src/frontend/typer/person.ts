@@ -50,7 +50,7 @@ export interface IGrunnlagPerson {
 }
 
 export interface IPersonInfo {
-    adressebeskyttelsegradering: Adressebeskyttelsegradering;
+    adressebeskyttelseGradering: Adressebeskyttelsegradering;
     familierelasjoner: IFamilierelasjon[];
     familierelasjonerMaskert: IFamilierelasjonMaskert[];
     fødselsdato: string;
@@ -61,7 +61,7 @@ export interface IPersonInfo {
 }
 
 export interface IFamilierelasjon {
-    adressebeskyttelsegradering: Adressebeskyttelsegradering;
+    adressebeskyttelseGradering: Adressebeskyttelsegradering;
     fødselsdato: string;
     navn: string;
     personIdent: string;
@@ -69,7 +69,7 @@ export interface IFamilierelasjon {
 }
 
 export interface IFamilierelasjonMaskert {
-    adressebeskyttelsegradering: Adressebeskyttelsegradering;
+    adressebeskyttelseGradering: Adressebeskyttelsegradering;
     relasjonRolle: FamilieRelasjonRolle;
 }
 
