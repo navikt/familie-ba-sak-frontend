@@ -148,7 +148,7 @@
     "fork-ts-checker-webpack-plugin": "^5.0.14",
     "html-webpack-plugin": "^4.3.0",
     "husky": "^4.2.5",
-    "jest": "^26.0.1",
+    "jest": "^26.5.3",
     "less": "^3.11.3",
     "less-loader": "^6.1.0",
     "lint-staged": "^10.2.9",
