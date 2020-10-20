@@ -13,32 +13,18 @@ import {
 
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import { adressebeskyttelsestyper } from '../../../typer/person';
-import { kjønnType } from '@navikt/familie-typer';
-import { Adressebeskyttelsegradering } from '../../../../../node_dist/frontend/typer/person';
-import { FagsakDeltagerRolle } from '../../../typer/fagsakdeltager';
+import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
 
 export interface IFagsakDeltagerkortProps {
-    navn?: string;
-    ident: string;
-    rolle: FagsakDeltagerRolle;
+    deltager: IFagsakDeltager;
     index: number;
-    kjønn?: kjønnType;
-    fagsakId?: string;
-    adressebeskyttelseGradering?: Adressebeskyttelsegradering;
-    harTilgang: boolean;
     onClick?: (index: number) => void;
     children?: React.ReactNode | React.ReactNode[];
 }
 
 const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
-    navn,
-    ident,
-    rolle,
+    deltager,
     index,
-    kjønn,
-    fagsakId,
-    adressebeskyttelseGradering,
-    harTilgang,
     onClick,
 }) => {
     type IkonerMap = Record<string, React.ReactNode>;
@@ -65,24 +51,26 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
         BARN_UKJENT: ' : BARN',
     };
 
-    const ingenTreff = !fagsakId;
+    const ingenTreff = !deltager.fagsakId;
 
     return (
         <div className={`fagsakdeltagerkort ${ingenTreff ? 'ingentreff' : 'treff'}`}>
             <Infokort
                 ikon={
-                    harTilgang ? (
-                        ikoner[`${rolle}_${kjønn}`]
+                    deltager.harTilgang ? (
+                        ikoner[`${deltager.rolle}_${deltager.kjønn}`]
                     ) : (
                         <IkkeTilgang heigth={30} width={30} />
                     )
                 }
                 header={
-                    harTilgang
-                        ? `${navn} (${ident})${rolleNavn[`${rolle}_${kjønn}`] || ''}`
+                    deltager.harTilgang
+                        ? `${deltager.navn} (${deltager.ident})${
+                              rolleNavn[`${deltager.rolle}_${deltager.kjønn}`] || ''
+                          }`
                         : `Personen har diskresjonskode ${
-                              adressebeskyttelseGradering
-                                  ? adressebeskyttelsestyper[adressebeskyttelseGradering]
+                              deltager.adressebeskyttelseGradering
+                                  ? adressebeskyttelsestyper[deltager.adressebeskyttelseGradering]
                                   : ''
                           }`
                 }
