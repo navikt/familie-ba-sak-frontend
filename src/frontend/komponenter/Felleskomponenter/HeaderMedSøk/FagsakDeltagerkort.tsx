@@ -12,9 +12,9 @@ import {
 } from '@navikt/familie-ikoner';
 
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
-import { adressebeskyttelsestyper } from '../../../typer/person';
+import { adressebeskyttelsestyper, Adressebeskyttelsegradering } from '../../../typer/person';
+
 import { kjønnType } from '@navikt/familie-typer';
-import { Adressebeskyttelsegradering } from '../../../../../node_dist/frontend/typer/person';
 import { FagsakDeltagerRolle } from '../../../typer/fagsakdeltager';
 
 export interface IFagsakDeltagerkortProps {
