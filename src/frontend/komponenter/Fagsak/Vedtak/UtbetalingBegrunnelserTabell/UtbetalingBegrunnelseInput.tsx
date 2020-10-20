@@ -5,7 +5,6 @@ import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
-import { behandlingsresultater } from '../../../../typer/behandling';
 import {
     VedtakBegrunnelse,
     IRestVedtakBegrunnelse,
