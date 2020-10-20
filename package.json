@@ -132,7 +132,7 @@
     "@types/webpack-env": "^1.15.2",
     "@types/webpack-hot-middleware": "^2.25.3",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
-    "@typescript-eslint/parser": "^4.3.0",
+    "@typescript-eslint/parser": "^4.4.1",
     "babel-polyfill": "^6.26.0",
     "copyfiles": "^2.2.0",
     "css-loader": "^4.2.1",
