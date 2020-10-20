@@ -34,7 +34,7 @@ const Brev = () => {
             {visInnsendtBrevModal && (
                 <UIModalWrapper
                     modal={{
-                        tittel: 'Brevet er bestilt',
+                        tittel: 'Brevet er sendt',
                         lukkKnapp: false,
                         visModal: visInnsendtBrevModal,
                         actions: [
