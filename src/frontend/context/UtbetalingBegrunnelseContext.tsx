@@ -64,7 +64,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
                     settFagsak(fagsak);
                     settUtbetalingBegrunnelseFeilmelding({ id, feilmelding: '' });
                     hentVedtaksbrev();
-                } else if (fagsak.status === RessursStatus.FEILET) {
+                } else if (fagsak.status === RessursStatus.FUNKSJONELL_FEIL) {
                     settUtbetalingBegrunnelseFeilmelding({
                         id,
                         feilmelding: fagsak.frontendFeilmelding,
