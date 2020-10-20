@@ -5,7 +5,6 @@ import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
-import { behandlingsresultater } from '../../../../typer/behandling';
 import {
     VedtakBegrunnelse,
     IRestVedtakBegrunnelse,
@@ -81,7 +80,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     erLesevisning={erLesevisning}
                     lesevisningVerdi={
                         mutableVedtakBegrunnelseType
-                            ? behandlingsresultater[mutableVedtakBegrunnelseType]?.navn
+                            ? begrunnelsetyper[mutableVedtakBegrunnelseType]?.navn
                             : ''
                     }
                     name="begrunnelse"
@@ -95,7 +94,6 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     <option>{defaultVelgBehandlingsresultat}</option>
                     {vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
                         Object.keys(vilkårBegrunnelser?.data)
-                            .filter((key: string) => key !== VedtakBegrunnelse.SATSENDRING)
                             .filter((begrunnelsetype: string) => {
                                 return (
                                     vilkårBegrunnelser?.status === RessursStatus.SUKSESS &&
