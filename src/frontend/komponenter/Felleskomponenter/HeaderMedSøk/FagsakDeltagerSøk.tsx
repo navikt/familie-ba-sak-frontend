@@ -76,13 +76,8 @@ const FagsakDeltagerSøk: React.FC = () => {
                 resultat.map((deltager, index) => {
                     return (
                         <FagsakDeltagerkort
-                            navn={deltager.navn}
-                            kjønn={deltager.kjønn}
-                            ident={deltager.ident}
-                            rolle={deltager.rolle}
-                            fagsakId={deltager.fagsakId?.toString()}
+                            deltager={deltager}
                             index={index}
-                            key={index}
                             onClick={(index: number): void => {
                                 resultat[index].fagsakId &&
                                     history.push(
