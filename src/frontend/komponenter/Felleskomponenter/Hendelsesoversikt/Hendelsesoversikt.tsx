@@ -9,7 +9,7 @@ import Meldingerknapp from './komponenter/Meldingerknapp';
 import classNames from 'classnames';
 import Brev from './komponenter/Brev';
 
-export { Tabs as Hendelsetype, Hendelse };
+export { Hendelse };
 
 export interface IHendelsesoversiktProps {
     className?: string;

@@ -12,10 +12,12 @@ import { AxiosError } from 'axios';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { hentStegNummer } from '../../../typer/behandling';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 const useBrevModul = () => {
     const { axiosRequest } = useApp();
     const { åpenBehandling } = useBehandling();
+    const { hentLogg } = useFagsakRessurser();
     const [innsendtBrev, settInnsendtBrev] = React.useState<Ressurs<string>>(byggTomRessurs());
     const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
         byggTomRessurs()
@@ -36,6 +38,7 @@ const useBrevModul = () => {
         })
             .then((response: Ressurs<string>) => {
                 settInnsendtBrev(response);
+                behandlingId && hentLogg(behandlingId);
             })
             .catch((_error: AxiosError) => {
                 settInnsendtBrev(byggFeiletRessurs('Ukjent feil ved sending av brev.'));
