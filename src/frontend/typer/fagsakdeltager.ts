@@ -1,4 +1,5 @@
 import { kjønnType } from '@navikt/familie-typer';
+import { Adressebeskyttelsegradering } from '../../../node_dist/frontend/typer/person';
 
 export enum FagsakDeltagerRolle {
     Barn = 'BARN',
@@ -7,11 +8,13 @@ export enum FagsakDeltagerRolle {
 }
 
 export interface IFagsakDeltager {
-    navn: string;
+    navn?: string;
     ident: string;
     rolle: FagsakDeltagerRolle;
     kjønn?: kjønnType;
     fagsakId?: number;
+    adressebeskyttelseGradering?: Adressebeskyttelsegradering;
+    harTilgang: boolean;
 }
 
 export interface ISøkParam {

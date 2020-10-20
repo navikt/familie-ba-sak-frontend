@@ -10,7 +10,7 @@ import { datoformat } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { BeregningEndringType, IOppsummeringBeregning } from '../../../../typer/beregning';
+import { IOppsummeringBeregning } from '../../../../typer/beregning';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -37,13 +37,6 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
         )
         .filter((beregningRad: IOppsummeringBeregning) => beregningRad.endring.trengerBegrunnelse);
     const erSisteRad = (index: number) => beregningerMedBegrunnelseBehov.length - 1 === index;
-
-    const lesevisningForRad = (beregning: IOppsummeringBeregning) => {
-        const erSatsendring = (beregning: IOppsummeringBeregning) =>
-            beregning.endring.type === BeregningEndringType.ENDRET_SATS ||
-            beregning.endring.type === BeregningEndringType.UENDRET_SATS;
-        return erLesevisning() || erSatsendring(beregning);
-    };
 
     return harAndeler ? (
         <table className={'tabell'}>
@@ -85,12 +78,12 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                 key={index}
                                                 id={utbetalingBegrunnelse.id}
                                                 begrunnelseType={
-                                                    utbetalingBegrunnelse.vedtakBegrunnelseType
+                                                    utbetalingBegrunnelse.begrunnelseType
                                                 }
                                                 vedtakBegrunnelse={
                                                     utbetalingBegrunnelse.vedtakBegrunnelse
                                                 }
-                                                erLesevisning={lesevisningForRad(beregningRad)}
+                                                erLesevisning={erLesevisning()}
                                             />
                                         ) : (
                                             <Feilmelding key={index}>
@@ -100,7 +93,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                     }
                                 )}
                                 <IkonKnapp
-                                    erLesevisning={lesevisningForRad(beregningRad)}
+                                    erLesevisning={erLesevisning()}
                                     id={`legg-til-begrunnelse-${periodeToString({
                                         fom: beregningRad.periodeFom,
                                         tom: beregningRad.periodeTom,
