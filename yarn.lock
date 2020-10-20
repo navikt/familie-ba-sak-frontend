@@ -7936,15 +7936,15 @@ nav-frontend-ikonknapper@^1.0.9:
   resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-1.0.9.tgz#2a432fdf571cbe61e5e173cd8f3b1fcd4bee7f55"
   integrity sha512-bj/q4t2azGs1goWpYDSmBm+VTvUHuWtat6Fuj/lJ+BCHeTVlfCTUnWwPEpUftordOT+LAiOnB5f4YwwmIGMHeA==
 
-nav-frontend-js-utils@1.0.9, nav-frontend-js-utils@^1.0.9:
+nav-frontend-js-utils@1.0.9:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.9.tgz#3b177db985dd3b1e57911f3e38440d62ca82e51c"
   integrity sha512-Kf2ksWM9cdEFesT1QS3X2c9ZLyQ4BsoHASBVzOgTU/2dd55jQmNtse0rJ43CGLEDguKPYUaIiaYfKdxIqU9SfQ==
 
-nav-frontend-js-utils@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.11.tgz#769cca01f65518ca0b365416d2b7d9887a88100e"
-  integrity sha512-Ca5IOU9cklznoymF0BwWkVGVRmjrQ/2NgySrz9+6otYHuZ060mEoiZwz302sVoap3HRjMGYYP3JleugXjO/ywQ==
+nav-frontend-js-utils@^1.0.13, nav-frontend-js-utils@^1.0.9:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.13.tgz#4c66a82e4ed026c36e528cdd84e1d96c4f7ce066"
+  integrity sha512-lq3vwEGFIQ3QlZhCYCUd2ydr4kGxivhzcCpMzHeVRDCyeGkKwWYPNwy61CRyxtvWMzTXK1+JCM4RtdFy2WmaeA==
 
 nav-frontend-knapper-style@^0.3.38:
   version "0.3.38"
