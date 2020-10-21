@@ -25,7 +25,7 @@ const Opplysningsplikt: React.FunctionComponent<ITilkjentYtelseProps> = ({
     return (
         <Skjemasteg
             senderInn={false}
-            tittel="Søkers opplysningsplikt"
+            tittel="Opplysningsplikt"
             className="opplysningsplikt"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={nesteOnClick}

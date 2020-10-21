@@ -32,6 +32,12 @@ export const sider: ISide[] = [
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
     },
     {
+        id: 'OPPLYSNINGSPLIKT',
+        href: 'opplysningsplikt',
+        navn: 'Opplysningsplikt',
+        steg: BehandlingSteg.VILKÅRSVURDERING, // TODO: Legge til nytt behandlingssteg?
+    },
+    {
         id: 'VILKÅRSVURDERING',
         href: 'vilkaarsvurdering',
         navn: 'Vilkårsvurdering',
@@ -89,9 +95,16 @@ export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
         return stegNummer !== 0;
     } else if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
+    } else if (side.id === 'OPPLYSNINGSPLIKT') {
+        return etterspurtDokumentasjon(åpenBehandling.behandlingId);
     } else {
         return true;
     }
+};
+
+const etterspurtDokumentasjon = (behandlingId: number): boolean => {
+    // TODO: Sjekk om det finnes rad i database
+    return true;
 };
 
 export const finnSideForBehandlingssteg = (steg: BehandlingSteg) => {
