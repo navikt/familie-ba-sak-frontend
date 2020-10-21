@@ -48,11 +48,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const hentVedtaksbrev = () => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
+        const httpMethod = erLesevisning() ? 'GET' : 'POST';
 
-        if (aktivtVedtak && !erLesevisning()) {
+        if (aktivtVedtak) {
             settVedtaksbrev(byggHenterRessurs());
             axiosRequest<string, void>({
-                method: 'POST',
+                method: httpMethod,
                 url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
             })
                 .then((response: Ressurs<string>) => {
