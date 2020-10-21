@@ -15,9 +15,9 @@ const Brev = () => {
     const {
         sendBrev,
         hentForhåndsvisning,
+        hentMuligeBrevMaler,
         innsendtBrev,
         hentetForhåndsvisning,
-        hentMuligeBrevMaler,
     } = useBrevModul();
 
     const behandlingId =
@@ -54,6 +54,7 @@ const Brev = () => {
                                 mini={true}
                                 onClick={() => {
                                     // TODO: Må legges til condition på brevmal valgt
+                                    // TODO: Sjekk opp hvorfor vi må bruke wrapperen og ikke kan bruke den rene modalen. Kunne da lagt den i brevskjema og hatt tilgang på rett data.
                                     history.push(
                                         `/fagsak/${fagsakId}/${behandlingId}/opplysningsplikt`
                                     );
