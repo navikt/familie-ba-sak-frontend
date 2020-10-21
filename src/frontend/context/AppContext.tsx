@@ -12,6 +12,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
 import IkkeTilgang from '../ikoner/IkkeTilgang';
+import { IToggles, alleTogglerAv, ToggleNavn } from '../typer/toggles';
 
 const FEM_MINUTTER = 300000;
 
@@ -37,6 +38,7 @@ interface IProps {
 
 const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IProps) => {
     const [autentisert, settAutentisert] = React.useState(true);
+    const [toggles, settToggles] = useState<IToggles>(alleTogglerAv());
     const [appVersjon, settAppVersjon] = useState('');
     const [ressurserSomLaster, settRessurserSomLaster] = React.useState<string[]>([]);
 
@@ -45,6 +47,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     );
     const [modal, settModal] = React.useState<IModal>(initalState);
 
+    console.log('toggles: ', toggles);
     const verifiserVersjon = () => {
         axiosRequest<string, void>({
             url: '/version',
@@ -104,6 +107,21 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             settInnloggetSaksbehandler(autentisertSaksbehandler);
         }
     }, [autentisertSaksbehandler]);
+
+    useEffect(() => {
+        axiosRequest<IToggles, string[]>({
+            method: 'POST',
+            url: '/familie-ba-sak/api/feature',
+            data: Object.values(ToggleNavn),
+            påvirkerSystemLaster: true,
+        }).then((response: Ressurs<IToggles>) => {
+            if (response.status === RessursStatus.SUKSESS) {
+                settToggles(response.data);
+            } else {
+                settToggles(alleTogglerAv);
+            }
+        });
+    }, []);
 
     const åpneModal = () => {
         settModal({
@@ -224,9 +242,10 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         lukkModal,
         modal,
         settModal,
-        systemetLaster,
-        åpneModal,
         sjekkTilgang,
+        systemetLaster,
+        toggles,
+        åpneModal,
     };
 });
 
