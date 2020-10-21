@@ -1,12 +1,17 @@
 import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { RessursStatus } from '@navikt/familie-typer';
 import UIModalWrapper from '../../Modal/UIModalWrapper';
 import Brevskjema from '../../BrevModul/BrevSkjema';
 import useBrevModul from '../useBrevModul';
-import { useEffect } from 'react';
+import { useHistory } from 'react-router';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
 
 const Brev = () => {
+    const { åpenBehandling } = useBehandling();
+    const { fagsak } = useFagsakRessurser();
     const {
         sendBrev,
         hentForhåndsvisning,
@@ -14,6 +19,12 @@ const Brev = () => {
         hentetForhåndsvisning,
         hentMuligeBrevMaler,
     } = useBrevModul();
+
+    const behandlingId =
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
+    const fagsakId = fagsak.status === RessursStatus.SUKSESS && fagsak.data.id;
+    const history = useHistory();
+
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
     useEffect(() => {
@@ -42,6 +53,10 @@ const Brev = () => {
                                 key={'ok'}
                                 mini={true}
                                 onClick={() => {
+                                    // TODO: Må legges til condition på brevmal valgt
+                                    history.push(
+                                        `/fagsak/${fagsakId}/${behandlingId}/opplysningsplikt`
+                                    );
                                     settVisInnsendtBrevModal(false);
                                 }}
                                 children={'Ok'}
