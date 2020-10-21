@@ -17,12 +17,15 @@ import FagsakLenkepanel from './FagsakLenkepanel';
 import AlertStripe from 'nav-frontend-alertstriper';
 import Opphør from './Opphør';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
+import { useApp } from '../../../context/AppContext';
+import { ToggleNavn } from '../../../typer/toggles';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
+    const { toggles } = useApp();
     const { bestemÅpenBehandling } = useBehandling();
     React.useEffect(() => {
         bestemÅpenBehandling(undefined);
@@ -70,7 +73,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                     ) : (
                         <>
                             <Utbetalinger beregningOversikt={beregningOversiktInneværendeMåned} />
-                            <Opphør fagsak={fagsak} />
+                            {toggles[ToggleNavn.visTekniskOpphør] && <Opphør fagsak={fagsak} />}
                         </>
                     )
                 ) : (
