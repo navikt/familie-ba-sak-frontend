@@ -47,7 +47,6 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     );
     const [modal, settModal] = React.useState<IModal>(initalState);
 
-    console.log('toggles: ', toggles);
     const verifiserVersjon = () => {
         axiosRequest<string, void>({
             url: '/version',
