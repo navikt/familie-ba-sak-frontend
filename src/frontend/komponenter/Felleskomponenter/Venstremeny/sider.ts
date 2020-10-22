@@ -1,5 +1,4 @@
 import {
-    BehandlingResultat,
     BehandlingSteg,
     Behandlingstype,
     hentStegNummer,
@@ -11,7 +10,7 @@ import { IFelt } from '../../../typer/felt';
 import { formaterPersonIdent } from '../../../utils/formatter';
 
 export interface ISide {
-    id: string;
+    id: SideId;
     href: string;
     navn: string;
     steg: BehandlingSteg;
@@ -24,21 +23,29 @@ export interface IUnderside {
     hash: string;
 }
 
+export enum SideId {
+    REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
+    OPPLYSNINGSPLIKT = 'OPPLYSNINGSPLIKT',
+    VILKÅRSVURDERING = 'VILKÅRSVURDERING',
+    BEHANDLINGRESULTAT = 'BEHANDLINGRESULTAT',
+    VEDTAK = 'VEDTAK',
+}
+
 export const sider: ISide[] = [
     {
-        id: 'REGISTRERE_SØKNAD',
+        id: SideId.REGISTRERE_SØKNAD,
         href: 'registrer-soknad',
         navn: 'Registrer søknad',
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
     },
     {
-        id: 'OPPLYSNINGSPLIKT',
+        id: SideId.OPPLYSNINGSPLIKT,
         href: 'opplysningsplikt',
         navn: 'Opplysningsplikt',
         steg: BehandlingSteg.VILKÅRSVURDERING,
     },
     {
-        id: 'VILKÅRSVURDERING',
+        id: SideId.VILKÅRSVURDERING,
         href: 'vilkaarsvurdering',
         navn: 'Vilkårsvurdering',
         steg: BehandlingSteg.VILKÅRSVURDERING,
@@ -67,12 +74,12 @@ export const sider: ISide[] = [
         },
     },
     {
-        id: 'BEHANDLINGRESULTAT',
+        id: SideId.BEHANDLINGRESULTAT,
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
         steg: BehandlingSteg.SEND_TIL_BESLUTTER,
     },
-    { id: 'VEDTAK', href: 'vedtak', navn: 'Vedtak', steg: BehandlingSteg.SEND_TIL_BESLUTTER },
+    { id: SideId.VEDTAK, href: 'vedtak', navn: 'Vedtak', steg: BehandlingSteg.SEND_TIL_BESLUTTER },
 ];
 
 export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
@@ -87,16 +94,11 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
     return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
-export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
-    const stegNummer = hentStegNummer(side.steg);
-    if (!åpenBehandling) {
-        return stegNummer !== 0;
-    } else if (åpenBehandling.samletResultat === BehandlingResultat.OPPHØRT) {
-        return stegNummer !== 0;
-    } else if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
+export const visSide = (side: ISide, åpenBehandling: IBehandling) => {
+    if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
-    } else if (side.id === 'OPPLYSNINGSPLIKT') {
-        return åpenBehandling.opplysningsplikt !== undefined;
+    } else if (side.id === SideId.OPPLYSNINGSPLIKT) {
+        return !!åpenBehandling.opplysningsplikt;
     } else {
         return true;
     }
@@ -104,7 +106,7 @@ export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
 
 export const finnSideForBehandlingssteg = (steg: BehandlingSteg) => {
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
-        return Object.values(sider).find((side: ISide) => side.id === 'VEDTAK');
+        return Object.values(sider).find((side: ISide) => side.id === SideId.VEDTAK);
     }
     return Object.values(sider).find((side: ISide) => side.steg === steg);
 };

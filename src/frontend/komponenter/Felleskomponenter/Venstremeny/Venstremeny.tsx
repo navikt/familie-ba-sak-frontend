@@ -4,7 +4,7 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../../../typer/fagsak';
 import Link from './Link';
-import { erSidenInaktiv, ISide, sider, visSide, IUnderside } from './sider';
+import { erSidenInaktiv, ISide, IUnderside, sider, visSide } from './sider';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {
@@ -20,10 +20,7 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 ? Object.values(sider)
                       .filter((side: ISide) => visSide(side, åpenBehandling.data))
                       .map((side: ISide, index: number) => {
-                          const tilPath =
-                              side.id === 'SAKSOVERSIKT'
-                                  ? `/fagsak/${fagsak.id}/${side.href}`
-                                  : `/fagsak/${fagsak.id}/${åpenBehandling.data.behandlingId}/${side.href}`;
+                          const tilPath = `/fagsak/${fagsak.id}/${åpenBehandling.data.behandlingId}/${side.href}`;
 
                           const undersider: IUnderside[] = side.undersider
                               ? side.undersider(åpenBehandling.data)
