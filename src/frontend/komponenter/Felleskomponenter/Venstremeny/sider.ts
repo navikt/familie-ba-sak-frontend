@@ -87,7 +87,10 @@ export const visSide = (side: ISide, åpenBehandling?: IBehandling) => {
         return stegNummer !== 0;
     } else if (åpenBehandling.samletResultat === BehandlingResultat.OPPHØRT) {
         return stegNummer !== 0;
-    } else if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
+    } else if (
+        åpenBehandling.skalBehandlesAutomatisk ||
+        åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+    ) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
     } else {
         return true;
