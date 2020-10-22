@@ -14,12 +14,13 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { hentStegNummer } from '../../../typer/behandling';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useState } from 'react';
+import { IFagsak } from '../../../typer/fagsak';
 
 const useBrevModul = () => {
     const { axiosRequest } = useApp();
     const { åpenBehandling } = useBehandling();
-    const { hentLogg } = useFagsakRessurser();
-    const [innsendtBrev, settInnsendtBrev] = React.useState<Ressurs<string>>(byggTomRessurs());
+    const { hentLogg, settFagsak } = useFagsakRessurser();
+    const [innsendtBrev, settInnsendtBrev] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
     const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
         byggTomRessurs()
     );
@@ -33,14 +34,15 @@ const useBrevModul = () => {
 
     const sendBrev = (brevData: IBrevData) => {
         settInnsendtBrev(byggHenterRessurs());
-        axiosRequest<string, IBrevData>({
+        axiosRequest<IFagsak, IBrevData>({
             method: 'POST',
             data: brevData,
             url: `/familie-ba-sak/api/dokument/send-brev/innhente-opplysninger/${behandlingId}`,
         })
-            .then((response: Ressurs<string>) => {
+            .then((response: Ressurs<IFagsak>) => {
                 settInnsendtBrev(response);
                 behandlingId && hentLogg(behandlingId);
+                settFagsak(response);
             })
             .catch((_error: AxiosError) => {
                 settInnsendtBrev(byggFeiletRessurs('Ukjent feil ved sending av brev.'));
