@@ -13,6 +13,7 @@ import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { hentStegNummer } from '../../../typer/behandling';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useState } from 'react';
 
 const useBrevModul = () => {
     const { axiosRequest } = useApp();
@@ -22,6 +23,7 @@ const useBrevModul = () => {
     const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
         byggTomRessurs()
     );
+    const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
 
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
@@ -81,6 +83,8 @@ const useBrevModul = () => {
     };
 
     return {
+        brevmal,
+        settBrevmal,
         sendBrev,
         hentForhåndsvisning,
         innsendtBrev,

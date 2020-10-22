@@ -6,6 +6,7 @@ import { IBrevData, TypeBrev, TypeMottaker } from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import PdfVisningModal from '../PdfVisningModal/PdfVisningModal';
+import useBrevModul from '../Hendelsesoversikt/useBrevModul';
 
 interface IProps {
     sendBrevOnClick: (brevData: IBrevData) => void;
@@ -22,8 +23,8 @@ const BrevSkjema = ({
     hentetForhåndsvisning,
     brevMaler,
 }: IProps) => {
+    const { brevmal, settBrevmal } = useBrevModul();
     const [mottaker, settMottaker] = useState(TypeMottaker.SØKER);
-    const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
     const [fritekst, settFritekst] = useState('');
     const [feilmelding, settFeilmelding] = React.useState<string | undefined>(undefined);
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);

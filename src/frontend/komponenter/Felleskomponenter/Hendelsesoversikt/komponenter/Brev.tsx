@@ -8,6 +8,7 @@ import useBrevModul from '../useBrevModul';
 import { useHistory } from 'react-router';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { TypeBrev } from '../../BrevModul/typer';
 
 const Brev = () => {
     const { åpenBehandling } = useBehandling();
@@ -18,6 +19,7 @@ const Brev = () => {
         hentMuligeBrevMaler,
         innsendtBrev,
         hentetForhåndsvisning,
+        brevmal,
     } = useBrevModul();
 
     const behandlingId =
@@ -53,11 +55,10 @@ const Brev = () => {
                                 key={'ok'}
                                 mini={true}
                                 onClick={() => {
-                                    // TODO: Må legges til condition på brevmal valgt
-                                    // TODO: Sjekk opp hvorfor vi må bruke wrapperen og ikke kan bruke den rene modalen. Kunne da lagt den i brevskjema og hatt tilgang på rett data.
-                                    history.push(
-                                        `/fagsak/${fagsakId}/${behandlingId}/opplysningsplikt`
-                                    );
+                                    brevmal === TypeBrev.OPPLYSNINGER &&
+                                        history.push(
+                                            `/fagsak/${fagsakId}/${behandlingId}/opplysningsplikt`
+                                        );
                                     settVisInnsendtBrevModal(false);
                                 }}
                                 children={'Ok'}
