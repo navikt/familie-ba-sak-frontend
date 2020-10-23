@@ -9,19 +9,17 @@ export enum Valideringsstatus {
 
 export const ok = <T>(felt: IFelt<T>): IFelt<T> => {
     return {
+        ...felt,
         feilmelding: '',
-        valideringsfunksjon: felt.valideringsfunksjon,
         valideringsstatus: Valideringsstatus.OK,
-        verdi: felt.verdi,
     };
 };
 
 export const feil = <T>(felt: IFelt<T>, feilmelding: string): IFelt<T> => {
     return {
+        ...felt,
         feilmelding,
-        valideringsfunksjon: felt.valideringsfunksjon,
         valideringsstatus: Valideringsstatus.FEIL,
-        verdi: felt.verdi,
     };
 };
 
@@ -40,9 +38,9 @@ export interface IFelt<T> {
     verdi: T;
 }
 
-export const nyttFelt = <T>(verdi: T, valideringsFunksjon?: ValiderIFelt<T>): IFelt<T> => ({
+export const nyttFelt = <T>(verdi: T, valideringsfunksjon: ValiderIFelt<T>): IFelt<T> => ({
     feilmelding: '',
-    valideringsfunksjon: valideringsFunksjon ? valideringsFunksjon : defaultValidator,
+    valideringsfunksjon,
     valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
     verdi,
 });

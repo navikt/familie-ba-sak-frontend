@@ -13,7 +13,7 @@ import {
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import PdfVisningModal from '../PdfVisningModal/PdfVisningModal';
-import { feil, IFelt, nyttFelt, ok } from '../../../typer/felt';
+import { defaultValidator, feil, IFelt, nyttFelt, ok } from '../../../typer/felt';
 import { useSkjema } from '../../../typer/skjema';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
@@ -48,7 +48,7 @@ const BrevSkjema = ({
         string
     >({
         felter: {
-            mottaker: nyttFelt<MottakerType>(MottakerType.SØKER),
+            mottaker: nyttFelt<MottakerType>(MottakerType.SØKER, defaultValidator),
             brevmal: nyttFelt<Brevmal | ''>('', (felt: IFelt<Brevmal | ''>) =>
                 felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal')
             ),
