@@ -12,13 +12,13 @@ import {
 } from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
-import PdfVisningModal from '../PdfVisningModal/PdfVisningModal';
-import { defaultValidator, feil, IFelt, nyttFelt, ok } from '../../../typer/felt';
-import { useSkjema } from '../../../typer/skjema';
-import { useBehandling } from '../../../context/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import styled from 'styled-components';
-import StyledKnapperekke from '../StyledComponents/StyledKnapperekke';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { nyttFelt, IFelt, ok, feil } from '../../../../typer/felt';
+import { useSkjema } from '../../../../typer/skjema';
+import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
+import StyledKnapperekke from '../../StyledComponents/StyledKnapperekke';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -44,11 +44,11 @@ const BrevSkjema = ({
     const { åpenBehandling } = useBehandling();
     const { hentLogg } = useFagsakRessurser();
 
-    const { skjema, oppdaterFeltISkjema, kanSendeSkjema, hentFeilmelding, onSubmit } = useSkjema<
+    const { hentFeltProps, kanSendeSkjema, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<
         string
     >({
         felter: {
-            mottaker: nyttFelt<MottakerType>(MottakerType.SØKER, defaultValidator),
+            mottaker: nyttFelt<MottakerType>(MottakerType.SØKER),
             brevmal: nyttFelt<Brevmal | ''>('', (felt: IFelt<Brevmal | ''>) =>
                 felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal')
             ),
@@ -61,6 +61,7 @@ const BrevSkjema = ({
                       )
             ),
         },
+        skjemanavn: 'brevmodul',
         submitRessurs: byggTomRessurs(),
         visFeilmeldinger: false,
     });
@@ -77,7 +78,6 @@ const BrevSkjema = ({
         }
     }, [hentetForhåndsvisning]);
 
-    console.log(skjema);
     return (
         <StyledBrevSkjema>
             <PdfVisningModal
@@ -93,11 +93,9 @@ const BrevSkjema = ({
                 }
             >
                 <FamilieSelect
-                    name="mottaker"
+                    {...hentFeltProps('mottaker')}
                     label={'Mottaker'}
                     placeholder={'Velg mottaker'}
-                    value={skjema.felter.mottaker.verdi}
-                    feil={hentFeilmelding('mottaker')}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                         oppdaterFeltISkjema('mottaker', event.target.value as MottakerType);
                     }}
@@ -115,11 +113,9 @@ const BrevSkjema = ({
                     })}
                 </FamilieSelect>
                 <FamilieSelect
-                    name="brevmal"
+                    {...hentFeltProps('brevmal')}
                     label={'Mal'}
                     placeholder={'Velg mal'}
-                    feil={hentFeilmelding('brevmal')}
-                    value={skjema.felter.brevmal.verdi}
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
                         oppdaterFeltISkjema('brevmal', event.target.value);
                     }}
@@ -140,11 +136,10 @@ const BrevSkjema = ({
                     })}
                 </FamilieSelect>
                 <FamilieTextarea
+                    {...hentFeltProps('fritekst')}
                     disabled={skjemaErLåst}
-                    erLesevisning={false}
                     label={'Fritekst'}
-                    feil={hentFeilmelding('fritekst')}
-                    value={skjema.felter.fritekst.verdi}
+                    erLesevisning={false}
                     maxLength={4000}
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
                         oppdaterFeltISkjema('fritekst', event.target.value);

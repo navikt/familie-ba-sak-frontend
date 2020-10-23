@@ -2,13 +2,10 @@ import * as React from 'react';
 
 import { Hendelse, Tabs } from './typer';
 
-import Dokumenterknapp from './komponenter/Dokumenterknapp';
 import HendelseItem from './komponenter/HendelseItem';
-import Historikkknapp from './komponenter/Historikkknapp';
-import Meldingerknapp from './komponenter/Meldingerknapp';
 import classNames from 'classnames';
 import Brev from './komponenter/Brev';
-import { useBehandling } from '../../../context/BehandlingContext';
+import Header from './Header/Header';
 
 export { Hendelse };
 
@@ -22,26 +19,11 @@ const tilHendelseItem = (hendelse: Hendelse) => (
 );
 
 const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) => {
-    const { erLesevisning } = useBehandling();
     const [aktivTab, settAktivTab] = React.useState<Tabs>(Tabs.Historikk);
 
     return (
         <div className={classNames('hendelsesoversikt', className)}>
-            <div className={'hendelsesoversikt__header'}>
-                <Historikkknapp
-                    aktiv={aktivTab === Tabs.Historikk}
-                    onClick={() => settAktivTab(Tabs.Historikk)}
-                />
-                <Meldingerknapp
-                    aktiv={aktivTab === Tabs.Meldinger}
-                    disabled={erLesevisning()}
-                    onClick={() => settAktivTab(Tabs.Meldinger)}
-                />
-                <Dokumenterknapp
-                    aktiv={aktivTab === Tabs.Dokumenter}
-                    onClick={() => settAktivTab(Tabs.Dokumenter)}
-                />
-            </div>
+            <Header aktivTab={aktivTab} settAktivTab={settAktivTab} />
             {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                 <div className={'historikk'}>
                     <ul className={'hendelsesoversikt__list'}>{hendelser?.map(tilHendelseItem)}</ul>

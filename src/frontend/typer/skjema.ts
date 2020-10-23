@@ -10,6 +10,7 @@ type felterType = { [key: string]: IFelt<any> };
 export interface ISkjema<T> {
     // eslint-disable-next-line
     felter: felterType;
+    skjemanavn: string;
     submitRessurs: Ressurs<T>;
     visFeilmeldinger: boolean;
 }
@@ -22,10 +23,10 @@ export const useSkjema = <T>(initialSkjema: ISkjema<T>) => {
         settSkjema({
             ...initialSkjema,
             felter: Object.entries(initialSkjema.felter).reduce(
-                (validerteFelter: felterType, [feltId, felt]) => {
+                (validerteFelter: felterType, [feltNavn, felt]) => {
                     return {
                         ...validerteFelter,
-                        [feltId]: felt.valideringsfunksjon(felt),
+                        [feltNavn]: felt.valider(felt),
                     };
                 },
                 {}
@@ -38,12 +39,12 @@ export const useSkjema = <T>(initialSkjema: ISkjema<T>) => {
     }, []);
 
     // eslint-disable-next-line
-    const oppdaterFeltISkjema = (feltId: string, nyVerdi: any) => {
+    const oppdaterFeltISkjema = (feltNavn: string, nyVerdi: any) => {
         settSkjema({
             ...skjema,
             felter: {
                 ...skjema.felter,
-                [feltId]: validerFelt(nyVerdi, skjema.felter[feltId]),
+                [feltNavn]: validerFelt(nyVerdi, skjema.felter[feltNavn]),
             },
         });
     };
@@ -69,8 +70,17 @@ export const useSkjema = <T>(initialSkjema: ISkjema<T>) => {
         );
     };
 
-    const hentFeilmelding = (feltId: string) => {
-        return skjema.visFeilmeldinger ? skjema.felter[feltId].feilmelding : undefined;
+    const hentFeltProps = (feltNavn: string) => {
+        return {
+            name: feltNavn,
+            id: `${skjema.skjemanavn}_${feltNavn}`,
+            feil: hentFeilmelding(feltNavn),
+            value: skjema.felter[feltNavn].verdi,
+        };
+    };
+
+    const hentFeilmelding = (feltNavn: string) => {
+        return skjema.visFeilmeldinger ? skjema.felter[feltNavn].feilmelding : undefined;
     };
 
     const onSubmit = <D>(
@@ -91,10 +101,10 @@ export const useSkjema = <T>(initialSkjema: ISkjema<T>) => {
     };
 
     return {
-        hentFeilmelding,
+        hentFeltProps,
         kanSendeSkjema,
+        onSubmit,
         oppdaterFeltISkjema,
         skjema,
-        onSubmit,
     };
 };

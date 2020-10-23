@@ -1,7 +1,7 @@
 import React from 'react';
 
 import IkonMeldinger from '../ikoner/IkonMeldinger';
-import Filterknapp from './Filterknapp';
+import Filterknapp from '../komponenter/Filterknapp';
 
 interface IMeldingerknappProps {
     aktiv?: boolean;
@@ -12,6 +12,7 @@ interface IMeldingerknappProps {
 const Meldingerknapp = ({ aktiv, disabled, onClick }: IMeldingerknappProps) => (
     <Filterknapp disabled={disabled} onClick={onClick} aktiv={aktiv}>
         <IkonMeldinger />
+        Send brev
     </Filterknapp>
 );
 

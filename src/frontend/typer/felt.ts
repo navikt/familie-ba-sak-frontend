@@ -32,15 +32,14 @@ export const defaultValidator = <T>(felt: IFelt<T>) => ({
 
 export interface IFelt<T> {
     feilmelding: string;
-    feltId?: string;
-    valideringsfunksjon: ValiderIFelt<T>;
+    valider: ValiderIFelt<T>;
     valideringsstatus: Valideringsstatus;
     verdi: T;
 }
 
-export const nyttFelt = <T>(verdi: T, valideringsfunksjon: ValiderIFelt<T>): IFelt<T> => ({
+export const nyttFelt = <T>(verdi: T, valideringsfunksjon?: ValiderIFelt<T>): IFelt<T> => ({
     feilmelding: '',
-    valideringsfunksjon,
+    valider: valideringsfunksjon ? valideringsfunksjon : defaultValidator,
     valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
     verdi,
 });
