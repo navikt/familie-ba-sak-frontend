@@ -95,7 +95,10 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
 };
 
 export const visSide = (side: ISide, åpenBehandling: IBehandling) => {
-    if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
+    if (
+        åpenBehandling.skalBehandlesAutomatisk ||
+        åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+    ) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
     } else if (side.id === SideId.OPPLYSNINGSPLIKT) {
         return !!åpenBehandling.opplysningsplikt;
