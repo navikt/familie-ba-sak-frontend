@@ -7,10 +7,11 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import PdfVisningModal from '../PdfVisningModal/PdfVisningModal';
 import useBrevModul from '../Hendelsesoversikt/useBrevModul';
+import { IFagsak } from '../../../typer/fagsak';
 
 interface IProps {
     sendBrevOnClick: (brevData: IBrevData) => void;
-    innsendtBrev: Ressurs<string>;
+    innsendtBrev: Ressurs<IFagsak>;
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
     hentetForhåndsvisning: Ressurs<string>;
     brevMaler: TypeBrev[];
