@@ -21,13 +21,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "pretty-quick --staged"
     }
-  },
-  "lint-staged": {
-    "./src/**/*.{js,ts,tsx}": [
-      "eslint --fix"
-    ]
   },
   "dependencies": {
     "@navikt/familie-backend": "5.0.12",
