@@ -2,43 +2,74 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/dist';
-import { IBrevData, TypeBrev, TypeMottaker } from './typer';
+import {
+    IBrevData,
+    Brevmal,
+    MottakerType,
+    brevmaler,
+    mottakerTyper,
+    BrevtypeSelect,
+} from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import PdfVisningModal from '../PdfVisningModal/PdfVisningModal';
+import { feil, IFelt, nyttFelt, ok } from '../../../typer/felt';
+import { useSkjema } from '../../../typer/skjema';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
+import styled from 'styled-components';
+import StyledKnapperekke from '../StyledComponents/StyledKnapperekke';
 
 interface IProps {
-    sendBrevOnClick: (brevData: IBrevData) => void;
-    innsendtBrev: Ressurs<string>;
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
     hentetForhåndsvisning: Ressurs<string>;
-    brevMaler: TypeBrev[];
+    brevMaler: Brevmal[];
+    onSubmitSuccess: () => void;
 }
 
+const StyledBrevSkjema = styled.div`
+    .skjemagruppe {
+        .skjemaelement {
+            margin-top: 1rem;
+        }
+    }
+`;
+
 const BrevSkjema = ({
-    sendBrevOnClick,
-    innsendtBrev,
+    brevMaler,
     forhåndsvisningOnClick,
     hentetForhåndsvisning,
-    brevMaler,
+    onSubmitSuccess,
 }: IProps) => {
-    const [mottaker, settMottaker] = useState(TypeMottaker.SØKER);
-    const [brevmal, settBrevmal] = useState(TypeBrev.OPPLYSNINGER);
-    const [fritekst, settFritekst] = useState('');
-    const [feilmelding, settFeilmelding] = React.useState<string | undefined>(undefined);
+    const { åpenBehandling } = useBehandling();
+    const { hentLogg } = useFagsakRessurser();
+
+    const { skjema, oppdaterFeltISkjema, kanSendeSkjema, hentFeilmelding, onSubmit } = useSkjema<
+        string
+    >({
+        felter: {
+            mottaker: nyttFelt<MottakerType>(MottakerType.SØKER),
+            brevmal: nyttFelt<Brevmal | ''>('', (felt: IFelt<Brevmal | ''>) =>
+                felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal')
+            ),
+            fritekst: nyttFelt('', (felt: IFelt<string>) =>
+                felt.verdi.replace(/\s/g, '').length >= 3
+                    ? ok(felt)
+                    : feil(
+                          felt,
+                          'Siden du har valgt “Annet” i feltet over, må du oppgi minst ett dokument '
+                      )
+            ),
+        },
+        submitRessurs: byggTomRessurs(),
+        visFeilmeldinger: false,
+    });
+
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
 
-    const senderInn = innsendtBrev.status === RessursStatus.HENTER;
-    const henterFohåndsvisning = hentetForhåndsvisning.status === RessursStatus.HENTER;
-
-    useEffect(() => {
-        settFeilmelding(
-            innsendtBrev.status === RessursStatus.FEILET ||
-                innsendtBrev.status === RessursStatus.IKKE_TILGANG
-                ? innsendtBrev.frontendFeilmelding
-                : undefined
-        );
-    }, [innsendtBrev]);
+    const skjemaErLåst =
+        skjema.submitRessurs.status === RessursStatus.HENTER ||
+        hentetForhåndsvisning.status === RessursStatus.HENTER;
 
     useEffect(() => {
         if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
@@ -46,100 +77,125 @@ const BrevSkjema = ({
         }
     }, [hentetForhåndsvisning]);
 
+    console.log(skjema);
     return (
-        <SkjemaGruppe className={'brevskjema'} feil={feilmelding}>
-            <FamilieSelect
-                name="mottaker"
-                label={'Mottaker'}
-                placeholder={'Velg mottaker'}
-                bredde="xxl"
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    settMottaker(event.target.value as TypeMottaker);
-                }}
-            >
-                {Object.entries(TypeMottaker).map(([id, navn]) => {
-                    return (
-                        <option aria-selected={id === mottaker} key={id} value={id}>
-                            {navn}
-                        </option>
-                    );
-                })}
-            </FamilieSelect>
-            <FamilieSelect
-                name="brevmal"
-                label={'Mal'}
-                placeholder={'Velg mal'}
-                bredde="xxl"
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    settBrevmal(event.target.value as TypeBrev);
-                }}
-            >
-                {brevMaler.map(mal => {
-                    return (
-                        <option aria-selected={mal === brevmal} key={mal} value={mal}>
-                            {mal}
-                        </option>
-                    );
-                })}
-            </FamilieSelect>
-            <FamilieTextarea
-                disabled={senderInn || henterFohåndsvisning}
-                erLesevisning={false}
-                label={'Fritekst'}
-                value={fritekst}
-                maxLength={4000}
-                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                    const tekst = event.target.value;
-                    settFritekst(tekst);
-                    if (tekst !== '') {
-                        settFeilmelding(undefined);
-                    }
-                }}
+        <StyledBrevSkjema>
+            <PdfVisningModal
+                åpen={visForhåndsvisningModal}
+                onRequestClose={() => settForhåndsviningModal(false)}
+                pdfdata={hentetForhåndsvisning}
             />
-            <div className="knapperekke">
-                <Knapp
-                    mini
-                    spinner={senderInn}
-                    disabled={senderInn}
-                    onClick={() => {
-                        if (fritekst === '') {
-                            settFeilmelding('Friteksten kan ikke være tom');
-                        } else if (!senderInn) {
-                            sendBrevOnClick({
-                                mottaker: mottaker,
-                                brevmal: brevmal,
-                                fritekst: fritekst,
-                            });
-                        }
+            <SkjemaGruppe
+                feil={
+                    skjema.submitRessurs.status === RessursStatus.FEILET
+                        ? skjema.submitRessurs.frontendFeilmelding
+                        : undefined
+                }
+            >
+                <FamilieSelect
+                    name="mottaker"
+                    label={'Mottaker'}
+                    placeholder={'Velg mottaker'}
+                    value={skjema.felter.mottaker.verdi}
+                    feil={hentFeilmelding('mottaker')}
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                        oppdaterFeltISkjema('mottaker', event.target.value as MottakerType);
                     }}
                 >
-                    Send brev
-                </Knapp>
+                    {Object.entries(MottakerType).map(([id, mottakerType]) => {
+                        return (
+                            <option
+                                aria-selected={id === skjema.felter.mottaker.verdi}
+                                key={id}
+                                value={id}
+                            >
+                                {mottakerTyper[mottakerType]}
+                            </option>
+                        );
+                    })}
+                </FamilieSelect>
+                <FamilieSelect
+                    name="brevmal"
+                    label={'Mal'}
+                    placeholder={'Velg mal'}
+                    feil={hentFeilmelding('brevmal')}
+                    value={skjema.felter.brevmal.verdi}
+                    onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
+                        oppdaterFeltISkjema('brevmal', event.target.value);
+                    }}
+                >
+                    <option disabled={true} value={''}>
+                        Velg
+                    </option>
+                    {brevMaler.map(mal => {
+                        return (
+                            <option
+                                aria-selected={mal === skjema.felter.brevmal.verdi}
+                                key={mal}
+                                value={mal}
+                            >
+                                {brevmaler[mal]}
+                            </option>
+                        );
+                    })}
+                </FamilieSelect>
+                <FamilieTextarea
+                    disabled={skjemaErLåst}
+                    erLesevisning={false}
+                    label={'Fritekst'}
+                    feil={hentFeilmelding('fritekst')}
+                    value={skjema.felter.fritekst.verdi}
+                    maxLength={4000}
+                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        oppdaterFeltISkjema('fritekst', event.target.value);
+                    }}
+                />
+            </SkjemaGruppe>
+            <StyledKnapperekke>
                 <Flatknapp
                     mini
-                    spinner={henterFohåndsvisning}
-                    disabled={henterFohåndsvisning}
+                    spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
+                    disabled={skjemaErLåst}
                     onClick={() => {
-                        if (fritekst === '') {
-                            settFeilmelding('Friteksten kan ikke være tom');
-                        } else if (!henterFohåndsvisning) {
+                        if (kanSendeSkjema()) {
                             forhåndsvisningOnClick({
-                                mottaker: mottaker,
-                                brevmal: brevmal,
-                                fritekst: fritekst,
+                                mottaker: skjema.felter.mottaker.verdi,
+                                brevmal: skjema.felter.brevmal.verdi,
+                                fritekst: skjema.felter.fritekst.verdi,
                             });
                         }
                     }}
                 >
                     Forhåndsvis
                 </Flatknapp>
-            </div>
-            <PdfVisningModal
-                åpen={visForhåndsvisningModal}
-                onRequestClose={() => settForhåndsviningModal(false)}
-                pdfdata={hentetForhåndsvisning}
-            />
-        </SkjemaGruppe>
+                <Knapp
+                    mini
+                    spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    disabled={skjemaErLåst}
+                    onClick={() => {
+                        if (åpenBehandling.status === RessursStatus.SUKSESS) {
+                            onSubmit(
+                                {
+                                    method: 'POST',
+                                    data: {
+                                        mottaker: skjema.felter.mottaker.verdi,
+                                        brevmal: skjema.felter.brevmal.verdi,
+                                        fritekst: skjema.felter.fritekst.verdi,
+                                    },
+                                    url: `/familie-ba-sak/api/dokument/send-brev/innhente-opplysninger/${åpenBehandling.data.behandlingId}`,
+                                },
+                                () => {
+                                    onSubmitSuccess();
+                                    hentLogg(åpenBehandling.data.behandlingId);
+                                }
+                            );
+                        }
+                    }}
+                >
+                    Send brev
+                </Knapp>
+            </StyledKnapperekke>
+        </StyledBrevSkjema>
     );
 };
 

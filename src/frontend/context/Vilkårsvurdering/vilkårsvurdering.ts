@@ -63,7 +63,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                 {
                                     begrunnelse: {
                                         feilmelding: '',
-                                        valideringsFunksjon: ikkeValider,
+                                        valideringsfunksjon: ikkeValider,
                                         valideringsstatus: Valideringsstatus.OK,
                                         verdi: vilkårResultat.begrunnelse,
                                     },

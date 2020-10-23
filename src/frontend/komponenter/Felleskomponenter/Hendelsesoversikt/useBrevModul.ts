@@ -7,43 +7,21 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { IBrevData, TypeBrev } from '../BrevModul/typer';
+import { IBrevData, Brevmal } from '../BrevModul/typer';
 import { AxiosError } from 'axios';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { hentStegNummer } from '../../../typer/behandling';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../../../typer/behandling';
 
 const useBrevModul = () => {
     const { axiosRequest } = useApp();
     const { åpenBehandling } = useBehandling();
-    const { hentLogg } = useFagsakRessurser();
-    const [innsendtBrev, settInnsendtBrev] = React.useState<Ressurs<string>>(byggTomRessurs());
     const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
         byggTomRessurs()
     );
 
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
-
-    const behandlingSteg =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.steg;
-
-    const sendBrev = (brevData: IBrevData) => {
-        settInnsendtBrev(byggHenterRessurs());
-        axiosRequest<string, IBrevData>({
-            method: 'POST',
-            data: brevData,
-            url: `/familie-ba-sak/api/dokument/send-brev/innhente-opplysninger/${behandlingId}`,
-        })
-            .then((response: Ressurs<string>) => {
-                settInnsendtBrev(response);
-                behandlingId && hentLogg(behandlingId);
-            })
-            .catch((_error: AxiosError) => {
-                settInnsendtBrev(byggFeiletRessurs('Ukjent feil ved sending av brev.'));
-            });
-    };
 
     const hentForhåndsvisning = (brevData: IBrevData) => {
         settHentetForhåndsvisning(byggHenterRessurs());
@@ -74,18 +52,26 @@ const useBrevModul = () => {
 
     const hentMuligeBrevMaler = () => {
         const brevMaler = [];
-        if (behandlingSteg && hentStegNummer(behandlingSteg) >= 2) {
-            brevMaler.push(TypeBrev.OPPLYSNINGER);
+        if (åpenBehandling.status === RessursStatus.SUKSESS) {
+            if (
+                hentStegNummer(åpenBehandling.data.steg) >= 2 &&
+                åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD
+            ) {
+                brevMaler.push(Brevmal.OPPLYSNINGER);
+            }
+
+            if (åpenBehandling.data.type === Behandlingstype.REVURDERING) {
+                brevMaler.push(Brevmal.VARSEL_OM_REVURDERING);
+            }
         }
+
         return brevMaler;
     };
 
     return {
-        sendBrev,
         hentForhåndsvisning,
-        innsendtBrev,
-        hentetForhåndsvisning,
         hentMuligeBrevMaler,
+        hentetForhåndsvisning,
     };
 };
 

@@ -8,6 +8,7 @@ import Historikkknapp from './komponenter/Historikkknapp';
 import Meldingerknapp from './komponenter/Meldingerknapp';
 import classNames from 'classnames';
 import Brev from './komponenter/Brev';
+import { useBehandling } from '../../../context/BehandlingContext';
 
 export { Hendelse };
 
@@ -21,6 +22,7 @@ const tilHendelseItem = (hendelse: Hendelse) => (
 );
 
 const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) => {
+    const { erLesevisning } = useBehandling();
     const [aktivTab, settAktivTab] = React.useState<Tabs>(Tabs.Historikk);
 
     return (
@@ -32,6 +34,7 @@ const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) =>
                 />
                 <Meldingerknapp
                     aktiv={aktivTab === Tabs.Meldinger}
+                    disabled={erLesevisning()}
                     onClick={() => settAktivTab(Tabs.Meldinger)}
                 />
                 <Dokumenterknapp

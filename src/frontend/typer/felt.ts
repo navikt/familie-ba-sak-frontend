@@ -10,7 +10,7 @@ export enum Valideringsstatus {
 export const ok = <T>(felt: IFelt<T>): IFelt<T> => {
     return {
         feilmelding: '',
-        valideringsFunksjon: felt.valideringsFunksjon,
+        valideringsfunksjon: felt.valideringsfunksjon,
         valideringsstatus: Valideringsstatus.OK,
         verdi: felt.verdi,
     };
@@ -19,7 +19,7 @@ export const ok = <T>(felt: IFelt<T>): IFelt<T> => {
 export const feil = <T>(felt: IFelt<T>, feilmelding: string): IFelt<T> => {
     return {
         feilmelding,
-        valideringsFunksjon: felt.valideringsFunksjon,
+        valideringsfunksjon: felt.valideringsfunksjon,
         valideringsstatus: Valideringsstatus.FEIL,
         verdi: felt.verdi,
     };
@@ -27,16 +27,22 @@ export const feil = <T>(felt: IFelt<T>, feilmelding: string): IFelt<T> => {
 
 export type ValiderIFelt<T> = (felt: IFelt<T>, person?: IGrunnlagPerson) => IFelt<T>;
 
+export const defaultValidator = <T>(felt: IFelt<T>) => ({
+    ...felt,
+    valideringsstatus: Valideringsstatus.OK,
+});
+
 export interface IFelt<T> {
     feilmelding: string;
+    feltId?: string;
+    valideringsfunksjon: ValiderIFelt<T>;
     valideringsstatus: Valideringsstatus;
-    valideringsFunksjon: ValiderIFelt<T>;
     verdi: T;
 }
 
-export const nyttFelt = <T>(verdi: T, valideringsFunksjon: ValiderIFelt<T>): IFelt<T> => ({
+export const nyttFelt = <T>(verdi: T, valideringsFunksjon?: ValiderIFelt<T>): IFelt<T> => ({
     feilmelding: '',
-    valideringsFunksjon,
+    valideringsfunksjon: valideringsFunksjon ? valideringsFunksjon : defaultValidator,
     valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
     verdi,
 });

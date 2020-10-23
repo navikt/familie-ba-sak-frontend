@@ -108,7 +108,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     };
 
     const onClickVilkårFerdig = () => {
-        const validertVilkår = redigerbartVilkår.valideringsFunksjon(redigerbartVilkår, person);
+        const validertVilkår = redigerbartVilkår.valideringsfunksjon(redigerbartVilkår, person);
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
             (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
