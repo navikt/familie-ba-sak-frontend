@@ -6,6 +6,7 @@ import { useBehandling } from '../../../../context/BehandlingContext';
 import { IFagsak } from '../../../../typer/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
+import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 
 interface IProps {
     fagsak: IFagsak;
@@ -54,6 +55,12 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                     )}
                     <li>
                         <OpprettBehandling
+                            onListElementClick={() => settAnker(undefined)}
+                            fagsak={fagsak}
+                        />
+                    </li>
+                    <li>
+                        <HenleggBehandling
                             onListElementClick={() => settAnker(undefined)}
                             fagsak={fagsak}
                         />

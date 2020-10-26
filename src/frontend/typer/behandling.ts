@@ -10,6 +10,16 @@ export enum BehandlingKategori {
     EØS = 'EØS',
 }
 
+export enum HenleggelseÅrsak {
+    SØKNAD_TRUKKET = 'SØKNAD_TRUKKET',
+    FEILAKTIG_OPPRETTET = 'FEILAKTIG_OPPRETTET',
+}
+
+export const henleggelseÅrsak: Record<HenleggelseÅrsak, string> = {
+    SØKNAD_TRUKKET: 'Søknaden er trukket',
+    FEILAKTIG_OPPRETTET: 'Behandlingen er feilaktig opprettet',
+};
+
 export enum BehandlingÅrsak {
     SØKNAD = 'SØKNAD',
     FØDSELSHENDELSE = 'FØDSELSHENDELSE',
