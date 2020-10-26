@@ -60,7 +60,10 @@ const useBrevModul = () => {
                 brevMaler.push(Brevmal.OPPLYSNINGER);
             }
 
-            if (åpenBehandling.data.type === Behandlingstype.REVURDERING) {
+            if (
+                åpenBehandling.data.type === Behandlingstype.REVURDERING &&
+                åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD
+            ) {
                 brevMaler.push(Brevmal.VARSEL_OM_REVURDERING);
             }
         }
