@@ -4,7 +4,7 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../../../typer/fagsak';
 import Link from './Link';
-import { erSidenInaktiv, ISide, IUnderside, sider, visSide } from './sider';
+import { erSidenInaktiv, IUnderside, sider, visSide } from './sider';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {
@@ -12,16 +12,14 @@ interface IProps {
 }
 
 const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { åpenBehandling, harOpplysningsplikt } = useBehandling();
+    const { åpenBehandling, opplysningsplikt } = useBehandling();
 
     return (
         <nav className={'venstremeny'}>
             {åpenBehandling.status === RessursStatus.SUKSESS
-                ? Object.values(sider)
-                      .filter((side: ISide) =>
-                          visSide(side, åpenBehandling.data, harOpplysningsplikt)
-                      )
-                      .map((side: ISide, index: number) => {
+                ? Object.entries(sider)
+                      .filter(([_, side]) => visSide(side, åpenBehandling.data, !!opplysningsplikt))
+                      .map(([sideId, side], index: number) => {
                           const tilPath = `/fagsak/${fagsak.id}/${åpenBehandling.data.behandlingId}/${side.href}`;
 
                           const undersider: IUnderside[] = side.undersider
@@ -29,10 +27,10 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                               : [];
 
                           return (
-                              <React.Fragment key={side.id}>
+                              <React.Fragment key={sideId}>
                                   <Link
                                       active={erSidenInaktiv(side, åpenBehandling.data.steg)}
-                                      id={side.id}
+                                      id={sideId}
                                       to={tilPath}
                                       className={classNames(
                                           'venstremeny__link',
@@ -46,8 +44,8 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                       const antallAksjonspunkter = underside.antallAksjonspunkter();
                                       return (
                                           <Link
-                                              key={`${side.id}_${underside.hash}`}
-                                              id={`${side.id}_${underside.hash}`}
+                                              key={`${sideId}_${underside.hash}`}
+                                              id={`${sideId}_${underside.hash}`}
                                               to={`${tilPath}#${underside.hash}`}
                                               className={classNames(
                                                   'venstremeny__link',

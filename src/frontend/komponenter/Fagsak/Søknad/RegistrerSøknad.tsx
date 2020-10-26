@@ -26,7 +26,7 @@ interface IProps {
 const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { axiosRequest } = useApp();
     const { fagsak, settFagsak } = useFagsakRessurser();
-    const { erLesevisning, harOpplysningsplikt } = useBehandling();
+    const { erLesevisning, opplysningsplikt } = useBehandling();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig } = useSøknad();
@@ -52,7 +52,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-                    if (harOpplysningsplikt) {
+                    if (opplysningsplikt) {
                         history.push(
                             `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/opplysningsplikt`
                         );

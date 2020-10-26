@@ -8,9 +8,9 @@ import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilk
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
 import { IFelt } from '../../../typer/felt';
 import { formaterPersonIdent } from '../../../utils/formatter';
+import { IOpplysningsplikt, OpplysningspliktStatus } from '../../../typer/opplysningsplikt';
 
 export interface ISide {
-    id: SideId;
     href: string;
     navn: string;
     steg: BehandlingSteg;
@@ -31,21 +31,18 @@ export enum SideId {
     VEDTAK = 'VEDTAK',
 }
 
-export const sider: ISide[] = [
-    {
-        id: SideId.REGISTRERE_SØKNAD,
+export const sider: Record<SideId, ISide> = {
+    REGISTRERE_SØKNAD: {
         href: 'registrer-soknad',
         navn: 'Registrer søknad',
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
     },
-    {
-        id: SideId.OPPLYSNINGSPLIKT,
+    OPPLYSNINGSPLIKT: {
         href: 'opplysningsplikt',
         navn: 'Opplysningsplikt',
-        steg: BehandlingSteg.VILKÅRSVURDERING,
+        steg: BehandlingSteg.OPPLYSNINGSPLIKT,
     },
-    {
-        id: SideId.VILKÅRSVURDERING,
+    VILKÅRSVURDERING: {
         href: 'vilkaarsvurdering',
         navn: 'Vilkårsvurdering',
         steg: BehandlingSteg.VILKÅRSVURDERING,
@@ -73,14 +70,17 @@ export const sider: ISide[] = [
             );
         },
     },
-    {
-        id: SideId.BEHANDLINGRESULTAT,
+    BEHANDLINGRESULTAT: {
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
         steg: BehandlingSteg.SEND_TIL_BESLUTTER,
     },
-    { id: SideId.VEDTAK, href: 'vedtak', navn: 'Vedtak', steg: BehandlingSteg.SEND_TIL_BESLUTTER },
-];
+    VEDTAK: {
+        href: 'vedtak',
+        navn: 'Vedtak',
+        steg: BehandlingSteg.SEND_TIL_BESLUTTER,
+    },
+};
 
 export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
     if (!side.steg && side.steg !== 0) {
@@ -100,16 +100,21 @@ export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysning
         åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
     ) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
-    } else if (side.id === SideId.OPPLYSNINGSPLIKT) {
+    } else if (side === sider.OPPLYSNINGSPLIKT) {
         return harOpplysningsplikt;
     } else {
         return true;
     }
 };
 
-export const finnSideForBehandlingssteg = (steg: BehandlingSteg) => {
+export const finnSideForBehandlingssteg = (
+    steg: BehandlingSteg,
+    opplysningsplikt: IOpplysningsplikt | undefined
+) => {
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
-        return Object.values(sider).find((side: ISide) => side.id === SideId.VEDTAK);
+        return sider.VEDTAK;
+    } else if (opplysningsplikt && opplysningsplikt.status === OpplysningspliktStatus.IKKE_SATT) {
+        return sider.OPPLYSNINGSPLIKT;
     }
     return Object.values(sider).find((side: ISide) => side.steg === steg);
 };
