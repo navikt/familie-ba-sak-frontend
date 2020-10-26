@@ -1,23 +1,27 @@
-import './Filterknapp.less';
-
 import React, { ReactNode } from 'react';
 
 import classNames from 'classnames';
 import { randomUUID } from '../../../../utils/commons';
 
 interface IFilterknappProps {
+    aktiv?: boolean;
+    disabled?: boolean;
     children: ReactNode;
     onClick: () => void;
-    aktiv?: boolean;
 }
 
-const Filterknapp = ({ children, onClick, aktiv }: IFilterknappProps) => {
+const Filterknapp = ({ children, disabled = false, onClick, aktiv }: IFilterknappProps) => {
     return (
         <button
             id={`filter_${randomUUID()}`}
             aria-label={`filter_${randomUUID()}`}
             onClick={onClick}
-            className={classNames('filterknapp', aktiv && 'filterknapp__aktivKnapp')}
+            disabled={disabled}
+            className={classNames(
+                'filterknapp',
+                aktiv && 'filterknapp__aktiv',
+                disabled && 'disabled'
+            )}
         >
             {children}
         </button>

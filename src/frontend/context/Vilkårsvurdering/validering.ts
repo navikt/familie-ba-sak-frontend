@@ -7,16 +7,16 @@ export const validerVilkår = (
     nyttVilkårResultat: IFelt<IVilkårResultat>,
     person?: IGrunnlagPerson
 ): IFelt<IVilkårResultat> => {
-    const nyPeriode: IFelt<IPeriode> = nyttVilkårResultat.verdi.periode.valideringsFunksjon(
+    const nyPeriode: IFelt<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
         nyttVilkårResultat.verdi.periode,
         person
     );
 
-    const nyBegrunnelse: IFelt<string> = nyttVilkårResultat.verdi.begrunnelse.valideringsFunksjon(
+    const nyBegrunnelse: IFelt<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
         nyttVilkårResultat.verdi.begrunnelse
     );
 
-    const nyttResultat: IFelt<Resultat> = nyttVilkårResultat.verdi.resultat.valideringsFunksjon(
+    const nyttResultat: IFelt<Resultat> = nyttVilkårResultat.verdi.resultat.valider(
         nyttVilkårResultat.verdi.resultat
     );
 

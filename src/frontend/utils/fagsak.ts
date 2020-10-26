@@ -42,16 +42,12 @@ export const hentAktivVedtakPåBehandlig = (
  * @param vilkårsvurdering liste av perioder med vilkår
  */
 export const erBehandlingenInnvilget = (vilkårsvurdering: IPersonResultat[]) => {
-    if (
+    return (
         vilkårsvurdering.find((personResultat: IPersonResultat) =>
             personResultat.vilkårResultater.find(
                 (vilkårResultat: IFelt<IVilkårResultat>) =>
                     vilkårResultat.verdi.resultat.verdi === Resultat.NEI
             )
-        ) !== undefined
-    ) {
-        return false;
-    } else {
-        return true;
-    }
+        ) === undefined
+    );
 };

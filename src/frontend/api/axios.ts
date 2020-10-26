@@ -12,9 +12,7 @@ export const håndterApiRessurs = <T>(
     ressurs: ApiRessurs<T>,
     innloggetSaksbehandler?: ISaksbehandler
 ): Ressurs<T> => {
-    let typetRessurs: Ressurs<T> = {
-        status: RessursStatus.IKKE_HENTET,
-    };
+    let typetRessurs: Ressurs<T>;
 
     switch (ressurs.status) {
         case RessursStatus.SUKSESS:
