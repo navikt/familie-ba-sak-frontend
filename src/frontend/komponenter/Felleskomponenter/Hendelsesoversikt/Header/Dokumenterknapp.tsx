@@ -1,3 +1,4 @@
+import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 
 import IkonDokumenter from '../ikoner/IkonDokumenter';
@@ -11,7 +12,7 @@ interface IDokumenterknappProps {
 const Dokumenterknapp = ({ aktiv, onClick }: IDokumenterknappProps) => (
     <Filterknapp onClick={onClick} aktiv={aktiv}>
         <IkonDokumenter />
-        Dokumenter
+        <Normaltekst>Dokumenter</Normaltekst>
     </Filterknapp>
 );
 

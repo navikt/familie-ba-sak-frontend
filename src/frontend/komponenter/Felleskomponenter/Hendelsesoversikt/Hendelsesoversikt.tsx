@@ -4,7 +4,7 @@ import { Hendelse, Tabs } from './typer';
 
 import HendelseItem from './komponenter/HendelseItem';
 import classNames from 'classnames';
-import Brev from './komponenter/Brev';
+import Brev from './BrevModul/Brev';
 import Header from './Header/Header';
 
 export { Hendelse };

@@ -1,8 +1,8 @@
 import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import UIModalWrapper from '../../Modal/UIModalWrapper';
-import Brevskjema from '../../BrevModul/BrevSkjema';
-import useBrevModul from '../useBrevModul';
+import useBrevModul from './useBrevModul';
+import Brevskjema from './Brevskjema';
 
 const Brev = () => {
     const { hentForhåndsvisning, hentetForhåndsvisning, hentMuligeBrevMaler } = useBrevModul();

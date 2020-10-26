@@ -1,3 +1,4 @@
+import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 
 import IkonMeldinger from '../ikoner/IkonMeldinger';
@@ -12,7 +13,7 @@ interface IMeldingerknappProps {
 const Meldingerknapp = ({ aktiv, disabled, onClick }: IMeldingerknappProps) => (
     <Filterknapp disabled={disabled} onClick={onClick} aktiv={aktiv}>
         <IkonMeldinger />
-        Send brev
+        <Normaltekst>Send brev</Normaltekst>
     </Filterknapp>
 );
 

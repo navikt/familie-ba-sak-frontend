@@ -35,7 +35,7 @@ const StyledBrevSkjema = styled.div`
     }
 `;
 
-const BrevSkjema = ({
+const Brevskjema = ({
     brevMaler,
     forhåndsvisningOnClick,
     hentetForhåndsvisning,
@@ -57,7 +57,9 @@ const BrevSkjema = ({
                     ? ok(felt)
                     : feil(
                           felt,
-                          'Siden du har valgt “Annet” i feltet over, må du oppgi minst ett dokument '
+                          'Du må fylle ut fritekst'
+                          // Teksten under skal inn når vi får på plass multiselect
+                          //'Siden du har valgt “Annet” i feltet over, må du oppgi minst ett dokument '
                       )
             ),
         },
@@ -194,4 +196,4 @@ const BrevSkjema = ({
     );
 };
 
-export default BrevSkjema;
+export default Brevskjema;

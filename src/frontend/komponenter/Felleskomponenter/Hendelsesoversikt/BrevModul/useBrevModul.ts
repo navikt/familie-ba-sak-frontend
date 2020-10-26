@@ -1,4 +1,4 @@
-import { useApp } from '../../../context/AppContext';
+import { useApp } from '../../../../context/AppContext';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -7,11 +7,11 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { IBrevData, Brevmal } from '../BrevModul/typer';
 import { AxiosError } from 'axios';
 import * as React from 'react';
-import { useBehandling } from '../../../context/BehandlingContext';
-import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../../../typer/behandling';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../../../../typer/behandling';
+import { Brevmal, IBrevData } from './typer';
 
 const useBrevModul = () => {
     const { axiosRequest } = useApp();

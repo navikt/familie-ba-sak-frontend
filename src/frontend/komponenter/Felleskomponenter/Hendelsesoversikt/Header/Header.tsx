@@ -12,11 +12,9 @@ interface IProps {
 }
 
 const StyledHeader = styled.div`
-    height: 3.125rem;
-    background: #f8f8f8;
-    margin-left: 1px;
+    height: 4rem;
     padding: 0 1.25rem;
-    border-bottom: 1px solid #c6c2bf;
+    display: flex;
 `;
 
 const Header = ({ aktivTab, settAktivTab }: IProps) => {
@@ -28,14 +26,14 @@ const Header = ({ aktivTab, settAktivTab }: IProps) => {
                 aktiv={aktivTab === Tabs.Historikk}
                 onClick={() => settAktivTab(Tabs.Historikk)}
             />
+            <Dokumenterknapp
+                aktiv={aktivTab === Tabs.Dokumenter}
+                onClick={() => settAktivTab(Tabs.Dokumenter)}
+            />
             <Meldingerknapp
                 aktiv={aktivTab === Tabs.Meldinger}
                 disabled={erLesevisning()}
                 onClick={() => settAktivTab(Tabs.Meldinger)}
-            />
-            <Dokumenterknapp
-                aktiv={aktivTab === Tabs.Dokumenter}
-                onClick={() => settAktivTab(Tabs.Dokumenter)}
             />
         </StyledHeader>
     );

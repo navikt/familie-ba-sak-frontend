@@ -1,15 +1,10 @@
 import * as React from 'react';
 import Ikon, { IIkonProps } from './Ikon';
 
-const IkonDokumenter = ({ width = 37, height = 37 }: IIkonProps) => {
+const IkonDokumenter = ({ width = 32, height = 32 }: IIkonProps) => {
     return (
-        <Ikon width={width} height={height} viewBox={37}>
-            <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M26.2895 2.93333H10.9521L8.31884 0.2156C8.18526 0.0777333 8.00479 0 7.81579 0H0.710526C0.319737 0 0 0.328533 0 0.733333V21.2667C0 21.6729 0.319737 22 0.710526 22H26.2895C26.6831 22 27 21.6729 27 21.2667V3.66667C27 3.26187 26.6831 2.93333 26.2895 2.93333Z"
-                fill="#59514B"
-            />
+        <Ikon width={width} height={height} viewBox={32}>
+            <path d="M26.2895 2.93333H10.9521L8.31884 0.2156C8.18526 0.0777333 8.00479 0 7.81579 0H0.710526C0.319737 0 0 0.328533 0 0.733333V21.2667C0 21.6729 0.319737 22 0.710526 22H26.2895C26.6831 22 27 21.6729 27 21.2667V3.66667C27 3.26187 26.6831 2.93333 26.2895 2.93333Z" />
         </Ikon>
     );
 };

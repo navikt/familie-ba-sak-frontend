@@ -1,5 +1,3 @@
-import './Filterknapp.less';
-
 import React, { ReactNode } from 'react';
 
 import classNames from 'classnames';
@@ -19,7 +17,7 @@ const Filterknapp = ({ children, disabled = false, onClick, aktiv }: IFilterknap
             aria-label={`filter_${randomUUID()}`}
             onClick={onClick}
             disabled={disabled}
-            className={classNames('filterknapp', aktiv && 'filterknapp__aktivKnapp')}
+            className={classNames('filterknapp', aktiv && 'aktivKnapp', disabled && 'disabled')}
         >
             {children}
         </button>
