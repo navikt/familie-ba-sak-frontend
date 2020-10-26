@@ -14,6 +14,7 @@ import { useFagsakRessurser } from '../../../context/FagsakContext';
 import Statuslinje from './Statuslinje';
 import { Resultat } from '../../../typer/vilkår';
 import styled from 'styled-components';
+import { Undertekst } from 'nav-frontend-typografi';
 
 interface IOpplysningspliktProps {
     fagsak: IFagsak;
@@ -111,7 +112,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                         legend={
                             <>
                                 Ta stilling til om opplysningsplikten er oppfylt{' '}
-                                <span>(§17 OG 18)</span>
+                                <Undertekst tag={'span'}>(§17 OG 18)</Undertekst>
                             </>
                         }
                     >
