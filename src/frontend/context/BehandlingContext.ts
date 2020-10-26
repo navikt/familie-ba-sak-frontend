@@ -16,16 +16,18 @@ import { useFagsakRessurser } from './FagsakContext';
 import { useHistory } from 'react-router';
 import {
     erViPåUdefinertFagsakSide,
+    erViPåUlovligSteg,
     finnSideForBehandlingssteg,
     ISide,
     sider,
-    erViPåUlovligSteg,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
     const { hentSaksbehandlerRolle } = useApp();
     const { fagsak } = useFagsakRessurser();
+    const harOpplysningsplikt =
+        åpenBehandling.status === RessursStatus.SUKSESS && !!åpenBehandling.data.opplysningsplikt;
 
     const history = useHistory();
     const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
@@ -104,6 +106,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     return {
         åpenBehandling,
+        harOpplysningsplikt,
         erLesevisning,
         bestemÅpenBehandling,
         forrigeÅpneSide,

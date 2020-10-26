@@ -26,7 +26,7 @@ interface IProps {
 const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { axiosRequest } = useApp();
     const { fagsak, settFagsak } = useFagsakRessurser();
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, harOpplysningsplikt } = useBehandling();
     const history = useHistory();
 
     const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig } = useSøknad();
@@ -52,9 +52,15 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-                    history.push(
-                        `/fagsak/${response.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
-                    );
+                    if (harOpplysningsplikt) {
+                        history.push(
+                            `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/opplysningsplikt`
+                        );
+                    } else {
+                        history.push(
+                            `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
+                        );
+                    }
                 } else if (response.status === RessursStatus.FUNKSJONELL_FEIL) {
                     settFrontendFeilmelding(response.frontendFeilmelding);
                     settVisModal(true);

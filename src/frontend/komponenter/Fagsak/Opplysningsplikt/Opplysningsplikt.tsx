@@ -12,12 +12,12 @@ import { AxiosError } from 'axios';
 import { useApp } from '../../../context/AppContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
-interface ITilkjentYtelseProps {
+interface IOpplysningspliktProps {
     fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
-const Opplysningsplikt: React.FunctionComponent<ITilkjentYtelseProps> = ({
+const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
     fagsak,
     åpenBehandling,
 }) => {
@@ -107,7 +107,7 @@ const Opplysningsplikt: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     erLesevisning={lesevisning}
                     label={'Begrunnelse (valgfri)'}
                     value={opplysningsplikt.begrunnelse}
-                    maxLength={2000}
+                    maxLength={1500}
                     onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
                         begrunnelseOnChange(event);
                     }}

@@ -94,14 +94,14 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
     return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
-export const visSide = (side: ISide, åpenBehandling: IBehandling) => {
+export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysningsplikt: boolean) => {
     if (
         åpenBehandling.skalBehandlesAutomatisk ||
         åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
     ) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
     } else if (side.id === SideId.OPPLYSNINGSPLIKT) {
-        return !!åpenBehandling.opplysningsplikt;
+        return harOpplysningsplikt;
     } else {
         return true;
     }
