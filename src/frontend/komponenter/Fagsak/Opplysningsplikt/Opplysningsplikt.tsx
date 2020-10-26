@@ -11,11 +11,23 @@ import { Ressurs } from '@navikt/familie-typer';
 import { AxiosError } from 'axios';
 import { useApp } from '../../../context/AppContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import Statuslinje from './Statuslinje';
+import { Resultat } from '../../../typer/vilkår';
+import styled from 'styled-components';
 
 interface IOpplysningspliktProps {
     fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
+
+const SkjemaContainer = styled.div`
+    display: flex;
+    margin: 2rem 0;
+`;
+
+const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+    margin-bottom: 1rem;
+`;
 
 const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
     fagsak,
@@ -70,49 +82,57 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
 
     return (
         <Skjemasteg
+            className={'opplysningsplikt'}
             senderInn={false}
             tittel="Opplysningsplikt"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={nesteOnClick}
             nesteKnappTittel={lesevisning ? 'Neste' : 'Bekreft og fortsett'}
         >
-            <div>
-                <FamilieRadioGruppe
-                    erLesevisning={lesevisning}
-                    legend={
-                        <p>
-                            Ta stilling til om opplysningsplikten er oppfylt{' '}
-                            <span>(§17 OG 18)</span>
-                        </p>
-                    }
-                >
-                    <Radio
-                        label={'Mottatt dokumentasjon'}
-                        name="opplysningsplikt"
-                        onChange={() => radioOnChange(OpplysningspliktStatus.MOTTATT)}
-                    />
-                    <Radio
-                        label={'Ikke mottatt dokumentasjon'}
-                        name="opplysningsplikt"
-                        onChange={() => radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG)}
-                    />
-                    <Radio
-                        label={'Fortsett med manglende dokumentasjon'}
-                        name="opplysningsplikt"
-                        onChange={() => radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT)}
-                    />
-                </FamilieRadioGruppe>
+            <SkjemaContainer>
+                <Statuslinje resultat={Resultat.JA} />
+                <div className={'opplysningsplikt__skjema'}>
+                    <StyledFamilieRadioGruppe
+                        erLesevisning={lesevisning}
+                        legend={
+                            <>
+                                Ta stilling til om opplysningsplikten er oppfylt{' '}
+                                <span>(§17 OG 18)</span>
+                            </>
+                        }
+                    >
+                        <Radio
+                            label={'Mottatt dokumentasjon'}
+                            name="opplysningsplikt"
+                            onChange={() => radioOnChange(OpplysningspliktStatus.MOTTATT)}
+                        />
+                        <Radio
+                            label={'Ikke mottatt dokumentasjon'}
+                            name="opplysningsplikt"
+                            onChange={() =>
+                                radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG)
+                            }
+                        />
+                        <Radio
+                            label={'Fortsett med manglende dokumentasjon'}
+                            name="opplysningsplikt"
+                            onChange={() =>
+                                radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT)
+                            }
+                        />
+                    </StyledFamilieRadioGruppe>
 
-                <FamilieTextarea
-                    erLesevisning={lesevisning}
-                    label={'Begrunnelse (valgfri)'}
-                    value={opplysningsplikt.begrunnelse}
-                    maxLength={1500}
-                    onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
-                        begrunnelseOnChange(event);
-                    }}
-                />
-            </div>
+                    <FamilieTextarea
+                        erLesevisning={lesevisning}
+                        label={'Begrunnelse (valgfri)'}
+                        value={opplysningsplikt.begrunnelse}
+                        maxLength={1500}
+                        onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
+                            begrunnelseOnChange(event);
+                        }}
+                    />
+                </div>
+            </SkjemaContainer>
         </Skjemasteg>
     );
 };
