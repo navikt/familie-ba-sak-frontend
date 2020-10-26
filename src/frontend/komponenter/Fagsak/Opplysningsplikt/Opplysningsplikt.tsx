@@ -99,7 +99,7 @@ const Opplysningsplikt: React.FunctionComponent<ITilkjentYtelseProps> = ({
 
             <FamilieTextarea
                 erLesevisning={lesevisning}
-                label={'Begrunnelse'}
+                label={'Begrunnelse (valgfri)'}
                 value={opplysningsplikt.begrunnelse}
                 maxLength={2000}
                 onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
