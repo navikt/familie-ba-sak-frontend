@@ -17,7 +17,11 @@ const Filterknapp = ({ children, disabled = false, onClick, aktiv }: IFilterknap
             aria-label={`filter_${randomUUID()}`}
             onClick={onClick}
             disabled={disabled}
-            className={classNames('filterknapp', aktiv && 'aktivKnapp', disabled && 'disabled')}
+            className={classNames(
+                'filterknapp',
+                aktiv && 'filterknapp__aktiv',
+                disabled && 'disabled'
+            )}
         >
             {children}
         </button>
