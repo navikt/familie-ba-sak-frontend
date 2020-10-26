@@ -11,7 +11,7 @@ interface IProps {
     settAktivTab: (tab: Tabs) => void;
 }
 
-const StyledHeader = styled.div`
+const StyledHeader = styled.header`
     height: 4rem;
     padding: 0 1.25rem;
     display: flex;

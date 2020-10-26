@@ -57,7 +57,7 @@ const useBrevModul = () => {
                 hentStegNummer(åpenBehandling.data.steg) >= 2 &&
                 åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD
             ) {
-                brevMaler.push(Brevmal.OPPLYSNINGER);
+                brevMaler.push(Brevmal.INNHENTE_OPPLYSNINGER);
             }
 
             if (

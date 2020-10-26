@@ -2,23 +2,18 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/dist';
-import {
-    IBrevData,
-    Brevmal,
-    MottakerType,
-    brevmaler,
-    mottakerTyper,
-    BrevtypeSelect,
-} from './typer';
+import { IBrevData, Brevmal, brevmaler, BrevtypeSelect } from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
-import styled from 'styled-components';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { nyttFelt, IFelt, ok, feil } from '../../../../typer/felt';
 import { useSkjema } from '../../../../typer/skjema';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
-import StyledKnapperekke from '../../StyledComponents/StyledKnapperekke';
+import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
+import { formaterPersonIdent } from '../../../../utils/formatter';
+import { fjernWhitespace } from '../../../../utils/commons';
+import Knapperekke from '../../Knapperekke';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -26,14 +21,6 @@ interface IProps {
     brevMaler: Brevmal[];
     onSubmitSuccess: () => void;
 }
-
-const StyledBrevSkjema = styled.div`
-    .skjemagruppe {
-        .skjemaelement {
-            margin-top: 1rem;
-        }
-    }
-`;
 
 const Brevskjema = ({
     brevMaler,
@@ -48,12 +35,14 @@ const Brevskjema = ({
         string
     >({
         felter: {
-            mottaker: nyttFelt<MottakerType>(MottakerType.SØKER),
+            mottaker: nyttFelt<string>('', (felt: IFelt<string>) =>
+                felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker')
+            ),
             brevmal: nyttFelt<Brevmal | ''>('', (felt: IFelt<Brevmal | ''>) =>
                 felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal')
             ),
             fritekst: nyttFelt('', (felt: IFelt<string>) =>
-                felt.verdi.replace(/\s/g, '').length >= 3
+                fjernWhitespace(felt.verdi).length >= 3
                     ? ok(felt)
                     : feil(
                           felt,
@@ -70,6 +59,8 @@ const Brevskjema = ({
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
 
+    const personer =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
     const skjemaErLåst =
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetForhåndsvisning.status === RessursStatus.HENTER;
@@ -81,7 +72,7 @@ const Brevskjema = ({
     }, [hentetForhåndsvisning]);
 
     return (
-        <StyledBrevSkjema>
+        <div>
             <PdfVisningModal
                 åpen={visForhåndsvisningModal}
                 onRequestClose={() => settForhåndsviningModal(false)}
@@ -99,20 +90,27 @@ const Brevskjema = ({
                     label={'Mottaker'}
                     placeholder={'Velg mottaker'}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        oppdaterFeltISkjema('mottaker', event.target.value as MottakerType);
+                        oppdaterFeltISkjema('mottaker', event.target.value);
                     }}
                 >
-                    {Object.entries(MottakerType).map(([id, mottakerType]) => {
-                        return (
-                            <option
-                                aria-selected={id === skjema.felter.mottaker.verdi}
-                                key={id}
-                                value={id}
-                            >
-                                {mottakerTyper[mottakerType]}
-                            </option>
-                        );
-                    })}
+                    <option disabled={true} value={''}>
+                        Velg
+                    </option>
+                    {personer
+                        .filter((person: IGrunnlagPerson) => person.type !== PersonType.BARN)
+                        .map(person => {
+                            return (
+                                <option
+                                    aria-selected={
+                                        person.personIdent === skjema.felter.mottaker.verdi
+                                    }
+                                    key={person.personIdent}
+                                    value={person.personIdent}
+                                >
+                                    {formaterPersonIdent(person.personIdent)}
+                                </option>
+                            );
+                        })}
                 </FamilieSelect>
                 <FamilieSelect
                     {...hentFeltProps('brevmal')}
@@ -148,7 +146,7 @@ const Brevskjema = ({
                     }}
                 />
             </SkjemaGruppe>
-            <StyledKnapperekke>
+            <Knapperekke>
                 <Flatknapp
                     mini
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
@@ -156,7 +154,7 @@ const Brevskjema = ({
                     onClick={() => {
                         if (kanSendeSkjema()) {
                             forhåndsvisningOnClick({
-                                mottaker: skjema.felter.mottaker.verdi,
+                                mottakerIdent: skjema.felter.mottaker.verdi,
                                 brevmal: skjema.felter.brevmal.verdi,
                                 fritekst: skjema.felter.fritekst.verdi,
                             });
@@ -191,8 +189,8 @@ const Brevskjema = ({
                 >
                     Send brev
                 </Knapp>
-            </StyledKnapperekke>
-        </StyledBrevSkjema>
+            </Knapperekke>
+        </div>
     );
 };
 

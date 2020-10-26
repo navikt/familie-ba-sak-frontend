@@ -4,10 +4,10 @@ import UIModalWrapper from '../../Modal/UIModalWrapper';
 import useBrevModul from './useBrevModul';
 import Brevskjema from './Brevskjema';
 interface IProps {
-    settTabTilHistorikk: () => void;
+    onOkIModalClick: () => void;
 }
 
-const Brev = ({ settTabTilHistorikk }: IProps) => {
+const Brev = ({ onOkIModalClick }: IProps) => {
     const { hentForhåndsvisning, hentetForhåndsvisning, hentMuligeBrevMaler } = useBrevModul();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
@@ -32,7 +32,7 @@ const Brev = ({ settTabTilHistorikk }: IProps) => {
                                 key={'ok'}
                                 mini={true}
                                 onClick={() => {
-                                    settTabTilHistorikk();
+                                    onOkIModalClick();
                                     settVisInnsendtBrevModal(false);
                                 }}
                                 children={'Ok'}
