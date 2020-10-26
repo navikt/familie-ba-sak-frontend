@@ -37,8 +37,8 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
     const [opplysningsplikt, settOpplysningsplikt] = useState<IOpplysningsplikt>({
-        status: undefined,
-        begrunnelse: '',
+        status: åpenBehandling.opplysningsplikt?.status,
+        begrunnelse: åpenBehandling.opplysningsplikt?.begrunnelse ?? '',
     });
     const { axiosRequest } = useApp();
     const { settFagsak } = useFagsakRessurser();
@@ -80,6 +80,20 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
         }));
     };
 
+    const opplysningspliktResultat = () => {
+        switch (åpenBehandling.opplysningsplikt?.status) {
+            case OpplysningspliktStatus.MOTTATT:
+            case OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT: {
+                return Resultat.JA;
+            }
+            case OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG: {
+                return Resultat.NEI;
+            }
+            default:
+                return Resultat.KANSKJE;
+        }
+    };
+
     return (
         <Skjemasteg
             className={'opplysningsplikt'}
@@ -90,7 +104,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
             nesteKnappTittel={lesevisning ? 'Neste' : 'Bekreft og fortsett'}
         >
             <SkjemaContainer>
-                <Statuslinje resultat={Resultat.JA} />
+                <Statuslinje resultat={opplysningspliktResultat()} />
                 <div className={'opplysningsplikt__skjema'}>
                     <StyledFamilieRadioGruppe
                         erLesevisning={lesevisning}
@@ -105,6 +119,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                             label={'Mottatt dokumentasjon'}
                             name="opplysningsplikt"
                             onChange={() => radioOnChange(OpplysningspliktStatus.MOTTATT)}
+                            checked={opplysningsplikt.status === OpplysningspliktStatus.MOTTATT}
                         />
                         <Radio
                             label={'Ikke mottatt dokumentasjon'}
@@ -112,12 +127,20 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                             onChange={() =>
                                 radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG)
                             }
+                            checked={
+                                opplysningsplikt.status ===
+                                OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG
+                            }
                         />
                         <Radio
                             label={'Fortsett med manglende dokumentasjon'}
                             name="opplysningsplikt"
                             onChange={() =>
                                 radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT)
+                            }
+                            checked={
+                                opplysningsplikt.status ===
+                                OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT
                             }
                         />
                     </StyledFamilieRadioGruppe>
