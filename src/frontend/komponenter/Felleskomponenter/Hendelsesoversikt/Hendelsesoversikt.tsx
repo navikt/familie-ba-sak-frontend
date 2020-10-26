@@ -2,12 +2,10 @@ import * as React from 'react';
 
 import { Hendelse, Tabs } from './typer';
 
-import Dokumenterknapp from './komponenter/Dokumenterknapp';
 import HendelseItem from './komponenter/HendelseItem';
-import Historikkknapp from './komponenter/Historikkknapp';
-import Meldingerknapp from './komponenter/Meldingerknapp';
 import classNames from 'classnames';
-import Brev from './komponenter/Brev';
+import Brev from './BrevModul/Brev';
+import Header from './Header/Header';
 
 export { Hendelse };
 
@@ -25,26 +23,15 @@ const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) =>
 
     return (
         <div className={classNames('hendelsesoversikt', className)}>
-            <div className={'hendelsesoversikt__header'}>
-                <Historikkknapp
-                    aktiv={aktivTab === Tabs.Historikk}
-                    onClick={() => settAktivTab(Tabs.Historikk)}
-                />
-                <Meldingerknapp
-                    aktiv={aktivTab === Tabs.Meldinger}
-                    onClick={() => settAktivTab(Tabs.Meldinger)}
-                />
-                <Dokumenterknapp
-                    aktiv={aktivTab === Tabs.Dokumenter}
-                    onClick={() => settAktivTab(Tabs.Dokumenter)}
-                />
-            </div>
+            <Header aktivTab={aktivTab} settAktivTab={settAktivTab} />
             {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                 <div className={'historikk'}>
                     <ul className={'hendelsesoversikt__list'}>{hendelser?.map(tilHendelseItem)}</ul>
                 </div>
             )}
-            {aktivTab === Tabs.Meldinger && <Brev />}
+            {aktivTab === Tabs.Meldinger && (
+                <Brev onOkIModalClick={() => settAktivTab(Tabs.Historikk)} />
+            )}
         </div>
     );
 };
