@@ -30,7 +30,14 @@ const Brevskjema = ({
     const { åpenBehandling } = useBehandling();
     const { hentLogg, settFagsak } = useFagsakRessurser();
 
-    const { hentFeltProps, kanSendeSkjema, onSubmit, oppdaterFeltISkjema, skjema } = useBrevModul();
+    const {
+        hentFeltProps,
+        kanSendeSkjema,
+        onSubmit,
+        oppdaterFeltISkjema,
+        skjema,
+        settNavigerTilOpplysningsplikt,
+    } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
 
@@ -144,6 +151,9 @@ const Brevskjema = ({
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (åpenBehandling.status === RessursStatus.SUKSESS) {
+                            settNavigerTilOpplysningsplikt(
+                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
+                            );
                             onSubmit(
                                 {
                                     method: 'POST',

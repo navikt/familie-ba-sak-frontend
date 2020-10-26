@@ -55,6 +55,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         byggTomRessurs()
     );
 
+    const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] = React.useState<boolean>(
+        false
+    );
+
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
@@ -107,6 +111,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     };
 
     return {
+        navigerTilOpplysningsplikt,
+        settNavigerTilOpplysningsplikt,
         hentForhåndsvisning,
         hentetForhåndsvisning,
         hentMuligeBrevMaler,

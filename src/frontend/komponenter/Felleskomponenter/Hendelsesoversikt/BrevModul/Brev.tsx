@@ -20,6 +20,7 @@ const Brev = ({ onOkIModalClick }: IProps) => {
         hentetForhåndsvisning,
         hentMuligeBrevMaler,
         skjema,
+        navigerTilOpplysningsplikt,
     } = useBrevModul();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
@@ -50,7 +51,7 @@ const Brev = ({ onOkIModalClick }: IProps) => {
                                 mini={true}
                                 onClick={() => {
                                     onOkIModalClick();
-                                    skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER &&
+                                    navigerTilOpplysningsplikt &&
                                         history.push(
                                             `/fagsak/${fagsakId}/${behandlingId}/opplysningsplikt`
                                         );
