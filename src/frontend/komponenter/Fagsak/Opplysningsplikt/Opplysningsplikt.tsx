@@ -76,36 +76,43 @@ const Opplysningsplikt: React.FunctionComponent<ITilkjentYtelseProps> = ({
             nesteOnClick={nesteOnClick}
             nesteKnappTittel={lesevisning ? 'Neste' : 'Bekreft og fortsett'}
         >
-            <FamilieRadioGruppe
-                erLesevisning={lesevisning}
-                legend={'Ta stilling til om opplysningsplikten er oppfylt'}
-            >
-                <Radio
-                    label={'Mottatt dokumentasjon'}
-                    name="opplysningsplikt"
-                    onChange={() => radioOnChange(OpplysningspliktStatus.MOTTATT)}
-                />
-                <Radio
-                    label={'Ikke mottatt dokumentasjon'}
-                    name="opplysningsplikt"
-                    onChange={() => radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG)}
-                />
-                <Radio
-                    label={'Fortsett med manglende dokumentasjon'}
-                    name="opplysningsplikt"
-                    onChange={() => radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT)}
-                />
-            </FamilieRadioGruppe>
+            <div>
+                <FamilieRadioGruppe
+                    erLesevisning={lesevisning}
+                    legend={
+                        <p>
+                            Ta stilling til om opplysningsplikten er oppfylt{' '}
+                            <span>(§17 OG 18)</span>
+                        </p>
+                    }
+                >
+                    <Radio
+                        label={'Mottatt dokumentasjon'}
+                        name="opplysningsplikt"
+                        onChange={() => radioOnChange(OpplysningspliktStatus.MOTTATT)}
+                    />
+                    <Radio
+                        label={'Ikke mottatt dokumentasjon'}
+                        name="opplysningsplikt"
+                        onChange={() => radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG)}
+                    />
+                    <Radio
+                        label={'Fortsett med manglende dokumentasjon'}
+                        name="opplysningsplikt"
+                        onChange={() => radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT)}
+                    />
+                </FamilieRadioGruppe>
 
-            <FamilieTextarea
-                erLesevisning={lesevisning}
-                label={'Begrunnelse (valgfri)'}
-                value={opplysningsplikt.begrunnelse}
-                maxLength={2000}
-                onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
-                    begrunnelseOnChange(event);
-                }}
-            />
+                <FamilieTextarea
+                    erLesevisning={lesevisning}
+                    label={'Begrunnelse (valgfri)'}
+                    value={opplysningsplikt.begrunnelse}
+                    maxLength={2000}
+                    onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
+                        begrunnelseOnChange(event);
+                    }}
+                />
+            </div>
         </Skjemasteg>
     );
 };
