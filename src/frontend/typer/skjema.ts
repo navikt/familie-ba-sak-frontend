@@ -7,17 +7,17 @@ import { IFelt, Valideringsstatus } from './felt';
 // eslint-disable-next-line
 type felterType = { [key: string]: IFelt<any> };
 
-export interface ISkjema<T> {
+export interface ISkjema<SkjemaRespons> {
     // eslint-disable-next-line
     felter: felterType;
     skjemanavn: string;
-    submitRessurs: Ressurs<T>;
+    submitRessurs: Ressurs<SkjemaRespons>;
     visFeilmeldinger: boolean;
 }
 
-export const useSkjema = <T>(initialSkjema: ISkjema<T>) => {
+export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) => {
     const { axiosRequest } = useApp();
-    const [skjema, settSkjema] = useState<ISkjema<T>>(initialSkjema);
+    const [skjema, settSkjema] = useState<ISkjema<SkjemaRespons>>(initialSkjema);
 
     const settInitialState = () => {
         settSkjema({
@@ -49,7 +49,7 @@ export const useSkjema = <T>(initialSkjema: ISkjema<T>) => {
         });
     };
 
-    const settSubmitRessurs = (submitRessurs: Ressurs<T>) => {
+    const settSubmitRessurs = (submitRessurs: Ressurs<SkjemaRespons>) => {
         settSkjema({
             ...skjema,
             submitRessurs,
@@ -83,20 +83,22 @@ export const useSkjema = <T>(initialSkjema: ISkjema<T>) => {
         return skjema.visFeilmeldinger ? skjema.felter[feltNavn].feilmelding : undefined;
     };
 
-    const onSubmit = <D>(
-        familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>,
+    const onSubmit = <SkjemaData>(
+        familieAxiosRequestConfig: FamilieAxiosRequestConfig<SkjemaData>,
         onSuccess: () => void
     ) => {
         if (kanSendeSkjema()) {
             settSubmitRessurs(byggHenterRessurs());
 
-            axiosRequest<T, D>(familieAxiosRequestConfig).then((response: Ressurs<T>) => {
-                settSubmitRessurs(response);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settInitialState();
-                    onSuccess();
+            axiosRequest<SkjemaRespons, SkjemaData>(familieAxiosRequestConfig).then(
+                (response: Ressurs<SkjemaRespons>) => {
+                    settSubmitRessurs(response);
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settInitialState();
+                        onSuccess();
+                    }
                 }
-            });
+            );
         }
     };
 
