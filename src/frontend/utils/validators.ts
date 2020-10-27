@@ -1,8 +1,16 @@
 import moment from 'moment';
 import { IPersonBeregning } from '../typer/beregning';
-import { feil, IFelt, ok, ValiderIFelt, Valideringsstatus } from '../typer/felt';
+import {
+    feil,
+    IFelt,
+    ok,
+    ValiderIFelt,
+    Valideringsmetadata,
+    Valideringsstatus,
+} from '../typer/felt';
 import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
+import { felterType } from '../typer/skjema';
 import { Resultat } from '../typer/vilkår';
 import { datoformat } from './formatter';
 
@@ -52,10 +60,12 @@ const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?
 
 export const erPeriodeGyldig = (
     felt: IFelt<IPeriode>,
-    person?: IGrunnlagPerson
+    valideringsmetadata?: Valideringsmetadata
 ): IFelt<IPeriode> => {
     const fom = felt.verdi.fom;
     const tom = felt.verdi.tom;
+
+    const person: IGrunnlagPerson | undefined = valideringsmetadata?.person;
 
     if (fom) {
         const fomDatoErGylding = moment(fom).isValid();
@@ -96,11 +106,28 @@ export const lagInitiellFelt = <T>(verdi: T, valideringsfunksjon: ValiderIFelt<T
     };
 };
 
-export const validerFelt = <T>(nyVerdi: T, felt: IFelt<T>): IFelt<T> => {
-    return felt.valider({
-        ...felt,
-        verdi: nyVerdi,
-    });
+export const validerFelt = <T>(
+    nyVerdi: T,
+    felt: IFelt<T>,
+    valideringsmetadata?: Valideringsmetadata
+): IFelt<T> => {
+    return felt.valider(
+        {
+            ...felt,
+            verdi: nyVerdi,
+        },
+        valideringsmetadata
+    );
+};
+
+export const validerFeltISkjema = <T>(nyVerdi: T, felt: IFelt<T>, felter: felterType): IFelt<T> => {
+    return felt.valider(
+        {
+            ...felt,
+            verdi: nyVerdi,
+        },
+        felter
+    );
 };
 
 export const ikkeValider = <T>(felt: IFelt<T>): IFelt<T> => {

@@ -2,7 +2,14 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/dist';
-import { IBrevData, Brevmal, brevmaler, BrevtypeSelect } from './typer';
+import {
+    IBrevData,
+    Brevmal,
+    brevmaler,
+    BrevtypeSelect,
+    selectLabelsForBrevmaler,
+    hentSelectOptions,
+} from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
@@ -13,6 +20,8 @@ import { formaterPersonIdent } from '../../../../utils/formatter';
 import Knapperekke from '../../Knapperekke';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { IFagsak } from '../../../../typer/fagsak';
+import { IFelt, Valideringsstatus } from '../../../../typer/felt';
+import FamilieReactSelect from '../../FamilieReactSelect';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -27,16 +36,17 @@ const Brevskjema = ({
     hentetForhåndsvisning,
     onSubmitSuccess,
 }: IProps) => {
-    const { åpenBehandling } = useBehandling();
+    const { åpenBehandling, erLesevisning } = useBehandling();
     const { hentLogg, settFagsak } = useFagsakRessurser();
 
     const {
         hentFeltProps,
         kanSendeSkjema,
+        multiselectInneholderAnnet,
         onSubmit,
         oppdaterFeltISkjema,
-        skjema,
         settNavigerTilOpplysningsplikt,
+        skjema,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -47,12 +57,23 @@ const Brevskjema = ({
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetForhåndsvisning.status === RessursStatus.HENTER;
 
+    const valgtBrevmal: IFelt<Brevmal> = skjema.felter['brevmal'];
+
     useEffect(() => {
         if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
             settForhåndsviningModal(true);
         }
     }, [hentetForhåndsvisning]);
 
+    const submitFeil =
+        skjema.submitRessurs.status === RessursStatus.FEILET
+            ? skjema.submitRessurs.frontendFeilmelding
+            : undefined;
+
+    const hentetForhåndsvisningFeil =
+        hentetForhåndsvisning.status === RessursStatus.FEILET
+            ? hentetForhåndsvisning.frontendFeilmelding
+            : undefined;
     return (
         <div>
             <PdfVisningModal
@@ -60,19 +81,13 @@ const Brevskjema = ({
                 onRequestClose={() => settForhåndsviningModal(false)}
                 pdfdata={hentetForhåndsvisning}
             />
-            <SkjemaGruppe
-                feil={
-                    skjema.submitRessurs.status === RessursStatus.FEILET
-                        ? skjema.submitRessurs.frontendFeilmelding
-                        : undefined
-                }
-            >
+            <SkjemaGruppe feil={submitFeil || hentetForhåndsvisningFeil}>
                 <FamilieSelect
-                    {...hentFeltProps('mottaker')}
+                    {...hentFeltProps('mottakerIdent')}
                     label={'Mottaker'}
                     placeholder={'Velg mottaker'}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        oppdaterFeltISkjema('mottaker', event.target.value);
+                        oppdaterFeltISkjema('mottakerIdent', event.target.value);
                     }}
                 >
                     <option disabled={true} value={''}>
@@ -84,7 +99,7 @@ const Brevskjema = ({
                             return (
                                 <option
                                     aria-selected={
-                                        person.personIdent === skjema.felter.mottaker.verdi
+                                        person.personIdent === skjema.felter.mottakerIdent.verdi
                                     }
                                     key={person.personIdent}
                                     value={person.personIdent}
@@ -117,16 +132,37 @@ const Brevskjema = ({
                         );
                     })}
                 </FamilieSelect>
-                <FamilieTextarea
-                    {...hentFeltProps('fritekst')}
-                    disabled={skjemaErLåst}
-                    label={'Fritekst'}
-                    erLesevisning={false}
-                    maxLength={4000}
-                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                        oppdaterFeltISkjema('fritekst', event.target.value);
-                    }}
-                />
+
+                {valgtBrevmal.valideringsstatus === Valideringsstatus.OK && (
+                    <FamilieReactSelect
+                        {...hentFeltProps('multiselect')}
+                        label={selectLabelsForBrevmaler[valgtBrevmal.verdi]}
+                        erLesevisning={erLesevisning()}
+                        isMulti={true}
+                        placeholder={'Velg'}
+                        noOptionsMessage={() => 'Ingen valg'}
+                        onChange={valgteOptions => {
+                            oppdaterFeltISkjema(
+                                'multiselect',
+                                valgteOptions === null ? [] : valgteOptions
+                            );
+                        }}
+                        options={hentSelectOptions(valgtBrevmal.verdi)}
+                    />
+                )}
+
+                {multiselectInneholderAnnet() && (
+                    <FamilieTextarea
+                        {...hentFeltProps('fritekst')}
+                        disabled={skjemaErLåst}
+                        label={'Fritekst'}
+                        erLesevisning={false}
+                        maxLength={4000}
+                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                            oppdaterFeltISkjema('fritekst', event.target.value);
+                        }}
+                    />
+                )}
             </SkjemaGruppe>
             <Knapperekke>
                 <Flatknapp
@@ -136,7 +172,7 @@ const Brevskjema = ({
                     onClick={() => {
                         if (kanSendeSkjema()) {
                             forhåndsvisningOnClick({
-                                mottakerIdent: skjema.felter.mottaker.verdi,
+                                mottakerIdent: skjema.felter.mottakerIdent.verdi,
                                 brevmal: skjema.felter.brevmal.verdi,
                                 fritekst: skjema.felter.fritekst.verdi,
                             });
@@ -158,11 +194,11 @@ const Brevskjema = ({
                                 {
                                     method: 'POST',
                                     data: {
-                                        mottaker: skjema.felter.mottaker.verdi,
+                                        mottaker: skjema.felter.mottakerIdent.verdi,
                                         brevmal: skjema.felter.brevmal.verdi,
                                         fritekst: skjema.felter.fritekst.verdi,
                                     },
-                                    url: `/familie-ba-sak/api/dokument/send-brev/innhente-opplysninger/${åpenBehandling.data.behandlingId}`,
+                                    url: `/familie-ba-sak/api/dokument/send-brev/${åpenBehandling.data.behandlingId}`,
                                 },
                                 (ressurs: Ressurs<IFagsak>) => {
                                     onSubmitSuccess();
