@@ -4,16 +4,15 @@ import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/dist';
 import { IBrevData, Brevmal, brevmaler, BrevtypeSelect } from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import { nyttFelt, IFelt, ok, feil } from '../../../../typer/felt';
-import { useSkjema } from '../../../../typer/skjema';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { formaterPersonIdent } from '../../../../utils/formatter';
-import { fjernWhitespace } from '../../../../utils/commons';
 import Knapperekke from '../../Knapperekke';
+import { useBrevModul } from '../../../../context/BrevModulContext';
+import { IFagsak } from '../../../../typer/fagsak';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -29,33 +28,16 @@ const Brevskjema = ({
     onSubmitSuccess,
 }: IProps) => {
     const { åpenBehandling } = useBehandling();
-    const { hentLogg } = useFagsakRessurser();
+    const { hentLogg, settFagsak } = useFagsakRessurser();
 
-    const { hentFeltProps, kanSendeSkjema, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<
-        string
-    >({
-        felter: {
-            mottaker: nyttFelt<string>('', (felt: IFelt<string>) =>
-                felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker')
-            ),
-            brevmal: nyttFelt<Brevmal | ''>('', (felt: IFelt<Brevmal | ''>) =>
-                felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal')
-            ),
-            fritekst: nyttFelt('', (felt: IFelt<string>) =>
-                fjernWhitespace(felt.verdi).length >= 3
-                    ? ok(felt)
-                    : feil(
-                          felt,
-                          'Du må fylle ut fritekst'
-                          // Teksten under skal inn når vi får på plass multiselect
-                          //'Siden du har valgt “Annet” i feltet over, må du oppgi minst ett dokument '
-                      )
-            ),
-        },
-        skjemanavn: 'brevmodul',
-        submitRessurs: byggTomRessurs(),
-        visFeilmeldinger: false,
-    });
+    const {
+        hentFeltProps,
+        kanSendeSkjema,
+        onSubmit,
+        oppdaterFeltISkjema,
+        skjema,
+        settNavigerTilOpplysningsplikt,
+    } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
 
@@ -169,6 +151,9 @@ const Brevskjema = ({
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (åpenBehandling.status === RessursStatus.SUKSESS) {
+                            settNavigerTilOpplysningsplikt(
+                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
+                            );
                             onSubmit(
                                 {
                                     method: 'POST',
@@ -179,8 +164,9 @@ const Brevskjema = ({
                                     },
                                     url: `/familie-ba-sak/api/dokument/send-brev/innhente-opplysninger/${åpenBehandling.data.behandlingId}`,
                                 },
-                                () => {
+                                (ressurs: Ressurs<IFagsak>) => {
                                     onSubmitSuccess();
+                                    settFagsak(ressurs);
                                     hentLogg(åpenBehandling.data.behandlingId);
                                 }
                             );

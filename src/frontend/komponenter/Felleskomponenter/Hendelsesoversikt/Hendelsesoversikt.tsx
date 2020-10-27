@@ -6,6 +6,7 @@ import HendelseItem from './komponenter/HendelseItem';
 import classNames from 'classnames';
 import Brev from './BrevModul/Brev';
 import Header from './Header/Header';
+import { BrevModulProvider } from '../../../context/BrevModulContext';
 
 export { Hendelse };
 
@@ -30,7 +31,9 @@ const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) =>
                 </div>
             )}
             {aktivTab === Tabs.Meldinger && (
-                <Brev onOkIModalClick={() => settAktivTab(Tabs.Historikk)} />
+                <BrevModulProvider>
+                    <Brev onOkIModalClick={() => settAktivTab(Tabs.Historikk)} />
+                </BrevModulProvider>
             )}
         </div>
     );

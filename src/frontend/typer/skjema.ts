@@ -85,7 +85,7 @@ export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) 
 
     const onSubmit = <SkjemaData>(
         familieAxiosRequestConfig: FamilieAxiosRequestConfig<SkjemaData>,
-        onSuccess: () => void
+        onSuccess: (ressurs: Ressurs<SkjemaRespons>) => void
     ) => {
         if (kanSendeSkjema()) {
             settSubmitRessurs(byggHenterRessurs());
@@ -95,7 +95,7 @@ export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) 
                     settSubmitRessurs(response);
                     if (response.status === RessursStatus.SUKSESS) {
                         settInitialState();
-                        onSuccess();
+                        onSuccess(response);
                     }
                 }
             );
