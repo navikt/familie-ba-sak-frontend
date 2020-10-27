@@ -1,7 +1,8 @@
 export interface IBrevData {
     mottakerIdent: string;
+    multiselectVerdier: string[];
     brevmal: Brevmal;
-    fritekst?: string;
+    fritekst: string;
 }
 
 export interface BrevtypeSelect extends HTMLSelectElement {
@@ -23,7 +24,7 @@ export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
     VARSEL_OM_REVURDERING: 'Velg årsak',
 };
 
-export const hentSelectOptions = (brevmal: Brevmal) => {
+export const hentSelectOptions = (brevmal: Brevmal): ISelectOptionMedBrevtekst[] => {
     let selectOptionsMedBrevtekst;
     switch (brevmal) {
         case Brevmal.INNHENTE_OPPLYSNINGER:
@@ -34,33 +35,29 @@ export const hentSelectOptions = (brevmal: Brevmal) => {
             break;
     }
 
-    return selectOptionsMedBrevtekst.map(
-        (selectOptionMedBrevtekst: ISelectOptionMedBrevtekst) => selectOptionMedBrevtekst.option
-    );
+    return selectOptionsMedBrevtekst;
 };
 
-export interface ISelectOption {
+export interface ISelectOptionMedBrevtekst {
     value: string;
     label: string;
-}
-
-export interface ISelectOptionMedBrevtekst {
-    option: ISelectOption;
     brevtekst: string;
 }
 
 export const dokumenter: ISelectOptionMedBrevtekst[] = [
     {
-        option: { value: 'oppholdstillatelse', label: 'Oppholdstillatelse' },
+        value: 'oppholdstillatelse',
+        label: 'Oppholdstillatelse',
         brevtekst: 'Bekreftelse på oppholdstillatelse',
     },
     {
-        option: { value: 'oppholdstillatelse_2', label: 'Oppholdstillatelse2' },
+        value: 'oppholdstillatelse_2',
+        label: 'Oppholdstillatelse2',
         brevtekst: 'Bekreftelse på oppholdstillatelse 2',
     },
-    { option: { value: 'annet', label: 'Annet' }, brevtekst: '' },
+    { value: 'annet', label: 'Annet', brevtekst: '' },
 ];
 
 export const årsaker: ISelectOptionMedBrevtekst[] = [
-    { option: { value: 'annet', label: 'Annet' }, brevtekst: '' },
+    { value: 'annet', label: 'Annet', brevtekst: '' },
 ];

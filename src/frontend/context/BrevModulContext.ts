@@ -16,7 +16,7 @@ import { IFagsak } from '../typer/fagsak';
 import {
     Brevmal,
     IBrevData,
-    ISelectOption,
+    ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { AxiosError } from 'axios';
 import { useSkjema } from '../typer/skjema';
@@ -36,9 +36,12 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             brevmal: nyttFelt<Brevmal | ''>('', (felt: IFelt<Brevmal | ''>) =>
                 felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal')
             ),
-            multiselect: nyttFelt<ISelectOption[]>(
+            multiselect: nyttFelt<ISelectOptionMedBrevtekst[]>(
                 [],
-                (felt: IFelt<ISelectOption[]>, valideringsmetadata?: Valideringsmetadata) => {
+                (
+                    felt: IFelt<ISelectOptionMedBrevtekst[]>,
+                    valideringsmetadata?: Valideringsmetadata
+                ) => {
                     const brevmal: Brevmal | '' = valideringsmetadata?.felter?.brevmal.verdi;
 
                     console.log(brevmal);
@@ -57,13 +60,14 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekst: nyttFelt(
                 '',
                 (felt: IFelt<string>, valideringsmetadata?: Valideringsmetadata) => {
-                    const multiselect: ISelectOption[] | undefined =
+                    const multiselect: ISelectOptionMedBrevtekst[] | undefined =
                         valideringsmetadata?.felter?.multiselect.verdi;
 
                     const annetErValgt =
                         (
                             multiselect?.filter(
-                                (selectOption: ISelectOption) => selectOption.value === 'annet'
+                                (selectOption: ISelectOptionMedBrevtekst) =>
+                                    selectOption.value === 'annet'
                             ) ?? []
                         ).length > 0;
 
@@ -101,7 +105,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         axiosRequest<string, IBrevData>({
             method: 'POST',
             data: brevData,
-            url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/innhente-opplysninger/${behandlingId}`,
+            url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
         })
             .then((response: Ressurs<string>) => {
                 if (response.status === RessursStatus.SUKSESS) {
@@ -147,15 +151,25 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const multiselectInneholderAnnet = () => {
         return (
             skjema.felter.multiselect.verdi.filter(
-                (selectOption: ISelectOption) => selectOption.value === 'annet'
+                (selectOption: ISelectOptionMedBrevtekst) => selectOption.value === 'annet'
             ).length > 0
         );
     };
+
+    const hentSkjemaData = (): IBrevData => ({
+        mottakerIdent: skjema.felter.mottakerIdent.verdi,
+        multiselectVerdier: skjema.felter.multiselect.verdi
+            .filter((selectOption: ISelectOptionMedBrevtekst) => selectOption.value !== 'annet')
+            .map((selectOption: ISelectOptionMedBrevtekst) => selectOption.brevtekst),
+        brevmal: skjema.felter.brevmal.verdi,
+        fritekst: skjema.felter.fritekst.verdi,
+    });
 
     return {
         hentFeltProps,
         hentForhåndsvisning,
         hentMuligeBrevMaler,
+        hentSkjemaData,
         hentetForhåndsvisning,
         kanSendeSkjema,
         multiselectInneholderAnnet,

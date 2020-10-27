@@ -8022,6 +8022,21 @@ nav-frontend-core@^5.0.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.1.tgz#f59d79da9342434cc89046bc289c90e2a5d53ea8"
   integrity sha512-wPcKfXcXvmqA3MPQwlU+nMvB3plJtxLBew4bNmcw5CJNIMtGPwGXEvcexVEIeEdCpJCvOZvwcWxaTc57x16eDA==
 
+nav-frontend-core@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.5.tgz#790c0e53d9417831bce353696c1b3b183e3174e7"
+  integrity sha512-thBvplvmNjMirKgsYzu+7YdcKzEJkHA2rb9N1oTkNJuelH1UcV6+V3GRnK7qIWl6MyhJ3nr2wOvcFIMgqo1Xag==
+
+nav-frontend-etiketter-style@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter-style/-/nav-frontend-etiketter-style-1.0.8.tgz#bb1d90cf192d43c35ff2cc9ab36f404eed2655fb"
+  integrity sha512-KoIbVcn/sB8TOLEoOm5+5FnhjqLlIJ08fkg+oBDFOPxvrtCPABGUUjCPXgUA62a8uZi0qUA4iOeFlAxE51d6/A==
+
+nav-frontend-etiketter@^2.0.14:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter/-/nav-frontend-etiketter-2.0.14.tgz#392e2ab4a062e443afeda8b5f164e23b0b7137c3"
+  integrity sha512-jcGkSZneHSgnVIcPYsZJvI8aVrkN48XkAnk12fpM/W+r5RgXvJX0pCjGTx6AJXO9rNRmf197wEBnvYNMvT0/TA==
+
 nav-frontend-hjelpetekst-style@^2.0.25:
   version "2.0.25"
   resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-2.0.25.tgz#9fc964179cecdb8b30489dbafe0c8722525fbe7c"

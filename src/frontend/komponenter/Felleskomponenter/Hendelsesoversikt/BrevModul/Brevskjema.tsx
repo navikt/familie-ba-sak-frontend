@@ -22,6 +22,10 @@ import { useBrevModul } from '../../../../context/BrevModulContext';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import FamilieReactSelect from '../../FamilieReactSelect';
+import { EtikettInfo } from 'nav-frontend-etiketter';
+import { Normaltekst } from 'nav-frontend-typografi';
+import { Målform, målform } from '../../../../typer/søknad';
+import styled from 'styled-components';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -29,6 +33,11 @@ interface IProps {
     brevMaler: Brevmal[];
     onSubmitSuccess: () => void;
 }
+
+const StyledEtikettGrå = styled(EtikettInfo)`
+    background-color: #e9e7e7;
+    border-color: #78706a;
+`;
 
 const Brevskjema = ({
     brevMaler,
@@ -41,6 +50,7 @@ const Brevskjema = ({
 
     const {
         hentFeltProps,
+        hentSkjemaData,
         kanSendeSkjema,
         multiselectInneholderAnnet,
         onSubmit,
@@ -51,6 +61,12 @@ const Brevskjema = ({
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
 
+    useEffect(() => {
+        if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
+            settForhåndsviningModal(true);
+        }
+    }, [hentetForhåndsvisning]);
+
     const personer =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
     const skjemaErLåst =
@@ -58,12 +74,10 @@ const Brevskjema = ({
         hentetForhåndsvisning.status === RessursStatus.HENTER;
 
     const valgtBrevmal: IFelt<Brevmal> = skjema.felter['brevmal'];
-
-    useEffect(() => {
-        if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
-            settForhåndsviningModal(true);
-        }
-    }, [hentetForhåndsvisning]);
+    const mottakersMålform =
+        personer.find(
+            (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.verdi
+        )?.målform ?? Målform.NB;
 
     const submitFeil =
         skjema.submitRessurs.status === RessursStatus.FEILET
@@ -155,7 +169,14 @@ const Brevskjema = ({
                     <FamilieTextarea
                         {...hentFeltProps('fritekst')}
                         disabled={skjemaErLåst}
-                        label={'Fritekst'}
+                        label={
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Normaltekst>Fritekst</Normaltekst>
+                                <StyledEtikettGrå mini={true}>
+                                    {målform[mottakersMålform]}
+                                </StyledEtikettGrå>
+                            </div>
+                        }
                         erLesevisning={false}
                         maxLength={4000}
                         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -171,11 +192,7 @@ const Brevskjema = ({
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (kanSendeSkjema()) {
-                            forhåndsvisningOnClick({
-                                mottakerIdent: skjema.felter.mottakerIdent.verdi,
-                                brevmal: skjema.felter.brevmal.verdi,
-                                fritekst: skjema.felter.fritekst.verdi,
-                            });
+                            forhåndsvisningOnClick(hentSkjemaData());
                         }
                     }}
                 >
@@ -193,11 +210,7 @@ const Brevskjema = ({
                             onSubmit(
                                 {
                                     method: 'POST',
-                                    data: {
-                                        mottaker: skjema.felter.mottakerIdent.verdi,
-                                        brevmal: skjema.felter.brevmal.verdi,
-                                        fritekst: skjema.felter.fritekst.verdi,
-                                    },
+                                    data: hentSkjemaData(),
                                     url: `/familie-ba-sak/api/dokument/send-brev/${åpenBehandling.data.behandlingId}`,
                                 },
                                 (ressurs: Ressurs<IFagsak>) => {

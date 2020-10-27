@@ -33,18 +33,18 @@ const MålformVelger: React.FunctionComponent<IProps> = ({ settSøknadOgValider,
                 erLesevisning={lesevisning}
                 verdi={
                     søknad.søkerMedOpplysninger.målform
-                        ? målform[søknad.søkerMedOpplysninger.målform].navn
+                        ? målform[søknad.søkerMedOpplysninger.målform]
                         : undefined
                 }
             >
                 <Radio
-                    label={målform[Målform.NB].navn}
+                    label={målform[Målform.NB]}
                     name={Målform[Målform.NB]}
                     checked={søknad.søkerMedOpplysninger.målform === Målform.NB}
                     onChange={() => radioOnChange(Målform.NB)}
                 />
                 <Radio
-                    label={målform[Målform.NN].navn}
+                    label={målform[Målform.NN]}
                     name={Målform[Målform.NN]}
                     checked={søknad.søkerMedOpplysninger.målform === Målform.NN}
                     onChange={() => radioOnChange(Målform.NN)}
