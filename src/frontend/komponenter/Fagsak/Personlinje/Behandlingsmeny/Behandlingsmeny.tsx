@@ -60,10 +60,14 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                         />
                     </li>
                     <li>
-                        <HenleggBehandling
-                            onListElementClick={() => settAnker(undefined)}
-                            fagsak={fagsak}
-                        />
+                        {åpenBehandling.status === RessursStatus.SUKSESS && (
+                            <li>
+                                <HenleggBehandling
+                                    onListElementClick={() => settAnker(undefined)}
+                                    behandling={åpenBehandling.data}
+                                />
+                            </li>
+                        )}
                     </li>
                 </ul>
             </Popover>

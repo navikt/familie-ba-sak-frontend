@@ -1,6 +1,12 @@
-import { byggHenterRessurs, byggTomRessurs } from '@navikt/familie-typer';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 import { useState } from 'react';
 import { HenleggelseÅrsak } from '../../../../../typer/behandling';
+import useFagsakApi from '../../../useFagsakApi';
 
 const useOpprettBehandling = (lukkModal: () => void) => {
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
@@ -21,7 +27,16 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         });
     };
 
-    const onBekreft = () => {
+    const { henleggBehandling } = useFagsakApi(
+        _ => {
+            'Feilmelding';
+        },
+        feilmelding => {
+            settSubmitRessurs(byggFeiletRessurs(feilmelding));
+        }
+    );
+
+    const onBekreft = (behandlingId: number) => {
         if (!selectedHenleggelseÅrsak) {
             settValideringsfeil({
                 henleggelseÅrsak: !selectedHenleggelseÅrsak
@@ -30,15 +45,15 @@ const useOpprettBehandling = (lukkModal: () => void) => {
             });
         } else {
             settSubmitRessurs(byggHenterRessurs());
-            /*henleggBehandling({
-                henleggelseÅrsak: selectedHenleggelseÅrsak,
-                begrunnelse
+            henleggBehandling(behandlingId, {
+                årsak: selectedHenleggelseÅrsak,
+                begrunnelse,
             }).then(response => {
                 if (response.status === RessursStatus.SUKSESS) {
                     lukkModal();
                     fjernState();
                 }
-            });*/
+            });
             lukkModal();
             fjernState();
         }

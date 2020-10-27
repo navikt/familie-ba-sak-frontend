@@ -3,21 +3,25 @@ import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
-import { henleggelseÅrsak, HenleggelseÅrsak } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
+import {
+    BehandlingSteg,
+    henleggelseÅrsak,
+    HenleggelseÅrsak,
+    IBehandling,
+} from '../../../../../typer/behandling';
 import useHenleggBehandling from './useHenleggBehandling';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 interface IProps {
     onListElementClick: () => void;
-    fagsak: IFagsak;
+    behandling: IBehandling;
 }
 
 interface HenleggelseÅrsakSelect extends HTMLSelectElement {
     value: HenleggelseÅrsak | '';
 }
 
-const HenleggBehandling: React.FC<IProps> = ({ onListElementClick }) => {
+const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, behandling }) => {
     const [visModal, settVisModal] = useState(false);
 
     const {
@@ -46,6 +50,13 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick }) => {
                     onListElementClick();
                     settVisModal(true);
                 }}
+                disabled={
+                    ![
+                        BehandlingSteg.REGISTRERE_SØKNAD,
+                        BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+                        BehandlingSteg.VILKÅRSVURDERING,
+                    ].includes(behandling.steg)
+                }
             >
                 Henlegg behandling
             </KnappBase>
@@ -57,7 +68,6 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick }) => {
                             key={'avbryt'}
                             mini={true}
                             onClick={() => {
-                                fjernState();
                                 lukkHenleggBehandlingModal();
                             }}
                             children={'Avbryt'}
@@ -66,14 +76,17 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick }) => {
                             key={'bekreft'}
                             type={'hoved'}
                             mini={true}
-                            onClick={() => onBekreft()}
-                            children={'Bekreft'}
+                            onClick={() => onBekreft(behandling.behandlingId)}
+                            children={
+                                selectedHenleggelseÅrsak === HenleggelseÅrsak.SØKNAD_TRUKKET
+                                    ? 'Bekreft og send brev'
+                                    : 'Bekreft'
+                            }
                             spinner={submitRessurs.status === RessursStatus.HENTER}
                             disabled={submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
                     onClose: () => {
-                        fjernState();
                         lukkHenleggBehandlingModal();
                     },
                     lukkKnapp: true,
