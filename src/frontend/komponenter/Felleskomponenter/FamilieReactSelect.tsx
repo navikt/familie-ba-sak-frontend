@@ -9,21 +9,19 @@ interface IProps extends NamedProps {
     label: string;
     lesevisningVerdi?: string;
     feil?: string;
+    propSelectStyles?: StylesConfig;
 }
 
 const Container = styled.div`
     margin-bottom: 1rem;
 `;
 
-const SelectStyles = (feil?: string): StylesConfig => ({
-    control: provided => ({
+const navSelectStyles = (feil?: string): StylesConfig => ({
+    control: (provided, state) => ({
         ...provided,
-        border: feil ? '1px solid #BA3A26' : '1px solid #78706A',
+        border: feil && !state.isFocused ? '1px solid #BA3A26' : '1px solid #78706A',
         borderRadius: '4px',
-        boxShadow: feil ? '0 0 0 1px #BA3A26' : '',
-        ':focus': {
-            boxShadow: '0 0 0 3px #254b6d',
-        },
+        boxShadow: state.isFocused ? '0 0 0 3px #254b6d' : feil ? '0 0 0 1px #BA3A26' : '',
         ':hover': {
             border: '1px solid #0067C5',
         },
@@ -41,9 +39,9 @@ const SelectStyles = (feil?: string): StylesConfig => ({
     }),
     clearIndicator: provided => ({
         ...provided,
-        color: 'initial',
+        color: '#78706A',
         ':hover': {
-            color: '#0067C5',
+            color: '#3E3832',
         },
     }),
     multiValue: (provided, _) => ({
@@ -53,11 +51,12 @@ const SelectStyles = (feil?: string): StylesConfig => ({
     multiValueRemove: provided => ({
         ...provided,
         ':hover': {
-            backgroundColor: '#254b6d',
+            backgroundColor: '#0067C5',
             color: 'white',
         },
     }),
 });
+
 const StyledFeilmelding = styled(Feilmelding)`
     margin-top: 0.5rem;
 `;
@@ -68,6 +67,7 @@ const FamilieReactSelect: React.FC<IProps> = ({
     lesevisningVerdi,
     value,
     feil,
+    propSelectStyles,
     ...props
 }) => {
     const id = `react-select-${label}`;
@@ -75,7 +75,10 @@ const FamilieReactSelect: React.FC<IProps> = ({
         <Container>
             <Label htmlFor={id}>{label} </Label>
             <ReactSelect
-                styles={SelectStyles(feil)}
+                styles={{
+                    ...propSelectStyles,
+                    ...navSelectStyles(feil),
+                }}
                 id={id}
                 isDisabled={erLesevisning}
                 value={value}
