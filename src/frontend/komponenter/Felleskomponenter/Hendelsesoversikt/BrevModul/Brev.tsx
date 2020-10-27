@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
-import { Brevmal } from './typer';
+
 interface IProps {
     onOkIModalClick: () => void;
 }
@@ -19,7 +19,6 @@ const Brev = ({ onOkIModalClick }: IProps) => {
         hentForhåndsvisning,
         hentetForhåndsvisning,
         hentMuligeBrevMaler,
-        skjema,
         navigerTilOpplysningsplikt,
     } = useBrevModul();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
