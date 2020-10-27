@@ -37,7 +37,6 @@ export enum BehandlingUnderkategori {
 export enum BehandlingSteg {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
-    OPPLYSNINGSPLIKT = 'OPPLYSNINGSPLIKT',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
     SEND_TIL_BESLUTTER = 'SEND_TIL_BESLUTTER',
     BESLUTTE_VEDTAK = 'BESLUTTE_VEDTAK',
@@ -55,8 +54,6 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
             return 1;
         case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
             return 1;
-        case BehandlingSteg.OPPLYSNINGSPLIKT:
-            return 2;
         case BehandlingSteg.VILKÅRSVURDERING:
             return 2;
         case BehandlingSteg.SEND_TIL_BESLUTTER:

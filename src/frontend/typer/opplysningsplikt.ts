@@ -1,5 +1,5 @@
 export interface IOpplysningsplikt {
-    status: OpplysningspliktStatus | undefined;
+    status: OpplysningspliktStatus;
     begrunnelse: string;
 }
 
