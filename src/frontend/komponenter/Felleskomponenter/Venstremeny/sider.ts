@@ -37,11 +37,6 @@ export const sider: Record<SideId, ISide> = {
         navn: 'Registrer søknad',
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
     },
-    OPPLYSNINGSPLIKT: {
-        href: 'opplysningsplikt',
-        navn: 'Opplysningsplikt',
-        steg: BehandlingSteg.OPPLYSNINGSPLIKT,
-    },
     VILKÅRSVURDERING: {
         href: 'vilkaarsvurdering',
         navn: 'Vilkårsvurdering',
@@ -69,6 +64,11 @@ export const sider: Record<SideId, ISide> = {
                 }
             );
         },
+    },
+    OPPLYSNINGSPLIKT: {
+        href: 'opplysningsplikt',
+        navn: 'Opplysningsplikt',
+        steg: BehandlingSteg.VILKÅRSVURDERING,
     },
     BEHANDLINGRESULTAT: {
         href: 'tilkjent-ytelse',

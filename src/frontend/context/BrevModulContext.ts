@@ -19,8 +19,8 @@ import {
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { AxiosError } from 'axios';
-import { useSkjema } from '../typer/skjema';
 import { feil, IFelt, nyttFelt, ok, Valideringsmetadata } from '../typer/felt';
+import { useSkjema } from '../typer/skjema';
 import { fjernWhitespace } from '../utils/commons';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {

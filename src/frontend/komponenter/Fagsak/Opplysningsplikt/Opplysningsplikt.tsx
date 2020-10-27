@@ -26,7 +26,7 @@ const SkjemaContainer = styled.div`
     margin: 2rem 0;
 `;
 
-const SkjemaGruppeStyled = styled(SkjemaGruppe)`
+const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     padding-left: 1rem;
 `;
 
@@ -116,7 +116,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
         >
             <SkjemaContainer>
                 <Statuslinje resultat={opplysningspliktResultat()} />
-                <SkjemaGruppeStyled
+                <StyledSkjemaGruppe
                     className={'opplysningsplikt__skjema'}
                     feil={
                         skjema.submitRessurs.status === RessursStatus.FEILET
@@ -176,7 +176,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                             begrunnelseOnChange(event);
                         }}
                     />
-                </SkjemaGruppeStyled>
+                </StyledSkjemaGruppe>
             </SkjemaContainer>
         </Skjemasteg>
     );

@@ -7,6 +7,7 @@ import { useHistory } from 'react-router';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
+
 interface IProps {
     onOkIModalClick: () => void;
 }
