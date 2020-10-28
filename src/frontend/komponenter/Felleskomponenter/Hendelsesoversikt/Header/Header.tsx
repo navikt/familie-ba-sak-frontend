@@ -14,6 +14,7 @@ interface IProps {
 const StyledHeader = styled.header`
     height: 4rem;
     padding: 0 1.25rem;
+    margin-bottom: 1rem;
     display: flex;
 `;
 

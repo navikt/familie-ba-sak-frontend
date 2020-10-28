@@ -5,7 +5,7 @@ import { validerFelt } from '../utils/validators';
 import { IFelt, Valideringsstatus } from './felt';
 
 // eslint-disable-next-line
-type felterType = { [key: string]: IFelt<any> };
+export type felterType = { [key: string]: IFelt<any> };
 
 export interface ISkjema<SkjemaRespons> {
     // eslint-disable-next-line
@@ -44,7 +44,9 @@ export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) 
             ...skjema,
             felter: {
                 ...skjema.felter,
-                [feltNavn]: validerFelt(nyVerdi, skjema.felter[feltNavn]),
+                [feltNavn]: validerFelt(nyVerdi, skjema.felter[feltNavn], {
+                    felter: skjema.felter,
+                }),
             },
         });
     };
@@ -57,13 +59,26 @@ export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) 
     };
 
     const kanSendeSkjema = (): boolean => {
-        settSkjema({
+        const validertSkjema = {
             ...skjema,
+            felter: Object.entries(skjema.felter).reduce(
+                (validerteFelter: felterType, [feltNavn, felt]) => {
+                    return {
+                        ...validerteFelter,
+                        [feltNavn]: felt.valider(felt, {
+                            felter: skjema.felter,
+                        }),
+                    };
+                },
+                {}
+            ),
             visFeilmeldinger: true,
-        });
+        };
+
+        settSkjema(validertSkjema);
 
         return (
-            Object.values(skjema.felter).filter(
+            Object.values(validertSkjema.felter).filter(
                 // eslint-disable-next-line
                 (felt: IFelt<any>) => felt.valideringsstatus !== Valideringsstatus.OK
             ).length === 0 && skjema.submitRessurs.status !== RessursStatus.HENTER

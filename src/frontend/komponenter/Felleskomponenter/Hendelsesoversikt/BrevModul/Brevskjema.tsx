@@ -2,7 +2,14 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/dist';
-import { IBrevData, Brevmal, brevmaler, BrevtypeSelect } from './typer';
+import {
+    IBrevData,
+    Brevmal,
+    brevmaler,
+    BrevtypeSelect,
+    selectLabelsForBrevmaler,
+    hentSelectOptions,
+} from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
@@ -13,6 +20,13 @@ import { formaterPersonIdent } from '../../../../utils/formatter';
 import Knapperekke from '../../Knapperekke';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { IFagsak } from '../../../../typer/fagsak';
+import { IFelt, Valideringsstatus } from '../../../../typer/felt';
+import FamilieReactSelect from '../../FamilieReactSelect';
+import { EtikettInfo } from 'nav-frontend-etiketter';
+import { Normaltekst } from 'nav-frontend-typografi';
+import { målform } from '../../../../typer/søknad';
+import styled from 'styled-components';
+import navFarger from 'nav-frontend-core';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -21,31 +35,34 @@ interface IProps {
     onSubmitSuccess: () => void;
 }
 
+const StyledEtikettInfo = styled(EtikettInfo)`
+    background-color: ${navFarger.navLysGra};
+    border-color: ${navFarger.navGra60};
+`;
+
 const Brevskjema = ({
     brevMaler,
     forhåndsvisningOnClick,
     hentetForhåndsvisning,
     onSubmitSuccess,
 }: IProps) => {
-    const { åpenBehandling } = useBehandling();
+    const { åpenBehandling, erLesevisning } = useBehandling();
     const { hentLogg, settFagsak } = useFagsakRessurser();
 
     const {
         hentFeltProps,
+        hentSkjemaData,
         kanSendeSkjema,
+        mottakersMålform,
+        multiselectInneholderAnnet,
         onSubmit,
         oppdaterFeltISkjema,
-        skjema,
+        personer,
         settNavigerTilOpplysningsplikt,
+        skjema,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
-
-    const personer =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
-    const skjemaErLåst =
-        skjema.submitRessurs.status === RessursStatus.HENTER ||
-        hentetForhåndsvisning.status === RessursStatus.HENTER;
 
     useEffect(() => {
         if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
@@ -53,6 +70,21 @@ const Brevskjema = ({
         }
     }, [hentetForhåndsvisning]);
 
+    const skjemaErLåst =
+        skjema.submitRessurs.status === RessursStatus.HENTER ||
+        hentetForhåndsvisning.status === RessursStatus.HENTER;
+
+    const valgtBrevmal: IFelt<Brevmal> = skjema.felter['brevmal'];
+
+    const submitFeil =
+        skjema.submitRessurs.status === RessursStatus.FEILET
+            ? skjema.submitRessurs.frontendFeilmelding
+            : undefined;
+
+    const hentetForhåndsvisningFeil =
+        hentetForhåndsvisning.status === RessursStatus.FEILET
+            ? hentetForhåndsvisning.frontendFeilmelding
+            : undefined;
     return (
         <div>
             <PdfVisningModal
@@ -60,31 +92,23 @@ const Brevskjema = ({
                 onRequestClose={() => settForhåndsviningModal(false)}
                 pdfdata={hentetForhåndsvisning}
             />
-            <SkjemaGruppe
-                feil={
-                    skjema.submitRessurs.status === RessursStatus.FEILET
-                        ? skjema.submitRessurs.frontendFeilmelding
-                        : undefined
-                }
-            >
+            <SkjemaGruppe feil={submitFeil || hentetForhåndsvisningFeil}>
                 <FamilieSelect
-                    {...hentFeltProps('mottaker')}
+                    {...hentFeltProps('mottakerIdent')}
                     label={'Mottaker'}
                     placeholder={'Velg mottaker'}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        oppdaterFeltISkjema('mottaker', event.target.value);
+                        oppdaterFeltISkjema('mottakerIdent', event.target.value);
                     }}
                 >
-                    <option disabled={true} value={''}>
-                        Velg
-                    </option>
+                    <option value={''}>Velg</option>
                     {personer
                         .filter((person: IGrunnlagPerson) => person.type !== PersonType.BARN)
                         .map(person => {
                             return (
                                 <option
                                     aria-selected={
-                                        person.personIdent === skjema.felter.mottaker.verdi
+                                        person.personIdent === skjema.felter.mottakerIdent.verdi
                                     }
                                     key={person.personIdent}
                                     value={person.personIdent}
@@ -102,9 +126,7 @@ const Brevskjema = ({
                         oppdaterFeltISkjema('brevmal', event.target.value);
                     }}
                 >
-                    <option disabled={true} value={''}>
-                        Velg
-                    </option>
+                    <option value={''}>Velg</option>
                     {brevMaler.map(mal => {
                         return (
                             <option
@@ -117,16 +139,44 @@ const Brevskjema = ({
                         );
                     })}
                 </FamilieSelect>
-                <FamilieTextarea
-                    {...hentFeltProps('fritekst')}
-                    disabled={skjemaErLåst}
-                    label={'Fritekst'}
-                    erLesevisning={false}
-                    maxLength={4000}
-                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                        oppdaterFeltISkjema('fritekst', event.target.value);
-                    }}
-                />
+
+                {valgtBrevmal.valideringsstatus === Valideringsstatus.OK && (
+                    <FamilieReactSelect
+                        {...hentFeltProps('multiselect')}
+                        label={selectLabelsForBrevmaler[valgtBrevmal.verdi]}
+                        erLesevisning={erLesevisning()}
+                        isMulti={true}
+                        placeholder={'Velg'}
+                        noOptionsMessage={() => 'Ingen valg'}
+                        onChange={valgteOptions => {
+                            oppdaterFeltISkjema(
+                                'multiselect',
+                                valgteOptions === null ? [] : valgteOptions
+                            );
+                        }}
+                        options={hentSelectOptions(valgtBrevmal.verdi)}
+                    />
+                )}
+
+                {multiselectInneholderAnnet() && (
+                    <FamilieTextarea
+                        {...hentFeltProps('fritekst')}
+                        disabled={skjemaErLåst}
+                        label={
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Normaltekst>Fritekst</Normaltekst>
+                                <StyledEtikettInfo mini={true}>
+                                    {målform[mottakersMålform]}
+                                </StyledEtikettInfo>
+                            </div>
+                        }
+                        erLesevisning={false}
+                        maxLength={4000}
+                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                            oppdaterFeltISkjema('fritekst', event.target.value);
+                        }}
+                    />
+                )}
             </SkjemaGruppe>
             <Knapperekke>
                 <Flatknapp
@@ -135,11 +185,7 @@ const Brevskjema = ({
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (kanSendeSkjema()) {
-                            forhåndsvisningOnClick({
-                                mottakerIdent: skjema.felter.mottaker.verdi,
-                                brevmal: skjema.felter.brevmal.verdi,
-                                fritekst: skjema.felter.fritekst.verdi,
-                            });
+                            forhåndsvisningOnClick(hentSkjemaData());
                         }
                     }}
                 >
@@ -157,12 +203,8 @@ const Brevskjema = ({
                             onSubmit(
                                 {
                                     method: 'POST',
-                                    data: {
-                                        mottaker: skjema.felter.mottaker.verdi,
-                                        brevmal: skjema.felter.brevmal.verdi,
-                                        fritekst: skjema.felter.fritekst.verdi,
-                                    },
-                                    url: `/familie-ba-sak/api/dokument/send-brev/innhente-opplysninger/${åpenBehandling.data.behandlingId}`,
+                                    data: hentSkjemaData(),
+                                    url: `/familie-ba-sak/api/dokument/send-brev/${åpenBehandling.data.behandlingId}`,
                                 },
                                 (ressurs: Ressurs<IFagsak>) => {
                                     onSubmitSuccess();

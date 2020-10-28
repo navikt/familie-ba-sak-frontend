@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 
-import classNames from 'classnames';
 import { randomUUID } from '../../../../utils/commons';
+import styled from 'styled-components';
+import navFarger from 'nav-frontend-core';
 
 interface IFilterknappProps {
     aktiv?: boolean;
@@ -10,21 +11,56 @@ interface IFilterknappProps {
     onClick: () => void;
 }
 
+const StyledButton = styled.button<IFilterknappProps>`
+    min-height: 50px;
+    width: 7.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: box-shadow 0.1s ease-in-out;
+    cursor: ${({ disabled }) => (disabled ? 'initial' : 'pointer')};
+    box-shadow: ${({ aktiv }) => (aktiv ? `inset 0 -5px 0 -1px ${navFarger.navBla}` : '')};
+
+    > * {
+        transition: fill 0.1s ease-in-out;
+        fill: ${({ aktiv, disabled }) => {
+            if (disabled) {
+                return navFarger.navGra60;
+            } else if (aktiv) {
+                return navFarger.navBla;
+            } else {
+                return navFarger.navGra80;
+            }
+        }};
+        color: ${({ aktiv, disabled }) => {
+            if (disabled) {
+                return navFarger.navGra60;
+            } else if (aktiv) {
+                return navFarger.navBla;
+            } else {
+                return '';
+            }
+        }};
+    }
+
+    :focus {
+        outline: ${({ disabled }) => (!disabled ? `none` : '')};
+        border: ${({ disabled }) => (!disabled ? `3px solid ${navFarger.fokusFarge}` : '')};
+    }
+`;
+
 const Filterknapp = ({ children, disabled = false, onClick, aktiv }: IFilterknappProps) => {
     return (
-        <button
+        <StyledButton
             id={`filter_${randomUUID()}`}
             aria-label={`filter_${randomUUID()}`}
             onClick={onClick}
             disabled={disabled}
-            className={classNames(
-                'filterknapp',
-                aktiv && 'filterknapp__aktiv',
-                disabled && 'disabled'
-            )}
+            aktiv={aktiv}
         >
             {children}
-        </button>
+        </StyledButton>
     );
 };
 
