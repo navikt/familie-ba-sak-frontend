@@ -39,7 +39,7 @@ export const sessionConfig: ISessionKonfigurasjon = {
     navn: 'familie-ba-sak-v1',
     redisPassord: process.env.REDIS_PASSWORD,
     redisUrl: env.redisUrl,
-    secureCookie: process.env.ENV === 'local' || process.env.ENV === 'e2e' ? false : true,
+    secureCookie: !(process.env.ENV === 'local' || process.env.ENV === 'e2e'),
     sessionMaxAgeSekunder: 12 * 60 * 60,
 };
 

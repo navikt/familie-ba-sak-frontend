@@ -21,12 +21,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --staged"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "./src/**/*.{js,ts,tsx}": [
-      "eslint --fix"
+    "src/**/*.{js,jsx,ts,tsx,json,css}": [
+      "prettier --write",
+      "eslint --fix src/"
     ]
   },
   "dependencies": {
@@ -156,7 +157,6 @@
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
     "prettier": "^2.0.5",
-    "pretty-quick": "^3.1.0",
     "react-axe": "^3.5.3",
     "react-hot-loader": "4.13.0",
     "style-loader": "^1.2.1",

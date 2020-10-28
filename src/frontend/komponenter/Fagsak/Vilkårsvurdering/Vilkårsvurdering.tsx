@@ -23,7 +23,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         hentVilkårMedFeil,
         vilkårsvurdering,
     } = useVilkårsvurdering();
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, opplysningsplikt } = useBehandling();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -42,9 +42,15 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         <Skjemasteg
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
-                history.push(
-                    `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
-                );
+                if (opplysningsplikt) {
+                    history.push(
+                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/opplysningsplikt`
+                    );
+                } else {
+                    history.push(
+                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
+                    );
+                }
             }}
             nesteOnClick={() => {
                 if (erLesevisning()) {

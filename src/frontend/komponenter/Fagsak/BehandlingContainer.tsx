@@ -11,6 +11,7 @@ import { useBehandling } from '../../context/BehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
+import Opplysningsplikt from './Opplysningsplikt/Opplysningsplikt';
 
 interface IProps {
     fagsak: IFagsak;
@@ -36,6 +37,18 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 <SøknadProvider>
                                     <RegistrerSøknad åpenBehandling={åpenBehandling.data} />
                                 </SøknadProvider>
+                            );
+                        }}
+                    />
+                    <Route
+                        exact={true}
+                        path="/fagsak/:fagsakId/:behandlingId/opplysningsplikt"
+                        render={() => {
+                            return (
+                                <Opplysningsplikt
+                                    fagsak={fagsak}
+                                    åpenBehandling={åpenBehandling.data}
+                                />
                             );
                         }}
                     />
