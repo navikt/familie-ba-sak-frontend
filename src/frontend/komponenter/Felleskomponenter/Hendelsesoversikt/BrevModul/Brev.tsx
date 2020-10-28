@@ -2,34 +2,41 @@ import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import { RessursStatus } from '@navikt/familie-typer';
 import UIModalWrapper from '../../Modal/UIModalWrapper';
-import Brevskjema from '../../BrevModul/BrevSkjema';
-import useBrevModul from '../useBrevModul';
-import { useEffect } from 'react';
+import Brevskjema from './Brevskjema';
+import { useHistory } from 'react-router';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBrevModul } from '../../../../context/BrevModulContext';
 
-const Brev = () => {
+interface IProps {
+    onOkIModalClick: () => void;
+}
+
+const Brev = ({ onOkIModalClick }: IProps) => {
+    const { åpenBehandling } = useBehandling();
+    const { fagsak } = useFagsakRessurser();
     const {
-        sendBrev,
         hentForhåndsvisning,
-        innsendtBrev,
         hentetForhåndsvisning,
         hentMuligeBrevMaler,
+        navigerTilOpplysningsplikt,
     } = useBrevModul();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
-    useEffect(() => {
-        if (innsendtBrev.status === RessursStatus.SUKSESS) {
-            settVisInnsendtBrevModal(true);
-        }
-    }, [innsendtBrev]);
+    const behandlingId =
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
+    const fagsakId = fagsak.status === RessursStatus.SUKSESS && fagsak.data.id;
+    const history = useHistory();
 
     return (
         <div className={'brev'}>
             <Brevskjema
-                sendBrevOnClick={sendBrev}
-                innsendtBrev={innsendtBrev}
                 forhåndsvisningOnClick={hentForhåndsvisning}
                 hentetForhåndsvisning={hentetForhåndsvisning}
                 brevMaler={hentMuligeBrevMaler()}
+                onSubmitSuccess={() => {
+                    settVisInnsendtBrevModal(true);
+                }}
             />
             {visInnsendtBrevModal && (
                 <UIModalWrapper
@@ -42,6 +49,11 @@ const Brev = () => {
                                 key={'ok'}
                                 mini={true}
                                 onClick={() => {
+                                    onOkIModalClick();
+                                    navigerTilOpplysningsplikt &&
+                                        history.push(
+                                            `/fagsak/${fagsakId}/${behandlingId}/opplysningsplikt`
+                                        );
                                     settVisInnsendtBrevModal(false);
                                 }}
                                 children={'Ok'}

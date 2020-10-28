@@ -16,6 +16,11 @@ import { IToggles, alleTogglerAv, ToggleNavn } from '../typer/toggles';
 
 const FEM_MINUTTER = 300000;
 
+export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
+    data?: D;
+    påvirkerSystemLaster?: boolean;
+};
+
 export interface IModal {
     actions?: JSX.Element[] | JSX.Element;
     className?: string;
@@ -180,7 +185,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     };
 
     const axiosRequest = async <T, D>(
-        config: AxiosRequestConfig & { data?: D; påvirkerSystemLaster?: boolean }
+        config: FamilieAxiosRequestConfig<D>
     ): Promise<Ressurs<T>> => {
         const ressursId = `${config.method}_${config.url}`;
         config.påvirkerSystemLaster && settRessurserSomLaster([...ressurserSomLaster, ressursId]);

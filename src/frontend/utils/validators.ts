@@ -90,14 +90,14 @@ export const erUtfylt = (felt: IFelt<string>): IFelt<string> => {
 export const lagInitiellFelt = <T>(verdi: T, valideringsfunksjon: ValiderIFelt<T>): IFelt<T> => {
     return {
         feilmelding: ikkeUtfyltFelt,
-        valideringsFunksjon: valideringsfunksjon,
+        valider: valideringsfunksjon,
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         verdi,
     };
 };
 
 export const validerFelt = <T>(nyVerdi: T, felt: IFelt<T>): IFelt<T> => {
-    return felt.valideringsFunksjon({
+    return felt.valider({
         ...felt,
         verdi: nyVerdi,
     });

@@ -50,7 +50,7 @@ export const initialOppgaveFelter = (
     innloggetSaksbehandler?: ISaksbehandler,
     search?: string
 ): IOppgaveFelter => {
-    const searchParams: ParsedQuery<string> = search ? parse(search) : {};
+    const searchParams: ParsedQuery = search ? parse(search) : {};
 
     return {
         opprettetTidspunkt: {
