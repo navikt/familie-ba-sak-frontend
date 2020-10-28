@@ -26,6 +26,7 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { målform } from '../../../../typer/søknad';
 import styled from 'styled-components';
+import navFarger from 'nav-frontend-core';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -34,9 +35,9 @@ interface IProps {
     onSubmitSuccess: () => void;
 }
 
-const StyledEtikettGrå = styled(EtikettInfo)`
-    background-color: #e9e7e7;
-    border-color: #78706a;
+const StyledEtikettInfo = styled(EtikettInfo)`
+    background-color: ${navFarger.navLysGra};
+    border-color: ${navFarger.navGra60};
 `;
 
 const Brevskjema = ({
@@ -164,9 +165,9 @@ const Brevskjema = ({
                         label={
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Normaltekst>Fritekst</Normaltekst>
-                                <StyledEtikettGrå mini={true}>
+                                <StyledEtikettInfo mini={true}>
                                     {målform[mottakersMålform]}
-                                </StyledEtikettGrå>
+                                </StyledEtikettInfo>
                             </div>
                         }
                         erLesevisning={false}
