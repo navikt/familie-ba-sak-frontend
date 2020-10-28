@@ -26,10 +26,6 @@ const SkjemaContainer = styled.div`
     margin: 2rem 0;
 `;
 
-const StyledSkjemaGruppe = styled(SkjemaGruppe)`
-    padding-left: 1rem;
-`;
-
 const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
     margin-bottom: 1rem;
 `;
@@ -107,7 +103,6 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
 
     return (
         <Skjemasteg
-            className={'opplysningsplikt'}
             senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
             tittel="Opplysningsplikt"
             forrigeOnClick={forrigeOnClick}
@@ -116,8 +111,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
         >
             <SkjemaContainer>
                 <Statuslinje resultat={opplysningspliktResultat()} />
-                <StyledSkjemaGruppe
-                    className={'opplysningsplikt__skjema'}
+                <SkjemaGruppe
                     feil={
                         skjema.submitRessurs.status === RessursStatus.FEILET
                             ? skjema.submitRessurs.frontendFeilmelding
@@ -176,7 +170,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                             begrunnelseOnChange(event);
                         }}
                     />
-                </StyledSkjemaGruppe>
+                </SkjemaGruppe>
             </SkjemaContainer>
         </Skjemasteg>
     );

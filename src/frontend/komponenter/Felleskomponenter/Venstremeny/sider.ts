@@ -37,6 +37,11 @@ export const sider: Record<SideId, ISide> = {
         navn: 'Registrer søknad',
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
     },
+    OPPLYSNINGSPLIKT: {
+        href: 'opplysningsplikt',
+        navn: 'Opplysningsplikt',
+        steg: BehandlingSteg.VILKÅRSVURDERING,
+    },
     VILKÅRSVURDERING: {
         href: 'vilkaarsvurdering',
         navn: 'Vilkårsvurdering',
@@ -64,11 +69,6 @@ export const sider: Record<SideId, ISide> = {
                 }
             );
         },
-    },
-    OPPLYSNINGSPLIKT: {
-        href: 'opplysningsplikt',
-        navn: 'Opplysningsplikt',
-        steg: BehandlingSteg.VILKÅRSVURDERING,
     },
     BEHANDLINGRESULTAT: {
         href: 'tilkjent-ytelse',
@@ -110,13 +110,18 @@ export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysning
 export const finnSideForBehandlingssteg = (
     steg: BehandlingSteg,
     opplysningsplikt: IOpplysningsplikt | undefined
-) => {
+): ISide | undefined => {
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
         return sider.VEDTAK;
     } else if (opplysningsplikt && opplysningsplikt.status === OpplysningspliktStatus.IKKE_SATT) {
         return sider.OPPLYSNINGSPLIKT;
     }
-    return Object.values(sider).find((side: ISide) => side.steg === steg);
+
+    const sideForSteg = Object.entries(sider)
+        .filter(([sideId, _]) => sideId !== SideId.OPPLYSNINGSPLIKT)
+        .find(([_, side]) => side.steg === steg);
+
+    return sideForSteg ? sideForSteg[1] : undefined;
 };
 
 export const erViPåUdefinertFagsakSide = (pathname: string) => {
