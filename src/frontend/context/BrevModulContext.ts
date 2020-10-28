@@ -52,7 +52,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                               felt,
                               `Du må velge minst ${
                                   brevmal === Brevmal.INNHENTE_OPPLYSNINGER
-                                      ? 'et dokument'
+                                      ? 'ett dokument'
                                       : 'en årsak'
                               }`
                           );
@@ -61,6 +61,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             fritekst: nyttFelt(
                 '',
                 (felt: IFelt<string>, valideringsmetadata?: Valideringsmetadata) => {
+                    const brevmal: Brevmal | '' = valideringsmetadata?.felter?.brevmal.verdi;
                     const multiselect: ISelectOptionMedBrevtekst[] | undefined =
                         valideringsmetadata?.felter?.multiselect.verdi;
 
@@ -77,7 +78,11 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                             ? ok(felt)
                             : feil(
                                   felt,
-                                  'Siden du har valgt “Annet” i feltet over, må du oppgi minst ett dokument '
+                                  `Siden du har valgt “Annet” i feltet over, må du oppgi minst ${
+                                      brevmal === Brevmal.INNHENTE_OPPLYSNINGER
+                                          ? 'ett dokument'
+                                          : 'en årsak'
+                                  }`
                               );
                     } else {
                         return ok(felt);
@@ -157,13 +162,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         return brevMaler;
     };
 
-    const multiselectInneholderAnnet = () => {
-        return (
-            skjema.felter.multiselect.verdi.filter(
-                (selectOption: ISelectOptionMedBrevtekst) => selectOption.value === 'annet'
-            ).length > 0
-        );
-    };
+    const multiselectInneholderAnnet = () =>
+        skjema.felter.multiselect.verdi.filter(
+            (selectOption: ISelectOptionMedBrevtekst) => selectOption.value === 'annet'
+        ).length > 0;
 
     const hentSkjemaData = (): IBrevData => ({
         mottakerIdent: skjema.felter.mottakerIdent.verdi,

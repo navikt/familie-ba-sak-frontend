@@ -120,16 +120,6 @@ export const validerFelt = <T>(
     );
 };
 
-export const validerFeltISkjema = <T>(nyVerdi: T, felt: IFelt<T>, felter: felterType): IFelt<T> => {
-    return felt.valider(
-        {
-            ...felt,
-            verdi: nyVerdi,
-        },
-        felter
-    );
-};
-
 export const ikkeValider = <T>(felt: IFelt<T>): IFelt<T> => {
     return ok(felt);
 };
