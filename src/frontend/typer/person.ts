@@ -1,4 +1,5 @@
 import { kjønnType } from '@navikt/familie-typer';
+import { Målform } from './søknad';
 
 // Enum
 export enum AdresseType {
@@ -47,6 +48,7 @@ export interface IGrunnlagPerson {
     navn: string;
     personIdent: string;
     type: PersonType;
+    målform: Målform;
 }
 
 export interface IPersonInfo {

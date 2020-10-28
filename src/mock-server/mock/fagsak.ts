@@ -14,6 +14,7 @@ import { IGrunnlagPerson, PersonType } from '../../frontend/typer/person';
 import { IRestPersonResultat, Resultat, VilkårType } from '../../frontend/typer/vilkår';
 import fs from 'fs';
 import path from 'path';
+import { Målform } from 'frontend/typer/søknad';
 
 const lesMockFil = (filnavn: string) => {
     return fs.readFileSync(path.join(__dirname, filnavn), 'utf-8');
@@ -66,6 +67,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         type: PersonType.BARN,
         kjønn: 'KVINNE' as kjønnType,
         navn: 'Mock Barn',
+        målform: Målform.NB,
     };
 
     const søker: IGrunnlagPerson = {
@@ -74,6 +76,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         type: PersonType.SØKER,
         kjønn: 'KVINNE' as kjønnType,
         navn: 'Mock Søker',
+        målform: Målform.NB,
     };
 
     const søkerPersonResultat: IRestPersonResultat = {
