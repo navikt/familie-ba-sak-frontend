@@ -47,6 +47,7 @@ const navSelectStyles = (feil?: string): StylesConfig => ({
     multiValue: (provided, _) => ({
         ...provided,
         backgroundColor: '#CCE1F3',
+        maxWidth: '12.5rem',
     }),
     multiValueRemove: provided => ({
         ...provided,

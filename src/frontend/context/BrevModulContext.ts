@@ -22,6 +22,8 @@ import { AxiosError } from 'axios';
 import { feil, IFelt, nyttFelt, ok, Valideringsmetadata } from '../typer/felt';
 import { useSkjema } from '../typer/skjema';
 import { fjernWhitespace } from '../utils/commons';
+import { IGrunnlagPerson } from '../typer/person';
+import { Målform } from '../typer/søknad';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { axiosRequest } = useApp();
@@ -99,6 +101,14 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
+    const personer =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
+
+    const mottakersMålform =
+        personer.find(
+            (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.verdi
+        )?.målform ?? Målform.NB;
+
     const hentForhåndsvisning = (brevData: IBrevData) => {
         settHentetForhåndsvisning(byggHenterRessurs());
         axiosRequest<string, IBrevData>({
@@ -159,7 +169,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         mottakerIdent: skjema.felter.mottakerIdent.verdi,
         multiselectVerdier: skjema.felter.multiselect.verdi
             .filter((selectOption: ISelectOptionMedBrevtekst) => selectOption.value !== 'annet')
-            .map((selectOption: ISelectOptionMedBrevtekst) => selectOption.brevtekst),
+            .map(
+                (selectOption: ISelectOptionMedBrevtekst) =>
+                    selectOption.brevtekst[mottakersMålform]
+            ),
         brevmal: skjema.felter.brevmal.verdi,
         fritekst: skjema.felter.fritekst.verdi,
     });
@@ -171,10 +184,12 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         hentSkjemaData,
         hentetForhåndsvisning,
         kanSendeSkjema,
+        mottakersMålform,
         multiselectInneholderAnnet,
         navigerTilOpplysningsplikt,
         onSubmit,
         oppdaterFeltISkjema,
+        personer,
         settNavigerTilOpplysningsplikt,
         skjema,
     };

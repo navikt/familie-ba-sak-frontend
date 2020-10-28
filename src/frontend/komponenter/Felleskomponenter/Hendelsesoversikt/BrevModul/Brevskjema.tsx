@@ -24,7 +24,7 @@ import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import FamilieReactSelect from '../../FamilieReactSelect';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Normaltekst } from 'nav-frontend-typografi';
-import { Målform, målform } from '../../../../typer/søknad';
+import { målform } from '../../../../typer/søknad';
 import styled from 'styled-components';
 
 interface IProps {
@@ -52,9 +52,11 @@ const Brevskjema = ({
         hentFeltProps,
         hentSkjemaData,
         kanSendeSkjema,
+        mottakersMålform,
         multiselectInneholderAnnet,
         onSubmit,
         oppdaterFeltISkjema,
+        personer,
         settNavigerTilOpplysningsplikt,
         skjema,
     } = useBrevModul();
@@ -67,17 +69,11 @@ const Brevskjema = ({
         }
     }, [hentetForhåndsvisning]);
 
-    const personer =
-        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
     const skjemaErLåst =
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetForhåndsvisning.status === RessursStatus.HENTER;
 
     const valgtBrevmal: IFelt<Brevmal> = skjema.felter['brevmal'];
-    const mottakersMålform =
-        personer.find(
-            (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.verdi
-        )?.målform ?? Målform.NB;
 
     const submitFeil =
         skjema.submitRessurs.status === RessursStatus.FEILET
