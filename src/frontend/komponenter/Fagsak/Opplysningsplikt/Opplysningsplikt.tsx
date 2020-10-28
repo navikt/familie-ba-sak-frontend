@@ -6,7 +6,10 @@ import { IBehandling } from '../../../typer/behandling';
 import { FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { OpplysningspliktStatus } from '../../../typer/opplysningsplikt';
+import {
+    OpplysningspliktStatus,
+    opplysningspliktVisningtekst,
+} from '../../../typer/opplysningsplikt';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import Statuslinje from './Statuslinje';
@@ -30,6 +33,10 @@ const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
     margin-bottom: 1rem;
 `;
 
+const Paragraf = styled(Undertekst)`
+    margin-left: 0.75rem;
+`;
+
 const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
     fagsak,
     åpenBehandling,
@@ -37,6 +44,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
     const history = useHistory();
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
+
     const { skjema, oppdaterFeltISkjema, hentFeltProps, onSubmit } = useSkjema<IFagsak>({
         felter: {
             status: nyttFelt<OpplysningspliktStatus>(
@@ -53,6 +61,8 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
         visFeilmeldinger: false,
     });
     const { settFagsak } = useFagsakRessurser();
+
+    const skjulBegrunnelse = lesevisning && !skjema.felter['begrunnelse'].verdi;
 
     const nesteOnClick = () => {
         if (!lesevisning) {
@@ -122,15 +132,20 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                     <StyledFamilieRadioGruppe
                         {...hentFeltProps('status')}
                         erLesevisning={lesevisning}
+                        verdi={
+                            opplysningspliktVisningtekst[
+                                skjema.felter['status'].verdi as OpplysningspliktStatus
+                            ]
+                        }
                         legend={
                             <>
-                                Ta stilling til om opplysningsplikten er oppfylt{' '}
-                                <Undertekst tag={'span'}>(§17 OG 18)</Undertekst>
+                                Ta stilling til om opplysningsplikten er oppfylt
+                                <Paragraf tag={'span'}>§§ 17 OG 18</Paragraf>
                             </>
                         }
                     >
                         <Radio
-                            label={'Mottatt dokumentasjon'}
+                            label={opplysningspliktVisningtekst[OpplysningspliktStatus.MOTTATT]}
                             name="opplysningsplikt"
                             onChange={() => radioOnChange(OpplysningspliktStatus.MOTTATT)}
                             checked={
@@ -138,7 +153,11 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                             }
                         />
                         <Radio
-                            label={'Ikke mottatt dokumentasjon'}
+                            label={
+                                opplysningspliktVisningtekst[
+                                    OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG
+                                ]
+                            }
                             name="opplysningsplikt"
                             onChange={() =>
                                 radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG)
@@ -149,7 +168,11 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                             }
                         />
                         <Radio
-                            label={'Fortsett med manglende dokumentasjon'}
+                            label={
+                                opplysningspliktVisningtekst[
+                                    OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT
+                                ]
+                            }
                             name="opplysningsplikt"
                             onChange={() =>
                                 radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT)
@@ -161,15 +184,17 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                         />
                     </StyledFamilieRadioGruppe>
 
-                    <FamilieTextarea
-                        erLesevisning={lesevisning}
-                        label={'Begrunnelse (valgfri)'}
-                        {...hentFeltProps('begrunnelse')}
-                        maxLength={1500}
-                        onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
-                            begrunnelseOnChange(event);
-                        }}
-                    />
+                    {!skjulBegrunnelse && (
+                        <FamilieTextarea
+                            erLesevisning={lesevisning}
+                            label={'Begrunnelse (valgfri)'}
+                            {...hentFeltProps('begrunnelse')}
+                            maxLength={1500}
+                            onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
+                                begrunnelseOnChange(event);
+                            }}
+                        />
+                    )}
                 </SkjemaGruppe>
             </SkjemaContainer>
         </Skjemasteg>
