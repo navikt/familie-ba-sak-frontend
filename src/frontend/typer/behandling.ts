@@ -4,6 +4,7 @@ import { IVedtakForBehandling } from './vedtak';
 import { IRestPersonResultat } from './vilkår';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IOppsummeringBeregning } from './beregning';
+import { IOpplysningsplikt } from './opplysningsplikt';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -120,6 +121,7 @@ export interface IBehandling {
     status: BehandlingStatus;
     steg: BehandlingSteg;
     totrinnskontroll?: ITotrinnskontroll;
+    opplysningsplikt?: IOpplysningsplikt;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];

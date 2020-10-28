@@ -4,13 +4,18 @@ import React from 'react';
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPersonInfo } from '../typer/person';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 import { useApp } from './AppContext';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPersonInfo>;
     fagsak: Ressurs<IFagsak>;
-    logg: Ressurs<ILogg[]>;
 }
 
 const initialState: IHovedRessurser = {
@@ -20,13 +25,11 @@ const initialState: IHovedRessurser = {
     fagsak: {
         status: RessursStatus.IKKE_HENTET,
     },
-    logg: {
-        status: RessursStatus.IKKE_HENTET,
-    },
 };
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
+    const [logg, settLogg] = React.useState<Ressurs<ILogg[]>>(byggTomRessurs());
     const { axiosRequest } = useApp();
 
     React.useEffect(() => {
@@ -80,24 +83,16 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     };
 
     const hentLogg = (behandlingId: number): void => {
-        settFagsakRessurser({
-            ...fagsakRessurser,
-            logg: {
-                status: RessursStatus.HENTER,
-            },
-        });
+        settLogg(byggHenterRessurs());
         axiosRequest<ILogg[], void>({
             method: 'GET',
             url: `/familie-ba-sak/api/logg/${behandlingId}`,
         })
             .then((hentetLogg: Ressurs<ILogg[]>) => {
-                settFagsakRessurser({ ...fagsakRessurser, logg: hentetLogg });
+                settLogg(hentetLogg);
             })
             .catch(() => {
-                settFagsakRessurser({
-                    ...fagsakRessurser,
-                    logg: byggFeiletRessurs('Feil ved lasting av logg'),
-                });
+                settLogg(byggFeiletRessurs('Feil ved lasting av logg'));
             });
     };
 
@@ -109,7 +104,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         fagsak: fagsakRessurser.fagsak,
         hentFagsak,
         hentLogg,
-        logg: fagsakRessurser.logg,
+        logg,
         ressurser: fagsakRessurser,
         settFagsak,
     };
