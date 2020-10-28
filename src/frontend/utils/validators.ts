@@ -10,7 +10,6 @@ import {
 } from '../typer/felt';
 import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
-import { felterType } from '../typer/skjema';
 import { Resultat } from '../typer/vilkår';
 import { datoformat } from './formatter';
 
