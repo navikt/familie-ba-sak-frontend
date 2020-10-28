@@ -3,6 +3,7 @@ import ReactSelect, { NamedProps, StylesConfig } from 'react-select';
 import { Label } from 'nav-frontend-skjema';
 import styled from 'styled-components';
 import { Feilmelding } from 'nav-frontend-typografi';
+import navFarger from 'nav-frontend-core';
 
 interface IProps extends NamedProps {
     erLesevisning: boolean;
@@ -19,11 +20,18 @@ const Container = styled.div`
 const navSelectStyles = (feil?: string): StylesConfig => ({
     control: (provided, state) => ({
         ...provided,
-        border: feil && !state.isFocused ? '1px solid #BA3A26' : '1px solid #78706A',
+        border:
+            feil && !state.isFocused
+                ? `1px solid ${navFarger.redError}`
+                : `1px solid ${navFarger.navGra60}`,
         borderRadius: '4px',
-        boxShadow: state.isFocused ? '0 0 0 3px #254b6d' : feil ? '0 0 0 1px #BA3A26' : '',
+        boxShadow: state.isFocused
+            ? `0 0 0 3px ${navFarger.fokusFarge}`
+            : feil
+            ? `0 0 0 1px ${navFarger.redError}`
+            : '',
         ':hover': {
-            border: '1px solid #0067C5',
+            border: `1px solid ${navFarger.navBla}`,
         },
     }),
     placeholder: provided => ({
@@ -39,20 +47,20 @@ const navSelectStyles = (feil?: string): StylesConfig => ({
     }),
     clearIndicator: provided => ({
         ...provided,
-        color: '#78706A',
+        color: navFarger.navGra60,
         ':hover': {
-            color: '#3E3832',
+            color: navFarger.navMorkGra,
         },
     }),
     multiValue: (provided, _) => ({
         ...provided,
-        backgroundColor: '#CCE1F3',
+        backgroundColor: navFarger.navBlaLighten80,
         maxWidth: '12.5rem',
     }),
     multiValueRemove: provided => ({
         ...provided,
         ':hover': {
-            backgroundColor: '#0067C5',
+            backgroundColor: navFarger.navBla,
             color: 'white',
         },
     }),
