@@ -11,9 +11,14 @@ import {
 } from '../../../../../typer/behandling';
 import useHenleggBehandling from './useHenleggBehandling';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { useHistory } from 'react-router';
+import { IFagsak } from '../../../../../typer/fagsak';
+import { Normaltekst } from 'nav-frontend-typografi';
+import Oppfylt from '../../../../../ikoner/Oppfylt';
 
 interface IProps {
     onListElementClick: () => void;
+    fagsak: IFagsak;
     behandling: IBehandling;
 }
 
@@ -21,8 +26,15 @@ interface HenleggelseÅrsakSelect extends HTMLSelectElement {
     value: HenleggelseÅrsak | '';
 }
 
-const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, behandling }) => {
+const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behandling }) => {
+    const history = useHistory();
+
     const [visModal, settVisModal] = useState(false);
+
+    const lukkHenleggBehandlingModal = () => {
+        fjernState();
+        settVisModal(false);
+    };
 
     const {
         fjernState,
@@ -35,12 +47,9 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, behandling })
         settBegrunnelse,
         valideringsFeil,
         settValideringsfeil,
-    } = useHenleggBehandling(() => settVisModal(false));
-
-    const lukkHenleggBehandlingModal = () => {
-        fjernState();
-        settVisModal(false);
-    };
+        visVeivalgModal,
+        settVisVeivalgModal,
+    } = useHenleggBehandling(lukkHenleggBehandlingModal);
 
     return (
         <>
@@ -146,6 +155,41 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, behandling })
                         }}
                     />
                 </SkjemaGruppe>
+            </UIModalWrapper>
+
+            <UIModalWrapper
+                modal={{
+                    className: 'henlegg-behandling__veivalg',
+                    actions: [
+                        <Knapp
+                            key={'Gå til saksoversikten'}
+                            mini={true}
+                            onClick={() => {
+                                history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                            }}
+                            children={'Gå til saksoversikten'}
+                        />,
+                        <Knapp
+                            key={'Gå til oppgavebenken'}
+                            mini={true}
+                            onClick={() => {
+                                history.push('/oppgaver');
+                            }}
+                            children={'Gå til oppgavebenken'}
+                        />,
+                    ],
+                    onClose: () => {
+                        settVisVeivalgModal(false);
+                    },
+                    lukkKnapp: true,
+                    tittel: '',
+                    visModal: visVeivalgModal,
+                }}
+            >
+                <Normaltekst className="henlegg-behandling__veivalg__tekst">
+                    <Oppfylt className="henlegg-behandling__veivalg__ikon" />
+                    Behandlingen er henlagt
+                </Normaltekst>
             </UIModalWrapper>
         </>
     );

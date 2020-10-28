@@ -64,6 +64,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             <li>
                                 <HenleggBehandling
                                     onListElementClick={() => settAnker(undefined)}
+                                    fagsak={fagsak}
                                     behandling={åpenBehandling.data}
                                 />
                             </li>

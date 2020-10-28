@@ -4,7 +4,6 @@ import {
     Behandlingstype,
     BehandlingUnderkategori,
     BehandlingÅrsak,
-    HenleggelseÅrsak,
     IBehandling,
 } from '../typer/behandling';
 import { IRestPersonResultat } from '../typer/vilkår';
@@ -23,11 +22,6 @@ export interface IOpprettBehandlingData {
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
     behandlingÅrsak: BehandlingÅrsak;
-}
-
-export interface IHenleggBehandlingData {
-    årsak: HenleggelseÅrsak;
-    begrunnelse: string;
 }
 
 export interface IRestVilkårsvurdering {

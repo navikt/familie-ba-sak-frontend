@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import {
-    IHenleggBehandlingData,
-    IOpprettBehandlingData,
-    IOpprettEllerHentFagsakData,
-} from '../../api/fagsak';
+import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../typer/behandling';
@@ -103,37 +99,6 @@ const useFagsakApi = (
             });
     };
 
-    const henleggBehandling = (
-        behandlingId: number,
-        data: IHenleggBehandlingData
-    ): Promise<Ressurs<IFagsak>> => {
-        settSenderInn(true);
-        return axiosRequest<IFagsak, IHenleggBehandlingData>({
-            data,
-            method: 'PUT',
-            url: `/familie-ba-sak/api/behandlinger/${behandlingId}/henlegg`,
-        })
-            .then((response: Ressurs<IFagsak>) => {
-                settSenderInn(false);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settFagsak(response);
-                } else if (response.status === RessursStatus.FEILET) {
-                    settVisFeilmeldinger(true);
-                    settFeilmelding(response.frontendFeilmelding);
-                } else {
-                    settVisFeilmeldinger(true);
-                    settFeilmelding('Henleggelse av behandling feilet');
-                }
-                return response;
-            })
-            .catch(() => {
-                settSenderInn(false);
-                settVisFeilmeldinger(true);
-                settFeilmelding('Henleggelse av behandling feilet');
-                return byggFeiletRessurs('Henleggelse av behandling feilet');
-            });
-    };
-
     const validerVilkårsvurderingOgSendInn = (
         vilkårsvurdering: IPersonResultat[],
         fagsak: IFagsak
@@ -181,7 +146,6 @@ const useFagsakApi = (
     };
 
     return {
-        henleggBehandling,
         opprettBehandling,
         opprettEllerHentFagsak,
         validerVilkårsvurderingOgSendInn,
