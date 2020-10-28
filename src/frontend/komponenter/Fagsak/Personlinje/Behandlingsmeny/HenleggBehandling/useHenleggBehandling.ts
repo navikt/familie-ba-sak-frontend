@@ -1,10 +1,4 @@
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useState } from 'react';
 import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
@@ -16,6 +10,7 @@ const useOpprettBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const { axiosRequest } = useApp();
     const { settFagsak } = useFagsakRessurser();
+    const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
 
     const [selectedHenleggelseÅrsak, settSelectedHenleggelseÅrsak] = useState<
         HenleggelseÅrsak | ''
@@ -54,21 +49,21 @@ const useOpprettBehandling = (lukkModal: () => void) => {
                 },
                 method: 'PUT',
                 url: `/familie-ba-sak/api/behandlinger/${behandlingId}/henlegg`,
-            })
-                .then((response: Ressurs<IFagsak>) => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        settFagsak(response);
-                        lukkModal();
-                        settVisVeivalgModal(true);
-                    }
-                    return response;
-                })
-                .catch(() => {
-                    return byggFeiletRessurs('Henleggelse av behandling feilet');
-                });
-
-            lukkModal();
-            settVisVeivalgModal(true);
+            }).then((response: Ressurs<IFagsak>) => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    settFagsak(response);
+                    lukkModal();
+                    settVisVeivalgModal(true);
+                } else {
+                    settFeilmelding(
+                        response.status === RessursStatus.FEILET ||
+                            response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                            response.status === RessursStatus.IKKE_TILGANG
+                            ? response.frontendFeilmelding
+                            : undefined
+                    );
+                }
+            });
         }
     };
 
@@ -85,6 +80,7 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         settValideringsfeil,
         visVeivalgModal,
         settVisVeivalgModal,
+        feilmelding,
     };
 };
 

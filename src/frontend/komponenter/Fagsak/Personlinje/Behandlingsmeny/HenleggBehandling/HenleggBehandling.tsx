@@ -49,6 +49,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
         settValideringsfeil,
         visVeivalgModal,
         settVisVeivalgModal,
+        feilmelding,
     } = useHenleggBehandling(lukkHenleggBehandlingModal);
 
     return (
@@ -103,13 +104,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     visModal,
                 }}
             >
-                <SkjemaGruppe
-                    feil={
-                        submitRessurs.status === RessursStatus.FEILET
-                            ? submitRessurs.frontendFeilmelding
-                            : ''
-                    }
-                >
+                <SkjemaGruppe feil={feilmelding}>
                     <FamilieSelect
                         feil={valideringsFeil.henleggelseÅrsak}
                         erLesevisning={false}
