@@ -19,24 +19,24 @@ const StyledButton = styled.button<IFilterknappProps>`
     justify-content: center;
     align-items: center;
     transition: box-shadow 0.1s ease-in-out;
-    cursor: ${props => (props.disabled ? 'initial' : 'pointer')};
-    box-shadow: ${props => (props.aktiv ? `inset 0 -5px 0 -1px ${navFarger.navBla}` : '')};
+    cursor: ${({ disabled }) => (disabled ? 'initial' : 'pointer')};
+    box-shadow: ${({ aktiv }) => (aktiv ? `inset 0 -5px 0 -1px ${navFarger.navBla}` : '')};
 
     > * {
         transition: fill 0.1s ease-in-out;
-        fill: ${props => {
-            if (props.disabled) {
+        fill: ${({ aktiv, disabled }) => {
+            if (disabled) {
                 return navFarger.navGra60;
-            } else if (props.aktiv) {
+            } else if (aktiv) {
                 return navFarger.navBla;
             } else {
                 return navFarger.navGra80;
             }
         }};
-        color: ${props => {
-            if (props.disabled) {
+        color: ${({ aktiv, disabled }) => {
+            if (disabled) {
                 return navFarger.navGra60;
-            } else if (props.aktiv) {
+            } else if (aktiv) {
                 return navFarger.navBla;
             } else {
                 return '';
@@ -45,8 +45,8 @@ const StyledButton = styled.button<IFilterknappProps>`
     }
 
     :focus {
-        outline: ${props => (!props.disabled ? `none` : '')};
-        border: ${props => (!props.disabled ? `3px solid ${navFarger.fokusFarge}` : '')};
+        outline: ${({ disabled }) => (!disabled ? `none` : '')};
+        border: ${({ disabled }) => (!disabled ? `3px solid ${navFarger.fokusFarge}` : '')};
     }
 `;
 
