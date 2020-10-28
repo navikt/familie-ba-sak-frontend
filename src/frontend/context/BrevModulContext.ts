@@ -44,7 +44,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 ) => {
                     const brevmal: Brevmal | '' = valideringsmetadata?.felter?.brevmal.verdi;
 
-                    console.log(brevmal);
                     return felt.verdi.length > 0
                         ? ok(felt)
                         : feil(

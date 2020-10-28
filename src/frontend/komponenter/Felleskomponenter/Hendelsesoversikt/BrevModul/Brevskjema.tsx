@@ -104,9 +104,7 @@ const Brevskjema = ({
                         oppdaterFeltISkjema('mottakerIdent', event.target.value);
                     }}
                 >
-                    <option disabled={true} value={''}>
-                        Velg
-                    </option>
+                    <option value={''}>Velg</option>
                     {personer
                         .filter((person: IGrunnlagPerson) => person.type !== PersonType.BARN)
                         .map(person => {
@@ -131,9 +129,7 @@ const Brevskjema = ({
                         oppdaterFeltISkjema('brevmal', event.target.value);
                     }}
                 >
-                    <option disabled={true} value={''}>
-                        Velg
-                    </option>
+                    <option value={''}>Velg</option>
                     {brevMaler.map(mal => {
                         return (
                             <option

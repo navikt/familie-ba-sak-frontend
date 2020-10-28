@@ -20,7 +20,7 @@ const tilHendelseItem = (hendelse: Hendelse) => (
 );
 
 const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) => {
-    const [aktivTab, settAktivTab] = React.useState<Tabs>(Tabs.Meldinger);
+    const [aktivTab, settAktivTab] = React.useState<Tabs>(Tabs.Historikk);
 
     return (
         <div className={classNames('hendelsesoversikt', className)}>
