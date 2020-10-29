@@ -8047,10 +8047,15 @@ nav-frontend-hjelpetekst@^2.0.32:
   resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst/-/nav-frontend-hjelpetekst-2.0.32.tgz#1c457a381d7d5c8872a54f90cb760019214f0890"
   integrity sha512-S4iZyxBEsZD2Y0QLZfjd560rFgFyimebV1mnRtX0sc6XAf09VznxYB9ExBYc2i/0QKcHAOu2Hr4IY53ZcrCwcw==
 
-nav-frontend-ikoner-assets@2.0.3, nav-frontend-ikoner-assets@^2.0.3:
+nav-frontend-ikoner-assets@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/nav-frontend-ikoner-assets/-/nav-frontend-ikoner-assets-2.0.3.tgz#b5de7cdc59c470f6077f5a61a978e54f40ee8076"
   integrity sha512-B8mizkduCh4O2JzD4BBl2SKUwAZgm9bZCkEGv1JoaSUFrnJFDHBh2ZSRGSFGvceJueJ1omuCNgRwjb/1BCcSfg==
+
+nav-frontend-ikoner-assets@^2.0.7:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ikoner-assets/-/nav-frontend-ikoner-assets-2.0.8.tgz#9aeced6e93d08b002d44a4b540a8b2befd5cb9f1"
+  integrity sha512-By6NVnUoKwIBxOeJlhpM1NEMtShlVCG6jLNwi6HgB9uZzF3Ac0NRz1amDdNfASg+MBfmoZNJE8WP06SiKvEV+A==
 
 nav-frontend-ikonknapper@^1.0.9:
   version "1.0.9"
