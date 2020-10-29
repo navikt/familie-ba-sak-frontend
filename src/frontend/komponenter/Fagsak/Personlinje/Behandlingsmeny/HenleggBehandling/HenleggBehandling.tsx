@@ -10,7 +10,7 @@ import {
     IBehandling,
 } from '../../../../../typer/behandling';
 import useHenleggBehandling from './useHenleggBehandling';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 import { useHistory } from 'react-router';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Normaltekst } from 'nav-frontend-typografi';
@@ -31,26 +31,16 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
 
     const [visModal, settVisModal] = useState(false);
 
-    const lukkHenleggBehandlingModal = () => {
-        fjernState();
-        settVisModal(false);
-    };
-
     const {
-        fjernState,
+        hentFeltProps,
         onBekreft,
-        settSubmitRessurs,
-        submitRessurs,
-        selectedHenleggelseÅrsak,
-        settSelectedHenleggelseÅrsak,
-        begrunnelse,
-        settBegrunnelse,
-        valideringsFeil,
-        settValideringsfeil,
-        visVeivalgModal,
+        oppdaterFeltISkjema,
         settVisVeivalgModal,
-        feilmelding,
-    } = useHenleggBehandling(lukkHenleggBehandlingModal);
+        skjema,
+        visVeivalgModal,
+    } = useHenleggBehandling(() => {
+        settVisModal(false);
+    });
 
     return (
         <>
@@ -78,7 +68,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             key={'avbryt'}
                             mini={true}
                             onClick={() => {
-                                lukkHenleggBehandlingModal();
+                                settVisModal(false);
                             }}
                             children={'Avbryt'}
                         />,
@@ -88,38 +78,32 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             mini={true}
                             onClick={() => onBekreft(behandling.behandlingId)}
                             children={
-                                selectedHenleggelseÅrsak === HenleggelseÅrsak.SØKNAD_TRUKKET
+                                skjema.felter.årsak.verdi === 'SØKNAD_TRUKKET'
                                     ? 'Bekreft og send brev'
                                     : 'Bekreft'
                             }
-                            spinner={submitRessurs.status === RessursStatus.HENTER}
-                            disabled={submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
                     onClose: () => {
-                        lukkHenleggBehandlingModal();
+                        settVisModal(false);
                     },
                     lukkKnapp: true,
                     tittel: 'Henlegg behandling',
                     visModal,
                 }}
             >
-                <SkjemaGruppe feil={feilmelding}>
+                <SkjemaGruppe
+                    feil={
+                        skjema.submitRessurs.status === RessursStatus.FEILET
+                            ? skjema.submitRessurs.frontendFeilmelding
+                            : undefined
+                    }
+                >
                     <FamilieSelect
-                        feil={valideringsFeil.henleggelseÅrsak}
-                        erLesevisning={false}
-                        value={selectedHenleggelseÅrsak}
-                        name={'Henleggelsesårsak'}
+                        {...hentFeltProps('årsak')}
                         label={'Velg årsak'}
                         onChange={(event: React.ChangeEvent<HenleggelseÅrsakSelect>): void => {
-                            settSubmitRessurs(byggTomRessurs());
-                            settValideringsfeil(valideringsFeil => {
-                                return {
-                                    ...valideringsFeil,
-                                    behandlingÅrsak: '',
-                                };
-                            });
-                            settSelectedHenleggelseÅrsak(event.target.value);
+                            oppdaterFeltISkjema('årsak', event.target.value);
                         }}
                     >
                         <option disabled={true} value={''}>
@@ -129,7 +113,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             return (
                                 <option
                                     key={årsak}
-                                    aria-selected={selectedHenleggelseÅrsak === årsak}
+                                    aria-selected={skjema.felter.årsak.verdi === årsak}
                                     value={årsak}
                                 >
                                     {henleggelseÅrsak[årsak]}
@@ -139,14 +123,12 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     </FamilieSelect>
 
                     <FamilieTextarea
-                        disabled={false}
-                        erLesevisning={false}
+                        {...hentFeltProps('begrunnelse')}
                         label={'Begrunnelse'}
-                        value={begrunnelse}
+                        erLesevisning={false}
                         maxLength={4000}
                         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                            const tekst = event.target.value;
-                            settBegrunnelse(tekst);
+                            oppdaterFeltISkjema('begrunnelse', event.target.value);
                         }}
                     />
                 </SkjemaGruppe>

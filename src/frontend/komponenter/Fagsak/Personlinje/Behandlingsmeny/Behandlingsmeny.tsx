@@ -59,17 +59,15 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             fagsak={fagsak}
                         />
                     </li>
-                    <li>
-                        {åpenBehandling.status === RessursStatus.SUKSESS && (
-                            <li>
-                                <HenleggBehandling
-                                    onListElementClick={() => settAnker(undefined)}
-                                    fagsak={fagsak}
-                                    behandling={åpenBehandling.data}
-                                />
-                            </li>
-                        )}
-                    </li>
+                    {åpenBehandling.status === RessursStatus.SUKSESS && (
+                        <li>
+                            <HenleggBehandling
+                                onListElementClick={() => settAnker(undefined)}
+                                fagsak={fagsak}
+                                behandling={åpenBehandling.data}
+                            />
+                        </li>
+                    )}
                 </ul>
             </Popover>
         </>
