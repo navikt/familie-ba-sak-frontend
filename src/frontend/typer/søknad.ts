@@ -1,5 +1,4 @@
 import { BehandlingUnderkategori } from './behandling';
-import { INøkkelPar } from './common';
 
 export interface IRestRegistrerSøknad {
     søknad: ISøknadDTO;
@@ -31,13 +30,7 @@ export enum Målform {
     NN = 'NN',
 }
 
-export const målform: INøkkelPar = {
-    NB: {
-        id: 'NB',
-        navn: 'Bokmål',
-    },
-    NN: {
-        id: 'NN',
-        navn: 'Nynorsk',
-    },
+export const målform: Record<Målform, string> = {
+    NB: 'Bokmål',
+    NN: 'Nynorsk',
 };

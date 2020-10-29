@@ -9,3 +9,10 @@ export enum OpplysningspliktStatus {
     IKKE_MOTTATT_AVSLAG = 'IKKE_MOTTATT_AVSLAG',
     IKKE_MOTTATT_FORTSETT = 'IKKE_MOTTATT_FORTSETT',
 }
+
+export const opplysningspliktVisningtekst: Record<OpplysningspliktStatus, string> = {
+    MOTTATT: 'Mottatt dokumentasjon',
+    IKKE_MOTTATT_AVSLAG: 'Ikke mottatt dokumentasjon',
+    IKKE_MOTTATT_FORTSETT: 'Fortsett med manglende dokumentasjon',
+    IKKE_SATT: 'Ingen opplysninger oppgitt',
+};

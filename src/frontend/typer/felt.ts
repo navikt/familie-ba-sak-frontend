@@ -1,5 +1,3 @@
-import { IGrunnlagPerson } from './person';
-
 export enum Valideringsstatus {
     FEIL = 'FEIL',
     ADVARSEL = 'ADVARSEL',
@@ -23,7 +21,9 @@ export const feil = <T>(felt: IFelt<T>, feilmelding: string): IFelt<T> => {
     };
 };
 
-export type ValiderIFelt<T> = (felt: IFelt<T>, person?: IGrunnlagPerson) => IFelt<T>;
+// eslint-disable-next-line
+export type Valideringsmetadata = { [key: string]: any };
+export type ValiderIFelt<T> = (felt: IFelt<T>, metadata?: Valideringsmetadata) => IFelt<T>;
 
 export const defaultValidator = <T>(felt: IFelt<T>) => ({
     ...felt,

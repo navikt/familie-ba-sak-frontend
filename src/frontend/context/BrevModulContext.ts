@@ -16,11 +16,14 @@ import { IFagsak } from '../typer/fagsak';
 import {
     Brevmal,
     IBrevData,
+    ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { AxiosError } from 'axios';
+import { feil, IFelt, nyttFelt, ok, Valideringsmetadata } from '../typer/felt';
 import { useSkjema } from '../typer/skjema';
-import { feil, IFelt, nyttFelt, ok } from '../typer/felt';
 import { fjernWhitespace } from '../utils/commons';
+import { IGrunnlagPerson } from '../typer/person';
+import { Målform } from '../typer/søknad';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { axiosRequest } = useApp();
@@ -29,21 +32,62 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         IFagsak
     >({
         felter: {
-            mottaker: nyttFelt<string>('', (felt: IFelt<string>) =>
+            mottakerIdent: nyttFelt<string>('', (felt: IFelt<string>) =>
                 felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker')
             ),
             brevmal: nyttFelt<Brevmal | ''>('', (felt: IFelt<Brevmal | ''>) =>
                 felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal')
             ),
-            fritekst: nyttFelt('', (felt: IFelt<string>) =>
-                fjernWhitespace(felt.verdi).length >= 3
-                    ? ok(felt)
-                    : feil(
-                          felt,
-                          'Du må fylle ut fritekst'
-                          // Teksten under skal inn når vi får på plass multiselect
-                          //'Siden du har valgt “Annet” i feltet over, må du oppgi minst ett dokument '
-                      )
+            multiselect: nyttFelt<ISelectOptionMedBrevtekst[]>(
+                [],
+                (
+                    felt: IFelt<ISelectOptionMedBrevtekst[]>,
+                    valideringsmetadata?: Valideringsmetadata
+                ) => {
+                    const brevmal: Brevmal | '' = valideringsmetadata?.felter?.brevmal.verdi;
+
+                    return felt.verdi.length > 0
+                        ? ok(felt)
+                        : feil(
+                              felt,
+                              `Du må velge minst ${
+                                  brevmal === Brevmal.INNHENTE_OPPLYSNINGER
+                                      ? 'ett dokument'
+                                      : 'en årsak'
+                              }`
+                          );
+                }
+            ),
+            fritekst: nyttFelt(
+                '',
+                (felt: IFelt<string>, valideringsmetadata?: Valideringsmetadata) => {
+                    const brevmal: Brevmal | '' = valideringsmetadata?.felter?.brevmal.verdi;
+                    const multiselect: ISelectOptionMedBrevtekst[] | undefined =
+                        valideringsmetadata?.felter?.multiselect.verdi;
+
+                    const annetErValgt =
+                        (
+                            multiselect?.filter(
+                                (selectOption: ISelectOptionMedBrevtekst) =>
+                                    selectOption.value === 'annet'
+                            ) ?? []
+                        ).length > 0;
+
+                    if (annetErValgt) {
+                        return fjernWhitespace(felt.verdi).length >= 3
+                            ? ok(felt)
+                            : feil(
+                                  felt,
+                                  `Siden du har valgt “Annet” i feltet over, må du oppgi minst ${
+                                      brevmal === Brevmal.INNHENTE_OPPLYSNINGER
+                                          ? 'ett dokument'
+                                          : 'en årsak'
+                                  }`
+                              );
+                    } else {
+                        return ok(felt);
+                    }
+                }
             ),
         },
         skjemanavn: 'brevmodul',
@@ -62,12 +106,20 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
+    const personer =
+        åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
+
+    const mottakersMålform =
+        personer.find(
+            (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.verdi
+        )?.målform ?? Målform.NB;
+
     const hentForhåndsvisning = (brevData: IBrevData) => {
         settHentetForhåndsvisning(byggHenterRessurs());
         axiosRequest<string, IBrevData>({
             method: 'POST',
             data: brevData,
-            url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/innhente-opplysninger/${behandlingId}`,
+            url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
         })
             .then((response: Ressurs<string>) => {
                 if (response.status === RessursStatus.SUKSESS) {
@@ -110,16 +162,37 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         return brevMaler;
     };
 
+    const multiselectInneholderAnnet = () =>
+        skjema.felter.multiselect.verdi.filter(
+            (selectOption: ISelectOptionMedBrevtekst) => selectOption.value === 'annet'
+        ).length > 0;
+
+    const hentSkjemaData = (): IBrevData => ({
+        mottakerIdent: skjema.felter.mottakerIdent.verdi,
+        multiselectVerdier: skjema.felter.multiselect.verdi
+            .filter((selectOption: ISelectOptionMedBrevtekst) => selectOption.value !== 'annet')
+            .map(
+                (selectOption: ISelectOptionMedBrevtekst) =>
+                    selectOption.brevtekst[mottakersMålform]
+            ),
+        brevmal: skjema.felter.brevmal.verdi,
+        fritekst: skjema.felter.fritekst.verdi,
+    });
+
     return {
-        navigerTilOpplysningsplikt,
-        settNavigerTilOpplysningsplikt,
-        hentForhåndsvisning,
-        hentetForhåndsvisning,
-        hentMuligeBrevMaler,
         hentFeltProps,
+        hentForhåndsvisning,
+        hentMuligeBrevMaler,
+        hentSkjemaData,
+        hentetForhåndsvisning,
         kanSendeSkjema,
+        mottakersMålform,
+        multiselectInneholderAnnet,
+        navigerTilOpplysningsplikt,
         onSubmit,
         oppdaterFeltISkjema,
+        personer,
+        settNavigerTilOpplysningsplikt,
         skjema,
     };
 });
