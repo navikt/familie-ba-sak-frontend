@@ -30,7 +30,7 @@ const useOpprettBehandling = (lukkModal: () => void) => {
                     årsak: skjema.felter.årsak.verdi,
                     begrunnelse: skjema.felter.begrunnelse.verdi,
                 },
-                url: `/familie-ba-sak/api/behandlinger/${behandlingId}/henleg`,
+                url: `/familie-ba-sak/api/behandlinger/${behandlingId}/henlegg`,
             },
             (ressurs: Ressurs<IFagsak>) => {
                 settFagsak(ressurs);
