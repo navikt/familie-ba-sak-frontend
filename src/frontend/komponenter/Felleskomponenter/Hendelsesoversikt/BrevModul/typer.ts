@@ -329,7 +329,7 @@ export const dokumenter: ISelectOptionMedBrevtekst[] = [
 export const årsaker: ISelectOptionMedBrevtekst[] = [
     {
         value: 'annet',
-        label: 'Annet',
+        label: 'Annet (Fritekst)',
         brevtekst: {
             NB: '',
             NN: '',
