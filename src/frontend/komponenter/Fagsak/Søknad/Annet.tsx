@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { Systemtittel } from 'nav-frontend-typografi';
-import PanelBase from 'nav-frontend-paneler';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISøknadDTO } from '../../../typer/søknad';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
+import styled from 'styled-components';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
     søknad: ISøknadDTO;
 }
+
+const AnnetWrapper = styled.div`
+    margin: 2rem 0;
+`;
 
 const Annet: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
@@ -22,11 +26,10 @@ const Annet: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
     };
 
     return (
-        <PanelBase key={'annet'}>
+        <AnnetWrapper>
             <Systemtittel children={'Annet'} />
             <br />
             <FamilieTextarea
-                className={'søknad__textarea'}
                 erLesevisning={lesevisning}
                 label={!lesevisning && 'Ved endring av opplysningene er begrunnelse obligatorisk'}
                 value={søknad.endringAvOpplysningerBegrunnelse}
@@ -35,7 +38,7 @@ const Annet: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                     tekstOnChange(event.target.value);
                 }}
             />
-        </PanelBase>
+        </AnnetWrapper>
     );
 };
 

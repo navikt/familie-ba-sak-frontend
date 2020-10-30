@@ -8,7 +8,7 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import { BehandlingSteg, IBehandling, hentStegNummer } from '../../../typer/behandling';
+import { BehandlingSteg, hentStegNummer, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
@@ -18,10 +18,20 @@ import Barna from './Barna';
 import SøknadType from './SøknadType';
 import Annet from './Annet';
 import MålformVelger from './MålformVelger';
+import styled from 'styled-components';
 
 interface IProps {
     åpenBehandling: IBehandling;
 }
+
+const FjernVilkårAdvarsel = styled(Normaltekst)`
+    white-space: pre-wrap;
+    padding-bottom: 3.5rem;
+`;
+
+const StyledSkjemasteg = styled(Skjemasteg)`
+    max-width: 40rem;
+`;
 
 const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { axiosRequest } = useApp();
@@ -102,7 +112,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     }, [åpenBehandling]);
 
     return (
-        <Skjemasteg
+        <StyledSkjemasteg
             className={'søknad'}
             tittel={'Registrer opplysninger fra søknaden'}
             nesteOnClick={() => {
@@ -179,12 +189,10 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                         ],
                     }}
                 >
-                    <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
-                        {frontendFeilmelding}
-                    </Normaltekst>
+                    <FjernVilkårAdvarsel>{frontendFeilmelding}</FjernVilkårAdvarsel>
                 </UIModalWrapper>
             )}
-        </Skjemasteg>
+        </StyledSkjemasteg>
     );
 };
 
