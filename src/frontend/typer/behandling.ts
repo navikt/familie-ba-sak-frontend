@@ -207,7 +207,8 @@ export const behandlingsresultater: INøkkelPar = {
     IKKE_VURDERT: { id: 'IKKE_VURDERT', navn: 'Ikke vurdert' },
     AVSLÅTT: { id: 'AVSLÅTT', navn: 'Avslått' },
     OPPHØRT: { id: 'OPPHØRT', navn: 'Opphørt' },
-    HENLAGT: { id: 'HENLAGT', navn: 'Henlagt' },
+    HENLAGT_FEILAKTIG_OPPRETTET: { id: 'HENLAGT', navn: 'Henlagt' },
+    HENLAGT_SØKNAD_TRUKKET: { id: 'HENLAGT', navn: 'Henlagt' },
 };
 
 type Behandlingsstatuser = {
