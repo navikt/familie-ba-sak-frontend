@@ -207,6 +207,7 @@ export const behandlingsresultater: INøkkelPar = {
     IKKE_VURDERT: { id: 'IKKE_VURDERT', navn: 'Ikke vurdert' },
     AVSLÅTT: { id: 'AVSLÅTT', navn: 'Avslått' },
     OPPHØRT: { id: 'OPPHØRT', navn: 'Opphørt' },
+    HENLAGT: { id: 'HENLAGT', navn: 'Henlagt' },
 };
 
 type Behandlingsstatuser = {
