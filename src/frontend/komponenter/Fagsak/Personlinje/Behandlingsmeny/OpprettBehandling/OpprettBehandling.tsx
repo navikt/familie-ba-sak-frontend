@@ -13,6 +13,7 @@ import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 import useOpprettBehandling from './useOpprettBehandling';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 
 interface IProps {
     onListElementClick: () => void;
@@ -105,6 +106,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                             : ''
                     }
                 >
+                    <SkjultLegend>Opprett ny behandling</SkjultLegend>
                     <FamilieSelect
                         feil={valideringsFeil.behandlingstype}
                         erLesevisning={false}

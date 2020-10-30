@@ -253,7 +253,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             >
                                 <Radio
                                     label={'Ja'}
-                                    name={`vilkår-spørsmål_ja_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                    name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                                     checked={
                                         redigerbartVilkår.verdi.vilkårType ===
                                         VilkårType.GIFT_PARTNERSKAP
@@ -272,7 +272,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 />
                                 <Radio
                                     label={'Nei'}
-                                    name={`vilkår-spørsmål_nei_${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                    name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
                                     checked={
                                         redigerbartVilkår.verdi.vilkårType ===
                                         VilkårType.GIFT_PARTNERSKAP

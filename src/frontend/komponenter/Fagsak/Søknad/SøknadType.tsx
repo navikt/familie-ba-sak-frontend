@@ -1,16 +1,24 @@
 import * as React from 'react';
 import { Systemtittel } from 'nav-frontend-typografi';
-import PanelBase from 'nav-frontend-paneler';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BehandlingUnderkategori, underkategorier } from '../../../typer/behandling';
 import { ISøknadDTO } from '../../../typer/søknad';
 import { Radio } from 'nav-frontend-skjema';
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
+import styled from 'styled-components';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
     søknad: ISøknadDTO;
 }
+
+const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
+    margin: 2rem 0;
+`;
+
+const StyledRadio = styled(Radio)`
+    padding-left: 1rem;
+`;
 
 const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
@@ -24,27 +32,24 @@ const SøknadType: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
     };
 
     return (
-        <PanelBase>
-            <Systemtittel children={'Hva har bruker søkt om?'} />
-            <br />
-            <FamilieRadioGruppe
-                erLesevisning={lesevisning}
-                verdi={underkategorier[søknad.underkategori].navn}
-            >
-                <Radio
-                    label={underkategorier[BehandlingUnderkategori.ORDINÆR].navn}
-                    name={underkategorier[BehandlingUnderkategori.ORDINÆR].id}
-                    checked={søknad.underkategori === BehandlingUnderkategori.ORDINÆR}
-                    onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
-                />
-                <Radio
-                    label={underkategorier[BehandlingUnderkategori.UTVIDET].navn}
-                    name={underkategorier[BehandlingUnderkategori.UTVIDET].id}
-                    checked={søknad.underkategori === BehandlingUnderkategori.UTVIDET}
-                    onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
-                />
-            </FamilieRadioGruppe>
-        </PanelBase>
+        <StyledFamilieRadioGruppe
+            erLesevisning={lesevisning}
+            verdi={underkategorier[søknad.underkategori].navn}
+            legend={<Systemtittel children={'Hva har bruker søkt om?'} />}
+        >
+            <StyledRadio
+                label={underkategorier[BehandlingUnderkategori.ORDINÆR].navn}
+                name={'registrer-søknad-søknadtype'}
+                checked={søknad.underkategori === BehandlingUnderkategori.ORDINÆR}
+                onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
+            />
+            <StyledRadio
+                label={underkategorier[BehandlingUnderkategori.UTVIDET].navn}
+                name={'registrer-søknad-søknadtype'}
+                checked={søknad.underkategori === BehandlingUnderkategori.UTVIDET}
+                onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
+            />
+        </StyledFamilieRadioGruppe>
     );
 };
 
