@@ -42,7 +42,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 >
                     <Radio
                         label={'Godkjent'}
-                        name={`godkjent`}
+                        name={'totrinnskontroll'}
                         className="totrinnskontroll-radio"
                         checked={totrinnskontrollStatus === TotrinnskontrollBeslutning.GODKJENT}
                         onChange={() =>
@@ -52,7 +52,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     />
                     <Radio
                         label={'Vurdér på nytt'}
-                        name={`underkjent`}
+                        name={'totrinnskontroll'}
                         className="totrinnskontroll-radio"
                         checked={totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT}
                         onChange={() =>
