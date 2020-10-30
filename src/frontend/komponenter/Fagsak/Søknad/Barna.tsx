@@ -1,6 +1,6 @@
 import { RessursStatus } from '@navikt/familie-typer';
 import moment from 'moment';
-import { CheckboxGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
