@@ -33,7 +33,7 @@
   "dependencies": {
     "@navikt/familie-backend": "5.0.12",
     "@navikt/familie-clipboard": "^3.0.3",
-    "@navikt/familie-form-elements": "^2.0.0",
+    "@navikt/familie-form-elements": "^2.0.4",
     "@navikt/familie-header": "^2.0.7",
     "@navikt/familie-ikoner": "^3.1.0",
     "@navikt/familie-typer": "^3.0.6",
@@ -73,6 +73,7 @@
     "https-proxy-agent": "^5.0.0",
     "lodash.throttle": "^4.1.1",
     "moment": "^2.28.0",
+    "nav-datovelger": "^6.1.9",
     "nav-frontend-alertstriper": "^3.0.23",
     "nav-frontend-alertstriper-style": "^2.0.17",
     "nav-frontend-chevron": "^1.0.13",
