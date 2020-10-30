@@ -27,6 +27,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import { målform } from '../../../../typer/søknad';
 import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
+import SkjultLegend from '../../SkjultLegend';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -93,6 +94,7 @@ const Brevskjema = ({
                 pdfdata={hentetForhåndsvisning}
             />
             <SkjemaGruppe feil={submitFeil || hentetForhåndsvisningFeil}>
+                <SkjultLegend>Send brev</SkjultLegend>
                 <FamilieSelect
                     {...hentFeltProps('mottakerIdent')}
                     label={'Mottaker'}
