@@ -50,6 +50,14 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     onListElementClick();
                     settVisModal(true);
                 }}
+                disabled={
+                    ![
+                        BehandlingSteg.REGISTRERE_SØKNAD,
+                        BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+                        BehandlingSteg.VILKÅRSVURDERING,
+                        BehandlingSteg.SEND_TIL_BESLUTTER,
+                    ].includes(behandling.steg)
+                }
             >
                 Henlegg behandling
             </KnappBase>
