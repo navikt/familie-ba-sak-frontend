@@ -1,7 +1,7 @@
 import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
-import { IRestPersonResultat } from './vilkår';
+import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IOppsummeringBeregning } from './beregning';
 import { IOpplysningsplikt } from './opplysningsplikt';
@@ -130,6 +130,7 @@ export interface IBehandling {
     samletResultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;
+    stegTilstand: IRestStegTilstand[];
     totrinnskontroll?: ITotrinnskontroll;
     opplysningsplikt?: IOpplysningsplikt;
     type: Behandlingstype;

@@ -4,7 +4,7 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../../../typer/fagsak';
 import Link from './Link';
-import { erSidenInaktiv, IUnderside, sider, visSide } from './sider';
+import { erSidenAktiv, IUnderside, sider, visSide } from './sider';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {
@@ -29,13 +29,20 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                           return (
                               <React.Fragment key={sideId}>
                                   <Link
-                                      active={erSidenInaktiv(side, åpenBehandling.data.steg)}
+                                      active={erSidenAktiv(
+                                          side,
+                                          åpenBehandling.data.steg,
+                                          åpenBehandling.data.stegTilstand
+                                      )}
                                       id={sideId}
                                       to={tilPath}
                                       className={classNames(
                                           'venstremeny__link',
-                                          erSidenInaktiv(side, åpenBehandling.data.steg) &&
-                                              'hover-effekt'
+                                          erSidenAktiv(
+                                              side,
+                                              åpenBehandling.data.steg,
+                                              åpenBehandling.data.stegTilstand
+                                          ) && 'hover-effekt'
                                       )}
                                   >
                                       {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}

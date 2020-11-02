@@ -4,7 +4,12 @@ import {
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
-import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
+import {
+    IPersonResultat,
+    IRestStegTilstand,
+    IVilkårResultat,
+    Resultat,
+} from '../../../typer/vilkår';
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
 import { IFelt } from '../../../typer/felt';
 import { formaterPersonIdent } from '../../../utils/formatter';
@@ -82,16 +87,24 @@ export const sider: Record<SideId, ISide> = {
     },
 };
 
-export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
+export const erSidenAktiv = (
+    side: ISide,
+    steg: BehandlingSteg,
+    stegTilstand: IRestStegTilstand[]
+): boolean => {
     if (!side.steg && side.steg !== 0) {
         return true;
     }
 
-    if (!steg) {
-        return false;
-    }
+    if (steg === BehandlingSteg.BEHANDLING_AVSLUTTET) {
+        return stegTilstand.map(st => st.behandlingSteg).includes(side.steg);
+    } else {
+        if (!steg) {
+            return false;
+        }
 
-    return hentStegNummer(side.steg) <= hentStegNummer(steg);
+        return hentStegNummer(side.steg) <= hentStegNummer(steg);
+    }
 };
 
 export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysningsplikt: boolean) => {
