@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { configureScope, withScope, captureException } from '@sentry/core';
-import { slackNotify } from '../../../api/axios';
-import { slackKanaler } from '../../../typer/slack';
 import { showReportDialog } from '@sentry/browser';
 import { ISaksbehandler } from '@navikt/familie-typer';
+import { apiLoggFeil } from '../../../api/axios';
 
 interface IProps {
     autentisertSaksbehandler?: ISaksbehandler;
@@ -34,10 +33,8 @@ class ErrorBoundary extends React.Component<IProps> {
                 });
             });
 
-            slackNotify(
-                `En feil har oppstått i vedtaksløsningen: \n*Error*: ${error}`,
-                slackKanaler.alert
-            );
+            apiLoggFeil(`En feil har oppstått i vedtaksløsningen: \n*Error*: ${error}`);
+
             showReportDialog();
         }
     }
