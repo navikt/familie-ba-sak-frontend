@@ -48,6 +48,10 @@ export const diff = (første: IPeriode, annen: IPeriode) => {
     );
 };
 
+export const sisteDagNesteMåned = (): Moment => {
+    return moment().add(1, 'months').endOf('month');
+};
+
 export const ikkeEtterfølgendeOgHullPåOver1Måned = (første: IPeriode, annen: IPeriode): boolean => {
     return (
         stringToMoment(annen.fom, TIDENES_MORGEN).diff(
