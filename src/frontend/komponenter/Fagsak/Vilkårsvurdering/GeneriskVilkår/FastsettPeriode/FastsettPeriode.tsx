@@ -1,4 +1,5 @@
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { ISODateString } from 'nav-datovelger';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useBehandling } from '../../../../../context/BehandlingContext';
@@ -8,7 +9,6 @@ import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { ISODateString } from 'nav-datovelger/lib/types';
 import styled from 'styled-components';
 import { Element } from 'nav-frontend-typografi';
 
