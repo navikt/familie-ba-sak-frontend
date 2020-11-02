@@ -1,5 +1,3 @@
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
-import { ISODateString } from 'nav-datovelger';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useBehandling } from '../../../../../context/BehandlingContext';
@@ -11,6 +9,8 @@ import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import styled from 'styled-components';
 import { Element } from 'nav-frontend-typografi';
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { ISODateString } from 'nav-datovelger/lib/types';
 
 interface IProps {
     hjelpetekst?: string;
