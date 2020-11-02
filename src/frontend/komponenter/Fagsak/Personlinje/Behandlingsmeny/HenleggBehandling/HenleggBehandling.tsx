@@ -15,6 +15,7 @@ import { useHistory } from 'react-router';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Normaltekst } from 'nav-frontend-typografi';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
+import styled from 'styled-components';
 
 interface IProps {
     onListElementClick: () => void;
@@ -25,6 +26,17 @@ interface IProps {
 interface HenleggelseÅrsakSelect extends HTMLSelectElement {
     value: HenleggelseÅrsak | '';
 }
+
+const StyledVeivalgTekst = styled(Normaltekst)`
+    position: relative;
+    top: -32px;
+`;
+
+const StyledVeivalgIkon = styled(Oppfylt)`
+    position: relative;
+    top: 7px;
+    margin-right: 10px;
+`;
 
 const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behandling }) => {
     const history = useHistory();
@@ -137,7 +149,6 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
 
             <UIModalWrapper
                 modal={{
-                    className: 'henlegg-behandling__veivalg',
                     actions: [
                         <Knapp
                             key={'Gå til saksoversikten'}
@@ -164,10 +175,10 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     visModal: visVeivalgModal,
                 }}
             >
-                <Normaltekst className="henlegg-behandling__veivalg__tekst">
-                    <Oppfylt className="henlegg-behandling__veivalg__ikon" />
+                <StyledVeivalgTekst>
+                    <StyledVeivalgIkon />
                     Behandlingen er henlagt
-                </Normaltekst>
+                </StyledVeivalgTekst>
             </UIModalWrapper>
         </>
     );
