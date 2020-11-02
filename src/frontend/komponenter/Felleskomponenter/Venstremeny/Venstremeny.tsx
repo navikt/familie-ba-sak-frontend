@@ -51,13 +51,22 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                       const antallAksjonspunkter = underside.antallAksjonspunkter();
                                       return (
                                           <Link
+                                              active={erSidenAktiv(
+                                                  side,
+                                                  åpenBehandling.data.steg,
+                                                  åpenBehandling.data.stegTilstand
+                                              )}
                                               key={`${sideId}_${underside.hash}`}
                                               id={`${sideId}_${underside.hash}`}
                                               to={`${tilPath}#${underside.hash}`}
                                               className={classNames(
                                                   'venstremeny__link',
                                                   'underside',
-                                                  'hover-effekt'
+                                                  erSidenAktiv(
+                                                      side,
+                                                      åpenBehandling.data.steg,
+                                                      åpenBehandling.data.stegTilstand
+                                                  ) && 'hover-effekt'
                                               )}
                                           >
                                               <>
