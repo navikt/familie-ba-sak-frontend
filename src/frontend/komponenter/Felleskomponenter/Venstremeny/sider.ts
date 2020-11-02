@@ -92,17 +92,9 @@ export const erSidenAktiv = (
     steg: BehandlingSteg,
     stegTilstand: IRestStegTilstand[]
 ): boolean => {
-    if (!side.steg && side.steg !== 0) {
-        return true;
-    }
-
     if (steg === BehandlingSteg.BEHANDLING_AVSLUTTET) {
         return stegTilstand.map(st => st.behandlingSteg).includes(side.steg);
     } else {
-        if (!steg) {
-            return false;
-        }
-
         return hentStegNummer(side.steg) <= hentStegNummer(steg);
     }
 };
