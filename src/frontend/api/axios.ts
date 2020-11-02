@@ -3,7 +3,6 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { captureException, configureScope, withScope } from '@sentry/core';
 
 import { ISaksbehandler } from '@navikt/familie-typer';
-import { slackKanaler } from '../typer/slack';
 
 axios.defaults.baseURL = window.location.origin;
 export const preferredAxios = axios;
@@ -82,20 +81,7 @@ export const loggFeil = (
                 feilmelding ? `Feilmelding: ${feilmelding}` : ''
             }`
         );
-
-        slackNotify(
-            `En feil har oppstått i barnetrygd vedtaksløsning!${
-                error ? `\n*Error*: ${error}` : ''
-            }${feilmelding ? `\n*Feilmelding:* ${feilmelding}` : ''}`,
-            slackKanaler.alert
-        );
     }
-};
-
-export const slackNotify = (melding: string, kanal: string) => {
-    return preferredAxios.post(`/slack/notify/${kanal}`, {
-        melding,
-    });
 };
 
 export const apiLoggFeil = (melding: string) => {

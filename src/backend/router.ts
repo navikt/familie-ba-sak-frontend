@@ -7,10 +7,9 @@ import {
 } from '@navikt/familie-backend';
 import { Response, Request, Router } from 'express';
 import path from 'path';
-import { buildPath, namespace } from './config';
+import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
-import { slackNotify } from './slack/slack';
 
 export default (
     authClient: Client,
@@ -32,14 +31,6 @@ export default (
     router.post('/logg-feil', (req: Request, res: Response) => {
         logRequest(req, req.body.melding, LOG_LEVEL.ERROR);
         res.status(200).send();
-    });
-
-    router.post('/slack/notify/:kanal', (req: Request, res: Response) => {
-        if (namespace !== 'production') {
-            slackNotify(req, res, req.params.kanal);
-        } else {
-            res.status(200).send();
-        }
     });
 
     // APP
