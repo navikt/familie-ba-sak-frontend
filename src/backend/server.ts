@@ -27,6 +27,12 @@ const port = 8000;
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
     let middleware;
 
+    app.get('*.js', function (req, res, next) {
+        req.url = req.url + '.gz';
+        res.set('Content-Encoding', 'gzip');
+        next();
+    });
+
     if (process.env.NODE_ENV === 'development') {
         const compiler = webpack(config);
         middleware = webpackDevMiddleware(compiler, {

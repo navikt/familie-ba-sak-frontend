@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const config = merge.strategy({
     'entry.familie-ba-sak': 'prepend',
@@ -26,6 +27,12 @@ const config = merge.strategy({
         new webpack.NoEmitOnErrorsPlugin(),
         new MiniCssExtractPlugin({
             filename: 'familie-ba-sak-frontend.css',
+        }),
+        new CompressionPlugin({
+            algorithm: 'gzip',
+            test: /\.js$|\.css$|\.html$/,
+            threshold: 10240,
+            minRatio: 0.8,
         }),
     ],
     optimization: {
