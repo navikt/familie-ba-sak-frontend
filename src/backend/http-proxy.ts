@@ -5,7 +5,7 @@ import { info } from '@navikt/familie-backend';
 const agent = () => {
     const proxyUri = envVar('HTTP_PROXY', false);
     if (proxyUri) {
-        info(`Proxying requests via ${proxyUri} for slack`);
+        info(`Proxying requests via ${proxyUri}`);
         const hostPort = proxyUri.replace('https://', '').replace('http://', '').split(':', 2);
 
         /**
