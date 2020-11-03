@@ -8,9 +8,9 @@ import backend, {
     envVar,
 } from '@navikt/familie-backend';
 import bodyParser from 'body-parser';
-import express from 'express';
 import path from 'path';
 import webpack from 'webpack';
+import expressStaticGzip from 'express-static-gzip';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
@@ -27,12 +27,6 @@ const port = 8000;
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
     let middleware;
 
-    app.get('*.js', function (req, res, next) {
-        req.url = req.url + '.gz';
-        res.set('Content-Encoding', 'gzip');
-        next();
-    });
-
     if (process.env.NODE_ENV === 'development') {
         const compiler = webpack(config);
         middleware = webpackDevMiddleware(compiler, {
@@ -42,7 +36,10 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         app.use(middleware);
         app.use(webpackHotMiddleware(compiler));
     } else {
-        app.use('/assets', express.static(path.join(__dirname, '../../frontend_production')));
+        app.use(
+            '/assets',
+            expressStaticGzip(path.join(__dirname, '../../frontend_production'), {})
+        );
     }
 
     app.use(
