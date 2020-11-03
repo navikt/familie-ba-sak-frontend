@@ -5,7 +5,7 @@ import { IFagsak } from '../../../../../typer/fagsak';
 import { feil, IFelt, nyttFelt, ok } from '../../../../../typer/felt';
 import { useSkjema } from '../../../../../typer/skjema';
 
-const useOpprettBehandling = (lukkModal: () => void) => {
+const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const [begrunnelse, settBegrunnelse] = useState('');
 
@@ -52,4 +52,4 @@ const useOpprettBehandling = (lukkModal: () => void) => {
     };
 };
 
-export default useOpprettBehandling;
+export default useHenleggBehandling;
