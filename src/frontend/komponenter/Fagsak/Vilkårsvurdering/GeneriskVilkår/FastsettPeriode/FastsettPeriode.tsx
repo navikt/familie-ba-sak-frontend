@@ -1,6 +1,5 @@
 import { FamilieDatovelger } from '@navikt/familie-form-elements';
-import { ISODateString } from 'nav-datovelger';
-import { SkjemaGruppe, Label } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
@@ -9,6 +8,9 @@ import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import styled from 'styled-components';
+import { Element } from 'nav-frontend-typografi';
+import { ISODateString } from 'nav-datovelger/lib/types';
 
 interface IProps {
     hjelpetekst?: string;
@@ -16,6 +18,17 @@ interface IProps {
     validerOgSettRedigerbartVilkår: (redigerbartVilkår: IFelt<IVilkårResultat>) => void;
     visFeilmeldinger: boolean;
 }
+
+const StyledLegend = styled.legend`
+    && {
+        display: flex;
+        margin-bottom: 0;
+    }
+`;
+
+const StyledElement = styled(Element)`
+    margin-right: 0.5rem;
+`;
 
 const FastsettPeriode: React.FC<IProps> = ({
     hjelpetekst,
@@ -38,15 +51,16 @@ const FastsettPeriode: React.FC<IProps> = ({
             }
         >
             {!lesevisning && (
-                <div className={'legend'}>
-                    <Label children={'Fastsett periode'} htmlFor={'fastsett-periode__flex'} />
+                <StyledLegend>
+                    <StyledElement>Velg periode</StyledElement>
                     {hjelpetekst && (
                         <Hjelpetekst tittel={'Hjelpetekst fastsett periode'}>
                             {hjelpetekst}
                         </Hjelpetekst>
                     )}
-                </div>
+                </StyledLegend>
             )}
+
             <div className={'fastsett-periode__flex'}>
                 <div>
                     <FamilieDatovelger

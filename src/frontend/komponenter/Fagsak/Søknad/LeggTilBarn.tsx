@@ -10,11 +10,16 @@ import { Valideringsstatus } from '../../../typer/felt';
 import { useApp } from '../../../context/AppContext';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import { FamilieInput } from '@navikt/familie-form-elements';
+import styled from 'styled-components';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
     søknad: ISøknadDTO;
 }
+
+const StyledKnapp = styled(Knapp)`
+    margin-left: 1rem;
+`;
 
 const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { axiosRequest } = useApp();
@@ -98,7 +103,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
 
     return (
         <>
-            <Knapp
+            <StyledKnapp
                 mini
                 onClick={() => {
                     settVisModal(true);
@@ -106,7 +111,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
             >
                 <Pluss />
                 <span>Legg til barn</span>
-            </Knapp>
+            </StyledKnapp>
 
             <UIModalWrapper
                 modal={{

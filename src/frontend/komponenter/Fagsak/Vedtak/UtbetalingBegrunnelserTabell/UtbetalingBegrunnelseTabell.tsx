@@ -4,7 +4,12 @@ import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
-import { periodeToString } from '../../../../typer/periode';
+import {
+    periodeToString,
+    sisteDagNesteMåned,
+    stringToMoment,
+    TIDENES_MORGEN,
+} from '../../../../typer/periode';
 import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
 import { datoformat } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -36,7 +41,9 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
             )
         )
         .filter((beregningRad: IOppsummeringBeregning) => beregningRad.endring.trengerBegrunnelse);
-    const erSisteRad = (index: number) => beregningerMedBegrunnelseBehov.length - 1 === index;
+
+    const slutterSenereEnnNesteMåned = (dato: string) =>
+        stringToMoment(dato, TIDENES_MORGEN).isAfter(sisteDagNesteMåned());
 
     return harAndeler ? (
         <table className={'tabell'}>
@@ -48,7 +55,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                 </tr>
             </thead>
             <tbody>
-                {beregningerMedBegrunnelseBehov.map((beregningRad, index) => {
+                {beregningerMedBegrunnelseBehov.map(beregningRad => {
                     const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
                         (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
                             return (
@@ -63,7 +70,9 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                             <td>
                                 {periodeToString({
                                     fom: beregningRad.periodeFom,
-                                    tom: erSisteRad(index) ? '' : beregningRad.periodeTom,
+                                    tom: slutterSenereEnnNesteMåned(beregningRad.periodeTom)
+                                        ? ''
+                                        : beregningRad.periodeTom,
                                 })}
                             </td>
                             <td>{`${beregningRad.utbetaltPerMnd} kr/mnd for ${beregningRad.antallBarn} barn`}</td>

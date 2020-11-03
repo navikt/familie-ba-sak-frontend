@@ -1,7 +1,6 @@
 import { RessursStatus } from '@navikt/familie-typer';
 import moment from 'moment';
-import PanelBase from 'nav-frontend-paneler';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -23,18 +22,23 @@ interface IProps {
     søknad: ISøknadDTO;
 }
 
-const StyledBarnMedDiskresjonskode = styled.div`
+const BarnMedDiskresjonskode = styled.div`
     display: flex;
     align-items: center;
     margin: 0.5rem;
+`;
 
-    svg {
-        margin-right: 1rem;
-    }
+const StyledRødError = styled(RødError)`
+    margin-right: 1rem;
+`;
+
+const BarnaWrapper = styled.div`
+    margin: 1rem 0;
 `;
 
 const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
+    const lesevisning = erLesevisning();
     const { bruker } = useFagsakRessurser();
     const sorterteBarnMedOpplysninger = søknad.barnaMedOpplysninger.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -46,11 +50,8 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
     );
 
     return (
-        <PanelBase key={'barna'} className={'søknad__barna'}>
+        <BarnaWrapper className={'søknad__barna'}>
             <Systemtittel children={'Opplysninger om barn under 18 år'} />
-
-            <br />
-
             {bruker.status === RessursStatus.SUKSESS &&
                 bruker.data.familierelasjonerMaskert
                     .filter(
@@ -59,33 +60,41 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                     )
                     .map((familierelasjonMaskert: IFamilierelasjonMaskert, index: number) => {
                         return (
-                            <StyledBarnMedDiskresjonskode
+                            <BarnMedDiskresjonskode
                                 key={`${index}_${familierelasjonMaskert.relasjonRolle}`}
                             >
-                                <RødError heigth={24} width={24} />
+                                <StyledRødError heigth={24} width={24} />
                                 {`Bruker har barn med diskresjonskode ${
                                     adressebeskyttelsestyper[
                                         familierelasjonMaskert.adressebeskyttelseGradering
                                     ] ?? 'ukjent'
                                 }`}
-                            </StyledBarnMedDiskresjonskode>
+                            </BarnMedDiskresjonskode>
                         );
                     })}
 
             <br />
-            {!erLesevisning() && <Element children={'Velg hvilke barn det er søkt om'} />}
-            <SkjemaGruppe feilmeldingId={'barna'}>
+            <CheckboxGruppe
+                feilmeldingId={'barna'}
+                legend={
+                    !lesevisning ? (
+                        <Element>Velg hvilke barn det er søkt om</Element>
+                    ) : (
+                        <Element>Barn det er søkt om</Element>
+                    )
+                }
+            >
                 {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                     <BarnMedOpplysninger
                         key={barnMedOpplysninger.ident}
                         barn={barnMedOpplysninger}
                     />
                 ))}
-                {!erLesevisning() && (
-                    <LeggTilBarn settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-                )}
-            </SkjemaGruppe>
-        </PanelBase>
+            </CheckboxGruppe>
+            {!lesevisning && (
+                <LeggTilBarn settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+            )}
+        </BarnaWrapper>
     );
 };
 

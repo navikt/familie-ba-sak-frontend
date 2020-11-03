@@ -24,17 +24,19 @@ const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) =>
 
     return (
         <div className={classNames('hendelsesoversikt', className)}>
-            <Header aktivTab={aktivTab} settAktivTab={settAktivTab} />
-            {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
-                <div className={'historikk'}>
-                    <ul className={'hendelsesoversikt__list'}>{hendelser?.map(tilHendelseItem)}</ul>
-                </div>
-            )}
-            {aktivTab === Tabs.Meldinger && (
-                <BrevModulProvider>
+            <BrevModulProvider>
+                <Header aktivTab={aktivTab} settAktivTab={settAktivTab} />
+                {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
+                    <div className={'historikk'}>
+                        <ul className={'hendelsesoversikt__list'}>
+                            {hendelser?.map(tilHendelseItem)}
+                        </ul>
+                    </div>
+                )}
+                {aktivTab === Tabs.Meldinger && (
                     <Brev onOkIModalClick={() => settAktivTab(Tabs.Historikk)} />
-                </BrevModulProvider>
-            )}
+                )}
+            </BrevModulProvider>
         </div>
     );
 };

@@ -759,15 +759,15 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@^1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-1.0.17.tgz#648b216503ebbbe2de555108cab02dfd209e19e0"
-  integrity sha512-ftYG5QK3d4rO3eo/gPofP0nLSwwqZB7EgxehSHFvXkZGnCOrjdI8XpI0YfwuDU2MMbEXTDxmv2QVQzTmqPTZlQ==
+"@navikt/familie-form-elements@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.5.tgz#508e36e8f58b45124c27001932fb433f87a399fe"
+  integrity sha512-YTMnNQiA7PAM7hjs7K3MtA0+TEkoIn9skQWYkY+EVfhDow1a+GRmOd9SiWQpdv9q/6nxRjeaq54L2KpUIlkd3w==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
     classnames "^2.2.6"
-    nav-datovelger "^6.1.9"
+    nav-datovelger "^7.0.8"
     nav-frontend-knapper "^2.0.4"
     nav-frontend-knapper-style "^0.3.38"
     nav-frontend-lenker "^1.0.37"
@@ -5151,20 +5151,19 @@ fn.name@1.x.x:
   resolved "https://registry.yarnpkg.com/fn.name/-/fn.name-1.1.0.tgz#26cad8017967aea8731bc42961d04a3d5988accc"
   integrity sha512-GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==
 
-focus-trap-react@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/focus-trap-react/-/focus-trap-react-6.0.0.tgz#3f5a9f68447dd374d22388fb4c50018be83e74a5"
-  integrity sha512-mvEYxmP75PMx0vOqoIAmJHO/qUEvdTAdz6gLlEZyxxODnuKQdnKea2RWTYxghAPrV+ibiIq2o/GTSgQycnAjcw==
+focus-trap-react@^8.1.0:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/focus-trap-react/-/focus-trap-react-8.1.1.tgz#d480d23a8fc86fc31f2ed25ee2ab7f420cd10fee"
+  integrity sha512-vzrznw7MhkRnk924z3nBt6V27RlMVA2TTwYo2kksbKROA/JNcRThOa9jg759g0yXS74PA2PqHE7BjthMzDDrTA==
   dependencies:
-    focus-trap "^4.0.2"
+    focus-trap "^6.1.4"
 
-focus-trap@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-4.0.2.tgz#4ee2b96547c9ea0e4252a2d4b2cca68944194663"
-  integrity sha512-HtLjfAK7Hp2qbBtLS6wEznID1mPT+48ZnP2nkHzgjpL4kroYHg0CdqJ5cTXk+UO5znAxF5fRUkhdyfgrhh8Lzw==
+focus-trap@^6.1.4:
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.1.4.tgz#6297a9f0f45a84377b60e9a8c0d1f8a5b98d94d2"
+  integrity sha512-jgNc+O8UkGsUpdhNXkyonwlw4i707+ESAWv1vCbyd8+29db5/Wv1BkJImDczfEWMu9O635FvM5ABOjeyqNQpEQ==
   dependencies:
-    tabbable "^3.1.2"
-    xtend "^4.0.1"
+    tabbable "^5.1.3"
 
 follow-redirects@1.5.10:
   version "1.5.10"
@@ -7985,12 +7984,12 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-nav-datovelger@^6.1.9:
-  version "6.1.10"
-  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-6.1.10.tgz#3af4f91960e99bf2d6eec6b1554ead43e138d5c9"
-  integrity sha512-3AKEnNP3Frk/PooXumWubuOA9Kf6t8N7jCfCum/Te68OW/WS1gKQug253Qv5OI7sxpyBJI1n/QKwiXHGLUGqVw==
+nav-datovelger@^7.0.8:
+  version "7.0.8"
+  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-7.0.8.tgz#ee3903c3c2ade31724919f9f842e8f7164da66e8"
+  integrity sha512-7gJt2G+E4x0mcUHuAkYMa/FgR18/FcImHy6c+b+TyHOiY8qMnJjkMh5WjvIieaUxMOBhKuN/uj4U6APRhucccw==
   dependencies:
-    focus-trap-react "^6.0.0"
+    focus-trap-react "^8.1.0"
 
 nav-frontend-alertstriper-style@2.0.17, nav-frontend-alertstriper-style@^2.0.17:
   version "2.0.17"
@@ -11506,10 +11505,10 @@ symbol-tree@^3.2.4:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-tabbable@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-3.1.2.tgz#f2d16cccd01f400e38635c7181adfe0ad965a4a2"
-  integrity sha512-wjB6puVXTYO0BSFtCmWQubA/KIn7Xvajw0x0l6eJUudMG/EAiJvIUnyNX6xO4NpGrJ16lbD0eUseB9WxW0vlpQ==
+tabbable@^5.1.3:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.1.3.tgz#8bb22b620d5a54d575c3243e4a324bd36acf99ec"
+  integrity sha512-jqR3rOgeyNlYWDWoyjNTWuHk3+FObu3Fw4e0zjeOLBicI74TT/wGrvSbJUaFVs7FMfiY0Ee8CKM7QaJwVMT4YA==
 
 table@^5.2.3:
   version "5.4.6"
@@ -12564,7 +12563,7 @@ xregexp@2.0.0:
   resolved "https://registry.yarnpkg.com/xregexp/-/xregexp-2.0.0.tgz#52a63e56ca0b84a7f3a5f3d61872f126ad7a5943"
   integrity sha1-UqY+VsoLhKfzpfPWGHLxJq16WUM=
 
-xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
+xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.2.tgz#bb72779f5fa465186b1f438f674fa347fdb5db54"
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
