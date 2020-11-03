@@ -759,10 +759,10 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@^2.0.5":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.5.tgz#508e36e8f58b45124c27001932fb433f87a399fe"
-  integrity sha512-YTMnNQiA7PAM7hjs7K3MtA0+TEkoIn9skQWYkY+EVfhDow1a+GRmOd9SiWQpdv9q/6nxRjeaq54L2KpUIlkd3w==
+"@navikt/familie-form-elements@^2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.8.tgz#4a7e2a1e6aaac59aed861974f46054a9e9950ad9"
+  integrity sha512-s/XWk8TJFVBT+F/xQaQ0vlKF6+Bd7ONwZyOv8qDam625wzAzzyLxYZPNlbOD3KJOHVyEdtUeE3czfWvNrZT6KQ==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
@@ -9766,9 +9766,9 @@ react-day-picker@^7.4.8:
     prop-types "^15.6.2"
 
 react-dom@^16.13.1:
-  version "16.13.1"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"
-  integrity sha512-81PIMmVLnCNLO/fFOQxdQkvEq/+Hfpv24XNJfpyZhTRfO0QcmQIF/PgCa1zCOj2w1hrn12MFLyaJ/G0+Mxtfag==
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
+  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
