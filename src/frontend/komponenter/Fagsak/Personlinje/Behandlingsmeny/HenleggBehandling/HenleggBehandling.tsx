@@ -16,6 +16,7 @@ import { IFagsak } from '../../../../../typer/fagsak';
 import { Normaltekst } from 'nav-frontend-typografi';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
 import styled from 'styled-components';
+import { useBehandling } from '../../../../../context/BehandlingContext';
 
 interface IProps {
     onListElementClick: () => void;
@@ -43,6 +44,8 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
 
     const [visModal, settVisModal] = useState(false);
 
+    const { erLesevisning } = useBehandling();
+
     const {
         hentFeltProps,
         onBekreft,
@@ -63,6 +66,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     settVisModal(true);
                 }}
                 disabled={
+                    erLesevisning() &&
                     ![
                         BehandlingSteg.REGISTRERE_SØKNAD,
                         BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
