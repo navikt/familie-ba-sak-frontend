@@ -95,7 +95,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             mini={true}
                             onClick={() => onBekreft(behandling.behandlingId)}
                             children={
-                                skjema.felter.årsak.verdi === 'SØKNAD_TRUKKET'
+                                skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET
                                     ? 'Bekreft og send brev'
                                     : 'Bekreft'
                             }

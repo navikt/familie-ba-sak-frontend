@@ -1,6 +1,7 @@
 import { byggTomRessurs, Ressurs } from '@navikt/familie-typer';
 import { useState } from 'react';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { HenleggelseÅrsak } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { feil, IFelt, nyttFelt, ok } from '../../../../../typer/felt';
 import { useSkjema } from '../../../../../typer/skjema';
@@ -12,8 +13,8 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const { settFagsak } = useFagsakRessurser();
     const { hentFeltProps, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<IFagsak>({
         felter: {
-            årsak: nyttFelt<string>('', (felt: IFelt<string>) =>
-                felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge årsak')
+            årsak: nyttFelt<HenleggelseÅrsak | ''>('', (felt: IFelt<HenleggelseÅrsak | ''>) =>
+                felt.verdi !== '' ? ok(felt) : feil(felt, 'Du må velge årsak')
             ),
             begrunnelse: nyttFelt(''),
         },
