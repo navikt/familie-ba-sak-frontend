@@ -22,6 +22,9 @@ const config = merge.strategy({
         globalObject: 'this',
     },
     devtool: 'inline-source-map',
+    resolve: {
+        alias: { react: require.resolve('react') },
+    },
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development'),
