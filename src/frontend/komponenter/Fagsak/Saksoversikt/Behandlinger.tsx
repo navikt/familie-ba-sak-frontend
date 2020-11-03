@@ -90,12 +90,11 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                     {behandling
                                                         ? behandlingsresultater[
                                                               behandling.samletResultat
-                                                          ].navn
+                                                          ]
                                                         : '-'}
                                                 </Lenke>
                                             ) : behandling ? (
                                                 behandlingsresultater[behandling.samletResultat]
-                                                    .navn
                                             ) : (
                                                 '-'
                                             )}

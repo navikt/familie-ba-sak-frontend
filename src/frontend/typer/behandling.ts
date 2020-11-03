@@ -107,6 +107,8 @@ export enum BehandlingResultat {
     IKKE_VURDERT = 'IKKE_VURDERT',
     INNVILGET = 'INNVILGET',
     OPPHØRT = 'OPPHØRT',
+    HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
+    HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
 }
 
 export enum BehandlerRolle {
@@ -203,13 +205,13 @@ export const underkategorier: INøkkelPar = {
     },
 };
 
-export const behandlingsresultater: INøkkelPar = {
-    INNVILGET: { id: 'INNVILGET', navn: 'Innvilget' },
-    IKKE_VURDERT: { id: 'IKKE_VURDERT', navn: 'Ikke vurdert' },
-    AVSLÅTT: { id: 'AVSLÅTT', navn: 'Avslått' },
-    OPPHØRT: { id: 'OPPHØRT', navn: 'Opphørt' },
-    HENLAGT_FEILAKTIG_OPPRETTET: { id: 'HENLAGT', navn: 'Henlagt' },
-    HENLAGT_SØKNAD_TRUKKET: { id: 'HENLAGT', navn: 'Henlagt' },
+export const behandlingsresultater: Record<BehandlingResultat, string> = {
+    AVSLÅTT: 'Avslått',
+    IKKE_VURDERT: 'Ikke vurdert',
+    INNVILGET: 'Innvilget',
+    OPPHØRT: 'Opphørt',
+    HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
+    HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
 };
 
 type Behandlingsstatuser = {
