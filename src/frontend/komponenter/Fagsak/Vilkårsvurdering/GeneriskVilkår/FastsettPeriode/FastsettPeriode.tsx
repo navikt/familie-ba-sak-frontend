@@ -9,8 +9,8 @@ import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import styled from 'styled-components';
 import { Element } from 'nav-frontend-typografi';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { ISODateString } from 'nav-datovelger/lib/types';
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
 
 interface IProps {
     hjelpetekst?: string;
@@ -64,6 +64,10 @@ const FastsettPeriode: React.FC<IProps> = ({
             <div className={'fastsett-periode__flex'}>
                 <div>
                     <FamilieDatovelger
+                        allowInvalidDateSelection={false}
+                        limitations={{
+                            maxDate: new Date().toISOString(),
+                        }}
                         erLesesvisning={lesevisning}
                         id={`${vilkårPeriodeFeilmeldingId(
                             redigerbartVilkår.verdi
