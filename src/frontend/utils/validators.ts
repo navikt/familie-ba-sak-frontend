@@ -71,8 +71,6 @@ export const erPeriodeGyldig = (
 
         const fomDatoErFremITid = moment(fom).isAfter(moment());
 
-        console.log(fomDatoErFremITid);
-
         const fomDatoErFørTomDato = stringToMoment(fom, TIDENES_MORGEN).isBefore(
             stringToMoment(tom, TIDENES_ENDE)
         );
