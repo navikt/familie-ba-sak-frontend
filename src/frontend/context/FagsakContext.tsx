@@ -33,7 +33,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const { axiosRequest } = useApp();
 
     React.useEffect(() => {
-        console.log(fagsakRessurser);
         if (
             fagsakRessurser.fagsak.status === RessursStatus.SUKSESS &&
             (fagsakRessurser.bruker.status === RessursStatus.IKKE_HENTET ||
