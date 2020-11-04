@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
-import { fagsakStatus, IFagsak } from '../typer/fagsak';
+import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPersonInfo } from '../typer/person';
 import {
@@ -12,7 +12,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
-import { Bruker } from '@navikt/familie-header';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPersonInfo>;
