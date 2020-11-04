@@ -71,16 +71,11 @@ export const loggFeil = (
                 scope.setExtra('nav-call-id', response.headers['nav-call-id']);
                 scope.setExtra('status text', response.statusText);
                 scope.setExtra('status', response.status);
+                scope.setExtra('feilmelding', feilmelding);
 
                 captureException(error);
             });
         }
-
-        apiLoggFeil(
-            `${error ? `${error}${feilmelding ? ' - ' : ''}` : ''}${
-                feilmelding ? `Feilmelding: ${feilmelding}` : ''
-            }`
-        );
     }
 };
 
