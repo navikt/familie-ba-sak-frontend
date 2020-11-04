@@ -4,7 +4,7 @@ import { useBehandling } from '../../../../../context/BehandlingContext';
 import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
-import { datoformatNorsk } from '../../../../../utils/formatter';
+import { datoformat, datoformatNorsk, formaterIsoDato } from '../../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import styled from 'styled-components';
@@ -89,7 +89,10 @@ const FastsettPeriode: React.FC<IProps> = ({
                                 },
                             });
                         }}
-                        valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
+                        valgtDato={formaterIsoDato(
+                            redigerbartVilkår.verdi.periode.verdi.fom,
+                            datoformat.DATO
+                        )}
                     />
                 </div>
                 {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
@@ -116,7 +119,10 @@ const FastsettPeriode: React.FC<IProps> = ({
                                     },
                                 });
                             }}
-                            valgtDato={redigerbartVilkår.verdi.periode.verdi.tom}
+                            valgtDato={formaterIsoDato(
+                                redigerbartVilkår.verdi.periode.verdi.tom,
+                                datoformat.DATO
+                            )}
                         />
                     </div>
                 )}
