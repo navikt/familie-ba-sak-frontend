@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
-import { IFagsak } from '../typer/fagsak';
+import { fagsakStatus, IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPersonInfo } from '../typer/person';
 import {
@@ -12,6 +12,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
+import { Bruker } from '@navikt/familie-header';
 
 interface IHovedRessurser {
     bruker: Ressurs<IPersonInfo>;
@@ -33,7 +34,14 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const { axiosRequest } = useApp();
 
     React.useEffect(() => {
-        if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
+        console.log(fagsakRessurser);
+        if (
+            fagsakRessurser.fagsak.status === RessursStatus.SUKSESS &&
+            (fagsakRessurser.bruker.status === RessursStatus.IKKE_HENTET ||
+                (fagsakRessurser.bruker.status === RessursStatus.SUKSESS &&
+                    fagsakRessurser.fagsak.data.søkerFødselsnummer !==
+                        fagsakRessurser.bruker.data.personIdent))
+        ) {
             settFagsakRessurser({
                 ...fagsakRessurser,
                 bruker: {
@@ -54,7 +62,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                 });
             });
         }
-    }, [fagsakRessurser.fagsak.status]);
+    }, [fagsakRessurser.fagsak]);
 
     const hentFagsak = (fagsakId: string): void => {
         settFagsakRessurser({
