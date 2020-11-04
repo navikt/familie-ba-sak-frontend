@@ -170,6 +170,15 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
             });
     };
 
+    const vilkårResultatForEkteskapVisning = (resultat: Resultat) => {
+        if (resultat === Resultat.JA) {
+            return resultater[Resultat.NEI].navn;
+        } else if (resultat === Resultat.NEI) return resultater[Resultat.JA].navn;
+        else {
+            return resultater[Resultat.KANSKJE].navn;
+        }
+    };
+
     return (
         <tbody>
             <tr className={ekspandertVilkår ? 'ekspandert' : ''}>
@@ -237,7 +246,14 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         <div className={'endre-vilkår'}>
                             <FamilieRadioGruppe
                                 erLesevisning={leseVisning}
-                                verdi={resultater[redigerbartVilkår.verdi.resultat.verdi].navn}
+                                verdi={
+                                    redigerbartVilkår.verdi.vilkårType ===
+                                    VilkårType.GIFT_PARTNERSKAP
+                                        ? vilkårResultatForEkteskapVisning(
+                                              redigerbartVilkår.verdi.resultat.verdi
+                                          )
+                                        : resultater[redigerbartVilkår.verdi.resultat.verdi].navn
+                                }
                                 legend={
                                     vilkårFraConfig.spørsmål
                                         ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
