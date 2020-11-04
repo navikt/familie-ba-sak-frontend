@@ -115,7 +115,7 @@ export const dokumenter: ISelectOptionMedBrevtekst[] = [
         label: 'Avtale om delt bosted',
         brevtekst: {
             NB: 'Avtale om delt bosted.',
-            NN: 'Avtale om fast bustad.',
+            NN: 'Avtale om delt bustad.',
         },
     },
     {
