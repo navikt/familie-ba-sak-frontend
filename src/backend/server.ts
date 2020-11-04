@@ -8,9 +8,9 @@ import backend, {
     envVar,
 } from '@navikt/familie-backend';
 import bodyParser from 'body-parser';
-import express from 'express';
 import path from 'path';
 import webpack from 'webpack';
+import expressStaticGzip from 'express-static-gzip';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
@@ -36,7 +36,10 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         app.use(middleware);
         app.use(webpackHotMiddleware(compiler));
     } else {
-        app.use('/assets', express.static(path.join(__dirname, '../../frontend_production')));
+        app.use(
+            '/assets',
+            expressStaticGzip(path.join(__dirname, '../../frontend_production'), {})
+        );
     }
 
     app.use(
