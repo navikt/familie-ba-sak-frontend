@@ -16,13 +16,19 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { UtbetalingBegrunnelserProvider } from '../../../context/UtbetalingBegrunnelseContext';
-import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
+import {
+    BehandlingStatus,
+    BehandlingSteg,
+    hentStegNummer,
+    IBehandling,
+} from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
+import { BehandlerRolle } from '../../../../../node_dist/frontend/typer/behandling';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -32,6 +38,7 @@ interface IVedtakProps {
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
     const { settFagsak } = useFagsakRessurser();
+    const { hentSaksbehandlerRolle } = useApp();
     const { erLesevisning } = useBehandling();
 
     const history = useHistory();
@@ -48,7 +55,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const hentVedtaksbrev = () => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
-        const httpMethod = erLesevisning() ? 'GET' : 'POST';
+        const rolle = hentSaksbehandlerRolle();
+        const genererBrev =
+            rolle &&
+            rolle > BehandlerRolle.VEILEDER &&
+            hentStegNummer(åpenBehandling.steg) <= hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+        const httpMethod = genererBrev ? 'POST' : 'GET';
 
         if (aktivtVedtak) {
             settVedtaksbrev(byggHenterRessurs());
