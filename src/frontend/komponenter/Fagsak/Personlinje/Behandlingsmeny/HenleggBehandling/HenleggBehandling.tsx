@@ -50,6 +50,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
         hentFeltProps,
         onBekreft,
         oppdaterFeltISkjema,
+        settInitialState,
         settVisVeivalgModal,
         skjema,
         visVeivalgModal,
@@ -85,6 +86,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             key={'avbryt'}
                             mini={true}
                             onClick={() => {
+                                settInitialState();
                                 settVisModal(false);
                             }}
                             children={'Avbryt'}
@@ -102,6 +104,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                         />,
                     ],
                     onClose: () => {
+                        settInitialState();
                         settVisModal(false);
                     },
                     lukkKnapp: true,

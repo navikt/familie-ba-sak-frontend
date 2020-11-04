@@ -11,7 +11,9 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [begrunnelse, settBegrunnelse] = useState('');
 
     const { settFagsak } = useFagsakRessurser();
-    const { hentFeltProps, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<IFagsak>({
+    const { hentFeltProps, settInitialState, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<
+        IFagsak
+    >({
         felter: {
             årsak: nyttFelt<HenleggelseÅrsak | ''>('', (felt: IFelt<HenleggelseÅrsak | ''>) =>
                 felt.verdi !== '' ? ok(felt) : feil(felt, 'Du må velge årsak')
@@ -46,6 +48,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         hentFeltProps,
         onBekreft,
         oppdaterFeltISkjema,
+        settInitialState,
         settBegrunnelse,
         settVisVeivalgModal,
         skjema,

@@ -1,6 +1,7 @@
 import {
     BehandlingSteg,
     Behandlingstype,
+    finnSisteUtfortStegForSendtTilBeslutter,
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
@@ -113,10 +114,17 @@ export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysning
 };
 
 export const finnSideForBehandlingssteg = (
-    steg: BehandlingSteg,
+    stegTilstand: IRestStegTilstand[],
     opplysningsplikt: IOpplysningsplikt | undefined
 ): ISide | undefined => {
-    if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
+    const sisteUtfortStegForSendtTilBeslutter = finnSisteUtfortStegForSendtTilBeslutter(
+        stegTilstand
+    );
+
+    if (
+        hentStegNummer(sisteUtfortStegForSendtTilBeslutter) >=
+        hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)
+    ) {
         return sider.VEDTAK;
     } else if (opplysningsplikt && opplysningsplikt.status === OpplysningspliktStatus.IKKE_SATT) {
         return sider.OPPLYSNINGSPLIKT;
@@ -124,7 +132,7 @@ export const finnSideForBehandlingssteg = (
 
     const sideForSteg = Object.entries(sider)
         .filter(([sideId, _]) => sideId !== SideId.OPPLYSNINGSPLIKT)
-        .find(([_, side]) => side.steg === steg);
+        .find(([_, side]) => side.steg === sisteUtfortStegForSendtTilBeslutter);
 
     return sideForSteg ? sideForSteg[1] : undefined;
 };

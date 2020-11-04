@@ -87,6 +87,39 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
     }
 };
 
+export const hentStegNummerForSendtTilBeslutter = (steg: BehandlingSteg): number => {
+    switch (steg) {
+        case BehandlingSteg.REGISTRERE_SØKNAD:
+            return 1;
+        case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
+            return 1;
+        case BehandlingSteg.VILKÅRSVURDERING:
+            return 2;
+        case BehandlingSteg.SEND_TIL_BESLUTTER:
+            return 3;
+        default:
+            return 0;
+    }
+};
+
+export const finnSisteUtfortStegForSendtTilBeslutter = (
+    stegTilstandListe: IRestStegTilstand[]
+): BehandlingSteg => {
+    let sisteUtfortSteg = BehandlingSteg.REGISTRERE_SØKNAD;
+
+    for (let i = 1; i < stegTilstandListe.length; ++i) {
+        const nesteBehandlingSteg = stegTilstandListe[i].behandlingSteg;
+        if (
+            hentStegNummerForSendtTilBeslutter(nesteBehandlingSteg) >
+            hentStegNummerForSendtTilBeslutter(sisteUtfortSteg)
+        ) {
+            sisteUtfortSteg = nesteBehandlingSteg;
+        }
+    }
+
+    return sisteUtfortSteg;
+};
+
 export enum BehandlingStatus {
     OPPRETTET = 'OPPRETTET',
     UTREDES = 'UTREDES',
