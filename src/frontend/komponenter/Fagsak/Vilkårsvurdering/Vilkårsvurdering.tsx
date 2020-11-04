@@ -67,10 +67,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             senderInn={senderInn}
             className={'vilkårsvurdering'}
         >
-            <VilkårsvurderingSkjema
-                visFeilmeldinger={visFeilmeldinger}
-                behandlingstype={åpenBehandling.type}
-            />
+            <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
 
             {hentVilkårMedFeil().length > 0 && visFeilmeldinger && (
                 <Feiloppsummering
