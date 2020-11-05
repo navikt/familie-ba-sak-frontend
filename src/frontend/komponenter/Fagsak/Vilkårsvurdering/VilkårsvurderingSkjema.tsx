@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { Behandlingstype } from '../../../typer/behandling';
 import { IFelt } from '../../../typer/felt';
 import {
     IPersonResultat,
@@ -9,8 +8,6 @@ import {
     vilkårConfig,
     Resultat,
 } from '../../../typer/vilkår';
-import { erBehandlingenInnvilget } from '../../../utils/fagsak';
-import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import { Collapse } from 'react-collapse';
@@ -19,12 +16,10 @@ import FamilieChevron from '../../../ikoner/FamilieChevron';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
-    behandlingstype: Behandlingstype;
 }
 
 const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema> = ({
     visFeilmeldinger,
-    behandlingstype,
 }) => {
     const { vilkårsvurdering } = useVilkårsvurdering();
     const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
@@ -40,14 +35,6 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
         }, {})
     );
 
-    const nesteMåned = () => {
-        const iDag = new Date();
-        const måned = (iDag.getMonth() + 2).toString();
-        return [
-            måned.length === 1 ? '0' + måned : måned,
-            iDag.getFullYear().toString().substr(2),
-        ].join('.');
-    };
     return (
         <>
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
@@ -123,17 +110,6 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                     </div>
                 );
             })}
-
-            <br />
-
-            {behandlingstype === Behandlingstype.REVURDERING &&
-                !erBehandlingenInnvilget(vilkårsvurdering) && (
-                    <div className={'vilkår__skjemagruppe--opphørsdato'}>
-                        <Informasjonsbolk
-                            informasjon={[{ label: `Forventet opphørsmåned`, tekst: nesteMåned() }]}
-                        />
-                    </div>
-                )}
         </>
     );
 };
