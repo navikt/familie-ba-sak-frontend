@@ -13,46 +13,27 @@ import {
 } from '@navikt/familie-typer';
 import { useApp } from './AppContext';
 
-interface IHovedRessurser {
-    bruker: Ressurs<IPersonInfo>;
-    fagsak: Ressurs<IFagsak>;
-}
-
-const initialState: IHovedRessurser = {
-    bruker: {
-        status: RessursStatus.IKKE_HENTET,
-    },
-    fagsak: {
-        status: RessursStatus.IKKE_HENTET,
-    },
-};
-
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
-    const [fagsakRessurser, settFagsakRessurser] = React.useState<IHovedRessurser>(initialState);
+    const [fagsak, settFagsak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
+    const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
     const [logg, settLogg] = React.useState<Ressurs<ILogg[]>>(byggTomRessurs());
     const { axiosRequest } = useApp();
 
     React.useEffect(() => {
-        if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
-            hentBruker(fagsakRessurser.fagsak.data.søkerFødselsnummer);
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            hentBruker(fagsak.data.søkerFødselsnummer);
         }
-    }, [fagsakRessurser.fagsak.status]);
+    }, [fagsak.status]);
 
     React.useEffect(() => {
-        if (
-            fagsakRessurser.fagsak.status === RessursStatus.SUKSESS &&
-            erBrukerUtdatert(fagsakRessurser.bruker, fagsakRessurser.fagsak)
-        ) {
-            hentBruker(fagsakRessurser.fagsak.data.søkerFødselsnummer);
+        if (fagsak.status === RessursStatus.SUKSESS && erBrukerUtdatert(bruker, fagsak)) {
+            hentBruker(fagsak.data.søkerFødselsnummer);
         }
-    }, [fagsakRessurser.fagsak]);
+    }, [fagsak]);
 
     const hentFagsak = (fagsakId: string): void => {
-        settFagsakRessurser({
-            ...fagsakRessurser,
-            fagsak: {
-                status: RessursStatus.HENTER,
-            },
+        settFagsak({
+            status: RessursStatus.HENTER,
         });
         axiosRequest<IFagsak, void>({
             method: 'GET',
@@ -60,16 +41,10 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             påvirkerSystemLaster: true,
         })
             .then((hentetFagsak: Ressurs<IFagsak>) => {
-                settFagsakRessurser({
-                    ...fagsakRessurser,
-                    fagsak: hentetFagsak,
-                });
+                settFagsak(hentetFagsak);
             })
             .catch((_error: AxiosError) => {
-                settFagsakRessurser({
-                    ...fagsakRessurser,
-                    fagsak: byggFeiletRessurs('Ukjent ved innhenting av fagsak'),
-                });
+                settFagsak(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
             });
     };
 
@@ -86,11 +61,8 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     };
 
     const hentBruker = (personIdent: string): void => {
-        settFagsakRessurser({
-            ...fagsakRessurser,
-            bruker: {
-                status: RessursStatus.HENTER,
-            },
+        settBruker({
+            status: RessursStatus.HENTER,
         });
         axiosRequest<IPersonInfo, void>({
             method: 'GET',
@@ -100,10 +72,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             },
             påvirkerSystemLaster: true,
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
-            settFagsakRessurser({
-                ...fagsakRessurser,
-                bruker: hentetPerson,
-            });
+            settBruker(hentetPerson);
         });
     };
 
@@ -121,16 +90,12 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
-    const settFagsak = (modifisertFagsak: Ressurs<IFagsak>): void =>
-        settFagsakRessurser({ ...fagsakRessurser, fagsak: modifisertFagsak });
-
     return {
-        bruker: fagsakRessurser.bruker,
-        fagsak: fagsakRessurser.fagsak,
+        bruker,
+        fagsak,
         hentFagsak,
         hentLogg,
         logg,
-        ressurser: fagsakRessurser,
         settFagsak,
     };
 });
