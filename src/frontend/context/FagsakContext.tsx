@@ -33,32 +33,17 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const { axiosRequest } = useApp();
 
     React.useEffect(() => {
+        if (fagsakRessurser.fagsak.status === RessursStatus.SUKSESS) {
+            hentBruker(fagsakRessurser.fagsak.data.søkerFødselsnummer);
+        }
+    }, [fagsakRessurser.fagsak.status]);
+
+    React.useEffect(() => {
         if (
             fagsakRessurser.fagsak.status === RessursStatus.SUKSESS &&
-            (fagsakRessurser.bruker.status === RessursStatus.IKKE_HENTET ||
-                (fagsakRessurser.bruker.status === RessursStatus.SUKSESS &&
-                    fagsakRessurser.fagsak.data.søkerFødselsnummer !==
-                        fagsakRessurser.bruker.data.personIdent))
+            erBrukerUtdatert(fagsakRessurser.bruker, fagsakRessurser.fagsak)
         ) {
-            settFagsakRessurser({
-                ...fagsakRessurser,
-                bruker: {
-                    status: RessursStatus.HENTER,
-                },
-            });
-            axiosRequest<IPersonInfo, void>({
-                method: 'GET',
-                url: '/familie-ba-sak/api/person',
-                headers: {
-                    personIdent: fagsakRessurser.fagsak.data.søkerFødselsnummer,
-                },
-                påvirkerSystemLaster: true,
-            }).then((hentetPerson: Ressurs<IPersonInfo>) => {
-                settFagsakRessurser({
-                    ...fagsakRessurser,
-                    bruker: hentetPerson,
-                });
-            });
+            hentBruker(fagsakRessurser.fagsak.data.søkerFødselsnummer);
         }
     }, [fagsakRessurser.fagsak]);
 
@@ -86,6 +71,40 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
                     fagsak: byggFeiletRessurs('Ukjent ved innhenting av fagsak'),
                 });
             });
+    };
+
+    const erBrukerUtdatert = (bruker: Ressurs<IPersonInfo>, fagsak: Ressurs<IFagsak>): boolean => {
+        if (fagsak.status !== RessursStatus.SUKSESS) {
+            return false;
+        }
+
+        return (
+            bruker.status === RessursStatus.IKKE_HENTET ||
+            (bruker.status === RessursStatus.SUKSESS &&
+                fagsak.data.søkerFødselsnummer !== bruker.data.personIdent)
+        );
+    };
+
+    const hentBruker = (personIdent: string): void => {
+        settFagsakRessurser({
+            ...fagsakRessurser,
+            bruker: {
+                status: RessursStatus.HENTER,
+            },
+        });
+        axiosRequest<IPersonInfo, void>({
+            method: 'GET',
+            url: '/familie-ba-sak/api/person',
+            headers: {
+                personIdent: personIdent,
+            },
+            påvirkerSystemLaster: true,
+        }).then((hentetPerson: Ressurs<IPersonInfo>) => {
+            settFagsakRessurser({
+                ...fagsakRessurser,
+                bruker: hentetPerson,
+            });
+        });
     };
 
     const hentLogg = (behandlingId: number): void => {
