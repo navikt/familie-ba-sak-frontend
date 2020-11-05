@@ -17,6 +17,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
 import styled from 'styled-components';
 import { useBehandling } from '../../../../../context/BehandlingContext';
+import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 
 interface IProps {
     onListElementClick: () => void;
@@ -118,6 +119,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             ? skjema.submitRessurs.frontendFeilmelding
                             : undefined
                     }
+                    legend={SkjultLegend({ children: 'Henlegg behandling' })}
                 >
                     <FamilieSelect
                         {...hentFeltProps('årsak')}
