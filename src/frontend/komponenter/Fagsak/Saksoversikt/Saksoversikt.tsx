@@ -95,7 +95,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                             </AlertStripe>
                         )}
                     <Utbetalinger beregningOversikt={beregningOversiktInneværendeMåned} />
-                    {toggles[ToggleNavn.visTekniskOpphør] && <Opphør fagsak={fagsak} />}
                 </>
             );
         } else if (beregningOversiktNesteMåned) {
@@ -130,6 +129,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 <>
                     <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
                     {løpendeMånedligUtbetaling()}
+                    {toggles[ToggleNavn.visTekniskOpphør] && <Opphør fagsak={fagsak} />}
                 </>
             )}
 
