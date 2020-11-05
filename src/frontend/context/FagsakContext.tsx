@@ -32,9 +32,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     }, [fagsak]);
 
     const hentFagsak = (fagsakId: string): void => {
-        settFagsak({
-            status: RessursStatus.HENTER,
-        });
+        settFagsak(byggHenterRessurs());
         axiosRequest<IFagsak, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/${fagsakId}`,
@@ -61,9 +59,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     };
 
     const hentBruker = (personIdent: string): void => {
-        settBruker({
-            status: RessursStatus.HENTER,
-        });
+        settBruker(byggHenterRessurs());
         axiosRequest<IPersonInfo, void>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
