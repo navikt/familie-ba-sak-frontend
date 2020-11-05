@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { useApp } from '../../context/AppContext';
@@ -18,9 +18,14 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     innloggetSaksbehandler,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
-    const [feilmelding, setFeilmelding] = React.useState<string>();
-    const [erTilbakestilt, setErTilbakestilt] = React.useState<boolean>(false);
+    const [feilmelding, settFeilmelding] = React.useState<string>();
+    const [erTilbakestilt, settErTilbakestilt] = React.useState<boolean>(false);
     const { sjekkTilgang } = useApp();
+
+    useEffect(() => {
+        settFeilmelding('');
+        settErTilbakestilt(false);
+    }, [oppgave]);
 
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
@@ -53,9 +58,9 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                         tilbakestillFordelingPåOppgave(oppgave).then(
                             (oppgaveResponse: Ressurs<string>) => {
                                 if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                    setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                                    settFeilmelding(oppgaveResponse.frontendFeilmelding);
                                 } else {
-                                    setErTilbakestilt(true);
+                                    settErTilbakestilt(true);
                                 }
                             }
                         );
@@ -77,7 +82,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                             fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
                                 (oppgaveResponse: Ressurs<string>) => {
                                     if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                        setFeilmelding(oppgaveResponse.frontendFeilmelding);
+                                        settFeilmelding(oppgaveResponse.frontendFeilmelding);
                                     }
                                 }
                             );
