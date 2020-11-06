@@ -46,6 +46,7 @@ const OppgaveHeader: React.FunctionComponent = () => {
                     }}
                     children={'Fortsett'}
                     spinner={senderInn}
+                    disabled={senderInn}
                 />
                 {visFeilmeldinger && <Feilmelding children={opprettelseFeilmelding} />}
             </div>

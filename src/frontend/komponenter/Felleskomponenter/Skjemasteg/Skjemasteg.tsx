@@ -4,6 +4,7 @@ import { Innholdstittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISide, sider } from '../Venstremeny/sider';
 
@@ -18,6 +19,24 @@ interface IProps {
     maxWidthStyle?: string;
     skalViseNesteKnapp?: boolean;
 }
+
+const Container = styled.div`
+    padding: 2rem;
+
+    .typo-innholdstittel {
+        padding-bottom: 1rem;
+    }
+`;
+
+const Navigering = styled.div`
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: row-reverse;
+
+    &--flex {
+        flex: 1;
+    }
+`;
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
     children,
@@ -48,7 +67,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     }, [forrigeÅpneSide]);
 
     return (
-        <div
+        <Container
             id={'skjemasteg'}
             className={classNames('skjemasteg', className)}
             style={{ maxWidth: maxWidthStyle }}
@@ -57,12 +76,13 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
 
             {children}
 
-            <div className={'skjemasteg__navigering'}>
+            <Navigering>
                 {nesteOnClick && skalViseNesteKnapp && (
                     <Knapp
                         type={'hoved'}
                         spinner={senderInn}
-                        onClick={async () => {
+                        disabled={senderInn}
+                        onClick={() => {
                             if (!senderInn) {
                                 nesteOnClick();
                             }
@@ -72,7 +92,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                     />
                 )}
 
-                <div className={'skjemasteg__navigering--flex'} />
+                <div style={{ flex: 1 }} />
 
                 {forrigeOnClick ? (
                     <Knapp
@@ -85,8 +105,8 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                 ) : (
                     <div />
                 )}
-            </div>
-        </div>
+            </Navigering>
+        </Container>
     );
 };
 

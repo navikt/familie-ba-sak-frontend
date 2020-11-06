@@ -353,6 +353,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                         mini={true}
                                         type={'standard'}
                                         spinner={vilkårSubmit === VilkårSubmit.PUT}
+                                        disabled={vilkårSubmit === VilkårSubmit.PUT}
                                     >
                                         Ferdig
                                     </FamilieKnapp>
@@ -377,6 +378,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     }}
                                     id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                                     spinner={vilkårSubmit === VilkårSubmit.DELETE}
+                                    disabled={vilkårSubmit === VilkårSubmit.DELETE}
                                     mini={true}
                                     label={'Fjern'}
                                     knappPosisjon={'venstre'}
