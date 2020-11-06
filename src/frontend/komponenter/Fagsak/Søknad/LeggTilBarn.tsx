@@ -124,10 +124,11 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
                         <Knapp
                             type={'hoved'}
                             key={'Legg til'}
-                            mini
+                            mini={true}
                             onClick={leggTilOnClick}
                             children={'Legg til'}
                             spinner={person.status === RessursStatus.HENTER}
+                            disabled={person.status === RessursStatus.HENTER}
                         />,
                     ],
                 }}
