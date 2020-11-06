@@ -7,14 +7,16 @@ import { IFagsak } from '../../../../typer/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
+import { ToggleNavn } from '../../../../typer/toggles';
+import { useApp } from '../../../../context/AppContext';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
+    const { toggles } = useApp();
     const { åpenBehandling } = useBehandling();
-
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
 
     return (
@@ -59,15 +61,16 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             fagsak={fagsak}
                         />
                     </li>
-                    {åpenBehandling.status === RessursStatus.SUKSESS && (
-                        <li>
-                            <HenleggBehandling
-                                onListElementClick={() => settAnker(undefined)}
-                                fagsak={fagsak}
-                                behandling={åpenBehandling.data}
-                            />
-                        </li>
-                    )}
+                    {toggles[ToggleNavn.visHenleggelse] &&
+                        åpenBehandling.status === RessursStatus.SUKSESS && (
+                            <li>
+                                <HenleggBehandling
+                                    onListElementClick={() => settAnker(undefined)}
+                                    fagsak={fagsak}
+                                    behandling={åpenBehandling.data}
+                                />
+                            </li>
+                        )}
                 </ul>
             </Popover>
         </>
