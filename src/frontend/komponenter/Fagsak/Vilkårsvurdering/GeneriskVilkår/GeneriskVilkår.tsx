@@ -128,6 +128,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         label={'Legg til periode'}
                         mini={true}
                         spinner={vilkårSubmit === VilkårSubmit.POST}
+                        disabled={vilkårSubmit === VilkårSubmit.POST}
                     />
                 ) : null}
             </SkjemaGruppe>

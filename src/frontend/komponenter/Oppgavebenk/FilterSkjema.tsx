@@ -85,6 +85,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                         hentOppgaver();
                     }}
                     spinner={oppgaver.status === RessursStatus.HENTER}
+                    disabled={oppgaver.status === RessursStatus.HENTER}
                     children={'Hent'}
                 />
                 <Knapp

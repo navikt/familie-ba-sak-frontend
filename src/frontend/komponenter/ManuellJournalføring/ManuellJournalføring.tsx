@@ -4,25 +4,14 @@ import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
 import { Input, Select } from 'nav-frontend-skjema';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router';
 import {
     ManuellJournalføringProvider,
     useManuellJournalføring,
 } from '../../context/ManuellJournalføringContext';
-import {
-    BehandlingKategori,
-    Behandlingstype,
-    BehandlingUnderkategori,
-    BehandlingÅrsak,
-} from '../../typer/behandling';
-import { IFagsak } from '../../typer/fagsak';
-import {
-    Dokumenttype,
-    dokumenttyper,
-    IDataForManuellJournalføring,
-    ILogiskVedlegg,
-} from '../../typer/manuell-journalføring';
+
+import { Dokumenttype, dokumenttyper, ILogiskVedlegg } from '../../typer/manuell-journalføring';
 import { IPersonInfo } from '../../typer/person';
 import { Journalstatus, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { randomUUID } from '../../utils/commons';
@@ -39,11 +28,8 @@ const ManuellJournalføringContent: React.FC = () => {
         hentAktivBehandlingForJournalføring,
         logiskeVedlegg,
         manueltJournalfør,
-        opprettBehandling,
-        opprettFagsak,
         person,
         senderInn,
-        settDataForManuellJournalføring,
         settDokumenttype,
         settLogiskeVedlegg,
         settPerson,
@@ -52,67 +38,10 @@ const ManuellJournalføringContent: React.FC = () => {
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
-    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = useState<
-        string | undefined
-    >(undefined);
 
     const behandlinger =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
         dataForManuellJournalføring.data.fagsak?.behandlinger;
-
-    const onClickOpprett = async (data: IDataForManuellJournalføring) => {
-        const søker = data.person?.personIdent ?? '';
-        if (søker === '') {
-            settOpprettBehandlingFeilmelding(
-                'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
-            );
-        } else {
-            const fagsak: IFagsak | undefined = !data.fagsak
-                ? await opprettFagsak({
-                      personIdent: data.person?.personIdent ?? null,
-                      aktørId: null,
-                  })
-                      .then((response: Ressurs<IFagsak>) =>
-                          response.status === RessursStatus.SUKSESS ? response.data : undefined
-                      )
-                      .catch(() => undefined)
-                : data.fagsak;
-
-            if (fagsak) {
-                const behandlingType =
-                    behandlinger && behandlinger.length > 0
-                        ? Behandlingstype.REVURDERING
-                        : Behandlingstype.FØRSTEGANGSBEHANDLING;
-
-                const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
-                    behandlingType: behandlingType,
-                    søkersIdent: søker,
-                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
-                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
-                    behandlingÅrsak: BehandlingÅrsak.SØKNAD,
-                }).then((response: Ressurs<IFagsak>) => response);
-
-                if (
-                    dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-                    fagsakMedBehandling.status === RessursStatus.SUKSESS
-                ) {
-                    settDataForManuellJournalføring({
-                        status: RessursStatus.SUKSESS,
-                        data: {
-                            ...dataForManuellJournalføring.data,
-                            fagsak: fagsakMedBehandling.data,
-                        },
-                    });
-                } else if (fagsakMedBehandling.status === RessursStatus.FEILET) {
-                    settOpprettBehandlingFeilmelding(fagsakMedBehandling.frontendFeilmelding);
-                } else {
-                    settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
-                }
-            } else {
-                settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
-            }
-        }
-    };
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
@@ -228,8 +157,6 @@ const ManuellJournalføringContent: React.FC = () => {
                     <KnyttTilBehandling
                         aktivBehandling={hentAktivBehandlingForJournalføring()}
                         dataForManuellJournalføring={dataForManuellJournalføring.data}
-                        onClickOpprett={onClickOpprett}
-                        opprettBehandlingFeilmelding={opprettBehandlingFeilmelding}
                     />
                     {visModal && (
                         <UIModalWrapper
@@ -243,6 +170,8 @@ const ManuellJournalføringContent: React.FC = () => {
                                         key={'ja'}
                                         type={'hoved'}
                                         mini={true}
+                                        spinner={senderInn}
+                                        disabled={senderInn}
                                         onClick={() => {
                                             settVisModal(false);
                                             manueltJournalfør();

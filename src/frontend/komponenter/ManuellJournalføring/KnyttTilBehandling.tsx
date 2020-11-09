@@ -1,28 +1,33 @@
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import moment from 'moment';
 import AlertStripe from 'nav-frontend-alertstriper';
-import KnappBase from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
-import React from 'react';
+import React, { useState } from 'react';
 import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import Pluss from '../../ikoner/Pluss';
-import { BehandlingStatus, IBehandling } from '../../typer/behandling';
+import {
+    BehandlingKategori,
+    BehandlingStatus,
+    Behandlingstype,
+    BehandlingUnderkategori,
+    BehandlingÅrsak,
+    IBehandling,
+} from '../../typer/behandling';
+import { IFagsak } from '../../typer/fagsak';
 import { IDataForManuellJournalføring } from '../../typer/manuell-journalføring';
 import { datoformat, formaterDato } from '../../utils/formatter';
+import IkonKnapp from '../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IKnyttTilBehandlingProps {
     aktivBehandling: IBehandling | undefined;
     dataForManuellJournalføring: IDataForManuellJournalføring;
-    onClickOpprett: (dataForManuellJournalføring: IDataForManuellJournalføring) => void;
-    opprettBehandlingFeilmelding: string | undefined;
 }
 
 export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
     aktivBehandling,
     dataForManuellJournalføring,
-    onClickOpprett,
-    opprettBehandlingFeilmelding,
 }) => {
     const behandlinger = dataForManuellJournalføring.fagsak?.behandlinger.sort((a, b) =>
         moment(b.opprettetTidspunkt).diff(moment(a.opprettetTidspunkt))
@@ -30,13 +35,78 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
     const visOpprettBehandlingKnapp =
         !aktivBehandling || aktivBehandling.status === BehandlingStatus.AVSLUTTET;
 
+    const [oppretterBehandling, settOppretterBehandling] = useState(false);
+    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = useState<
+        string | undefined
+    >(undefined);
+
     const {
-        tilknyttedeBehandlingIder,
-        settTilknyttedeBehandlingIder,
         feilmeldinger,
-        visFeilmeldinger,
         innsendingsfeilmelding,
+        opprettBehandling,
+        opprettFagsak,
+        settDataForManuellJournalføring,
+        settTilknyttedeBehandlingIder,
+        tilknyttedeBehandlingIder,
+        visFeilmeldinger,
     } = useManuellJournalføring();
+
+    const onClickOpprett = async (data: IDataForManuellJournalføring) => {
+        const søker = data.person?.personIdent ?? '';
+        if (søker === '') {
+            settOpprettBehandlingFeilmelding(
+                'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
+            );
+        } else {
+            settOppretterBehandling(true);
+
+            const fagsak: IFagsak | undefined = !data.fagsak
+                ? await opprettFagsak({
+                      personIdent: data.person?.personIdent ?? null,
+                      aktørId: null,
+                  })
+                      .then((response: Ressurs<IFagsak>) =>
+                          response.status === RessursStatus.SUKSESS ? response.data : undefined
+                      )
+                      .catch(() => {
+                          settOppretterBehandling(false);
+                          return undefined;
+                      })
+                : data.fagsak;
+
+            if (fagsak) {
+                const behandlingType =
+                    behandlinger && behandlinger.length > 0
+                        ? Behandlingstype.REVURDERING
+                        : Behandlingstype.FØRSTEGANGSBEHANDLING;
+
+                const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
+                    behandlingType: behandlingType,
+                    søkersIdent: søker,
+                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
+                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
+                    behandlingÅrsak: BehandlingÅrsak.SØKNAD,
+                }).then((response: Ressurs<IFagsak>) => response);
+
+                settOppretterBehandling(false);
+                if (fagsakMedBehandling.status === RessursStatus.SUKSESS) {
+                    settDataForManuellJournalføring({
+                        status: RessursStatus.SUKSESS,
+                        data: {
+                            ...dataForManuellJournalføring,
+                            fagsak: fagsakMedBehandling.data,
+                        },
+                    });
+                } else if (fagsakMedBehandling.status === RessursStatus.FEILET) {
+                    settOpprettBehandlingFeilmelding(fagsakMedBehandling.frontendFeilmelding);
+                } else {
+                    settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
+                }
+            } else {
+                settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
+            }
+        }
+    };
 
     return (
         <>
@@ -48,24 +118,27 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
                             : 'Det er ikke registrert tidligere behandlinger på denne brukeren.') +
                             ' For å koble dokumentasjonen til en behandling, "Opprett ny behandling", eller journalfør uten å opprette behandling. '}
                     </AlertStripe>
-                    <KnappBase
-                        aria-label={`utfør_opprettfagsakogbehandlingvedjournalføring}`}
+                    <IkonKnapp
+                        aria-labelledby={`utfør_opprett-fagsak-og-behandling-ved-journalføring`}
                         className={'ikon-knapp'}
-                        id={'d'}
+                        id={'opprettbehandling'}
                         onClick={() => {
                             onClickOpprett(dataForManuellJournalføring);
                         }}
+                        label={'Opprett ny behandling'}
+                        erLesevisning={false}
+                        knappPosisjon={'venstre'}
                         type="flat"
-                        kompakt={true}
-                    >
-                        <Pluss />
-                        {'Opprett ny behandling'}
-                    </KnappBase>
+                        spinner={oppretterBehandling}
+                        disabled={oppretterBehandling}
+                        ikon={<Pluss />}
+                    />
                     {opprettBehandlingFeilmelding && (
                         <Feilmelding>{opprettBehandlingFeilmelding}</Feilmelding>
                     )}
                 </div>
             )}
+
             {behandlinger && behandlinger.length > 0 && (
                 <table className="tabell">
                     <thead className="tabell__head">

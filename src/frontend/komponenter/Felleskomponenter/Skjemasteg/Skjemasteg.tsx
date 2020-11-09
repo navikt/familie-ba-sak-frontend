@@ -1,9 +1,9 @@
-import classNames from 'classnames';
 import { Knapp } from 'nav-frontend-knapper';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISide, sider } from '../Venstremeny/sider';
 
@@ -18,6 +18,22 @@ interface IProps {
     maxWidthStyle?: string;
     skalViseNesteKnapp?: boolean;
 }
+
+const Container = styled.div<{ maxWidthStyle: string }>`
+    padding: 2rem;
+    max-width: ${({ maxWidthStyle }) => maxWidthStyle};
+`;
+
+const StyledInnholdstittel = styled(Innholdstittel)`
+    padding-bottom: 1rem;
+`;
+
+const Navigering = styled.div`
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+`;
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
     children,
@@ -48,21 +64,18 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     }, [forrigeÅpneSide]);
 
     return (
-        <div
-            id={'skjemasteg'}
-            className={classNames('skjemasteg', className)}
-            style={{ maxWidth: maxWidthStyle }}
-        >
-            <Innholdstittel children={tittel} />
+        <Container id={'skjemasteg'} className={className} maxWidthStyle={maxWidthStyle}>
+            <StyledInnholdstittel children={tittel} />
 
             {children}
 
-            <div className={'skjemasteg__navigering'}>
-                {nesteOnClick && skalViseNesteKnapp && (
+            <Navigering>
+                {nesteOnClick && skalViseNesteKnapp ? (
                     <Knapp
                         type={'hoved'}
                         spinner={senderInn}
-                        onClick={async () => {
+                        disabled={senderInn}
+                        onClick={() => {
                             if (!senderInn) {
                                 nesteOnClick();
                             }
@@ -70,9 +83,9 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         mini={true}
                         children={nesteKnappTittel ?? 'Neste'}
                     />
+                ) : (
+                    <div />
                 )}
-
-                <div className={'skjemasteg__navigering--flex'} />
 
                 {forrigeOnClick ? (
                     <Knapp
@@ -85,8 +98,8 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                 ) : (
                     <div />
                 )}
-            </div>
-        </div>
+            </Navigering>
+        </Container>
     );
 };
 

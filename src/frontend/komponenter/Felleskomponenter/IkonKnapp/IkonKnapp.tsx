@@ -1,6 +1,6 @@
 import React from 'react';
 import { randomUUID } from '../../../utils/commons';
-import KnappBase from 'nav-frontend-knapper';
+import KnappBase, { KnappBaseProps } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import classNames from 'classnames';
 import { Normaltekst } from 'nav-frontend-typografi';
@@ -17,7 +17,7 @@ interface IProps {
     spinner?: boolean;
 }
 
-const IkonKnapp: React.FC<IProps> = ({
+const IkonKnapp: React.FC<IProps & KnappBaseProps> = ({
     className,
     erLesevisning,
     id,
@@ -27,6 +27,7 @@ const IkonKnapp: React.FC<IProps> = ({
     mini,
     onClick,
     spinner,
+    ...props
 }) => {
     return !erLesevisning ? (
         <KnappBase
@@ -37,6 +38,7 @@ const IkonKnapp: React.FC<IProps> = ({
             type="flat"
             mini={mini}
             kompakt={true}
+            {...props}
         >
             {knappPosisjon === 'venstre' && <IkonTilKnapp ikon={ikon} spinner={spinner} />}
             <Normaltekst>{label}</Normaltekst>
