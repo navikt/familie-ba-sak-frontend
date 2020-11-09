@@ -65,6 +65,25 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         return oppgaveFelter[nøkkel];
     };
 
+    const oppdaterOppgave = (oppdatertOppgave: IOppgave) => {
+        if (oppgaver.status === RessursStatus.SUKSESS) {
+            const nyOppgaveliste = oppgaver.data.oppgaver.map(oppgave => {
+                if (oppdatertOppgave.id === oppgave.id) {
+                    return oppdatertOppgave;
+                } else {
+                    return oppgave;
+                }
+            });
+            settOppgaver({
+                status: oppgaver.status,
+                data: {
+                    ...oppgaver.data,
+                    oppgaver: nyOppgaveliste,
+                },
+            });
+        }
+    };
+
     const settVerdiPåOppgaveFelt = (oppgaveFelt: IOppgaveFelt, nyVerdi: string) => {
         if (oppgaveFelt.filter) {
             const oppdaterteOppgaveFelter = {
@@ -280,16 +299,16 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
-    const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<string>> => {
-        return axiosRequest<string, void>({
+    const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<IOppgave>> => {
+        return axiosRequest<IOppgave, string>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/tilbakestill`,
         })
-            .then((oppgaverRes: Ressurs<string>) => {
+            .then((oppgaverRes: Ressurs<IOppgave>) => {
                 return oppgaverRes;
             })
             .catch((_error: AxiosError) => {
-                return byggFeiletRessurs<string>('Ukjent feil ved tilbakestilling av oppgave');
+                return byggFeiletRessurs('Ukjent feil ved tilbakestilling av oppgave');
             });
     };
 
@@ -389,9 +408,9 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         sortOppgave,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
+        oppdaterOppgave,
     };
 });
-
 const Oppgaver: React.FC = () => {
     return (
         <OppgaverProvider>

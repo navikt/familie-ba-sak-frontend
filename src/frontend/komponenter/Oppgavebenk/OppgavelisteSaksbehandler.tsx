@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { useApp } from '../../context/AppContext';
-import { ISaksbehandler } from '@navikt/familie-typer';
+import { ISaksbehandler, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
@@ -17,14 +16,21 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     oppgave,
     innloggetSaksbehandler,
 }) => {
-    const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
+    const { fordelOppgave, tilbakestillFordelingPåOppgave, oppdaterOppgave } = useOppgaver();
     const [feilmelding, settFeilmelding] = React.useState<string>();
     const [erTilbakestilt, settErTilbakestilt] = React.useState<boolean>(false);
     const { sjekkTilgang } = useApp();
+    const oppgaveRef = useRef<IOppgave | null>(null);
 
     useEffect(() => {
-        settFeilmelding('');
-        settErTilbakestilt(false);
+        if (oppgaveRef.current === null) {
+            oppgaveRef.current = oppgave;
+        }
+        if (oppgaveRef.current.id !== oppgave.id) {
+            settFeilmelding('');
+            settErTilbakestilt(false);
+        }
+        oppgaveRef.current = oppgave;
     }, [oppgave]);
 
     if (innloggetSaksbehandler == null) {
@@ -56,10 +62,12 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                     key={'tilbakestill'}
                     onClick={() => {
                         tilbakestillFordelingPåOppgave(oppgave).then(
-                            (oppgaveResponse: Ressurs<string>) => {
+                            (oppgaveResponse: Ressurs<IOppgave>) => {
                                 if (oppgaveResponse.status === RessursStatus.FEILET) {
                                     settFeilmelding(oppgaveResponse.frontendFeilmelding);
                                 } else {
+                                    oppgaveResponse.status === RessursStatus.SUKSESS &&
+                                        oppdaterOppgave(oppgaveResponse.data);
                                     settErTilbakestilt(true);
                                 }
                             }
