@@ -56,11 +56,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const hentVedtaksbrev = () => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
         const rolle = hentSaksbehandlerRolle();
-        const genererBrev =
+        const genererBrevUnderBehandling =
             rolle &&
             rolle > BehandlerRolle.VEILEDER &&
-            hentStegNummer(åpenBehandling.steg) <= hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-        const httpMethod = genererBrev ? 'POST' : 'GET';
+            hentStegNummer(åpenBehandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+
+        const genererBrevUnderBeslutning =
+            rolle &&
+            rolle === BehandlerRolle.BESLUTTER &&
+            hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+
+        const httpMethod =
+            genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
         if (aktivtVedtak) {
             settVedtaksbrev(byggHenterRessurs());
