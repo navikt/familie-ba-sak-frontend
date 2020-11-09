@@ -14,6 +14,8 @@ import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 import useOpprettBehandling from './useOpprettBehandling';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import { useApp } from '../../../../../context/AppContext';
+import { ToggleNavn } from '../../../../../typer/toggles';
 
 interface IProps {
     onListElementClick: () => void;
@@ -29,6 +31,7 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
 }
 
 const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => {
+    const { toggles } = useApp();
     const [visModal, settVisModal] = useState(false);
 
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
@@ -165,17 +168,28 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         <option disabled={true} value={''}>
                             Velg
                         </option>
-                        {Object.values(BehandlingÅrsak).map(årsak => {
-                            return (
-                                <option
-                                    key={årsak}
-                                    aria-selected={selectedBehandlingÅrsak === årsak}
-                                    value={årsak}
-                                >
-                                    {behandlingÅrsak[årsak]}
-                                </option>
-                            );
-                        })}
+                        {Object.values(BehandlingÅrsak)
+                            .filter(årsak => {
+                                if (årsak === BehandlingÅrsak.TEKNISK_OPPHØR) {
+                                    return (
+                                        revurderingEnabled &&
+                                        (toggles[ToggleNavn.visTekniskOpphør] || true)
+                                    );
+                                } else {
+                                    return true;
+                                }
+                            })
+                            .map(årsak => {
+                                return (
+                                    <option
+                                        key={årsak}
+                                        aria-selected={selectedBehandlingÅrsak === årsak}
+                                        value={årsak}
+                                    >
+                                        {behandlingÅrsak[årsak]}
+                                    </option>
+                                );
+                            })}
                     </FamilieSelect>
                 </SkjemaGruppe>
             </UIModalWrapper>
