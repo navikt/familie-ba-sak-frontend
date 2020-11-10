@@ -2,7 +2,7 @@ import constate from 'constate';
 import * as React from 'react';
 import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../typer/felt';
+import { IFelt, Valideringsstatus } from '../../familie-skjema/felt';
 import {
     IPersonResultat,
     IRestNyttVilkår,

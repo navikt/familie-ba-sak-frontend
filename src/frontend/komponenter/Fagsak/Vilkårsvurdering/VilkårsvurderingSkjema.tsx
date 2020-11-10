@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { IFelt } from '../../../typer/felt';
+import { IFelt } from '../../../familie-skjema/felt';
 import {
     IPersonResultat,
     IVilkårConfig,

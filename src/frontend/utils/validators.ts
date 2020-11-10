@@ -7,7 +7,7 @@ import {
     ValiderIFelt,
     Valideringsmetadata,
     Valideringsstatus,
-} from '../typer/felt';
+} from '../familie-skjema/felt';
 import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Resultat } from '../typer/vilkår';

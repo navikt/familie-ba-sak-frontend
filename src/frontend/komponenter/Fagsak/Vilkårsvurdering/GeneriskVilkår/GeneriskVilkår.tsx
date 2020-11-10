@@ -7,7 +7,7 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Pluss from '../../../../ikoner/Pluss';
-import { IFelt } from '../../../../typer/felt';
+import { IFelt } from '../../../../familie-skjema/felt';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';

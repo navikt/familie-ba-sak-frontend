@@ -14,7 +14,7 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Slett from '../../../../ikoner/Slett';
-import { IFelt, Valideringsstatus } from '../../../../typer/felt';
+import { IFelt, Valideringsstatus } from '../../../../familie-skjema/felt';
 import { periodeToString } from '../../../../typer/periode';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';

@@ -4,7 +4,7 @@ import PanelBase from 'nav-frontend-paneler';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
-import { IFelt, Valideringsstatus } from '../../../typer/felt';
+import { IFelt, Valideringsstatus } from '../../../familie-skjema/felt';
 import { IPersonInfo } from '../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';

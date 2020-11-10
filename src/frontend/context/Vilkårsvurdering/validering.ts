@@ -1,4 +1,4 @@
-import { feil, IFelt, ok, Valideringsmetadata, Valideringsstatus } from '../../typer/felt';
+import { feil, IFelt, ok, Valideringsmetadata, Valideringsstatus } from '../../familie-skjema/felt';
 import { IPeriode } from '../../typer/periode';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 

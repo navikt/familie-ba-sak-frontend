@@ -1,7 +1,7 @@
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useBehandling } from '../../../../../context/BehandlingContext';
-import { IFelt, Valideringsstatus } from '../../../../../typer/felt';
+import { IFelt, Valideringsstatus } from '../../../../../familie-skjema/felt';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformat, datoformatNorsk, formaterIsoDato } from '../../../../../utils/formatter';

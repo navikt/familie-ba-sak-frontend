@@ -19,8 +19,8 @@ import {
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { AxiosError } from 'axios';
-import { feil, IFelt, nyttFelt, ok, Valideringsmetadata } from '../typer/felt';
-import { useSkjema } from '../typer/skjema';
+import { feil, IFelt, nyttFelt, ok, Valideringsmetadata } from '../familie-skjema/felt';
+import { useSkjema } from '../familie-skjema/skjema';
 import { fjernWhitespace } from '../utils/commons';
 import { IGrunnlagPerson } from '../typer/person';
 import { Målform } from '../typer/søknad';

@@ -1,5 +1,5 @@
 import { INøkkelPar } from './common';
-import { IFelt } from './felt';
+import { IFelt } from '../familie-skjema/felt';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';

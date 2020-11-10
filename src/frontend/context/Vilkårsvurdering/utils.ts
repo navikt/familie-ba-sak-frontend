@@ -1,4 +1,4 @@
-import { IFelt } from '../../typer/felt';
+import { IFelt } from '../../familie-skjema/felt';
 import { IVilkårResultat, Resultat } from '../../typer/vilkår';
 import { IPeriode } from '../../typer/periode';
 

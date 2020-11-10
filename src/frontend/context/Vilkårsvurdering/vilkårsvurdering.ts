@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { IFelt, Valideringsstatus } from '../../typer/felt';
+import { IFelt, Valideringsstatus } from '../../familie-skjema/felt';
 import { diff, nyPeriode } from '../../typer/periode';
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {

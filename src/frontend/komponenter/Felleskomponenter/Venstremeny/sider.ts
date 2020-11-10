@@ -12,7 +12,7 @@ import {
     Resultat,
 } from '../../../typer/vilkår';
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import { IFelt } from '../../../typer/felt';
+import { IFelt } from '../../../familie-skjema/felt';
 import { formaterPersonIdent } from '../../../utils/formatter';
 import { IOpplysningsplikt, OpplysningspliktStatus } from '../../../typer/opplysningsplikt';
 

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { IFelt } from '../typer/felt';
+import { IFelt } from '../familie-skjema/felt';
 import { IVedtakForBehandling } from '../typer/vedtak';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../typer/vilkår';
 

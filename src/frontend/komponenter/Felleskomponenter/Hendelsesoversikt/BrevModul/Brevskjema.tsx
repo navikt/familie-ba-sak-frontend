@@ -20,7 +20,7 @@ import { formaterPersonIdent } from '../../../../utils/formatter';
 import Knapperekke from '../../Knapperekke';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { IFagsak } from '../../../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../../../typer/felt';
+import { IFelt, Valideringsstatus } from '../../../../familie-skjema/felt';
 import FamilieReactSelect from '../../FamilieReactSelect';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Normaltekst } from 'nav-frontend-typografi';

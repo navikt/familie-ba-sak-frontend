@@ -6,7 +6,7 @@ import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
-import { Valideringsstatus } from '../../../typer/felt';
+import { Valideringsstatus } from '../../../familie-skjema/felt';
 import { useApp } from '../../../context/AppContext';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import { FamilieInput } from '@navikt/familie-form-elements';

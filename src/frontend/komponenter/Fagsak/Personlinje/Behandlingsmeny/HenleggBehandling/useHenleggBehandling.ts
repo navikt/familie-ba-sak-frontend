@@ -3,26 +3,37 @@ import { useState } from 'react';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { HenleggelseÅrsak } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { feil, IFelt, nyttFelt, ok } from '../../../../../typer/felt';
-import { useSkjema } from '../../../../../typer/skjema';
+import { feil, ok, useFelt } from '../../../../../familie-skjema/felt';
+import { useSkjema } from '../../../../../familie-skjema/skjema';
+import { FeltState } from '../../../../../familie-skjema/typer';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const [begrunnelse, settBegrunnelse] = useState('');
 
     const { settFagsak } = useFagsakRessurser();
-    const { hentFeltProps, settInitialState, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<
+    const { onSubmit, skjema, nullstillSkjema } = useSkjema<
+        {
+            årsak: HenleggelseÅrsak | '';
+            begrunnelse: '';
+        },
         IFagsak
     >({
-        felter: {
-            årsak: nyttFelt<HenleggelseÅrsak | ''>('', (felt: IFelt<HenleggelseÅrsak | ''>) =>
-                felt.verdi !== '' ? ok(felt) : feil(felt, 'Du må velge årsak')
-            ),
-            begrunnelse: nyttFelt(''),
+        initialSkjema: {
+            felter: {
+                årsak: useFelt({
+                    verdi: '',
+                    valideringsfunksjon: (felt: FeltState<HenleggelseÅrsak | ''>) =>
+                        felt.verdi !== '' ? ok(felt) : feil(felt, 'Du må velge årsak'),
+                }),
+                begrunnelse: useFelt({
+                    verdi: '',
+                }),
+            },
+            skjemanavn: 'henleggbehandling',
+            submitRessurs: byggTomRessurs(),
+            visFeilmeldinger: false,
         },
-        skjemanavn: 'henleggbehandling',
-        submitRessurs: byggTomRessurs(),
-        visFeilmeldinger: false,
     });
 
     const onBekreft = (behandlingId: number) => {
@@ -45,10 +56,8 @@ const useHenleggBehandling = (lukkModal: () => void) => {
 
     return {
         begrunnelse,
-        hentFeltProps,
+        nullstillSkjema,
         onBekreft,
-        oppdaterFeltISkjema,
-        settInitialState,
         settBegrunnelse,
         settVisVeivalgModal,
         skjema,
