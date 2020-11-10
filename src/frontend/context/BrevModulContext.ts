@@ -1,5 +1,5 @@
 import createUseContext from 'constate';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../typer/behandling';
 import {
@@ -28,9 +28,14 @@ import { Målform } from '../typer/søknad';
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { axiosRequest } = useApp();
     const { åpenBehandling } = useBehandling();
-    const { hentFeltProps, kanSendeSkjema, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<
-        IFagsak
-    >({
+    const {
+        hentFeltProps,
+        kanSendeSkjema,
+        nullstillFelt,
+        onSubmit,
+        oppdaterFeltISkjema,
+        skjema,
+    } = useSkjema<IFagsak>({
         felter: {
             mottakerIdent: nyttFelt<string>('', (felt: IFelt<string>) =>
                 felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker')
@@ -102,6 +107,15 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] = React.useState<boolean>(
         false
     );
+
+    /**
+     * Nullstill enkelte felter i skjemaet ved oppdatering av åpenbehandling i staten.
+     * Dette fordi at man kan ha gjort endring på målform
+     */
+    useEffect(() => {
+        nullstillFelt('fritekst');
+        nullstillFelt('multiselect');
+    }, [åpenBehandling]);
 
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
