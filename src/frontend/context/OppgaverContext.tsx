@@ -305,6 +305,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/tilbakestill`,
         })
             .then((oppgaverRes: Ressurs<IOppgave>) => {
+                oppgaverRes.status === RessursStatus.SUKSESS && oppdaterOppgave(oppgaverRes.data);
                 return oppgaverRes;
             })
             .catch((_error: AxiosError) => {
@@ -408,7 +409,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         sortOppgave,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
-        oppdaterOppgave,
     };
 });
 const Oppgaver: React.FC = () => {

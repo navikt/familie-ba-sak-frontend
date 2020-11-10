@@ -16,7 +16,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     oppgave,
     innloggetSaksbehandler,
 }) => {
-    const { fordelOppgave, tilbakestillFordelingPåOppgave, oppdaterOppgave } = useOppgaver();
+    const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
     const [feilmelding, settFeilmelding] = React.useState<string>();
     const [erTilbakestilt, settErTilbakestilt] = React.useState<boolean>(false);
     const { sjekkTilgang } = useApp();
@@ -66,8 +66,6 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                                 if (oppgaveResponse.status === RessursStatus.FEILET) {
                                     settFeilmelding(oppgaveResponse.frontendFeilmelding);
                                 } else {
-                                    oppgaveResponse.status === RessursStatus.SUKSESS &&
-                                        oppdaterOppgave(oppgaveResponse.data);
                                     settErTilbakestilt(true);
                                 }
                             }
