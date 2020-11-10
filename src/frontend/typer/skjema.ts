@@ -122,6 +122,7 @@ export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) 
         kanSendeSkjema,
         onSubmit,
         oppdaterFeltISkjema,
+        settInitialState,
         skjema,
     };
 };
