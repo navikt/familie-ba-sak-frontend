@@ -29,6 +29,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
         innsendtVedtak.status === RessursStatus.IKKE_TILGANG
             ? innsendtVedtak.frontendFeilmelding
             : '';
+
     return (
         <div className="totrinnskontroll">
             <SkjemaGruppe className="totrinnskontroll-skjemagruppe" feil={feilmelding}>
@@ -75,6 +76,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     type={'hoved'}
                     spinner={senderInn}
                     disabled={senderInn}
+                    mini={true}
                     onClick={() => {
                         if (!senderInn) {
                             sendInnVedtak({
