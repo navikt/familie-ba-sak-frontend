@@ -95,13 +95,14 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
 };
 
 export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysningsplikt: boolean) => {
-    if (
+    if (side === sider.OPPLYSNINGSPLIKT) {
+        return harOpplysningsplikt;
+    } else if (
         åpenBehandling.skalBehandlesAutomatisk ||
-        åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+        åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD ||
+        åpenBehandling.type === Behandlingstype.TEKNISK_OPPHØR
     ) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
-    } else if (side === sider.OPPLYSNINGSPLIKT) {
-        return harOpplysningsplikt;
     } else {
         return true;
     }

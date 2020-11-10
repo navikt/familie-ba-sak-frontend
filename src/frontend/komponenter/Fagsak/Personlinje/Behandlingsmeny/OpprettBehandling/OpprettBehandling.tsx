@@ -189,7 +189,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                                 }
                                 value={BehandlingÅrsak.TEKNISK_OPPHØR}
                             >
-                                {BehandlingÅrsak.TEKNISK_OPPHØR}
+                                {behandlingÅrsak[BehandlingÅrsak.TEKNISK_OPPHØR]}
                             </option>
                         ) : (
                             Object.values(BehandlingÅrsak)
