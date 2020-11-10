@@ -109,7 +109,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     );
 
     /**
-     * Nullstill fritekstfeltet ved oppdatering av åpenbehandling i staten.
+     * Nullstill enkelte felter i skjemaet ved oppdatering av åpenbehandling i staten.
      * Dette fordi at man kan ha gjort endring på målform
      */
     useEffect(() => {
