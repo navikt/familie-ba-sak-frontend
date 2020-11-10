@@ -135,6 +135,7 @@ export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) 
         nullstillFelt,
         onSubmit,
         oppdaterFeltISkjema,
+        settInitialState,
         skjema,
     };
 };

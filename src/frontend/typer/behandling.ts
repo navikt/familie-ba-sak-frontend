@@ -1,7 +1,7 @@
 import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
-import { IRestPersonResultat } from './vilkår';
+import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IOppsummeringBeregning } from './beregning';
 import { IOpplysningsplikt } from './opplysningsplikt';
@@ -10,6 +10,16 @@ export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
     EØS = 'EØS',
 }
+
+export enum HenleggelseÅrsak {
+    SØKNAD_TRUKKET = 'SØKNAD_TRUKKET',
+    FEILAKTIG_OPPRETTET = 'FEILAKTIG_OPPRETTET',
+}
+
+export const henleggelseÅrsak: Record<HenleggelseÅrsak, string> = {
+    SØKNAD_TRUKKET: 'Søknaden er trukket',
+    FEILAKTIG_OPPRETTET: 'Behandlingen er feilaktig opprettet',
+};
 
 export enum BehandlingÅrsak {
     SØKNAD = 'SØKNAD',
@@ -77,6 +87,39 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
     }
 };
 
+export const hentStegNummerForSendtTilBeslutter = (steg: BehandlingSteg): number => {
+    switch (steg) {
+        case BehandlingSteg.REGISTRERE_SØKNAD:
+            return 1;
+        case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
+            return 1;
+        case BehandlingSteg.VILKÅRSVURDERING:
+            return 2;
+        case BehandlingSteg.SEND_TIL_BESLUTTER:
+            return 3;
+        default:
+            return 0;
+    }
+};
+
+export const finnSisteUtfortStegForSendtTilBeslutter = (
+    stegTilstandListe: IRestStegTilstand[]
+): BehandlingSteg => {
+    let sisteUtfortSteg = BehandlingSteg.REGISTRERE_SØKNAD;
+
+    for (let i = 1; i < stegTilstandListe.length; ++i) {
+        const nesteBehandlingSteg = stegTilstandListe[i].behandlingSteg;
+        if (
+            hentStegNummerForSendtTilBeslutter(nesteBehandlingSteg) >
+            hentStegNummerForSendtTilBeslutter(sisteUtfortSteg)
+        ) {
+            sisteUtfortSteg = nesteBehandlingSteg;
+        }
+    }
+
+    return sisteUtfortSteg;
+};
+
 export enum BehandlingStatus {
     OPPRETTET = 'OPPRETTET',
     UTREDES = 'UTREDES',
@@ -97,6 +140,8 @@ export enum BehandlingResultat {
     IKKE_VURDERT = 'IKKE_VURDERT',
     INNVILGET = 'INNVILGET',
     OPPHØRT = 'OPPHØRT',
+    HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
+    HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
 }
 
 export enum BehandlerRolle {
@@ -120,6 +165,7 @@ export interface IBehandling {
     samletResultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;
+    stegTilstand: IRestStegTilstand[];
     totrinnskontroll?: ITotrinnskontroll;
     opplysningsplikt?: IOpplysningsplikt;
     type: Behandlingstype;
@@ -192,11 +238,13 @@ export const underkategorier: INøkkelPar = {
     },
 };
 
-export const behandlingsresultater: INøkkelPar = {
-    INNVILGET: { id: 'INNVILGET', navn: 'Innvilget' },
-    IKKE_VURDERT: { id: 'IKKE_VURDERT', navn: 'Ikke vurdert' },
-    AVSLÅTT: { id: 'AVSLÅTT', navn: 'Avslått' },
-    OPPHØRT: { id: 'OPPHØRT', navn: 'Opphørt' },
+export const behandlingsresultater: Record<BehandlingResultat, string> = {
+    AVSLÅTT: 'Avslått',
+    IKKE_VURDERT: 'Ikke vurdert',
+    INNVILGET: 'Innvilget',
+    OPPHØRT: 'Opphørt',
+    HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
+    HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
 };
 
 type Behandlingsstatuser = {
