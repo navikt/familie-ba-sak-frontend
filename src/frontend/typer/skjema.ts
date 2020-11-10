@@ -34,6 +34,18 @@ export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) 
         });
     };
 
+    const nullstillFelt = (feltNavn: string) => {
+        const initialFelt = initialSkjema.felter[feltNavn];
+
+        settSkjema({
+            ...skjema,
+            felter: {
+                ...skjema.felter,
+                [feltNavn]: initialFelt.valider(initialFelt),
+            },
+        });
+    };
+
     useEffect(() => {
         settInitialState();
     }, []);
@@ -120,8 +132,10 @@ export const useSkjema = <SkjemaRespons>(initialSkjema: ISkjema<SkjemaRespons>) 
     return {
         hentFeltProps,
         kanSendeSkjema,
+        nullstillFelt,
         onSubmit,
         oppdaterFeltISkjema,
+        settInitialState,
         skjema,
     };
 };

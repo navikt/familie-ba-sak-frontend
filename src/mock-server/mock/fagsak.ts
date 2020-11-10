@@ -166,6 +166,10 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             manueltOverstyrt: false,
         },
         steg: (steg as unknown) as BehandlingSteg,
+        stegTilstand: [
+            { behandlingSteg: BehandlingSteg.REGISTRERE_SØKNAD },
+            { behandlingSteg: BehandlingSteg.REGISTRERE_PERSONGRUNNLAG },
+        ],
         type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         personer: [barn, søker],
         begrunnelse: '',

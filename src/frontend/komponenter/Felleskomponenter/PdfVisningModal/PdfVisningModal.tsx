@@ -3,8 +3,8 @@ import Modal from 'nav-frontend-modal';
 import { hentDataFraRessursMedFallback, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
+import { Document, Page } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { Undertittel } from 'nav-frontend-typografi';
 
 interface IPdfVisningModalProps {
