@@ -772,10 +772,10 @@
     nav-frontend-typografi "^2.0.21"
     react-day-picker "^7.4.8"
 
-"@navikt/familie-header@^2.0.7":
-  version "2.0.11"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.11.tgz#d3c4fbe17db0b38a8ed969e13dd719b9b6b0daa7"
-  integrity sha512-znUHFOBSU5qlh0b4CT13RIqwYsSQFWJiAf8jsETqE7tkndAwxoq08JjMOUUV+hBLO0UsIJre9huiibeMxhFYDg==
+"@navikt/familie-header@^2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.13.tgz#412df0539ad675868d655ecb810925750f468f60"
+  integrity sha512-wXsUPmPG5Y6vj7MpwsfnTxh9XRx8QyWoeLxKPZ87ySu61NjzZA+JScH54yPYBvb3OCAdTFucoBMI0Oto1EwIYA==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/familie-ikoner" "^3.1.2"
@@ -785,9 +785,9 @@
     lodash.throttle "^4.1.1"
     nav-frontend-alertstriper "^3.0.13"
     nav-frontend-alertstriper-style "2.0.17"
-    nav-frontend-core "^4.0.12"
+    nav-frontend-core "^5.0.8"
     nav-frontend-ikoner-assets "2.0.3"
-    nav-frontend-js-utils "1.0.9"
+    nav-frontend-js-utils "1.0.13"
     nav-frontend-paneler "^1.0.24"
     nav-frontend-paneler-style "0.3.21"
     nav-frontend-popover "0.0.28"
@@ -8122,7 +8122,7 @@ nav-frontend-chevron@^1.0.10, nav-frontend-chevron@^1.0.13:
   resolved "https://registry.yarnpkg.com/nav-frontend-chevron/-/nav-frontend-chevron-1.0.19.tgz#2f341c6f33911aa0a67adb8bf661e77033541635"
   integrity sha512-Wl+xbI17fue1S+rhcKrw0Jk7Mi5r46QPEGexKFXGFgI6yGRWZ8kR3putQ/fn3GMGzFIr+Jlkw9fDOgBR/FrKrQ==
 
-nav-frontend-core@^4.0.11, nav-frontend-core@^4.0.12:
+nav-frontend-core@^4.0.11:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-4.0.13.tgz#0f1917d914279c9f6555ccd1f7709c67b0316233"
   integrity sha512-36PyQkYceP6ZInQpeYfNA307qEODRjGfSxOIeiPdxilyxRB6v2PaLEePRZSS/adJ5i9PegSCDsm/rUKBaJKaIA==
@@ -8167,10 +8167,10 @@ nav-frontend-ikonknapper@^1.0.9:
   resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-1.0.20.tgz#27970c0f12630beede1c244429ce028094a33c64"
   integrity sha512-eaJkZc3r5y33BPbtS55+0veAh3ocnWMClwR4O+S+QfGkFrYhDaDudRwVykdziL76buL2P4tU9U3i6FVpRmRKpw==
 
-nav-frontend-js-utils@1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.9.tgz#3b177db985dd3b1e57911f3e38440d62ca82e51c"
-  integrity sha512-Kf2ksWM9cdEFesT1QS3X2c9ZLyQ4BsoHASBVzOgTU/2dd55jQmNtse0rJ43CGLEDguKPYUaIiaYfKdxIqU9SfQ==
+nav-frontend-js-utils@1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.13.tgz#4c66a82e4ed026c36e528cdd84e1d96c4f7ce066"
+  integrity sha512-lq3vwEGFIQ3QlZhCYCUd2ydr4kGxivhzcCpMzHeVRDCyeGkKwWYPNwy61CRyxtvWMzTXK1+JCM4RtdFy2WmaeA==
 
 nav-frontend-js-utils@^1.0.13, nav-frontend-js-utils@^1.0.14:
   version "1.0.15"
