@@ -1,11 +1,15 @@
 import moment from 'moment';
 import { IPersonBeregning } from '../typer/beregning';
-import { FeltState, ValiderFelt, Valideringsstatus } from '../familie-skjema/typer';
+import {
+    FeltState,
+    ValiderFelt,
+    Valideringscontext,
+    Valideringsstatus,
+} from '../familie-skjema/typer';
 import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Resultat } from '../typer/vilkår';
 import { datoformat } from './formatter';
-import { Valideringsmetadata } from '../../../node_dist/frontend/typer/felt';
 import { feil, ok } from '../familie-skjema/validators';
 
 // eslint-disable-next-line
@@ -54,12 +58,12 @@ const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?
 
 export const erPeriodeGyldig = (
     felt: FeltState<IPeriode>,
-    valideringsmetadata?: Valideringsmetadata
+    valideringscontext?: Valideringscontext
 ): FeltState<IPeriode> => {
     const fom = felt.value.fom;
     const tom = felt.value.tom;
 
-    const person: IGrunnlagPerson | undefined = valideringsmetadata?.person;
+    const person: IGrunnlagPerson | undefined = valideringscontext?.person;
 
     if (fom) {
         const fomDatoErGyldig = moment(fom).isValid();

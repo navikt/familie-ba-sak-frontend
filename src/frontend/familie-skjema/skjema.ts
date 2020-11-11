@@ -1,43 +1,34 @@
-import { byggHenterRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useState } from 'react';
 import { FamilieAxiosRequestConfig, useApp } from '../context/AppContext';
-import { ISkjema, Felt, Valideringsstatus, FieldBag } from './typer';
+import { Felt, FieldDictionary, ISkjema, Valideringsstatus } from './typer';
 
-export const useSkjema = <Felter extends FieldBag, SkjemaRespons>({
-    initialSkjema,
+export const useSkjema = <Felter, SkjemaRespons>({
+    skjemanavn,
+    felter,
     nullstillEtterSubmit = true,
 }: {
-    initialSkjema: ISkjema<Felter, SkjemaRespons>;
+    skjemanavn: string;
+    felter: FieldDictionary<Felter>;
     nullstillEtterSubmit?: boolean;
 }) => {
     const { axiosRequest } = useApp();
-    const [skjema, settSkjema] = useState<ISkjema<Felter, SkjemaRespons>>(initialSkjema);
-
-    const settSubmitRessurs = (submitRessurs: Ressurs<SkjemaRespons>) => {
-        settSkjema({
-            ...skjema,
-            submitRessurs,
-        });
-    };
+    const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
+    const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs<SkjemaRespons>());
 
     const kanSendeSkjema = (): boolean => {
-        // eslint-disable-next-line
-        Object.values(skjema.felter).forEach((felt: Felt<unknown>) => {
-            felt.valider(felt, {
-                felter: skjema.felter,
-            });
-        });
-
+        settVisfeilmeldinger(true);
         return (
-            Object.values(skjema.felter).filter(
-                (felt: Felt<unknown>) => felt.valideringsstatus !== Valideringsstatus.OK
-            ).length === 0 && skjema.submitRessurs.status !== RessursStatus.HENTER
+            Object.values(felter).filter(felt => {
+                const unknownFelt = felt as Felt<unknown>;
+                return unknownFelt.valideringsstatus !== Valideringsstatus.OK;
+            }) && skjema.submitRessurs.status !== RessursStatus.HENTER
         );
     };
 
     const nullstillSkjema = () => {
         // eslint-disable-next-line
-        Object.values(skjema.felter).forEach((felt: Felt<unknown>) => felt.nullstill);
+        Object.values(felter).forEach((felt: unknown) => (felt as Felt<unknown>).nullstill);
     };
 
     const onSubmit = <SkjemaData>(
@@ -57,6 +48,13 @@ export const useSkjema = <Felter extends FieldBag, SkjemaRespons>({
                 }
             );
         }
+    };
+
+    const skjema: ISkjema<Felter, SkjemaRespons> = {
+        felter,
+        visFeilmeldinger,
+        skjemanavn,
+        submitRessurs,
     };
 
     return {

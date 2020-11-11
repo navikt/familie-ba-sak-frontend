@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
     defaultValidator,
     Felt,
@@ -14,10 +14,7 @@ export interface FeltConfig<Value> {
     valideringsfunksjon?: ValiderFelt<Value>;
 }
 
-export function useFelt<Value = string>(
-    feltConfig: FeltConfig<Value>,
-    avhengigheter: unknown[] = []
-): Felt<Value> {
+export function useFelt<Value = string>(feltConfig: FeltConfig<Value>): Felt<Value> {
     const [feltState, settFeltState] = useState<FeltState<Value>>({
         feilmelding: '',
         valider: feltConfig.valideringsfunksjon ? feltConfig.valideringsfunksjon : defaultValidator,
@@ -27,53 +24,44 @@ export function useFelt<Value = string>(
 
     const kjørValidering = (value: Value = feltState.value) => {
         settFeltState(
-            feltState.valider(
-                {
-                    ...feltState,
-                    value,
-                },
-                avhengigheter
-            )
+            feltState.valider({
+                ...feltState,
+                value,
+            })
         );
     };
 
-    const onChange = useCallback(
-        (value: Value | ChangeEvent) => {
-            const normalisertVerdi = isChangeEvent(value) ? value.target.value : value;
+    useEffect(() => {
+        kjørValidering();
+    }, []);
 
-            kjørValidering(normalisertVerdi as Value);
-        },
-        [kjørValidering, feltState.feilmelding, settFeltState]
-    );
+    const onChange = (value: Value | ChangeEvent) => {
+        const normalisertVerdi = isChangeEvent(value) ? value.target.value : value;
+
+        kjørValidering(normalisertVerdi as Value);
+    };
 
     const hentNavInputProps = (visFeilmelding: boolean): NavInputProps<Value> => ({
         id: '',
         name: '',
         feil: visFeilmelding ? feltState.feilmelding : undefined,
         value: feltState.value,
+        onChange,
     });
 
     const nullstill = () => {
         settFeltState(
-            feltState.valider(
-                {
-                    ...feltState,
-                    value: feltConfig.value,
-                },
-                avhengigheter
-            )
+            feltState.valider({
+                ...feltState,
+                value: feltConfig.value,
+            })
         );
     };
 
-    const felt = useMemo(() => {
-        return {
-            ...feltState,
-            hentNavInputProps,
-            kjørValidering,
-            nullstill,
-            onChange,
-        };
-    }, [feltState, hentNavInputProps, onChange, kjørValidering, nullstill]);
-
-    return felt as Felt<Value>;
+    return {
+        ...feltState,
+        hentNavInputProps,
+        nullstill,
+        onChange,
+    };
 }

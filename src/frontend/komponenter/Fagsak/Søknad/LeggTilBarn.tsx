@@ -6,11 +6,11 @@ import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
-import { Valideringsstatus } from '../../../familie-skjema/felt';
 import { useApp } from '../../../context/AppContext';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import styled from 'styled-components';
+import { Valideringsstatus } from '../../../familie-skjema/typer';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
@@ -52,7 +52,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
             axiosRequest<IRestTilgang, { brukerIdent: string }>({
                 method: 'POST',
                 url: '/familie-ba-sak/api/tilgang',
-                data: { brukerIdent: ident.verdi },
+                data: { brukerIdent: ident.value },
             }).then((ressurs: Ressurs<IRestTilgang>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     if (ressurs.data.saksbehandlerHarTilgang) {
@@ -60,7 +60,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                             method: 'GET',
                             url: '/familie-ba-sak/api/person/enkel',
                             headers: {
-                                personIdent: ident.verdi,
+                                personIdent: ident.value,
                             },
                         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
                             settPerson(hentetPerson);

@@ -7,7 +7,6 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Pluss from '../../../../ikoner/Pluss';
-import { IFelt } from '../../../../familie-skjema/felt';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -15,6 +14,7 @@ import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { IFagsak } from '../../../../typer/fagsak';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { FeltState } from '../../../../familie-skjema/typer';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -30,7 +30,7 @@ export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =
 
 interface IProps {
     person: IGrunnlagPerson;
-    vilkårResultater: IFelt<IVilkårResultat>[];
+    vilkårResultater: FeltState<IVilkårResultat>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
 }
@@ -73,7 +73,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
     const skalViseLeggTilKnapp = () => {
         const uvurdertPeriodePåVilkår = vilkårResultater.find(
-            vilkår => vilkår.verdi.resultat.verdi === Resultat.KANSKJE
+            vilkår => vilkår.value.resultat.value === Resultat.KANSKJE
         );
         return uvurdertPeriodePåVilkår === undefined;
     };
@@ -98,10 +98,10 @@ const GeneriskVilkår: React.FC<IProps> = ({
                             <th />
                         </tr>
                     </thead>
-                    {vilkårResultater.map((vilkårResultat: IFelt<IVilkårResultat>) => {
+                    {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>) => {
                         return (
                             <GeneriskVilkårVurdering
-                                key={`${person.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
+                                key={`${person.personIdent}_${vilkårResultat.value.vilkårType}_${vilkårResultat.value.id}`}
                                 vilkårFraConfig={vilkårFraConfig}
                                 person={person}
                                 vilkårResultat={vilkårResultat}

@@ -1,22 +1,23 @@
-import { feil, IFelt, ok, Valideringsmetadata, Valideringsstatus } from '../../familie-skjema/felt';
+import { FeltState, Valideringscontext, Valideringsstatus } from '../../familie-skjema/typer';
+import { feil, ok } from '../../familie-skjema/validators';
 import { IPeriode } from '../../typer/periode';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
-    nyttVilkårResultat: IFelt<IVilkårResultat>,
-    valideringsmetadata?: Valideringsmetadata
-): IFelt<IVilkårResultat> => {
-    const nyPeriode: IFelt<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
-        nyttVilkårResultat.verdi.periode,
-        valideringsmetadata
+    nyttVilkårResultat: FeltState<IVilkårResultat>,
+    valideringscontext?: Valideringscontext
+): FeltState<IVilkårResultat> => {
+    const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.value.periode.valider(
+        nyttVilkårResultat.value.periode,
+        valideringscontext
     );
 
-    const nyBegrunnelse: IFelt<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
-        nyttVilkårResultat.verdi.begrunnelse
+    const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.value.begrunnelse.valider(
+        nyttVilkårResultat.value.begrunnelse
     );
 
-    const nyttResultat: IFelt<Resultat> = nyttVilkårResultat.verdi.resultat.valider(
-        nyttVilkårResultat.verdi.resultat
+    const nyttResultat: FeltState<Resultat> = nyttVilkårResultat.value.resultat.valider(
+        nyttVilkårResultat.value.resultat
     );
 
     const gyldigVilkår: boolean =
@@ -25,7 +26,7 @@ export const validerVilkår = (
         nyttResultat.valideringsstatus === Valideringsstatus.OK;
 
     const nyVerdi: IVilkårResultat = {
-        ...nyttVilkårResultat.verdi,
+        ...nyttVilkårResultat.value,
         periode: nyPeriode,
         begrunnelse: nyBegrunnelse,
         resultat: nyttResultat,
@@ -41,7 +42,7 @@ export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonRe
         return {
             ...personResultat,
             vilkårResultater: personResultat.vilkårResultater.map(
-                (vilkårResultat: IFelt<IVilkårResultat>): IFelt<IVilkårResultat> => {
+                (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
                     return validerVilkår(vilkårResultat);
                 }
             ),

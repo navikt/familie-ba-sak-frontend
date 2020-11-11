@@ -8,20 +8,25 @@ export interface FeltState<Value> {
     value: Value;
 }
 
+export type FeltOnChange<Value> = (
+    value: Value | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+) => void;
+
 export interface Felt<Value> {
     feilmelding: string;
-    onChange(value: Value | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>): void;
+    hentNavInputProps(visFeilmelding: boolean): NavInputProps<Value>;
     nullstill(): void;
+    onChange: FeltOnChange<Value>;
     valider: ValiderFelt<Value>;
     valideringsstatus: Valideringsstatus;
     value: Value;
-    hentNavInputProps(visFeilmelding: boolean): NavInputProps<Value>;
 }
 
 export interface NavInputProps<Value> {
+    feil: string | undefined;
     id: string;
     name: string;
-    feil: string | undefined;
+    onChange: FeltOnChange<Value>;
     value: Value;
 }
 
@@ -33,9 +38,10 @@ export enum Valideringsstatus {
 }
 
 // eslint-disable-next-line
-export type ValiderFelt<Verdi, Context = {}> = (
+export type Valideringscontext = { [key: string]: any };
+export type ValiderFelt<Verdi> = (
     felt: FeltState<Verdi>,
-    context: Context
+    valideringscontext?: Valideringscontext
 ) => FeltState<Verdi>;
 
 export const defaultValidator = <Verdi>(felt: FeltState<Verdi>) => ({
@@ -47,13 +53,9 @@ export type FieldDictionary<Record extends unknown> = {
     [Key in keyof Record]: Felt<Record[Key]>;
 };
 
-export interface FieldBag {
-    [key: string]: FieldDictionary<unknown>;
-}
-
-export interface ISkjema<Felter extends FieldBag, SkjemaRespons> {
+export interface ISkjema<Felter, SkjemaRespons> {
     felter: FieldDictionary<Felter>;
-    skjemanavn: string;
     submitRessurs: Ressurs<SkjemaRespons>;
+    skjemanavn: string;
     visFeilmeldinger: boolean;
 }

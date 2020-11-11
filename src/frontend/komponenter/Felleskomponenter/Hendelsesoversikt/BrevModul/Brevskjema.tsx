@@ -6,9 +6,10 @@ import {
     IBrevData,
     Brevmal,
     brevmaler,
-    BrevtypeSelect,
     selectLabelsForBrevmaler,
     hentSelectOptions,
+    BrevtypeSelect,
+    ISelectOptionMedBrevtekst,
 } from './typer';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -51,16 +52,14 @@ const Brevskjema = ({
     const { hentLogg, settFagsak } = useFagsakRessurser();
 
     const {
-        hentFeltProps,
+        skjema,
         hentSkjemaData,
         kanSendeSkjema,
         mottakersMålform,
         multiselectInneholderAnnet,
         onSubmit,
-        oppdaterFeltISkjema,
         personer,
         settNavigerTilOpplysningsplikt,
-        skjema,
     } = useBrevModul();
 
     const [visForhåndsvisningModal, settForhåndsviningModal] = useState(false);
@@ -75,7 +74,7 @@ const Brevskjema = ({
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetForhåndsvisning.status === RessursStatus.HENTER;
 
-    const valgtBrevmal: Felt<Brevmal> = skjema.felter.brevmal;
+    const valgtBrevmal: Felt<Brevmal | ''> = skjema.felter.brevmal;
 
     const submitFeil =
         skjema.submitRessurs.status === RessursStatus.FEILET
@@ -86,6 +85,7 @@ const Brevskjema = ({
         hentetForhåndsvisning.status === RessursStatus.FEILET
             ? hentetForhåndsvisning.frontendFeilmelding
             : undefined;
+
     return (
         <div>
             <PdfVisningModal
@@ -96,11 +96,11 @@ const Brevskjema = ({
             <SkjemaGruppe feil={submitFeil || hentetForhåndsvisningFeil}>
                 <SkjultLegend>Send brev</SkjultLegend>
                 <FamilieSelect
-                    {...hentFeltProps('mottakerIdent')}
+                    {...skjema.felter.mottakerIdent.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={'Mottaker'}
                     placeholder={'Velg mottaker'}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        oppdaterFeltISkjema('mottakerIdent', event.target.value);
+                        skjema.felter.mottakerIdent.onChange(event.target.value);
                     }}
                 >
                     <option value={''}>Velg</option>
@@ -110,7 +110,7 @@ const Brevskjema = ({
                             return (
                                 <option
                                     aria-selected={
-                                        person.personIdent === skjema.felter.mottakerIdent.verdi
+                                        person.personIdent === skjema.felter.mottakerIdent.value
                                     }
                                     key={person.personIdent}
                                     value={person.personIdent}
@@ -121,18 +121,18 @@ const Brevskjema = ({
                         })}
                 </FamilieSelect>
                 <FamilieSelect
-                    {...hentFeltProps('brevmal')}
+                    {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
                     label={'Mal'}
                     placeholder={'Velg mal'}
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
-                        oppdaterFeltISkjema('brevmal', event.target.value);
+                        skjema.felter.brevmal.onChange(event.target.value);
                     }}
                 >
                     <option value={''}>Velg</option>
                     {brevMaler.map(mal => {
                         return (
                             <option
-                                aria-selected={mal === skjema.felter.brevmal.verdi}
+                                aria-selected={mal === skjema.felter.brevmal.value}
                                 key={mal}
                                 value={mal}
                             >
@@ -144,25 +144,30 @@ const Brevskjema = ({
 
                 {valgtBrevmal.valideringsstatus === Valideringsstatus.OK && (
                     <FamilieReactSelect
-                        {...hentFeltProps('multiselect')}
-                        label={selectLabelsForBrevmaler[valgtBrevmal.verdi]}
+                        {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
+                        label={
+                            valgtBrevmal.value !== ''
+                                ? selectLabelsForBrevmaler[valgtBrevmal.value]
+                                : ''
+                        }
                         erLesevisning={erLesevisning()}
                         isMulti={true}
                         placeholder={'Velg'}
                         noOptionsMessage={() => 'Ingen valg'}
                         onChange={valgteOptions => {
-                            oppdaterFeltISkjema(
-                                'multiselect',
-                                valgteOptions === null ? [] : valgteOptions
+                            skjema.felter.multiselect.onChange(
+                                valgteOptions === null
+                                    ? []
+                                    : (valgteOptions as ISelectOptionMedBrevtekst[])
                             );
                         }}
-                        options={hentSelectOptions(valgtBrevmal.verdi)}
+                        options={hentSelectOptions(valgtBrevmal.value)}
                     />
                 )}
 
                 {multiselectInneholderAnnet() && (
                     <FamilieTextarea
-                        {...hentFeltProps('fritekst')}
+                        {...skjema.felter.fritekst.hentNavInputProps(skjema.visFeilmeldinger)}
                         disabled={skjemaErLåst}
                         label={
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -174,9 +179,6 @@ const Brevskjema = ({
                         }
                         erLesevisning={false}
                         maxLength={4000}
-                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                            oppdaterFeltISkjema('fritekst', event.target.value);
-                        }}
                     />
                 )}
             </SkjemaGruppe>

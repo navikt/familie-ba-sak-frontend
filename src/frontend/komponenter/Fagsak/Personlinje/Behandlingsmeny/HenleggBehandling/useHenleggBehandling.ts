@@ -1,11 +1,12 @@
-import { byggTomRessurs, Ressurs } from '@navikt/familie-typer';
+import { Ressurs } from '@navikt/familie-typer';
 import { useState } from 'react';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { HenleggelseÅrsak } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { feil, ok, useFelt } from '../../../../../familie-skjema/felt';
+import { useFelt } from '../../../../../familie-skjema/felt';
 import { useSkjema } from '../../../../../familie-skjema/skjema';
 import { FeltState } from '../../../../../familie-skjema/typer';
+import { feil, ok } from '../../../../../familie-skjema/validators';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
@@ -19,21 +20,17 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         },
         IFagsak
     >({
-        initialSkjema: {
-            felter: {
-                årsak: useFelt({
-                    value: '',
-                    valideringsfunksjon: (felt: FeltState<HenleggelseÅrsak | ''>) =>
-                        felt.value !== '' ? ok(felt) : feil(felt, 'Du må velge årsak'),
-                }),
-                begrunnelse: useFelt({
-                    value: '',
-                }),
-            },
-            skjemanavn: 'henleggbehandling',
-            submitRessurs: byggTomRessurs(),
-            visFeilmeldinger: false,
+        felter: {
+            årsak: useFelt({
+                value: '',
+                valideringsfunksjon: (felt: FeltState<HenleggelseÅrsak | ''>) =>
+                    felt.value !== '' ? ok(felt) : feil(felt, 'Du må velge årsak'),
+            }),
+            begrunnelse: useFelt({
+                value: '',
+            }),
         },
+        skjemanavn: 'henleggbehandling',
     });
 
     const onBekreft = (behandlingId: number) => {
@@ -56,11 +53,11 @@ const useHenleggBehandling = (lukkModal: () => void) => {
 
     return {
         begrunnelse,
+        skjema,
         nullstillSkjema,
         onBekreft,
         settBegrunnelse,
         settVisVeivalgModal,
-        skjema,
         visVeivalgModal,
     };
 };

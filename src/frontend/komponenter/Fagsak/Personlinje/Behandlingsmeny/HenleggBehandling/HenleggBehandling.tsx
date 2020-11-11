@@ -48,10 +48,10 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
     const { erLesevisning } = useBehandling();
 
     const {
-        onBekreft,
-        settVisVeivalgModal,
         skjema,
         nullstillSkjema,
+        onBekreft,
+        settVisVeivalgModal,
         visVeivalgModal,
     } = useHenleggBehandling(() => {
         settVisModal(false);

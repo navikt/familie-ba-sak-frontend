@@ -14,7 +14,6 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Slett from '../../../../ikoner/Slett';
-import { IFelt, Valideringsstatus } from '../../../../familie-skjema/felt';
 import { periodeToString } from '../../../../typer/periode';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -42,11 +41,12 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import { IFagsak } from '../../../../typer/fagsak';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { FeltState, Valideringsstatus } from '../../../../familie-skjema/typer';
 
 interface IProps {
     person: IGrunnlagPerson;
     vilkårFraConfig: IVilkårConfig;
-    vilkårResultat: IFelt<IVilkårResultat>;
+    vilkårResultat: FeltState<IVilkårResultat>;
     visFeilmeldinger: boolean;
 }
 
@@ -69,26 +69,26 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     const leseVisning = erLesevisning();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(
-        erLesevisning() || false || vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+        erLesevisning() || false || vilkårResultat.value.resultat.value === Resultat.KANSKJE
     );
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
-    const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
+    const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(
         vilkårResultat
     );
 
-    const validerOgSettRedigerbartVilkår = (endretVilkår: IFelt<IVilkårResultat>) => {
+    const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
         settRedigerbartVilkår(validerVilkår(endretVilkår));
     };
 
     const radioOnChange = (resultat: Resultat) => {
         validerOgSettRedigerbartVilkår({
             ...redigerbartVilkår,
-            verdi: {
-                ...redigerbartVilkår.verdi,
+            value: {
+                ...redigerbartVilkår.value,
                 resultat: {
-                    ...redigerbartVilkår.verdi.resultat,
-                    verdi: resultat,
+                    ...redigerbartVilkår.value.resultat,
+                    value: resultat,
                 },
             },
         });
@@ -118,7 +118,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     };
 
     const lagreVilkår = (
-        validertVilkår: IFelt<IVilkårResultat>,
+        validertVilkår: FeltState<IVilkårResultat>,
         vilkårsvurderingForPerson: IPersonResultat | undefined
     ) => {
         if (
@@ -185,32 +185,32 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                 <td>
                     <div className={'vurdering'}>
                         <VilkårResultatIkon
-                            resultat={vilkårResultat.verdi.resultat.verdi}
+                            resultat={vilkårResultat.value.resultat.value}
                             width={20}
                             heigth={20}
                         />
                         <Normaltekst
-                            children={resultatTilUi(vilkårResultat.verdi.resultat.verdi)}
+                            children={resultatTilUi(vilkårResultat.value.resultat.value)}
                         />
                     </div>
                 </td>
                 <td>
-                    <Normaltekst children={periodeToString(vilkårResultat.verdi.periode.verdi)} />
+                    <Normaltekst children={periodeToString(vilkårResultat.value.periode.value)} />
                 </td>
                 <td>
                     <Normaltekst
                         className={'beskrivelse'}
-                        children={vilkårResultat.verdi.begrunnelse.verdi}
+                        children={vilkårResultat.value.begrunnelse.value}
                     />
                 </td>
                 <td>
                     <IkonKnapp
                         erLesevisning={erLesevisning()}
                         onClick={() => toggleForm(true)}
-                        id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                        id={vilkårFeilmeldingId(vilkårResultat.value)}
                         label={
                             !ekspandertVilkår
-                                ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                ? vilkårResultat.value.resultat.value === Resultat.KANSKJE
                                     ? 'Vurder'
                                     : 'Endre'
                                 : 'Lukk'
@@ -220,7 +220,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     />
                 </td>
                 <td>
-                    {vilkårResultat.verdi.endretAv === 'VL' ? (
+                    {vilkårResultat.value.endretAv === 'VL' ? (
                         <AutomatiskVurdering />
                     ) : (
                         <ManuellVurdering />
@@ -229,10 +229,10 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                 <td>
                     <i>
                         {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        vilkårResultat.verdi.erVurdert
-                            ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
+                        vilkårResultat.value.erVurdert
+                            ? vilkårResultat.value.behandlingId === åpenBehandling.data.behandlingId
                                 ? 'Vurdert i denne behandlingen'
-                                : `Vurdert ${moment(vilkårResultat.verdi.endretTidspunkt).format(
+                                : `Vurdert ${moment(vilkårResultat.value.endretTidspunkt).format(
                                       datoformat.DATO_FORKORTTET
                                   )}`
                             : ''}
@@ -247,12 +247,12 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             <FamilieRadioGruppe
                                 erLesevisning={leseVisning}
                                 verdi={
-                                    redigerbartVilkår.verdi.vilkårType ===
+                                    redigerbartVilkår.value.vilkårType ===
                                     VilkårType.GIFT_PARTNERSKAP
                                         ? vilkårResultatForEkteskapVisning(
-                                              redigerbartVilkår.verdi.resultat.verdi
+                                              redigerbartVilkår.value.resultat.value
                                           )
-                                        : resultater[redigerbartVilkår.verdi.resultat.verdi].navn
+                                        : resultater[redigerbartVilkår.value.resultat.value].navn
                                 }
                                 legend={
                                     vilkårFraConfig.spørsmål
@@ -260,26 +260,26 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                         : ''
                                 }
                                 feil={
-                                    redigerbartVilkår.verdi.resultat.valideringsstatus ===
+                                    redigerbartVilkår.value.resultat.valideringsstatus ===
                                         Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                                        ? redigerbartVilkår.verdi.resultat.feilmelding
+                                        ? redigerbartVilkår.value.resultat.feilmelding
                                         : ''
                                 }
-                                feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
+                                feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.value)}
                             >
                                 <Radio
                                     label={'Ja'}
-                                    name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                    name={`${redigerbartVilkår.value.vilkårType}_${redigerbartVilkår.value.id}`}
                                     checked={
-                                        redigerbartVilkår.verdi.vilkårType ===
+                                        redigerbartVilkår.value.vilkårType ===
                                         VilkårType.GIFT_PARTNERSKAP
-                                            ? redigerbartVilkår.verdi.resultat.verdi ===
+                                            ? redigerbartVilkår.value.resultat.value ===
                                               Resultat.NEI
-                                            : redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
+                                            : redigerbartVilkår.value.resultat.value === Resultat.JA
                                     }
                                     onChange={() =>
                                         radioOnChange(
-                                            redigerbartVilkår.verdi.vilkårType ===
+                                            redigerbartVilkår.value.vilkårType ===
                                                 VilkårType.GIFT_PARTNERSKAP
                                                 ? Resultat.NEI
                                                 : Resultat.JA
@@ -288,17 +288,17 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                 />
                                 <Radio
                                     label={'Nei'}
-                                    name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                                    name={`${redigerbartVilkår.value.vilkårType}_${redigerbartVilkår.value.id}`}
                                     checked={
-                                        redigerbartVilkår.verdi.vilkårType ===
+                                        redigerbartVilkår.value.vilkårType ===
                                         VilkårType.GIFT_PARTNERSKAP
-                                            ? redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
-                                            : redigerbartVilkår.verdi.resultat.verdi ===
+                                            ? redigerbartVilkår.value.resultat.value === Resultat.JA
+                                            : redigerbartVilkår.value.resultat.value ===
                                               Resultat.NEI
                                     }
                                     onChange={() =>
                                         radioOnChange(
-                                            redigerbartVilkår.verdi.vilkårType ===
+                                            redigerbartVilkår.value.vilkårType ===
                                                 VilkårType.GIFT_PARTNERSKAP
                                                 ? Resultat.JA
                                                 : Resultat.NEI
@@ -319,26 +319,26 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             <FamilieTextareaControlled
                                 tekstLesevisning={''}
                                 erLesevisning={leseVisning}
-                                defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
-                                id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
+                                defaultValue={redigerbartVilkår.value.begrunnelse.value}
+                                id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.value)}
                                 label={'Begrunnelse (valgfri)'}
                                 placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                                 textareaClass={'begrunnelse'}
-                                value={redigerbartVilkår.verdi.begrunnelse.verdi}
+                                value={redigerbartVilkår.value.begrunnelse.value}
                                 feil={
-                                    redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
+                                    redigerbartVilkår.value.begrunnelse.valideringsstatus ===
                                         Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                                        ? redigerbartVilkår.verdi.begrunnelse.feilmelding
+                                        ? redigerbartVilkår.value.begrunnelse.feilmelding
                                         : ''
                                 }
                                 onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                                     validerOgSettRedigerbartVilkår({
                                         ...redigerbartVilkår,
-                                        verdi: {
-                                            ...redigerbartVilkår.verdi,
+                                        value: {
+                                            ...redigerbartVilkår.value,
                                             begrunnelse: {
-                                                ...redigerbartVilkår.verdi.begrunnelse,
-                                                verdi: event?.target.value,
+                                                ...redigerbartVilkår.value.begrunnelse,
+                                                value: event?.target.value,
                                             },
                                         },
                                     });
@@ -372,11 +372,11 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     onClick={() => {
                                         const promise = deleteVilkår(
                                             person.personIdent,
-                                            redigerbartVilkår.verdi.id
+                                            redigerbartVilkår.value.id
                                         );
                                         håndterEndringPåVilkårsvurdering(promise);
                                     }}
-                                    id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                                    id={vilkårFeilmeldingId(vilkårResultat.value)}
                                     spinner={vilkårSubmit === VilkårSubmit.DELETE}
                                     disabled={vilkårSubmit === VilkårSubmit.DELETE}
                                     mini={true}

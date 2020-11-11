@@ -24,7 +24,7 @@ import { fjernWhitespace } from '../utils/commons';
 import { IGrunnlagPerson } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { useFelt } from '../familie-skjema/felt';
-import { FeltState } from '../familie-skjema/typer';
+import { FeltState, Valideringscontext } from '../familie-skjema/typer';
 import { feil, ok } from '../familie-skjema/validators';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
@@ -39,72 +39,73 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         },
         IFagsak
     >({
-        initialSkjema: {
-            felter: {
-                mottakerIdent: useFelt({
-                    value: '',
-                    valideringsfunksjon: (felt: FeltState<string>) =>
-                        felt.value.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker'),
-                }),
-                brevmal: useFelt({
-                    value: '',
-                    valideringsfunksjon: (felt: FeltState<Brevmal | ''>) =>
-                        felt.value ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
-                }),
-                multiselect: useFelt({
-                    value: [],
-                    valideringsfunksjon: (felt: FeltState<ISelectOptionMedBrevtekst[]>) => {
-                        // TODO hente fra context
-                        const brevmal: Brevmal | '' = Brevmal.INNHENTE_OPPLYSNINGER;
+        felter: {
+            mottakerIdent: useFelt({
+                value: '',
+                valideringsfunksjon: (felt: FeltState<string>) =>
+                    felt.value.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker'),
+            }),
+            brevmal: useFelt({
+                value: '',
+                valideringsfunksjon: (felt: FeltState<Brevmal | ''>) =>
+                    felt.value ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
+            }),
+            multiselect: useFelt({
+                value: [],
+                valideringsfunksjon: (
+                    felt: FeltState<ISelectOptionMedBrevtekst[]>,
+                    valideringscontext?: Valideringscontext
+                ) => {
+                    const brevmal: Brevmal | '' = valideringscontext?.felter.brevmal.value;
 
-                        return felt.value.length > 0
+                    return felt.value.length > 0
+                        ? ok(felt)
+                        : feil(
+                              felt,
+                              `Du må velge minst ${
+                                  brevmal === Brevmal.INNHENTE_OPPLYSNINGER
+                                      ? 'ett dokument'
+                                      : 'en årsak'
+                              }`
+                          );
+                },
+            }),
+            fritekst: useFelt({
+                value: '',
+                valideringsfunksjon: (
+                    felt: FeltState<string>,
+                    valideringscontext?: Valideringscontext
+                ) => {
+                    const brevmal: Brevmal | '' = valideringscontext?.felter?.brevmal.value;
+                    const multiselect: ISelectOptionMedBrevtekst[] | undefined =
+                        valideringscontext?.felter?.multiselect.value;
+
+                    const annetErValgt =
+                        (
+                            multiselect?.filter(
+                                (selectOption: ISelectOptionMedBrevtekst) =>
+                                    selectOption.value === 'annet'
+                            ) ?? []
+                        ).length > 0;
+
+                    if (annetErValgt) {
+                        return fjernWhitespace(felt.value).length >= 3
                             ? ok(felt)
                             : feil(
                                   felt,
-                                  `Du må velge minst ${
+                                  `Siden du har valgt “Annet” i feltet over, må du oppgi minst ${
                                       brevmal === Brevmal.INNHENTE_OPPLYSNINGER
                                           ? 'ett dokument'
                                           : 'en årsak'
                                   }`
                               );
-                    },
-                }),
-                fritekst: nyttFelt(
-                    '',
-                    (felt: FeltState<string>, valideringsmetadata?: Valideringsmetadata) => {
-                        const brevmal: Brevmal | '' = valideringsmetadata?.felter?.brevmal.value;
-                        const multiselect: ISelectOptionMedBrevtekst[] | undefined =
-                            valideringsmetadata?.felter?.multiselect.value;
-
-                        const annetErValgt =
-                            (
-                                multiselect?.filter(
-                                    (selectOption: ISelectOptionMedBrevtekst) =>
-                                        selectOption.value === 'annet'
-                                ) ?? []
-                            ).length > 0;
-
-                        if (annetErValgt) {
-                            return fjernWhitespace(felt.value).length >= 3
-                                ? ok(felt)
-                                : feil(
-                                      felt,
-                                      `Siden du har valgt “Annet” i feltet over, må du oppgi minst ${
-                                          brevmal === Brevmal.INNHENTE_OPPLYSNINGER
-                                              ? 'ett dokument'
-                                              : 'en årsak'
-                                      }`
-                                  );
-                        } else {
-                            return ok(felt);
-                        }
+                    } else {
+                        return ok(felt);
                     }
-                ),
-            },
-            skjemanavn: 'brevmodul',
-            submitRessurs: byggTomRessurs(),
-            visFeilmeldinger: false,
+                },
+            }),
         },
+        skjemanavn: 'brevmodul',
     });
 
     const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
@@ -120,8 +121,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
      * Dette fordi at man kan ha gjort endring på målform
      */
     useEffect(() => {
-        nullstillFelt('fritekst');
-        nullstillFelt('multiselect');
+        skjema.felter.fritekst.nullstill();
+        skjema.felter.multiselect.nullstill();
     }, [åpenBehandling]);
 
     const behandlingId =
@@ -196,12 +197,12 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 (selectOption: ISelectOptionMedBrevtekst) =>
                     selectOption.brevtekst[mottakersMålform]
             ),
-        brevmal: skjema.felter.brevmal.value,
+        brevmal: skjema.felter.brevmal.value as Brevmal,
         fritekst: skjema.felter.fritekst.value,
     });
 
     return {
-        hentFeltProps,
+        skjema,
         hentForhåndsvisning,
         hentMuligeBrevMaler,
         hentSkjemaData,
@@ -211,10 +212,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         multiselectInneholderAnnet,
         navigerTilOpplysningsplikt,
         onSubmit,
-        oppdaterFeltISkjema,
         personer,
         settNavigerTilOpplysningsplikt,
-        skjema,
     };
 });
 

@@ -10,15 +10,16 @@ import {
     OpplysningspliktStatus,
     opplysningspliktVisningtekst,
 } from '../../../typer/opplysningsplikt';
-import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import Statuslinje from './Statuslinje';
 import { Resultat } from '../../../typer/vilkår';
 import styled from 'styled-components';
 import { Undertekst } from 'nav-frontend-typografi';
 import { useSkjema } from '../../../familie-skjema/skjema';
-import { feil, ok, useFelt } from '../../../familie-skjema/felt';
 import { FeltState } from '../../../familie-skjema/typer';
+import { useFelt } from '../../../familie-skjema/felt';
+import { feil, ok } from '../../../familie-skjema/validators';
 
 interface IOpplysningspliktProps {
     fagsak: IFagsak;
@@ -53,24 +54,19 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
         },
         IFagsak
     >({
-        initialSkjema: {
-            felter: {
-                status: useFelt({
-                    value:
-                        åpenBehandling.opplysningsplikt?.status ?? OpplysningspliktStatus.IKKE_SATT,
-                    valideringsfunksjon: (felt: FeltState<OpplysningspliktStatus>) =>
-                        felt.value !== OpplysningspliktStatus.IKKE_SATT
-                            ? ok(felt)
-                            : feil(felt, 'Du må velge en status'),
-                }),
-                begrunnelse: useFelt({
-                    value: åpenBehandling.opplysningsplikt?.begrunnelse ?? '',
-                }),
-            },
-            skjemanavn: 'opplysningsplikt',
-            submitRessurs: byggTomRessurs(),
-            visFeilmeldinger: false,
+        felter: {
+            status: useFelt({
+                value: åpenBehandling.opplysningsplikt?.status ?? OpplysningspliktStatus.IKKE_SATT,
+                valideringsfunksjon: (felt: FeltState<OpplysningspliktStatus>) =>
+                    felt.value !== OpplysningspliktStatus.IKKE_SATT
+                        ? ok(felt)
+                        : feil(felt, 'Du må velge en status'),
+            }),
+            begrunnelse: useFelt({
+                value: åpenBehandling.opplysningsplikt?.begrunnelse ?? '',
+            }),
         },
+        skjemanavn: 'opplysningsplikt',
     });
     const { settFagsak } = useFagsakRessurser();
 

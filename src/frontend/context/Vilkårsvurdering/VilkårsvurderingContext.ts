@@ -1,8 +1,8 @@
 import constate from 'constate';
 import * as React from 'react';
+import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
 import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../familie-skjema/felt';
 import {
     IPersonResultat,
     IRestNyttVilkår,
@@ -50,26 +50,26 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
 
     const putVilkår = (
         vilkårsvurderingForPerson: IPersonResultat,
-        redigerbartVilkår: IFelt<IVilkårResultat>
+        redigerbartVilkår: FeltState<IVilkårResultat>
     ) => {
         settVilkårSubmit(VilkårSubmit.PUT);
 
         return axiosRequest<IFagsak, IRestPersonResultat>({
             method: 'PUT',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${redigerbartVilkår.value.id}`,
             data: {
                 personIdent: vilkårsvurderingForPerson.personIdent,
                 vilkårResultater: [
                     {
-                        begrunnelse: redigerbartVilkår.verdi.begrunnelse.verdi,
-                        id: redigerbartVilkår.verdi.id,
-                        periodeFom: redigerbartVilkår.verdi.periode.verdi.fom,
-                        periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
-                        resultat: redigerbartVilkår.verdi.resultat.verdi,
-                        vilkårType: redigerbartVilkår.verdi.vilkårType,
-                        endretAv: redigerbartVilkår.verdi.endretAv,
-                        endretTidspunkt: redigerbartVilkår.verdi.endretTidspunkt,
-                        behandlingId: redigerbartVilkår.verdi.behandlingId,
+                        begrunnelse: redigerbartVilkår.value.begrunnelse.value,
+                        id: redigerbartVilkår.value.id,
+                        periodeFom: redigerbartVilkår.value.periode.value.fom,
+                        periodeTom: redigerbartVilkår.value.periode.value.tom,
+                        resultat: redigerbartVilkår.value.resultat.value,
+                        vilkårType: redigerbartVilkår.value.vilkårType,
+                        endretAv: redigerbartVilkår.value.endretAv,
+                        endretTidspunkt: redigerbartVilkår.value.endretTidspunkt,
+                        behandlingId: redigerbartVilkår.value.behandlingId,
                     },
                 ],
             },
@@ -101,7 +101,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
             vilkårsvurdering.filter((personResultat: IPersonResultat) => {
                 return (
                     personResultat.vilkårResultater.filter(
-                        (vilkårResultat: IFelt<IVilkårResultat>) =>
+                        (vilkårResultat: FeltState<IVilkårResultat>) =>
                             vilkårResultat.valideringsstatus !== Valideringsstatus.OK
                     ).length > 0
                 );
@@ -116,10 +116,10 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                     ...accVilkårMedFeil,
                     ...personResultat.vilkårResultater
                         .filter(
-                            (vilkårResultat: IFelt<IVilkårResultat>) =>
+                            (vilkårResultat: FeltState<IVilkårResultat>) =>
                                 vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
                         )
-                        .map((vilkårResultat: IFelt<IVilkårResultat>) => vilkårResultat.verdi),
+                        .map((vilkårResultat: FeltState<IVilkårResultat>) => vilkårResultat.value),
                 ];
             },
             []
