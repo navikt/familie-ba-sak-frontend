@@ -18,17 +18,20 @@ export const useSkjema = <Felter, SkjemaRespons>({
 
     const kanSendeSkjema = (): boolean => {
         settVisfeilmeldinger(true);
+
         return (
             Object.values(felter).filter(felt => {
                 const unknownFelt = felt as Felt<unknown>;
                 return unknownFelt.valideringsstatus !== Valideringsstatus.OK;
-            }) && skjema.submitRessurs.status !== RessursStatus.HENTER
+            }).length === 0 && skjema.submitRessurs.status !== RessursStatus.HENTER
         );
     };
 
     const nullstillSkjema = () => {
         // eslint-disable-next-line
-        Object.values(felter).forEach((felt: unknown) => (felt as Felt<unknown>).nullstill);
+        Object.values(felter).forEach((felt: unknown) => (felt as Felt<unknown>).nullstill());
+        settVisfeilmeldinger(false);
+        settSubmitRessurs(byggTomRessurs());
     };
 
     const onSubmit = <SkjemaData>(

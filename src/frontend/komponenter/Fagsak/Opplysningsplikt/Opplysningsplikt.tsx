@@ -68,6 +68,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
         },
         skjemanavn: 'opplysningsplikt',
     });
+    console.log(skjema.felter);
     const { settFagsak } = useFagsakRessurser();
 
     const skjulBegrunnelse = lesevisning && !skjema.felter['begrunnelse'].verdi;
@@ -98,6 +99,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
     };
 
     const radioOnChange = (status: OpplysningspliktStatus) => {
+        console.log(status);
         skjema.felter.status.onChange(status);
     };
 
@@ -134,7 +136,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                     utenFeilPropagering={true}
                 >
                     <StyledFamilieRadioGruppe
-                        {...skjema.felter.status}
+                        {...skjema.felter.status.hentNavInputProps(skjema.visFeilmeldinger)}
                         erLesevisning={lesevisning}
                         verdi={
                             opplysningspliktVisningtekst[
@@ -188,7 +190,9 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
 
                     {!skjulBegrunnelse && (
                         <FamilieTextarea
-                            {...skjema.felter.begrunnelse}
+                            {...skjema.felter.begrunnelse.hentNavInputProps(
+                                skjema.visFeilmeldinger
+                            )}
                             value={skjema.felter.begrunnelse.verdi}
                             erLesevisning={lesevisning}
                             label={'Begrunnelse (valgfri)'}
