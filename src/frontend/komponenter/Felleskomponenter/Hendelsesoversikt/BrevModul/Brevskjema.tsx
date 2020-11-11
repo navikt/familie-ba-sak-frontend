@@ -20,7 +20,6 @@ import { formaterPersonIdent } from '../../../../utils/formatter';
 import Knapperekke from '../../Knapperekke';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { IFagsak } from '../../../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../../../familie-skjema/felt';
 import FamilieReactSelect from '../../FamilieReactSelect';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Normaltekst } from 'nav-frontend-typografi';
@@ -28,6 +27,7 @@ import { målform } from '../../../../typer/søknad';
 import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import SkjultLegend from '../../SkjultLegend';
+import { Felt, Valideringsstatus } from '../../../../familie-skjema/typer';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -75,7 +75,7 @@ const Brevskjema = ({
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetForhåndsvisning.status === RessursStatus.HENTER;
 
-    const valgtBrevmal: IFelt<Brevmal> = skjema.felter['brevmal'];
+    const valgtBrevmal: Felt<Brevmal> = skjema.felter.brevmal;
 
     const submitFeil =
         skjema.submitRessurs.status === RessursStatus.FEILET
@@ -200,7 +200,7 @@ const Brevskjema = ({
                     onClick={() => {
                         if (åpenBehandling.status === RessursStatus.SUKSESS) {
                             settNavigerTilOpplysningsplikt(
-                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
+                                skjema.felter.brevmal.value === Brevmal.INNHENTE_OPPLYSNINGER
                             );
                             onSubmit(
                                 {

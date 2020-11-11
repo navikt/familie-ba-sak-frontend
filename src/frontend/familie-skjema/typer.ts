@@ -1,20 +1,28 @@
 import { Ressurs } from '@navikt/familie-typer';
 import { ChangeEvent } from 'react';
 
-export interface FeltState<Verdi> {
+export interface FeltState<Value> {
     feilmelding: string;
-    valider: ValiderFelt<Verdi>;
+    valider: ValiderFelt<Value>;
     valideringsstatus: Valideringsstatus;
-    verdi: Verdi;
+    value: Value;
 }
 
-export interface Felt<Verdi> {
+export interface Felt<Value> {
     feilmelding: string;
-    onChange(value: Verdi | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>): void;
+    onChange(value: Value | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>): void;
     nullstill(): void;
-    valider: ValiderFelt<Verdi>;
+    valider: ValiderFelt<Value>;
     valideringsstatus: Valideringsstatus;
-    verdi: Verdi;
+    value: Value;
+    hentNavInputProps(visFeilmelding: boolean): NavInputProps<Value>;
+}
+
+export interface NavInputProps<Value> {
+    id: string;
+    name: string;
+    feil: string | undefined;
+    value: Value;
 }
 
 export enum Valideringsstatus {
@@ -39,10 +47,8 @@ export type FieldDictionary<Record extends unknown> = {
     [Key in keyof Record]: Felt<Record[Key]>;
 };
 
-export type FieldOutput<T extends unknown> = FieldDictionary<T> | Felt<T> | FieldDictionary<T>[];
-
 export interface FieldBag {
-    [key: string]: FieldOutput<unknown>;
+    [key: string]: FieldDictionary<unknown>;
 }
 
 export interface ISkjema<Felter extends FieldBag, SkjemaRespons> {

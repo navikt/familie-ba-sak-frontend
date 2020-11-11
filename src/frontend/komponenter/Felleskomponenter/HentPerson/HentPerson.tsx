@@ -4,12 +4,13 @@ import PanelBase from 'nav-frontend-paneler';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useApp } from '../../../context/AppContext';
-import { IFelt, Valideringsstatus } from '../../../familie-skjema/felt';
 import { IPersonInfo } from '../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
+import { identValidator } from '../../../utils/validators';
 import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
 import { FamilieInput } from '@navikt/familie-form-elements';
+import { useFelt } from '../../../familie-skjema/felt';
+import { Valideringsstatus } from '../../../familie-skjema/typer';
 
 interface IProps {
     erLesevisning?: boolean;
@@ -23,14 +24,14 @@ const HentPerson: React.FunctionComponent<IProps> = ({
     settPerson,
 }) => {
     const { axiosRequest } = useApp();
-    const [ident, settIdent] = React.useState<IFelt<string>>(lagInitiellFelt('', identValidator));
+    const ident = useFelt({
+        value: '',
+        valideringsfunksjon: identValidator,
+    });
 
     React.useEffect(() => {
         if (person.status === RessursStatus.SUKSESS) {
-            settIdent({
-                ...ident,
-                verdi: person.data.personIdent,
-            });
+            ident.onChange(person.data.personIdent);
         }
     }, [person.status]);
     const [visFeilmelding, settVisFeilmelding] = React.useState(false);
@@ -39,20 +40,12 @@ const HentPerson: React.FunctionComponent<IProps> = ({
         <div className={'hentperson'}>
             <div className={'hentperson__inputogknapp'}>
                 <FamilieInput
+                    {...ident.hentNavInputProps(visFeilmelding)}
                     erLesevisning={erLesevisning}
                     id={'hent-person'}
                     label={'Ident'}
                     bredde={'XL'}
-                    value={ident.verdi}
                     placeholder={'fnr/dnr'}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        settIdent(validerFelt(event.target.value, ident));
-                    }}
-                    feil={
-                        visFeilmelding &&
-                        ident.valideringsstatus === Valideringsstatus.FEIL &&
-                        ident.feilmelding
-                    }
                 />
                 {!erLesevisning && (
                     <Knapp
@@ -66,7 +59,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                                     method: 'GET',
                                     url: '/familie-ba-sak/api/person',
                                     headers: {
-                                        personIdent: ident.verdi,
+                                        personIdent: ident.value,
                                     },
                                 })
                                     .then((hentetPerson: Ressurs<IPersonInfo>) => {

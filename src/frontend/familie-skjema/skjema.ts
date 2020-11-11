@@ -1,7 +1,7 @@
 import { byggHenterRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useState } from 'react';
 import { FamilieAxiosRequestConfig, useApp } from '../context/AppContext';
-import { FieldBag, FeltState, ISkjema, Felt, Valideringsstatus } from './typer';
+import { ISkjema, Felt, Valideringsstatus, FieldBag } from './typer';
 
 export const useSkjema = <Felter extends FieldBag, SkjemaRespons>({
     initialSkjema,
@@ -22,7 +22,7 @@ export const useSkjema = <Felter extends FieldBag, SkjemaRespons>({
 
     const kanSendeSkjema = (): boolean => {
         // eslint-disable-next-line
-        Object.values(skjema.felter).forEach((felt: FeltState<any>) => {
+        Object.values(skjema.felter).forEach((felt: Felt<unknown>) => {
             felt.valider(felt, {
                 felter: skjema.felter,
             });
@@ -30,15 +30,14 @@ export const useSkjema = <Felter extends FieldBag, SkjemaRespons>({
 
         return (
             Object.values(skjema.felter).filter(
-                // eslint-disable-next-line
-                (felt: Felt<any>) => felt.valideringsstatus !== Valideringsstatus.OK
+                (felt: Felt<unknown>) => felt.valideringsstatus !== Valideringsstatus.OK
             ).length === 0 && skjema.submitRessurs.status !== RessursStatus.HENTER
         );
     };
 
     const nullstillSkjema = () => {
         // eslint-disable-next-line
-        Object.values(skjema.felter).forEach((felt: Felt<any>) => felt.nullstill);
+        Object.values(skjema.felter).forEach((felt: Felt<unknown>) => felt.nullstill);
     };
 
     const onSubmit = <SkjemaData>(

@@ -32,8 +32,8 @@ export const validerVilkår = (
     };
 
     return gyldigVilkår
-        ? ok({ ...nyttVilkårResultat, verdi: nyVerdi })
-        : feil({ ...nyttVilkårResultat, verdi: nyVerdi }, '');
+        ? ok({ ...nyttVilkårResultat, value: nyVerdi })
+        : feil({ ...nyttVilkårResultat, value: nyVerdi }, '');
 };
 
 export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonResultat[] => {

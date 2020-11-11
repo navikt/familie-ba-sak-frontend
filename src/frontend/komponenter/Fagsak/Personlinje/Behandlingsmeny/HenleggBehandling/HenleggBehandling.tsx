@@ -96,7 +96,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             mini={true}
                             onClick={() => onBekreft(behandling.behandlingId)}
                             children={
-                                skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET
+                                skjema.felter.årsak.value === HenleggelseÅrsak.SØKNAD_TRUKKET
                                     ? 'Bekreft og send brev'
                                     : 'Bekreft'
                             }
@@ -133,7 +133,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             return (
                                 <option
                                     key={årsak}
-                                    aria-selected={skjema.felter.årsak.verdi === årsak}
+                                    aria-selected={skjema.felter.årsak.value === årsak}
                                     value={årsak}
                                 >
                                     {henleggelseÅrsak[årsak]}
@@ -147,9 +147,6 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                         label={'Begrunnelse'}
                         erLesevisning={false}
                         maxLength={4000}
-                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                            skjema.felter.begrunnelse.onChange(event.target.value);
-                        }}
                     />
                 </SkjemaGruppe>
             </UIModalWrapper>

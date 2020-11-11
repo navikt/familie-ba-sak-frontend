@@ -1,9 +1,9 @@
 import { INøkkelPar } from './common';
-import { IFelt } from '../familie-skjema/felt';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 import { BehandlingSteg } from './behandling';
+import { Felt } from '../familie-skjema/typer';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -50,19 +50,19 @@ export enum VilkårType {
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
-    vilkårResultater: IFelt<IVilkårResultat>[];
+    vilkårResultater: Felt<IVilkårResultat>[];
     person: IGrunnlagPerson;
 }
 
 export interface IVilkårResultat {
-    begrunnelse: IFelt<string>;
+    begrunnelse: Felt<string>;
     behandlingId: number;
     endretAv: string;
     endretTidspunkt: string;
     erVurdert: boolean;
     id: number;
-    periode: IFelt<IPeriode>;
-    resultat: IFelt<Resultat>;
+    periode: Felt<IPeriode>;
+    resultat: Felt<Resultat>;
     vilkårType: VilkårType;
 }
 

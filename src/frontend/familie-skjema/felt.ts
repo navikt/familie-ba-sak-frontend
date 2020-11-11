@@ -1,29 +1,36 @@
 import { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { defaultValidator, Felt, FeltState, ValiderFelt, Valideringsstatus } from './typer';
+import {
+    defaultValidator,
+    Felt,
+    FeltState,
+    NavInputProps,
+    ValiderFelt,
+    Valideringsstatus,
+} from './typer';
 import { isChangeEvent } from './utils';
 
-export interface FeltConfig<Verdi> {
-    verdi: Verdi;
-    valideringsfunksjon?: ValiderFelt<Verdi>;
+export interface FeltConfig<Value> {
+    value: Value;
+    valideringsfunksjon?: ValiderFelt<Value>;
 }
 
-export function useFelt<Verdi = string>(
-    feltConfig: FeltConfig<Verdi>,
+export function useFelt<Value = string>(
+    feltConfig: FeltConfig<Value>,
     avhengigheter: unknown[] = []
-): Felt<Verdi> {
-    const [feltState, settFeltState] = useState<FeltState<Verdi>>({
+): Felt<Value> {
+    const [feltState, settFeltState] = useState<FeltState<Value>>({
         feilmelding: '',
         valider: feltConfig.valideringsfunksjon ? feltConfig.valideringsfunksjon : defaultValidator,
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-        verdi: feltConfig.verdi,
+        value: feltConfig.value,
     });
 
-    const kjørValidering = (verdi: Verdi = feltState.verdi) => {
+    const kjørValidering = (value: Value = feltState.value) => {
         settFeltState(
             feltState.valider(
                 {
                     ...feltState,
-                    verdi,
+                    value,
                 },
                 avhengigheter
             )
@@ -31,55 +38,42 @@ export function useFelt<Verdi = string>(
     };
 
     const onChange = useCallback(
-        (value: Verdi | ChangeEvent) => {
+        (value: Value | ChangeEvent) => {
             const normalisertVerdi = isChangeEvent(value) ? value.target.value : value;
 
-            kjørValidering(normalisertVerdi as Verdi);
+            kjørValidering(normalisertVerdi as Value);
         },
         [kjørValidering, feltState.feilmelding, settFeltState]
     );
+
+    const hentNavInputProps = (visFeilmelding: boolean): NavInputProps<Value> => ({
+        id: '',
+        name: '',
+        feil: visFeilmelding ? feltState.feilmelding : undefined,
+        value: feltState.value,
+    });
 
     const nullstill = () => {
         settFeltState(
             feltState.valider(
                 {
                     ...feltState,
-                    verdi: feltConfig.verdi,
+                    value: feltConfig.value,
                 },
                 avhengigheter
             )
         );
     };
 
-    const hentFeilmelding = () => {
-        return felt.feilmelding;
-    };
-
     const felt = useMemo(() => {
         return {
             ...feltState,
-            hentFeilmelding,
+            hentNavInputProps,
             kjørValidering,
             nullstill,
             onChange,
         };
-    }, [feltState, hentFeilmelding, onChange, kjørValidering, nullstill]);
+    }, [feltState, hentNavInputProps, onChange, kjørValidering, nullstill]);
 
-    return felt as Felt<Verdi>;
+    return felt as Felt<Value>;
 }
-
-export const ok = <T>(felt: FeltState<T>): FeltState<T> => {
-    return {
-        ...felt,
-        feilmelding: '',
-        valideringsstatus: Valideringsstatus.OK,
-    };
-};
-
-export const feil = <T>(felt: FeltState<T>, feilmelding: string): FeltState<T> => {
-    return {
-        ...felt,
-        feilmelding,
-        valideringsstatus: Valideringsstatus.FEIL,
-    };
-};
