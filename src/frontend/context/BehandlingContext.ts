@@ -91,7 +91,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
             fagsak.status === RessursStatus.SUKSESS
         ) {
             const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
-                åpenBehandling.data.stegTilstand,
+                åpenBehandling.data.stegTilstand, // TODO: Tar nå inn liste, så blir feil og redirecter til registrer-søknad siden den ligger som siste utførte. Vil egentlig sjekke siste vi skal utføre.
                 opplysningsplikt
             );
 
