@@ -73,7 +73,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
     const skalViseLeggTilKnapp = () => {
         const uvurdertPeriodePåVilkår = vilkårResultater.find(
-            vilkår => vilkår.value.resultat.value === Resultat.KANSKJE
+            vilkår => vilkår.verdi.resultat.verdi === Resultat.KANSKJE
         );
         return uvurdertPeriodePåVilkår === undefined;
     };
@@ -101,7 +101,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>) => {
                         return (
                             <GeneriskVilkårVurdering
-                                key={`${person.personIdent}_${vilkårResultat.value.vilkårType}_${vilkårResultat.value.id}`}
+                                key={`${person.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
                                 vilkårFraConfig={vilkårFraConfig}
                                 person={person}
                                 vilkårResultat={vilkårResultat}

@@ -52,7 +52,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
             axiosRequest<IRestTilgang, { brukerIdent: string }>({
                 method: 'POST',
                 url: '/familie-ba-sak/api/tilgang',
-                data: { brukerIdent: ident.value },
+                data: { brukerIdent: ident.verdi },
             }).then((ressurs: Ressurs<IRestTilgang>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     if (ressurs.data.saksbehandlerHarTilgang) {
@@ -60,7 +60,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
                             method: 'GET',
                             url: '/familie-ba-sak/api/person/enkel',
                             headers: {
-                                personIdent: ident.value,
+                                personIdent: ident.verdi,
                             },
                         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
                             settPerson(hentetPerson);

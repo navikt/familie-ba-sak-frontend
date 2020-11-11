@@ -16,13 +16,13 @@ import { feil, ok } from '../familie-skjema/validators';
 const validator = require('@navikt/fnrvalidator');
 
 const harFyltInnIdent = (felt: FeltState<string>): FeltState<string> => {
-    return /^\d{11}$/.test(felt.value.replace(' ', ''))
+    return /^\d{11}$/.test(felt.verdi.replace(' ', ''))
         ? ok(felt)
         : feil(felt, 'Identen har ikke 11 tall');
 };
 
 const validerIdent = (felt: FeltState<string>): FeltState<string> => {
-    return validator.idnr(felt.value).status === 'valid'
+    return validator.idnr(felt.verdi).status === 'valid'
         ? ok(felt)
         : feil(felt, 'Identen er ugyldig');
 };
@@ -39,8 +39,8 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
 export const erGyldigMånedDato = (
     felt: FeltState<IPersonBeregning>
 ): FeltState<IPersonBeregning> => {
-    return /^\d{2}\.\d{2}$/.test(felt.value.stønadFom) &&
-        moment(felt.value.stønadFom, datoformat.MÅNED).isValid()
+    return /^\d{2}\.\d{2}$/.test(felt.verdi.stønadFom) &&
+        moment(felt.verdi.stønadFom, datoformat.MÅNED).isValid()
         ? ok(felt)
         : feil(felt, 'Ugyldig dato');
 };
@@ -60,8 +60,8 @@ export const erPeriodeGyldig = (
     felt: FeltState<IPeriode>,
     valideringscontext?: Valideringscontext
 ): FeltState<IPeriode> => {
-    const fom = felt.value.fom;
-    const tom = felt.value.tom;
+    const fom = felt.verdi.fom;
+    const tom = felt.verdi.tom;
 
     const person: IGrunnlagPerson | undefined = valideringscontext?.person;
 
@@ -91,12 +91,12 @@ export const erPeriodeGyldig = (
 };
 
 export const erResultatGyldig = (felt: FeltState<Resultat>): FeltState<Resultat> => {
-    return felt.value !== Resultat.KANSKJE ? ok(felt) : feil(felt, 'Resultat er ikke satt');
+    return felt.verdi !== Resultat.KANSKJE ? ok(felt) : feil(felt, 'Resultat er ikke satt');
 };
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
 export const erUtfylt = (felt: FeltState<string>): FeltState<string> => {
-    if (felt.value === '') {
+    if (felt.verdi === '') {
         return feil(felt, ikkeUtfyltFelt);
     }
     return ok(felt);
@@ -110,7 +110,7 @@ export const lagInitiellFelt = <Value>(
         feilmelding: ikkeUtfyltFelt,
         valider: valideringsfunksjon,
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-        value,
+        verdi: value,
     };
 };
 
@@ -122,7 +122,7 @@ export const validerFelt = <Value, Context>(
     return felt.valider(
         {
             ...felt,
-            value: nyVerdi,
+            verdi: nyVerdi,
         },
         context ? context : {}
     );

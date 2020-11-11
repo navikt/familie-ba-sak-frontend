@@ -10,7 +10,7 @@ import {
 import { isChangeEvent } from './utils';
 
 export interface FeltConfig<Value> {
-    value: Value;
+    verdi: Value;
     valideringsfunksjon?: ValiderFelt<Value>;
 }
 
@@ -19,14 +19,14 @@ export function useFelt<Value = string>(feltConfig: FeltConfig<Value>): Felt<Val
         feilmelding: '',
         valider: feltConfig.valideringsfunksjon ? feltConfig.valideringsfunksjon : defaultValidator,
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-        value: feltConfig.value,
+        verdi: feltConfig.verdi,
     });
 
-    const kjørValidering = (value: Value = feltState.value) => {
+    const kjørValidering = (value: Value = feltState.verdi) => {
         settFeltState(
             feltState.valider({
                 ...feltState,
-                value,
+                verdi: value,
             })
         );
     };
@@ -35,8 +35,8 @@ export function useFelt<Value = string>(feltConfig: FeltConfig<Value>): Felt<Val
         kjørValidering();
     }, []);
 
-    const onChange = (value: Value | ChangeEvent) => {
-        const normalisertVerdi = isChangeEvent(value) ? value.target.value : value;
+    const onChange = (verdi: Value | ChangeEvent) => {
+        const normalisertVerdi = isChangeEvent(verdi) ? verdi.target.value : verdi;
 
         kjørValidering(normalisertVerdi as Value);
     };
@@ -45,7 +45,7 @@ export function useFelt<Value = string>(feltConfig: FeltConfig<Value>): Felt<Val
         id: '',
         name: '',
         feil: visFeilmelding ? feltState.feilmelding : undefined,
-        value: feltState.value,
+        value: feltState.verdi,
         onChange,
     });
 
@@ -53,7 +53,7 @@ export function useFelt<Value = string>(feltConfig: FeltConfig<Value>): Felt<Val
         settFeltState(
             feltState.valider({
                 ...feltState,
-                value: feltConfig.value,
+                verdi: feltConfig.verdi,
             })
         );
     };

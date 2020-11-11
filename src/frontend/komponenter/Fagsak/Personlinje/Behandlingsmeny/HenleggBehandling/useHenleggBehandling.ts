@@ -22,12 +22,12 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     >({
         felter: {
             årsak: useFelt({
-                value: '',
+                verdi: '',
                 valideringsfunksjon: (felt: FeltState<HenleggelseÅrsak | ''>) =>
-                    felt.value !== '' ? ok(felt) : feil(felt, 'Du må velge årsak'),
+                    felt.verdi !== '' ? ok(felt) : feil(felt, 'Du må velge årsak'),
             }),
             begrunnelse: useFelt({
-                value: '',
+                verdi: '',
             }),
         },
         skjemanavn: 'henleggbehandling',
@@ -38,8 +38,8 @@ const useHenleggBehandling = (lukkModal: () => void) => {
             {
                 method: 'PUT',
                 data: {
-                    årsak: skjema.felter.årsak.value,
-                    begrunnelse: skjema.felter.begrunnelse.value,
+                    årsak: skjema.felter.årsak.verdi,
+                    begrunnelse: skjema.felter.begrunnelse.verdi,
                 },
                 url: `/familie-ba-sak/api/behandlinger/${behandlingId}/henlegg`,
             },

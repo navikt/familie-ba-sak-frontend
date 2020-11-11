@@ -29,7 +29,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                 [personResultat.personIdent]:
                     personResultat.vilkårResultater.filter(
                         (vilkårResultat: FeltState<IVilkårResultat>) =>
-                            vilkårResultat.value.resultat.value === Resultat.KANSKJE
+                            vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
                     ).length > 0,
             };
         }, {})
@@ -89,7 +89,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                         IVilkårResultat
                                     >[] = personResultat.vilkårResultater.filter(
                                         (vilkårResultat: FeltState<IVilkårResultat>) =>
-                                            vilkårResultat.value.vilkårType === vc.key
+                                            vilkårResultat.verdi.vilkårType === vc.key
                                     );
 
                                     if (vilkårResultater.length !== 0) {

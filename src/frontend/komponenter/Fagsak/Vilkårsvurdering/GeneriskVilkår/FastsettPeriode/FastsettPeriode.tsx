@@ -41,12 +41,12 @@ const FastsettPeriode: React.FC<IProps> = ({
 
     return (
         <SkjemaGruppe
-            feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.value)}
+            feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
             className={'fastsett-periode'}
             feil={
-                redigerbartVilkår.value.periode.valideringsstatus === Valideringsstatus.FEIL &&
+                redigerbartVilkår.verdi.periode.valideringsstatus === Valideringsstatus.FEIL &&
                 visFeilmeldinger
-                    ? redigerbartVilkår.value.periode.feilmelding
+                    ? redigerbartVilkår.verdi.periode.feilmelding
                     : ''
             }
         >
@@ -70,49 +70,49 @@ const FastsettPeriode: React.FC<IProps> = ({
                         }}
                         erLesesvisning={lesevisning}
                         id={`${vilkårPeriodeFeilmeldingId(
-                            redigerbartVilkår.value
+                            redigerbartVilkår.verdi
                         )}__fastsett-periode-fom`}
                         label={'F.o.m'}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
-                                value: {
-                                    ...redigerbartVilkår.value,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
                                     periode: {
-                                        ...redigerbartVilkår.value.periode,
-                                        value: nyPeriode(
+                                        ...redigerbartVilkår.verdi.periode,
+                                        verdi: nyPeriode(
                                             dato,
-                                            redigerbartVilkår.value.periode.value.tom
+                                            redigerbartVilkår.verdi.periode.verdi.tom
                                         ),
                                     },
                                 },
                             });
                         }}
                         valgtDato={formaterIsoDato(
-                            redigerbartVilkår.value.periode.value.fom,
+                            redigerbartVilkår.verdi.periode.verdi.fom,
                             datoformat.DATO
                         )}
                     />
                 </div>
-                {(!lesevisning || redigerbartVilkår.value.periode.value.tom) && (
+                {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
                         <FamilieDatovelger
                             erLesesvisning={lesevisning}
                             id={`${vilkårPeriodeFeilmeldingId(
-                                redigerbartVilkår.value
+                                redigerbartVilkår.verdi
                             )}__fastsett-periode-tom`}
                             label={'T.o.m (valgfri)'}
                             placeholder={datoformatNorsk.DATO}
                             onChange={(dato?: ISODateString) => {
                                 validerOgSettRedigerbartVilkår({
                                     ...redigerbartVilkår,
-                                    value: {
-                                        ...redigerbartVilkår.value,
+                                    verdi: {
+                                        ...redigerbartVilkår.verdi,
                                         periode: {
-                                            ...redigerbartVilkår.value.periode,
-                                            value: nyPeriode(
-                                                redigerbartVilkår.value.periode.value.fom,
+                                            ...redigerbartVilkår.verdi.periode,
+                                            verdi: nyPeriode(
+                                                redigerbartVilkår.verdi.periode.verdi.fom,
                                                 dato
                                             ),
                                         },
@@ -120,7 +120,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                                 });
                             }}
                             valgtDato={formaterIsoDato(
-                                redigerbartVilkår.value.periode.value.tom,
+                                redigerbartVilkår.verdi.periode.verdi.tom,
                                 datoformat.DATO
                             )}
                         />

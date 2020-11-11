@@ -56,20 +56,20 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
 
         return axiosRequest<IFagsak, IRestPersonResultat>({
             method: 'PUT',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${redigerbartVilkår.value.id}`,
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
             data: {
                 personIdent: vilkårsvurderingForPerson.personIdent,
                 vilkårResultater: [
                     {
-                        begrunnelse: redigerbartVilkår.value.begrunnelse.value,
-                        id: redigerbartVilkår.value.id,
-                        periodeFom: redigerbartVilkår.value.periode.value.fom,
-                        periodeTom: redigerbartVilkår.value.periode.value.tom,
-                        resultat: redigerbartVilkår.value.resultat.value,
-                        vilkårType: redigerbartVilkår.value.vilkårType,
-                        endretAv: redigerbartVilkår.value.endretAv,
-                        endretTidspunkt: redigerbartVilkår.value.endretTidspunkt,
-                        behandlingId: redigerbartVilkår.value.behandlingId,
+                        begrunnelse: redigerbartVilkår.verdi.begrunnelse.verdi,
+                        id: redigerbartVilkår.verdi.id,
+                        periodeFom: redigerbartVilkår.verdi.periode.verdi.fom,
+                        periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
+                        resultat: redigerbartVilkår.verdi.resultat.verdi,
+                        vilkårType: redigerbartVilkår.verdi.vilkårType,
+                        endretAv: redigerbartVilkår.verdi.endretAv,
+                        endretTidspunkt: redigerbartVilkår.verdi.endretTidspunkt,
+                        behandlingId: redigerbartVilkår.verdi.behandlingId,
                     },
                 ],
             },
@@ -119,7 +119,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                             (vilkårResultat: FeltState<IVilkårResultat>) =>
                                 vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
                         )
-                        .map((vilkårResultat: FeltState<IVilkårResultat>) => vilkårResultat.value),
+                        .map((vilkårResultat: FeltState<IVilkårResultat>) => vilkårResultat.verdi),
                 ];
             },
             []

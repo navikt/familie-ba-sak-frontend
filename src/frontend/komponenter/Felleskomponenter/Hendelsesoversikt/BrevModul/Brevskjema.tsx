@@ -110,7 +110,7 @@ const Brevskjema = ({
                             return (
                                 <option
                                     aria-selected={
-                                        person.personIdent === skjema.felter.mottakerIdent.value
+                                        person.personIdent === skjema.felter.mottakerIdent.verdi
                                     }
                                     key={person.personIdent}
                                     value={person.personIdent}
@@ -132,7 +132,7 @@ const Brevskjema = ({
                     {brevMaler.map(mal => {
                         return (
                             <option
-                                aria-selected={mal === skjema.felter.brevmal.value}
+                                aria-selected={mal === skjema.felter.brevmal.verdi}
                                 key={mal}
                                 value={mal}
                             >
@@ -146,8 +146,8 @@ const Brevskjema = ({
                     <FamilieReactSelect
                         {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={
-                            valgtBrevmal.value !== ''
-                                ? selectLabelsForBrevmaler[valgtBrevmal.value]
+                            valgtBrevmal.verdi !== ''
+                                ? selectLabelsForBrevmaler[valgtBrevmal.verdi]
                                 : ''
                         }
                         erLesevisning={erLesevisning()}
@@ -161,7 +161,7 @@ const Brevskjema = ({
                                     : (valgteOptions as ISelectOptionMedBrevtekst[])
                             );
                         }}
-                        options={hentSelectOptions(valgtBrevmal.value)}
+                        options={hentSelectOptions(valgtBrevmal.verdi)}
                     />
                 )}
 
@@ -202,7 +202,7 @@ const Brevskjema = ({
                     onClick={() => {
                         if (åpenBehandling.status === RessursStatus.SUKSESS) {
                             settNavigerTilOpplysningsplikt(
-                                skjema.felter.brevmal.value === Brevmal.INNHENTE_OPPLYSNINGER
+                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
                             );
                             onSubmit(
                                 {

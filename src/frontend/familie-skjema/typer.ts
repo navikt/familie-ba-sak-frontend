@@ -1,33 +1,33 @@
 import { Ressurs } from '@navikt/familie-typer';
 import { ChangeEvent } from 'react';
 
-export interface FeltState<Value> {
+export interface FeltState<Verdi> {
     feilmelding: string;
-    valider: ValiderFelt<Value>;
+    valider: ValiderFelt<Verdi>;
     valideringsstatus: Valideringsstatus;
-    value: Value;
+    verdi: Verdi;
 }
 
-export type FeltOnChange<Value> = (
-    value: Value | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+export type FeltOnChange<Verdi> = (
+    verdi: Verdi | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
 ) => void;
 
-export interface Felt<Value> {
+export interface Felt<Verdi> {
     feilmelding: string;
-    hentNavInputProps(visFeilmelding: boolean): NavInputProps<Value>;
+    hentNavInputProps(visFeilmelding: boolean): NavInputProps<Verdi>;
     nullstill(): void;
-    onChange: FeltOnChange<Value>;
-    valider: ValiderFelt<Value>;
+    onChange: FeltOnChange<Verdi>;
+    valider: ValiderFelt<Verdi>;
     valideringsstatus: Valideringsstatus;
-    value: Value;
+    verdi: Verdi;
 }
 
-export interface NavInputProps<Value> {
+export interface NavInputProps<Verdi> {
     feil: string | undefined;
     id: string;
     name: string;
-    onChange: FeltOnChange<Value>;
-    value: Value;
+    onChange: FeltOnChange<Verdi>;
+    value: Verdi;
 }
 
 export enum Valideringsstatus {

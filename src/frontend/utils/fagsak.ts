@@ -46,7 +46,7 @@ export const erBehandlingenInnvilget = (vilkårsvurdering: IPersonResultat[]) =>
         vilkårsvurdering.find((personResultat: IPersonResultat) =>
             personResultat.vilkårResultater.find(
                 (vilkårResultat: FeltState<IVilkårResultat>) =>
-                    vilkårResultat.value.resultat.value === Resultat.NEI
+                    vilkårResultat.verdi.resultat.verdi === Resultat.NEI
             )
         ) === undefined
     );

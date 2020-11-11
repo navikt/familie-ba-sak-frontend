@@ -96,7 +96,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             mini={true}
                             onClick={() => onBekreft(behandling.behandlingId)}
                             children={
-                                skjema.felter.årsak.value === HenleggelseÅrsak.SØKNAD_TRUKKET
+                                skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET
                                     ? 'Bekreft og send brev'
                                     : 'Bekreft'
                             }
@@ -133,7 +133,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             return (
                                 <option
                                     key={årsak}
-                                    aria-selected={skjema.felter.årsak.value === årsak}
+                                    aria-selected={skjema.felter.årsak.verdi === årsak}
                                     value={årsak}
                                 >
                                     {henleggelseÅrsak[årsak]}
@@ -143,7 +143,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     </FamilieSelect>
 
                     <FamilieTextarea
-                        {...skjema.felter.begrunnelse}
+                        {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={'Begrunnelse'}
                         erLesevisning={false}
                         maxLength={4000}

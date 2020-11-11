@@ -22,8 +22,8 @@ export const sorterVilkårsvurderingForPerson = (
 ): FeltState<IVilkårResultat>[] => {
     return vilkårResultater.sort(
         (a, b) =>
-            a.value.vilkårType.localeCompare(b.value.vilkårType) ||
-            diff(a.value.periode.value, b.value.periode.value)
+            a.verdi.vilkårType.localeCompare(b.verdi.vilkårType) ||
+            diff(a.verdi.periode.verdi, b.verdi.periode.verdi)
     );
 };
 
@@ -65,7 +65,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                         feilmelding: '',
                                         valider: ikkeValider,
                                         valideringsstatus: Valideringsstatus.OK,
-                                        value: vilkårResultat.begrunnelse,
+                                        verdi: vilkårResultat.begrunnelse,
                                     },
                                     id: vilkårResultat.id,
                                     periode: lagInitiellFelt(

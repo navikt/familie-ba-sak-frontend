@@ -25,7 +25,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
 }) => {
     const { axiosRequest } = useApp();
     const ident = useFelt({
-        value: '',
+        verdi: '',
         valideringsfunksjon: identValidator,
     });
 
@@ -59,7 +59,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                                     method: 'GET',
                                     url: '/familie-ba-sak/api/person',
                                     headers: {
-                                        personIdent: ident.value,
+                                        personIdent: ident.verdi,
                                     },
                                 })
                                     .then((hentetPerson: Ressurs<IPersonInfo>) => {

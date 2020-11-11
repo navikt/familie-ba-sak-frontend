@@ -7,17 +7,17 @@ export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
     valideringscontext?: Valideringscontext
 ): FeltState<IVilkårResultat> => {
-    const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.value.periode.valider(
-        nyttVilkårResultat.value.periode,
+    const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
+        nyttVilkårResultat.verdi.periode,
         valideringscontext
     );
 
-    const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.value.begrunnelse.valider(
-        nyttVilkårResultat.value.begrunnelse
+    const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
+        nyttVilkårResultat.verdi.begrunnelse
     );
 
-    const nyttResultat: FeltState<Resultat> = nyttVilkårResultat.value.resultat.valider(
-        nyttVilkårResultat.value.resultat
+    const nyttResultat: FeltState<Resultat> = nyttVilkårResultat.verdi.resultat.valider(
+        nyttVilkårResultat.verdi.resultat
     );
 
     const gyldigVilkår: boolean =
@@ -26,15 +26,15 @@ export const validerVilkår = (
         nyttResultat.valideringsstatus === Valideringsstatus.OK;
 
     const nyVerdi: IVilkårResultat = {
-        ...nyttVilkårResultat.value,
+        ...nyttVilkårResultat.verdi,
         periode: nyPeriode,
         begrunnelse: nyBegrunnelse,
         resultat: nyttResultat,
     };
 
     return gyldigVilkår
-        ? ok({ ...nyttVilkårResultat, value: nyVerdi })
-        : feil({ ...nyttVilkårResultat, value: nyVerdi }, '');
+        ? ok({ ...nyttVilkårResultat, verdi: nyVerdi })
+        : feil({ ...nyttVilkårResultat, verdi: nyVerdi }, '');
 };
 
 export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonResultat[] => {

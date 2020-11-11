@@ -41,24 +41,24 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     >({
         felter: {
             mottakerIdent: useFelt({
-                value: '',
+                verdi: '',
                 valideringsfunksjon: (felt: FeltState<string>) =>
-                    felt.value.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker'),
+                    felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker'),
             }),
             brevmal: useFelt({
-                value: '',
+                verdi: '',
                 valideringsfunksjon: (felt: FeltState<Brevmal | ''>) =>
-                    felt.value ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
             }),
             multiselect: useFelt({
-                value: [],
+                verdi: [],
                 valideringsfunksjon: (
                     felt: FeltState<ISelectOptionMedBrevtekst[]>,
                     valideringscontext?: Valideringscontext
                 ) => {
                     const brevmal: Brevmal | '' = valideringscontext?.felter.brevmal.value;
 
-                    return felt.value.length > 0
+                    return felt.verdi.length > 0
                         ? ok(felt)
                         : feil(
                               felt,
@@ -71,7 +71,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 },
             }),
             fritekst: useFelt({
-                value: '',
+                verdi: '',
                 valideringsfunksjon: (
                     felt: FeltState<string>,
                     valideringscontext?: Valideringscontext
@@ -89,7 +89,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                         ).length > 0;
 
                     if (annetErValgt) {
-                        return fjernWhitespace(felt.value).length >= 3
+                        return fjernWhitespace(felt.verdi).length >= 3
                             ? ok(felt)
                             : feil(
                                   felt,
@@ -133,7 +133,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const mottakersMålform =
         personer.find(
-            (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.value
+            (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.verdi
         )?.målform ?? Målform.NB;
 
     const hentForhåndsvisning = (brevData: IBrevData) => {
@@ -185,20 +185,20 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     };
 
     const multiselectInneholderAnnet = () =>
-        skjema.felter.multiselect.value.filter(
+        skjema.felter.multiselect.verdi.filter(
             (selectOption: ISelectOptionMedBrevtekst) => selectOption.value === 'annet'
         ).length > 0;
 
     const hentSkjemaData = (): IBrevData => ({
-        mottakerIdent: skjema.felter.mottakerIdent.value,
-        multiselectVerdier: skjema.felter.multiselect.value
+        mottakerIdent: skjema.felter.mottakerIdent.verdi,
+        multiselectVerdier: skjema.felter.multiselect.verdi
             .filter((selectOption: ISelectOptionMedBrevtekst) => selectOption.value !== 'annet')
             .map(
                 (selectOption: ISelectOptionMedBrevtekst) =>
                     selectOption.brevtekst[mottakersMålform]
             ),
-        brevmal: skjema.felter.brevmal.value as Brevmal,
-        fritekst: skjema.felter.fritekst.value,
+        brevmal: skjema.felter.brevmal.verdi as Brevmal,
+        fritekst: skjema.felter.fritekst.verdi,
     });
 
     return {

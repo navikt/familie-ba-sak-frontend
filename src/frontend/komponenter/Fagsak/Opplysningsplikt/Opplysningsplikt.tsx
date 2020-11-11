@@ -56,21 +56,21 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
     >({
         felter: {
             status: useFelt({
-                value: åpenBehandling.opplysningsplikt?.status ?? OpplysningspliktStatus.IKKE_SATT,
+                verdi: åpenBehandling.opplysningsplikt?.status ?? OpplysningspliktStatus.IKKE_SATT,
                 valideringsfunksjon: (felt: FeltState<OpplysningspliktStatus>) =>
-                    felt.value !== OpplysningspliktStatus.IKKE_SATT
+                    felt.verdi !== OpplysningspliktStatus.IKKE_SATT
                         ? ok(felt)
                         : feil(felt, 'Du må velge en status'),
             }),
             begrunnelse: useFelt({
-                value: åpenBehandling.opplysningsplikt?.begrunnelse ?? '',
+                verdi: åpenBehandling.opplysningsplikt?.begrunnelse ?? '',
             }),
         },
         skjemanavn: 'opplysningsplikt',
     });
     const { settFagsak } = useFagsakRessurser();
 
-    const skjulBegrunnelse = lesevisning && !skjema.felter['begrunnelse'].value;
+    const skjulBegrunnelse = lesevisning && !skjema.felter['begrunnelse'].verdi;
 
     const nesteOnClick = () => {
         if (!lesevisning) {
@@ -78,8 +78,8 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                 {
                     method: 'PUT',
                     data: {
-                        status: skjema.felter.status.value,
-                        begrunnelse: skjema.felter.begrunnelse.value,
+                        status: skjema.felter.status.verdi,
+                        begrunnelse: skjema.felter.begrunnelse.verdi,
                     },
                     url: `/familie-ba-sak/api/opplysningsplikt/${fagsak.id}/${åpenBehandling?.behandlingId}`,
                 },
@@ -138,7 +138,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                         erLesevisning={lesevisning}
                         verdi={
                             opplysningspliktVisningtekst[
-                                skjema.felter.status.value as OpplysningspliktStatus
+                                skjema.felter.status.verdi as OpplysningspliktStatus
                             ]
                         }
                         legend={
@@ -152,7 +152,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                             label={opplysningspliktVisningtekst[OpplysningspliktStatus.MOTTATT]}
                             name="opplysningsplikt"
                             onChange={() => radioOnChange(OpplysningspliktStatus.MOTTATT)}
-                            checked={skjema.felter.status.value === OpplysningspliktStatus.MOTTATT}
+                            checked={skjema.felter.status.verdi === OpplysningspliktStatus.MOTTATT}
                         />
                         <Radio
                             label={
@@ -165,7 +165,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                                 radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG)
                             }
                             checked={
-                                skjema.felter.status.value ===
+                                skjema.felter.status.verdi ===
                                 OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG
                             }
                         />
@@ -180,7 +180,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                                 radioOnChange(OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT)
                             }
                             checked={
-                                skjema.felter.status.value ===
+                                skjema.felter.status.verdi ===
                                 OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT
                             }
                         />
@@ -189,7 +189,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                     {!skjulBegrunnelse && (
                         <FamilieTextarea
                             {...skjema.felter.begrunnelse}
-                            value={skjema.felter.begrunnelse.value}
+                            value={skjema.felter.begrunnelse.verdi}
                             erLesevisning={lesevisning}
                             label={'Begrunnelse (valgfri)'}
                             maxLength={1500}
