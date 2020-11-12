@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     defaultValidator,
     Felt,
@@ -14,20 +14,28 @@ import { isChangeEvent } from './utils';
 export interface FeltConfig<Verdi> {
     verdi: Verdi;
     valideringsfunksjon?: ValiderFelt<Verdi>;
+    skalSkjules?: (valideringscontext: Valideringscontext) => boolean;
 }
 
-export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Verdi> {
-    const [feltState, settFeltState] = useState<FeltState<Verdi>>({
+export function useFelt<Verdi = string>(
+    feltConfig: FeltConfig<Verdi>,
+    valideringscontext: Valideringscontext = {}
+): Felt<Verdi> {
+    const initialFeltState = {
         feilmelding: '',
         valider: feltConfig.valideringsfunksjon ? feltConfig.valideringsfunksjon : defaultValidator,
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         verdi: feltConfig.verdi,
-    });
+    };
 
-    const validerOgSettFelt = (
-        verdi: Verdi = feltState.verdi,
-        valideringscontext?: Valideringscontext
-    ) => {
+    const [feltState, settFeltState] = useState<FeltState<Verdi>>(initialFeltState);
+    const [skalRendres, settSkalRendres] = useState(feltConfig.skalSkjules === undefined);
+
+    const nullstill = () => {
+        settFeltState(initialFeltState);
+    };
+
+    const validerOgSettFelt = (verdi: Verdi = feltState.verdi) => {
         settFeltState(
             feltState.valider(
                 {
@@ -39,6 +47,19 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
         );
     };
 
+    useEffect(() => {
+        if (feltConfig.skalSkjules) {
+            if (feltConfig.skalSkjules(valideringscontext)) {
+                if (feltState.valideringsstatus !== Valideringsstatus.IKKE_VALIDERT) {
+                    nullstill();
+                    settSkalRendres(false);
+                }
+            } else {
+                settSkalRendres(true);
+            }
+        }
+    }, [...Object.values(valideringscontext)]);
+
     const onChange = useCallback(
         (verdi: Verdi | ChangeEvent) => {
             const normalisertVerdi = isChangeEvent(verdi) ? verdi.target.value : verdi;
@@ -48,45 +69,22 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
         [validerOgSettFelt, settFeltState]
     );
 
-    const onBlur = useCallback(() => {
-        if (feltState.valideringsstatus !== Valideringsstatus.IKKE_VALIDERT) {
-            return;
-        }
-
-        validerOgSettFelt();
-    }, [validerOgSettFelt, feltState.valideringsstatus]);
-
     const hentNavInputProps = useCallback(
         (visFeilmelding: boolean): NavInputProps<Verdi> => ({
-            id: '',
-            name: '',
             feil: visFeilmelding ? feltState.feilmelding : undefined,
             value: feltState.verdi,
             onChange,
-            onBlur,
         }),
         [validerOgSettFelt, settFeltState]
     );
 
     const hentNavRadiogruppeProps = useCallback(
         (visFeilmelding: boolean): NavBaseSkjemaProps<Verdi> => ({
-            id: '',
-            name: '',
             feil: visFeilmelding ? feltState.feilmelding : undefined,
             value: feltState.verdi,
-            onBlur,
         }),
         [validerOgSettFelt, settFeltState]
     );
-
-    const nullstill = () => {
-        settFeltState(
-            feltState.valider({
-                ...feltState,
-                verdi: feltConfig.verdi,
-            })
-        );
-    };
 
     return useMemo(
         () => ({
@@ -94,7 +92,7 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
             hentNavInputProps,
             hentNavRadiogruppeProps,
             nullstill,
-            onBlur,
+            skalRendres,
             onChange,
             validerOgSettFelt,
         }),

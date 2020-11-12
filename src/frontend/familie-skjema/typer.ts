@@ -13,6 +13,7 @@ export type FeltOnChange<Verdi> = (
 ) => void;
 
 export interface Felt<Verdi> {
+    skalRendres: boolean;
     feilmelding: string;
     hentNavInputProps(visFeilmelding: boolean): NavInputProps<Verdi>;
     hentNavRadiogruppeProps(visFeilmelding: boolean): NavBaseSkjemaProps<Verdi>;
@@ -26,10 +27,7 @@ export interface Felt<Verdi> {
 
 export interface NavBaseSkjemaProps<Verdi> {
     feil: string | undefined;
-    id: string;
-    name: string;
     value: Verdi;
-    onBlur(): void;
 }
 
 export interface NavInputProps<Verdi> extends NavBaseSkjemaProps<Verdi> {

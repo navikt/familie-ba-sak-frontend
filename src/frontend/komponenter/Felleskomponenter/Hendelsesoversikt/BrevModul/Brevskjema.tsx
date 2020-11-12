@@ -28,7 +28,7 @@ import { målform } from '../../../../typer/søknad';
 import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import SkjultLegend from '../../SkjultLegend';
-import { Felt, Valideringsstatus } from '../../../../familie-skjema/typer';
+import { Felt } from '../../../../familie-skjema/typer';
 
 interface IProps {
     forhåndsvisningOnClick: (brevData: IBrevData) => void;
@@ -56,7 +56,6 @@ const Brevskjema = ({
         hentSkjemaData,
         kanSendeSkjema,
         mottakersMålform,
-        multiselectInneholderAnnet,
         onSubmit,
         personer,
         settNavigerTilOpplysningsplikt,
@@ -146,7 +145,7 @@ const Brevskjema = ({
                     })}
                 </FamilieSelect>
 
-                {valgtBrevmal.valideringsstatus === Valideringsstatus.OK && (
+                {skjema.felter.multiselect.skalRendres && (
                     <FamilieReactSelect
                         {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={
@@ -169,7 +168,7 @@ const Brevskjema = ({
                     />
                 )}
 
-                {multiselectInneholderAnnet() && (
+                {skjema.felter.fritekst.skalRendres && (
                     <FamilieTextarea
                         {...skjema.felter.fritekst.hentNavInputProps(skjema.visFeilmeldinger)}
                         disabled={skjemaErLåst}

@@ -14,13 +14,17 @@ export const useSkjema = <Felter, SkjemaRespons>({
     const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs<SkjemaRespons>());
 
-    const kanSendeSkjema = (): boolean => {
+    const validerAlleFelter = () => {
         Object.values(felter).forEach(felt => {
             const unknownFelt = felt as Felt<unknown>;
             unknownFelt.validerOgSettFelt(unknownFelt.verdi, {
                 felter,
             });
         });
+    };
+
+    const kanSendeSkjema = (): boolean => {
+        validerAlleFelter();
         settVisfeilmeldinger(true);
 
         return (
@@ -30,7 +34,6 @@ export const useSkjema = <Felter, SkjemaRespons>({
             }).length === 0 && skjema.submitRessurs.status !== RessursStatus.HENTER
         );
     };
-    console.log(felter);
 
     const nullstillSkjema = () => {
         // eslint-disable-next-line
