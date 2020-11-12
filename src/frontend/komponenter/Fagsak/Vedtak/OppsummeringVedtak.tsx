@@ -200,7 +200,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                     )}
                 </>
             ) : (
-                <AlertStripeInfo>Teknisk opphør har ikke brev</AlertStripeInfo>
+                <AlertStripeInfo>
+                    {`Den forrige behandlingen er annullert, og det er ${
+                        åpenBehandling.status === BehandlingStatus.AVSLUTTET
+                            ? 'ikke sendt ut brev til søker'
+                            : 'ikke generert brev'
+                    }`}
+                </AlertStripeInfo>
             )}
         </Skjemasteg>
     );
