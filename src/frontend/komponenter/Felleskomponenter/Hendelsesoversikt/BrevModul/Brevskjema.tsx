@@ -70,6 +70,10 @@ const Brevskjema = ({
         }
     }, [hentetForhåndsvisning]);
 
+    useEffect(() => {
+        settForhåndsviningModal(false);
+    }, []);
+
     const skjemaErLåst =
         skjema.submitRessurs.status === RessursStatus.HENTER ||
         hentetForhåndsvisning.status === RessursStatus.HENTER;

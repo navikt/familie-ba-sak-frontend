@@ -3,6 +3,7 @@ import {
     defaultValidator,
     Felt,
     FeltState,
+    NavBaseSkjemaProps,
     NavInputProps,
     ValiderFelt,
     Valideringsstatus,
@@ -37,22 +38,33 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
 
     const onChange = useCallback(
         (verdi: Verdi | ChangeEvent) => {
-            console.log(verdi);
             const normalisertVerdi = isChangeEvent(verdi) ? verdi.target.value : verdi;
 
-            console.log(normalisertVerdi);
             kjørValidering(normalisertVerdi as Verdi);
         },
         [kjørValidering, settFeltState]
     );
 
-    const hentNavInputProps = (visFeilmelding: boolean): NavInputProps<Verdi> => ({
-        id: '',
-        name: '',
-        feil: visFeilmelding ? feltState.feilmelding : undefined,
-        value: feltState.verdi,
-        onChange,
-    });
+    const hentNavInputProps = useCallback(
+        (visFeilmelding: boolean): NavInputProps<Verdi> => ({
+            id: '',
+            name: '',
+            feil: visFeilmelding ? feltState.feilmelding : undefined,
+            value: feltState.verdi,
+            onChange,
+        }),
+        [kjørValidering, settFeltState]
+    );
+
+    const hentNavRadiogruppeProps = useCallback(
+        (visFeilmelding: boolean): NavBaseSkjemaProps<Verdi> => ({
+            id: '',
+            name: '',
+            feil: visFeilmelding ? feltState.feilmelding : undefined,
+            value: feltState.verdi,
+        }),
+        [kjørValidering, settFeltState]
+    );
 
     const nullstill = () => {
         settFeltState(
@@ -67,6 +79,7 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
         () => ({
             ...feltState,
             hentNavInputProps,
+            hentNavRadiogruppeProps,
             nullstill,
             onChange,
         }),
