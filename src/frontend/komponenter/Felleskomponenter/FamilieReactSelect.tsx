@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactSelect, { NamedProps, StylesConfig } from 'react-select';
+import { NamedProps, StylesConfig } from 'react-select';
+import Creatable from 'react-select/creatable';
 import { Label } from 'nav-frontend-skjema';
 import styled from 'styled-components';
 import { Feilmelding } from 'nav-frontend-typografi';
@@ -83,7 +84,7 @@ const FamilieReactSelect: React.FC<IProps> = ({
     return (
         <Container>
             <Label htmlFor={id}>{label} </Label>
-            <ReactSelect
+            <Creatable
                 styles={{
                     ...propSelectStyles,
                     ...navSelectStyles(feil),

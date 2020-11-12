@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import {
     defaultValidator,
     Felt,
@@ -6,6 +6,7 @@ import {
     NavBaseSkjemaProps,
     NavInputProps,
     ValiderFelt,
+    Valideringscontext,
     Valideringsstatus,
 } from './typer';
 import { isChangeEvent } from './utils';
@@ -23,27 +24,37 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
         verdi: feltConfig.verdi,
     });
 
-    const kjørValidering = (verdi: Verdi = feltState.verdi) => {
+    const validerOgSettFelt = (
+        verdi: Verdi = feltState.verdi,
+        valideringscontext?: Valideringscontext
+    ) => {
         settFeltState(
-            feltState.valider({
-                ...feltState,
-                verdi: verdi,
-            })
+            feltState.valider(
+                {
+                    ...feltState,
+                    verdi: verdi,
+                },
+                valideringscontext
+            )
         );
     };
-
-    useEffect(() => {
-        kjørValidering();
-    }, []);
 
     const onChange = useCallback(
         (verdi: Verdi | ChangeEvent) => {
             const normalisertVerdi = isChangeEvent(verdi) ? verdi.target.value : verdi;
 
-            kjørValidering(normalisertVerdi as Verdi);
+            validerOgSettFelt(normalisertVerdi as Verdi);
         },
-        [kjørValidering, settFeltState]
+        [validerOgSettFelt, settFeltState]
     );
+
+    const onBlur = useCallback(() => {
+        if (feltState.valideringsstatus !== Valideringsstatus.IKKE_VALIDERT) {
+            return;
+        }
+
+        validerOgSettFelt();
+    }, [validerOgSettFelt, feltState.valideringsstatus]);
 
     const hentNavInputProps = useCallback(
         (visFeilmelding: boolean): NavInputProps<Verdi> => ({
@@ -52,8 +63,9 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
             feil: visFeilmelding ? feltState.feilmelding : undefined,
             value: feltState.verdi,
             onChange,
+            onBlur,
         }),
-        [kjørValidering, settFeltState]
+        [validerOgSettFelt, settFeltState]
     );
 
     const hentNavRadiogruppeProps = useCallback(
@@ -62,8 +74,9 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
             name: '',
             feil: visFeilmelding ? feltState.feilmelding : undefined,
             value: feltState.verdi,
+            onBlur,
         }),
-        [kjørValidering, settFeltState]
+        [validerOgSettFelt, settFeltState]
     );
 
     const nullstill = () => {
@@ -81,8 +94,10 @@ export function useFelt<Verdi = string>(feltConfig: FeltConfig<Verdi>): Felt<Ver
             hentNavInputProps,
             hentNavRadiogruppeProps,
             nullstill,
+            onBlur,
             onChange,
+            validerOgSettFelt,
         }),
-        [feltState, hentNavInputProps, nullstill, onChange]
+        [feltState, hentNavInputProps, validerOgSettFelt, nullstill, onChange]
     );
 }

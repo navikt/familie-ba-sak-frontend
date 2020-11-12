@@ -4,19 +4,23 @@ import { FamilieAxiosRequestConfig, useApp } from '../context/AppContext';
 import { Felt, FieldDictionary, ISkjema, Valideringsstatus } from './typer';
 
 export const useSkjema = <Felter, SkjemaRespons>({
-    skjemanavn,
     felter,
-    nullstillEtterSubmit = true,
+    skjemanavn,
 }: {
-    skjemanavn: string;
     felter: FieldDictionary<Felter>;
-    nullstillEtterSubmit?: boolean;
+    skjemanavn: string;
 }) => {
     const { axiosRequest } = useApp();
     const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs<SkjemaRespons>());
 
     const kanSendeSkjema = (): boolean => {
+        Object.values(felter).forEach(felt => {
+            const unknownFelt = felt as Felt<unknown>;
+            unknownFelt.validerOgSettFelt(unknownFelt.verdi, {
+                felter,
+            });
+        });
         settVisfeilmeldinger(true);
 
         return (
@@ -26,6 +30,7 @@ export const useSkjema = <Felter, SkjemaRespons>({
             }).length === 0 && skjema.submitRessurs.status !== RessursStatus.HENTER
         );
     };
+    console.log(felter);
 
     const nullstillSkjema = () => {
         // eslint-disable-next-line
@@ -45,7 +50,7 @@ export const useSkjema = <Felter, SkjemaRespons>({
                 (response: Ressurs<SkjemaRespons>) => {
                     settSubmitRessurs(response);
                     if (response.status === RessursStatus.SUKSESS) {
-                        nullstillEtterSubmit && nullstillSkjema();
+                        nullstillSkjema();
                         onSuccess(response);
                     }
                 }

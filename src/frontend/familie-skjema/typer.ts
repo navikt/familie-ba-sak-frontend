@@ -19,6 +19,7 @@ export interface Felt<Verdi> {
     nullstill(): void;
     onChange: FeltOnChange<Verdi>;
     valider: ValiderFelt<Verdi>;
+    validerOgSettFelt: ValiderOgSettFelt<Verdi>;
     valideringsstatus: Valideringsstatus;
     verdi: Verdi;
 }
@@ -28,6 +29,7 @@ export interface NavBaseSkjemaProps<Verdi> {
     id: string;
     name: string;
     value: Verdi;
+    onBlur(): void;
 }
 
 export interface NavInputProps<Verdi> extends NavBaseSkjemaProps<Verdi> {
@@ -47,6 +49,11 @@ export type ValiderFelt<Verdi> = (
     felt: FeltState<Verdi>,
     valideringscontext?: Valideringscontext
 ) => FeltState<Verdi>;
+
+export type ValiderOgSettFelt<Verdi> = (
+    verdi: Verdi,
+    valideringscontext?: Valideringscontext
+) => void;
 
 export const defaultValidator = <Verdi>(felt: FeltState<Verdi>) => ({
     ...felt,
