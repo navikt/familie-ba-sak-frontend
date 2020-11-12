@@ -40,6 +40,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
     const førstegangsbehandlingEnabled =
         fagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
     const revurderingEnabled = fagsak.behandlinger.length > 0 && kanOppretteBehandling;
+    const visTekniskOpphør = revurderingEnabled && (toggles[ToggleNavn.visTekniskOpphør] || true);
 
     const {
         fjernState,
@@ -146,6 +147,18 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         >
                             Revurdering
                         </option>
+
+                        {visTekniskOpphør && (
+                            <option
+                                aria-selected={
+                                    selectedBehandlingstype === Behandlingstype.TEKNISK_OPPHØR
+                                }
+                                disabled={!revurderingEnabled}
+                                value={Behandlingstype.TEKNISK_OPPHØR}
+                            >
+                                Teknisk opphør
+                            </option>
+                        )}
                     </FamilieSelect>
 
                     <FamilieSelect
@@ -168,28 +181,31 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         <option disabled={true} value={''}>
                             Velg
                         </option>
-                        {Object.values(BehandlingÅrsak)
-                            .filter(årsak => {
-                                if (årsak === BehandlingÅrsak.TEKNISK_OPPHØR) {
-                                    return (
-                                        revurderingEnabled &&
-                                        (toggles[ToggleNavn.visTekniskOpphør] || true)
-                                    );
-                                } else {
-                                    return true;
+                        {selectedBehandlingstype === Behandlingstype.TEKNISK_OPPHØR ? (
+                            <option
+                                key={BehandlingÅrsak.TEKNISK_OPPHØR}
+                                aria-selected={
+                                    selectedBehandlingÅrsak === BehandlingÅrsak.TEKNISK_OPPHØR
                                 }
-                            })
-                            .map(årsak => {
-                                return (
-                                    <option
-                                        key={årsak}
-                                        aria-selected={selectedBehandlingÅrsak === årsak}
-                                        value={årsak}
-                                    >
-                                        {behandlingÅrsak[årsak]}
-                                    </option>
-                                );
-                            })}
+                                value={BehandlingÅrsak.TEKNISK_OPPHØR}
+                            >
+                                {behandlingÅrsak[BehandlingÅrsak.TEKNISK_OPPHØR]}
+                            </option>
+                        ) : (
+                            Object.values(BehandlingÅrsak)
+                                .filter(årsak => årsak !== BehandlingÅrsak.TEKNISK_OPPHØR)
+                                .map(årsak => {
+                                    return (
+                                        <option
+                                            key={årsak}
+                                            aria-selected={selectedBehandlingÅrsak === årsak}
+                                            value={årsak}
+                                        >
+                                            {behandlingÅrsak[årsak]}
+                                        </option>
+                                    );
+                                })
+                        )}
                     </FamilieSelect>
                 </SkjemaGruppe>
             </UIModalWrapper>

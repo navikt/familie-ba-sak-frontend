@@ -14,6 +14,7 @@ const agent = () => {
         return createHttpsProxyAgent({
             host: hostPort[0],
             port: parseInt(hostPort[1], 10),
+            // eslint-disable-next-line
         }) as any;
     } else {
         info(`Environment variable HTTP_PROXY is not set, not proxying requests`);
