@@ -27,6 +27,10 @@ const StyledInfokort = styled(Infokort)`
     }
 `;
 
+const IngenFagsakTekst = styled.p`
+    margin: 0.5rem 0;
+`;
+
 const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
     deltager,
     index,
@@ -79,7 +83,9 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
             index={index}
             onClick={onClick}
         >
-            {!deltager.fagsakId && <p>Ingen fagsak. Trykk for å opprette &gt;</p>}
+            {!deltager.fagsakId && (
+                <IngenFagsakTekst>Ingen fagsak. Trykk for å opprette &gt;</IngenFagsakTekst>
+            )}
         </StyledInfokort>
     );
 };
