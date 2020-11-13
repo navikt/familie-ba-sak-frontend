@@ -15,10 +15,7 @@ import Behandlinger from './Behandlinger';
 import Utbetalinger from './Utbetalinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import AlertStripe from 'nav-frontend-alertstriper';
-import Opphør from './Opphør';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
-import { useApp } from '../../../context/AppContext';
-import { ToggleNavn } from '../../../typer/toggles';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import styled from 'styled-components';
 import Lenke from 'nav-frontend-lenker';
@@ -33,7 +30,6 @@ const FlexSpaceBetween = styled.div`
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { toggles } = useApp();
     const { bestemÅpenBehandling } = useBehandling();
     React.useEffect(() => {
         bestemÅpenBehandling(undefined);
@@ -129,7 +125,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 <>
                     <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
                     {løpendeMånedligUtbetaling()}
-                    {toggles[ToggleNavn.visTekniskOpphør] && <Opphør fagsak={fagsak} />}
                 </>
             )}
 

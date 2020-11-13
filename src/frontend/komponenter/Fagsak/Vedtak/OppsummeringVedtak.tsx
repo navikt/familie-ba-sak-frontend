@@ -19,6 +19,7 @@ import { UtbetalingBegrunnelserProvider } from '../../../context/UtbetalingBegru
 import {
     BehandlingStatus,
     BehandlingSteg,
+    BehandlingÅrsak,
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
@@ -29,6 +30,7 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import { BehandlerRolle } from '../../../../../node_dist/frontend/typer/behandling';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -135,64 +137,76 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             maxWidthStyle="100%"
             className={'vedtaksbrev'}
         >
-            <PdfVisningModal
-                onRequestOpen={hentVedtaksbrev}
-                åpen={visVedtaksbrev}
-                onRequestClose={() => {
-                    settVisVedtaksbrev(false);
-                    settVedtaksbrev(byggTomRessurs());
-                }}
-                pdfdata={vedtaksbrev}
-            />
+            {åpenBehandling.årsak !== BehandlingÅrsak.TEKNISK_OPPHØR ? (
+                <>
+                    <PdfVisningModal
+                        onRequestOpen={hentVedtaksbrev}
+                        åpen={visVedtaksbrev}
+                        onRequestClose={() => {
+                            settVisVedtaksbrev(false);
+                            settVedtaksbrev(byggTomRessurs());
+                        }}
+                        pdfdata={vedtaksbrev}
+                    />
 
-            <UtbetalingBegrunnelserProvider
-                fagsak={fagsak}
-                aktivVedtak={aktivVedtak}
-                hentVedtaksbrev={hentVedtaksbrev}
-            >
-                <UtbetalingBegrunnelseTabell åpenBehandling={åpenBehandling} />
-            </UtbetalingBegrunnelserProvider>
+                    <UtbetalingBegrunnelserProvider
+                        fagsak={fagsak}
+                        aktivVedtak={aktivVedtak}
+                        hentVedtaksbrev={hentVedtaksbrev}
+                    >
+                        <UtbetalingBegrunnelseTabell åpenBehandling={åpenBehandling} />
+                    </UtbetalingBegrunnelserProvider>
 
-            <Knapp
-                mini={true}
-                onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
-                children={'Vis vedtaksbrev'}
-            />
+                    <Knapp
+                        mini={true}
+                        onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
+                        children={'Vis vedtaksbrev'}
+                    />
 
-            {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
+                    {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
 
-            {visModal && (
-                <UIModalWrapper
-                    modal={{
-                        tittel: 'Totrinnskontroll',
-                        lukkKnapp: false,
-                        visModal: visModal,
-                        actions: [
-                            <Knapp
-                                key={'saksoversikt'}
-                                mini={true}
-                                onClick={() => {
-                                    settVisModal(false);
-                                    history.push(`/fagsak/${fagsak.id}/saksoversikt`);
-                                    window.location.reload();
-                                }}
-                                children={'Gå til saksoversikten'}
-                            />,
-                            <Knapp
-                                key={'oppgavebenk'}
-                                type={'hoved'}
-                                mini={true}
-                                onClick={() => {
-                                    settVisModal(false);
-                                    history.push('/oppgaver');
-                                }}
-                                children={'Gå til oppgavebenken'}
-                            />,
-                        ],
-                    }}
-                >
-                    <Normaltekst>Behandlingen er nå sendt til totrinnskontroll</Normaltekst>
-                </UIModalWrapper>
+                    {visModal && (
+                        <UIModalWrapper
+                            modal={{
+                                tittel: 'Totrinnskontroll',
+                                lukkKnapp: false,
+                                visModal: visModal,
+                                actions: [
+                                    <Knapp
+                                        key={'saksoversikt'}
+                                        mini={true}
+                                        onClick={() => {
+                                            settVisModal(false);
+                                            history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                            window.location.reload();
+                                        }}
+                                        children={'Gå til saksoversikten'}
+                                    />,
+                                    <Knapp
+                                        key={'oppgavebenk'}
+                                        type={'hoved'}
+                                        mini={true}
+                                        onClick={() => {
+                                            settVisModal(false);
+                                            history.push('/oppgaver');
+                                        }}
+                                        children={'Gå til oppgavebenken'}
+                                    />,
+                                ],
+                            }}
+                        >
+                            <Normaltekst>Behandlingen er nå sendt til totrinnskontroll</Normaltekst>
+                        </UIModalWrapper>
+                    )}
+                </>
+            ) : (
+                <AlertStripeInfo>
+                    {`Den forrige behandlingen er annullert, og det er ${
+                        åpenBehandling.status === BehandlingStatus.AVSLUTTET
+                            ? 'ikke sendt ut brev til søker'
+                            : 'ikke generert brev'
+                    }`}
+                </AlertStripeInfo>
             )}
         </Skjemasteg>
     );
