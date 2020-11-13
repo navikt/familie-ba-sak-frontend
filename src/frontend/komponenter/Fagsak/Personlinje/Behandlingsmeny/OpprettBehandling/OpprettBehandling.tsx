@@ -14,6 +14,8 @@ import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 import useOpprettBehandling from './useOpprettBehandling';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import { useApp } from '../../../../../context/AppContext';
+import { ToggleNavn } from '../../../../../typer/toggles';
 
 interface IProps {
     onListElementClick: () => void;
@@ -29,6 +31,7 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
 }
 
 const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => {
+    const { toggles } = useApp();
     const [visModal, settVisModal] = useState(false);
 
     const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
@@ -37,6 +40,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
     const førstegangsbehandlingEnabled =
         fagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
     const revurderingEnabled = fagsak.behandlinger.length > 0 && kanOppretteBehandling;
+    const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
 
     const {
         fjernState,
@@ -143,6 +147,18 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         >
                             Revurdering
                         </option>
+
+                        {visTekniskOpphør && (
+                            <option
+                                aria-selected={
+                                    selectedBehandlingstype === Behandlingstype.TEKNISK_OPPHØR
+                                }
+                                disabled={!revurderingEnabled}
+                                value={Behandlingstype.TEKNISK_OPPHØR}
+                            >
+                                Teknisk opphør
+                            </option>
+                        )}
                     </FamilieSelect>
 
                     <FamilieSelect
@@ -165,17 +181,31 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         <option disabled={true} value={''}>
                             Velg
                         </option>
-                        {Object.values(BehandlingÅrsak).map(årsak => {
-                            return (
-                                <option
-                                    key={årsak}
-                                    aria-selected={selectedBehandlingÅrsak === årsak}
-                                    value={årsak}
-                                >
-                                    {behandlingÅrsak[årsak]}
-                                </option>
-                            );
-                        })}
+                        {selectedBehandlingstype === Behandlingstype.TEKNISK_OPPHØR ? (
+                            <option
+                                key={BehandlingÅrsak.TEKNISK_OPPHØR}
+                                aria-selected={
+                                    selectedBehandlingÅrsak === BehandlingÅrsak.TEKNISK_OPPHØR
+                                }
+                                value={BehandlingÅrsak.TEKNISK_OPPHØR}
+                            >
+                                {behandlingÅrsak[BehandlingÅrsak.TEKNISK_OPPHØR]}
+                            </option>
+                        ) : (
+                            Object.values(BehandlingÅrsak)
+                                .filter(årsak => årsak !== BehandlingÅrsak.TEKNISK_OPPHØR)
+                                .map(årsak => {
+                                    return (
+                                        <option
+                                            key={årsak}
+                                            aria-selected={selectedBehandlingÅrsak === årsak}
+                                            value={årsak}
+                                        >
+                                            {behandlingÅrsak[årsak]}
+                                        </option>
+                                    );
+                                })
+                        )}
                     </FamilieSelect>
                 </SkjemaGruppe>
             </UIModalWrapper>
