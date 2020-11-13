@@ -2,8 +2,8 @@ import { INøkkelPar } from './common';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
-import { BehandlingSteg } from './behandling';
 import { FeltState } from '../familie-skjema/typer';
+import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -92,6 +92,7 @@ export interface IRestVilkårResultat {
 
 export interface IRestStegTilstand {
     behandlingSteg: BehandlingSteg;
+    behandlingStegStatus: BehandlingStegStatus;
 }
 
 export type Vilkårsbegrunnelser = {
