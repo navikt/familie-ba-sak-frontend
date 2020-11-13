@@ -40,7 +40,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
     const førstegangsbehandlingEnabled =
         fagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
     const revurderingEnabled = fagsak.behandlinger.length > 0 && kanOppretteBehandling;
-    const visTekniskOpphør = revurderingEnabled && (toggles[ToggleNavn.visTekniskOpphør] || true);
+    const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
 
     const {
         fjernState,
