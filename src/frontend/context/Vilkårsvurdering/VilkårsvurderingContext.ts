@@ -1,8 +1,8 @@
 import constate from 'constate';
 import * as React from 'react';
+import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
 import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { IFelt, Valideringsstatus } from '../../typer/felt';
 import {
     IPersonResultat,
     IRestNyttVilkår,
@@ -50,7 +50,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
 
     const putVilkår = (
         vilkårsvurderingForPerson: IPersonResultat,
-        redigerbartVilkår: IFelt<IVilkårResultat>
+        redigerbartVilkår: FeltState<IVilkårResultat>
     ) => {
         settVilkårSubmit(VilkårSubmit.PUT);
 
@@ -101,7 +101,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
             vilkårsvurdering.filter((personResultat: IPersonResultat) => {
                 return (
                     personResultat.vilkårResultater.filter(
-                        (vilkårResultat: IFelt<IVilkårResultat>) =>
+                        (vilkårResultat: FeltState<IVilkårResultat>) =>
                             vilkårResultat.valideringsstatus !== Valideringsstatus.OK
                     ).length > 0
                 );
@@ -116,10 +116,10 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                     ...accVilkårMedFeil,
                     ...personResultat.vilkårResultater
                         .filter(
-                            (vilkårResultat: IFelt<IVilkårResultat>) =>
+                            (vilkårResultat: FeltState<IVilkårResultat>) =>
                                 vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
                         )
-                        .map((vilkårResultat: IFelt<IVilkårResultat>) => vilkårResultat.verdi),
+                        .map((vilkårResultat: FeltState<IVilkårResultat>) => vilkårResultat.verdi),
                 ];
             },
             []
