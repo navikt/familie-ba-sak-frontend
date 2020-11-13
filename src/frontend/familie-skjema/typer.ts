@@ -13,7 +13,7 @@ export type FeltOnChange<Verdi> = (
 ) => void;
 
 export interface Felt<Verdi> {
-    skalRendres: boolean;
+    erSynlig: boolean;
     feilmelding: string;
     hentNavInputProps(visFeilmelding: boolean): NavInputProps<Verdi>;
     hentNavRadiogruppeProps(visFeilmelding: boolean): NavBaseSkjemaProps<Verdi>;
@@ -42,16 +42,13 @@ export enum Valideringsstatus {
 }
 
 // eslint-disable-next-line
-export type Valideringscontext = { [key: string]: any };
+export type FeltContext = { [key: string]: any };
 export type ValiderFelt<Verdi> = (
     felt: FeltState<Verdi>,
-    valideringscontext?: Valideringscontext
+    avhengigheter?: FeltContext
 ) => FeltState<Verdi>;
 
-export type ValiderOgSettFelt<Verdi> = (
-    verdi: Verdi,
-    valideringscontext?: Valideringscontext
-) => void;
+export type ValiderOgSettFelt<Verdi> = (verdi: Verdi, avhengigheter?: FeltContext) => void;
 
 export const defaultValidator = <Verdi>(felt: FeltState<Verdi>) => ({
     ...felt,

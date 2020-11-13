@@ -145,7 +145,7 @@ const Brevskjema = ({
                     })}
                 </FamilieSelect>
 
-                {skjema.felter.multiselect.skalRendres && (
+                {skjema.felter.multiselect.erSynlig && (
                     <FamilieReactSelect
                         {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={
@@ -168,7 +168,7 @@ const Brevskjema = ({
                     />
                 )}
 
-                {skjema.felter.fritekst.skalRendres && (
+                {skjema.felter.fritekst.erSynlig && (
                     <FamilieTextarea
                         {...skjema.felter.fritekst.hentNavInputProps(skjema.visFeilmeldinger)}
                         disabled={skjemaErLåst}

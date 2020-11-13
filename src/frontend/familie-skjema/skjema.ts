@@ -14,8 +14,12 @@ export const useSkjema = <Felter, SkjemaRespons>({
     const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs<SkjemaRespons>());
 
-    const validerAlleFelter = () => {
-        Object.values(felter).forEach(felt => {
+    const alleSynligeFelter = () => {
+        return Object.values(felter).filter(felt => (felt as Felt<unknown>).erSynlig);
+    };
+
+    const validerAlleSynligeFelter = () => {
+        alleSynligeFelter().forEach(felt => {
             const unknownFelt = felt as Felt<unknown>;
             unknownFelt.validerOgSettFelt(unknownFelt.verdi, {
                 felter,
@@ -24,11 +28,11 @@ export const useSkjema = <Felter, SkjemaRespons>({
     };
 
     const kanSendeSkjema = (): boolean => {
-        validerAlleFelter();
+        validerAlleSynligeFelter();
         settVisfeilmeldinger(true);
 
         return (
-            Object.values(felter).filter(felt => {
+            alleSynligeFelter().filter(felt => {
                 const unknownFelt = felt as Felt<unknown>;
                 return unknownFelt.valideringsstatus !== Valideringsstatus.OK;
             }).length === 0 && skjema.submitRessurs.status !== RessursStatus.HENTER
@@ -37,7 +41,7 @@ export const useSkjema = <Felter, SkjemaRespons>({
 
     const nullstillSkjema = () => {
         // eslint-disable-next-line
-        Object.values(felter).forEach((felt: unknown) => (felt as Felt<unknown>).nullstill());
+        alleSynligeFelter().forEach((felt: unknown) => (felt as Felt<unknown>).nullstill());
         settVisfeilmeldinger(false);
         settSubmitRessurs(byggTomRessurs());
     };

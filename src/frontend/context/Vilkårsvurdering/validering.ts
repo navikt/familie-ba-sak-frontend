@@ -1,15 +1,15 @@
-import { FeltState, Valideringscontext, Valideringsstatus } from '../../familie-skjema/typer';
+import { FeltState, FeltContext, Valideringsstatus } from '../../familie-skjema/typer';
 import { feil, ok } from '../../familie-skjema/validators';
 import { IPeriode } from '../../typer/periode';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
-    valideringscontext?: Valideringscontext
+    avhengigheter?: FeltContext
 ): FeltState<IVilkårResultat> => {
     const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
         nyttVilkårResultat.verdi.periode,
-        valideringscontext
+        avhengigheter
     );
 
     const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(

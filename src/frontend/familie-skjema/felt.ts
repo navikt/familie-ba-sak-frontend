@@ -6,30 +6,42 @@ import {
     NavBaseSkjemaProps,
     NavInputProps,
     ValiderFelt,
-    Valideringscontext,
+    FeltContext,
     Valideringsstatus,
 } from './typer';
 import { isChangeEvent } from './utils';
 
+/**
+ * Konfigurasjon for å opprette et felt.
+ *
+ * @verdi verdien til feltet med generisk Verdi type
+ * @valideringsfunksjon optional valideringsfunksjon på feltet
+ * @skalFeltetVises optional visningsfunksjon. Kan brukes dersom skjemaet
+ * skjuler felter for bruker under gitte omstendigheter
+ * @valideringscontext avhengighetene som brukes til validering og vis/skjul
+ */
 export interface FeltConfig<Verdi> {
     verdi: Verdi;
     valideringsfunksjon?: ValiderFelt<Verdi>;
-    skalSkjules?: (valideringscontext: Valideringscontext) => boolean;
+    skalFeltetVises?: (valideringscontext: FeltContext) => boolean;
+    avhengigheter?: FeltContext;
 }
 
-export function useFelt<Verdi = string>(
-    feltConfig: FeltConfig<Verdi>,
-    valideringscontext: Valideringscontext = {}
-): Felt<Verdi> {
+export function useFelt<Verdi = string>({
+    verdi,
+    valideringsfunksjon,
+    skalFeltetVises,
+    avhengigheter = {},
+}: FeltConfig<Verdi>): Felt<Verdi> {
     const initialFeltState = {
         feilmelding: '',
-        valider: feltConfig.valideringsfunksjon ? feltConfig.valideringsfunksjon : defaultValidator,
+        valider: valideringsfunksjon ? valideringsfunksjon : defaultValidator,
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-        verdi: feltConfig.verdi,
+        verdi: verdi,
     };
 
     const [feltState, settFeltState] = useState<FeltState<Verdi>>(initialFeltState);
-    const [skalRendres, settSkalRendres] = useState(feltConfig.skalSkjules === undefined);
+    const [erSynlig, settErSynlig] = useState(skalFeltetVises === undefined);
 
     const nullstill = () => {
         settFeltState(initialFeltState);
@@ -42,23 +54,27 @@ export function useFelt<Verdi = string>(
                     ...feltState,
                     verdi: verdi,
                 },
-                valideringscontext
+                avhengigheter
             )
         );
     };
 
+    /**
+     * Basert på avhengighetene til feltet håndterer vi vis/skjul
+     * og nullstilling på feltet.
+     */
     useEffect(() => {
-        if (feltConfig.skalSkjules) {
-            if (feltConfig.skalSkjules(valideringscontext)) {
+        if (skalFeltetVises) {
+            if (skalFeltetVises(avhengigheter)) {
+                settErSynlig(true);
+            } else {
                 if (feltState.valideringsstatus !== Valideringsstatus.IKKE_VALIDERT) {
                     nullstill();
-                    settSkalRendres(false);
+                    settErSynlig(false);
                 }
-            } else {
-                settSkalRendres(true);
             }
         }
-    }, [...Object.values(valideringscontext)]);
+    }, [...Object.values(avhengigheter)]);
 
     const onChange = useCallback(
         (verdi: Verdi | ChangeEvent) => {
@@ -92,7 +108,7 @@ export function useFelt<Verdi = string>(
             hentNavInputProps,
             hentNavRadiogruppeProps,
             nullstill,
-            skalRendres,
+            erSynlig,
             onChange,
             validerOgSettFelt,
         }),

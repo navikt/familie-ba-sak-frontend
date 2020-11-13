@@ -1,11 +1,6 @@
 import moment from 'moment';
 import { IPersonBeregning } from '../typer/beregning';
-import {
-    FeltState,
-    ValiderFelt,
-    Valideringscontext,
-    Valideringsstatus,
-} from '../familie-skjema/typer';
+import { FeltState, ValiderFelt, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
 import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Resultat } from '../typer/vilkår';
@@ -58,12 +53,12 @@ const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?
 
 export const erPeriodeGyldig = (
     felt: FeltState<IPeriode>,
-    valideringscontext?: Valideringscontext
+    avhengigheter?: FeltContext
 ): FeltState<IPeriode> => {
     const fom = felt.verdi.fom;
     const tom = felt.verdi.tom;
 
-    const person: IGrunnlagPerson | undefined = valideringscontext?.person;
+    const person: IGrunnlagPerson | undefined = avhengigheter?.person;
 
     if (fom) {
         const fomDatoErGyldig = moment(fom).isValid();
