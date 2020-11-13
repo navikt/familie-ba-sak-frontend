@@ -51,7 +51,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
 
     return (
         <BarnaWrapper className={'søknad__barna'}>
-            <Systemtittel children={'Opplysninger om barn under 18 år'} />
+            <Systemtittel children={'Opplysninger om barn'} />
             {bruker.status === RessursStatus.SUKSESS &&
                 bruker.data.familierelasjonerMaskert
                     .filter(
