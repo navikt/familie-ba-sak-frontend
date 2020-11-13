@@ -22,9 +22,9 @@ export interface IFagsakDeltagerkortProps {
     children?: React.ReactNode | React.ReactNode[];
 }
 
-const StyledInfokort = styled(Infokort)`
+const StyledInfokort = styled(Infokort)<{ deaktivert: boolean }>`
     :hover {
-        cursor: pointer;
+        cursor: ${({ deaktivert }) => (deaktivert ? 'default' : 'pointer')};
     }
 `;
 
@@ -64,6 +64,7 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
 
     return (
         <StyledInfokort
+            deaktivert={!deltager.harTilgang}
             ikon={
                 deltager.harTilgang ? (
                     ikoner[`${deltager.rolle}_${deltager.kjønn}`]
