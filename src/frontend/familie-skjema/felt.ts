@@ -41,7 +41,7 @@ export function useFelt<Verdi = string>({
     };
 
     const [feltState, settFeltState] = useState<FeltState<Verdi>>(initialFeltState);
-    const [erSynlig, settErSynlig] = useState(skalFeltetVises === undefined);
+    const [erSynlig, settErSynlig] = useState(!skalFeltetVises);
 
     const nullstill = () => {
         settFeltState(initialFeltState);

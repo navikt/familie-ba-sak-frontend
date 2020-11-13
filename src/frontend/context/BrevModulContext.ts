@@ -83,7 +83,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
                     const multiselect: ISelectOptionMedBrevtekst[] | undefined =
                         avhengigheter?.multiselect.verdi;
-                    console.log(avhengigheter?.multiselect, multiselect);
 
                     const annetErValgt =
                         (
@@ -109,11 +108,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                     }
                 },
                 skalFeltetVises: (avhengigheter: FeltContext) => {
-                    return (
-                        avhengigheter?.multiselect.verdi.filter(
-                            (selectOption: ISelectOptionMedBrevtekst) =>
-                                selectOption.value === 'annet'
-                        ).length > 0
+                    return avhengigheter?.multiselect.verdi.some(
+                        (selectOption: ISelectOptionMedBrevtekst) => selectOption.value === 'annet'
                     );
                 },
                 avhengigheter: { brevmal, multiselect },
