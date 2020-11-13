@@ -29,20 +29,12 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                           return (
                               <React.Fragment key={sideId}>
                                   <Link
-                                      active={erSidenAktiv(
-                                          side,
-                                          åpenBehandling.data.steg,
-                                          åpenBehandling.data.stegTilstand
-                                      )}
+                                      active={erSidenAktiv(side, åpenBehandling.data)}
                                       id={sideId}
                                       to={tilPath}
                                       className={classNames(
                                           'venstremeny__link',
-                                          erSidenAktiv(
-                                              side,
-                                              åpenBehandling.data.steg,
-                                              åpenBehandling.data.stegTilstand
-                                          ) && 'hover-effekt'
+                                          erSidenAktiv(side, åpenBehandling.data) && 'hover-effekt'
                                       )}
                                   >
                                       {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
@@ -51,22 +43,15 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                       const antallAksjonspunkter = underside.antallAksjonspunkter();
                                       return (
                                           <Link
-                                              active={erSidenAktiv(
-                                                  side,
-                                                  åpenBehandling.data.steg,
-                                                  åpenBehandling.data.stegTilstand
-                                              )}
+                                              active={erSidenAktiv(side, åpenBehandling.data)}
                                               key={`${sideId}_${underside.hash}`}
                                               id={`${sideId}_${underside.hash}`}
                                               to={`${tilPath}#${underside.hash}`}
                                               className={classNames(
                                                   'venstremeny__link',
                                                   'underside',
-                                                  erSidenAktiv(
-                                                      side,
-                                                      åpenBehandling.data.steg,
-                                                      åpenBehandling.data.stegTilstand
-                                                  ) && 'hover-effekt'
+                                                  erSidenAktiv(side, åpenBehandling.data) &&
+                                                      'hover-effekt'
                                               )}
                                           >
                                               <>

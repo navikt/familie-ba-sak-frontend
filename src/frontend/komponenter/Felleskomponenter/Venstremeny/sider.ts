@@ -1,16 +1,11 @@
 import {
     BehandlingSteg,
+    BehandlingStegStatus,
     Behandlingstype,
-    finnSisteUtfortStegForSendtTilBeslutter,
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
-import {
-    IPersonResultat,
-    IRestStegTilstand,
-    IVilkårResultat,
-    Resultat,
-} from '../../../typer/vilkår';
+import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
 import { IFelt } from '../../../typer/felt';
 import { formaterPersonIdent } from '../../../utils/formatter';
@@ -88,16 +83,18 @@ export const sider: Record<SideId, ISide> = {
     },
 };
 
-export const erSidenAktiv = (
-    side: ISide,
-    steg: BehandlingSteg,
-    stegTilstand: IRestStegTilstand[]
-): boolean => {
-    if (steg === BehandlingSteg.BEHANDLING_AVSLUTTET) {
-        return stegTilstand.map(st => st.behandlingSteg).includes(side.steg);
-    } else {
-        return hentStegNummer(side.steg) <= hentStegNummer(steg);
+export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
+    const steg = finnSteg(behandling);
+
+    if (!side.steg && side.steg !== 0) {
+        return true;
     }
+
+    if (!steg) {
+        return false;
+    }
+
+    return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
 export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysningsplikt: boolean) => {
@@ -115,17 +112,12 @@ export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysning
 };
 
 export const finnSideForBehandlingssteg = (
-    stegTilstand: IRestStegTilstand[],
+    behandling: IBehandling,
     opplysningsplikt: IOpplysningsplikt | undefined
 ): ISide | undefined => {
-    const sisteUtfortStegForSendtTilBeslutter = finnSisteUtfortStegForSendtTilBeslutter(
-        stegTilstand
-    );
+    const steg = finnSteg(behandling);
 
-    if (
-        hentStegNummer(sisteUtfortStegForSendtTilBeslutter) >=
-        hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)
-    ) {
+    if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
         return sider.VEDTAK;
     } else if (opplysningsplikt && opplysningsplikt.status === OpplysningspliktStatus.IKKE_SATT) {
         return sider.OPPLYSNINGSPLIKT;
@@ -133,7 +125,7 @@ export const finnSideForBehandlingssteg = (
 
     const sideForSteg = Object.entries(sider)
         .filter(([sideId, _]) => sideId !== SideId.OPPLYSNINGSPLIKT)
-        .find(([_, side]) => side.steg === sisteUtfortStegForSendtTilBeslutter);
+        .find(([_, side]) => side.steg === steg);
 
     return sideForSteg ? sideForSteg[1] : undefined;
 };
@@ -161,3 +153,24 @@ export const erViPåUlovligSteg = (pathname: string, behandlingSide?: ISide) => 
 
     return false;
 };
+
+export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
+    const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_SØKNAD);
+
+    if (erHenlagt) {
+        if (inneholderSteg(behandling, BehandlingSteg.SEND_TIL_BESLUTTER))
+            return BehandlingSteg.SEND_TIL_BESLUTTER;
+        if (inneholderSteg(behandling, BehandlingSteg.VILKÅRSVURDERING))
+            return BehandlingSteg.VILKÅRSVURDERING;
+        return BehandlingSteg.REGISTRERE_SØKNAD;
+    } else {
+        return behandling.steg;
+    }
+};
+
+export const inneholderSteg = (behandling: IBehandling, behandlingSteg: BehandlingSteg): boolean =>
+    behandling.stegTilstand
+        .filter(
+            stegTilstand => stegTilstand.behandlingStegStatus !== BehandlingStegStatus.IKKE_UTFØRT
+        )
+        .some(stegTilstand => stegTilstand.behandlingSteg === behandlingSteg);

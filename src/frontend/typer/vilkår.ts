@@ -3,7 +3,7 @@ import { IFelt } from './felt';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
-import { BehandlingSteg } from './behandling';
+import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 
 export enum Resultat {
     NEI = 'NEI',
@@ -92,6 +92,7 @@ export interface IRestVilkårResultat {
 
 export interface IRestStegTilstand {
     behandlingSteg: BehandlingSteg;
+    behandlingStegStatus: BehandlingStegStatus;
 }
 
 export type Vilkårsbegrunnelser = {
