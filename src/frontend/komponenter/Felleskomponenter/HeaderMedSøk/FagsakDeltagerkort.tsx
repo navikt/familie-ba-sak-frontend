@@ -13,6 +13,7 @@ import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import { adressebeskyttelsestyper } from '../../../typer/person';
 import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
 import { Infokort } from '@navikt/familie-header';
+import navFarger from 'nav-frontend-core';
 
 export interface IFagsakDeltagerkortProps {
     deltager: IFagsakDeltager;
@@ -29,6 +30,7 @@ const StyledInfokort = styled(Infokort)`
 
 const IngenFagsakTekst = styled.p`
     margin: 0.5rem 0;
+    color: ${navFarger.navGra80};
 `;
 
 const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
@@ -83,7 +85,7 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
             index={index}
             onClick={onClick}
         >
-            {!deltager.fagsakId && (
+            {!deltager.fagsakId && deltager.harTilgang && (
                 <IngenFagsakTekst>Ingen fagsak. Trykk for å opprette &gt;</IngenFagsakTekst>
             )}
         </StyledInfokort>
