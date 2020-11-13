@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useApp } from '../../../context/AppContext';
-import useFagsakApi from '../../Fagsak/useFagsakApi';
 import UIModalWrapper from '../Modal/UIModalWrapper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding } from 'nav-frontend-typografi';
+import useOpprettFagsak from './useOpprettFagsak';
 
 export interface IOpprettFagsakModal {
     lukkModal: () => void;
@@ -11,15 +11,9 @@ export interface IOpprettFagsakModal {
 }
 
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, personIdent }) => {
-    const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
-    const [opprettelseFeilmelding, settOpprettelseFeilmelding] = useState('');
+    const { opprettFagsak, feilmelding, senderInn } = useOpprettFagsak();
     const { sjekkTilgang } = useApp();
     const visModal = !!personIdent;
-
-    const { opprettEllerHentFagsak, senderInn } = useFagsakApi(
-        settVisFeilmeldinger,
-        settOpprettelseFeilmelding
-    );
 
     return (
         <UIModalWrapper
@@ -32,7 +26,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, personId
                         mini={true}
                         onClick={async () => {
                             if (personIdent && (await sjekkTilgang(personIdent))) {
-                                opprettEllerHentFagsak({
+                                opprettFagsak({
                                     personIdent,
                                     aktørId: null,
                                 });
@@ -51,7 +45,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, personId
                 visModal,
             }}
         >
-            {visFeilmeldinger && <Feilmelding children={opprettelseFeilmelding} />}
+            {!!feilmelding && <Feilmelding children={feilmelding} />}
         </UIModalWrapper>
     );
 };

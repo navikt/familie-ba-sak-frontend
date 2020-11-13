@@ -7,7 +7,6 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../../context/AppContext';
 import OpprettFagsakModal from './OpprettFagsakModal';
-import { FagsakProvider } from '../../../context/FagsakContext';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -99,12 +98,10 @@ const FagsakDeltagerSøk: React.FC = () => {
                     })}
             </Søk>
 
-            <FagsakProvider>
-                <OpprettFagsakModal
-                    personIdent={identForOpprettFagsak}
-                    lukkModal={() => settIdentForOpprettFagsak(undefined)}
-                />
-            </FagsakProvider>
+            <OpprettFagsakModal
+                personIdent={identForOpprettFagsak}
+                lukkModal={() => settIdentForOpprettFagsak(undefined)}
+            />
         </>
     );
 };
