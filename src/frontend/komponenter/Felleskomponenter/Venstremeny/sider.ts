@@ -7,9 +7,9 @@ import {
 } from '../../../typer/behandling';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import { IFelt } from '../../../typer/felt';
 import { formaterPersonIdent } from '../../../utils/formatter';
 import { IOpplysningsplikt, OpplysningspliktStatus } from '../../../typer/opplysningsplikt';
+import { FeltState } from '../../../familie-skjema/typer';
 
 export interface ISide {
     href: string;
@@ -62,7 +62,7 @@ export const sider: Record<SideId, ISide> = {
                         hash: `${index}_${personResultat.person.fødselsdato}`,
                         antallAksjonspunkter: () =>
                             personResultat.vilkårResultater.filter(
-                                (vilkårResultat: IFelt<IVilkårResultat>) => {
+                                (vilkårResultat: FeltState<IVilkårResultat>) => {
                                     return vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE;
                                 }
                             ).length,

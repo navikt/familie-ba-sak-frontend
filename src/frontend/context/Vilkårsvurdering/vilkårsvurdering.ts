@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { IFelt, Valideringsstatus } from '../../typer/felt';
+import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
 import { diff, nyPeriode } from '../../typer/periode';
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
@@ -18,8 +18,8 @@ import {
 import { kjørValidering, validerVilkår } from './validering';
 
 export const sorterVilkårsvurderingForPerson = (
-    vilkårResultater: IFelt<IVilkårResultat>[]
-): IFelt<IVilkårResultat>[] => {
+    vilkårResultater: FeltState<IVilkårResultat>[]
+): FeltState<IVilkårResultat>[] => {
     return vilkårResultater.sort(
         (a, b) =>
             a.verdi.vilkårType.localeCompare(b.verdi.vilkårType) ||

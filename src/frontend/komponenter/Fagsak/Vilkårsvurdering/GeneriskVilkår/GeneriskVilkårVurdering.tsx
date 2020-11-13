@@ -14,7 +14,6 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Slett from '../../../../ikoner/Slett';
-import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { periodeToString } from '../../../../typer/periode';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -42,11 +41,12 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import { IFagsak } from '../../../../typer/fagsak';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { FeltState, Valideringsstatus } from '../../../../familie-skjema/typer';
 
 interface IProps {
     person: IGrunnlagPerson;
     vilkårFraConfig: IVilkårConfig;
-    vilkårResultat: IFelt<IVilkårResultat>;
+    vilkårResultat: FeltState<IVilkårResultat>;
     visFeilmeldinger: boolean;
 }
 
@@ -73,11 +73,11 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     );
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
-    const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
+    const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(
         vilkårResultat
     );
 
-    const validerOgSettRedigerbartVilkår = (endretVilkår: IFelt<IVilkårResultat>) => {
+    const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
         settRedigerbartVilkår(validerVilkår(endretVilkår));
     };
 
@@ -118,7 +118,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     };
 
     const lagreVilkår = (
-        validertVilkår: IFelt<IVilkårResultat>,
+        validertVilkår: FeltState<IVilkårResultat>,
         vilkårsvurderingForPerson: IPersonResultat | undefined
     ) => {
         if (

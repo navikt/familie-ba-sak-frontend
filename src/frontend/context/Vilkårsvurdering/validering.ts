@@ -1,21 +1,22 @@
-import { feil, IFelt, ok, Valideringsmetadata, Valideringsstatus } from '../../typer/felt';
+import { FeltState, FeltContext, Valideringsstatus } from '../../familie-skjema/typer';
+import { feil, ok } from '../../familie-skjema/validators';
 import { IPeriode } from '../../typer/periode';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
-    nyttVilkårResultat: IFelt<IVilkårResultat>,
-    valideringsmetadata?: Valideringsmetadata
-): IFelt<IVilkårResultat> => {
-    const nyPeriode: IFelt<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
+    nyttVilkårResultat: FeltState<IVilkårResultat>,
+    avhengigheter?: FeltContext
+): FeltState<IVilkårResultat> => {
+    const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
         nyttVilkårResultat.verdi.periode,
-        valideringsmetadata
+        avhengigheter
     );
 
-    const nyBegrunnelse: IFelt<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
+    const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
         nyttVilkårResultat.verdi.begrunnelse
     );
 
-    const nyttResultat: IFelt<Resultat> = nyttVilkårResultat.verdi.resultat.valider(
+    const nyttResultat: FeltState<Resultat> = nyttVilkårResultat.verdi.resultat.valider(
         nyttVilkårResultat.verdi.resultat
     );
 
@@ -41,7 +42,7 @@ export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonRe
         return {
             ...personResultat,
             vilkårResultater: personResultat.vilkårResultater.map(
-                (vilkårResultat: IFelt<IVilkårResultat>): IFelt<IVilkårResultat> => {
+                (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
                     return validerVilkår(vilkårResultat);
                 }
             ),
