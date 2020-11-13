@@ -73,7 +73,10 @@ const useFagsakApi = (
                     if (!aktivBehandling) {
                         settVisFeilmeldinger(true);
                         settFeilmelding('Opprettelse av behandling feilet');
-                    } else if (aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
+                    } else if (
+                        aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD ||
+                        aktivBehandling.type === Behandlingstype.TEKNISK_OPPHØR
+                    ) {
                         history.push(
                             `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
                         );
