@@ -189,7 +189,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             ) {
                 brevMaler.push(Brevmal.VARSEL_OM_REVURDERING);
             }
-            brevMaler.push(Brevmal.VARSEL_OM_REVURDERING);
         }
 
         return brevMaler;

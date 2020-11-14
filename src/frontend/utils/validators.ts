@@ -60,7 +60,6 @@ export const erPeriodeGyldig = (
 
     const person: IGrunnlagPerson | undefined = avhengigheter?.person;
 
-    console.log(person);
     if (fom) {
         const fomDatoErGyldig = moment(fom).isValid();
 
@@ -74,7 +73,6 @@ export const erPeriodeGyldig = (
                 ? barnsVilkårErMellom0og18År(fom, person, tom)
                 : true;
 
-        console.log(periodeErInnenfor18år);
         if (fomDatoErFremITid) {
             return feil(felt, 'Du kan ikke legge inn en dato frem i tid');
         }
