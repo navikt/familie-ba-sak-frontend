@@ -7,6 +7,7 @@ export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
     avhengigheter?: FeltContext
 ): FeltState<IVilkårResultat> => {
+    console.log(avhengigheter);
     const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
         nyttVilkårResultat.verdi.periode,
         avhengigheter

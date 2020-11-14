@@ -60,6 +60,7 @@ export const erPeriodeGyldig = (
 
     const person: IGrunnlagPerson | undefined = avhengigheter?.person;
 
+    console.log(person);
     if (fom) {
         const fomDatoErGyldig = moment(fom).isValid();
 
@@ -68,16 +69,17 @@ export const erPeriodeGyldig = (
         const fomDatoErFørTomDato = stringToMoment(fom, TIDENES_MORGEN).isBefore(
             stringToMoment(tom, TIDENES_ENDE)
         );
-        const periodeErInnenfqor18år =
+        const periodeErInnenfor18år =
             person && person.type === PersonType.BARN
                 ? barnsVilkårErMellom0og18År(fom, person, tom)
                 : true;
 
+        console.log(periodeErInnenfor18år);
         if (fomDatoErFremITid) {
             return feil(felt, 'Du kan ikke legge inn en dato frem i tid');
         }
 
-        return fomDatoErGyldig && fomDatoErFørTomDato && periodeErInnenfqor18år
+        return fomDatoErGyldig && fomDatoErFørTomDato && periodeErInnenfor18år
             ? ok(felt)
             : feil(felt, 'Ugyldig periode');
     } else {

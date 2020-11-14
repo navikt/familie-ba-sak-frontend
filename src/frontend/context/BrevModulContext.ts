@@ -47,7 +47,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             felt: FeltState<ISelectOptionMedBrevtekst[]>,
             avhengigheter?: FeltContext
         ) => {
-            const brevmal: Brevmal | '' = avhengigheter?.brevmal.value;
+            const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
 
             return felt.verdi.length > 0
                 ? ok(felt)
@@ -189,6 +189,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             ) {
                 brevMaler.push(Brevmal.VARSEL_OM_REVURDERING);
             }
+            brevMaler.push(Brevmal.VARSEL_OM_REVURDERING);
         }
 
         return brevMaler;
