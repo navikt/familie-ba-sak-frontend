@@ -6,18 +6,31 @@ import {
     useManuellJournalføringV2,
 } from '../../context/ManuellJournalføringContextV2';
 import { Dokumenter } from './Dokumenter';
-import { Dokument as PdfDokument } from '../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import styled from 'styled-components';
+import { PdfDokument } from './PdfDokument';
 
 const PageSplit = styled.div`
     display: flex;
     flex-direction: row;
 `;
 
-const ScrollDiv = styled.div`
+const BackgroundDiv = styled.div`
+    margin-left: 40px;
     width: 40rem;
-    height: 50rem;
+    height: 80vh;
+    background-color: #e9e7e7;
+`;
+
+const ScrollDiv = styled.div`
+    padding: 1rem 0 1rem 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    height: 70vh;
     overflow-y: scroll;
+`;
+
+const ListDiv = styled.div`
+    margin-left: 20px;
 `;
 
 const ManuellJournalføringContentV2: React.FC = () => {
@@ -27,8 +40,16 @@ const ManuellJournalføringContentV2: React.FC = () => {
         case RessursStatus.SUKSESS:
             return (
                 <PageSplit>
-                    <Dokumenter />
-                    <ScrollDiv>{visDokument && <PdfDokument pdfdata={dokumentData} />}</ScrollDiv>
+                    <ListDiv>
+                        <Dokumenter />
+                    </ListDiv>
+                    {visDokument && (
+                        <BackgroundDiv>
+                            <ScrollDiv>
+                                <PdfDokument pdfdata={dokumentData} />
+                            </ScrollDiv>
+                        </BackgroundDiv>
+                    )}
                 </PageSplit>
             );
         case RessursStatus.FEILET:
