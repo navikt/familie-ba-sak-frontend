@@ -8136,10 +8136,10 @@ nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.18, nav-
   dependencies:
     nav-frontend-core "^5.0.8"
 
-nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.17, nav-frontend-typografi@^2.0.21, nav-frontend-typografi@^2.0.34:
-  version "2.0.34"
-  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.34.tgz#74a7b474ddae944bff20b22bd3bc553ac59bcb72"
-  integrity sha512-UXFBJCUfQu+OQmBD1CH6uQg9PRIc5Qrmv5Nk2UYXTBqGXoUfSR3QAcZEv772ii5m/st2/dNqYgG3YJrPzBVFng==
+nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.17, nav-frontend-typografi@^2.0.21, nav-frontend-typografi@^2.0.36:
+  version "2.0.36"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.36.tgz#0a8e7619df8f80708c0949ed3f04ae82531e0d58"
+  integrity sha512-f9lzsuHXcE9lEdDEmY2bkV7ho4QT2DH4+MDN/rpAudgKzIvRFTDRxk8x64glHlpsU9mkhNo1h5rtsk/7vt/LhQ==
 
 nav-styled-component-theme@^1.0.7:
   version "1.0.7"
