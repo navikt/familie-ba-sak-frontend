@@ -105,13 +105,13 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
         switch (åpenBehandling.opplysningsplikt?.status) {
             case OpplysningspliktStatus.MOTTATT:
             case OpplysningspliktStatus.IKKE_MOTTATT_FORTSETT: {
-                return Resultat.JA;
+                return Resultat.OPPFYLT;
             }
             case OpplysningspliktStatus.IKKE_MOTTATT_AVSLAG: {
-                return Resultat.NEI;
+                return Resultat.IKKE_OPPFYLT;
             }
             default:
-                return Resultat.KANSKJE;
+                return Resultat.IKKE_VURDERT;
         }
     };
 

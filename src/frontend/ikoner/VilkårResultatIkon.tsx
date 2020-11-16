@@ -18,11 +18,11 @@ const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({
     width,
 }) => {
     switch (resultat) {
-        case Resultat.JA:
+        case Resultat.OPPFYLT:
             return <Oppfylt heigth={heigth} className={className} width={width} />;
-        case Resultat.NEI:
+        case Resultat.IKKE_OPPFYLT:
             return <IkkeOppfylt heigth={heigth} className={className} width={width} />;
-        case Resultat.KANSKJE:
+        case Resultat.IKKE_VURDERT:
             return <Advarsel heigth={heigth} className={className} width={width} />;
     }
 };
