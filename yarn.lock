@@ -7972,10 +7972,10 @@ nav-frontend-hjelpetekst-style@^2.0.25:
   resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-2.0.33.tgz#88470995dd79d564e22e0164397ca5c30a9af40b"
   integrity sha512-KC7GmL/B0wVAnsRdNpaXfqEno2fYXLeNWjK866H4Opm9xYHVE/fZPdU82AkEa1Tki3/W5Mhp/4T+hSVq1bKRNQ==
 
-nav-frontend-hjelpetekst@^2.0.32:
-  version "2.0.43"
-  resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst/-/nav-frontend-hjelpetekst-2.0.43.tgz#046fa7f1c9eae3b564022e82fae65cda49e45dd7"
-  integrity sha512-+IgCjcrd+qECCOqERq3ObrmzfRPpJ05a8A9lLzFi+/IsE8jfPmAz3y1DMNtV3YQAHLTmftWgp/txe5qgA9BeoQ==
+nav-frontend-hjelpetekst@^2.0.45:
+  version "2.0.45"
+  resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst/-/nav-frontend-hjelpetekst-2.0.45.tgz#03521554a8610c694aa2477f3007c721e9448ccd"
+  integrity sha512-ePFJaVGOObFERJ3QwrZKwWQEfMg0xEAXGSG5Xy8v2k8BzQFuWyNAPc7wKaEgNDLC6QOintyfF+N4+aYIEzZdPw==
 
 nav-frontend-ikoner-assets@2.0.3:
   version "2.0.3"
