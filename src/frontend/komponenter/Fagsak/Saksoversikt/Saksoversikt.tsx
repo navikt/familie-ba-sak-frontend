@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import {
     BehandlingKategori,
+    BehandlingResultat,
     BehandlingStatus,
     IBehandling,
     kategorier,
@@ -36,7 +37,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     }, [fagsak.status]);
 
     const behandlingshistorikk = fagsak.behandlinger.filter(
-        (behandling: IBehandling) => behandling.status === BehandlingStatus.AVSLUTTET
+        (behandling: IBehandling) =>
+            behandling.status === BehandlingStatus.AVSLUTTET &&
+            behandling.samletResultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
+            behandling.samletResultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET
     );
 
     let gjeldendeBehandling =
