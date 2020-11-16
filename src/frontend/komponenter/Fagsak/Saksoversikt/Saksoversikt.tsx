@@ -36,7 +36,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         bestemÅpenBehandling(undefined);
     }, [fagsak.status]);
 
-    const behandlingshistorikk = fagsak.behandlinger.filter(
+    const iverksatteBehandlinger = fagsak.behandlinger.filter(
         (behandling: IBehandling) =>
             behandling.status === BehandlingStatus.AVSLUTTET &&
             behandling.samletResultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
@@ -44,8 +44,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     );
 
     let gjeldendeBehandling =
-        behandlingshistorikk.length > 0
-            ? behandlingshistorikk.sort((a, b) =>
+        iverksatteBehandlinger.length > 0
+            ? iverksatteBehandlinger.sort((a, b) =>
                   moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
               )[0]
             : undefined;
