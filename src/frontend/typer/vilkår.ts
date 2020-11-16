@@ -26,8 +26,8 @@ export const uiResultat: Record<Resultat, string> = {
 };
 
 export const resultater: Record<Resultat, string> = {
-    OPPFYLT: 'JA',
-    IKKE_OPPFYLT: 'NEI',
+    OPPFYLT: 'Ja',
+    IKKE_OPPFYLT: 'Nei',
     IKKE_VURDERT: 'Kanskje',
 };
 

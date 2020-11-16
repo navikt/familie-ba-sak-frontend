@@ -12,7 +12,7 @@ import {
     IBehandling,
 } from '../../frontend/typer/behandling';
 import { IGrunnlagPerson, PersonType } from '../../frontend/typer/person';
-import { IRestPersonResultat, Resultat, VilkårType } from '../../frontend/typer/vilkår';
+import { IRestPersonResultat, RestResultat, VilkårType } from '../../frontend/typer/vilkår';
 import fs from 'fs';
 import path from 'path';
 import { Målform } from 'frontend/typer/søknad';
@@ -86,7 +86,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 1,
                 vilkårType: VilkårType.LOVLIG_OPPHOLD,
-                resultat: Resultat.IKKE_VURDERT,
+                resultat: RestResultat.IKKE_VURDERT,
                 periodeFom: '2000-01-01',
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -103,7 +103,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 2,
                 vilkårType: VilkårType.BOSATT_I_RIKET,
-                resultat: Resultat.IKKE_VURDERT,
+                resultat: RestResultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -114,7 +114,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 3,
                 vilkårType: VilkårType.LOVLIG_OPPHOLD,
-                resultat: Resultat.IKKE_VURDERT,
+                resultat: RestResultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -125,7 +125,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 4,
                 vilkårType: VilkårType.GIFT_PARTNERSKAP,
-                resultat: Resultat.IKKE_VURDERT,
+                resultat: RestResultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -136,7 +136,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 5,
                 vilkårType: VilkårType.UNDER_18_ÅR,
-                resultat: Resultat.IKKE_VURDERT,
+                resultat: RestResultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -147,7 +147,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 6,
                 vilkårType: VilkårType.BOR_MED_SØKER,
-                resultat: Resultat.IKKE_VURDERT,
+                resultat: RestResultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
