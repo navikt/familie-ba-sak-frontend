@@ -1,3 +1,4 @@
+import deepEqual from 'deep-equal';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import {
     defaultValidator,
@@ -37,26 +38,43 @@ export function useFelt<Verdi = string>({
         feilmelding: '',
         valider: valideringsfunksjon ? valideringsfunksjon : defaultValidator,
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-        verdi: verdi,
+        verdi,
     };
 
     const [feltState, settFeltState] = useState<FeltState<Verdi>>(initialFeltState);
-    const [erSynlig, settErSynlig] = useState(!skalFeltetVises);
+    const [erSynlig, settErSynlig] = useState(
+        skalFeltetVises ? skalFeltetVises(avhengigheter) : true
+    );
 
     const nullstill = () => {
         settFeltState(initialFeltState);
     };
 
     const validerOgSettFelt = (verdi: Verdi = feltState.verdi) => {
-        settFeltState(
-            feltState.valider(
-                {
-                    ...feltState,
-                    verdi: verdi,
-                },
-                avhengigheter
-            )
+        const validertFelt = feltState.valider(
+            {
+                ...feltState,
+                verdi,
+            },
+            avhengigheter
         );
+
+        if (!deepEqual(feltState, validertFelt)) {
+            settFeltState(validertFelt);
+        }
+    };
+
+    const hentAvhengighetArray = () => {
+        return avhengigheter
+            ? // eslint-disable-next-line
+              Object.values(avhengigheter).reduce((acc: [], avhengighet: any) => {
+                  if ('valideringsstatus' in avhengighet) {
+                      return [...acc, (avhengighet as Felt<unknown>).verdi];
+                  } else {
+                      return [...acc, avhengighet];
+                  }
+              }, [])
+            : [];
     };
 
     /**
@@ -65,16 +83,14 @@ export function useFelt<Verdi = string>({
      */
     useEffect(() => {
         if (skalFeltetVises) {
-            if (skalFeltetVises(avhengigheter)) {
-                settErSynlig(true);
-            } else {
-                if (feltState.valideringsstatus !== Valideringsstatus.IKKE_VALIDERT) {
-                    nullstill();
-                    settErSynlig(false);
-                }
+            if (feltState.valideringsstatus !== Valideringsstatus.IKKE_VALIDERT) {
+                nullstill();
             }
+            settErSynlig(skalFeltetVises(avhengigheter));
+        } else {
+            validerOgSettFelt();
         }
-    }, [...Object.values(avhengigheter)]);
+    }, [...hentAvhengighetArray()]);
 
     const onChange = useCallback(
         (verdi: Verdi | ChangeEvent) => {
