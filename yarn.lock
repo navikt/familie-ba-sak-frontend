@@ -817,10 +817,10 @@
   resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.1.3.tgz#1bd136977a708120b6069276b0069b2a9cc9ae73"
   integrity sha512-xBwlPOI08kbByUWI4Yyd6NbIYLFs78I0h05mlHPjmrPPikyM89IQRbMac+6ovkgpi2s63OV6ryv3w4QqPubwiw==
 
-"@navikt/helse-frontend-tidslinje@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@navikt/helse-frontend-tidslinje/-/helse-frontend-tidslinje-3.1.0.tgz#6136c8eee0d79dbfe21c208a8ff0fa83394eb80e"
-  integrity sha512-J4SvS8L5VUowb8Kii+Ko15qkS80VUqEqQgi7S+DfkiWa2wgvQMpV5PrEJUpjaSpE3gp9cQetap/XELbr+QS+vA==
+"@navikt/helse-frontend-tidslinje@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@navikt/helse-frontend-tidslinje/-/helse-frontend-tidslinje-4.0.1.tgz#08fb47a6f4784735eb495a5ac3a40b9623d4a0ec"
+  integrity sha512-qx2879GRX2WGVjLvZUYoqoVAIwWrEEUl4WJpx/gqWpWhkHcqxZQvyoX9si6+taNWX0YSUyuar+xYjepnjM6csw==
   dependencies:
     nanoid "^3.1.3"
 
