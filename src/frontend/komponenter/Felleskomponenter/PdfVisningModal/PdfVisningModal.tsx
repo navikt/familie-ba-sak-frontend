@@ -40,7 +40,7 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
     );
 };
 
-const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
+export const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
     const [antallSider, settAntallSider] = React.useState<number>(0);
 
     switch (pdfdata.status) {

@@ -6,10 +6,10 @@ import { Oppgaver } from '../context/OppgaverContext';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
-import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring';
 import classNames from 'classnames';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import FagsakContainer from './Fagsak/FagsakContainer';
+import ManuellJournalføringV2 from './ManuellJournalføringV2/ManuellJournalføringV2';
 
 const Container: React.FC = () => {
     const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
@@ -39,7 +39,7 @@ const Container: React.FC = () => {
                                 <Route
                                     exact={true}
                                     path="/oppgaver/journalfør/:oppgaveId"
-                                    component={ManuellJournalføring}
+                                    component={ManuellJournalføringV2}
                                 />
                             </Switch>
                         </FagsakProvider>
