@@ -7,7 +7,7 @@ import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringC
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 
 const DokumentPanel = styled(Panel)`
-    margin-top: 5px;
+    margin-top: 20px;
     width: 24rem;
     height: 100%;
 `;

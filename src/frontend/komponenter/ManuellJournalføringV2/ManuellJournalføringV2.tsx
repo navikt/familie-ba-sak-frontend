@@ -1,4 +1,4 @@
-import { RessursStatus } from '@navikt/familie-typer';
+import { kjønnType, RessursStatus } from '@navikt/familie-typer';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import React from 'react';
 import {
@@ -7,7 +7,9 @@ import {
 } from '../../context/ManuellJournalføringContextV2';
 import { Dokumenter } from './Dokumenter';
 import styled from 'styled-components';
-import { PdfDokument } from './PdfDokument';
+import Visittkort from '@navikt/familie-visittkort';
+import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
+//import { PdfDokument } from './PdfDokument';
 
 const PageSplit = styled.div`
     display: flex;
@@ -16,20 +18,18 @@ const PageSplit = styled.div`
 
 const Bakgrunn = styled.div`
     margin-left: 40px;
-    width: 40rem;
-    height: 80vh;
-    background-color: #e9e7e7;
+    width: 100%;
+    height: 92vh;
 `;
 
+/*
 const Scroll = styled.div`
-    padding: 1rem 0 1rem 0;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    height: 70vh;
-    overflow-y: scroll;
+    padding: 1rem 1rem 1rem 1rem;
+    width: 40rem;
 `;
-
+*/
 const Dokumentliste = styled.div`
+    margin-top: 60px;
     margin-left: 20px;
 `;
 
@@ -39,18 +39,39 @@ const ManuellJournalføringContentV2: React.FC = () => {
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
-                <PageSplit>
-                    <Dokumentliste>
-                        <Dokumenter />
-                    </Dokumentliste>
-                    {visDokument && (
-                        <Bakgrunn>
+                <div>
+                    <Visittkort
+                        navn={dataForManuellJournalføring.data.person?.navn || 'Noname'}
+                        ident={formaterPersonIdent(
+                            dataForManuellJournalføring.data.person?.personIdent || ''
+                        )}
+                        alder={hentAlder(
+                            dataForManuellJournalføring.data.person?.fødselsdato || ''
+                        )}
+                        kjønn={dataForManuellJournalføring.data.person?.kjønn || kjønnType.UKJENT}
+                    ></Visittkort>
+                    <PageSplit>
+                        <Dokumentliste>
+                            <Dokumenter />
+                        </Dokumentliste>
+                        {visDokument && dokumentData.status === RessursStatus.SUKSESS && (
+                            /*                        <Bakgrunn>
                             <Scroll>
                                 <PdfDokument pdfdata={dokumentData} />
                             </Scroll>
                         </Bakgrunn>
-                    )}
-                </PageSplit>
+*/
+                            <Bakgrunn>
+                                <iframe
+                                    title={'dokument'}
+                                    src={dokumentData.data}
+                                    width={'100%'}
+                                    height={'100%'}
+                                ></iframe>
+                            </Bakgrunn>
+                        )}
+                    </PageSplit>
+                </div>
             );
         case RessursStatus.FEILET:
             return <AlertStripeFeil children={dataForManuellJournalføring.frontendFeilmelding} />;
