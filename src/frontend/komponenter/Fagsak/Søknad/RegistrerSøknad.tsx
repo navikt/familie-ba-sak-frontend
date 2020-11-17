@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { useSøknad } from '../../../context/SøknadContext';
+import { initalState, useSøknad } from '../../../context/SøknadContext';
 import { BehandlingSteg, hentStegNummer, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -35,11 +35,11 @@ const StyledSkjemasteg = styled(Skjemasteg)`
 
 const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { axiosRequest } = useApp();
-    const { fagsak, settFagsak } = useFagsakRessurser();
+    const { fagsak, settFagsak, bruker } = useFagsakRessurser();
     const { erLesevisning, opplysningsplikt } = useBehandling();
     const history = useHistory();
 
-    const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig } = useSøknad();
+    const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig, settSøknad } = useSøknad();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
     const [frontendFeilmelding, settFrontendFeilmelding] = React.useState('');
@@ -106,6 +106,8 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                             })
                         ),
                     });
+                } else {
+                    bruker.status === RessursStatus.SUKSESS && settSøknad(initalState(bruker.data));
                 }
             });
         }

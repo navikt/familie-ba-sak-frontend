@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
 import { useFagsakRessurser } from './FagsakContext';
 
-const initalState = (bruker?: IPersonInfo): ISøknadDTO => {
+export const initalState = (bruker?: IPersonInfo): ISøknadDTO => {
     return {
         underkategori: BehandlingUnderkategori.ORDINÆR,
         søkerMedOpplysninger: {
@@ -88,7 +88,14 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
         validerSøknad(søknad);
     };
 
-    return { feilmeldinger, søknad, settBarn, settSøknadOgValider, erSøknadGyldig: validerSøknad };
+    return {
+        feilmeldinger,
+        søknad,
+        settBarn,
+        settSøknadOgValider,
+        erSøknadGyldig: validerSøknad,
+        settSøknad,
+    };
 });
 
 export { SøknadProvider, useSøknad };
