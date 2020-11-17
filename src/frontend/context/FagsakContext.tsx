@@ -20,9 +20,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const { axiosRequest } = useApp();
 
     React.useEffect(() => {
-        console.log(fagsak);
         if (fagsak.status !== RessursStatus.SUKSESS && fagsak.status !== RessursStatus.HENTER) {
-            console.log('clear bruker', fagsak);
             settBruker(byggTomRessurs());
         } else {
             oppdaterBrukerHvisFagsakEndres(bruker, fagsak);
@@ -48,7 +46,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         bruker: Ressurs<IPersonInfo>,
         fagsak: Ressurs<IFagsak>
     ): void => {
-        console.log('entering oppdater bruker', bruker, fagsak);
         if (fagsak.status !== RessursStatus.SUKSESS) {
             return;
         }
@@ -59,8 +56,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         ) {
             hentBruker(fagsak.data.søkerFødselsnummer);
         }
-
-        console.log('leaving oppdater bruker', bruker, fagsak);
     };
 
     const hentBruker = (personIdent: string): void => {
