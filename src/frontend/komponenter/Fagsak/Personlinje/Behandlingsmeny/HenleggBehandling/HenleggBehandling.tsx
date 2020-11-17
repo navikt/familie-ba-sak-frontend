@@ -126,7 +126,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             skjema.felter.årsak.onChange(event.target.value);
                         }}
                     >
-                        <option disabled={true} value={''}>
+                        <option disabled={true} value={''} selected={true}>
                             Velg
                         </option>
                         {Object.values(HenleggelseÅrsak).map(årsak => {
