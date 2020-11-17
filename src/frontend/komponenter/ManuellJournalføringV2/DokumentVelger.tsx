@@ -12,7 +12,7 @@ const DokumentPanel = styled(Panel)`
     height: 100%;
 `;
 
-const RightAlign = styled.div`
+const Høyrejuster = styled.div`
     margin-left: auto;
 `;
 
@@ -65,9 +65,9 @@ const DokumentInfoStripe: React.FC<IDokumentInfoProps> = ({ dokument, journalpos
         <DokumentInfoStripeContainer>
             <DokumentIkon />
             <DokumentInfo dokument={dokument} journalpost={journalpost}></DokumentInfo>
-            <RightAlign>
+            <Høyrejuster>
                 <HoyreChevron></HoyreChevron>
-            </RightAlign>
+            </Høyrejuster>
         </DokumentInfoStripeContainer>
     );
 };

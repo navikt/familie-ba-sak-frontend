@@ -26,6 +26,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settDataForManuellJournalføring(byggHenterRessurs());
         axiosRequest<IDataForManuellJournalføring, void>({
             method: 'GET',
+            //TODO: remove mock
             url: `/familie-ba-sak/api/mock/oppgave/${oppgaveId}`,
             påvirkerSystemLaster: true,
         })
@@ -44,6 +45,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settVisDokument(true);
         axiosRequest<string, void>({
             method: 'GET',
+            //TODO: remove mock
             url: `/familie-ba-sak/api/mock/journalpost/${journalPostId}/hent/${dokumentInfoId}`,
             påvirkerSystemLaster: true,
         })
@@ -68,6 +70,8 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     React.useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
+            settDokumentData(byggTomRessurs());
+            settVisDokument(false);
         }
     }, [oppgaveId]);
 

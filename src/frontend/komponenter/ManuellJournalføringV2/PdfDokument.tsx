@@ -4,6 +4,31 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
+import styled from 'styled-components';
+
+const Spinner = styled.div`
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding-top: 5rem;
+`;
+
+const SpinnerItem = styled(NavFrontendSpinner)`
+    margin-top: 2rem;
+    height: 7rem;
+    width: 7rem;
+`;
+
+const DokumentFeilStripe = styled(AlertStripeFeil)`
+    top: 5rem;
+    position: relative;
+    margin: 0 1rem;
+`;
+
+const Dokumentside = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
 
 export const PdfDokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
     const [antallSider, settAntallSider] = React.useState<number>(0);
@@ -11,32 +36,21 @@ export const PdfDokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata })
     switch (pdfdata.status) {
         case RessursStatus.HENTER:
             return (
-                <div className={'pdfvisning-modal__spinner'}>
+                <Spinner>
                     <Undertittel children={'Innhenter dokument'} />
-                    <NavFrontendSpinner className={'pdfvisning-modal__spinner--item'} />
-                </div>
+                    <SpinnerItem />
+                </Spinner>
             );
         case RessursStatus.SUKSESS:
             return (
                 <Document
-                    className={'pdfvisning-modal__dokument'}
                     file={hentDataFraRessursMedFallback(pdfdata, undefined)}
-                    error={
-                        <AlertStripeFeil
-                            className={'pdfvisning-modal__document--feil'}
-                            children={'Ukjent feil ved henting av dokument.'}
-                        />
-                    }
-                    noData={
-                        <AlertStripeFeil
-                            className={'pdfvisning-modal__document--feil'}
-                            children={'Dokumentet er tomt.'}
-                        />
-                    }
-                    loading={<NavFrontendSpinner className={'skjemamodal__spinner--item'} />}
+                    error={<DokumentFeilStripe children={'Ukjent feil ved henting av dokument.'} />}
+                    noData={<DokumentFeilStripe children={'Dokumentet er tomt.'} />}
+                    loading={<SpinnerItem />}
                     onLoadSuccess={({ numPages }) => settAntallSider(numPages)}
                 >
-                    <div className={'pdfvisning-modal__document--pages'}>
+                    <Dokumentside>
                         {antallSider > 0 &&
                             [...Array(antallSider)].map((_: number, index: number) => {
                                 return (
@@ -46,16 +60,11 @@ export const PdfDokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata })
                                     </div>
                                 );
                             })}
-                    </div>
+                    </Dokumentside>
                 </Document>
             );
         case RessursStatus.FEILET:
-            return (
-                <AlertStripeFeil
-                    className={'pdfvisning-modal__document--feil'}
-                    children={pdfdata.frontendFeilmelding}
-                />
-            );
+            return <DokumentFeilStripe children={pdfdata.frontendFeilmelding} />;
         default:
             return null;
     }

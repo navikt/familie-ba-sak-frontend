@@ -14,14 +14,14 @@ const PageSplit = styled.div`
     flex-direction: row;
 `;
 
-const BackgroundDiv = styled.div`
+const Bakgrunn = styled.div`
     margin-left: 40px;
     width: 40rem;
     height: 80vh;
     background-color: #e9e7e7;
 `;
 
-const ScrollDiv = styled.div`
+const Scroll = styled.div`
     padding: 1rem 0 1rem 0;
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -29,7 +29,7 @@ const ScrollDiv = styled.div`
     overflow-y: scroll;
 `;
 
-const ListDiv = styled.div`
+const Dokumentliste = styled.div`
     margin-left: 20px;
 `;
 
@@ -40,15 +40,15 @@ const ManuellJournalføringContentV2: React.FC = () => {
         case RessursStatus.SUKSESS:
             return (
                 <PageSplit>
-                    <ListDiv>
+                    <Dokumentliste>
                         <Dokumenter />
-                    </ListDiv>
+                    </Dokumentliste>
                     {visDokument && (
-                        <BackgroundDiv>
-                            <ScrollDiv>
+                        <Bakgrunn>
+                            <Scroll>
                                 <PdfDokument pdfdata={dokumentData} />
-                            </ScrollDiv>
-                        </BackgroundDiv>
+                            </Scroll>
+                        </Bakgrunn>
                     )}
                 </PageSplit>
             );

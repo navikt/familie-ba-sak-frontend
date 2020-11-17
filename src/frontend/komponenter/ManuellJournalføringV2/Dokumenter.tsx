@@ -13,16 +13,23 @@ export const Dokumenter: React.FC = () => {
                 <div>
                     {dataForManuellJournalføring.data.journalpost.journalstatus ===
                     Journalstatus.MOTTATT ? (
-                        dataForManuellJournalføring.data.journalpost.dokumenter?.map(
-                            (dokument, index) => (
-                                <div key={index}>
-                                    <DokumentVelger
-                                        dokument={dokument}
-                                        journalpost={dataForManuellJournalføring.data.journalpost}
-                                    />
-                                </div>
+                        !dataForManuellJournalføring.data.journalpost.dokumenter ||
+                        dataForManuellJournalføring.data.journalpost.dokumenter.length === 0 ? (
+                            <AlertStripeAdvarsel children={'Ingen Vedlegg'} />
+                        ) : (
+                            dataForManuellJournalføring.data.journalpost.dokumenter?.map(
+                                (dokument, index) => (
+                                    <div key={index}>
+                                        <DokumentVelger
+                                            dokument={dokument}
+                                            journalpost={
+                                                dataForManuellJournalføring.data.journalpost
+                                            }
+                                        />
+                                    </div>
+                                )
                             )
-                        ) || <AlertStripeAdvarsel children={'Ingen Vedlegg'} />
+                        )
                     ) : (
                         <AlertStripeAdvarsel
                             children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
