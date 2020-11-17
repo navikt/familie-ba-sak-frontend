@@ -8,7 +8,6 @@ import {
     IRestNyttVilkår,
     IRestPersonResultat,
     IVilkårResultat,
-    migrerResultatTilApi,
     VilkårType,
 } from '../../typer/vilkår';
 import { useApp } from '../AppContext';
@@ -66,7 +65,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                         id: redigerbartVilkår.verdi.id,
                         periodeFom: redigerbartVilkår.verdi.periode.verdi.fom,
                         periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
-                        resultat: migrerResultatTilApi(redigerbartVilkår.verdi.resultat.verdi),
+                        resultat: redigerbartVilkår.verdi.resultat.verdi,
                         vilkårType: redigerbartVilkår.verdi.vilkårType,
                         endretAv: redigerbartVilkår.verdi.endretAv,
                         endretTidspunkt: redigerbartVilkår.verdi.endretTidspunkt,
