@@ -7,6 +7,7 @@ import {
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
+    migrerResultatTilUi,
 } from '../../typer/vilkår';
 import { datoformat } from '../../utils/formatter';
 import {
@@ -76,7 +77,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                         erPeriodeGyldig
                                     ),
                                     resultat: lagInitiellFelt(
-                                        vilkårResultat.resultat,
+                                        migrerResultatTilUi(vilkårResultat.resultat),
                                         erResultatGyldig
                                     ),
                                     vilkårType: vilkårResultat.vilkårType,
