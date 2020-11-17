@@ -5,6 +5,7 @@ import { IPersonBeregning, IYtelsePeriode } from '../typer/beregning';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 import { IGrunnlagPerson } from '../typer/person';
+import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '../utils/tid';
 
 export interface ITidslinjeVindu {
     id: number;
@@ -82,8 +83,12 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             ? personBeregninger.map((personBeregning: IPersonBeregning) => {
                   return personBeregning.ytelsePerioder.map(
                       (ytelsePeriode: IYtelsePeriode, index: number) => ({
-                          fom: new Date(ytelsePeriode.stønadFom),
-                          tom: new Date(ytelsePeriode.stønadTom),
+                          fom: new Date(
+                              hentFørsteDagIYearMonth(ytelsePeriode.stønadFom).toISOString()
+                          ),
+                          tom: new Date(
+                              hentSisteDagIYearMonth(ytelsePeriode.stønadTom).toISOString()
+                          ),
                           id: `${personBeregning.personIdent}_${index}`,
                           status: 'suksess',
                       })
