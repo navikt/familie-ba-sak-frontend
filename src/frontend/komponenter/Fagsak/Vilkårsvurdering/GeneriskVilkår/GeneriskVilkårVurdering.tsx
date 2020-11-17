@@ -23,7 +23,7 @@ import {
     IVilkårResultat,
     Resultat,
     resultater,
-    resultatTilUi,
+    uiResultat,
     VilkårType,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -69,7 +69,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     const leseVisning = erLesevisning();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(
-        erLesevisning() || false || vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+        erLesevisning() || false || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
     );
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
@@ -78,7 +78,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     );
 
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
-        settRedigerbartVilkår(validerVilkår(endretVilkår));
+        settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
     };
 
     const radioOnChange = (resultat: Resultat) => {
@@ -108,7 +108,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     };
 
     const onClickVilkårFerdig = () => {
-        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, person);
+        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person });
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
             (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
@@ -171,11 +171,11 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     };
 
     const vilkårResultatForEkteskapVisning = (resultat: Resultat) => {
-        if (resultat === Resultat.JA) {
-            return resultater[Resultat.NEI].navn;
-        } else if (resultat === Resultat.NEI) return resultater[Resultat.JA].navn;
+        if (resultat === Resultat.OPPFYLT) {
+            return resultater[Resultat.IKKE_OPPFYLT];
+        } else if (resultat === Resultat.IKKE_OPPFYLT) return resultater[Resultat.OPPFYLT];
         else {
-            return resultater[Resultat.KANSKJE].navn;
+            return resultater[Resultat.IKKE_VURDERT];
         }
     };
 
@@ -189,9 +189,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                             width={20}
                             heigth={20}
                         />
-                        <Normaltekst
-                            children={resultatTilUi(vilkårResultat.verdi.resultat.verdi)}
-                        />
+                        <Normaltekst children={uiResultat[vilkårResultat.verdi.resultat.verdi]} />
                     </div>
                 </td>
                 <td>
@@ -210,7 +208,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                         label={
                             !ekspandertVilkår
-                                ? vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                                ? vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
                                     ? 'Vurder'
                                     : 'Endre'
                                 : 'Lukk'
@@ -252,7 +250,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                         ? vilkårResultatForEkteskapVisning(
                                               redigerbartVilkår.verdi.resultat.verdi
                                           )
-                                        : resultater[redigerbartVilkår.verdi.resultat.verdi].navn
+                                        : resultater[redigerbartVilkår.verdi.resultat.verdi]
                                 }
                                 legend={
                                     vilkårFraConfig.spørsmål
@@ -274,15 +272,16 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                         redigerbartVilkår.verdi.vilkårType ===
                                         VilkårType.GIFT_PARTNERSKAP
                                             ? redigerbartVilkår.verdi.resultat.verdi ===
-                                              Resultat.NEI
-                                            : redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
+                                              Resultat.IKKE_OPPFYLT
+                                            : redigerbartVilkår.verdi.resultat.verdi ===
+                                              Resultat.OPPFYLT
                                     }
                                     onChange={() =>
                                         radioOnChange(
                                             redigerbartVilkår.verdi.vilkårType ===
                                                 VilkårType.GIFT_PARTNERSKAP
-                                                ? Resultat.NEI
-                                                : Resultat.JA
+                                                ? Resultat.IKKE_OPPFYLT
+                                                : Resultat.OPPFYLT
                                         )
                                     }
                                 />
@@ -292,16 +291,17 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     checked={
                                         redigerbartVilkår.verdi.vilkårType ===
                                         VilkårType.GIFT_PARTNERSKAP
-                                            ? redigerbartVilkår.verdi.resultat.verdi === Resultat.JA
+                                            ? redigerbartVilkår.verdi.resultat.verdi ===
+                                              Resultat.OPPFYLT
                                             : redigerbartVilkår.verdi.resultat.verdi ===
-                                              Resultat.NEI
+                                              Resultat.IKKE_OPPFYLT
                                     }
                                     onChange={() =>
                                         radioOnChange(
                                             redigerbartVilkår.verdi.vilkårType ===
                                                 VilkårType.GIFT_PARTNERSKAP
-                                                ? Resultat.JA
-                                                : Resultat.NEI
+                                                ? Resultat.OPPFYLT
+                                                : Resultat.IKKE_OPPFYLT
                                         )
                                     }
                                 />

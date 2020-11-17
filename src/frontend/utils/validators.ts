@@ -68,7 +68,7 @@ export const erPeriodeGyldig = (
         const fomDatoErFørTomDato = stringToMoment(fom, TIDENES_MORGEN).isBefore(
             stringToMoment(tom, TIDENES_ENDE)
         );
-        const periodeErInnenfqor18år =
+        const periodeErInnenfor18år =
             person && person.type === PersonType.BARN
                 ? barnsVilkårErMellom0og18År(fom, person, tom)
                 : true;
@@ -77,7 +77,7 @@ export const erPeriodeGyldig = (
             return feil(felt, 'Du kan ikke legge inn en dato frem i tid');
         }
 
-        return fomDatoErGyldig && fomDatoErFørTomDato && periodeErInnenfqor18år
+        return fomDatoErGyldig && fomDatoErFørTomDato && periodeErInnenfor18år
             ? ok(felt)
             : feil(felt, 'Ugyldig periode');
     } else {
@@ -86,7 +86,7 @@ export const erPeriodeGyldig = (
 };
 
 export const erResultatGyldig = (felt: FeltState<Resultat>): FeltState<Resultat> => {
-    return felt.verdi !== Resultat.KANSKJE ? ok(felt) : feil(felt, 'Resultat er ikke satt');
+    return felt.verdi !== Resultat.IKKE_VURDERT ? ok(felt) : feil(felt, 'Resultat er ikke satt');
 };
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';

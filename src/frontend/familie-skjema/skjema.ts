@@ -19,12 +19,17 @@ export const useSkjema = <Felter, SkjemaRespons>({
     };
 
     const validerAlleSynligeFelter = () => {
-        alleSynligeFelter().forEach(felt => {
-            const unknownFelt = felt as Felt<unknown>;
-            unknownFelt.validerOgSettFelt(unknownFelt.verdi, {
-                felter,
+        alleSynligeFelter()
+            .filter(
+                felt =>
+                    (felt as Felt<unknown>).valideringsstatus === Valideringsstatus.IKKE_VALIDERT
+            )
+            .forEach(felt => {
+                const unknownFelt = felt as Felt<unknown>;
+                unknownFelt.validerOgSettFelt(unknownFelt.verdi, {
+                    felter,
+                });
             });
-        });
     };
 
     const kanSendeSkjema = (): boolean => {

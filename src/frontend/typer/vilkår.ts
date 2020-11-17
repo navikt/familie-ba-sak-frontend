@@ -1,4 +1,3 @@
-import { INøkkelPar } from './common';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
@@ -6,37 +5,21 @@ import { FeltState } from '../familie-skjema/typer';
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 
 export enum Resultat {
-    NEI = 'NEI',
-    JA = 'JA',
-    KANSKJE = 'KANSKJE',
+    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+    OPPFYLT = 'OPPFYLT',
+    IKKE_VURDERT = 'IKKE_VURDERT',
 }
 
-export const resultatTilUi = (resultat: Resultat) => {
-    switch (resultat) {
-        case Resultat.JA:
-            return 'Oppfylt';
-        case Resultat.NEI:
-            return 'Ikke oppfylt';
-        case Resultat.KANSKJE:
-            return 'Ikke vurdert';
-        default:
-            return 'Ukjent resultat';
-    }
+export const uiResultat: Record<Resultat, string> = {
+    OPPFYLT: 'Oppfylt',
+    IKKE_OPPFYLT: 'Ikke oppfylt',
+    IKKE_VURDERT: 'Ikke vurdert',
 };
 
-export const resultater: INøkkelPar = {
-    JA: {
-        id: 'JA',
-        navn: 'Ja',
-    },
-    NEI: {
-        id: 'NEI',
-        navn: 'Nei',
-    },
-    KANSKJE: {
-        id: 'Kanskje',
-        navn: 'Kanskje',
-    },
+export const resultater: Record<Resultat, string> = {
+    OPPFYLT: 'Ja',
+    IKKE_OPPFYLT: 'Nei',
+    IKKE_VURDERT: 'Kanskje',
 };
 
 export enum VilkårType {

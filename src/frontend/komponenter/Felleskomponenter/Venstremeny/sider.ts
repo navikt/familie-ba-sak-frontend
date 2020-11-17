@@ -63,7 +63,10 @@ export const sider: Record<SideId, ISide> = {
                         antallAksjonspunkter: () =>
                             personResultat.vilkårResultater.filter(
                                 (vilkårResultat: FeltState<IVilkårResultat>) => {
-                                    return vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE;
+                                    return (
+                                        vilkårResultat.verdi.resultat.verdi ===
+                                        Resultat.IKKE_VURDERT
+                                    );
                                 }
                             ).length,
                     };

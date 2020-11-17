@@ -29,7 +29,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                 [personResultat.personIdent]:
                     personResultat.vilkårResultater.filter(
                         (vilkårResultat: FeltState<IVilkårResultat>) =>
-                            vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                            vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
                     ).length > 0,
             };
         }, {})
