@@ -17,9 +17,9 @@ const FagsakDeltagerSøk: React.FC = () => {
     const [resultat, settResultat] = React.useState<IFagsakDeltager[] | undefined>(undefined);
     const [spinner, settSpinner] = React.useState<boolean>(false);
     const [søkfeil, settSøkfeil] = React.useState<string | undefined>(undefined);
-    const [identForOpprettFagsak, settIdentForOpprettFagsak] = useState<string | undefined>(
-        undefined
-    );
+    const [deltagerForOpprettFagsak, settDeltagerForOpprettFagsak] = useState<
+        IFagsakDeltager | undefined
+    >(undefined);
 
     const slettResultat = (): void => {
         settSøkfeil(undefined);
@@ -91,7 +91,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                                         ? history.push(
                                               `/fagsak/${resultat[index].fagsakId}/saksoversikt`
                                           )
-                                        : settIdentForOpprettFagsak(deltager.ident);
+                                        : settDeltagerForOpprettFagsak(deltager);
                                 }}
                             />
                         );
@@ -99,8 +99,8 @@ const FagsakDeltagerSøk: React.FC = () => {
             </Søk>
 
             <OpprettFagsakModal
-                personIdent={identForOpprettFagsak}
-                lukkModal={() => settIdentForOpprettFagsak(undefined)}
+                deltager={deltagerForOpprettFagsak}
+                lukkModal={() => settDeltagerForOpprettFagsak(undefined)}
             />
         </>
     );
