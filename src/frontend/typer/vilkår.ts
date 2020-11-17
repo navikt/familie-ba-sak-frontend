@@ -1,4 +1,3 @@
-import { INøkkelPar } from './common';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
@@ -6,37 +5,58 @@ import { FeltState } from '../familie-skjema/typer';
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 
 export enum Resultat {
+    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+    OPPFYLT = 'OPPFYLT',
+    IKKE_VURDERT = 'IKKE_VURDERT',
+}
+
+export enum RestResultat {
+    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+    OPPFYLT = 'OPPFYLT',
+    IKKE_VURDERT = 'IKKE_VURDERT',
     NEI = 'NEI',
     JA = 'JA',
     KANSKJE = 'KANSKJE',
 }
 
-export const resultatTilUi = (resultat: Resultat) => {
+export const uiResultat: Record<Resultat, string> = {
+    OPPFYLT: 'Oppfylt',
+    IKKE_OPPFYLT: 'Ikke oppfylt',
+    IKKE_VURDERT: 'Ikke vurdert',
+};
+
+export const resultater: Record<Resultat, string> = {
+    OPPFYLT: 'Ja',
+    IKKE_OPPFYLT: 'Nei',
+    IKKE_VURDERT: 'Kanskje',
+};
+
+export const migrerResultatTilUi = (resultat: RestResultat): Resultat => {
     switch (resultat) {
-        case Resultat.JA:
-            return 'Oppfylt';
-        case Resultat.NEI:
-            return 'Ikke oppfylt';
-        case Resultat.KANSKJE:
-            return 'Ikke vurdert';
-        default:
-            return 'Ukjent resultat';
+        case RestResultat.OPPFYLT:
+            return Resultat.OPPFYLT;
+        case RestResultat.JA:
+            return Resultat.OPPFYLT;
+        case RestResultat.IKKE_OPPFYLT:
+            return Resultat.IKKE_OPPFYLT;
+        case RestResultat.NEI:
+            return Resultat.IKKE_OPPFYLT;
+        case RestResultat.KANSKJE:
+            return Resultat.IKKE_VURDERT;
+        case RestResultat.IKKE_VURDERT:
+            return Resultat.IKKE_VURDERT;
     }
 };
 
-export const resultater: INøkkelPar = {
-    JA: {
-        id: 'JA',
-        navn: 'Ja',
-    },
-    NEI: {
-        id: 'NEI',
-        navn: 'Nei',
-    },
-    KANSKJE: {
-        id: 'Kanskje',
-        navn: 'Kanskje',
-    },
+export const migrerResultatTilApi = (resultat: Resultat): RestResultat => {
+    switch (resultat) {
+        case Resultat.OPPFYLT:
+            return RestResultat.OPPFYLT;
+        case Resultat.IKKE_OPPFYLT:
+            return RestResultat.IKKE_OPPFYLT;
+        case Resultat.IKKE_VURDERT:
+            return RestResultat.IKKE_VURDERT;
+    }
 };
 
 export enum VilkårType {
@@ -86,7 +106,7 @@ export interface IRestVilkårResultat {
     id: number;
     periodeFom?: string;
     periodeTom?: string;
-    resultat: Resultat;
+    resultat: RestResultat;
     vilkårType: VilkårType;
 }
 

@@ -73,7 +73,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
     const skalViseLeggTilKnapp = () => {
         const uvurdertPeriodePåVilkår = vilkårResultater.find(
-            vilkår => vilkår.verdi.resultat.verdi === Resultat.KANSKJE
+            vilkår => vilkår.verdi.resultat.verdi === Resultat.IKKE_VURDERT
         );
         return uvurdertPeriodePåVilkår === undefined;
     };
