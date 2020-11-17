@@ -122,11 +122,12 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     <FamilieSelect
                         {...skjema.felter.årsak}
                         label={'Velg årsak'}
+                        value={skjema.felter.årsak.verdi}
                         onChange={(event: React.ChangeEvent<HenleggelseÅrsakSelect>): void => {
                             skjema.felter.årsak.onChange(event.target.value);
                         }}
                     >
-                        <option disabled={true} value={''} selected={true}>
+                        <option disabled={true} value={''}>
                             Velg
                         </option>
                         {Object.values(HenleggelseÅrsak).map(årsak => {
