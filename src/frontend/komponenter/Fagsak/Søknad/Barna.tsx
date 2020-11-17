@@ -36,6 +36,10 @@ const BarnaWrapper = styled.div`
     margin: 1rem 0;
 `;
 
+const StyledCheckboxGruppe = styled(CheckboxGruppe)`
+    min-width: 0;
+`;
+
 const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
@@ -74,7 +78,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                     })}
 
             <br />
-            <CheckboxGruppe
+            <StyledCheckboxGruppe
                 feilmeldingId={'barna'}
                 legend={
                     !lesevisning ? (
@@ -90,7 +94,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                         barn={barnMedOpplysninger}
                     />
                 ))}
-            </CheckboxGruppe>
+            </StyledCheckboxGruppe>
             {!lesevisning && (
                 <LeggTilBarn settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
             )}

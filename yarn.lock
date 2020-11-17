@@ -744,17 +744,17 @@
     framer-motion "^1.8.3"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.8.tgz#4a7e2a1e6aaac59aed861974f46054a9e9950ad9"
-  integrity sha512-s/XWk8TJFVBT+F/xQaQ0vlKF6+Bd7ONwZyOv8qDam625wzAzzyLxYZPNlbOD3KJOHVyEdtUeE3czfWvNrZT6KQ==
+"@navikt/familie-form-elements@^2.0.10":
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.10.tgz#1ea53e02c83a77b063e9e82b5f06b899b702a42e"
+  integrity sha512-W++nT2p2vUnCwFbn8LopBRcGTSpt32CcYr+3Hf0zbzz/cI0P0Tjr5OLW60F3p95gt/LxqM0saehtUn4OaQyERA==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
     classnames "^2.2.6"
     nav-datovelger "^7.0.8"
     nav-frontend-knapper "^2.0.4"
-    nav-frontend-knapper-style "^0.3.38"
+    nav-frontend-knapper-style "^1.0.8"
     nav-frontend-lenker "^1.0.37"
     nav-frontend-lenker-style "^0.2.28"
     nav-frontend-skjema "^3.0.7"
@@ -8004,15 +8004,15 @@ nav-frontend-js-utils@^1.0.13, nav-frontend-js-utils@^1.0.14:
   dependencies:
     lodash.throttle "^4.1.1"
 
-nav-frontend-knapper-style@^0.3.38:
-  version "0.3.38"
-  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.38.tgz#4ad009a42cc6405dd41b1932f3f0839311dae57f"
-  integrity sha512-pqzIAakw2EU2aqsPpYLLfYO/3DEb7OuW+qcmM95u6h9pIOB+pbduwzoYjRDv11N9ylk5Nqt7oYmpildGVwwZbg==
-
 nav-frontend-knapper-style@^1.0.1, nav-frontend-knapper-style@^1.0.5:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-1.0.8.tgz#fe49e1ec2f30d98a0177f1c4ac89e4ea57f71bb4"
   integrity sha512-e4BomkEF3XPG7Iy5x2FaqlWWGPlaufgcByQPgyIo+/G7Cnutev6ZGBptBXZEDy71sst0HmOMGVdBuQOQ2cuiew==
+
+nav-frontend-knapper-style@^1.0.8:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-1.0.10.tgz#33056e3da3e96214ec1cc23b0bd2ef13615ec264"
+  integrity sha512-Z9fFoGZTQUF7oI1x47jomijhDgrqutXoD06TusdW4DBRVAgNT0jvPMRLnYgLBhipNB6TrKcKe4JKK5/y19kOow==
 
 nav-frontend-knapper@^2.0.16, nav-frontend-knapper@^2.0.4, nav-frontend-knapper@^2.0.9:
   version "2.0.20"
