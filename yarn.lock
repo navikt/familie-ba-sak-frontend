@@ -7943,9 +7943,9 @@ nav-frontend-chevron-style@^0.3.5:
   integrity sha512-1oXBRfzVEiHgcP2CJRvxJnaVzt6Ihv/d4aRSCYZFxTwmwedXEyLEiKgBzJsXL9OaOIIVnFGzMZxkijnAFadi5A==
 
 nav-frontend-chevron@^1.0.10, nav-frontend-chevron@^1.0.13:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/nav-frontend-chevron/-/nav-frontend-chevron-1.0.19.tgz#2f341c6f33911aa0a67adb8bf661e77033541635"
-  integrity sha512-Wl+xbI17fue1S+rhcKrw0Jk7Mi5r46QPEGexKFXGFgI6yGRWZ8kR3putQ/fn3GMGzFIr+Jlkw9fDOgBR/FrKrQ==
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/nav-frontend-chevron/-/nav-frontend-chevron-1.0.20.tgz#d15927796310bacb752422a0b0fecbf26d1fd941"
+  integrity sha512-j+WSuQo2+lOme2duVe5aw/JvKgGTxJzzvXwG0kYrBiv4Slg9PzfeZ5ikYrcino7OphqifRHvFDTpe1vDelT/zw==
 
 nav-frontend-core@^4.0.11:
   version "4.0.13"
