@@ -20,7 +20,7 @@ import { useBehandling } from '../../../../../context/BehandlingContext';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import Lenke from 'nav-frontend-lenker';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import useForhåndsvisning from './useForhåndsvisning';
+import useForhåndsvisning from '../../../../Felleskomponenter/PdfVisningModal/useForhåndsvisning';
 
 interface IProps {
     onListElementClick: () => void;

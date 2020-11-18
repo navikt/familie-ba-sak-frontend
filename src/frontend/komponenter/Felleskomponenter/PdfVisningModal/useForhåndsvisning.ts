@@ -1,4 +1,4 @@
-import { IBrevData } from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { IBrevData } from '../Hendelsesoversikt/BrevModul/typer';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -9,7 +9,7 @@ import {
 } from '@navikt/familie-typer';
 import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
-import { FamilieAxiosRequestConfig, useApp } from '../../../../../context/AppContext';
+import { FamilieAxiosRequestConfig, useApp } from '../../../context/AppContext';
 
 const useForhåndsvisning = () => {
     const { axiosRequest } = useApp();
