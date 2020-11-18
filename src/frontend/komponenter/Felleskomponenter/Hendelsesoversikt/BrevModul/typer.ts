@@ -4,7 +4,6 @@ export interface IBrevData {
     mottakerIdent: string;
     multiselectVerdier: string[];
     brevmal: Brevmal;
-    fritekst: string;
 }
 
 export interface BrevtypeSelect extends HTMLSelectElement {

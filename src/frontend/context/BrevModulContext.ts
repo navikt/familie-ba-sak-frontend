@@ -170,7 +170,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             }
         ),
         brevmal: skjema.felter.brevmal.verdi as Brevmal,
-        fritekst: '',
     });
 
     return {
