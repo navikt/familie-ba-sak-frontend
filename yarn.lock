@@ -8110,9 +8110,9 @@ nav-frontend-spinner-style@^0.2.8:
   integrity sha512-5cYxBgDMoS39TnXOYXP0t7+ChNfbtCVp5wr5vOcLNIQfrQY9tCY/SWR/ZASLVWMhKR5qqnI5rvUHPCyz4LtP4Q==
 
 nav-frontend-spinner@^2.0.10:
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/nav-frontend-spinner/-/nav-frontend-spinner-2.0.10.tgz#4a039dfa4e5ad9306637214d78b708665cd41d5f"
-  integrity sha512-2iQhgtsIsKGUW6swcOTAQdByWpOSrbUKhjtek0D/18GMRh5DSxgCvKfIExHUXB2ntMusSrwykpZK0LxtDed1Wg==
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/nav-frontend-spinner/-/nav-frontend-spinner-2.0.11.tgz#b934b2bd595e1bf0cf6e8df3a83021e5dfb3a993"
+  integrity sha512-enQp6zLNmkD9CyVb1KWQVn1gC8yHD5hx/rF69VLyxUSnX1Yv9FSrfAnkA/Af7WjxGMdmwjX31u6DSKFDHufqLA==
 
 nav-frontend-tabell-style@^0.2.30:
   version "0.2.30"
