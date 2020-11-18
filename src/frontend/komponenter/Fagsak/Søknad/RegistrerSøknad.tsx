@@ -14,6 +14,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { inneholderSteg } from '../../Felleskomponenter/Venstremeny/sider';
 import Barna from './Barna';
 import SøknadType from './SøknadType';
 import Annet from './Annet';
@@ -88,6 +89,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     React.useEffect(() => {
         if (
             åpenBehandling &&
+            !inneholderSteg(åpenBehandling, BehandlingSteg.HENLEGG_SØKNAD) &&
             hentStegNummer(åpenBehandling.steg) >= hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
         ) {
             axiosRequest<ISøknadDTO, void>({
