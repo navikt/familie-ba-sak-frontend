@@ -5,6 +5,7 @@ import {
     BehandlingResultat,
     BehandlingStatus,
     BehandlingSteg,
+    BehandlingStegStatus,
     Behandlingstype,
     BehandlingUnderkategori,
     BehandlingÅrsak,
@@ -12,20 +13,11 @@ import {
 } from '../../frontend/typer/behandling';
 import { IGrunnlagPerson, PersonType } from '../../frontend/typer/person';
 import { IRestPersonResultat, Resultat, VilkårType } from '../../frontend/typer/vilkår';
-import fs from 'fs';
-import path from 'path';
 import { Målform } from 'frontend/typer/søknad';
-
-const lesMockFil = (filnavn: string) => {
-    return fs.readFileSync(path.join(__dirname, filnavn), 'utf-8');
-};
 
 export const hentMockFagsak = (id: string): Ressurs<IFagsak> | null => {
     try {
-        const fagsak: Ressurs<IFagsak> | null =
-            id === '3'
-                ? mockFagsak3(parseInt(id, 10), '12345678910')
-                : JSON.parse(lesMockFil(`fagsak-${id}.json`));
+        const fagsak: Ressurs<IFagsak> | null = mockFagsak3(parseInt(id, 10), '12345678910');
         return fagsak;
     } catch (e) {
         return null;
@@ -85,7 +77,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 1,
                 vilkårType: VilkårType.LOVLIG_OPPHOLD,
-                resultat: Resultat.KANSKJE,
+                resultat: Resultat.IKKE_VURDERT,
                 periodeFom: '2000-01-01',
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -102,7 +94,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 2,
                 vilkårType: VilkårType.BOSATT_I_RIKET,
-                resultat: Resultat.KANSKJE,
+                resultat: Resultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -113,7 +105,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 3,
                 vilkårType: VilkårType.LOVLIG_OPPHOLD,
-                resultat: Resultat.KANSKJE,
+                resultat: Resultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -124,7 +116,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 4,
                 vilkårType: VilkårType.GIFT_PARTNERSKAP,
-                resultat: Resultat.KANSKJE,
+                resultat: Resultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -135,7 +127,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 5,
                 vilkårType: VilkårType.UNDER_18_ÅR,
-                resultat: Resultat.KANSKJE,
+                resultat: Resultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -146,7 +138,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             {
                 id: 6,
                 vilkårType: VilkårType.BOR_MED_SØKER,
-                resultat: Resultat.KANSKJE,
+                resultat: Resultat.IKKE_VURDERT,
                 periodeFom: undefined,
                 periodeTom: undefined,
                 begrunnelse: '',
@@ -167,8 +159,14 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         },
         steg: (steg as unknown) as BehandlingSteg,
         stegTilstand: [
-            { behandlingSteg: BehandlingSteg.REGISTRERE_SØKNAD },
-            { behandlingSteg: BehandlingSteg.REGISTRERE_PERSONGRUNNLAG },
+            {
+                behandlingSteg: BehandlingSteg.REGISTRERE_SØKNAD,
+                behandlingStegStatus: BehandlingStegStatus.UTFØRT,
+            },
+            {
+                behandlingSteg: BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+                behandlingStegStatus: BehandlingStegStatus.UTFØRT,
+            },
         ],
         type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         personer: [barn, søker],

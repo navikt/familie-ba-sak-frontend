@@ -1,42 +1,25 @@
-import { INøkkelPar } from './common';
-import { IFelt } from './felt';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
-import { BehandlingSteg } from './behandling';
+import { FeltState } from '../familie-skjema/typer';
+import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 
 export enum Resultat {
-    NEI = 'NEI',
-    JA = 'JA',
-    KANSKJE = 'KANSKJE',
+    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+    OPPFYLT = 'OPPFYLT',
+    IKKE_VURDERT = 'IKKE_VURDERT',
 }
 
-export const resultatTilUi = (resultat: Resultat) => {
-    switch (resultat) {
-        case Resultat.JA:
-            return 'Oppfylt';
-        case Resultat.NEI:
-            return 'Ikke oppfylt';
-        case Resultat.KANSKJE:
-            return 'Ikke vurdert';
-        default:
-            return 'Ukjent resultat';
-    }
+export const uiResultat: Record<Resultat, string> = {
+    OPPFYLT: 'Oppfylt',
+    IKKE_OPPFYLT: 'Ikke oppfylt',
+    IKKE_VURDERT: 'Ikke vurdert',
 };
 
-export const resultater: INøkkelPar = {
-    JA: {
-        id: 'JA',
-        navn: 'Ja',
-    },
-    NEI: {
-        id: 'NEI',
-        navn: 'Nei',
-    },
-    KANSKJE: {
-        id: 'Kanskje',
-        navn: 'Kanskje',
-    },
+export const resultater: Record<Resultat, string> = {
+    OPPFYLT: 'Ja',
+    IKKE_OPPFYLT: 'Nei',
+    IKKE_VURDERT: 'Kanskje',
 };
 
 export enum VilkårType {
@@ -50,19 +33,19 @@ export enum VilkårType {
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
-    vilkårResultater: IFelt<IVilkårResultat>[];
+    vilkårResultater: FeltState<IVilkårResultat>[];
     person: IGrunnlagPerson;
 }
 
 export interface IVilkårResultat {
-    begrunnelse: IFelt<string>;
+    begrunnelse: FeltState<string>;
     behandlingId: number;
     endretAv: string;
     endretTidspunkt: string;
     erVurdert: boolean;
     id: number;
-    periode: IFelt<IPeriode>;
-    resultat: IFelt<Resultat>;
+    periode: FeltState<IPeriode>;
+    resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
 }
 
@@ -92,6 +75,7 @@ export interface IRestVilkårResultat {
 
 export interface IRestStegTilstand {
     behandlingSteg: BehandlingSteg;
+    behandlingStegStatus: BehandlingStegStatus;
 }
 
 export type Vilkårsbegrunnelser = {

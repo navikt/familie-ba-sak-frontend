@@ -29,7 +29,7 @@ export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
     HENLEGGELSE: 'Velg årsak',
 };
 
-export const hentSelectOptions = (brevmal: Brevmal): ISelectOptionMedBrevtekst[] => {
+export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevtekst[] => {
     let selectOptionsMedBrevtekst;
     switch (brevmal) {
         case Brevmal.INNHENTE_OPPLYSNINGER:
@@ -43,16 +43,23 @@ export const hentSelectOptions = (brevmal: Brevmal): ISelectOptionMedBrevtekst[]
             break;
     }
 
-    return selectOptionsMedBrevtekst.map((selectOptionMedBrevtekst: ISelectOptionMedBrevtekst) => ({
-        ...selectOptionMedBrevtekst,
-        value:
-            selectOptionMedBrevtekst.value !== ''
-                ? selectOptionMedBrevtekst.value
-                : selectOptionMedBrevtekst.label.toLocaleLowerCase().replace(' ', '_'),
-    }));
+    return (
+        selectOptionsMedBrevtekst?.map((selectOptionMedBrevtekst: ISelectOptionMedBrevtekst) => ({
+            ...selectOptionMedBrevtekst,
+            value:
+                selectOptionMedBrevtekst.value !== ''
+                    ? selectOptionMedBrevtekst.value
+                    : selectOptionMedBrevtekst.label.toLocaleLowerCase().replace(' ', '_'),
+        })) ?? []
+    );
 };
 
-export interface ISelectOptionMedBrevtekst {
+type OptionType = {
+    value: string;
+    label: string;
+};
+
+export interface ISelectOptionMedBrevtekst extends OptionType {
     value: string;
     label: string;
     brevtekst: Record<Målform, string>;

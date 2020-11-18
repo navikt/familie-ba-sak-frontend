@@ -60,12 +60,10 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const {
-        hentFeltProps,
-        onBekreft,
-        oppdaterFeltISkjema,
-        settInitialState,
-        settVisVeivalgModal,
         skjema,
+        nullstillSkjema,
+        onBekreft,
+        settVisVeivalgModal,
         visVeivalgModal,
         hentSkjemaData,
     } = useHenleggBehandling(() => {
@@ -113,7 +111,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             key={'avbryt'}
                             mini={true}
                             onClick={() => {
-                                settInitialState();
+                                nullstillSkjema();
                                 settVisModal(false);
                             }}
                             children={'Avbryt'}
@@ -131,7 +129,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                         />,
                     ],
                     onClose: () => {
-                        settInitialState();
+                        nullstillSkjema();
                         settVisModal(false);
                     },
                     lukkKnapp: true,
@@ -148,10 +146,11 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     legend={SkjultLegend({ children: 'Henlegg behandling' })}
                 >
                     <FamilieSelect
-                        {...hentFeltProps('årsak')}
+                        {...skjema.felter.årsak}
                         label={'Velg årsak'}
+                        value={skjema.felter.årsak.verdi}
                         onChange={(event: React.ChangeEvent<HenleggelseÅrsakSelect>): void => {
-                            oppdaterFeltISkjema('årsak', event.target.value);
+                            skjema.felter.årsak.onChange(event.target.value);
                         }}
                     >
                         <option disabled={true} value={''}>
@@ -171,13 +170,10 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     </FamilieSelect>
 
                     <FamilieTextarea
-                        {...hentFeltProps('begrunnelse')}
+                        {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={'Begrunnelse'}
                         erLesevisning={false}
                         maxLength={4000}
-                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                            oppdaterFeltISkjema('begrunnelse', event.target.value);
-                        }}
                     />
                 </SkjemaGruppe>
             </UIModalWrapper>

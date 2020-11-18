@@ -1,8 +1,6 @@
-import './fagsakdeltagerkort.less';
-
 import React from 'react';
+import styled from 'styled-components';
 
-import { Infokort } from '@navikt/familie-header';
 import {
     GuttIkon,
     JenteIkon,
@@ -14,6 +12,8 @@ import {
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import { adressebeskyttelsestyper } from '../../../typer/person';
 import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
+import { Infokort } from '@navikt/familie-header';
+import navFarger from 'nav-frontend-core';
 
 export interface IFagsakDeltagerkortProps {
     deltager: IFagsakDeltager;
@@ -21,6 +21,17 @@ export interface IFagsakDeltagerkortProps {
     onClick?: (index: number) => void;
     children?: React.ReactNode | React.ReactNode[];
 }
+
+const StyledInfokort = styled(Infokort)<{ deaktivert: boolean }>`
+    :hover {
+        cursor: ${({ deaktivert }) => (deaktivert ? 'default' : 'pointer')};
+    }
+`;
+
+const IngenFagsakTekst = styled.p`
+    margin: 0.5rem 0;
+    color: ${navFarger.navGra80};
+`;
 
 const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
     deltager,
@@ -51,33 +62,34 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
         BARN_UKJENT: ' : BARN',
     };
 
-    const ingenTreff = !deltager.fagsakId;
-
     return (
-        <div className={`fagsakdeltagerkort ${ingenTreff ? 'ingentreff' : 'treff'}`}>
-            <Infokort
-                ikon={
-                    deltager.harTilgang ? (
-                        ikoner[`${deltager.rolle}_${deltager.kjønn}`]
-                    ) : (
-                        <IkkeTilgang heigth={30} width={30} />
-                    )
-                }
-                header={
-                    deltager.harTilgang
-                        ? `${deltager.navn} (${deltager.ident})${
-                              rolleNavn[`${deltager.rolle}_${deltager.kjønn}`] || ''
-                          }`
-                        : `Personen har diskresjonskode ${
-                              deltager.adressebeskyttelseGradering
-                                  ? adressebeskyttelsestyper[deltager.adressebeskyttelseGradering]
-                                  : ''
-                          }`
-                }
-                index={index}
-                onClick={onClick}
-            />
-        </div>
+        <StyledInfokort
+            deaktivert={!deltager.harTilgang}
+            ikon={
+                deltager.harTilgang ? (
+                    ikoner[`${deltager.rolle}_${deltager.kjønn}`]
+                ) : (
+                    <IkkeTilgang heigth={30} width={30} />
+                )
+            }
+            header={
+                deltager.harTilgang
+                    ? `${deltager.navn} (${deltager.ident})${
+                          rolleNavn[`${deltager.rolle}_${deltager.kjønn}`] || ''
+                      }`
+                    : `Personen har diskresjonskode ${
+                          deltager.adressebeskyttelseGradering
+                              ? adressebeskyttelsestyper[deltager.adressebeskyttelseGradering]
+                              : ''
+                      }`
+            }
+            index={index}
+            onClick={onClick}
+        >
+            {!deltager.fagsakId && deltager.harTilgang && (
+                <IngenFagsakTekst>Ingen fagsak. Trykk for å opprette &gt;</IngenFagsakTekst>
+            )}
+        </StyledInfokort>
     );
 };
 

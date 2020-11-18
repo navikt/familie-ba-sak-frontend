@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { IFelt } from '../../../typer/felt';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -13,6 +12,7 @@ import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 import { Collapse } from 'react-collapse';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
+import { FeltState } from '../../../familie-skjema/typer';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
@@ -28,8 +28,8 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                 ...personMapEkspandert,
                 [personResultat.personIdent]:
                     personResultat.vilkårResultater.filter(
-                        (vilkårResultat: IFelt<IVilkårResultat>) =>
-                            vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE
+                        (vilkårResultat: FeltState<IVilkårResultat>) =>
+                            vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
                     ).length > 0,
             };
         }, {})
@@ -85,10 +85,10 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     vc.parterDetteGjelderFor.includes(personResultat.person.type)
                                 )
                                 .map((vc: IVilkårConfig) => {
-                                    const vilkårResultater: IFelt<
+                                    const vilkårResultater: FeltState<
                                         IVilkårResultat
                                     >[] = personResultat.vilkårResultater.filter(
-                                        (vilkårResultat: IFelt<IVilkårResultat>) =>
+                                        (vilkårResultat: FeltState<IVilkårResultat>) =>
                                             vilkårResultat.verdi.vilkårType === vc.key
                                     );
 

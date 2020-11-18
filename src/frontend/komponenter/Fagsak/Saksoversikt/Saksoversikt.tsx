@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import {
     BehandlingKategori,
+    BehandlingResultat,
     BehandlingStatus,
     IBehandling,
     kategorier,
@@ -15,10 +16,7 @@ import Behandlinger from './Behandlinger';
 import Utbetalinger from './Utbetalinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import AlertStripe from 'nav-frontend-alertstriper';
-import Opphør from './Opphør';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
-import { useApp } from '../../../context/AppContext';
-import { ToggleNavn } from '../../../typer/toggles';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import styled from 'styled-components';
 import Lenke from 'nav-frontend-lenker';
@@ -33,19 +31,21 @@ const FlexSpaceBetween = styled.div`
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { toggles } = useApp();
     const { bestemÅpenBehandling } = useBehandling();
     React.useEffect(() => {
         bestemÅpenBehandling(undefined);
     }, [fagsak.status]);
 
-    const behandlingshistorikk = fagsak.behandlinger.filter(
-        (behandling: IBehandling) => behandling.status === BehandlingStatus.AVSLUTTET
+    const iverksatteBehandlinger = fagsak.behandlinger.filter(
+        (behandling: IBehandling) =>
+            behandling.status === BehandlingStatus.AVSLUTTET &&
+            behandling.samletResultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
+            behandling.samletResultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET
     );
 
     let gjeldendeBehandling =
-        behandlingshistorikk.length > 0
-            ? behandlingshistorikk.sort((a, b) =>
+        iverksatteBehandlinger.length > 0
+            ? iverksatteBehandlinger.sort((a, b) =>
                   moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
               )[0]
             : undefined;
@@ -129,7 +129,6 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 <>
                     <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
                     {løpendeMånedligUtbetaling()}
-                    {toggles[ToggleNavn.visTekniskOpphør] && <Opphør fagsak={fagsak} />}
                 </>
             )}
 

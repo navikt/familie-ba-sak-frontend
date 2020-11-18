@@ -45,6 +45,7 @@ export enum BehandlingUnderkategori {
 }
 
 export enum BehandlingSteg {
+    HENLEGG_SØKNAD = 'HENLEGG_SØKNAD',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
@@ -56,6 +57,11 @@ export enum BehandlingSteg {
     DISTRIBUER_VEDTAKSBREV = 'DISTRIBUER_VEDTAKSBREV',
     FERDIGSTILLE_BEHANDLING = 'FERDIGSTILLE_BEHANDLING',
     BEHANDLING_AVSLUTTET = 'BEHANDLING_AVSLUTTET',
+}
+
+export enum BehandlingStegStatus {
+    UTFØRT = 'UTFØRT',
+    IKKE_UTFØRT = 'IKKE_UTFØRT',
 }
 
 export const hentStegNummer = (steg: BehandlingSteg): number => {
@@ -85,39 +91,6 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
         default:
             return 0;
     }
-};
-
-export const hentStegNummerForSendtTilBeslutter = (steg: BehandlingSteg): number => {
-    switch (steg) {
-        case BehandlingSteg.REGISTRERE_SØKNAD:
-            return 1;
-        case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
-            return 1;
-        case BehandlingSteg.VILKÅRSVURDERING:
-            return 2;
-        case BehandlingSteg.SEND_TIL_BESLUTTER:
-            return 3;
-        default:
-            return 0;
-    }
-};
-
-export const finnSisteUtfortStegForSendtTilBeslutter = (
-    stegTilstandListe: IRestStegTilstand[]
-): BehandlingSteg => {
-    let sisteUtfortSteg = BehandlingSteg.REGISTRERE_SØKNAD;
-
-    for (let i = 1; i < stegTilstandListe.length; ++i) {
-        const nesteBehandlingSteg = stegTilstandListe[i].behandlingSteg;
-        if (
-            hentStegNummerForSendtTilBeslutter(nesteBehandlingSteg) >
-            hentStegNummerForSendtTilBeslutter(sisteUtfortSteg)
-        ) {
-            sisteUtfortSteg = nesteBehandlingSteg;
-        }
-    }
-
-    return sisteUtfortSteg;
 };
 
 export enum BehandlingStatus {

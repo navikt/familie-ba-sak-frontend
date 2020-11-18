@@ -1,10 +1,12 @@
-import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useState } from 'react';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { HenleggelseÅrsak } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { feil, IFelt, nyttFelt, ok } from '../../../../../typer/felt';
-import { useSkjema } from '../../../../../typer/skjema';
+import { useFelt } from '../../../../../familie-skjema/felt';
+import { useSkjema } from '../../../../../familie-skjema/skjema';
+import { FeltState } from '../../../../../familie-skjema/typer';
+import { feil, ok } from '../../../../../familie-skjema/validators';
 import {
     Brevmal,
     IBrevData,
@@ -15,19 +17,24 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const [begrunnelse, settBegrunnelse] = useState('');
 
     const { fagsak, settFagsak } = useFagsakRessurser();
-
-    const { hentFeltProps, settInitialState, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<
+    const { onSubmit, skjema, nullstillSkjema } = useSkjema<
+        {
+            årsak: HenleggelseÅrsak | '';
+            begrunnelse: '';
+        },
         IFagsak
     >({
         felter: {
-            årsak: nyttFelt<HenleggelseÅrsak | ''>('', (felt: IFelt<HenleggelseÅrsak | ''>) =>
-                felt.verdi !== '' ? ok(felt) : feil(felt, 'Du må velge årsak')
-            ),
-            begrunnelse: nyttFelt(''),
+            årsak: useFelt({
+                verdi: '',
+                valideringsfunksjon: (felt: FeltState<HenleggelseÅrsak | ''>) =>
+                    felt.verdi !== '' ? ok(felt) : feil(felt, 'Du må velge årsak'),
+            }),
+            begrunnelse: useFelt({
+                verdi: '',
+            }),
         },
         skjemanavn: 'henleggbehandling',
-        submitRessurs: byggTomRessurs(),
-        visFeilmeldinger: false,
     });
 
     const erTypeSoknedTrukket = () => {
@@ -64,14 +71,12 @@ const useHenleggBehandling = (lukkModal: () => void) => {
 
     return {
         begrunnelse,
-        hentFeltProps,
+        skjema,
+        nullstillSkjema,
         onBekreft,
         erTypeSoknedTrukket,
-        oppdaterFeltISkjema,
-        settInitialState,
         settBegrunnelse,
         settVisVeivalgModal,
-        skjema,
         visVeivalgModal,
         hentSkjemaData,
     };

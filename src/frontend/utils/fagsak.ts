@@ -1,7 +1,7 @@
 import moment from 'moment';
+import { FeltState } from '../familie-skjema/typer';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { IFelt } from '../typer/felt';
 import { IVedtakForBehandling } from '../typer/vedtak';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../typer/vilkår';
 
@@ -45,8 +45,8 @@ export const erBehandlingenInnvilget = (vilkårsvurdering: IPersonResultat[]) =>
     return (
         vilkårsvurdering.find((personResultat: IPersonResultat) =>
             personResultat.vilkårResultater.find(
-                (vilkårResultat: IFelt<IVilkårResultat>) =>
-                    vilkårResultat.verdi.resultat.verdi === Resultat.NEI
+                (vilkårResultat: FeltState<IVilkårResultat>) =>
+                    vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
             )
         ) === undefined
     );

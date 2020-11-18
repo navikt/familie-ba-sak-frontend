@@ -1,6 +1,7 @@
 import { INøkkelPar } from './common';
 import { BehandlingKategori } from './behandling';
 import { IGrunnlagPerson } from './person';
+import { YearMonth } from './tid';
 
 export interface IOppsummeringBeregning {
     periodeFom: string;
@@ -35,14 +36,14 @@ export interface IPersonBeregning {
     personIdent: string;
     ytelsePerioder: IYtelsePeriode[];
     beløp: number;
-    stønadFom: string;
-    stønadTom: string;
+    stønadFom: YearMonth;
+    stønadTom: YearMonth;
 }
 
 export interface IYtelsePeriode {
     beløp: number;
-    stønadFom: string;
-    stønadTom: string;
+    stønadFom: YearMonth;
+    stønadTom: YearMonth;
     ytelseType: YtelseType;
 }
 
