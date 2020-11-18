@@ -1,16 +1,21 @@
-import { byggTomRessurs, Ressurs } from '@navikt/familie-typer';
+import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useState } from 'react';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { HenleggelseÅrsak } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { feil, IFelt, nyttFelt, ok } from '../../../../../typer/felt';
 import { useSkjema } from '../../../../../typer/skjema';
+import {
+    Brevmal,
+    IBrevData,
+} from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const [begrunnelse, settBegrunnelse] = useState('');
 
-    const { settFagsak } = useFagsakRessurser();
+    const { fagsak, settFagsak } = useFagsakRessurser();
+
     const { hentFeltProps, settInitialState, onSubmit, oppdaterFeltISkjema, skjema } = useSkjema<
         IFagsak
     >({
@@ -24,6 +29,12 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         submitRessurs: byggTomRessurs(),
         visFeilmeldinger: false,
     });
+
+    const erTypeSoknedTrukket = () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        fagsak.status;
+        return true;
+    };
 
     const onBekreft = (behandlingId: number) => {
         onSubmit(
@@ -43,16 +54,26 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         );
     };
 
+    const hentSkjemaData = (): IBrevData => ({
+        mottakerIdent:
+            fagsak.status === RessursStatus.SUKSESS ? fagsak.data.søkerFødselsnummer : '',
+        multiselectVerdier: [],
+        brevmal: Brevmal.HENLEGGELSE,
+        fritekst: '',
+    });
+
     return {
         begrunnelse,
         hentFeltProps,
         onBekreft,
+        erTypeSoknedTrukket,
         oppdaterFeltISkjema,
         settInitialState,
         settBegrunnelse,
         settVisVeivalgModal,
         skjema,
         visVeivalgModal,
+        hentSkjemaData,
     };
 };
 

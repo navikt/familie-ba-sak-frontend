@@ -18,6 +18,8 @@ import Oppfylt from '../../../../../ikoner/Oppfylt';
 import styled from 'styled-components';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import Lenke from 'nav-frontend-lenker';
+import useForhåndsvisning from './useForhåndsvisning';
 
 interface IProps {
     onListElementClick: () => void;
@@ -40,12 +42,22 @@ const StyledVeivalgIkon = styled(Oppfylt)`
     margin-right: 10px;
 `;
 
+const StyledLenke = styled(Lenke)`
+    margin-right: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+`;
+
 const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behandling }) => {
     const history = useHistory();
-
     const [visModal, settVisModal] = useState(false);
-
     const { erLesevisning } = useBehandling();
+    const { hentForhåndsvisning } = useForhåndsvisning();
+    const { åpenBehandling } = useBehandling();
+
+    const behandlingId =
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const {
         hentFeltProps,
@@ -55,6 +67,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
         settVisVeivalgModal,
         skjema,
         visVeivalgModal,
+        hentSkjemaData,
     } = useHenleggBehandling(() => {
         settVisModal(false);
     });
@@ -83,6 +96,19 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
             <UIModalWrapper
                 modal={{
                     actions: [
+                        <StyledLenke
+                            href="#"
+                            onClick={() => {
+                                hentForhåndsvisning({
+                                    method: 'POST',
+                                    data: hentSkjemaData(),
+                                    url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
+                                });
+                            }}
+                            hidden={skjema.felter.årsak.verdi !== HenleggelseÅrsak.SØKNAD_TRUKKET}
+                        >
+                            Forhåndsvis
+                        </StyledLenke>,
                         <Flatknapp
                             key={'avbryt'}
                             mini={true}
