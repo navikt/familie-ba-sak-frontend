@@ -150,7 +150,6 @@ const Brevskjema = ({
                         {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                {console.log(mottakersMålform())}
                                 <Normaltekst>
                                     {valgtBrevmal.verdi !== ''
                                         ? selectLabelsForBrevmaler[valgtBrevmal.verdi]
