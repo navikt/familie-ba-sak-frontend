@@ -162,10 +162,13 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         mottakerIdent: skjema.felter.mottakerIdent.verdi,
         multiselectVerdier: skjema.felter.multiselect.verdi
             .filter((selectOption: ISelectOptionMedBrevtekst) => selectOption.value !== 'annet')
-            .map(
-                (selectOption: ISelectOptionMedBrevtekst) =>
-                    selectOption.brevtekst[mottakersMålform()]
-            ),
+            .map((selectOption: ISelectOptionMedBrevtekst) => {
+                if (selectOption.brevtekst) {
+                    return selectOption.brevtekst[mottakersMålform()];
+                } else {
+                    return selectOption.value;
+                }
+            }),
         brevmal: skjema.felter.brevmal.verdi as Brevmal,
         fritekst: '',
     });
