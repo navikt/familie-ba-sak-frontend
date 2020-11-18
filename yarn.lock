@@ -7963,9 +7963,9 @@ nav-frontend-etiketter-style@^1.0.8:
   integrity sha512-76+c/4wWN+ER1eb0I+yk7M4leHQeXANanulhRFGKkJ7W+tzkjL1D9mpSDbNlaHfkpu6k5RzvMLL/UHEwxuy3+g==
 
 nav-frontend-etiketter@^2.0.14:
-  version "2.0.17"
-  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter/-/nav-frontend-etiketter-2.0.17.tgz#08abf0733148104a3f9622758e624db68c5ba909"
-  integrity sha512-dknbQlZgvjlx7TLzBsqZwm3FNBRpIBh+WJKYvC4+HMAm4/BHD8Mud6A3PGDN5q5u6TJ4BV6dvsia5DB+2Lr94A==
+  version "2.0.19"
+  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter/-/nav-frontend-etiketter-2.0.19.tgz#c2f5d56e8d025d13bc3ae1bce01b893908b5eb27"
+  integrity sha512-LUvuTAo071DgUSl0Tjo7EbrUeyXI1PrN8WVWf/170P+1vLCCj1dI6zs6UxeE/oxohiSgV6J/tsXEkBldsmnQ3A==
 
 nav-frontend-hjelpetekst-style@^2.0.25:
   version "2.0.33"
