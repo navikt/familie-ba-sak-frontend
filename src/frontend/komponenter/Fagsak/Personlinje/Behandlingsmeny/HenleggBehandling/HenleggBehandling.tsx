@@ -19,6 +19,7 @@ import styled from 'styled-components';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import Lenke from 'nav-frontend-lenker';
+import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import useForhåndsvisning from './useForhåndsvisning';
 
 interface IProps {
@@ -53,7 +54,12 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
     const history = useHistory();
     const [visModal, settVisModal] = useState(false);
     const { erLesevisning } = useBehandling();
-    const { hentForhåndsvisning } = useForhåndsvisning();
+    const {
+        hentForhåndsvisning,
+        visForhåndsvisningModal,
+        hentetForhåndsvisning,
+        settVisForhåndsviningModal,
+    } = useForhåndsvisning();
     const { åpenBehandling } = useBehandling();
 
     const behandlingId =
@@ -95,6 +101,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                 modal={{
                     actions: [
                         <StyledLenke
+                            key={'forhåndsvis'}
                             href="#"
                             onClick={() => {
                                 hentForhåndsvisning({
@@ -146,7 +153,6 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     legend={SkjultLegend({ children: 'Henlegg behandling' })}
                 >
                     <FamilieSelect
-                        {...skjema.felter.årsak}
                         label={'Velg årsak'}
                         value={skjema.felter.årsak.verdi}
                         onChange={(event: React.ChangeEvent<HenleggelseÅrsakSelect>): void => {
@@ -211,6 +217,11 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     Behandlingen er henlagt
                 </StyledVeivalgTekst>
             </UIModalWrapper>
+            <PdfVisningModal
+                åpen={visForhåndsvisningModal}
+                onRequestClose={() => settVisForhåndsviningModal(false)}
+                pdfdata={hentetForhåndsvisning}
+            />
         </>
     );
 };

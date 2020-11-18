@@ -8,15 +8,23 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 import { AxiosError } from 'axios';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FamilieAxiosRequestConfig, useApp } from '../../../../../context/AppContext';
 
 const useForhåndsvisning = () => {
     const { axiosRequest } = useApp();
 
+    const [visForhåndsvisningModal, settVisForhåndsviningModal] = useState<boolean>(false);
+
     const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
         byggTomRessurs()
     );
+
+    useEffect(() => {
+        if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
+            settVisForhåndsviningModal(true);
+        }
+    }, [hentetForhåndsvisning]);
 
     const hentForhåndsvisning = (
         familieAxiosRequestConfig: FamilieAxiosRequestConfig<IBrevData>
@@ -43,7 +51,12 @@ const useForhåndsvisning = () => {
             });
     };
 
-    return { hentForhåndsvisning, hentetForhåndsvisning };
+    return {
+        hentForhåndsvisning,
+        hentetForhåndsvisning,
+        visForhåndsvisningModal,
+        settVisForhåndsviningModal,
+    };
 };
 
 export default useForhåndsvisning;

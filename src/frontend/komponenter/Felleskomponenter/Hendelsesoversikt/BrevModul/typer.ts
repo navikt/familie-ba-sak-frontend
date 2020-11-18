@@ -38,7 +38,7 @@ export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevte
         case Brevmal.VARSEL_OM_REVURDERING:
             selectOptionsMedBrevtekst = årsaker;
             break;
-        case Brevmal.HENLEGG_SØKNAD:
+        case Brevmal.HENLEGGELSE:
             selectOptionsMedBrevtekst = årsaker;
             break;
     }
