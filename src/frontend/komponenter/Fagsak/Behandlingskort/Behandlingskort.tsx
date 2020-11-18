@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import {
@@ -51,7 +51,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                 informasjon={[
                     {
                         label: 'Opprettet',
-                        tekst: moment(åpenBehandling.opprettetTidspunkt).format(datoformat.DATO),
+                        tekst: dayjs(åpenBehandling.opprettetTidspunkt).format(datoformat.DATO),
                     },
                     {
                         label: 'Vedtaksdato',
