@@ -323,23 +323,6 @@ export const dokumenter: ISelectOptionMedBrevtekst[] = [
             NN: 'Vergefullmakt.',
         },
     },
-    {
-        value: 'annet',
-        label: 'Annet (Fritekst)',
-        brevtekst: {
-            NB: '',
-            NN: '',
-        },
-    },
 ];
 
-export const årsaker: ISelectOptionMedBrevtekst[] = [
-    {
-        value: 'annet',
-        label: 'Annet (Fritekst)',
-        brevtekst: {
-            NB: '',
-            NN: '',
-        },
-    },
-];
+export const årsaker: ISelectOptionMedBrevtekst[] = [];
