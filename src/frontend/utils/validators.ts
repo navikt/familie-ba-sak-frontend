@@ -86,7 +86,7 @@ export const erPeriodeGyldig = (
 };
 
 export const erResultatGyldig = (felt: FeltState<Resultat>): FeltState<Resultat> => {
-    return felt.verdi !== Resultat.KANSKJE ? ok(felt) : feil(felt, 'Resultat er ikke satt');
+    return felt.verdi !== Resultat.IKKE_VURDERT ? ok(felt) : feil(felt, 'Resultat er ikke satt');
 };
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';

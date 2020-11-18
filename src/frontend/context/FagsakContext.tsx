@@ -20,14 +20,10 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const { axiosRequest } = useApp();
 
     React.useEffect(() => {
-        if (fagsak.status === RessursStatus.SUKSESS) {
-            hentBruker(fagsak.data.søkerFødselsnummer);
-        }
-    }, [fagsak.status]);
-
-    React.useEffect(() => {
-        if (fagsak.status === RessursStatus.SUKSESS && erBrukerUtdatert(bruker, fagsak)) {
-            hentBruker(fagsak.data.søkerFødselsnummer);
+        if (fagsak.status !== RessursStatus.SUKSESS && fagsak.status !== RessursStatus.HENTER) {
+            settBruker(byggTomRessurs());
+        } else {
+            oppdaterBrukerHvisFagsakEndres(bruker, fagsak);
         }
     }, [fagsak]);
 
@@ -46,16 +42,20 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
-    const erBrukerUtdatert = (bruker: Ressurs<IPersonInfo>, fagsak: Ressurs<IFagsak>): boolean => {
+    const oppdaterBrukerHvisFagsakEndres = (
+        bruker: Ressurs<IPersonInfo>,
+        fagsak: Ressurs<IFagsak>
+    ): void => {
         if (fagsak.status !== RessursStatus.SUKSESS) {
-            return false;
+            return;
         }
 
-        return (
-            bruker.status === RessursStatus.IKKE_HENTET ||
-            (bruker.status === RessursStatus.SUKSESS &&
-                fagsak.data.søkerFødselsnummer !== bruker.data.personIdent)
-        );
+        if (
+            bruker.status !== RessursStatus.SUKSESS ||
+            fagsak.data.søkerFødselsnummer !== bruker.data.personIdent
+        ) {
+            hentBruker(fagsak.data.søkerFødselsnummer);
+        }
     };
 
     const hentBruker = (personIdent: string): void => {
