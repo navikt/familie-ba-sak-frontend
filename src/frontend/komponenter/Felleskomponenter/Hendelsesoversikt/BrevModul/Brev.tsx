@@ -7,6 +7,7 @@ import { useHistory } from 'react-router';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
+import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
 
 interface IProps {
     onOkIModalClick: () => void;
@@ -15,12 +16,9 @@ interface IProps {
 const Brev = ({ onOkIModalClick }: IProps) => {
     const { åpenBehandling } = useBehandling();
     const { fagsak } = useFagsakRessurser();
-    const {
-        hentForhåndsvisning,
-        hentetForhåndsvisning,
-        hentMuligeBrevMaler,
-        navigerTilOpplysningsplikt,
-    } = useBrevModul();
+    const { hentMuligeBrevMaler, navigerTilOpplysningsplikt } = useBrevModul();
+    const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
+
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
     const behandlingId =

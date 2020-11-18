@@ -2,15 +2,7 @@ import createUseContext from 'constate';
 import React, { useEffect } from 'react';
 
 import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../typer/behandling';
-import {
-    byggDataRessurs,
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
-import { useApp } from './AppContext';
+import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from './BehandlingContext';
 import { IFagsak } from '../typer/fagsak';
 import {
@@ -18,7 +10,6 @@ import {
     IBrevData,
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { AxiosError } from 'axios';
 import { useSkjema } from '../familie-skjema/skjema';
 import { fjernWhitespace } from '../utils/commons';
 import { IGrunnlagPerson } from '../typer/person';
@@ -28,7 +19,6 @@ import { FeltState, FeltContext, Valideringsstatus } from '../familie-skjema/typ
 import { feil, ok } from '../familie-skjema/validators';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
-    const { axiosRequest } = useApp();
     const { åpenBehandling } = useBehandling();
 
     const mottakerIdent = useFelt({
@@ -118,10 +108,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skjemanavn: 'brevmodul',
     });
 
-    const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
-        byggTomRessurs()
-    );
-
     const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] = React.useState<boolean>(
         false
     );
@@ -135,9 +121,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skjema.felter.multiselect.nullstill();
     }, [åpenBehandling]);
 
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
-
     const personer =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
 
@@ -145,33 +128,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         personer.find(
             (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.verdi
         )?.målform ?? Målform.NB;
-
-    const hentForhåndsvisning = (brevData: IBrevData) => {
-        settHentetForhåndsvisning(byggHenterRessurs());
-        axiosRequest<string, IBrevData>({
-            method: 'POST',
-            data: brevData,
-            url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
-        })
-            .then((response: Ressurs<string>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settHentetForhåndsvisning(
-                        byggDataRessurs(`data:application/pdf;base64,${response.data}`)
-                    );
-                } else if (response.status === RessursStatus.FEILET) {
-                    settHentetForhåndsvisning(response);
-                } else {
-                    settHentetForhåndsvisning(
-                        byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
-                    );
-                }
-            })
-            .catch((_error: AxiosError) => {
-                settHentetForhåndsvisning(
-                    byggFeiletRessurs('Ukjent feil ved henting av forhåndsvisning.')
-                );
-            });
-    };
 
     const hentMuligeBrevMaler = () => {
         const brevMaler = [];
@@ -208,10 +164,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     return {
         skjema,
-        hentForhåndsvisning,
         hentMuligeBrevMaler,
         hentSkjemaData,
-        hentetForhåndsvisning,
         kanSendeSkjema,
         mottakersMålform,
         navigerTilOpplysningsplikt,

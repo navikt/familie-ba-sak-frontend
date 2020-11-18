@@ -29,9 +29,12 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import SkjultLegend from '../../SkjultLegend';
 import { Felt } from '../../../../familie-skjema/typer';
+import { FamilieAxiosRequestConfig } from '../../../../context/AppContext';
 
 interface IProps {
-    forhåndsvisningOnClick: (brevData: IBrevData) => void;
+    forhåndsvisningOnClick: (
+        familieAxiosRequestConfig: FamilieAxiosRequestConfig<IBrevData>
+    ) => void;
     hentetForhåndsvisning: Ressurs<string>;
     brevMaler: Brevmal[];
     onSubmitSuccess: () => void;
@@ -88,6 +91,9 @@ const Brevskjema = ({
         hentetForhåndsvisning.status === RessursStatus.FEILET
             ? hentetForhåndsvisning.frontendFeilmelding
             : undefined;
+
+    const behandlingId =
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     return (
         <div>
@@ -192,7 +198,11 @@ const Brevskjema = ({
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (kanSendeSkjema()) {
-                            forhåndsvisningOnClick(hentSkjemaData());
+                            forhåndsvisningOnClick({
+                                method: 'POST',
+                                data: hentSkjemaData(),
+                                url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
+                            });
                         }
                     }}
                 >
