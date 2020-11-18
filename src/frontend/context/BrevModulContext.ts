@@ -20,8 +20,7 @@ import {
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { AxiosError } from 'axios';
 import { useSkjema } from '../familie-skjema/skjema';
-import { fjernWhitespace } from '../utils/commons';
-import { IGrunnlagPerson } from '../typer/person';
+import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { useFelt } from '../familie-skjema/felt';
 import { FeltState, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
@@ -69,7 +68,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             mottakerIdent: string;
             brevmal: Brevmal | '';
             multiselect: ISelectOptionMedBrevtekst[];
-            fritekst: string;
         },
         IFagsak
     >({
@@ -77,43 +75,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             mottakerIdent,
             brevmal,
             multiselect,
-            fritekst: useFelt({
-                verdi: '',
-                valideringsfunksjon: (felt: FeltState<string>, avhengigheter?: FeltContext) => {
-                    const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
-                    const multiselect: ISelectOptionMedBrevtekst[] | undefined =
-                        avhengigheter?.multiselect.verdi;
-
-                    const annetErValgt =
-                        (
-                            multiselect?.filter(
-                                (selectOption: ISelectOptionMedBrevtekst) =>
-                                    selectOption.value === 'annet'
-                            ) ?? []
-                        ).length > 0;
-
-                    if (annetErValgt) {
-                        return fjernWhitespace(felt.verdi).length >= 3
-                            ? ok(felt)
-                            : feil(
-                                  felt,
-                                  `Siden du har valgt “Annet” i feltet over, må du oppgi minst ${
-                                      brevmal === Brevmal.INNHENTE_OPPLYSNINGER
-                                          ? 'ett dokument'
-                                          : 'en årsak'
-                                  }`
-                              );
-                    } else {
-                        return ok(felt);
-                    }
-                },
-                skalFeltetVises: (avhengigheter: FeltContext) => {
-                    return avhengigheter?.multiselect.verdi.some(
-                        (selectOption: ISelectOptionMedBrevtekst) => selectOption.value === 'annet'
-                    );
-                },
-                avhengigheter: { brevmal, multiselect },
-            }),
         },
         skjemanavn: 'brevmodul',
     });
@@ -131,7 +92,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
      * Dette fordi at man kan ha gjort endring på målform
      */
     useEffect(() => {
-        skjema.felter.fritekst.nullstill();
         skjema.felter.multiselect.nullstill();
     }, [åpenBehandling]);
 
@@ -141,10 +101,14 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const personer =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
 
-    const mottakersMålform =
-        personer.find(
-            (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.verdi
-        )?.målform ?? Målform.NB;
+    const mottakersMålform = () =>
+        personer.find((person: IGrunnlagPerson) => {
+            if (skjema.felter.mottakerIdent.valideringsstatus === Valideringsstatus.OK) {
+                return person.personIdent === skjema.felter.mottakerIdent.verdi;
+            } else {
+                return person.type === PersonType.SØKER;
+            }
+        })?.målform ?? Målform.NB;
 
     const hentForhåndsvisning = (brevData: IBrevData) => {
         settHentetForhåndsvisning(byggHenterRessurs());
@@ -200,10 +164,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             .filter((selectOption: ISelectOptionMedBrevtekst) => selectOption.value !== 'annet')
             .map(
                 (selectOption: ISelectOptionMedBrevtekst) =>
-                    selectOption.brevtekst[mottakersMålform]
+                    selectOption.brevtekst[mottakersMålform()]
             ),
         brevmal: skjema.felter.brevmal.verdi as Brevmal,
-        fritekst: skjema.felter.fritekst.verdi,
+        fritekst: '',
     });
 
     return {

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactSelect, { NamedProps, StylesConfig } from 'react-select';
+import Creatable from 'react-select/creatable';
 import { Label } from 'nav-frontend-skjema';
 import styled from 'styled-components';
 import { Feilmelding } from 'nav-frontend-typografi';
@@ -7,7 +8,8 @@ import navFarger from 'nav-frontend-core';
 
 interface IProps extends NamedProps {
     erLesevisning: boolean;
-    label: string;
+    creatable?: boolean;
+    label: string | React.ReactNode;
     lesevisningVerdi?: string;
     feil?: string;
     propSelectStyles?: StylesConfig;
@@ -55,7 +57,7 @@ const navSelectStyles = (feil?: string): StylesConfig => ({
     multiValue: (provided, _) => ({
         ...provided,
         backgroundColor: navFarger.navBlaLighten80,
-        maxWidth: '12.5rem',
+        maxWidth: '18rem',
     }),
     multiValueRemove: provided => ({
         ...provided,
@@ -72,6 +74,7 @@ const StyledFeilmelding = styled(Feilmelding)`
 
 const FamilieReactSelect: React.FC<IProps> = ({
     erLesevisning,
+    creatable = false,
     label,
     lesevisningVerdi,
     value,
@@ -80,19 +83,30 @@ const FamilieReactSelect: React.FC<IProps> = ({
     ...props
 }) => {
     const id = `react-select-${label}`;
+
+    const hentSelectProps = () => ({
+        styles: {
+            ...navSelectStyles(feil),
+            ...propSelectStyles,
+        },
+        id: id,
+        isDisabled: erLesevisning,
+        value,
+        ...props,
+    });
+
     return (
         <Container>
             <Label htmlFor={id}>{label} </Label>
-            <ReactSelect
-                styles={{
-                    ...propSelectStyles,
-                    ...navSelectStyles(feil),
-                }}
-                id={id}
-                isDisabled={erLesevisning}
-                value={value}
-                {...props}
-            />
+            {creatable ? (
+                <Creatable
+                    formatCreateLabel={value => `Opprett "${value}"`}
+                    {...hentSelectProps()}
+                />
+            ) : (
+                <ReactSelect {...hentSelectProps()} />
+            )}
+
             {feil && <StyledFeilmelding>{feil}</StyledFeilmelding>}
         </Container>
     );
