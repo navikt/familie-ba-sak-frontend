@@ -55,7 +55,7 @@ type OptionType = {
 export interface ISelectOptionMedBrevtekst extends OptionType {
     value: string;
     label: string;
-    brevtekst: Record<Målform, string>;
+    brevtekst?: Record<Målform, string>;
 }
 
 // Value settes ved henting av select option basert på label

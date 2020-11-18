@@ -25,6 +25,7 @@ import { Målform } from '../typer/søknad';
 import { useFelt } from '../familie-skjema/felt';
 import { FeltState, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
 import { feil, ok } from '../familie-skjema/validators';
+import { fjernWhitespace } from '../utils/commons';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { axiosRequest } = useApp();
@@ -40,6 +41,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         valideringsfunksjon: (felt: FeltState<Brevmal | ''>) =>
             felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
     });
+
     const multiselect = useFelt({
         verdi: [],
         valideringsfunksjon: (
@@ -48,14 +50,38 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         ) => {
             const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
 
-            return felt.verdi.length > 0
-                ? ok(felt)
-                : feil(
-                      felt,
-                      `Du må velge minst ${
-                          brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'ett dokument' : 'en årsak'
-                      }`
-                  );
+            if (felt.verdi.length === 0) {
+                return feil(
+                    felt,
+                    `Du må velge minst ${
+                        brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'ett dokument' : 'en årsak'
+                    }`
+                );
+            }
+
+            const opprettedeVerdierMedFeil = felt.verdi.filter(
+                (selectOptionMedBrevtekst: ISelectOptionMedBrevtekst) =>
+                    !selectOptionMedBrevtekst.brevtekst &&
+                    fjernWhitespace(selectOptionMedBrevtekst.value).length < 3
+            );
+
+            if (opprettedeVerdierMedFeil.length > 0) {
+                return opprettedeVerdierMedFeil.length === 1
+                    ? feil(
+                          felt,
+                          `Du må fjerne ${
+                              brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'dokumentet' : 'årsaken'
+                          } som har mindre enn tre tegn`
+                      )
+                    : feil(
+                          felt,
+                          `Du må fjerne ${
+                              brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'dokumentene' : 'årsakene'
+                          } som har mindre enn tre tegn`
+                      );
+            }
+
+            return ok(felt);
         },
         skalFeltetVises: (avhengigheter: FeltContext) => {
             return avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK;
