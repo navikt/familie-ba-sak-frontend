@@ -110,7 +110,11 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                                     url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
                                 });
                             }}
-                            hidden={skjema.felter.årsak.verdi !== HenleggelseÅrsak.SØKNAD_TRUKKET}
+                            style={
+                                skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET
+                                    ? {}
+                                    : { display: 'none' }
+                            }
                         >
                             Forhåndsvis
                         </StyledLenke>,
