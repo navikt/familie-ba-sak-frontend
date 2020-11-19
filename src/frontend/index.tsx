@@ -9,7 +9,16 @@ import { AppContainer } from 'react-hot-loader';
 import { init } from '@sentry/browser';
 
 import App from './komponenter/App';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isBetween from 'dayjs/plugin/isBetween';
+
+require('dayjs/locale/nb');
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isBetween);
+dayjs.locale('nb');
 
 // eslint-disable-next-line
 const packageConfig = require('../../package.json');
@@ -26,7 +35,6 @@ init({
 if (process.env.NODE_ENV !== 'production') {
     axe(React, ReactDOM, 1000);
 }
-moment.locale('nb');
 
 const rootElement = document.getElementById('app');
 const renderApp = (Component: React.ComponentType): void => {

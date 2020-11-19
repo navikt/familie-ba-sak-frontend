@@ -1,6 +1,6 @@
 import createUseContext from 'constate';
 import { useState } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { IPersonBeregning, IYtelsePeriode } from '../typer/beregning';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
@@ -36,8 +36,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
-        sluttDato: moment().endOf('month'),
-        startDato: moment().subtract(12, 'month').endOf('month'),
+        sluttDato: dayjs().endOf('month'),
+        startDato: dayjs().subtract(12, 'month').endOf('month'),
     });
 
     const genererFormatertÅrstall = () => {

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { YearMonth } from '../typer/tid';
 
 export const periodeOverlapperMedValgtDato = (
@@ -6,7 +6,7 @@ export const periodeOverlapperMedValgtDato = (
     periodeTom: string,
     valgtDato: Date
 ) => {
-    const valgtDatoToMoment = moment(valgtDato.toDateString());
+    const valgtDatoToMoment = dayjs(valgtDato.toDateString());
     return (
         valgtDatoToMoment.isBetween(periodeFom, periodeTom) ||
         valgtDatoToMoment.isSame(periodeFom) ||
@@ -15,9 +15,9 @@ export const periodeOverlapperMedValgtDato = (
 };
 
 export const hentFørsteDagIYearMonth = (yearMonth: YearMonth) => {
-    return moment(yearMonth).startOf('month');
+    return dayjs(yearMonth).startOf('month');
 };
 
 export const hentSisteDagIYearMonth = (yearMonth: YearMonth) => {
-    return moment(yearMonth).endOf('month');
+    return dayjs(yearMonth).endOf('month');
 };

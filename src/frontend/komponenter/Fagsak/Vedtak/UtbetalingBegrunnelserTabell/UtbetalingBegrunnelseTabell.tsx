@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
@@ -35,8 +35,8 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     const beregningerMedBegrunnelseBehov = åpenBehandling.beregningOversikt
         .slice()
         .sort((a, b) =>
-            moment(a.periodeFom, datoformat.ISO_DAG).diff(
-                moment(b.periodeFom, datoformat.ISO_DAG),
+            dayjs(a.periodeFom, datoformat.ISO_DAG).diff(
+                dayjs(b.periodeFom, datoformat.ISO_DAG),
                 'day'
             )
         )
