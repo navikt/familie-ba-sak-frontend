@@ -8,7 +8,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 import { AxiosError } from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FamilieAxiosRequestConfig, useApp } from '../../../context/AppContext';
 
 const useForhåndsvisning = () => {
@@ -20,18 +20,13 @@ const useForhåndsvisning = () => {
         byggTomRessurs()
     );
 
-    useEffect(() => {
-        if (hentetForhåndsvisning.status === RessursStatus.SUKSESS) {
-            settVisForhåndsviningModal(true);
-        }
-    }, [hentetForhåndsvisning]);
-
     const hentForhåndsvisning = (
         familieAxiosRequestConfig: FamilieAxiosRequestConfig<IBrevData>
     ) => {
         settHentetForhåndsvisning(byggHenterRessurs());
         axiosRequest<string, IBrevData>(familieAxiosRequestConfig)
             .then((response: Ressurs<string>) => {
+                settVisForhåndsviningModal(true);
                 if (response.status === RessursStatus.SUKSESS) {
                     settHentetForhåndsvisning(
                         byggDataRessurs(`data:application/pdf;base64,${response.data}`)
