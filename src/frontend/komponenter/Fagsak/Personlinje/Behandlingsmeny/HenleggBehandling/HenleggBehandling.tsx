@@ -43,11 +43,10 @@ const StyledVeivalgIkon = styled(Oppfylt)`
     margin-right: 10px;
 `;
 
-const StyledLenke = styled(Lenke)`
+const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
     margin-right: auto;
-    display: inline-flex;
+    display: ${({ visLenke }) => (visLenke ? 'flex' : 'none')};
     align-items: center;
-    justify-content: center;
 `;
 
 const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behandling }) => {
@@ -110,11 +109,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                                     url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
                                 });
                             }}
-                            style={
-                                skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET
-                                    ? {}
-                                    : { display: 'none' }
-                            }
+                            visLenke={skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET}
                         >
                             Forhåndsvis
                         </StyledLenke>,
