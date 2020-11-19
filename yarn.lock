@@ -763,9 +763,9 @@
     react-day-picker "^7.4.8"
 
 "@navikt/familie-header@^2.0.13":
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.13.tgz#412df0539ad675868d655ecb810925750f468f60"
-  integrity sha512-wXsUPmPG5Y6vj7MpwsfnTxh9XRx8QyWoeLxKPZ87ySu61NjzZA+JScH54yPYBvb3OCAdTFucoBMI0Oto1EwIYA==
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.14.tgz#c3aae49ea833e90fb967fe7ab4abef6914de8875"
+  integrity sha512-kKz/byuHdWM4XaFGC15HM3Lt3pwGpa3NmgDXU+ddRZoCd/O4xh67rFDSytV0/LEv9a6Z3WXVdQOqN8s6sfMo+Q==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/familie-ikoner" "^3.1.2"
@@ -780,7 +780,7 @@
     nav-frontend-js-utils "1.0.13"
     nav-frontend-paneler "^1.0.24"
     nav-frontend-paneler-style "0.3.21"
-    nav-frontend-popover "0.0.28"
+    nav-frontend-popover "0.0.40"
     nav-frontend-popover-style "0.0.5"
     nav-frontend-typografi "^2.0.17"
     nav-frontend-typografi-style "^1.0.18"
@@ -8084,10 +8084,10 @@ nav-frontend-popover-style@^0.0.11:
   resolved "https://registry.yarnpkg.com/nav-frontend-popover-style/-/nav-frontend-popover-style-0.0.11.tgz#2ef11c6821061522bcd4f64a0c80572eec3f5439"
   integrity sha512-ieaXb1YqFoDaisiSZHIRKgT+egAjU5srO16bXwh/1y/lqiborKqYf8m69CoJmbnvJwKG6IWwH3PS8vx998vsBw==
 
-nav-frontend-popover@0.0.28:
-  version "0.0.28"
-  resolved "https://registry.yarnpkg.com/nav-frontend-popover/-/nav-frontend-popover-0.0.28.tgz#2b0152e50c92d69ca2cc8ea74b79b3ec3d2fa2ec"
-  integrity sha512-ITNBEAVEne2rhCupf/QPCIegskF/XW1UERPqJk93owxpi/AJ3JciEzzny/SzFojZ5Q5aFPvLteCfrl76LOTV6g==
+nav-frontend-popover@0.0.40:
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/nav-frontend-popover/-/nav-frontend-popover-0.0.40.tgz#41bbbbc2fe6cda64fc566a4ff6585bba85e18b09"
+  integrity sha512-U2d8u34YQWbDtJ+fvUBNYTKuYNBVUdq2xmGnBNTJSvK+97dkQ7W840kYEblKxTpODTIkXQ4RAz9nvShQHR3b9A==
 
 nav-frontend-popover@^0.0.38:
   version "0.0.38"
