@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment';
+import dayjs from 'dayjs';
 
 export enum datoformat {
     MÅNED = 'MM.YY',
@@ -22,27 +22,25 @@ export const formaterIsoDato = (
     tilFormat: datoformat,
     defaultString?: string
 ): string => {
-    const momentDato = moment(dato);
-    return momentDato.isValid() && dato
-        ? momentDato.format(tilFormat)
-        : dato || defaultString || '';
+    const dayjsDato = dayjs(dato);
+    return dayjsDato.isValid() && dato ? dayjsDato.format(tilFormat) : dato || defaultString || '';
 };
 
-export const formaterDato = (dato: Moment, tilFormat: datoformat): string => {
+export const formaterDato = (dato: dayjs.Dayjs, tilFormat: datoformat): string => {
     return dato.isValid() ? dato.format(tilFormat) : '';
 };
 
 export const formaterIverksattDato = (dato: string | undefined) =>
-    dato ? moment(dato).format(datoformat.DATO) : 'Ikke satt';
+    dato ? dayjs(dato).format(datoformat.DATO) : 'Ikke satt';
 
 export const hentAlder = (dato: string): number => {
-    const momentDato = moment(dato);
-    return momentDato.isValid() ? moment().diff(momentDato, 'years') : 0;
+    const dayjsDato = dayjs(dato);
+    return dayjsDato.isValid() ? dayjs().diff(dayjsDato, 'year') : 0;
 };
 
 export const hentAlderSomString = (fødselsdato: string | undefined) => {
     return fødselsdato
-        ? moment().diff(moment(fødselsdato, 'YYYY-MM-DD'), 'years') + ' år'
+        ? dayjs().diff(dayjs(fødselsdato, 'YYYY-MM-DD'), 'year') + ' år'
         : 'Alder ukjent';
 };
 
@@ -67,4 +65,4 @@ export const sisteDatoIMnd = (måned: number, år: number): Date => {
 };
 
 export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>
-    moment(fødselsDatoA).isBefore(fødselsDatoB) ? 1 : -1;
+    dayjs(fødselsDatoA).isBefore(fødselsDatoB) ? 1 : -1;

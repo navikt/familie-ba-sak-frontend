@@ -7,7 +7,7 @@ import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendels
 import { IBehandling } from '../../../typer/behandling';
 import { ILogg } from '../../../typer/logg';
 import { datoformat } from '../../../utils/formatter';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 
 interface IProps {
@@ -29,7 +29,7 @@ const Logg = ({ åpenBehandling }: IProps) => {
                 (loggElement: ILogg): Hendelse => {
                     return {
                         id: loggElement.id.toString(),
-                        dato: moment(loggElement.opprettetTidspunkt).format(datoformat.DATO_TID),
+                        dato: dayjs(loggElement.opprettetTidspunkt).format(datoformat.DATO_TID),
                         utførtAv: loggElement.opprettetAv,
                         rolle: loggElement.rolle,
                         tittel: loggElement.tittel,

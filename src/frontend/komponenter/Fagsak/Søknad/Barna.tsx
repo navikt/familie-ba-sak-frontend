@@ -1,5 +1,5 @@
 import { RessursStatus } from '@navikt/familie-typer';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
@@ -46,8 +46,8 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
     const { bruker } = useFagsakRessurser();
     const sorterteBarnMedOpplysninger = søknad.barnaMedOpplysninger.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-            return moment(b.fødselsdato, datoformat.ISO_DAG).diff(
-                moment(a.fødselsdato, datoformat.ISO_DAG),
+            return dayjs(b.fødselsdato, datoformat.ISO_DAG).diff(
+                dayjs(a.fødselsdato, datoformat.ISO_DAG),
                 'day'
             );
         }

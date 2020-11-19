@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
@@ -43,7 +43,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                     </thead>
                     <tbody>
                         {fagsak.behandlinger
-                            .sort((a, b) => moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt))
+                            .sort((a, b) => dayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt))
                             .map((behandling: IBehandling) => {
                                 const aktivVedtakForBehandling = behandling.vedtakForBehandling.find(
                                     (vedtak: IVedtakForBehandling) => vedtak.aktiv
