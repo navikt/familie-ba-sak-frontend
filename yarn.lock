@@ -737,15 +737,15 @@
     framer-motion "^2.9.1"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@^2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.10.tgz#1ea53e02c83a77b063e9e82b5f06b899b702a42e"
-  integrity sha512-W++nT2p2vUnCwFbn8LopBRcGTSpt32CcYr+3Hf0zbzz/cI0P0Tjr5OLW60F3p95gt/LxqM0saehtUn4OaQyERA==
+"@navikt/familie-form-elements@2.0.11-alpha.15":
+  version "2.0.11-alpha.15"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.11-alpha.15.tgz#e9447bd4b56989be3ef63083a6fed92ec62998bc"
+  integrity sha512-aMUy0vgH2kEiwyKAh4hJsM3/Pk4ilW56VtKcLuMTEz97prd82KsPsaHdXo7VZP7UPQYjPbDhG64Phn9ilwxSIQ==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
     classnames "^2.2.6"
-    nav-datovelger "^7.0.8"
+    nav-datovelger "^8.0.0"
     nav-frontend-knapper "^2.0.4"
     nav-frontend-knapper-style "^1.0.8"
     nav-frontend-lenker "^1.0.37"
@@ -7828,13 +7828,6 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
-
-nav-datovelger@^7.0.8:
-  version "7.0.8"
-  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-7.0.8.tgz#ee3903c3c2ade31724919f9f842e8f7164da66e8"
-  integrity sha512-7gJt2G+E4x0mcUHuAkYMa/FgR18/FcImHy6c+b+TyHOiY8qMnJjkMh5WjvIieaUxMOBhKuN/uj4U6APRhucccw==
-  dependencies:
-    focus-trap-react "^8.1.0"
 
 nav-datovelger@^8.0.0:
   version "8.0.0"
