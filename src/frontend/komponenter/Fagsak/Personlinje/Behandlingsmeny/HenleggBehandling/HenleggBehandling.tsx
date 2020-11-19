@@ -10,7 +10,7 @@ import {
     IBehandling,
 } from '../../../../../typer/behandling';
 import useHenleggBehandling from './useHenleggBehandling';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import { useHistory } from 'react-router';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Normaltekst } from 'nav-frontend-typografi';
@@ -57,6 +57,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
         hentForhåndsvisning,
         visForhåndsvisningModal,
         hentetForhåndsvisning,
+        settHentetForhåndsvisning,
         settVisForhåndsviningModal,
     } = useForhåndsvisning();
     const { åpenBehandling } = useBehandling();
@@ -71,6 +72,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
         settVisVeivalgModal,
         visVeivalgModal,
         hentSkjemaData,
+        årsak,
     } = useHenleggBehandling(() => {
         settVisModal(false);
     });
@@ -136,6 +138,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     ],
                     onClose: () => {
                         nullstillSkjema();
+                        settHentetForhåndsvisning(byggTomRessurs());
                         settVisModal(false);
                     },
                     lukkKnapp: true,
@@ -145,9 +148,12 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
             >
                 <SkjemaGruppe
                     feil={
-                        skjema.submitRessurs.status === RessursStatus.FEILET
+                        (skjema.submitRessurs.status === RessursStatus.FEILET
                             ? skjema.submitRessurs.frontendFeilmelding
-                            : undefined
+                            : undefined) ||
+                        (hentetForhåndsvisning.status === RessursStatus.FEILET
+                            ? hentetForhåndsvisning.frontendFeilmelding
+                            : undefined)
                     }
                     legend={SkjultLegend({ children: 'Henlegg behandling' })}
                 >
@@ -213,7 +219,9 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
             >
                 <StyledVeivalgTekst>
                     <StyledVeivalgIkon />
-                    Behandlingen er henlagt
+                    {årsak === HenleggelseÅrsak.SØKNAD_TRUKKET
+                        ? 'Behandlingen er henlagt og brev til bruker er sendt'
+                        : 'Behandlingen er henlagt'}
                 </StyledVeivalgTekst>
             </UIModalWrapper>
             <PdfVisningModal

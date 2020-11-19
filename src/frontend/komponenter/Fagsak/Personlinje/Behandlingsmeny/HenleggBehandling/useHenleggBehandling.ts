@@ -15,6 +15,7 @@ import {
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const [begrunnelse, settBegrunnelse] = useState('');
+    const [årsak, settÅrsak] = useState('');
 
     const { fagsak, settFagsak } = useFagsakRessurser();
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
@@ -37,12 +38,6 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         skjemanavn: 'henleggbehandling',
     });
 
-    const erTypeSoknedTrukket = () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        fagsak.status;
-        return true;
-    };
-
     const onBekreft = (behandlingId: number) => {
         onSubmit(
             {
@@ -55,6 +50,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
             },
             (ressurs: Ressurs<IFagsak>) => {
                 settFagsak(ressurs);
+                settÅrsak(skjema.felter.årsak.verdi);
                 lukkModal();
                 settVisVeivalgModal(true);
             }
@@ -74,11 +70,11 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         skjema,
         nullstillSkjema,
         onBekreft,
-        erTypeSoknedTrukket,
         settBegrunnelse,
         settVisVeivalgModal,
         visVeivalgModal,
         hentSkjemaData,
+        årsak,
     };
 };
 

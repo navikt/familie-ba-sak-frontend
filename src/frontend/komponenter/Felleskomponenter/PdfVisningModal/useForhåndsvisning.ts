@@ -54,6 +54,7 @@ const useForhåndsvisning = () => {
     return {
         hentForhåndsvisning,
         hentetForhåndsvisning,
+        settHentetForhåndsvisning,
         visForhåndsvisningModal,
         settVisForhåndsviningModal,
     };
