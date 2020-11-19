@@ -42,6 +42,11 @@ const StyledEtikettInfo = styled(EtikettInfo)`
     border-color: ${navFarger.navGra60};
 `;
 
+const LabelOgEtikett = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
 const Brevskjema = ({
     brevMaler,
     forhåndsvisningOnClick,
@@ -149,7 +154,7 @@ const Brevskjema = ({
                     <FamilieReactSelect
                         {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <LabelOgEtikett>
                                 <Normaltekst>
                                     {valgtBrevmal.verdi !== ''
                                         ? selectLabelsForBrevmaler[valgtBrevmal.verdi]
@@ -158,7 +163,7 @@ const Brevskjema = ({
                                 <StyledEtikettInfo mini={true}>
                                     {målform[mottakersMålform()]}
                                 </StyledEtikettInfo>
-                            </div>
+                            </LabelOgEtikett>
                         }
                         creatable={true}
                         erLesevisning={erLesevisning()}
