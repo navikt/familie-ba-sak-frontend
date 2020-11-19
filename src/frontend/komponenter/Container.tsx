@@ -10,11 +10,9 @@ import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring
 import classNames from 'classnames';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import FagsakContainer from './Fagsak/FagsakContainer';
-import { EventKategori, useAmplitude } from '../utils/amplitude';
 
 const Container: React.FC = () => {
     const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
-    const { loggSidevisning } = useAmplitude();
 
     return (
         <Router>
@@ -41,7 +39,6 @@ const Container: React.FC = () => {
                                     exact={true}
                                     path="/oppgaver"
                                     render={() => {
-                                        loggSidevisning(EventKategori.OPPGAVE, 'oppgaver');
                                         return <Oppgaver />;
                                     }}
                                 />
@@ -49,10 +46,6 @@ const Container: React.FC = () => {
                                     exact={true}
                                     path="/oppgaver/journalfør/:oppgaveId"
                                     render={() => {
-                                        loggSidevisning(
-                                            EventKategori.JOURNALFØRING,
-                                            'journalføring'
-                                        );
                                         return <ManuellJournalføring />;
                                     }}
                                 />

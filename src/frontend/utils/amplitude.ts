@@ -12,40 +12,22 @@ amplitudeInstance.init('default', '', {
     platform: window.location.toString(),
 });
 
-export enum EventKategori {
-    OPPGAVE = 'OPPGAVE',
-    JOURNALFØRING = 'JOURNALFØRING',
-    FAGSAK = 'FAGSAK',
-    BEHANDLING = 'BEHANDLING',
-}
-
 export const useAmplitude = () => {
     // eslint-disable-next-line
     const loggEvent = (eventName: string, eventProperties: any) => {
         amplitudeInstance.logEvent(eventName, eventProperties);
     };
 
-    const loggSidevisning = (kategori: EventKategori, sidevisning: string) => {
+    const loggSidevisning = (sidevisning: string) => {
         loggEvent('sidevisning', {
             sidevisning,
             team_id,
             applikasjon,
-            kategori,
-        });
-    };
-
-    const loggSidevisningBehandling = (sidevisning: string) => {
-        loggEvent('sidevisning', {
-            sidevisning,
-            team_id,
-            applikasjon,
-            kategori: EventKategori.BEHANDLING,
         });
     };
 
     return {
         loggEvent,
         loggSidevisning,
-        loggSidevisningBehandling,
     };
 };
