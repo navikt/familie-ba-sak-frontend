@@ -10,9 +10,11 @@ import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring
 import classNames from 'classnames';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import FagsakContainer from './Fagsak/FagsakContainer';
+import { EventKategori, useAmplitude } from '../utils/amplitude';
 
 const Container: React.FC = () => {
     const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
+    const { loggSidevisning } = useAmplitude();
 
     return (
         <Router>
@@ -35,11 +37,24 @@ const Container: React.FC = () => {
                                     }}
                                 />
                                 <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
-                                <Route exact={true} path="/oppgaver" component={Oppgaver} />
+                                <Route
+                                    exact={true}
+                                    path="/oppgaver"
+                                    render={() => {
+                                        loggSidevisning(EventKategori.OPPGAVE, 'oppgaver');
+                                        return <Oppgaver />;
+                                    }}
+                                />
                                 <Route
                                     exact={true}
                                     path="/oppgaver/journalfør/:oppgaveId"
-                                    component={ManuellJournalføring}
+                                    render={() => {
+                                        loggSidevisning(
+                                            EventKategori.JOURNALFØRING,
+                                            'journalføring'
+                                        );
+                                        return <ManuellJournalføring />;
+                                    }}
                                 />
                             </Switch>
                         </FagsakProvider>
@@ -48,6 +63,7 @@ const Container: React.FC = () => {
             ) : (
                 <UgyldigSesjon />
             )}
+            );
         </Router>
     );
 };

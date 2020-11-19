@@ -10,10 +10,12 @@ import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import Personlinje from './Personlinje/Personlinje';
+import { EventKategori, useAmplitude } from '../../utils/amplitude';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams<{ fagsakId: string }>();
     const history = useHistory();
+    const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
@@ -54,6 +56,10 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             exact={true}
                                             path="/fagsak/:fagsakId/saksoversikt"
                                             render={() => {
+                                                loggSidevisning(
+                                                    EventKategori.FAGSAK,
+                                                    'saksoversikt'
+                                                );
                                                 return <Saksoversikt fagsak={fagsak.data} />;
                                             }}
                                         />
