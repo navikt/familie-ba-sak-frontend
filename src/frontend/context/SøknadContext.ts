@@ -2,11 +2,14 @@ import createUseContext from 'constate';
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 
-import { BehandlingUnderkategori } from '../typer/behandling';
+import { BehandlingSteg, BehandlingUnderkategori, hentStegNummer } from '../typer/behandling';
 import { FamilieRelasjonRolle, IFamilierelasjon, IPersonInfo } from '../typer/person';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
 import { useFagsakRessurser } from './FagsakContext';
+import { useBehandling } from './BehandlingContext';
+import { useParams } from 'react-router';
+import { useApp } from './AppContext';
 
 const initalState = (bruker?: IPersonInfo): ISøknadDTO => {
     return {
@@ -35,15 +38,56 @@ const initalState = (bruker?: IPersonInfo): ISøknadDTO => {
 };
 
 const [SøknadProvider, useSøknad] = createUseContext(() => {
+    const { axiosRequest } = useApp();
     const { bruker } = useFagsakRessurser();
+    const { åpenBehandling } = useBehandling();
+    const { behandlingId } = useParams<{ behandlingId: string }>();
+
     const [søknad, settSøknad] = React.useState<ISøknadDTO>(initalState());
+    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
     const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
 
-    React.useEffect(() => {
+    const nullstillSøknad = () => {
         if (bruker.status === RessursStatus.SUKSESS) {
             settSøknad(initalState(bruker.data));
         }
+        settSøknadErLastetFraBackend(false);
+    };
+
+    React.useEffect(() => {
+        nullstillSøknad();
     }, [bruker.status]);
+
+    React.useEffect(() => {
+        if (
+            åpenBehandling.status === RessursStatus.SUKSESS &&
+            parseInt(behandlingId, 10) === åpenBehandling.data.behandlingId &&
+            hentStegNummer(åpenBehandling.data.steg) >=
+                hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
+        ) {
+            axiosRequest<ISøknadDTO, void>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.data.behandlingId}/søknad`,
+                påvirkerSystemLaster: true,
+            }).then((response: Ressurs<ISøknadDTO>) => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    settSøknadErLastetFraBackend(true);
+                    settSøknadOgValider({
+                        ...response.data,
+                        barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
+                            (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                                ...barnMedOpplysninger,
+                                checked: true,
+                            })
+                        ),
+                    });
+                }
+            });
+        } else {
+            // Ny behandling er lastet som ikke har fullført søknad-steget.
+            nullstillSøknad();
+        }
+    }, [åpenBehandling]);
 
     const validerSøknad = (validerSøknad: ISøknadDTO): boolean => {
         const søknadFeilmeldinger: FeiloppsummeringFeil[] = [];
@@ -88,7 +132,14 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
         validerSøknad(søknad);
     };
 
-    return { feilmeldinger, søknad, settBarn, settSøknadOgValider, erSøknadGyldig: validerSøknad };
+    return {
+        erSøknadGyldig: validerSøknad,
+        feilmeldinger,
+        settBarn,
+        settSøknadOgValider,
+        søknad,
+        søknadErLastetFraBackend,
+    };
 });
 
 export { SøknadProvider, useSøknad };

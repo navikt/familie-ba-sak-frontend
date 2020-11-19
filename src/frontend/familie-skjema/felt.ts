@@ -110,7 +110,7 @@ export function useFelt<Verdi = string>({
         [validerOgSettFelt, settFeltState]
     );
 
-    const hentNavRadiogruppeProps = useCallback(
+    const hentNavBaseSkjemaProps = useCallback(
         (visFeilmelding: boolean): NavBaseSkjemaProps<Verdi> => ({
             feil: visFeilmelding ? feltState.feilmelding : undefined,
             value: feltState.verdi,
@@ -122,7 +122,7 @@ export function useFelt<Verdi = string>({
         () => ({
             ...feltState,
             hentNavInputProps,
-            hentNavRadiogruppeProps,
+            hentNavBaseSkjemaProps,
             nullstill,
             erSynlig,
             onChange,

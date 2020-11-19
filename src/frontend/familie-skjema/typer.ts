@@ -16,7 +16,7 @@ export interface Felt<Verdi> {
     erSynlig: boolean;
     feilmelding: string;
     hentNavInputProps(visFeilmelding: boolean): NavInputProps<Verdi>;
-    hentNavRadiogruppeProps(visFeilmelding: boolean): NavBaseSkjemaProps<Verdi>;
+    hentNavBaseSkjemaProps(visFeilmelding: boolean): NavBaseSkjemaProps<Verdi>;
     nullstill(): void;
     onChange: FeltOnChange<Verdi>;
     valider: ValiderFelt<Verdi>;
