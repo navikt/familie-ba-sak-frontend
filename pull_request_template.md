@@ -1,13 +1,23 @@
-### 💰 Functional description of merge request
-_In what way does the application change behavior when this code is merged? A couple of sentences is often sufficient._
-### 🏆 Interesting highlights
-_Any uncertainties or other interesting things to look at?_
+### 💰 Hva forsøker du å løse i denne PR'en
+_Skriv 1 eller 2 setninger om hvilken funksjonell endring som blir implementert._
+
+### 🔎️ Er det noe spesielt du ønsker å fremheve?
+_Er det noe du er bekymret eller usikker på? Beskriv det gjerne her._
+
 ### ✅ Checklist
-_Go through this list and make sure you can check all boxes before merging._
-- [ ] I've thoroughly read through all my changes and I'm happy with the result :muscle:
-- [ ] I've tested the feature :female-detective:
-- [ ] I've written tests (or actively chosen not to) :rocket: If you've chosen to _not_ write tests, explain why below:
-### 🤷‍♀️ Suggested approach when reviewing
-_How to best review this? One commit at the time? All the things in one go? Go through it together IRL?_
+_Har du husket alle punktene i listen?_
+- [ ] Jeg har testet mine endringer i henhold til akseptansekriteriene 🕵️
+- [ ] Jeg har skrevet tester. Hvis du ikke har skrevet tester, beskriv hvorfor under 👇
+
+_Jeg har ikke skrevet tester fordi:_
+
+
+### 🤷‍♀ ️Hvor er det lurt å starte?
+_F.eks. commit for commit, alt i ett?_
+
+### 💬 Ønsker du muntlig tilbakemelding?
+- [ ] Ja
+- [ ] Nei
+  
 ### 👀 Screen shots
-_Any new visual functionality? Add a screen shot!_
+_Har det visuelle endret seg? Legg til før- og etterbilder!_
