@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
-import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements/dist';
+import { FamilieSelect } from '@navikt/familie-form-elements/dist';
 import {
     IBrevData,
     Brevmal,
@@ -21,7 +21,7 @@ import { formaterPersonIdent } from '../../../../utils/formatter';
 import Knapperekke from '../../Knapperekke';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { IFagsak } from '../../../../typer/fagsak';
-import FamilieReactSelect from '../../FamilieReactSelect';
+import FamilieReactSelect from '../../../../familie-react-select/FamilieReactSelect';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { målform } from '../../../../typer/søknad';
@@ -43,6 +43,11 @@ interface IProps {
 const StyledEtikettInfo = styled(EtikettInfo)`
     background-color: ${navFarger.navLysGra};
     border-color: ${navFarger.navGra60};
+`;
+
+const LabelOgEtikett = styled.div`
+    display: flex;
+    justify-content: space-between;
 `;
 
 const Brevskjema = ({
@@ -155,10 +160,18 @@ const Brevskjema = ({
                     <FamilieReactSelect
                         {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={
-                            valgtBrevmal.verdi !== ''
-                                ? selectLabelsForBrevmaler[valgtBrevmal.verdi]
-                                : ''
+                            <LabelOgEtikett>
+                                <Normaltekst>
+                                    {valgtBrevmal.verdi !== ''
+                                        ? selectLabelsForBrevmaler[valgtBrevmal.verdi]
+                                        : ''}
+                                </Normaltekst>
+                                <StyledEtikettInfo mini={true}>
+                                    {målform[mottakersMålform()]}
+                                </StyledEtikettInfo>
+                            </LabelOgEtikett>
                         }
+                        creatable={true}
                         erLesevisning={erLesevisning()}
                         isMulti={true}
                         placeholder={'Velg'}
@@ -171,23 +184,6 @@ const Brevskjema = ({
                             );
                         }}
                         options={hentSelectOptions(valgtBrevmal.verdi)}
-                    />
-                )}
-
-                {skjema.felter.fritekst.erSynlig && (
-                    <FamilieTextarea
-                        {...skjema.felter.fritekst.hentNavInputProps(skjema.visFeilmeldinger)}
-                        disabled={skjemaErLåst}
-                        label={
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Normaltekst>Fritekst</Normaltekst>
-                                <StyledEtikettInfo mini={true}>
-                                    {målform[mottakersMålform]}
-                                </StyledEtikettInfo>
-                            </div>
-                        }
-                        erLesevisning={false}
-                        maxLength={4000}
                     />
                 )}
             </SkjemaGruppe>

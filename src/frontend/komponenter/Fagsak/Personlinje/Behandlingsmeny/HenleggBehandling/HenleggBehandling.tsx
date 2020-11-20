@@ -158,6 +158,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     legend={SkjultLegend({ children: 'Henlegg behandling' })}
                 >
                     <FamilieSelect
+                        {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={'Velg årsak'}
                         value={skjema.felter.årsak.verdi}
                         onChange={(event: React.ChangeEvent<HenleggelseÅrsakSelect>): void => {

@@ -4,7 +4,6 @@ export interface IBrevData {
     mottakerIdent: string;
     multiselectVerdier: string[];
     brevmal: Brevmal;
-    fritekst: string;
 }
 
 export interface BrevtypeSelect extends HTMLSelectElement {
@@ -62,7 +61,7 @@ type OptionType = {
 export interface ISelectOptionMedBrevtekst extends OptionType {
     value: string;
     label: string;
-    brevtekst: Record<Målform, string>;
+    brevtekst?: Record<Målform, string>;
 }
 
 // Value settes ved henting av select option basert på label
@@ -329,23 +328,6 @@ export const dokumenter: ISelectOptionMedBrevtekst[] = [
             NN: 'Vergefullmakt.',
         },
     },
-    {
-        value: 'annet',
-        label: 'Annet (Fritekst)',
-        brevtekst: {
-            NB: '',
-            NN: '',
-        },
-    },
 ];
 
-export const årsaker: ISelectOptionMedBrevtekst[] = [
-    {
-        value: 'annet',
-        label: 'Annet (Fritekst)',
-        brevtekst: {
-            NB: '',
-            NN: '',
-        },
-    },
-];
+export const årsaker: ISelectOptionMedBrevtekst[] = [];

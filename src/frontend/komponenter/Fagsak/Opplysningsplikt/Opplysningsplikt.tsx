@@ -134,7 +134,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
                     utenFeilPropagering={true}
                 >
                     <StyledFamilieRadioGruppe
-                        {...skjema.felter.status.hentNavRadiogruppeProps(skjema.visFeilmeldinger)}
+                        {...skjema.felter.status.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         erLesevisning={lesevisning}
                         verdi={
                             opplysningspliktVisningtekst[
