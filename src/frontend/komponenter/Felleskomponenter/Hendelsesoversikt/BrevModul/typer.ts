@@ -13,19 +13,19 @@ export interface BrevtypeSelect extends HTMLSelectElement {
 export enum Brevmal {
     INNHENTE_OPPLYSNINGER = 'INNHENTE_OPPLYSNINGER',
     VARSEL_OM_REVURDERING = 'VARSEL_OM_REVURDERING',
-    HENLEGGELSE = 'HENLEGGELSE',
+    HENLEGGE_TRUKKET_SØKNAD = 'HENLEGGE_TRUKKET_SØKNAD',
 }
 
 export const brevmaler: Record<Brevmal, string> = {
     INNHENTE_OPPLYSNINGER: 'Innhent opplysninger',
     VARSEL_OM_REVURDERING: 'Varsel om revurdering',
-    HENLEGGELSE: 'Henlegg søknad',
+    HENLEGGE_TRUKKET_SØKNAD: 'Henlegg søknad',
 };
 
 export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
     INNHENTE_OPPLYSNINGER: 'Velg dokumenter',
     VARSEL_OM_REVURDERING: 'Velg årsak',
-    HENLEGGELSE: 'Velg årsak',
+    HENLEGGE_TRUKKET_SØKNAD: 'Velg årsak',
 };
 
 export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevtekst[] => {
@@ -37,7 +37,7 @@ export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevte
         case Brevmal.VARSEL_OM_REVURDERING:
             selectOptionsMedBrevtekst = årsaker;
             break;
-        case Brevmal.HENLEGGELSE:
+        case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
             selectOptionsMedBrevtekst = årsaker;
             break;
     }

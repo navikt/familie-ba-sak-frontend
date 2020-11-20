@@ -61,7 +61,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         mottakerIdent:
             fagsak.status === RessursStatus.SUKSESS ? fagsak.data.søkerFødselsnummer : '',
         multiselectVerdier: [],
-        brevmal: Brevmal.HENLEGGELSE,
+        brevmal: Brevmal.HENLEGGE_TRUKKET_SØKNAD,
     });
 
     return {
