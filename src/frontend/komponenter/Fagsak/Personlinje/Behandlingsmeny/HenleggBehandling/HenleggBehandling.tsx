@@ -18,6 +18,9 @@ import Oppfylt from '../../../../../ikoner/Oppfylt';
 import styled from 'styled-components';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import Lenke from 'nav-frontend-lenker';
+import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
+import useForhåndsvisning from '../../../../Felleskomponenter/PdfVisningModal/useForhåndsvisning';
 
 interface IProps {
     onListElementClick: () => void;
@@ -40,12 +43,27 @@ const StyledVeivalgIkon = styled(Oppfylt)`
     margin-right: 10px;
 `;
 
+const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
+    margin-right: auto;
+    display: ${({ visLenke }) => (visLenke ? 'flex' : 'none')};
+    align-items: center;
+`;
+
 const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behandling }) => {
     const history = useHistory();
-
     const [visModal, settVisModal] = useState(false);
-
     const { erLesevisning } = useBehandling();
+    const {
+        hentForhåndsvisning,
+        nullstillHentetForhåndsvisning,
+        visForhåndsvisningModal,
+        hentetForhåndsvisning,
+        settVisForhåndsviningModal,
+    } = useForhåndsvisning();
+    const { åpenBehandling } = useBehandling();
+
+    const behandlingId =
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const {
         skjema,
@@ -53,6 +71,8 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
         onBekreft,
         settVisVeivalgModal,
         visVeivalgModal,
+        hentSkjemaData,
+        årsak,
     } = useHenleggBehandling(() => {
         settVisModal(false);
     });
@@ -81,6 +101,20 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
             <UIModalWrapper
                 modal={{
                     actions: [
+                        <StyledLenke
+                            key={'forhåndsvis'}
+                            href="#"
+                            onClick={() => {
+                                hentForhåndsvisning({
+                                    method: 'POST',
+                                    data: hentSkjemaData(),
+                                    url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
+                                });
+                            }}
+                            visLenke={skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET}
+                        >
+                            Forhåndsvis
+                        </StyledLenke>,
                         <Flatknapp
                             key={'avbryt'}
                             mini={true}
@@ -104,6 +138,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     ],
                     onClose: () => {
                         nullstillSkjema();
+                        nullstillHentetForhåndsvisning();
                         settVisModal(false);
                     },
                     lukkKnapp: true,
@@ -113,9 +148,12 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
             >
                 <SkjemaGruppe
                     feil={
-                        skjema.submitRessurs.status === RessursStatus.FEILET
+                        (skjema.submitRessurs.status === RessursStatus.FEILET
                             ? skjema.submitRessurs.frontendFeilmelding
-                            : undefined
+                            : undefined) ||
+                        (hentetForhåndsvisning.status === RessursStatus.FEILET
+                            ? hentetForhåndsvisning.frontendFeilmelding
+                            : undefined)
                     }
                     legend={SkjultLegend({ children: 'Henlegg behandling' })}
                 >
@@ -182,9 +220,16 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
             >
                 <StyledVeivalgTekst>
                     <StyledVeivalgIkon />
-                    Behandlingen er henlagt
+                    {årsak === HenleggelseÅrsak.SØKNAD_TRUKKET
+                        ? 'Behandlingen er henlagt og brev til bruker er sendt'
+                        : 'Behandlingen er henlagt'}
                 </StyledVeivalgTekst>
             </UIModalWrapper>
+            <PdfVisningModal
+                åpen={visForhåndsvisningModal}
+                onRequestClose={() => settVisForhåndsviningModal(false)}
+                pdfdata={hentetForhåndsvisning}
+            />
         </>
     );
 };

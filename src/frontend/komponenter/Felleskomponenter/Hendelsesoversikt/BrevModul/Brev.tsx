@@ -15,12 +15,8 @@ interface IProps {
 const Brev = ({ onOkIModalClick }: IProps) => {
     const { åpenBehandling } = useBehandling();
     const { fagsak } = useFagsakRessurser();
-    const {
-        hentForhåndsvisning,
-        hentetForhåndsvisning,
-        hentMuligeBrevMaler,
-        navigerTilOpplysningsplikt,
-    } = useBrevModul();
+    const { hentMuligeBrevMaler, navigerTilOpplysningsplikt } = useBrevModul();
+
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
     const behandlingId =
@@ -31,8 +27,6 @@ const Brev = ({ onOkIModalClick }: IProps) => {
     return (
         <div className={'brev'}>
             <Brevskjema
-                forhåndsvisningOnClick={hentForhåndsvisning}
-                hentetForhåndsvisning={hentetForhåndsvisning}
                 brevMaler={hentMuligeBrevMaler()}
                 onSubmitSuccess={() => {
                     settVisInnsendtBrevModal(true);

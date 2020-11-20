@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect } from '@navikt/familie-form-elements/dist';
 import {
-    IBrevData,
     Brevmal,
     brevmaler,
     selectLabelsForBrevmaler,
@@ -29,10 +28,9 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import SkjultLegend from '../../SkjultLegend';
 import { Felt } from '../../../../familie-skjema/typer';
+import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
 
 interface IProps {
-    forhåndsvisningOnClick: (brevData: IBrevData) => void;
-    hentetForhåndsvisning: Ressurs<string>;
     brevMaler: Brevmal[];
     onSubmitSuccess: () => void;
 }
@@ -47,14 +45,10 @@ const LabelOgEtikett = styled.div`
     justify-content: space-between;
 `;
 
-const Brevskjema = ({
-    brevMaler,
-    forhåndsvisningOnClick,
-    hentetForhåndsvisning,
-    onSubmitSuccess,
-}: IProps) => {
+const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
     const { åpenBehandling, erLesevisning } = useBehandling();
     const { hentLogg, settFagsak } = useFagsakRessurser();
+    const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
 
     const {
         skjema,
@@ -93,6 +87,9 @@ const Brevskjema = ({
         hentetForhåndsvisning.status === RessursStatus.FEILET
             ? hentetForhåndsvisning.frontendFeilmelding
             : undefined;
+
+    const behandlingId =
+        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     return (
         <div>
@@ -188,7 +185,11 @@ const Brevskjema = ({
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (kanSendeSkjema()) {
-                            forhåndsvisningOnClick(hentSkjemaData());
+                            hentForhåndsvisning({
+                                method: 'POST',
+                                data: hentSkjemaData(),
+                                url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
+                            });
                         }
                     }}
                 >
