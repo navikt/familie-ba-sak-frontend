@@ -7,7 +7,6 @@ import { useHistory } from 'react-router';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
-import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
 
 interface IProps {
     onOkIModalClick: () => void;
@@ -17,7 +16,6 @@ const Brev = ({ onOkIModalClick }: IProps) => {
     const { åpenBehandling } = useBehandling();
     const { fagsak } = useFagsakRessurser();
     const { hentMuligeBrevMaler, navigerTilOpplysningsplikt } = useBrevModul();
-    const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
 
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
@@ -29,8 +27,6 @@ const Brev = ({ onOkIModalClick }: IProps) => {
     return (
         <div className={'brev'}>
             <Brevskjema
-                forhåndsvisningOnClick={hentForhåndsvisning}
-                hentetForhåndsvisning={hentetForhåndsvisning}
                 brevMaler={hentMuligeBrevMaler()}
                 onSubmitSuccess={() => {
                     settVisInnsendtBrevModal(true);

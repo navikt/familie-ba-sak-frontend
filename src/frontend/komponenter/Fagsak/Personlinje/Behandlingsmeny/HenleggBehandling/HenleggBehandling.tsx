@@ -10,7 +10,7 @@ import {
     IBehandling,
 } from '../../../../../typer/behandling';
 import useHenleggBehandling from './useHenleggBehandling';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 import { useHistory } from 'react-router';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Normaltekst } from 'nav-frontend-typografi';
@@ -55,9 +55,9 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
     const { erLesevisning } = useBehandling();
     const {
         hentForhåndsvisning,
+        nullstillHentetForhåndsvisning,
         visForhåndsvisningModal,
         hentetForhåndsvisning,
-        settHentetForhåndsvisning,
         settVisForhåndsviningModal,
     } = useForhåndsvisning();
     const { åpenBehandling } = useBehandling();
@@ -138,7 +138,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                     ],
                     onClose: () => {
                         nullstillSkjema();
-                        settHentetForhåndsvisning(byggTomRessurs());
+                        nullstillHentetForhåndsvisning();
                         settVisModal(false);
                     },
                     lukkKnapp: true,

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieSelect } from '@navikt/familie-form-elements/dist';
 import {
-    IBrevData,
     Brevmal,
     brevmaler,
     selectLabelsForBrevmaler,
@@ -29,13 +28,9 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import SkjultLegend from '../../SkjultLegend';
 import { Felt } from '../../../../familie-skjema/typer';
-import { FamilieAxiosRequestConfig } from '../../../../context/AppContext';
+import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
 
 interface IProps {
-    forhåndsvisningOnClick: (
-        familieAxiosRequestConfig: FamilieAxiosRequestConfig<IBrevData>
-    ) => void;
-    hentetForhåndsvisning: Ressurs<string>;
     brevMaler: Brevmal[];
     onSubmitSuccess: () => void;
 }
@@ -50,14 +45,10 @@ const LabelOgEtikett = styled.div`
     justify-content: space-between;
 `;
 
-const Brevskjema = ({
-    brevMaler,
-    forhåndsvisningOnClick,
-    hentetForhåndsvisning,
-    onSubmitSuccess,
-}: IProps) => {
+const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
     const { åpenBehandling, erLesevisning } = useBehandling();
     const { hentLogg, settFagsak } = useFagsakRessurser();
+    const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
 
     const {
         skjema,
@@ -194,7 +185,7 @@ const Brevskjema = ({
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (kanSendeSkjema()) {
-                            forhåndsvisningOnClick({
+                            hentForhåndsvisning({
                                 method: 'POST',
                                 data: hentSkjemaData(),
                                 url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,

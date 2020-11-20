@@ -20,9 +20,11 @@ const useForhåndsvisning = () => {
         byggTomRessurs()
     );
 
-    const hentForhåndsvisning = (
-        familieAxiosRequestConfig: FamilieAxiosRequestConfig<IBrevData>
-    ) => {
+    const nullstillHentetForhåndsvisning = () => {
+        settHentetForhåndsvisning(byggTomRessurs);
+    };
+
+    const hentForhåndsvisning = <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => {
         settHentetForhåndsvisning(byggHenterRessurs());
         axiosRequest<string, IBrevData>(familieAxiosRequestConfig)
             .then((response: Ressurs<string>) => {
@@ -48,6 +50,7 @@ const useForhåndsvisning = () => {
 
     return {
         hentForhåndsvisning,
+        nullstillHentetForhåndsvisning,
         hentetForhåndsvisning,
         settHentetForhåndsvisning,
         visForhåndsvisningModal,
