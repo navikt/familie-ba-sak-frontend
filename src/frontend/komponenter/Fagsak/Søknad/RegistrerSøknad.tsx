@@ -8,10 +8,10 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import { BehandlingSteg, hentStegNummer, IBehandling } from '../../../typer/behandling';
+import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO } from '../../../typer/søknad';
+import { IRestRegistrerSøknad } from '../../../typer/søknad';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import Barna from './Barna';
@@ -39,15 +39,18 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const { erLesevisning, opplysningsplikt } = useBehandling();
     const history = useHistory();
 
-    const { feilmeldinger, søknad, settSøknadOgValider, erSøknadGyldig } = useSøknad();
+    const {
+        erSøknadGyldig,
+        feilmeldinger,
+        settSøknadOgValider,
+        søknad,
+        søknadErLastetFraBackend,
+    } = useSøknad();
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
     const [frontendFeilmelding, settFrontendFeilmelding] = React.useState('');
 
-    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
-
     const [senderInn, settSenderInn] = React.useState(false);
-
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
@@ -84,32 +87,6 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             settVisFeilmeldinger(true);
         }
     };
-
-    React.useEffect(() => {
-        if (
-            åpenBehandling &&
-            hentStegNummer(åpenBehandling.steg) >= hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
-        ) {
-            axiosRequest<ISøknadDTO, void>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/søknad`,
-                påvirkerSystemLaster: true,
-            }).then((response: Ressurs<ISøknadDTO>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settSøknadErLastetFraBackend(true);
-                    settSøknadOgValider({
-                        ...response.data,
-                        barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
-                            (barnMedOpplysninger: IBarnMedOpplysninger) => ({
-                                ...barnMedOpplysninger,
-                                checked: true,
-                            })
-                        ),
-                    });
-                }
-            });
-        }
-    }, [åpenBehandling]);
 
     return (
         <StyledSkjemasteg

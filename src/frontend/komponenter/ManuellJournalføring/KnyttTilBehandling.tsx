@@ -1,6 +1,6 @@
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
@@ -30,7 +30,7 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
     dataForManuellJournalføring,
 }) => {
     const behandlinger = dataForManuellJournalføring.fagsak?.behandlinger.sort((a, b) =>
-        moment(b.opprettetTidspunkt).diff(moment(a.opprettetTidspunkt))
+        dayjs(b.opprettetTidspunkt).diff(dayjs(a.opprettetTidspunkt))
     );
     const visOpprettBehandlingKnapp =
         !aktivBehandling || aktivBehandling.status === BehandlingStatus.AVSLUTTET;
@@ -185,7 +185,7 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
                                 </td>
                                 <td className={'behandlingliste__tabell--dato'}>
                                     {formaterDato(
-                                        moment(behandling.opprettetTidspunkt),
+                                        dayjs(behandling.opprettetTidspunkt),
                                         datoformat.DATO_FORKORTTET
                                     )}
                                 </td>

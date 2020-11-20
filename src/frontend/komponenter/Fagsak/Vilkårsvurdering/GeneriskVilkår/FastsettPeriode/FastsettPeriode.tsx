@@ -8,8 +8,7 @@ import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import styled from 'styled-components';
 import { Element } from 'nav-frontend-typografi';
-import { ISODateString } from 'nav-datovelger/lib/types';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
 import { FeltState, Valideringsstatus } from '../../../../../familie-skjema/typer';
 
 interface IProps {
