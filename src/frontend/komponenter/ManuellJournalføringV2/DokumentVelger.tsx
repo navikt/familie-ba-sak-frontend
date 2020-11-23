@@ -1,19 +1,20 @@
 import { IDokumentInfo, IJournalpost } from '@navikt/familie-typer';
-import { HoyreChevron } from 'nav-frontend-chevron';
 import Panel from 'nav-frontend-paneler';
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
+import CreatableSelect from 'react-select/creatable';
+import { HoyreChevron, NedChevron, OppChevron } from 'nav-frontend-chevron';
 
 const DokumentPanel = styled(Panel)`
     margin-top: 20px;
-    width: 24rem;
+    width: 27rem;
     height: 100%;
-`;
-
-const Høyrejuster = styled.div`
-    margin-left: auto;
+    border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
+    &:hover {
+        border-color: ${props => `${props.theme.hoverBorderColor}`};
+    }
 `;
 
 const DokumentInfoStripeContainer = styled.div`
@@ -29,9 +30,33 @@ interface IDokumentInfoProps {
     journalpost: IJournalpost;
 }
 
+interface IDokumentInfoStripeProps {
+    dokument: IDokumentInfo;
+    journalpost: IJournalpost;
+    valgt: boolean;
+    utvidet: boolean;
+    onClick: () => void;
+}
+
+interface IDokumentTittelPanelProps {
+    tittel: string;
+}
+
 interface IDokumentVelgerProps {
     dokument: IDokumentInfo;
     journalpost: IJournalpost;
+    valgt: boolean;
+}
+
+enum EndreKnappStatus {
+    UVALGT,
+    VALGT,
+    UTVIDET,
+}
+
+interface IEndreKnappProps {
+    status: EndreKnappStatus;
+    onClick: () => void;
 }
 
 const DokumentTittel = styled.td`
@@ -60,29 +85,138 @@ const DokumentInfo: React.FC<IDokumentInfoProps> = ({ dokument, journalpost }) =
     );
 };
 
-const DokumentInfoStripe: React.FC<IDokumentInfoProps> = ({ dokument, journalpost }) => {
+const StyledDokumentIkon = styled(DokumentIkon)`
+    margin: 0 16px 0 0;
+`;
+
+const EndreDiv = styled.div`
+    text-decoration: underline;
+    text-align: right;
+    width: 5rem;
+    margin-left: auto;
+`;
+
+const EndreDivVanlig = styled(EndreDiv)`
+    color: black;
+`;
+
+const EndreDivAktiv = styled(EndreDiv)`
+    color: #0067c5;
+`;
+
+const EndreKnapp: React.FC<IEndreKnappProps> = ({ status, onClick }) => {
+    switch (status) {
+        case EndreKnappStatus.UVALGT:
+            return (
+                <EndreDivVanlig onClick={onClick}>
+                    <HoyreChevron />
+                </EndreDivVanlig>
+            );
+        case EndreKnappStatus.VALGT:
+            return (
+                <EndreDivAktiv onClick={onClick}>
+                    Endre
+                    <NedChevron />
+                </EndreDivAktiv>
+            );
+        case EndreKnappStatus.UTVIDET:
+            return (
+                <EndreDivAktiv onClick={onClick}>
+                    Lukk
+                    <OppChevron />
+                </EndreDivAktiv>
+            );
+    }
+};
+
+const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
+    dokument,
+    journalpost,
+    valgt,
+    utvidet,
+    onClick,
+}) => {
     return (
-        <DokumentInfoStripeContainer>
-            <DokumentIkon />
+        <DokumentInfoStripeContainer
+            onClick={() => {
+                if (!valgt) {
+                    onClick();
+                }
+            }}
+        >
+            <StyledDokumentIkon />
             <DokumentInfo dokument={dokument} journalpost={journalpost}></DokumentInfo>
-            <Høyrejuster>
-                <HoyreChevron></HoyreChevron>
-            </Høyrejuster>
+            <EndreKnapp
+                status={
+                    utvidet
+                        ? EndreKnappStatus.UTVIDET
+                        : valgt
+                        ? EndreKnappStatus.VALGT
+                        : EndreKnappStatus.UVALGT
+                }
+                onClick={onClick}
+            />
         </DokumentInfoStripeContainer>
     );
 };
 
-export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, journalpost }) => {
-    const { hentDokumentData } = useManuellJournalføringV2();
+const sampleOptions = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+];
+
+const DokumentTittelPanel: React.FC<IDokumentTittelPanelProps> = ({ tittel }) => {
+    return (
+        <div>
+            <CreatableSelect
+                isClearable
+                isMulti={true}
+                options={sampleOptions}
+                defaultInputValue={tittel}
+            />
+        </div>
+    );
+};
+
+export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({
+    dokument,
+    journalpost,
+    valgt,
+}) => {
+    const { hentDokumentData, settValgtDokumentId } = useManuellJournalføringV2();
+    const [utvidet, settUtvidet] = useState<boolean>(false);
+    const theme = {
+        borderWidth: valgt ? '3px' : '1px',
+        borderColor: valgt ? '#254b6d' : 'black',
+        hoverBorderColor: '#0067c5',
+    };
 
     return (
-        <DokumentPanel
-            border
-            onClick={() => {
-                hentDokumentData(journalpost.journalpostId, dokument.dokumentInfoId || '0');
-            }}
-        >
-            <DokumentInfoStripe dokument={dokument} journalpost={journalpost}></DokumentInfoStripe>
-        </DokumentPanel>
+        <ThemeProvider theme={theme}>
+            <DokumentPanel
+                border
+                onClick={() => {
+                    if (!valgt) {
+                        hentDokumentData(journalpost.journalpostId, dokument.dokumentInfoId || '0');
+                        settValgtDokumentId(dokument.dokumentInfoId);
+                        settUtvidet(false);
+                    }
+                }}
+            >
+                <DokumentInfoStripe
+                    dokument={dokument}
+                    journalpost={journalpost}
+                    valgt={valgt}
+                    utvidet={valgt && utvidet}
+                    onClick={() => {
+                        settUtvidet(!utvidet);
+                    }}
+                ></DokumentInfoStripe>
+                {valgt && utvidet && (
+                    <DokumentTittelPanel tittel={dokument.tittel || 'No Tittle'} />
+                )}
+            </DokumentPanel>
+        </ThemeProvider>
     );
 };

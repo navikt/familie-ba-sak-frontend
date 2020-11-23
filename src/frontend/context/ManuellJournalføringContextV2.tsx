@@ -3,6 +3,7 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
+    IDokumentInfo,
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
@@ -10,7 +11,7 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 import { useParams } from 'react-router';
-import { IDataForManuellJournalføring } from '../typer/manuell-journalføring';
+import { DokumentTittel, IDataForManuellJournalføring } from '../typer/manuell-journalføring';
 import { useApp } from './AppContext';
 
 const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseContext(() => {
@@ -21,6 +22,51 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [dokumentData, settDokumentData] = React.useState(byggTomRessurs<string>());
     const [visDokument, settVisDokument] = React.useState(false);
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
+    const [oppdatertData, settOppdatertData] = React.useState(
+        byggTomRessurs<IDataForManuellJournalføring>()
+    );
+    const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
+
+    const settDataRessurs = (dataRessurs: Ressurs<IDataForManuellJournalføring>) => {
+        settDataForManuellJournalføring(dataRessurs);
+        const oppdatert = JSON.parse(JSON.stringify(dataRessurs));
+        settOppdatertData(oppdatert);
+    };
+
+    const finnDokument = (
+        ressurs: Ressurs<IDataForManuellJournalføring>,
+        dokumentInfoId: string | undefined
+    ) => {
+        return ressurs.status !== RessursStatus.SUKSESS
+            ? undefined
+            : ressurs.data.journalpost.dokumenter?.find(
+                  dokument => dokument.dokumentInfoId === dokumentInfoId
+              );
+    };
+
+    const finnValgtDokument = (ressurs: Ressurs<IDataForManuellJournalføring>) => {
+        return finnDokument(ressurs, valgtDokumentId);
+    };
+
+    const settDokumentTittel = (dokumentTittel: DokumentTittel) => {
+        const valgtDokument = finnValgtDokument(oppdatertData);
+        if (valgtDokument) {
+            valgtDokument.tittel = dokumentTittel;
+        }
+    };
+
+    const erDokumentTittelEndret = (dokument: IDokumentInfo): boolean => {
+        const dokumentUendret = finnDokument(dataForManuellJournalføring, dokument.dokumentInfoId);
+        return dokument.tittel !== dokumentUendret?.tittel;
+    };
+
+    const tilbakestilleDokumentTittel = () => {
+        const valgtDokument = finnValgtDokument(oppdatertData);
+        const valgtDokumentUendret = finnValgtDokument(dataForManuellJournalføring);
+        if (valgtDokument && valgtDokumentUendret) {
+            valgtDokument.tittel = valgtDokumentUendret.tittel;
+        }
+    };
 
     const hentDataForManuellJournalføring = (oppgaveId: string) => {
         settDataForManuellJournalføring(byggHenterRessurs());
@@ -31,12 +77,10 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             påvirkerSystemLaster: true,
         })
             .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
-                settDataForManuellJournalføring(hentetDataForManuellJournalføring);
+                settDataRessurs(hentetDataForManuellJournalføring);
             })
             .catch((_error: AxiosError) => {
-                settDataForManuellJournalføring(
-                    byggFeiletRessurs('Ukjent feil ved henting av oppgave')
-                );
+                settDataRessurs(byggFeiletRessurs('Ukjent feil ved henting av oppgave'));
             });
     };
 
@@ -76,10 +120,15 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     }, [oppgaveId]);
 
     return {
-        dataForManuellJournalføring,
+        dataForManuellJournalføring: oppdatertData,
         dokumentData,
         visDokument,
         hentDokumentData,
+        valgtDokumentId,
+        settValgtDokumentId,
+        settDokumentTittel,
+        tilbakestilleDokumentTittel,
+        erDokumentTittelEndret,
     };
 });
 

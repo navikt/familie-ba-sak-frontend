@@ -9,7 +9,6 @@ import { Dokumenter } from './Dokumenter';
 import styled from 'styled-components';
 import Visittkort from '@navikt/familie-visittkort';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
-//import { PdfDokument } from './PdfDokument';
 
 const PageSplit = styled.div`
     display: flex;
@@ -22,12 +21,6 @@ const Bakgrunn = styled.div`
     height: 92vh;
 `;
 
-/*
-const Scroll = styled.div`
-    padding: 1rem 1rem 1rem 1rem;
-    width: 40rem;
-`;
-*/
 const Dokumentliste = styled.div`
     margin-top: 60px;
     margin-left: 20px;
@@ -55,12 +48,6 @@ const ManuellJournalføringContentV2: React.FC = () => {
                             <Dokumenter />
                         </Dokumentliste>
                         {visDokument && dokumentData.status === RessursStatus.SUKSESS && (
-                            /*                        <Bakgrunn>
-                            <Scroll>
-                                <PdfDokument pdfdata={dokumentData} />
-                            </Scroll>
-                        </Bakgrunn>
-*/
                             <Bakgrunn>
                                 <iframe
                                     title={'dokument'}

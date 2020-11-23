@@ -6,7 +6,7 @@ interface IDokumentIkon {
     width?: number;
 }
 
-export const DokumentIkon: React.FC<IDokumentIkon> = ({ className, width = 24, height = 24 }) => {
+export const DokumentIkon: React.FC<IDokumentIkon> = ({ className, width = 48, height = 48 }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
