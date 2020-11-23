@@ -5,6 +5,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 import { useState } from 'react';
+import { useApp } from '../../../../../context/AppContext';
 import {
     BehandlingKategori,
     Behandlingstype,
@@ -14,6 +15,7 @@ import {
 import useFagsakApi from '../../../useFagsakApi';
 
 const useOpprettBehandling = (lukkModal: () => void) => {
+    const { innloggetSaksbehandler } = useApp();
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
     const [selectedBehandlingstype, settSelectedBehandlingstype] = useState<Behandlingstype | ''>(
         ''
@@ -60,8 +62,9 @@ const useOpprettBehandling = (lukkModal: () => void) => {
             opprettBehandling({
                 behandlingType: selectedBehandlingstype,
                 behandlingÅrsak: selectedBehandlingÅrsak,
-                søkersIdent,
                 kategori: BehandlingKategori.NASJONAL,
+                navIdent: innloggetSaksbehandler?.navIdent,
+                søkersIdent,
                 underkategori: BehandlingUnderkategori.ORDINÆR,
             }).then(response => {
                 if (response.status === RessursStatus.SUKSESS) {
