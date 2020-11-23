@@ -780,9 +780,9 @@
     prop-types "^15.7.2"
 
 "@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.2":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.2.tgz#d9dc41b615098101536b0f0978a0af2f2e258466"
-  integrity sha512-X41Xsrwoa6NPav623nxH5JkmuNyJwYNIWIJN20bdfjBwlYwsMPVEXctyW7+O5tYQYXpM0zBf3yq8JivBJtMkeg==
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.3.tgz#c6ede2bd5db303b112f0e74a7cc7adf0b63747e6"
+  integrity sha512-12vKWsoXZCqwgQqH12hgumsrqdQaZOhaxXBqevadB3oL5CGFi9agjOHDacmmxiaMZuFuN8Ws3liMeO+BcmD1tg==
   dependencies:
     "@navikt/familie-typer" "^3.0.6"
 
