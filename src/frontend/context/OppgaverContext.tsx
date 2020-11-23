@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
@@ -194,8 +194,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 return 0;
             }
 
-            const aValid = moment(a.substring(0, 10), 'YYYY-MM-DD', true).isValid();
-            const bValid = moment(b.substring(0, 10), 'YYYY-MM-DD', true).isValid();
+            const aValid = dayjs(a.substring(0, 10), 'YYYY-MM-DD', true).isValid();
+            const bValid = dayjs(b.substring(0, 10), 'YYYY-MM-DD', true).isValid();
 
             if (!aValid && !bValid) {
                 return 0;
@@ -211,8 +211,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
             const aBefore = ascendant ? -1 : 1;
             const aAfter = ascendant ? 1 : -1;
-            return moment(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
-                moment(b.substring(0, 10), 'YYYY-MM-DD')
+            return dayjs(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
+                dayjs(b.substring(0, 10), 'YYYY-MM-DD')
             )
                 ? aBefore
                 : aAfter;

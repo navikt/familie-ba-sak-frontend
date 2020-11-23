@@ -3,13 +3,12 @@ import React from 'react';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
-import { datoformat, datoformatNorsk, formaterIsoDato } from '../../../../../utils/formatter';
+import { datoformatNorsk } from '../../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import styled from 'styled-components';
 import { Element } from 'nav-frontend-typografi';
-import { ISODateString } from 'nav-datovelger/lib/types';
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
 import { FeltState, Valideringsstatus } from '../../../../../familie-skjema/typer';
 
 interface IProps {
@@ -89,10 +88,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                                 },
                             });
                         }}
-                        valgtDato={formaterIsoDato(
-                            redigerbartVilkår.verdi.periode.verdi.fom,
-                            datoformat.DATO
-                        )}
+                        valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
                     />
                 </div>
                 {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
@@ -119,10 +115,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                                     },
                                 });
                             }}
-                            valgtDato={formaterIsoDato(
-                                redigerbartVilkår.verdi.periode.verdi.tom,
-                                datoformat.DATO
-                            )}
+                            valgtDato={redigerbartVilkår.verdi.periode.verdi.tom}
                         />
                     </div>
                 )}

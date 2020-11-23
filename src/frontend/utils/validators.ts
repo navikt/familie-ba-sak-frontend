@@ -1,4 +1,5 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+
 import { IPersonBeregning } from '../typer/beregning';
 import { FeltState, ValiderFelt, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
 import { IPeriode, stringToMoment, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
@@ -35,16 +36,16 @@ export const erGyldigMånedDato = (
     felt: FeltState<IPersonBeregning>
 ): FeltState<IPersonBeregning> => {
     return /^\d{2}\.\d{2}$/.test(felt.verdi.stønadFom) &&
-        moment(felt.verdi.stønadFom, datoformat.MÅNED).isValid()
+        dayjs(felt.verdi.stønadFom, datoformat.MÅNED).isValid()
         ? ok(felt)
         : feil(felt, 'Ugyldig dato');
 };
 
 const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?: string) => {
-    const fødselsdato = moment(person.fødselsdato);
-    const fødselsdatoPluss18 = moment(person.fødselsdato).add(18, 'years');
-    const fomDato = moment(fom);
-    const tomDato = tom ? moment(tom) : undefined;
+    const fødselsdato = dayjs(person.fødselsdato);
+    const fødselsdatoPluss18 = dayjs(person.fødselsdato).add(18, 'year');
+    const fomDato = dayjs(fom);
+    const tomDato = tom ? dayjs(tom) : undefined;
     return (
         fomDato.isSameOrAfter(fødselsdato) &&
         (tomDato ? tomDato.isSameOrBefore(fødselsdatoPluss18) : true)
@@ -61,9 +62,9 @@ export const erPeriodeGyldig = (
     const person: IGrunnlagPerson | undefined = avhengigheter?.person;
 
     if (fom) {
-        const fomDatoErGyldig = moment(fom).isValid();
+        const fomDatoErGyldig = dayjs(fom).isValid();
 
-        const fomDatoErFremITid = moment(fom).isAfter(moment());
+        const fomDatoErFremITid = dayjs(fom).isAfter(dayjs());
 
         const fomDatoErFørTomDato = stringToMoment(fom, TIDENES_MORGEN).isBefore(
             stringToMoment(tom, TIDENES_ENDE)
@@ -86,7 +87,7 @@ export const erPeriodeGyldig = (
 };
 
 export const erResultatGyldig = (felt: FeltState<Resultat>): FeltState<Resultat> => {
-    return felt.verdi !== Resultat.KANSKJE ? ok(felt) : feil(felt, 'Resultat er ikke satt');
+    return felt.verdi !== Resultat.IKKE_VURDERT ? ok(felt) : feil(felt, 'Resultat er ikke satt');
 };
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';

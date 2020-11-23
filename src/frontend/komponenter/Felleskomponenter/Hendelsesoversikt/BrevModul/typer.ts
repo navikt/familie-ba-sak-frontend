@@ -4,7 +4,6 @@ export interface IBrevData {
     mottakerIdent: string;
     multiselectVerdier: string[];
     brevmal: Brevmal;
-    fritekst: string;
 }
 
 export interface BrevtypeSelect extends HTMLSelectElement {
@@ -14,16 +13,19 @@ export interface BrevtypeSelect extends HTMLSelectElement {
 export enum Brevmal {
     INNHENTE_OPPLYSNINGER = 'INNHENTE_OPPLYSNINGER',
     VARSEL_OM_REVURDERING = 'VARSEL_OM_REVURDERING',
+    HENLEGGE_TRUKKET_SØKNAD = 'HENLEGGE_TRUKKET_SØKNAD',
 }
 
 export const brevmaler: Record<Brevmal, string> = {
     INNHENTE_OPPLYSNINGER: 'Innhent opplysninger',
     VARSEL_OM_REVURDERING: 'Varsel om revurdering',
+    HENLEGGE_TRUKKET_SØKNAD: 'Henlegg søknad',
 };
 
 export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
     INNHENTE_OPPLYSNINGER: 'Velg dokumenter',
     VARSEL_OM_REVURDERING: 'Velg årsak',
+    HENLEGGE_TRUKKET_SØKNAD: 'Velg årsak',
 };
 
 export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevtekst[] => {
@@ -33,6 +35,9 @@ export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevte
             selectOptionsMedBrevtekst = dokumenter;
             break;
         case Brevmal.VARSEL_OM_REVURDERING:
+            selectOptionsMedBrevtekst = årsaker;
+            break;
+        case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
             selectOptionsMedBrevtekst = årsaker;
             break;
     }
@@ -56,7 +61,7 @@ type OptionType = {
 export interface ISelectOptionMedBrevtekst extends OptionType {
     value: string;
     label: string;
-    brevtekst: Record<Målform, string>;
+    brevtekst?: Record<Målform, string>;
 }
 
 // Value settes ved henting av select option basert på label
@@ -323,23 +328,6 @@ export const dokumenter: ISelectOptionMedBrevtekst[] = [
             NN: 'Vergefullmakt.',
         },
     },
-    {
-        value: 'annet',
-        label: 'Annet (Fritekst)',
-        brevtekst: {
-            NB: '',
-            NN: '',
-        },
-    },
 ];
 
-export const årsaker: ISelectOptionMedBrevtekst[] = [
-    {
-        value: 'annet',
-        label: 'Annet (Fritekst)',
-        brevtekst: {
-            NB: '',
-            NN: '',
-        },
-    },
-];
+export const årsaker: ISelectOptionMedBrevtekst[] = [];

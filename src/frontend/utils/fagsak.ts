@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { FeltState } from '../familie-skjema/typer';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
@@ -10,7 +10,7 @@ export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | und
         return undefined;
     } else {
         return fagsak.behandlinger.sort((a, b) =>
-            moment(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
+            dayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
         )[0];
     }
 };
@@ -46,7 +46,7 @@ export const erBehandlingenInnvilget = (vilkårsvurdering: IPersonResultat[]) =>
         vilkårsvurdering.find((personResultat: IPersonResultat) =>
             personResultat.vilkårResultater.find(
                 (vilkårResultat: FeltState<IVilkårResultat>) =>
-                    vilkårResultat.verdi.resultat.verdi === Resultat.NEI
+                    vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
             )
         ) === undefined
     );

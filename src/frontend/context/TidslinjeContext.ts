@@ -1,10 +1,11 @@
 import createUseContext from 'constate';
 import { useState } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { IPersonBeregning, IYtelsePeriode } from '../typer/beregning';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 import { IGrunnlagPerson } from '../typer/person';
+import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '../utils/tid';
 
 export interface ITidslinjeVindu {
     id: number;
@@ -35,8 +36,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
-        sluttDato: moment().endOf('month'),
-        startDato: moment().subtract(12, 'month').endOf('month'),
+        sluttDato: dayjs().endOf('month'),
+        startDato: dayjs().subtract(12, 'month').endOf('month'),
     });
 
     const genererFormatertÅrstall = () => {
@@ -82,8 +83,12 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             ? personBeregninger.map((personBeregning: IPersonBeregning) => {
                   return personBeregning.ytelsePerioder.map(
                       (ytelsePeriode: IYtelsePeriode, index: number) => ({
-                          fom: new Date(ytelsePeriode.stønadFom),
-                          tom: new Date(ytelsePeriode.stønadTom),
+                          fom: new Date(
+                              hentFørsteDagIYearMonth(ytelsePeriode.stønadFom).toISOString()
+                          ),
+                          tom: new Date(
+                              hentSisteDagIYearMonth(ytelsePeriode.stønadTom).toISOString()
+                          ),
                           id: `${personBeregning.personIdent}_${index}`,
                           status: 'suksess',
                       })

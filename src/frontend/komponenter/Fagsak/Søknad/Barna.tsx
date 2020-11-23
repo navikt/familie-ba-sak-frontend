@@ -1,5 +1,5 @@
 import { RessursStatus } from '@navikt/familie-typer';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
@@ -36,14 +36,18 @@ const BarnaWrapper = styled.div`
     margin: 1rem 0;
 `;
 
+const StyledCheckboxGruppe = styled(CheckboxGruppe)`
+    min-width: 0;
+`;
+
 const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
     const { bruker } = useFagsakRessurser();
     const sorterteBarnMedOpplysninger = søknad.barnaMedOpplysninger.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-            return moment(b.fødselsdato, datoformat.ISO_DAG).diff(
-                moment(a.fødselsdato, datoformat.ISO_DAG),
+            return dayjs(b.fødselsdato, datoformat.ISO_DAG).diff(
+                dayjs(a.fødselsdato, datoformat.ISO_DAG),
                 'day'
             );
         }
@@ -51,7 +55,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
 
     return (
         <BarnaWrapper className={'søknad__barna'}>
-            <Systemtittel children={'Opplysninger om barn under 18 år'} />
+            <Systemtittel children={'Opplysninger om barn'} />
             {bruker.status === RessursStatus.SUKSESS &&
                 bruker.data.familierelasjonerMaskert
                     .filter(
@@ -74,7 +78,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                     })}
 
             <br />
-            <CheckboxGruppe
+            <StyledCheckboxGruppe
                 feilmeldingId={'barna'}
                 legend={
                     !lesevisning ? (
@@ -90,7 +94,7 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                         barn={barnMedOpplysninger}
                     />
                 ))}
-            </CheckboxGruppe>
+            </StyledCheckboxGruppe>
             {!lesevisning && (
                 <LeggTilBarn settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
             )}

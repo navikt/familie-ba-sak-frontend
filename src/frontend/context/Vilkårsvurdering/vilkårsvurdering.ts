@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
 import { diff, nyPeriode } from '../../typer/periode';
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
@@ -107,8 +107,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 return -1;
             }
 
-            return moment(b.person.fødselsdato, datoformat.ISO_DAG).diff(
-                moment(a.person.fødselsdato, datoformat.ISO_DAG),
+            return dayjs(b.person.fødselsdato, datoformat.ISO_DAG).diff(
+                dayjs(a.person.fødselsdato, datoformat.ISO_DAG),
                 'day'
             );
         });

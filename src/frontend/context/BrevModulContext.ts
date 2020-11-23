@@ -2,15 +2,7 @@ import createUseContext from 'constate';
 import React, { useEffect } from 'react';
 
 import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../typer/behandling';
-import {
-    byggDataRessurs,
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
-import { useApp } from './AppContext';
+import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from './BehandlingContext';
 import { IFagsak } from '../typer/fagsak';
 import {
@@ -18,17 +10,15 @@ import {
     IBrevData,
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { AxiosError } from 'axios';
 import { useSkjema } from '../familie-skjema/skjema';
-import { fjernWhitespace } from '../utils/commons';
-import { IGrunnlagPerson } from '../typer/person';
+import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { useFelt } from '../familie-skjema/felt';
 import { FeltState, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
 import { feil, ok } from '../familie-skjema/validators';
+import { fjernWhitespace } from '../utils/commons';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
-    const { axiosRequest } = useApp();
     const { åpenBehandling } = useBehandling();
 
     const mottakerIdent = useFelt({
@@ -41,6 +31,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         valideringsfunksjon: (felt: FeltState<Brevmal | ''>) =>
             felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
     });
+
     const multiselect = useFelt({
         verdi: [],
         valideringsfunksjon: (
@@ -49,14 +40,38 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         ) => {
             const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
 
-            return felt.verdi.length > 0
-                ? ok(felt)
-                : feil(
-                      felt,
-                      `Du må velge minst ${
-                          brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'ett dokument' : 'en årsak'
-                      }`
-                  );
+            if (felt.verdi.length === 0) {
+                return feil(
+                    felt,
+                    `Du må velge minst ${
+                        brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'ett dokument' : 'en årsak'
+                    }`
+                );
+            }
+
+            const opprettedeVerdierMedFeil = felt.verdi.filter(
+                (selectOptionMedBrevtekst: ISelectOptionMedBrevtekst) =>
+                    !selectOptionMedBrevtekst.brevtekst &&
+                    fjernWhitespace(selectOptionMedBrevtekst.value).length < 3
+            );
+
+            if (opprettedeVerdierMedFeil.length > 0) {
+                return opprettedeVerdierMedFeil.length === 1
+                    ? feil(
+                          felt,
+                          `Du må fjerne ${
+                              brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'dokumentet' : 'årsaken'
+                          } som har mindre enn tre tegn`
+                      )
+                    : feil(
+                          felt,
+                          `Du må fjerne ${
+                              brevmal === Brevmal.INNHENTE_OPPLYSNINGER ? 'dokumentene' : 'årsakene'
+                          } som har mindre enn tre tegn`
+                      );
+            }
+
+            return ok(felt);
         },
         skalFeltetVises: (avhengigheter: FeltContext) => {
             return avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK;
@@ -69,7 +84,6 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             mottakerIdent: string;
             brevmal: Brevmal | '';
             multiselect: ISelectOptionMedBrevtekst[];
-            fritekst: string;
         },
         IFagsak
     >({
@@ -77,50 +91,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             mottakerIdent,
             brevmal,
             multiselect,
-            fritekst: useFelt({
-                verdi: '',
-                valideringsfunksjon: (felt: FeltState<string>, avhengigheter?: FeltContext) => {
-                    const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
-                    const multiselect: ISelectOptionMedBrevtekst[] | undefined =
-                        avhengigheter?.multiselect.verdi;
-
-                    const annetErValgt =
-                        (
-                            multiselect?.filter(
-                                (selectOption: ISelectOptionMedBrevtekst) =>
-                                    selectOption.value === 'annet'
-                            ) ?? []
-                        ).length > 0;
-
-                    if (annetErValgt) {
-                        return fjernWhitespace(felt.verdi).length >= 3
-                            ? ok(felt)
-                            : feil(
-                                  felt,
-                                  `Siden du har valgt “Annet” i feltet over, må du oppgi minst ${
-                                      brevmal === Brevmal.INNHENTE_OPPLYSNINGER
-                                          ? 'ett dokument'
-                                          : 'en årsak'
-                                  }`
-                              );
-                    } else {
-                        return ok(felt);
-                    }
-                },
-                skalFeltetVises: (avhengigheter: FeltContext) => {
-                    return avhengigheter?.multiselect.verdi.some(
-                        (selectOption: ISelectOptionMedBrevtekst) => selectOption.value === 'annet'
-                    );
-                },
-                avhengigheter: { brevmal, multiselect },
-            }),
         },
         skjemanavn: 'brevmodul',
     });
-
-    const [hentetForhåndsvisning, settHentetForhåndsvisning] = React.useState<Ressurs<string>>(
-        byggTomRessurs()
-    );
 
     const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] = React.useState<boolean>(
         false
@@ -131,47 +104,20 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
      * Dette fordi at man kan ha gjort endring på målform
      */
     useEffect(() => {
-        skjema.felter.fritekst.nullstill();
         skjema.felter.multiselect.nullstill();
     }, [åpenBehandling]);
-
-    const behandlingId =
-        åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
     const personer =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
 
-    const mottakersMålform =
-        personer.find(
-            (person: IGrunnlagPerson) => person.personIdent === skjema.felter.mottakerIdent.verdi
-        )?.målform ?? Målform.NB;
-
-    const hentForhåndsvisning = (brevData: IBrevData) => {
-        settHentetForhåndsvisning(byggHenterRessurs());
-        axiosRequest<string, IBrevData>({
-            method: 'POST',
-            data: brevData,
-            url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
-        })
-            .then((response: Ressurs<string>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settHentetForhåndsvisning(
-                        byggDataRessurs(`data:application/pdf;base64,${response.data}`)
-                    );
-                } else if (response.status === RessursStatus.FEILET) {
-                    settHentetForhåndsvisning(response);
-                } else {
-                    settHentetForhåndsvisning(
-                        byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
-                    );
-                }
-            })
-            .catch((_error: AxiosError) => {
-                settHentetForhåndsvisning(
-                    byggFeiletRessurs('Ukjent feil ved henting av forhåndsvisning.')
-                );
-            });
-    };
+    const mottakersMålform = () =>
+        personer.find((person: IGrunnlagPerson) => {
+            if (skjema.felter.mottakerIdent.valideringsstatus === Valideringsstatus.OK) {
+                return person.personIdent === skjema.felter.mottakerIdent.verdi;
+            } else {
+                return person.type === PersonType.SØKER;
+            }
+        })?.målform ?? Målform.NB;
 
     const hentMuligeBrevMaler = () => {
         const brevMaler = [];
@@ -196,22 +142,22 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const hentSkjemaData = (): IBrevData => ({
         mottakerIdent: skjema.felter.mottakerIdent.verdi,
-        multiselectVerdier: skjema.felter.multiselect.verdi
-            .filter((selectOption: ISelectOptionMedBrevtekst) => selectOption.value !== 'annet')
-            .map(
-                (selectOption: ISelectOptionMedBrevtekst) =>
-                    selectOption.brevtekst[mottakersMålform]
-            ),
+        multiselectVerdier: skjema.felter.multiselect.verdi.map(
+            (selectOption: ISelectOptionMedBrevtekst) => {
+                if (selectOption.brevtekst) {
+                    return selectOption.brevtekst[mottakersMålform()];
+                } else {
+                    return selectOption.value;
+                }
+            }
+        ),
         brevmal: skjema.felter.brevmal.verdi as Brevmal,
-        fritekst: skjema.felter.fritekst.verdi,
     });
 
     return {
         skjema,
-        hentForhåndsvisning,
         hentMuligeBrevMaler,
         hentSkjemaData,
-        hentetForhåndsvisning,
         kanSendeSkjema,
         mottakersMålform,
         navigerTilOpplysningsplikt,
