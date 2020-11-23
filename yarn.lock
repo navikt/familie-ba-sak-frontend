@@ -8028,10 +8028,10 @@ nav-frontend-tabell-style@^0.2.30:
   resolved "https://registry.yarnpkg.com/nav-frontend-tabell-style/-/nav-frontend-tabell-style-0.2.33.tgz#7474a75537a541572d250cd75e90cb152cba99a9"
   integrity sha512-I3hnEknBcvXZjD69XHUFu2oqkDm9mAzDKx6/xEU5DcEKPOEU4EyZj1lp2bbJIG3q7HC2NlCctyrVotYwOei5/Q==
 
-nav-frontend-tabs-style@^0.0.34:
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/nav-frontend-tabs-style/-/nav-frontend-tabs-style-0.0.34.tgz#597bac38b84a4b466ff06073cb445d19d60fe993"
-  integrity sha512-8ekyP2odWFF/CAFgBAj+N0uc4dNFnVj7BFBcZpfoqWMF0V1oC59VovT4D3H9/+nR92kiJ3B6a4EDzy9nMu4tSA==
+nav-frontend-tabs-style@^0.0.37:
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/nav-frontend-tabs-style/-/nav-frontend-tabs-style-0.0.37.tgz#cc3feb8fe3f7efd11f5f9cd4c0efcfa38dca2c13"
+  integrity sha512-TO4lOrxIov2qtx3/f86Kis0S0RPxeNCSpzEerjm8FelNR3AZnKcWfTtxkAXLOYwXXiFDang1vFuel3//DOYUWQ==
 
 nav-frontend-tabs@^0.0.57:
   version "0.0.57"
