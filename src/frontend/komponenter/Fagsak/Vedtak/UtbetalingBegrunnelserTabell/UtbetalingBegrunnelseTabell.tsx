@@ -6,7 +6,7 @@ import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
 import {
     periodeToString,
-    sisteDagNesteMåned,
+    sisteDagInneværendeMåned,
     stringToMoment,
     TIDENES_MORGEN,
 } from '../../../../typer/periode';
@@ -42,8 +42,8 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
         )
         .filter((beregningRad: IOppsummeringBeregning) => beregningRad.endring.trengerBegrunnelse);
 
-    const slutterSenereEnnNesteMåned = (dato: string) =>
-        stringToMoment(dato, TIDENES_MORGEN).isAfter(sisteDagNesteMåned());
+    const slutterSenereEnnInneværendeMåned = (dato: string) =>
+        stringToMoment(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
 
     return harAndeler ? (
         <table className={'tabell'}>
@@ -70,7 +70,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                             <td>
                                 {periodeToString({
                                     fom: beregningRad.periodeFom,
-                                    tom: slutterSenereEnnNesteMåned(beregningRad.periodeTom)
+                                    tom: slutterSenereEnnInneværendeMåned(beregningRad.periodeTom)
                                         ? ''
                                         : beregningRad.periodeTom,
                                 })}

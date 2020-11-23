@@ -1,14 +1,15 @@
 import {
     BehandlingSteg,
+    BehandlingStegStatus,
     Behandlingstype,
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import { IFelt } from '../../../typer/felt';
 import { formaterPersonIdent } from '../../../utils/formatter';
 import { IOpplysningsplikt, OpplysningspliktStatus } from '../../../typer/opplysningsplikt';
+import { FeltState } from '../../../familie-skjema/typer';
 
 export interface ISide {
     href: string;
@@ -61,7 +62,7 @@ export const sider: Record<SideId, ISide> = {
                         hash: `${index}_${personResultat.person.fødselsdato}`,
                         antallAksjonspunkter: () =>
                             personResultat.vilkårResultater.filter(
-                                (vilkårResultat: IFelt<IVilkårResultat>) => {
+                                (vilkårResultat: FeltState<IVilkårResultat>) => {
                                     return vilkårResultat.verdi.resultat.verdi === Resultat.KANSKJE;
                                 }
                             ).length,
@@ -82,7 +83,9 @@ export const sider: Record<SideId, ISide> = {
     },
 };
 
-export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
+export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
+    const steg = finnSteg(behandling);
+
     if (!side.steg && side.steg !== 0) {
         return true;
     }
@@ -95,22 +98,25 @@ export const erSidenInaktiv = (side: ISide, steg?: BehandlingSteg): boolean => {
 };
 
 export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysningsplikt: boolean) => {
-    if (
+    if (side === sider.OPPLYSNINGSPLIKT) {
+        return harOpplysningsplikt;
+    } else if (
         åpenBehandling.skalBehandlesAutomatisk ||
-        åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+        åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD ||
+        åpenBehandling.type === Behandlingstype.TEKNISK_OPPHØR
     ) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
-    } else if (side === sider.OPPLYSNINGSPLIKT) {
-        return harOpplysningsplikt;
     } else {
         return true;
     }
 };
 
 export const finnSideForBehandlingssteg = (
-    steg: BehandlingSteg,
+    behandling: IBehandling,
     opplysningsplikt: IOpplysningsplikt | undefined
 ): ISide | undefined => {
+    const steg = finnSteg(behandling);
+
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
         return sider.VEDTAK;
     } else if (opplysningsplikt && opplysningsplikt.status === OpplysningspliktStatus.IKKE_SATT) {
@@ -147,3 +153,24 @@ export const erViPåUlovligSteg = (pathname: string, behandlingSide?: ISide) => 
 
     return false;
 };
+
+export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
+    const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_SØKNAD);
+
+    if (erHenlagt) {
+        if (inneholderSteg(behandling, BehandlingSteg.SEND_TIL_BESLUTTER))
+            return BehandlingSteg.SEND_TIL_BESLUTTER;
+        if (inneholderSteg(behandling, BehandlingSteg.VILKÅRSVURDERING))
+            return BehandlingSteg.VILKÅRSVURDERING;
+        return BehandlingSteg.REGISTRERE_SØKNAD;
+    } else {
+        return behandling.steg;
+    }
+};
+
+export const inneholderSteg = (behandling: IBehandling, behandlingSteg: BehandlingSteg): boolean =>
+    behandling.stegTilstand
+        .filter(
+            stegTilstand => stegTilstand.behandlingStegStatus !== BehandlingStegStatus.IKKE_UTFØRT
+        )
+        .some(stegTilstand => stegTilstand.behandlingSteg === behandlingSteg);

@@ -6,11 +6,11 @@ import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
-import { Valideringsstatus } from '../../../typer/felt';
 import { useApp } from '../../../context/AppContext';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import styled from 'styled-components';
+import { Valideringsstatus } from '../../../familie-skjema/typer';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
@@ -124,10 +124,11 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                         <Knapp
                             type={'hoved'}
                             key={'Legg til'}
-                            mini
+                            mini={true}
                             onClick={leggTilOnClick}
                             children={'Legg til'}
                             spinner={person.status === RessursStatus.HENTER}
+                            disabled={person.status === RessursStatus.HENTER}
                         />,
                     ],
                 }}

@@ -20,9 +20,13 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const { axiosRequest } = useApp();
 
     React.useEffect(() => {
-        if (fagsak.status !== RessursStatus.SUKSESS) {
-            settBruker(byggTomRessurs());
-        } else if (erBrukerUtdatert(bruker, fagsak)) {
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            hentBruker(fagsak.data.søkerFødselsnummer);
+        }
+    }, [fagsak.status]);
+
+    React.useEffect(() => {
+        if (fagsak.status === RessursStatus.SUKSESS && erBrukerUtdatert(bruker, fagsak)) {
             hentBruker(fagsak.data.søkerFødselsnummer);
         }
     }, [fagsak]);
@@ -48,8 +52,9 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         }
 
         return (
-            bruker.status !== RessursStatus.SUKSESS ||
-            fagsak.data.søkerFødselsnummer !== bruker.data.personIdent
+            bruker.status === RessursStatus.IKKE_HENTET ||
+            (bruker.status === RessursStatus.SUKSESS &&
+                fagsak.data.søkerFødselsnummer !== bruker.data.personIdent)
         );
     };
 

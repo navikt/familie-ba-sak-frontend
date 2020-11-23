@@ -185,6 +185,8 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                                     nesteAction(true);
                                 }}
                                 children={'Ja'}
+                                spinner={senderInn}
+                                disabled={senderInn}
                             />,
                         ],
                     }}

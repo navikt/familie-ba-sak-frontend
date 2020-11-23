@@ -91,7 +91,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
             fagsak.status === RessursStatus.SUKSESS
         ) {
             const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
-                åpenBehandling.data.steg,
+                åpenBehandling.data,
                 opplysningsplikt
             );
 

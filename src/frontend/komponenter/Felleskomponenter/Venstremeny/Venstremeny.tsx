@@ -4,7 +4,7 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../../../typer/fagsak';
 import Link from './Link';
-import { erSidenInaktiv, IUnderside, sider, visSide } from './sider';
+import { erSidenAktiv, IUnderside, sider, visSide } from './sider';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {
@@ -29,13 +29,12 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                           return (
                               <React.Fragment key={sideId}>
                                   <Link
-                                      active={erSidenInaktiv(side, åpenBehandling.data.steg)}
+                                      active={erSidenAktiv(side, åpenBehandling.data)}
                                       id={sideId}
                                       to={tilPath}
                                       className={classNames(
                                           'venstremeny__link',
-                                          erSidenInaktiv(side, åpenBehandling.data.steg) &&
-                                              'hover-effekt'
+                                          erSidenAktiv(side, åpenBehandling.data) && 'hover-effekt'
                                       )}
                                   >
                                       {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
@@ -44,13 +43,15 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                       const antallAksjonspunkter = underside.antallAksjonspunkter();
                                       return (
                                           <Link
+                                              active={erSidenAktiv(side, åpenBehandling.data)}
                                               key={`${sideId}_${underside.hash}`}
                                               id={`${sideId}_${underside.hash}`}
                                               to={`${tilPath}#${underside.hash}`}
                                               className={classNames(
                                                   'venstremeny__link',
                                                   'underside',
-                                                  'hover-effekt'
+                                                  erSidenAktiv(side, åpenBehandling.data) &&
+                                                      'hover-effekt'
                                               )}
                                           >
                                               <>

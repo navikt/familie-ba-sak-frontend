@@ -1,7 +1,7 @@
 import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
-import { IRestPersonResultat } from './vilkår';
+import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IOppsummeringBeregning } from './beregning';
 import { IOpplysningsplikt } from './opplysningsplikt';
@@ -10,6 +10,16 @@ export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
     EØS = 'EØS',
 }
+
+export enum HenleggelseÅrsak {
+    SØKNAD_TRUKKET = 'SØKNAD_TRUKKET',
+    FEILAKTIG_OPPRETTET = 'FEILAKTIG_OPPRETTET',
+}
+
+export const henleggelseÅrsak: Record<HenleggelseÅrsak, string> = {
+    SØKNAD_TRUKKET: 'Søknaden er trukket',
+    FEILAKTIG_OPPRETTET: 'Behandlingen er feilaktig opprettet',
+};
 
 export enum BehandlingÅrsak {
     SØKNAD = 'SØKNAD',
@@ -35,6 +45,7 @@ export enum BehandlingUnderkategori {
 }
 
 export enum BehandlingSteg {
+    HENLEGG_SØKNAD = 'HENLEGG_SØKNAD',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
@@ -46,6 +57,11 @@ export enum BehandlingSteg {
     DISTRIBUER_VEDTAKSBREV = 'DISTRIBUER_VEDTAKSBREV',
     FERDIGSTILLE_BEHANDLING = 'FERDIGSTILLE_BEHANDLING',
     BEHANDLING_AVSLUTTET = 'BEHANDLING_AVSLUTTET',
+}
+
+export enum BehandlingStegStatus {
+    UTFØRT = 'UTFØRT',
+    IKKE_UTFØRT = 'IKKE_UTFØRT',
 }
 
 export const hentStegNummer = (steg: BehandlingSteg): number => {
@@ -97,6 +113,8 @@ export enum BehandlingResultat {
     IKKE_VURDERT = 'IKKE_VURDERT',
     INNVILGET = 'INNVILGET',
     OPPHØRT = 'OPPHØRT',
+    HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
+    HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
 }
 
 export enum BehandlerRolle {
@@ -120,6 +138,7 @@ export interface IBehandling {
     samletResultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;
+    stegTilstand: IRestStegTilstand[];
     totrinnskontroll?: ITotrinnskontroll;
     opplysningsplikt?: IOpplysningsplikt;
     type: Behandlingstype;
@@ -192,11 +211,13 @@ export const underkategorier: INøkkelPar = {
     },
 };
 
-export const behandlingsresultater: INøkkelPar = {
-    INNVILGET: { id: 'INNVILGET', navn: 'Innvilget' },
-    IKKE_VURDERT: { id: 'IKKE_VURDERT', navn: 'Ikke vurdert' },
-    AVSLÅTT: { id: 'AVSLÅTT', navn: 'Avslått' },
-    OPPHØRT: { id: 'OPPHØRT', navn: 'Opphørt' },
+export const behandlingsresultater: Record<BehandlingResultat, string> = {
+    AVSLÅTT: 'Avslått',
+    IKKE_VURDERT: 'Ikke vurdert',
+    INNVILGET: 'Innvilget',
+    OPPHØRT: 'Opphørt',
+    HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
+    HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
 };
 
 type Behandlingsstatuser = {

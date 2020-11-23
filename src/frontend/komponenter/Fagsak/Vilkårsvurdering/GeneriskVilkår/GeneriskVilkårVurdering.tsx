@@ -14,7 +14,6 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Slett from '../../../../ikoner/Slett';
-import { IFelt, Valideringsstatus } from '../../../../typer/felt';
 import { periodeToString } from '../../../../typer/periode';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -42,11 +41,12 @@ import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import { IFagsak } from '../../../../typer/fagsak';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { FeltState, Valideringsstatus } from '../../../../familie-skjema/typer';
 
 interface IProps {
     person: IGrunnlagPerson;
     vilkårFraConfig: IVilkårConfig;
-    vilkårResultat: IFelt<IVilkårResultat>;
+    vilkårResultat: FeltState<IVilkårResultat>;
     visFeilmeldinger: boolean;
 }
 
@@ -73,12 +73,12 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     );
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
-    const [redigerbartVilkår, settRedigerbartVilkår] = useState<IFelt<IVilkårResultat>>(
+    const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(
         vilkårResultat
     );
 
-    const validerOgSettRedigerbartVilkår = (endretVilkår: IFelt<IVilkårResultat>) => {
-        settRedigerbartVilkår(validerVilkår(endretVilkår));
+    const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
+        settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
     };
 
     const radioOnChange = (resultat: Resultat) => {
@@ -108,7 +108,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     };
 
     const onClickVilkårFerdig = () => {
-        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, person);
+        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person });
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
             (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
@@ -118,7 +118,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
     };
 
     const lagreVilkår = (
-        validertVilkår: IFelt<IVilkårResultat>,
+        validertVilkår: FeltState<IVilkårResultat>,
         vilkårsvurderingForPerson: IPersonResultat | undefined
     ) => {
         if (
@@ -353,6 +353,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                         mini={true}
                                         type={'standard'}
                                         spinner={vilkårSubmit === VilkårSubmit.PUT}
+                                        disabled={vilkårSubmit === VilkårSubmit.PUT}
                                     >
                                         Ferdig
                                     </FamilieKnapp>
@@ -377,6 +378,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     }}
                                     id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                                     spinner={vilkårSubmit === VilkårSubmit.DELETE}
+                                    disabled={vilkårSubmit === VilkårSubmit.DELETE}
                                     mini={true}
                                     label={'Fjern'}
                                     knappPosisjon={'venstre'}

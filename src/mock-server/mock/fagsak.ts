@@ -5,6 +5,7 @@ import {
     BehandlingResultat,
     BehandlingStatus,
     BehandlingSteg,
+    BehandlingStegStatus,
     Behandlingstype,
     BehandlingUnderkategori,
     BehandlingÅrsak,
@@ -166,6 +167,16 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             manueltOverstyrt: false,
         },
         steg: (steg as unknown) as BehandlingSteg,
+        stegTilstand: [
+            {
+                behandlingSteg: BehandlingSteg.REGISTRERE_SØKNAD,
+                behandlingStegStatus: BehandlingStegStatus.UTFØRT,
+            },
+            {
+                behandlingSteg: BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+                behandlingStegStatus: BehandlingStegStatus.UTFØRT,
+            },
+        ],
         type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         personer: [barn, søker],
         begrunnelse: '',
