@@ -138,7 +138,7 @@
     "babel-polyfill": "^6.26.0",
     "compression-webpack-plugin": "^6.1.0",
     "copyfiles": "^2.2.0",
-    "css-loader": "^4.2.1",
+    "css-loader": "^5.0.1",
     "eslint": "^7.13.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.11.0",
