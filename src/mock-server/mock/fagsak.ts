@@ -17,8 +17,7 @@ import { Målform } from 'frontend/typer/søknad';
 
 export const hentMockFagsak = (id: string): Ressurs<IFagsak> | null => {
     try {
-        const fagsak: Ressurs<IFagsak> | null = mockFagsak3(parseInt(id, 10), '12345678910');
-        return fagsak;
+        return mockFagsak3(parseInt(id, 10), '12345678910');
     } catch (e) {
         return null;
     }
@@ -149,7 +148,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
         ],
     };
 
-    const behandling: IBehandling = {
+    return {
         behandlingId,
         aktiv,
         arbeidsfordelingPåBehandling: {
@@ -185,10 +184,9 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
             godkjent: true,
             opprettetTidspunkt: '2020-03-19T10:08:56.8',
         },
-        beregningOversikt: [],
+        utbetalingsperioder: [],
+        andelerTilkjentYtelse: [],
         årsak: BehandlingÅrsak.SØKNAD,
         skalBehandlesAutomatisk: false,
     };
-
-    return behandling;
 };

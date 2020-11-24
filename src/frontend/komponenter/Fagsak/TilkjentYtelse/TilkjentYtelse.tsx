@@ -7,7 +7,7 @@ import { IBehandling } from '../../../typer/behandling';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
-import { IOppsummeringBeregning } from '../../../typer/beregning';
+import { IUtbetalingsperiode } from '../../../typer/beregning';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -29,18 +29,19 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     };
 
     const filtrerPerioderForAktivEtikett = (
-        beregningOversikt: IOppsummeringBeregning[]
-    ): IOppsummeringBeregning[] => {
+        utbetalingsperioder: IUtbetalingsperiode[]
+    ): IUtbetalingsperiode[] => {
         return aktivEtikett
-            ? beregningOversikt.filter(periode =>
+            ? utbetalingsperioder.filter((utbetalingsperioder: IUtbetalingsperiode) =>
                   periodeOverlapperMedValgtDato(
-                      periode.periodeFom,
-                      periode.periodeTom,
+                      utbetalingsperioder.periodeFom,
+                      utbetalingsperioder.periodeTom,
                       aktivEtikett.dato
                   )
               )
             : [];
     };
+
     return (
         <Skjemasteg
             senderInn={false}
@@ -53,7 +54,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             <TilkjentYtelseTidslinje />
             {aktivEtikett && (
                 <Oppsummeringsboks
-                    perioder={filtrerPerioderForAktivEtikett(åpenBehandling.beregningOversikt)}
+                    utbetalingsperioder={filtrerPerioderForAktivEtikett(
+                        åpenBehandling.utbetalingsperioder
+                    )}
                     aktivEtikett={aktivEtikett}
                 />
             )}

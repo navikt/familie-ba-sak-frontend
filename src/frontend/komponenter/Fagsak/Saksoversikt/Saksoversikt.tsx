@@ -56,12 +56,12 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const beregningOversikt = gjeldendeBehandling?.beregningOversikt ?? [];
-    const beregningOversiktInneværendeMåned = beregningOversikt.find(periode =>
+    const utbetalingsperioder = gjeldendeBehandling?.utbetalingsperioder ?? [];
+    const utbetalingsperiodeInneværendeMåned = utbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
-    const nesteMåned = dayjs(new Date()).add(1, 'month').startOf('month').toDate();
-    const beregningOversiktNesteMåned = beregningOversikt.find(periode =>
+    const nesteMåned = dayjs().add(1, 'month').startOf('month').toDate();
+    const utbetalingsperiodeNesteMåned = utbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned)
     );
 
@@ -74,16 +74,16 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     };
 
     const løpendeMånedligUtbetaling = () => {
-        if (beregningOversiktInneværendeMåned) {
-            return beregningOversiktInneværendeMåned.utbetaltPerMnd < 1 &&
+        if (utbetalingsperiodeInneværendeMåned) {
+            return utbetalingsperiodeInneværendeMåned.utbetaltPerMnd < 1 &&
                 gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
                 <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                     Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra NAV
                 </AlertStripe>
             ) : (
                 <>
-                    {beregningOversiktNesteMåned &&
-                        beregningOversiktNesteMåned !== beregningOversiktInneværendeMåned && (
+                    {utbetalingsperiodeNesteMåned &&
+                        utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
                             <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                                 <FlexSpaceBetween>
                                     {`Utbetalingen endres fra og med ${formaterIsoDato(
@@ -94,10 +94,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 </FlexSpaceBetween>
                             </AlertStripe>
                         )}
-                    <Utbetalinger beregningOversikt={beregningOversiktInneværendeMåned} />
+                    <Utbetalinger utbetalingsperiode={utbetalingsperiodeInneværendeMåned} />
                 </>
             );
-        } else if (beregningOversiktNesteMåned) {
+        } else if (utbetalingsperiodeNesteMåned) {
             return (
                 <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                     <FlexSpaceBetween>

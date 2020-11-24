@@ -3,36 +3,23 @@ import { BehandlingKategori } from './behandling';
 import { IGrunnlagPerson } from './person';
 import { YearMonth } from './tid';
 
-export interface IOppsummeringBeregning {
+export interface IUtbetalingsperiode {
     periodeFom: string;
     periodeTom: string;
     sakstype: BehandlingKategori;
-    beregningDetaljer: IBeregningDetalj[];
+    utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
     ytelseTyper: YtelseType[];
     antallBarn: number;
     utbetaltPerMnd: number;
-    endring: IBeregningEndring;
 }
 
-export interface IBeregningEndring {
-    type: BeregningEndringType;
-    trengerBegrunnelse: boolean;
-}
-
-export enum BeregningEndringType {
-    ENDRET = 'ENDRET',
-    ENDRET_SATS = 'ENDRET_SATS',
-    UENDRET = 'UENDRET',
-    UENDRET_SATS = 'UENDRET_SATS',
-}
-
-export interface IBeregningDetalj {
+export interface IUtbetalingsperiodeDetalj {
     person: IGrunnlagPerson;
     ytelseType: YtelseType;
     utbetaltPerMnd: number;
 }
 
-export interface IPersonBeregning {
+export interface IAndelTilkjentYtelse {
     personIdent: string;
     ytelsePerioder: IYtelsePeriode[];
     beløp: number;
