@@ -8,8 +8,6 @@ export const Dokumenter: React.FC = () => {
     const { dataForManuellJournalføring, valgtDokumentId } = useManuellJournalføringV2();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
-            console.log(dataForManuellJournalføring.data.journalpost.dokumenter);
-
             return (
                 <div>
                     {dataForManuellJournalføring.data.journalpost.journalstatus ===

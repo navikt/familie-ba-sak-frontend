@@ -11,7 +11,7 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 import { useParams } from 'react-router';
-import { DokumentTittel, IDataForManuellJournalføring } from '../typer/manuell-journalføring';
+import { IDataForManuellJournalføring } from '../typer/manuell-journalføring';
 import { useApp } from './AppContext';
 
 const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseContext(() => {
@@ -48,11 +48,46 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         return finnDokument(ressurs, valgtDokumentId);
     };
 
-    const settDokumentTittel = (dokumentTittel: DokumentTittel) => {
-        const valgtDokument = finnValgtDokument(oppdatertData);
-        if (valgtDokument) {
-            valgtDokument.tittel = dokumentTittel;
+    const settValgtDokumentInfo = (dokumentInfo: IDokumentInfo) => {
+        oppdatertData.status === RessursStatus.SUKSESS &&
+            settOppdatertData({
+                ...oppdatertData,
+                data: {
+                    ...oppdatertData.data,
+                    journalpost: {
+                        ...oppdatertData.data.journalpost,
+                        dokumenter: oppdatertData.data.journalpost.dokumenter?.map(dokument => {
+                            return dokument.dokumentInfoId === valgtDokumentId
+                                ? dokumentInfo
+                                : dokument;
+                        }),
+                    },
+                },
+            });
+    };
+
+    const settDokumentTittel = (dokumentTittel: string) => {
+        const valgt = finnValgtDokument(oppdatertData);
+        if (!valgt) {
+            return;
         }
+        valgt.tittel = dokumentTittel;
+        settValgtDokumentInfo(valgt);
+    };
+
+    const settLogiskVedlegg = (logiskVedlggNavn: Array<string>) => {
+        const valgt = finnValgtDokument(oppdatertData);
+        if (!valgt) {
+            return;
+        }
+
+        valgt.logiskeVedlegg = logiskVedlggNavn.map(vedlegg => {
+            return {
+                tittel: vedlegg,
+                logiskVedleggId: '0',
+            };
+        });
+        settValgtDokumentInfo(valgt);
     };
 
     const erDokumentTittelEndret = (dokument: IDokumentInfo): boolean => {
@@ -65,6 +100,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         const valgtDokumentUendret = finnValgtDokument(dataForManuellJournalføring);
         if (valgtDokument && valgtDokumentUendret) {
             valgtDokument.tittel = valgtDokumentUendret.tittel;
+            settValgtDokumentInfo(valgtDokument);
         }
     };
 
@@ -125,8 +161,12 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         visDokument,
         hentDokumentData,
         valgtDokumentId,
+        finnValgtDokument: (): IDokumentInfo | undefined => {
+            return finnValgtDokument(oppdatertData);
+        },
         settValgtDokumentId,
         settDokumentTittel,
+        settLogiskVedlegg,
         tilbakestilleDokumentTittel,
         erDokumentTittelEndret,
     };

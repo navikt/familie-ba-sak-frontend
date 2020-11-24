@@ -66,6 +66,22 @@ export interface INavnOgIdent {
     id: string;
 }
 
+export enum JournalpostTittel {
+    SØKNAD_OM_BARNETRYGD_ORDINÆR = 'Søknad om barnetrygd ordinær',
+    SØKNAD_OM_UTVIDET_BARNETRYGD = 'Søknad om utvidet barnetrygd',
+    ETTERSENDELSE_TIL_SØKNAD_OM_BARNETRYGD_ORDINÆR = 'Ettersendelse til søknad om barnetrygd ordinær',
+    ETTERSENDELSE_TIL_SØKNAD_OM_UTVIDET_BARNETRYGD = 'Ettersendelse til søknad om utvidet barnetrygd',
+    TILLEGGSSKJEMA_VED_KRAV_OM_UTBETALING = 'Tilleggsskjema ved krav om utbetaling av barnetrygd og/eller kontantstøtte på grunnlag av regler om eksport etter EØS-avtalen',
+}
+
+export const BrevkodeMap = new Map([
+    [JournalpostTittel.SØKNAD_OM_BARNETRYGD_ORDINÆR, 'NAV 33-00.07'],
+    [JournalpostTittel.SØKNAD_OM_UTVIDET_BARNETRYGD, 'NAV 33-00.09'],
+    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_BARNETRYGD_ORDINÆR, 'NAV 33-00.07'],
+    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_UTVIDET_BARNETRYGD, 'NAV 33-00.09'],
+    [JournalpostTittel.TILLEGGSSKJEMA_VED_KRAV_OM_UTBETALING, 'NAV 34-00.15'],
+]);
+
 export enum DokumentTittel {
     AVTALE_OM_DELT_BOSTED = 'Avtale om delt bosted',
     AVTALE_OM_FAST_BOSTED_SAMVÆR = 'Avtale om fast bosted/samvær',
@@ -91,7 +107,7 @@ export enum DokumentTittel {
     MEKLINGSATTEST = 'Meklingsattest',
     MELDING_FRA_SKOLE_OM_FRAVÆR = 'Melding fra skole om fravær',
     PASS_ID_PAPIRER = 'Pass/ID-papirer',
-    REGISTERUTSKRIFT_FRA_BRØNNØYSUNDREGISTRENE = 'Registerutskrift fra Brønnøysundregistrene / Registerutskrift fra enhetsregisteret i Brønnøysundregistrene',
+    REGISTERUTSKRIFT_FRA_BRØNNØYSUNDREGISTRENE = 'Registerutskrift fra enhetsregisteret i Brønnøysundregistrene',
     RETTSKJENNELSE_BARNEFORDELINGSSAKER = 'Rettskjennelse - barnefordelingssaker',
     SKILSMISSE_ELLER_SEPARASJONSBEVILLING = 'Skilsmisse- eller separasjonsbevilling',
     TILLEGGSSKJEMA_EØS_TILLEGGSSKJEMA_VED_KRAV_OM_UTBETALING = 'Tilleggsskjema EØS / Tilleggsskjema ved krav om utbetaling av barnetrygd og/eller kontantstøtte på grunnlag av regler om eksport etter EØS-avtalen',

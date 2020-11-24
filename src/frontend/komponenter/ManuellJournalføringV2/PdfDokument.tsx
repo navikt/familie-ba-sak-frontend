@@ -3,8 +3,8 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import styled from 'styled-components';
+import { Document, Page } from 'react-pdf';
 
 const Spinner = styled.div`
     align-items: center;

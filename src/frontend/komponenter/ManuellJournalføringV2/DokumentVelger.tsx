@@ -6,6 +6,8 @@ import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringC
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import CreatableSelect from 'react-select/creatable';
 import { HoyreChevron, NedChevron, OppChevron } from 'nav-frontend-chevron';
+import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
+import { Label } from 'nav-frontend-skjema';
 
 const DokumentPanel = styled(Panel)`
     margin-top: 20px;
@@ -59,7 +61,7 @@ interface IEndreKnappProps {
     onClick: () => void;
 }
 
-const DokumentTittel = styled.td`
+const DokumentTittelDiv = styled.td`
     font-weight: bold;
 `;
 
@@ -69,7 +71,7 @@ const DokumentInfo: React.FC<IDokumentInfoProps> = ({ dokument, journalpost }) =
             <table>
                 <thead>
                     <tr>
-                        <DokumentTittel>{dokument.tittel || 'Ukjent'}</DokumentTittel>
+                        <DokumentTittelDiv>{dokument.tittel || 'Ukjent'}</DokumentTittelDiv>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,20 +162,89 @@ const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
     );
 };
 
-const sampleOptions = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-];
+interface ITittel {
+    value: string;
+    label: string;
+}
 
-const DokumentTittelPanel: React.FC<IDokumentTittelPanelProps> = ({ tittel }) => {
+const dokumentTittelList: Array<ITittel> = Object.keys(DokumentTittel).map((_, index) => {
+    return {
+        value: Object.values(DokumentTittel)[index],
+        label: Object.values(DokumentTittel)[index],
+    };
+});
+
+const journalpostTittelList: Array<ITittel> = Object.keys(JournalpostTittel).map((_, index) => {
+    return {
+        value: Object.values(JournalpostTittel)[index],
+        label: Object.values(JournalpostTittel)[index],
+    };
+});
+
+const tittelList = dokumentTittelList.concat(journalpostTittelList);
+
+const LogiskVedleggPanel: React.FC<IDokumentTittelPanelProps> = () => {
+    const {
+        settLogiskVedlegg,
+        finnValgtDokument,
+        settDokumentTittel,
+        tilbakestilleDokumentTittel,
+    } = useManuellJournalføringV2();
+
+    const hentVedleggList = () => {
+        const valgtDokument = finnValgtDokument();
+        return valgtDokument
+            ? valgtDokument.logiskeVedlegg.map(vedlegg => {
+                  return {
+                      value: vedlegg.tittel,
+                      label: vedlegg.tittel,
+                  };
+              })
+            : [];
+    };
+
+    const finnTittel = (options: Array<string>) => {
+        return options.filter(value => Object.values(JournalpostTittel).find(v => v === value));
+    };
+
+    const genererDokumentTittelFraOptions = (options: Array<string>) => {
+        return options.length === 0
+            ? ''
+            : options.reduce((tittel, option) => (tittel ? `${tittel}, ${option}` : `${option}`));
+    };
+
+    const handleOptions = (options: Array<string>) => {
+        const tittel = finnTittel(options);
+        if (tittel.length === 1) {
+            settDokumentTittel(tittel[0]);
+        } else if (tittel.length === 0) {
+            const generertTittel = genererDokumentTittelFraOptions(options);
+            if (generertTittel !== '') {
+                settDokumentTittel(generertTittel);
+            } else {
+                tilbakestilleDokumentTittel();
+            }
+        } else {
+            alert('TODO: Error message for conflicting tags');
+        }
+
+        settLogiskVedlegg(options);
+    };
+
     return (
         <div>
+            <Label htmlFor="select">Dokumentbesrivelse</Label>
             <CreatableSelect
+                id="select"
                 isClearable
                 isMulti={true}
-                options={sampleOptions}
-                defaultInputValue={tittel}
+                options={tittelList}
+                value={hentVedleggList()}
+                onChange={options => {
+                    handleOptions(
+                        options instanceof Array ? options.map(({ value }) => value) : []
+                    );
+                }}
             />
         </div>
     );
@@ -213,9 +284,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({
                         settUtvidet(!utvidet);
                     }}
                 ></DokumentInfoStripe>
-                {valgt && utvidet && (
-                    <DokumentTittelPanel tittel={dokument.tittel || 'No Tittle'} />
-                )}
+                {valgt && utvidet && <LogiskVedleggPanel tittel={dokument.tittel || 'No Tittle'} />}
             </DokumentPanel>
         </ThemeProvider>
     );
