@@ -4,7 +4,7 @@ import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
 import { Input, Select } from 'nav-frontend-skjema';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import {
     ManuellJournalføringProvider,
@@ -21,6 +21,7 @@ import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { KnyttTilBehandling } from './KnyttTilBehandling';
 import { Dokumenter } from './Dokumenter';
 import styled from 'styled-components';
+import { useAmplitude } from '../../utils/amplitude';
 
 const PageSplit = styled.div`
     display: flex;
@@ -35,6 +36,7 @@ const Bakgrunn = styled.div`
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
+    const { loggSidevisning } = useAmplitude();
     const {
         dataForManuellJournalføring,
         dokumenttype,
@@ -53,6 +55,10 @@ const ManuellJournalføringContent: React.FC = () => {
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
+
+    useEffect(() => {
+        loggSidevisning('journalføring');
+    }, [history.location.pathname]);
 
     const behandlinger =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
