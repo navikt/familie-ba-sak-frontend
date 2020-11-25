@@ -19,7 +19,7 @@ export interface IUtbetalingsperiodeDetalj {
     utbetaltPerMnd: number;
 }
 
-export interface IAndelTilkjentYtelse {
+export interface IPersonMedAndelerTilkjentYtelse {
     personIdent: string;
     ytelsePerioder: IYtelsePeriode[];
     beløp: number;

@@ -18,8 +18,8 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         genererRader,
         aktivEtikett,
         aktivtTidslinjeVindu,
-        mapAndelerTilkjentYtelseTilPersoner,
-        mapPersonerTilAndelerTilkjentYtelse,
+        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
+        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
     } = useTidslinje();
 
     if (åpenBehandling.status !== RessursStatus.SUKSESS) {
@@ -27,17 +27,17 @@ const TilkjentYtelseTidslinje: React.FC = () => {
     }
 
     const personer = åpenBehandling.data.personer;
-    const personerFraAndelerTilkjentYtelseSortert = mapAndelerTilkjentYtelseTilPersoner(
+    const personerFraAndelerTilkjentYtelseSortert = mapPersonerMedAndelerTilkjentYtelseTilPersoner(
         personer,
-        åpenBehandling.data.andelerTilkjentYtelse
+        åpenBehandling.data.personerMedAndelerTilkjentYtelse
     ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
 
-    const andelerTilkjentYtelseSortert = mapPersonerTilAndelerTilkjentYtelse(
+    const personerMedAndelerTilkjentYtelseSortert = mapPersonerTilPersonerMedAndelerTilkjentYtelse(
         personerFraAndelerTilkjentYtelseSortert,
-        åpenBehandling.data.andelerTilkjentYtelse
+        åpenBehandling.data.personerMedAndelerTilkjentYtelse
     );
 
-    const tidslinjeRader = genererRader(andelerTilkjentYtelseSortert);
+    const tidslinjeRader = genererRader(personerMedAndelerTilkjentYtelseSortert);
 
     return (
         <>

@@ -3,7 +3,7 @@ import { IGrunnlagPerson } from './person';
 import { IVedtakForBehandling } from './vedtak';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 import { ITotrinnskontroll } from './totrinnskontroll';
-import { IAndelTilkjentYtelse, IUtbetalingsperiode } from './beregning';
+import { IPersonMedAndelerTilkjentYtelse, IUtbetalingsperiode } from './beregning';
 import { IOpplysningsplikt } from './opplysningsplikt';
 
 export enum BehandlingKategori {
@@ -145,7 +145,7 @@ export interface IBehandling {
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
     utbetalingsperioder: IUtbetalingsperiode[];
-    andelerTilkjentYtelse: IAndelTilkjentYtelse[];
+    personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
 }
