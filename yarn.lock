@@ -725,10 +725,10 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
-"@navikt/familie-backend@5.0.18-alpha.4":
-  version "5.0.18-alpha.4"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.18-alpha.4.tgz#0ae6a35569d028b6caf848dff2a9bea576faf058"
-  integrity sha512-rt+dppENYGgODTd8ujNIOYrHakYtqPpy5Epx+ijJVKL8YNs6isXgc6TiY2ii+u0DPIicV2k3pFN0C7+qOzlFcQ==
+"@navikt/familie-backend@^5.0.18":
+  version "5.0.18"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.18.tgz#05a3b48da783c26ec5035eb7d17ec46695f5820a"
+  integrity sha512-z9HP+nNds2UWLu/dGYoT9yEw54bDTGex4a3rbT2zCIEqN0ru7dmvdHUhA3GtTS4TK80WJ9XR9+atiNG3s0uOpg==
   dependencies:
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.9"
