@@ -5,6 +5,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
+import { useApp } from '../../context/AppContext';
 import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import Pluss from '../../ikoner/Pluss';
 import {
@@ -29,6 +30,7 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
     aktivBehandling,
     dataForManuellJournalføring,
 }) => {
+    const { innloggetSaksbehandler } = useApp();
     const behandlinger = dataForManuellJournalføring.fagsak?.behandlinger.sort((a, b) =>
         dayjs(b.opprettetTidspunkt).diff(dayjs(a.opprettetTidspunkt))
     );
@@ -82,10 +84,11 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
 
                 const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
                     behandlingType: behandlingType,
-                    søkersIdent: søker,
-                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
-                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
                     behandlingÅrsak: BehandlingÅrsak.SØKNAD,
+                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
+                    navIdent: innloggetSaksbehandler?.navIdent,
+                    søkersIdent: søker,
+                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
                 }).then((response: Ressurs<IFagsak>) => response);
 
                 settOppretterBehandling(false);

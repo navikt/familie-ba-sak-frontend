@@ -1,4 +1,4 @@
-import { Ressurs } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useState } from 'react';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { HenleggelseÅrsak } from '../../../../../typer/behandling';
@@ -7,12 +7,17 @@ import { useFelt } from '../../../../../familie-skjema/felt';
 import { useSkjema } from '../../../../../familie-skjema/skjema';
 import { FeltState } from '../../../../../familie-skjema/typer';
 import { feil, ok } from '../../../../../familie-skjema/validators';
+import {
+    Brevmal,
+    IBrevData,
+} from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
     const [begrunnelse, settBegrunnelse] = useState('');
+    const [årsak, settÅrsak] = useState('');
 
-    const { settFagsak } = useFagsakRessurser();
+    const { fagsak, settFagsak } = useFagsakRessurser();
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {
             årsak: HenleggelseÅrsak | '';
@@ -45,11 +50,19 @@ const useHenleggBehandling = (lukkModal: () => void) => {
             },
             (ressurs: Ressurs<IFagsak>) => {
                 settFagsak(ressurs);
+                settÅrsak(skjema.felter.årsak.verdi);
                 lukkModal();
                 settVisVeivalgModal(true);
             }
         );
     };
+
+    const hentSkjemaData = (): IBrevData => ({
+        mottakerIdent:
+            fagsak.status === RessursStatus.SUKSESS ? fagsak.data.søkerFødselsnummer : '',
+        multiselectVerdier: [],
+        brevmal: Brevmal.HENLEGGE_TRUKKET_SØKNAD,
+    });
 
     return {
         begrunnelse,
@@ -59,6 +72,8 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         settBegrunnelse,
         settVisVeivalgModal,
         visVeivalgModal,
+        hentSkjemaData,
+        årsak,
     };
 };
 
