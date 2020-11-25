@@ -35,19 +35,11 @@ const Container: React.FC = () => {
                                     }}
                                 />
                                 <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
-                                <Route
-                                    exact={true}
-                                    path="/oppgaver"
-                                    render={() => {
-                                        return <Oppgaver />;
-                                    }}
-                                />
+                                <Route exact={true} path="/oppgaver" component={Oppgaver} />
                                 <Route
                                     exact={true}
                                     path="/oppgaver/journalfør/:oppgaveId"
-                                    render={() => {
-                                        return <ManuellJournalføring />;
-                                    }}
+                                    component={ManuellJournalføring}
                                 />
                             </Switch>
                         </FagsakProvider>
@@ -56,7 +48,6 @@ const Container: React.FC = () => {
             ) : (
                 <UgyldigSesjon />
             )}
-            );
         </Router>
     );
 };
