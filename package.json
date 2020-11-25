@@ -31,7 +31,7 @@
     ]
   },
   "dependencies": {
-    "@navikt/familie-backend": "5.0.16",
+    "@navikt/familie-backend": "5.0.18-alpha.4",
     "@navikt/familie-clipboard": "^3.0.5",
     "@navikt/familie-form-elements": "2.0.11",
     "@navikt/familie-header": "^2.0.14",
@@ -104,8 +104,8 @@
     "nav-frontend-spinner": "^2.0.10",
     "nav-frontend-spinner-style": "^0.2.8",
     "nav-frontend-tabell-style": "^0.2.30",
-    "nav-frontend-tabs-style": "^0.0.37",
     "nav-frontend-tabs": "^0.0.57",
+    "nav-frontend-tabs-style": "^0.0.37",
     "nav-frontend-typografi": "^2.0.36",
     "nav-frontend-typografi-style": "^1.0.29",
     "node": "^15.0.1",
