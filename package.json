@@ -31,7 +31,7 @@
     ]
   },
   "dependencies": {
-    "@navikt/familie-backend": "5.0.16",
+    "@navikt/familie-backend": "5.0.17",
     "@navikt/familie-clipboard": "^3.0.5",
     "@navikt/familie-form-elements": "2.0.11",
     "@navikt/familie-header": "^2.0.14",
