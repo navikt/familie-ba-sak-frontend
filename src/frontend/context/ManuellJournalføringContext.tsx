@@ -12,6 +12,7 @@ import {
 } from '../typer/manuell-journalføring';
 import { IPersonInfo } from '../typer/person';
 import {
+    byggDataRessurs,
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
@@ -202,6 +203,44 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         }
     };
 
+    /*
+    *****************************************************************************
+    Dokument Visning - temporary feature
+    */
+    const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
+    const [dokumentData, settDokumentData] = React.useState(byggTomRessurs<string>());
+    const [visDokument, settVisDokument] = React.useState(false);
+
+    const hentDokumentData = (journalPostId: string, dokumentInfoId: string) => {
+        settDokumentData(byggHenterRessurs());
+        settVisDokument(true);
+        axiosRequest<string, void>({
+            method: 'GET',
+            //TODO: remove mock
+            url: `/familie-ba-sak/api/journalpost/${journalPostId}/hent/${dokumentInfoId}`,
+            påvirkerSystemLaster: true,
+        })
+            .then((hentetDokumentData: Ressurs<string>) => {
+                if (hentetDokumentData.status === RessursStatus.SUKSESS) {
+                    settDokumentData(
+                        byggDataRessurs(`data:application/pdf;base64,${hentetDokumentData.data}`)
+                    );
+                } else if (hentetDokumentData.status === RessursStatus.FEILET) {
+                    settDokumentData(hentetDokumentData);
+                } else {
+                    settDokumentData(
+                        byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
+                    );
+                }
+            })
+            .catch((_error: AxiosError) => {
+                settDokumentData(byggFeiletRessurs('Ukjent feil ved henting av dokument'));
+            });
+    };
+    /*
+     *****************************************************************************
+     */
+
     return {
         dataForManuellJournalføring,
         dokumenttype,
@@ -225,6 +264,18 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         tilknyttedeBehandlingIder,
         validerSkjema,
         visFeilmeldinger,
+        valgtDokumentId,
+        /*
+        *****************************************************************************
+        Dokument Visning - temporary feature
+        */
+        settValgtDokumentId,
+        dokumentData,
+        visDokument,
+        hentDokumentData,
+        /*
+         *****************************************************************************
+         */
     };
 });
 

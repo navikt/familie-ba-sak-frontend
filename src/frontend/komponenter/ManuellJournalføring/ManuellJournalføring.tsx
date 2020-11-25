@@ -19,6 +19,19 @@ import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { KnyttTilBehandling } from './KnyttTilBehandling';
+import { Dokumenter } from './Dokumenter';
+import styled from 'styled-components';
+
+const PageSplit = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+const Bakgrunn = styled.div`
+    margin-left: 40px;
+    width: 90%;
+    height: 90vh;
+`;
 
 const ManuellJournalføringContent: React.FC = () => {
     const history = useHistory();
@@ -35,6 +48,8 @@ const ManuellJournalføringContent: React.FC = () => {
         settPerson,
         tilknyttedeBehandlingIder,
         validerSkjema,
+        visDokument,
+        dokumentData,
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
@@ -47,163 +62,183 @@ const ManuellJournalføringContent: React.FC = () => {
         case RessursStatus.SUKSESS:
             return dataForManuellJournalføring.data.journalpost.journalstatus ===
                 Journalstatus.MOTTATT ? (
-                <Skjemasteg
-                    className={'journalføring'}
-                    tittel={'Registrere journalpost: Barnetrygd'}
-                    forrigeKnappTittel={'Avbryt'}
-                    forrigeOnClick={() => {
-                        history.push(`/oppgaver`);
-                    }}
-                    nesteKnappTittel={'Journalfør'}
-                    nesteOnClick={() => {
-                        if (tilknyttedeBehandlingIder.length < 1) {
-                            settVisModal(true);
-                        } else {
-                            manueltJournalfør();
-                        }
-                    }}
-                    senderInn={senderInn}
-                >
-                    <br />
-                    <Undertittel children={'Bruker'} />
-                    <HentPerson
-                        person={person}
-                        settPerson={(hentetPerson: Ressurs<IPersonInfo>) => {
-                            settPerson(hentetPerson);
-                            validerSkjema();
+                <PageSplit>
+                    <Skjemasteg
+                        className={'journalføring'}
+                        tittel={'Registrere journalpost: Barnetrygd'}
+                        forrigeKnappTittel={'Avbryt'}
+                        forrigeOnClick={() => {
+                            history.push(`/oppgaver`);
                         }}
-                    />
-                    <br />
-                    <Select
-                        bredde={'xl'}
-                        id={'manuell-journalføring-dokumenttype'}
-                        label={'Dokumenttittel'}
-                        value={dokumenttype}
-                        onChange={event => {
-                            settDokumenttype(event.target.value as Dokumenttype);
-                            validerSkjema();
+                        nesteKnappTittel={'Journalfør'}
+                        nesteOnClick={() => {
+                            if (tilknyttedeBehandlingIder.length < 1) {
+                                settVisModal(true);
+                            } else {
+                                manueltJournalfør();
+                            }
                         }}
+                        senderInn={senderInn}
                     >
-                        {Object.keys(dokumenttyper).map((key: string) => {
-                            return (
-                                <option aria-selected={dokumenttype === key} key={key} value={key}>
-                                    {dokumenttyper[key].navn}
-                                </option>
-                            );
-                        })}
-                    </Select>
-                    <br />
-                    <PanelBase className={'panel--gra'}>
-                        <Undertittel children={'Annet innhold'} />
-                        {logiskeVedlegg.map((logiskVedlegg: ILogiskVedlegg, index: number) => {
-                            return (
-                                <div key={index} className={'journalføring__logisk-vedlegg'}>
-                                    <Input
-                                        className={'journalføring__logisk-vedlegg--input'}
-                                        label={'Tittel'}
-                                        value={logiskVedlegg.tittel}
-                                        bredde={'XXL'}
-                                        onChange={event => {
-                                            settLogiskeVedlegg(
-                                                logiskeVedlegg.map((lVedlegg: ILogiskVedlegg) => {
-                                                    if (
-                                                        lVedlegg.logiskVedleggId ===
-                                                        logiskVedlegg.logiskVedleggId
-                                                    ) {
-                                                        return {
-                                                            ...lVedlegg,
-                                                            tittel: event.target.value,
-                                                        };
-                                                    } else {
-                                                        return lVedlegg;
-                                                    }
-                                                })
-                                            );
-                                        }}
-                                    />
-                                    <Lukknapp
-                                        onClick={() => {
-                                            settLogiskeVedlegg(
-                                                logiskeVedlegg.filter(
-                                                    (lVedlegg: ILogiskVedlegg) =>
-                                                        lVedlegg.logiskVedleggId !==
-                                                        logiskVedlegg.logiskVedleggId
-                                                )
-                                            );
-                                        }}
-                                    />
-                                </div>
-                            );
-                        })}
-
                         <br />
-                        <Knapp
-                            mini={true}
-                            onClick={() => {
-                                settLogiskeVedlegg([
-                                    ...logiskeVedlegg,
-                                    {
-                                        logiskVedleggId: randomUUID(),
-                                        tittel: '',
-                                    },
-                                ]);
+                        <Undertittel children={'Bruker'} />
+                        <HentPerson
+                            person={person}
+                            settPerson={(hentetPerson: Ressurs<IPersonInfo>) => {
+                                settPerson(hentetPerson);
+                                validerSkjema();
+                            }}
+                        />
+                        <br />
+                        <Select
+                            bredde={'xl'}
+                            id={'manuell-journalføring-dokumenttype'}
+                            label={'Dokumenttittel'}
+                            value={dokumenttype}
+                            onChange={event => {
+                                settDokumenttype(event.target.value as Dokumenttype);
+                                validerSkjema();
                             }}
                         >
-                            Legg til innhold
-                        </Knapp>
-                    </PanelBase>
-                    <br />
-                    <br />
-                    <KnyttTilBehandling
-                        aktivBehandling={hentAktivBehandlingForJournalføring()}
-                        dataForManuellJournalføring={dataForManuellJournalføring.data}
-                    />
-                    {visModal && (
-                        <UIModalWrapper
-                            modal={{
-                                className: 'søknad-modal',
-                                tittel: 'Ønsker du å journalføre uten å knytte til behandling?',
-                                lukkKnapp: false,
-                                visModal: visModal,
-                                actions: [
-                                    <Knapp
-                                        key={'ja'}
-                                        type={'hoved'}
-                                        mini={true}
-                                        spinner={senderInn}
-                                        disabled={senderInn}
-                                        onClick={() => {
-                                            settVisModal(false);
-                                            manueltJournalfør();
-                                        }}
-                                        children={'Ja, journalfør'}
-                                    />,
-                                    <Knapp
-                                        key={'nei'}
-                                        mini={true}
-                                        onClick={() => {
-                                            settVisModal(false);
-                                        }}
-                                        children={
-                                            behandlinger && behandlinger.length > 0
-                                                ? hentAktivBehandlingForJournalføring()
-                                                    ? 'Nei, velg behandling'
-                                                    : 'Nei, velg/opprett behandling'
-                                                : 'Nei, opprett behandling'
-                                        }
-                                    />,
-                                ],
-                            }}
-                        >
-                            <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
-                                Du har valgt å journalføre uten å knytte dokumentet til en spesifikk
-                                behandling. Journalposten knyttes kun til personen.
-                                <br />
-                                (Tilsvarende "Knytt til generell sak" i Gosys).
-                            </Normaltekst>
-                        </UIModalWrapper>
+                            {Object.keys(dokumenttyper).map((key: string) => {
+                                return (
+                                    <option
+                                        aria-selected={dokumenttype === key}
+                                        key={key}
+                                        value={key}
+                                    >
+                                        {dokumenttyper[key].navn}
+                                    </option>
+                                );
+                            })}
+                        </Select>
+                        <br />
+                        <Dokumenter></Dokumenter>
+                        <br />
+                        <PanelBase className={'panel--gra'}>
+                            <Undertittel children={'Annet innhold'} />
+                            {logiskeVedlegg.map((logiskVedlegg: ILogiskVedlegg, index: number) => {
+                                return (
+                                    <div key={index} className={'journalføring__logisk-vedlegg'}>
+                                        <Input
+                                            className={'journalføring__logisk-vedlegg--input'}
+                                            label={'Tittel'}
+                                            value={logiskVedlegg.tittel}
+                                            bredde={'XXL'}
+                                            onChange={event => {
+                                                settLogiskeVedlegg(
+                                                    logiskeVedlegg.map(
+                                                        (lVedlegg: ILogiskVedlegg) => {
+                                                            if (
+                                                                lVedlegg.logiskVedleggId ===
+                                                                logiskVedlegg.logiskVedleggId
+                                                            ) {
+                                                                return {
+                                                                    ...lVedlegg,
+                                                                    tittel: event.target.value,
+                                                                };
+                                                            } else {
+                                                                return lVedlegg;
+                                                            }
+                                                        }
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                        <Lukknapp
+                                            onClick={() => {
+                                                settLogiskeVedlegg(
+                                                    logiskeVedlegg.filter(
+                                                        (lVedlegg: ILogiskVedlegg) =>
+                                                            lVedlegg.logiskVedleggId !==
+                                                            logiskVedlegg.logiskVedleggId
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                    </div>
+                                );
+                            })}
+
+                            <br />
+                            <Knapp
+                                mini={true}
+                                onClick={() => {
+                                    settLogiskeVedlegg([
+                                        ...logiskeVedlegg,
+                                        {
+                                            logiskVedleggId: randomUUID(),
+                                            tittel: '',
+                                        },
+                                    ]);
+                                }}
+                            >
+                                Legg til innhold
+                            </Knapp>
+                        </PanelBase>
+                        <br />
+                        <br />
+                        <KnyttTilBehandling
+                            aktivBehandling={hentAktivBehandlingForJournalføring()}
+                            dataForManuellJournalføring={dataForManuellJournalføring.data}
+                        />
+                        {visModal && (
+                            <UIModalWrapper
+                                modal={{
+                                    className: 'søknad-modal',
+                                    tittel: 'Ønsker du å journalføre uten å knytte til behandling?',
+                                    lukkKnapp: false,
+                                    visModal: visModal,
+                                    actions: [
+                                        <Knapp
+                                            key={'ja'}
+                                            type={'hoved'}
+                                            mini={true}
+                                            spinner={senderInn}
+                                            disabled={senderInn}
+                                            onClick={() => {
+                                                settVisModal(false);
+                                                manueltJournalfør();
+                                            }}
+                                            children={'Ja, journalfør'}
+                                        />,
+                                        <Knapp
+                                            key={'nei'}
+                                            mini={true}
+                                            onClick={() => {
+                                                settVisModal(false);
+                                            }}
+                                            children={
+                                                behandlinger && behandlinger.length > 0
+                                                    ? hentAktivBehandlingForJournalføring()
+                                                        ? 'Nei, velg behandling'
+                                                        : 'Nei, velg/opprett behandling'
+                                                    : 'Nei, opprett behandling'
+                                            }
+                                        />,
+                                    ],
+                                }}
+                            >
+                                <Normaltekst className={'søknad-modal__fjern-vilkår-advarsel'}>
+                                    Du har valgt å journalføre uten å knytte dokumentet til en
+                                    spesifikk behandling. Journalposten knyttes kun til personen.
+                                    <br />
+                                    (Tilsvarende "Knytt til generell sak" i Gosys).
+                                </Normaltekst>
+                            </UIModalWrapper>
+                        )}
+                    </Skjemasteg>
+                    {visDokument && dokumentData.status === RessursStatus.SUKSESS && (
+                        <Bakgrunn>
+                            <iframe
+                                title={'dokument'}
+                                src={dokumentData.data}
+                                width={'100%'}
+                                height={'100%'}
+                            ></iframe>
+                        </Bakgrunn>
                     )}
-                </Skjemasteg>
+                </PageSplit>
             ) : (
                 <AlertStripeAdvarsel
                     children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
