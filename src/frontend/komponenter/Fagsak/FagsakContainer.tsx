@@ -1,5 +1,5 @@
 import AlertStripe from 'nav-frontend-alertstriper';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
 import { BehandlingProvider } from '../../context/BehandlingContext';
@@ -10,15 +10,17 @@ import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import Personlinje from './Personlinje/Personlinje';
+import { useAmplitude } from '../../utils/amplitude';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams<{ fagsakId: string }>();
     const history = useHistory();
+    const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (fagsakId !== undefined) {
             if (fagsak.status !== RessursStatus.SUKSESS) {
                 hentFagsak(fagsakId);
@@ -30,6 +32,12 @@ const FagsakContainer: React.FunctionComponent = () => {
             }
         }
     }, [fagsakId]);
+
+    useEffect(() => {
+        if (erPåSaksoversikt) {
+            loggSidevisning('saksoversikt');
+        }
+    }, [history.location.pathname]);
 
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
