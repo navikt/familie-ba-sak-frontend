@@ -1,4 +1,3 @@
-import { IPersonBeregning } from '../typer/beregning';
 import {
     BehandlingKategori,
     Behandlingstype,
@@ -27,8 +26,4 @@ export interface IOpprettBehandlingData {
 
 export interface IRestVilkårsvurdering {
     personResultater: IRestPersonResultat[];
-}
-
-export interface IOpprettBeregningData {
-    personBeregninger: IPersonBeregning[];
 }
