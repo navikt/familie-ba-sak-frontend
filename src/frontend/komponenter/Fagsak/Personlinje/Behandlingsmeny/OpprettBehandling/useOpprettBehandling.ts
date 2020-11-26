@@ -27,6 +27,7 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         behandlingstype: '',
         behandlingÅrsak: '',
     });
+    const [visÅrsakerSelect, settVisÅrsakerSelect] = useState(false);
 
     const { opprettBehandling } = useFagsakApi(
         _ => {
@@ -75,17 +76,52 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         }
     };
 
+    const behandlingstypeOnChange = (behandlingstype: Behandlingstype | '') => {
+        settSubmitRessurs(byggTomRessurs());
+        settValideringsfeil(valideringsFeil => {
+            return {
+                ...valideringsFeil,
+                behandlingstype: '',
+            };
+        });
+
+        switch (behandlingstype) {
+            case Behandlingstype.TEKNISK_OPPHØR:
+                settSelectedBehandlingÅrsak(BehandlingÅrsak.TEKNISK_OPPHØR);
+                settVisÅrsakerSelect(false);
+                break;
+            case Behandlingstype.FØRSTEGANGSBEHANDLING:
+                settSelectedBehandlingÅrsak(BehandlingÅrsak.SØKNAD);
+                settVisÅrsakerSelect(false);
+                break;
+            default:
+                settVisÅrsakerSelect(true);
+        }
+
+        settSelectedBehandlingstype(behandlingstype);
+    };
+
+    const behandlingÅrsakOnChange = (behandlingÅrsak: BehandlingÅrsak | '') => {
+        settSubmitRessurs(byggTomRessurs());
+        settValideringsfeil(valideringsFeil => {
+            return {
+                ...valideringsFeil,
+                behandlingÅrsak: '',
+            };
+        });
+        settSelectedBehandlingÅrsak(behandlingÅrsak);
+    };
+
     return {
         onBekreft,
         fjernState,
-        settSubmitRessurs,
         submitRessurs,
-        settSelectedBehandlingstype,
         selectedBehandlingstype,
         selectedBehandlingÅrsak,
-        settSelectedBehandlingÅrsak,
         valideringsFeil,
-        settValideringsfeil,
+        behandlingstypeOnChange,
+        behandlingÅrsakOnChange,
+        visÅrsakerSelect,
     };
 };
 

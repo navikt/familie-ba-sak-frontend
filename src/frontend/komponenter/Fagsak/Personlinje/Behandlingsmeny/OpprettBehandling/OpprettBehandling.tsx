@@ -12,7 +12,7 @@ import {
 import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 import useOpprettBehandling from './useOpprettBehandling';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import { useApp } from '../../../../../context/AppContext';
 import { ToggleNavn } from '../../../../../typer/toggles';
@@ -45,14 +45,13 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
     const {
         fjernState,
         onBekreft,
-        settSelectedBehandlingstype,
         selectedBehandlingstype,
-        settSubmitRessurs,
         submitRessurs,
-        settSelectedBehandlingÅrsak,
         selectedBehandlingÅrsak,
         valideringsFeil,
-        settValideringsfeil,
+        behandlingstypeOnChange,
+        behandlingÅrsakOnChange,
+        visÅrsakerSelect,
     } = useOpprettBehandling(() => settVisModal(false));
 
     const lukkOpprettBehandlingModal = () => {
@@ -118,14 +117,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         name={'Behandling'}
                         label={'Velg type behandling'}
                         onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
-                            settSubmitRessurs(byggTomRessurs());
-                            settValideringsfeil(valideringsFeil => {
-                                return {
-                                    ...valideringsFeil,
-                                    behandlingstype: '',
-                                };
-                            });
-                            settSelectedBehandlingstype(event.target.value);
+                            behandlingstypeOnChange(event.target.value);
                         }}
                     >
                         <option disabled={true} value={''}>
@@ -161,39 +153,26 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         )}
                     </FamilieSelect>
 
-                    <FamilieSelect
-                        feil={valideringsFeil.behandlingÅrsak}
-                        erLesevisning={false}
-                        value={selectedBehandlingÅrsak}
-                        name={'Behandlingsårsak'}
-                        label={'Velg årsak'}
-                        onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
-                            settSubmitRessurs(byggTomRessurs());
-                            settValideringsfeil(valideringsFeil => {
-                                return {
-                                    ...valideringsFeil,
-                                    behandlingÅrsak: '',
-                                };
-                            });
-                            settSelectedBehandlingÅrsak(event.target.value);
-                        }}
-                    >
-                        <option disabled={true} value={''}>
-                            Velg
-                        </option>
-                        {selectedBehandlingstype === Behandlingstype.TEKNISK_OPPHØR ? (
-                            <option
-                                key={BehandlingÅrsak.TEKNISK_OPPHØR}
-                                aria-selected={
-                                    selectedBehandlingÅrsak === BehandlingÅrsak.TEKNISK_OPPHØR
-                                }
-                                value={BehandlingÅrsak.TEKNISK_OPPHØR}
-                            >
-                                {behandlingÅrsak[BehandlingÅrsak.TEKNISK_OPPHØR]}
+                    {visÅrsakerSelect && (
+                        <FamilieSelect
+                            feil={valideringsFeil.behandlingÅrsak}
+                            erLesevisning={false}
+                            value={selectedBehandlingÅrsak}
+                            name={'Behandlingsårsak'}
+                            label={'Velg årsak'}
+                            onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
+                                behandlingÅrsakOnChange(event.target.value);
+                            }}
+                        >
+                            <option disabled={true} value={''}>
+                                Velg
                             </option>
-                        ) : (
-                            Object.values(BehandlingÅrsak)
-                                .filter(årsak => årsak !== BehandlingÅrsak.TEKNISK_OPPHØR)
+                            {Object.values(BehandlingÅrsak)
+                                .filter(
+                                    årsak =>
+                                        årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
+                                        årsak !== BehandlingÅrsak.FØDSELSHENDELSE
+                                )
                                 .map(årsak => {
                                     return (
                                         <option
@@ -204,9 +183,9 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                                             {behandlingÅrsak[årsak]}
                                         </option>
                                     );
-                                })
-                        )}
-                    </FamilieSelect>
+                                })}
+                        </FamilieSelect>
+                    )}
                 </SkjemaGruppe>
             </UIModalWrapper>
         </>
