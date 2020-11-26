@@ -180,7 +180,7 @@
     "preset": "ts-jest",
     "globals": {
       "ts-jest": {
-        "tsConfig": "<rootDir>/src/frontend/tsconfig.json"
+        "tsconfig": "<rootDir>/src/frontend/tsconfig.json"
       }
     }
   },

@@ -1,6 +1,5 @@
-import dayjs from 'dayjs';
 import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
-import { diff, nyPeriode } from '../../typer/periode';
+import { periodeDiff, nyPeriode } from '../../typer/periode';
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
     IPersonResultat,
@@ -8,6 +7,7 @@ import {
     IRestVilkårResultat,
     IVilkårResultat,
 } from '../../typer/vilkår';
+import familieDayjs from '../../utils/familieDayjs';
 import { datoformat } from '../../utils/formatter';
 import {
     erPeriodeGyldig,
@@ -23,7 +23,7 @@ export const sorterVilkårsvurderingForPerson = (
     return vilkårResultater.sort(
         (a, b) =>
             a.verdi.vilkårType.localeCompare(b.verdi.vilkårType) ||
-            diff(a.verdi.periode.verdi, b.verdi.periode.verdi)
+            periodeDiff(a.verdi.periode.verdi, b.verdi.periode.verdi)
     );
 };
 
@@ -107,9 +107,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 return -1;
             }
 
-            return dayjs(b.person.fødselsdato, datoformat.ISO_DAG).diff(
-                dayjs(a.person.fødselsdato, datoformat.ISO_DAG),
-                'day'
+            return familieDayjs(b.person.fødselsdato, datoformat.ISO_DAG).diff(
+                familieDayjs(a.person.fødselsdato, datoformat.ISO_DAG)
             );
         });
 };

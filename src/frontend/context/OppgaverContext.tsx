@@ -1,6 +1,5 @@
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
@@ -26,6 +25,7 @@ import {
     IOppgaveFelt,
     IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
+import familieDayjs from '../utils/familieDayjs';
 
 export const oppgaveSideLimit = 15;
 
@@ -194,8 +194,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 return 0;
             }
 
-            const aValid = dayjs(a.substring(0, 10), 'YYYY-MM-DD', true).isValid();
-            const bValid = dayjs(b.substring(0, 10), 'YYYY-MM-DD', true).isValid();
+            const aValid = familieDayjs(a.substring(0, 10), 'YYYY-MM-DD').isValid();
+            const bValid = familieDayjs(b.substring(0, 10), 'YYYY-MM-DD').isValid();
 
             if (!aValid && !bValid) {
                 return 0;
@@ -211,8 +211,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
             const aBefore = ascendant ? -1 : 1;
             const aAfter = ascendant ? 1 : -1;
-            return dayjs(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
-                dayjs(b.substring(0, 10), 'YYYY-MM-DD')
+            return familieDayjs(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
+                familieDayjs(b.substring(0, 10), 'YYYY-MM-DD')
             )
                 ? aBefore
                 : aAfter;
