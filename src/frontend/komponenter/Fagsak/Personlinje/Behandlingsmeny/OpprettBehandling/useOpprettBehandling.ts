@@ -27,7 +27,6 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         behandlingstype: '',
         behandlingÅrsak: '',
     });
-    const [visÅrsakerSelect, settVisÅrsakerSelect] = useState(false);
 
     const { opprettBehandling } = useFagsakApi(
         _ => {
@@ -76,6 +75,8 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         }
     };
 
+    const visÅrsakerSelect = () => selectedBehandlingstype === Behandlingstype.REVURDERING;
+
     const behandlingstypeOnChange = (behandlingstype: Behandlingstype | '') => {
         settSubmitRessurs(byggTomRessurs());
         settValideringsfeil(valideringsFeil => {
@@ -88,14 +89,12 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         switch (behandlingstype) {
             case Behandlingstype.TEKNISK_OPPHØR:
                 settSelectedBehandlingÅrsak(BehandlingÅrsak.TEKNISK_OPPHØR);
-                settVisÅrsakerSelect(false);
                 break;
             case Behandlingstype.FØRSTEGANGSBEHANDLING:
                 settSelectedBehandlingÅrsak(BehandlingÅrsak.SØKNAD);
-                settVisÅrsakerSelect(false);
                 break;
             default:
-                settVisÅrsakerSelect(true);
+                break;
         }
 
         settSelectedBehandlingstype(behandlingstype);

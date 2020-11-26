@@ -153,7 +153,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         )}
                     </FamilieSelect>
 
-                    {visÅrsakerSelect && (
+                    {visÅrsakerSelect() && (
                         <FamilieSelect
                             feil={valideringsFeil.behandlingÅrsak}
                             erLesevisning={false}
