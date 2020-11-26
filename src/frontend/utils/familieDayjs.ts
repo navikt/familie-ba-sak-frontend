@@ -4,7 +4,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import LocalizedFormat from 'dayjs/plugin/LocalizedFormat';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 export type Dayjs = dayjs.Dayjs;
 
@@ -16,7 +16,7 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 dayjs.extend(timezone);
-dayjs.extend(LocalizedFormat);
+dayjs.extend(localizedFormat);
 
 dayjs.tz.setDefault(norskTidssone);
 dayjs.locale('nb');
