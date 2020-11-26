@@ -1,4 +1,4 @@
-import { IPersonBeregning } from '../typer/beregning';
+import { IPersonMedAndelerTilkjentYtelse } from '../typer/beregning';
 import { FeltState, ValiderFelt, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
@@ -32,8 +32,8 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
 };
 
 export const erGyldigMånedDato = (
-    felt: FeltState<IPersonBeregning>
-): FeltState<IPersonBeregning> => {
+    felt: FeltState<IPersonMedAndelerTilkjentYtelse>
+): FeltState<IPersonMedAndelerTilkjentYtelse> => {
     return /^\d{2}\.\d{2}$/.test(felt.verdi.stønadFom) &&
         familieDayjs(felt.verdi.stønadFom, datoformat.MÅNED).isValid()
         ? ok(felt)

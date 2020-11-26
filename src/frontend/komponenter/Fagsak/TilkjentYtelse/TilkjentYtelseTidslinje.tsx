@@ -1,7 +1,6 @@
 import React from 'react';
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { RessursStatus } from '@navikt/familie-typer';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { Tidslinje } from '@navikt/helse-frontend-tidslinje';
@@ -19,30 +18,26 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         genererRader,
         aktivEtikett,
         aktivtTidslinjeVindu,
-        mapPersonberegningerTilPersoner,
-        mapPersonerTilPersonberegninger,
+        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
+        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
     } = useTidslinje();
 
-    const aktivVedtak =
-        åpenBehandling.status === RessursStatus.SUKSESS
-            ? hentAktivVedtakPåBehandlig(åpenBehandling.data)
-            : undefined;
-
-    if (åpenBehandling.status !== RessursStatus.SUKSESS || !aktivVedtak) {
+    if (åpenBehandling.status !== RessursStatus.SUKSESS) {
         return null;
     }
 
     const personer = åpenBehandling.data.personer;
-    const personerFraPersonberegningerSortert = mapPersonberegningerTilPersoner(
+    const personerFraAndelerTilkjentYtelseSortert = mapPersonerMedAndelerTilkjentYtelseTilPersoner(
         personer,
-        aktivVedtak.personBeregninger
+        åpenBehandling.data.personerMedAndelerTilkjentYtelse
     ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
-    const personberegningerSortert = mapPersonerTilPersonberegninger(
-        personerFraPersonberegningerSortert,
-        aktivVedtak.personBeregninger
+
+    const personerMedAndelerTilkjentYtelseSortert = mapPersonerTilPersonerMedAndelerTilkjentYtelse(
+        personerFraAndelerTilkjentYtelseSortert,
+        åpenBehandling.data.personerMedAndelerTilkjentYtelse
     );
 
-    const tidslinjeRader = genererRader(personberegningerSortert);
+    const tidslinjeRader = genererRader(personerMedAndelerTilkjentYtelseSortert);
 
     return (
         <>
@@ -55,7 +50,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
             </div>
             <div className={'tidslinje-container'}>
                 <div className={'tidslinje-container__labels'}>
-                    {personerFraPersonberegningerSortert.map((person, index) => {
+                    {personerFraAndelerTilkjentYtelseSortert.map((person, index) => {
                         return (
                             <Normaltekst key={index} title={person.navn}>
                                 {formaterPersonIdent(person.personIdent)}

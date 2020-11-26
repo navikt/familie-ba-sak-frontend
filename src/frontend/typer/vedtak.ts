@@ -1,9 +1,7 @@
-import { IPersonBeregning } from './beregning';
 import { INøkkelPar } from './common';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
-    personBeregninger: IPersonBeregning[];
     utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[];
     vedtaksdato: string;
     id: number;

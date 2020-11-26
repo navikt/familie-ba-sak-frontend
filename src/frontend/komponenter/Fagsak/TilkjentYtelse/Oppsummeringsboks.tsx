@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IOppsummeringBeregning, ytelsetype } from '../../../typer/beregning';
+import { IUtbetalingsperiode, ytelsetype } from '../../../typer/beregning';
 import {
     datoformat,
     formaterBeløp,
@@ -14,15 +14,18 @@ import { Xknapp } from 'nav-frontend-ikonknapper';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 interface IProps {
-    perioder: IOppsummeringBeregning[];
+    utbetalingsperioder: IUtbetalingsperiode[];
     aktivEtikett: Skalaetikett;
 }
 
-const summerTotalbeløpForPeriode = (sum: number, periode: IOppsummeringBeregning) => {
+const summerTotalbeløpForPeriode = (sum: number, periode: IUtbetalingsperiode) => {
     return sum + periode.utbetaltPerMnd;
 };
 
-const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEtikett }) => {
+const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
+    utbetalingsperioder,
+    aktivEtikett,
+}) => {
     const { settAktivEtikett } = useTidslinje();
 
     const månedNavnOgÅr = () => {
@@ -36,7 +39,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                 <div className={'tilkjentytelse-informasjonsboks__header__info'}>
                     <Element>{månedNavnOgÅr()}</Element>
 
-                    {perioder.length > 0 ? (
+                    {utbetalingsperioder.length > 0 ? (
                         <Normaltekst>
                             Totalt utbetalt i mnd
                             <span
@@ -44,7 +47,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                                     'tilkjentytelse-informasjonsboks__header__info__totalbeløp'
                                 }
                             >
-                                {`${perioder.reduce(summerTotalbeløpForPeriode, 0)} kr`}
+                                {`${utbetalingsperioder.reduce(summerTotalbeløpForPeriode, 0)} kr`}
                             </span>
                         </Normaltekst>
                     ) : (
@@ -57,7 +60,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                     }}
                 />
             </div>
-            {perioder.length !== 0 && (
+            {utbetalingsperioder.length !== 0 && (
                 <table>
                     <thead>
                         <tr>
@@ -73,8 +76,8 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                         </tr>
                     </thead>
                     <tbody>
-                        {perioder.map(periode => {
-                            return periode.beregningDetaljer
+                        {utbetalingsperioder.map((utbetalingsperiode: IUtbetalingsperiode) => {
+                            return utbetalingsperiode.utbetalingsperiodeDetaljer
                                 .sort((detaljA, detaljB) =>
                                     sorterFødselsdato(
                                         detaljA.person.fødselsdato,
