@@ -26,7 +26,6 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
         utbetalingBegrunnelser,
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
-    console.log(åpenBehandling);
 
     const harAndeler = åpenBehandling.utbetalingsperioder.length > 0;
     const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
@@ -84,7 +83,6 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                             utbetalingBegrunnelse: IRestUtbetalingBegrunnelse,
                                             index: number
                                         ) => {
-                                            console.log(utbetalingBegrunnelse);
                                             return utbetalingBegrunnelse.id ? (
                                                 <UtbetalingBegrunnelseInput
                                                     key={index}
