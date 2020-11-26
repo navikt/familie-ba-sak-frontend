@@ -1,20 +1,16 @@
-import dayjs from 'dayjs';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
-import {
-    periodeToString,
-    sisteDagInneværendeMåned,
-    stringToMoment,
-    TIDENES_MORGEN,
-} from '../../../../typer/periode';
+import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
-import { datoformat } from '../../../../utils/formatter';
+import { datoformat, isoStringToDayjs } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
 import { useBehandling } from '../../../../context/BehandlingContext';
+import familieDayjs from '../../../../utils/familieDayjs';
+import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 import { IUtbetalingsperiode } from '../../../../typer/beregning';
 
 interface IUtbetalingBegrunnelseTabell {
@@ -35,14 +31,17 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
         .slice()
         .sort((a, b) =>
-            dayjs(a.periodeFom, datoformat.ISO_DAG).diff(
-                dayjs(b.periodeFom, datoformat.ISO_DAG),
-                'day'
+            familieDayjs(a.periodeFom, datoformat.ISO_DAG).diff(
+                familieDayjs(b.periodeFom, datoformat.ISO_DAG)
             )
-        );
+        )
+        .filter((utbetalingsperiode: IUtbetalingsperiode) => {
+            // Fjern perioder hvor fom er mer enn 2 måneder frem i tid
+            return familieDayjs(utbetalingsperiode.periodeFom).diff(familieDayjs(), 'month') < 2;
+        });
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
-        stringToMoment(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
+        isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
 
     return harAndeler ? (
         <table className={'tabell'}>

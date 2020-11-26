@@ -9,16 +9,6 @@ import { AppContainer } from 'react-hot-loader';
 import { init } from '@sentry/browser';
 
 import App from './komponenter/App';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import isBetween from 'dayjs/plugin/isBetween';
-
-require('dayjs/locale/nb');
-dayjs.extend(isSameOrBefore);
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isBetween);
-dayjs.locale('nb');
 
 // eslint-disable-next-line
 const packageConfig = require('../../package.json');
