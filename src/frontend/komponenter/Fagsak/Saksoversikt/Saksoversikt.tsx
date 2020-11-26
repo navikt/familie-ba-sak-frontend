@@ -16,7 +16,7 @@ import Utbetalinger from './Utbetalinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
-import { datoformat, formaterDato, formaterIsoDato } from '../../../utils/formatter';
+import { datoformat, formaterDato } from '../../../utils/formatter';
 import styled from 'styled-components';
 import Lenke from 'nav-frontend-lenker';
 import familieDayjs from '../../../utils/familieDayjs';
