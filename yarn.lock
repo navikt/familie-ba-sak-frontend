@@ -763,14 +763,15 @@
     framer-motion "^2.9.1"
     react-tooltip "^3.11.4"
 
-"@navikt/familie-form-elements@2.0.11":
-  version "2.0.11"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.11.tgz#1660cd8795a2b6a7e71cdb4f9e255a2b58bba07d"
-  integrity sha512-jXB9ySprrkKKosupvB3KdnA+Adi3utskdX29Ooe6quOeSkdN8dhJJ+JW05a2wv5iv3EbqOpj9O57KYdewrsxsA==
+"@navikt/familie-form-elements@2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.12.tgz#de48e8d7950de039fc7eee06dc133d10d89d6c10"
+  integrity sha512-/4IKl4usGG2zaYJg4u62K9SOxYNyBYkqZvYFs9qJRfrzDrXq1xQlmyz3xZF8TFyrbAsBmJ/v+T1LQGYjnnkkHA==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
     classnames "^2.2.6"
+    dayjs "^1.9.6"
     nav-datovelger "^8.0.0"
     nav-frontend-knapper "^2.0.4"
     nav-frontend-knapper-style "^1.0.8"
