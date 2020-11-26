@@ -34,7 +34,11 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
             familieDayjs(a.periodeFom, datoformat.ISO_DAG).diff(
                 familieDayjs(b.periodeFom, datoformat.ISO_DAG)
             )
-        );
+        )
+        .filter((utbetalingsperiode: IUtbetalingsperiode) => {
+            // Fjern perioder hvor fom er mer enn 2 måneder frem i tid
+            return dayjs(utbetalingsperiode.periodeFom).diff(dayjs(), 'month') < 2;
+        });
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
