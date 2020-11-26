@@ -35,11 +35,12 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
         .slice()
         .sort((a, b) =>
-            dayjs(a.periodeFom, datoformat.ISO_DAG).diff(
-                dayjs(b.periodeFom, datoformat.ISO_DAG),
-                'day'
-            )
-        );
+            dayjs(a.periodeFom, datoformat.ISO_DAG).diff(dayjs(b.periodeFom, datoformat.ISO_DAG))
+        )
+        .filter((utbetalingsperiode: IUtbetalingsperiode) => {
+            // Fjern perioder hvor fom er mer enn 2 måneder frem i tid
+            return dayjs(utbetalingsperiode.periodeFom).diff(dayjs(), 'month') < 2;
+        });
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         stringToMoment(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
