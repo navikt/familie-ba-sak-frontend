@@ -17,6 +17,10 @@ export enum datoformatNorsk {
     DATO = 'ddmmåå',
 }
 
+export const isoStringToDayjs = (dato: string | undefined, defaultValue: Dayjs): Dayjs => {
+    return dato && dato !== '' ? familieDayjs(dato, datoformat.ISO_DAG) : defaultValue;
+};
+
 export const formaterIsoDato = (
     dato: string | undefined,
     tilFormat: datoformat,

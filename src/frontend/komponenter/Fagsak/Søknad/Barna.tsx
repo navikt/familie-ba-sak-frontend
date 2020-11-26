@@ -1,5 +1,4 @@
 import { RessursStatus } from '@navikt/familie-typer';
-import dayjs from 'dayjs';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
@@ -16,6 +15,7 @@ import { datoformat } from '../../../utils/formatter';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import LeggTilBarn from './LeggTilBarn';
 import styled from 'styled-components';
+import familieDayjs from '../../../utils/familieDayjs';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;
@@ -46,9 +46,8 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
     const { bruker } = useFagsakRessurser();
     const sorterteBarnMedOpplysninger = søknad.barnaMedOpplysninger.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-            return dayjs(b.fødselsdato, datoformat.ISO_DAG).diff(
-                dayjs(a.fødselsdato, datoformat.ISO_DAG),
-                'day'
+            return familieDayjs(b.fødselsdato, datoformat.ISO_DAG).diff(
+                familieDayjs(a.fødselsdato, datoformat.ISO_DAG)
             );
         }
     );

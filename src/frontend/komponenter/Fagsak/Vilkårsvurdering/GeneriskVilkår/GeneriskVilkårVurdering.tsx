@@ -35,8 +35,7 @@ import {
 } from './GeneriskVilkår';
 import AutomatiskVurdering from '../../../../ikoner/AutomatiskVurdering';
 import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
-import { datoformat } from '../../../../utils/formatter';
-import dayjs from 'dayjs';
+import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import { IFagsak } from '../../../../typer/fagsak';
@@ -230,7 +229,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         vilkårResultat.verdi.erVurdert
                             ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
                                 ? 'Vurdert i denne behandlingen'
-                                : `Vurdert ${dayjs(vilkårResultat.verdi.endretTidspunkt).format(
+                                : `Vurdert ${formaterIsoDato(
+                                      vilkårResultat.verdi.endretTidspunkt,
                                       datoformat.DATO_FORKORTTET
                                   )}`
                             : ''}

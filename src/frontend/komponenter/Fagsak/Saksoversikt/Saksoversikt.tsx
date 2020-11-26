@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -20,6 +19,7 @@ import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import styled from 'styled-components';
 import Lenke from 'nav-frontend-lenker';
+import familieDayjs from '../../../utils/familieDayjs';
 
 interface IProps {
     fagsak: IFagsak;
@@ -46,7 +46,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     let gjeldendeBehandling =
         iverksatteBehandlinger.length > 0
             ? iverksatteBehandlinger.sort((a, b) =>
-                  dayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
+                  familieDayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
               )[0]
             : undefined;
 
@@ -60,7 +60,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const beregningOversiktInneværendeMåned = beregningOversikt.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
-    const nesteMåned = dayjs(new Date()).add(1, 'month').startOf('month').toDate();
+
+    const nesteMåned = familieDayjs().add(1, 'month').startOf('month').toDate();
     const beregningOversiktNesteMåned = beregningOversikt.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned)
     );

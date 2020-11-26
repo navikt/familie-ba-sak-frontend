@@ -1,4 +1,4 @@
-import familieDayjs from './familieDayjs';
+import familieDayjs, { Dayjs } from './familieDayjs';
 import { YearMonth } from '../typer/tid';
 
 export const periodeOverlapperMedValgtDato = (
@@ -13,6 +13,10 @@ export const periodeOverlapperMedValgtDato = (
         valgtDatoToDayjs.isSame(periodeFom, 'date') ||
         valgtDatoToDayjs.isSame(periodeTom, 'date')
     );
+};
+
+export const sisteDagInneværendeMåned = (): Dayjs => {
+    return familieDayjs().endOf('month');
 };
 
 export const hentFørsteDagIYearMonth = (yearMonth: YearMonth) => {

@@ -1,21 +1,17 @@
-import dayjs from 'dayjs';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
-import {
-    periodeToString,
-    sisteDagInneværendeMåned,
-    stringToMoment,
-    TIDENES_MORGEN,
-} from '../../../../typer/periode';
+import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
-import { datoformat } from '../../../../utils/formatter';
+import { datoformat, isoStringToDayjs } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { IOppsummeringBeregning } from '../../../../typer/beregning';
+import familieDayjs from '../../../../utils/familieDayjs';
+import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -35,15 +31,14 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     const beregningerMedBegrunnelseBehov = åpenBehandling.beregningOversikt
         .slice()
         .sort((a, b) =>
-            dayjs(a.periodeFom, datoformat.ISO_DAG).diff(
-                dayjs(b.periodeFom, datoformat.ISO_DAG),
-                'day'
+            familieDayjs(a.periodeFom, datoformat.ISO_DAG).diff(
+                familieDayjs(b.periodeFom, datoformat.ISO_DAG)
             )
         )
         .filter((beregningRad: IOppsummeringBeregning) => beregningRad.endring.trengerBegrunnelse);
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
-        stringToMoment(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
+        isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
 
     return harAndeler ? (
         <table className={'tabell'}>

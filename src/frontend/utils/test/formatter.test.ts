@@ -1,7 +1,7 @@
 import { datoformat, formaterIsoDato } from '../formatter';
 
 describe('utils/formatter', () => {
-    describe('formaterIsoDato', function () {
+    describe('formaterIsoDato', () => {
         const dato = '2020-12-01T14:02';
 
         test('Skal returnere dato på format MM.YY', () => {
