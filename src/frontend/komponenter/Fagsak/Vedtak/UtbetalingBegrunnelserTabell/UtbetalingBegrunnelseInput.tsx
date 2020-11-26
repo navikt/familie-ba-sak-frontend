@@ -170,9 +170,11 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                         mutableVedtakBegrunnelseType &&
                         begrunnelser[mutableVedtakBegrunnelseType]
                             .filter((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
-                                return utgjørendeVilkårForPeriode.includes(
-                                    restVedtakBegrunnelse.vilkår
-                                );
+                                return restVedtakBegrunnelse.vilkår
+                                    ? utgjørendeVilkårForPeriode.includes(
+                                          restVedtakBegrunnelse.vilkår
+                                      )
+                                    : true;
                             })
                             .map((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                                 return (

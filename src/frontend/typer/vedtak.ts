@@ -25,7 +25,7 @@ export interface IRestPutUtbetalingBegrunnelse {
 export interface IRestVedtakBegrunnelse {
     id: VedtakBegrunnelse;
     navn: string;
-    vilkår: VilkårType;
+    vilkår?: VilkårType;
 }
 
 export enum VedtakBegrunnelse {
