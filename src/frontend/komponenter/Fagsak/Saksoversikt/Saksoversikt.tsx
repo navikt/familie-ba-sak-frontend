@@ -16,7 +16,7 @@ import Utbetalinger from './Utbetalinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { datoformat, formaterDato, formaterIsoDato } from '../../../utils/formatter';
 import styled from 'styled-components';
 import Lenke from 'nav-frontend-lenker';
 import familieDayjs from '../../../utils/familieDayjs';
@@ -61,9 +61,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
 
-    const nesteMåned = familieDayjs().add(1, 'month').startOf('month').toDate();
+    const nesteMåned = familieDayjs().add(1, 'month').startOf('month');
     const utbetalingsperiodeNesteMåned = utbetalingsperioder.find(periode =>
-        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned)
+        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned.toDate())
     );
 
     const lenkeTilBehandlingsresultat = () => {
@@ -87,8 +87,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
                             <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                                 <FlexSpaceBetween>
-                                    {`Utbetalingen endres fra og med ${formaterIsoDato(
-                                        nesteMåned.toDateString(),
+                                    {`Utbetalingen endres fra og med ${formaterDato(
+                                        nesteMåned,
                                         datoformat.MÅNED_NAVN
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
@@ -102,10 +102,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
             return (
                 <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                     <FlexSpaceBetween>
-                        {`Utbetalingen starter ${formaterIsoDato(
-                            nesteMåned.toDateString(),
-                            datoformat.MÅNED_NAVN
-                        )}`}
+                        {`Utbetalingen starter ${formaterDato(nesteMåned, datoformat.MÅNED_NAVN)}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
                 </AlertStripe>
