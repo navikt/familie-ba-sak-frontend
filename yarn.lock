@@ -813,9 +813,9 @@
     "@navikt/familie-typer" "^3.0.6"
 
 "@navikt/familie-typer@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.6.tgz#bbad6578d325e257c8d070d64285a303ae7e7d43"
-  integrity sha512-HDC2y6lGUq0RgQwZDnVYXRRFLMsJEa/M8PypXMH7HyZDwBqKDXU72Hr/wxWUOgpCiosKYp7yqI0Byk1J4QhVpw==
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.7.tgz#9202e46241d7bfd5a9034cbd80a5a7e0b16aa2c4"
+  integrity sha512-aWw+S8X1cyavr7AHMsxDJ4EGd1VdhBJXUVUUHKa5TIHSpG7wg7BrCH1RB/AH/W2h98IeuOHIASwRNd/nO1ohXQ==
 
 "@navikt/familie-visittkort@^2.1.12":
   version "2.1.12"
