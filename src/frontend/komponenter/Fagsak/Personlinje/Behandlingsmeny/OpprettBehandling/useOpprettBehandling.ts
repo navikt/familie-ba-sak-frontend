@@ -94,6 +94,7 @@ const useOpprettBehandling = (lukkModal: () => void) => {
                 settSelectedBehandlingÅrsak(BehandlingÅrsak.SØKNAD);
                 break;
             default:
+                settSelectedBehandlingÅrsak('');
                 break;
         }
 
