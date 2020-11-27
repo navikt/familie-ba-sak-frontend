@@ -805,26 +805,26 @@
     nav-frontend-typografi-style "^1.0.18"
     prop-types "^15.7.2"
 
-"@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.2":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.2.tgz#d9dc41b615098101536b0f0978a0af2f2e258466"
-  integrity sha512-X41Xsrwoa6NPav623nxH5JkmuNyJwYNIWIJN20bdfjBwlYwsMPVEXctyW7+O5tYQYXpM0zBf3yq8JivBJtMkeg==
+"@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.2", "@navikt/familie-ikoner@^3.1.4":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.4.tgz#60988228c0c2d497679c70a08e6a548a74c94d08"
+  integrity sha512-A3gxFuCQYk3LIrUKyjpjIRDurbRBtRAXnCGSRxU8cp8JxMSJYcJ9bF60iA1d/OICiFdJNqu/HC84RnwIvWNtvg==
   dependencies:
-    "@navikt/familie-typer" "^3.0.6"
+    "@navikt/familie-typer" "^3.0.7"
 
-"@navikt/familie-typer@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.6.tgz#bbad6578d325e257c8d070d64285a303ae7e7d43"
-  integrity sha512-HDC2y6lGUq0RgQwZDnVYXRRFLMsJEa/M8PypXMH7HyZDwBqKDXU72Hr/wxWUOgpCiosKYp7yqI0Byk1J4QhVpw==
+"@navikt/familie-typer@^3.0.6", "@navikt/familie-typer@^3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.7.tgz#9202e46241d7bfd5a9034cbd80a5a7e0b16aa2c4"
+  integrity sha512-aWw+S8X1cyavr7AHMsxDJ4EGd1VdhBJXUVUUHKa5TIHSpG7wg7BrCH1RB/AH/W2h98IeuOHIASwRNd/nO1ohXQ==
 
 "@navikt/familie-visittkort@^2.1.12":
-  version "2.1.12"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.12.tgz#e92157618a3654c5c7c7efe56f122bedbaffdd9c"
-  integrity sha512-rRL1irhGQKHMkx90067M6KwAhiVh8EQZ9lTT/56hY6K24e2yjv0KNo0wMZZ3Xg1/KxC16klxSzwiXCsJ8yA3GA==
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.14.tgz#02bdae482fd420f71a544033b96027fe7d40d00b"
+  integrity sha512-JOwtAbUbXkiefYlmUP1RkW34/hSnHn2GplmRB2rZKeL+kMLfBHQV3XV026Rgj37VrJvNY7JQDxY5YcXSux+rJQ==
   dependencies:
     "@navikt/familie-clipboard" "^3.0.5"
-    "@navikt/familie-ikoner" "^3.1.2"
-    "@navikt/familie-typer" "^3.0.6"
+    "@navikt/familie-ikoner" "^3.1.4"
+    "@navikt/familie-typer" "^3.0.7"
     classnames "^2.2.6"
     nav-frontend-core "^5.0.8"
     nav-frontend-typografi "^2.0.17"
