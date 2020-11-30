@@ -9,10 +9,21 @@ import { Dokumenter } from './Dokumenter';
 import styled from 'styled-components';
 import Visittkort from '@navikt/familie-visittkort';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
+import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
+import { useHistory } from 'react-router';
+import { Undertittel } from 'nav-frontend-typografi';
+import { Journalpost } from './Journalpost';
+import { BrukerPanel } from './BrukerPanel';
+import { AvsenderPanel } from './AvsenderPanel';
 
 const PageSplit = styled.div`
     display: flex;
     flex-direction: row;
+`;
+
+const JournalpostSkjema = styled(Skjemasteg)`
+    min-width: 640px;
+    padding: 40px;
 `;
 
 const Bakgrunn = styled.div`
@@ -21,13 +32,9 @@ const Bakgrunn = styled.div`
     height: 92vh;
 `;
 
-const Dokumentliste = styled.div`
-    margin-top: 60px;
-    margin-left: 20px;
-`;
-
 const ManuellJournalføringContentV2: React.FC = () => {
     const { dataForManuellJournalføring, visDokument, dokumentData } = useManuellJournalføringV2();
+    const history = useHistory();
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
@@ -44,9 +51,29 @@ const ManuellJournalføringContentV2: React.FC = () => {
                         kjønn={dataForManuellJournalføring.data.person?.kjønn || kjønnType.UKJENT}
                     ></Visittkort>
                     <PageSplit>
-                        <Dokumentliste>
-                            <Dokumenter />
-                        </Dokumentliste>
+                        <JournalpostSkjema
+                            className={'journalføring'}
+                            tittel={'Journalføring'}
+                            forrigeKnappTittel={'Avbryt'}
+                            forrigeOnClick={() => {
+                                history.push(`/oppgaver`);
+                            }}
+                            nesteKnappTittel={'Journalfør'}
+                            senderInn={false}
+                        >
+                            <Journalpost />
+                            <br />
+                            <div>
+                                <Undertittel children={'Dokumenter'} />
+                                <Dokumenter />
+                            </div>
+                            <br />
+                            <div>
+                                <Undertittel children={'Bruker og avsender'} />
+                                <BrukerPanel></BrukerPanel>
+                                <AvsenderPanel></AvsenderPanel>
+                            </div>
+                        </JournalpostSkjema>
                         {visDokument && dokumentData.status === RessursStatus.SUKSESS && (
                             <Bakgrunn>
                                 <iframe

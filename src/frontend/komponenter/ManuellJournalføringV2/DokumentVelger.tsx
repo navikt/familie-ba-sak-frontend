@@ -8,10 +8,11 @@ import CreatableSelect from 'react-select/creatable';
 import { HoyreChevron, NedChevron, OppChevron } from 'nav-frontend-chevron';
 import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
 import { Label } from 'nav-frontend-skjema';
+import { datoformat, formaterIsoDato } from '../../utils/formatter';
 
 const DokumentPanel = styled(Panel)`
     margin-top: 20px;
-    width: 27rem;
+    width: 100%;
     height: 100%;
     border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
     &:hover {
@@ -76,7 +77,12 @@ const DokumentInfo: React.FC<IDokumentInfoProps> = ({ dokument, journalpost }) =
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Motatt: {journalpost.datoMottatt}</td>
+                        <td>
+                            Motatt:{' '}
+                            {journalpost.datoMottatt
+                                ? formaterIsoDato(journalpost.datoMottatt, datoformat.DATO)
+                                : 'Ingen mottatt dato'}
+                        </td>
                     </tr>
                     <tr>
                         <td>{dokument.brevkode || 'Ukjent'}</td>

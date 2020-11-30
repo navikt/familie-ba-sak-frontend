@@ -791,6 +791,11 @@
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.6.tgz#bbad6578d325e257c8d070d64285a303ae7e7d43"
   integrity sha512-HDC2y6lGUq0RgQwZDnVYXRRFLMsJEa/M8PypXMH7HyZDwBqKDXU72Hr/wxWUOgpCiosKYp7yqI0Byk1J4QhVpw==
 
+"@navikt/familie-typer@^3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.8.tgz#cb369b6848bffca51f71b9efdbe1d887da74b042"
+  integrity sha512-a9x4HEQU5exzHDJXTjL1qkqnbgdAiUUZee4ASSNzaLQ4hTcTnoFSyGtYx+swVfYlaMNWBJ9zNG7k3O+sHjlJyg==
+
 "@navikt/familie-visittkort@^2.1.12":
   version "2.1.12"
   resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.12.tgz#e92157618a3654c5c7c7efe56f122bedbaffdd9c"
@@ -7865,6 +7870,16 @@ nav-frontend-core@^5.0.1, nav-frontend-core@^5.0.10, nav-frontend-core@^5.0.5, n
   version "5.0.10"
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.10.tgz#6f582c2a09ee18c3d26d68fe09413289a7efed65"
   integrity sha512-0wo5L2s/OO5Q5pqJg8UWQCuRBzYY5txgbx1dD7OXHuokbva7GA0sZvh25VTrPauUbnDSUB26leJtwzos9Upi0A==
+
+nav-frontend-ekspanderbartpanel-style@^1.0.31:
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel-style/-/nav-frontend-ekspanderbartpanel-style-1.0.31.tgz#5af4ebf0093811bb114eef3c4ee5664aa73ffa3d"
+  integrity sha512-SW05Ke77qWKRgc7kDoEZD0tyYkumhQ+yU9Sem/6AB7lBgu60w9LwHw/MtTlPVR3oEoxImmjSIWD0gLHocfJXwA==
+
+nav-frontend-ekspanderbartpanel@^3.0.42:
+  version "3.0.42"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel/-/nav-frontend-ekspanderbartpanel-3.0.42.tgz#a59c16f653bc27dfbb1d90eed0d390472fef8605"
+  integrity sha512-bnE0nR7w9m6jSl61axGOJcXr6YcigX+lNkj4k2tB3q2HpsJkwKxhaUnJF3fbyYZ/P/WY03U6IX6safWKd6obRw==
 
 nav-frontend-etiketter-style@^1.0.8:
   version "1.0.14"
