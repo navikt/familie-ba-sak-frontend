@@ -13,8 +13,6 @@
       "strictPropertyInitialization": true,
       "noImplicitThis": true,
       "alwaysStrict": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
       "noImplicitReturns": false,
       "noFallthroughCasesInSwitch": true,
       "moduleResolution": "node",
