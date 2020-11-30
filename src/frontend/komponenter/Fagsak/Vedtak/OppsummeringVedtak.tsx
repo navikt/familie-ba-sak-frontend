@@ -31,16 +31,21 @@ import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/Utbetali
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import { BehandlerRolle } from '../../../../../node_dist/frontend/typer/behandling';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { IRestUtbetalingBegrunnelse } from '../../../typer/vedtak';
+import styled from 'styled-components';
 
 interface IVedtakProps {
     fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
+const StyledFeilmelding = styled(Feilmelding)`
+    margin-top: 1rem;
+`;
+
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
-    const { axiosRequest, innloggetSaksbehandler } = useApp();
+    const { axiosRequest, hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
     const { settFagsak } = useFagsakRessurser();
-    const { hentSaksbehandlerRolle } = useApp();
     const { erLesevisning } = useBehandling();
 
     const history = useHistory();
@@ -54,6 +59,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
+    const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const hentVedtaksbrev = () => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
@@ -104,25 +110,42 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
-    const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
+    const minst1PeriodeErBegrunnet = () => {
+        return (
+            (aktivVedtak?.utbetalingBegrunnelser.filter(
+                (utbetalingsbegrunnelse: IRestUtbetalingBegrunnelse) => {
+                    return (
+                        utbetalingsbegrunnelse.begrunnelseType &&
+                        utbetalingsbegrunnelse.vedtakBegrunnelse
+                    );
+                }
+            ).length ?? []) > 0
+        );
+    };
 
     const sendInn = () => {
-        settSenderInn(true);
-        settSubmitFeil('');
-        axiosRequest<IFagsak, void>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/send-til-beslutter?behandlendeEnhet=${
-                innloggetSaksbehandler?.enhet ?? '9999'
-            }`,
-        }).then((response: Ressurs<IFagsak>) => {
-            settSenderInn(false);
-            if (response.status === RessursStatus.SUKSESS) {
-                settVisModal(true);
-                settFagsak(response);
-            } else if (response.status === RessursStatus.FEILET) {
-                settSubmitFeil(response.frontendFeilmelding);
-            }
-        });
+        if (minst1PeriodeErBegrunnet()) {
+            settSenderInn(true);
+            settSubmitFeil('');
+            axiosRequest<IFagsak, void>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/fagsaker/${
+                    fagsak.id
+                }/send-til-beslutter?behandlendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
+            }).then((response: Ressurs<IFagsak>) => {
+                settSenderInn(false);
+                if (response.status === RessursStatus.SUKSESS) {
+                    settVisModal(true);
+                    settFagsak(response);
+                } else if (response.status === RessursStatus.FEILET) {
+                    settSubmitFeil(response.frontendFeilmelding);
+                }
+            });
+        } else {
+            settSubmitFeil(
+                'Vedtaksbrevet mangler begrunnelse. Du må legge til minst 1 begrunnelse.'
+            );
+        }
     };
 
     return (
@@ -163,7 +186,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         children={'Vis vedtaksbrev'}
                     />
 
-                    {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
+                    {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
 
                     {visModal && (
                         <UIModalWrapper
