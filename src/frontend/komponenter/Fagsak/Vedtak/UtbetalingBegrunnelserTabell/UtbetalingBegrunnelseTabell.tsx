@@ -36,7 +36,21 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
             )
         )
         .filter((utbetalingsperiode: IUtbetalingsperiode) => {
-            // Fjern perioder hvor fom er mer enn 2 måneder frem i tid
+            const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
+                (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
+                    return (
+                        utbetalingBegrunnelse.fom === utbetalingsperiode.periodeFom &&
+                        utbetalingBegrunnelse.tom === utbetalingsperiode.periodeTom
+                    );
+                }
+            );
+
+            // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
+            if (erLesevisning()) {
+                return utbetalingBegrunnelseForPeriode.length !== 0;
+            }
+
+            // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
             return familieDayjs(utbetalingsperiode.periodeFom).diff(familieDayjs(), 'month') < 2;
         });
 
