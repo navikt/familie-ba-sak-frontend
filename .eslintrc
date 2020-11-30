@@ -19,7 +19,6 @@
     "plugins": ["@typescript-eslint", "react-app", "prettier"],
     "rules": {
         "no-case-declarations": "off",
-
         "import/extensions": [
             "off",
             "ignorePackages",
