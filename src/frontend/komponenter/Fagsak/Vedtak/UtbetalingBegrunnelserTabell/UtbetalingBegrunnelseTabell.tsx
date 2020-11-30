@@ -87,13 +87,15 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                 <UtbetalingBegrunnelseInput
                                                     key={index}
                                                     id={utbetalingBegrunnelse.id}
-                                                    begrunnelseType={
-                                                        utbetalingBegrunnelse.begrunnelseType
-                                                    }
-                                                    vedtakBegrunnelse={
-                                                        utbetalingBegrunnelse.vedtakBegrunnelse
-                                                    }
+                                                    utbetalingBegrunnelse={utbetalingBegrunnelse}
                                                     erLesevisning={erLesevisning()}
+                                                    personResultater={
+                                                        åpenBehandling.personResultater
+                                                    }
+                                                    periode={{
+                                                        fom: utbetalingsperiode.periodeFom,
+                                                        tom: utbetalingsperiode.periodeTom,
+                                                    }}
                                                 />
                                             ) : (
                                                 <Feilmelding key={index}>
