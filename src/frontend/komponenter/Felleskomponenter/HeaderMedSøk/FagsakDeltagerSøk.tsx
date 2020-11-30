@@ -91,7 +91,8 @@ const FagsakDeltagerSøk: React.FC = () => {
                                         ? history.push(
                                               `/fagsak/${resultat[index].fagsakId}/saksoversikt`
                                           )
-                                        : settDeltagerForOpprettFagsak(deltager);
+                                        : deltager.harTilgang &&
+                                          settDeltagerForOpprettFagsak(deltager);
                                 }}
                             />
                         );
