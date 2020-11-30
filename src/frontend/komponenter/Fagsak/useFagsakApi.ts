@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { Behandlingstype, IBehandling } from '../../typer/behandling';
+import { BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IPersonResultat } from '../../typer/vilkår';
@@ -73,16 +73,13 @@ const useFagsakApi = (
                     if (!aktivBehandling) {
                         settVisFeilmeldinger(true);
                         settFeilmelding('Opprettelse av behandling feilet');
-                    } else if (
-                        aktivBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD ||
-                        aktivBehandling.type === Behandlingstype.TEKNISK_OPPHØR
-                    ) {
+                    } else if (aktivBehandling.årsak === BehandlingÅrsak.SØKNAD) {
                         history.push(
-                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
+                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
                         );
                     } else {
                         history.push(
-                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
+                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
                         );
                     }
                 } else if (response.status === RessursStatus.FEILET) {
