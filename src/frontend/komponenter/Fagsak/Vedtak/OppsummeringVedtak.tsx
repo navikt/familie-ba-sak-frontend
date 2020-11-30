@@ -110,21 +110,19 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
-    const minst1PeriodeErBegrunnet = () => {
+    const minstEnPeriodeErBegrunnet = (utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[]) => {
+        const begrunnelsenErUtfylt = (utbetalingsbegrunnelse: IRestUtbetalingBegrunnelse) =>
+            utbetalingsbegrunnelse.begrunnelseType && utbetalingsbegrunnelse.vedtakBegrunnelse;
+
         return (
-            (aktivVedtak?.utbetalingBegrunnelser.filter(
-                (utbetalingsbegrunnelse: IRestUtbetalingBegrunnelse) => {
-                    return (
-                        utbetalingsbegrunnelse.begrunnelseType &&
-                        utbetalingsbegrunnelse.vedtakBegrunnelse
-                    );
-                }
-            ).length ?? []) > 0
+            utbetalingBegrunnelser.filter((utbetalingsbegrunnelse: IRestUtbetalingBegrunnelse) =>
+                begrunnelsenErUtfylt(utbetalingsbegrunnelse)
+            ).length > 0
         );
     };
 
     const sendInn = () => {
-        if (minst1PeriodeErBegrunnet()) {
+        if (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.utbetalingBegrunnelser)) {
             settSenderInn(true);
             settSubmitFeil('');
             axiosRequest<IFagsak, void>({
@@ -143,7 +141,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             });
         } else {
             settSubmitFeil(
-                'Vedtaksbrevet mangler begrunnelse. Du må legge til minst 1 begrunnelse.'
+                'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
             );
         }
     };
