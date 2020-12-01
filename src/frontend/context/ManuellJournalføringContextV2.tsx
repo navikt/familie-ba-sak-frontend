@@ -109,7 +109,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         axiosRequest<IDataForManuellJournalføring, void>({
             method: 'GET',
             //TODO: remove mock
-            url: `/familie-ba-sak/api/mock/oppgave/${oppgaveId}`,
+            url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
             påvirkerSystemLaster: true,
         })
             .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
@@ -126,7 +126,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         axiosRequest<string, void>({
             method: 'GET',
             //TODO: remove mock
-            url: `/familie-ba-sak/api/mock/journalpost/${journalPostId}/hent/${dokumentInfoId}`,
+            url: `/familie-ba-sak/api/journalpost/${journalPostId}/hent/${dokumentInfoId}`,
             påvirkerSystemLaster: true,
         })
             .then((hentetDokumentData: Ressurs<string>) => {
