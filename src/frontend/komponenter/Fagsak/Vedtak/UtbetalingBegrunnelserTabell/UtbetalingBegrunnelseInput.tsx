@@ -5,67 +5,48 @@ import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
+import { IPeriode } from '../../../../typer/periode';
 import {
-    VedtakBegrunnelse,
     IRestVedtakBegrunnelse,
     VedtakBegrunnelseType,
     begrunnelsetyper,
+    IRestUtbetalingBegrunnelse,
 } from '../../../../typer/vedtak';
+import { IRestPersonResultat, VilkårType } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import useUtbetalingBegrunnelse from './useUtbetalingBegrunnelse';
 
 interface IUtbetalingsBegrunnelseInput {
-    vedtakBegrunnelse?: VedtakBegrunnelse;
-    id: number;
-    begrunnelseType?: VedtakBegrunnelseType;
+    utbetalingBegrunnelse: IRestUtbetalingBegrunnelse;
     erLesevisning: boolean;
+    id: number;
+    periode: IPeriode;
+    personResultater: IRestPersonResultat[];
 }
 
 const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
-    vedtakBegrunnelse,
-    id,
-    begrunnelseType,
     erLesevisning,
+    id,
+    periode,
+    personResultater,
+    utbetalingBegrunnelse,
 }) => {
     const {
-        endreUtbetalingBegrunnelse,
         vilkårBegrunnelser,
         slettUtbetalingBegrunnelse,
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
+    const {
+        begrunnelser,
+        defaultVelgBehandlingsresultat,
+        hentUtgjørendeVilkår,
+        mutableVedtakBegrunnelse,
+        mutableVedtakBegrunnelseType,
+        onChangeBegrunnelse,
+        onChangeType,
+    } = useUtbetalingBegrunnelse(id, personResultater, periode, utbetalingBegrunnelse);
 
-    const [mutableVedtakBegrunnelse, settMutableVedtakBegrunnelse] = React.useState<
-        VedtakBegrunnelse | undefined
-    >(vedtakBegrunnelse);
-    const [mutableVedtakBegrunnelseType, settMutableVedtakBegrunnelseType] = React.useState<
-        VedtakBegrunnelseType | undefined
-    >(begrunnelseType);
-    const defaultVelgBehandlingsresultat = 'Velg behandlingsresultat';
-
-    const onChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value ? event.target.value : '';
-        settMutableVedtakBegrunnelseType(value as VedtakBegrunnelseType);
-        settMutableVedtakBegrunnelse(undefined);
-        endreUtbetalingBegrunnelse(id, {
-            vedtakBegrunnelseType:
-                value !== defaultVelgBehandlingsresultat
-                    ? (value as VedtakBegrunnelseType)
-                    : undefined,
-            vedtakBegrunnelse: undefined,
-        });
-    };
-
-    const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value ? event.target.value : '';
-        settMutableVedtakBegrunnelse(value as VedtakBegrunnelse);
-        endreUtbetalingBegrunnelse(id, {
-            vedtakBegrunnelseType: mutableVedtakBegrunnelseType,
-            vedtakBegrunnelse:
-                value !== 'Velg begrunnelse' ? (value as VedtakBegrunnelse) : undefined,
-        });
-    };
-
-    const begrunnelser =
-        vilkårBegrunnelser?.status === RessursStatus.SUKSESS && vilkårBegrunnelser.data;
+    const utgjørendeVilkårForPeriode: VilkårType[] = hentUtgjørendeVilkår();
 
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
@@ -137,8 +118,15 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                     <option>Velg begrunnelse</option>
                     {begrunnelser &&
                         mutableVedtakBegrunnelseType &&
-                        begrunnelser[mutableVedtakBegrunnelseType].map(
-                            (restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
+                        begrunnelser[mutableVedtakBegrunnelseType]
+                            .filter((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
+                                return restVedtakBegrunnelse.vilkår
+                                    ? utgjørendeVilkårForPeriode.includes(
+                                          restVedtakBegrunnelse.vilkår
+                                      )
+                                    : true;
+                            })
+                            .map((restVedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                                 return (
                                     <option
                                         key={restVedtakBegrunnelse.id}
@@ -147,8 +135,7 @@ const UtbetalingBegrunnelseInput: React.FC<IUtbetalingsBegrunnelseInput> = ({
                                         {restVedtakBegrunnelse.navn}
                                     </option>
                                 );
-                            }
-                        )}
+                            })}
                 </FamilieSelect>
 
                 <IkonKnapp
