@@ -12,6 +12,7 @@ interface IProps extends NamedProps {
     label: string | React.ReactNode;
     feil?: string;
     propSelectStyles?: StylesConfig;
+    //TODO: legg inn lesevisningsverdi når denne dras ut i felles
 }
 
 const Container = styled.div`
