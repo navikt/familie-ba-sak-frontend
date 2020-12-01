@@ -1,9 +1,13 @@
 import * as React from 'react';
+
+import styled from 'styled-components';
+
 import { Systemtittel } from 'nav-frontend-typografi';
+
+import { FamilieTextarea } from '@navikt/familie-form-elements';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISøknadDTO } from '../../../typer/søknad';
-import { FamilieTextarea } from '@navikt/familie-form-elements';
-import styled from 'styled-components';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;

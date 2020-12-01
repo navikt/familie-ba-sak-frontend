@@ -1,6 +1,10 @@
+import React from 'react';
+
+import classNames from 'classnames';
+
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
-import React from 'react';
+
 import {
     behandlingsresultater,
     behandlingstyper,
@@ -13,9 +17,8 @@ import {
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
-import classNames from 'classnames';
 import familieDayjs from '../../../utils/familieDayjs';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 
 interface IBehandlingshistorikkProps {
     fagsak: IFagsak;

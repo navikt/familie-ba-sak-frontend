@@ -1,11 +1,15 @@
-import { Søk } from '@navikt/familie-header';
-import FagsakDeltagerkort from './FagsakDeltagerkort';
 import React, { useState } from 'react';
-import { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
+
 import { useHistory } from 'react-router';
+
 import AlertStripe from 'nav-frontend-alertstriper';
+
+import { Søk } from '@navikt/familie-header';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import { useApp } from '../../../context/AppContext';
+import { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
+import FagsakDeltagerkort from './FagsakDeltagerkort';
 import OpprettFagsakModal from './OpprettFagsakModal';
 
 // eslint-disable-next-line

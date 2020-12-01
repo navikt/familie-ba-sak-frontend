@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
-import { useOppgaver } from '../../context/OppgaverContext';
-import { useApp } from '../../context/AppContext';
-import { ISaksbehandler, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+
+import { ISaksbehandler, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useApp } from '../../context/AppContext';
+import { useOppgaver } from '../../context/OppgaverContext';
+import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 interface IOppgavelisteSaksbehandler {

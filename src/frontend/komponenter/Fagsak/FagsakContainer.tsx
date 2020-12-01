@@ -1,16 +1,20 @@
-import AlertStripe from 'nav-frontend-alertstriper';
 import React, { useEffect } from 'react';
+
 import { useHistory } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
+
+import AlertStripe from 'nav-frontend-alertstriper';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { BehandlingProvider } from '../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { RessursStatus } from '@navikt/familie-typer';
+import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
-import Saksoversikt from './Saksoversikt/Saksoversikt';
 import Personlinje from './Personlinje/Personlinje';
-import { useAmplitude } from '../../utils/amplitude';
+import Saksoversikt from './Saksoversikt/Saksoversikt';
 
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams<{ fagsakId: string }>();

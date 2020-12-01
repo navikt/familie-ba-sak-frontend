@@ -1,6 +1,9 @@
-import classNames from 'classnames';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+
+import classNames from 'classnames';
+
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+
 import {
     behandlingsresultater,
     behandlingsstatuser,

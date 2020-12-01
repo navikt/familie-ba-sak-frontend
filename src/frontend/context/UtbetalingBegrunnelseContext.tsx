@@ -1,6 +1,9 @@
-import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
-import constate from 'constate';
 import React, { useEffect, useState } from 'react';
+
+import constate from 'constate';
+
+import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import { IFagsak } from '../typer/fagsak';
 import {
     IRestPutUtbetalingBegrunnelse,

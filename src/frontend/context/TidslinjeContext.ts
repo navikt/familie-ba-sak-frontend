@@ -1,11 +1,14 @@
-import createUseContext from 'constate';
 import { useState } from 'react';
-import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
+
+import createUseContext from 'constate';
+
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+
+import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
 import { IGrunnlagPerson } from '../typer/person';
-import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '../utils/tid';
 import familieDayjs from '../utils/familieDayjs';
+import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '../utils/tid';
 
 export interface ITidslinjeVindu {
     id: number;

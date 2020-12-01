@@ -1,11 +1,14 @@
 import { useState } from 'react';
+
 import { useHistory } from 'react-router';
+
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IPersonResultat } from '../../typer/vilkår';
 import { erBehandlingenInnvilget, hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 

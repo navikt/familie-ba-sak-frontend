@@ -1,11 +1,11 @@
-import { IPersonMedAndelerTilkjentYtelse } from '../typer/beregning';
 import { FeltState, ValiderFelt, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
+import { feil, ok } from '../familie-skjema/validators';
+import { IPersonMedAndelerTilkjentYtelse } from '../typer/beregning';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Resultat } from '../typer/vilkår';
-import { datoformat, isoStringToDayjs } from './formatter';
-import { feil, ok } from '../familie-skjema/validators';
 import familieDayjs from './familieDayjs';
+import { datoformat, isoStringToDayjs } from './formatter';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');

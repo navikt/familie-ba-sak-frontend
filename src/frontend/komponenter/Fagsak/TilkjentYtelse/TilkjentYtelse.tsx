@@ -1,13 +1,15 @@
 import * as React from 'react';
+
 import { useHistory } from 'react-router';
+
+import { useTidslinje } from '../../../context/TidslinjeContext';
+import { IBehandling } from '../../../typer/behandling';
+import { IUtbetalingsperiode } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
+import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
-import { IBehandling } from '../../../typer/behandling';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-import { useTidslinje } from '../../../context/TidslinjeContext';
-import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
-import { IUtbetalingsperiode } from '../../../typer/beregning';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;

@@ -1,12 +1,16 @@
-import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
-import { RessursStatus } from '@navikt/familie-typer';
-import UIModalWrapper from '../../Modal/UIModalWrapper';
-import Brevskjema from './Brevskjema';
+
 import { useHistory } from 'react-router';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
+
+import { Knapp } from 'nav-frontend-knapper';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import UIModalWrapper from '../../Modal/UIModalWrapper';
+import Brevskjema from './Brevskjema';
 
 interface IProps {
     onOkIModalClick: () => void;

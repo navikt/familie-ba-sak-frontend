@@ -1,3 +1,8 @@
+import { parse, ParsedQuery } from 'query-string';
+
+import { ISaksbehandler } from '@navikt/familie-typer';
+
+import { hentPar, INøkkelPar } from '../../typer/common';
 import {
     EnhetFilter,
     OppgavetypeFilter,
@@ -8,9 +13,6 @@ import {
     gjelderFilter,
     saksbehandlerFilter,
 } from '../../typer/oppgave';
-import { ISaksbehandler } from '@navikt/familie-typer';
-import { parse, ParsedQuery } from 'query-string';
-import { hentPar, INøkkelPar } from '../../typer/common';
 
 export enum FeltSortOrder {
     NONE = 'NONE',

@@ -1,6 +1,6 @@
-import { IVilkårResultat, Resultat } from '../../typer/vilkår';
-import { IPeriode } from '../../typer/periode';
 import { FeltState } from '../../familie-skjema/typer';
+import { IPeriode } from '../../typer/periode';
+import { IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const hentPeriode = (vilkårResultat: FeltState<IVilkårResultat>): IPeriode => {
     return vilkårResultat.verdi.periode.verdi;

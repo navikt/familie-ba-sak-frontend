@@ -1,12 +1,15 @@
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import * as React from 'react';
+
+import styled from 'styled-components';
+
+import { FamilieCheckbox } from '@navikt/familie-form-elements';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
+import Slett from '../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { formaterPersonIdent, hentAlderSomString } from '../../../utils/formatter';
-import Slett from '../../../ikoner/Slett';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import styled from 'styled-components';
 
 interface IProps {
     barn: IBarnMedOpplysninger;

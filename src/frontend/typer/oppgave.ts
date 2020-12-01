@@ -1,5 +1,6 @@
-import { INøkkelPar } from './common';
 import { ISaksbehandler } from '@navikt/familie-typer';
+
+import { INøkkelPar } from './common';
 
 export interface IFinnOppgaveRequest {
     behandlingstema?: string;

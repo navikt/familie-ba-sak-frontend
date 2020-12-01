@@ -1,8 +1,12 @@
-import { FamilieSelect } from '@navikt/familie-form-elements';
+import React, { useState } from 'react';
+
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
-import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
+
+import { FamilieSelect } from '@navikt/familie-form-elements';
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { useApp } from '../../../../../context/AppContext';
 import {
     BehandlingStatus,
     Behandlingstype,
@@ -10,12 +14,11 @@ import {
     BehandlingÅrsak,
 } from '../../../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
-import useOpprettBehandling from './useOpprettBehandling';
-import { RessursStatus } from '@navikt/familie-typer';
-import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
-import { useApp } from '../../../../../context/AppContext';
 import { ToggleNavn } from '../../../../../typer/toggles';
+import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
+import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
+import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import useOpprettBehandling from './useOpprettBehandling';
 
 interface IProps {
     onListElementClick: () => void;

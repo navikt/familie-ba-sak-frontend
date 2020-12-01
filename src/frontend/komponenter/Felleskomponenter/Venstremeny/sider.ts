@@ -1,3 +1,5 @@
+import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
+import { FeltState } from '../../../familie-skjema/typer';
 import {
     BehandlingSteg,
     BehandlingStegStatus,
@@ -5,11 +7,9 @@ import {
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
-import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
-import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import { formaterPersonIdent } from '../../../utils/formatter';
 import { IOpplysningsplikt, OpplysningspliktStatus } from '../../../typer/opplysningsplikt';
-import { FeltState } from '../../../familie-skjema/typer';
+import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
+import { formaterPersonIdent } from '../../../utils/formatter';
 
 export interface ISide {
     href: string;

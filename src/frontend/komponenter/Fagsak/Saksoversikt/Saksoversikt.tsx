@@ -1,5 +1,11 @@
-import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+
+import styled from 'styled-components';
+
+import AlertStripe from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
+import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import {
     BehandlingKategori,
@@ -11,15 +17,12 @@ import {
 } from '../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import Behandlinger from './Behandlinger';
-import Utbetalinger from './Utbetalinger';
-import FagsakLenkepanel from './FagsakLenkepanel';
-import AlertStripe from 'nav-frontend-alertstriper';
-import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
-import { datoformat, formaterDato } from '../../../utils/formatter';
-import styled from 'styled-components';
-import Lenke from 'nav-frontend-lenker';
 import familieDayjs from '../../../utils/familieDayjs';
+import { datoformat, formaterDato } from '../../../utils/formatter';
+import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
+import Behandlinger from './Behandlinger';
+import FagsakLenkepanel from './FagsakLenkepanel';
+import Utbetalinger from './Utbetalinger';
 
 interface IProps {
     fagsak: IFagsak;

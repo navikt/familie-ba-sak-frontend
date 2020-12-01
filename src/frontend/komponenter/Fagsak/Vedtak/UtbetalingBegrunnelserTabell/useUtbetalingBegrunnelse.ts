@@ -1,5 +1,7 @@
-import { RessursStatus } from '@navikt/familie-typer';
 import { useState } from 'react';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
 import {

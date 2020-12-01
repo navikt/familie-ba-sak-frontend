@@ -1,8 +1,10 @@
 import React, { ReactNode } from 'react';
 
-import { randomUUID } from '../../../../utils/commons';
 import styled from 'styled-components';
+
 import navFarger from 'nav-frontend-core';
+
+import { randomUUID } from '../../../../utils/commons';
 
 interface IFilterknappProps {
     aktiv?: boolean;

@@ -1,5 +1,5 @@
-import familieDayjs, { Dayjs } from './familieDayjs';
 import { YearMonth } from '../typer/tid';
+import familieDayjs, { Dayjs } from './familieDayjs';
 
 export const periodeOverlapperMedValgtDato = (
     periodeFom: string,

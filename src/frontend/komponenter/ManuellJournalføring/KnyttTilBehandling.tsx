@@ -1,9 +1,12 @@
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import React, { useState } from 'react';
+
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
-import React, { useState } from 'react';
+
+import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import Pluss from '../../ikoner/Pluss';

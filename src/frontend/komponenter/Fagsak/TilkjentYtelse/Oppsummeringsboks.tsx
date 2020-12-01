@@ -1,5 +1,13 @@
 import * as React from 'react';
+
+import { Xknapp } from 'nav-frontend-ikonknapper';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+
+import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IUtbetalingsperiode, ytelsetype } from '../../../typer/beregning';
+import familieDayjs from '../../../utils/familieDayjs';
 import {
     datoformat,
     formaterBeløp,
@@ -8,11 +16,6 @@ import {
     hentAlderSomString,
     sorterFødselsdato,
 } from '../../../utils/formatter';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
-import { useTidslinje } from '../../../context/TidslinjeContext';
-import { Xknapp } from 'nav-frontend-ikonknapper';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
-import familieDayjs from '../../../utils/familieDayjs';
 
 interface IProps {
     utbetalingsperioder: IUtbetalingsperiode[];

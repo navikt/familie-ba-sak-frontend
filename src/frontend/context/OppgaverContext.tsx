@@ -1,16 +1,9 @@
+import React, { useEffect, useState } from 'react';
+
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
-import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
-import {
-    IFinnOppgaveRequest,
-    IHentOppgaveDto,
-    IOppgave,
-    OppgavetypeFilter,
-    SaksbehandlerFilter,
-} from '../typer/oppgave';
+
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -18,14 +11,24 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { useApp } from './AppContext';
+
+import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
+import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import {
     FeltSortOrder,
     initialOppgaveFelter,
     IOppgaveFelt,
     IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
+import {
+    IFinnOppgaveRequest,
+    IHentOppgaveDto,
+    IOppgave,
+    OppgavetypeFilter,
+    SaksbehandlerFilter,
+} from '../typer/oppgave';
 import familieDayjs from '../utils/familieDayjs';
+import { useApp } from './AppContext';
 
 export const oppgaveSideLimit = 15;
 

@@ -1,7 +1,8 @@
 import React, { ReactChild } from 'react';
-import { NavHashLink as NavLink } from 'react-router-hash-link';
+
 import classNames from 'classnames';
 import { useLocation } from 'react-router';
+import { NavHashLink as NavLink } from 'react-router-hash-link';
 
 interface Props {
     children: ReactChild;

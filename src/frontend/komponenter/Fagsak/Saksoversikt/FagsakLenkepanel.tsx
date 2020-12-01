@@ -1,15 +1,18 @@
-import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
-import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
+
+import classNames from 'classnames';
+
 import { LenkepanelBase } from 'nav-frontend-lenkepanel';
+import Panel from 'nav-frontend-paneler';
+import { Normaltekst } from 'nav-frontend-typografi';
+
 import {
     BehandlingStatus,
     IBehandling,
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import Panel from 'nav-frontend-paneler';
-import classNames from 'classnames';
+import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 
 interface IBehandlingLenkepanel {
