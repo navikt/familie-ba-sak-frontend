@@ -1,7 +1,7 @@
 import createUseContext from 'constate';
 import React, { useEffect } from 'react';
 
-import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from './BehandlingContext';
 import { IFagsak } from '../typer/fagsak';
@@ -122,10 +122,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const hentMuligeBrevMaler = () => {
         const brevMaler = [];
         if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            if (
-                hentStegNummer(åpenBehandling.data.steg) >= 2 &&
-                åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD
-            ) {
+            if (åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD) {
                 brevMaler.push(Brevmal.INNHENTE_OPPLYSNINGER);
             }
 

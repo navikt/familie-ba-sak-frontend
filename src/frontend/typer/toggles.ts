@@ -4,7 +4,6 @@ export interface IToggles {
 
 export enum ToggleNavn {
     visTekniskOpphør = 'familie-ba-sak.behandling.vis-teknisk-opphoer',
-    visHenleggelse = 'familie-ba-sak.behandling.aktiver-henleggelse',
 }
 
 export const alleTogglerAv = (): IToggles => {
