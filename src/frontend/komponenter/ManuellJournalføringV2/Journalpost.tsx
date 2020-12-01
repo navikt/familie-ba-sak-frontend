@@ -5,13 +5,15 @@ import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringC
 import { RessursStatus } from '@navikt/familie-typer';
 import styled from 'styled-components';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
+import CreatableSelect from 'react-select/creatable';
+import { journalpostTittelList } from './DokumentVelger';
 
 const JournalpostDiv = styled.div`
     width: 560px;
 `;
 
 const JournalpostInfo: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring, brevkode } = useManuellJournalføringV2();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const journalpost = dataForManuellJournalføring.data.journalpost;
@@ -19,7 +21,7 @@ const JournalpostInfo: React.FC = () => {
                 <div>
                     <Undertittel>{journalpost.tittel || 'Ingen tittel'}</Undertittel>
                     <Normaltekst>Tema: {journalpost.tema || 'Ingen tema'}</Normaltekst>
-                    <Normaltekst>Skjemakode: ???</Normaltekst>
+                    <Normaltekst>Skjemakode: {brevkode}</Normaltekst>
                     <Normaltekst>Kanal: {journalpost.kanal || 'Ingen kanal'}</Normaltekst>
                     <Normaltekst>
                         Mottatt:{' '}
@@ -35,7 +37,33 @@ const JournalpostInfo: React.FC = () => {
 };
 
 const EndreJournalpost: React.FC = () => {
-    return <div></div>;
+    const {
+        dataForManuellJournalføring,
+        settJournalpostTittel,
+        tilbakestilleJournalpostTittel,
+    } = useManuellJournalføringV2();
+    const journalpostTittel =
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS
+            ? dataForManuellJournalføring.data.journalpost.tittel
+            : undefined;
+    return (
+        <div>
+            <CreatableSelect
+                id="select"
+                isClearable
+                isMulti={false}
+                options={journalpostTittelList}
+                value={{ value: journalpostTittel, label: journalpostTittel }}
+                onChange={value => {
+                    if (value && 'value' in value) {
+                        settJournalpostTittel(value.value);
+                    } else {
+                        tilbakestilleJournalpostTittel();
+                    }
+                }}
+            />
+        </div>
+    );
 };
 
 export const Journalpost: React.FC = () => {

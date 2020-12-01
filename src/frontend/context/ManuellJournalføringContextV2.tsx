@@ -11,7 +11,11 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import React from 'react';
 import { useParams } from 'react-router';
-import { IDataForManuellJournalføring } from '../typer/manuell-journalføring';
+import {
+    BrevkodeMap,
+    IDataForManuellJournalføring,
+    JournalpostTittel,
+} from '../typer/manuell-journalføring';
 import { useApp } from './AppContext';
 
 const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseContext(() => {
@@ -32,6 +36,8 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         const oppdatert = JSON.parse(JSON.stringify(dataRessurs));
         settOppdatertData(oppdatert);
     };
+
+    const [brevkode, settBrevkode] = React.useState<string | undefined>('');
 
     const finnDokument = (
         ressurs: Ressurs<IDataForManuellJournalføring>,
@@ -66,6 +72,31 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             });
     };
 
+    const autoOppdateJournalpostMetadata = () => {
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
+            let funnetTittel = undefined;
+            oppdatertData.data.journalpost.dokumenter?.find(
+                dokument =>
+                    !!dokument.logiskeVedlegg.find(
+                        lv =>
+                            !!Object.values(JournalpostTittel).find(it => {
+                                if (it === lv.tittel) {
+                                    funnetTittel = it;
+                                    return true;
+                                }
+                                return false;
+                            })
+                    )
+            );
+            if (funnetTittel) {
+                settJournalpostTittel(funnetTittel);
+                settBrevkode(BrevkodeMap.get(funnetTittel) || '');
+            } else {
+                tilbakestilleJournalpostTittel();
+            }
+        }
+    };
+
     const settDokumentTittel = (dokumentTittel: string) => {
         const valgt = finnValgtDokument(oppdatertData);
         if (!valgt) {
@@ -88,6 +119,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             };
         });
         settValgtDokumentInfo(valgt);
+        autoOppdateJournalpostMetadata();
     };
 
     const erDokumentTittelEndret = (dokument: IDokumentInfo): boolean => {
@@ -145,6 +177,28 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             });
     };
 
+    const settJournalpostTittel = (tittel: string | undefined) => {
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
+            settOppdatertData({
+                ...oppdatertData,
+                data: {
+                    ...oppdatertData.data,
+                    journalpost: {
+                        ...oppdatertData.data.journalpost,
+                        tittel: tittel,
+                    },
+                },
+            });
+            settBrevkode(BrevkodeMap.get(tittel) || '');
+        }
+    };
+
+    const tilbakestilleJournalpostTittel = () => {
+        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
+            settJournalpostTittel(dataForManuellJournalføring.data.journalpost.tittel);
+        }
+    };
+
     React.useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
@@ -167,6 +221,9 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settLogiskVedlegg,
         tilbakestilleDokumentTittel,
         erDokumentTittelEndret,
+        settJournalpostTittel,
+        tilbakestilleJournalpostTittel,
+        brevkode,
     };
 });
 

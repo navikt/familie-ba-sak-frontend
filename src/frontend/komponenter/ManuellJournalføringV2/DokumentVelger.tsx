@@ -79,12 +79,14 @@ const dokumentTittelList: Array<ITittel> = Object.keys(DokumentTittel).map((_, i
     };
 });
 
-const journalpostTittelList: Array<ITittel> = Object.keys(JournalpostTittel).map((_, index) => {
-    return {
-        value: Object.values(JournalpostTittel)[index],
-        label: Object.values(JournalpostTittel)[index],
-    };
-});
+export const journalpostTittelList: Array<ITittel> = Object.keys(JournalpostTittel).map(
+    (_, index) => {
+        return {
+            value: Object.values(JournalpostTittel)[index],
+            label: Object.values(JournalpostTittel)[index],
+        };
+    }
+);
 
 const tittelList = dokumentTittelList.concat(journalpostTittelList);
 
