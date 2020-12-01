@@ -1,14 +1,17 @@
-import { RessursStatus } from '@navikt/familie-typer';
+import React, { useState } from 'react';
+
 import { Menyknapp } from 'nav-frontend-ikonknapper';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
-import React, { useState } from 'react';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { IFagsak } from '../../../../typer/fagsak';
-import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
-import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
-import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import { ToggleNavn } from '../../../../typer/toggles';
-import { useApp } from '../../../../context/AppContext';
+import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
+import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
+import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 
 interface IProps {
     fagsak: IFagsak;

@@ -1,13 +1,15 @@
 import React from 'react';
-import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
+
 import { Normaltekst } from 'nav-frontend-typografi';
+
 import {
     IUtbetalingsperiodeDetalj,
     satsBeløp,
     YtelseType,
     ytelsetype,
 } from '../../../typer/beregning';
+import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
+import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 
 interface IPersonUtbetalingProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];

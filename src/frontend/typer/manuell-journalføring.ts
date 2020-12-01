@@ -1,8 +1,9 @@
+import { IJournalpost } from '@navikt/familie-typer';
+
 import { INøkkelPar } from './common';
+import { IFagsak } from './fagsak';
 import { IOppgave } from './oppgave';
 import { IPersonInfo } from './person';
-import { IFagsak } from './fagsak';
-import { IJournalpost } from '@navikt/familie-typer';
 
 export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;

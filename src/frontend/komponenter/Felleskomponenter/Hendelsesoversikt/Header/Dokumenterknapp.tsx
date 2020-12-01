@@ -1,5 +1,6 @@
-import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
+
+import { Normaltekst } from 'nav-frontend-typografi';
 
 import IkonDokumenter from '../ikoner/IkonDokumenter';
 import Filterknapp from '../komponenter/Filterknapp';

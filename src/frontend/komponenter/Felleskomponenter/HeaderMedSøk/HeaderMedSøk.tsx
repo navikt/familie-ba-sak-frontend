@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Header } from '@navikt/familie-header';
+
 import FagsakDeltagerSøk from './FagsakDeltagerSøk';
 
 export interface IHeaderMedSøkProps {

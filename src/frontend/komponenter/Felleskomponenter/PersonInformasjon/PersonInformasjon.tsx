@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { IGrunnlagPerson, personTypeMap } from '../../../typer/person';
-import { FamilieIkonVelger } from '@navikt/familie-ikoner';
-import Clipboard from '@navikt/familie-clipboard';
+
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+
+import Clipboard from '@navikt/familie-clipboard';
+import { FamilieIkonVelger } from '@navikt/familie-ikoner';
+
+import { IGrunnlagPerson, personTypeMap } from '../../../typer/person';
 import { hentAlder, formaterPersonIdent } from '../../../utils/formatter';
 
 interface IProps {

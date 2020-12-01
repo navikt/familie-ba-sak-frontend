@@ -1,9 +1,12 @@
-import { useHistory } from 'react-router';
-import { useApp } from '../../../context/AppContext';
 import { useState } from 'react';
-import { IFagsak } from '../../../typer/fagsak';
+
+import { useHistory } from 'react-router';
+
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useApp } from '../../../context/AppContext';
 import { IBehandling } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 
 export interface IOpprettFagsakData {

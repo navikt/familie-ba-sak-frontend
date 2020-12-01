@@ -1,17 +1,19 @@
-import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
+
+import { Feilmelding } from 'nav-frontend-typografi';
+
+import { useBehandling } from '../../../../context/BehandlingContext';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
+import { IUtbetalingsperiode } from '../../../../typer/beregning';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
+import familieDayjs from '../../../../utils/familieDayjs';
 import { datoformat, isoStringToDayjs } from '../../../../utils/formatter';
+import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
-import { useBehandling } from '../../../../context/BehandlingContext';
-import familieDayjs from '../../../../utils/familieDayjs';
-import { sisteDagInneværendeMåned } from '../../../../utils/tid';
-import { IUtbetalingsperiode } from '../../../../typer/beregning';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;

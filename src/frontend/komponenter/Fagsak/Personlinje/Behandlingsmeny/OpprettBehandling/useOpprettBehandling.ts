@@ -1,10 +1,12 @@
+import { useState } from 'react';
+
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { useState } from 'react';
+
 import { useApp } from '../../../../../context/AppContext';
 import {
     BehandlingKategori,

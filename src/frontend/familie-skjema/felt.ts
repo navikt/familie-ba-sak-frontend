@@ -1,5 +1,7 @@
-import deepEqual from 'deep-equal';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+
+import deepEqual from 'deep-equal';
+
 import {
     defaultValidator,
     Felt,

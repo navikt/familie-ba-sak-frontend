@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
-import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
-import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { IBehandling } from '../../../typer/behandling';
 import { ILogg } from '../../../typer/logg';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
+import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 
 interface IProps {
     åpenBehandling: IBehandling | undefined;

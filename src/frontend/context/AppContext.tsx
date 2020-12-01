@@ -1,18 +1,21 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import createUseContext from 'constate';
 import React, { useEffect, useState } from 'react';
 
-import { håndterApiRessurs, loggFeil, preferredAxios } from '../api/axios';
-import { Ressurs, ApiRessurs, RessursStatus } from '@navikt/familie-typer';
-import { ISaksbehandler } from '@navikt/familie-typer';
-import { BehandlerRolle } from '../typer/behandling';
-import { gruppeIdTilRolle } from '../utils/behandling';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import createUseContext from 'constate';
+
 import { Knapp } from 'nav-frontend-knapper';
-import InformasjonSirkel from '../ikoner/InformasjonSirkel';
-import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
+import { Normaltekst } from 'nav-frontend-typografi';
+
+import { ISaksbehandler } from '@navikt/familie-typer';
+import { Ressurs, ApiRessurs, RessursStatus } from '@navikt/familie-typer';
+
+import { håndterApiRessurs, loggFeil, preferredAxios } from '../api/axios';
 import IkkeTilgang from '../ikoner/IkkeTilgang';
+import InformasjonSirkel from '../ikoner/InformasjonSirkel';
+import { BehandlerRolle } from '../typer/behandling';
+import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
 import { IToggles, alleTogglerAv, ToggleNavn } from '../typer/toggles';
+import { gruppeIdTilRolle } from '../utils/behandling';
 
 const FEM_MINUTTER = 300000;
 

@@ -1,11 +1,10 @@
-import { AxiosError } from 'axios';
-import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
+
+import { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
-import { useApp } from '../../../context/AppContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
+
+import { Knapp } from 'nav-frontend-knapper';
+
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -13,6 +12,11 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
+
+import { useApp } from '../../../context/AppContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';

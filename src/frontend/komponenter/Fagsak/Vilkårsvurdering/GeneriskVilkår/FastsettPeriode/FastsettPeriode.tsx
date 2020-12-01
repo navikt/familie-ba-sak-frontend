@@ -1,15 +1,19 @@
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
+
+import styled from 'styled-components';
+
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Element } from 'nav-frontend-typografi';
+
+import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
+
 import { useBehandling } from '../../../../../context/BehandlingContext';
+import { FeltState, Valideringsstatus } from '../../../../../familie-skjema/typer';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import styled from 'styled-components';
-import { Element } from 'nav-frontend-typografi';
-import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
-import { FeltState, Valideringsstatus } from '../../../../../familie-skjema/typer';
 
 interface IProps {
     hjelpetekst?: string;

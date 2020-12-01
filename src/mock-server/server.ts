@@ -1,9 +1,11 @@
-import app from './mock-routes';
+import path from 'path';
+
+import { Request, Response } from 'express';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import path from 'path';
-import { Request, Response } from 'express';
+
+import app from './mock-routes';
 
 // eslint-disable-next-line
 const config = require('../../build_n_deploy/webpack/webpack.dev');

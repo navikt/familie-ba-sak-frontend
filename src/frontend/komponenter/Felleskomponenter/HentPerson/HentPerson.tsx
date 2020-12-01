@@ -1,16 +1,20 @@
+import * as React from 'react';
+
 import classNames from 'classnames';
+
 import { Knapp } from 'nav-frontend-knapper';
 import PanelBase from 'nav-frontend-paneler';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
-import * as React from 'react';
-import { useApp } from '../../../context/AppContext';
-import { IPersonInfo } from '../../../typer/person';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { identValidator } from '../../../utils/validators';
-import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
+
 import { FamilieInput } from '@navikt/familie-form-elements';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useApp } from '../../../context/AppContext';
 import { useFelt } from '../../../familie-skjema/felt';
 import { Valideringsstatus } from '../../../familie-skjema/typer';
+import { IPersonInfo } from '../../../typer/person';
+import { identValidator } from '../../../utils/validators';
+import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
 
 interface IProps {
     erLesevisning?: boolean;

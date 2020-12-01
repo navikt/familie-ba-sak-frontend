@@ -1,25 +1,29 @@
 import React from 'react';
+
 import { useHistory } from 'react-router';
-import { IFagsak } from '../../../typer/fagsak';
-import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { IBehandling } from '../../../typer/behandling';
-import { FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
-import { useBehandling } from '../../../context/BehandlingContext';
+import styled from 'styled-components';
+
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Undertekst } from 'nav-frontend-typografi';
+
+import { FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useFelt } from '../../../familie-skjema/felt';
+import { useSkjema } from '../../../familie-skjema/skjema';
+import { FeltState } from '../../../familie-skjema/typer';
+import { feil, ok } from '../../../familie-skjema/validators';
+import { IBehandling } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
 import {
     OpplysningspliktStatus,
     opplysningspliktVisningtekst,
 } from '../../../typer/opplysningsplikt';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import Statuslinje from './Statuslinje';
 import { Resultat } from '../../../typer/vilkår';
-import styled from 'styled-components';
-import { Undertekst } from 'nav-frontend-typografi';
-import { useSkjema } from '../../../familie-skjema/skjema';
-import { FeltState } from '../../../familie-skjema/typer';
-import { useFelt } from '../../../familie-skjema/felt';
-import { feil, ok } from '../../../familie-skjema/validators';
+import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Statuslinje from './Statuslinje';
 
 interface IOpplysningspliktProps {
     fagsak: IFagsak;

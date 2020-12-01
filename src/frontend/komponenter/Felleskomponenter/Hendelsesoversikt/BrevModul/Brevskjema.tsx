@@ -1,7 +1,30 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+
+import styled from 'styled-components';
+
+import navFarger from 'nav-frontend-core';
+import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Normaltekst } from 'nav-frontend-typografi';
+
 import { FamilieSelect } from '@navikt/familie-form-elements/dist';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBrevModul } from '../../../../context/BrevModulContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import FamilieReactSelect from '../../../../familie-react-select/FamilieReactSelect';
+import { Felt } from '../../../../familie-skjema/typer';
+import { IFagsak } from '../../../../typer/fagsak';
+import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
+import { målform } from '../../../../typer/søknad';
+import { formaterPersonIdent } from '../../../../utils/formatter';
+import Knapperekke from '../../Knapperekke';
+import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
+import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
+import SkjultLegend from '../../SkjultLegend';
 import {
     Brevmal,
     brevmaler,
@@ -10,25 +33,6 @@ import {
     BrevtypeSelect,
     ISelectOptionMedBrevtekst,
 } from './typer';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { useBehandling } from '../../../../context/BehandlingContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
-import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
-import { formaterPersonIdent } from '../../../../utils/formatter';
-import Knapperekke from '../../Knapperekke';
-import { useBrevModul } from '../../../../context/BrevModulContext';
-import { IFagsak } from '../../../../typer/fagsak';
-import FamilieReactSelect from '../../../../familie-react-select/FamilieReactSelect';
-import { EtikettInfo } from 'nav-frontend-etiketter';
-import { Normaltekst } from 'nav-frontend-typografi';
-import { målform } from '../../../../typer/søknad';
-import styled from 'styled-components';
-import navFarger from 'nav-frontend-core';
-import SkjultLegend from '../../SkjultLegend';
-import { Felt } from '../../../../familie-skjema/typer';
-import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
 
 interface IProps {
     brevMaler: Brevmal[];

@@ -1,3 +1,13 @@
+import * as React from 'react';
+
+import { AxiosError } from 'axios';
+import { useHistory } from 'react-router';
+import styled from 'styled-components';
+
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
+import { Normaltekst, Feilmelding } from 'nav-frontend-typografi';
+
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -6,11 +16,8 @@ import {
     RessursStatus,
     byggHenterRessurs,
 } from '@navikt/familie-typer';
-import { AxiosError } from 'axios';
-import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst, Feilmelding } from 'nav-frontend-typografi';
-import * as React from 'react';
-import { useHistory } from 'react-router';
+
+import { BehandlerRolle } from '../../../../../node_dist/frontend/typer/behandling';
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -24,15 +31,12 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { IRestUtbetalingBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
-import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import { BehandlerRolle } from '../../../../../node_dist/frontend/typer/behandling';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { IRestUtbetalingBegrunnelse } from '../../../typer/vedtak';
-import styled from 'styled-components';
 
 interface IVedtakProps {
     fagsak: IFagsak;

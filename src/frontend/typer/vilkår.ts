@@ -1,8 +1,8 @@
+import { FeltState } from '../familie-skjema/typer';
+import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
-import { FeltState } from '../familie-skjema/typer';
-import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 
 export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',

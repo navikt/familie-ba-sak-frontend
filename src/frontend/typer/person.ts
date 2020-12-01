@@ -1,4 +1,5 @@
 import { kjønnType } from '@navikt/familie-typer';
+
 import { Målform } from './søknad';
 
 // Enum

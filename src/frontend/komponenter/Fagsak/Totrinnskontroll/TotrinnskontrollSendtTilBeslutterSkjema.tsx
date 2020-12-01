@@ -1,8 +1,10 @@
-import { Normaltekst, Systemtittel, UndertekstBold } from 'nav-frontend-typografi';
 import * as React from 'react';
+
+import { Normaltekst, Systemtittel, UndertekstBold } from 'nav-frontend-typografi';
+
 import GrønnHake from '../../../ikoner/GrønnHake';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { IBehandling } from '../../../typer/behandling';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 
 interface IProps {
     åpenBehandling: IBehandling | undefined;

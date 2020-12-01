@@ -1,8 +1,11 @@
-import { FamilieSelect } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
+import React from 'react';
+
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Feilmelding } from 'nav-frontend-typografi';
-import React from 'react';
+
+import { FamilieSelect } from '@navikt/familie-form-elements';
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Slett from '../../../../ikoner/Slett';
 import { IPeriode } from '../../../../typer/periode';

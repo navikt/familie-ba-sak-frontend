@@ -1,13 +1,16 @@
-import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
-import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import React, { useState } from 'react';
+
 import KnappBase, { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
+
+import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import { behandendeEnheter, IArbeidsfordelingsenhet } from '../../../../../typer/enhet';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
-import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
 
 interface IProps {
     onListElementClick: () => void;

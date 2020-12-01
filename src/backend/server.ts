@@ -1,5 +1,13 @@
 import './konfigurerApp';
 
+import path from 'path';
+
+import bodyParser from 'body-parser';
+import expressStaticGzip from 'express-static-gzip';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+
 import backend, {
     IApp,
     ensureAuthenticated,
@@ -7,12 +15,6 @@ import backend, {
     info,
     envVar,
 } from '@navikt/familie-backend';
-import bodyParser from 'body-parser';
-import path from 'path';
-import webpack from 'webpack';
-import expressStaticGzip from 'express-static-gzip';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';

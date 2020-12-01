@@ -1,10 +1,12 @@
 import React from 'react';
+
 import ReactSelect, { NamedProps, StylesConfig } from 'react-select';
 import Creatable from 'react-select/creatable';
-import { Label } from 'nav-frontend-skjema';
 import styled from 'styled-components';
-import { Feilmelding } from 'nav-frontend-typografi';
+
 import navFarger from 'nav-frontend-core';
+import { Label } from 'nav-frontend-skjema';
+import { Feilmelding } from 'nav-frontend-typografi';
 
 interface IProps extends NamedProps {
     erLesevisning: boolean;

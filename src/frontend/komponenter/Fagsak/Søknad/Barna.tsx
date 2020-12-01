@@ -1,7 +1,12 @@
-import { RessursStatus } from '@navikt/familie-typer';
+import * as React from 'react';
+
+import styled from 'styled-components';
+
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { Element, Systemtittel } from 'nav-frontend-typografi';
-import * as React from 'react';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import RødError from '../../../ikoner/RødError';
@@ -11,11 +16,10 @@ import {
     IFamilierelasjonMaskert,
 } from '../../../typer/person';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
+import familieDayjs from '../../../utils/familieDayjs';
 import { datoformat } from '../../../utils/formatter';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import LeggTilBarn from './LeggTilBarn';
-import styled from 'styled-components';
-import familieDayjs from '../../../utils/familieDayjs';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;

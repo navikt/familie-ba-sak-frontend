@@ -1,12 +1,14 @@
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import React from 'react';
+
 import { Knapp } from 'nav-frontend-knapper';
 import { Select } from 'nav-frontend-skjema';
-import React from 'react';
-import { useOppgaver } from '../../context/OppgaverContext';
 
+import { FamilieDatovelger } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
-import { datoformatNorsk } from '../../utils/formatter';
+
+import { useOppgaver } from '../../context/OppgaverContext';
 import { IPar } from '../../typer/common';
+import { datoformatNorsk } from '../../utils/formatter';
 import { IOppgaveFelt } from './oppgavefelter';
 
 const FilterSkjema: React.FunctionComponent = () => {

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -5,7 +7,7 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { useEffect, useState } from 'react';
+
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';

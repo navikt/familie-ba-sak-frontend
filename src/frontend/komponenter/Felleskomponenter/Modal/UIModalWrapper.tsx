@@ -1,8 +1,11 @@
+import * as React from 'react';
+
+import classNames from 'classnames';
+
 import Modal from 'nav-frontend-modal';
 import { Undertittel } from 'nav-frontend-typografi';
-import * as React from 'react';
+
 import { useApp, IModal } from '../../../context/AppContext';
-import classNames = require('classnames');
 
 interface IProps {
     modal?: IModal;

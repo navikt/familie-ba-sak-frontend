@@ -1,5 +1,7 @@
-import constate from 'constate';
 import * as React from 'react';
+
+import constate from 'constate';
+
 import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
 import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';

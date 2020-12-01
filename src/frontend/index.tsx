@@ -2,11 +2,11 @@ import './index.less';
 import 'nav-frontend-tabell-style';
 
 import * as React from 'react';
+
+import { init } from '@sentry/browser';
 import axe from 'react-axe';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-
-import { init } from '@sentry/browser';
 
 import App from './komponenter/App';
 

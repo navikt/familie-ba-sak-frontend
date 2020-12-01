@@ -1,8 +1,10 @@
 import React from 'react';
+
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
-import FamilieChevron from '../../../ikoner/FamilieChevron';
 import { Flatknapp } from 'nav-frontend-knapper';
+
 import { NavigeringsRetning, useTidslinje } from '../../../context/TidslinjeContext';
+import FamilieChevron from '../../../ikoner/FamilieChevron';
 
 const TidslinjeNavigering: React.FC = () => {
     const { naviger } = useTidslinje();

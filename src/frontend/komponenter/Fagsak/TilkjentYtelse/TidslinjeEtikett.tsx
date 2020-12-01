@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
-import { TidslinjeVindu, useTidslinje } from '../../../context/TidslinjeContext';
 import classNames from 'classnames';
+
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+
+import { TidslinjeVindu, useTidslinje } from '../../../context/TidslinjeContext';
 
 interface IEtikettProp {
     etikett: Skalaetikett;

@@ -1,6 +1,8 @@
-import createUseContext from 'constate';
 import React, { useEffect, useState } from 'react';
-import { BehandlerRolle, BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
+
+import createUseContext from 'constate';
+import { useHistory } from 'react-router';
+
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -9,11 +11,7 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { tilFeilside } from '../utils/commons';
-import { hentBehandlingPåFagsak } from '../utils/fagsak';
-import { useApp } from './AppContext';
-import { useFagsakRessurser } from './FagsakContext';
-import { useHistory } from 'react-router';
+
 import {
     erViPåUdefinertFagsakSide,
     erViPåUlovligSteg,
@@ -21,6 +19,11 @@ import {
     ISide,
     sider,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
+import { BehandlerRolle, BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
+import { tilFeilside } from '../utils/commons';
+import { hentBehandlingPåFagsak } from '../utils/fagsak';
+import { useApp } from './AppContext';
+import { useFagsakRessurser } from './FagsakContext';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
