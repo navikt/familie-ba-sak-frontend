@@ -19,7 +19,7 @@ const HSplit = styled.div`
 `;
 
 const DeltagerDiv = styled.div`
-    width: 100%;
+    width: 560px;
     margin-top: 20px;
 `;
 

@@ -23,11 +23,10 @@ const PageSplit = styled.div`
 
 const JournalpostSkjema = styled(Skjemasteg)`
     min-width: 640px;
-    padding: 40px;
+    padding-left: 40px;
 `;
 
 const Bakgrunn = styled.div`
-    margin-left: 40px;
     width: 100%;
     height: 92vh;
 `;

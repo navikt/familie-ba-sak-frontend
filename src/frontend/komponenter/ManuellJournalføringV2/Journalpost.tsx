@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 
 const JournalpostDiv = styled.div`
-    width: 100%;
+    width: 560px;
 `;
 
 const JournalpostInfo: React.FC = () => {
@@ -34,11 +34,15 @@ const JournalpostInfo: React.FC = () => {
     }
 };
 
+const EndreJournalpost: React.FC = () => {
+    return <div></div>;
+};
+
 export const Journalpost: React.FC = () => {
     return (
         <JournalpostDiv>
             <Ekspanderbartpanel tittel={<JournalpostInfo />}>
-                Panelet vil da ekspandere og vise innholdet.
+                <EndreJournalpost />
             </Ekspanderbartpanel>
         </JournalpostDiv>
     );
