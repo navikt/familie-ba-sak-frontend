@@ -29,6 +29,7 @@ import navFarger from 'nav-frontend-core';
 import SkjultLegend from '../../SkjultLegend';
 import { Felt } from '../../../../familie-skjema/typer';
 import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
+import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 
 interface IProps {
     brevMaler: Brevmal[];
@@ -201,8 +202,12 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (åpenBehandling.status === RessursStatus.SUKSESS) {
+                            const harRegistrertSøknad =
+                                hentStegNummer(åpenBehandling.data.steg) >
+                                hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
                             settNavigerTilOpplysningsplikt(
-                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
+                                harRegistrertSøknad &&
+                                    skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
                             );
                             onSubmit(
                                 {
