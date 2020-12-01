@@ -3,7 +3,7 @@ import { IUtbetalingsperiode, ytelsetype } from '../../../typer/beregning';
 import {
     datoformat,
     formaterBeløp,
-    formaterIsoDato,
+    formaterDato,
     formaterPersonIdent,
     hentAlderSomString,
     sorterFødselsdato,
@@ -12,6 +12,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { Xknapp } from 'nav-frontend-ikonknapper';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import familieDayjs from '../../../utils/familieDayjs';
 
 interface IProps {
     utbetalingsperioder: IUtbetalingsperiode[];
@@ -29,7 +30,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const { settAktivEtikett } = useTidslinje();
 
     const månedNavnOgÅr = () => {
-        const navn = formaterIsoDato(aktivEtikett.dato.toDateString(), datoformat.MÅNED_NAVN);
+        const navn = formaterDato(familieDayjs(aktivEtikett.dato), datoformat.MÅNED_NAVN);
         return navn[0].toUpperCase() + navn.substr(1);
     };
 

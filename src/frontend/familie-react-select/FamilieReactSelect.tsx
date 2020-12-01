@@ -10,9 +10,9 @@ interface IProps extends NamedProps {
     erLesevisning: boolean;
     creatable?: boolean;
     label: string | React.ReactNode;
-    lesevisningVerdi?: string;
     feil?: string;
     propSelectStyles?: StylesConfig;
+    //TODO: legg inn lesevisningsverdi når denne dras ut i felles
 }
 
 const Container = styled.div`
@@ -76,7 +76,6 @@ const FamilieReactSelect: React.FC<IProps> = ({
     erLesevisning,
     creatable = false,
     label,
-    lesevisningVerdi,
     value,
     feil,
     propSelectStyles,
