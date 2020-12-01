@@ -5,10 +5,11 @@ import styled, { ThemeProvider } from 'styled-components';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import CreatableSelect from 'react-select/creatable';
-import { HoyreChevron, NedChevron, OppChevron } from 'nav-frontend-chevron';
 import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
 import { Label } from 'nav-frontend-skjema';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
+import Lenkepanel from 'nav-frontend-lenkepanel';
+import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 
 const DokumentPanel = styled(Panel)`
     margin-top: 20px;
@@ -115,25 +116,11 @@ const EndreDivAktiv = styled(EndreDiv)`
 const EndreKnapp: React.FC<IEndreKnappProps> = ({ status, onClick }) => {
     switch (status) {
         case EndreKnappStatus.UVALGT:
-            return (
-                <EndreDivVanlig onClick={onClick}>
-                    <HoyreChevron />
-                </EndreDivVanlig>
-            );
+            return <EndreDivVanlig onClick={onClick}></EndreDivVanlig>;
         case EndreKnappStatus.VALGT:
-            return (
-                <EndreDivAktiv onClick={onClick}>
-                    Endre
-                    <NedChevron />
-                </EndreDivAktiv>
-            );
+            return <EndreDivAktiv onClick={onClick}></EndreDivAktiv>;
         case EndreKnappStatus.UTVIDET:
-            return (
-                <EndreDivAktiv onClick={onClick}>
-                    Lukk
-                    <OppChevron />
-                </EndreDivAktiv>
-            );
+            return <EndreDivAktiv onClick={onClick}></EndreDivAktiv>;
     }
 };
 
@@ -271,27 +258,74 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({
 
     return (
         <ThemeProvider theme={theme}>
-            <DokumentPanel
-                border
-                onClick={() => {
-                    if (!valgt) {
-                        hentDokumentData(journalpost.journalpostId, dokument.dokumentInfoId || '0');
-                        settValgtDokumentId(dokument.dokumentInfoId);
-                        settUtvidet(false);
-                    }
-                }}
-            >
-                <DokumentInfoStripe
-                    dokument={dokument}
-                    journalpost={journalpost}
-                    valgt={valgt}
-                    utvidet={valgt && utvidet}
+            {!valgt && (
+                <Lenkepanel
+                    border
+                    tittelProps="normaltekst"
+                    href="#"
                     onClick={() => {
-                        settUtvidet(!utvidet);
+                        if (!valgt) {
+                            hentDokumentData(
+                                journalpost.journalpostId,
+                                dokument.dokumentInfoId || '0'
+                            );
+                            settValgtDokumentId(dokument.dokumentInfoId);
+                            settUtvidet(false);
+                        }
                     }}
-                ></DokumentInfoStripe>
-                {valgt && utvidet && <LogiskVedleggPanel tittel={dokument.tittel || 'No Tittle'} />}
-            </DokumentPanel>
+                >
+                    <DokumentInfoStripe
+                        dokument={dokument}
+                        journalpost={journalpost}
+                        valgt={valgt}
+                        utvidet={valgt && utvidet}
+                        onClick={}
+                    ></DokumentInfoStripe>
+                </Lenkepanel>
+            )}
+            {valgt && (
+                <Ekspanderbartpanel
+                    tittel={
+                        <DokumentInfoStripe
+                            dokument={dokument}
+                            journalpost={journalpost}
+                            valgt={valgt}
+                            utvidet={valgt && utvidet}
+                            onClick={}
+                        ></DokumentInfoStripe>
+                    }
+                >
+                    <div>jasdkajsld</div>
+                </Ekspanderbartpanel>
+            )}
+            {false && (
+                <DokumentPanel
+                    border
+                    onClick={() => {
+                        if (!valgt) {
+                            hentDokumentData(
+                                journalpost.journalpostId,
+                                dokument.dokumentInfoId || '0'
+                            );
+                            settValgtDokumentId(dokument.dokumentInfoId);
+                            settUtvidet(false);
+                        }
+                    }}
+                >
+                    <DokumentInfoStripe
+                        dokument={dokument}
+                        journalpost={journalpost}
+                        valgt={valgt}
+                        utvidet={valgt && utvidet}
+                        onClick={() => {
+                            settUtvidet(!utvidet);
+                        }}
+                    ></DokumentInfoStripe>
+                    {valgt && utvidet && (
+                        <LogiskVedleggPanel tittel={dokument.tittel || 'No Tittle'} />
+                    )}
+                </DokumentPanel>
+            )}
         </ThemeProvider>
     );
 };
