@@ -13,7 +13,7 @@ import {
     IBrevData,
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
@@ -124,10 +124,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const hentMuligeBrevMaler = () => {
         const brevMaler = [];
         if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            if (
-                hentStegNummer(åpenBehandling.data.steg) >= 2 &&
-                åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD
-            ) {
+            if (åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD) {
                 brevMaler.push(Brevmal.INNHENTE_OPPLYSNINGER);
             }
 

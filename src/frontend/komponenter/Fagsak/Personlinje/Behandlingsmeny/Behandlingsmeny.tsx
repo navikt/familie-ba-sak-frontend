@@ -5,10 +5,8 @@ import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { IFagsak } from '../../../../typer/fagsak';
-import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
@@ -18,7 +16,6 @@ interface IProps {
 }
 
 const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
-    const { toggles } = useApp();
     const { åpenBehandling } = useBehandling();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
 
@@ -64,16 +61,15 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             fagsak={fagsak}
                         />
                     </li>
-                    {toggles[ToggleNavn.visHenleggelse] &&
-                        åpenBehandling.status === RessursStatus.SUKSESS && (
-                            <li>
-                                <HenleggBehandling
-                                    onListElementClick={() => settAnker(undefined)}
-                                    fagsak={fagsak}
-                                    behandling={åpenBehandling.data}
-                                />
-                            </li>
-                        )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS && (
+                        <li>
+                            <HenleggBehandling
+                                onListElementClick={() => settAnker(undefined)}
+                                fagsak={fagsak}
+                                behandling={åpenBehandling.data}
+                            />
+                        </li>
+                    )}
                 </ul>
             </Popover>
         </>

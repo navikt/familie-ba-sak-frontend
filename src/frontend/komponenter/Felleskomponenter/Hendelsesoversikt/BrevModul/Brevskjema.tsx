@@ -17,6 +17,7 @@ import { useBrevModul } from '../../../../context/BrevModulContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import FamilieReactSelect from '../../../../familie-react-select/FamilieReactSelect';
 import { Felt } from '../../../../familie-skjema/typer';
+import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
@@ -205,8 +206,12 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                     disabled={skjemaErLåst}
                     onClick={() => {
                         if (åpenBehandling.status === RessursStatus.SUKSESS) {
+                            const harRegistrertSøknad =
+                                hentStegNummer(åpenBehandling.data.steg) >
+                                hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
                             settNavigerTilOpplysningsplikt(
-                                skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
+                                harRegistrertSøknad &&
+                                    skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
                             );
                             onSubmit(
                                 {

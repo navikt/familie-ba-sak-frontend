@@ -7,10 +7,11 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IUtbetalingsperiode, ytelsetype } from '../../../typer/beregning';
+import familieDayjs from '../../../utils/familieDayjs';
 import {
     datoformat,
     formaterBeløp,
-    formaterIsoDato,
+    formaterDato,
     formaterPersonIdent,
     hentAlderSomString,
     sorterFødselsdato,
@@ -32,7 +33,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const { settAktivEtikett } = useTidslinje();
 
     const månedNavnOgÅr = () => {
-        const navn = formaterIsoDato(aktivEtikett.dato.toDateString(), datoformat.MÅNED_NAVN);
+        const navn = formaterDato(familieDayjs(aktivEtikett.dato), datoformat.MÅNED_NAVN);
         return navn[0].toUpperCase() + navn.substr(1);
     };
 
