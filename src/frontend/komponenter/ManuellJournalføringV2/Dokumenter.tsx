@@ -5,7 +5,7 @@ import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringC
 import { DokumentVelger } from './DokumentVelger';
 
 export const Dokumenter: React.FC = () => {
-    const { dataForManuellJournalføring, valgtDokumentId } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring } = useManuellJournalføringV2();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
@@ -18,15 +18,7 @@ export const Dokumenter: React.FC = () => {
                         ) : (
                             dataForManuellJournalføring.data.journalpost.dokumenter?.map(
                                 (dokument, index) => (
-                                    <div key={index}>
-                                        <DokumentVelger
-                                            dokument={dokument}
-                                            journalpost={
-                                                dataForManuellJournalføring.data.journalpost
-                                            }
-                                            valgt={dokument.dokumentInfoId === valgtDokumentId}
-                                        />
-                                    </div>
+                                    <DokumentVelger dokument={dokument} key={index} />
                                 )
                             )
                         )

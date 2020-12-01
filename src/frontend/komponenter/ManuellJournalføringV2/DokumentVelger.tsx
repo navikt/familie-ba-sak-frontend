@@ -1,14 +1,16 @@
-import { IDokumentInfo, IJournalpost } from '@navikt/familie-typer';
-import React, { useState } from 'react';
+import navFarger from 'nav-frontend-core';
+import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
+import Lenkepanel from 'nav-frontend-lenkepanel';
+import { Label } from 'nav-frontend-skjema';
+import React from 'react';
+import CreatableSelect from 'react-select/creatable';
 import styled, { ThemeProvider } from 'styled-components';
+
+import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
+
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
-import CreatableSelect from 'react-select/creatable';
 import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
-import { Label } from 'nav-frontend-skjema';
-import Lenkepanel from 'nav-frontend-lenkepanel';
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import navFarger from 'nav-frontend-core';
 
 const DokumentPanel = styled(Lenkepanel)`
     margin-top: 20px;
@@ -40,19 +42,14 @@ const DokumentInfoStripeContainer = styled.div`
 
 interface IDokumentInfoStripeProps {
     dokument: IDokumentInfo;
-    journalpost: IJournalpost;
-    valgt: boolean;
-    utvidet: boolean;
 }
 
 interface IDokumentVelgerProps {
     dokument: IDokumentInfo;
-    journalpost: IJournalpost;
-    valgt: boolean;
 }
 
 const DokumentTittelDiv = styled.td`
-    font-size: 1rem;
+    font-size: 1.2rem;
 `;
 
 const StyledDokumentIkon = styled(DokumentIkon)`
@@ -151,13 +148,18 @@ const LogiskVedleggPanel: React.FC = () => {
     );
 };
 
-export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({
-    dokument,
-    journalpost,
-    valgt,
-}) => {
-    const { hentDokumentData, settValgtDokumentId } = useManuellJournalføringV2();
-    const [utvidet, settUtvidet] = useState<boolean>(false);
+export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => {
+    const {
+        dataForManuellJournalføring,
+        hentDokumentData,
+        valgtDokumentId,
+        settValgtDokumentId,
+    } = useManuellJournalføringV2();
+    const valgt = dokument.dokumentInfoId === valgtDokumentId;
+    const journalpostId =
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS
+            ? dataForManuellJournalføring.data.journalpost.journalpostId
+            : undefined;
     const theme = {
         borderWidth: valgt ? '3px' : '1px',
         borderColor: valgt ? navFarger.fokusFarge : navFarger.navMorkGra,
@@ -166,43 +168,26 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({
 
     return (
         <ThemeProvider theme={theme}>
-            {!valgt && (
+            {valgt ? (
+                <DokumentPanelValgt
+                    tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+                >
+                    <LogiskVedleggPanel />
+                </DokumentPanelValgt>
+            ) : (
                 <DokumentPanel
                     border
                     tittelProps="normaltekst"
                     href="#"
                     onClick={() => {
-                        if (!valgt) {
-                            hentDokumentData(
-                                journalpost.journalpostId,
-                                dokument.dokumentInfoId || '0'
-                            );
+                        if (!valgt && journalpostId && dokument.dokumentInfoId) {
+                            hentDokumentData(journalpostId, dokument.dokumentInfoId);
                             settValgtDokumentId(dokument.dokumentInfoId);
-                            settUtvidet(false);
                         }
                     }}
                 >
-                    <DokumentInfoStripe
-                        dokument={dokument}
-                        journalpost={journalpost}
-                        valgt={valgt}
-                        utvidet={valgt && utvidet}
-                    ></DokumentInfoStripe>
+                    <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
                 </DokumentPanel>
-            )}
-            {valgt && (
-                <DokumentPanelValgt
-                    tittel={
-                        <DokumentInfoStripe
-                            dokument={dokument}
-                            journalpost={journalpost}
-                            valgt={valgt}
-                            utvidet={valgt && utvidet}
-                        ></DokumentInfoStripe>
-                    }
-                >
-                    <LogiskVedleggPanel />
-                </DokumentPanelValgt>
             )}
         </ThemeProvider>
     );
