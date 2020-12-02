@@ -88,7 +88,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
     };
 
     return (
-        <div>
+        <>
             {skalViseSkjema &&
                 (kanBeslutte ? (
                     <Totrinnskontrollskjema
@@ -130,7 +130,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                     <TotrinnskontrollModalInnhold beslutning={modalVerdi.beslutning} />
                 </UIModalWrapper>
             )}
-        </div>
+        </>
     );
 };
 
