@@ -224,7 +224,10 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                     settDokumentData(
                         byggDataRessurs(`data:application/pdf;base64,${hentetDokumentData.data}`)
                     );
-                } else if (hentetDokumentData.status === RessursStatus.FEILET) {
+                } else if (
+                    hentetDokumentData.status === RessursStatus.FEILET ||
+                    hentetDokumentData.status === RessursStatus.FUNKSJONELL_FEIL
+                ) {
                     settDokumentData(hentetDokumentData);
                 } else {
                     settDokumentData(
