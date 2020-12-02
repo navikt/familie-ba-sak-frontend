@@ -216,9 +216,8 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         settVisDokument(true);
         axiosRequest<string, void>({
             method: 'GET',
-            //TODO: remove mock
             url: `/familie-ba-sak/api/journalpost/${journalPostId}/hent/${dokumentInfoId}`,
-            påvirkerSystemLaster: true,
+            påvirkerSystemLaster: false,
         })
             .then((hentetDokumentData: Ressurs<string>) => {
                 if (hentetDokumentData.status === RessursStatus.SUKSESS) {
