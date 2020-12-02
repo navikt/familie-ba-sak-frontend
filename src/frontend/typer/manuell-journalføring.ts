@@ -74,13 +74,13 @@ export enum JournalpostTittel {
     TILLEGGSSKJEMA_VED_KRAV_OM_UTBETALING = 'Tilleggsskjema ved krav om utbetaling av barnetrygd og/eller kontantstøtte på grunnlag av regler om eksport etter EØS-avtalen',
 }
 
-export const BrevkodeMap = new Map([
-    [JournalpostTittel.SØKNAD_OM_BARNETRYGD_ORDINÆR, 'NAV 33-00.07'],
-    [JournalpostTittel.SØKNAD_OM_UTVIDET_BARNETRYGD, 'NAV 33-00.09'],
-    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_BARNETRYGD_ORDINÆR, 'NAV 33-00.07'],
-    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_UTVIDET_BARNETRYGD, 'NAV 33-00.09'],
-    [JournalpostTittel.TILLEGGSSKJEMA_VED_KRAV_OM_UTBETALING, 'NAV 34-00.15'],
-]);
+export const BrevkodeMap: Record<JournalpostTittel, string> = {
+    [JournalpostTittel.SØKNAD_OM_BARNETRYGD_ORDINÆR]: 'NAV 33-00.07',
+    [JournalpostTittel.SØKNAD_OM_UTVIDET_BARNETRYGD]: 'NAV 33-00.09',
+    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_BARNETRYGD_ORDINÆR]: 'NAVe 33-00.07',
+    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_UTVIDET_BARNETRYGD]: 'NAVe 33-00.09',
+    [JournalpostTittel.TILLEGGSSKJEMA_VED_KRAV_OM_UTBETALING]: 'NAV 34-00.15',
+};
 
 export enum DokumentTittel {
     AVTALE_OM_DELT_BOSTED = 'Avtale om delt bosted',

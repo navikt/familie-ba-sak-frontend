@@ -57,7 +57,7 @@ const DokumentInfo: React.FC<IDokumentInfoProps> = ({ dokument, journalpost }) =
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Motatt: {journalpost.datoMottatt}</td>
+                        <td>Mottatt: {journalpost.datoMottatt}</td>
                     </tr>
                     <tr>
                         <td>{dokument.brevkode || 'Ukjent'}</td>

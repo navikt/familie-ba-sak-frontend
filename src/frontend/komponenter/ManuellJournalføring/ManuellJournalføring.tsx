@@ -11,7 +11,12 @@ import {
     useManuellJournalføring,
 } from '../../context/ManuellJournalføringContext';
 
-import { Dokumenttype, dokumenttyper, ILogiskVedlegg } from '../../typer/manuell-journalføring';
+import {
+    BrevkodeMap,
+    Dokumenttype,
+    dokumenttyper,
+    ILogiskVedlegg,
+} from '../../typer/manuell-journalføring';
 import { IPersonInfo } from '../../typer/person';
 import { Journalstatus, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { randomUUID } from '../../utils/commons';
@@ -177,6 +182,7 @@ const ManuellJournalføringContent: React.FC = () => {
                                             tittel: '',
                                         },
                                     ]);
+                                    console.log(BrevkodeMap);
                                 }}
                             >
                                 Legg til innhold
