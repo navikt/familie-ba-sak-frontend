@@ -57,6 +57,7 @@ const ManuellJournalføringContent: React.FC = () => {
         validerSkjema,
         visDokument,
         dokumentData,
+        hentValgtDokument,
     } = useManuellJournalføring();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
@@ -68,6 +69,8 @@ const ManuellJournalføringContent: React.FC = () => {
     const behandlinger =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
         dataForManuellJournalføring.data.fagsak?.behandlinger;
+
+    const valgtDokument = hentValgtDokument();
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
@@ -243,7 +246,7 @@ const ManuellJournalføringContent: React.FC = () => {
                     {visDokument && dokumentData.status === RessursStatus.SUKSESS && (
                         <Bakgrunn>
                             <iframe
-                                title={'dokument'}
+                                title={valgtDokument ? valgtDokument.tittel : 'Dokumenttittel'}
                                 src={dokumentData.data}
                                 width={'100%'}
                                 height={'100%'}

@@ -239,6 +239,13 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                 settDokumentData(byggFeiletRessurs('Ukjent feil ved henting av dokument'));
             });
     };
+
+    const hentValgtDokument = () =>
+        valgtDokumentId && dataForManuellJournalføring.status === RessursStatus.SUKSESS
+            ? dataForManuellJournalføring.data.journalpost.dokumenter?.find(
+                  it => it.dokumentInfoId === valgtDokumentId
+              )
+            : undefined;
     /*
      *****************************************************************************
      */
@@ -275,6 +282,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         dokumentData,
         visDokument,
         hentDokumentData,
+        hentValgtDokument,
         /*
          *****************************************************************************
          */
