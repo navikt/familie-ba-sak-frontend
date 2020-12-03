@@ -22,7 +22,6 @@ const DokumentPanel = styled(Panel)`
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
-    justify-content: left;
     align-items: flex-start;
     width: 100%;
     height: 100%;
