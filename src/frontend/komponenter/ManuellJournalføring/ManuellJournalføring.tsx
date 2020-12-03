@@ -30,7 +30,6 @@ import { useAmplitude } from '../../utils/amplitude';
 
 const Sidesplitt = styled.div`
     display: flex;
-    flex-direction: row;
 `;
 
 const PdfFrame = styled.iframe`
