@@ -28,7 +28,7 @@ import { Dokumenter } from './Dokumenter';
 import styled from 'styled-components';
 import { useAmplitude } from '../../utils/amplitude';
 
-const PageSplit = styled.div`
+const Sidesplitt = styled.div`
     display: flex;
     flex-direction: row;
 `;
@@ -76,7 +76,7 @@ const ManuellJournalføringContent: React.FC = () => {
         case RessursStatus.SUKSESS:
             return dataForManuellJournalføring.data.journalpost.journalstatus ===
                 Journalstatus.MOTTATT ? (
-                <PageSplit>
+                <Sidesplitt>
                     <Skjemasteg
                         className={'journalføring'}
                         tittel={'Registrere journalpost: Barnetrygd'}
@@ -251,7 +251,7 @@ const ManuellJournalføringContent: React.FC = () => {
                             height={'100%'}
                         />
                     )}
-                </PageSplit>
+                </Sidesplitt>
             ) : (
                 <AlertStripeAdvarsel
                     children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 const DokumentPanel = styled(Panel)`
     margin-top: 20px;
@@ -42,28 +43,12 @@ interface IDokumentVelgerProps {
     valgt: boolean;
 }
 
-const DokumentTittelDiv = styled.td`
-    font-weight: bold;
-`;
-
 const DokumentInfo: React.FC<IDokumentInfoProps> = ({ dokument, journalpost }) => {
     return (
         <div>
-            <table>
-                <thead>
-                    <tr>
-                        <DokumentTittelDiv>{dokument.tittel || 'Ukjent'}</DokumentTittelDiv>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Mottatt: {journalpost.datoMottatt}</td>
-                    </tr>
-                    <tr>
-                        <td>{dokument.brevkode || 'Ukjent'}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <Undertittel>{dokument.tittel || 'Ukjent'}</Undertittel>
+            <Normaltekst>Mottatt: {journalpost.datoMottatt}</Normaltekst>
+            <Normaltekst>{dokument.brevkode || 'Ukjent'}</Normaltekst>
         </div>
     );
 };
@@ -125,7 +110,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({
                     onClick={() => {
                         settUtvidet(!utvidet);
                     }}
-                ></DokumentInfoStripe>
+                />
             </DokumentPanel>
         </ThemeProvider>
     );
