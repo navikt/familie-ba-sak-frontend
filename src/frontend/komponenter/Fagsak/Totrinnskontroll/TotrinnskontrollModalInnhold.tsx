@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
+
 import IkkeOppfylt from '../../../ikoner/IkkeOppfylt';
 import Oppfylt from '../../../ikoner/Oppfylt';
+import { TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 
 interface IProps {
     beslutning: TotrinnskontrollBeslutning;

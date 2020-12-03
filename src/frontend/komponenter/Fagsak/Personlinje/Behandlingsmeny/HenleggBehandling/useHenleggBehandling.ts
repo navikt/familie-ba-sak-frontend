@@ -1,12 +1,14 @@
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useState } from 'react';
+
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
-import { HenleggelseÅrsak } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
 import { useFelt } from '../../../../../familie-skjema/felt';
 import { useSkjema } from '../../../../../familie-skjema/skjema';
 import { FeltState } from '../../../../../familie-skjema/typer';
 import { feil, ok } from '../../../../../familie-skjema/validators';
+import { HenleggelseÅrsak } from '../../../../../typer/behandling';
+import { IFagsak } from '../../../../../typer/fagsak';
 import {
     Brevmal,
     IBrevData,

@@ -1,22 +1,24 @@
-import createUseContext from 'constate';
 import React, { useEffect } from 'react';
 
-import { Behandlingstype, BehandlingÅrsak, hentStegNummer } from '../typer/behandling';
+import createUseContext from 'constate';
+
 import { RessursStatus } from '@navikt/familie-typer';
-import { useBehandling } from './BehandlingContext';
-import { IFagsak } from '../typer/fagsak';
+
+import { useFelt } from '../familie-skjema/felt';
+import { useSkjema } from '../familie-skjema/skjema';
+import { FeltState, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
+import { feil, ok } from '../familie-skjema/validators';
 import {
     Brevmal,
     IBrevData,
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { useSkjema } from '../familie-skjema/skjema';
+import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import { IFagsak } from '../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
-import { useFelt } from '../familie-skjema/felt';
-import { FeltState, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
-import { feil, ok } from '../familie-skjema/validators';
 import { fjernWhitespace } from '../utils/commons';
+import { useBehandling } from './BehandlingContext';
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
@@ -122,10 +124,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const hentMuligeBrevMaler = () => {
         const brevMaler = [];
         if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            if (
-                hentStegNummer(åpenBehandling.data.steg) >= 2 &&
-                åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD
-            ) {
+            if (åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD) {
                 brevMaler.push(Brevmal.INNHENTE_OPPLYSNINGER);
             }
 

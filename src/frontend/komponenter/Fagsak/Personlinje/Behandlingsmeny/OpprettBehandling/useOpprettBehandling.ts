@@ -1,10 +1,12 @@
+import { useState } from 'react';
+
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { useState } from 'react';
+
 import { useApp } from '../../../../../context/AppContext';
 import {
     BehandlingKategori,
@@ -75,17 +77,53 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         }
     };
 
+    const visÅrsakerSelect = () => selectedBehandlingstype === Behandlingstype.REVURDERING;
+
+    const behandlingstypeOnChange = (behandlingstype: Behandlingstype | '') => {
+        settSubmitRessurs(byggTomRessurs());
+        settValideringsfeil(valideringsFeil => {
+            return {
+                ...valideringsFeil,
+                behandlingstype: '',
+            };
+        });
+
+        switch (behandlingstype) {
+            case Behandlingstype.TEKNISK_OPPHØR:
+                settSelectedBehandlingÅrsak(BehandlingÅrsak.TEKNISK_OPPHØR);
+                break;
+            case Behandlingstype.FØRSTEGANGSBEHANDLING:
+                settSelectedBehandlingÅrsak(BehandlingÅrsak.SØKNAD);
+                break;
+            default:
+                settSelectedBehandlingÅrsak('');
+                break;
+        }
+
+        settSelectedBehandlingstype(behandlingstype);
+    };
+
+    const behandlingÅrsakOnChange = (behandlingÅrsak: BehandlingÅrsak | '') => {
+        settSubmitRessurs(byggTomRessurs());
+        settValideringsfeil(valideringsFeil => {
+            return {
+                ...valideringsFeil,
+                behandlingÅrsak: '',
+            };
+        });
+        settSelectedBehandlingÅrsak(behandlingÅrsak);
+    };
+
     return {
         onBekreft,
         fjernState,
-        settSubmitRessurs,
         submitRessurs,
-        settSelectedBehandlingstype,
         selectedBehandlingstype,
         selectedBehandlingÅrsak,
-        settSelectedBehandlingÅrsak,
         valideringsFeil,
-        settValideringsfeil,
+        behandlingstypeOnChange,
+        behandlingÅrsakOnChange,
+        visÅrsakerSelect,
     };
 };
 

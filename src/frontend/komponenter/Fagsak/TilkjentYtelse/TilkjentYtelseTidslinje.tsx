@@ -1,15 +1,19 @@
 import React from 'react';
+
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
-import { useBehandling } from '../../../context/BehandlingContext';
-import { RessursStatus } from '@navikt/familie-typer';
+
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+
+import { RessursStatus } from '@navikt/familie-typer';
 import { Tidslinje } from '@navikt/helse-frontend-tidslinje';
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+
+import { useBehandling } from '../../../context/BehandlingContext';
+import { useTidslinje } from '../../../context/TidslinjeContext';
 import { formaterPersonIdent, sisteDatoIMnd, sorterFødselsdato } from '../../../utils/formatter';
 import TidslinjeEtikett from './TidslinjeEtikett';
-import { useTidslinje } from '../../../context/TidslinjeContext';
-import Vinduvelger from './VinduVelger';
 import TidslinjeNavigering from './TidslinjeNavigering';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+import Vinduvelger from './VinduVelger';
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();

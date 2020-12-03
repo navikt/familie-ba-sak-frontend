@@ -1,17 +1,21 @@
 import * as React from 'react';
+
+import { Xknapp } from 'nav-frontend-ikonknapper';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+
+import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IUtbetalingsperiode, ytelsetype } from '../../../typer/beregning';
+import familieDayjs from '../../../utils/familieDayjs';
 import {
     datoformat,
     formaterBeløp,
-    formaterIsoDato,
+    formaterDato,
     formaterPersonIdent,
     hentAlderSomString,
     sorterFødselsdato,
 } from '../../../utils/formatter';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
-import { useTidslinje } from '../../../context/TidslinjeContext';
-import { Xknapp } from 'nav-frontend-ikonknapper';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 interface IProps {
     utbetalingsperioder: IUtbetalingsperiode[];
@@ -29,7 +33,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const { settAktivEtikett } = useTidslinje();
 
     const månedNavnOgÅr = () => {
-        const navn = formaterIsoDato(aktivEtikett.dato.toDateString(), datoformat.MÅNED_NAVN);
+        const navn = formaterDato(familieDayjs(aktivEtikett.dato), datoformat.MÅNED_NAVN);
         return navn[0].toUpperCase() + navn.substr(1);
     };
 

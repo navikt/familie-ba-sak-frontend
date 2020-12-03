@@ -1,3 +1,8 @@
+import path from 'path';
+
+import { Response, Request, Router } from 'express';
+import WebpackDevMiddleware from 'webpack-dev-middleware';
+
 import {
     Client,
     ensureAuthenticated,
@@ -5,11 +10,9 @@ import {
     LOG_LEVEL,
     envVar,
 } from '@navikt/familie-backend';
-import { Response, Request, Router } from 'express';
-import path from 'path';
+
 import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
-import WebpackDevMiddleware from 'webpack-dev-middleware';
 
 export default (
     authClient: Client,

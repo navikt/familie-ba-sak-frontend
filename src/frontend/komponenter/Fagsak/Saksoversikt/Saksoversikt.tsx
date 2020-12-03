@@ -1,6 +1,11 @@
-import dayjs from 'dayjs';
-import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+
+import styled from 'styled-components';
+
+import AlertStripe from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
+import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import {
     BehandlingKategori,
@@ -12,14 +17,12 @@ import {
 } from '../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import Behandlinger from './Behandlinger';
-import Utbetalinger from './Utbetalinger';
-import FagsakLenkepanel from './FagsakLenkepanel';
-import AlertStripe from 'nav-frontend-alertstriper';
+import familieDayjs from '../../../utils/familieDayjs';
+import { datoformat, formaterDato } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
-import styled from 'styled-components';
-import Lenke from 'nav-frontend-lenker';
+import Behandlinger from './Behandlinger';
+import FagsakLenkepanel from './FagsakLenkepanel';
+import Utbetalinger from './Utbetalinger';
 
 interface IProps {
     fagsak: IFagsak;
@@ -46,7 +49,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     let gjeldendeBehandling =
         iverksatteBehandlinger.length > 0
             ? iverksatteBehandlinger.sort((a, b) =>
-                  dayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
+                  familieDayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
               )[0]
             : undefined;
 
@@ -60,9 +63,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const utbetalingsperiodeInneværendeMåned = utbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
-    const nesteMåned = dayjs().add(1, 'month').startOf('month').toDate();
+
+    const nesteMåned = familieDayjs().add(1, 'month').startOf('month');
     const utbetalingsperiodeNesteMåned = utbetalingsperioder.find(periode =>
-        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned)
+        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned.toDate())
     );
 
     const lenkeTilBehandlingsresultat = () => {
@@ -86,8 +90,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
                             <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                                 <FlexSpaceBetween>
-                                    {`Utbetalingen endres fra og med ${formaterIsoDato(
-                                        nesteMåned.toDateString(),
+                                    {`Utbetalingen endres fra og med ${formaterDato(
+                                        nesteMåned,
                                         datoformat.MÅNED_NAVN
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
@@ -101,10 +105,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
             return (
                 <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                     <FlexSpaceBetween>
-                        {`Utbetalingen starter ${formaterIsoDato(
-                            nesteMåned.toDateString(),
-                            datoformat.MÅNED_NAVN
-                        )}`}
+                        {`Utbetalingen starter ${formaterDato(nesteMåned, datoformat.MÅNED_NAVN)}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
                 </AlertStripe>

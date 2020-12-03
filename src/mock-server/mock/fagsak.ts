@@ -1,5 +1,7 @@
-import { FagsakStatus, IFagsak } from '../../frontend/typer/fagsak';
+import { Målform } from 'frontend/typer/søknad';
+
 import { byggSuksessRessurs, kjønnType, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import {
     BehandlingKategori,
     BehandlingResultat,
@@ -11,9 +13,9 @@ import {
     BehandlingÅrsak,
     IBehandling,
 } from '../../frontend/typer/behandling';
+import { FagsakStatus, IFagsak } from '../../frontend/typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../../frontend/typer/person';
 import { IRestPersonResultat, Resultat, VilkårType } from '../../frontend/typer/vilkår';
-import { Målform } from 'frontend/typer/søknad';
 
 export const hentMockFagsak = (id: string): Ressurs<IFagsak> | null => {
     try {

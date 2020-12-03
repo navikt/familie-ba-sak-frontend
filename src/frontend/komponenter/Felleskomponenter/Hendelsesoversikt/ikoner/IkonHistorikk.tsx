@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Ikon, { IIkonProps } from './Ikon';
 
 const IkonHistorikk = ({ width = 32, height = 32 }: IIkonProps) => {

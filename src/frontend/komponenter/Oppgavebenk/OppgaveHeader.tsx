@@ -1,5 +1,7 @@
-import { Systemtittel } from 'nav-frontend-typografi';
 import React from 'react';
+
+import { Systemtittel } from 'nav-frontend-typografi';
+
 import FilterSkjema from './FilterSkjema';
 
 const OppgaveHeader: React.FunctionComponent = () => {

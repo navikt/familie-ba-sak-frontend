@@ -1,12 +1,15 @@
-import express, { Request, Response } from 'express';
-import path from 'path';
 import fs from 'fs';
-import { vedtakHtml } from './mock/vedtak';
-import { hentMockFagsak, oppdaterBehandlingsstatusPaaFagsak } from './mock/fagsak';
-import { BehandlingStatus } from '../frontend/typer/behandling';
-import { TotrinnskontrollBeslutning } from '../frontend/typer/totrinnskontroll';
+import path from 'path';
+
+import express, { Request, Response } from 'express';
+
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { BehandlingStatus } from '../frontend/typer/behandling';
 import { IFagsak } from '../frontend/typer/fagsak';
+import { TotrinnskontrollBeslutning } from '../frontend/typer/totrinnskontroll';
+import { hentMockFagsak, oppdaterBehandlingsstatusPaaFagsak } from './mock/fagsak';
+import { vedtakHtml } from './mock/vedtak';
 
 const delayMs = 20;
 const app = express();

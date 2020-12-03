@@ -1,21 +1,19 @@
-import dayjs from 'dayjs';
-import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
+
+import { Feilmelding } from 'nav-frontend-typografi';
+
+import { useBehandling } from '../../../../context/BehandlingContext';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
-import {
-    periodeToString,
-    sisteDagInneværendeMåned,
-    stringToMoment,
-    TIDENES_MORGEN,
-} from '../../../../typer/periode';
+import { IUtbetalingsperiode } from '../../../../typer/beregning';
+import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
-import { datoformat } from '../../../../utils/formatter';
+import familieDayjs from '../../../../utils/familieDayjs';
+import { datoformat, isoStringToDayjs } from '../../../../utils/formatter';
+import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
-import { useBehandling } from '../../../../context/BehandlingContext';
-import { IUtbetalingsperiode } from '../../../../typer/beregning';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -35,14 +33,31 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
         .slice()
         .sort((a, b) =>
-            dayjs(a.periodeFom, datoformat.ISO_DAG).diff(
-                dayjs(b.periodeFom, datoformat.ISO_DAG),
-                'day'
+            familieDayjs(a.periodeFom, datoformat.ISO_DAG).diff(
+                familieDayjs(b.periodeFom, datoformat.ISO_DAG)
             )
-        );
+        )
+        .filter((utbetalingsperiode: IUtbetalingsperiode) => {
+            const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
+                (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
+                    return (
+                        utbetalingBegrunnelse.fom === utbetalingsperiode.periodeFom &&
+                        utbetalingBegrunnelse.tom === utbetalingsperiode.periodeTom
+                    );
+                }
+            );
+
+            // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
+            if (erLesevisning()) {
+                return utbetalingBegrunnelseForPeriode.length !== 0;
+            }
+
+            // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
+            return familieDayjs(utbetalingsperiode.periodeFom).diff(familieDayjs(), 'month') < 2;
+        });
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
-        stringToMoment(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
+        isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
 
     return harAndeler ? (
         <table className={'tabell'}>
@@ -88,13 +103,15 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                                 <UtbetalingBegrunnelseInput
                                                     key={index}
                                                     id={utbetalingBegrunnelse.id}
-                                                    begrunnelseType={
-                                                        utbetalingBegrunnelse.begrunnelseType
-                                                    }
-                                                    vedtakBegrunnelse={
-                                                        utbetalingBegrunnelse.vedtakBegrunnelse
-                                                    }
+                                                    utbetalingBegrunnelse={utbetalingBegrunnelse}
                                                     erLesevisning={erLesevisning()}
+                                                    personResultater={
+                                                        åpenBehandling.personResultater
+                                                    }
+                                                    periode={{
+                                                        fom: utbetalingsperiode.periodeFom,
+                                                        tom: utbetalingsperiode.periodeTom,
+                                                    }}
                                                 />
                                             ) : (
                                                 <Feilmelding key={index}>

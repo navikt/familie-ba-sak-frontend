@@ -1,10 +1,13 @@
-import Modal from 'nav-frontend-modal';
 import * as React from 'react';
-import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
-import { AppProvider } from '../context/AppContext';
+
+import Modal from 'nav-frontend-modal';
+
 import { ISaksbehandler } from '@navikt/familie-typer';
+
 import { hentInnloggetBruker } from '../api/saksbehandler';
+import { AppProvider } from '../context/AppContext';
 import Container from './Container';
+import ErrorBoundary from './Felleskomponenter/ErrorBoundary/ErrorBoundary';
 
 Modal.setAppElement(document.getElementById('modal-a11y-wrapper'));
 

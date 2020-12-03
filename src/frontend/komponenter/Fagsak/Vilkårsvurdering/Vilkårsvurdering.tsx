@@ -1,16 +1,19 @@
-import { Feiloppsummering } from 'nav-frontend-skjema';
 import * as React from 'react';
+
 import { useHistory } from 'react-router';
+
+import { Feiloppsummering } from 'nav-frontend-skjema';
+import { Feilmelding } from 'nav-frontend-typografi';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVilkårResultat } from '../../../typer/vilkår';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
-import { IBehandling } from '../../../typer/behandling';
-import { Feilmelding } from 'nav-frontend-typografi';
 
 interface IProps {
     fagsak: IFagsak;

@@ -1,5 +1,5 @@
-import { INøkkelPar } from './common';
 import { BehandlingKategori } from './behandling';
+import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
 import { YearMonth } from './tid';
 

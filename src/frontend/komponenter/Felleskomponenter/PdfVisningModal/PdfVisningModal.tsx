@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
-import Modal from 'nav-frontend-modal';
-import { hentDataFraRessursMedFallback, Ressurs, RessursStatus } from '@navikt/familie-typer';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import Modal from 'nav-frontend-modal';
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
+
+import { hentDataFraRessursMedFallback, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 interface IPdfVisningModalProps {
     onRequestClose: () => void;

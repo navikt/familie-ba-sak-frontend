@@ -1,16 +1,16 @@
-import dayjs from 'dayjs';
 import { FeltState } from '../familie-skjema/typer';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IVedtakForBehandling } from '../typer/vedtak';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../typer/vilkår';
+import familieDayjs from './familieDayjs';
 
 export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
     if (fagsak.behandlinger.length === 0) {
         return undefined;
     } else {
         return fagsak.behandlinger.sort((a, b) =>
-            dayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
+            familieDayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
         )[0];
     }
 };

@@ -1,9 +1,8 @@
+import React from 'react';
+
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import React from 'react';
-import { IFagsak } from '../typer/fagsak';
-import { ILogg } from '../typer/logg';
-import { IPersonInfo } from '../typer/person';
+
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -11,6 +10,10 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
+
+import { IFagsak } from '../typer/fagsak';
+import { ILogg } from '../typer/logg';
+import { IPersonInfo } from '../typer/person';
 import { useApp } from './AppContext';
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {

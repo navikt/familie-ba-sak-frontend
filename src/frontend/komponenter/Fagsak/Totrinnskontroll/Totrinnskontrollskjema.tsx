@@ -1,10 +1,13 @@
+import * as React from 'react';
+
 import { Knapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
 import { Systemtittel } from 'nav-frontend-typografi';
-import * as React from 'react';
+
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import Info from '../../../ikoner/Info';
 import { IFagsak } from '../../../typer/fagsak';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 
 interface IProps {

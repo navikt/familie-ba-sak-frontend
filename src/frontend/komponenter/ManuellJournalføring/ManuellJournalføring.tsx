@@ -1,16 +1,21 @@
+import React, { useEffect } from 'react';
+
+import { useHistory } from 'react-router';
+import styled from 'styled-components';
+
 import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
 import PanelBase from 'nav-frontend-paneler';
 import { Input, Select } from 'nav-frontend-skjema';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router';
+
+import { Journalstatus, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import {
     ManuellJournalføringProvider,
     useManuellJournalføring,
 } from '../../context/ManuellJournalføringContext';
-
 import {
     BrevkodeMap,
     Dokumenttype,
@@ -18,15 +23,13 @@ import {
     ILogiskVedlegg,
 } from '../../typer/manuell-journalføring';
 import { IPersonInfo } from '../../typer/person';
-import { Journalstatus, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { useAmplitude } from '../../utils/amplitude';
 import { randomUUID } from '../../utils/commons';
 import HentPerson from '../Felleskomponenter/HentPerson/HentPerson';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { KnyttTilBehandling } from './KnyttTilBehandling';
 import { Dokumenter } from './Dokumenter';
-import styled from 'styled-components';
-import { useAmplitude } from '../../utils/amplitude';
+import { KnyttTilBehandling } from './KnyttTilBehandling';
 
 const Sidesplitt = styled.div`
     display: flex;

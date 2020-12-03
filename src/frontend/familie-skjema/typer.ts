@@ -1,5 +1,6 @@
-import { Ressurs } from '@navikt/familie-typer';
 import { ChangeEvent } from 'react';
+
+import { Ressurs } from '@navikt/familie-typer';
 
 export interface FeltState<Verdi> {
     feilmelding: string;

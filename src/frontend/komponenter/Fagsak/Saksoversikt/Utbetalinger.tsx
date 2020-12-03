@@ -1,8 +1,10 @@
-import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
+
+import { Normaltekst } from 'nav-frontend-typografi';
+
 import { IUtbetalingsperiodeDetalj, IUtbetalingsperiode } from '../../../typer/beregning';
-import PersonUtbetaling from './PersonUtbetaling';
 import { sorterFødselsdato } from '../../../utils/formatter';
+import PersonUtbetaling from './PersonUtbetaling';
 
 interface IUtbetalingerProps {
     utbetalingsperiode?: IUtbetalingsperiode;

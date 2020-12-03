@@ -1,16 +1,20 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
-import Pluss from '../../../ikoner/Pluss';
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
-import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
-import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
-import { useApp } from '../../../context/AppContext';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-import { FamilieInput } from '@navikt/familie-form-elements';
+
 import styled from 'styled-components';
+
+import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+
+import { FamilieInput } from '@navikt/familie-form-elements';
+import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useApp } from '../../../context/AppContext';
 import { Valideringsstatus } from '../../../familie-skjema/typer';
+import Pluss from '../../../ikoner/Pluss';
+import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
+import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
+import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;

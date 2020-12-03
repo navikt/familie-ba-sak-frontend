@@ -1,3 +1,13 @@
+import * as React from 'react';
+
+import { AxiosError } from 'axios';
+import { useHistory } from 'react-router';
+import styled from 'styled-components';
+
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
+import { Normaltekst, Feilmelding } from 'nav-frontend-typografi';
+
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -6,11 +16,8 @@ import {
     RessursStatus,
     byggHenterRessurs,
 } from '@navikt/familie-typer';
-import { AxiosError } from 'axios';
-import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst, Feilmelding } from 'nav-frontend-typografi';
-import * as React from 'react';
-import { useHistory } from 'react-router';
+
+import { BehandlerRolle } from '../../../../../node_dist/frontend/typer/behandling';
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -24,23 +31,25 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { IRestUtbetalingBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
-import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import { BehandlerRolle } from '../../../../../node_dist/frontend/typer/behandling';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 
 interface IVedtakProps {
     fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
+const StyledFeilmelding = styled(Feilmelding)`
+    margin-top: 1rem;
+`;
+
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
-    const { axiosRequest, innloggetSaksbehandler } = useApp();
+    const { axiosRequest, hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
     const { settFagsak } = useFagsakRessurser();
-    const { hentSaksbehandlerRolle } = useApp();
     const { erLesevisning } = useBehandling();
 
     const history = useHistory();
@@ -54,6 +63,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
+    const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const hentVedtaksbrev = () => {
         const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
@@ -104,25 +114,40 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
-    const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
+    const minstEnPeriodeErBegrunnet = (utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[]) => {
+        const begrunnelsenErUtfylt = (utbetalingsbegrunnelse: IRestUtbetalingBegrunnelse) =>
+            utbetalingsbegrunnelse.begrunnelseType && utbetalingsbegrunnelse.vedtakBegrunnelse;
+
+        return (
+            utbetalingBegrunnelser.filter((utbetalingsbegrunnelse: IRestUtbetalingBegrunnelse) =>
+                begrunnelsenErUtfylt(utbetalingsbegrunnelse)
+            ).length > 0
+        );
+    };
 
     const sendInn = () => {
-        settSenderInn(true);
-        settSubmitFeil('');
-        axiosRequest<IFagsak, void>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/send-til-beslutter?behandlendeEnhet=${
-                innloggetSaksbehandler?.enhet ?? '9999'
-            }`,
-        }).then((response: Ressurs<IFagsak>) => {
-            settSenderInn(false);
-            if (response.status === RessursStatus.SUKSESS) {
-                settVisModal(true);
-                settFagsak(response);
-            } else if (response.status === RessursStatus.FEILET) {
-                settSubmitFeil(response.frontendFeilmelding);
-            }
-        });
+        if (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.utbetalingBegrunnelser)) {
+            settSenderInn(true);
+            settSubmitFeil('');
+            axiosRequest<IFagsak, void>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/fagsaker/${
+                    fagsak.id
+                }/send-til-beslutter?behandlendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
+            }).then((response: Ressurs<IFagsak>) => {
+                settSenderInn(false);
+                if (response.status === RessursStatus.SUKSESS) {
+                    settVisModal(true);
+                    settFagsak(response);
+                } else if (response.status === RessursStatus.FEILET) {
+                    settSubmitFeil(response.frontendFeilmelding);
+                }
+            });
+        } else {
+            settSubmitFeil(
+                'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
+            );
+        }
     };
 
     return (
@@ -163,7 +188,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         children={'Vis vedtaksbrev'}
                     />
 
-                    {submitFeil !== '' && <Feilmelding>{submitFeil}</Feilmelding>}
+                    {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
 
                     {visModal && (
                         <UIModalWrapper
