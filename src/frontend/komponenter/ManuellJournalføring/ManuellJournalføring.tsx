@@ -33,7 +33,7 @@ const PageSplit = styled.div`
     flex-direction: row;
 `;
 
-const Bakgrunn = styled.div`
+const PdfFrame = styled.iframe`
     margin-left: 40px;
     width: 90%;
     height: 90vh;
@@ -244,14 +244,12 @@ const ManuellJournalføringContent: React.FC = () => {
                         )}
                     </Skjemasteg>
                     {visDokument && dokumentData.status === RessursStatus.SUKSESS && (
-                        <Bakgrunn>
-                            <iframe
-                                title={valgtDokument ? valgtDokument.tittel : 'Dokumenttittel'}
-                                src={dokumentData.data}
-                                width={'100%'}
-                                height={'100%'}
-                            ></iframe>
-                        </Bakgrunn>
+                        <PdfFrame
+                            title={valgtDokument ? valgtDokument.tittel : 'Dokumenttittel'}
+                            src={dokumentData.data}
+                            width={'100%'}
+                            height={'100%'}
+                        ></PdfFrame>
                     )}
                 </PageSplit>
             ) : (
