@@ -7,19 +7,38 @@ import styled from 'styled-components';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import CreatableSelect from 'react-select/creatable';
 import { journalpostTittelList } from './DokumentVelger';
+import { Label } from 'nav-frontend-skjema';
 
 const JournalpostDiv = styled.div`
     width: 560px;
 `;
 
 const JournalpostInfo: React.FC = () => {
-    const { dataForManuellJournalføring, brevkode } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring } = useManuellJournalføringV2();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const journalpost = dataForManuellJournalføring.data.journalpost;
             return (
                 <div>
                     <Undertittel>{journalpost.tittel || 'Ingen tittel'}</Undertittel>
+                </div>
+            );
+        default:
+            return <div></div>;
+    }
+};
+
+const JournalpostMetadataDiv = styled.div`
+    margin: 0 0 20px 0;
+`;
+
+const JournalpostMetadata: React.FC = () => {
+    const { dataForManuellJournalføring, brevkode } = useManuellJournalføringV2();
+    switch (dataForManuellJournalføring.status) {
+        case RessursStatus.SUKSESS:
+            const journalpost = dataForManuellJournalføring.data.journalpost;
+            return (
+                <JournalpostMetadataDiv>
                     <Normaltekst>Tema: {journalpost.tema || 'Ingen tema'}</Normaltekst>
                     <Normaltekst>Skjemakode: {brevkode}</Normaltekst>
                     <Normaltekst>Kanal: {journalpost.kanal || 'Ingen kanal'}</Normaltekst>
@@ -29,7 +48,7 @@ const JournalpostInfo: React.FC = () => {
                             ? formaterIsoDato(journalpost.datoMottatt, datoformat.DATO)
                             : 'Ingen mottatt dato'}
                     </Normaltekst>
-                </div>
+                </JournalpostMetadataDiv>
             );
         default:
             return <div></div>;
@@ -48,6 +67,7 @@ const EndreJournalpost: React.FC = () => {
             : undefined;
     return (
         <div>
+            <Label htmlFor="select">Endre journalpostTittel</Label>
             <CreatableSelect
                 id="select"
                 isClearable
@@ -70,6 +90,7 @@ export const Journalpost: React.FC = () => {
     return (
         <JournalpostDiv>
             <Ekspanderbartpanel tittel={<JournalpostInfo />}>
+                <JournalpostMetadata />
                 <EndreJournalpost />
             </Ekspanderbartpanel>
         </JournalpostDiv>
