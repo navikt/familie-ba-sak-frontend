@@ -75,7 +75,6 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({
     return (
         <DokumentPanel
             valgt={valgt}
-            border
             onClick={() => {
                 if (!valgt) {
                     hentDokumentData(journalpost.journalpostId, dokument.dokumentInfoId || '0');
