@@ -12,7 +12,7 @@ export const Dokumenter: React.FC = () => {
                 <div>
                     {dataForManuellJournalføring.data.journalpost.journalstatus ===
                     Journalstatus.MOTTATT ? (
-                        !dataForManuellJournalføring.data.journalpost.dokumenter ||
+                        dataForManuellJournalføring.data.journalpost.dokumenter === undefined ||
                         dataForManuellJournalføring.data.journalpost.dokumenter.length === 0 ? (
                             <AlertStripeAdvarsel children={'Ingen Vedlegg'} />
                         ) : (
