@@ -1,9 +1,8 @@
-import { IPersonBeregning } from './beregning';
 import { INøkkelPar } from './common';
+import { VilkårType } from './vilkår';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
-    personBeregninger: IPersonBeregning[];
     utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[];
     vedtaksdato: string;
     id: number;
@@ -26,6 +25,7 @@ export interface IRestPutUtbetalingBegrunnelse {
 export interface IRestVedtakBegrunnelse {
     id: VedtakBegrunnelse;
     navn: string;
+    vilkår?: VilkårType;
 }
 
 export enum VedtakBegrunnelse {

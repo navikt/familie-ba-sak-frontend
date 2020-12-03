@@ -1,46 +1,53 @@
-import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
-import { IBeregningDetalj, IOppsummeringBeregning } from '../../../typer/beregning';
-import PersonUtbetaling from './PersonUtbetaling';
+
+import { Normaltekst } from 'nav-frontend-typografi';
+
+import { IUtbetalingsperiodeDetalj, IUtbetalingsperiode } from '../../../typer/beregning';
 import { sorterFødselsdato } from '../../../utils/formatter';
+import PersonUtbetaling from './PersonUtbetaling';
 
 interface IUtbetalingerProps {
-    beregningOversikt?: IOppsummeringBeregning;
+    utbetalingsperiode?: IUtbetalingsperiode;
 }
 
-const Utbetalinger: React.FC<IUtbetalingerProps> = ({ beregningOversikt }) => {
-    const beregningDetaljerGruppertPåPerson =
-        beregningOversikt?.beregningDetaljer
+const Utbetalinger: React.FC<IUtbetalingerProps> = ({ utbetalingsperiode }) => {
+    const utbetalingsperiodeDetaljerGruppertPåPerson =
+        utbetalingsperiode?.utbetalingsperiodeDetaljer
             .sort((detaljA, detaljB) =>
                 sorterFødselsdato(detaljA.person.fødselsdato, detaljB.person.fødselsdato)
             )
-            .reduce((acc: { [key: string]: IBeregningDetalj[] }, beregningDetalj) => {
-                const beregningDetaljerForPerson = acc[beregningDetalj.person.personIdent] ?? [];
-                return {
-                    ...acc,
-                    [beregningDetalj.person.personIdent]: [
-                        ...beregningDetaljerForPerson,
-                        beregningDetalj,
-                    ],
-                };
-            }, {}) ?? {};
+            .reduce(
+                (acc: { [key: string]: IUtbetalingsperiodeDetalj[] }, utbetalingsperiodeDetalj) => {
+                    const utbetalingsperiodeDetaljerForPerson =
+                        acc[utbetalingsperiodeDetalj.person.personIdent] ?? [];
+
+                    return {
+                        ...acc,
+                        [utbetalingsperiodeDetalj.person.personIdent]: [
+                            ...utbetalingsperiodeDetaljerForPerson,
+                            utbetalingsperiodeDetalj,
+                        ],
+                    };
+                },
+                {}
+            ) ?? {};
 
     return (
         <div className={'saksoversikt__utbetalinger'}>
             <ul>
-                {Object.values(beregningDetaljerGruppertPåPerson).map(
-                    (beregningDetaljerForPerson, index) => {
+                {Object.values(utbetalingsperiodeDetaljerGruppertPåPerson).map(
+                    (utbetalingsperiodeDetaljerForPerson, index) => {
                         return (
                             <PersonUtbetaling
                                 key={index}
-                                beregningDetaljer={beregningDetaljerForPerson}
+                                utbetalingsperiodeDetaljer={utbetalingsperiodeDetaljerForPerson}
                             />
                         );
                     }
                 )}
                 <li className={'saksoversikt__utbetalinger__totallinje'}>
                     <Normaltekst>Totalt utbetalt/mnd</Normaltekst>
-                    <Normaltekst>{`${beregningOversikt?.utbetaltPerMnd ?? '-'} kr`}</Normaltekst>
+                    <Normaltekst>{`${utbetalingsperiode?.utbetaltPerMnd ?? '-'} kr`}</Normaltekst>
                 </li>
                 <hr />
             </ul>

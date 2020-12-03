@@ -1,4 +1,5 @@
 import createHttpsProxyAgent from 'https-proxy-agent';
+
 import { envVar } from '@navikt/familie-backend';
 import { info } from '@navikt/familie-backend';
 

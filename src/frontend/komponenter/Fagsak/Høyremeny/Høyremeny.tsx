@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { useBehandling } from '../../../context/BehandlingContext';
+
 import { RessursStatus } from '@navikt/familie-typer';
+
+import { useBehandling } from '../../../context/BehandlingContext';
 import { IFagsak } from '../../../typer/fagsak';
 import Behandlingskort from '../Behandlingskort/Behandlingskort';
 import Totrinnskontroll from '../Totrinnskontroll/Totrinnskontroll';

@@ -1,15 +1,18 @@
-import createUseContext from 'constate';
-import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
+
+import createUseContext from 'constate';
+import { useParams } from 'react-router';
+
+import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
+
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSteg, BehandlingUnderkategori, hentStegNummer } from '../typer/behandling';
 import { FamilieRelasjonRolle, IFamilierelasjon, IPersonInfo } from '../typer/person';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
-import { useFagsakRessurser } from './FagsakContext';
-import { useBehandling } from './BehandlingContext';
-import { useParams } from 'react-router';
 import { useApp } from './AppContext';
+import { useBehandling } from './BehandlingContext';
+import { useFagsakRessurser } from './FagsakContext';
 
 const initalState = (bruker?: IPersonInfo): ISøknadDTO => {
     return {

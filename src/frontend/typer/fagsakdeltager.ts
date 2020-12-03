@@ -1,4 +1,5 @@
 import { kjønnType } from '@navikt/familie-typer';
+
 import { Adressebeskyttelsegradering } from '../../../node_dist/frontend/typer/person';
 
 export enum FagsakDeltagerRolle {

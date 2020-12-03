@@ -1,10 +1,13 @@
-import createUseContext from 'constate';
 import { useState } from 'react';
-import dayjs from 'dayjs';
-import { IPersonBeregning, IYtelsePeriode } from '../typer/beregning';
+
+import createUseContext from 'constate';
+
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+
+import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
 import { IGrunnlagPerson } from '../typer/person';
+import familieDayjs from '../utils/familieDayjs';
 import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '../utils/tid';
 
 export interface ITidslinjeVindu {
@@ -36,8 +39,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
-        sluttDato: dayjs().endOf('month'),
-        startDato: dayjs().subtract(12, 'month').endOf('month'),
+        sluttDato: familieDayjs().endOf('month'),
+        startDato: familieDayjs().subtract(12, 'month').endOf('month'),
     });
 
     const genererFormatertÅrstall = () => {
@@ -46,7 +49,9 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
         if (startÅr !== sluttÅr) {
             return `${startÅr} - ${sluttÅr}`;
-        } else return sluttÅr;
+        } else {
+            return sluttÅr;
+        }
     };
 
     const naviger = (retning: NavigeringsRetning) => {
@@ -78,36 +83,38 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         }));
     };
 
-    const genererRader = (personBeregninger?: IPersonBeregning[]): Periode[][] => {
-        return personBeregninger
-            ? personBeregninger.map((personBeregning: IPersonBeregning) => {
-                  return personBeregning.ytelsePerioder.map(
-                      (ytelsePeriode: IYtelsePeriode, index: number) => ({
-                          fom: new Date(
-                              hentFørsteDagIYearMonth(ytelsePeriode.stønadFom).toISOString()
-                          ),
-                          tom: new Date(
-                              hentSisteDagIYearMonth(ytelsePeriode.stønadTom).toISOString()
-                          ),
-                          id: `${personBeregning.personIdent}_${index}`,
-                          status: 'suksess',
-                      })
-                  );
-              })
+    const genererRader = (
+        personerMedAndelerTilkjentYtelse?: IPersonMedAndelerTilkjentYtelse[]
+    ): Periode[][] => {
+        return personerMedAndelerTilkjentYtelse
+            ? personerMedAndelerTilkjentYtelse.map(
+                  (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
+                      return personMedAndelerTilkjentYtelse.ytelsePerioder.map(
+                          (ytelsePeriode: IYtelsePeriode, index: number) => ({
+                              fom: new Date(
+                                  hentFørsteDagIYearMonth(ytelsePeriode.stønadFom).toISOString()
+                              ),
+                              tom: new Date(
+                                  hentSisteDagIYearMonth(ytelsePeriode.stønadTom).toISOString()
+                              ),
+                              id: `${personMedAndelerTilkjentYtelse.personIdent}_${index}`,
+                              status: 'suksess',
+                          })
+                      );
+                  }
+              )
             : [[]];
     };
 
-    const mapPersonberegningerTilPersoner = (
+    const mapPersonerMedAndelerTilkjentYtelseTilPersoner = (
         personer: IGrunnlagPerson[],
-        personberegninger?: IPersonBeregning[]
+        personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IGrunnlagPerson[] => {
-        if (!personberegninger) {
-            return [];
-        }
-        return personberegninger
-            .map((personBeregning: IPersonBeregning) => {
+        return personerMedAndelerTilkjentYtelse
+            .map((personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
                 return personer.find(
-                    (person: IGrunnlagPerson) => person.personIdent === personBeregning.personIdent
+                    (person: IGrunnlagPerson) =>
+                        person.personIdent === personMedAndelerTilkjentYtelse.personIdent
                 );
             })
             .reduce((acc: IGrunnlagPerson[], person) => {
@@ -118,23 +125,20 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             }, []);
     };
 
-    const mapPersonerTilPersonberegninger = (
+    const mapPersonerTilPersonerMedAndelerTilkjentYtelse = (
         personer: IGrunnlagPerson[],
-        personberegninger?: IPersonBeregning[]
-    ): IPersonBeregning[] => {
-        if (!personberegninger) {
-            return [];
-        }
+        personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
+    ): IPersonMedAndelerTilkjentYtelse[] => {
         return personer
             .map((person: IGrunnlagPerson) => {
-                return personberegninger.find(
-                    (personberegning: IPersonBeregning) =>
-                        person.personIdent === personberegning.personIdent
+                return personerMedAndelerTilkjentYtelse.find(
+                    (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) =>
+                        person.personIdent === personMedAndelerTilkjentYtelse.personIdent
                 );
             })
-            .reduce((acc: IPersonBeregning[], personberegning) => {
-                if (personberegning) {
-                    return [...acc, personberegning];
+            .reduce((acc: IPersonMedAndelerTilkjentYtelse[], andelTilkjentYtelse) => {
+                if (andelTilkjentYtelse) {
+                    return [...acc, andelTilkjentYtelse];
                 }
                 return acc;
             }, []);
@@ -151,8 +155,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         genererRader,
         initiellAktivEtikettErSatt,
         setInitiellAktivEtikettErSatt,
-        mapPersonberegningerTilPersoner,
-        mapPersonerTilPersonberegninger,
+        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
+        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
     };
 });
 

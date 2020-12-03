@@ -1,8 +1,11 @@
 import React from 'react';
+
+import styled from 'styled-components';
+
+import navFarger from 'nav-frontend-core';
+
 import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
 import { Resultat } from '../../../typer/vilkår';
-import styled from 'styled-components';
-import navFarger from 'nav-frontend-core';
 
 interface StatuslinjeProps {
     resultat: Resultat;

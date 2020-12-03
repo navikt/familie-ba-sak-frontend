@@ -1,7 +1,10 @@
-import dayjs from 'dayjs';
+import React from 'react';
+
+import classNames from 'classnames';
+
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
-import React from 'react';
+
 import {
     behandlingsresultater,
     behandlingstyper,
@@ -14,8 +17,8 @@ import {
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
+import familieDayjs from '../../../utils/familieDayjs';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
-import classNames from 'classnames';
 
 interface IBehandlingshistorikkProps {
     fagsak: IFagsak;
@@ -43,7 +46,9 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                     </thead>
                     <tbody>
                         {fagsak.behandlinger
-                            .sort((a, b) => dayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt))
+                            .sort((a, b) =>
+                                familieDayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
+                            )
                             .map((behandling: IBehandling) => {
                                 const aktivVedtakForBehandling = behandling.vedtakForBehandling.find(
                                     (vedtak: IVedtakForBehandling) => vedtak.aktiv

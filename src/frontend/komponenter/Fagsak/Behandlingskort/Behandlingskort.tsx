@@ -1,7 +1,9 @@
-import classNames from 'classnames';
-import dayjs from 'dayjs';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+
+import classNames from 'classnames';
+
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+
 import {
     behandlingsresultater,
     behandlingsstatuser,
@@ -11,7 +13,7 @@ import {
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
-import { datoformat, formaterIverksattDato } from '../../../utils/formatter';
+import { datoformat, formaterIsoDato, formaterIverksattDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { sakstype } from '../Saksoversikt/Saksoversikt';
 
@@ -51,7 +53,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                 informasjon={[
                     {
                         label: 'Opprettet',
-                        tekst: dayjs(åpenBehandling.opprettetTidspunkt).format(datoformat.DATO),
+                        tekst: formaterIsoDato(åpenBehandling.opprettetTidspunkt, datoformat.DATO),
                     },
                     {
                         label: 'Vedtaksdato',

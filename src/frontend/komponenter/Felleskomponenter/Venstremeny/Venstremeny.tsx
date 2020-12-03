@@ -1,11 +1,15 @@
-import classNames from 'classnames';
 import * as React from 'react';
-import { useBehandling } from '../../../context/BehandlingContext';
+
+import classNames from 'classnames';
+
+import { Normaltekst } from 'nav-frontend-typografi';
+
 import { RessursStatus } from '@navikt/familie-typer';
+
+import { useBehandling } from '../../../context/BehandlingContext';
 import { IFagsak } from '../../../typer/fagsak';
 import Link from './Link';
 import { erSidenAktiv, IUnderside, sider, visSide } from './sider';
-import { Normaltekst } from 'nav-frontend-typografi';
 
 interface IProps {
     fagsak: IFagsak;

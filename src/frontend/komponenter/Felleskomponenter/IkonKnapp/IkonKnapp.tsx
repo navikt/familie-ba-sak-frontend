@@ -1,9 +1,12 @@
 import React from 'react';
-import { randomUUID } from '../../../utils/commons';
+
+import classNames from 'classnames';
+
 import KnappBase, { KnappBaseProps } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import classNames from 'classnames';
 import { Normaltekst } from 'nav-frontend-typografi';
+
+import { randomUUID } from '../../../utils/commons';
 
 interface IProps {
     className?: string;

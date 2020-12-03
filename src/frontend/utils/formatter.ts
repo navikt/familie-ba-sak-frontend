@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import familieDayjs, { Dayjs } from './familieDayjs';
 
 export enum datoformat {
     MÅNED = 'MM.YY',
@@ -17,30 +17,37 @@ export enum datoformatNorsk {
     DATO = 'ddmmåå',
 }
 
+export const isoStringToDayjs = (dato: string | undefined, defaultValue: Dayjs): Dayjs => {
+    return dato && dato !== '' ? familieDayjs(dato, datoformat.ISO_DAG) : defaultValue;
+};
+
 export const formaterIsoDato = (
     dato: string | undefined,
     tilFormat: datoformat,
     defaultString?: string
 ): string => {
-    const dayjsDato = dayjs(dato);
-    return dayjsDato.isValid() && dato ? dayjsDato.format(tilFormat) : dato || defaultString || '';
+    if (!dato) {
+        return defaultString ?? '';
+    }
+    const dayjsDato = familieDayjs(dato);
+    return dayjsDato.isValid() ? dayjsDato.format(tilFormat) : dato;
 };
 
-export const formaterDato = (dato: dayjs.Dayjs, tilFormat: datoformat): string => {
+export const formaterDato = (dato: Dayjs, tilFormat: datoformat): string => {
     return dato.isValid() ? dato.format(tilFormat) : '';
 };
 
 export const formaterIverksattDato = (dato: string | undefined) =>
-    dato ? dayjs(dato).format(datoformat.DATO) : 'Ikke satt';
+    dato ? familieDayjs(dato).format(datoformat.DATO) : 'Ikke satt';
 
 export const hentAlder = (dato: string): number => {
-    const dayjsDato = dayjs(dato);
-    return dayjsDato.isValid() ? dayjs().diff(dayjsDato, 'year') : 0;
+    const dayjsDato = familieDayjs(dato);
+    return dayjsDato.isValid() ? familieDayjs().diff(dayjsDato, 'year') : 0;
 };
 
 export const hentAlderSomString = (fødselsdato: string | undefined) => {
     return fødselsdato
-        ? dayjs().diff(dayjs(fødselsdato, 'YYYY-MM-DD'), 'year') + ' år'
+        ? familieDayjs().diff(familieDayjs(fødselsdato, 'YYYY-MM-DD'), 'year') + ' år'
         : 'Alder ukjent';
 };
 
@@ -65,4 +72,4 @@ export const sisteDatoIMnd = (måned: number, år: number): Date => {
 };
 
 export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>
-    dayjs(fødselsDatoA).isBefore(fødselsDatoB) ? 1 : -1;
+    familieDayjs(fødselsDatoA).isBefore(fødselsDatoB) ? 1 : -1;

@@ -1,10 +1,10 @@
+import { IPersonMedAndelerTilkjentYtelse, IUtbetalingsperiode } from './beregning';
 import { INøkkelPar } from './common';
+import { IOpplysningsplikt } from './opplysningsplikt';
 import { IGrunnlagPerson } from './person';
+import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
-import { ITotrinnskontroll } from './totrinnskontroll';
-import { IOppsummeringBeregning } from './beregning';
-import { IOpplysningsplikt } from './opplysningsplikt';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -144,7 +144,8 @@ export interface IBehandling {
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
-    beregningOversikt: IOppsummeringBeregning[];
+    utbetalingsperioder: IUtbetalingsperiode[];
+    personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
 }

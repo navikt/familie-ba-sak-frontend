@@ -1,6 +1,10 @@
 import React from 'react';
+
 import styled from 'styled-components';
 
+import navFarger from 'nav-frontend-core';
+
+import { Infokort } from '@navikt/familie-header';
 import {
     GuttIkon,
     JenteIkon,
@@ -10,10 +14,8 @@ import {
 } from '@navikt/familie-ikoner';
 
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
-import { adressebeskyttelsestyper } from '../../../typer/person';
 import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
-import { Infokort } from '@navikt/familie-header';
-import navFarger from 'nav-frontend-core';
+import { adressebeskyttelsestyper } from '../../../typer/person';
 
 export interface IFagsakDeltagerkortProps {
     deltager: IFagsakDeltager;

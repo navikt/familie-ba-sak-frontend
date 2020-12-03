@@ -1,6 +1,8 @@
 import React from 'react';
-import UIModalWrapper from './UIModalWrapper';
+
 import { Normaltekst } from 'nav-frontend-typografi';
+
+import UIModalWrapper from './UIModalWrapper';
 
 const UgyldigSesjon: React.FC = () => {
     return (

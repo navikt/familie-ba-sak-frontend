@@ -1,11 +1,15 @@
 import * as React from 'react';
+
+import styled from 'styled-components';
+
+import { Radio } from 'nav-frontend-skjema';
 import { Systemtittel } from 'nav-frontend-typografi';
+
+import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BehandlingUnderkategori, underkategorier } from '../../../typer/behandling';
 import { ISøknadDTO } from '../../../typer/søknad';
-import { Radio } from 'nav-frontend-skjema';
-import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
-import styled from 'styled-components';
 
 interface IProps {
     settSøknadOgValider: (søknad: ISøknadDTO) => void;

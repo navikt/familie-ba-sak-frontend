@@ -1,16 +1,11 @@
+import React, { useState } from 'react';
+
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
-import {
-    Dokumenttype,
-    dokumenttyper,
-    IDataForManuellJournalføring,
-    ILogiskVedlegg,
-    IRestOppdaterJournalpost,
-} from '../typer/manuell-journalføring';
-import { IPersonInfo } from '../typer/person';
+
+import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
+
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -20,11 +15,20 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
+
+import { IOpprettEllerHentFagsakData, IOpprettBehandlingData } from '../api/fagsak';
+import { IBehandling } from '../typer/behandling';
+import { IFagsak } from '../typer/fagsak';
+import {
+    Dokumenttype,
+    dokumenttyper,
+    IDataForManuellJournalføring,
+    ILogiskVedlegg,
+    IRestOppdaterJournalpost,
+} from '../typer/manuell-journalføring';
+import { IPersonInfo } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
-import { IBehandling } from '../typer/behandling';
-import { IOpprettEllerHentFagsakData, IOpprettBehandlingData } from '../api/fagsak';
-import { IFagsak } from '../typer/fagsak';
 
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();

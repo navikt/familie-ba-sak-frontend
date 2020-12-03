@@ -1,22 +1,33 @@
+import React, { useState } from 'react';
+
+import deepEqual from 'deep-equal';
+
+import { Radio } from 'nav-frontend-skjema';
+import { Normaltekst } from 'nav-frontend-typografi';
+
 import {
     FamilieKnapp,
     FamilieRadioGruppe,
     FamilieTextareaControlled,
 } from '@navikt/familie-form-elements';
-import deepEqual from 'deep-equal';
-import { Radio } from 'nav-frontend-skjema';
-import { Normaltekst } from 'nav-frontend-typografi';
-import React, { useState } from 'react';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { FeltState, Valideringsstatus } from '../../../../familie-skjema/typer';
+import AutomatiskVurdering from '../../../../ikoner/AutomatiskVurdering';
+import FamilieChevron from '../../../../ikoner/FamilieChevron';
+import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
 import Slett from '../../../../ikoner/Slett';
+import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
+import { IFagsak } from '../../../../typer/fagsak';
 import { periodeToString } from '../../../../typer/periode';
 import { IGrunnlagPerson } from '../../../../typer/person';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -26,6 +37,7 @@ import {
     uiResultat,
     VilkårType,
 } from '../../../../typer/vilkår';
+import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
 import {
@@ -33,15 +45,6 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './GeneriskVilkår';
-import AutomatiskVurdering from '../../../../ikoner/AutomatiskVurdering';
-import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
-import { datoformat } from '../../../../utils/formatter';
-import dayjs from 'dayjs';
-import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
-import FamilieChevron from '../../../../ikoner/FamilieChevron';
-import { IFagsak } from '../../../../typer/fagsak';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import { FeltState, Valideringsstatus } from '../../../../familie-skjema/typer';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -230,7 +233,8 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                         vilkårResultat.verdi.erVurdert
                             ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
                                 ? 'Vurdert i denne behandlingen'
-                                : `Vurdert ${dayjs(vilkårResultat.verdi.endretTidspunkt).format(
+                                : `Vurdert ${formaterIsoDato(
+                                      vilkårResultat.verdi.endretTidspunkt,
                                       datoformat.DATO_FORKORTTET
                                   )}`
                             : ''}

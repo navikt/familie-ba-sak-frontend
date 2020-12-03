@@ -1,15 +1,15 @@
+import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
+import { FeltState } from '../../../familie-skjema/typer';
 import {
     BehandlingSteg,
     BehandlingStegStatus,
-    Behandlingstype,
+    BehandlingÅrsak,
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
-import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
-import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import { formaterPersonIdent } from '../../../utils/formatter';
 import { IOpplysningsplikt, OpplysningspliktStatus } from '../../../typer/opplysningsplikt';
-import { FeltState } from '../../../familie-skjema/typer';
+import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
+import { formaterPersonIdent } from '../../../utils/formatter';
 
 export interface ISide {
     href: string;
@@ -105,8 +105,7 @@ export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysning
         return harOpplysningsplikt;
     } else if (
         åpenBehandling.skalBehandlesAutomatisk ||
-        åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD ||
-        åpenBehandling.type === Behandlingstype.TEKNISK_OPPHØR
+        åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD
     ) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
     } else {

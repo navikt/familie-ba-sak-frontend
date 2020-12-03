@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
+
+import { Collapse } from 'react-collapse';
+
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { FeltState } from '../../../familie-skjema/typer';
+import FamilieChevron from '../../../ikoner/FamilieChevron';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -7,12 +12,9 @@ import {
     vilkårConfig,
     Resultat,
 } from '../../../typer/vilkår';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
-import { Collapse } from 'react-collapse';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import FamilieChevron from '../../../ikoner/FamilieChevron';
-import { FeltState } from '../../../familie-skjema/typer';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
