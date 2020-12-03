@@ -1,18 +1,22 @@
 import { IDokumentInfo, IJournalpost } from '@navikt/familie-typer';
 import Panel from 'nav-frontend-paneler';
-import React, { useState } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import navFarger from 'nav-frontend-core';
 
 const DokumentPanel = styled(Panel)`
     margin-top: 20px;
     width: 27rem;
     height: 100%;
-    border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
+    border: ${(props: { valgt: boolean }) =>
+        `${props.valgt ? '3px' : '1px'} solid ${
+            props.valgt ? navFarger.fokusFarge : navFarger.navMorkGra
+        }`};
     &:hover {
-        border-color: ${props => `${props.theme.hoverBorderColor}`};
+        border-color: ${navFarger.navBla};
     }
 `;
 
@@ -32,9 +36,6 @@ interface IDokumentInfoProps {
 interface IDokumentInfoStripeProps {
     dokument: IDokumentInfo;
     journalpost: IJournalpost;
-    valgt: boolean;
-    utvidet: boolean;
-    onClick: () => void;
 }
 
 interface IDokumentVelgerProps {
@@ -57,20 +58,9 @@ const StyledDokumentIkon = styled(DokumentIkon)`
     margin: 0 16px 0 0;
 `;
 
-const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
-    dokument,
-    journalpost,
-    valgt,
-    onClick,
-}) => {
+const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ dokument, journalpost }) => {
     return (
-        <DokumentInfoStripeContainer
-            onClick={() => {
-                if (!valgt) {
-                    onClick();
-                }
-            }}
-        >
+        <DokumentInfoStripeContainer>
             <StyledDokumentIkon />
             <DokumentInfo dokument={dokument} journalpost={journalpost}></DokumentInfo>
         </DokumentInfoStripeContainer>
@@ -83,35 +73,18 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({
     valgt,
 }) => {
     const { hentDokumentData, settValgtDokumentId } = useManuellJournalføring();
-    const [utvidet, settUtvidet] = useState<boolean>(false);
-    const theme = {
-        borderWidth: valgt ? '3px' : '1px',
-        borderColor: valgt ? '#254b6d' : 'black',
-        hoverBorderColor: '#0067c5',
-    };
-
     return (
-        <ThemeProvider theme={theme}>
-            <DokumentPanel
-                border
-                onClick={() => {
-                    if (!valgt) {
-                        hentDokumentData(journalpost.journalpostId, dokument.dokumentInfoId || '0');
-                        settValgtDokumentId(dokument.dokumentInfoId);
-                        settUtvidet(false);
-                    }
-                }}
-            >
-                <DokumentInfoStripe
-                    dokument={dokument}
-                    journalpost={journalpost}
-                    valgt={valgt}
-                    utvidet={valgt && utvidet}
-                    onClick={() => {
-                        settUtvidet(!utvidet);
-                    }}
-                />
-            </DokumentPanel>
-        </ThemeProvider>
+        <DokumentPanel
+            valgt={valgt}
+            border
+            onClick={() => {
+                if (!valgt) {
+                    hentDokumentData(journalpost.journalpostId, dokument.dokumentInfoId || '0');
+                    settValgtDokumentId(dokument.dokumentInfoId);
+                }
+            }}
+        >
+            <DokumentInfoStripe dokument={dokument} journalpost={journalpost} />
+        </DokumentPanel>
     );
 };
