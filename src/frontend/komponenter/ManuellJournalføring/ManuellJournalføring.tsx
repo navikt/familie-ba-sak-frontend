@@ -249,7 +249,7 @@ const ManuellJournalføringContent: React.FC = () => {
                             src={dokumentData.data}
                             width={'100%'}
                             height={'100%'}
-                        ></PdfFrame>
+                        />
                     )}
                 </PageSplit>
             ) : (
