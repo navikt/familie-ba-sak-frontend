@@ -1,11 +1,15 @@
-import { IDokumentInfo, IJournalpost } from '@navikt/familie-typer';
-import Panel from 'nav-frontend-paneler';
 import React from 'react';
+
 import styled from 'styled-components';
-import { DokumentIkon } from '../../ikoner/DokumentIkon';
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+
 import navFarger from 'nav-frontend-core';
+import Panel from 'nav-frontend-paneler';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+
+import { IDokumentInfo, IJournalpost } from '@navikt/familie-typer';
+
+import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { DokumentIkon } from '../../ikoner/DokumentIkon';
 
 const DokumentPanel = styled(Panel)`
     margin-top: 20px;

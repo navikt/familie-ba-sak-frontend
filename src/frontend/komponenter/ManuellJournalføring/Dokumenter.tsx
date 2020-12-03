@@ -1,6 +1,9 @@
-import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
+
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+
+import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
+
 import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import { DokumentVelger } from './DokumentVelger';
 
