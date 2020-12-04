@@ -1,32 +1,39 @@
 import * as React from 'react';
-import { IOppsummeringBeregning, ytelsetype } from '../../../typer/beregning';
+
+import { Xknapp } from 'nav-frontend-ikonknapper';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+
+import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
+
+import { useTidslinje } from '../../../context/TidslinjeContext';
+import { IUtbetalingsperiode, ytelsetype } from '../../../typer/beregning';
+import familieDayjs from '../../../utils/familieDayjs';
 import {
     datoformat,
     formaterBeløp,
-    formaterIsoDato,
+    formaterDato,
     formaterPersonIdent,
     hentAlderSomString,
     sorterFødselsdato,
 } from '../../../utils/formatter';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
-import { useTidslinje } from '../../../context/TidslinjeContext';
-import { Xknapp } from 'nav-frontend-ikonknapper';
-import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 interface IProps {
-    perioder: IOppsummeringBeregning[];
+    utbetalingsperioder: IUtbetalingsperiode[];
     aktivEtikett: Skalaetikett;
 }
 
-const summerTotalbeløpForPeriode = (sum: number, periode: IOppsummeringBeregning) => {
+const summerTotalbeløpForPeriode = (sum: number, periode: IUtbetalingsperiode) => {
     return sum + periode.utbetaltPerMnd;
 };
 
-const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEtikett }) => {
+const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
+    utbetalingsperioder,
+    aktivEtikett,
+}) => {
     const { settAktivEtikett } = useTidslinje();
 
     const månedNavnOgÅr = () => {
-        const navn = formaterIsoDato(aktivEtikett.dato.toDateString(), datoformat.MÅNED_NAVN);
+        const navn = formaterDato(familieDayjs(aktivEtikett.dato), datoformat.MÅNED_NAVN);
         return navn[0].toUpperCase() + navn.substr(1);
     };
 
@@ -36,7 +43,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                 <div className={'tilkjentytelse-informasjonsboks__header__info'}>
                     <Element>{månedNavnOgÅr()}</Element>
 
-                    {perioder.length > 0 ? (
+                    {utbetalingsperioder.length > 0 ? (
                         <Normaltekst>
                             Totalt utbetalt i mnd
                             <span
@@ -44,7 +51,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                                     'tilkjentytelse-informasjonsboks__header__info__totalbeløp'
                                 }
                             >
-                                {`${perioder.reduce(summerTotalbeløpForPeriode, 0)} kr`}
+                                {`${utbetalingsperioder.reduce(summerTotalbeløpForPeriode, 0)} kr`}
                             </span>
                         </Normaltekst>
                     ) : (
@@ -57,7 +64,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                     }}
                 />
             </div>
-            {perioder.length !== 0 && (
+            {utbetalingsperioder.length !== 0 && (
                 <table>
                     <thead>
                         <tr>
@@ -73,8 +80,8 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ perioder, aktivEti
                         </tr>
                     </thead>
                     <tbody>
-                        {perioder.map(periode => {
-                            return periode.beregningDetaljer
+                        {utbetalingsperioder.map((utbetalingsperiode: IUtbetalingsperiode) => {
+                            return utbetalingsperiode.utbetalingsperiodeDetaljer
                                 .sort((detaljA, detaljB) =>
                                     sorterFødselsdato(
                                         detaljA.person.fødselsdato,

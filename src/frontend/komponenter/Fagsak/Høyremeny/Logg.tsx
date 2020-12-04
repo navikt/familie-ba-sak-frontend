@@ -2,13 +2,12 @@ import * as React from 'react';
 
 import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
-import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
-import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { IBehandling } from '../../../typer/behandling';
 import { ILogg } from '../../../typer/logg';
-import { datoformat } from '../../../utils/formatter';
-import dayjs from 'dayjs';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
+import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 
 interface IProps {
     åpenBehandling: IBehandling | undefined;
@@ -29,7 +28,7 @@ const Logg = ({ åpenBehandling }: IProps) => {
                 (loggElement: ILogg): Hendelse => {
                     return {
                         id: loggElement.id.toString(),
-                        dato: dayjs(loggElement.opprettetTidspunkt).format(datoformat.DATO_TID),
+                        dato: formaterIsoDato(loggElement.opprettetTidspunkt, datoformat.DATO_TID),
                         utførtAv: loggElement.opprettetAv,
                         rolle: loggElement.rolle,
                         tittel: loggElement.tittel,

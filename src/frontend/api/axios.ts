@@ -1,7 +1,7 @@
-import { Ressurs, RessursStatus, ApiRessurs } from '@navikt/familie-typer';
-import axios, { AxiosError, AxiosResponse } from 'axios';
 import { captureException, configureScope, withScope } from '@sentry/core';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
+import { Ressurs, RessursStatus, ApiRessurs } from '@navikt/familie-typer';
 import { ISaksbehandler } from '@navikt/familie-typer';
 
 axios.defaults.baseURL = window.location.origin;

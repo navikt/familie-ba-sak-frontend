@@ -1,8 +1,10 @@
-import Visittkort from '@navikt/familie-visittkort';
-import { Element } from 'nav-frontend-typografi';
-import Lenke from 'nav-frontend-lenker';
-import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
+
+import Lenke from 'nav-frontend-lenker';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+
+import Visittkort from '@navikt/familie-visittkort';
+
 import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
 import { formaterPersonIdent, hentAlder } from '../../../utils/formatter';

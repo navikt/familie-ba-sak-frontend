@@ -1,24 +1,28 @@
+import * as React from 'react';
+
+import { useHistory } from 'react-router';
+import styled from 'styled-components';
+
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
-import * as React from 'react';
-import { useHistory } from 'react-router';
+
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IRestRegistrerSøknad } from '../../../typer/søknad';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import Barna from './Barna';
-import SøknadType from './SøknadType';
 import Annet from './Annet';
+import Barna from './Barna';
 import MålformVelger from './MålformVelger';
-import styled from 'styled-components';
+import SøknadType from './SøknadType';
 
 interface IProps {
     åpenBehandling: IBehandling;

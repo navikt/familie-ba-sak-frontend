@@ -1,9 +1,15 @@
+import React from 'react';
+
+import classNames from 'classnames';
+import { useHistory } from 'react-router';
+
 import Alertstripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import { Systemtittel } from 'nav-frontend-typografi';
-import React from 'react';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useApp } from '../../context/AppContext';
-import { useHistory } from 'react-router';
 import { useOppgaver } from '../../context/OppgaverContext';
 import {
     enhetFilter,
@@ -13,12 +19,10 @@ import {
     oppgaveTypeFilter,
     PrioritetFilter,
 } from '../../typer/oppgave';
-import { RessursStatus } from '@navikt/familie-typer';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
+import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
-import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
-import classNames from 'classnames';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;

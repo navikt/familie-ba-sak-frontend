@@ -1,20 +1,24 @@
-import { kjønnType, RessursStatus } from '@navikt/familie-typer';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import React from 'react';
+
+import { useHistory } from 'react-router';
+import styled from 'styled-components';
+
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { Undertittel } from 'nav-frontend-typografi';
+
+import { kjønnType, RessursStatus } from '@navikt/familie-typer';
+import Visittkort from '@navikt/familie-visittkort';
+
 import {
     ManuellJournalføringProviderV2,
     useManuellJournalføringV2,
 } from '../../context/ManuellJournalføringContextV2';
-import { Dokumenter } from './Dokumenter';
-import styled from 'styled-components';
-import Visittkort from '@navikt/familie-visittkort';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
-import { useHistory } from 'react-router';
-import { Undertittel } from 'nav-frontend-typografi';
-import { Journalpost } from './Journalpost';
-import { BrukerPanel } from './BrukerPanel';
 import { AvsenderPanel } from './AvsenderPanel';
+import { BrukerPanel } from './BrukerPanel';
+import { Dokumenter } from './Dokumenter';
+import { Journalpost } from './Journalpost';
 
 const TwoColumnDiv = styled.div`
     display: flex;

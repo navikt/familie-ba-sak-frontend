@@ -1,14 +1,16 @@
 import React from 'react';
+
+import classNames from 'classnames';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+
 import { useApp } from '../context/AppContext';
 import { FagsakProvider } from '../context/FagsakContext';
 import { Oppgaver } from '../context/OppgaverContext';
+import FagsakContainer from './Fagsak/FagsakContainer';
 import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
-import classNames from 'classnames';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
-import FagsakContainer from './Fagsak/FagsakContainer';
 import ManuellJournalføringV2 from './ManuellJournalføringV2/ManuellJournalføringV2';
 
 const Container: React.FC = () => {

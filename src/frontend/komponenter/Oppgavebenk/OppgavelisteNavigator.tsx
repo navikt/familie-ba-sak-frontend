@@ -1,7 +1,10 @@
 import React from 'react';
-import { useOppgaver, oppgaveSideLimit } from '../../context/OppgaverContext';
-import { RessursStatus } from '@navikt/familie-typer';
+
 import Pagination from 'paginering';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { useOppgaver, oppgaveSideLimit } from '../../context/OppgaverContext';
 
 const OppgavelisteNavigator: React.FunctionComponent = () => {
     const { oppgaver, hentOppgaveSide, sideindeks, settSide } = useOppgaver();

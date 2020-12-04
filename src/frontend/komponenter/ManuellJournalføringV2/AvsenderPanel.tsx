@@ -1,5 +1,7 @@
-import { RessursStatus } from '@navikt/familie-typer';
 import React from 'react';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { EmailIkon } from '../../ikoner/EmailIkon';
 import { Deltager } from './Deltager';

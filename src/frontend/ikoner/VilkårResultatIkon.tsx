@@ -1,8 +1,9 @@
 import React from 'react';
+
 import { Resultat } from '../typer/vilkår';
-import Oppfylt from './Oppfylt';
-import IkkeOppfylt from './IkkeOppfylt';
 import Advarsel from './Advarsel';
+import IkkeOppfylt from './IkkeOppfylt';
+import Oppfylt from './Oppfylt';
 
 interface IVilkårResultatIkon {
     className?: string;

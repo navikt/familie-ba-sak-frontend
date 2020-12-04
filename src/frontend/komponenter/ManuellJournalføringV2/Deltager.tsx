@@ -1,8 +1,12 @@
-import { RessursStatus } from '@navikt/familie-typer';
+import React from 'react';
+
+import styled from 'styled-components';
+
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import React from 'react';
-import styled from 'styled-components';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 
 interface DeltagerProps {

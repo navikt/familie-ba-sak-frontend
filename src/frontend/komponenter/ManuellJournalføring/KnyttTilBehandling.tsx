@@ -1,10 +1,13 @@
-import { FamilieCheckbox } from '@navikt/familie-form-elements';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
-import dayjs from 'dayjs';
+import React, { useState } from 'react';
+
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
-import React, { useState } from 'react';
+
+import { FamilieCheckbox } from '@navikt/familie-form-elements';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useApp } from '../../context/AppContext';
 import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import Pluss from '../../ikoner/Pluss';
 import {
@@ -17,6 +20,7 @@ import {
 } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IDataForManuellJournalføring } from '../../typer/manuell-journalføring';
+import familieDayjs from '../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../utils/formatter';
 import IkonKnapp from '../Felleskomponenter/IkonKnapp/IkonKnapp';
 
@@ -29,8 +33,9 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
     aktivBehandling,
     dataForManuellJournalføring,
 }) => {
+    const { innloggetSaksbehandler } = useApp();
     const behandlinger = dataForManuellJournalføring.fagsak?.behandlinger.sort((a, b) =>
-        dayjs(b.opprettetTidspunkt).diff(dayjs(a.opprettetTidspunkt))
+        familieDayjs(b.opprettetTidspunkt).diff(familieDayjs(a.opprettetTidspunkt))
     );
     const visOpprettBehandlingKnapp =
         !aktivBehandling || aktivBehandling.status === BehandlingStatus.AVSLUTTET;
@@ -82,10 +87,11 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
 
                 const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
                     behandlingType: behandlingType,
-                    søkersIdent: søker,
-                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
-                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
                     behandlingÅrsak: BehandlingÅrsak.SØKNAD,
+                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
+                    navIdent: innloggetSaksbehandler?.navIdent,
+                    søkersIdent: søker,
+                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
                 }).then((response: Ressurs<IFagsak>) => response);
 
                 settOppretterBehandling(false);
@@ -185,7 +191,7 @@ export const KnyttTilBehandling: React.FC<IKnyttTilBehandlingProps> = ({
                                 </td>
                                 <td className={'behandlingliste__tabell--dato'}>
                                     {formaterDato(
-                                        dayjs(behandling.opprettetTidspunkt),
+                                        familieDayjs(behandling.opprettetTidspunkt),
                                         datoformat.DATO_FORKORTTET
                                     )}
                                 </td>

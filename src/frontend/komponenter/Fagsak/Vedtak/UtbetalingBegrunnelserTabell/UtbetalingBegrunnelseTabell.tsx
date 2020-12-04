@@ -1,21 +1,19 @@
-import dayjs from 'dayjs';
-import { Feilmelding } from 'nav-frontend-typografi';
 import React from 'react';
+
+import { Feilmelding } from 'nav-frontend-typografi';
+
+import { useBehandling } from '../../../../context/BehandlingContext';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
-import {
-    periodeToString,
-    sisteDagInneværendeMåned,
-    stringToMoment,
-    TIDENES_MORGEN,
-} from '../../../../typer/periode';
+import { IUtbetalingsperiode } from '../../../../typer/beregning';
+import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
-import { datoformat } from '../../../../utils/formatter';
+import familieDayjs from '../../../../utils/familieDayjs';
+import { datoformat, isoStringToDayjs } from '../../../../utils/formatter';
+import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
-import { useBehandling } from '../../../../context/BehandlingContext';
-import { IOppsummeringBeregning } from '../../../../typer/beregning';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -31,19 +29,35 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
         utbetalingBegrunnelseFeilmelding,
     } = useUtbetalingBegrunnelser();
 
-    const harAndeler = åpenBehandling.beregningOversikt.length > 0;
-    const beregningerMedBegrunnelseBehov = åpenBehandling.beregningOversikt
+    const harAndeler = åpenBehandling.utbetalingsperioder.length > 0;
+    const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
         .slice()
         .sort((a, b) =>
-            dayjs(a.periodeFom, datoformat.ISO_DAG).diff(
-                dayjs(b.periodeFom, datoformat.ISO_DAG),
-                'day'
+            familieDayjs(a.periodeFom, datoformat.ISO_DAG).diff(
+                familieDayjs(b.periodeFom, datoformat.ISO_DAG)
             )
         )
-        .filter((beregningRad: IOppsummeringBeregning) => beregningRad.endring.trengerBegrunnelse);
+        .filter((utbetalingsperiode: IUtbetalingsperiode) => {
+            const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
+                (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
+                    return (
+                        utbetalingBegrunnelse.fom === utbetalingsperiode.periodeFom &&
+                        utbetalingBegrunnelse.tom === utbetalingsperiode.periodeTom
+                    );
+                }
+            );
+
+            // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
+            if (erLesevisning()) {
+                return utbetalingBegrunnelseForPeriode.length !== 0;
+            }
+
+            // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
+            return familieDayjs(utbetalingsperiode.periodeFom).diff(familieDayjs(), 'month') < 2;
+        });
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
-        stringToMoment(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
+        isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
 
     return harAndeler ? (
         <table className={'tabell'}>
@@ -55,79 +69,85 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                 </tr>
             </thead>
             <tbody>
-                {beregningerMedBegrunnelseBehov.map(beregningRad => {
-                    const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
-                        (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
-                            return (
-                                utbetalingBegrunnelse.fom === beregningRad.periodeFom &&
-                                utbetalingBegrunnelse.tom === beregningRad.periodeTom
-                            );
-                        }
-                    );
+                {utbetalingsperioderMedBegrunnelseBehov.map(
+                    (utbetalingsperiode: IUtbetalingsperiode) => {
+                        const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
+                            (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
+                                return (
+                                    utbetalingBegrunnelse.fom === utbetalingsperiode.periodeFom &&
+                                    utbetalingBegrunnelse.tom === utbetalingsperiode.periodeTom
+                                );
+                            }
+                        );
 
-                    return (
-                        <tr key={beregningRad.periodeFom}>
-                            <td>
-                                {periodeToString({
-                                    fom: beregningRad.periodeFom,
-                                    tom: slutterSenereEnnInneværendeMåned(beregningRad.periodeTom)
-                                        ? ''
-                                        : beregningRad.periodeTom,
-                                })}
-                            </td>
-                            <td>{`${beregningRad.utbetaltPerMnd} kr/mnd for ${beregningRad.antallBarn} barn`}</td>
-                            <td>
-                                {utbetalingBegrunnelseForPeriode.map(
-                                    (
-                                        utbetalingBegrunnelse: IRestUtbetalingBegrunnelse,
-                                        index: number
-                                    ) => {
-                                        return utbetalingBegrunnelse.id ? (
-                                            <UtbetalingBegrunnelseInput
-                                                key={index}
-                                                id={utbetalingBegrunnelse.id}
-                                                begrunnelseType={
-                                                    utbetalingBegrunnelse.begrunnelseType
-                                                }
-                                                vedtakBegrunnelse={
-                                                    utbetalingBegrunnelse.vedtakBegrunnelse
-                                                }
-                                                erLesevisning={erLesevisning()}
-                                            />
-                                        ) : (
-                                            <Feilmelding key={index}>
-                                                Begrunnelsen mangler id
-                                            </Feilmelding>
-                                        );
-                                    }
-                                )}
-                                <IkonKnapp
-                                    erLesevisning={erLesevisning()}
-                                    id={`legg-til-begrunnelse-${periodeToString({
-                                        fom: beregningRad.periodeFom,
-                                        tom: beregningRad.periodeTom,
-                                    })}`}
-                                    onClick={() => {
-                                        leggTilUtbetalingBegrunnelse({
-                                            fom: beregningRad.periodeFom,
-                                            tom: beregningRad.periodeTom,
-                                        });
-                                    }}
-                                    knappPosisjon={'venstre'}
-                                    mini={true}
-                                    label={'Legg til'}
-                                    ikon={<Pluss />}
-                                    spinner={false}
-                                />
-                                {!utbetalingBegrunnelseFeilmelding.id && (
-                                    <Feilmelding>
-                                        {utbetalingBegrunnelseFeilmelding.feilmelding}
-                                    </Feilmelding>
-                                )}
-                            </td>
-                        </tr>
-                    );
-                })}
+                        return (
+                            <tr key={utbetalingsperiode.periodeFom}>
+                                <td>
+                                    {periodeToString({
+                                        fom: utbetalingsperiode.periodeFom,
+                                        tom: slutterSenereEnnInneværendeMåned(
+                                            utbetalingsperiode.periodeTom
+                                        )
+                                            ? ''
+                                            : utbetalingsperiode.periodeTom,
+                                    })}
+                                </td>
+                                <td>{`${utbetalingsperiode.utbetaltPerMnd} kr/mnd for ${utbetalingsperiode.antallBarn} barn`}</td>
+                                <td>
+                                    {utbetalingBegrunnelseForPeriode.map(
+                                        (
+                                            utbetalingBegrunnelse: IRestUtbetalingBegrunnelse,
+                                            index: number
+                                        ) => {
+                                            return utbetalingBegrunnelse.id ? (
+                                                <UtbetalingBegrunnelseInput
+                                                    key={index}
+                                                    id={utbetalingBegrunnelse.id}
+                                                    utbetalingBegrunnelse={utbetalingBegrunnelse}
+                                                    erLesevisning={erLesevisning()}
+                                                    personResultater={
+                                                        åpenBehandling.personResultater
+                                                    }
+                                                    periode={{
+                                                        fom: utbetalingsperiode.periodeFom,
+                                                        tom: utbetalingsperiode.periodeTom,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Feilmelding key={index}>
+                                                    Begrunnelsen mangler id
+                                                </Feilmelding>
+                                            );
+                                        }
+                                    )}
+                                    <IkonKnapp
+                                        erLesevisning={erLesevisning()}
+                                        id={`legg-til-begrunnelse-${periodeToString({
+                                            fom: utbetalingsperiode.periodeFom,
+                                            tom: utbetalingsperiode.periodeTom,
+                                        })}`}
+                                        onClick={() => {
+                                            leggTilUtbetalingBegrunnelse({
+                                                fom: utbetalingsperiode.periodeFom,
+                                                tom: utbetalingsperiode.periodeTom,
+                                            });
+                                        }}
+                                        knappPosisjon={'venstre'}
+                                        mini={true}
+                                        label={'Legg til'}
+                                        ikon={<Pluss />}
+                                        spinner={false}
+                                    />
+                                    {!utbetalingBegrunnelseFeilmelding.id && (
+                                        <Feilmelding>
+                                            {utbetalingBegrunnelseFeilmelding.feilmelding}
+                                        </Feilmelding>
+                                    )}
+                                </td>
+                            </tr>
+                        );
+                    }
+                )}
             </tbody>
         </table>
     ) : null;

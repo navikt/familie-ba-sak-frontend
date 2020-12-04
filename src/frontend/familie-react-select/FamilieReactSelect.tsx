@@ -1,18 +1,20 @@
 import React from 'react';
+
 import ReactSelect, { NamedProps, StylesConfig } from 'react-select';
 import Creatable from 'react-select/creatable';
-import { Label } from 'nav-frontend-skjema';
 import styled from 'styled-components';
-import { Feilmelding } from 'nav-frontend-typografi';
+
 import navFarger from 'nav-frontend-core';
+import { Label } from 'nav-frontend-skjema';
+import { Feilmelding } from 'nav-frontend-typografi';
 
 interface IProps extends NamedProps {
     erLesevisning: boolean;
     creatable?: boolean;
     label: string | React.ReactNode;
-    lesevisningVerdi?: string;
     feil?: string;
     propSelectStyles?: StylesConfig;
+    //TODO: legg inn lesevisningsverdi når denne dras ut i felles
 }
 
 const Container = styled.div`
@@ -76,7 +78,6 @@ const FamilieReactSelect: React.FC<IProps> = ({
     erLesevisning,
     creatable = false,
     label,
-    lesevisningVerdi,
     value,
     feil,
     propSelectStyles,

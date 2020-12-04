@@ -1,23 +1,28 @@
-import dayjs from 'dayjs';
 import { YearMonth } from '../typer/tid';
+import familieDayjs, { Dayjs } from './familieDayjs';
 
 export const periodeOverlapperMedValgtDato = (
     periodeFom: string,
     periodeTom: string,
     valgtDato: Date
 ) => {
-    const valgtDatoToMoment = dayjs(valgtDato.toDateString());
+    const valgtDatoToDayjs = familieDayjs(valgtDato);
+
     return (
-        valgtDatoToMoment.isBetween(periodeFom, periodeTom) ||
-        valgtDatoToMoment.isSame(periodeFom) ||
-        valgtDatoToMoment.isSame(periodeTom)
+        valgtDatoToDayjs.isBetween(periodeFom, periodeTom, 'date') ||
+        valgtDatoToDayjs.isSame(periodeFom, 'date') ||
+        valgtDatoToDayjs.isSame(periodeTom, 'date')
     );
 };
 
+export const sisteDagInneværendeMåned = (): Dayjs => {
+    return familieDayjs().endOf('month');
+};
+
 export const hentFørsteDagIYearMonth = (yearMonth: YearMonth) => {
-    return dayjs(yearMonth).startOf('month');
+    return familieDayjs(yearMonth).startOf('month');
 };
 
 export const hentSisteDagIYearMonth = (yearMonth: YearMonth) => {
-    return dayjs(yearMonth).endOf('month');
+    return familieDayjs(yearMonth).endOf('month');
 };

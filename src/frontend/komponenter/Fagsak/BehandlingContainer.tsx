@@ -1,29 +1,41 @@
-import React from 'react';
-import { Route, Switch, useParams } from 'react-router';
+import React, { useEffect } from 'react';
+
+import { Route, Switch, useHistory, useParams } from 'react-router';
+
+import AlertStripe from 'nav-frontend-alertstriper';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { useBehandling } from '../../context/BehandlingContext';
 import { SøknadProvider } from '../../context/SøknadContext';
+import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IFagsak } from '../../typer/fagsak';
+import { useAmplitude } from '../../utils/amplitude';
+import Opplysningsplikt from './Opplysningsplikt/Opplysningsplikt';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
 import Vilkårsvurdering from './Vilkårsvurdering/Vilkårsvurdering';
-import { useBehandling } from '../../context/BehandlingContext';
-import { RessursStatus } from '@navikt/familie-typer';
-import AlertStripe from 'nav-frontend-alertstriper';
-import { TidslinjeProvider } from '../../context/TidslinjeContext';
-import Opplysningsplikt from './Opplysningsplikt/Opplysningsplikt';
 
 interface IProps {
     fagsak: IFagsak;
 }
 
 const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
+    const { loggSidevisning } = useAmplitude();
+    const history = useHistory();
     const { behandlingId } = useParams<{ behandlingId: string }>();
     const { bestemÅpenBehandling, åpenBehandling } = useBehandling();
 
     React.useEffect(() => {
         bestemÅpenBehandling(behandlingId);
     }, [fagsak, behandlingId]);
+
+    const sidevisning = history.location.pathname.split('/')[4];
+    useEffect(() => {
+        loggSidevisning(sidevisning);
+    }, [sidevisning]);
 
     switch (åpenBehandling.status) {
         case RessursStatus.SUKSESS:

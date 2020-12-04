@@ -1,9 +1,13 @@
-import { FamilieInput } from '@navikt/familie-form-elements';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import React, { useState } from 'react';
+
+import styled from 'styled-components';
+
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import React, { useState } from 'react';
-import styled from 'styled-components';
+
+import { FamilieInput } from '@navikt/familie-form-elements';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { useFelt } from '../../familie-skjema/felt';

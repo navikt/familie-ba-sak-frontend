@@ -1,11 +1,14 @@
 import React from 'react';
-import { useApp } from '../../../context/AppContext';
-import UIModalWrapper from '../Modal/UIModalWrapper';
+
+import styled from 'styled-components';
+
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import useOpprettFagsak from './useOpprettFagsak';
-import styled from 'styled-components';
+
+import { useApp } from '../../../context/AppContext';
 import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
+import UIModalWrapper from '../Modal/UIModalWrapper';
+import useOpprettFagsak from './useOpprettFagsak';
 
 export interface IOpprettFagsakModal {
     lukkModal: () => void;

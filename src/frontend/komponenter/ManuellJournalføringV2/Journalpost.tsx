@@ -1,13 +1,17 @@
 import React from 'react';
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
-import { RessursStatus } from '@navikt/familie-typer';
-import styled from 'styled-components';
-import { datoformat, formaterIsoDato } from '../../utils/formatter';
+
 import CreatableSelect from 'react-select/creatable';
-import { journalpostTittelList } from './DokumentVelger';
+import styled from 'styled-components';
+
+import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Label } from 'nav-frontend-skjema';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
+import { datoformat, formaterIsoDato } from '../../utils/formatter';
+import { journalpostTittelList } from './DokumentVelger';
 
 const JournalpostDiv = styled.div`
     width: 560px;

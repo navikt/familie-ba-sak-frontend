@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { configureScope, withScope, captureException } from '@sentry/core';
+
 import { showReportDialog } from '@sentry/browser';
+import { configureScope, withScope, captureException } from '@sentry/core';
+
 import { ISaksbehandler } from '@navikt/familie-typer';
+
 import { apiLoggFeil } from '../../../api/axios';
 
 interface IProps {

@@ -1,10 +1,12 @@
+import React from 'react';
+
+import CreatableSelect from 'react-select/creatable';
+import styled, { ThemeProvider } from 'styled-components';
+
 import navFarger from 'nav-frontend-core';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import Lenkepanel from 'nav-frontend-lenkepanel';
 import { Label } from 'nav-frontend-skjema';
-import React from 'react';
-import CreatableSelect from 'react-select/creatable';
-import styled, { ThemeProvider } from 'styled-components';
 
 import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
 

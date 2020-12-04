@@ -1,3 +1,9 @@
+import React from 'react';
+
+import { AxiosError } from 'axios';
+import createUseContext from 'constate';
+import { useParams } from 'react-router';
+
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -7,10 +13,7 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { AxiosError } from 'axios';
-import createUseContext from 'constate';
-import React from 'react';
-import { useParams } from 'react-router';
+
 import {
     BrevkodeMap,
     IDataForManuellJournalføring,

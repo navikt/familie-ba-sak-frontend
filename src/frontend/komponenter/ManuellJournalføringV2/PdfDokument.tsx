@@ -1,10 +1,13 @@
-import { hentDataFraRessursMedFallback, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import React from 'react';
+
+import { Document, Page } from 'react-pdf';
+import styled from 'styled-components';
+
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
-import React from 'react';
-import styled from 'styled-components';
-import { Document, Page } from 'react-pdf';
+
+import { hentDataFraRessursMedFallback, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 const Spinner = styled.div`
     align-items: center;

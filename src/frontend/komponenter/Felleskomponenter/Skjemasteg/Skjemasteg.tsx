@@ -1,9 +1,12 @@
-import { Knapp } from 'nav-frontend-knapper';
-import { Innholdstittel } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useEffect } from 'react';
+
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
+
+import { Knapp } from 'nav-frontend-knapper';
+import { Innholdstittel } from 'nav-frontend-typografi';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import { ISide, sider } from '../Venstremeny/sider';
 

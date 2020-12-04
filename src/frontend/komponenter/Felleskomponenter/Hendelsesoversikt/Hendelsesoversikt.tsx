@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Hendelse, Tabs } from './typer';
-
-import HendelseItem from './komponenter/HendelseItem';
 import classNames from 'classnames';
+
+import { BrevModulProvider } from '../../../context/BrevModulContext';
 import Brev from './BrevModul/Brev';
 import Header from './Header/Header';
-import { BrevModulProvider } from '../../../context/BrevModulContext';
+import HendelseItem from './komponenter/HendelseItem';
+import { Hendelse, Tabs } from './typer';
 
 export { Hendelse };
 

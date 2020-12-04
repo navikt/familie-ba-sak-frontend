@@ -1,10 +1,13 @@
+import { useState } from 'react';
+
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { useState } from 'react';
+
+import { useApp } from '../../../../../context/AppContext';
 import {
     BehandlingKategori,
     Behandlingstype,
@@ -14,6 +17,7 @@ import {
 import useFagsakApi from '../../../useFagsakApi';
 
 const useOpprettBehandling = (lukkModal: () => void) => {
+    const { innloggetSaksbehandler } = useApp();
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
     const [selectedBehandlingstype, settSelectedBehandlingstype] = useState<Behandlingstype | ''>(
         ''
@@ -60,8 +64,9 @@ const useOpprettBehandling = (lukkModal: () => void) => {
             opprettBehandling({
                 behandlingType: selectedBehandlingstype,
                 behandlingÅrsak: selectedBehandlingÅrsak,
-                søkersIdent,
                 kategori: BehandlingKategori.NASJONAL,
+                navIdent: innloggetSaksbehandler?.navIdent,
+                søkersIdent,
                 underkategori: BehandlingUnderkategori.ORDINÆR,
             }).then(response => {
                 if (response.status === RessursStatus.SUKSESS) {
@@ -72,17 +77,53 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         }
     };
 
+    const visÅrsakerSelect = () => selectedBehandlingstype === Behandlingstype.REVURDERING;
+
+    const behandlingstypeOnChange = (behandlingstype: Behandlingstype | '') => {
+        settSubmitRessurs(byggTomRessurs());
+        settValideringsfeil(valideringsFeil => {
+            return {
+                ...valideringsFeil,
+                behandlingstype: '',
+            };
+        });
+
+        switch (behandlingstype) {
+            case Behandlingstype.TEKNISK_OPPHØR:
+                settSelectedBehandlingÅrsak(BehandlingÅrsak.TEKNISK_OPPHØR);
+                break;
+            case Behandlingstype.FØRSTEGANGSBEHANDLING:
+                settSelectedBehandlingÅrsak(BehandlingÅrsak.SØKNAD);
+                break;
+            default:
+                settSelectedBehandlingÅrsak('');
+                break;
+        }
+
+        settSelectedBehandlingstype(behandlingstype);
+    };
+
+    const behandlingÅrsakOnChange = (behandlingÅrsak: BehandlingÅrsak | '') => {
+        settSubmitRessurs(byggTomRessurs());
+        settValideringsfeil(valideringsFeil => {
+            return {
+                ...valideringsFeil,
+                behandlingÅrsak: '',
+            };
+        });
+        settSelectedBehandlingÅrsak(behandlingÅrsak);
+    };
+
     return {
         onBekreft,
         fjernState,
-        settSubmitRessurs,
         submitRessurs,
-        settSelectedBehandlingstype,
         selectedBehandlingstype,
         selectedBehandlingÅrsak,
-        settSelectedBehandlingÅrsak,
         valideringsFeil,
-        settValideringsfeil,
+        behandlingstypeOnChange,
+        behandlingÅrsakOnChange,
+        visÅrsakerSelect,
     };
 };
 

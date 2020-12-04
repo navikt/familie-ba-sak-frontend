@@ -1,26 +1,30 @@
-import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
-import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
-import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
+
+import { useHistory } from 'react-router';
+import styled from 'styled-components';
+
+import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import Lenke from 'nav-frontend-lenker';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Normaltekst } from 'nav-frontend-typografi';
+
+import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { useBehandling } from '../../../../../context/BehandlingContext';
+import Oppfylt from '../../../../../ikoner/Oppfylt';
 import {
     BehandlingSteg,
     henleggelseÅrsak,
     HenleggelseÅrsak,
     IBehandling,
 } from '../../../../../typer/behandling';
-import useHenleggBehandling from './useHenleggBehandling';
-import { RessursStatus } from '@navikt/familie-typer';
-import { useHistory } from 'react-router';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { Normaltekst } from 'nav-frontend-typografi';
-import Oppfylt from '../../../../../ikoner/Oppfylt';
-import styled from 'styled-components';
-import { useBehandling } from '../../../../../context/BehandlingContext';
-import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
-import Lenke from 'nav-frontend-lenker';
+import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import useForhåndsvisning from '../../../../Felleskomponenter/PdfVisningModal/useForhåndsvisning';
+import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
+import useHenleggBehandling from './useHenleggBehandling';
 
 interface IProps {
     onListElementClick: () => void;

@@ -1,30 +1,40 @@
 import React from 'react';
-import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
-import { IBeregningDetalj, satsBeløp, ytelsetype, YtelseType } from '../../../typer/beregning';
+
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import {
+    IUtbetalingsperiodeDetalj,
+    satsBeløp,
+    YtelseType,
+    ytelsetype,
+} from '../../../typer/beregning';
+import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
+import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+
 interface IPersonUtbetalingProps {
-    beregningDetaljer: IBeregningDetalj[];
+    utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
 }
 
-const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ beregningDetaljer }) => {
+const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiodeDetaljer }) => {
     const genererTekstForOrdinær = (beløp: number) =>
         beløp === satsBeløp.ORDINÆR_UNDER_6_ÅR ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
 
     return (
         <li>
-            <PersonInformasjon person={beregningDetaljer[0].person} />
+            <PersonInformasjon person={utbetalingsperiodeDetaljer[0].person} />
             <div className={'saksoversikt__utbetalinger__ytelser'}>
-                {beregningDetaljer.map((beregningDetaljer, index) => {
+                {utbetalingsperiodeDetaljer.map((utbetalingsperiodeDetalj, index) => {
                     return (
                         <div key={index} className={'saksoversikt__utbetalinger__ytelselinje'}>
                             <Normaltekst>
-                                {beregningDetaljer.ytelseType === YtelseType.ORDINÆR_BARNETRYGD
-                                    ? genererTekstForOrdinær(beregningDetaljer.utbetaltPerMnd)
-                                    : ytelsetype[beregningDetaljer.ytelseType].navn}
+                                {utbetalingsperiodeDetalj.ytelseType ===
+                                YtelseType.ORDINÆR_BARNETRYGD
+                                    ? genererTekstForOrdinær(
+                                          utbetalingsperiodeDetalj.utbetaltPerMnd
+                                      )
+                                    : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
                             </Normaltekst>
-                            <Normaltekst>{`${beregningDetaljer.utbetaltPerMnd} kr`}</Normaltekst>
+                            <Normaltekst>{`${utbetalingsperiodeDetalj.utbetaltPerMnd} kr`}</Normaltekst>
                         </div>
                     );
                 })}

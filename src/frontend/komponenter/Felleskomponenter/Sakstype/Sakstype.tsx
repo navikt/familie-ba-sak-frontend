@@ -1,11 +1,13 @@
 import * as React from 'react';
+
+import { FamilieSelect } from '@navikt/familie-form-elements';
+
 import {
     BehandlingKategori,
     BehandlingUnderkategori,
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { FamilieSelect } from '@navikt/familie-form-elements';
 
 interface IProps {
     kategori: BehandlingKategori;

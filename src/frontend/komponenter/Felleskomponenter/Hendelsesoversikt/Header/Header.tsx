@@ -1,10 +1,12 @@
 import * as React from 'react';
+
 import styled from 'styled-components';
+
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { Tabs } from '../typer';
 import Dokumenterknapp from './Dokumenterknapp';
 import Historikkknapp from './Historikkknapp';
 import Meldingerknapp from './Meldingerknapp';
-import { Tabs } from '../typer';
 
 interface IProps {
     aktivTab: Tabs;

@@ -1,7 +1,10 @@
 import React from 'react';
-import { useTidslinje } from '../../../context/TidslinjeContext';
+
 import classNames from 'classnames';
+
 import { Undertekst } from 'nav-frontend-typografi';
+
+import { useTidslinje } from '../../../context/TidslinjeContext';
 
 const Vinduvelger: React.FunctionComponent = () => {
     const { tidslinjeVinduer, endreTidslinjeVindu, aktivtTidslinjeVindu } = useTidslinje();

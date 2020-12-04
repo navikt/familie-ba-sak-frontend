@@ -1,20 +1,23 @@
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import React, { useState } from 'react';
+
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertekst } from 'nav-frontend-typografi';
-import React, { useState } from 'react';
+
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import { FeltState } from '../../../../familie-skjema/typer';
 import Pluss from '../../../../ikoner/Pluss';
+import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
-import { useBehandling } from '../../../../context/BehandlingContext';
-import { IFagsak } from '../../../../typer/fagsak';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import { FeltState } from '../../../../familie-skjema/typer';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
