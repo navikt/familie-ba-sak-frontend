@@ -16,6 +16,7 @@ import {
     IDataForManuellJournalføring,
     JournalpostTittel,
 } from '../typer/manuell-journalføring';
+import { IPersonInfo } from '../typer/person';
 import { useApp } from './AppContext';
 
 const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseContext(() => {
@@ -199,6 +200,18 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
     };
 
+    const settPerson = (person: IPersonInfo) => {
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
+            settOppdatertData({
+                ...oppdatertData,
+                data: {
+                    ...oppdatertData.data,
+                    person: person,
+                },
+            });
+        }
+    };
+
     React.useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
@@ -224,6 +237,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settJournalpostTittel,
         tilbakestilleJournalpostTittel,
         brevkode,
+        settPerson,
     };
 });
 

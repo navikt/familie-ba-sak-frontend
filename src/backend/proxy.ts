@@ -1,8 +1,11 @@
-import { Client, getOnBehalfOfAccessToken, stdoutLogger } from '@navikt/familie-backend';
-import { NextFunction, Request, Response } from 'express';
 import { ClientRequest } from 'http';
+
+import { NextFunction, Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { v4 as uuidv4 } from 'uuid';
+
+import { Client, getOnBehalfOfAccessToken, stdoutLogger } from '@navikt/familie-backend';
+
 import { oboConfig, proxyUrl } from './config';
 
 const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
@@ -14,6 +17,14 @@ const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     }
 };
 
+const doMock = (path: string) => {
+    let mockPath = path.replace('oppgave/', 'mock/oppgave/');
+    mockPath = mockPath.replace('journalpost/', 'mock/journalpost/');
+    mockPath = mockPath.replace('feature', 'mock/feature');
+    mockPath = mockPath.replace('person', 'mock/person');
+    return mockPath;
+};
+
 // eslint-disable-next-line
 export const doProxy: any = () => {
     return createProxyMiddleware('/familie-ba-sak/api', {
@@ -21,7 +32,7 @@ export const doProxy: any = () => {
         logLevel: 'info',
         onProxyReq: restream,
         pathRewrite: (path: string, _req: Request) => {
-            const newPath = path.replace('/familie-ba-sak/api', '');
+            const newPath = doMock(path.replace('/familie-ba-sak/api', ''));
             return `/api${newPath}`;
         },
         secure: true,
