@@ -10,9 +10,10 @@ export const AvsenderPanel: React.FC = () => {
     const { dataForManuellJournalføring } = useManuellJournalføringV2();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
-            const navn = 'Sender navn';
-            const type = 'Sender';
-            const ident = '123456 11111';
+            const avsender = dataForManuellJournalføring.data.journalpost.avsenderMottaker;
+            const navn = avsender?.navn || 'Ukjent avsender';
+            const type = avsender?.type || 'Ukjent avsenderstype';
+            const ident = avsender?.id || 'Ukjent avsenderident';
             return <Deltager ikon={<EmailIkon />} navn={navn} type={type} ident={ident}></Deltager>;
         default:
             return <></>;

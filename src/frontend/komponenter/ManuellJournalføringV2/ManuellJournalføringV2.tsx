@@ -45,6 +45,7 @@ const ManuellJournalføringContentV2: React.FC = () => {
     const { dataForManuellJournalføring, visDokument, dokumentData } = useManuellJournalføringV2();
     const history = useHistory();
 
+    console.log(dataForManuellJournalføring);
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
