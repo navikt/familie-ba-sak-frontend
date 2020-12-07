@@ -42,7 +42,7 @@
     "@navikt/helse-frontend-tidslinje": "^3.1.0",
     "@sentry/browser": "^5.27.3",
     "@sentry/core": "^5.27.3",
-    "@types/amplitude-js": "^6.0.0",
+    "@types/amplitude-js": "^7.0.0",
     "@types/classnames": "^2.2.10",
     "@types/deep-equal": "^1.0.1",
     "@types/express": "^4.17.6",
