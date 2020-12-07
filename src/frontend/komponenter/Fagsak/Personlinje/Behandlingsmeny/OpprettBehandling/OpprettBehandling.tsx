@@ -45,22 +45,17 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
     const revurderingEnabled = fagsak.behandlinger.length > 0 && kanOppretteBehandling;
     const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
 
-    const {
-        fjernState,
-        onBekreft,
-        selectedBehandlingstype,
-        submitRessurs,
-        selectedBehandlingÅrsak,
-        valideringsFeil,
-        behandlingstypeOnChange,
-        behandlingÅrsakOnChange,
-        visÅrsakerSelect,
-    } = useOpprettBehandling(() => settVisModal(false));
+    const { onBekreft, opprettBehandlingSkjema, nullstillSkjema } = useOpprettBehandling(() =>
+        settVisModal(false)
+    );
 
     const lukkOpprettBehandlingModal = () => {
-        fjernState();
+        nullstillSkjema();
         settVisModal(false);
     };
+
+    const behandlingstypeFelt = opprettBehandlingSkjema.felter.behandlingstype;
+    const behandlingsårsakFelt = opprettBehandlingSkjema.felter.behandlingsårsak;
 
     return (
         <>
@@ -80,10 +75,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         <Flatknapp
                             key={'avbryt'}
                             mini={true}
-                            onClick={() => {
-                                fjernState();
-                                lukkOpprettBehandlingModal();
-                            }}
+                            onClick={lukkOpprettBehandlingModal}
                             children={'Avbryt'}
                         />,
                         <Knapp
@@ -92,14 +84,17 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                             mini={true}
                             onClick={() => onBekreft(fagsak.søkerFødselsnummer)}
                             children={'Bekreft'}
-                            spinner={submitRessurs.status === RessursStatus.HENTER}
-                            disabled={submitRessurs.status === RessursStatus.HENTER}
+                            spinner={
+                                opprettBehandlingSkjema.submitRessurs.status ===
+                                RessursStatus.HENTER
+                            }
+                            disabled={
+                                opprettBehandlingSkjema.submitRessurs.status ===
+                                RessursStatus.HENTER
+                            }
                         />,
                     ],
-                    onClose: () => {
-                        fjernState();
-                        lukkOpprettBehandlingModal();
-                    },
+                    onClose: lukkOpprettBehandlingModal,
                     lukkKnapp: true,
                     tittel: 'Opprett ny behandling',
                     visModal,
@@ -107,20 +102,21 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
             >
                 <SkjemaGruppe
                     feil={
-                        submitRessurs.status === RessursStatus.FEILET
-                            ? submitRessurs.frontendFeilmelding
+                        opprettBehandlingSkjema.submitRessurs.status === RessursStatus.FEILET
+                            ? opprettBehandlingSkjema.submitRessurs.frontendFeilmelding
                             : ''
                     }
                 >
                     <SkjultLegend>Opprett ny behandling</SkjultLegend>
                     <FamilieSelect
-                        feil={valideringsFeil.behandlingstype}
+                        {...behandlingstypeFelt.hentNavBaseSkjemaProps(
+                            opprettBehandlingSkjema.visFeilmeldinger
+                        )}
                         erLesevisning={false}
-                        value={selectedBehandlingstype}
                         name={'Behandling'}
                         label={'Velg type behandling'}
                         onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
-                            behandlingstypeOnChange(event.target.value);
+                            behandlingstypeFelt.onChange(event.target.value);
                         }}
                     >
                         <option disabled={true} value={''}>
@@ -128,7 +124,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         </option>
                         <option
                             aria-selected={
-                                selectedBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
+                                behandlingstypeFelt.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING
                             }
                             disabled={!førstegangsbehandlingEnabled}
                             value={Behandlingstype.FØRSTEGANGSBEHANDLING}
@@ -136,7 +132,9 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                             Førstegangsbehandling
                         </option>
                         <option
-                            aria-selected={selectedBehandlingstype === Behandlingstype.REVURDERING}
+                            aria-selected={
+                                behandlingstypeFelt.verdi === Behandlingstype.REVURDERING
+                            }
                             disabled={!revurderingEnabled}
                             value={Behandlingstype.REVURDERING}
                         >
@@ -146,7 +144,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         {visTekniskOpphør && (
                             <option
                                 aria-selected={
-                                    selectedBehandlingstype === Behandlingstype.TEKNISK_OPPHØR
+                                    behandlingstypeFelt.verdi === Behandlingstype.TEKNISK_OPPHØR
                                 }
                                 disabled={!revurderingEnabled}
                                 value={Behandlingstype.TEKNISK_OPPHØR}
@@ -156,15 +154,16 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         )}
                     </FamilieSelect>
 
-                    {visÅrsakerSelect() && (
+                    {opprettBehandlingSkjema.felter.behandlingsårsak.erSynlig && (
                         <FamilieSelect
-                            feil={valideringsFeil.behandlingÅrsak}
+                            {...behandlingsårsakFelt.hentNavBaseSkjemaProps(
+                                opprettBehandlingSkjema.visFeilmeldinger
+                            )}
                             erLesevisning={false}
-                            value={selectedBehandlingÅrsak}
                             name={'Behandlingsårsak'}
                             label={'Velg årsak'}
                             onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
-                                behandlingÅrsakOnChange(event.target.value);
+                                behandlingsårsakFelt.onChange(event.target.value);
                             }}
                         >
                             <option disabled={true} value={''}>
@@ -180,7 +179,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                                     return (
                                         <option
                                             key={årsak}
-                                            aria-selected={selectedBehandlingÅrsak === årsak}
+                                            aria-selected={behandlingsårsakFelt.verdi === årsak}
                                             value={årsak}
                                         >
                                             {behandlingÅrsak[årsak]}

@@ -1,129 +1,117 @@
-import { useState } from 'react';
+import { useHistory } from 'react-router';
 
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { useFelt } from '../../../../../familie-skjema/felt';
+import { useSkjema } from '../../../../../familie-skjema/skjema';
+import { FeltContext } from '../../../../../familie-skjema/typer';
+import { feil, ok } from '../../../../../familie-skjema/validators';
 import {
     BehandlingKategori,
     Behandlingstype,
     BehandlingUnderkategori,
     BehandlingÅrsak,
+    IBehandling,
 } from '../../../../../typer/behandling';
-import useFagsakApi from '../../../useFagsakApi';
+import { IFagsak } from '../../../../../typer/fagsak';
+import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 
 const useOpprettBehandling = (lukkModal: () => void) => {
     const { innloggetSaksbehandler } = useApp();
-    const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
-    const [selectedBehandlingstype, settSelectedBehandlingstype] = useState<Behandlingstype | ''>(
-        ''
-    );
-    const [selectedBehandlingÅrsak, settSelectedBehandlingÅrsak] = useState<BehandlingÅrsak | ''>(
-        ''
-    );
-    const [valideringsFeil, settValideringsfeil] = useState({
-        behandlingstype: '',
-        behandlingÅrsak: '',
+    const { settFagsak } = useFagsakRessurser();
+    const history = useHistory();
+
+    const behandlingstype = useFelt<Behandlingstype | ''>({
+        verdi: '',
+        valideringsfunksjon: felt => {
+            return felt.verdi !== ''
+                ? ok(felt)
+                : feil(felt, 'Velg type behandling som skal opprettes fra nedtrekkslisten');
+        },
     });
 
-    const { opprettBehandling } = useFagsakApi(
-        _ => {
-            'Feilmelding';
+    const behandlingsårsak = useFelt<BehandlingÅrsak | ''>({
+        verdi: '',
+        valideringsfunksjon: felt => {
+            return felt.verdi !== ''
+                ? ok(felt)
+                : feil(felt, 'Velg årsak for opprettelse av behandlingen fra nedtrekkslisten');
         },
-        feilmelding => {
-            settSubmitRessurs(byggFeiletRessurs(feilmelding));
-        }
-    );
+        skalFeltetVises: (avhengigheter: FeltContext) => {
+            const behandlingstypeVerdi = avhengigheter.behandlingstype.verdi;
+            return behandlingstypeVerdi === Behandlingstype.REVURDERING;
+        },
+        avhengigheter: { behandlingstype },
+    });
 
-    const fjernState = () => {
-        settSelectedBehandlingstype('');
-        settSelectedBehandlingÅrsak('');
-        settSubmitRessurs(byggTomRessurs());
-        settValideringsfeil({
-            behandlingÅrsak: '',
-            behandlingstype: '',
-        });
+    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit } = useSkjema<
+        {
+            behandlingstype: Behandlingstype | '';
+            behandlingsårsak: BehandlingÅrsak | '';
+        },
+        IFagsak
+    >({
+        felter: { behandlingstype, behandlingsårsak },
+        skjemanavn: 'Opprett behandling modal',
+    });
+
+    const hentBehandlingårsak = () => {
+        switch (skjema.felter.behandlingstype.verdi) {
+            case Behandlingstype.TEKNISK_OPPHØR:
+                return BehandlingÅrsak.TEKNISK_OPPHØR;
+            case Behandlingstype.FØRSTEGANGSBEHANDLING:
+                return BehandlingÅrsak.SØKNAD;
+            default:
+                return skjema.felter.behandlingsårsak.verdi;
+        }
     };
 
     const onBekreft = (søkersIdent: string) => {
-        if (!selectedBehandlingstype || !selectedBehandlingÅrsak) {
-            settValideringsfeil({
-                behandlingÅrsak: !selectedBehandlingÅrsak
-                    ? 'Velg type behandling som skal opprettes fra nedtrekkslisten'
-                    : '',
-                behandlingstype: !selectedBehandlingstype
-                    ? 'Velg årsak for opprettelse av behandlingen fra nedtrekkslisten'
-                    : '',
-            });
-        } else {
-            settSubmitRessurs(byggHenterRessurs());
-            opprettBehandling({
-                behandlingType: selectedBehandlingstype,
-                behandlingÅrsak: selectedBehandlingÅrsak,
-                kategori: BehandlingKategori.NASJONAL,
-                navIdent: innloggetSaksbehandler?.navIdent,
-                søkersIdent,
-                underkategori: BehandlingUnderkategori.ORDINÆR,
-            }).then(response => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    lukkModal();
-                    fjernState();
+        if (kanSendeSkjema()) {
+            onSubmit(
+                {
+                    data: {
+                        behandlingType: skjema.felter.behandlingstype.verdi as Behandlingstype,
+                        behandlingÅrsak: hentBehandlingårsak(),
+                        kategori: BehandlingKategori.NASJONAL,
+                        navIdent: innloggetSaksbehandler?.navIdent,
+                        søkersIdent,
+                        underkategori: BehandlingUnderkategori.ORDINÆR,
+                    },
+                    method: 'POST',
+                    url: '/familie-ba-sak/api/behandlinger',
+                },
+                response => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        lukkModal();
+                        nullstillSkjema();
+
+                        settFagsak(response);
+                        const aktivBehandling:
+                            | IBehandling
+                            | undefined = hentAktivBehandlingPåFagsak(response.data);
+
+                        if (aktivBehandling && aktivBehandling.årsak === BehandlingÅrsak.SØKNAD) {
+                            history.push(
+                                `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
+                            );
+                        } else {
+                            history.push(
+                                `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
+                            );
+                        }
+                    }
                 }
-            });
+            );
         }
-    };
-
-    const visÅrsakerSelect = () => selectedBehandlingstype === Behandlingstype.REVURDERING;
-
-    const behandlingstypeOnChange = (behandlingstype: Behandlingstype | '') => {
-        settSubmitRessurs(byggTomRessurs());
-        settValideringsfeil(valideringsFeil => {
-            return {
-                ...valideringsFeil,
-                behandlingstype: '',
-            };
-        });
-
-        switch (behandlingstype) {
-            case Behandlingstype.TEKNISK_OPPHØR:
-                settSelectedBehandlingÅrsak(BehandlingÅrsak.TEKNISK_OPPHØR);
-                break;
-            case Behandlingstype.FØRSTEGANGSBEHANDLING:
-                settSelectedBehandlingÅrsak(BehandlingÅrsak.SØKNAD);
-                break;
-            default:
-                settSelectedBehandlingÅrsak('');
-                break;
-        }
-
-        settSelectedBehandlingstype(behandlingstype);
-    };
-
-    const behandlingÅrsakOnChange = (behandlingÅrsak: BehandlingÅrsak | '') => {
-        settSubmitRessurs(byggTomRessurs());
-        settValideringsfeil(valideringsFeil => {
-            return {
-                ...valideringsFeil,
-                behandlingÅrsak: '',
-            };
-        });
-        settSelectedBehandlingÅrsak(behandlingÅrsak);
     };
 
     return {
         onBekreft,
-        fjernState,
-        submitRessurs,
-        selectedBehandlingstype,
-        selectedBehandlingÅrsak,
-        valideringsFeil,
-        behandlingstypeOnChange,
-        behandlingÅrsakOnChange,
-        visÅrsakerSelect,
+        opprettBehandlingSkjema: skjema,
+        nullstillSkjema,
     };
 };
 
