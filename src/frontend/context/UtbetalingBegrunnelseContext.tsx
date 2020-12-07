@@ -17,11 +17,10 @@ import { useFagsakRessurser } from './FagsakContext';
 interface IProps {
     aktivVedtak?: IVedtakForBehandling;
     fagsak: IFagsak;
-    hentVedtaksbrev: () => void;
 }
 
 const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
-    ({ aktivVedtak, fagsak, hentVedtaksbrev }: IProps) => {
+    ({ aktivVedtak, fagsak }: IProps) => {
         const { axiosRequest } = useApp();
 
         const { settFagsak } = useFagsakRessurser();
@@ -66,7 +65,6 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
                 if (fagsak.status === RessursStatus.SUKSESS) {
                     settFagsak(fagsak);
                     settUtbetalingBegrunnelseFeilmelding({ id, feilmelding: '' });
-                    hentVedtaksbrev();
                 } else if (
                     fagsak.status === RessursStatus.FEILET ||
                     fagsak.status === RessursStatus.FUNKSJONELL_FEIL
