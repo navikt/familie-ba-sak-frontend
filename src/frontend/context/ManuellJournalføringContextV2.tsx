@@ -57,6 +57,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [knyttTilFagsak, settKnyttTilFagsak] = React.useState(true);
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
     const [senderInn, settSenderInn] = React.useState(false);
+    const [visModal, settVisModal] = React.useState(false);
 
     const finnDokument = (
         ressurs: Ressurs<IDataForManuellJournalføring>,
@@ -383,6 +384,8 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         senderInn,
         settSenderInn,
         manueltJournalfør,
+        visModal,
+        settVisModal,
     };
 });
 
