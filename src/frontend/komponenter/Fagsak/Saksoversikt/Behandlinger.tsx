@@ -93,13 +93,11 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                     href={`/fagsak/${fagsak.id}/${behandling.behandlingId}`}
                                                 >
                                                     {behandling
-                                                        ? behandlingsresultater[
-                                                              behandling.samletResultat
-                                                          ]
+                                                        ? behandlingsresultater[behandling.resultat]
                                                         : '-'}
                                                 </Lenke>
                                             ) : behandling ? (
-                                                behandlingsresultater[behandling.samletResultat]
+                                                behandlingsresultater[behandling.resultat]
                                             ) : (
                                                 '-'
                                             )}
