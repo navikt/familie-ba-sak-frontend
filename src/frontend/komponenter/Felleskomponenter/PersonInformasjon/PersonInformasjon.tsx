@@ -19,12 +19,11 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     person,
     tag,
     tekstType = 'NORMALTEKST',
-    width = '30rem',
 }) => {
     const alder = hentAlder(person.fødselsdato);
 
     return (
-        <div className={'personinformasjon'} style={{ width }}>
+        <div className={'personinformasjon'}>
             {tekstType === 'UNDERTITTEL' && (
                 <>
                     <FamilieIkonVelger
