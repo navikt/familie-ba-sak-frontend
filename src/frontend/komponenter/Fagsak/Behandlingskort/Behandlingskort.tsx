@@ -27,7 +27,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
     const åpenBehandlingIndex = fagsak.behandlinger.findIndex(() => åpenBehandling) + 1;
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
 
-    const behandlingsresultat = behandlingsresultater[åpenBehandling.samletResultat];
+    const behandlingsresultat = behandlingsresultater[åpenBehandling.resultat];
     const tittel = `${
         åpenBehandling ? behandlingstyper[åpenBehandling.type].navn : 'ukjent'
     } (${åpenBehandlingIndex}/${antallBehandlinger}) - ${sakstype(åpenBehandling).toLowerCase()}`;

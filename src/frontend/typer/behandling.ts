@@ -110,11 +110,15 @@ export enum Behandlingstype {
 
 export enum BehandlingResultat {
     AVSLÅTT = 'AVSLÅTT',
+    DELVIS_INNVILGET = 'DELVIS_INNVILGET',
+    ENDRING_OG_LØPENDE = 'ENDRING_OG_LØPENDE',
+    ENDRING_OG_OPPHØRT = 'ENDRING_OG_OPPHØRT',
+    FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
+    HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
+    HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
     INNVILGET = 'INNVILGET',
     OPPHØRT = 'OPPHØRT',
-    HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
-    HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
 }
 
 export enum BehandlerRolle {
@@ -135,7 +139,7 @@ export interface IBehandling {
     opprettetTidspunkt: string;
     personResultater: IRestPersonResultat[];
     personer: IGrunnlagPerson[];
-    samletResultat: BehandlingResultat;
+    resultat: BehandlingResultat;
     status: BehandlingStatus;
     steg: BehandlingSteg;
     stegTilstand: IRestStegTilstand[];
@@ -213,6 +217,10 @@ export const underkategorier: INøkkelPar = {
 };
 
 export const behandlingsresultater: Record<BehandlingResultat, string> = {
+    DELVIS_INNVILGET: 'Delvis innvilget',
+    ENDRING_OG_LØPENDE: 'Endring og løpende',
+    ENDRING_OG_OPPHØRT: 'Endring og opphørt',
+    FORTSATT_INNVILGET: 'Fortsatt innvilget',
     AVSLÅTT: 'Avslått',
     IKKE_VURDERT: 'Ikke vurdert',
     INNVILGET: 'Innvilget',
@@ -221,11 +229,7 @@ export const behandlingsresultater: Record<BehandlingResultat, string> = {
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
 };
 
-type Behandlingsstatuser = {
-    [key in BehandlingStatus]: string;
-};
-
-export const behandlingsstatuser: Behandlingsstatuser = {
+export const behandlingsstatuser: Record<BehandlingStatus, string> = {
     OPPRETTET: 'Opprettet',
     UTREDES: 'Utredes',
     FATTER_VEDTAK: 'Fatter vedtak',
