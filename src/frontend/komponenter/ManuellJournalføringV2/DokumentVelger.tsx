@@ -50,7 +50,7 @@ interface IDokumentVelgerProps {
     dokument: IDokumentInfo;
 }
 
-const DokumentTittelDiv = styled.td`
+const DokumentTittelDiv = styled.div`
     font-size: 1.2rem;
 `;
 

@@ -2,7 +2,9 @@ import React from 'react';
 
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
+
+import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 
 import {
     byggDataRessurs,
@@ -14,16 +16,21 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../api/fagsak';
+import { IBehandling } from '../typer/behandling';
+import { IFagsak } from '../typer/fagsak';
 import {
     BrevkodeMap,
     IDataForManuellJournalføring,
+    IRestOppdaterJournalpost,
     JournalpostTittel,
 } from '../typer/manuell-journalføring';
 import { IPersonInfo } from '../typer/person';
+import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 
 const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseContext(() => {
-    const { axiosRequest } = useApp();
+    const { axiosRequest, innloggetSaksbehandler } = useApp();
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
@@ -34,6 +41,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         byggTomRessurs<IDataForManuellJournalføring>()
     );
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
+    const history = useHistory();
 
     const settDataRessurs = (dataRessurs: Ressurs<IDataForManuellJournalføring>) => {
         settDataForManuellJournalføring(dataRessurs);
@@ -42,6 +50,13 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     };
 
     const [brevkode, settBrevkode] = React.useState<string | undefined>('');
+
+    const [visFeilmeldinger, settVisfeilmeldinger] = React.useState(false);
+    const [feilmeldinger, settFeilmeldinger] = React.useState<FeiloppsummeringFeil[]>([]);
+    const [innsendingsfeilmelding, settInnsendingsfeilmelding] = React.useState('');
+    const [knyttTilFagsak, settKnyttTilFagsak] = React.useState(true);
+    const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
+    const [senderInn, settSenderInn] = React.useState(false);
 
     const finnDokument = (
         ressurs: Ressurs<IDataForManuellJournalføring>,
@@ -215,6 +230,116 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
     };
 
+    const hentAktivBehandlingForJournalføring = (): IBehandling | undefined => {
+        let aktivBehandling = undefined;
+        if (oppdatertData.status === RessursStatus.SUKSESS && oppdatertData.data.fagsak) {
+            aktivBehandling = hentAktivBehandlingPåFagsak(oppdatertData.data.fagsak);
+        }
+        return aktivBehandling;
+    };
+
+    const opprettFagsak = async (data: IOpprettEllerHentFagsakData): Promise<Ressurs<IFagsak>> => {
+        return axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
+            data,
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker`,
+        })
+            .then((response: Ressurs<IFagsak>) => {
+                return response;
+            })
+            .catch(() => {
+                return byggFeiletRessurs('Opprettelse av fagsak feilet');
+            });
+    };
+
+    const opprettBehandling = async (data: IOpprettBehandlingData): Promise<Ressurs<IFagsak>> => {
+        return axiosRequest<IFagsak, IOpprettBehandlingData>({
+            data,
+            method: 'POST',
+            url: '/familie-ba-sak/api/behandlinger',
+        })
+            .then((response: Ressurs<IFagsak>) => {
+                return response;
+            })
+            .catch(() => {
+                return byggFeiletRessurs('Opprettelse av behandling feilet');
+            });
+    };
+
+    const validerSkjema = () => {
+        const accFeilmeldinger: FeiloppsummeringFeil[] = [];
+
+        if (oppdatertData.status !== RessursStatus.SUKSESS || !oppdatertData.data.person) {
+            accFeilmeldinger.push({
+                feilmelding: 'Du må knytte bruker til journalposten',
+                skjemaelementId: 'hent-person',
+            });
+        }
+
+        settFeilmeldinger(accFeilmeldinger);
+        return accFeilmeldinger;
+    };
+
+    const manueltJournalfør = () => {
+        const accFeilmeldinger = validerSkjema();
+
+        if (
+            accFeilmeldinger.length === 0 &&
+            oppdatertData.status === RessursStatus.SUKSESS &&
+            oppdatertData.data.person
+        ) {
+            const dokumenter: IDokumentInfo[] | undefined =
+                oppdatertData.data.journalpost.dokumenter;
+            const person = oppdatertData.data.person;
+
+            settSenderInn(true);
+            axiosRequest<string, IRestOppdaterJournalpost>({
+                method: 'PUT',
+                url: `/familie-ba-sak/api/journalpost/${
+                    oppdatertData.data.journalpost.journalpostId
+                }/ferdigstill/${oppgaveId}?journalfoerendeEnhet=${
+                    innloggetSaksbehandler?.enhet ?? '9999'
+                }`,
+                data: {
+                    bruker: {
+                        navn: person.navn,
+                        id: person.personIdent,
+                    },
+                    avsender: {
+                        navn: person.navn,
+                        id: person.personIdent,
+                    },
+                    datoMottatt: oppdatertData.data.journalpost.datoMottatt,
+                    dokumentTittel: '',
+                    dokumentInfoId: dokumenter ? dokumenter[0].dokumentInfoId ?? '' : '',
+                    eksisterendeLogiskeVedlegg: dokumenter ? dokumenter[0].logiskeVedlegg : [],
+                    logiskeVedlegg: [],
+                    knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,
+                    tilknyttedeBehandlingIder,
+                    navIdent: innloggetSaksbehandler?.navIdent ?? '',
+                },
+            })
+                .then((fagsakId: Ressurs<string>) => {
+                    settSenderInn(false);
+                    if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
+                        history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
+                    } else if (fagsakId.status === RessursStatus.SUKSESS) {
+                        history.push('/oppgaver');
+                    } else if (fagsakId.status === RessursStatus.FEILET) {
+                        settVisfeilmeldinger(true);
+                        settInnsendingsfeilmelding(fagsakId.frontendFeilmelding);
+                    }
+                })
+                .catch(() => {
+                    settSenderInn(false);
+                    settVisfeilmeldinger(true);
+                    settInnsendingsfeilmelding('Ukjent feil ved journalføring.');
+                });
+        } else {
+            settVisfeilmeldinger(true);
+        }
+    };
+
     React.useEffect(() => {
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
@@ -225,6 +350,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     return {
         dataForManuellJournalføring: oppdatertData,
+        settDataForManuellJournalføring: settOppdatertData,
         dokumentData,
         visDokument,
         hentDokumentData,
@@ -239,8 +365,24 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         erDokumentTittelEndret,
         settJournalpostTittel,
         tilbakestilleJournalpostTittel,
+        hentAktivBehandlingForJournalføring,
         brevkode,
         settPerson,
+        visFeilmeldinger,
+        settVisfeilmeldinger,
+        feilmeldinger,
+        settFeilmeldinger,
+        innsendingsfeilmelding,
+        settInnsendingsfeilmelding,
+        knyttTilFagsak,
+        settKnyttTilFagsak,
+        tilknyttedeBehandlingIder,
+        settTilknyttedeBehandlingIder,
+        opprettBehandling,
+        opprettFagsak,
+        senderInn,
+        settSenderInn,
+        manueltJournalfør,
     };
 });
 

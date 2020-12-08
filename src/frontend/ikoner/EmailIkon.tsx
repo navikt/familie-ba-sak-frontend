@@ -17,9 +17,9 @@ export const EmailIkon: React.FC<IEmailIkon> = ({ className, width = 48, height 
         >
             <g
                 stroke="#0067c5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-miterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeMiterlimit="10"
                 fill="none"
             >
                 <path d="M22.5 17.012c0 .828-.672 1.5-1.5 1.5h-18c-.828 0-1.5-.672-1.5-1.5v-11c0-.829.672-1.5 1.5-1.5h18c.828 0 1.5.671 1.5 1.5v11zM22 5.012l-10 8-10-8" />

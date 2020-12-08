@@ -14,7 +14,8 @@ import IkkeTilgang from '../ikoner/IkkeTilgang';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 import { BehandlerRolle } from '../typer/behandling';
 import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
-import { IToggles, alleTogglerAv, ToggleNavn } from '../typer/toggles';
+//import { IToggles, alleTogglerAv, ToggleNavn } from '../typer/toggles';
+import { IToggles, alleTogglerAv } from '../typer/toggles';
 import { gruppeIdTilRolle } from '../utils/behandling';
 
 const FEM_MINUTTER = 300000;
@@ -46,7 +47,9 @@ interface IProps {
 
 const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IProps) => {
     const [autentisert, settAutentisert] = React.useState(true);
-    const [toggles, settToggles] = useState<IToggles>(alleTogglerAv());
+    //    const [toggles, settToggles] = useState<IToggles>(alleTogglerAv());
+    const [toggles] = useState<IToggles>(alleTogglerAv());
+
     const [appVersjon, settAppVersjon] = useState('');
     const [ressurserSomLaster, settRessurserSomLaster] = React.useState<string[]>([]);
 
@@ -114,7 +117,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             settInnloggetSaksbehandler(autentisertSaksbehandler);
         }
     }, [autentisertSaksbehandler]);
-
+    /*
     useEffect(() => {
         axiosRequest<IToggles, string[]>({
             method: 'POST',
@@ -129,7 +132,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             }
         });
     }, []);
-
+*/
     const åpneModal = () => {
         settModal({
             ...modal,
