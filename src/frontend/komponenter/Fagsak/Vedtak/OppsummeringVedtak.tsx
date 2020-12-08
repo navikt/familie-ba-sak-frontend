@@ -139,7 +139,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                 if (response.status === RessursStatus.SUKSESS) {
                     settVisModal(true);
                     settFagsak(response);
-                } else if (response.status === RessursStatus.FEILET) {
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL
+                ) {
                     settSubmitFeil(response.frontendFeilmelding);
                 }
             });
