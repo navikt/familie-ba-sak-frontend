@@ -42,8 +42,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const iverksatteBehandlinger = fagsak.behandlinger.filter(
         (behandling: IBehandling) =>
             behandling.status === BehandlingStatus.AVSLUTTET &&
-            behandling.samletResultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
-            behandling.samletResultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET
+            behandling.resultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
+            behandling.resultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET
     );
 
     let gjeldendeBehandling =
