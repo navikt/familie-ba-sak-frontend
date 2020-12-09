@@ -97,7 +97,7 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
 
         if (validerSøknad.søkerMedOpplysninger.målform === undefined) {
             søknadFeilmeldinger.push({
-                skjemaelementId: 'målform',
+                skjemaelementId: 'målform-nb',
                 feilmelding: 'Målform er ikke valgt.',
             });
         }
@@ -108,7 +108,7 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
             ).length === 0
         ) {
             søknadFeilmeldinger.push({
-                skjemaelementId: 'barna',
+                skjemaelementId: 'barn-0',
                 feilmelding: 'Ingen av barna er valgt.',
             });
         }

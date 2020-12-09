@@ -13,6 +13,7 @@ import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
+    index: number;
 }
 
 const StyledFamilieCheckbox = styled(FamilieCheckbox)`
@@ -37,7 +38,7 @@ const FjernBarnKnapp = styled(IkonKnapp)`
     margin-left: 1rem;
 `;
 
-const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
+const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn, index }) => {
     const { settBarn, søknad, settSøknadOgValider } = useSøknad();
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
@@ -54,7 +55,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     return (
         <StyledFamilieCheckbox
             erLesevisning={lesevisning}
-            id={`barn-${barn.ident}`}
+            id={`barn-${index}`}
             label={
                 <LabelContent>
                     <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
