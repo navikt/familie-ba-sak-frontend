@@ -91,12 +91,15 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                     )
                 }
             >
-                {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
-                    <BarnMedOpplysninger
-                        key={barnMedOpplysninger.ident}
-                        barn={barnMedOpplysninger}
-                    />
-                ))}
+                {sorterteBarnMedOpplysninger.map(
+                    (barnMedOpplysninger: IBarnMedOpplysninger, index) => (
+                        <BarnMedOpplysninger
+                            key={barnMedOpplysninger.ident}
+                            barn={barnMedOpplysninger}
+                            index={index}
+                        />
+                    )
+                )}
             </StyledCheckboxGruppe>
             {!lesevisning && (
                 <LeggTilBarn settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
