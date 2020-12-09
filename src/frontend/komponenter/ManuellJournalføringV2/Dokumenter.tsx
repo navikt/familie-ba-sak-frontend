@@ -2,7 +2,7 @@ import React from 'react';
 
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 
-import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { DokumentVelger } from './DokumentVelger';
@@ -13,22 +13,13 @@ export const Dokumenter: React.FC = () => {
         case RessursStatus.SUKSESS:
             return (
                 <div>
-                    {dataForManuellJournalføring.data.journalpost.journalstatus ===
-                    Journalstatus.MOTTATT ? (
-                        !dataForManuellJournalføring.data.journalpost.dokumenter ||
-                        dataForManuellJournalføring.data.journalpost.dokumenter.length === 0 ? (
-                            <AlertStripeAdvarsel children={'Ingen Vedlegg'} />
-                        ) : (
-                            dataForManuellJournalføring.data.journalpost.dokumenter?.map(
-                                (dokument, index) => (
-                                    <DokumentVelger dokument={dokument} key={index} />
-                                )
-                            )
-                        )
+                    {!dataForManuellJournalføring.data.journalpost.dokumenter ||
+                    dataForManuellJournalføring.data.journalpost.dokumenter.length === 0 ? (
+                        <AlertStripeAdvarsel children={'Ingen Vedlegg'} />
                     ) : (
-                        <AlertStripeAdvarsel
-                            children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
-                        />
+                        dataForManuellJournalføring.data.journalpost.dokumenter?.map(
+                            (dokument, index) => <DokumentVelger dokument={dokument} key={index} />
+                        )
                     )}
                 </div>
             );

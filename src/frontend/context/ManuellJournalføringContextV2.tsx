@@ -22,7 +22,7 @@ import { IFagsak } from '../typer/fagsak';
 import {
     BrevkodeMap,
     IDataForManuellJournalføring,
-    IRestOppdaterJournalpost,
+    IRestJournalføring,
     JournalpostTittel,
 } from '../typer/manuell-journalføring';
 import { IPersonInfo } from '../typer/person';
@@ -287,18 +287,17 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         if (
             accFeilmeldinger.length === 0 &&
             oppdatertData.status === RessursStatus.SUKSESS &&
+            dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             oppdatertData.data.person
         ) {
-            const dokumenter: IDokumentInfo[] | undefined =
-                oppdatertData.data.journalpost.dokumenter;
             const person = oppdatertData.data.person;
 
             settSenderInn(true);
-            axiosRequest<string, IRestOppdaterJournalpost>({
-                method: 'PUT',
+            axiosRequest<string, IRestJournalføring>({
+                method: 'POST',
                 url: `/familie-ba-sak/api/journalpost/${
                     oppdatertData.data.journalpost.journalpostId
-                }/ferdigstill/${oppgaveId}?journalfoerendeEnhet=${
+                }/journalfør/${oppgaveId}?journalfoerendeEnhet=${
                     innloggetSaksbehandler?.enhet ?? '9999'
                 }`,
                 data: {
@@ -311,10 +310,17 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                         id: person.personIdent,
                     },
                     datoMottatt: oppdatertData.data.journalpost.datoMottatt,
-                    dokumentTittel: '',
-                    dokumentInfoId: dokumenter ? dokumenter[0].dokumentInfoId ?? '' : '',
-                    eksisterendeLogiskeVedlegg: dokumenter ? dokumenter[0].logiskeVedlegg : [],
-                    logiskeVedlegg: [],
+                    dokumenter: oppdatertData.data.journalpost.dokumenter?.map(dokument => {
+                        return {
+                            dokumentTittel: dokument.tittel,
+                            dokumentInfoId: dokument.dokumentInfoId || '0', //TODO: dokumentInfoId is not nullable
+                            brevkode: dokument.brevkode,
+                            logiskeVedlegg: dokument.logiskeVedlegg,
+                            eksisterendeLogiskeVedlegg: dataForManuellJournalføring.data.journalpost.dokumenter?.find(
+                                it => it.dokumentInfoId === dokument.dokumentInfoId
+                            )?.logiskeVedlegg,
+                        };
+                    }),
                     knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,
                     tilknyttedeBehandlingIder,
                     navIdent: innloggetSaksbehandler?.navIdent ?? '',

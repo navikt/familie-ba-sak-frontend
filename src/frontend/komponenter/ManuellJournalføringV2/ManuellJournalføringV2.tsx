@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
 
-import { RessursStatus } from '@navikt/familie-typer';
+import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
 
 import {
     ManuellJournalføringProviderV2,
@@ -28,16 +28,20 @@ const ManuellJournalføringContentV2: React.FC = () => {
             return (
                 <div>
                     <BrukerHeader />
-                    <ToColonerDiv>
-                        <JournalpostSkjema />
-                        <DokumentPane />
-                    </ToColonerDiv>
-                    {visModal && <JournalføringModal />}
+                    {dataForManuellJournalføring.data.journalpost.journalstatus ===
+                    Journalstatus.MOTTATT ? (
+                        <div>
+                            <ToColonerDiv>
+                                <JournalpostSkjema />
+                                <DokumentPane />
+                            </ToColonerDiv>
+                            {visModal && <JournalføringModal />}
+                        </div>
                     ) : (
-                    <AlertStripeAdvarsel
-                        children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
-                    />
-                    );
+                        <AlertStripeAdvarsel
+                            children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
+                        />
+                    )}
                 </div>
             );
         case RessursStatus.FEILET:

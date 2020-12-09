@@ -57,6 +57,25 @@ export interface IRestOppdaterJournalpost {
     navIdent: string;
 }
 
+export interface IRestJournalpostDokument {
+    dokumentTittel?: string;
+    dokumentInfoId: string;
+    brevkode?: string;
+    logiskeVedlegg?: ILogiskVedlegg[];
+    eksisterendeLogiskeVedlegg?: ILogiskVedlegg[];
+}
+
+export interface IRestJournalføring {
+    avsender: INavnOgIdent;
+    bruker: INavnOgIdent;
+    datoMottatt?: string;
+    journalpostTittel?: string;
+    dokumenter?: IRestJournalpostDokument[];
+    knyttTilFagsak: boolean;
+    tilknyttedeBehandlingIder: number[];
+    navIdent: string;
+}
+
 export interface ILogiskVedlegg {
     logiskVedleggId: string;
     tittel: string;
