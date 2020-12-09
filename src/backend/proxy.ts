@@ -17,14 +17,6 @@ const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     }
 };
 
-const doMock = (path: string) => {
-    let mockPath = path.replace('oppgave/', 'mock/oppgave/');
-    mockPath = mockPath.replace('journalpost/', 'mock/journalpost/');
-    mockPath = mockPath.replace('feature', 'mock/feature');
-    mockPath = mockPath.replace('person', 'mock/person');
-    return mockPath;
-};
-
 // eslint-disable-next-line
 export const doProxy: any = () => {
     return createProxyMiddleware('/familie-ba-sak/api', {
@@ -32,7 +24,7 @@ export const doProxy: any = () => {
         logLevel: 'info',
         onProxyReq: restream,
         pathRewrite: (path: string, _req: Request) => {
-            const newPath = doMock(path.replace('/familie-ba-sak/api', ''));
+            const newPath = path.replace('/familie-ba-sak/api', '');
             return `/api${newPath}`;
         },
         secure: true,

@@ -33,9 +33,10 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         key={oppgaveFelt.nøkkel}
                                         id={oppgaveFelt.nøkkel}
                                         label={oppgaveFelt.label}
-                                        onChange={(dato: string | undefined) =>
-                                            settVerdiPåOppgaveFelt(oppgaveFelt, dato ? dato : '')
-                                        }
+                                        onChange={(dato: string | undefined) => {
+                                            console.log(dato);
+                                            settVerdiPåOppgaveFelt(oppgaveFelt, dato ? dato : '');
+                                        }}
                                         placeholder={datoformatNorsk.DATO}
                                         valgtDato={oppgaveFelt.filter.selectedValue}
                                         className="filterskjema__filtre--input"
