@@ -21,11 +21,11 @@ const useOpprettFagsak = () => {
     const [senderInn, settSenderInn] = useState(false);
 
     const opprettFagsak = (data: IOpprettFagsakData) => {
-        settSenderInn(true);
         axiosRequest<IFagsak, IOpprettFagsakData>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
+            påvirkerSystemLaster: true,
         })
             .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
@@ -54,6 +54,7 @@ const useOpprettFagsak = () => {
         opprettFagsak,
         feilmelding,
         senderInn,
+        settSenderInn,
     };
 };
 

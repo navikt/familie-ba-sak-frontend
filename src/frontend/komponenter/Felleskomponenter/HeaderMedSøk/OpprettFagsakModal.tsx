@@ -21,7 +21,7 @@ const StyledUndertittel = styled(Undertittel)`
 `;
 
 const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, deltager }) => {
-    const { opprettFagsak, feilmelding, senderInn } = useOpprettFagsak();
+    const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang } = useApp();
     const visModal = !!deltager;
 
@@ -35,6 +35,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, deltager
                         type={'hoved'}
                         mini={true}
                         onClick={async () => {
+                            settSenderInn(true);
                             if (deltager && (await sjekkTilgang(deltager.ident))) {
                                 opprettFagsak({
                                     personIdent: deltager.ident,
