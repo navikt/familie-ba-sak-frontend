@@ -1,5 +1,8 @@
 import * as React from 'react';
 
+import styled from 'styled-components';
+
+import navFarger from 'nav-frontend-core';
 import { Normaltekst, Systemtittel, UndertekstBold } from 'nav-frontend-typografi';
 
 import GrønnHake from '../../../ikoner/GrønnHake';
@@ -10,6 +13,17 @@ interface IProps {
     åpenBehandling: IBehandling | undefined;
 }
 
+const Container = styled.div`
+    margin: 0.5rem;
+    padding: 2rem;
+    border: 1.5px solid ${navFarger.navGronnDarken40};
+    display: flex;
+`;
+
+const StyledGrønnHake = styled(GrønnHake)`
+    margin-right: 0.5rem;
+`;
+
 const TotrinnskontrollSendtTilBeslutterSkjema: React.FunctionComponent<IProps> = ({
     åpenBehandling,
 }) => {
@@ -19,27 +33,23 @@ const TotrinnskontrollSendtTilBeslutterSkjema: React.FunctionComponent<IProps> =
     const opprettetTidspunkt = totrinnskontroll?.opprettetTidspunkt ?? undefined;
 
     return (
-        <div className="totrinnskontroll">
-            <div className="totrinnskontroll-sendt-til-beslutter-skjema">
-                <div className="ikon-boks">
-                    <GrønnHake className="ikon" />
-                </div>
-                <div className="totrinnskontroll-sendt-til-beslutter-skjema__tittel">
-                    <Systemtittel>Totrinnskontroll</Systemtittel>
-                </div>
-                <div className="totrinnskontroll-sendt-til-beslutter-skjema__dato-og-navn ">
-                    <Normaltekst>
-                        {formaterIsoDato(
-                            opprettetTidspunkt,
-                            datoformat.DATO_FORLENGET_MED_TID,
-                            'UKJENT OPPRETTELSESTIDSPUNKT'
-                        )}
-                    </Normaltekst>
-                    <Normaltekst>{saksbehandler}</Normaltekst>
-                </div>
+        <Container>
+            <StyledGrønnHake />
+            <div>
+                <Systemtittel>Totrinnskontroll</Systemtittel>
+                <br />
+                <Normaltekst>
+                    {formaterIsoDato(
+                        opprettetTidspunkt,
+                        datoformat.DATO_FORLENGET_MED_TID,
+                        'UKJENT OPPRETTELSESTIDSPUNKT'
+                    )}
+                </Normaltekst>
+                <Normaltekst>{saksbehandler}</Normaltekst>
+                <br />
                 <UndertekstBold>Vedtaket er sendt til godkjenning</UndertekstBold>
             </div>
-        </div>
+        </Container>
     );
 };
 

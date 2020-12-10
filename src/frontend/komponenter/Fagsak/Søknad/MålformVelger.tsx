@@ -52,6 +52,7 @@ const MålformVelger: React.FunctionComponent<IProps> = ({ settSøknadOgValider,
                 name={'registrer-søknad-målform'}
                 checked={søknad.søkerMedOpplysninger.målform === Målform.NB}
                 onChange={() => radioOnChange(Målform.NB)}
+                id={'målform-nb'}
             />
             <StyledRadio
                 label={målform[Målform.NN]}
