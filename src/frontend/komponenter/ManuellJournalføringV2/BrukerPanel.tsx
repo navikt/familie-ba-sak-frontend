@@ -38,17 +38,21 @@ export const BrukerPanel: React.FC = () => {
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const bruker = dataForManuellJournalføring.data.person;
-            const navn = bruker?.navn || 'Ingen brukernavn';
-            const type = bruker?.type || 'Ingen brukertype';
-            const ident = bruker?.personIdent || 'Ingen brukerident';
+            const navn = bruker?.navn || 'Ukjent';
+            const ident = bruker?.personIdent || 'Ukjent';
             return (
-                <Deltager ikon={<KontoSirkel />} navn={navn} type={type} ident={ident}>
+                <Deltager
+                    ikon={<KontoSirkel />}
+                    navn={navn}
+                    ident={ident}
+                    undertittel={'Bruker/søker'}
+                >
                     <div className={'hentperson__inputogknapp'}>
                         <FamilieInput
                             {...nyttIdent.hentNavInputProps(feilMelding === VIS_FELT_MELDING)}
                             erLesevisning={false}
                             id={'hent-person'}
-                            label={'Skrive inn fødselsnummer/D-nummer'}
+                            label={'Skriv inn fødselsnummer/D-nummer'}
                             bredde={'XL'}
                             placeholder={'fnr/dnr'}
                         />

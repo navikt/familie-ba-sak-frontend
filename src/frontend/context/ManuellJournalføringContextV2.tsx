@@ -15,6 +15,7 @@ import {
     ILogiskVedlegg,
     Ressurs,
     RessursStatus,
+    AvsenderMottakerIdType,
 } from '@navikt/familie-typer';
 
 import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../api/fagsak';
@@ -257,6 +258,27 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
     };
 
+    const settAvsender = (navn: string) => {
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
+            settOppdatertData({
+                ...oppdatertData,
+                data: {
+                    ...oppdatertData.data,
+                    journalpost: {
+                        ...oppdatertData.data.journalpost,
+                        avsenderMottaker: {
+                            navn: navn,
+                            id: '',
+                            land: '',
+                            erLikBruker: false,
+                            type: AvsenderMottakerIdType.UKJENT,
+                        },
+                    },
+                },
+            });
+        }
+    };
+
     const tilbakestilleJournalpostTittel = () => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
             settJournalpostTittel(dataForManuellJournalføring.data.journalpost.tittel);
@@ -416,6 +438,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settValgtDokumentId,
         settDokumentTittel,
         settLogiskVedlegg,
+        settAvsender,
         tilbakestilleDokumentTittel,
         erDokumentTittelEndret,
         settJournalpostTittel,
