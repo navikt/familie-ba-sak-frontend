@@ -12,8 +12,8 @@ import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringC
 interface DeltagerProps {
     ikon: React.ReactNode;
     navn: string;
-    type: string;
     ident: string;
+    undertittel: string;
     children?: React.ReactNode | React.ReactNode[];
 }
 
@@ -27,7 +27,7 @@ const DeltagerDiv = styled.div`
     margin-top: 20px;
 `;
 
-const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, type, ident }) => {
+const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel, ident }) => {
     const { dataForManuellJournalføring } = useManuellJournalføringV2();
     const MarginedDiv = styled.div`
         margin-right: 16px;
@@ -37,9 +37,8 @@ const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, type, ident }) => {
             <HSplit>
                 <MarginedDiv>{ikon}</MarginedDiv>
                 <div>
-                    <Undertittel>{navn}</Undertittel>
-                    <Normaltekst>{type}</Normaltekst>
-                    <Normaltekst>{ident}</Normaltekst>
+                    <Undertittel>{ident ? `${navn} | ${ident}` : navn}</Undertittel>
+                    <Normaltekst>{undertittel}</Normaltekst>
                 </div>
             </HSplit>
         </div>
@@ -48,11 +47,13 @@ const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, type, ident }) => {
     );
 };
 
-export const Deltager: React.FC<DeltagerProps> = ({ ikon, navn, type, ident, children }) => {
+export const Deltager: React.FC<DeltagerProps> = ({ ikon, navn, ident, undertittel, children }) => {
     return (
         <DeltagerDiv>
             <Ekspanderbartpanel
-                tittel={<DeltagerInfo ikon={ikon} navn={navn} type={type} ident={ident} />}
+                tittel={
+                    <DeltagerInfo ikon={ikon} navn={navn} undertittel={undertittel} ident={ident} />
+                }
             >
                 {children}
             </Ekspanderbartpanel>
