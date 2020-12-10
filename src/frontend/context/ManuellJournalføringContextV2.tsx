@@ -12,6 +12,7 @@ import {
     byggHenterRessurs,
     byggTomRessurs,
     IDokumentInfo,
+    ILogiskVedlegg,
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
@@ -138,8 +139,17 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 logiskVedleggId: '0',
             };
         });
+        valgt.brevkode = hentBrevkode(valgt.logiskeVedlegg);
         settValgtDokumentInfo(valgt);
         autoOppdateJournalpostMetadata();
+    };
+
+    const hentBrevkode = (logiskevedlegg: ILogiskVedlegg[]): string | undefined => {
+        return BrevkodeMap.get(
+            logiskevedlegg.reduce((pv, cv) => {
+                return BrevkodeMap.has(pv.tittel) ? pv : cv;
+            })?.tittel
+        );
     };
 
     const erDokumentTittelEndret = (dokument: IDokumentInfo): boolean => {
