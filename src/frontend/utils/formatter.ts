@@ -4,7 +4,6 @@ export enum datoformat {
     MÅNED = 'MM.YY',
     DATO = 'DD.MM.YYYY',
     DATO_FORKORTTET = 'DD.MM.YY',
-    DATO_KORTTERE = 'DDMMYY',
     DATO_FORLENGET = 'LL',
     DATO_FORLENGET_MED_TID = 'LLL',
     ISO_MÅNED = 'YYYY-MM',
