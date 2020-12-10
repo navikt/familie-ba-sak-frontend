@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
 import { IPar } from '../../typer/common';
-import { datoformatNorsk } from '../../utils/formatter';
+import { datoformatNorsk, formaterDatoTilIsoDag } from '../../utils/formatter';
 import { IOppgaveFelt } from './oppgavefelter';
 
 const FilterSkjema: React.FunctionComponent = () => {
@@ -33,9 +33,10 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         key={oppgaveFelt.nøkkel}
                                         id={oppgaveFelt.nøkkel}
                                         label={oppgaveFelt.label}
-                                        onChange={(dato: string | undefined) =>
-                                            settVerdiPåOppgaveFelt(oppgaveFelt, dato ? dato : '')
-                                        }
+                                        onChange={(dato: string | undefined) => {
+                                            const isoDag = formaterDatoTilIsoDag(dato || '');
+                                            settVerdiPåOppgaveFelt(oppgaveFelt, isoDag || '');
+                                        }}
                                         placeholder={datoformatNorsk.DATO}
                                         valgtDato={oppgaveFelt.filter.selectedValue}
                                         className="filterskjema__filtre--input"

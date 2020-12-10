@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import familieDayjs, { Dayjs } from './familieDayjs';
 
 export enum datoformat {
@@ -35,6 +37,10 @@ export const formaterIsoDato = (
 
 export const formaterDato = (dato: Dayjs, tilFormat: datoformat): string => {
     return dato.isValid() ? dato.format(tilFormat) : '';
+};
+
+export const formaterDatoTilIsoDag = (dato: string): string | undefined => {
+    return dayjs(dato).isValid() ? formaterDato(familieDayjs(dato), datoformat.ISO_DAG) : undefined;
 };
 
 export const formaterIverksattDato = (dato: string | undefined) =>
