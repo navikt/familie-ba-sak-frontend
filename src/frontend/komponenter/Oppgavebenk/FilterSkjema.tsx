@@ -1,5 +1,7 @@
 import React from 'react';
 
+import dayjs from 'dayjs';
+
 import { Knapp } from 'nav-frontend-knapper';
 import { Select } from 'nav-frontend-skjema';
 
@@ -8,7 +10,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
 import { IPar } from '../../typer/common';
-import { datoformatNorsk, formaterDatoTilIsoDag } from '../../utils/formatter';
+import { datoformat, datoformatNorsk } from '../../utils/formatter';
 import { IOppgaveFelt } from './oppgavefelter';
 
 const FilterSkjema: React.FunctionComponent = () => {
@@ -34,8 +36,12 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         id={oppgaveFelt.nøkkel}
                                         label={oppgaveFelt.label}
                                         onChange={(dato: string | undefined) => {
-                                            const isoDag = formaterDatoTilIsoDag(dato || '');
-                                            settVerdiPåOppgaveFelt(oppgaveFelt, isoDag || '');
+                                            settVerdiPåOppgaveFelt(
+                                                oppgaveFelt,
+                                                dato && dayjs(dato, datoformat.ISO_DAG).isValid()
+                                                    ? dato
+                                                    : ''
+                                            );
                                         }}
                                         placeholder={datoformatNorsk.DATO}
                                         valgtDato={oppgaveFelt.filter.selectedValue}

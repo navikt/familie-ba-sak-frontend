@@ -1,11 +1,10 @@
-import dayjs from 'dayjs';
-
 import familieDayjs, { Dayjs } from './familieDayjs';
 
 export enum datoformat {
     MÅNED = 'MM.YY',
     DATO = 'DD.MM.YYYY',
     DATO_FORKORTTET = 'DD.MM.YY',
+    DATO_KORTTERE = 'DDMMYY',
     DATO_FORLENGET = 'LL',
     DATO_FORLENGET_MED_TID = 'LLL',
     ISO_MÅNED = 'YYYY-MM',
@@ -37,10 +36,6 @@ export const formaterIsoDato = (
 
 export const formaterDato = (dato: Dayjs, tilFormat: datoformat): string => {
     return dato.isValid() ? dato.format(tilFormat) : '';
-};
-
-export const formaterDatoTilIsoDag = (dato: string): string | undefined => {
-    return dayjs(dato).isValid() ? formaterDato(familieDayjs(dato), datoformat.ISO_DAG) : undefined;
 };
 
 export const formaterIverksattDato = (dato: string | undefined) =>
