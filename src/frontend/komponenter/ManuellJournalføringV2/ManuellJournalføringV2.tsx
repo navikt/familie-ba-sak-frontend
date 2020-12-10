@@ -15,7 +15,7 @@ import { DokumentPane } from './DokumentPane';
 import { JournalføringModal } from './JournalføringModal';
 import { JournalpostSkjema } from './JournalpostSkjema';
 
-const ToColonerDiv = styled.div`
+const ToKolonerDiv = styled.div`
     display: flex;
     flex-direction: row;
 `;
@@ -31,10 +31,10 @@ const ManuellJournalføringContentV2: React.FC = () => {
                     {dataForManuellJournalføring.data.journalpost.journalstatus ===
                     Journalstatus.MOTTATT ? (
                         <div>
-                            <ToColonerDiv>
+                            <ToKolonerDiv>
                                 <JournalpostSkjema />
                                 <DokumentPane />
-                            </ToColonerDiv>
+                            </ToKolonerDiv>
                             {visModal && <JournalføringModal />}
                         </div>
                     ) : (

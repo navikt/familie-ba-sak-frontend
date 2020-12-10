@@ -15,22 +15,32 @@ import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
 
 const DokumentPanel = styled(Lenkepanel)`
-    margin-top: 20px;
-    width: 560px;
-    height: 100%;
-    border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
-    &:hover {
-        border-color: ${props => `${props.theme.hoverBorderColor}`};
+    && {
+        margin-top: 20px;
+        width: 560px;
+        height: 100%;
+        border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
+        &:hover {
+            border-color: ${props => `${props.theme.hoverBorderColor}`};
+        }
+        &:focus {
+            border-color: ${props => `${props.theme.hoverBorderColor}`};
+        }
     }
 `;
 
 const DokumentPanelValgt = styled(Ekspanderbartpanel)`
-    margin-top: 20px;
-    width: 560px;
-    height: 100%;
-    border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
-    &:hover {
-        border-color: ${props => `${props.theme.hoverBorderColor}`};
+    && {
+        margin-top: 20px;
+        width: 560px;
+        height: 100%;
+        border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
+        &:hover {
+            border-color: ${props => `${props.theme.hoverBorderColor}`};
+        }
+        &:focus {
+            border-color: ${props => `${props.theme.hoverBorderColor}`};
+        }
     }
 `;
 
@@ -135,7 +145,7 @@ const LogiskVedleggPanel: React.FC = () => {
 
     return (
         <div>
-            <Label htmlFor="select">Dokumentbesrivelse</Label>
+            <Label htmlFor="select">Dokumentbeskrivelse</Label>
             <CreatableSelect
                 id="select"
                 isClearable
@@ -158,16 +168,18 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         hentDokumentData,
         valgtDokumentId,
         settValgtDokumentId,
+        valideringsfeil,
     } = useManuellJournalføringV2();
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
     const journalpostId =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.journalpostId
             : undefined;
+    const feil = valideringsfeil.get(dokument);
     const theme = {
         borderWidth: valgt ? '3px' : '1px',
-        borderColor: valgt ? navFarger.fokusFarge : navFarger.navMorkGra,
-        hoverBorderColor: navFarger.navBla,
+        borderColor: feil ? navFarger.navRod : valgt ? navFarger.fokusFarge : navFarger.navMorkGra,
+        hoverBorderColor: feil ? navFarger.navRod : navFarger.navBla,
     };
 
     return (
@@ -180,7 +192,6 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                 </DokumentPanelValgt>
             ) : (
                 <DokumentPanel
-                    border
                     tittelProps="normaltekst"
                     href="#"
                     onClick={() => {

@@ -30,6 +30,10 @@ import { IPersonInfo } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 
+interface ValideringsfeilProps {
+    feil: string;
+}
+
 const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
@@ -38,6 +42,9 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [dokumentData, settDokumentData] = React.useState(byggTomRessurs<string>());
     const [visDokument, settVisDokument] = React.useState(false);
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
+    const [valideringsfeil, settValideringsfeil] = React.useState(
+        new Map<unknown, ValideringsfeilProps>()
+    );
 
     //We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
     //a copy of the data that is subject to change. All modification will be done on the copy
@@ -64,6 +71,28 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
     const [senderInn, settSenderInn] = React.useState(false);
     const [visModal, settVisModal] = React.useState(false);
+
+    const validaterData = () => {
+        const oppdatertValideringsfeil = new Map<unknown, ValideringsfeilProps>();
+
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
+            if (!oppdatertData.data.journalpost.tittel) {
+                oppdatertValideringsfeil.set(oppdatertData.data.journalpost, {
+                    feil: 'Journalpost tittel må ikke være tom',
+                });
+            }
+
+            oppdatertData.data.journalpost.dokumenter?.forEach(dokument => {
+                if (!dokument.tittel) {
+                    oppdatertValideringsfeil.set(dokument, {
+                        feil: 'Dokument tittel må ikke være tom',
+                    });
+                }
+            });
+        }
+
+        settValideringsfeil(oppdatertValideringsfeil);
+    };
 
     const finnDokument = (
         ressurs: Ressurs<IDataForManuellJournalføring>,
@@ -370,6 +399,10 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
     }, [oppgaveId]);
 
+    React.useEffect(() => {
+        validaterData();
+    }, [oppdatertData]);
+
     return {
         dataForManuellJournalføring: oppdatertData,
         settDataForManuellJournalføring: settOppdatertData,
@@ -407,6 +440,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         manueltJournalfør,
         visModal,
         settVisModal,
+        valideringsfeil,
     };
 });
 
