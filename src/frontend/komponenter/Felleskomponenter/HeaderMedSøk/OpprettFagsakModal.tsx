@@ -37,11 +37,13 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, deltager
                         onClick={async () => {
                             settSenderInn(true);
                             if (deltager && (await sjekkTilgang(deltager.ident))) {
-                                opprettFagsak({
-                                    personIdent: deltager.ident,
-                                    aktørId: null,
-                                });
-                                lukkModal();
+                                opprettFagsak(
+                                    {
+                                        personIdent: deltager.ident,
+                                        aktørId: null,
+                                    },
+                                    lukkModal
+                                );
                             }
                         }}
                         children={'Ja, opprett fagsak'}
