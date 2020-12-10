@@ -12,6 +12,7 @@ import {
     byggHenterRessurs,
     byggTomRessurs,
     IDokumentInfo,
+    ILogiskVedlegg,
     Ressurs,
     RessursStatus,
     AvsenderMottakerIdType,
@@ -38,9 +39,14 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [dokumentData, settDokumentData] = React.useState(byggTomRessurs<string>());
     const [visDokument, settVisDokument] = React.useState(false);
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
+
+    //We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
+    //a copy of the data that is subject to change. All modification will be done on the copy
+    //before <<journalføring>>
     const [oppdatertData, settOppdatertData] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
+
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
     const history = useHistory();
 
@@ -139,8 +145,17 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 logiskVedleggId: '0',
             };
         });
+        valgt.brevkode = hentBrevkode(valgt.logiskeVedlegg);
         settValgtDokumentInfo(valgt);
         autoOppdateJournalpostMetadata();
+    };
+
+    const hentBrevkode = (logiskevedlegg: ILogiskVedlegg[]): string | undefined => {
+        return BrevkodeMap.get(
+            logiskevedlegg.reduce((pv, cv) => {
+                return BrevkodeMap.has(pv.tittel) ? pv : cv;
+            })?.tittel
+        );
     };
 
     const erDokumentTittelEndret = (dokument: IDokumentInfo): boolean => {
