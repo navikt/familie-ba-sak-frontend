@@ -1,9 +1,12 @@
 import { FeltState } from '../familie-skjema/typer';
 import { IBehandling } from '../typer/behandling';
-import { IFagsak } from '../typer/fagsak';
+import { fagsakStatus, IFagsak } from '../typer/fagsak';
 import { IVedtakForBehandling } from '../typer/vedtak';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
+
+export const hentFagsakStatusVisning = (fagsak: IFagsak): string =>
+    fagsak.underBehandling ? 'Under behandling' : fagsakStatus[fagsak.status].navn;
 
 export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
     if (fagsak.behandlinger.length === 0) {
