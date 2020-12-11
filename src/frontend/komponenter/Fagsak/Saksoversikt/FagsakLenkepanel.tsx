@@ -12,8 +12,8 @@ import {
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
+import { hentAktivBehandlingPåFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
 
 interface IBehandlingLenkepanel {
     fagsak: IFagsak;
@@ -53,7 +53,7 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
                         </Normaltekst>
                     </td>
                     <td>
-                        <Normaltekst>{fagsakStatus[fagsak.status].navn}</Normaltekst>
+                        <Normaltekst>{hentFagsakStatusVisning(fagsak)}</Normaltekst>
                     </td>
                 </tr>
             </tbody>
