@@ -168,7 +168,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                         </td>
                                         <td className={'handlinger'}>
                                             {oppg.oppgavetype
-                                                ? oppgaveTypeFilter[oppg.oppgavetype].id ===
+                                                ? oppgaveTypeFilter[oppg.oppgavetype]?.id ===
                                                       OppgavetypeFilter.JFR && (
                                                       <button
                                                           key={'tiloppg'}
