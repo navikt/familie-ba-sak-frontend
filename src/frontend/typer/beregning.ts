@@ -1,4 +1,3 @@
-import { BehandlingKategori } from './behandling';
 import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
 import { YearMonth } from './tid';
@@ -6,7 +5,6 @@ import { YearMonth } from './tid';
 export interface IUtbetalingsperiode {
     periodeFom: string;
     periodeTom: string;
-    sakstype: BehandlingKategori;
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
     ytelseTyper: YtelseType[];
     antallBarn: number;
