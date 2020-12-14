@@ -8,10 +8,17 @@ axios.defaults.baseURL = window.location.origin;
 export const preferredAxios = axios;
 
 export const håndterApiRessurs = <T>(
-    ressurs: ApiRessurs<T>,
+    ressurs?: ApiRessurs<T>,
     innloggetSaksbehandler?: ISaksbehandler
 ): Ressurs<T> => {
     let typetRessurs: Ressurs<T>;
+
+    if (!ressurs) {
+        return {
+            frontendFeilmelding: 'En feil har oppstått!',
+            status: RessursStatus.FEILET,
+        };
+    }
 
     switch (ressurs.status) {
         case RessursStatus.SUKSESS:
