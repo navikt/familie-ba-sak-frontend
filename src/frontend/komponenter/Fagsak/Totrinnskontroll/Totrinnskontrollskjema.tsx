@@ -1,5 +1,8 @@
 import * as React from 'react';
 
+import styled from 'styled-components';
+
+import navFarger from 'nav-frontend-core';
 import { Knapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
 import { Systemtittel } from 'nav-frontend-typografi';
@@ -14,6 +17,13 @@ interface IProps {
     innsendtVedtak: Ressurs<IFagsak>;
     sendInnVedtak: (totrinnskontrollData: ITotrinnskontrollData) => void;
 }
+
+const Container = styled.div`
+    margin: 0.5rem;
+    border-radius: 0.25rem;
+    padding: 1.2rem;
+    border: 1.5px solid ${navFarger.navGra40};
+`;
 
 const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
@@ -34,7 +44,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
             : '';
 
     return (
-        <div className="totrinnskontroll">
+        <Container className="totrinnskontroll">
             <SkjemaGruppe className="totrinnskontroll-skjemagruppe" feil={feilmelding}>
                 <legend className="totrinnskontroll-tittel">
                     <Info className="ikon" />
@@ -98,7 +108,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                         : 'Godkjenn vedtaket'
                 }
             />
-        </div>
+        </Container>
     );
 };
 

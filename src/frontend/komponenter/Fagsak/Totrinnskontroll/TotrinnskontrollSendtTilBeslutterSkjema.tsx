@@ -15,6 +15,7 @@ interface IProps {
 
 const Container = styled.div`
     margin: 0.5rem;
+    border-radius: 0.25rem;
     padding: 2rem;
     border: 1.5px solid ${navFarger.navGronnDarken40};
     display: flex;
