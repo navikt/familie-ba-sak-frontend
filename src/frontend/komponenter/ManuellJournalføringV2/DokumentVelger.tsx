@@ -13,8 +13,9 @@ import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
+import { feilPanel } from './FeilPanel';
 
-const DokumentPanel = styled(Lenkepanel)`
+const DokumentPanelUvalgt = styled(Lenkepanel)`
     && {
         margin-top: 20px;
         width: 560px;
@@ -168,30 +169,28 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         hentDokumentData,
         valgtDokumentId,
         settValgtDokumentId,
-        valideringsfeil,
+        harFeil,
     } = useManuellJournalføringV2();
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
     const journalpostId =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.journalpostId
             : undefined;
-    const feil = valideringsfeil.get(dokument);
     const theme = {
         borderWidth: valgt ? '3px' : '1px',
-        borderColor: feil ? navFarger.navRod : valgt ? navFarger.fokusFarge : navFarger.navMorkGra,
-        hoverBorderColor: feil ? navFarger.navRod : navFarger.navBla,
+        borderColor: valgt ? navFarger.fokusFarge : navFarger.navMorkGra,
     };
+    const DokumentPanel = valgt ? DokumentPanelValgt : DokumentPanelUvalgt;
+    const Panel = harFeil(dokument) ? feilPanel(DokumentPanel) : DokumentPanel;
 
     return (
         <ThemeProvider theme={theme}>
             {valgt ? (
-                <DokumentPanelValgt
-                    tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
-                >
+                <Panel tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}>
                     <LogiskVedleggPanel />
-                </DokumentPanelValgt>
+                </Panel>
             ) : (
-                <DokumentPanel
+                <Panel
                     tittelProps="normaltekst"
                     href="#"
                     onClick={() => {
@@ -202,7 +201,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                     }}
                 >
                     <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
-                </DokumentPanel>
+                </Panel>
             )}
         </ThemeProvider>
     );

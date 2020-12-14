@@ -22,7 +22,6 @@ const ToKolonerDiv = styled.div`
 
 const ManuellJournalføringContentV2: React.FC = () => {
     const { dataForManuellJournalføring, visModal } = useManuellJournalføringV2();
-
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (

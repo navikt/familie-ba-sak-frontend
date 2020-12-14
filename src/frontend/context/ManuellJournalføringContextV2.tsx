@@ -16,6 +16,8 @@ import {
     Ressurs,
     RessursStatus,
     AvsenderMottakerIdType,
+    kjønnType,
+    AvsenderMottaker,
 } from '@navikt/familie-typer';
 
 import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../api/fagsak';
@@ -27,13 +29,68 @@ import {
     IRestJournalføring,
     JournalpostTittel,
 } from '../typer/manuell-journalføring';
-import { IPersonInfo } from '../typer/person';
+import { Adressebeskyttelsegradering, IPersonInfo, PersonType } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 
-interface ValideringsfeilProps {
-    feil: string;
-}
+const tomtPerson = {
+    adressebeskyttelseGradering: Adressebeskyttelsegradering.UGRADERT,
+    familierelasjoner: [],
+    familierelasjonerMaskert: [],
+    fødselsdato: '',
+    kjønn: kjønnType.UKJENT,
+    navn: '',
+    personIdent: '',
+    type: PersonType.SØKER,
+};
+
+const tomtAvsender = {
+    erLikBruker: false,
+    id: '',
+    land: '',
+    navn: '',
+    type: AvsenderMottakerIdType.UKJENT,
+};
+
+const erPersonTomt = (person: IPersonInfo | undefined) => !person || !person.personIdent;
+
+const erAvsenderTomt = (avsender: AvsenderMottaker | undefined) => !avsender || !avsender.navn;
+
+const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
+    const valideringsfeilMap = new Map<unknown, string[]>();
+
+    if (!dataForValidering.journalpost.tittel) {
+        valideringsfeilMap.set(dataForValidering.journalpost, [
+            ...(valideringsfeilMap.get(dataForValidering.journalpost) || []),
+            'Journalpost tittel må ikke være tom',
+        ]);
+    }
+
+    dataForValidering.journalpost.dokumenter?.forEach(dokument => {
+        if (!dokument.tittel) {
+            valideringsfeilMap.set(dokument, [
+                ...(valideringsfeilMap.get(dokument) || []),
+                'Dokument tittel må ikke være tom',
+            ]);
+        }
+    });
+
+    if (erPersonTomt(dataForValidering.person)) {
+        valideringsfeilMap.set(dataForValidering.person, [
+            ...(valideringsfeilMap.get(dataForValidering.person) || []),
+            'Bruker er ikke satt',
+        ]);
+    }
+
+    if (erAvsenderTomt(dataForValidering.journalpost.avsenderMottaker)) {
+        valideringsfeilMap.set(dataForValidering.journalpost.avsenderMottaker, [
+            ...(valideringsfeilMap.get(dataForValidering.journalpost.avsenderMottaker) || []),
+            'Avsender er ikke satt',
+        ]);
+    }
+
+    return valideringsfeilMap;
+};
 
 const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
@@ -43,9 +100,16 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [dokumentData, settDokumentData] = React.useState(byggTomRessurs<string>());
     const [visDokument, settVisDokument] = React.useState(false);
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
-    const [valideringsfeil, settValideringsfeil] = React.useState(
-        new Map<unknown, ValideringsfeilProps>()
-    );
+
+    const [valideringsfeil, settValideringsfeil] = React.useState(new Map<unknown, string[]>());
+    const harFeil = (data: unknown) => valideringsfeil.get(data);
+    const hentFeil = (data: unknown = undefined) =>
+        data
+            ? valideringsfeil.get(data)
+            : Array.from(valideringsfeil, ([_, feil]) => feil).reduce(
+                  (alleFeil, feil) => [...alleFeil, ...feil],
+                  []
+              );
 
     //We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
     //a copy of the data that is subject to change. All modification will be done on the copy
@@ -59,7 +123,17 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     const settDataRessurs = (dataRessurs: Ressurs<IDataForManuellJournalføring>) => {
         settDataForManuellJournalføring(dataRessurs);
-        const oppdatert = JSON.parse(JSON.stringify(dataRessurs));
+        const oppdatert: Ressurs<IDataForManuellJournalføring> = JSON.parse(
+            JSON.stringify(dataRessurs)
+        );
+        if (oppdatert.status === RessursStatus.SUKSESS) {
+            if (!oppdatert.data.person) {
+                oppdatert.data.person = tomtPerson;
+            }
+            if (!oppdatert.data.journalpost.avsenderMottaker) {
+                oppdatert.data.journalpost.avsenderMottaker = tomtAvsender;
+            }
+        }
         settOppdatertData(oppdatert);
     };
 
@@ -72,28 +146,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
     const [senderInn, settSenderInn] = React.useState(false);
     const [visModal, settVisModal] = React.useState(false);
-
-    const validaterData = () => {
-        const oppdatertValideringsfeil = new Map<unknown, ValideringsfeilProps>();
-
-        if (oppdatertData.status === RessursStatus.SUKSESS) {
-            if (!oppdatertData.data.journalpost.tittel) {
-                oppdatertValideringsfeil.set(oppdatertData.data.journalpost, {
-                    feil: 'Journalpost tittel må ikke være tom',
-                });
-            }
-
-            oppdatertData.data.journalpost.dokumenter?.forEach(dokument => {
-                if (!dokument.tittel) {
-                    oppdatertValideringsfeil.set(dokument, {
-                        feil: 'Dokument tittel må ikke være tom',
-                    });
-                }
-            });
-        }
-
-        settValideringsfeil(oppdatertValideringsfeil);
-    };
 
     const finnDokument = (
         ressurs: Ressurs<IDataForManuellJournalføring>,
@@ -422,7 +474,8 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     }, [oppgaveId]);
 
     React.useEffect(() => {
-        validaterData();
+        oppdatertData.status === RessursStatus.SUKSESS &&
+            settValideringsfeil(validaterData(oppdatertData.data));
     }, [oppdatertData]);
 
     return {
@@ -464,6 +517,8 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         visModal,
         settVisModal,
         valideringsfeil,
+        harFeil,
+        hentFeil,
     };
 });
 

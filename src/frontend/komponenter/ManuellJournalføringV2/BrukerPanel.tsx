@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Knapp } from 'nav-frontend-knapper';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
@@ -15,7 +16,8 @@ import { Valideringsstatus } from '../../familie-skjema/typer';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { IPersonInfo } from '../../typer/person';
 import { identValidator } from '../../utils/validators';
-import { Deltager } from './Deltager';
+import { DeltagerInfo } from './DeltagerInfo';
+import { feilPanel } from './FeilPanel';
 
 const VIS_FELT_MELDING = '';
 const IKKE_VIS_MELDING = undefined;
@@ -24,8 +26,16 @@ const StyledAlert = styled(AlertStripeFeil)`
     margin: 10px 0 0 0;
 `;
 
+const BrukerPanelDiv = styled.div`
+    width: 560px;
+    margin-top: 20px;
+`;
+
+const PanelGyldig = Ekspanderbartpanel;
+const PanelFeil = feilPanel(PanelGyldig);
+
 export const BrukerPanel: React.FC = () => {
-    const { dataForManuellJournalføring, settPerson } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring, settPerson, harFeil } = useManuellJournalføringV2();
     const [feilMelding, settFeilMelding] = useState<string | undefined>(IKKE_VIS_MELDING);
     const { axiosRequest } = useApp();
     const [spinner, settSpinner] = useState(false);
@@ -40,23 +50,28 @@ export const BrukerPanel: React.FC = () => {
             const bruker = dataForManuellJournalføring.data.person;
             const navn = bruker?.navn || 'Ukjent';
             const ident = bruker?.personIdent || 'Ukjent';
+            const Panel = harFeil(bruker) ? PanelFeil : PanelGyldig;
             return (
-                <Deltager
-                    ikon={<KontoSirkel />}
-                    navn={navn}
-                    ident={ident}
-                    undertittel={'Bruker/søker'}
-                >
-                    <div className={'hentperson__inputogknapp'}>
-                        <FamilieInput
-                            {...nyttIdent.hentNavInputProps(feilMelding === VIS_FELT_MELDING)}
-                            erLesevisning={false}
-                            id={'hent-person'}
-                            label={'Skriv inn fødselsnummer/D-nummer'}
-                            bredde={'XL'}
-                            placeholder={'fnr/dnr'}
-                        />
-                        {
+                <BrukerPanelDiv>
+                    <Panel
+                        tittel={
+                            <DeltagerInfo
+                                ikon={<KontoSirkel />}
+                                navn={navn}
+                                undertittel={'Søker/Bruker'}
+                                ident={ident}
+                            />
+                        }
+                    >
+                        <div className={'hentperson__inputogknapp'}>
+                            <FamilieInput
+                                {...nyttIdent.hentNavInputProps(feilMelding === VIS_FELT_MELDING)}
+                                erLesevisning={false}
+                                id={'hent-person'}
+                                label={'Skriv inn fødselsnummer/D-nummer'}
+                                bredde={'XL'}
+                                placeholder={'fnr/dnr'}
+                            />
                             <Knapp
                                 onClick={() => {
                                     if (
@@ -93,10 +108,10 @@ export const BrukerPanel: React.FC = () => {
                                 children={'Endre bruker'}
                                 spinner={spinner}
                             />
-                        }
-                    </div>
-                    {feilMelding && <StyledAlert>{feilMelding}</StyledAlert>}
-                </Deltager>
+                        </div>
+                        {feilMelding && <StyledAlert>{feilMelding}</StyledAlert>}{' '}
+                    </Panel>
+                </BrukerPanelDiv>
             );
         default:
             return <></>;

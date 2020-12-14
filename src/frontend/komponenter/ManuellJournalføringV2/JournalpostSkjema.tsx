@@ -3,6 +3,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
+import Panel from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
@@ -12,6 +13,7 @@ import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokumenter';
+import { feilPanel } from './FeilPanel';
 import { JournalførMotSak } from './JournalførMotSak';
 import { Journalpost } from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
@@ -22,6 +24,8 @@ const StyledSkjema = styled(Skjemasteg)`
     padding-bottom: 40px;
 `;
 
+const FeilPanel = feilPanel(Panel);
+
 export const JournalpostSkjema: React.FC = () => {
     const {
         dataForManuellJournalføring,
@@ -30,7 +34,11 @@ export const JournalpostSkjema: React.FC = () => {
         tilknyttedeBehandlingIder,
         manueltJournalfør,
         settVisModal,
+        hentFeil,
     } = useManuellJournalføringV2();
+
+    const alleFeil = hentFeil() ?? [];
+    console.log(alleFeil);
 
     const history = useHistory();
 
@@ -44,14 +52,18 @@ export const JournalpostSkjema: React.FC = () => {
                     forrigeOnClick={() => {
                         history.push(`/oppgaver`);
                     }}
-                    nesteKnappTittel={'Journalfør'}
-                    nesteOnClick={() => {
-                        if (tilknyttedeBehandlingIder.length < 1) {
-                            settVisModal(true);
-                        } else {
-                            manueltJournalfør();
-                        }
-                    }}
+                    nesteKnappTittel={alleFeil.length === 0 ? 'Journalfør' : undefined}
+                    nesteOnClick={
+                        alleFeil.length === 0
+                            ? () => {
+                                  if (tilknyttedeBehandlingIder.length < 1) {
+                                      settVisModal(true);
+                                  } else {
+                                      manueltJournalfør();
+                                  }
+                              }
+                            : undefined
+                    }
                     senderInn={senderInn}
                 >
                     <Journalpost />
@@ -71,6 +83,16 @@ export const JournalpostSkjema: React.FC = () => {
                         aktivBehandling={hentAktivBehandlingForJournalføring()}
                         dataForManuellJournalføring={dataForManuellJournalføring.data}
                     ></KnyttJournalpostTilBehandling>
+                    {alleFeil.length > 0 && (
+                        <FeilPanel>
+                            <Undertittel>For å gå videre må du rette opp følgende:</Undertittel>
+                            <ul>
+                                {alleFeil.map((feil, index) => (
+                                    <li key={index}>{feil}</li>
+                                ))}
+                            </ul>
+                        </FeilPanel>
+                    )}
                 </StyledSkjema>
             )}
         </div>
