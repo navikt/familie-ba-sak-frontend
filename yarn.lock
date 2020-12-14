@@ -782,13 +782,13 @@
     react-day-picker "^7.4.8"
 
 "@navikt/familie-header@^2.0.14":
-  version "2.0.19"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.19.tgz#24a321f0979f4b214000cd918692ca3fabd90bf2"
-  integrity sha512-/2YhoThhglMCNlvDxrpE6ukBtnS5/DPCC/RcnHOgZUjarTxH1STeLX0K37dnv3nP1Eupq3TKAd1KUnfZn9FxFQ==
+  version "2.0.20"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.20.tgz#5dab54a3877a3390b30d7231a28692d6ae40787b"
+  integrity sha512-wrwxKTu5pJQxn+uW5B2IfF/PjRVRKZ7663mtlSGIGv1QDerwZe07vmyKCiHNfL2/HLIXUtC4sI8zfWDb3f9fgA==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
-    "@navikt/familie-ikoner" "^3.1.6"
-    "@navikt/familie-typer" "^3.0.9"
+    "@navikt/familie-ikoner" "^3.1.7"
+    "@navikt/familie-typer" "^3.0.10"
     "@navikt/nap-user-panel" "^1.0.0"
     classnames "^2.2.6"
     lodash.throttle "^4.1.1"
@@ -805,17 +805,17 @@
     nav-frontend-typografi-style "^1.0.18"
     prop-types "^15.7.2"
 
-"@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.2", "@navikt/familie-ikoner@^3.1.6":
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.6.tgz#fa0855ccf3cf36c5ee4e19825e8968c92612d6fe"
-  integrity sha512-Cva9IHAbQ+2ZRz0SPL7qSbC/HJElqgAO+bSQrO72cOefxUijN+7+62/zvyi/hf0lZFlj4JFlAmveIRlRxN/wGg==
+"@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.2", "@navikt/familie-ikoner@^3.1.7":
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.7.tgz#894432ff11fee3ddcaddcb031938a67b9f551b5b"
+  integrity sha512-A4psvLYg4LasyG4L8rfSySAZjWeG14FOFYOfOX9w3qiRr9vVXJMllyQxHMchO+K0l48xHnpWuvaTvYk1Yzc3bA==
   dependencies:
-    "@navikt/familie-typer" "^3.0.9"
+    "@navikt/familie-typer" "^3.0.10"
 
-"@navikt/familie-typer@^3.0.6", "@navikt/familie-typer@^3.0.9":
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.9.tgz#c35ce06b304db5b9b62195b40e9547408bf5b756"
-  integrity sha512-8g0d/lMQi+5K2tQb5T6Y4qHsNMyCXhCT8jL4RoJ0WB6Oh9mnI/Wf/Ku9NFMXtIsCxvKEt6BRd9zWqM+DIO+tHQ==
+"@navikt/familie-typer@^3.0.10", "@navikt/familie-typer@^3.0.6", "@navikt/familie-typer@^3.0.9":
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.10.tgz#b9b1dac25c492850a0a36f33504b37e311dad586"
+  integrity sha512-vtefj8N6PlRO7JcbfmJFWGOU3JFFoxaZ8sf4o7y3h6Oj67CXKItLF8+gyxhfQAag3pyGnMK2KdcVRNOKA0V14w==
 
 "@navikt/familie-visittkort@^2.1.12":
   version "2.1.12"
