@@ -37,15 +37,12 @@ const JournalpostMetadataDiv = styled.div`
 `;
 
 const JournalpostMetadata: React.FC = () => {
-    const { dataForManuellJournalføring, brevkode } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring } = useManuellJournalføringV2();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const journalpost = dataForManuellJournalføring.data.journalpost;
             return (
                 <JournalpostMetadataDiv>
-                    <Normaltekst>Tema: {journalpost.tema || 'Ingen tema'}</Normaltekst>
-                    <Normaltekst>Skjemakode: {brevkode}</Normaltekst>
-                    <Normaltekst>Kanal: {journalpost.kanal || 'Ingen kanal'}</Normaltekst>
                     <Normaltekst>
                         Mottatt:{' '}
                         {journalpost.datoMottatt
@@ -63,7 +60,7 @@ const EndreJournalpost: React.FC = () => {
     const {
         dataForManuellJournalføring,
         settJournalpostTittel,
-        tilbakestilleJournalpostTittel,
+        tilbakestillJournalpostTittel,
     } = useManuellJournalføringV2();
     const journalpostTittel =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
@@ -71,7 +68,7 @@ const EndreJournalpost: React.FC = () => {
             : undefined;
     return (
         <div>
-            <Label htmlFor="select">Endre journalpostTittel</Label>
+            <Label htmlFor="select">Endre journalposttittel</Label>
             <CreatableSelect
                 id="select"
                 isClearable
@@ -82,7 +79,7 @@ const EndreJournalpost: React.FC = () => {
                     if (value && 'value' in value) {
                         settJournalpostTittel(value.value);
                     } else {
-                        tilbakestilleJournalpostTittel();
+                        tilbakestillJournalpostTittel();
                     }
                 }}
             />

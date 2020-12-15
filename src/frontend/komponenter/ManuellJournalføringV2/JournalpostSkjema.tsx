@@ -34,7 +34,7 @@ export const JournalpostSkjema: React.FC = () => {
         settVisModal,
         hentFeil,
         erEndret,
-        tilbakestilleData,
+        tilbakestillData,
     } = useManuellJournalføringV2();
 
     const alleFeil = hentFeil() ?? [];
@@ -65,7 +65,7 @@ export const JournalpostSkjema: React.FC = () => {
                     }
                     senderInn={senderInn}
                     tilbakestillOnClick={() => {
-                        tilbakestilleData();
+                        tilbakestillData();
                     }}
                     skalViseTilbakestillKnapp={erEndret()}
                 >

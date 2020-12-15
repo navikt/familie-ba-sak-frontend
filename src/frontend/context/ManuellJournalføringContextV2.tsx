@@ -12,7 +12,6 @@ import {
     byggHenterRessurs,
     byggTomRessurs,
     IDokumentInfo,
-    ILogiskVedlegg,
     Ressurs,
     RessursStatus,
     AvsenderMottakerIdType,
@@ -27,7 +26,6 @@ import {
     BrevkodeMap,
     IDataForManuellJournalføring,
     IRestJournalføring,
-    JournalpostTittel,
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo, PersonType } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
@@ -121,7 +119,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         return false;
     };
 
-    const tilbakestilleData = () => {
+    const tilbakestillData = () => {
         settDataRessurs(dataForManuellJournalføring);
     };
 
@@ -156,8 +154,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
         settOppdatertData(oppdatert);
     };
-
-    const [brevkode, settBrevkode] = React.useState<string | undefined>('');
 
     const [visFeilmeldinger, settVisfeilmeldinger] = React.useState(false);
     const [feilmeldinger, settFeilmeldinger] = React.useState<FeiloppsummeringFeil[]>([]);
@@ -200,63 +196,33 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             });
     };
 
-    const autoOppdateJournalpostMetadata = () => {
-        if (oppdatertData.status === RessursStatus.SUKSESS) {
-            let funnetTittel = undefined;
-            oppdatertData.data.journalpost.dokumenter?.find(
-                dokument =>
-                    !!dokument.logiskeVedlegg.find(
-                        lv =>
-                            !!Object.values(JournalpostTittel).find(it => {
-                                if (it === lv.tittel) {
-                                    funnetTittel = it;
-                                    return true;
-                                }
-                                return false;
-                            })
-                    )
-            );
-            if (funnetTittel) {
-                settJournalpostTittel(funnetTittel);
-                settBrevkode(BrevkodeMap.get(funnetTittel) || '');
-            } else {
-                tilbakestilleJournalpostTittel();
-            }
-        }
-    };
-
     const settDokumentTittel = (dokumentTittel: string) => {
         const valgt = finnValgtDokument(oppdatertData);
         if (!valgt) {
             return;
         }
         valgt.tittel = dokumentTittel;
+        valgt.brevkode = hentBrevkode(valgt.tittel);
         settValgtDokumentInfo(valgt);
     };
 
-    const settLogiskVedlegg = (logiskVedlggNavn: Array<string>) => {
+    const settLogiskeVedlegg = (logiskeVedleggNavn: Array<string>) => {
         const valgt = finnValgtDokument(oppdatertData);
         if (!valgt) {
             return;
         }
 
-        valgt.logiskeVedlegg = logiskVedlggNavn.map(vedlegg => {
+        valgt.logiskeVedlegg = logiskeVedleggNavn.map(vedlegg => {
             return {
                 tittel: vedlegg,
                 logiskVedleggId: '0',
             };
         });
-        valgt.brevkode = hentBrevkode(valgt.logiskeVedlegg);
         settValgtDokumentInfo(valgt);
-        autoOppdateJournalpostMetadata();
     };
 
-    const hentBrevkode = (logiskevedlegg: ILogiskVedlegg[]): string | undefined => {
-        return BrevkodeMap.get(
-            logiskevedlegg.reduce((pv, cv) => {
-                return BrevkodeMap.has(pv.tittel) ? pv : cv;
-            })?.tittel
-        );
+    const hentBrevkode = (dokumentTittel: string | undefined): string | undefined => {
+        return BrevkodeMap.get(dokumentTittel);
     };
 
     const settFagsak = (fagsak: Ressurs<IFagsak | undefined>) => {
@@ -287,7 +253,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         });
     };
 
-    const endrePerson = (personId: string, callback: (status: RessursStatus) => void) => {
+    const endreBruker = (personId: string, callback: (status: RessursStatus) => void) => {
         return axiosRequest<IPersonInfo, void>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
@@ -316,7 +282,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         return dokument.tittel !== dokumentUendret?.tittel;
     };
 
-    const tilbakestilleDokumentTittel = () => {
+    const tilbakestillDokumentTittel = () => {
         const valgtDokument = finnValgtDokument(oppdatertData);
         const valgtDokumentUendret = finnValgtDokument(dataForManuellJournalføring);
         if (valgtDokument && valgtDokumentUendret) {
@@ -392,7 +358,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                     },
                 },
             });
-            settBrevkode(BrevkodeMap.get(tittel) || '');
         }
     };
 
@@ -417,7 +382,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
     };
 
-    const tilbakestilleJournalpostTittel = () => {
+    const tilbakestillJournalpostTittel = () => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
             settJournalpostTittel(dataForManuellJournalføring.data.journalpost.tittel);
         }
@@ -588,15 +553,14 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             return finnValgtDokument(oppdatertData);
         },
         settDokumentTittel,
-        settLogiskVedlegg,
+        settLogiskeVedlegg,
         settAvsender,
-        tilbakestilleDokumentTittel,
+        tilbakestillDokumentTittel,
         erDokumentTittelEndret,
         settJournalpostTittel,
-        tilbakestilleJournalpostTittel,
+        tilbakestillJournalpostTittel,
         hentAktivBehandlingForJournalføring,
-        brevkode,
-        endrePerson,
+        endreBruker,
         visFeilmeldinger,
         settVisfeilmeldinger,
         feilmeldinger,
@@ -620,7 +584,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settFagsak,
         velgOgHentDokumentData,
         erEndret,
-        tilbakestilleData,
+        tilbakestillData,
     };
 });
 

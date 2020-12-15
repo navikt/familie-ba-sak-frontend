@@ -33,7 +33,7 @@ const PanelGyldig = Ekspanderbartpanel;
 const PanelFeil = feilPanel(PanelGyldig);
 
 export const BrukerPanel: React.FC = () => {
-    const { dataForManuellJournalføring, endrePerson, harFeil } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalføringV2();
     const [feilMelding, settFeilMelding] = useState<string | undefined>(IKKE_VIS_MELDING);
     const [spinner, settSpinner] = useState(false);
 
@@ -73,7 +73,7 @@ export const BrukerPanel: React.FC = () => {
                                 onClick={() => {
                                     if (nyttIdent.valideringsstatus === Valideringsstatus.OK) {
                                         settSpinner(true);
-                                        endrePerson(nyttIdent.verdi, status => {
+                                        endreBruker(nyttIdent.verdi, (status: RessursStatus) => {
                                             settSpinner(false);
                                             settFeilMelding(
                                                 status === RessursStatus.SUKSESS

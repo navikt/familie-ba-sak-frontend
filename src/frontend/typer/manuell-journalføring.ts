@@ -97,8 +97,8 @@ export enum JournalpostTittel {
 export const BrevkodeMap = new Map<string | undefined, string>([
     [JournalpostTittel.SØKNAD_OM_BARNETRYGD_ORDINÆR.toString(), 'NAV 33-00.07'],
     [JournalpostTittel.SØKNAD_OM_UTVIDET_BARNETRYGD.toString(), 'NAV 33-00.09'],
-    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_BARNETRYGD_ORDINÆR.toString(), 'NAV 33-00.07'],
-    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_UTVIDET_BARNETRYGD.toString(), 'NAV 33-00.09'],
+    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_BARNETRYGD_ORDINÆR.toString(), 'NAVe 33-00.07'],
+    [JournalpostTittel.ETTERSENDELSE_TIL_SØKNAD_OM_UTVIDET_BARNETRYGD.toString(), 'NAVe 33-00.09'],
     [JournalpostTittel.TILLEGGSSKJEMA_VED_KRAV_OM_UTBETALING.toString(), 'NAV 34-00.15'],
 ]);
 
