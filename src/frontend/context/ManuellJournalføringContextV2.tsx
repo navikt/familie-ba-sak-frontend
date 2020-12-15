@@ -110,6 +110,20 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                   (alleFeil, feil) => [...alleFeil, ...feil],
                   []
               );
+    const erEndret = (data: unknown = undefined) => {
+        if (
+            !data &&
+            oppdatertData.status === RessursStatus.SUKSESS &&
+            dataForManuellJournalføring.status === RessursStatus.SUKSESS
+        ) {
+            return JSON.stringify(oppdatertData) !== JSON.stringify(dataForManuellJournalføring);
+        }
+        return false;
+    };
+
+    const tilbakestilleData = () => {
+        settDataRessurs(dataForManuellJournalføring);
+    };
 
     //We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
     //a copy of the data that is subject to change. All modification will be done on the copy
@@ -605,6 +619,8 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         hentFeil,
         settFagsak,
         velgOgHentDokumentData,
+        erEndret,
+        tilbakestilleData,
     };
 });
 
