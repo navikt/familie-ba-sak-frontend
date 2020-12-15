@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -24,6 +24,15 @@ const PanelFeil = feilPanel(PanelGyldig);
 export const AvsenderPanel: React.FC = () => {
     const { dataForManuellJournalføring, settAvsender, harFeil } = useManuellJournalføringV2();
     const [avsenderFelt, settAvsenderFelt] = useState('');
+
+    useEffect(() => {
+        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
+            settAvsenderFelt(
+                dataForManuellJournalføring.data.journalpost.avsenderMottaker?.navn ?? ''
+            );
+        }
+    }, [dataForManuellJournalføring]);
+
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const avsender = dataForManuellJournalføring.data.journalpost.avsenderMottaker;
