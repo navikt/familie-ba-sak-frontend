@@ -166,9 +166,8 @@ const LogiskVedleggPanel: React.FC = () => {
 export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => {
     const {
         dataForManuellJournalføring,
-        hentDokumentData,
         valgtDokumentId,
-        settValgtDokumentId,
+        velgOgHentDokumentData,
         harFeil,
     } = useManuellJournalføringV2();
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
@@ -195,8 +194,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                     href="#"
                     onClick={() => {
                         if (!valgt && journalpostId && dokument.dokumentInfoId) {
-                            hentDokumentData(journalpostId, dokument.dokumentInfoId);
-                            settValgtDokumentId(dokument.dokumentInfoId);
+                            velgOgHentDokumentData(dokument.dokumentInfoId);
                         }
                     }}
                 >

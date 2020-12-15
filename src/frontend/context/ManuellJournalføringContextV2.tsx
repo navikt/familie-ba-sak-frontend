@@ -133,6 +133,12 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             if (!oppdatert.data.journalpost.avsenderMottaker) {
                 oppdatert.data.journalpost.avsenderMottaker = tomtAvsender;
             }
+            const firstDokument = oppdatert.data.journalpost.dokumenter?.find(() => true);
+            settValgtDokumentId(firstDokument?.dokumentInfoId);
+            hentDokumentData(
+                oppdatert.data.journalpost.journalpostId,
+                firstDokument?.dokumentInfoId
+            );
         }
         settOppdatertData(oppdatert);
     };
@@ -320,13 +326,20 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             });
     };
 
-    const hentDokumentData = (journalPostId: string, dokumentInfoId: string) => {
+    const hentDokumentData = (
+        journalpostId: string | undefined,
+        dokumentInfoId: string | undefined
+    ) => {
+        if (!journalpostId || !dokumentInfoId) {
+            return;
+        }
+
         settDokumentData(byggHenterRessurs());
         settVisDokument(true);
         axiosRequest<string, void>({
             method: 'GET',
-            url: `/familie-ba-sak/api/journalpost/${journalPostId}/hent/${dokumentInfoId}`,
-            påvirkerSystemLaster: true,
+            url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentInfoId}`,
+            påvirkerSystemLaster: false,
         })
             .then((hentetDokumentData: Ressurs<string>) => {
                 if (hentetDokumentData.status === RessursStatus.SUKSESS) {
@@ -344,6 +357,13 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             .catch((_error: AxiosError) => {
                 settDokumentData(byggFeiletRessurs('Ukjent feil ved henting av dokument'));
             });
+    };
+
+    const velgOgHentDokumentData = (dokumentInfoId: string) => {
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
+            hentDokumentData(oppdatertData.data.journalpost.journalpostId, dokumentInfoId);
+            settValgtDokumentId(dokumentInfoId);
+        }
     };
 
     const settJournalpostTittel = (tittel: string | undefined) => {
@@ -550,12 +570,10 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settDataForManuellJournalføring: settOppdatertData,
         dokumentData,
         visDokument,
-        hentDokumentData,
         valgtDokumentId,
         finnValgtDokument: (): IDokumentInfo | undefined => {
             return finnValgtDokument(oppdatertData);
         },
-        settValgtDokumentId,
         settDokumentTittel,
         settLogiskVedlegg,
         settAvsender,
@@ -587,6 +605,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         harFeil,
         hentFeil,
         settFagsak,
+        velgOgHentDokumentData,
     };
 });
 
