@@ -7,14 +7,12 @@ import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Knapp } from 'nav-frontend-knapper';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../context/AppContext';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { useFelt } from '../../familie-skjema/felt';
 import { Valideringsstatus } from '../../familie-skjema/typer';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
-import { IPersonInfo } from '../../typer/person';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
 import { feilPanel } from './FeilPanel';
@@ -35,9 +33,8 @@ const PanelGyldig = Ekspanderbartpanel;
 const PanelFeil = feilPanel(PanelGyldig);
 
 export const BrukerPanel: React.FC = () => {
-    const { dataForManuellJournalføring, settPerson, harFeil } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring, endrePerson, harFeil } = useManuellJournalføringV2();
     const [feilMelding, settFeilMelding] = useState<string | undefined>(IKKE_VIS_MELDING);
-    const { axiosRequest } = useApp();
     const [spinner, settSpinner] = useState(false);
 
     const nyttIdent = useFelt({
@@ -74,33 +71,16 @@ export const BrukerPanel: React.FC = () => {
                             />
                             <Knapp
                                 onClick={() => {
-                                    if (
-                                        nyttIdent.valideringsstatus === Valideringsstatus.OK ||
-                                        process.env.NODE_ENV === 'development'
-                                    ) {
+                                    if (nyttIdent.valideringsstatus === Valideringsstatus.OK) {
                                         settSpinner(true);
-                                        axiosRequest<IPersonInfo, void>({
-                                            method: 'GET',
-                                            url: '/familie-ba-sak/api/person',
-                                            headers: {
-                                                personIdent: nyttIdent.verdi,
-                                            },
-                                        })
-                                            .then((hentetPerson: Ressurs<IPersonInfo>) => {
-                                                if (hentetPerson.status === RessursStatus.SUKSESS) {
-                                                    settPerson(hentetPerson.data);
-                                                }
-                                                settSpinner(false);
-                                                settFeilMelding(
-                                                    hentetPerson.status === RessursStatus.SUKSESS
-                                                        ? IKKE_VIS_MELDING
-                                                        : 'Ukjent feil ved hent person.'
-                                                );
-                                            })
-                                            .catch(() => {
-                                                settSpinner(false);
-                                                settFeilMelding('Ukjent feil ved hent person.');
-                                            });
+                                        endrePerson(nyttIdent.verdi, status => {
+                                            settSpinner(false);
+                                            settFeilMelding(
+                                                status === RessursStatus.SUKSESS
+                                                    ? IKKE_VIS_MELDING
+                                                    : 'Ukjent feil ved hent person.'
+                                            );
+                                        });
                                     } else {
                                         settFeilMelding(VIS_FELT_MELDING);
                                     }

@@ -239,6 +239,58 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         );
     };
 
+    const settFagsak = (fagsak: Ressurs<IFagsak | undefined>) => {
+        if (
+            oppdatertData.status === RessursStatus.SUKSESS &&
+            fagsak.status === RessursStatus.SUKSESS
+        ) {
+            console.log(fagsak);
+            settOppdatertData({
+                ...oppdatertData,
+                data: {
+                    ...oppdatertData.data,
+                    fagsak: fagsak.data,
+                },
+            });
+        }
+    };
+
+    const hentFagsak = (personId: string) => {
+        return axiosRequest<IFagsak | undefined, Ressurs<IFagsak | undefined>>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/fagsaker/restfagsak`,
+            headers: {
+                personIdent: personId,
+            },
+        }).then((fagsak: Ressurs<IFagsak | undefined>) => {
+            return fagsak;
+        });
+    };
+
+    const endrePerson = (personId: string, callback: (status: RessursStatus) => void) => {
+        return axiosRequest<IPersonInfo, void>({
+            method: 'GET',
+            url: '/familie-ba-sak/api/person',
+            headers: {
+                personIdent: personId,
+            },
+        }).then((hentetPerson: Ressurs<IPersonInfo>) => {
+            if (hentetPerson.status === RessursStatus.SUKSESS) {
+                hentFagsak(hentetPerson.data.personIdent).then(restFagsak => {
+                    if (
+                        restFagsak.status === RessursStatus.SUKSESS &&
+                        oppdatertData.status === RessursStatus.SUKSESS
+                    ) {
+                        settPersonOgFagsak(hentetPerson, restFagsak);
+                    }
+                    callback(restFagsak.status);
+                });
+            } else {
+                callback(hentetPerson.status);
+            }
+        });
+    };
+
     const erDokumentTittelEndret = (dokument: IDokumentInfo): boolean => {
         const dokumentUendret = finnDokument(dataForManuellJournalføring, dokument.dokumentInfoId);
         return dokument.tittel !== dokumentUendret?.tittel;
@@ -337,13 +389,27 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
     };
 
-    const settPerson = (person: IPersonInfo) => {
-        if (oppdatertData.status === RessursStatus.SUKSESS) {
+    const settPersonOgFagsak = (
+        person: Ressurs<IPersonInfo>,
+        fagsak: Ressurs<IFagsak | undefined>
+    ) => {
+        if (
+            oppdatertData.status === RessursStatus.SUKSESS &&
+            person.status === RessursStatus.SUKSESS &&
+            fagsak.status === RessursStatus.SUKSESS
+        ) {
             settOppdatertData({
                 ...oppdatertData,
                 data: {
                     ...oppdatertData.data,
-                    person: person,
+                    fagsak: fagsak.data,
+                    journalpost: {
+                        ...oppdatertData.data.journalpost,
+                        bruker: {
+                            id: person.data.personIdent,
+                        },
+                    },
+                    person: person.data,
                 },
             });
         }
@@ -417,15 +483,15 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                     oppdatertData.data.journalpost.journalpostId
                 }/journalfør/${oppgaveId}?journalfoerendeEnhet=${
                     innloggetSaksbehandler?.enhet ?? '9999'
-                }`,
+                }&ikkeFerdigstill=false`,
                 data: {
                     bruker: {
                         navn: person.navn,
                         id: person.personIdent,
                     },
                     avsender: {
-                        navn: person.navn,
-                        id: person.personIdent,
+                        navn: oppdatertData.data.journalpost.avsenderMottaker?.navn || '',
+                        id: oppdatertData.data.journalpost.avsenderMottaker?.id || '',
                     },
                     datoMottatt: oppdatertData.data.journalpost.datoMottatt,
                     dokumenter: oppdatertData.data.journalpost.dokumenter?.map(dokument => {
@@ -474,6 +540,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     }, [oppgaveId]);
 
     React.useEffect(() => {
+        console.log(oppdatertData);
         oppdatertData.status === RessursStatus.SUKSESS &&
             settValideringsfeil(validaterData(oppdatertData.data));
     }, [oppdatertData]);
@@ -498,7 +565,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         tilbakestilleJournalpostTittel,
         hentAktivBehandlingForJournalføring,
         brevkode,
-        settPerson,
+        endrePerson,
         visFeilmeldinger,
         settVisfeilmeldinger,
         feilmeldinger,
@@ -519,6 +586,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         valideringsfeil,
         harFeil,
         hentFeil,
+        settFagsak,
     };
 });
 

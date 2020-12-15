@@ -26,41 +26,41 @@ import familieDayjs from '../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../utils/formatter';
 import IkonKnapp from '../Felleskomponenter/IkonKnapp/IkonKnapp';
 
-interface IKnyttJournalpostTilBehandlingProps {
-    aktivBehandling: IBehandling | undefined;
-    dataForManuellJournalføring: IDataForManuellJournalføring;
-}
-
 const KnyttDiv = styled.div`
     margin-top: 20px;
 `;
 
-export const KnyttJournalpostTilBehandling: React.FC<IKnyttJournalpostTilBehandlingProps> = ({
-    aktivBehandling,
-    dataForManuellJournalføring,
-}) => {
+export const KnyttJournalpostTilBehandling: React.FC = () => {
     const { innloggetSaksbehandler } = useApp();
-    const behandlinger = dataForManuellJournalføring.fagsak?.behandlinger.sort((a, b) =>
-        familieDayjs(b.opprettetTidspunkt).diff(familieDayjs(a.opprettetTidspunkt))
-    );
-    const visOpprettBehandlingKnapp =
-        !aktivBehandling || aktivBehandling.status === BehandlingStatus.AVSLUTTET;
+    const {
+        feilmeldinger,
+        innsendingsfeilmelding,
+        opprettBehandling,
+        opprettFagsak,
+        settTilknyttedeBehandlingIder,
+        dataForManuellJournalføring,
+        hentAktivBehandlingForJournalføring,
+        tilknyttedeBehandlingIder,
+        visFeilmeldinger,
+        settFagsak,
+    } = useManuellJournalføringV2();
 
     const [oppretterBehandling, settOppretterBehandling] = useState(false);
     const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = useState<
         string | undefined
     >(undefined);
 
-    const {
-        feilmeldinger,
-        innsendingsfeilmelding,
-        opprettBehandling,
-        opprettFagsak,
-        settDataForManuellJournalføring,
-        settTilknyttedeBehandlingIder,
-        tilknyttedeBehandlingIder,
-        visFeilmeldinger,
-    } = useManuellJournalføringV2();
+    console.log(dataForManuellJournalføring);
+    if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
+        return <></>;
+    }
+
+    const aktivBehandling = hentAktivBehandlingForJournalføring();
+    const behandlinger = dataForManuellJournalføring.data.fagsak?.behandlinger.sort((a, b) =>
+        familieDayjs(b.opprettetTidspunkt).diff(familieDayjs(a.opprettetTidspunkt))
+    );
+    const visOpprettBehandlingKnapp =
+        !aktivBehandling || aktivBehandling.status === BehandlingStatus.AVSLUTTET;
 
     const onClickOpprett = async (data: IDataForManuellJournalføring) => {
         const søker = data.person?.personIdent ?? '';
@@ -102,13 +102,7 @@ export const KnyttJournalpostTilBehandling: React.FC<IKnyttJournalpostTilBehandl
 
                 settOppretterBehandling(false);
                 if (fagsakMedBehandling.status === RessursStatus.SUKSESS) {
-                    settDataForManuellJournalføring({
-                        status: RessursStatus.SUKSESS,
-                        data: {
-                            ...dataForManuellJournalføring,
-                            fagsak: fagsakMedBehandling.data,
-                        },
-                    });
+                    settFagsak(fagsakMedBehandling);
                 } else if (fagsakMedBehandling.status === RessursStatus.FEILET) {
                     settOpprettBehandlingFeilmelding(fagsakMedBehandling.frontendFeilmelding);
                 } else {
@@ -137,7 +131,7 @@ export const KnyttJournalpostTilBehandling: React.FC<IKnyttJournalpostTilBehandl
                         className={'ikon-knapp'}
                         id={'opprettbehandling'}
                         onClick={() => {
-                            onClickOpprett(dataForManuellJournalføring);
+                            onClickOpprett(dataForManuellJournalføring.data);
                         }}
                         label={'Opprett ny behandling'}
                         erLesevisning={false}

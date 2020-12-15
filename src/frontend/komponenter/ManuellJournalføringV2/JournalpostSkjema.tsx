@@ -14,7 +14,6 @@ import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokumenter';
 import { feilPanel } from './FeilPanel';
-import { JournalførMotSak } from './JournalførMotSak';
 import { Journalpost } from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 
@@ -29,7 +28,6 @@ const FeilPanel = feilPanel(Panel);
 export const JournalpostSkjema: React.FC = () => {
     const {
         dataForManuellJournalføring,
-        hentAktivBehandlingForJournalføring,
         senderInn,
         tilknyttedeBehandlingIder,
         manueltJournalfør,
@@ -38,7 +36,6 @@ export const JournalpostSkjema: React.FC = () => {
     } = useManuellJournalføringV2();
 
     const alleFeil = hentFeil() ?? [];
-    console.log(alleFeil);
 
     const history = useHistory();
 
@@ -78,11 +75,7 @@ export const JournalpostSkjema: React.FC = () => {
                         <BrukerPanel></BrukerPanel>
                         <AvsenderPanel></AvsenderPanel>
                     </div>
-                    <JournalførMotSak></JournalførMotSak>
-                    <KnyttJournalpostTilBehandling
-                        aktivBehandling={hentAktivBehandlingForJournalføring()}
-                        dataForManuellJournalføring={dataForManuellJournalføring.data}
-                    ></KnyttJournalpostTilBehandling>
+                    <KnyttJournalpostTilBehandling />
                     {alleFeil.length > 0 && (
                         <FeilPanel>
                             <Undertittel>For å gå videre må du rette opp følgende:</Undertittel>
