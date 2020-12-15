@@ -264,7 +264,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const hentFagsak = (personId: string) => {
         return axiosRequest<IFagsak | undefined, Ressurs<IFagsak | undefined>>({
             method: 'GET',
-            url: `/familie-ba-sak/api/fagsaker/restfagsak`,
+            url: `/familie-ba-sak/api/fagsakForPerson`,
             headers: {
                 personIdent: personId,
             },
@@ -560,7 +560,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     }, [oppgaveId]);
 
     React.useEffect(() => {
-        console.log(oppdatertData);
         oppdatertData.status === RessursStatus.SUKSESS &&
             settValideringsfeil(validaterData(oppdatertData.data));
     }, [oppdatertData]);

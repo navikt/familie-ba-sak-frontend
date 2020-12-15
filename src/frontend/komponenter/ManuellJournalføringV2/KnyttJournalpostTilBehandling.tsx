@@ -50,7 +50,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         string | undefined
     >(undefined);
 
-    console.log(dataForManuellJournalføring);
     if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
         return <></>;
     }

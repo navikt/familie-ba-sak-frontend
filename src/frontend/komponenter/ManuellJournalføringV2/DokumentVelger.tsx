@@ -170,6 +170,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         velgOgHentDokumentData,
         harFeil,
     } = useManuellJournalføringV2();
+
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
     const journalpostId =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
@@ -184,23 +185,25 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
 
     return (
         <ThemeProvider theme={theme}>
-            {valgt ? (
-                <Panel tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}>
-                    <LogiskVedleggPanel />
-                </Panel>
-            ) : (
-                <Panel
-                    tittelProps="normaltekst"
-                    href="#"
-                    onClick={() => {
-                        if (!valgt && journalpostId && dokument.dokumentInfoId) {
-                            velgOgHentDokumentData(dokument.dokumentInfoId);
-                        }
-                    }}
-                >
-                    <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
-                </Panel>
-            )}
+            <div>
+                {valgt ? (
+                    <Panel tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}>
+                        <LogiskVedleggPanel />
+                    </Panel>
+                ) : (
+                    <Panel
+                        tittelProps="normaltekst"
+                        href="#"
+                        onClick={() => {
+                            if (!valgt && journalpostId && dokument.dokumentInfoId) {
+                                velgOgHentDokumentData(dokument.dokumentInfoId);
+                            }
+                        }}
+                    >
+                        <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
+                    </Panel>
+                )}
+            </div>
         </ThemeProvider>
     );
 };
