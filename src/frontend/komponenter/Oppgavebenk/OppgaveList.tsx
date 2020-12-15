@@ -111,7 +111,8 @@ const OppgaveList: React.FunctionComponent = () => {
                                             )}
                                         >
                                             {oppg.oppgavetype
-                                                ? oppgaveTypeFilter[oppg.oppgavetype].navn
+                                                ? oppgaveTypeFilter[oppg.oppgavetype]?.navn ??
+                                                  oppg.oppgavetype
                                                 : 'Ukjent'}
                                         </td>
                                         <td
@@ -120,7 +121,8 @@ const OppgaveList: React.FunctionComponent = () => {
                                             )}
                                         >
                                             {oppg.behandlingstema
-                                                ? gjelderFilter[oppg.behandlingstema].navn
+                                                ? gjelderFilter[oppg.behandlingstema]?.navn ??
+                                                  oppg.behandlingstema
                                                 : 'Ikke satt'}
                                         </td>
                                         <td
@@ -166,7 +168,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                         </td>
                                         <td className={'handlinger'}>
                                             {oppg.oppgavetype
-                                                ? oppgaveTypeFilter[oppg.oppgavetype].id ===
+                                                ? oppgaveTypeFilter[oppg.oppgavetype]?.id ===
                                                       OppgavetypeFilter.JFR && (
                                                       <button
                                                           key={'tiloppg'}

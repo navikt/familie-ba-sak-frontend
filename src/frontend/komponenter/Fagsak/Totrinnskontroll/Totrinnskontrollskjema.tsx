@@ -75,29 +75,29 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                         />
                     </div>
                 )}
-                <Knapp
-                    type={'hoved'}
-                    spinner={senderInn}
-                    disabled={senderInn}
-                    mini={true}
-                    onClick={() => {
-                        if (!senderInn) {
-                            sendInnVedtak({
-                                beslutning: totrinnskontrollStatus,
-                                begrunnelse:
-                                    totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
-                                        ? totrinnskontrollBegrunnelse
-                                        : '',
-                            });
-                        }
-                    }}
-                    children={
-                        totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
-                            ? 'Send til saksbehandler'
-                            : 'Godkjenn vedtaket'
-                    }
-                />
             </SkjemaGruppe>
+            <Knapp
+                type={'hoved'}
+                spinner={senderInn}
+                disabled={senderInn}
+                mini={true}
+                onClick={() => {
+                    if (!senderInn) {
+                        sendInnVedtak({
+                            beslutning: totrinnskontrollStatus,
+                            begrunnelse:
+                                totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
+                                    ? totrinnskontrollBegrunnelse
+                                    : '',
+                        });
+                    }
+                }}
+                children={
+                    totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
+                        ? 'Send til saksbehandler'
+                        : 'Godkjenn vedtaket'
+                }
+            />
         </div>
     );
 };

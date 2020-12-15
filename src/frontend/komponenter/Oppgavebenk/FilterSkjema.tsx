@@ -3,7 +3,7 @@ import React from 'react';
 import { Knapp } from 'nav-frontend-knapper';
 import { Select } from 'nav-frontend-skjema';
 
-import { FamilieDatovelger } from '@navikt/familie-form-elements';
+import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
@@ -33,7 +33,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         key={oppgaveFelt.nøkkel}
                                         id={oppgaveFelt.nøkkel}
                                         label={oppgaveFelt.label}
-                                        onChange={(dato: string | undefined) =>
+                                        onChange={(dato?: ISODateString) =>
                                             settVerdiPåOppgaveFelt(oppgaveFelt, dato ? dato : '')
                                         }
                                         placeholder={datoformatNorsk.DATO}

@@ -20,16 +20,17 @@ const useOpprettFagsak = () => {
     const [feilmelding, settFeilmelding] = useState('');
     const [senderInn, settSenderInn] = useState(false);
 
-    const opprettFagsak = (data: IOpprettFagsakData) => {
-        settSenderInn(true);
+    const opprettFagsak = (data: IOpprettFagsakData, onSuccess?: () => void) => {
         axiosRequest<IFagsak, IOpprettFagsakData>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
+            påvirkerSystemLaster: true,
         })
             .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
+                    onSuccess && onSuccess();
                     const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
                         response.data
                     );
@@ -54,6 +55,7 @@ const useOpprettFagsak = () => {
         opprettFagsak,
         feilmelding,
         senderInn,
+        settSenderInn,
     };
 };
 
