@@ -125,7 +125,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     // We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
     // a copy of the data that is subject to change. All modifications will be done on the copy
-    // before <<journalføring>>
+    // before journalføring
     const [oppdatertData, settOppdatertData] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
@@ -617,7 +617,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         erEndret,
         tilbakestillData,
 
-        // <<Journalfør>>
+        // Journalfør
         manueltJournalfør,
     };
 });
