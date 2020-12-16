@@ -166,7 +166,6 @@ const EndreDokumentInfoPanel: React.FC = () => {
                 options={tittelList}
                 value={hentVedleggList()}
                 onChange={options => {
-                    console.log(options);
                     settLogiskeVedlegg(
                         options instanceof Array ? options.map(({ value }) => value) : []
                     );
