@@ -56,33 +56,33 @@ const tomtAvsender = {
     type: AvsenderMottakerIdType.UKJENT,
 };
 
-const erPersonTomt = (person: IPersonInfo | undefined) => !person || !person.personIdent;
+const erPersonTom = (person: IPersonInfo | undefined) => !person || !person.personIdent;
 
-const erAvsenderTomt = (avsender: AvsenderMottaker | undefined) => !avsender || !avsender.navn;
+const erAvsenderTom = (avsender: AvsenderMottaker | undefined) => !avsender || !avsender.navn;
 
 const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
     const valideringsfeilMap = new Map<unknown, string[]>();
 
-    const settValideringsFeil = (data: unknown, feil: string) => {
+    const settValideringsfeil = (data: unknown, feil: string) => {
         valideringsfeilMap.set(data, [...(valideringsfeilMap.get(data) || []), feil]);
     };
 
     if (!dataForValidering.journalpost.tittel) {
-        settValideringsFeil(dataForValidering.journalpost, 'Journalpost tittel må ikke være tom');
+        settValideringsfeil(dataForValidering.journalpost, 'Journalpost tittel må ikke være tom');
     }
 
     dataForValidering.journalpost.dokumenter?.forEach(dokument => {
         if (!dokument.tittel) {
-            settValideringsFeil(dokument, 'Dokument tittel må ikke være tom');
+            settValideringsfeil(dokument, 'Dokument tittel må ikke være tom');
         }
     });
 
-    if (erPersonTomt(dataForValidering.person)) {
-        settValideringsFeil(dataForValidering.person, 'Bruker er ikke satt');
+    if (erPersonTom(dataForValidering.person)) {
+        settValideringsfeil(dataForValidering.person, 'Bruker er ikke satt');
     }
 
-    if (erAvsenderTomt(dataForValidering.journalpost.avsenderMottaker)) {
-        settValideringsFeil(
+    if (erAvsenderTom(dataForValidering.journalpost.avsenderMottaker)) {
+        settValideringsfeil(
             dataForValidering.journalpost.avsenderMottaker,
             'Avsender er ikke satt'
         );
@@ -146,10 +146,10 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         if (oppdatert.status === RessursStatus.SUKSESS) {
             //we use tom object for person and avsender if they are not present in data
             //because we need to use the objects to index the validation errors (See validaterData() for details)
-            if (erPersonTomt(oppdatert.data.person)) {
+            if (erPersonTom(oppdatert.data.person)) {
                 oppdatert.data.person = tomtPerson;
             }
-            if (erAvsenderTomt(oppdatert.data.journalpost.avsenderMottaker)) {
+            if (erAvsenderTom(oppdatert.data.journalpost.avsenderMottaker)) {
                 oppdatert.data.journalpost.avsenderMottaker = tomtAvsender;
             }
 
