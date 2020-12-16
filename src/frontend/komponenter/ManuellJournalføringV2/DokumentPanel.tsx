@@ -19,7 +19,7 @@ const DokumentDataAlert = styled(AlertStripeFeil)`
     height: 3rem;
 `;
 
-export const DokumentPane: React.FC = () => {
+export const DokumentPanel: React.FC = () => {
     const { dokumentData } = useManuellJournalføringV2();
     return (
         <DokumentDiv>

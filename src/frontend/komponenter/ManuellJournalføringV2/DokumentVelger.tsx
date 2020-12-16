@@ -27,7 +27,7 @@ const dokumentPanelDekoratør = <T extends unknown>(
     }
 `;
 
-const DokumentPanelUvalgt = styled(dokumentPanelDekoratør(Lenkepanel))`
+const DokumentBoksValgt = styled(dokumentPanelDekoratør(Lenkepanel))`
     && {
         border: 1px solid ${navFarger.navMorkGra};
         &:hover {
@@ -39,7 +39,7 @@ const DokumentPanelUvalgt = styled(dokumentPanelDekoratør(Lenkepanel))`
     }
 `;
 
-const DokumentPanelValgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
+const DokumentBoksUvalgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
     && {
         border: 3px solid ${navFarger.fokusFarge};
         &:hover {
@@ -51,9 +51,9 @@ const DokumentPanelValgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
     }
 `;
 
-const PanelFeilValgt = feilDekoratør(DokumentPanelValgt);
+const PanelFeilValgt = feilDekoratør(DokumentBoksValgt);
 
-const PanelFeilUvalgt = feilDekoratør(DokumentPanelUvalgt);
+const PanelFeilUvalgt = feilDekoratør(DokumentBoksUvalgt);
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
@@ -91,7 +91,7 @@ const StyledDokumentIkon = styled(DokumentIkon)`
 const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ dokument }) => {
     return (
         <DokumentInfoStripeContainer>
-            <StyledDokumentIkon />
+            <StyledDokumentIkon width={48} height={48} />
             <DokumentTittelContainer>
                 <DokumentTittelDiv>{dokument.tittel || 'Ukjent'}</DokumentTittelDiv>
                 {dokument.logiskeVedlegg.map((it, index) => (
@@ -201,17 +201,17 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.journalpostId
             : undefined;
-    const DokumentPanel = harFeil(dokument)
+    const DokumentBoks = harFeil(dokument)
         ? valgt
             ? PanelFeilValgt
             : PanelFeilUvalgt
         : valgt
-        ? DokumentPanelValgt
-        : DokumentPanelUvalgt;
+        ? DokumentBoksValgt
+        : DokumentBoksUvalgt;
 
     return (
         <div>
-            <DokumentPanel
+            <DokumentBoks
                 tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
                 tittelProps="normaltekst"
                 href="#"
@@ -223,7 +223,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
             >
                 {!valgt && <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
                 {valgt && <EndreDokumentInfoPanel />}
-            </DokumentPanel>
+            </DokumentBoks>
         </div>
     );
 };
