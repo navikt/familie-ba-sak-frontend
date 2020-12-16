@@ -14,7 +14,7 @@ import { Valideringsstatus } from '../../familie-skjema/typer';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
-import { feilPanel } from './FeilPanel';
+import { feilDekoratør } from './FeilPanel';
 
 const BrukerPanelDiv = styled.div`
     width: 560px;
@@ -22,7 +22,7 @@ const BrukerPanelDiv = styled.div`
 `;
 
 const PanelGyldig = Ekspanderbartpanel;
-const PanelFeil = feilPanel(PanelGyldig);
+const PanelFeil = feilDekoratør(PanelGyldig);
 
 export const BrukerPanel: React.FC = () => {
     const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalføringV2();

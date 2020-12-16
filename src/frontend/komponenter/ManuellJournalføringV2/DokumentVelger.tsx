@@ -2,6 +2,7 @@ import React from 'react';
 
 import CreatableSelect from 'react-select/creatable';
 import styled, { ThemeProvider } from 'styled-components';
+import { AnyStyledComponent } from 'styled-components/index';
 
 import navFarger from 'nav-frontend-core';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
@@ -14,37 +15,28 @@ import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
-import { feilPanel } from './FeilPanel';
+import { feilDekoratør } from './FeilPanel';
 
-const DokumentPanelUvalgt = styled(Lenkepanel)`
+const dokumentPanelDekoratør = <T extends unknown>(
+    component: AnyStyledComponent | React.ComponentType<T>
+) => styled(component)`
     && {
         margin-top: 20px;
         width: 560px;
         height: 100%;
-        border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
+        border: ${props => `${props.borderWidth} solid ${props.borderColor}`};
         &:hover {
-            border-color: ${props => `${props.theme.hoverBorderColor}`};
+            border-color: ${props => `${props.hoverBorderColor}`};
         }
         &:focus {
-            border-color: ${props => `${props.theme.hoverBorderColor}`};
+            border-color: ${props => `${props.hoverBorderColor}`};
         }
     }
 `;
 
-const DokumentPanelValgt = styled(Ekspanderbartpanel)`
-    && {
-        margin-top: 20px;
-        width: 560px;
-        height: 100%;
-        border: ${props => `${props.theme.borderWidth} solid ${props.theme.borderColor}`};
-        &:hover {
-            border-color: ${props => `${props.theme.hoverBorderColor}`};
-        }
-        &:focus {
-            border-color: ${props => `${props.theme.hoverBorderColor}`};
-        }
-    }
-`;
+const DokumentPanelUvalgt = dokumentPanelDekoratør(Lenkepanel);
+
+const DokumentPanelValgt = dokumentPanelDekoratør(Ekspanderbartpanel);
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
@@ -198,7 +190,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         borderColor: valgt ? navFarger.fokusFarge : navFarger.navMorkGra,
     };
     const DokumentPanel = valgt ? DokumentPanelValgt : DokumentPanelUvalgt;
-    const Panel = harFeil(dokument) ? feilPanel(DokumentPanel) : DokumentPanel;
+    const Panel = harFeil(dokument) ? feilDekoratør(DokumentPanel) : DokumentPanel;
 
     return (
         <ThemeProvider theme={theme}>

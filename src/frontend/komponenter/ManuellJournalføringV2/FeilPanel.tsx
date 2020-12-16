@@ -3,7 +3,7 @@ import { AnyStyledComponent } from 'styled-components/index';
 
 import navFarger from 'nav-frontend-core';
 
-export const feilPanel = <T extends unknown>(
+export const feilDekoratør = <T extends unknown>(
     component: AnyStyledComponent | React.ComponentType<T>
 ) => styled(component)`
     && {
