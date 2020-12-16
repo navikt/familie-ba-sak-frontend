@@ -51,8 +51,6 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
 
     const [senderInn, settSenderInn] = React.useState(false);
 
-    console.log(erEndret());
-
     const onClickManuellJournalfør = () => {
         if (tilknyttedeBehandlingIder.length < 1) {
             visModal();
