@@ -27,7 +27,7 @@ const dokumentPanelDekoratør = <T extends unknown>(
     }
 `;
 
-const DokumentBoksValgt = styled(dokumentPanelDekoratør(Lenkepanel))`
+const DokumentBoksValgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
     && {
         border: 1px solid ${navFarger.navMorkGra};
         &:hover {
@@ -39,7 +39,7 @@ const DokumentBoksValgt = styled(dokumentPanelDekoratør(Lenkepanel))`
     }
 `;
 
-const DokumentBoksUvalgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
+const DokumentBoksUvalgt = styled(dokumentPanelDekoratør(Lenkepanel))`
     && {
         border: 3px solid ${navFarger.fokusFarge};
         &:hover {
@@ -210,7 +210,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         : DokumentBoksUvalgt;
 
     return (
-        <div>
+        <>
             <DokumentBoks
                 tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
                 tittelProps="normaltekst"
@@ -224,6 +224,6 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                 {!valgt && <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
                 {valgt && <EndreDokumentInfoPanel />}
             </DokumentBoks>
-        </div>
+        </>
     );
 };

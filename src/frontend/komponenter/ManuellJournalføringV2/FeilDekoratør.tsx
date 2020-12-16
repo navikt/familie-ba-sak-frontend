@@ -8,5 +8,11 @@ export const feilDekoratør = <T extends unknown>(
 ) => styled(component)`
     && {
         border: ${navFarger.navRod} solid;
+        &:hover {
+            border-color: ${navFarger.navRod};
+        }
+        &:focus {
+            border-color: ${navFarger.navRodDarken40};
+        }
     }
 `;
