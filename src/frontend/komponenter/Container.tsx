@@ -11,7 +11,6 @@ import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
-import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring';
 import ManuellJournalføringV2 from './ManuellJournalføringV2/ManuellJournalføringV2';
 
 const Container: React.FC = () => {
@@ -43,11 +42,6 @@ const Container: React.FC = () => {
                                     exact={true}
                                     path="/oppgaver/journalfør/:oppgaveId"
                                     component={ManuellJournalføringV2}
-                                />
-                                <Route
-                                    exact={true}
-                                    path="/oppgaver/journalfør/gamle/:oppgaveId"
-                                    component={ManuellJournalføring}
                                 />
                             </Switch>
                         </FagsakProvider>
