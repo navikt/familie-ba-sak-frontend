@@ -118,6 +118,7 @@ export enum BehandlingResultat {
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
     INNVILGET = 'INNVILGET',
+    INNVILGET_OG_OPPHØRT = 'INNVILGET_OG_OPPHØRT',
     OPPHØRT = 'OPPHØRT',
 }
 
@@ -224,6 +225,7 @@ export const behandlingsresultater: Record<BehandlingResultat, string> = {
     AVSLÅTT: 'Avslått',
     IKKE_VURDERT: 'Ikke vurdert',
     INNVILGET: 'Innvilget',
+    INNVILGET_OG_OPPHØRT: 'Innvilget og opphørt',
     OPPHØRT: 'Opphørt',
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
