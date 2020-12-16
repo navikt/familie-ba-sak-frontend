@@ -15,7 +15,7 @@ import { DokumentPane } from './DokumentPane';
 import { JournalføringModal } from './JournalføringModal';
 import { JournalpostSkjema } from './JournalpostSkjema';
 
-const ToKolonerDiv = styled.div`
+const ToKolonnerDiv = styled.div`
     display: flex;
     flex-direction: row;
 `;
@@ -34,13 +34,13 @@ const ManuellJournalføringContentV2: React.FC = () => {
                         <div>
                             {feilmelding && <AlertStripeFeil>{feilmelding}</AlertStripeFeil>}
 
-                            <ToKolonerDiv>
+                            <ToKolonnerDiv>
                                 <JournalpostSkjema
                                     visModal={() => settVisModal(true)}
                                     settFeilmelding={settFeilmelding}
                                 />
                                 <DokumentPane />
-                            </ToKolonerDiv>
+                            </ToKolonnerDiv>
                             {visModal && (
                                 <JournalføringModal
                                     gjemme={() => settVisModal(false)}
