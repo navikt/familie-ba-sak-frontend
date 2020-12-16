@@ -38,6 +38,10 @@ const DokumentPanelUvalgt = dokumentPanelDekoratør(Lenkepanel);
 
 const DokumentPanelValgt = dokumentPanelDekoratør(Ekspanderbartpanel);
 
+const PanelFeilValgt = feilDekoratør(DokumentPanelValgt);
+
+const PanelFeilUvalgt = feilDekoratør(DokumentPanelValgt);
+
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
     justify-content: left;
@@ -189,18 +193,25 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         borderWidth: valgt ? '3px' : '1px',
         borderColor: valgt ? navFarger.fokusFarge : navFarger.navMorkGra,
     };
-    const DokumentPanel = valgt ? DokumentPanelValgt : DokumentPanelUvalgt;
-    const Panel = harFeil(dokument) ? feilDekoratør(DokumentPanel) : DokumentPanel;
+    const DokumentPanel = harFeil(dokument)
+        ? valgt
+            ? PanelFeilValgt
+            : PanelFeilUvalgt
+        : valgt
+        ? DokumentPanelValgt
+        : DokumentPanelUvalgt;
 
     return (
         <ThemeProvider theme={theme}>
             <div>
                 {valgt ? (
-                    <Panel tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}>
+                    <DokumentPanel
+                        tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+                    >
                         <EndreDokumentInfoPanel />
-                    </Panel>
+                    </DokumentPanel>
                 ) : (
-                    <Panel
+                    <DokumentPanel
                         tittelProps="normaltekst"
                         href="#"
                         onClick={() => {
@@ -210,7 +221,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                         }}
                     >
                         <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
-                    </Panel>
+                    </DokumentPanel>
                 )}
             </div>
         </ThemeProvider>
