@@ -137,3 +137,8 @@ export enum DokumentTittel {
     F001 = 'F001',
     F002 = 'F002',
 }
+
+export enum JournalpostKanal {
+    NAV_NO = 'NAV_NO',
+    SCAN_IM = 'SCAN_IM',
+}

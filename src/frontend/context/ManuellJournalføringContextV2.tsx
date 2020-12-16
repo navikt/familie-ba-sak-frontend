@@ -16,6 +16,7 @@ import {
     kjønnType,
     AvsenderMottaker,
     byggSuksessRessurs,
+    IJournalpost,
 } from '@navikt/familie-typer';
 
 import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../api/fagsak';
@@ -31,6 +32,7 @@ import {
     BrevkodeMap,
     IDataForManuellJournalføring,
     IRestJournalføring,
+    JournalpostKanal,
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo, PersonType } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
@@ -528,20 +530,22 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     };
 
     const journalfør = async () => {
+        const erDigital = (journalpost: IJournalpost) =>
+            journalpost.kanal === JournalpostKanal.NAV_NO;
+
         if (
             oppdatertData.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             oppdatertData.data.person
         ) {
             const person = oppdatertData.data.person;
-
             return axiosRequest<string, IRestJournalføring>({
                 method: 'POST',
                 url: `/familie-ba-sak/api/journalpost/${
                     oppdatertData.data.journalpost.journalpostId
                 }/journalfør/${oppgaveId}?journalfoerendeEnhet=${
                     innloggetSaksbehandler?.enhet ?? '9999'
-                }&ferdigstill=true`,
+                }&ferdigstill=false`,
                 data: {
                     bruker: {
                         navn: person.navn,
@@ -553,14 +557,27 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                     },
                     datoMottatt: oppdatertData.data.journalpost.datoMottatt,
                     dokumenter: oppdatertData.data.journalpost.dokumenter?.map(dokument => {
+                        const exsisternendeLogiskeVedlegg = dataForManuellJournalføring.data.journalpost.dokumenter?.find(
+                            it => it.dokumentInfoId === dokument.dokumentInfoId
+                        )?.logiskeVedlegg;
+                        const tittelssammenkobling = dokument.logiskeVedlegg
+                            .map(current => current.tittel)
+                            .reduce(
+                                (previous, current) => `${previous}, ${current}`,
+                                dokument.tittel ?? ''
+                            );
                         return {
-                            dokumentTittel: dokument.tittel,
+                            //for digital document, use concatation of titles
+                            dokumentTittel: erDigital(oppdatertData.data.journalpost)
+                                ? tittelssammenkobling
+                                : dokument.tittel,
                             dokumentInfoId: dokument.dokumentInfoId || '0', // dokumentInfoId is not nullable
                             brevkode: dokument.brevkode,
-                            logiskeVedlegg: dokument.logiskeVedlegg,
-                            eksisterendeLogiskeVedlegg: dataForManuellJournalføring.data.journalpost.dokumenter?.find(
-                                it => it.dokumentInfoId === dokument.dokumentInfoId
-                            )?.logiskeVedlegg,
+                            eksisterendeLogiskeVedlegg: exsisternendeLogiskeVedlegg,
+                            //preserve vedlgg of scanned document
+                            logiskeVedlegg: erDigital(oppdatertData.data.journalpost)
+                                ? exsisternendeLogiskeVedlegg
+                                : dokument.logiskeVedlegg,
                         };
                     }),
                     knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,

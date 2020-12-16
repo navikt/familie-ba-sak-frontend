@@ -22,6 +22,7 @@ const doMock = (path: string) => {
     mockPath = mockPath.replace('journalpost/', 'mock/journalpost/');
     mockPath = mockPath.replace('feature', 'mock/feature');
     mockPath = mockPath.replace('person', 'mock/person');
+    mockPath = mockPath.replace('fagsakForPerson', 'mock/fagsakForPerson');
     return mockPath;
 };
 
