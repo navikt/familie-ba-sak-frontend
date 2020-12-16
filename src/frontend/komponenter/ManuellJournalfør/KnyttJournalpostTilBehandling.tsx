@@ -131,8 +131,8 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                                 ...(tilknyttedeBehandlingIder.includes(
                                                     behandling.behandlingId
                                                 )
-                                                    ? [behandling.behandlingId]
-                                                    : []),
+                                                    ? []
+                                                    : [behandling.behandlingId]),
                                             ]);
                                         }}
                                     />

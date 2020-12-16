@@ -102,7 +102,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
                     </div>
                     <br />
                     <KnyttJournalpostTilBehandling />
-                    {alleFeil.length && (
+                    {!!alleFeil.length && (
                         <FeilPanel>
                             <Undertittel>For å gå videre må du rette opp følgende:</Undertittel>
                             <ul>
