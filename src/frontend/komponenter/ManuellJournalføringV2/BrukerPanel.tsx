@@ -29,7 +29,7 @@ export const BrukerPanel: React.FC = () => {
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
 
-    const nyttIdent = useFelt({
+    const nyIdent = useFelt({
         verdi: '',
         valideringsfunksjon: identValidator,
     });
@@ -54,7 +54,7 @@ export const BrukerPanel: React.FC = () => {
                     >
                         <div className={'hentperson__inputogknapp'}>
                             <FamilieInput
-                                {...nyttIdent.hentNavInputProps(!!feilMelding)}
+                                {...nyIdent.hentNavInputProps(!!feilMelding)}
                                 erLesevisning={false}
                                 id={'hent-person'}
                                 label={'Skriv inn fødselsnummer/D-nummer'}
@@ -63,9 +63,9 @@ export const BrukerPanel: React.FC = () => {
                             />
                             <Knapp
                                 onClick={() => {
-                                    if (nyttIdent.valideringsstatus === Valideringsstatus.OK) {
+                                    if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                                         settSpinner(true);
-                                        endreBruker(nyttIdent.verdi)
+                                        endreBruker(nyIdent.verdi)
                                             .then((ressur: Ressurs<unknown>) => {
                                                 settFeilMelding(
                                                     ressur.status === RessursStatus.SUKSESS
