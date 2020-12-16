@@ -754,14 +754,16 @@
     snyk "^1.336.0"
     winston "^3.2.1"
 
-"@navikt/familie-clipboard@^3.0.5":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.0.5.tgz#bfd6cfe2e81994963c0403b8a3b53a610886b81e"
-  integrity sha512-5bQPuOA07WAKArDADtmuJxyF9aAgfXNoz3w7tnYiL3B8DAujHO2YeSQXNG4B3Uw95EzDFyTFAqqq8bFmyVeKcg==
+"@navikt/familie-clipboard@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.1.0.tgz#6f0e1b06e4d1f3c6aca8e2c64294fe74dfbc5d9c"
+  integrity sha512-+f0dA9QR5aJWoAhCyuzfP+RAQ75pSLlJHJl3fi0LAQuWjbZskJP317DkZNun4aY4G7/1pgpdsBlcMz5b/vqcyQ==
   dependencies:
     "@types/react-tooltip" "^3.11.0"
     framer-motion "^2.9.1"
+    nav-frontend-core "^5.0.10"
     react-tooltip "^3.11.4"
+    styled-components "^5.2.1"
 
 "@navikt/familie-form-elements@^2.0.13":
   version "2.0.13"
@@ -806,26 +808,26 @@
     nav-frontend-typografi-style "^1.0.18"
     prop-types "^15.7.2"
 
-"@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.2", "@navikt/familie-ikoner@^3.1.7":
+"@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.7":
   version "3.1.7"
   resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.7.tgz#894432ff11fee3ddcaddcb031938a67b9f551b5b"
   integrity sha512-A4psvLYg4LasyG4L8rfSySAZjWeG14FOFYOfOX9w3qiRr9vVXJMllyQxHMchO+K0l48xHnpWuvaTvYk1Yzc3bA==
   dependencies:
     "@navikt/familie-typer" "^3.0.10"
 
-"@navikt/familie-typer@^3.0.10", "@navikt/familie-typer@^3.0.6", "@navikt/familie-typer@^3.0.9":
+"@navikt/familie-typer@^3.0.10", "@navikt/familie-typer@^3.0.9":
   version "3.0.10"
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.10.tgz#b9b1dac25c492850a0a36f33504b37e311dad586"
   integrity sha512-vtefj8N6PlRO7JcbfmJFWGOU3JFFoxaZ8sf4o7y3h6Oj67CXKItLF8+gyxhfQAag3pyGnMK2KdcVRNOKA0V14w==
 
-"@navikt/familie-visittkort@^2.1.12":
-  version "2.1.12"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.12.tgz#e92157618a3654c5c7c7efe56f122bedbaffdd9c"
-  integrity sha512-rRL1irhGQKHMkx90067M6KwAhiVh8EQZ9lTT/56hY6K24e2yjv0KNo0wMZZ3Xg1/KxC16klxSzwiXCsJ8yA3GA==
+"@navikt/familie-visittkort@^2.1.18":
+  version "2.1.18"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-visittkort/-/familie-visittkort-2.1.18.tgz#ce44bc40951763f9dd5b087d205f701850a32126"
+  integrity sha512-4xkV6ebrn8/xS3o9srq2zfRDLiygWE2WFCcPT0/DiWpfZ2L0NWCjqNHjT2ZdRv1sjPSftyOtRFcqWLIinSJcWA==
   dependencies:
-    "@navikt/familie-clipboard" "^3.0.5"
-    "@navikt/familie-ikoner" "^3.1.2"
-    "@navikt/familie-typer" "^3.0.6"
+    "@navikt/familie-clipboard" "^3.1.0"
+    "@navikt/familie-ikoner" "^3.1.7"
+    "@navikt/familie-typer" "^3.0.10"
     classnames "^2.2.6"
     nav-frontend-core "^5.0.8"
     nav-frontend-typografi "^2.0.17"
@@ -11267,7 +11269,7 @@ style-value-types@^3.1.9:
     hey-listen "^1.0.8"
     tslib "^1.10.0"
 
-styled-components@^5, styled-components@^5.2.0:
+styled-components@^5, styled-components@^5.2.0, styled-components@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-5.2.1.tgz#6ed7fad2dc233825f64c719ffbdedd84ad79101a"
   integrity sha512-sBdgLWrCFTKtmZm/9x7jkIabjFNVzCUeKfoQsM6R3saImkUnjx0QYdLwJHBjY9ifEcmjDamJDVfknWm1yxZPxQ==
