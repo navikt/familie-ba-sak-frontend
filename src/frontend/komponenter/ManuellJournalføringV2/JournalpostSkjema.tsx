@@ -19,8 +19,9 @@ import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 
 const StyledSkjema = styled(Skjemasteg)`
     min-width: 640px;
+    height: 90vh;
     padding-left: 40px;
-    padding-bottom: 40px;
+    padding-bottom: 80px;
 `;
 
 const FeilPanel = feilPanel(Panel);
