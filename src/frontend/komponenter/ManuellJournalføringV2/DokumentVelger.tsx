@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CreatableSelect from 'react-select/creatable';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import { AnyStyledComponent } from 'styled-components/index';
 
 import navFarger from 'nav-frontend-core';
@@ -40,7 +40,7 @@ const DokumentPanelValgt = dokumentPanelDekoratør(Ekspanderbartpanel);
 
 const PanelFeilValgt = feilDekoratør(DokumentPanelValgt);
 
-const PanelFeilUvalgt = feilDekoratør(DokumentPanelValgt);
+const PanelFeilUvalgt = feilDekoratør(DokumentPanelUvalgt);
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
@@ -189,10 +189,6 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.journalpostId
             : undefined;
-    const theme = {
-        borderWidth: valgt ? '3px' : '1px',
-        borderColor: valgt ? navFarger.fokusFarge : navFarger.navMorkGra,
-    };
     const DokumentPanel = harFeil(dokument)
         ? valgt
             ? PanelFeilValgt
@@ -202,28 +198,32 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         : DokumentPanelUvalgt;
 
     return (
-        <ThemeProvider theme={theme}>
-            <div>
-                {valgt ? (
-                    <DokumentPanel
-                        tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
-                    >
-                        <EndreDokumentInfoPanel />
-                    </DokumentPanel>
-                ) : (
-                    <DokumentPanel
-                        tittelProps="normaltekst"
-                        href="#"
-                        onClick={() => {
-                            if (!valgt && journalpostId && dokument.dokumentInfoId) {
-                                velgOgHentDokumentData(dokument.dokumentInfoId);
-                            }
-                        }}
-                    >
-                        <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
-                    </DokumentPanel>
-                )}
-            </div>
-        </ThemeProvider>
+        <div>
+            {valgt ? (
+                <DokumentPanel
+                    borderColor={navFarger.fokusFarge}
+                    borderWidth={'3px'}
+                    hoverBorderColor={navFarger.navBla}
+                    tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+                >
+                    <EndreDokumentInfoPanel />
+                </DokumentPanel>
+            ) : (
+                <DokumentPanel
+                    borderColor={navFarger.navMorkGra}
+                    borderWidth={'1px'}
+                    hoverBorderColor={navFarger.navBla}
+                    tittelProps="normaltekst"
+                    href="#"
+                    onClick={() => {
+                        if (!valgt && journalpostId && dokument.dokumentInfoId) {
+                            velgOgHentDokumentData(dokument.dokumentInfoId);
+                        }
+                    }}
+                >
+                    <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
+                </DokumentPanel>
+            )}
+        </div>
     );
 };
