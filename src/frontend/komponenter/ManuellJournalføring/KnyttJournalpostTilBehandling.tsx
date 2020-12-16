@@ -79,7 +79,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                             settOppretterBehandling(true);
                             opprettFagsakOgBehandling()
                                 .then(fagsakRessurs => {
-                                    settOppretterBehandling(false);
                                     settOpprettBehandlingFeilmelding(
                                         fagsakRessurs.status === RessursStatus.FEILET ||
                                             fagsakRessurs.status === RessursStatus.FUNKSJONELL_FEIL

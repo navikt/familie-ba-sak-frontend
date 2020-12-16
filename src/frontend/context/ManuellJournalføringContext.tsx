@@ -545,7 +545,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                     oppdatertData.data.journalpost.journalpostId
                 }/journalfør/${oppgaveId}?journalfoerendeEnhet=${
                     innloggetSaksbehandler?.enhet ?? '9999'
-                }&ferdigstill=false`,
+                }&ferdigstill=true`,
                 data: {
                     bruker: {
                         navn: person.navn,
