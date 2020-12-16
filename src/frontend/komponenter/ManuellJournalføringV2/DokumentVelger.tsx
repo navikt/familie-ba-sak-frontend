@@ -15,7 +15,7 @@ import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
-import { feilDekoratør } from './FeilPanel';
+import { feilDekoratør } from './FeilDekoratør';
 
 const dokumentPanelDekoratør = <T extends unknown>(
     component: AnyStyledComponent | React.ComponentType<T>

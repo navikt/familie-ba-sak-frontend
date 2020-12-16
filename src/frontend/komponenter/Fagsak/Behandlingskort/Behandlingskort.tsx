@@ -1,10 +1,12 @@
 import * as React from 'react';
 
-import classNames from 'classnames';
+import styled from 'styled-components';
 
+import navFarger from 'nav-frontend-core';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import {
+    BehandlingResultat,
     behandlingsresultater,
     behandlingsstatuser,
     behandlingstyper,
@@ -22,21 +24,52 @@ interface IBehandlingskortProps {
     åpenBehandling: IBehandling;
 }
 
+const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
+    switch (behandlingResultat) {
+        case BehandlingResultat.INNVILGET:
+            return navFarger.navGronnDarken40;
+        case BehandlingResultat.INNVILGET_OG_OPPHØRT:
+            return navFarger.navGronnDarken40;
+        case BehandlingResultat.AVSLÅTT:
+            return navFarger.redErrorDarken20;
+        default:
+            return navFarger.navGra40;
+    }
+};
+
+const Container = styled.div<{ behandlingResultat: BehandlingResultat }>`
+    border: 1px solid ${navFarger.navGra40};
+    border-left: 0.5rem solid ${navFarger.navGra40};
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-left-color: ${({ behandlingResultat }) => hentResultatfarge(behandlingResultat)};
+`;
+
+const StyledUndertittel = styled(Undertittel)`
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+`;
+
+const StyledHr = styled.hr`
+    border: none;
+    border-bottom: 1px solid ${navFarger.navLysGra};
+`;
+
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandling }) => {
     const antallBehandlinger = fagsak.behandlinger.length;
     const åpenBehandlingIndex = fagsak.behandlinger.findIndex(() => åpenBehandling) + 1;
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
 
-    const behandlingsresultat = behandlingsresultater[åpenBehandling.samletResultat];
     const tittel = `${
         åpenBehandling ? behandlingstyper[åpenBehandling.type].navn : 'ukjent'
     } (${åpenBehandlingIndex}/${antallBehandlinger}) - ${sakstype(åpenBehandling).toLowerCase()}`;
 
     return (
-        <div className={classNames('behandlingskort', behandlingsresultat)}>
-            <Undertittel>{tittel}</Undertittel>
+        <Container behandlingResultat={åpenBehandling.resultat}>
+            <StyledUndertittel>{tittel}</StyledUndertittel>
             <Normaltekst>{behandlingÅrsak[åpenBehandling.årsak]}</Normaltekst>
-            <hr />
+            <StyledHr />
             <Informasjonsbolk
                 informasjon={[
                     {
@@ -45,7 +78,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                     },
                     {
                         label: 'Resultat',
-                        tekst: behandlingsresultat,
+                        tekst: behandlingsresultater[åpenBehandling.resultat],
                     },
                 ]}
             />
@@ -72,7 +105,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                     },
                 ]}
             />
-        </div>
+        </Container>
     );
 };
 

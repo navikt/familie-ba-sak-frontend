@@ -14,7 +14,7 @@ import { Valideringsstatus } from '../../familie-skjema/typer';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
-import { feilDekoratør } from './FeilPanel';
+import { feilDekoratør } from './FeilDekoratør';
 
 const BrukerPanelDiv = styled.div`
     width: 560px;

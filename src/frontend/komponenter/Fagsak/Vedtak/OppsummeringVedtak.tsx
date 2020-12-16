@@ -139,7 +139,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                 if (response.status === RessursStatus.SUKSESS) {
                     settVisModal(true);
                     settFagsak(response);
-                } else if (response.status === RessursStatus.FEILET) {
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL
+                ) {
                     settSubmitFeil(response.frontendFeilmelding);
                 }
             });
@@ -152,7 +155,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     return (
         <Skjemasteg
-            tittel={'Vedtaksbrev'}
+            tittel={'Vedtak'}
             forrigeOnClick={() =>
                 history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`)
             }
@@ -160,12 +163,16 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             nesteKnappTittel={'Til godkjenning'}
             senderInn={senderInn}
             maxWidthStyle="100%"
-            className={'vedtaksbrev'}
+            className={'vedtak'}
         >
             {åpenBehandling.årsak !== BehandlingÅrsak.TEKNISK_OPPHØR ? (
                 <>
                     <PdfVisningModal
-                        onRequestOpen={hentVedtaksbrev}
+                        onRequestOpen={() => {
+                            if (vedtaksbrev.status !== RessursStatus.HENTER) {
+                                hentVedtaksbrev();
+                            }
+                        }}
                         åpen={visVedtaksbrev}
                         onRequestClose={() => {
                             settVisVedtaksbrev(false);
@@ -174,11 +181,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         pdfdata={vedtaksbrev}
                     />
 
-                    <UtbetalingBegrunnelserProvider
-                        fagsak={fagsak}
-                        aktivVedtak={aktivVedtak}
-                        hentVedtaksbrev={hentVedtaksbrev}
-                    >
+                    <UtbetalingBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                         <UtbetalingBegrunnelseTabell åpenBehandling={åpenBehandling} />
                     </UtbetalingBegrunnelserProvider>
 

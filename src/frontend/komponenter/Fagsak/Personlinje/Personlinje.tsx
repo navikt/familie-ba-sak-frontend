@@ -5,8 +5,9 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import Visittkort from '@navikt/familie-visittkort';
 
-import { fagsakStatus, IFagsak } from '../../../typer/fagsak';
+import { IFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
+import { hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { formaterPersonIdent, hentAlder } from '../../../utils/formatter';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
@@ -25,12 +26,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
         >
             <div style={{ flex: 1 }}></div>
             <Normaltekst children={'Status på sak '} />
-            <Element
-                className={'visittkort__status'}
-                children={
-                    fagsak.underBehandling ? 'Under behandling' : fagsakStatus[fagsak.status].navn
-                }
-            />
+            <Element className={'visittkort__status'} children={hentFagsakStatusVisning(fagsak)} />
             <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/saksoversikt`}>
                 <Normaltekst>Gå til saksoversikt</Normaltekst>
             </Lenke>

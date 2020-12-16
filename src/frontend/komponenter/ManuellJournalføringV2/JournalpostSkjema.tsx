@@ -13,7 +13,7 @@ import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokumenter';
-import { feilPanel } from './FeilPanel';
+import { feilDekoratør } from './FeilDekoratør';
 import { Journalpost } from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 
@@ -24,7 +24,7 @@ const StyledSkjema = styled(Skjemasteg)`
     padding-bottom: 80px;
 `;
 
-const FeilPanel = feilPanel(Panel);
+const FeilPanel = feilDekoratør(Panel);
 
 interface JournalpostSkjemaProps {
     visModal: () => void;

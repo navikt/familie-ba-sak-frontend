@@ -10,7 +10,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { EmailIkon } from '../../ikoner/EmailIkon';
 import { DeltagerInfo } from './DeltagerInfo';
-import { feilPanel } from './FeilPanel';
+import { feilDekoratør } from './FeilDekoratør';
 
 const AvsenderPanelDiv = styled.div`
     width: 560px;
@@ -19,7 +19,7 @@ const AvsenderPanelDiv = styled.div`
 
 const PanelGyldig = Ekspanderbartpanel;
 
-const PanelFeil = feilPanel(PanelGyldig);
+const PanelFeil = feilDekoratør(PanelGyldig);
 
 export const AvsenderPanel: React.FC = () => {
     const { dataForManuellJournalføring, settAvsender, harFeil } = useManuellJournalføringV2();
