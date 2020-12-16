@@ -34,7 +34,6 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         id={oppgaveFelt.nøkkel}
                                         label={oppgaveFelt.label}
                                         onChange={(dato: string | undefined) => {
-                                            console.log(dato);
                                             settVerdiPåOppgaveFelt(oppgaveFelt, dato ? dato : '');
                                         }}
                                         placeholder={datoformatNorsk.DATO}
