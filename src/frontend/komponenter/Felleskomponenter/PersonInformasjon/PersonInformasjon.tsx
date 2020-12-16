@@ -21,6 +21,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     tekstType = 'NORMALTEKST',
 }) => {
     const alder = hentAlder(person.fødselsdato);
+    const navnOgAlder = `${person.navn} (${alder} år)`;
 
     return (
         <div className={'personinformasjon'}>
@@ -31,10 +32,9 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                         alder={alder}
                         kjønn={person.kjønn}
                     />
-                    <Undertittel
-                        className={'navn'}
-                        tag={tag}
-                    >{`${person.navn} (${alder} år)`}</Undertittel>
+                    <Undertittel className={'navn'} tag={tag} title={navnOgAlder}>
+                        {navnOgAlder}
+                    </Undertittel>
                     <Undertittel>&ensp;|&ensp;</Undertittel>
                     <Clipboard>
                         <Undertittel>{formaterPersonIdent(person.personIdent)}</Undertittel>
@@ -53,10 +53,9 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                         alder={alder}
                         kjønn={person.kjønn}
                     />
-                    <Normaltekst
-                        className={'navn'}
-                        tag={tag}
-                    >{`${person.navn} (${alder} år)`}</Normaltekst>
+                    <Normaltekst className={'navn'} tag={tag} title={navnOgAlder}>
+                        {navnOgAlder}
+                    </Normaltekst>
                     <Normaltekst>&ensp;|&ensp;</Normaltekst>
                     <Clipboard>
                         <Normaltekst>{formaterPersonIdent(person.personIdent)}</Normaltekst>
