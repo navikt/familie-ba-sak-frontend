@@ -29,7 +29,7 @@ const dokumentPanelDekoratør = <T extends unknown>(
 
 const DokumentBoksValgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
     && {
-        border: 1px solid ${navFarger.navMorkGra};
+        border: 3px solid ${navFarger.fokusFarge};
         &:hover {
             border-color: ${navFarger.navBla};
         }
@@ -41,7 +41,7 @@ const DokumentBoksValgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
 
 const DokumentBoksUvalgt = styled(dokumentPanelDekoratør(Lenkepanel))`
     && {
-        border: 3px solid ${navFarger.fokusFarge};
+        border: 1px solid ${navFarger.navMorkGra};
         &:hover {
             border-color: ${navFarger.navBla};
         }
