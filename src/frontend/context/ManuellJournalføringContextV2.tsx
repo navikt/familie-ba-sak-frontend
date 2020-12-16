@@ -37,7 +37,7 @@ import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import familieDayjs from '../utils/familieDayjs';
 import { useApp } from './AppContext';
 
-const tomtPerson = {
+const tomPerson = {
     adressebeskyttelseGradering: Adressebeskyttelsegradering.UGRADERT,
     familierelasjoner: [],
     familierelasjonerMaskert: [],
@@ -48,7 +48,7 @@ const tomtPerson = {
     type: PersonType.SØKER,
 };
 
-const tomtAvsender = {
+const tomAvsender = {
     erLikBruker: false,
     id: '',
     land: '',
@@ -147,10 +147,10 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             //we use tom object for person and avsender if they are not present in data
             //because we need to use the objects to index the validation errors (See validaterData() for details)
             if (erPersonTom(dataKopiert.data.person)) {
-                dataKopiert.data.person = tomtPerson;
+                dataKopiert.data.person = tomPerson;
             }
             if (erAvsenderTom(dataKopiert.data.journalpost.avsenderMottaker)) {
-                dataKopiert.data.journalpost.avsenderMottaker = tomtAvsender;
+                dataKopiert.data.journalpost.avsenderMottaker = tomAvsender;
             }
 
             //the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
