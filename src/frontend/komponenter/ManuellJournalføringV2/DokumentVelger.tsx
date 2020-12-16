@@ -24,19 +24,32 @@ const dokumentPanelDekoratør = <T extends unknown>(
         margin-top: 20px;
         width: 560px;
         height: 100%;
-        border: ${props => `${props.borderWidth} solid ${props.borderColor}`};
+    }
+`;
+
+const DokumentPanelUvalgt = styled(dokumentPanelDekoratør(Lenkepanel))`
+    && {
+        border: 1px solid ${navFarger.navMorkGra};
         &:hover {
-            border-color: ${props => `${props.hoverBorderColor}`};
+            border-color: ${navFarger.navBla};
         }
         &:focus {
-            border-color: ${props => `${props.hoverBorderColor}`};
+            border-color: ${navFarger.fokusFarge};
         }
     }
 `;
 
-const DokumentPanelUvalgt = dokumentPanelDekoratør(Lenkepanel);
-
-const DokumentPanelValgt = dokumentPanelDekoratør(Ekspanderbartpanel);
+const DokumentPanelValgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
+    && {
+        border: 3px solid ${navFarger.fokusFarge};
+        &:hover {
+            border-color: ${navFarger.navBla};
+        }
+        &:focus {
+            border-color: ${navFarger.fokusFarge};
+        }
+    }
+`;
 
 const PanelFeilValgt = feilDekoratør(DokumentPanelValgt);
 
@@ -198,31 +211,19 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
 
     return (
         <div>
-            {valgt ? (
-                <DokumentPanel
-                    borderColor={navFarger.fokusFarge}
-                    borderWidth={'3px'}
-                    hoverBorderColor={navFarger.navBla}
-                    tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
-                >
-                    <EndreDokumentInfoPanel />
-                </DokumentPanel>
-            ) : (
-                <DokumentPanel
-                    borderColor={navFarger.navMorkGra}
-                    borderWidth={'1px'}
-                    hoverBorderColor={navFarger.navBla}
-                    tittelProps="normaltekst"
-                    href="#"
-                    onClick={() => {
-                        if (!valgt && journalpostId && dokument.dokumentInfoId) {
-                            velgOgHentDokumentData(dokument.dokumentInfoId);
-                        }
-                    }}
-                >
-                    <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
-                </DokumentPanel>
-            )}
+            <DokumentPanel
+                tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+                tittelProps="normaltekst"
+                href="#"
+                onClick={() => {
+                    if (!valgt && journalpostId && dokument.dokumentInfoId) {
+                        velgOgHentDokumentData(dokument.dokumentInfoId);
+                    }
+                }}
+            >
+                {!valgt && <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+                {valgt && <EndreDokumentInfoPanel />}
+            </DokumentPanel>
         </div>
     );
 };
