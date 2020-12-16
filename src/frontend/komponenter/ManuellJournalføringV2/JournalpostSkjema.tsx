@@ -49,7 +49,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
 
     const [senderInn, settSenderInn] = React.useState(false);
 
-    const manuellJournalfør = () => {
+    const onClickManuellJournalfør = () => {
         if (tilknyttedeBehandlingIder.length < 1) {
             visModal();
         } else {
@@ -80,7 +80,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
                         history.push(`/oppgaver`);
                     }}
                     nesteKnappTittel={alleFeil.length === 0 ? 'Journalfør' : undefined}
-                    nesteOnClick={alleFeil.length === 0 ? manuellJournalfør : undefined}
+                    nesteOnClick={alleFeil.length === 0 ? onClickManuellJournalfør : undefined}
                     senderInn={senderInn}
                     tilbakestillOnClick={() => {
                         tilbakestillData();
