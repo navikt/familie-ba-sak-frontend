@@ -21,7 +21,6 @@ const KnyttDiv = styled.div`
 
 export const KnyttJournalpostTilBehandling: React.FC = () => {
     const {
-        innsendingsfeilmelding,
         settTilknyttedeBehandlingIder,
         dataForManuellJournalføring,
         opprettFagsakOgBehandling,
@@ -61,19 +60,19 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                         id={'opprettbehandling'}
                         onClick={() => {
                             settOppretterBehandling(true);
-                            opprettFagsakOgBehandling().then(fagsakRessurs => {
-                                settOppretterBehandling(false);
-                                if (
-                                    fagsakRessurs.status === RessursStatus.FEILET ||
-                                    fagsakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-                                ) {
+                            opprettFagsakOgBehandling()
+                                .then(fagsakRessurs => {
+                                    settOppretterBehandling(false);
                                     settOpprettBehandlingFeilmelding(
-                                        fagsakRessurs.frontendFeilmelding
+                                        fagsakRessurs.status === RessursStatus.FEILET ||
+                                            fagsakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+                                            ? fagsakRessurs.frontendFeilmelding
+                                            : ''
                                     );
-                                } else {
-                                    settOpprettBehandlingFeilmelding('');
-                                }
-                            });
+                                })
+                                .finally(() => {
+                                    settOppretterBehandling(false);
+                                });
                         }}
                         label={'Opprett ny behandling'}
                         erLesevisning={false}
@@ -144,7 +143,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     </tbody>
                 </table>
             )}
-            {innsendingsfeilmelding && <Feilmelding children={innsendingsfeilmelding} />}
         </KnyttDiv>
     );
 };

@@ -3,14 +3,20 @@ import React from 'react';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 
 interface JournalføringModalProps {
     gjemme: () => void;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
-export const JournalføringModal: React.FC<JournalføringModalProps> = ({ gjemme }) => {
+export const JournalføringModal: React.FC<JournalføringModalProps> = ({
+    gjemme,
+    settFeilmelding,
+}) => {
     const {
         manueltJournalfør,
         hentSortertBehandlinger,
@@ -36,10 +42,21 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({ gjemme
                         disabled={senderInn}
                         onClick={() => {
                             settSenderInn(true);
-                            manueltJournalfør().finally(() => {
-                                settSenderInn(false);
-                                gjemme();
-                            });
+                            manueltJournalfør()
+                                .then(fagsak => {
+                                    if (
+                                        fagsak.status === RessursStatus.FEILET ||
+                                        fagsak.status === RessursStatus.FUNKSJONELL_FEIL
+                                    ) {
+                                        settFeilmelding(
+                                            `Feil ved manuelt journalfør: ${fagsak.frontendFeilmelding}`
+                                        );
+                                    }
+                                })
+                                .finally(() => {
+                                    settSenderInn(false);
+                                    gjemme();
+                                });
                         }}
                         children={'Ja, journalfør'}
                     />,

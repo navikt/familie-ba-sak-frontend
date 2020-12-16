@@ -27,9 +27,13 @@ const FeilPanel = feilPanel(Panel);
 
 interface JournalpostSkjemaProps {
     visModal: () => void;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
-export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ visModal }) => {
+export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
+    visModal,
+    settFeilmelding,
+}) => {
     const {
         dataForManuellJournalføring,
         tilknyttedeBehandlingIder,
@@ -45,6 +49,26 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ visModal }
 
     const [senderInn, settSenderInn] = React.useState(false);
 
+    const manuellJournalfør = () => {
+        if (tilknyttedeBehandlingIder.length < 1) {
+            visModal();
+        } else {
+            settSenderInn(true);
+            manueltJournalfør()
+                .then(fagsak => {
+                    settFeilmelding(
+                        fagsak.status === RessursStatus.FEILET ||
+                            fagsak.status === RessursStatus.FUNKSJONELL_FEIL
+                            ? `Feil ved manuelt journalfør: ${fagsak.frontendFeilmelding}`
+                            : ''
+                    );
+                })
+                .finally(() => {
+                    settSenderInn(false);
+                });
+        }
+    };
+
     return (
         <div>
             {dataForManuellJournalføring.status === RessursStatus.SUKSESS && (
@@ -56,20 +80,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ visModal }
                         history.push(`/oppgaver`);
                     }}
                     nesteKnappTittel={alleFeil.length === 0 ? 'Journalfør' : undefined}
-                    nesteOnClick={
-                        alleFeil.length === 0
-                            ? () => {
-                                  if (tilknyttedeBehandlingIder.length < 1) {
-                                      visModal();
-                                  } else {
-                                      settSenderInn(true);
-                                      manueltJournalfør().finally(() => {
-                                          settSenderInn(false);
-                                      });
-                                  }
-                              }
-                            : undefined
-                    }
+                    nesteOnClick={alleFeil.length === 0 ? manuellJournalfør : undefined}
                     senderInn={senderInn}
                     tilbakestillOnClick={() => {
                         tilbakestillData();

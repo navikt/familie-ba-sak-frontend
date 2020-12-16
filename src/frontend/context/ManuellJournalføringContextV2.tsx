@@ -101,7 +101,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     const [valideringsfeil, settValideringsfeil] = React.useState(new Map<unknown, string[]>());
 
-    const harFeil = (data: unknown) => !!hentFeil(data);
+    const harFeil = (data: unknown) => !!hentFeil(data).length;
 
     const hentFeil = (data: unknown = undefined) =>
         data
@@ -135,16 +135,17 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     const settDataRessurs = (
         dataRessurs: Ressurs<IDataForManuellJournalføring>,
-        persistFagsak = false
+        holdeFagsak = false
     ) => {
         settDataForManuellJournalføring(dataRessurs);
         const oppdatert: Ressurs<IDataForManuellJournalføring> = JSON.parse(
             JSON.stringify(dataRessurs)
         );
+
+        //before updating data, we need extra steps for architectural and business concerns
         if (oppdatert.status === RessursStatus.SUKSESS) {
             //we use tom object for person and avsender if they are not present in data
-            //because we need to use the objects to index the validation errors and "may" also index
-            //modification logs (See validaterData() for details)
+            //because we need to use the objects to index the validation errors (See validaterData() for details)
             if (erPersonTomt(oppdatert.data.person)) {
                 oppdatert.data.person = tomtPerson;
             }
@@ -160,14 +161,15 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 firstDokument?.dokumentInfoId
             );
 
-            if (persistFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
+            //the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
+            //overwrite the change because creating fagsak is not possible to revert
+            if (holdeFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
                 oppdatert.data.fagsak = oppdatertData.data.fagsak;
             }
         }
         settOppdatertData(oppdatert);
     };
 
-    const [innsendingsfeilmelding, settInnsendingsfeilmelding] = React.useState('');
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
 
     const finnDokument = (
@@ -222,14 +224,14 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         valgt.logiskeVedlegg = logiskeVedleggNavn.map(vedlegg => {
             return {
                 tittel: vedlegg,
-                logiskVedleggId: '0',
+                logiskVedleggId: '0', //this id is not nullable but ignored by backend so set it to whatever string
             };
         });
         settValgtDokumentInfo(valgt);
     };
 
-    const hentBrevkode = (dokumentTittel: string | undefined): string | undefined => {
-        return BrevkodeMap.get(dokumentTittel);
+    const hentBrevkode = (dokumentTittel: string | undefined): string => {
+        return BrevkodeMap.get(dokumentTittel) || '';
     };
 
     const settFagsak = (fagsak: Ressurs<IFagsak | undefined>) => {
@@ -237,7 +239,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             oppdatertData.status === RessursStatus.SUKSESS &&
             fagsak.status === RessursStatus.SUKSESS
         ) {
-            console.log(fagsak);
             settOppdatertData({
                 ...oppdatertData,
                 data: {
@@ -248,7 +249,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
     };
 
-    const hentFagsak = (personId: string) => {
+    const hentFagsak = async (personId: string) => {
         return axiosRequest<IFagsak | undefined, Ressurs<IFagsak | undefined>>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsakForPerson`,
@@ -260,28 +261,26 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         });
     };
 
-    const endreBruker = (personId: string, callback: (status: RessursStatus) => void) => {
-        return axiosRequest<IPersonInfo, void>({
+    const endreBruker = async (personId: string) => {
+        const hentetPerson = await axiosRequest<IPersonInfo, void>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
             headers: {
                 personIdent: personId,
             },
-        }).then((hentetPerson: Ressurs<IPersonInfo>) => {
-            if (hentetPerson.status === RessursStatus.SUKSESS) {
-                hentFagsak(hentetPerson.data.personIdent).then(restFagsak => {
-                    if (
-                        restFagsak.status === RessursStatus.SUKSESS &&
-                        oppdatertData.status === RessursStatus.SUKSESS
-                    ) {
-                        settPersonOgFagsak(hentetPerson, restFagsak);
-                    }
-                    callback(restFagsak.status);
-                });
-            } else {
-                callback(hentetPerson.status);
-            }
         });
+
+        if (hentetPerson.status === RessursStatus.SUKSESS) {
+            const restFagsak = await hentFagsak(hentetPerson.data.personIdent);
+            if (
+                restFagsak.status === RessursStatus.SUKSESS &&
+                oppdatertData.status === RessursStatus.SUKSESS
+            ) {
+                settPersonOgFagsak(hentetPerson, restFagsak);
+            }
+            return restFagsak;
+        }
+        return hentetPerson;
     };
 
     const tilbakestillDokumentTittel = () => {
@@ -293,9 +292,9 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
     };
 
-    const hentDataForManuellJournalføring = (oppgaveId: string) => {
+    const hentDataForManuellJournalføring = async (oppgaveId: string) => {
         settDataForManuellJournalføring(byggHenterRessurs());
-        axiosRequest<IDataForManuellJournalføring, void>({
+        return axiosRequest<IDataForManuellJournalføring, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
             påvirkerSystemLaster: true,
@@ -308,7 +307,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             });
     };
 
-    const hentDokumentData = (
+    const hentDokumentData = async (
         journalpostId: string | undefined,
         dokumentInfoId: string | undefined
     ) => {
@@ -317,7 +316,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
 
         settDokumentData(byggHenterRessurs());
-        axiosRequest<string, void>({
+        return axiosRequest<string, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentInfoId}`,
             påvirkerSystemLaster: false,
@@ -342,6 +341,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     const velgOgHentDokumentData = (dokumentInfoId: string) => {
         if (oppdatertData.status === RessursStatus.SUKSESS) {
+            //not necessary to await because the UI will monitor document data
             hentDokumentData(oppdatertData.data.journalpost.journalpostId, dokumentInfoId);
             settValgtDokumentId(dokumentInfoId);
         }
@@ -423,7 +423,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         return aktivBehandling;
     };
 
-    const opprettFagsak = async (data: IOpprettEllerHentFagsakData): Promise<Ressurs<IFagsak>> => {
+    const opprettFagsak = async (data: IOpprettEllerHentFagsakData) => {
         return axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
             data,
             method: 'POST',
@@ -433,11 +433,11 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 return response;
             })
             .catch(() => {
-                return byggFeiletRessurs('Opprettelse av fagsak feilet');
+                return byggFeiletRessurs<IFagsak>('Opprettelse av fagsak feilet');
             });
     };
 
-    const opprettBehandling = async (data: IOpprettBehandlingData): Promise<Ressurs<IFagsak>> => {
+    const opprettBehandling = async (data: IOpprettBehandlingData) => {
         return axiosRequest<IFagsak, IOpprettBehandlingData>({
             data,
             method: 'POST',
@@ -447,7 +447,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 return response;
             })
             .catch(() => {
-                return byggFeiletRessurs('Opprettelse av behandling feilet');
+                return byggFeiletRessurs<IFagsak>('Opprettelse av behandling feilet');
             });
     };
 
@@ -471,9 +471,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 : undefined;
 
         if (stateFeil) {
-            return new Promise<Ressurs<IFagsak>>(resolve => {
-                resolve(stateFeil);
-            });
+            return stateFeil;
         }
 
         const data =
@@ -489,9 +487,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                   .catch(() => byggFeiletRessurs<IFagsak>('Ukjent feil ved opprett fagsak'));
 
         if (fagsakRessurs.status !== RessursStatus.SUKSESS) {
-            return new Promise<Ressurs<IFagsak>>(resolve => {
-                resolve(fagsakRessurs);
-            });
+            return fagsakRessurs;
         }
 
         const fagsak = fagsakRessurs.data;
@@ -512,14 +508,10 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         if (fagsakMedBehandling.status === RessursStatus.SUKSESS) {
             settFagsak(fagsakMedBehandling);
         } else if (fagsakMedBehandling.status !== RessursStatus.FEILET) {
-            return new Promise<Ressurs<IFagsak>>(resolve => {
-                resolve(byggFeiletRessurs<IFagsak>('Opprettelse av behandling feilet.'));
-            });
+            return byggFeiletRessurs<IFagsak>('Opprettelse av behandling feilet.');
         }
 
-        return new Promise<Ressurs<IFagsak>>(resolve => {
-            resolve(fagsakMedBehandling);
-        });
+        return fagsakMedBehandling;
     };
 
     const manueltJournalfør = async () => {
@@ -530,7 +522,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         ) {
             const person = oppdatertData.data.person;
 
-            axiosRequest<string, IRestJournalføring>({
+            return axiosRequest<string, IRestJournalføring>({
                 method: 'POST',
                 url: `/familie-ba-sak/api/journalpost/${
                     oppdatertData.data.journalpost.journalpostId
@@ -568,20 +560,14 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                         history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
                         history.push('/oppgaver');
-                    } else if (fagsakId.status === RessursStatus.FEILET) {
-                        settInnsendingsfeilmelding(fagsakId.frontendFeilmelding);
                     }
-                    return fagsakId.status;
+                    return fagsakId;
                 })
                 .catch(() => {
-                    settInnsendingsfeilmelding('Ukjent feil ved journalføring.');
-                    return RessursStatus.FEILET;
+                    return byggFeiletRessurs<string>('Ukjent feil ved journalføring.');
                 });
         } else {
-            settInnsendingsfeilmelding('Ukjent feil ved applikasjonen');
-            return new Promise<RessursStatus>(resolve => {
-                resolve(RessursStatus.FEILET);
-            });
+            return byggFeiletRessurs<string>('Ukjent feil ved applikasjonen');
         }
     };
 
@@ -628,7 +614,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         //Validate, check, revert data
         harFeil,
         hentFeil,
-        innsendingsfeilmelding,
         erEndret,
         tilbakestillData,
 

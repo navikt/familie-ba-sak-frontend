@@ -23,6 +23,7 @@ const ToKolonerDiv = styled.div`
 const ManuellJournalføringContentV2: React.FC = () => {
     const { dataForManuellJournalføring } = useManuellJournalføringV2();
     const [visModal, settVisModal] = React.useState(false);
+    const [feilmelding, settFeilmelding] = React.useState('');
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
@@ -31,11 +32,21 @@ const ManuellJournalføringContentV2: React.FC = () => {
                     {dataForManuellJournalføring.data.journalpost.journalstatus ===
                     Journalstatus.MOTTATT ? (
                         <div>
+                            {feilmelding && <AlertStripeFeil>{feilmelding}</AlertStripeFeil>}
+
                             <ToKolonerDiv>
-                                <JournalpostSkjema visModal={() => settVisModal(true)} />
+                                <JournalpostSkjema
+                                    visModal={() => settVisModal(true)}
+                                    settFeilmelding={settFeilmelding}
+                                />
                                 <DokumentPane />
                             </ToKolonerDiv>
-                            {visModal && <JournalføringModal gjemme={() => settVisModal(false)} />}
+                            {visModal && (
+                                <JournalføringModal
+                                    gjemme={() => settVisModal(false)}
+                                    settFeilmelding={settFeilmelding}
+                                />
+                            )}
                         </div>
                     ) : (
                         <AlertStripeAdvarsel

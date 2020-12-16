@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Knapp } from 'nav-frontend-knapper';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import { useFelt } from '../../familie-skjema/felt';
@@ -16,13 +15,6 @@ import { KontoSirkel } from '../../ikoner/KontoSirkel';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
 import { feilPanel } from './FeilPanel';
-
-const VIS_FELT_MELDING = '';
-const IKKE_VIS_MELDING = undefined;
-
-const StyledAlert = styled(AlertStripeFeil)`
-    margin: 10px 0 0 0;
-`;
 
 const BrukerPanelDiv = styled.div`
     width: 560px;
@@ -34,7 +26,7 @@ const PanelFeil = feilPanel(PanelGyldig);
 
 export const BrukerPanel: React.FC = () => {
     const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalføringV2();
-    const [feilMelding, settFeilMelding] = useState<string | undefined>(IKKE_VIS_MELDING);
+    const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
 
     const nyttIdent = useFelt({
@@ -62,7 +54,7 @@ export const BrukerPanel: React.FC = () => {
                     >
                         <div className={'hentperson__inputogknapp'}>
                             <FamilieInput
-                                {...nyttIdent.hentNavInputProps(feilMelding === VIS_FELT_MELDING)}
+                                {...nyttIdent.hentNavInputProps(!!feilMelding)}
                                 erLesevisning={false}
                                 id={'hent-person'}
                                 label={'Skriv inn fødselsnummer/D-nummer'}
@@ -73,23 +65,25 @@ export const BrukerPanel: React.FC = () => {
                                 onClick={() => {
                                     if (nyttIdent.valideringsstatus === Valideringsstatus.OK) {
                                         settSpinner(true);
-                                        endreBruker(nyttIdent.verdi, (status: RessursStatus) => {
-                                            settSpinner(false);
-                                            settFeilMelding(
-                                                status === RessursStatus.SUKSESS
-                                                    ? IKKE_VIS_MELDING
-                                                    : 'Ukjent feil ved hent person.'
-                                            );
-                                        });
+                                        endreBruker(nyttIdent.verdi)
+                                            .then((ressur: Ressurs<unknown>) => {
+                                                settFeilMelding(
+                                                    ressur.status === RessursStatus.SUKSESS
+                                                        ? ''
+                                                        : 'Ukjent feil ved hent person.'
+                                                );
+                                            })
+                                            .finally(() => {
+                                                settSpinner(false);
+                                            });
                                     } else {
-                                        settFeilMelding(VIS_FELT_MELDING);
+                                        settFeilMelding('Ugyldig person ident');
                                     }
                                 }}
                                 children={'Endre bruker'}
                                 spinner={spinner}
                             />
                         </div>
-                        {feilMelding && <StyledAlert>{feilMelding}</StyledAlert>}{' '}
                     </Panel>
                 </BrukerPanelDiv>
             );
