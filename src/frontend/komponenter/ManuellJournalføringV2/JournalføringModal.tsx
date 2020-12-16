@@ -36,15 +36,10 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({ gjemme
                         disabled={senderInn}
                         onClick={() => {
                             settSenderInn(true);
-                            manueltJournalfør()
-                                .then(() => {
-                                    settSenderInn(false);
-                                    gjemme();
-                                })
-                                .catch(() => {
-                                    settSenderInn(false);
-                                    gjemme();
-                                });
+                            manueltJournalfør().finally(() => {
+                                settSenderInn(false);
+                                gjemme();
+                            });
                         }}
                         children={'Ja, journalfør'}
                     />,

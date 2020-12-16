@@ -101,7 +101,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     const [valideringsfeil, settValideringsfeil] = React.useState(new Map<unknown, string[]>());
 
-    const harFeil = (data: unknown) => !!valideringsfeil.get(data);
+    const harFeil = (data: unknown) => !!hentFeil(data);
 
     const hentFeil = (data: unknown = undefined) =>
         data
@@ -111,22 +111,13 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                   []
               );
 
-    const erEndret = (data: unknown = undefined) => {
-        //TODO: support per data point query
-        if (
-            !data &&
-            oppdatertData.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.status === RessursStatus.SUKSESS
-        ) {
-            return (
-                JSON.stringify(oppdatertData.data.journalpost) !==
-                    JSON.stringify(dataForManuellJournalføring.data.journalpost) ||
-                JSON.stringify(oppdatertData.data.person) !==
-                    JSON.stringify(dataForManuellJournalføring.data.person)
-            );
-        }
-        return false;
-    };
+    const erEndret = () =>
+        oppdatertData.status === RessursStatus.SUKSESS &&
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+        (JSON.stringify(oppdatertData.data.journalpost) !==
+            JSON.stringify(dataForManuellJournalføring.data.journalpost) ||
+            JSON.stringify(oppdatertData.data.person) !==
+                JSON.stringify(dataForManuellJournalføring.data.person));
 
     const tilbakestillData = () => {
         settDataRessurs(dataForManuellJournalføring, true);
