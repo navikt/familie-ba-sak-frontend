@@ -111,13 +111,16 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                   []
               );
 
-    const erEndret = () =>
-        oppdatertData.status === RessursStatus.SUKSESS &&
-        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-        (JSON.stringify(oppdatertData.data.journalpost) !==
-            JSON.stringify(dataForManuellJournalføring.data.journalpost) ||
-            JSON.stringify(oppdatertData.data.person) !==
-                JSON.stringify(dataForManuellJournalføring.data.person));
+    const erEndret = () => {
+        const kopi = lagerDataKopi(dataForManuellJournalføring);
+        return (
+            oppdatertData.status === RessursStatus.SUKSESS &&
+            kopi.status === RessursStatus.SUKSESS &&
+            (JSON.stringify(oppdatertData.data.journalpost) !==
+                JSON.stringify(kopi.data.journalpost) ||
+                JSON.stringify(oppdatertData.data.person) !== JSON.stringify(kopi.data.person))
+        );
+    };
 
     const tilbakestillData = () => {
         settDataRessurs(dataForManuellJournalføring, true);
@@ -133,26 +136,43 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
     const history = useHistory();
 
+    const lagerDataKopi = (
+        dataRessurs: Ressurs<IDataForManuellJournalføring>,
+        holdeFagsak = false
+    ) => {
+        const dataKopiert: Ressurs<IDataForManuellJournalføring> = JSON.parse(
+            JSON.stringify(dataRessurs)
+        );
+        if (dataKopiert.status === RessursStatus.SUKSESS) {
+            //we use tom object for person and avsender if they are not present in data
+            //because we need to use the objects to index the validation errors (See validaterData() for details)
+            if (erPersonTomt(dataKopiert.data.person)) {
+                dataKopiert.data.person = tomtPerson;
+            }
+            if (erAvsenderTomt(dataKopiert.data.journalpost.avsenderMottaker)) {
+                dataKopiert.data.journalpost.avsenderMottaker = tomtAvsender;
+            }
+
+            //the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
+            //overwrite the change because creating fagsak is not possible to revert
+            if (holdeFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
+                dataKopiert.data.fagsak = oppdatertData.data.fagsak;
+            }
+        }
+
+        return dataKopiert;
+    };
+
     const settDataRessurs = (
         dataRessurs: Ressurs<IDataForManuellJournalføring>,
         holdeFagsak = false
     ) => {
         settDataForManuellJournalføring(dataRessurs);
-        const oppdatert: Ressurs<IDataForManuellJournalføring> = JSON.parse(
-            JSON.stringify(dataRessurs)
-        );
+        const oppdatert = lagerDataKopi(dataRessurs, holdeFagsak);
+        settOppdatertData(oppdatert);
 
-        //before updating data, we need extra steps for architectural and business concerns
+        //after updating data, we need extra steps for business concerns
         if (oppdatert.status === RessursStatus.SUKSESS) {
-            //we use tom object for person and avsender if they are not present in data
-            //because we need to use the objects to index the validation errors (See validaterData() for details)
-            if (erPersonTomt(oppdatert.data.person)) {
-                oppdatert.data.person = tomtPerson;
-            }
-            if (erAvsenderTomt(oppdatert.data.journalpost.avsenderMottaker)) {
-                oppdatert.data.journalpost.avsenderMottaker = tomtAvsender;
-            }
-
             //Select and view the first document by default
             const firstDokument = oppdatert.data.journalpost.dokumenter?.find(() => true);
             settValgtDokumentId(firstDokument?.dokumentInfoId);
@@ -160,14 +180,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 oppdatert.data.journalpost.journalpostId,
                 firstDokument?.dokumentInfoId
             );
-
-            //the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
-            //overwrite the change because creating fagsak is not possible to revert
-            if (holdeFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
-                oppdatert.data.fagsak = oppdatertData.data.fagsak;
-            }
         }
-        settOppdatertData(oppdatert);
     };
 
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
