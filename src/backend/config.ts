@@ -3,20 +3,20 @@
 import { appConfig, ISessionKonfigurasjon, IApi } from '@navikt/familie-backend';
 
 const Environment = () => {
-    if (process.env.ENV === 'local') {
+    if (process.env.ENV?.includes('local')) {
         return {
             buildPath: '../../frontend_development',
             namespace: 'local',
             proxyUrl: 'http://localhost:8089',
         };
-    } else if (process.env.ENV === 'e2e') {
+    } else if (process.env.ENV?.includes('e2e')) {
         return {
             buildPath: '../../frontend_production',
             namespace: 'e2e',
             proxyUrl: 'http://familie-ba-sak:8089',
             redisUrl: 'familie-redis',
         };
-    } else if (process.env.ENV === 'preprod') {
+    } else if (process.env.ENV?.includes('preprod')) {
         return {
             buildPath: '../../frontend_production',
             namespace: 'preprod',
@@ -39,7 +39,7 @@ export const sessionConfig: ISessionKonfigurasjon = {
     navn: 'familie-ba-sak-v1',
     redisPassord: process.env.REDIS_PASSWORD,
     redisUrl: env.redisUrl,
-    secureCookie: !(process.env.ENV === 'local' || process.env.ENV === 'e2e'),
+    secureCookie: !(process.env.ENV?.includes('local') || process.env.ENV?.includes('e2e')),
     sessionMaxAgeSekunder: 12 * 60 * 60,
 };
 

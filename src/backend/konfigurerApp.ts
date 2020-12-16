@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV?.includes('production')) {
     dotenv.config({ path: '/var/run/secrets/nais.io/vault/.env' });
 } else {
     dotenv.config();

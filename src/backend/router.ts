@@ -37,7 +37,7 @@ export default (
     });
 
     // APP
-    if (process.env.NODE_ENV === 'development' && middleware) {
+    if (process.env.NODE_ENV?.includes('development') && middleware) {
         router.get('*', ensureAuthenticated(authClient, false), (_: Request, res: Response) => {
             prometheusTellere.appLoad.inc();
 

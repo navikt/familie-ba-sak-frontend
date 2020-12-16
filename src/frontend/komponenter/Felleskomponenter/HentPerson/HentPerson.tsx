@@ -56,7 +56,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                         onClick={() => {
                             if (
                                 ident.valideringsstatus === Valideringsstatus.OK ||
-                                process.env.NODE_ENV === 'development'
+                                process.env.NODE_ENV?.includes('development')
                             ) {
                                 settPerson({ status: RessursStatus.HENTER });
                                 axiosRequest<IPersonInfo, void>({
