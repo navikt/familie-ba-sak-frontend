@@ -19,12 +19,12 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({
 }) => {
     const {
         journalfør,
-        hentSortertBehandlinger,
+        hentSorterteBehandlinger,
         hentAktivBehandlingForJournalføring,
     } = useManuellJournalføringV2();
 
     const [senderInn, settSenderInn] = React.useState(false);
-    const behandlinger = hentSortertBehandlinger();
+    const behandlinger = hentSorterteBehandlinger();
 
     return (
         <UIModalWrapper

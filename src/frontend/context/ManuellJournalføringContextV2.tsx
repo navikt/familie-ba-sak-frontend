@@ -451,7 +451,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             });
     };
 
-    const hentSortertBehandlinger = () => {
+    const hentSorterteBehandlinger = () => {
         return oppdatertData.status === RessursStatus.SUKSESS &&
             oppdatertData.data.fagsak?.behandlinger.length
             ? oppdatertData.data.fagsak.behandlinger.sort((a, b) =>
@@ -607,7 +607,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         endreBruker,
         hentAktivBehandlingForJournalføring,
         opprettFagsakOgBehandling,
-        hentSortertBehandlinger,
+        hentSorterteBehandlinger,
         tilknyttedeBehandlingIder,
         settTilknyttedeBehandlingIder,
 
