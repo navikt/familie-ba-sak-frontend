@@ -56,33 +56,33 @@ const tomtAvsender = {
     type: AvsenderMottakerIdType.UKJENT,
 };
 
-const erPersonTomt = (person: IPersonInfo | undefined) => !person || !person.personIdent;
+const erPersonTom = (person: IPersonInfo | undefined) => !person || !person.personIdent;
 
-const erAvsenderTomt = (avsender: AvsenderMottaker | undefined) => !avsender || !avsender.navn;
+const erAvsenderTom = (avsender: AvsenderMottaker | undefined) => !avsender || !avsender.navn;
 
 const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
     const valideringsfeilMap = new Map<unknown, string[]>();
 
-    const settValideringsFeil = (data: unknown, feil: string) => {
+    const settValideringsfeil = (data: unknown, feil: string) => {
         valideringsfeilMap.set(data, [...(valideringsfeilMap.get(data) || []), feil]);
     };
 
     if (!dataForValidering.journalpost.tittel) {
-        settValideringsFeil(dataForValidering.journalpost, 'Journalpost tittel må ikke være tom');
+        settValideringsfeil(dataForValidering.journalpost, 'Journalpost tittel må ikke være tom');
     }
 
     dataForValidering.journalpost.dokumenter?.forEach(dokument => {
         if (!dokument.tittel) {
-            settValideringsFeil(dokument, 'Dokument tittel må ikke være tom');
+            settValideringsfeil(dokument, 'Dokument tittel må ikke være tom');
         }
     });
 
-    if (erPersonTomt(dataForValidering.person)) {
-        settValideringsFeil(dataForValidering.person, 'Bruker er ikke satt');
+    if (erPersonTom(dataForValidering.person)) {
+        settValideringsfeil(dataForValidering.person, 'Bruker er ikke satt');
     }
 
-    if (erAvsenderTomt(dataForValidering.journalpost.avsenderMottaker)) {
-        settValideringsFeil(
+    if (erAvsenderTom(dataForValidering.journalpost.avsenderMottaker)) {
+        settValideringsfeil(
             dataForValidering.journalpost.avsenderMottaker,
             'Avsender er ikke satt'
         );
@@ -126,9 +126,9 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settDataRessurs(dataForManuellJournalføring, true);
     };
 
-    //We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
-    //a copy of the data that is subject to change. All modifications will be done on the copy
-    //before <<journalføring>>
+    // We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
+    // a copy of the data that is subject to change. All modifications will be done on the copy
+    // before journalføring
     const [oppdatertData, settOppdatertData] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
@@ -146,10 +146,10 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         if (dataKopiert.status === RessursStatus.SUKSESS) {
             //we use tom object for person and avsender if they are not present in data
             //because we need to use the objects to index the validation errors (See validaterData() for details)
-            if (erPersonTomt(dataKopiert.data.person)) {
+            if (erPersonTom(dataKopiert.data.person)) {
                 dataKopiert.data.person = tomtPerson;
             }
-            if (erAvsenderTomt(dataKopiert.data.journalpost.avsenderMottaker)) {
+            if (erAvsenderTom(dataKopiert.data.journalpost.avsenderMottaker)) {
                 dataKopiert.data.journalpost.avsenderMottaker = tomtAvsender;
             }
 
@@ -237,7 +237,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         valgt.logiskeVedlegg = logiskeVedleggNavn.map(vedlegg => {
             return {
                 tittel: vedlegg,
-                logiskVedleggId: '0', //this id is not nullable but ignored by backend so set it to whatever string
+                logiskVedleggId: '0', // this id is not nullable but ignored by backend so set it to whatever string
             };
         });
         settValgtDokumentInfo(valgt);
@@ -354,7 +354,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     const velgOgHentDokumentData = (dokumentInfoId: string) => {
         if (oppdatertData.status === RessursStatus.SUKSESS) {
-            //not necessary to await because the UI will monitor document data
+            // not necessary to await because the UI will monitor document data
             hentDokumentData(oppdatertData.data.journalpost.journalpostId, dokumentInfoId);
             settValgtDokumentId(dokumentInfoId);
         }
@@ -464,7 +464,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             });
     };
 
-    const hentSortertBehandlinger = () => {
+    const hentSorterteBehandlinger = () => {
         return oppdatertData.status === RessursStatus.SUKSESS &&
             oppdatertData.data.fagsak?.behandlinger.length
             ? oppdatertData.data.fagsak.behandlinger.sort((a, b) =>
@@ -527,7 +527,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         return fagsakMedBehandling;
     };
 
-    const manueltJournalfør = async () => {
+    const journalfør = async () => {
         if (
             oppdatertData.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
@@ -555,7 +555,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                     dokumenter: oppdatertData.data.journalpost.dokumenter?.map(dokument => {
                         return {
                             dokumentTittel: dokument.tittel,
-                            dokumentInfoId: dokument.dokumentInfoId || '0', //TODO: dokumentInfoId is not nullable
+                            dokumentInfoId: dokument.dokumentInfoId || '0', // dokumentInfoId is not nullable
                             brevkode: dokument.brevkode,
                             logiskeVedlegg: dokument.logiskeVedlegg,
                             eksisterendeLogiskeVedlegg: dataForManuellJournalføring.data.journalpost.dokumenter?.find(
@@ -600,7 +600,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         dataForManuellJournalføring: oppdatertData,
         settDataForManuellJournalføring: settOppdatertData,
 
-        //The methods below manipulate selected document
+        // The methods below manipulate selected document
         finnValgtDokument: (): IDokumentInfo | undefined => {
             return finnValgtDokument(oppdatertData);
         },
@@ -612,26 +612,26 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         tilbakestillDokumentTittel,
         velgOgHentDokumentData,
 
-        //The methods below manupulate jounalpost metadata
+        // The methods below manipulate journalpost metadata
         settJournalpostTittel,
         tilbakestillJournalpostTittel,
 
-        //Bruker and fagsak/behandling
+        // Bruker and fagsak/behandling
         endreBruker,
         hentAktivBehandlingForJournalføring,
         opprettFagsakOgBehandling,
-        hentSortertBehandlinger,
+        hentSorterteBehandlinger,
         tilknyttedeBehandlingIder,
         settTilknyttedeBehandlingIder,
 
-        //Validate, check, revert data
+        // Validate, check, revert data
         harFeil,
         hentFeil,
         erEndret,
         tilbakestillData,
 
-        //<<Journalfør>>
-        manueltJournalfør,
+        // Journalfør
+        journalfør,
     };
 });
 

@@ -24,7 +24,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         settTilknyttedeBehandlingIder,
         dataForManuellJournalføring,
         opprettFagsakOgBehandling,
-        hentSortertBehandlinger,
+        hentSorterteBehandlinger,
         hentAktivBehandlingForJournalføring,
         tilknyttedeBehandlingIder,
     } = useManuellJournalføringV2();
@@ -98,7 +98,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody className="tabell__body">
-                        {hentSortertBehandlinger().map((behandling: IBehandling) => (
+                        {hentSorterteBehandlinger().map((behandling: IBehandling) => (
                             <tr key={behandling.behandlingId}>
                                 <td className={'behandlingliste__tabell--behandlingtype'}>
                                     <FamilieCheckbox

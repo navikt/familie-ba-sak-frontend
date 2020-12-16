@@ -38,7 +38,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
     const {
         dataForManuellJournalføring,
         tilknyttedeBehandlingIder,
-        manueltJournalfør,
+        journalfør,
         hentFeil,
         erEndret,
         tilbakestillData,
@@ -57,7 +57,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
             visModal();
         } else {
             settSenderInn(true);
-            manueltJournalfør()
+            journalfør()
                 .then(fagsak => {
                     settFeilmelding(
                         fagsak.status === RessursStatus.FEILET ||

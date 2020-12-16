@@ -9,22 +9,22 @@ import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringC
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 
 interface JournalføringModalProps {
-    gjemme: () => void;
+    gjem: () => void;
     settFeilmelding: (feilmelding: string) => void;
 }
 
 export const JournalføringModal: React.FC<JournalføringModalProps> = ({
-    gjemme,
+    gjem,
     settFeilmelding,
 }) => {
     const {
-        manueltJournalfør,
-        hentSortertBehandlinger,
+        journalfør,
+        hentSorterteBehandlinger,
         hentAktivBehandlingForJournalføring,
     } = useManuellJournalføringV2();
 
     const [senderInn, settSenderInn] = React.useState(false);
-    const behandlinger = hentSortertBehandlinger();
+    const behandlinger = hentSorterteBehandlinger();
 
     return (
         <UIModalWrapper
@@ -42,20 +42,20 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({
                         disabled={senderInn}
                         onClick={() => {
                             settSenderInn(true);
-                            manueltJournalfør()
+                            journalfør()
                                 .then(fagsak => {
                                     if (
                                         fagsak.status === RessursStatus.FEILET ||
                                         fagsak.status === RessursStatus.FUNKSJONELL_FEIL
                                     ) {
                                         settFeilmelding(
-                                            `Feil ved manuelt journalfør: ${fagsak.frontendFeilmelding}`
+                                            `Feil ved manuell journalføring: ${fagsak.frontendFeilmelding}`
                                         );
                                     }
                                 })
                                 .finally(() => {
                                     settSenderInn(false);
-                                    gjemme();
+                                    gjem();
                                 });
                         }}
                         children={'Ja, journalfør'}
@@ -64,7 +64,7 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({
                         key={'nei'}
                         mini={true}
                         onClick={() => {
-                            gjemme();
+                            gjem();
                         }}
                         children={
                             behandlinger && behandlinger.length > 0
