@@ -3,11 +3,11 @@ import React from 'react';
 import { kjønnType, RessursStatus } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
 
 export const BrukerHeader: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføring();
+    const { dataForManuellJournalføring } = useManuellJournalfør();
     const person =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.person

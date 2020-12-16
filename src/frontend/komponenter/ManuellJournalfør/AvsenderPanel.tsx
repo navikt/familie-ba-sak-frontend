@@ -7,7 +7,7 @@ import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { EmailIkon } from '../../ikoner/EmailIkon';
 import { DeltagerInfo } from './DeltagerInfo';
 import { feilDekoratør } from './FeilDekoratør';
@@ -22,7 +22,7 @@ const PanelGyldig = Ekspanderbartpanel;
 const PanelFeil = feilDekoratør(PanelGyldig);
 
 export const AvsenderPanel: React.FC = () => {
-    const { dataForManuellJournalføring, settAvsender, harFeil } = useManuellJournalføring();
+    const { dataForManuellJournalføring, settAvsender, harFeil } = useManuellJournalfør();
     const [avsenderFelt, settAvsenderFelt] = useState('');
 
     useEffect(() => {

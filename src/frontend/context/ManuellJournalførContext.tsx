@@ -93,7 +93,7 @@ const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
     return valideringsfeilMap;
 };
 
-const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
+const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { axiosRequest, innloggetSaksbehandler } = useApp();
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
@@ -652,4 +652,4 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     };
 });
 
-export { ManuellJournalføringProvider, useManuellJournalføring };
+export { ManuellJournalførProvider, useManuellJournalfør };

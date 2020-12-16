@@ -8,7 +8,7 @@ import { Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
@@ -43,7 +43,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
         hentFeil,
         erEndret,
         tilbakestillData,
-    } = useManuellJournalføring();
+    } = useManuellJournalfør();
 
     const alleFeil = hentFeil() ?? [];
 

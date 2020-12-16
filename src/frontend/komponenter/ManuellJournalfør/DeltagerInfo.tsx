@@ -6,7 +6,7 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 
 interface DeltagerProps {
     ikon: React.ReactNode;
@@ -22,7 +22,7 @@ const HSplit = styled.div`
 `;
 
 export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel, ident }) => {
-    const { dataForManuellJournalføring } = useManuellJournalføring();
+    const { dataForManuellJournalføring } = useManuellJournalfør();
     const MarginedDiv = styled.div`
         margin-right: 16px;
     `;

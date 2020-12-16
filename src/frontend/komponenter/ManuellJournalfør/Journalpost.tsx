@@ -9,7 +9,7 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { journalpostTittelList } from './DokumentVelger';
 
@@ -18,7 +18,7 @@ const JournalpostDiv = styled.div`
 `;
 
 const JournalpostInfo: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføring();
+    const { dataForManuellJournalføring } = useManuellJournalfør();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const journalpost = dataForManuellJournalføring.data.journalpost;
@@ -41,7 +41,7 @@ const EndreJournalpost: React.FC = () => {
         dataForManuellJournalføring,
         settJournalpostTittel,
         tilbakestillJournalpostTittel,
-    } = useManuellJournalføring();
+    } = useManuellJournalfør();
     const journalpostTittel =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.tittel
@@ -68,7 +68,7 @@ const EndreJournalpost: React.FC = () => {
 };
 
 export const Journalpost: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføring();
+    const { dataForManuellJournalføring } = useManuellJournalfør();
     const datoMottatt =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.datoMottatt

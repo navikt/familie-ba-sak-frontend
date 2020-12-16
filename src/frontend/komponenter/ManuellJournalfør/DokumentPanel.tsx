@@ -6,7 +6,7 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 
 const DokumentDiv = styled.div`
     width: 100%;
@@ -20,7 +20,7 @@ const DokumentDataAlert = styled(AlertStripeFeil)`
 `;
 
 export const DokumentPanel: React.FC = () => {
-    const { dokumentData } = useManuellJournalføring();
+    const { dokumentData } = useManuellJournalfør();
     return (
         <DokumentDiv>
             {dokumentData.status === RessursStatus.SUKSESS && (

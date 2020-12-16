@@ -8,7 +8,7 @@ import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import Pluss from '../../ikoner/Pluss';
 import { BehandlingStatus, IBehandling } from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
@@ -45,7 +45,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         hentSorterteBehandlinger,
         hentAktivBehandlingForJournalføring,
         tilknyttedeBehandlingIder,
-    } = useManuellJournalføring();
+    } = useManuellJournalfør();
 
     const [oppretterBehandling, settOppretterBehandling] = useState(false);
     const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = useState<
@@ -124,24 +124,16 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             behandling.behandlingId
                                         )}
                                         onChange={() => {
-                                            const id = behandling.behandlingId;
-                                            if (
-                                                tilknyttedeBehandlingIder.includes(
+                                            settTilknyttedeBehandlingIder([
+                                                ...tilknyttedeBehandlingIder.filter(
+                                                    it => it !== behandling.behandlingId
+                                                ),
+                                                ...(tilknyttedeBehandlingIder.includes(
                                                     behandling.behandlingId
                                                 )
-                                            ) {
-                                                settTilknyttedeBehandlingIder(
-                                                    tilknyttedeBehandlingIder.filter(
-                                                        tilknyttedeBehandlingId =>
-                                                            tilknyttedeBehandlingId !== id
-                                                    )
-                                                );
-                                            } else {
-                                                settTilknyttedeBehandlingIder([
-                                                    ...tilknyttedeBehandlingIder,
-                                                    id,
-                                                ]);
-                                            }
+                                                    ? [behandling.behandlingId]
+                                                    : []),
+                                            ]);
                                         }}
                                     />
                                 </StyledTd>

@@ -8,7 +8,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { useFelt } from '../../familie-skjema/felt';
 import { Valideringsstatus } from '../../familie-skjema/typer';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
@@ -35,7 +35,7 @@ const StyledKnapp = styled(Knapp)`
 `;
 
 export const BrukerPanel: React.FC = () => {
-    const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalføring();
+    const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalfør();
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
 

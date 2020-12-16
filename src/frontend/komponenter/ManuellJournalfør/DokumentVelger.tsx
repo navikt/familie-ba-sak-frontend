@@ -12,7 +12,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 
 import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { DokumentIkon } from '../../ikoner/DokumentIkon';
 import { DokumentTittel, JournalpostTittel } from '../../typer/manuell-journalføring';
 import { feilDekoratør } from './FeilDekoratør';
@@ -131,7 +131,7 @@ const EndreDokumentInfoPanel: React.FC = () => {
         finnValgtDokument,
         settDokumentTittel,
         tilbakestillDokumentTittel,
-    } = useManuellJournalføring();
+    } = useManuellJournalfør();
 
     const hentVedleggList = () => {
         const valgtDokument = finnValgtDokument();
@@ -194,7 +194,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         valgtDokumentId,
         velgOgHentDokumentData,
         harFeil,
-    } = useManuellJournalføring();
+    } = useManuellJournalfør();
 
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
     const journalpostId =

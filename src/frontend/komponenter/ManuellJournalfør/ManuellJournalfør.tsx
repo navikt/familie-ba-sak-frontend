@@ -7,9 +7,9 @@ import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper'
 import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
 
 import {
-    ManuellJournalføringProvider,
-    useManuellJournalføring,
-} from '../../context/ManuellJournalføringContext';
+    ManuellJournalførProvider,
+    useManuellJournalfør,
+} from '../../context/ManuellJournalførContext';
 import { BrukerHeader } from './BrukerHeader';
 import { DokumentPanel } from './DokumentPanel';
 import { JournalføringModal } from './JournalføringModal';
@@ -20,8 +20,8 @@ const ToKolonnerDiv = styled.div`
     flex-direction: row;
 `;
 
-const ManuellJournalføringContent: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføring();
+const ManuellJournalførContent: React.FC = () => {
+    const { dataForManuellJournalføring } = useManuellJournalfør();
     const [visModal, settVisModal] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
     switch (dataForManuellJournalføring.status) {
@@ -62,12 +62,12 @@ const ManuellJournalføringContent: React.FC = () => {
     }
 };
 
-const ManuellJournalføringV2: React.FC = () => {
+const ManuellJournalfør: React.FC = () => {
     return (
-        <ManuellJournalføringProvider>
-            <ManuellJournalføringContent />
-        </ManuellJournalføringProvider>
+        <ManuellJournalførProvider>
+            <ManuellJournalførContent />
+        </ManuellJournalførProvider>
     );
 };
 
-export default ManuellJournalføringV2;
+export default ManuellJournalfør;

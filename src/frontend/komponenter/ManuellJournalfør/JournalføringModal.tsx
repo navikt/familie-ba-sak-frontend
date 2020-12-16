@@ -5,7 +5,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
+import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 
 interface JournalføringModalProps {
@@ -21,7 +21,7 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({
         journalfør,
         hentSorterteBehandlinger,
         hentAktivBehandlingForJournalføring,
-    } = useManuellJournalføring();
+    } = useManuellJournalfør();
 
     const [senderInn, settSenderInn] = React.useState(false);
     const behandlinger = hentSorterteBehandlinger();
