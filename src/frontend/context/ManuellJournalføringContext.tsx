@@ -147,7 +147,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
             });
     };
 
-    const manueltJournalfør = () => {
+    const journalfør = () => {
         const accFeilmeldinger = validerSkjema();
 
         if (
@@ -215,7 +215,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
         innsendingsfeilmelding,
         knyttTilFagsak,
         logiskeVedlegg,
-        manueltJournalfør,
+        journalfør,
         opprettBehandling,
         opprettFagsak,
         person,

@@ -514,7 +514,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         return fagsakMedBehandling;
     };
 
-    const manueltJournalfør = async () => {
+    const journalfør = async () => {
         if (
             oppdatertData.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
@@ -618,7 +618,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         tilbakestillData,
 
         // Journalfør
-        manueltJournalfør,
+        journalfør,
     };
 });
 

@@ -32,7 +32,7 @@ const ManuellJournalføringContent: React.FC = () => {
         dokumenttype,
         hentAktivBehandlingForJournalføring,
         logiskeVedlegg,
-        manueltJournalfør,
+        journalfør,
         person,
         senderInn,
         settDokumenttype,
@@ -68,7 +68,7 @@ const ManuellJournalføringContent: React.FC = () => {
                         if (tilknyttedeBehandlingIder.length < 1) {
                             settVisModal(true);
                         } else {
-                            manueltJournalfør();
+                            journalfør();
                         }
                     }}
                     senderInn={senderInn}
@@ -183,7 +183,7 @@ const ManuellJournalføringContent: React.FC = () => {
                                         disabled={senderInn}
                                         onClick={() => {
                                             settVisModal(false);
-                                            manueltJournalfør();
+                                            journalfør();
                                         }}
                                         children={'Ja, journalfør'}
                                     />,

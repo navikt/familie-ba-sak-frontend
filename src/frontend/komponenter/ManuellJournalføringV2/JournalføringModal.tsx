@@ -18,7 +18,7 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({
     settFeilmelding,
 }) => {
     const {
-        manueltJournalfør,
+        journalfør,
         hentSortertBehandlinger,
         hentAktivBehandlingForJournalføring,
     } = useManuellJournalføringV2();
@@ -42,7 +42,7 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({
                         disabled={senderInn}
                         onClick={() => {
                             settSenderInn(true);
-                            manueltJournalfør()
+                            journalfør()
                                 .then(fagsak => {
                                     if (
                                         fagsak.status === RessursStatus.FEILET ||
