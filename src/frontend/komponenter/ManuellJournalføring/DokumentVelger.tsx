@@ -210,20 +210,18 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         : DokumentBoksUvalgt;
 
     return (
-        <>
-            <DokumentBoks
-                tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
-                tittelProps="normaltekst"
-                href="#"
-                onClick={() => {
-                    if (!valgt && journalpostId && dokument.dokumentInfoId) {
-                        velgOgHentDokumentData(dokument.dokumentInfoId);
-                    }
-                }}
-            >
-                {!valgt && <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
-                {valgt && <EndreDokumentInfoPanel />}
-            </DokumentBoks>
-        </>
+        <DokumentBoks
+            tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+            tittelProps="normaltekst"
+            href="#"
+            onClick={() => {
+                if (!valgt && journalpostId && dokument.dokumentInfoId) {
+                    velgOgHentDokumentData(dokument.dokumentInfoId);
+                }
+            }}
+        >
+            {!valgt && <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+            {valgt && <EndreDokumentInfoPanel />}
+        </DokumentBoks>
     );
 };
