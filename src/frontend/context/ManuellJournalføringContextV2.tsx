@@ -123,9 +123,9 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         settDataRessurs(dataForManuellJournalføring, true);
     };
 
-    //We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
-    //a copy of the data that is subject to change. All modifications will be done on the copy
-    //before <<journalføring>>
+    // We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
+    // a copy of the data that is subject to change. All modifications will be done on the copy
+    // before <<journalføring>>
     const [oppdatertData, settOppdatertData] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
@@ -142,10 +142,10 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             JSON.stringify(dataRessurs)
         );
 
-        //before updating data, we need extra steps for architectural and business concerns
+        // before updating data, we need extra steps for architectural and business concerns
         if (oppdatert.status === RessursStatus.SUKSESS) {
-            //we use tom object for person and avsender if they are not present in data
-            //because we need to use the objects to index the validation errors (See validaterData() for details)
+            // we use an empty object for person and avsender if they are not present in data
+            // because we need to use the objects to index the validation errors (See validaterData() for details)
             if (erPersonTom(oppdatert.data.person)) {
                 oppdatert.data.person = tomtPerson;
             }
@@ -153,7 +153,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 oppdatert.data.journalpost.avsenderMottaker = tomtAvsender;
             }
 
-            //Select and view the first document by default
+            // Select and view the first document by default
             const firstDokument = oppdatert.data.journalpost.dokumenter?.find(() => true);
             settValgtDokumentId(firstDokument?.dokumentInfoId);
             hentDokumentData(
@@ -161,8 +161,8 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 firstDokument?.dokumentInfoId
             );
 
-            //the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
-            //overwrite the change because creating fagsak is not possible to revert
+            // the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
+            // overwrite the change because creating fagsak is not possible to revert
             if (holdeFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
                 oppdatert.data.fagsak = oppdatertData.data.fagsak;
             }
@@ -224,7 +224,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         valgt.logiskeVedlegg = logiskeVedleggNavn.map(vedlegg => {
             return {
                 tittel: vedlegg,
-                logiskVedleggId: '0', //this id is not nullable but ignored by backend so set it to whatever string
+                logiskVedleggId: '0', // this id is not nullable but ignored by backend so set it to whatever string
             };
         });
         settValgtDokumentInfo(valgt);
@@ -341,7 +341,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
 
     const velgOgHentDokumentData = (dokumentInfoId: string) => {
         if (oppdatertData.status === RessursStatus.SUKSESS) {
-            //not necessary to await because the UI will monitor document data
+            // not necessary to await because the UI will monitor document data
             hentDokumentData(oppdatertData.data.journalpost.journalpostId, dokumentInfoId);
             settValgtDokumentId(dokumentInfoId);
         }
@@ -542,7 +542,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                     dokumenter: oppdatertData.data.journalpost.dokumenter?.map(dokument => {
                         return {
                             dokumentTittel: dokument.tittel,
-                            dokumentInfoId: dokument.dokumentInfoId || '0', //TODO: dokumentInfoId is not nullable
+                            dokumentInfoId: dokument.dokumentInfoId || '0', // dokumentInfoId is not nullable
                             brevkode: dokument.brevkode,
                             logiskeVedlegg: dokument.logiskeVedlegg,
                             eksisterendeLogiskeVedlegg: dataForManuellJournalføring.data.journalpost.dokumenter?.find(
@@ -587,7 +587,7 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         dataForManuellJournalføring: oppdatertData,
         settDataForManuellJournalføring: settOppdatertData,
 
-        //The methods below manipulate selected document
+        // The methods below manipulate selected document
         finnValgtDokument: (): IDokumentInfo | undefined => {
             return finnValgtDokument(oppdatertData);
         },
@@ -599,11 +599,11 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         tilbakestillDokumentTittel,
         velgOgHentDokumentData,
 
-        //The methods below manupulate jounalpost metadata
+        // The methods below manipulate journalpost metadata
         settJournalpostTittel,
         tilbakestillJournalpostTittel,
 
-        //Bruker and fagsak/behandling
+        // Bruker and fagsak/behandling
         endreBruker,
         hentAktivBehandlingForJournalføring,
         opprettFagsakOgBehandling,
@@ -611,13 +611,13 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         tilknyttedeBehandlingIder,
         settTilknyttedeBehandlingIder,
 
-        //Validate, check, revert data
+        // Validate, check, revert data
         harFeil,
         hentFeil,
         erEndret,
         tilbakestillData,
 
-        //<<Journalfør>>
+        // <<Journalfør>>
         manueltJournalfør,
     };
 });
