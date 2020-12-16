@@ -28,8 +28,7 @@ const port = 8000;
 
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
     let middleware;
-
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV?.includes('development')) {
         const compiler = webpack(config);
         middleware = webpackDevMiddleware(compiler, {
             publicPath: config.output.publicPath,
