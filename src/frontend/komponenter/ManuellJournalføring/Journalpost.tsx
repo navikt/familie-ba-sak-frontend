@@ -36,26 +36,6 @@ const JournalpostMetadataDiv = styled.div`
     margin: 0 0 20px 0;
 `;
 
-const JournalpostMetadata: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføring();
-    switch (dataForManuellJournalføring.status) {
-        case RessursStatus.SUKSESS:
-            const journalpost = dataForManuellJournalføring.data.journalpost;
-            return (
-                <JournalpostMetadataDiv>
-                    <Normaltekst>
-                        Mottatt:{' '}
-                        {journalpost.datoMottatt
-                            ? formaterIsoDato(journalpost.datoMottatt, datoformat.DATO)
-                            : 'Ingen mottatt dato'}
-                    </Normaltekst>
-                </JournalpostMetadataDiv>
-            );
-        default:
-            return <div></div>;
-    }
-};
-
 const EndreJournalpost: React.FC = () => {
     const {
         dataForManuellJournalføring,
@@ -88,10 +68,22 @@ const EndreJournalpost: React.FC = () => {
 };
 
 export const Journalpost: React.FC = () => {
+    const { dataForManuellJournalføring } = useManuellJournalføring();
+    const datoMottatt =
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS
+            ? dataForManuellJournalføring.data.journalpost.datoMottatt
+            : undefined;
     return (
         <JournalpostDiv>
             <Ekspanderbartpanel tittel={<JournalpostInfo />}>
-                <JournalpostMetadata />
+                <JournalpostMetadataDiv>
+                    <Normaltekst>
+                        Mottatt:{' '}
+                        {datoMottatt
+                            ? formaterIsoDato(datoMottatt, datoformat.DATO)
+                            : 'Ingen mottatt dato'}
+                    </Normaltekst>
+                </JournalpostMetadataDiv>
                 <EndreJournalpost />
             </Ekspanderbartpanel>
         </JournalpostDiv>
