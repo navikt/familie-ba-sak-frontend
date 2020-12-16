@@ -16,6 +16,7 @@ import { BehandlerRolle } from '../typer/behandling';
 import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
 import { IToggles, alleTogglerAv, ToggleNavn } from '../typer/toggles';
 import { gruppeIdTilRolle } from '../utils/behandling';
+import { tilFeilside } from '../utils/commons';
 
 const FEM_MINUTTER = 300000;
 
@@ -235,6 +236,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
             innloggetSaksbehandler,
             'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
         );
+        tilFeilside();
     };
 
     const systemetLaster = () => {
