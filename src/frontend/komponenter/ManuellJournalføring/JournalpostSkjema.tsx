@@ -8,7 +8,7 @@ import { Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
+import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
@@ -19,9 +19,10 @@ import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 
 const StyledSkjema = styled(Skjemasteg)`
     min-width: 640px;
-    height: 90vh;
     padding-left: 40px;
     padding-bottom: 80px;
+    height: calc(100vh - 3rem);
+    overflow: auto;
 `;
 
 const FeilPanel = feilDekoratør(Panel);
@@ -42,7 +43,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
         hentFeil,
         erEndret,
         tilbakestillData,
-    } = useManuellJournalføringV2();
+    } = useManuellJournalføring();
 
     const alleFeil = hentFeil() ?? [];
 
@@ -76,7 +77,6 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
         <div>
             {dataForManuellJournalføring.status === RessursStatus.SUKSESS && (
                 <StyledSkjema
-                    className={'journalføring'}
                     tittel={'Journalføring'}
                     forrigeKnappTittel={'Avbryt'}
                     forrigeOnClick={() => {

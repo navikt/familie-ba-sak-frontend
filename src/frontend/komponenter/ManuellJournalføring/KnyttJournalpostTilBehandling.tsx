@@ -8,7 +8,7 @@ import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
+import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import Pluss from '../../ikoner/Pluss';
 import { BehandlingStatus, IBehandling } from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
@@ -19,6 +19,24 @@ const KnyttDiv = styled.div`
     margin-top: 20px;
 `;
 
+const StyledDiv = styled.div`
+    & .knapp.ikon-knapp {
+        margin-top: 1rem;
+        svg {
+            margin: 0.5rem;
+        }
+    }
+    & .typo-feilmelding {
+        margin-top: 0.5rem;
+    }
+`;
+
+const StyledTd = styled.td`
+    label {
+        text-indent: 2rem !important;
+    }
+`;
+
 export const KnyttJournalpostTilBehandling: React.FC = () => {
     const {
         settTilknyttedeBehandlingIder,
@@ -27,7 +45,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         hentSorterteBehandlinger,
         hentAktivBehandlingForJournalføring,
         tilknyttedeBehandlingIder,
-    } = useManuellJournalføringV2();
+    } = useManuellJournalføring();
 
     const [oppretterBehandling, settOppretterBehandling] = useState(false);
     const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = useState<
@@ -47,7 +65,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
             <Undertittel>Knytt til behandling</Undertittel>
             <br />
             {visOpprettBehandlingKnapp && (
-                <div className={'journalføring__opprett-behandling'}>
+                <StyledDiv>
                     <AlertStripe type="info">
                         {(dataForManuellJournalføring.data.fagsak?.behandlinger.length
                             ? 'Det finnes ingen åpne behandlinger på denne brukeren.'
@@ -56,7 +74,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     </AlertStripe>
                     <IkonKnapp
                         aria-labelledby={`utfør_opprett-fagsak-og-behandling-ved-journalføring`}
-                        className={'ikon-knapp'}
                         id={'opprettbehandling'}
                         onClick={() => {
                             settOppretterBehandling(true);
@@ -85,7 +102,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     {opprettBehandlingFeilmelding && (
                         <Feilmelding>{opprettBehandlingFeilmelding}</Feilmelding>
                     )}
-                </div>
+                </StyledDiv>
             )}
 
             {dataForManuellJournalføring.data.fagsak?.behandlinger.length && (
@@ -100,7 +117,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     <tbody className="tabell__body">
                         {hentSorterteBehandlinger().map((behandling: IBehandling) => (
                             <tr key={behandling.behandlingId}>
-                                <td className={'behandlingliste__tabell--behandlingtype'}>
+                                <StyledTd>
                                     <FamilieCheckbox
                                         erLesevisning={false}
                                         label={behandling.type}
@@ -128,11 +145,9 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             }
                                         }}
                                     />
-                                </td>
-                                <td className={'behandlingliste__tabell--status'}>
-                                    {behandling.status}
-                                </td>
-                                <td className={'behandlingliste__tabell--dato'}>
+                                </StyledTd>
+                                <td>{behandling.status}</td>
+                                <td>
                                     {formaterDato(
                                         familieDayjs(behandling.opprettetTidspunkt),
                                         datoformat.DATO_FORKORTTET

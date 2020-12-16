@@ -11,7 +11,7 @@ import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
-import ManuellJournalføringV2 from './ManuellJournalføringV2/ManuellJournalføringV2';
+import ManuellJournalføring from './ManuellJournalføring/ManuellJournalføring';
 
 const Container: React.FC = () => {
     const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
@@ -41,7 +41,7 @@ const Container: React.FC = () => {
                                 <Route
                                     exact={true}
                                     path="/oppgaver/journalfør/:oppgaveId"
-                                    component={ManuellJournalføringV2}
+                                    component={ManuellJournalføring}
                                 />
                             </Switch>
                         </FagsakProvider>

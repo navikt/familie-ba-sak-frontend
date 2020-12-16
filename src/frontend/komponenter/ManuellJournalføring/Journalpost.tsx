@@ -9,7 +9,7 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
+import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { journalpostTittelList } from './DokumentVelger';
 
@@ -18,7 +18,7 @@ const JournalpostDiv = styled.div`
 `;
 
 const JournalpostInfo: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring } = useManuellJournalføring();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const journalpost = dataForManuellJournalføring.data.journalpost;
@@ -37,7 +37,7 @@ const JournalpostMetadataDiv = styled.div`
 `;
 
 const JournalpostMetadata: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring } = useManuellJournalføring();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const journalpost = dataForManuellJournalføring.data.journalpost;
@@ -61,7 +61,7 @@ const EndreJournalpost: React.FC = () => {
         dataForManuellJournalføring,
         settJournalpostTittel,
         tilbakestillJournalpostTittel,
-    } = useManuellJournalføringV2();
+    } = useManuellJournalføring();
     const journalpostTittel =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.tittel

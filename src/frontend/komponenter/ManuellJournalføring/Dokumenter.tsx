@@ -4,11 +4,11 @@ import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
+import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import { DokumentVelger } from './DokumentVelger';
 
 export const Dokumenter: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring } = useManuellJournalføring();
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (

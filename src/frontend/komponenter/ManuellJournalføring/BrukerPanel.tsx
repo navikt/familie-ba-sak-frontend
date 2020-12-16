@@ -8,7 +8,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
+import { useManuellJournalføring } from '../../context/ManuellJournalføringContext';
 import { useFelt } from '../../familie-skjema/felt';
 import { Valideringsstatus } from '../../familie-skjema/typer';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
@@ -24,8 +24,18 @@ const BrukerPanelDiv = styled.div`
 const PanelGyldig = Ekspanderbartpanel;
 const PanelFeil = feilDekoratør(PanelGyldig);
 
+const StyledDiv = styled.div`
+    display: flex;
+`;
+
+const StyledKnapp = styled(Knapp)`
+    margin-left: 1rem;
+    margin-top: 1.8rem;
+    height: 1rem;
+`;
+
 export const BrukerPanel: React.FC = () => {
-    const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalføring();
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
 
@@ -52,7 +62,7 @@ export const BrukerPanel: React.FC = () => {
                             />
                         }
                     >
-                        <div className={'hentperson__inputogknapp'}>
+                        <StyledDiv>
                             <FamilieInput
                                 {...nyIdent.hentNavInputProps(!!feilMelding)}
                                 erLesevisning={false}
@@ -61,7 +71,7 @@ export const BrukerPanel: React.FC = () => {
                                 bredde={'XL'}
                                 placeholder={'fnr/dnr'}
                             />
-                            <Knapp
+                            <StyledKnapp
                                 onClick={() => {
                                     if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                                         settSpinner(true);
@@ -83,7 +93,7 @@ export const BrukerPanel: React.FC = () => {
                                 children={'Endre bruker'}
                                 spinner={spinner}
                             />
-                        </div>
+                        </StyledDiv>
                     </Panel>
                 </BrukerPanelDiv>
             );
