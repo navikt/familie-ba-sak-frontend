@@ -11,7 +11,7 @@ import {
     useManuellJournalføringV2,
 } from '../../context/ManuellJournalføringContextV2';
 import { BrukerHeader } from './BrukerHeader';
-import { DokumentPane } from './DokumentPane';
+import { DokumentPanel } from './DokumentPanel';
 import { JournalføringModal } from './JournalføringModal';
 import { JournalpostSkjema } from './JournalpostSkjema';
 
@@ -39,7 +39,7 @@ const ManuellJournalføringContentV2: React.FC = () => {
                                     visModal={() => settVisModal(true)}
                                     settFeilmelding={settFeilmelding}
                                 />
-                                <DokumentPane />
+                                <DokumentPanel />
                             </ToKolonnerDiv>
                             {visModal && (
                                 <JournalføringModal

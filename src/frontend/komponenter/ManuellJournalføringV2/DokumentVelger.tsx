@@ -34,13 +34,13 @@ const dokumentPanelDekoratør = <T extends unknown>(
     }
 `;
 
-const DokumentPanelUvalgt = dokumentPanelDekoratør(Lenkepanel);
+const DokumentBoksUvalgt = dokumentPanelDekoratør(Lenkepanel);
 
-const DokumentPanelValgt = dokumentPanelDekoratør(Ekspanderbartpanel);
+const DokumentBoksValgt = dokumentPanelDekoratør(Ekspanderbartpanel);
 
-const PanelFeilValgt = feilDekoratør(DokumentPanelValgt);
+const PanelFeilValgt = feilDekoratør(DokumentBoksValgt);
 
-const PanelFeilUvalgt = feilDekoratør(DokumentPanelUvalgt);
+const PanelFeilUvalgt = feilDekoratør(DokumentBoksUvalgt);
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
@@ -188,27 +188,27 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.journalpostId
             : undefined;
-    const DokumentPanel = harFeil(dokument)
+    const DokumentBoks = harFeil(dokument)
         ? valgt
             ? PanelFeilValgt
             : PanelFeilUvalgt
         : valgt
-        ? DokumentPanelValgt
-        : DokumentPanelUvalgt;
+        ? DokumentBoksValgt
+        : DokumentBoksUvalgt;
 
     return (
-        <div>
+        <>
             {valgt ? (
-                <DokumentPanel
+                <DokumentBoks
                     borderColor={navFarger.fokusFarge}
                     borderWidth={'3px'}
                     hoverBorderColor={navFarger.navBla}
                     tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
                 >
                     <EndreDokumentInfoPanel />
-                </DokumentPanel>
+                </DokumentBoks>
             ) : (
-                <DokumentPanel
+                <DokumentBoks
                     borderColor={navFarger.navMorkGra}
                     borderWidth={'1px'}
                     hoverBorderColor={navFarger.navBla}
@@ -221,8 +221,8 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                     }}
                 >
                     <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>
-                </DokumentPanel>
+                </DokumentBoks>
             )}
-        </div>
+        </>
     );
 };
