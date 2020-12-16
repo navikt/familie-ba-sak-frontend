@@ -3,24 +3,22 @@ import React from 'react';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { RessursStatus } from '@navikt/familie-typer';
-
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 
-export const JournalføringModal: React.FC = () => {
+interface JournalføringModalProps {
+    gjemme: () => void;
+}
+
+export const JournalføringModal: React.FC<JournalføringModalProps> = ({ gjemme }) => {
     const {
-        visModal,
-        settVisModal,
         manueltJournalfør,
-        senderInn,
-        dataForManuellJournalføring,
+        hentSortertBehandlinger,
         hentAktivBehandlingForJournalføring,
     } = useManuellJournalføringV2();
 
-    const behandlinger =
-        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-        dataForManuellJournalføring.data.fagsak?.behandlinger;
+    const [senderInn, settSenderInn] = React.useState(false);
+    const behandlinger = hentSortertBehandlinger();
 
     return (
         <UIModalWrapper
@@ -28,7 +26,7 @@ export const JournalføringModal: React.FC = () => {
                 className: 'søknad-modal',
                 tittel: 'Ønsker du å journalføre uten å knytte til behandling?',
                 lukkKnapp: false,
-                visModal: visModal,
+                visModal: true,
                 actions: [
                     <Knapp
                         key={'ja'}
@@ -37,8 +35,16 @@ export const JournalføringModal: React.FC = () => {
                         spinner={senderInn}
                         disabled={senderInn}
                         onClick={() => {
-                            settVisModal(false);
-                            manueltJournalfør();
+                            settSenderInn(true);
+                            manueltJournalfør()
+                                .then(() => {
+                                    settSenderInn(false);
+                                    gjemme();
+                                })
+                                .catch(() => {
+                                    settSenderInn(false);
+                                    gjemme();
+                                });
                         }}
                         children={'Ja, journalfør'}
                     />,
@@ -46,7 +52,7 @@ export const JournalføringModal: React.FC = () => {
                         key={'nei'}
                         mini={true}
                         onClick={() => {
-                            settVisModal(false);
+                            gjemme();
                         }}
                         children={
                             behandlinger && behandlinger.length > 0

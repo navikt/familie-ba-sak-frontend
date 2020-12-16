@@ -25,13 +25,15 @@ const StyledSkjema = styled(Skjemasteg)`
 
 const FeilPanel = feilPanel(Panel);
 
-export const JournalpostSkjema: React.FC = () => {
+interface JournalpostSkjemaProps {
+    visModal: () => void;
+}
+
+export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ visModal }) => {
     const {
         dataForManuellJournalføring,
-        senderInn,
         tilknyttedeBehandlingIder,
         manueltJournalfør,
-        settVisModal,
         hentFeil,
         erEndret,
         tilbakestillData,
@@ -40,6 +42,8 @@ export const JournalpostSkjema: React.FC = () => {
     const alleFeil = hentFeil() ?? [];
 
     const history = useHistory();
+
+    const [senderInn, settSenderInn] = React.useState(false);
 
     return (
         <div>
@@ -56,9 +60,12 @@ export const JournalpostSkjema: React.FC = () => {
                         alleFeil.length === 0
                             ? () => {
                                   if (tilknyttedeBehandlingIder.length < 1) {
-                                      settVisModal(true);
+                                      visModal();
                                   } else {
-                                      manueltJournalfør();
+                                      settSenderInn(true);
+                                      manueltJournalfør().finally(() => {
+                                          settSenderInn(false);
+                                      });
                                   }
                               }
                             : undefined

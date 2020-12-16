@@ -21,7 +21,8 @@ const ToKolonerDiv = styled.div`
 `;
 
 const ManuellJournalføringContentV2: React.FC = () => {
-    const { dataForManuellJournalføring, visModal } = useManuellJournalføringV2();
+    const { dataForManuellJournalføring } = useManuellJournalføringV2();
+    const [visModal, settVisModal] = React.useState(false);
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
@@ -31,10 +32,10 @@ const ManuellJournalføringContentV2: React.FC = () => {
                     Journalstatus.MOTTATT ? (
                         <div>
                             <ToKolonerDiv>
-                                <JournalpostSkjema />
+                                <JournalpostSkjema visModal={() => settVisModal(true)} />
                                 <DokumentPane />
                             </ToKolonerDiv>
-                            {visModal && <JournalføringModal />}
+                            {visModal && <JournalføringModal gjemme={() => settVisModal(false)} />}
                         </div>
                     ) : (
                         <AlertStripeAdvarsel

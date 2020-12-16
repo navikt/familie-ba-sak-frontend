@@ -20,8 +20,8 @@ const DokumentDataAlert = styled(AlertStripeFeil)`
 `;
 
 export const DokumentPane: React.FC = () => {
-    const { visDokument, dokumentData } = useManuellJournalføringV2();
-    return visDokument ? (
+    const { dokumentData } = useManuellJournalføringV2();
+    return (
         <DokumentDiv>
             {dokumentData.status === RessursStatus.SUKSESS && (
                 <iframe
@@ -36,7 +36,5 @@ export const DokumentPane: React.FC = () => {
                 <DokumentDataAlert children={dokumentData.frontendFeilmelding} />
             )}
         </DokumentDiv>
-    ) : (
-        <div />
     );
 };

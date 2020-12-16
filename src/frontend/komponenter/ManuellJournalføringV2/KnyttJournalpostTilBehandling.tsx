@@ -3,25 +3,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../context/AppContext';
 import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringContextV2';
 import Pluss from '../../ikoner/Pluss';
-import {
-    BehandlingKategori,
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingUnderkategori,
-    BehandlingÅrsak,
-    IBehandling,
-} from '../../typer/behandling';
-import { IFagsak } from '../../typer/fagsak';
-import { IDataForManuellJournalføring } from '../../typer/manuell-journalføring';
+import { BehandlingStatus, IBehandling } from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../utils/formatter';
 import IkonKnapp from '../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -31,18 +20,14 @@ const KnyttDiv = styled.div`
 `;
 
 export const KnyttJournalpostTilBehandling: React.FC = () => {
-    const { innloggetSaksbehandler } = useApp();
     const {
-        feilmeldinger,
         innsendingsfeilmelding,
-        opprettBehandling,
-        opprettFagsak,
         settTilknyttedeBehandlingIder,
         dataForManuellJournalføring,
+        opprettFagsakOgBehandling,
+        hentSortertBehandlinger,
         hentAktivBehandlingForJournalføring,
         tilknyttedeBehandlingIder,
-        visFeilmeldinger,
-        settFagsak,
     } = useManuellJournalføringV2();
 
     const [oppretterBehandling, settOppretterBehandling] = useState(false);
@@ -55,63 +40,8 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
     }
 
     const aktivBehandling = hentAktivBehandlingForJournalføring();
-    const behandlinger = dataForManuellJournalføring.data.fagsak?.behandlinger.sort((a, b) =>
-        familieDayjs(b.opprettetTidspunkt).diff(familieDayjs(a.opprettetTidspunkt))
-    );
     const visOpprettBehandlingKnapp =
         !aktivBehandling || aktivBehandling.status === BehandlingStatus.AVSLUTTET;
-
-    const onClickOpprett = async (data: IDataForManuellJournalføring) => {
-        const søker = data.person?.personIdent ?? '';
-        if (søker === '') {
-            settOpprettBehandlingFeilmelding(
-                'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
-            );
-        } else {
-            settOppretterBehandling(true);
-
-            const fagsak: IFagsak | undefined = !data.fagsak
-                ? await opprettFagsak({
-                      personIdent: data.person?.personIdent ?? null,
-                      aktørId: null,
-                  })
-                      .then((response: Ressurs<IFagsak>) =>
-                          response.status === RessursStatus.SUKSESS ? response.data : undefined
-                      )
-                      .catch(() => {
-                          settOppretterBehandling(false);
-                          return undefined;
-                      })
-                : data.fagsak;
-
-            if (fagsak) {
-                const behandlingType =
-                    behandlinger && behandlinger.length > 0
-                        ? Behandlingstype.REVURDERING
-                        : Behandlingstype.FØRSTEGANGSBEHANDLING;
-
-                const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
-                    behandlingType: behandlingType,
-                    behandlingÅrsak: BehandlingÅrsak.SØKNAD,
-                    kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
-                    navIdent: innloggetSaksbehandler?.navIdent,
-                    søkersIdent: søker,
-                    underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
-                }).then((response: Ressurs<IFagsak>) => response);
-
-                settOppretterBehandling(false);
-                if (fagsakMedBehandling.status === RessursStatus.SUKSESS) {
-                    settFagsak(fagsakMedBehandling);
-                } else if (fagsakMedBehandling.status === RessursStatus.FEILET) {
-                    settOpprettBehandlingFeilmelding(fagsakMedBehandling.frontendFeilmelding);
-                } else {
-                    settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
-                }
-            } else {
-                settOpprettBehandlingFeilmelding('Opprettelse av behandling feilet.');
-            }
-        }
-    };
 
     return (
         <KnyttDiv>
@@ -120,7 +50,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
             {visOpprettBehandlingKnapp && (
                 <div className={'journalføring__opprett-behandling'}>
                     <AlertStripe type="info">
-                        {(behandlinger && behandlinger.length > 0
+                        {(dataForManuellJournalføring.data.fagsak?.behandlinger.length
                             ? 'Det finnes ingen åpne behandlinger på denne brukeren.'
                             : 'Det er ikke registrert tidligere behandlinger på denne brukeren.') +
                             ' For å koble dokumentasjonen til en behandling, "Opprett ny behandling", eller journalfør uten å opprette behandling. '}
@@ -130,7 +60,20 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                         className={'ikon-knapp'}
                         id={'opprettbehandling'}
                         onClick={() => {
-                            onClickOpprett(dataForManuellJournalføring.data);
+                            settOppretterBehandling(true);
+                            opprettFagsakOgBehandling().then(fagsakRessurs => {
+                                settOppretterBehandling(false);
+                                if (
+                                    fagsakRessurs.status === RessursStatus.FEILET ||
+                                    fagsakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+                                ) {
+                                    settOpprettBehandlingFeilmelding(
+                                        fagsakRessurs.frontendFeilmelding
+                                    );
+                                } else {
+                                    settOpprettBehandlingFeilmelding('');
+                                }
+                            });
                         }}
                         label={'Opprett ny behandling'}
                         erLesevisning={false}
@@ -146,7 +89,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                 </div>
             )}
 
-            {behandlinger && behandlinger.length > 0 && (
+            {dataForManuellJournalføring.data.fagsak?.behandlinger.length && (
                 <table className="tabell">
                     <thead className="tabell__head">
                         <tr className="tabell__head__tr">
@@ -156,7 +99,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody className="tabell__body">
-                        {behandlinger.map((behandling: IBehandling) => (
+                        {hentSortertBehandlinger().map((behandling: IBehandling) => (
                             <tr key={behandling.behandlingId}>
                                 <td className={'behandlingliste__tabell--behandlingtype'}>
                                     <FamilieCheckbox
@@ -201,13 +144,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     </tbody>
                 </table>
             )}
-            {feilmeldinger.length > 0 && visFeilmeldinger && (
-                <Feiloppsummering
-                    tittel={'For å gå videre må du rette opp følgende:'}
-                    feil={feilmeldinger}
-                />
-            )}
-            {visFeilmeldinger && <Feilmelding children={innsendingsfeilmelding} />}
+            {innsendingsfeilmelding && <Feilmelding children={innsendingsfeilmelding} />}
         </KnyttDiv>
     );
 };

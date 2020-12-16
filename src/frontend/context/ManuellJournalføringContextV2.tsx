@@ -4,8 +4,6 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
-import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
-
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -17,10 +15,17 @@ import {
     AvsenderMottakerIdType,
     kjønnType,
     AvsenderMottaker,
+    byggSuksessRessurs,
 } from '@navikt/familie-typer';
 
 import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../api/fagsak';
-import { IBehandling } from '../typer/behandling';
+import {
+    BehandlingKategori,
+    Behandlingstype,
+    BehandlingUnderkategori,
+    BehandlingÅrsak,
+    IBehandling,
+} from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
     BrevkodeMap,
@@ -29,6 +34,7 @@ import {
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo, PersonType } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
+import familieDayjs from '../utils/familieDayjs';
 import { useApp } from './AppContext';
 
 const tomtPerson = {
@@ -57,34 +63,29 @@ const erAvsenderTomt = (avsender: AvsenderMottaker | undefined) => !avsender || 
 const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
     const valideringsfeilMap = new Map<unknown, string[]>();
 
+    const settValideringsFeil = (data: unknown, feil: string) => {
+        valideringsfeilMap.set(data, [...(valideringsfeilMap.get(data) || []), feil]);
+    };
+
     if (!dataForValidering.journalpost.tittel) {
-        valideringsfeilMap.set(dataForValidering.journalpost, [
-            ...(valideringsfeilMap.get(dataForValidering.journalpost) || []),
-            'Journalpost tittel må ikke være tom',
-        ]);
+        settValideringsFeil(dataForValidering.journalpost, 'Journalpost tittel må ikke være tom');
     }
 
     dataForValidering.journalpost.dokumenter?.forEach(dokument => {
         if (!dokument.tittel) {
-            valideringsfeilMap.set(dokument, [
-                ...(valideringsfeilMap.get(dokument) || []),
-                'Dokument tittel må ikke være tom',
-            ]);
+            settValideringsFeil(dokument, 'Dokument tittel må ikke være tom');
         }
     });
 
     if (erPersonTomt(dataForValidering.person)) {
-        valideringsfeilMap.set(dataForValidering.person, [
-            ...(valideringsfeilMap.get(dataForValidering.person) || []),
-            'Bruker er ikke satt',
-        ]);
+        settValideringsFeil(dataForValidering.person, 'Bruker er ikke satt');
     }
 
     if (erAvsenderTomt(dataForValidering.journalpost.avsenderMottaker)) {
-        valideringsfeilMap.set(dataForValidering.journalpost.avsenderMottaker, [
-            ...(valideringsfeilMap.get(dataForValidering.journalpost.avsenderMottaker) || []),
-            'Avsender er ikke satt',
-        ]);
+        settValideringsFeil(
+            dataForValidering.journalpost.avsenderMottaker,
+            'Avsender er ikke satt'
+        );
     }
 
     return valideringsfeilMap;
@@ -96,35 +97,43 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         byggTomRessurs<IDataForManuellJournalføring>()
     );
     const [dokumentData, settDokumentData] = React.useState(byggTomRessurs<string>());
-    const [visDokument, settVisDokument] = React.useState(false);
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
 
     const [valideringsfeil, settValideringsfeil] = React.useState(new Map<unknown, string[]>());
-    const harFeil = (data: unknown) => valideringsfeil.get(data);
+
+    const harFeil = (data: unknown) => !!valideringsfeil.get(data);
+
     const hentFeil = (data: unknown = undefined) =>
         data
-            ? valideringsfeil.get(data)
+            ? valideringsfeil.get(data) ?? []
             : Array.from(valideringsfeil, ([_, feil]) => feil).reduce(
                   (alleFeil, feil) => [...alleFeil, ...feil],
                   []
               );
+
     const erEndret = (data: unknown = undefined) => {
+        //TODO: support per data point query
         if (
             !data &&
             oppdatertData.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.status === RessursStatus.SUKSESS
         ) {
-            return JSON.stringify(oppdatertData) !== JSON.stringify(dataForManuellJournalføring);
+            return (
+                JSON.stringify(oppdatertData.data.journalpost) !==
+                    JSON.stringify(dataForManuellJournalføring.data.journalpost) ||
+                JSON.stringify(oppdatertData.data.person) !==
+                    JSON.stringify(dataForManuellJournalføring.data.person)
+            );
         }
         return false;
     };
 
     const tilbakestillData = () => {
-        settDataRessurs(dataForManuellJournalføring);
+        settDataRessurs(dataForManuellJournalføring, true);
     };
 
     //We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
-    //a copy of the data that is subject to change. All modification will be done on the copy
+    //a copy of the data that is subject to change. All modifications will be done on the copy
     //before <<journalføring>>
     const [oppdatertData, settOppdatertData] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
@@ -133,35 +142,42 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
     const history = useHistory();
 
-    const settDataRessurs = (dataRessurs: Ressurs<IDataForManuellJournalføring>) => {
+    const settDataRessurs = (
+        dataRessurs: Ressurs<IDataForManuellJournalføring>,
+        persistFagsak = false
+    ) => {
         settDataForManuellJournalføring(dataRessurs);
         const oppdatert: Ressurs<IDataForManuellJournalføring> = JSON.parse(
             JSON.stringify(dataRessurs)
         );
         if (oppdatert.status === RessursStatus.SUKSESS) {
-            if (!oppdatert.data.person) {
+            //we use tom object for person and avsender if they are not present in data
+            //because we need to use the objects to index the validation errors and "may" also index
+            //modification logs (See validaterData() for details)
+            if (erPersonTomt(oppdatert.data.person)) {
                 oppdatert.data.person = tomtPerson;
             }
-            if (!oppdatert.data.journalpost.avsenderMottaker) {
+            if (erAvsenderTomt(oppdatert.data.journalpost.avsenderMottaker)) {
                 oppdatert.data.journalpost.avsenderMottaker = tomtAvsender;
             }
+
+            //Select and view the first document by default
             const firstDokument = oppdatert.data.journalpost.dokumenter?.find(() => true);
             settValgtDokumentId(firstDokument?.dokumentInfoId);
             hentDokumentData(
                 oppdatert.data.journalpost.journalpostId,
                 firstDokument?.dokumentInfoId
             );
+
+            if (persistFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
+                oppdatert.data.fagsak = oppdatertData.data.fagsak;
+            }
         }
         settOppdatertData(oppdatert);
     };
 
-    const [visFeilmeldinger, settVisfeilmeldinger] = React.useState(false);
-    const [feilmeldinger, settFeilmeldinger] = React.useState<FeiloppsummeringFeil[]>([]);
     const [innsendingsfeilmelding, settInnsendingsfeilmelding] = React.useState('');
-    const [knyttTilFagsak, settKnyttTilFagsak] = React.useState(true);
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
-    const [senderInn, settSenderInn] = React.useState(false);
-    const [visModal, settVisModal] = React.useState(false);
 
     const finnDokument = (
         ressurs: Ressurs<IDataForManuellJournalføring>,
@@ -277,11 +293,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         });
     };
 
-    const erDokumentTittelEndret = (dokument: IDokumentInfo): boolean => {
-        const dokumentUendret = finnDokument(dataForManuellJournalføring, dokument.dokumentInfoId);
-        return dokument.tittel !== dokumentUendret?.tittel;
-    };
-
     const tilbakestillDokumentTittel = () => {
         const valgtDokument = finnValgtDokument(oppdatertData);
         const valgtDokumentUendret = finnValgtDokument(dataForManuellJournalføring);
@@ -315,7 +326,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         }
 
         settDokumentData(byggHenterRessurs());
-        settVisDokument(true);
         axiosRequest<string, void>({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentInfoId}`,
@@ -450,32 +460,85 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
             });
     };
 
-    const validerSkjema = () => {
-        const accFeilmeldinger: FeiloppsummeringFeil[] = [];
+    const hentSortertBehandlinger = () => {
+        return oppdatertData.status === RessursStatus.SUKSESS &&
+            oppdatertData.data.fagsak?.behandlinger.length
+            ? oppdatertData.data.fagsak.behandlinger.sort((a, b) =>
+                  familieDayjs(b.opprettetTidspunkt).diff(familieDayjs(a.opprettetTidspunkt))
+              )
+            : [];
+    };
 
-        if (oppdatertData.status !== RessursStatus.SUKSESS || !oppdatertData.data.person) {
-            accFeilmeldinger.push({
-                feilmelding: 'Du må knytte bruker til journalposten',
-                skjemaelementId: 'hent-person',
+    const opprettFagsakOgBehandling = async () => {
+        const stateFeil =
+            oppdatertData.status !== RessursStatus.SUKSESS
+                ? byggFeiletRessurs<IFagsak>('Ukjent feil ved applikasjonen')
+                : !oppdatertData.data.person?.personIdent
+                ? byggFeiletRessurs<IFagsak>(
+                      'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
+                  )
+                : undefined;
+
+        if (stateFeil) {
+            return new Promise<Ressurs<IFagsak>>(resolve => {
+                resolve(stateFeil);
             });
         }
 
-        settFeilmeldinger(accFeilmeldinger);
-        return accFeilmeldinger;
+        const data =
+            oppdatertData.status === RessursStatus.SUKSESS ? oppdatertData.data : undefined;
+
+        const fagsakRessurs = data?.fagsak
+            ? byggSuksessRessurs(data?.fagsak)
+            : await opprettFagsak({
+                  personIdent: data?.person?.personIdent ?? '',
+                  aktørId: null,
+              })
+                  .then((response: Ressurs<IFagsak>) => response)
+                  .catch(() => byggFeiletRessurs<IFagsak>('Ukjent feil ved opprett fagsak'));
+
+        if (fagsakRessurs.status !== RessursStatus.SUKSESS) {
+            return new Promise<Ressurs<IFagsak>>(resolve => {
+                resolve(fagsakRessurs);
+            });
+        }
+
+        const fagsak = fagsakRessurs.data;
+
+        const behandlingType = fagsak.behandlinger.length
+            ? Behandlingstype.REVURDERING
+            : Behandlingstype.FØRSTEGANGSBEHANDLING;
+
+        const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
+            behandlingType: behandlingType,
+            behandlingÅrsak: BehandlingÅrsak.SØKNAD,
+            kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
+            navIdent: innloggetSaksbehandler?.navIdent,
+            søkersIdent: data?.person?.personIdent ?? '',
+            underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
+        }).then((response: Ressurs<IFagsak>) => response);
+
+        if (fagsakMedBehandling.status === RessursStatus.SUKSESS) {
+            settFagsak(fagsakMedBehandling);
+        } else if (fagsakMedBehandling.status !== RessursStatus.FEILET) {
+            return new Promise<Ressurs<IFagsak>>(resolve => {
+                resolve(byggFeiletRessurs<IFagsak>('Opprettelse av behandling feilet.'));
+            });
+        }
+
+        return new Promise<Ressurs<IFagsak>>(resolve => {
+            resolve(fagsakMedBehandling);
+        });
     };
 
-    const manueltJournalfør = () => {
-        const accFeilmeldinger = validerSkjema();
-
+    const manueltJournalfør = async () => {
         if (
-            accFeilmeldinger.length === 0 &&
             oppdatertData.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             oppdatertData.data.person
         ) {
             const person = oppdatertData.data.person;
 
-            settSenderInn(true);
             axiosRequest<string, IRestJournalføring>({
                 method: 'POST',
                 url: `/familie-ba-sak/api/journalpost/${
@@ -510,23 +573,24 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
                 },
             })
                 .then((fagsakId: Ressurs<string>) => {
-                    settSenderInn(false);
                     if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
                         history.push(`/fagsak/${fagsakId.data}/saksoversikt`);
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
                         history.push('/oppgaver');
                     } else if (fagsakId.status === RessursStatus.FEILET) {
-                        settVisfeilmeldinger(true);
                         settInnsendingsfeilmelding(fagsakId.frontendFeilmelding);
                     }
+                    return fagsakId.status;
                 })
                 .catch(() => {
-                    settSenderInn(false);
-                    settVisfeilmeldinger(true);
                     settInnsendingsfeilmelding('Ukjent feil ved journalføring.');
+                    return RessursStatus.FEILET;
                 });
         } else {
-            settVisfeilmeldinger(true);
+            settInnsendingsfeilmelding('Ukjent feil ved applikasjonen');
+            return new Promise<RessursStatus>(resolve => {
+                resolve(RessursStatus.FEILET);
+            });
         }
     };
 
@@ -534,7 +598,6 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
         if (oppgaveId) {
             hentDataForManuellJournalføring(oppgaveId);
             settDokumentData(byggTomRessurs());
-            settVisDokument(false);
         }
     }, [oppgaveId]);
 
@@ -546,45 +609,40 @@ const [ManuellJournalføringProviderV2, useManuellJournalføringV2] = createUseC
     return {
         dataForManuellJournalføring: oppdatertData,
         settDataForManuellJournalføring: settOppdatertData,
-        dokumentData,
-        visDokument,
-        valgtDokumentId,
+
+        //The methods below manipulate selected document
         finnValgtDokument: (): IDokumentInfo | undefined => {
             return finnValgtDokument(oppdatertData);
         },
+        dokumentData,
+        valgtDokumentId,
         settDokumentTittel,
         settLogiskeVedlegg,
         settAvsender,
         tilbakestillDokumentTittel,
-        erDokumentTittelEndret,
+        velgOgHentDokumentData,
+
+        //The methods below manupulate jounalpost metadata
         settJournalpostTittel,
         tilbakestillJournalpostTittel,
-        hentAktivBehandlingForJournalføring,
+
+        //Bruker and fagsak/behandling
         endreBruker,
-        visFeilmeldinger,
-        settVisfeilmeldinger,
-        feilmeldinger,
-        settFeilmeldinger,
-        innsendingsfeilmelding,
-        settInnsendingsfeilmelding,
-        knyttTilFagsak,
-        settKnyttTilFagsak,
+        hentAktivBehandlingForJournalføring,
+        opprettFagsakOgBehandling,
+        hentSortertBehandlinger,
         tilknyttedeBehandlingIder,
         settTilknyttedeBehandlingIder,
-        opprettBehandling,
-        opprettFagsak,
-        senderInn,
-        settSenderInn,
-        manueltJournalfør,
-        visModal,
-        settVisModal,
-        valideringsfeil,
+
+        //Validate, check, revert data
         harFeil,
         hentFeil,
-        settFagsak,
-        velgOgHentDokumentData,
+        innsendingsfeilmelding,
         erEndret,
         tilbakestillData,
+
+        //<<Journalfør>>
+        manueltJournalfør,
     };
 });
 
