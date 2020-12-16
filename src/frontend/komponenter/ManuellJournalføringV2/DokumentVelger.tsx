@@ -78,7 +78,7 @@ const StyledDokumentIkon = styled(DokumentIkon)`
 const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ dokument }) => {
     return (
         <DokumentInfoStripeContainer>
-            <StyledDokumentIkon />
+            <StyledDokumentIkon width={48} height={48} />
             <DokumentTittelContainer>
                 <DokumentTittelDiv>{dokument.tittel || 'Ukjent'}</DokumentTittelDiv>
                 {dokument.logiskeVedlegg.map((it, index) => (

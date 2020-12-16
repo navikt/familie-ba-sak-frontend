@@ -45,7 +45,7 @@ export const BrukerPanel: React.FC = () => {
                     <Panel
                         tittel={
                             <DeltagerInfo
-                                ikon={<KontoSirkel />}
+                                ikon={<KontoSirkel width={48} height={48} />}
                                 navn={navn}
                                 undertittel={'Søker/Bruker'}
                                 ident={ident}

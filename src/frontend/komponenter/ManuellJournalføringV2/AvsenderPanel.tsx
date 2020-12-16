@@ -44,7 +44,7 @@ export const AvsenderPanel: React.FC = () => {
                     <Panel
                         tittel={
                             <DeltagerInfo
-                                ikon={<EmailIkon />}
+                                ikon={<EmailIkon width={48} height={48} />}
                                 navn={navn}
                                 ident={ident}
                                 undertittel="Avsender"
