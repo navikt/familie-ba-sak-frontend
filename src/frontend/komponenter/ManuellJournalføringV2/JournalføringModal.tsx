@@ -9,12 +9,12 @@ import { useManuellJournalføringV2 } from '../../context/ManuellJournalføringC
 import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 
 interface JournalføringModalProps {
-    gjemme: () => void;
+    gjem: () => void;
     settFeilmelding: (feilmelding: string) => void;
 }
 
 export const JournalføringModal: React.FC<JournalføringModalProps> = ({
-    gjemme,
+    gjem,
     settFeilmelding,
 }) => {
     const {
@@ -49,13 +49,13 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({
                                         fagsak.status === RessursStatus.FUNKSJONELL_FEIL
                                     ) {
                                         settFeilmelding(
-                                            `Feil ved manuelt journalfør: ${fagsak.frontendFeilmelding}`
+                                            `Feil ved manuell journalføring: ${fagsak.frontendFeilmelding}`
                                         );
                                     }
                                 })
                                 .finally(() => {
                                     settSenderInn(false);
-                                    gjemme();
+                                    gjem();
                                 });
                         }}
                         children={'Ja, journalfør'}
@@ -64,7 +64,7 @@ export const JournalføringModal: React.FC<JournalføringModalProps> = ({
                         key={'nei'}
                         mini={true}
                         onClick={() => {
-                            gjemme();
+                            gjem();
                         }}
                         children={
                             behandlinger && behandlinger.length > 0

@@ -43,7 +43,7 @@ const ManuellJournalføringContentV2: React.FC = () => {
                             </ToKolonnerDiv>
                             {visModal && (
                                 <JournalføringModal
-                                    gjemme={() => settVisModal(false)}
+                                    gjem={() => settVisModal(false)}
                                     settFeilmelding={settFeilmelding}
                                 />
                             )}
