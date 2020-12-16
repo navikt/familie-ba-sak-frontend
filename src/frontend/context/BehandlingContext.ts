@@ -20,7 +20,6 @@ import {
     sider,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
 import { BehandlerRolle, BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
-import { tilFeilside } from '../utils/commons';
 import { hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
@@ -83,7 +82,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         } else if (rolle && rolle >= BehandlerRolle.VEILEDER) {
             return true;
         } else {
-            tilFeilside();
+            // Default til lesevisning dersom vi er usikre
             return true;
         }
     };
