@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -34,11 +32,6 @@ const StyledKnapp = styled(Knapp)`
     margin-left: 1rem;
     margin-top: 1.8rem;
     height: 1rem;
-`;
-
-const FeilMelding = styled(Normaltekst)`
-    margin-top: 15px;
-    color: ${navFarger.navRod};
 `;
 
 export const BrukerPanel: React.FC = () => {
@@ -72,6 +65,7 @@ export const BrukerPanel: React.FC = () => {
                         <StyledDiv>
                             <FamilieInput
                                 {...nyIdent.hentNavInputProps(!!feilMelding)}
+                                feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
                                 erLesevisning={false}
                                 id={'hent-person'}
                                 label={'Skriv inn fødselsnummer/D-nummer'}
@@ -101,7 +95,6 @@ export const BrukerPanel: React.FC = () => {
                                 spinner={spinner}
                             />
                         </StyledDiv>
-                        {!!feilMelding && <FeilMelding>{feilMelding}</FeilMelding>}
                     </Panel>
                 </BrukerPanelDiv>
             );
