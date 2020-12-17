@@ -62,6 +62,20 @@ const erPersonTom = (person: IPersonInfo | undefined) => !person || !person.pers
 
 const erAvsenderTom = (avsender: AvsenderMottaker | undefined) => !avsender || !avsender.navn;
 
+const patchTomFelt = (ress: Ressurs<IDataForManuellJournalføring>) => {
+    // we use tom object for person and avsender if they are not present in data
+    // because we need to use the objects to index the validation errors (See validaterData() for details)
+    if (ress.status === RessursStatus.SUKSESS) {
+        if (!ress.data.person) {
+            ress.data.person = tomPerson;
+        }
+        if (!ress.data.journalpost.avsenderMottaker) {
+            ress.data.journalpost.avsenderMottaker = tomAvsender;
+        }
+    }
+    return ress;
+};
+
 const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
     const valideringsfeilMap = new Map<unknown, string[]>();
 
@@ -113,16 +127,13 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                   []
               );
 
-    const erEndret = () => {
-        const kopi = lagerDataKopi(dataForManuellJournalføring);
-        return (
-            oppdatertData.status === RessursStatus.SUKSESS &&
-            kopi.status === RessursStatus.SUKSESS &&
-            (JSON.stringify(oppdatertData.data.journalpost) !==
-                JSON.stringify(kopi.data.journalpost) ||
-                JSON.stringify(oppdatertData.data.person) !== JSON.stringify(kopi.data.person))
-        );
-    };
+    const erEndret = () =>
+        oppdatertData.status === RessursStatus.SUKSESS &&
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+        (JSON.stringify(oppdatertData.data.journalpost) !==
+            JSON.stringify(dataForManuellJournalføring.data.journalpost) ||
+            JSON.stringify(oppdatertData.data.person) !==
+                JSON.stringify(dataForManuellJournalføring.data.person));
 
     const tilbakestillData = () => {
         settDataRessurs(dataForManuellJournalføring, true);
@@ -138,39 +149,22 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
     const history = useHistory();
 
-    const lagerDataKopi = (
-        dataRessurs: Ressurs<IDataForManuellJournalføring>,
-        holdeFagsak = false
-    ) => {
-        const dataKopiert: Ressurs<IDataForManuellJournalføring> = JSON.parse(
-            JSON.stringify(dataRessurs)
-        );
-        if (dataKopiert.status === RessursStatus.SUKSESS) {
-            //we use tom object for person and avsender if they are not present in data
-            //because we need to use the objects to index the validation errors (See validaterData() for details)
-            if (erPersonTom(dataKopiert.data.person)) {
-                dataKopiert.data.person = tomPerson;
-            }
-            if (erAvsenderTom(dataKopiert.data.journalpost.avsenderMottaker)) {
-                dataKopiert.data.journalpost.avsenderMottaker = tomAvsender;
-            }
-
-            //the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
-            //overwrite the change because creating fagsak is not possible to revert
-            if (holdeFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
-                dataKopiert.data.fagsak = oppdatertData.data.fagsak;
-            }
-        }
-
-        return dataKopiert;
-    };
+    const lagerDataKopi = (dataRessurs: Ressurs<IDataForManuellJournalføring>) =>
+        JSON.parse(JSON.stringify(dataRessurs));
 
     const settDataRessurs = (
         dataRessurs: Ressurs<IDataForManuellJournalføring>,
         holdeFagsak = false
     ) => {
         settDataForManuellJournalføring(dataRessurs);
-        const oppdatert = lagerDataKopi(dataRessurs, holdeFagsak);
+        const oppdatert = lagerDataKopi(dataRessurs);
+
+        //the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
+        //overwrite the change because creating fagsak is not possible to revert
+        if (holdeFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
+            oppdatert.data.fagsak = oppdatertData.data.fagsak;
+        }
+
         settOppdatertData(oppdatert);
 
         //after updating data, we need extra steps for business concerns
@@ -315,7 +309,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             påvirkerSystemLaster: true,
         })
             .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
-                settDataRessurs(hentetDataForManuellJournalføring);
+                settDataRessurs(patchTomFelt(hentetDataForManuellJournalføring));
             })
             .catch((_error: AxiosError) => {
                 settDataRessurs(byggFeiletRessurs('Ukjent feil ved henting av oppgave'));
@@ -363,38 +357,21 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const settJournalpostTittel = (tittel: string | undefined) => {
-        if (oppdatertData.status === RessursStatus.SUKSESS) {
-            settOppdatertData({
-                ...oppdatertData,
-                data: {
-                    ...oppdatertData.data,
-                    journalpost: {
-                        ...oppdatertData.data.journalpost,
-                        tittel: tittel,
-                    },
-                },
-            });
+        const oppdatert = { ...oppdatertData };
+        if (oppdatert.status === RessursStatus.SUKSESS) {
+            oppdatert.data.journalpost.tittel = tittel;
+            settOppdatertData(oppdatert);
         }
     };
 
     const settAvsender = (navn: string) => {
-        if (oppdatertData.status === RessursStatus.SUKSESS) {
-            settOppdatertData({
-                ...oppdatertData,
-                data: {
-                    ...oppdatertData.data,
-                    journalpost: {
-                        ...oppdatertData.data.journalpost,
-                        avsenderMottaker: {
-                            navn: navn,
-                            id: '',
-                            land: '',
-                            erLikBruker: false,
-                            type: AvsenderMottakerIdType.UKJENT,
-                        },
-                    },
-                },
-            });
+        const oppdatert = { ...oppdatertData };
+        if (
+            oppdatert.status === RessursStatus.SUKSESS &&
+            oppdatert.data.journalpost.avsenderMottaker
+        ) {
+            oppdatert.data.journalpost.avsenderMottaker.navn = navn;
+            settOppdatertData(oppdatert);
         }
     };
 
@@ -408,25 +385,15 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         person: Ressurs<IPersonInfo>,
         fagsak: Ressurs<IFagsak | undefined>
     ) => {
+        const oppdatert = { ...oppdatertData };
         if (
-            oppdatertData.status === RessursStatus.SUKSESS &&
+            oppdatert.status === RessursStatus.SUKSESS &&
             person.status === RessursStatus.SUKSESS &&
             fagsak.status === RessursStatus.SUKSESS
         ) {
-            settOppdatertData({
-                ...oppdatertData,
-                data: {
-                    ...oppdatertData.data,
-                    fagsak: fagsak.data,
-                    journalpost: {
-                        ...oppdatertData.data.journalpost,
-                        bruker: {
-                            id: person.data.personIdent,
-                        },
-                    },
-                    person: person.data,
-                },
-            });
+            oppdatert.data.person = person.data;
+            oppdatert.data.fagsak = fagsak.data;
+            settOppdatertData(oppdatert);
         }
     };
 
