@@ -93,8 +93,6 @@ export const BrukerPanel: React.FC = () => {
                                             .finally(() => {
                                                 settSpinner(false);
                                             });
-                                    } else {
-                                        settFeilMelding('Ugyldig person ident');
                                     }
                                 }}
                                 children={'Endre bruker'}
