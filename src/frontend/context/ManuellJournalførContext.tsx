@@ -135,8 +135,20 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             JSON.stringify(oppdatertData.data.person) !==
                 JSON.stringify(dataForManuellJournalføring.data.person));
 
+    const tilbakestillBruker = () => {
+        if (
+            oppdatertData.status === RessursStatus.SUKSESS &&
+            dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+            oppdatertData.data.person?.personIdent !==
+                dataForManuellJournalføring.data.person?.personIdent
+        ) {
+            endreBruker(dataForManuellJournalføring.data.person?.personIdent ?? '');
+        }
+    };
+
     const tilbakestillData = () => {
         settDataRessurs(dataForManuellJournalføring, true);
+        tilbakestillBruker();
     };
 
     // We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
