@@ -87,12 +87,14 @@ export const BrukerPanel: React.FC = () => {
                                                 settFeilMelding(
                                                     ressur.status === RessursStatus.SUKSESS
                                                         ? ''
-                                                        : 'Ukjent feil ved hent person.'
+                                                        : 'Ukjent feil ved hent person'
                                                 );
                                             })
                                             .finally(() => {
                                                 settSpinner(false);
                                             });
+                                    } else {
+                                        settFeilMelding('Ugyldig person ident');
                                     }
                                 }}
                                 children={'Endre bruker'}
