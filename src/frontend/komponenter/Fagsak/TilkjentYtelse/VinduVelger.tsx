@@ -1,10 +1,43 @@
 import React from 'react';
 
-import classNames from 'classnames';
+import styled from 'styled-components';
 
+import navFarger from 'nav-frontend-core';
 import { Undertekst } from 'nav-frontend-typografi';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
+
+const VinduVelgerKnapp = styled.button<{ valgt: boolean }>`
+    color: ${({ valgt }) => (valgt ? '#fff' : navFarger.navMorkGra)};
+    padding: 0.5rem;
+    border: 0.0625rem solid ${navFarger.navGra20};
+    background-color: ${({ valgt }) => (valgt ? navFarger.navGra80 : 'none')};
+
+    :first-child {
+        border-bottom-left-radius: 0.25rem;
+        border-top-left-radius: 0.25rem;
+        margin-right: -0.0625rem;
+        box-sizing: border-box;
+    }
+
+    :last-child {
+        border-bottom-right-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        margin-left: -0.0625rem;
+    }
+
+    :hover {
+        background-color: ${({ valgt }) => (valgt ? navFarger.navGra80 : navFarger.navLysGra)};
+    }
+
+    :focus {
+        background-color: ${({ valgt }) => (valgt ? navFarger.navGra80 : navFarger.navLysGra)};
+        outline: ${({ valgt }) =>
+            `0.1875rem solid ${valgt ? navFarger.navOransjeLighten20 : navFarger.fokusFarge}`};
+        outline-offset: -0.125rem;
+        position: relative;
+    }
+`;
 
 const Vinduvelger: React.FunctionComponent = () => {
     const { tidslinjeVinduer, endreTidslinjeVindu, aktivtTidslinjeVindu } = useTidslinje();
@@ -13,21 +46,14 @@ const Vinduvelger: React.FunctionComponent = () => {
         <div>
             {tidslinjeVinduer.map(vindu => {
                 return (
-                    <button
+                    <VinduVelgerKnapp
                         key={vindu.id}
                         aria-label={vindu.label}
-                        className={classNames(
-                            'tidslinje-header__vinduvelger',
-                            `${
-                                aktivtTidslinjeVindu.vindu.id === vindu.id
-                                    ? 'tidslinje-header__vinduvelger--aktiv'
-                                    : ''
-                            }`
-                        )}
+                        valgt={aktivtTidslinjeVindu.vindu.id === vindu.id}
                         onClick={() => endreTidslinjeVindu(vindu)}
                     >
                         <Undertekst>{vindu.label}</Undertekst>
-                    </button>
+                    </VinduVelgerKnapp>
                 );
             })}
         </div>
