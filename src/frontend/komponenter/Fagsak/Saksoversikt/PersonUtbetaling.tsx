@@ -8,6 +8,7 @@ import {
     YtelseType,
     ytelsetype,
 } from '../../../typer/beregning';
+import { formaterBeløp } from '../../../utils/formatter';
 import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 
@@ -34,7 +35,9 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
                                       )
                                     : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
                             </Normaltekst>
-                            <Normaltekst>{`${utbetalingsperiodeDetalj.utbetaltPerMnd} kr`}</Normaltekst>
+                            <Normaltekst>
+                                {formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}
+                            </Normaltekst>
                         </div>
                     );
                 })}

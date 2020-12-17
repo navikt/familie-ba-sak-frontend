@@ -51,7 +51,9 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                     'tilkjentytelse-informasjonsboks__header__info__totalbeløp'
                                 }
                             >
-                                {`${utbetalingsperioder.reduce(summerTotalbeløpForPeriode, 0)} kr`}
+                                {formaterBeløp(
+                                    utbetalingsperioder.reduce(summerTotalbeløpForPeriode, 0)
+                                )}
                             </span>
                         </Normaltekst>
                     ) : (
