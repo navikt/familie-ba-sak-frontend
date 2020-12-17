@@ -3,7 +3,7 @@ import React from 'react';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { IUtbetalingsperiodeDetalj, IUtbetalingsperiode } from '../../../typer/beregning';
-import { sorterFødselsdato } from '../../../utils/formatter';
+import { formaterBeløp, sorterFødselsdato } from '../../../utils/formatter';
 import PersonUtbetaling from './PersonUtbetaling';
 
 interface IUtbetalingerProps {
@@ -47,7 +47,11 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ utbetalingsperiode }) => {
                 )}
                 <li className={'saksoversikt__utbetalinger__totallinje'}>
                     <Normaltekst>Totalt utbetalt/mnd</Normaltekst>
-                    <Normaltekst>{`${utbetalingsperiode?.utbetaltPerMnd ?? '-'} kr`}</Normaltekst>
+                    <Normaltekst>
+                        {utbetalingsperiode
+                            ? formaterBeløp(utbetalingsperiode.utbetaltPerMnd)
+                            : '-'}
+                    </Normaltekst>
                 </li>
                 <hr />
             </ul>
