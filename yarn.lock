@@ -7974,9 +7974,9 @@ nav-frontend-ikoner-assets@2.0.8, nav-frontend-ikoner-assets@^2.0.3:
   integrity sha512-By6NVnUoKwIBxOeJlhpM1NEMtShlVCG6jLNwi6HgB9uZzF3Ac0NRz1amDdNfASg+MBfmoZNJE8WP06SiKvEV+A==
 
 nav-frontend-ikonknapper@^1.0.9:
-  version "1.0.25"
-  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-1.0.25.tgz#44c840784e50d8107afef5fbe2ef10c62bdb0a34"
-  integrity sha512-gXAzR1EtR0EjEyMVuNj9gseTgAaWVPxq6Q2kqdhPrR0mZMw+E7aKuXrEWyZWxWjqs4zXQWNM/7IUtuQLdjT6fA==
+  version "1.0.29"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-1.0.29.tgz#7d984334c5bb18312b7fa5134876ba00a1909ee7"
+  integrity sha512-CtK0BpMA701zHTvgcC3WK/0MxfOHLEnm8h9zgdExeJaQ1OxPFzqFiuoqno79nZ6EZ+7MTlvwKm1thXFt3fJ9mg==
 
 nav-frontend-js-utils@1.0.15, nav-frontend-js-utils@^1.0.13, nav-frontend-js-utils@^1.0.14:
   version "1.0.15"
@@ -7996,9 +7996,9 @@ nav-frontend-knapper@^2.0.16, nav-frontend-knapper@^2.0.4, nav-frontend-knapper@
   integrity sha512-8Zw0RZ9+kmD6Z6liscEr5a9UmMnjMCUlr8Q4y1OXVh5fd/eHbgkV1Dp0IPUYoHikA8eL9cThx3OMh0+XIYmwEA==
 
 nav-frontend-lenkepanel-style@^0.3.31:
-  version "0.3.42"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lenkepanel-style/-/nav-frontend-lenkepanel-style-0.3.42.tgz#34f1ec2531f222222e385c7f581801915d5267ba"
-  integrity sha512-rN+B4Fc0pKK6ZEFr/A0yUypyyCwuRDXkrrhPEwc/1fTYHTzgwgU23fkhXpYWknYVumXqHpKM9hzWUiYSKAaoEQ==
+  version "0.3.44"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lenkepanel-style/-/nav-frontend-lenkepanel-style-0.3.44.tgz#f5637299abe328b06312d004f22178ed856bba24"
+  integrity sha512-4V4plHrDlAU1BKXisvaUr7J3jILVuoQ0XaGYmFb42DV9X8KhKp2cWhRH+dkQhLgbboaAPpHBuYGB7oA+DtwuTQ==
 
 nav-frontend-lenkepanel@^1.0.55:
   version "1.0.61"
