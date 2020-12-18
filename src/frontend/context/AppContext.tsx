@@ -234,19 +234,23 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     };
 });
 
+const AuthOgHttpProvider: React.FC = ({ children }) => {
+    const { innloggetSaksbehandler, settAutentisert } = useAuth();
+
+    return (
+        <HttpProvider
+            innloggetSaksbehandler={innloggetSaksbehandler}
+            settAutentisert={settAutentisert}
+        >
+            <AppContentProvider>{children}</AppContentProvider>
+        </HttpProvider>
+    );
+};
+
 const AppProvider: React.FC<IProps> = ({ autentisertSaksbehandler, children }) => {
     return (
         <AuthProvider autentisertSaksbehandler={autentisertSaksbehandler}>
-            {({ innloggetSaksbehandler, settAutentisert }: AuthProviderExports) => {
-                return (
-                    <HttpProvider
-                        innloggetSaksbehandler={innloggetSaksbehandler}
-                        settAutentisert={settAutentisert}
-                    >
-                        <AppContentProvider>{children}</AppContentProvider>
-                    </HttpProvider>
-                );
-            }}
+            <AuthOgHttpProvider children={children} />
         </AuthProvider>
     );
 };
