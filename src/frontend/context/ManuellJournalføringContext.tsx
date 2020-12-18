@@ -6,6 +6,7 @@ import { useHistory, useParams } from 'react-router';
 
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 
+import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -30,7 +31,8 @@ import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 
 const [ManuellJournalføringProvider, useManuellJournalføring] = createUseContext(() => {
-    const { axiosRequest, innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler } = useApp();
+    const { request } = useHttp();
     const history = useHistory();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
 
@@ -90,7 +92,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
 
     const hentDataForManuellJournalføring = (oppgaveId: string) => {
         settDataForManuellJournalføring(byggHenterRessurs());
-        axiosRequest<IDataForManuellJournalføring, void>({
+        request<void, IDataForManuellJournalføring>({
             method: 'GET',
             url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
             påvirkerSystemLaster: true,
@@ -120,7 +122,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     };
 
     const opprettFagsak = async (data: IOpprettEllerHentFagsakData): Promise<Ressurs<IFagsak>> => {
-        return axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
+        return request<IOpprettEllerHentFagsakData, IFagsak>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
@@ -134,7 +136,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
     };
 
     const opprettBehandling = async (data: IOpprettBehandlingData): Promise<Ressurs<IFagsak>> => {
-        return axiosRequest<IFagsak, IOpprettBehandlingData>({
+        return request<IOpprettBehandlingData, IFagsak>({
             data,
             method: 'POST',
             url: '/familie-ba-sak/api/behandlinger',
@@ -159,7 +161,7 @@ const [ManuellJournalføringProvider, useManuellJournalføring] = createUseConte
                 dataForManuellJournalføring.data.journalpost.dokumenter;
 
             settSenderInn(true);
-            axiosRequest<string, IRestOppdaterJournalpost>({
+            request<IRestOppdaterJournalpost, string>({
                 method: 'PUT',
                 url: `/familie-ba-sak/api/journalpost/${
                     dataForManuellJournalføring.data.journalpost.journalpostId

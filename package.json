@@ -35,6 +35,7 @@
     "@navikt/familie-clipboard": "^3.1.0",
     "@navikt/familie-form-elements": "^2.0.14",
     "@navikt/familie-header": "^2.0.14",
+    "@navikt/familie-http": "^1.0.1-alpha.315",
     "@navikt/familie-ikoner": "^3.1.0",
     "@navikt/familie-typer": "^3.0.9",
     "@navikt/familie-visittkort": "^2.1.18",

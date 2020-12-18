@@ -5,6 +5,7 @@ import { useHistory } from 'react-router';
 
 import { Knapp } from 'nav-frontend-knapper';
 
+import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -39,7 +40,8 @@ const initiellModalVerdi = {
 };
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsak }) => {
-    const { axiosRequest, hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
@@ -70,7 +72,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         } else if (manglerBegrunnelse) {
             settInnsendtVedtak(byggFeiletRessurs('Mangler begrunnelse ved innsending'));
         } else {
-            axiosRequest<IFagsak, ITotrinnskontrollData>({
+            request<ITotrinnskontrollData, IFagsak>({
                 method: 'POST',
                 data: totrinnskontrollData,
                 url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/iverksett-vedtak`,

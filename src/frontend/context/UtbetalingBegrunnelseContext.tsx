@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import constate from 'constate';
 
+import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IFagsak } from '../typer/fagsak';
@@ -11,7 +12,6 @@ import {
     IVedtakForBehandling,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
-import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 interface IProps {
@@ -21,7 +21,7 @@ interface IProps {
 
 const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
     ({ aktivVedtak, fagsak }: IProps) => {
-        const { axiosRequest } = useApp();
+        const { request } = useHttp();
 
         const { settFagsak } = useFagsakRessurser();
 
@@ -49,7 +49,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
         }, [aktivVedtak]);
 
         const hentVilkårBegrunnelseTekster = () => {
-            axiosRequest<Vilkårsbegrunnelser, void>({
+            request<void, Vilkårsbegrunnelser>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/vilkaarsbegrunnelser`,
             }).then((vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>) => {
@@ -79,7 +79,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
 
         const leggTilUtbetalingBegrunnelse = (data: IRestUtbetalingBegrunnelse) => {
             håndterEndretUtbetalingBegrunnelser(
-                axiosRequest<IFagsak, IRestUtbetalingBegrunnelse>({
+                request<IRestUtbetalingBegrunnelse, IFagsak>({
                     method: 'POST',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse`,
                     data,
@@ -89,7 +89,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
 
         const slettUtbetalingBegrunnelse = (utbetalingBegrunnelseId: number) => {
             håndterEndretUtbetalingBegrunnelser(
-                axiosRequest<IFagsak, IRestUtbetalingBegrunnelse>({
+                request<IRestUtbetalingBegrunnelse, IFagsak>({
                     method: 'DELETE',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${utbetalingBegrunnelseId}`,
                 }),
@@ -102,7 +102,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             data: IRestPutUtbetalingBegrunnelse
         ) => {
             håndterEndretUtbetalingBegrunnelser(
-                axiosRequest<IFagsak, IRestPutUtbetalingBegrunnelse>({
+                request<IRestPutUtbetalingBegrunnelse, IFagsak>({
                     method: 'PUT',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${utbetalingBegrunnelseId}`,
                     data,

@@ -3,6 +3,7 @@ import React from 'react';
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 
+import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -14,13 +15,12 @@ import {
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPersonInfo } from '../typer/person';
-import { useApp } from './AppContext';
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsak, settFagsak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
     const [logg, settLogg] = React.useState<Ressurs<ILogg[]>>(byggTomRessurs());
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
 
     React.useEffect(() => {
         if (fagsak.status !== RessursStatus.SUKSESS && fagsak.status !== RessursStatus.HENTER) {
@@ -32,7 +32,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
 
     const hentFagsak = (fagsakId: string): void => {
         settFagsak(byggHenterRessurs());
-        axiosRequest<IFagsak, void>({
+        request<void, IFagsak>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/${fagsakId}`,
             påvirkerSystemLaster: true,
@@ -63,7 +63,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
 
     const hentBruker = (personIdent: string): void => {
         settBruker(byggHenterRessurs());
-        axiosRequest<IPersonInfo, void>({
+        request<void, IPersonInfo>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
             headers: {
@@ -77,7 +77,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
 
     const hentLogg = (behandlingId: number): void => {
         settLogg(byggHenterRessurs());
-        axiosRequest<ILogg[], void>({
+        request<void, ILogg[]>({
             method: 'GET',
             url: `/familie-ba-sak/api/logg/${behandlingId}`,
         })

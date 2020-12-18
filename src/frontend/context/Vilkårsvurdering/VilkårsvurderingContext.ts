@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import constate from 'constate';
 
+import { useHttp } from '@navikt/familie-http';
+
 import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
 import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
@@ -12,7 +14,6 @@ import {
     IVilkårResultat,
     VilkårType,
 } from '../../typer/vilkår';
-import { useApp } from '../AppContext';
 import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 
 interface IProps {
@@ -27,7 +28,7 @@ export enum VilkårSubmit {
 }
 
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehandling }: IProps) => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
     const [vilkårSubmit, settVilkårSubmit] = React.useState(VilkårSubmit.NONE);
 
     const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
@@ -56,7 +57,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
     ) => {
         settVilkårSubmit(VilkårSubmit.PUT);
 
-        return axiosRequest<IFagsak, IRestPersonResultat>({
+        return request<IRestPersonResultat, IFagsak>({
             method: 'PUT',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
             data: {
@@ -81,7 +82,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
     const deleteVilkår = (personIdent: string, vilkårId: number) => {
         settVilkårSubmit(VilkårSubmit.DELETE);
 
-        return axiosRequest<IFagsak, string>({
+        return request<string, IFagsak>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${vilkårId}`,
             data: personIdent,
@@ -91,7 +92,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
     const postVilkår = (personIdent: string, vilkårType: VilkårType) => {
         settVilkårSubmit(VilkårSubmit.DELETE);
 
-        return axiosRequest<IFagsak, IRestNyttVilkår>({
+        return request<IRestNyttVilkår, IFagsak>({
             method: 'POST',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}`,
             data: { personIdent, vilkårType },

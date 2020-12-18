@@ -5,9 +5,9 @@ import { useHistory } from 'react-router';
 import AlertStripe from 'nav-frontend-alertstriper';
 
 import { Søk } from '@navikt/familie-header';
+import { useHttp } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
 import { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import FagsakDeltagerkort from './FagsakDeltagerkort';
 import OpprettFagsakModal from './OpprettFagsakModal';
@@ -16,7 +16,7 @@ import OpprettFagsakModal from './OpprettFagsakModal';
 const validator = require('@navikt/fnrvalidator');
 
 const FagsakDeltagerSøk: React.FC = () => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
     const history = useHistory();
     const [resultat, settResultat] = React.useState<IFagsakDeltager[] | undefined>(undefined);
     const [spinner, settSpinner] = React.useState<boolean>(false);
@@ -33,7 +33,7 @@ const FagsakDeltagerSøk: React.FC = () => {
     const søk = (personIdent: string): void => {
         slettResultat();
         settSpinner(true);
-        axiosRequest<IFagsakDeltager[], ISøkParam>({
+        request<ISøkParam, IFagsakDeltager[]>({
             method: 'POST',
             url: 'familie-ba-sak/api/fagsaker/sok',
             data: {

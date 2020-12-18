@@ -810,6 +810,15 @@
     nav-frontend-typografi-style "^1.0.18"
     prop-types "^15.7.2"
 
+"@navikt/familie-http@^1.0.1-alpha.315":
+  version "1.0.1-alpha.315"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.1-alpha.315.tgz#3ed7c01c5073d1b73be6b399f647ba5b455e95fa"
+  integrity sha512-gnJvPfTrQk1MIvtV16HPLGmt4NlaBxL6HHGv2AIkGvxTEI4KKnc452lhTsUD32d3m3uaXClswmdKRIEMmdlthA==
+  dependencies:
+    "@navikt/familie-typer" "^3.0.10"
+    "@sentry/core" "^5.27.3"
+    constate "^3.1.0"
+
 "@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.7":
   version "3.1.7"
   resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.7.tgz#894432ff11fee3ddcaddcb031938a67b9f551b5b"
@@ -3433,7 +3442,7 @@ constants-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
   integrity sha1-wguW2MYXdIqvHBYCF2DNJ/y4y3U=
 
-constate@^3.0.1:
+constate@^3.0.1, constate@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/constate/-/constate-3.1.0.tgz#6a84da7f8051334a77a6a92860e4058b2eae96c1"
   integrity sha512-a8hPXRJzcllP5D/9twMRI2VkAiZwgcY/fXyTHQqvv8EBZxzjEh6cAFlsHqnBQ7GtPWlNK11zD4pbIqO1jP0ReA==

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
+import { useHttp } from '@navikt/familie-http';
 import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { FamilieAxiosRequestConfig, useApp } from '../context/AppContext';
+import { FamilieAxiosRequestConfig } from '../context/AppContext';
 import { Felt, FieldDictionary, ISkjema, Valideringsstatus } from './typer';
 
 export const useSkjema = <Felter, SkjemaRespons>({
@@ -12,7 +13,7 @@ export const useSkjema = <Felter, SkjemaRespons>({
     felter: FieldDictionary<Felter>;
     skjemanavn: string;
 }) => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
     const [visFeilmeldinger, settVisfeilmeldinger] = useState(false);
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs<SkjemaRespons>());
 
@@ -60,7 +61,7 @@ export const useSkjema = <Felter, SkjemaRespons>({
         if (kanSendeSkjema()) {
             settSubmitRessurs(byggHenterRessurs());
 
-            axiosRequest<SkjemaRespons, SkjemaData>(familieAxiosRequestConfig).then(
+            request<SkjemaData, SkjemaRespons>(familieAxiosRequestConfig).then(
                 (response: Ressurs<SkjemaRespons>) => {
                     settSubmitRessurs(response);
                     if (response.status === RessursStatus.SUKSESS) {

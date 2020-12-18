@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 
+import { useHttp } from '@navikt/familie-http';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/fagsak';
-import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
@@ -17,14 +17,14 @@ const useFagsakApi = (
     settFeilmelding: (feilmelding: string) => void
 ) => {
     const { settFagsak } = useFagsakRessurser();
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
 
     const history = useHistory();
     const [senderInn, settSenderInn] = useState(false);
 
     const opprettEllerHentFagsak = (data: IOpprettEllerHentFagsakData) => {
         settSenderInn(true);
-        axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
+        request<IOpprettEllerHentFagsakData, IFagsak>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
@@ -59,7 +59,7 @@ const useFagsakApi = (
 
     const opprettBehandling = (data: IOpprettBehandlingData): Promise<Ressurs<IFagsak>> => {
         settSenderInn(true);
-        return axiosRequest<IFagsak, IOpprettBehandlingData>({
+        return request<IOpprettBehandlingData, IFagsak>({
             data,
             method: 'POST',
             url: '/familie-ba-sak/api/behandlinger',
@@ -109,7 +109,7 @@ const useFagsakApi = (
         const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
         settSenderInn(true);
 
-        axiosRequest<IFagsak, void>({
+        request<void, IFagsak>({
             method: 'POST',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${aktivBehandling?.behandlingId}/valider`,
         })
