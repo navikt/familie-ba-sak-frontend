@@ -1,24 +1,18 @@
 import React from 'react';
 
-import CreatableSelect from 'react-select/creatable';
 import styled from 'styled-components';
 
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import { Label } from 'nav-frontend-skjema';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 
-export interface ITittel {
-    value: string;
-    label: string;
-}
-
-export const journalpostTittelList: Array<ITittel> = Object.keys(JournalpostTittel).map(
+export const journalpostTittelList: ISelectOption[] = Object.keys(JournalpostTittel).map(
     (_, index) => {
         return {
             value: Object.values(JournalpostTittel)[index],
@@ -60,24 +54,29 @@ const EndreJournalpost: React.FC = () => {
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.tittel
             : undefined;
+
+    const selectValue: ISelectOption = {
+        value: journalpostTittel ?? '',
+        label: journalpostTittel ?? '',
+    };
     return (
-        <div>
-            <Label htmlFor="select">Endre journalposttittel</Label>
-            <CreatableSelect
-                id="select"
-                isClearable
-                isMulti={false}
-                options={journalpostTittelList}
-                value={{ value: journalpostTittel, label: journalpostTittel }}
-                onChange={value => {
-                    if (value && 'value' in value) {
-                        settJournalpostTittel(value.value);
-                    } else {
-                        tilbakestillJournalpostTittel();
-                    }
-                }}
-            />
-        </div>
+        <FamilieReactSelect
+            creatable={true}
+            isClearable
+            erLesevisning={false}
+            label={'Endre journalposttittel'}
+            id="select"
+            isMulti={false}
+            options={journalpostTittelList}
+            value={selectValue}
+            onChange={value => {
+                if (value && 'value' in value) {
+                    settJournalpostTittel(value.value);
+                } else {
+                    tilbakestillJournalpostTittel();
+                }
+            }}
+        />
     );
 };
 
