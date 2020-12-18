@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -44,6 +44,10 @@ export const BrukerPanel: React.FC = () => {
         valideringsfunksjon: identValidator,
     });
 
+    useEffect(() => {
+        settFeilMelding('');
+    }, [nyIdent.verdi]);
+
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const bruker = dataForManuellJournalføring.data.person;
@@ -88,7 +92,7 @@ export const BrukerPanel: React.FC = () => {
                                                 settSpinner(false);
                                             });
                                     } else {
-                                        settFeilMelding('Ugyldig person ident');
+                                        settFeilMelding('Person ident er ugyldig');
                                     }
                                 }}
                                 children={'Endre bruker'}
