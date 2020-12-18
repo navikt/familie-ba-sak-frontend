@@ -26,6 +26,9 @@ class ErrorBoundary extends React.Component<IProps> {
                     username: this.props.autentisertSaksbehandler
                         ? this.props.autentisertSaksbehandler.displayName
                         : 'Ukjent bruker',
+                    email: this.props.autentisertSaksbehandler
+                        ? this.props.autentisertSaksbehandler.email
+                        : 'Ukjent email',
                 });
             });
 
@@ -38,7 +41,21 @@ class ErrorBoundary extends React.Component<IProps> {
 
             apiLoggFeil(`En feil har oppstått i vedtaksløsningen: \n*Error*: ${error}`);
 
-            showReportDialog();
+            showReportDialog({
+                title: 'En feil har oppstått i vedtaksløsningen',
+                subtitle: '',
+                subtitle2:
+                    'Teamet har fått beskjed. Dersom du ønsker å hjelpe oss, si litt om hva som skjedde.',
+                user: {
+                    name: this.props.autentisertSaksbehandler?.displayName,
+                    email: this.props.autentisertSaksbehandler?.email,
+                },
+                labelName: 'NAVN',
+                labelComments: 'HVA SKJEDDE?',
+                labelClose: 'Lukk',
+                labelSubmit: 'Send inn rapport',
+                successMessage: 'Rapport er innsendt',
+            });
         }
     }
 
