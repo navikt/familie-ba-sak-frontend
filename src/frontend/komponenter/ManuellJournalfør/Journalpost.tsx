@@ -10,8 +10,22 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
-import { journalpostTittelList } from './DokumentVelger';
+
+export interface ITittel {
+    value: string;
+    label: string;
+}
+
+export const journalpostTittelList: Array<ITittel> = Object.keys(JournalpostTittel).map(
+    (_, index) => {
+        return {
+            value: Object.values(JournalpostTittel)[index],
+            label: Object.values(JournalpostTittel)[index],
+        };
+    }
+);
 
 const JournalpostDiv = styled.div`
     width: 560px;

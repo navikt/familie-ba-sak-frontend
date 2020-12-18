@@ -11,7 +11,7 @@ import {
     useManuellJournalfør,
 } from '../../context/ManuellJournalførContext';
 import { BrukerHeader } from './BrukerHeader';
-import { DokumentPanel } from './DokumentPanel';
+import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalføringModal } from './JournalføringModal';
 import { JournalpostSkjema } from './JournalpostSkjema';
 

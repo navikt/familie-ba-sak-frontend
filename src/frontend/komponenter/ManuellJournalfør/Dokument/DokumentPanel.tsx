@@ -6,7 +6,7 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 
 const DokumentDiv = styled.div`
     width: 100%;

@@ -12,7 +12,7 @@ import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
-import { Dokumenter } from './Dokumenter';
+import { Dokumenter } from './Dokument/Dokumenter';
 import { feilDekoratør } from './FeilDekoratør';
 import { Journalpost } from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
