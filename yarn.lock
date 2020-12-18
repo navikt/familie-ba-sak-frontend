@@ -765,13 +765,14 @@
     react-tooltip "^3.11.4"
     styled-components "^5.2.1"
 
-"@navikt/familie-form-elements@^2.0.13":
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.13.tgz#93fbf4bdf738eddbc43b36caa32a14177726293f"
-  integrity sha512-JKpSRHKchKeiUnGavVpd/BuxJqz860LE3ncDg0YNGelbYJDs/YrVUacDVqTbVCbuXUeaeX8fd7ZKrkRP+WsxOg==
+"@navikt/familie-form-elements@2.0.14-alpha.2":
+  version "2.0.14-alpha.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.14-alpha.2.tgz#f31d1870cdb65f55458251b9f9a06db9465eaab1"
+  integrity sha512-varZjb1feKV/Yt5qriDcvLzYiat9DKPP3ebEAKh3LOFe6cJMDGC0DWcK8yMyscHxDF3Pn3R+TWJKvxT3/dKc4w==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
+    "@types/react-select" "^3.0.28"
     classnames "^2.2.6"
     dayjs "^1.9.6"
     nav-datovelger "^8.0.4"
@@ -783,6 +784,7 @@
     nav-frontend-skjema-style "^2.0.9"
     nav-frontend-typografi "^2.0.21"
     react-day-picker "^7.4.8"
+    react-select "^3.1.1"
 
 "@navikt/familie-header@^2.0.14":
   version "2.0.20"
@@ -1530,10 +1532,10 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react-select@^3.0.25":
-  version "3.0.26"
-  resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-3.0.26.tgz#f1b1a1e2b624ed9843eb56dda837e7a0f4a76a8f"
-  integrity sha512-rAaiD0SFkBi3PUwp1DrJV04CobPl2LuZXF+kv6MKw8kaeGo82xTOZzjM8DDi4lrdkqGbInZiE2QO9nIJm3bqgw==
+"@types/react-select@^3.0.28":
+  version "3.0.28"
+  resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-3.0.28.tgz#b9adb98421926321b81c4cfe6a40121c96a421f0"
+  integrity sha512-Gfg3a/EPLyUQkfezcCQkmLW1Vz6+ziclJhn8dpBUEYJF3IUoxS81ToAi3ky2xtnAyk2wJFMXLvE73KiUd56yTA==
   dependencies:
     "@types/react" "*"
     "@types/react-dom" "*"
@@ -9732,7 +9734,7 @@ react-router@5.2.0, react-router@^5.2.0:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-select@^3.1.0:
+react-select@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-select/-/react-select-3.1.1.tgz#156a5b4a6c22b1e3d62a919cb1fd827adb4060bc"
   integrity sha512-HjC6jT2BhUxbIbxMZWqVcDibrEpdUJCfGicN0MMV+BQyKtCaPTgFekKWiOizSCy4jdsLMGjLqcFGJMhVGWB0Dg==

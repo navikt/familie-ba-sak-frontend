@@ -9,13 +9,12 @@ import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { FamilieSelect } from '@navikt/familie-form-elements/dist';
+import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import FamilieReactSelect from '../../../../familie-react-select/FamilieReactSelect';
 import { Felt } from '../../../../familie-skjema/typer';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
@@ -170,8 +169,6 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                         creatable={true}
                         erLesevisning={erLesevisning()}
                         isMulti={true}
-                        placeholder={'Velg'}
-                        noOptionsMessage={() => 'Ingen valg'}
                         onChange={valgteOptions => {
                             skjema.felter.multiselect.onChange(
                                 valgteOptions === null
