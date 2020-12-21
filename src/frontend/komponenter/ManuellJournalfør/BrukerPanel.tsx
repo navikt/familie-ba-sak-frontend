@@ -11,7 +11,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { useFelt } from '../../familie-skjema/felt';
 import { Valideringsstatus } from '../../familie-skjema/typer';
-import { KontoSirkel } from '../../ikoner/KontoSirkel';
+import { Kontosirkel } from '../../ikoner/Kontosirkel';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
 import { feilDekoratør } from './FeilDekoratør';
@@ -59,7 +59,7 @@ export const BrukerPanel: React.FC = () => {
                     <Panel
                         tittel={
                             <DeltagerInfo
-                                ikon={<KontoSirkel width={48} height={48} />}
+                                ikon={<Kontosirkel width={48} height={48} />}
                                 navn={navn}
                                 undertittel={'Søker/Bruker'}
                                 ident={ident}

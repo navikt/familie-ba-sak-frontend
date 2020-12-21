@@ -9,12 +9,14 @@ interface IEmailIkon {
 export const EmailIkon: React.FC<IEmailIkon> = ({ className, width = 48, height = 48 }) => {
     return (
         <svg
+            aria-labelledby={'email'}
             xmlns="http://www.w3.org/2000/svg"
             width={width}
             height={height}
             viewBox="0 0 24 24"
             className={className}
         >
+            <title id={'email'}>Email ikon</title>
             <g
                 stroke="#0067c5"
                 strokeLinecap="round"

@@ -9,12 +9,14 @@ interface IDokumentIkon {
 export const DokumentIkon: React.FC<IDokumentIkon> = ({ className, width = 48, height = 48 }) => {
     return (
         <svg
+            aria-labelledby={'dokument'}
             xmlns="http://www.w3.org/2000/svg"
             className={className}
             height={height}
             width={width}
             viewBox="0 0 24 24"
         >
+            <title id={'dokument'}>Dokument ikon</title>
             <g
                 stroke="#0067c5"
                 strokeLinecap="round"

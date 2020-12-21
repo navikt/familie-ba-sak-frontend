@@ -8,9 +8,10 @@ interface IKontoSirkel {
     width?: number;
 }
 
-export const KontoSirkel: React.FC<IKontoSirkel> = ({ className, width = 48, height = 48 }) => {
+export const Kontosirkel: React.FC<IKontoSirkel> = ({ className, width = 48, height = 48 }) => {
     return (
         <StyledSvg
+            aria-labelledby={'kontosirkel'}
             version="1.1"
             id="Layer_1"
             xmlns="http://www.w3.org/2000/svg"
@@ -21,6 +22,7 @@ export const KontoSirkel: React.FC<IKontoSirkel> = ({ className, width = 48, hei
             viewBox="0 0 24 24"
             className={className}
         >
+            <title id={'kontosirkel'}>Kontosirkel</title>
             <g>
                 <StyledPath
                     d="M10,15c0,0-1.5-0.5-1.5-3c-0.8,0-0.8-2,0-2c0-0.3-1.5-4,1-3.5c0.5-2,6-2,6.5,0c0.3,1.4-0.5,3.3-0.5,3.5

@@ -22,7 +22,7 @@ interface IProps {
     tittel: string;
     maxWidthStyle?: string;
     skalViseNesteKnapp?: boolean;
-    skalViseTilbakestillKnapp?: boolean;
+    skalAktivereTilbakestillKnapp?: boolean;
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
@@ -58,7 +58,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     tittel,
     maxWidthStyle = '40rem',
     skalViseNesteKnapp = true,
-    skalViseTilbakestillKnapp,
+    skalAktivereTilbakestillKnapp,
 }) => {
     const history = useHistory();
     const { forrigeÅpneSide } = useBehandling();
@@ -114,7 +114,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                     {tilbakestillOnClick ? (
                         <TilbakestillKnapp
                             type={'hoved'}
-                            disabled={!skalViseTilbakestillKnapp}
+                            disabled={!skalAktivereTilbakestillKnapp}
                             onClick={() => {
                                 tilbakestillOnClick();
                             }}

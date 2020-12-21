@@ -39,7 +39,7 @@ import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import familieDayjs from '../utils/familieDayjs';
 import { useApp } from './AppContext';
 
-const tomPerson = {
+const tomPerson: IPersonInfo = {
     adressebeskyttelseGradering: Adressebeskyttelsegradering.UGRADERT,
     familierelasjoner: [],
     familierelasjonerMaskert: [],
@@ -50,7 +50,7 @@ const tomPerson = {
     type: PersonType.SØKER,
 };
 
-const tomAvsender = {
+const tomAvsender: AvsenderMottaker = {
     erLikBruker: false,
     id: '',
     land: '',
@@ -62,18 +62,18 @@ const erPersonTom = (person: IPersonInfo | undefined) => !person || !person.pers
 
 const erAvsenderTom = (avsender: AvsenderMottaker | undefined) => !avsender || !avsender.navn;
 
-const patchTomFelt = (ress: Ressurs<IDataForManuellJournalføring>) => {
-    // we use tom object for person and avsender if they are not present in data
-    // because we need to use the objects to index the validation errors (See validaterData() for details)
-    if (ress.status === RessursStatus.SUKSESS) {
-        if (!ress.data.person) {
-            ress.data.person = tomPerson;
+const erstattNullVerdiMedTomtObjekt = (res: Ressurs<IDataForManuellJournalføring>) => {
+    // Vi bruker tomt objekt for person og avsender hvis de er null/undefined i hentet data fra backend
+    // fordi vi vil bruke objektene til å indeksere valideringsfeil (Se validaterData())
+    if (res.status === RessursStatus.SUKSESS) {
+        if (!res.data.person) {
+            res.data.person = tomPerson;
         }
-        if (!ress.data.journalpost.avsenderMottaker) {
-            ress.data.journalpost.avsenderMottaker = tomAvsender;
+        if (!res.data.journalpost.avsenderMottaker) {
+            res.data.journalpost.avsenderMottaker = tomAvsender;
         }
     }
-    return ress;
+    return res;
 };
 
 const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
@@ -151,9 +151,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         tilbakestillBruker();
     };
 
-    // We need to revert changes on journalpost in case the saksbehandler wants so, therefore we make
-    // a copy of the data that is subject to change. All modifications will be done on the copy
-    // before journalføring
+    // Vi lager en kopi av journalposten, for enklere å støtte tilbakestilling av endringer.
+    // Modifikasjoner gjøres på kopien. Ved tilbakestilling reverterer vi tilbake til originalen.
     const [oppdatertData, settOppdatertData] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
@@ -171,20 +170,19 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         settDataForManuellJournalføring(dataRessurs);
         const oppdatert = lagerDataKopi(dataRessurs);
 
-        //the function can be used in the <<tilbakestill>> scenario, where if fagsak has changed we do not
-        //overwrite the change because creating fagsak is not possible to revert
+        // Function-en kan brukes for <<tilbakestill>>, hvor vi skal ikke tilbakestille fagsak hvis den endres, fordi endering fagsak
+        // er ikke mulig å tilbakestille
         if (holdeFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
             oppdatert.data.fagsak = oppdatertData.data.fagsak;
         }
 
         settOppdatertData(oppdatert);
 
-        //after updating data, we need extra steps for business concerns
         if (oppdatert.status === RessursStatus.SUKSESS) {
-            //Select and view the first document by default
+            //Velg og vis det først dokumentet
             const firstDokument = oppdatert.data.journalpost.dokumenter?.find(() => true);
             settValgtDokumentId(firstDokument?.dokumentInfoId);
-            hentDokumentData(
+            hentOgVisDokument(
                 oppdatert.data.journalpost.journalpostId,
                 firstDokument?.dokumentInfoId
             );
@@ -245,7 +243,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         valgt.logiskeVedlegg = logiskeVedleggNavn.map(vedlegg => {
             return {
                 tittel: vedlegg,
-                logiskVedleggId: '0', // this id is not nullable but ignored by backend so set it to whatever string
+                logiskVedleggId: '0', // Påkrevd felt, ignoreres av backend. Kan settes til hva som helst.
             };
         });
         settValgtDokumentInfo(valgt);
@@ -321,14 +319,14 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             påvirkerSystemLaster: true,
         })
             .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
-                settDataRessurs(patchTomFelt(hentetDataForManuellJournalføring));
+                settDataRessurs(erstattNullVerdiMedTomtObjekt(hentetDataForManuellJournalføring));
             })
             .catch((_error: AxiosError) => {
                 settDataRessurs(byggFeiletRessurs('Ukjent feil ved henting av oppgave'));
             });
     };
 
-    const hentDokumentData = async (
+    const hentOgVisDokument = async (
         journalpostId: string | undefined,
         dokumentInfoId: string | undefined
     ) => {
@@ -362,8 +360,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const velgOgHentDokumentData = (dokumentInfoId: string) => {
         if (oppdatertData.status === RessursStatus.SUKSESS) {
-            // not necessary to await because the UI will monitor document data
-            hentDokumentData(oppdatertData.data.journalpost.journalpostId, dokumentInfoId);
+            hentOgVisDokument(oppdatertData.data.journalpost.journalpostId, dokumentInfoId);
             settValgtDokumentId(dokumentInfoId);
         }
     };
@@ -509,7 +506,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const journalfør = async () => {
-        const erDigital = (journalpost: IJournalpost) =>
+        const erDigitalKanal = (journalpost: IJournalpost) =>
             journalpost.kanal === JournalpostKanal.NAV_NO;
 
         if (
@@ -518,6 +515,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             oppdatertData.data.person
         ) {
             const person = oppdatertData.data.person;
+            //SKAN_IM-kanalen benytter logiske vedlegg, NAV_NO-kanalen gjør ikke. For sistnevnte må titlene konkateneres.
             return axiosRequest<string, IRestJournalføring>({
                 method: 'POST',
                 url: `/familie-ba-sak/api/journalpost/${
@@ -536,26 +534,23 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     },
                     datoMottatt: oppdatertData.data.journalpost.datoMottatt,
                     dokumenter: oppdatertData.data.journalpost.dokumenter?.map(dokument => {
-                        const exsisternendeLogiskeVedlegg = dataForManuellJournalføring.data.journalpost.dokumenter?.find(
+                        const exsisterendeLogiskeVedlegg = dataForManuellJournalføring.data.journalpost.dokumenter?.find(
                             it => it.dokumentInfoId === dokument.dokumentInfoId
                         )?.logiskeVedlegg;
-                        const tittelssammenkobling = dokument.logiskeVedlegg
+                        const tittelsammenkobling = dokument.logiskeVedlegg
                             .map(current => current.tittel)
                             .reduce(
                                 (previous, current) => `${previous}, ${current}`,
                                 dokument.tittel ?? ''
                             );
                         return {
-                            //for digital document, use concatation of titles
-                            dokumentTittel: erDigital(oppdatertData.data.journalpost)
-                                ? tittelssammenkobling
+                            dokumentTittel: erDigitalKanal(oppdatertData.data.journalpost)
+                                ? tittelsammenkobling
                                 : dokument.tittel,
-                            dokumentInfoId: dokument.dokumentInfoId || '0', // dokumentInfoId is not nullable
-                            brevkode: dokument.brevkode,
-                            eksisterendeLogiskeVedlegg: exsisternendeLogiskeVedlegg,
-                            //preserve vedlgg of scanned document
-                            logiskeVedlegg: erDigital(oppdatertData.data.journalpost)
-                                ? exsisternendeLogiskeVedlegg
+                            dokumentInfoId: dokument.dokumentInfoId || '0',
+                            eksisterendeLogiskeVedlegg: exsisterendeLogiskeVedlegg,
+                            logiskeVedlegg: erDigitalKanal(oppdatertData.data.journalpost)
+                                ? exsisterendeLogiskeVedlegg
                                 : dokument.logiskeVedlegg,
                         };
                     }),
@@ -596,7 +591,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         dataForManuellJournalføring: oppdatertData,
         settDataForManuellJournalføring: settOppdatertData,
 
-        // The methods below manipulate selected document
+        // Funksjoner for å endre valgt dokument
         finnValgtDokument: (): IDokumentInfo | undefined => {
             return finnValgtDokument(oppdatertData);
         },
@@ -608,11 +603,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         tilbakestillDokumentTittel,
         velgOgHentDokumentData,
 
-        // The methods below manipulate journalpost metadata
+        // Funksjoner for å endre journalpostmetadata
         settJournalpostTittel,
         tilbakestillJournalpostTittel,
 
-        // Bruker and fagsak/behandling
+        // Funksjoner som omhandler bruker og behandling
         endreBruker,
         hentAktivBehandlingForJournalføring,
         opprettFagsakOgBehandling,
@@ -620,13 +615,13 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         tilknyttedeBehandlingIder,
         settTilknyttedeBehandlingIder,
 
-        // Validate, check, revert data
+        // Validering og tilbakestilling
         harFeil,
         hentFeil,
         erEndret,
         tilbakestillData,
 
-        // Journalfør
+        // Journalføring
         journalfør,
     };
 });

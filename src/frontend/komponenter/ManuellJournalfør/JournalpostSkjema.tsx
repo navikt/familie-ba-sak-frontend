@@ -86,7 +86,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
                     tilbakestillOnClick={() => {
                         tilbakestillData();
                     }}
-                    skalViseTilbakestillKnapp={erEndret()}
+                    skalAktivereTilbakestillKnapp={erEndret()}
                 >
                     <Journalpost />
                     <br />
