@@ -163,28 +163,28 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const lagerDataKopi = (dataRessurs: Ressurs<IDataForManuellJournalføring>) =>
         JSON.parse(JSON.stringify(dataRessurs));
 
+    // Funksjonen kan brukes for <<tilbakestill>>, hvor vi ikke skal tilbakestille fagsak dersom fagsaken er endret
+    // (endringer på fagsak er ikke mulig å tilbakestille, da allerede er lagret i databasen).
+    // Dette vil f.eks. skje når en behandling er opprettet.
     const settDataRessurs = (
         dataRessurs: Ressurs<IDataForManuellJournalføring>,
-        holdeFagsak = false
+        beholdFagsak = false
     ) => {
         settDataForManuellJournalføring(dataRessurs);
         const oppdatert = lagerDataKopi(dataRessurs);
 
-        // Function-en kan brukes for <<tilbakestill>>, hvor vi skal ikke tilbakestille fagsak hvis den endres, fordi endering fagsak
-        // er ikke mulig å tilbakestille
-        if (holdeFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
+        if (beholdFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
             oppdatert.data.fagsak = oppdatertData.data.fagsak;
         }
 
         settOppdatertData(oppdatert);
 
         if (oppdatert.status === RessursStatus.SUKSESS) {
-            //Velg og vis det først dokumentet
-            const firstDokument = oppdatert.data.journalpost.dokumenter?.find(() => true);
-            settValgtDokumentId(firstDokument?.dokumentInfoId);
+            const førsteDokument = oppdatert.data.journalpost.dokumenter?.find(() => true);
+            settValgtDokumentId(førsteDokument?.dokumentInfoId);
             hentOgVisDokument(
                 oppdatert.data.journalpost.journalpostId,
-                firstDokument?.dokumentInfoId
+                førsteDokument?.dokumentInfoId
             );
         }
     };
