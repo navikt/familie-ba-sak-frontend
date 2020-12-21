@@ -271,10 +271,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const hentFagsak = async (personId: string) => {
-        return axiosRequest<IFagsak | undefined, Ressurs<IFagsak | undefined>>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/fagsakForPerson`,
-            headers: {
+        return axiosRequest<IFagsak | undefined, { personIdent: string }>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
+            data: {
                 personIdent: personId,
             },
         }).then((fagsak: Ressurs<IFagsak | undefined>) => {
