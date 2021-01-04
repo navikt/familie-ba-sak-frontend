@@ -2,12 +2,17 @@ import React, { useEffect } from 'react';
 
 import createUseContext from 'constate';
 
+import {
+    FeltContext,
+    FeltState,
+    Valideringsstatus,
+    feil,
+    ok,
+    useFelt,
+    useSkjema,
+} from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useFelt } from '../familie-skjema/felt';
-import { useSkjema } from '../familie-skjema/skjema';
-import { FeltState, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
-import { feil, ok } from '../familie-skjema/validators';
 import {
     Brevmal,
     IBrevData,

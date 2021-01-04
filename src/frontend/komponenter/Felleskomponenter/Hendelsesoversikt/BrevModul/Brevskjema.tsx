@@ -10,12 +10,12 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
+import { Felt } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import { Felt } from '../../../../familie-skjema/typer';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../../../../typer/person';

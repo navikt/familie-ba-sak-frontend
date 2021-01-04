@@ -1,5 +1,5 @@
-import { FeltState, FeltContext, Valideringsstatus } from '../../familie-skjema/typer';
-import { feil, ok } from '../../familie-skjema/validators';
+import { FeltState, FeltContext, Valideringsstatus, feil, ok } from '@navikt/familie-skjema';
+
 import { IPeriode } from '../../typer/periode';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 

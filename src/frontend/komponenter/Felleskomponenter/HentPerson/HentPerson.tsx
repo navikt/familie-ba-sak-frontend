@@ -8,10 +8,9 @@ import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
+import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useFelt } from '../../../familie-skjema/felt';
-import { Valideringsstatus } from '../../../familie-skjema/typer';
 import { IPersonInfo } from '../../../typer/person';
 import { identValidator } from '../../../utils/validators';
 import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';

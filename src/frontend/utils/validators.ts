@@ -1,5 +1,12 @@
-import { FeltState, ValiderFelt, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
-import { feil, ok } from '../familie-skjema/validators';
+import {
+    feil,
+    FeltContext,
+    FeltState,
+    ok,
+    ValiderFelt,
+    Valideringsstatus,
+} from '@navikt/familie-skjema';
+
 import { IPersonMedAndelerTilkjentYtelse } from '../typer/beregning';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';

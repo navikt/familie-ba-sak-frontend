@@ -7,9 +7,9 @@ import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { Valideringsstatus } from '../../../familie-skjema/typer';
 import Pluss from '../../../ikoner/Pluss';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';

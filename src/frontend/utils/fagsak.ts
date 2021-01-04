@@ -1,4 +1,5 @@
-import { FeltState } from '../familie-skjema/typer';
+import { FeltState } from '@navikt/familie-skjema';
+
 import { IBehandling } from '../typer/behandling';
 import { fagsakStatus, IFagsak } from '../typer/fagsak';
 import { IVedtakForBehandling } from '../typer/vedtak';

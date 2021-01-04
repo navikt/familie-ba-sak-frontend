@@ -1,13 +1,10 @@
 import { useHistory } from 'react-router';
 
+import { useFelt, feil, ok, FeltContext, useSkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
-import { useFelt } from '../../../../../familie-skjema/felt';
-import { useSkjema } from '../../../../../familie-skjema/skjema';
-import { FeltContext } from '../../../../../familie-skjema/typer';
-import { feil, ok } from '../../../../../familie-skjema/validators';
 import {
     BehandlingKategori,
     Behandlingstype,

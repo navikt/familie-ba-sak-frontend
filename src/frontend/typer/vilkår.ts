@@ -1,4 +1,5 @@
-import { FeltState } from '../familie-skjema/typer';
+import { FeltState } from '@navikt/familie-skjema';
+
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
