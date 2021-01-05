@@ -41,3 +41,18 @@ Spørsmål knyttet til koden eller prosjektet kan rettes til:
 ## For NAV-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen #team-familie.
+
+## For Windows-brukere
+
+Applikasjonen kjører ikke på Windows via GitBash as is. En måte å løse det på er å kjøre den via Linux.
+Fra og med Windows 10 følge det med eget Subsystem for Linux i Windows.
+
+* Installer Ubuntu fra Microsoft Store
+* Sørg for at alle packages er oppdatert  med `sudo apt update` og `sudo apt full-upgrade`
+* Installer [Node Version Manager](https://github.com/nvm-sh/nvm#installing-and-updating) (curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash)
+* Restart Ubuntu
+* Hent siste stabile Nodejs versjon med: `nvm install --lts`
+* Clon repoet i ønsket mappe i linux-området med `git clone https://github.com/navikt/familie-ba-sak-frontend.git`
+* Legg til .env fila (se beskrivelsen over)
+
+Anbefaler også å laste ned Visual Studio Code fra Microsoft store for å kunne åpne og redigere filene i Linux uten å gå via terminalen. Det gjør det også betydelig lettere å legge til .env fila.

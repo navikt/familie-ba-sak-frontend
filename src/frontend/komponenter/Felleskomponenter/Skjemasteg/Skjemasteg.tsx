@@ -16,10 +16,13 @@ interface IProps {
     forrigeOnClick?: () => void;
     nesteKnappTittel?: string;
     nesteOnClick?: () => void;
+    tilbakestillOnClick?: () => void;
+    tilbakestillKnappTittel?: string;
     senderInn: boolean;
     tittel: string;
     maxWidthStyle?: string;
     skalViseNesteKnapp?: boolean;
+    skalAktivereTilbakestillKnapp?: boolean;
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
@@ -38,6 +41,10 @@ const Navigering = styled.div`
     justify-content: space-between;
 `;
 
+const TilbakestillKnapp = styled(Knapp)`
+    margin-left: 20px;
+`;
+
 const Skjemasteg: React.FunctionComponent<IProps> = ({
     children,
     className,
@@ -45,10 +52,13 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     forrigeOnClick,
     nesteKnappTittel,
     nesteOnClick,
+    tilbakestillOnClick,
+    tilbakestillKnappTittel,
     senderInn,
     tittel,
     maxWidthStyle = '40rem',
     skalViseNesteKnapp = true,
+    skalAktivereTilbakestillKnapp,
 }) => {
     const history = useHistory();
     const { forrigeÅpneSide } = useBehandling();
@@ -89,18 +99,32 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                 ) : (
                     <div />
                 )}
-
-                {forrigeOnClick ? (
-                    <Knapp
-                        onClick={() => {
-                            forrigeOnClick();
-                        }}
-                        mini={true}
-                        children={forrigeKnappTittel ?? 'Forrige'}
-                    />
-                ) : (
-                    <div />
-                )}
+                <div>
+                    {forrigeOnClick ? (
+                        <Knapp
+                            onClick={() => {
+                                forrigeOnClick();
+                            }}
+                            mini={true}
+                            children={forrigeKnappTittel ?? 'Forrige'}
+                        />
+                    ) : (
+                        <div />
+                    )}
+                    {tilbakestillOnClick ? (
+                        <TilbakestillKnapp
+                            type={'hoved'}
+                            disabled={!skalAktivereTilbakestillKnapp}
+                            onClick={() => {
+                                tilbakestillOnClick();
+                            }}
+                            mini={true}
+                            children={tilbakestillKnappTittel ?? 'Tilbakestill'}
+                        />
+                    ) : (
+                        <div />
+                    )}
+                </div>
             </Navigering>
         </Container>
     );
