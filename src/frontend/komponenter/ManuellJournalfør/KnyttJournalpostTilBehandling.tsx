@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
+import { Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -32,6 +32,7 @@ const StyledDiv = styled.div`
 `;
 
 const StyledTd = styled.td`
+    min-width: 14rem;
     label {
         text-indent: 2rem !important;
     }
@@ -46,11 +47,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         hentAktivBehandlingForJournalføring,
         tilknyttedeBehandlingIder,
     } = useManuellJournalfør();
-
-    const [oppretterBehandling, settOppretterBehandling] = useState(false);
-    const [opprettBehandlingFeilmelding, settOpprettBehandlingFeilmelding] = useState<
-        string | undefined
-    >(undefined);
 
     if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
         return <></>;
@@ -76,31 +72,14 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                         aria-labelledby={`utfør_opprett-fagsak-og-behandling-ved-journalføring`}
                         id={'opprettbehandling'}
                         onClick={() => {
-                            settOppretterBehandling(true);
-                            opprettFagsakOgBehandling()
-                                .then(fagsakRessurs => {
-                                    settOpprettBehandlingFeilmelding(
-                                        fagsakRessurs.status === RessursStatus.FEILET ||
-                                            fagsakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-                                            ? fagsakRessurs.frontendFeilmelding
-                                            : ''
-                                    );
-                                })
-                                .finally(() => {
-                                    settOppretterBehandling(false);
-                                });
+                            opprettFagsakOgBehandling();
                         }}
                         label={'Opprett ny behandling'}
                         erLesevisning={false}
                         knappPosisjon={'venstre'}
                         type="flat"
-                        spinner={oppretterBehandling}
-                        disabled={oppretterBehandling}
                         ikon={<Pluss />}
                     />
-                    {opprettBehandlingFeilmelding && (
-                        <Feilmelding>{opprettBehandlingFeilmelding}</Feilmelding>
-                    )}
                 </StyledDiv>
             )}
 

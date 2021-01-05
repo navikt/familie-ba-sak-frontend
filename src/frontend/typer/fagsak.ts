@@ -3,6 +3,7 @@ import { INøkkelPar } from './common';
 
 // Enum
 export enum FagsakStatus {
+    IKKE_OPPRETTET = 'IKKE_OPPRETTET',
     OPPRETTET = 'OPPRETTET',
     LØPENDE = 'LØPENDE',
     AVSLUTTET = 'AVSLUTTET',

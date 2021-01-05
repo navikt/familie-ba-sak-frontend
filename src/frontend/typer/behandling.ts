@@ -94,6 +94,7 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
 };
 
 export enum BehandlingStatus {
+    IKKE_OPPRETTET = 'IKKE_OPPRETTET',
     OPPRETTET = 'OPPRETTET',
     UTREDES = 'UTREDES',
     FATTER_VEDTAK = 'FATTER_VEDTAK',
@@ -232,6 +233,7 @@ export const behandlingsresultater: Record<BehandlingResultat, string> = {
 };
 
 export const behandlingsstatuser: Record<BehandlingStatus, string> = {
+    IKKE_OPPRETTET: 'Skal opprettes',
     OPPRETTET: 'Opprettet',
     UTREDES: 'Utredes',
     FATTER_VEDTAK: 'Fatter vedtak',

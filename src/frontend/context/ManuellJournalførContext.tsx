@@ -15,19 +15,20 @@ import {
     AvsenderMottakerIdType,
     kjønnType,
     AvsenderMottaker,
-    byggSuksessRessurs,
     IJournalpost,
 } from '@navikt/familie-typer';
 
-import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../api/fagsak';
 import {
     BehandlingKategori,
+    BehandlingResultat,
+    BehandlingStatus,
+    BehandlingSteg,
     Behandlingstype,
     BehandlingUnderkategori,
     BehandlingÅrsak,
     IBehandling,
 } from '../typer/behandling';
-import { IFagsak } from '../typer/fagsak';
+import { FagsakStatus, IFagsak } from '../typer/fagsak';
 import {
     BrevkodeMap,
     IDataForManuellJournalføring,
@@ -130,10 +131,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const erEndret = () =>
         oppdatertData.status === RessursStatus.SUKSESS &&
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-        (JSON.stringify(oppdatertData.data.journalpost) !==
-            JSON.stringify(dataForManuellJournalføring.data.journalpost) ||
-            JSON.stringify(oppdatertData.data.person) !==
-                JSON.stringify(dataForManuellJournalføring.data.person));
+        JSON.stringify(oppdatertData) !== JSON.stringify(dataForManuellJournalføring);
 
     const tilbakestillBruker = () => {
         if (
@@ -147,7 +145,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const tilbakestillData = () => {
-        settDataRessurs(dataForManuellJournalføring, true);
+        settDataRessurs(dataForManuellJournalføring);
         tilbakestillBruker();
     };
 
@@ -166,16 +164,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     // Funksjonen kan brukes for <<tilbakestill>>, hvor vi ikke skal tilbakestille fagsak dersom fagsaken er endret
     // (endringer på fagsak er ikke mulig å tilbakestille, da allerede er lagret i databasen).
     // Dette vil f.eks. skje når en behandling er opprettet.
-    const settDataRessurs = (
-        dataRessurs: Ressurs<IDataForManuellJournalføring>,
-        beholdFagsak = false
-    ) => {
+    const settDataRessurs = (dataRessurs: Ressurs<IDataForManuellJournalføring>) => {
         settDataForManuellJournalføring(dataRessurs);
         const oppdatert = lagerDataKopi(dataRessurs);
-
-        if (beholdFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
-            oppdatert.data.fagsak = oppdatertData.data.fagsak;
-        }
 
         settOppdatertData(oppdatert);
 
@@ -253,16 +244,13 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return BrevkodeMap.get(dokumentTittel) || '';
     };
 
-    const settFagsak = (fagsak: Ressurs<IFagsak | undefined>) => {
-        if (
-            oppdatertData.status === RessursStatus.SUKSESS &&
-            fagsak.status === RessursStatus.SUKSESS
-        ) {
+    const settFagsak = (fagsak: IFagsak) => {
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
             settOppdatertData({
                 ...oppdatertData,
                 data: {
                     ...oppdatertData.data,
-                    fagsak: fagsak.data,
+                    fagsak: fagsak,
                 },
             });
         }
@@ -414,34 +402,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return aktivBehandling;
     };
 
-    const opprettFagsak = async (data: IOpprettEllerHentFagsakData) => {
-        return axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
-            data,
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker`,
-        })
-            .then((response: Ressurs<IFagsak>) => {
-                return response;
-            })
-            .catch(() => {
-                return byggFeiletRessurs<IFagsak>('Opprettelse av fagsak feilet');
-            });
-    };
-
-    const opprettBehandling = async (data: IOpprettBehandlingData) => {
-        return axiosRequest<IFagsak, IOpprettBehandlingData>({
-            data,
-            method: 'POST',
-            url: '/familie-ba-sak/api/behandlinger',
-        })
-            .then((response: Ressurs<IFagsak>) => {
-                return response;
-            })
-            .catch(() => {
-                return byggFeiletRessurs<IFagsak>('Opprettelse av behandling feilet');
-            });
-    };
-
     const hentSorterteBehandlinger = () => {
         return oppdatertData.status === RessursStatus.SUKSESS &&
             oppdatertData.data.fagsak?.behandlinger.length
@@ -451,58 +411,57 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             : [];
     };
 
-    const opprettFagsakOgBehandling = async () => {
-        const stateFeil =
-            oppdatertData.status !== RessursStatus.SUKSESS
-                ? byggFeiletRessurs<IFagsak>('Ukjent feil ved applikasjonen')
-                : !oppdatertData.data.person?.personIdent
-                ? byggFeiletRessurs<IFagsak>(
-                      'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
-                  )
-                : undefined;
-
-        if (stateFeil) {
-            return stateFeil;
+    const opprettFagsakOgBehandling = () => {
+        if (oppdatertData.status !== RessursStatus.SUKSESS) {
+            return;
         }
+        const data = oppdatertData.data;
 
-        const data =
-            oppdatertData.status === RessursStatus.SUKSESS ? oppdatertData.data : undefined;
+        const fagsak = data?.fagsak ?? {
+            behandlinger: [],
+            id: -1,
+            opprettetTidspunkt: '',
+            saksnummer: '',
+            status: FagsakStatus.IKKE_OPPRETTET,
+            søkerFødselsnummer: data?.person?.personIdent ?? '',
+            underBehandling: false,
+        };
 
-        const fagsakRessurs = data?.fagsak
-            ? byggSuksessRessurs(data?.fagsak)
-            : await opprettFagsak({
-                  personIdent: data?.person?.personIdent ?? '',
-                  aktørId: null,
-              })
-                  .then((response: Ressurs<IFagsak>) => response)
-                  .catch(() => byggFeiletRessurs<IFagsak>('Ukjent feil ved opprett fagsak'));
-
-        if (fagsakRessurs.status !== RessursStatus.SUKSESS) {
-            return fagsakRessurs;
-        }
-
-        const fagsak = fagsakRessurs.data;
-
-        const behandlingType = fagsak.behandlinger.length
-            ? Behandlingstype.REVURDERING
-            : Behandlingstype.FØRSTEGANGSBEHANDLING;
-
-        const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
-            behandlingType: behandlingType,
-            behandlingÅrsak: BehandlingÅrsak.SØKNAD,
-            kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
-            navIdent: innloggetSaksbehandler?.navIdent,
-            søkersIdent: data?.person?.personIdent ?? '',
-            underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
-        }).then((response: Ressurs<IFagsak>) => response);
-
-        if (fagsakMedBehandling.status === RessursStatus.SUKSESS) {
-            settFagsak(fagsakMedBehandling);
-        } else if (fagsakMedBehandling.status !== RessursStatus.FEILET) {
-            return byggFeiletRessurs<IFagsak>('Opprettelse av behandling feilet.');
-        }
-
-        return fagsakMedBehandling;
+        const fagsakMedBehandling: IFagsak = {
+            ...fagsak,
+            behandlinger: [
+                ...fagsak.behandlinger,
+                {
+                    aktiv: true,
+                    arbeidsfordelingPåBehandling: {
+                        behandlendeEnhetId: '',
+                        behandlendeEnhetNavn: '',
+                        manueltOverstyrt: false,
+                    },
+                    begrunnelse: '',
+                    behandlingId: -1,
+                    endretAv: '',
+                    kategori: BehandlingKategori.NASJONAL,
+                    opprettetTidspunkt: '',
+                    personResultater: [],
+                    personer: [],
+                    resultat: BehandlingResultat.IKKE_VURDERT,
+                    status: BehandlingStatus.IKKE_OPPRETTET,
+                    steg: BehandlingSteg.REGISTRERE_SØKNAD,
+                    stegTilstand: [],
+                    totrinnskontroll: undefined,
+                    opplysningsplikt: undefined,
+                    type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+                    underkategori: BehandlingUnderkategori.ORDINÆR,
+                    vedtakForBehandling: [],
+                    utbetalingsperioder: [],
+                    personerMedAndelerTilkjentYtelse: [],
+                    årsak: BehandlingÅrsak.SØKNAD,
+                    skalBehandlesAutomatisk: false,
+                },
+            ],
+        };
+        settFagsak(fagsakMedBehandling);
     };
 
     const journalfør = async () => {
