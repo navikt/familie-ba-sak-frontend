@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import createUseContext from 'constate';
 
 import {
-    FeltContext,
+    Avhengigheter,
     FeltState,
     Valideringsstatus,
     feil,
@@ -43,7 +43,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         verdi: [],
         valideringsfunksjon: (
             felt: FeltState<ISelectOptionMedBrevtekst[]>,
-            avhengigheter?: FeltContext
+            avhengigheter?: Avhengigheter
         ) => {
             const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
 
@@ -80,7 +80,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
             return ok(felt);
         },
-        skalFeltetVises: (avhengigheter: FeltContext) => {
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK;
         },
         avhengigheter: { brevmal },

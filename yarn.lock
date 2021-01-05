@@ -810,10 +810,10 @@
     nav-frontend-typografi-style "^1.0.18"
     prop-types "^15.7.2"
 
-"@navikt/familie-http@^1.0.1-alpha.315", "@navikt/familie-http@^1.0.1-alpha.315+d7484a6":
-  version "1.0.1-alpha.315"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.1-alpha.315.tgz#3ed7c01c5073d1b73be6b399f647ba5b455e95fa"
-  integrity sha512-gnJvPfTrQk1MIvtV16HPLGmt4NlaBxL6HHGv2AIkGvxTEI4KKnc452lhTsUD32d3m3uaXClswmdKRIEMmdlthA==
+"@navikt/familie-http@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.1.tgz#61d78c3006425d782a00c9ad25922dc23a66c469"
+  integrity sha512-Hl4HFjWVgc3vJcFKWBtkiN9hrH/6WmXSDei92jB5c5RxRSK2L73qOIgeoQnl1UvNFYGtIFrDNfDEecUVILky/A==
   dependencies:
     "@navikt/familie-typer" "^3.0.10"
     "@sentry/core" "^5.27.3"
@@ -826,12 +826,12 @@
   dependencies:
     "@navikt/familie-typer" "^3.0.10"
 
-"@navikt/familie-skjema@^1.0.1-alpha.315":
-  version "1.0.1-alpha.315"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.0.1-alpha.315.tgz#a93f866a17fb5fce374c811bfb8189197ab4dec6"
-  integrity sha512-+afG816uQ+WmILK/SkwjfY+vfRu4iMhA2W/DuVWBmmhYWGMUXAhz+DmpY3ozZvJKFeFlxTroqzzKJEDm6a9KIg==
+"@navikt/familie-skjema@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.0.1.tgz#9ace0485ba6d01f82a058ee17412813c22fd0749"
+  integrity sha512-mwCDYhs94JZBB+0Qf1GDSd+SzyJ48GwzLUpJsDNn4I+X6JXArF+OEHBR2C2UypUuGeiIExtUjhgk4so4zmjDBg==
   dependencies:
-    "@navikt/familie-http" "^1.0.1-alpha.315+d7484a6"
+    "@navikt/familie-http" "^1.0.1"
     "@navikt/familie-typer" "^3.0.10"
     "@types/deep-equal" "^1.0.1"
     deep-equal "^2.0.5"

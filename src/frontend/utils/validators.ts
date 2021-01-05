@@ -1,6 +1,6 @@
 import {
     feil,
-    FeltContext,
+    Avhengigheter,
     FeltState,
     ok,
     ValiderFelt,
@@ -60,7 +60,7 @@ const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?
 
 export const erPeriodeGyldig = (
     felt: FeltState<IPeriode>,
-    avhengigheter?: FeltContext
+    avhengigheter?: Avhengigheter
 ): FeltState<IPeriode> => {
     const fom = felt.verdi.fom;
     const tom = felt.verdi.tom;
