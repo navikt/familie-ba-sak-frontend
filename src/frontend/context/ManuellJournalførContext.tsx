@@ -514,7 +514,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         };
                     }),
                     knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,
-                    tilknyttedeBehandlingIder,
+                    tilknyttedeBehandlingIder: tilknyttedeBehandlingIder.filter(
+                        behandlingId => behandlingId > 0
+                    ),
+                    opprettNyBehandlingOgKnyttTil: !!tilknyttedeBehandlingIder.find(
+                        behandlingId => behandlingId < 0
+                    ),
                     navIdent: innloggetSaksbehandler?.navIdent ?? '',
                 },
             })
