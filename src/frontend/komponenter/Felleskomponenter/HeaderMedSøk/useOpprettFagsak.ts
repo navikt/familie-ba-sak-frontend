@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 
+import { useHttp } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
@@ -16,12 +16,12 @@ export interface IOpprettFagsakData {
 
 const useOpprettFagsak = () => {
     const history = useHistory();
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
     const [feilmelding, settFeilmelding] = useState('');
     const [senderInn, settSenderInn] = useState(false);
 
     const opprettFagsak = (data: IOpprettFagsakData, onSuccess?: () => void) => {
-        axiosRequest<IFagsak, IOpprettFagsakData>({
+        request<IOpprettFagsakData, IFagsak>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,

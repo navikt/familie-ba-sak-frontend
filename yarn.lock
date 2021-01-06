@@ -810,12 +810,31 @@
     nav-frontend-typografi-style "^1.0.18"
     prop-types "^15.7.2"
 
+"@navikt/familie-http@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.1.tgz#61d78c3006425d782a00c9ad25922dc23a66c469"
+  integrity sha512-Hl4HFjWVgc3vJcFKWBtkiN9hrH/6WmXSDei92jB5c5RxRSK2L73qOIgeoQnl1UvNFYGtIFrDNfDEecUVILky/A==
+  dependencies:
+    "@navikt/familie-typer" "^3.0.10"
+    "@sentry/core" "^5.27.3"
+    constate "^3.1.0"
+
 "@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.7":
   version "3.1.7"
   resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.7.tgz#894432ff11fee3ddcaddcb031938a67b9f551b5b"
   integrity sha512-A4psvLYg4LasyG4L8rfSySAZjWeG14FOFYOfOX9w3qiRr9vVXJMllyQxHMchO+K0l48xHnpWuvaTvYk1Yzc3bA==
   dependencies:
     "@navikt/familie-typer" "^3.0.10"
+
+"@navikt/familie-skjema@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.0.1.tgz#9ace0485ba6d01f82a058ee17412813c22fd0749"
+  integrity sha512-mwCDYhs94JZBB+0Qf1GDSd+SzyJ48GwzLUpJsDNn4I+X6JXArF+OEHBR2C2UypUuGeiIExtUjhgk4so4zmjDBg==
+  dependencies:
+    "@navikt/familie-http" "^1.0.1"
+    "@navikt/familie-typer" "^3.0.10"
+    "@types/deep-equal" "^1.0.1"
+    deep-equal "^2.0.5"
 
 "@navikt/familie-typer@^3.0.10", "@navikt/familie-typer@^3.0.9":
   version "3.0.10"
@@ -3438,7 +3457,7 @@ constants-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
   integrity sha1-wguW2MYXdIqvHBYCF2DNJ/y4y3U=
 
-constate@^3.0.1:
+constate@^3.0.1, constate@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/constate/-/constate-3.1.0.tgz#6a84da7f8051334a77a6a92860e4058b2eae96c1"
   integrity sha512-a8hPXRJzcllP5D/9twMRI2VkAiZwgcY/fXyTHQqvv8EBZxzjEh6cAFlsHqnBQ7GtPWlNK11zD4pbIqO1jP0ReA==
@@ -3946,7 +3965,7 @@ dedent@^0.7.0:
   resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
   integrity sha1-JJXduvbrh0q7Dhvp3yLS5aVEMmw=
 
-deep-equal@^2.0.3:
+deep-equal@^2.0.3, deep-equal@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-2.0.5.tgz#55cd2fe326d83f9cbf7261ef0e060b3f724c5cb9"
   integrity sha512-nPiRgmbAtm1a3JsnLCf6/SLfXcjyN5v8L1TXzdCmHrXJ4hx+gW/w1YCcn7z8gJtSiDArZCgYtbao3QqLm/N1Sw==

@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
+import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -36,7 +37,8 @@ export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const history = useHistory();
-    const { axiosRequest, innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler } = useApp();
+    const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
@@ -277,7 +279,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             : [];
 
     const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
-        return axiosRequest<string, void>({
+        return request<void, string>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
         })
@@ -303,7 +305,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<IOppgave>> => {
-        return axiosRequest<IOppgave, string>({
+        return request<string, IOppgave>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/tilbakestill`,
         })
@@ -386,7 +388,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             offset: 0,
         };
 
-        return axiosRequest<IHentOppgaveDto, IFinnOppgaveRequest>({
+        return request<IFinnOppgaveRequest, IHentOppgaveDto>({
             data: finnOppgaveRequest,
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/hent-oppgaver`,

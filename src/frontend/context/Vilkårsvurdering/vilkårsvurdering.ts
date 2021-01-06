@@ -1,4 +1,5 @@
-import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
+import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+
 import { periodeDiff, nyPeriode } from '../../typer/periode';
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {

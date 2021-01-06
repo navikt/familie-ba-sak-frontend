@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertekst } from 'nav-frontend-typografi';
 
+import { FeltState } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
@@ -11,7 +12,6 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { FeltState } from '../../../../familie-skjema/typer';
 import Pluss from '../../../../ikoner/Pluss';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
