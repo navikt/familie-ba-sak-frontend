@@ -8,6 +8,7 @@ import { Undertittel } from 'nav-frontend-typografi';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { behandlingsstatuser } from '../../../../node_dist/frontend/typer/behandling';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import Pluss from '../../ikoner/Pluss';
 import { BehandlingStatus, IBehandling } from '../../typer/behandling';
@@ -116,7 +117,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                         }}
                                     />
                                 </StyledTd>
-                                <td>{behandling.status}</td>
+                                <td>{behandlingsstatuser[behandling.status]}</td>
                                 <td>
                                     {formaterDato(
                                         familieDayjs(behandling.opprettetTidspunkt),

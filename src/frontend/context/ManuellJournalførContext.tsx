@@ -517,7 +517,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     tilknyttedeBehandlingIder: tilknyttedeBehandlingIder.filter(
                         behandlingId => behandlingId > 0
                     ),
-                    opprettNyBehandlingOgKnyttTil: !!tilknyttedeBehandlingIder.find(
+                    opprettOgKnyttTilNyBehandling: !!tilknyttedeBehandlingIder.find(
                         behandlingId => behandlingId < 0
                     ),
                     navIdent: innloggetSaksbehandler?.navIdent ?? '',
