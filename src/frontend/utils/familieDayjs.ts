@@ -1,4 +1,4 @@
-import dayjs, { ConfigType } from 'dayjs';
+import dayjs, { ConfigType, OpUnitType, QUnitType } from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -26,6 +26,14 @@ const familieDayjs = (config?: ConfigType, format?: string): Dayjs => {
         return dayjs.tz(config, format, norskTidssone);
     }
     return config ? dayjs.tz(config) : dayjs.tz(dayjs());
+};
+
+export const sammenlignDatoer = (
+    første: Dayjs,
+    andre: Dayjs,
+    unit?: QUnitType | OpUnitType
+): boolean => {
+    return første.utc().diff(andre.utc(), unit) === 0;
 };
 
 export default familieDayjs;

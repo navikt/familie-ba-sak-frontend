@@ -53,7 +53,11 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
             }
 
             // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
-            return familieDayjs(utbetalingsperiode.periodeFom).diff(familieDayjs(), 'month') < 2;
+            return (
+                familieDayjs(utbetalingsperiode.periodeFom)
+                    .utc()
+                    .diff(familieDayjs().utc(), 'month') < 2
+            );
         });
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
