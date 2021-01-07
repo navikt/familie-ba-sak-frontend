@@ -15,7 +15,7 @@ import {
     Resultat,
     VilkårType,
 } from '../../../../typer/vilkår';
-import familieDayjs from '../../../../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { isoStringToDayjs } from '../../../../utils/formatter';
 
 const useUtbetalingBegrunnelse = (
@@ -63,7 +63,8 @@ const useUtbetalingBegrunnelse = (
             .filter((vilkårResultat: IRestVilkårResultat) => {
                 if (utbetalingBegrunnelse.begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                     return (
-                        isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN).diff(
+                        familieDayjsDiff(
+                            isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN),
                             familieDayjs(periode.fom).subtract(1, 'month'),
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
@@ -72,7 +73,8 @@ const useUtbetalingBegrunnelse = (
                     utbetalingBegrunnelse.begrunnelseType === VedtakBegrunnelseType.REDUKSJON
                 ) {
                     return (
-                        isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE).diff(
+                        familieDayjsDiff(
+                            isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
                             familieDayjs(periode.tom).subtract(1, 'month'),
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT

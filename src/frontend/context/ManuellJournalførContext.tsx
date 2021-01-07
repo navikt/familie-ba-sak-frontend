@@ -37,7 +37,7 @@ import {
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo, PersonType } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
-import familieDayjs from '../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../utils/familieDayjs';
 import { useApp } from './AppContext';
 
 const tomPerson: IPersonInfo = {
@@ -448,7 +448,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return oppdatertData.status === RessursStatus.SUKSESS &&
             oppdatertData.data.fagsak?.behandlinger.length
             ? oppdatertData.data.fagsak.behandlinger.sort((a, b) =>
-                  familieDayjs(b.opprettetTidspunkt).diff(familieDayjs(a.opprettetTidspunkt))
+                  familieDayjsDiff(
+                      familieDayjs(b.opprettetTidspunkt),
+                      familieDayjs(a.opprettetTidspunkt)
+                  )
               )
             : [];
     };
