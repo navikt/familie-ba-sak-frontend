@@ -8,7 +8,7 @@ import {
     IRestVilkårResultat,
     IVilkårResultat,
 } from '../../typer/vilkår';
-import familieDayjs from '../../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../../utils/familieDayjs';
 import { datoformat } from '../../utils/formatter';
 import {
     erPeriodeGyldig,
@@ -108,7 +108,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 return -1;
             }
 
-            return familieDayjs(b.person.fødselsdato, datoformat.ISO_DAG).diff(
+            return familieDayjsDiff(
+                familieDayjs(b.person.fødselsdato, datoformat.ISO_DAG),
                 familieDayjs(a.person.fødselsdato, datoformat.ISO_DAG)
             );
         });

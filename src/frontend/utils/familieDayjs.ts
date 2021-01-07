@@ -28,12 +28,12 @@ const familieDayjs = (config?: ConfigType, format?: string): Dayjs => {
     return config ? dayjs.tz(config) : dayjs.tz(dayjs());
 };
 
-export const sammenlignDatoer = (
+export const familieDayjsDiff = (
     første: Dayjs,
     andre: Dayjs,
     unit?: QUnitType | OpUnitType
-): boolean => {
-    return første.utc().diff(andre.utc(), unit) === 0;
+): number => {
+    return første.utc().diff(andre.utc(), unit);
 };
 
 export default familieDayjs;
