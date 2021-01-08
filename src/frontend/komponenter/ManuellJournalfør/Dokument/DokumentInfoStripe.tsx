@@ -7,6 +7,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import { IDokumentInfo } from '@navikt/familie-typer';
 
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
+import { EksternLenke } from '../../../ikoner/EksternLenke';
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
@@ -33,16 +34,36 @@ const StyledDokumentIkon = styled(DokumentIkon)`
     min-height: 48px;
 `;
 
+const StyledÅpenDokument = styled.button`
+    margin-left: 10px;
+`;
+
 interface IDokumentInfoStripeProps {
+    journalpostId: string | undefined;
     dokument: IDokumentInfo;
 }
 
-export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ dokument }) => {
+export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
+    journalpostId,
+    dokument,
+}) => {
     return (
         <DokumentInfoStripeContainer>
             <StyledDokumentIkon width={48} height={48} />
             <DokumentTittelContainer>
-                <DokumentTittelDiv>{dokument.tittel || 'Ukjent'}</DokumentTittelDiv>
+                <DokumentTittelDiv>
+                    {dokument.tittel || 'Ukjent'}
+                    <StyledÅpenDokument
+                        onClick={() => {
+                            window.open(
+                                `/api/hentDokument/${journalpostId}/hent/${dokument.dokumentInfoId}`,
+                                '_blank'
+                            );
+                        }}
+                    >
+                        <EksternLenke />
+                    </StyledÅpenDokument>
+                </DokumentTittelDiv>
                 {dokument.logiskeVedlegg.map((it, index) => (
                     <Normaltekst key={index}>{it.tittel}</Normaltekst>
                 ))}
