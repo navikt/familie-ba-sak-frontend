@@ -52,7 +52,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     );
 
     app.use(
-        '/api/hentDokument',
+        '/proxy/api/hentDokument',
         ensureAuthenticated(azureAuthClient, true),
         attachToken(azureAuthClient),
         doHentDokumentProxy()
