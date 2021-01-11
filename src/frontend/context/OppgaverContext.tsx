@@ -5,6 +5,7 @@ import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -13,7 +14,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { Valideringsstatus } from '../familie-skjema/typer';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import {

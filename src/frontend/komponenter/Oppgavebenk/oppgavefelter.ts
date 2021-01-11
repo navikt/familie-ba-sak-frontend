@@ -1,8 +1,8 @@
 import { parse, ParsedQuery } from 'query-string';
 
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { ISaksbehandler } from '@navikt/familie-typer';
 
-import { Valideringsstatus } from '../../familie-skjema/typer';
 import { hentPar, INøkkelPar } from '../../typer/common';
 import {
     EnhetFilter,

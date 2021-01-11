@@ -8,10 +8,10 @@ import { Select } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
 import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
-import { Valideringsstatus } from '../../familie-skjema/typer';
 import { IPar } from '../../typer/common';
 import { datoformatNorsk } from '../../utils/formatter';
 import { IOppgaveFelt } from './oppgavefelter';
