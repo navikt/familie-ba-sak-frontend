@@ -1,15 +1,29 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
+import navFarger from 'nav-frontend-core';
 import { Knapp } from 'nav-frontend-knapper';
 import { Select } from 'nav-frontend-skjema';
+import { Element } from 'nav-frontend-typografi';
 
 import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgaver } from '../../context/OppgaverContext';
+import { Valideringsstatus } from '../../familie-skjema/typer';
 import { IPar } from '../../typer/common';
 import { datoformatNorsk } from '../../utils/formatter';
 import { IOppgaveFelt } from './oppgavefelter';
+
+const StyledElement = styled(Element)`
+    margin-top: 0.5rem;
+    color: ${navFarger.redError};
+`;
+
+const DatoVelgerContainer = styled.div`
+    max-width: 12.5rem;
+`;
 
 const FilterSkjema: React.FunctionComponent = () => {
     const {
@@ -18,6 +32,7 @@ const FilterSkjema: React.FunctionComponent = () => {
         oppgaveFelter,
         settVerdiPåOppgaveFelt,
         tilbakestillOppgaveFelter,
+        validerDatoer,
     } = useOppgaver();
 
     return (
@@ -29,17 +44,25 @@ const FilterSkjema: React.FunctionComponent = () => {
                         switch (oppgaveFelt.filter?.type) {
                             case 'dato':
                                 return (
-                                    <FamilieDatovelger
-                                        key={oppgaveFelt.nøkkel}
-                                        id={oppgaveFelt.nøkkel}
-                                        label={oppgaveFelt.label}
-                                        onChange={(dato?: ISODateString) =>
-                                            settVerdiPåOppgaveFelt(oppgaveFelt, dato ? dato : '')
-                                        }
-                                        placeholder={datoformatNorsk.DATO}
-                                        valgtDato={oppgaveFelt.filter.selectedValue}
-                                        className="filterskjema__filtre--input"
-                                    />
+                                    <DatoVelgerContainer key={oppgaveFelt.nøkkel}>
+                                        <FamilieDatovelger
+                                            id={oppgaveFelt.nøkkel}
+                                            label={oppgaveFelt.label}
+                                            onChange={(dato?: ISODateString) => {
+                                                settVerdiPåOppgaveFelt(
+                                                    oppgaveFelt,
+                                                    dato ? dato : ''
+                                                );
+                                            }}
+                                            placeholder={datoformatNorsk.DATO}
+                                            valgtDato={oppgaveFelt.filter.selectedValue}
+                                            className="filterskjema__filtre--input"
+                                        />
+                                        {oppgaveFelt.valideringsstatus ===
+                                            Valideringsstatus.FEIL && (
+                                            <StyledElement>{oppgaveFelt.feilmelding}</StyledElement>
+                                        )}
+                                    </DatoVelgerContainer>
                                 );
                             case 'select':
                                 return (
@@ -84,7 +107,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     type={'hoved'}
                     mini
                     onClick={() => {
-                        hentOppgaver();
+                        validerDatoer() && hentOppgaver();
                     }}
                     spinner={oppgaver.status === RessursStatus.HENTER}
                     disabled={oppgaver.status === RessursStatus.HENTER}

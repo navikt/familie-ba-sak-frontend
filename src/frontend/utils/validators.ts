@@ -126,3 +126,7 @@ export const validerFelt = <Value, Context>(
 export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => {
     return ok(felt);
 };
+
+export const validerFormatISODag = (dato: string | undefined) => {
+    return familieDayjs(dato, datoformat.ISO_DAG).isValid();
+};

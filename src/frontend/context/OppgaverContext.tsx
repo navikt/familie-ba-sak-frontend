@@ -12,6 +12,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { Valideringsstatus } from '../familie-skjema/typer';
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import {
@@ -28,6 +29,7 @@ import {
     SaksbehandlerFilter,
 } from '../typer/oppgave';
 import familieDayjs from '../utils/familieDayjs';
+import { validerFormatISODag } from '../utils/validators';
 import { useApp } from './AppContext';
 
 export const oppgaveSideLimit = 15;
@@ -316,6 +318,36 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
+    const validerDatoer = () => {
+        const opprettetTidspunktGyldig = validerFormatISODag(
+            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue
+        );
+
+        const fristGyldig = validerFormatISODag(
+            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue
+        );
+
+        const oppdaterteOppgaveFelter = {
+            ...oppgaveFelter,
+            opprettetTidspunkt: {
+                ...oppgaveFelter.opprettetTidspunkt,
+                valideringsstatus: opprettetTidspunktGyldig
+                    ? Valideringsstatus.OK
+                    : Valideringsstatus.FEIL,
+                feilmelding: opprettetTidspunktGyldig ? '' : 'Dato må skrives på format ddmmåå',
+            },
+            fristFerdigstillelse: {
+                ...oppgaveFelter.fristFerdigstillelse,
+                valideringsstatus: fristGyldig ? Valideringsstatus.OK : Valideringsstatus.FEIL,
+                feilmelding: fristGyldig ? '' : 'Dato må skrives på format ddmmåå',
+            },
+        };
+
+        settOppgaveFelter(oppdaterteOppgaveFelter);
+
+        return opprettetTidspunktGyldig && fristGyldig;
+    };
+
     const hentOppgaver = () => {
         settOppgaver(byggHenterRessurs());
         tilbakestillSortOrder();
@@ -412,6 +444,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         sortOppgave,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
+        validerDatoer,
     };
 });
 const Oppgaver: React.FC = () => {

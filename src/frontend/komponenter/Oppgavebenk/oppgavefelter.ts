@@ -2,15 +2,16 @@ import { parse, ParsedQuery } from 'query-string';
 
 import { ISaksbehandler } from '@navikt/familie-typer';
 
+import { Valideringsstatus } from '../../familie-skjema/typer';
 import { hentPar, INøkkelPar } from '../../typer/common';
 import {
     EnhetFilter,
-    OppgavetypeFilter,
-    GjelderFilter,
-    SaksbehandlerFilter,
-    oppgaveTypeFilter,
     enhetFilter,
+    GjelderFilter,
     gjelderFilter,
+    OppgavetypeFilter,
+    oppgaveTypeFilter,
+    SaksbehandlerFilter,
     saksbehandlerFilter,
 } from '../../typer/oppgave';
 
@@ -32,6 +33,9 @@ export interface IOppgaveFelt {
     label: string;
     filter?: IOppgaveFilter;
     order?: FeltSortOrder;
+    // TODO: midlertidig - ønsker å bruke FeltState og Skjema-hook
+    valideringsstatus?: Valideringsstatus;
+    feilmelding?: string;
 }
 
 export interface IOppgaveFelter {
@@ -64,6 +68,7 @@ export const initialOppgaveFelter = (
                 initialValue: '',
             },
             order: FeltSortOrder.NONE,
+            valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         },
         oppgavetype: {
             nøkkel: 'oppgavetype',
@@ -104,6 +109,7 @@ export const initialOppgaveFelter = (
                 initialValue: '',
             },
             order: FeltSortOrder.NONE,
+            valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         },
         prioritet: {
             nøkkel: 'prioritet',
