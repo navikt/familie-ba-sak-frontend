@@ -1,11 +1,11 @@
-import { FeltState, FeltContext, Valideringsstatus } from '../../familie-skjema/typer';
-import { feil, ok } from '../../familie-skjema/validators';
+import { FeltState, Avhengigheter, Valideringsstatus, feil, ok } from '@navikt/familie-skjema';
+
 import { IPeriode } from '../../typer/periode';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
-    avhengigheter?: FeltContext
+    avhengigheter?: Avhengigheter
 ): FeltState<IVilkårResultat> => {
     const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
         nyttVilkårResultat.verdi.periode,

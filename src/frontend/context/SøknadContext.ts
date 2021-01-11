@@ -5,12 +5,12 @@ import { useParams } from 'react-router';
 
 import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
 
+import { useHttp } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSteg, BehandlingUnderkategori, hentStegNummer } from '../typer/behandling';
 import { FamilieRelasjonRolle, IFamilierelasjon, IPersonInfo } from '../typer/person';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
-import { useApp } from './AppContext';
 import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 
@@ -41,7 +41,7 @@ const initalState = (bruker?: IPersonInfo): ISøknadDTO => {
 };
 
 const [SøknadProvider, useSøknad] = createUseContext(() => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
     const { bruker } = useFagsakRessurser();
     const { åpenBehandling } = useBehandling();
     const { behandlingId } = useParams<{ behandlingId: string }>();
@@ -68,7 +68,7 @@ const [SøknadProvider, useSøknad] = createUseContext(() => {
             hentStegNummer(åpenBehandling.data.steg) >=
                 hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
         ) {
-            axiosRequest<ISøknadDTO, void>({
+            request<void, ISøknadDTO>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.data.behandlingId}/søknad`,
                 påvirkerSystemLaster: true,

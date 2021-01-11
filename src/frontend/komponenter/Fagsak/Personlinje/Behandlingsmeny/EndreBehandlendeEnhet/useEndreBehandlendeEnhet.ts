@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -8,14 +9,13 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { IRestEndreBehandlendeEnhet } from '../../../../../typer/enhet';
 import { IFagsak } from '../../../../../typer/fagsak';
 
 const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { åpenBehandling } = useBehandling();
 
@@ -43,7 +43,7 @@ const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
         if (enhetId !== undefined) {
             settSubmitRessurs(byggHenterRessurs());
 
-            axiosRequest<IFagsak, IRestEndreBehandlendeEnhet>({
+            request<IRestEndreBehandlendeEnhet, IFagsak>({
                 method: 'PUT',
                 data: {
                     enhetId,

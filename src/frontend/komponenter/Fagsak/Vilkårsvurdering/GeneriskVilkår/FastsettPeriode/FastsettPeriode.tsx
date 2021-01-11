@@ -7,9 +7,9 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
 import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
+import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../../context/BehandlingContext';
-import { FeltState, Valideringsstatus } from '../../../../../familie-skjema/typer';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';

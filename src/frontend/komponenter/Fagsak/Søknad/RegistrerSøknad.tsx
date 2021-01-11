@@ -8,9 +8,9 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
+import { useHttp } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
@@ -38,7 +38,7 @@ const StyledSkjemasteg = styled(Skjemasteg)`
 `;
 
 const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
     const { fagsak, settFagsak } = useFagsakRessurser();
     const { erLesevisning, opplysningsplikt } = useBehandling();
     const history = useHistory();
@@ -61,7 +61,7 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
         if (åpenBehandling && erSøknadGyldig(søknad)) {
             settSenderInn(true);
 
-            axiosRequest<IFagsak, IRestRegistrerSøknad>({
+            request<IRestRegistrerSøknad, IFagsak>({
                 method: 'POST',
                 data: { søknad, bekreftEndringerViaFrontend },
                 url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,

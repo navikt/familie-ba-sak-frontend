@@ -1,4 +1,4 @@
-import dayjs, { ConfigType } from 'dayjs';
+import dayjs, { ConfigType, OpUnitType, QUnitType } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
@@ -28,6 +28,14 @@ const familieDayjs = (config?: ConfigType, format?: string): Dayjs => {
         return dayjs(config, format).tz();
     }
     return config ? dayjs(config).tz() : dayjs().tz();
+};
+
+export const familieDayjsDiff = (
+    første: Dayjs,
+    andre: Dayjs,
+    unit?: QUnitType | OpUnitType
+): number => {
+    return første.utc().diff(andre.utc(), unit);
 };
 
 export default familieDayjs;

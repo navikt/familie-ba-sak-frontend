@@ -1,4 +1,4 @@
-import familieDayjs, { Dayjs } from './familieDayjs';
+import familieDayjs, { Dayjs, familieDayjsDiff } from './familieDayjs';
 
 export enum datoformat {
     MÅNED = 'MM.YY',
@@ -42,12 +42,12 @@ export const formaterIverksattDato = (dato: string | undefined) =>
 
 export const hentAlder = (dato: string): number => {
     const dayjsDato = familieDayjs(dato);
-    return dayjsDato.isValid() ? familieDayjs().diff(dayjsDato, 'year') : 0;
+    return dayjsDato.isValid() ? familieDayjsDiff(familieDayjs(), dayjsDato, 'year') : 0;
 };
 
 export const hentAlderSomString = (fødselsdato: string | undefined) => {
     return fødselsdato
-        ? familieDayjs().diff(familieDayjs(fødselsdato, 'YYYY-MM-DD'), 'year') + ' år'
+        ? familieDayjsDiff(familieDayjs(), familieDayjs(fødselsdato, 'YYYY-MM-DD'), 'year') + ' år'
         : 'Alder ukjent';
 };
 
