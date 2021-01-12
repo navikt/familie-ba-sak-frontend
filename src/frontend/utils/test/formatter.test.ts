@@ -2,7 +2,7 @@ import { datoformat, formaterIsoDato } from '../formatter';
 
 describe('utils/formatter', () => {
     describe('formaterIsoDato', () => {
-        const dato = '2020-12-01T14:02';
+        const dato = '2020-12-01T14:02:00+01:00';
 
         test('Skal returnere dato på format MM.YY', () => {
             expect(formaterIsoDato(dato, datoformat.MÅNED)).toEqual('12.20');
