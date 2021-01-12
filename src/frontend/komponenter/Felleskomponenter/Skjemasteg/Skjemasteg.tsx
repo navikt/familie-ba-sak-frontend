@@ -113,7 +113,6 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                     )}
                     {tilbakestillOnClick ? (
                         <TilbakestillKnapp
-                            type={'hoved'}
                             disabled={!skalAktivereTilbakestillKnapp}
                             onClick={() => {
                                 tilbakestillOnClick();
