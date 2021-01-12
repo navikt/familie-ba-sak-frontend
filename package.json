@@ -136,7 +136,7 @@
     "@types/jest": "^26.0.15",
     "@types/react-axe": "^3.1.0",
     "@types/webpack": "^4.41.17",
-    "@types/webpack-dev-middleware": "^3.7.1",
+    "@types/webpack-dev-middleware": "^4.0.0",
     "@types/webpack-env": "^1.15.2",
     "@types/webpack-hot-middleware": "^2.25.3",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
