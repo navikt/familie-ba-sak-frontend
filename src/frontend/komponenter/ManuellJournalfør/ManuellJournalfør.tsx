@@ -12,7 +12,6 @@ import {
 } from '../../context/ManuellJournalførContext';
 import { BrukerHeader } from './BrukerHeader';
 import { DokumentPanel } from './Dokument/DokumentPanel';
-import { JournalføringModal } from './JournalføringModal';
 import { JournalpostSkjema } from './JournalpostSkjema';
 
 const ToKolonnerDiv = styled.div`
@@ -22,7 +21,6 @@ const ToKolonnerDiv = styled.div`
 
 const ManuellJournalførContent: React.FC = () => {
     const { dataForManuellJournalføring } = useManuellJournalfør();
-    const [visModal, settVisModal] = React.useState(false);
     const [feilmelding, settFeilmelding] = React.useState('');
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
@@ -35,18 +33,9 @@ const ManuellJournalførContent: React.FC = () => {
                             {feilmelding && <AlertStripeFeil>{feilmelding}</AlertStripeFeil>}
 
                             <ToKolonnerDiv>
-                                <JournalpostSkjema
-                                    visModal={() => settVisModal(true)}
-                                    settFeilmelding={settFeilmelding}
-                                />
+                                <JournalpostSkjema settFeilmelding={settFeilmelding} />
                                 <DokumentPanel />
                             </ToKolonnerDiv>
-                            {visModal && (
-                                <JournalføringModal
-                                    gjem={() => settVisModal(false)}
-                                    settFeilmelding={settFeilmelding}
-                                />
-                            )}
                         </div>
                     ) : (
                         <AlertStripeAdvarsel
