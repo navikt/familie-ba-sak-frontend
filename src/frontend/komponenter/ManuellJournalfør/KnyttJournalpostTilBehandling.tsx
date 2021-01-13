@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
+import Panel from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
@@ -108,33 +109,27 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                 <>
                     <br />
                     <Undertittel>Knytt til ny behandling</Undertittel>
-                    <table className="tabell">
-                        <tbody className="tabell__body">
-                            <tr>
-                                <KnyttTilBehandlingTd>
-                                    <FamilieCheckbox
-                                        erLesevisning={false}
-                                        label={'-'}
-                                        checked={knyttTilNyBehandling}
-                                        onChange={() => {
-                                            settKnyttTilNyBehandling(!knyttTilNyBehandling);
-                                        }}
-                                    />
-                                </KnyttTilBehandlingTd>
-                                <td>{'Knytt til ny behandling'}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <br />
+                    <Panel border={true}>
+                        <FamilieCheckbox
+                            erLesevisning={false}
+                            label={'Knytt til ny behandling'}
+                            checked={knyttTilNyBehandling}
+                            onChange={() => {
+                                settKnyttTilNyBehandling(!knyttTilNyBehandling);
+                            }}
+                        />
+                    </Panel>
                 </>
             )}
             {visGenerellSakInfoStripe && (
                 <>
                     <br />
                     <AlertStripe type="info">
-                        <GenerellSakInfoStripeTittel>{`Du Velger å journalføre uten å knytte til behandling(er).`}</GenerellSakInfoStripeTittel>
+                        <GenerellSakInfoStripeTittel>{`Du velger å journalføre uten å knytte til behandling(er).`}</GenerellSakInfoStripeTittel>
                         <div>
-                            {`Journalposten knyttes kun til person(tilsvarende "Knytt til generell
-                            sak" i Gosys")`}
+                            {`Journalposten knyttes kun til person (tilsvarende "Knytt til generell
+                            sak" i Gosys)`}
                         </div>
                     </AlertStripe>
                 </>

@@ -76,12 +76,12 @@ const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
     };
 
     if (!dataForValidering.journalpost.tittel) {
-        settValideringsfeil(dataForValidering.journalpost, 'Journalpost tittel må ikke være tom');
+        settValideringsfeil(dataForValidering.journalpost, 'Journalposttittel må ikke være tom');
     }
 
     dataForValidering.journalpost.dokumenter?.forEach(dokument => {
         if (!dokument.tittel) {
-            settValideringsfeil(dokument, 'Dokument tittel må ikke være tom');
+            settValideringsfeil(dokument, 'Dokumenttittel må ikke være tom');
         }
     });
 
