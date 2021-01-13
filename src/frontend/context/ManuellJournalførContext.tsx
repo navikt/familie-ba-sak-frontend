@@ -483,8 +483,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 hentAktivBehandlingPåFagsak(dataForManuellJournalføring.data.fagsak)?.status ===
                     BehandlingStatus.AVSLUTTET);
 
-        console.log(kanKnyttTilNyBehandling);
-        console.log(dataForManuellJournalføring);
         settVisKnyttTilNyBehandling(kanKnyttTilNyBehandling);
         settKnyttTilNyBehandling(kanKnyttTilNyBehandling);
     }, [dataForManuellJournalføring]);
