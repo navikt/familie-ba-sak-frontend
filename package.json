@@ -177,7 +177,7 @@
     "typescript-eslint": "^0.0.1-alpha.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^4.2.0",
-    "webpack-dev-middleware": "3.7.2",
+    "webpack-dev-middleware": "4.0.4",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "4.2.2"
   },
