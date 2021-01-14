@@ -11,7 +11,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
-import { formaterTilKunFørstBokstavStor } from '../../utils/formatter';
+import { formaterPersonIdent, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
 import { feilDekoratør } from './FeilDekoratør';
@@ -51,8 +51,8 @@ export const BrukerPanel: React.FC = () => {
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const bruker = dataForManuellJournalføring.data.person;
-            const navn = formaterTilKunFørstBokstavStor(bruker?.navn) || 'Ukjent';
-            const ident = bruker?.personIdent || 'Ukjent';
+            const navn = formaterTilKunFørstBokstavStor(bruker?.navn) || 'Bruke ikke satt';
+            const ident = bruker?.personIdent ? formaterPersonIdent(bruker.personIdent) : '';
             const Panel = harFeil(bruker) ? PanelFeil : PanelGyldig;
             return (
                 <BrukerPanelDiv>

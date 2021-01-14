@@ -9,7 +9,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { EmailIkon } from '../../ikoner/EmailIkon';
-import { formaterTilKunFørstBokstavStor } from '../../utils/formatter';
+import { formaterPersonIdent, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
 import { DeltagerInfo } from './DeltagerInfo';
 import { feilDekoratør } from './FeilDekoratør';
 
@@ -38,7 +38,7 @@ export const AvsenderPanel: React.FC = () => {
         case RessursStatus.SUKSESS:
             const avsender = dataForManuellJournalføring.data.journalpost.avsenderMottaker;
             const navn = formaterTilKunFørstBokstavStor(avsender?.navn) || 'Ukjent';
-            const ident = avsender?.id || 'Ukjent';
+            const ident = avsender?.id ? formaterPersonIdent(avsender.id) : '';
             const Panel = harFeil(avsender) ? PanelFeil : PanelGyldig;
             return (
                 <AvsenderPanelDiv>
