@@ -128,6 +128,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 [oppgaveFelt.nøkkel]: {
                     ...oppgaveFelt,
                     order: FeltSortOrder.NONE,
+                    feilmelding: '',
+                    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
                 },
             };
             settOppgaveFelter(midlertidigOppgaveFelter);
@@ -345,9 +347,10 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             },
         };
 
-        settOppgaveFelter(oppdaterteOppgaveFelter);
+        const erGyldig = opprettetTidspunktGyldig && fristGyldig;
+        !erGyldig && settOppgaveFelter(oppdaterteOppgaveFelter);
 
-        return opprettetTidspunktGyldig && fristGyldig;
+        return erGyldig;
     };
 
     const hentOppgaver = () => {
