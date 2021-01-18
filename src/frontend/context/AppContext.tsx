@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { HttpProvider, useHttp } from '@navikt/familie-http';
 import { ISaksbehandler } from '@navikt/familie-typer';
-import { Ressurs, ApiRessurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { håndterApiRessurs, loggFeil, preferredAxios } from '../api/axios';
+import { loggFeil } from '../api/axios';
 import IkkeTilgang from '../ikoner/IkkeTilgang';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 import { BehandlerRolle } from '../typer/behandling';
@@ -45,19 +46,40 @@ interface IProps {
     autentisertSaksbehandler: ISaksbehandler | undefined;
 }
 
-const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IProps) => {
-    const [autentisert, settAutentisert] = React.useState(true);
+interface AuthProviderExports {
+    autentisert: boolean;
+    settAutentisert: (autentisert: boolean) => void;
+    innloggetSaksbehandler: ISaksbehandler | undefined;
+}
+
+const [AuthProvider, useAuth] = createUseContext(
+    ({ autentisertSaksbehandler }: IProps): AuthProviderExports => {
+        const [autentisert, settAutentisert] = React.useState(true);
+        const [innloggetSaksbehandler, settInnloggetSaksbehandler] = React.useState(
+            autentisertSaksbehandler
+        );
+
+        useEffect(() => {
+            if (autentisertSaksbehandler) {
+                settInnloggetSaksbehandler(autentisertSaksbehandler);
+            }
+        }, [autentisertSaksbehandler]);
+
+        return { autentisert, settAutentisert, innloggetSaksbehandler };
+    }
+);
+
+const [AppContentProvider, useApp] = createUseContext(() => {
+    const { autentisert, innloggetSaksbehandler } = useAuth();
+    const { request, systemetLaster } = useHttp();
+
     const [toggles, settToggles] = useState<IToggles>(alleTogglerAv());
     const [appVersjon, settAppVersjon] = useState('');
-    const [ressurserSomLaster, settRessurserSomLaster] = React.useState<string[]>([]);
 
-    const [innloggetSaksbehandler, settInnloggetSaksbehandler] = React.useState(
-        autentisertSaksbehandler
-    );
     const [modal, settModal] = React.useState<IModal>(initalState);
 
     const verifiserVersjon = () => {
-        axiosRequest<string, void>({
+        request<void, string>({
             url: '/version',
             method: 'GET',
         }).then((versjon: Ressurs<string>) => {
@@ -111,13 +133,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     useEffect(() => verifiserVersjon(), []);
 
     useEffect(() => {
-        if (autentisertSaksbehandler) {
-            settInnloggetSaksbehandler(autentisertSaksbehandler);
-        }
-    }, [autentisertSaksbehandler]);
-
-    useEffect(() => {
-        axiosRequest<IToggles, string[]>({
+        request<string[], IToggles>({
             method: 'POST',
             url: '/familie-ba-sak/api/feature',
             data: Object.values(ToggleNavn),
@@ -143,7 +159,7 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     };
 
     const sjekkTilgang = async (brukerIdent: string): Promise<boolean> => {
-        return axiosRequest<IRestTilgang, { brukerIdent: string }>({
+        return request<{ brukerIdent: string }, IRestTilgang>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
             data: { brukerIdent },
@@ -188,41 +204,6 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         });
     };
 
-    const axiosRequest = async <T, D>(
-        config: FamilieAxiosRequestConfig<D>
-    ): Promise<Ressurs<T>> => {
-        const ressursId = `${config.method}_${config.url}`;
-        config.påvirkerSystemLaster && settRessurserSomLaster([...ressurserSomLaster, ressursId]);
-
-        return preferredAxios
-            .request(config)
-            .then((response: AxiosResponse<ApiRessurs<T>>) => {
-                const responsRessurs: ApiRessurs<T> = response.data;
-
-                config.påvirkerSystemLaster && fjernRessursSomLaster(ressursId);
-                return håndterApiRessurs(responsRessurs, innloggetSaksbehandler);
-            })
-            .catch((error: AxiosError) => {
-                if (error.message.includes('401')) {
-                    settAutentisert(false);
-                }
-                loggFeil(error, innloggetSaksbehandler);
-
-                config.påvirkerSystemLaster && fjernRessursSomLaster(ressursId);
-
-                const responsRessurs: ApiRessurs<T> = error.response?.data;
-                return håndterApiRessurs(responsRessurs, innloggetSaksbehandler);
-            });
-    };
-
-    const fjernRessursSomLaster = (ressursId: string) => {
-        setTimeout(() => {
-            settRessurserSomLaster((prevState: string[]) => {
-                return prevState.filter((ressurs: string) => ressurs !== ressursId);
-            });
-        }, 300);
-    };
-
     const hentSaksbehandlerRolle = (): BehandlerRolle | undefined => {
         let rolle = BehandlerRolle.UKJENT;
         if (innloggetSaksbehandler && innloggetSaksbehandler.groups) {
@@ -239,13 +220,8 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
         tilFeilside();
     };
 
-    const systemetLaster = () => {
-        return ressurserSomLaster.length > 0;
-    };
-
     return {
         autentisert,
-        axiosRequest,
         hentSaksbehandlerRolle,
         innloggetSaksbehandler,
         lukkModal,
@@ -258,4 +234,25 @@ const [AppProvider, useApp] = createUseContext(({ autentisertSaksbehandler }: IP
     };
 });
 
-export { AppProvider, useApp };
+const AuthOgHttpProvider: React.FC = ({ children }) => {
+    const { innloggetSaksbehandler, settAutentisert } = useAuth();
+
+    return (
+        <HttpProvider
+            innloggetSaksbehandler={innloggetSaksbehandler}
+            settAutentisert={settAutentisert}
+        >
+            <AppContentProvider>{children}</AppContentProvider>
+        </HttpProvider>
+    );
+};
+
+const AppProvider: React.FC<IProps> = ({ autentisertSaksbehandler, children }) => {
+    return (
+        <AuthProvider autentisertSaksbehandler={autentisertSaksbehandler}>
+            <AuthOgHttpProvider children={children} />
+        </AuthProvider>
+    );
+};
+
+export { AppProvider, useApp, useAuth };

@@ -10,6 +10,7 @@ import {
     FamilieRadioGruppe,
     FamilieTextareaControlled,
 } from '@navikt/familie-form-elements';
+import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
@@ -19,7 +20,6 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { FeltState, Valideringsstatus } from '../../../../familie-skjema/typer';
 import AutomatiskVurdering from '../../../../ikoner/AutomatiskVurdering';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import ManuellVurdering from '../../../../ikoner/ManuellVurdering';

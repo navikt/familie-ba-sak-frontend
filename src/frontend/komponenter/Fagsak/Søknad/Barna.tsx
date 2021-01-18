@@ -16,7 +16,7 @@ import {
     IFamilierelasjonMaskert,
 } from '../../../typer/person';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
-import familieDayjs from '../../../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat } from '../../../utils/formatter';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import LeggTilBarn from './LeggTilBarn';
@@ -50,7 +50,8 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
     const { bruker } = useFagsakRessurser();
     const sorterteBarnMedOpplysninger = søknad.barnaMedOpplysninger.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-            return familieDayjs(b.fødselsdato, datoformat.ISO_DAG).diff(
+            return familieDayjsDiff(
+                familieDayjs(b.fødselsdato, datoformat.ISO_DAG),
                 familieDayjs(a.fødselsdato, datoformat.ISO_DAG)
             );
         }

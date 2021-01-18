@@ -17,7 +17,7 @@ import {
 } from '../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import familieDayjs from '../../../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 import Behandlinger from './Behandlinger';
@@ -49,7 +49,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     let gjeldendeBehandling =
         iverksatteBehandlinger.length > 0
             ? iverksatteBehandlinger.sort((a, b) =>
-                  familieDayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
+                  familieDayjsDiff(
+                      familieDayjs(b.opprettetTidspunkt),
+                      familieDayjs(a.opprettetTidspunkt)
+                  )
               )[0]
             : undefined;
 

@@ -6,10 +6,10 @@ import styled from 'styled-components';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
-import { Valideringsstatus } from '../../../familie-skjema/typer';
 import Pluss from '../../../ikoner/Pluss';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
 import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
@@ -26,7 +26,7 @@ const StyledKnapp = styled(Knapp)`
 `;
 
 const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
 
     const [visModal, settVisModal] = useState<boolean>(false);
     const [inputValue, settInputValue] = useState<string>('');
@@ -53,14 +53,14 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
         ) {
             settPerson({ status: RessursStatus.HENTER });
 
-            axiosRequest<IRestTilgang, { brukerIdent: string }>({
+            request<{ brukerIdent: string }, IRestTilgang>({
                 method: 'POST',
                 url: '/familie-ba-sak/api/tilgang',
                 data: { brukerIdent: ident.verdi },
             }).then((ressurs: Ressurs<IRestTilgang>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     if (ressurs.data.saksbehandlerHarTilgang) {
-                        axiosRequest<IPersonInfo, void>({
+                        request<void, IPersonInfo>({
                             method: 'GET',
                             url: '/familie-ba-sak/api/person/enkel',
                             headers: {

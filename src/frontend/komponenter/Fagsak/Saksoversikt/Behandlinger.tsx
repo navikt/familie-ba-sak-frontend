@@ -17,7 +17,7 @@ import {
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
-import familieDayjs from '../../../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 
 interface IBehandlingshistorikkProps {
@@ -47,7 +47,10 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                     <tbody>
                         {fagsak.behandlinger
                             .sort((a, b) =>
-                                familieDayjs(b.opprettetTidspunkt).diff(a.opprettetTidspunkt)
+                                familieDayjsDiff(
+                                    familieDayjs(b.opprettetTidspunkt),
+                                    familieDayjs(a.opprettetTidspunkt)
+                                )
                             )
                             .map((behandling: IBehandling) => {
                                 const aktivVedtakForBehandling = behandling.vedtakForBehandling.find(

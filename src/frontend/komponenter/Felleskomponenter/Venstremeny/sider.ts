@@ -1,5 +1,6 @@
+import { FeltState } from '@navikt/familie-skjema';
+
 import { mapFraRestPersonResultatTilPersonResultat } from '../../../context/Vilkårsvurdering/vilkårsvurdering';
-import { FeltState } from '../../../familie-skjema/typer';
 import {
     BehandlingSteg,
     BehandlingStegStatus,

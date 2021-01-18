@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { AxiosError } from 'axios';
 
+import { useHttp } from '@navikt/familie-http';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -11,11 +12,11 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { FamilieAxiosRequestConfig, useApp } from '../../../context/AppContext';
+import { FamilieAxiosRequestConfig } from '../../../context/AppContext';
 import { IBrevData } from '../Hendelsesoversikt/BrevModul/typer';
 
 const useForhåndsvisning = () => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
 
     const [visForhåndsvisningModal, settVisForhåndsviningModal] = useState<boolean>(false);
 
@@ -29,7 +30,7 @@ const useForhåndsvisning = () => {
 
     const hentForhåndsvisning = <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => {
         settHentetForhåndsvisning(byggHenterRessurs());
-        axiosRequest<string, IBrevData>(familieAxiosRequestConfig)
+        request<IBrevData, string>(familieAxiosRequestConfig)
             .then((response: Ressurs<string>) => {
                 settVisForhåndsviningModal(true);
                 if (response.status === RessursStatus.SUKSESS) {

@@ -1,4 +1,5 @@
-import { FeltState } from '../../familie-skjema/typer';
+import { FeltState } from '@navikt/familie-skjema';
+
 import { IPeriode } from '../../typer/periode';
 import { IVilkårResultat, Resultat } from '../../typer/vilkår';
 
