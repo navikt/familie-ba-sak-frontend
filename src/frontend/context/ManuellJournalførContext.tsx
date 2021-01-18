@@ -470,21 +470,27 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     }, [oppgaveId]);
 
-    React.useEffect(() => {
-        oppdatertData.status === RessursStatus.SUKSESS &&
-            settValideringsfeil(validaterData(oppdatertData.data));
-    }, [oppdatertData]);
-
-    React.useEffect(() => {
+    const oppdatertKnyttTilNyBehandling = (journalføringData: IDataForManuellJournalføring) => {
         const kanKnyttTilNyBehandling =
-            dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            (!dataForManuellJournalføring.data.fagsak ||
-                !hentAktivBehandlingPåFagsak(dataForManuellJournalføring.data.fagsak) ||
-                hentAktivBehandlingPåFagsak(dataForManuellJournalføring.data.fagsak)?.status ===
-                    BehandlingStatus.AVSLUTTET);
+            !journalføringData.fagsak ||
+            !hentAktivBehandlingPåFagsak(journalføringData.fagsak) ||
+            hentAktivBehandlingPåFagsak(journalføringData.fagsak)?.status ===
+                BehandlingStatus.AVSLUTTET;
 
         settVisKnyttTilNyBehandling(kanKnyttTilNyBehandling);
         settKnyttTilNyBehandling(kanKnyttTilNyBehandling);
+    };
+
+    React.useEffect(() => {
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
+            settValideringsfeil(validaterData(oppdatertData.data));
+            oppdatertKnyttTilNyBehandling(oppdatertData.data);
+        }
+    }, [oppdatertData]);
+
+    React.useEffect(() => {
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+            oppdatertKnyttTilNyBehandling(dataForManuellJournalføring.data);
     }, [dataForManuellJournalføring]);
 
     return {
