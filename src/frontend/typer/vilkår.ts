@@ -43,6 +43,7 @@ export interface IVilkårResultat {
     behandlingId: number;
     endretAv: string;
     endretTidspunkt: string;
+    erAutomatiskVurdert: boolean;
     erVurdert: boolean;
     id: number;
     periode: FeltState<IPeriode>;
@@ -66,7 +67,8 @@ export interface IRestVilkårResultat {
     behandlingId: number;
     endretAv: string;
     endretTidspunkt: string;
-    erVurdert?: boolean;
+    erAutomatiskVurdert: boolean;
+    erVurdert: boolean;
     id: number;
     periodeFom?: string;
     periodeTom?: string;
