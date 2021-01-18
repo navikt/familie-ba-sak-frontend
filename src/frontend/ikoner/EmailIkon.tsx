@@ -15,6 +15,7 @@ export const EmailIkon: React.FC<IEmailIkon> = ({
 }) => {
     return filled ? (
         <svg
+            aria-labelledby={'email'}
             version="1.1"
             id="Filled_Version"
             xmlns="http://www.w3.org/2000/svg"
