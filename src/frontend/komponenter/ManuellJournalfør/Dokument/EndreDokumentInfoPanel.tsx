@@ -6,14 +6,17 @@ import { useManuellJournalfør } from '../../../context/ManuellJournalførContex
 import { DokumentTittel } from '../../../typer/manuell-journalføring';
 import { journalpostTittelList } from '../Journalpost';
 
-const dokumentTittelList: ISelectOption[] = Object.keys(DokumentTittel).map((_, index) => {
+const dokumentTittelList = Object.keys(DokumentTittel).map((_, index) => {
     return {
-        value: Object.values(DokumentTittel)[index],
-        label: Object.values(DokumentTittel)[index],
+        value: Object.values(DokumentTittel)[index].toString(),
+        label: Object.values(DokumentTittel)[index].toString(),
+        isDisabled: false,
     };
 });
 
-const tittelList: ISelectOption[] = journalpostTittelList.concat(dokumentTittelList);
+const tittelList = journalpostTittelList
+    .concat([{ value: '----------', label: '----------', isDisabled: true }])
+    .concat(dokumentTittelList);
 
 export const EndreDokumentInfoPanel: React.FC = () => {
     const {

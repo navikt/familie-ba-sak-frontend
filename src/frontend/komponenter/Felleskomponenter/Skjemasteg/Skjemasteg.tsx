@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { Knapp } from 'nav-frontend-knapper';
+import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { Innholdstittel } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -41,7 +41,7 @@ const Navigering = styled.div`
     justify-content: space-between;
 `;
 
-const TilbakestillKnapp = styled(Knapp)`
+const TilbakestillKnapp = styled(Flatknapp)`
     margin-left: 20px;
 `;
 
@@ -113,7 +113,6 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                     )}
                     {tilbakestillOnClick ? (
                         <TilbakestillKnapp
-                            type={'hoved'}
                             disabled={!skalAktivereTilbakestillKnapp}
                             onClick={() => {
                                 tilbakestillOnClick();
