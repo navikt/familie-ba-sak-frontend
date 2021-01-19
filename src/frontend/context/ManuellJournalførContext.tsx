@@ -292,12 +292,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             },
         });
 
-        if (hentetPerson.status === RessursStatus.SUKSESS) {
-            hentetPerson.data.harTilgang = false;
-            hentetPerson.data.adressebeskyttelseGradering =
-                Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND;
-        }
-
         if (hentetPerson.status !== RessursStatus.SUKSESS) {
             return 'Ukjent feil ved henting av person';
         } else if (!hentetPerson.data.harTilgang) {
