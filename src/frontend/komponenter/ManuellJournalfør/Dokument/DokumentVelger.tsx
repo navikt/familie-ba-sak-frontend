@@ -79,7 +79,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
 
     return (
         <DokumentBoks
-            tittel={<DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+            tittel={<DokumentInfoStripe valgt={valgt} dokument={dokument}></DokumentInfoStripe>}
             tittelProps="normaltekst"
             href="#"
             onClick={() => {
@@ -88,7 +88,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                 }
             }}
         >
-            {!valgt && <DokumentInfoStripe dokument={dokument}></DokumentInfoStripe>}
+            {!valgt && <DokumentInfoStripe valgt={valgt} dokument={dokument}></DokumentInfoStripe>}
             {valgt && <EndreDokumentInfoPanel />}
         </DokumentBoks>
     );
