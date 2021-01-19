@@ -8121,9 +8121,9 @@ nav-frontend-skjema-style@^2.0.19, nav-frontend-skjema-style@^2.0.9:
   integrity sha512-fIr1Cr6f+BzouOLK/L0kc5vAQB9lxCKjt3O3+jDPL3ksXx/j2ac1xnTp0FEOKSmLML6JC8bAXd17hUWwMkYGCQ==
 
 nav-frontend-skjema@^3.0.32, nav-frontend-skjema@^3.0.7:
-  version "3.0.38"
-  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.38.tgz#bc2b3b8952cea09d61254f87c36bac1e578b83b5"
-  integrity sha512-33l41M/AwutmF92cD2RW8jVIwb3aKYaeuBSOAnhZaKC56UNXqtKi6SegP5wtzW00SlaoNI1MEtw7sYyHBAVLEA==
+  version "3.0.41"
+  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.41.tgz#0faf909eca2523e73c064d3eb2b643c922dad289"
+  integrity sha512-tCZXvgLEBh6+HAbdCOIkOnKVaN/dw93sn1aILc1mZB41mRalx/QhYhrWcnmy7YV5IpJ9Opi6XLAm8IjRTqoeTQ==
 
 nav-frontend-spinner-style@^0.2.8:
   version "0.2.9"
