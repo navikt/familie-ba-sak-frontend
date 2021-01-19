@@ -221,7 +221,7 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     />
                 </td>
                 <td>
-                    {vilkårResultat.verdi.endretAv === 'VL' ? (
+                    {vilkårResultat.verdi.erAutomatiskVurdert ? (
                         <AutomatiskVurdering />
                     ) : (
                         <ManuellVurdering />
