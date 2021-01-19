@@ -66,7 +66,6 @@ export const doHentDokumentProxy: any = () => {
                 }
             });
             res.end = () => {
-                console.log(visfrontendFeilmelding, dokumentData);
                 res.setHeader('content-length', Buffer.byteLength(dokumentData));
                 if (visfrontendFeilmelding) {
                     res.setHeader('content-encoding', 'utf-8');
