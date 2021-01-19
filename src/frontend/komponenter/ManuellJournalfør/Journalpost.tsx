@@ -12,14 +12,13 @@ import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 
-export const journalpostTittelList: ISelectOption[] = Object.keys(JournalpostTittel).map(
-    (_, index) => {
-        return {
-            value: Object.values(JournalpostTittel)[index],
-            label: Object.values(JournalpostTittel)[index],
-        };
-    }
-);
+export const journalpostTittelList = Object.keys(JournalpostTittel).map((_, index) => {
+    return {
+        value: Object.values(JournalpostTittel)[index].toString(),
+        label: Object.values(JournalpostTittel)[index].toString(),
+        isDisabled: false,
+    };
+});
 
 const JournalpostDiv = styled.div`
     width: 560px;

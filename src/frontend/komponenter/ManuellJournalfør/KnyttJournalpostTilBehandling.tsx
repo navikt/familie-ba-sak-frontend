@@ -12,7 +12,7 @@ import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import Pluss from '../../ikoner/Pluss';
 import { BehandlingStatus, IBehandling } from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
-import { datoformat, formaterDato } from '../../utils/formatter';
+import { datoformat, formaterDato, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
 import IkonKnapp from '../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 const KnyttDiv = styled.div`
@@ -32,6 +32,7 @@ const StyledDiv = styled.div`
 `;
 
 const StyledTd = styled.td`
+    min-width: 12rem;
     label {
         text-indent: 2rem !important;
     }
@@ -110,6 +111,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                         <tr className="tabell__head__tr">
                             <th>{'Behandlingstype'}</th>
                             <th>{'Status'}</th>
+                            <th>{'Årsak'}</th>
                             <th>{'Dato'}</th>
                         </tr>
                     </thead>
@@ -119,7 +121,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                 <StyledTd>
                                     <FamilieCheckbox
                                         erLesevisning={false}
-                                        label={behandling.type}
+                                        label={formaterTilKunFørstBokstavStor(behandling.type)}
                                         checked={tilknyttedeBehandlingIder.includes(
                                             behandling.behandlingId
                                         )}
@@ -137,7 +139,8 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                         }}
                                     />
                                 </StyledTd>
-                                <td>{behandling.status}</td>
+                                <td>{formaterTilKunFørstBokstavStor(behandling.status)}</td>
+                                <td>{formaterTilKunFørstBokstavStor(behandling.årsak)}</td>
                                 <td>
                                     {formaterDato(
                                         familieDayjs(behandling.opprettetTidspunkt),

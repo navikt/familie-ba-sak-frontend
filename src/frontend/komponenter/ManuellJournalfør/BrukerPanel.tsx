@@ -11,6 +11,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
+import { formaterPersonIdent, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
 import { feilDekoratør } from './FeilDekoratør';
@@ -29,7 +30,7 @@ const StyledDiv = styled.div`
 
 const StyledKnapp = styled(Knapp)`
     margin-left: 1rem;
-    margin-top: 1.8rem;
+    margin-top: auto;
     height: 1rem;
 `;
 
@@ -50,8 +51,8 @@ export const BrukerPanel: React.FC = () => {
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const bruker = dataForManuellJournalføring.data.person;
-            const navn = bruker?.navn || 'Ukjent';
-            const ident = bruker?.personIdent || 'Ukjent';
+            const navn = formaterTilKunFørstBokstavStor(bruker?.navn) || 'Bruke ikke satt';
+            const ident = bruker?.personIdent ? formaterPersonIdent(bruker.personIdent) : '';
             const Panel = harFeil(bruker) ? PanelFeil : PanelGyldig;
             return (
                 <BrukerPanelDiv>
@@ -99,6 +100,7 @@ export const BrukerPanel: React.FC = () => {
                                 }}
                                 children={'Endre bruker'}
                                 spinner={spinner}
+                                mini={true}
                             />
                         </StyledDiv>
                     </Panel>
