@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
+import { useHttp } from '@navikt/familie-http';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -36,7 +37,7 @@ import {
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo, PersonType } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
-import familieDayjs from '../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../utils/familieDayjs';
 import { useApp } from './AppContext';
 
 const tomPerson: IPersonInfo = {
@@ -108,7 +109,8 @@ const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
 };
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
-    const { axiosRequest, innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler } = useApp();
+    const { request } = useHttp();
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
@@ -269,7 +271,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const hentFagsak = async (personId: string) => {
-        return axiosRequest<IFagsak | undefined, { personIdent: string }>({
+        return request<{ personIdent: string }, IFagsak | undefined>({
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
             data: {
@@ -281,7 +283,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const endreBruker = async (personId: string) => {
-        const hentetPerson = await axiosRequest<IPersonInfo, void>({
+        const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
             url: '/familie-ba-sak/api/person',
             headers: {
@@ -313,7 +315,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const hentDataForManuellJournalføring = async (oppgaveId: string) => {
         settDataForManuellJournalføring(byggHenterRessurs());
-        return axiosRequest<IDataForManuellJournalføring, void>({
+        return request<void, IDataForManuellJournalføring>({
             method: 'GET',
             url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
             påvirkerSystemLaster: true,
@@ -335,7 +337,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
 
         settDokumentData(byggHenterRessurs());
-        return axiosRequest<string, void>({
+        return request<void, string>({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentInfoId}`,
             påvirkerSystemLaster: false,
@@ -415,7 +417,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const opprettFagsak = async (data: IOpprettEllerHentFagsakData) => {
-        return axiosRequest<IFagsak, IOpprettEllerHentFagsakData>({
+        return request<IOpprettEllerHentFagsakData, IFagsak>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
@@ -429,7 +431,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const opprettBehandling = async (data: IOpprettBehandlingData) => {
-        return axiosRequest<IFagsak, IOpprettBehandlingData>({
+        return request<IOpprettBehandlingData, IFagsak>({
             data,
             method: 'POST',
             url: '/familie-ba-sak/api/behandlinger',
@@ -446,7 +448,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return oppdatertData.status === RessursStatus.SUKSESS &&
             oppdatertData.data.fagsak?.behandlinger.length
             ? oppdatertData.data.fagsak.behandlinger.sort((a, b) =>
-                  familieDayjs(b.opprettetTidspunkt).diff(familieDayjs(a.opprettetTidspunkt))
+                  familieDayjsDiff(
+                      familieDayjs(b.opprettetTidspunkt),
+                      familieDayjs(a.opprettetTidspunkt)
+                  )
               )
             : [];
     };
@@ -516,7 +521,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         ) {
             const person = oppdatertData.data.person;
             //SKAN_IM-kanalen benytter logiske vedlegg, NAV_NO-kanalen gjør ikke. For sistnevnte må titlene konkateneres.
-            return axiosRequest<string, IRestJournalføring>({
+            return request<IRestJournalføring, string>({
                 method: 'POST',
                 url: `/familie-ba-sak/api/journalpost/${
                     oppdatertData.data.journalpost.journalpostId

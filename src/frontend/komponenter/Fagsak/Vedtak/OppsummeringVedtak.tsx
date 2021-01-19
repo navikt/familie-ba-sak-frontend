@@ -8,6 +8,7 @@ import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, Feilmelding } from 'nav-frontend-typografi';
 
+import { useHttp } from '@navikt/familie-http';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -48,7 +49,8 @@ const StyledFeilmelding = styled(Feilmelding)`
 `;
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
-    const { axiosRequest, hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
 
@@ -83,7 +85,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
         if (aktivtVedtak) {
             settVedtaksbrev(byggHenterRessurs());
-            axiosRequest<string, void>({
+            request<void, string>({
                 method: httpMethod,
                 url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
             })
@@ -129,7 +131,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         if (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.utbetalingBegrunnelser)) {
             settSenderInn(true);
             settSubmitFeil('');
-            axiosRequest<IFagsak, void>({
+            request<void, IFagsak>({
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/${
                     fagsak.id

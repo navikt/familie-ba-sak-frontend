@@ -7,14 +7,11 @@ import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertekst } from 'nav-frontend-typografi';
 
 import { FamilieRadioGruppe, FamilieTextarea } from '@navikt/familie-form-elements';
+import { useSkjema, useFelt, FeltState, feil, ok } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { useFelt } from '../../../familie-skjema/felt';
-import { useSkjema } from '../../../familie-skjema/skjema';
-import { FeltState } from '../../../familie-skjema/typer';
-import { feil, ok } from '../../../familie-skjema/validators';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import {

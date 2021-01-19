@@ -1,4 +1,5 @@
-import dayjs, { ConfigType } from 'dayjs';
+import dayjs, { ConfigType, OpUnitType, QUnitType } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -17,15 +18,24 @@ dayjs.extend(isBetween);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
+dayjs.extend(customParseFormat);
 
 dayjs.tz.setDefault(norskTidssone);
 dayjs.locale('nb');
 
 const familieDayjs = (config?: ConfigType, format?: string): Dayjs => {
     if (config && format) {
-        return dayjs.tz(config, format, norskTidssone);
+        return dayjs(config, format).tz();
     }
-    return config ? dayjs.tz(config) : dayjs.tz(dayjs());
+    return config ? dayjs(config).tz() : dayjs().tz();
+};
+
+export const familieDayjsDiff = (
+    første: Dayjs,
+    andre: Dayjs,
+    unit?: QUnitType | OpUnitType
+): number => {
+    return første.utc().diff(andre.utc(), unit);
 };
 
 export default familieDayjs;

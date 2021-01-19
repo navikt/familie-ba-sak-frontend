@@ -6,12 +6,14 @@ export const periodeOverlapperMedValgtDato = (
     periodeTom: string,
     valgtDato: Date
 ) => {
-    const valgtDatoToDayjs = familieDayjs(valgtDato);
+    const valgtDatoToDayjs = familieDayjs(valgtDato.toISOString()).startOf('day');
+    const periodeFomToDayjs = familieDayjs(periodeFom).startOf('day');
+    const periodeTomToDayjs = familieDayjs(periodeTom).startOf('day');
 
     return (
-        valgtDatoToDayjs.isBetween(periodeFom, periodeTom, 'date') ||
-        valgtDatoToDayjs.isSame(periodeFom, 'date') ||
-        valgtDatoToDayjs.isSame(periodeTom, 'date')
+        valgtDatoToDayjs.isBetween(periodeFomToDayjs, periodeTomToDayjs, 'date') ||
+        valgtDatoToDayjs.isSame(periodeFomToDayjs, 'date') ||
+        valgtDatoToDayjs.isSame(periodeTomToDayjs, 'date')
     );
 };
 

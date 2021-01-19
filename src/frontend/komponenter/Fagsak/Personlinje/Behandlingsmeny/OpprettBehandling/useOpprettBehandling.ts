@@ -1,13 +1,10 @@
 import { useHistory } from 'react-router';
 
+import { useFelt, feil, ok, Avhengigheter, useSkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
-import { useFelt } from '../../../../../familie-skjema/felt';
-import { useSkjema } from '../../../../../familie-skjema/skjema';
-import { FeltContext } from '../../../../../familie-skjema/typer';
-import { feil, ok } from '../../../../../familie-skjema/validators';
 import {
     BehandlingKategori,
     Behandlingstype,
@@ -39,7 +36,7 @@ const useOpprettBehandling = (lukkModal: () => void) => {
                 ? ok(felt)
                 : feil(felt, 'Velg årsak for opprettelse av behandlingen fra nedtrekkslisten');
         },
-        skalFeltetVises: (avhengigheter: FeltContext) => {
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
             const behandlingstypeVerdi = avhengigheter.behandlingstype.verdi;
             return behandlingstypeVerdi === Behandlingstype.REVURDERING;
         },

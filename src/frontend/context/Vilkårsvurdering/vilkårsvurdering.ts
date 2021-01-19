@@ -1,4 +1,5 @@
-import { FeltState, Valideringsstatus } from '../../familie-skjema/typer';
+import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+
 import { periodeDiff, nyPeriode } from '../../typer/periode';
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
@@ -7,7 +8,7 @@ import {
     IRestVilkårResultat,
     IVilkårResultat,
 } from '../../typer/vilkår';
-import familieDayjs from '../../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../../utils/familieDayjs';
 import { datoformat } from '../../utils/formatter';
 import {
     erPeriodeGyldig,
@@ -81,7 +82,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     ),
                                     vilkårType: vilkårResultat.vilkårType,
                                     endretAv: vilkårResultat.endretAv,
-                                    erVurdert: vilkårResultat.erVurdert ?? false,
+                                    erVurdert: vilkårResultat.erVurdert,
+                                    erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                 },
@@ -107,7 +109,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 return -1;
             }
 
-            return familieDayjs(b.person.fødselsdato, datoformat.ISO_DAG).diff(
+            return familieDayjsDiff(
+                familieDayjs(b.person.fødselsdato, datoformat.ISO_DAG),
                 familieDayjs(a.person.fødselsdato, datoformat.ISO_DAG)
             );
         });

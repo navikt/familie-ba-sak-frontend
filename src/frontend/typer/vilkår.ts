@@ -1,4 +1,5 @@
-import { FeltState } from '../familie-skjema/typer';
+import { FeltState } from '@navikt/familie-skjema';
+
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
@@ -42,6 +43,7 @@ export interface IVilkårResultat {
     behandlingId: number;
     endretAv: string;
     endretTidspunkt: string;
+    erAutomatiskVurdert: boolean;
     erVurdert: boolean;
     id: number;
     periode: FeltState<IPeriode>;
@@ -65,7 +67,8 @@ export interface IRestVilkårResultat {
     behandlingId: number;
     endretAv: string;
     endretTidspunkt: string;
-    erVurdert?: boolean;
+    erAutomatiskVurdert: boolean;
+    erVurdert: boolean;
     id: number;
     periodeFom?: string;
     periodeTom?: string;

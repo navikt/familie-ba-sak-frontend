@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 
 import { Collapse } from 'react-collapse';
 
+import { FeltState } from '@navikt/familie-skjema';
+
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { FeltState } from '../../../familie-skjema/typer';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
 import {
     IPersonResultat,

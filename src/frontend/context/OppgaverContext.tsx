@@ -4,6 +4,8 @@ import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
+import { useHttp } from '@navikt/familie-http';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -28,6 +30,7 @@ import {
     SaksbehandlerFilter,
 } from '../typer/oppgave';
 import familieDayjs from '../utils/familieDayjs';
+import { validerFormatISODag } from '../utils/validators';
 import { useApp } from './AppContext';
 
 export const oppgaveSideLimit = 15;
@@ -36,7 +39,8 @@ export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const history = useHistory();
-    const { axiosRequest, innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler } = useApp();
+    const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
@@ -124,6 +128,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 [oppgaveFelt.nøkkel]: {
                     ...oppgaveFelt,
                     order: FeltSortOrder.NONE,
+                    feilmelding: '',
+                    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
                 },
             };
             settOppgaveFelter(midlertidigOppgaveFelter);
@@ -277,7 +283,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             : [];
 
     const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
-        return axiosRequest<string, void>({
+        return request<void, string>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
         })
@@ -303,7 +309,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<IOppgave>> => {
-        return axiosRequest<IOppgave, string>({
+        return request<string, IOppgave>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/tilbakestill`,
         })
@@ -314,6 +320,37 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             .catch((_error: AxiosError) => {
                 return byggFeiletRessurs('Ukjent feil ved tilbakestilling av oppgave');
             });
+    };
+
+    const validerDatoer = () => {
+        const opprettetTidspunktGyldig = validerFormatISODag(
+            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue
+        );
+
+        const fristGyldig = validerFormatISODag(
+            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue
+        );
+
+        const oppdaterteOppgaveFelter = {
+            ...oppgaveFelter,
+            opprettetTidspunkt: {
+                ...oppgaveFelter.opprettetTidspunkt,
+                valideringsstatus: opprettetTidspunktGyldig
+                    ? Valideringsstatus.OK
+                    : Valideringsstatus.FEIL,
+                feilmelding: opprettetTidspunktGyldig ? '' : 'Dato må skrives på format ddmmåå',
+            },
+            fristFerdigstillelse: {
+                ...oppgaveFelter.fristFerdigstillelse,
+                valideringsstatus: fristGyldig ? Valideringsstatus.OK : Valideringsstatus.FEIL,
+                feilmelding: fristGyldig ? '' : 'Dato må skrives på format ddmmåå',
+            },
+        };
+
+        const erGyldig = opprettetTidspunktGyldig && fristGyldig;
+        !erGyldig && settOppgaveFelter(oppdaterteOppgaveFelter);
+
+        return erGyldig;
     };
 
     const hentOppgaver = () => {
@@ -386,7 +423,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             offset: 0,
         };
 
-        return axiosRequest<IHentOppgaveDto, IFinnOppgaveRequest>({
+        return request<IFinnOppgaveRequest, IHentOppgaveDto>({
             data: finnOppgaveRequest,
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/hent-oppgaver`,
@@ -412,6 +449,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         sortOppgave,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
+        validerDatoer,
     };
 });
 const Oppgaver: React.FC = () => {

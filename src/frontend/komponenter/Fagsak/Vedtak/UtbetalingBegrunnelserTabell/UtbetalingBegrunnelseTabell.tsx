@@ -9,7 +9,7 @@ import { IBehandling } from '../../../../typer/behandling';
 import { IUtbetalingsperiode } from '../../../../typer/beregning';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
-import familieDayjs from '../../../../utils/familieDayjs';
+import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat, isoStringToDayjs } from '../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -33,7 +33,8 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
         .slice()
         .sort((a, b) =>
-            familieDayjs(a.periodeFom, datoformat.ISO_DAG).diff(
+            familieDayjsDiff(
+                familieDayjs(a.periodeFom, datoformat.ISO_DAG),
                 familieDayjs(b.periodeFom, datoformat.ISO_DAG)
             )
         )
@@ -53,7 +54,13 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
             }
 
             // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
-            return familieDayjs(utbetalingsperiode.periodeFom).diff(familieDayjs(), 'month') < 2;
+            return (
+                familieDayjsDiff(
+                    familieDayjs(utbetalingsperiode.periodeFom),
+                    familieDayjs(),
+                    'month'
+                ) < 2
+            );
         });
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>

@@ -1,5 +1,12 @@
-import { FeltState, ValiderFelt, FeltContext, Valideringsstatus } from '../familie-skjema/typer';
-import { feil, ok } from '../familie-skjema/validators';
+import {
+    feil,
+    Avhengigheter,
+    FeltState,
+    ok,
+    ValiderFelt,
+    Valideringsstatus,
+} from '@navikt/familie-skjema';
+
 import { IPersonMedAndelerTilkjentYtelse } from '../typer/beregning';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
@@ -53,7 +60,7 @@ const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?
 
 export const erPeriodeGyldig = (
     felt: FeltState<IPeriode>,
-    avhengigheter?: FeltContext
+    avhengigheter?: Avhengigheter
 ): FeltState<IPeriode> => {
     const fom = felt.verdi.fom;
     const tom = felt.verdi.tom;
@@ -125,4 +132,8 @@ export const validerFelt = <Value, Context>(
 
 export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => {
     return ok(felt);
+};
+
+export const validerFormatISODag = (dato: string | undefined) => {
+    return familieDayjs(dato, datoformat.ISO_DAG).isValid();
 };

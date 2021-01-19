@@ -7,11 +7,10 @@ import PanelBase from 'nav-frontend-paneler';
 import { Feilmelding, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
+import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
-import { useFelt } from '../../../familie-skjema/felt';
-import { Valideringsstatus } from '../../../familie-skjema/typer';
 import { IPersonInfo } from '../../../typer/person';
 import { identValidator } from '../../../utils/validators';
 import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
@@ -27,7 +26,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
     person,
     settPerson,
 }) => {
-    const { axiosRequest } = useApp();
+    const { request } = useHttp();
     const ident = useFelt({
         verdi: '',
         valideringsfunksjon: identValidator,
@@ -59,7 +58,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                                 process.env.NODE_ENV === 'development'
                             ) {
                                 settPerson({ status: RessursStatus.HENTER });
-                                axiosRequest<IPersonInfo, void>({
+                                request<void, IPersonInfo>({
                                     method: 'GET',
                                     url: '/familie-ba-sak/api/person',
                                     headers: {
