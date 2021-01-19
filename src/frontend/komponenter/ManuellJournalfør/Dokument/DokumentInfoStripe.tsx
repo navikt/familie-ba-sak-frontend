@@ -34,13 +34,14 @@ const StyledDokumentIkon = styled(DokumentIkon)`
 `;
 
 interface IDokumentInfoStripeProps {
+    valgt: boolean;
     dokument: IDokumentInfo;
 }
 
-export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ dokument }) => {
+export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ valgt, dokument }) => {
     return (
         <DokumentInfoStripeContainer>
-            <StyledDokumentIkon width={48} height={48} />
+            <StyledDokumentIkon filled={valgt} width={48} height={48} />
             <DokumentTittelContainer>
                 <DokumentTittelDiv>{dokument.tittel || 'Ukjent'}</DokumentTittelDiv>
                 {dokument.logiskeVedlegg.map((it, index) => (

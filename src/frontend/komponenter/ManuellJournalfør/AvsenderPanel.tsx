@@ -25,6 +25,7 @@ const PanelFeil = feilDekoratør(PanelGyldig);
 export const AvsenderPanel: React.FC = () => {
     const { dataForManuellJournalføring, settAvsender, harFeil } = useManuellJournalfør();
     const [avsenderFelt, settAvsenderFelt] = useState('');
+    const [valgt, settValgt] = useState(false);
 
     useEffect(() => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
@@ -45,12 +46,15 @@ export const AvsenderPanel: React.FC = () => {
                     <Panel
                         tittel={
                             <DeltagerInfo
-                                ikon={<EmailIkon width={48} height={48} />}
+                                ikon={<EmailIkon filled={valgt} width={48} height={48} />}
                                 navn={navn}
                                 ident={ident}
                                 undertittel="Avsender"
                             />
                         }
+                        onClick={() => {
+                            settValgt(!valgt);
+                        }}
                     >
                         <FamilieInput
                             erLesevisning={false}
