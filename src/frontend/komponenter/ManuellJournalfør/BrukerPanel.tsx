@@ -37,7 +37,7 @@ export const BrukerPanel: React.FC = () => {
     const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalfør();
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
-
+    const [valgt, settValgt] = useState(false);
     const nyIdent = useFelt({
         verdi: '',
         valideringsfunksjon: identValidator,
@@ -56,9 +56,12 @@ export const BrukerPanel: React.FC = () => {
             return (
                 <BrukerPanelDiv>
                     <Panel
+                        onClick={() => {
+                            settValgt(!valgt);
+                        }}
                         tittel={
                             <DeltagerInfo
-                                ikon={<KontoSirkel width={48} height={48} />}
+                                ikon={<KontoSirkel filled={valgt} width={48} height={48} />}
                                 navn={navn}
                                 undertittel={'Søker/Bruker'}
                                 ident={ident}
