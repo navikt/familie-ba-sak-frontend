@@ -64,11 +64,12 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         harFeil,
     } = useManuellJournalfør();
 
+    if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
+        return <></>;
+    }
+
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
-    const journalpostId =
-        dataForManuellJournalføring.status === RessursStatus.SUKSESS
-            ? dataForManuellJournalføring.data.journalpost.journalpostId
-            : undefined;
+    const journalpostId = dataForManuellJournalføring.data.journalpost.journalpostId;
     const DokumentBoks = harFeil(dokument)
         ? valgt
             ? PanelFeilValgt
@@ -81,6 +82,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         <DokumentBoks
             tittel={
                 <DokumentInfoStripe
+                    valgt={valgt}
                     journalpostId={journalpostId}
                     dokument={dokument}
                 ></DokumentInfoStripe>
@@ -95,6 +97,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         >
             {!valgt && (
                 <DokumentInfoStripe
+                    valgt={valgt}
                     journalpostId={journalpostId}
                     dokument={dokument}
                 ></DokumentInfoStripe>

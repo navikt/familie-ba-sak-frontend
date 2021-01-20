@@ -375,13 +375,14 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     };
 
-    const settAvsender = (navn: string) => {
+    const settAvsender = (navn: string, id = '') => {
         const oppdatert = { ...oppdatertData };
         if (
             oppdatert.status === RessursStatus.SUKSESS &&
             oppdatert.data.journalpost.avsenderMottaker
         ) {
             oppdatert.data.journalpost.avsenderMottaker.navn = navn;
+            oppdatert.data.journalpost.avsenderMottaker.id = id;
             settOppdatertData(oppdatert);
         }
     };

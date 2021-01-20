@@ -35,12 +35,12 @@ export const doProxy: any = () => {
 
 // eslint-disable-next-line
 export const doHentDokumentProxy: any = () => {
-    return createProxyMiddleware('/proxy/api/hentDokument', {
+    return createProxyMiddleware('/api/pdf', {
         changeOrigin: true,
         logLevel: 'info',
         onProxyReq: restream,
         pathRewrite: (path: string, _req: Request) => {
-            const newPath = path.replace('/proxy/api/hentDokument', '/journalpost');
+            const newPath = path.replace('/api/pdf', '/journalpost');
             return `/api${newPath}`;
         },
         secure: true,

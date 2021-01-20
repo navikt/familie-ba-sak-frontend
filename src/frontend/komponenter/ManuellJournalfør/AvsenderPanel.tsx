@@ -9,6 +9,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { EmailIkon } from '../../ikoner/EmailIkon';
+import { formaterPersonIdent, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
 import { DeltagerInfo } from './DeltagerInfo';
 import { feilDekoratør } from './FeilDekoratør';
 
@@ -24,6 +25,7 @@ const PanelFeil = feilDekoratør(PanelGyldig);
 export const AvsenderPanel: React.FC = () => {
     const { dataForManuellJournalføring, settAvsender, harFeil } = useManuellJournalfør();
     const [avsenderFelt, settAvsenderFelt] = useState('');
+    const [valgt, settValgt] = useState(false);
 
     useEffect(() => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
@@ -36,20 +38,23 @@ export const AvsenderPanel: React.FC = () => {
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             const avsender = dataForManuellJournalføring.data.journalpost.avsenderMottaker;
-            const navn = avsender?.navn || 'Ukjent';
-            const ident = avsender?.id || 'Ukjent';
+            const navn = formaterTilKunFørstBokstavStor(avsender?.navn) || 'Ukjent';
+            const ident = avsender?.id ? formaterPersonIdent(avsender.id) : '';
             const Panel = harFeil(avsender) ? PanelFeil : PanelGyldig;
             return (
                 <AvsenderPanelDiv>
                     <Panel
                         tittel={
                             <DeltagerInfo
-                                ikon={<EmailIkon width={48} height={48} />}
+                                ikon={<EmailIkon filled={valgt} width={48} height={48} />}
                                 navn={navn}
                                 ident={ident}
                                 undertittel="Avsender"
                             />
                         }
+                        onClick={() => {
+                            settValgt(!valgt);
+                        }}
                     >
                         <FamilieInput
                             erLesevisning={false}

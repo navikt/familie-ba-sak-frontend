@@ -39,17 +39,19 @@ const StyledÅpenDokument = styled.button`
 `;
 
 interface IDokumentInfoStripeProps {
-    journalpostId: string | undefined;
+    valgt: boolean;
+    journalpostId: string;
     dokument: IDokumentInfo;
 }
 
 export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
+    valgt,
     journalpostId,
     dokument,
 }) => {
     return (
         <DokumentInfoStripeContainer>
-            <StyledDokumentIkon width={48} height={48} />
+            <StyledDokumentIkon filled={valgt} width={48} height={48} />
             <DokumentTittelContainer>
                 <DokumentTittelDiv>
                     {dokument.tittel || 'Ukjent'}
