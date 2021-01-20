@@ -10,6 +10,7 @@ export const EksternLenke: React.FC<IEksternLenke> = ({ className, width = 16, h
     //<!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
     return (
         <svg
+            aria-labelledby={'eksternLenke'}
             width={width}
             height={height}
             className={className}
