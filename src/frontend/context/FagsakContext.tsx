@@ -15,7 +15,7 @@ import {
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPersonInfo } from '../typer/person';
-import { konverterePersonMedKode6eller7 } from '../utils/commons';
+import { sjekkTilgangTilPerson } from '../utils/commons';
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsak, settFagsak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
@@ -72,7 +72,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             },
             påvirkerSystemLaster: true,
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
-            settBruker(konverterePersonMedKode6eller7(hentetPerson));
+            settBruker(sjekkTilgangTilPerson(hentetPerson));
         });
     };
 

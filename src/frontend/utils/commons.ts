@@ -14,9 +14,7 @@ export const tilFeilside = (): void => {
     window.location.assign(window.location.protocol + '//' + window.location.host + '/error');
 };
 
-export const konverterePersonMedKode6eller7 = (
-    personRes: Ressurs<IPersonInfo>
-): Ressurs<IPersonInfo> => {
+export const sjekkTilgangTilPerson = (personRes: Ressurs<IPersonInfo>): Ressurs<IPersonInfo> => {
     if (personRes.status === RessursStatus.SUKSESS && !personRes.data.harTilgang) {
         return byggFeiletRessurs('Du har ikke tilgang til denne brukeren.');
     } else {
