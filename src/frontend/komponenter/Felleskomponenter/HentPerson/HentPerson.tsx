@@ -12,6 +12,7 @@ import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IPersonInfo } from '../../../typer/person';
+import { konverterePersonMedKode6eller7 } from '../../../utils/commons';
 import { identValidator } from '../../../utils/validators';
 import Informasjonsbolk from '../Informasjonsbolk/Informasjonsbolk';
 
@@ -66,7 +67,7 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                                     },
                                 })
                                     .then((hentetPerson: Ressurs<IPersonInfo>) => {
-                                        settPerson(hentetPerson);
+                                        settPerson(konverterePersonMedKode6eller7(hentetPerson));
                                     })
                                     .catch(() => {
                                         settPerson({

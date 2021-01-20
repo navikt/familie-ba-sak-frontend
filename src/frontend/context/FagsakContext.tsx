@@ -14,7 +14,8 @@ import {
 
 import { IFagsak } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
-import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
+import { IPersonInfo } from '../typer/person';
+import { konverterePersonMedKode6eller7 } from '../utils/commons';
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsak, settFagsak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
@@ -71,29 +72,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             },
             påvirkerSystemLaster: true,
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
-            if (hentetPerson.status === RessursStatus.SUKSESS && !hentetPerson.data.harTilgang) {
-                switch (hentetPerson.data.adressebeskyttelseGradering) {
-                    case Adressebeskyttelsegradering.FORTROLIG:
-                        settBruker(
-                            byggFeiletRessurs(
-                                'Denne brukeren har diskresjonskode fortrolig adresse.'
-                            )
-                        );
-                        break;
-                    case Adressebeskyttelsegradering.STRENGT_FORTROLIG:
-                    case Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND:
-                        settBruker(
-                            byggFeiletRessurs(
-                                'Denne brukeren har diskresjonskode strengt fortrolig adresse.'
-                            )
-                        );
-                        break;
-                    default:
-                        settBruker(byggFeiletRessurs('Du har ikke tilgang til denne brukeren.'));
-                }
-            } else {
-                settBruker(hentetPerson);
-            }
+            settBruker(konverterePersonMedKode6eller7(hentetPerson));
         });
     };
 
