@@ -15,7 +15,7 @@ export const tilFeilside = (): void => {
 };
 
 export const sjekkTilgangTilPerson = (personRes: Ressurs<IPersonInfo>): Ressurs<IPersonInfo> => {
-    if (personRes.status === RessursStatus.SUKSESS && !personRes.data.harTilgang) {
+    if (personRes.status === RessursStatus.SUKSESS && personRes.data.harTilgang === false) {
         return byggFeiletRessurs('Du har ikke tilgang til denne brukeren.');
     } else {
         return personRes;
