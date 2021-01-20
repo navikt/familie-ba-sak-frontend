@@ -33,15 +33,20 @@ export const doProxy: any = () => {
     });
 };
 
+const pdfProxyUrlRecord: Record<string, string> = {
+    '/api/pdf/journalpost': '/api/journalpost',
+};
+
 // eslint-disable-next-line
-export const doHentDokumentProxy: any = () => {
+export const doPdfProxy: any = () => {
     return createProxyMiddleware('/api/pdf', {
         changeOrigin: true,
         logLevel: 'info',
         onProxyReq: restream,
         pathRewrite: (path: string, _req: Request) => {
-            const newPath = path.replace('/api/pdf', '/journalpost');
-            return `/api${newPath}`;
+            const urlKey = Object.keys(pdfProxyUrlRecord).find(k => path.includes(k));
+            const newPath = urlKey ? path.replace(urlKey, pdfProxyUrlRecord[urlKey]) : path;
+            return `${newPath}`;
         },
         secure: true,
         target: `${proxyUrl}`,
