@@ -8026,9 +8026,9 @@ nav-frontend-ekspanderbartpanel-style@^1.0.31:
   integrity sha512-8xj2gwzEt/AsprId08xcls4yCNGUmRBg2voUlK/LlMn+YY0foJFT5nz/4Vd/QSFLJTu60cIzNSSo2Ut7EbgJyQ==
 
 nav-frontend-ekspanderbartpanel@^3.0.42:
-  version "3.0.42"
-  resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel/-/nav-frontend-ekspanderbartpanel-3.0.42.tgz#a59c16f653bc27dfbb1d90eed0d390472fef8605"
-  integrity sha512-bnE0nR7w9m6jSl61axGOJcXr6YcigX+lNkj4k2tB3q2HpsJkwKxhaUnJF3fbyYZ/P/WY03U6IX6safWKd6obRw==
+  version "3.0.46"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel/-/nav-frontend-ekspanderbartpanel-3.0.46.tgz#1c2889de4d251b813a35434781e05cb4eeb2ee4f"
+  integrity sha512-r/EhvOpDKpa25+nLPuW21fl/q7bXKsQXdzew7WMQJG8ssl4CZsuzW32z1ZzWKiEJXlRkUcLapBKcAH0941PYEA==
 
 nav-frontend-etiketter-style@^1.0.8:
   version "1.0.14"

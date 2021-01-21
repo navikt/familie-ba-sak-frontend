@@ -7,7 +7,7 @@ import { Knapp } from 'nav-frontend-knapper';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
@@ -84,12 +84,8 @@ export const BrukerPanel: React.FC = () => {
                                     if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
                                         settSpinner(true);
                                         endreBruker(nyIdent.verdi)
-                                            .then((ressur: Ressurs<unknown>) => {
-                                                settFeilMelding(
-                                                    ressur.status === RessursStatus.SUKSESS
-                                                        ? ''
-                                                        : 'Ukjent feil ved hent person'
-                                                );
+                                            .then((feilmelding: string) => {
+                                                settFeilMelding(feilmelding);
                                             })
                                             .finally(() => {
                                                 settSpinner(false);
