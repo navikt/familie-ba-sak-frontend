@@ -58,7 +58,7 @@ export const doPdfProxy: any = () => {
             res.write = () => true;
             proxyRes.on('data', data => {
                 try {
-                    dokumentData = data;
+                    dokumentData += data;
                     visfrontendFeilmelding = true;
                     /*JSON.parse(Buffer.from(data).toString(), (k, v) => {
                         if ((k === 'data' || k === 'frontendFeilmelding') && v) {
