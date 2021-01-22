@@ -787,9 +787,9 @@
     react-select "^3.1.1"
 
 "@navikt/familie-header@^2.0.14":
-  version "2.0.20"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.20.tgz#5dab54a3877a3390b30d7231a28692d6ae40787b"
-  integrity sha512-wrwxKTu5pJQxn+uW5B2IfF/PjRVRKZ7663mtlSGIGv1QDerwZe07vmyKCiHNfL2/HLIXUtC4sI8zfWDb3f9fgA==
+  version "2.0.21"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.21.tgz#ca839e44a8b3d60069719c30cf184cdedcb5ec02"
+  integrity sha512-ahhQVcKVRyu6/2oRRNE972ZhfZPHGZGRZyLzMsABL25qpioNYPe/5giiMW37ZsT03qELVnz9Ql6rumyBKnhjtw==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/familie-ikoner" "^3.1.7"
@@ -798,7 +798,7 @@
     classnames "^2.2.6"
     lodash.throttle "^4.1.1"
     nav-frontend-alertstriper "^3.0.13"
-    nav-frontend-alertstriper-style "2.0.23"
+    nav-frontend-alertstriper-style "2.0.33"
     nav-frontend-core "^5.0.8"
     nav-frontend-ikoner-assets "2.0.8"
     nav-frontend-js-utils "1.0.15"
@@ -8025,15 +8025,10 @@ nav-datovelger@^8.0.4:
   dependencies:
     focus-trap-react "^8.1.0"
 
-nav-frontend-alertstriper-style@2.0.23:
-  version "2.0.23"
-  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.23.tgz#fae2c905a98da091bc70721617cb6f478b2b2cc3"
-  integrity sha512-hCDtn5AxsaCzLfL3z8f+dFH/YqNiXT83uQKcjT8EZ1J4u3ccXVlggXMeFw1P0iHM85Nn2EJ/rHh/azX7QbJ6OA==
-
-nav-frontend-alertstriper-style@^2.0.17:
-  version "2.0.30"
-  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.30.tgz#76c51e9de4751569f7815ca21f17ce1a1bf4b370"
-  integrity sha512-9CKGRXAQQT/WaK5QGdbfWvRxFtdVWnvFaUO9FKSRer7xZGFLRxm9bBRjF4Ohi3Y/ReaCpnWS4iWzzmMlbkjbfg==
+nav-frontend-alertstriper-style@2.0.33, nav-frontend-alertstriper-style@^2.0.17:
+  version "2.0.33"
+  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.33.tgz#dea26838e135ad3dfb47cd060ab1cefa454e8494"
+  integrity sha512-11m3sde2W11zEjnLn7/kgbknAZhnrpoN2f8tF2fBu4LUE6ybsQo2olCXk96skD9Zun/EePCPcZZ70ybNepzHlw==
 
 nav-frontend-alertstriper@^3.0.13, nav-frontend-alertstriper@^3.0.23:
   version "3.0.38"
