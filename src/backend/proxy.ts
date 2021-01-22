@@ -52,36 +52,37 @@ export const doPdfProxy: any = () => {
         target: `${proxyUrl}`,
         logProvider: () => stdoutLogger,
         onProxyRes: (proxyRes, _, res) => {
-            let dokumentData = Buffer.from('Ukjent feil ved vis dokument');
-            let visfrontendFeilmelding = true;
+            let dokumentData = '';
             const _end = res.end;
             res.write = () => true;
-            proxyRes.on('data', data => {
+            proxyRes.on('data', chunk => {
+                dokumentData += chunk;
+            });
+
+            res.end = () => {
                 try {
-                    dokumentData += data;
-                    visfrontendFeilmelding = true;
-                    /*JSON.parse(Buffer.from(data).toString(), (k, v) => {
+                    let dataVises = 'Ukjent feil ved visning dokument';
+                    let visfrontendFeilmelding = true;
+                    JSON.parse(dokumentData, (k, v) => {
                         if ((k === 'data' || k === 'frontendFeilmelding') && v) {
-                            dokumentData = Buffer.from(v, 'utf-8');
+                            dataVises = v;
                         }
                         if (k === 'data' && v) {
                             visfrontendFeilmelding = false;
                         }
-                    });*/
+                    });
+                    res.setHeader('content-length', Buffer.byteLength(dataVises));
+                    if (visfrontendFeilmelding) {
+                        res.setHeader('content-encoding', 'utf-8');
+                        res.setHeader('Content-Type', 'text/plain');
+                        _end.call(res, dataVises, 'utf-8');
+                    } else {
+                        res.setHeader('content-encoding', 'base64');
+                        res.setHeader('Content-Type', 'application/pdf');
+                        _end.call(res, dataVises, 'base64');
+                    }
                 } catch (error) {
                     console.log(error);
-                }
-            });
-            res.end = () => {
-                res.setHeader('content-length', Buffer.byteLength(dokumentData));
-                if (visfrontendFeilmelding) {
-                    res.setHeader('content-encoding', 'utf-8');
-                    res.setHeader('Content-Type', 'text/plain');
-                    _end.call(res, dokumentData.toString('utf-8'), 'utf-8');
-                } else {
-                    res.setHeader('content-encoding', 'base64');
-                    res.setHeader('Content-Type', 'application/pdf');
-                    _end.call(res, dokumentData.toString('utf-8'), 'base64');
                 }
             };
         },
