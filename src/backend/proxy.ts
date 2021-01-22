@@ -58,14 +58,16 @@ export const doPdfProxy: any = () => {
             res.write = () => true;
             proxyRes.on('data', data => {
                 try {
-                    JSON.parse(Buffer.from(data).toString(), (k, v) => {
+                    dokumentData = data;
+                    visfrontendFeilmelding = true;
+                    /*JSON.parse(Buffer.from(data).toString(), (k, v) => {
                         if ((k === 'data' || k === 'frontendFeilmelding') && v) {
                             dokumentData = Buffer.from(v, 'utf-8');
                         }
                         if (k === 'data' && v) {
                             visfrontendFeilmelding = false;
                         }
-                    });
+                    });*/
                 } catch (error) {
                     console.log(error);
                 }
