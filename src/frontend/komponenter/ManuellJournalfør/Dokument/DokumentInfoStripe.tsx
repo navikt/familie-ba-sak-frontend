@@ -28,7 +28,7 @@ const DokumentTittelDiv = styled.div`
     margin-bottom: 10px;
 `;
 
-const StyledDokumentIkon = styled(DokumentIkon)`
+const StyledDokumentIkonDiv = styled.div`
     margin: 0 16px 0 0;
     min-width: 48px;
     min-height: 48px;
@@ -51,7 +51,9 @@ export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
 }) => {
     return (
         <DokumentInfoStripeContainer>
-            <StyledDokumentIkon filled={valgt} width={48} height={48} />
+            <StyledDokumentIkonDiv>
+                <DokumentIkon filled={valgt} width={48} height={48} />
+            </StyledDokumentIkonDiv>
             <DokumentTittelContainer>
                 <DokumentTittelDiv>
                     {dokument.tittel || 'Ukjent'}

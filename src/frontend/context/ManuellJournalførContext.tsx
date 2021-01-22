@@ -16,18 +16,10 @@ import {
     AvsenderMottakerIdType,
     kjønnType,
     AvsenderMottaker,
-    byggSuksessRessurs,
     IJournalpost,
 } from '@navikt/familie-typer';
 
-import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../api/fagsak';
-import {
-    BehandlingKategori,
-    Behandlingstype,
-    BehandlingUnderkategori,
-    BehandlingÅrsak,
-    IBehandling,
-} from '../typer/behandling';
+import { BehandlingStatus, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
     BrevkodeMap,
@@ -86,12 +78,12 @@ const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
     };
 
     if (!dataForValidering.journalpost.tittel) {
-        settValideringsfeil(dataForValidering.journalpost, 'Journalpost tittel må ikke være tom');
+        settValideringsfeil(dataForValidering.journalpost, 'Journalposttittel må ikke være tom');
     }
 
     dataForValidering.journalpost.dokumenter?.forEach(dokument => {
         if (!dokument.tittel) {
-            settValideringsfeil(dokument, 'Dokument tittel må ikke være tom');
+            settValideringsfeil(dokument, 'Dokumenttittel må ikke være tom');
         }
     });
 
@@ -133,10 +125,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const erEndret = () =>
         oppdatertData.status === RessursStatus.SUKSESS &&
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-        (JSON.stringify(oppdatertData.data.journalpost) !==
-            JSON.stringify(dataForManuellJournalføring.data.journalpost) ||
-            JSON.stringify(oppdatertData.data.person) !==
-                JSON.stringify(dataForManuellJournalføring.data.person));
+        JSON.stringify(oppdatertData) !== JSON.stringify(dataForManuellJournalføring);
 
     const tilbakestillBruker = () => {
         if (
@@ -150,7 +139,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const tilbakestillData = () => {
-        settDataRessurs(dataForManuellJournalføring, true);
+        settDataRessurs(dataForManuellJournalføring);
         tilbakestillBruker();
     };
 
@@ -169,16 +158,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     // Funksjonen kan brukes for <<tilbakestill>>, hvor vi ikke skal tilbakestille fagsak dersom fagsaken er endret
     // (endringer på fagsak er ikke mulig å tilbakestille, da allerede er lagret i databasen).
     // Dette vil f.eks. skje når en behandling er opprettet.
-    const settDataRessurs = (
-        dataRessurs: Ressurs<IDataForManuellJournalføring>,
-        beholdFagsak = false
-    ) => {
+    const settDataRessurs = (dataRessurs: Ressurs<IDataForManuellJournalføring>) => {
         settDataForManuellJournalføring(dataRessurs);
         const oppdatert = lagerDataKopi(dataRessurs);
-
-        if (beholdFagsak && oppdatertData.status === RessursStatus.SUKSESS) {
-            oppdatert.data.fagsak = oppdatertData.data.fagsak;
-        }
 
         settOppdatertData(oppdatert);
 
@@ -193,6 +175,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
+    const [knyttTilNyBehandling, settKnyttTilNyBehandling] = React.useState(false);
+    const [visKnyttTilNyBehandling, settVisKnyttTilNyBehandling] = React.useState(false);
 
     const finnDokument = (
         ressurs: Ressurs<IDataForManuellJournalføring>,
@@ -254,21 +238,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const hentBrevkode = (dokumentTittel: string | undefined): string => {
         return BrevkodeMap.get(dokumentTittel) || '';
-    };
-
-    const settFagsak = (fagsak: Ressurs<IFagsak | undefined>) => {
-        if (
-            oppdatertData.status === RessursStatus.SUKSESS &&
-            fagsak.status === RessursStatus.SUKSESS
-        ) {
-            settOppdatertData({
-                ...oppdatertData,
-                data: {
-                    ...oppdatertData.data,
-                    fagsak: fagsak.data,
-                },
-            });
-        }
     };
 
     const hentFagsak = async (personId: string) => {
@@ -437,34 +406,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return aktivBehandling;
     };
 
-    const opprettFagsak = async (data: IOpprettEllerHentFagsakData) => {
-        return request<IOpprettEllerHentFagsakData, IFagsak>({
-            data,
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker`,
-        })
-            .then((response: Ressurs<IFagsak>) => {
-                return response;
-            })
-            .catch(() => {
-                return byggFeiletRessurs<IFagsak>('Opprettelse av fagsak feilet');
-            });
-    };
-
-    const opprettBehandling = async (data: IOpprettBehandlingData) => {
-        return request<IOpprettBehandlingData, IFagsak>({
-            data,
-            method: 'POST',
-            url: '/familie-ba-sak/api/behandlinger',
-        })
-            .then((response: Ressurs<IFagsak>) => {
-                return response;
-            })
-            .catch(() => {
-                return byggFeiletRessurs<IFagsak>('Opprettelse av behandling feilet');
-            });
-    };
-
     const hentSorterteBehandlinger = () => {
         return oppdatertData.status === RessursStatus.SUKSESS &&
             oppdatertData.data.fagsak?.behandlinger.length
@@ -475,60 +416,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                   )
               )
             : [];
-    };
-
-    const opprettFagsakOgBehandling = async () => {
-        const stateFeil =
-            oppdatertData.status !== RessursStatus.SUKSESS
-                ? byggFeiletRessurs<IFagsak>('Ukjent feil ved applikasjonen')
-                : !oppdatertData.data.person?.personIdent
-                ? byggFeiletRessurs<IFagsak>(
-                      'Klarer ikke opprette behandling fordi journalpost mangler bruker. Hent bruker før opprettelse av behandling'
-                  )
-                : undefined;
-
-        if (stateFeil) {
-            return stateFeil;
-        }
-
-        const data =
-            oppdatertData.status === RessursStatus.SUKSESS ? oppdatertData.data : undefined;
-
-        const fagsakRessurs = data?.fagsak
-            ? byggSuksessRessurs(data?.fagsak)
-            : await opprettFagsak({
-                  personIdent: data?.person?.personIdent ?? '',
-                  aktørId: null,
-              })
-                  .then((response: Ressurs<IFagsak>) => response)
-                  .catch(() => byggFeiletRessurs<IFagsak>('Ukjent feil ved opprett fagsak'));
-
-        if (fagsakRessurs.status !== RessursStatus.SUKSESS) {
-            return fagsakRessurs;
-        }
-
-        const fagsak = fagsakRessurs.data;
-
-        const behandlingType = fagsak.behandlinger.length
-            ? Behandlingstype.REVURDERING
-            : Behandlingstype.FØRSTEGANGSBEHANDLING;
-
-        const fagsakMedBehandling: Ressurs<IFagsak> = await opprettBehandling({
-            behandlingType: behandlingType,
-            behandlingÅrsak: BehandlingÅrsak.SØKNAD,
-            kategori: BehandlingKategori.NASJONAL, // TODO: Utvides/fjernes fra opprettelse
-            navIdent: innloggetSaksbehandler?.navIdent,
-            søkersIdent: data?.person?.personIdent ?? '',
-            underkategori: BehandlingUnderkategori.ORDINÆR, // TODO: Utvides/fjernes fra opprettelse
-        }).then((response: Ressurs<IFagsak>) => response);
-
-        if (fagsakMedBehandling.status === RessursStatus.SUKSESS) {
-            settFagsak(fagsakMedBehandling);
-        } else if (fagsakMedBehandling.status !== RessursStatus.FEILET) {
-            return byggFeiletRessurs<IFagsak>('Opprettelse av behandling feilet.');
-        }
-
-        return fagsakMedBehandling;
     };
 
     const journalfør = async () => {
@@ -581,7 +468,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         };
                     }),
                     knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,
-                    tilknyttedeBehandlingIder,
+                    tilknyttedeBehandlingIder: tilknyttedeBehandlingIder,
+                    opprettOgKnyttTilNyBehandling: knyttTilNyBehandling,
                     navIdent: innloggetSaksbehandler?.navIdent ?? '',
                 },
             })
@@ -608,10 +496,28 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     }, [oppgaveId]);
 
+    const oppdatertKnyttTilNyBehandling = (journalføringData: IDataForManuellJournalføring) => {
+        const kanKnyttTilNyBehandling =
+            !journalføringData.fagsak ||
+            !hentAktivBehandlingPåFagsak(journalføringData.fagsak) ||
+            hentAktivBehandlingPåFagsak(journalføringData.fagsak)?.status ===
+                BehandlingStatus.AVSLUTTET;
+
+        settVisKnyttTilNyBehandling(kanKnyttTilNyBehandling);
+        settKnyttTilNyBehandling(kanKnyttTilNyBehandling);
+    };
+
     React.useEffect(() => {
-        oppdatertData.status === RessursStatus.SUKSESS &&
+        if (oppdatertData.status === RessursStatus.SUKSESS) {
             settValideringsfeil(validaterData(oppdatertData.data));
+            oppdatertKnyttTilNyBehandling(oppdatertData.data);
+        }
     }, [oppdatertData]);
+
+    React.useEffect(() => {
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+            oppdatertKnyttTilNyBehandling(dataForManuellJournalføring.data);
+    }, [dataForManuellJournalføring]);
 
     return {
         dataForManuellJournalføring: oppdatertData,
@@ -636,10 +542,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         // Funksjoner som omhandler bruker og behandling
         endreBruker,
         hentAktivBehandlingForJournalføring,
-        opprettFagsakOgBehandling,
         hentSorterteBehandlinger,
         tilknyttedeBehandlingIder,
         settTilknyttedeBehandlingIder,
+        visKnyttTilNyBehandling,
+        knyttTilNyBehandling,
+        settKnyttTilNyBehandling,
 
         // Validering og tilbakestilling
         harFeil,
