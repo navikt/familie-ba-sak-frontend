@@ -18,7 +18,7 @@ import backend, {
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
-import { attachToken, doProxy } from './proxy';
+import { attachToken, doPdfProxy, doProxy } from './proxy';
 import setupRouter from './router';
 
 // eslint-disable-next-line
@@ -49,6 +49,13 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         ensureAuthenticated(azureAuthClient, true),
         attachToken(azureAuthClient),
         doProxy()
+    );
+
+    app.use(
+        '/api/pdf',
+        ensureAuthenticated(azureAuthClient, true),
+        attachToken(azureAuthClient),
+        doPdfProxy()
     );
 
     // Sett opp bodyParser og router etter proxy. Spesielt viktig med tanke på større payloads som blir parset av bodyParser

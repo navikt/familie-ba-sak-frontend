@@ -13,7 +13,7 @@ import { behandlingsstatuser } from '../../../../node_dist/frontend/typer/behand
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { IBehandling } from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
-import { datoformat, formaterDato } from '../../utils/formatter';
+import { datoformat, formaterDato, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
 
 const KnyttDiv = styled.div`
     margin-top: 20px;
@@ -96,9 +96,15 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             datoformat.DATO_FORKORTTET
                                         )}
                                     </td>
-                                    <td>{behandling.årsak}</td>
-                                    <BehandlingstypeTd>{behandling.type}</BehandlingstypeTd>
-                                    <td>{behandlingsstatuser[behandling.status]}</td>
+                                    <td>{formaterTilKunFørstBokstavStor(behandling.årsak)}</td>
+                                    <BehandlingstypeTd>
+                                        {formaterTilKunFørstBokstavStor(behandling.type)}
+                                    </BehandlingstypeTd>
+                                    <td>
+                                        {formaterTilKunFørstBokstavStor(
+                                            behandlingsstatuser[behandling.status]
+                                        )}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

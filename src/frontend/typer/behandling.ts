@@ -28,6 +28,8 @@ export enum BehandlingÅrsak {
     DØDSFALL = 'DØDSFALL',
     NYE_OPPLYSNINGER = 'NYE_OPPLYSNINGER',
     TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
+    OMREGNING_6ÅR = 'OMREGNING_6ÅR',
+    OMREGNING_18ÅR = 'OMREGNING_18ÅR',
 }
 
 export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
@@ -37,6 +39,8 @@ export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
     DØDSFALL: 'Dødsfall',
     NYE_OPPLYSNINGER: 'Nye opplysninger',
     TEKNISK_OPPHØR: 'Teknisk opphør',
+    OMREGNING_6ÅR: 'Omregning 6 år',
+    OMREGNING_18ÅR: 'Omregning 18 år',
 };
 
 export enum BehandlingUnderkategori {

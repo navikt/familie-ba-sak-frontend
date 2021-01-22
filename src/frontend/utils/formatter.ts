@@ -73,3 +73,17 @@ export const sisteDatoIMnd = (måned: number, år: number): Date => {
 
 export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>
     familieDayjs(fødselsDatoA).isBefore(fødselsDatoB) ? 1 : -1;
+
+export const formaterTilKunFørstBokstavStor = (navn: string | undefined): string | undefined => {
+    if (!navn) {
+        return navn;
+    }
+
+    let skalVæreStor = true;
+    let formatert = '';
+    for (let i = 0; i < navn.length; i++) {
+        formatert += skalVæreStor ? navn.charAt(i).toUpperCase() : navn.charAt(i).toLowerCase();
+        skalVæreStor = navn.charAt(i) === ' ';
+    }
+    return formatert;
+};

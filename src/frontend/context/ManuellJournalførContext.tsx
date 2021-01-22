@@ -34,6 +34,7 @@ import { useApp } from './AppContext';
 
 const tomPerson: IPersonInfo = {
     adressebeskyttelseGradering: Adressebeskyttelsegradering.UGRADERT,
+    harTilgang: true,
     familierelasjoner: [],
     familierelasjonerMaskert: [],
     fødselsdato: '',
@@ -260,17 +261,36 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             },
         });
 
-        if (hentetPerson.status === RessursStatus.SUKSESS) {
-            const restFagsak = await hentFagsak(hentetPerson.data.personIdent);
+        if (hentetPerson.status !== RessursStatus.SUKSESS) {
+            return 'Ukjent feil ved henting av person';
+        } else if (!hentetPerson.data.harTilgang) {
             if (
-                restFagsak.status === RessursStatus.SUKSESS &&
-                oppdatertData.status === RessursStatus.SUKSESS
+                hentetPerson.data.adressebeskyttelseGradering ===
+                Adressebeskyttelsegradering.FORTROLIG
             ) {
-                settPersonOgFagsak(hentetPerson, restFagsak);
+                return 'Brukeren har diskresjonskode fortrolig adresse. Avbryt journalføringen og endre enhet.';
+            } else if (
+                hentetPerson.data.adressebeskyttelseGradering ===
+                    Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+                hentetPerson.data.adressebeskyttelseGradering ===
+                    Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND
+            ) {
+                return 'Brukeren har diskresjonskode strengt fortrolig adresse. Avbryt journalføringen og tildel ny saksbehandler.';
+            } else {
+                return 'Du har ikke tilgang til denne brukeren.';
             }
-            return restFagsak;
         }
-        return hentetPerson;
+
+        const restFagsak = await hentFagsak(hentetPerson.data.personIdent);
+        if (
+            restFagsak.status === RessursStatus.SUKSESS &&
+            oppdatertData.status === RessursStatus.SUKSESS
+        ) {
+            settPersonOgFagsak(hentetPerson, restFagsak);
+            return '';
+        } else {
+            return 'Ukjent feil ved henting av fagsak.';
+        }
     };
 
     const tilbakestillDokumentTittel = () => {
@@ -344,13 +364,14 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     };
 
-    const settAvsender = (navn: string) => {
+    const settAvsender = (navn: string, id = '') => {
         const oppdatert = { ...oppdatertData };
         if (
             oppdatert.status === RessursStatus.SUKSESS &&
             oppdatert.data.journalpost.avsenderMottaker
         ) {
             oppdatert.data.journalpost.avsenderMottaker.navn = navn;
+            oppdatert.data.journalpost.avsenderMottaker.id = id;
             settOppdatertData(oppdatert);
         }
     };
