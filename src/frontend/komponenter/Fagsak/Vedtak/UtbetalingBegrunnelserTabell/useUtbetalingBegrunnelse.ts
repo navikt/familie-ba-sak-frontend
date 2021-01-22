@@ -75,7 +75,7 @@ const useUtbetalingBegrunnelse = (
                     return (
                         familieDayjsDiff(
                             isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
-                            familieDayjs(periode.tom).endOf('month'),
+                            familieDayjs(periode.fom).subtract(1, 'month'),
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
                     );
