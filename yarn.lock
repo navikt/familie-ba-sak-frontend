@@ -2219,9 +2219,9 @@ alphanum-sort@^1.0.0:
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
 amplitude-js@^7.3.3:
-  version "7.3.3"
-  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-7.3.3.tgz#ae4b35bd28231ccdc9713f8cc8675ae1ce64f19e"
-  integrity sha512-krSXUXeHqbQk15ozx0kC3h0K3i7wQ1ycSG08OfZBga2Vfbi3Y30CP6UXLdtJX4AiBB8EkjMePdMgU6kyuIpi/A==
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-7.4.1.tgz#ad1b47fefca3b1c9afe257f8b8164cce95e671cf"
+  integrity sha512-AiqYt9z0tzWBxcE0ILVDNOksXuPdZa4Jiak2VSWwBpgt+CUJ4jZzT3daGZPbw50o2/KnSIfMfAojcT7PpmKxLA==
   dependencies:
     "@amplitude/ua-parser-js" "0.7.24"
     "@amplitude/utils" "^1.0.5"
