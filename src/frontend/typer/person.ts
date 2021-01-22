@@ -54,6 +54,7 @@ export interface IGrunnlagPerson {
 
 export interface IPersonInfo {
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
+    harTilgang?: boolean;
     familierelasjoner: IFamilierelasjon[];
     familierelasjonerMaskert: IFamilierelasjonMaskert[];
     fødselsdato: string;
