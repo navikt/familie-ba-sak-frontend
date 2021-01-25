@@ -128,7 +128,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     };
 
     const sendInn = () => {
-        if (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.utbetalingBegrunnelser)) {
+        if (
+            (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.utbetalingBegrunnelser)) ||
+            åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR
+        ) {
             settSenderInn(true);
             settSubmitFeil('');
             request<void, IFagsak>({
