@@ -94,7 +94,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         settVedtaksbrev(
                             byggDataRessurs(`data:application/pdf;base64,${response.data}`)
                         );
-                    } else if (response.status === RessursStatus.FEILET) {
+                    } else if (
+                        [
+                            RessursStatus.FEILET,
+                            RessursStatus.FUNKSJONELL_FEIL,
+                            RessursStatus.IKKE_TILGANG,
+                        ].includes(response.status)
+                    ) {
                         settVedtaksbrev(response);
                     } else {
                         settVedtaksbrev(

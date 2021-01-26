@@ -37,7 +37,13 @@ const useForhåndsvisning = () => {
                     settHentetForhåndsvisning(
                         byggDataRessurs(`data:application/pdf;base64,${response.data}`)
                     );
-                } else if (response.status === RessursStatus.FEILET) {
+                } else if (
+                    [
+                        RessursStatus.FEILET,
+                        RessursStatus.FUNKSJONELL_FEIL,
+                        RessursStatus.IKKE_TILGANG,
+                    ].includes(response.status)
+                ) {
                     settHentetForhåndsvisning(response);
                 } else {
                     settHentetForhåndsvisning(
@@ -47,7 +53,7 @@ const useForhåndsvisning = () => {
             })
             .catch((_error: AxiosError) => {
                 settHentetForhåndsvisning(
-                    byggFeiletRessurs('Ukjent feil ved henting av forhåndsvisning.')
+                    byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning. 🚨')
                 );
             });
     };
