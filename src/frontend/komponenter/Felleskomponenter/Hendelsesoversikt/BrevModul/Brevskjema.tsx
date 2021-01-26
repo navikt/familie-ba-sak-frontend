@@ -21,6 +21,7 @@ import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
 import { formaterPersonIdent } from '../../../../utils/formatter';
+import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
@@ -82,16 +83,6 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
 
     const valgtBrevmal: Felt<Brevmal | ''> = skjema.felter.brevmal;
 
-    const submitFeil =
-        skjema.submitRessurs.status === RessursStatus.FEILET
-            ? skjema.submitRessurs.frontendFeilmelding
-            : undefined;
-
-    const hentetForhåndsvisningFeil =
-        hentetForhåndsvisning.status === RessursStatus.FEILET
-            ? hentetForhåndsvisning.frontendFeilmelding
-            : undefined;
-
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
 
@@ -102,7 +93,12 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                 onRequestClose={() => settForhåndsviningModal(false)}
                 pdfdata={hentetForhåndsvisning}
             />
-            <SkjemaGruppe feil={submitFeil || hentetForhåndsvisningFeil}>
+            <SkjemaGruppe
+                feil={
+                    hentFrontendFeilmelding(skjema.submitRessurs) ||
+                    hentFrontendFeilmelding(hentetForhåndsvisning)
+                }
+            >
                 <SkjultLegend>Send brev</SkjultLegend>
                 <FamilieSelect
                     {...skjema.felter.mottakerIdent.hentNavInputProps(skjema.visFeilmeldinger)}

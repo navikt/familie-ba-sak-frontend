@@ -95,11 +95,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             byggDataRessurs(`data:application/pdf;base64,${response.data}`)
                         );
                     } else if (
-                        [
-                            RessursStatus.FEILET,
-                            RessursStatus.FUNKSJONELL_FEIL,
-                            RessursStatus.IKKE_TILGANG,
-                        ].includes(response.status)
+                        response.status === RessursStatus.FEILET ||
+                        response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        response.status === RessursStatus.IKKE_TILGANG
                     ) {
                         settVedtaksbrev(response);
                     } else {
@@ -152,7 +150,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                     settFagsak(response);
                 } else if (
                     response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.FUNKSJONELL_FEIL
+                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    response.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settSubmitFeil(response.frontendFeilmelding);
                 }

@@ -30,6 +30,7 @@ import {
 import { Adressebeskyttelsegradering, IPersonInfo, PersonType } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import familieDayjs, { familieDayjsDiff } from '../utils/familieDayjs';
+import { ressursHarFeilEllerIkkeTilgang } from '../utils/ressursUtils';
 import { useApp } from './AppContext';
 
 const tomPerson: IPersonInfo = {
@@ -336,7 +337,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     settDokumentData(
                         byggDataRessurs(`data:application/pdf;base64,${hentetDokumentData.data}`)
                     );
-                } else if (hentetDokumentData.status === RessursStatus.FEILET) {
+                } else if (ressursHarFeilEllerIkkeTilgang(hentetDokumentData)) {
                     settDokumentData(hentetDokumentData);
                 } else {
                     settDokumentData(

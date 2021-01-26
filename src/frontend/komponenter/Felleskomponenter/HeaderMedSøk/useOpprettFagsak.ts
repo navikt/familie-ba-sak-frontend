@@ -39,7 +39,11 @@ const useOpprettFagsak = () => {
                               `/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`
                           )
                         : history.push(`/fagsak/${response.data.id}/saksoversikt`);
-                } else if (response.status === RessursStatus.FEILET) {
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    response.status === RessursStatus.IKKE_TILGANG
+                ) {
                     settFeilmelding(response.frontendFeilmelding);
                 } else {
                     settFeilmelding('Opprettelse av fagsak feilet');

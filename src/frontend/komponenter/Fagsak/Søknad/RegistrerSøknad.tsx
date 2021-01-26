@@ -81,7 +81,10 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                 } else if (response.status === RessursStatus.FUNKSJONELL_FEIL) {
                     settFrontendFeilmelding(response.frontendFeilmelding);
                     settVisModal(true);
-                } else if (response.status === RessursStatus.FEILET) {
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.IKKE_TILGANG
+                ) {
                     settFeilmelding(response.frontendFeilmelding);
                 } else {
                     settFeilmelding('Registrering av søknaden feilet');

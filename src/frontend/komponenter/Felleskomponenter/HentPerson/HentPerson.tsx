@@ -107,7 +107,9 @@ const HentPerson: React.FunctionComponent<IProps> = ({
                     />
                 </PanelBase>
             )}
-            {person.status === RessursStatus.FEILET && (
+            {(person.status === RessursStatus.FEILET ||
+                person.status === RessursStatus.FUNKSJONELL_FEIL ||
+                person.status === RessursStatus.IKKE_TILGANG) && (
                 <>
                     <br />
                     <Feilmelding children={person.frontendFeilmelding} />

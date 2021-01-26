@@ -20,6 +20,7 @@ import {
     IBehandling,
 } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import useForhåndsvisning from '../../../../Felleskomponenter/PdfVisningModal/useForhåndsvisning';
@@ -152,12 +153,8 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
             >
                 <SkjemaGruppe
                     feil={
-                        (skjema.submitRessurs.status === RessursStatus.FEILET
-                            ? skjema.submitRessurs.frontendFeilmelding
-                            : undefined) ||
-                        (hentetForhåndsvisning.status === RessursStatus.FEILET
-                            ? hentetForhåndsvisning.frontendFeilmelding
-                            : undefined)
+                        hentFrontendFeilmelding(skjema.submitRessurs) ||
+                        hentFrontendFeilmelding(hentetForhåndsvisning)
                     }
                     legend={SkjultLegend({ children: 'Henlegg behandling' })}
                 >

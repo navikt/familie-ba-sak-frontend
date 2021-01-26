@@ -53,7 +53,7 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ settFeilme
                 settFeilmelding(
                     fagsak.status === RessursStatus.FEILET ||
                         fagsak.status === RessursStatus.FUNKSJONELL_FEIL
-                        ? `Feil ved manuelt journalfør: ${fagsak.frontendFeilmelding}`
+                        ? `Feil ved manuell journalføring: ${fagsak.frontendFeilmelding}`
                         : ''
                 );
             })
