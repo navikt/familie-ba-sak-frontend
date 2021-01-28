@@ -8,6 +8,7 @@ import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/famil
 
 import { useBehandling } from '../../../../../context/BehandlingContext';
 import { behandendeEnheter, IArbeidsfordelingsenhet } from '../../../../../typer/enhet';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import useEndreBehandlendeEnhet from './useEndreBehandlendeEnhet';
@@ -81,13 +82,7 @@ const EndreBehandlendeEnhet: React.FC<IProps> = ({ onListElementClick }) => {
                     visModal,
                 }}
             >
-                <SkjemaGruppe
-                    feil={
-                        submitRessurs.status === RessursStatus.FEILET
-                            ? submitRessurs.frontendFeilmelding
-                            : undefined
-                    }
-                >
+                <SkjemaGruppe feil={hentFrontendFeilmelding(submitRessurs)}>
                     <SkjultLegend>Endre enhet</SkjultLegend>
                     <FamilieSelect
                         erLesevisning={erLesevisning()}

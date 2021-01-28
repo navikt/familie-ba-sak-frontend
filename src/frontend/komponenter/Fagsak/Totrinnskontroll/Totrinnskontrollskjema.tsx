@@ -12,6 +12,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import Info from '../../../ikoner/Info';
 import { IFagsak } from '../../../typer/fagsak';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 
 interface IProps {
     innsendtVedtak: Ressurs<IFagsak>;
@@ -37,15 +38,13 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     );
 
     const senderInn = innsendtVedtak.status === RessursStatus.HENTER;
-    const feilmelding =
-        innsendtVedtak.status === RessursStatus.FEILET ||
-        innsendtVedtak.status === RessursStatus.IKKE_TILGANG
-            ? innsendtVedtak.frontendFeilmelding
-            : '';
 
     return (
         <Container className="totrinnskontroll">
-            <SkjemaGruppe className="totrinnskontroll-skjemagruppe" feil={feilmelding}>
+            <SkjemaGruppe
+                className="totrinnskontroll-skjemagruppe"
+                feil={hentFrontendFeilmelding(innsendtVedtak)}
+            >
                 <legend className="totrinnskontroll-tittel">
                     <Info className="ikon" />
                     <Systemtittel>Totrinnskontroll</Systemtittel>

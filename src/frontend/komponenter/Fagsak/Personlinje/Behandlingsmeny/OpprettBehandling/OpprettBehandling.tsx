@@ -16,6 +16,7 @@ import {
 import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import useOpprettBehandling from './useOpprettBehandling';
@@ -100,13 +101,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     visModal,
                 }}
             >
-                <SkjemaGruppe
-                    feil={
-                        opprettBehandlingSkjema.submitRessurs.status === RessursStatus.FEILET
-                            ? opprettBehandlingSkjema.submitRessurs.frontendFeilmelding
-                            : ''
-                    }
-                >
+                <SkjemaGruppe feil={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}>
                     <SkjultLegend>Opprett ny behandling</SkjultLegend>
                     <FamilieSelect
                         {...behandlingstypeFelt.hentNavBaseSkjemaProps(

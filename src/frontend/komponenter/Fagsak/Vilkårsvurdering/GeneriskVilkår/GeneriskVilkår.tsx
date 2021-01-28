@@ -59,7 +59,11 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 settFeilmelding('');
                 if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
                     settFagsak(oppdatertFagsak);
-                } else if (oppdatertFagsak.status === RessursStatus.FEILET) {
+                } else if (
+                    oppdatertFagsak.status === RessursStatus.FEILET ||
+                    oppdatertFagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    oppdatertFagsak.status === RessursStatus.IKKE_TILGANG
+                ) {
                     settFeilmelding(oppdatertFagsak.frontendFeilmelding);
                     settVisFeilmeldingerForVilkår(true);
                 } else {
