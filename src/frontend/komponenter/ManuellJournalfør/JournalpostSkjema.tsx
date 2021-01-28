@@ -28,7 +28,7 @@ const StyledSkjema = styled(Skjemasteg)`
 const FeilPanel = feilDekoratør(Panel);
 
 const StyledSectionDiv = styled.div`
-    margin-top: 60px;
+    margin-top: 40px;
 `;
 
 interface JournalpostSkjemaProps {
