@@ -8,11 +8,18 @@ import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
-import { byggFeiletRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import Pluss from '../../../ikoner/Pluss';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
 import { IBarnMedOpplysninger, IS√∏knadDTO } from '../../../typer/s√∏knad';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 
@@ -51,7 +58,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
             ident.valideringsstatus === Valideringsstatus.OK ||
             process.env.NODE_ENV === 'development'
         ) {
-            settPerson({ status: RessursStatus.HENTER });
+            settPerson(byggHenterRessurs());
 
             request<{ brukerIdent: string }, IRestTilgang>({
                 method: 'POST',
@@ -95,7 +102,13 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
                             )
                         );
                     }
-                } else if (ressurs.status === RessursStatus.FEILET) {
+                } else if (
+                    [
+                        RessursStatus.FEILET,
+                        RessursStatus.FUNKSJONELL_FEIL,
+                        RessursStatus.IKKE_TILGANG,
+                    ].includes(ressurs.status)
+                ) {
                     settPerson(ressurs);
                 }
             });
@@ -144,11 +157,7 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settS√∏knadOgValider, s√
                         settPerson(byggTomRessurs());
                         settInputValue(event.target.value);
                     }}
-                    feil={
-                        person.status === RessursStatus.FEILET
-                            ? person.frontendFeilmelding
-                            : undefined
-                    }
+                    feil={hentFrontendFeilmelding(person)}
                 />
             </UIModalWrapper>
         </>

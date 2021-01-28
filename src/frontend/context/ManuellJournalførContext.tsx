@@ -336,7 +336,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     settDokumentData(
                         byggDataRessurs(`data:application/pdf;base64,${hentetDokumentData.data}`)
                     );
-                } else if (hentetDokumentData.status === RessursStatus.FEILET) {
+                } else if (
+                    hentetDokumentData.status === RessursStatus.FEILET ||
+                    hentetDokumentData.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    hentetDokumentData.status === RessursStatus.IKKE_TILGANG
+                ) {
                     settDokumentData(hentetDokumentData);
                 } else {
                     settDokumentData(

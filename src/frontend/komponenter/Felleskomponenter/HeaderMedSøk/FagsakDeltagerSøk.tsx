@@ -49,6 +49,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                     settSøkfeil('Person ikke funnet');
                 } else if (
                     response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
                     response.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settSøkfeil(response.frontendFeilmelding);

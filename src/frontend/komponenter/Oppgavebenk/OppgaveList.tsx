@@ -191,7 +191,9 @@ const OppgaveList: React.FunctionComponent = () => {
                     Ingen oppgaver
                 </Alertstripe>
             )}
-            {oppgaver.status === RessursStatus.FEILET && (
+            {(oppgaver.status === RessursStatus.FEILET ||
+                oppgaver.status === RessursStatus.FUNKSJONELL_FEIL ||
+                oppgaver.status === RessursStatus.IKKE_TILGANG) && (
                 <Alertstripe type="feil" className="oppgavelist__info">
                     {oppgaver.frontendFeilmelding}
                 </Alertstripe>
