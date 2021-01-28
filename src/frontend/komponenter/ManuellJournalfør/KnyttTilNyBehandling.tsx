@@ -17,7 +17,7 @@ const StyledSelectDiv = styled.div`
 `;
 
 const StyledCheckboxDiv = styled.div`
-    width: 22rem;
+    width: 20rem;
 `;
 
 export const KnyttTilNyBehandling: React.FC = () => {
