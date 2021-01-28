@@ -103,7 +103,7 @@ export const KnyttTilNyBehandling: React.FC = () => {
                     />
                 </>
             )}
-            {nyBehandlingstype === Behandlingstype.REVURDERING && (
+            {knyttTilNyBehandling && nyBehandlingstype === Behandlingstype.REVURDERING && (
                 <>
                     <StyledSelect
                         creatable={false}
