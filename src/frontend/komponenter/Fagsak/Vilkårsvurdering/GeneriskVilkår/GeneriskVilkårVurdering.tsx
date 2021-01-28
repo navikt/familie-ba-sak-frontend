@@ -144,7 +144,11 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                     settVisFeilmeldingerForEttVilkår(false);
                     settFagsak(oppdatertFagsak);
                     settEkspandertVilkår(false);
-                } else if (oppdatertFagsak.status === RessursStatus.FEILET) {
+                } else if (
+                    oppdatertFagsak.status === RessursStatus.FEILET ||
+                    oppdatertFagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    oppdatertFagsak.status === RessursStatus.IKKE_TILGANG
+                ) {
                     settVisFeilmeldingerForEttVilkår(true);
                     settRedigerbartVilkår({
                         ...redigerbartVilkår,

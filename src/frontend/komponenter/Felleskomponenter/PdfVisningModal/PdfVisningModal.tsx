@@ -89,6 +89,8 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
                 </Document>
             );
         case RessursStatus.FEILET:
+        case RessursStatus.FUNKSJONELL_FEIL:
+        case RessursStatus.IKKE_TILGANG:
             return (
                 <AlertStripeFeil
                     className={'pdfvisning-modal__document--feil'}

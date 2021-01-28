@@ -66,7 +66,11 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                     onClick={() => {
                         tilbakestillFordelingPåOppgave(oppgave).then(
                             (oppgaveResponse: Ressurs<IOppgave>) => {
-                                if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                if (
+                                    oppgaveResponse.status === RessursStatus.FEILET ||
+                                    oppgaveResponse.status === RessursStatus.FUNKSJONELL_FEIL ||
+                                    oppgaveResponse.status === RessursStatus.IKKE_TILGANG
+                                ) {
                                     settFeilmelding(oppgaveResponse.frontendFeilmelding);
                                 } else {
                                     settErTilbakestilt(true);
