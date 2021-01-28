@@ -123,6 +123,8 @@ export enum DokumentTittel {
     ENDRING_I_SIVILSTAND = 'Endring i sivilstand',
     EØS_REGISTERINGSBEVIS = 'EØS registreringsbevis',
     EØS_VARIG_OPPHOLDBEVIS = 'EØS varig oppholdbevis',
+    F001 = 'F001',
+    F002 = 'F002',
     FØDSELSATTEST = 'Fødselsattest',
     KONTOOPPLYSNINGER = 'Kontoopplysninger',
     MEKLINGSATTEST = 'Meklingsattest',
@@ -134,8 +136,6 @@ export enum DokumentTittel {
     UTTALELSE = 'Uttalelse',
     UTTALELSE_TILBAKEKREVING = 'Uttalelse tilbakekreving',
     VERGEFULLMAKT = 'Vergefullmakt',
-    F001 = 'F001',
-    F002 = 'F002',
 }
 
 export enum JournalpostKanal {
