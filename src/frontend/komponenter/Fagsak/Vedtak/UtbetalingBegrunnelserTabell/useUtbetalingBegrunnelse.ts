@@ -72,10 +72,13 @@ const useUtbetalingBegrunnelse = (
                 } else if (
                     utbetalingBegrunnelse.begrunnelseType === VedtakBegrunnelseType.REDUKSJON
                 ) {
+                    const oppfyltTomMånedEtter =
+                        vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
+
                     return (
                         familieDayjsDiff(
                             isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
-                            familieDayjs(periode.fom).subtract(1, 'month'),
+                            familieDayjs(periode.fom).subtract(oppfyltTomMånedEtter, 'month'),
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
                     );
