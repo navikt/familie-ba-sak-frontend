@@ -67,7 +67,8 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
                     settUtbetalingBegrunnelseFeilmelding({ id, feilmelding: '' });
                 } else if (
                     fagsak.status === RessursStatus.FEILET ||
-                    fagsak.status === RessursStatus.FUNKSJONELL_FEIL
+                    fagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    fagsak.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settUtbetalingBegrunnelseFeilmelding({
                         id,

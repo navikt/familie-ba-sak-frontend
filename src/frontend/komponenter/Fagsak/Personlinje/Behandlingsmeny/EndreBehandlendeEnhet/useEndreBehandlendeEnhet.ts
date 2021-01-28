@@ -56,9 +56,10 @@ const useEndreBehandlendeEnhet = (lukkModal: () => void) => {
                     settSubmitRessurs(byggTomRessurs());
                     settBegrunnelse('');
                     lukkModal();
-                } else if (oppdatertFagsak.status === RessursStatus.FEILET) {
-                    settSubmitRessurs(byggFeiletRessurs(oppdatertFagsak.frontendFeilmelding));
+                    return;
                 }
+
+                settSubmitRessurs(oppdatertFagsak);
             });
         }
     };

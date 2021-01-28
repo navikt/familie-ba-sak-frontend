@@ -19,6 +19,7 @@ import {
     opplysningspliktVisningtekst,
 } from '../../../typer/opplysningsplikt';
 import { Resultat } from '../../../typer/vilkår';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import Statuslinje from './Statuslinje';
 
@@ -127,11 +128,7 @@ const Opplysningsplikt: React.FunctionComponent<IOpplysningspliktProps> = ({
             <SkjemaContainer>
                 <Statuslinje resultat={opplysningspliktResultat()} />
                 <SkjemaGruppe
-                    feil={
-                        skjema.submitRessurs.status === RessursStatus.FEILET
-                            ? skjema.submitRessurs.frontendFeilmelding
-                            : undefined
-                    }
+                    feil={hentFrontendFeilmelding(skjema.submitRessurs)}
                     utenFeilPropagering={true}
                 >
                     <StyledFamilieRadioGruppe

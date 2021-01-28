@@ -45,6 +45,8 @@ const ManuellJournalførContent: React.FC = () => {
                 </div>
             );
         case RessursStatus.FEILET:
+        case RessursStatus.FUNKSJONELL_FEIL:
+        case RessursStatus.IKKE_TILGANG:
             return <AlertStripeFeil children={dataForManuellJournalføring.frontendFeilmelding} />;
         default:
             return <div />;
