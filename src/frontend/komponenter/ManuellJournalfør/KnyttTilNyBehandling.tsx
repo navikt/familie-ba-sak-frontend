@@ -63,7 +63,6 @@ export const KnyttTilNyBehandling: React.FC = () => {
     } = useManuellJournalfør();
     return (
         <>
-            <br />
             <Undertittel>Knytt til ny behandling</Undertittel>
             <br />
             <StyledCheckboxDiv>
