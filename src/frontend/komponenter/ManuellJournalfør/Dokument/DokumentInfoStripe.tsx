@@ -7,6 +7,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import { IDokumentInfo } from '@navikt/familie-typer';
 
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
+import { EksternLenke } from '../../../ikoner/EksternLenke';
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
@@ -27,23 +28,46 @@ const DokumentTittelDiv = styled.div`
     margin-bottom: 10px;
 `;
 
-const StyledDokumentIkon = styled(DokumentIkon)`
+const StyledDokumentIkonDiv = styled.div`
     margin: 0 16px 0 0;
     min-width: 48px;
     min-height: 48px;
 `;
 
+const StyledÅpenDokument = styled.button`
+    margin-left: 10px;
+`;
+
 interface IDokumentInfoStripeProps {
     valgt: boolean;
+    journalpostId: string;
     dokument: IDokumentInfo;
 }
 
-export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ valgt, dokument }) => {
+export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
+    valgt,
+    journalpostId,
+    dokument,
+}) => {
     return (
         <DokumentInfoStripeContainer>
-            <StyledDokumentIkon filled={valgt} width={48} height={48} />
+            <StyledDokumentIkonDiv>
+                <DokumentIkon filled={valgt} width={48} height={48} />
+            </StyledDokumentIkonDiv>
             <DokumentTittelContainer>
-                <DokumentTittelDiv>{dokument.tittel || 'Ukjent'}</DokumentTittelDiv>
+                <DokumentTittelDiv>
+                    {dokument.tittel || 'Ukjent'}
+                    <StyledÅpenDokument
+                        onClick={() => {
+                            window.open(
+                                `/api/pdf/journalpost/${journalpostId}/hent/${dokument.dokumentInfoId}`,
+                                '_blank'
+                            );
+                        }}
+                    >
+                        <EksternLenke />
+                    </StyledÅpenDokument>
+                </DokumentTittelDiv>
                 {dokument.logiskeVedlegg.map((it, index) => (
                     <Normaltekst key={index}>{it.tittel}</Normaltekst>
                 ))}

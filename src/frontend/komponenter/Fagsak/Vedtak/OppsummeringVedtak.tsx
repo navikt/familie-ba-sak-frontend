@@ -94,7 +94,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         settVedtaksbrev(
                             byggDataRessurs(`data:application/pdf;base64,${response.data}`)
                         );
-                    } else if (response.status === RessursStatus.FEILET) {
+                    } else if (
+                        response.status === RessursStatus.FEILET ||
+                        response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        response.status === RessursStatus.IKKE_TILGANG
+                    ) {
                         settVedtaksbrev(response);
                     } else {
                         settVedtaksbrev(
@@ -128,7 +132,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     };
 
     const sendInn = () => {
-        if (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.utbetalingBegrunnelser)) {
+        if (
+            (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.utbetalingBegrunnelser)) ||
+            åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR
+        ) {
             settSenderInn(true);
             settSubmitFeil('');
             request<void, IFagsak>({
@@ -143,7 +150,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                     settFagsak(response);
                 } else if (
                     response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.FUNKSJONELL_FEIL
+                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    response.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settSubmitFeil(response.frontendFeilmelding);
                 }

@@ -114,6 +114,7 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                 />
             );
         case RessursStatus.FEILET:
+        case RessursStatus.FUNKSJONELL_FEIL:
             return <AlertStripe children={åpenBehandling.frontendFeilmelding} type={'feil'} />;
         default:
             return <div />;

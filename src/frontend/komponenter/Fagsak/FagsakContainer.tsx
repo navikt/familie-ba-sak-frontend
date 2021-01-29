@@ -86,6 +86,8 @@ const FagsakContainer: React.FunctionComponent = () => {
                         </BehandlingProvider>
                     );
                 case RessursStatus.FEILET:
+                case RessursStatus.FUNKSJONELL_FEIL:
+                case RessursStatus.IKKE_TILGANG:
                     return <AlertStripe children={bruker.frontendFeilmelding} type={'feil'} />;
                 default:
                     return <div />;
@@ -98,6 +100,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                 />
             );
         case RessursStatus.FEILET:
+        case RessursStatus.FUNKSJONELL_FEIL:
             return <AlertStripe children={fagsak.frontendFeilmelding} type={'feil'} />;
         default:
             return <div />;

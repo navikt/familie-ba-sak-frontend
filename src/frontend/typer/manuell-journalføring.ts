@@ -73,6 +73,7 @@ export interface IRestJournalføring {
     dokumenter?: IRestJournalpostDokument[];
     knyttTilFagsak: boolean;
     tilknyttedeBehandlingIder: number[];
+    opprettOgKnyttTilNyBehandling: boolean;
     navIdent: string;
 }
 

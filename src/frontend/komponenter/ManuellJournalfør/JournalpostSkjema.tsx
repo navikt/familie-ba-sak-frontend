@@ -28,17 +28,12 @@ const StyledSkjema = styled(Skjemasteg)`
 const FeilPanel = feilDekoratør(Panel);
 
 interface JournalpostSkjemaProps {
-    visModal: () => void;
     settFeilmelding: (feilmelding: string) => void;
 }
 
-export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
-    visModal,
-    settFeilmelding,
-}) => {
+export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ settFeilmelding }) => {
     const {
         dataForManuellJournalføring,
-        tilknyttedeBehandlingIder,
         journalfør,
         hentFeil,
         erEndret,
@@ -52,23 +47,19 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({
     const [senderInn, settSenderInn] = React.useState(false);
 
     const onClickManuellJournalfør = () => {
-        if (tilknyttedeBehandlingIder.length < 1) {
-            visModal();
-        } else {
-            settSenderInn(true);
-            journalfør()
-                .then(fagsak => {
-                    settFeilmelding(
-                        fagsak.status === RessursStatus.FEILET ||
-                            fagsak.status === RessursStatus.FUNKSJONELL_FEIL
-                            ? `Feil ved manuelt journalfør: ${fagsak.frontendFeilmelding}`
-                            : ''
-                    );
-                })
-                .finally(() => {
-                    settSenderInn(false);
-                });
-        }
+        settSenderInn(true);
+        journalfør()
+            .then(fagsak => {
+                settFeilmelding(
+                    fagsak.status === RessursStatus.FEILET ||
+                        fagsak.status === RessursStatus.FUNKSJONELL_FEIL
+                        ? `Feil ved manuell journalføring: ${fagsak.frontendFeilmelding}`
+                        : ''
+                );
+            })
+            .finally(() => {
+                settSenderInn(false);
+            });
     };
 
     return (
