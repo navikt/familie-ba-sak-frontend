@@ -51,8 +51,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         tilknyttedeBehandlingIder.length === 0 && !knyttTilNyBehandling;
     return (
         <KnyttDiv>
-            <br />
-            {dataForManuellJournalføring.data.fagsak?.behandlinger.length && (
+            {!!dataForManuellJournalføring.data.fagsak?.behandlinger.length && (
                 <>
                     <Undertittel>Knytt til tidligere behandling(er)</Undertittel>
                     <table className="tabell">
@@ -118,6 +117,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                             ))}
                         </tbody>
                     </table>
+                    <br />
                 </>
             )}
             {visKnyttTilNyBehandling && <KnyttTilNyBehandling />}
