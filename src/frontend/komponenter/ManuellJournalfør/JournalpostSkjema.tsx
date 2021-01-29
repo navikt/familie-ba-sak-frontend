@@ -27,6 +27,10 @@ const StyledSkjema = styled(Skjemasteg)`
 
 const FeilPanel = feilDekoratør(Panel);
 
+const StyledSectionDiv = styled.div`
+    margin-top: 40px;
+`;
+
 interface JournalpostSkjemaProps {
     settFeilmelding: (feilmelding: string) => void;
 }
@@ -77,33 +81,32 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ settFeilme
                     tilbakestillOnClick={() => {
                         tilbakestillData();
                     }}
-                    skalAktivereTilbakestillKnapp={erEndret()}
+                    skalViseTilbakestillKnapp={erEndret()}
                 >
                     <Journalpost />
-                    <br />
-                    <div>
+                    <StyledSectionDiv>
                         <Undertittel children={'Dokumenter'} />
                         <Dokumenter />
-                    </div>
-                    <br />
-                    <div>
+                    </StyledSectionDiv>
+                    <StyledSectionDiv>
                         <Undertittel children={'Bruker og avsender'} />
                         <BrukerPanel></BrukerPanel>
                         <AvsenderPanel></AvsenderPanel>
-                    </div>
-                    <br />
-                    <KnyttJournalpostTilBehandling />
-                    <br />
-                    {!!alleFeil.length && (
-                        <FeilPanel>
-                            <Undertittel>For å gå videre må du rette opp følgende:</Undertittel>
-                            <ul>
-                                {alleFeil.map((feil, index) => (
-                                    <li key={index}>{feil}</li>
-                                ))}
-                            </ul>
-                        </FeilPanel>
-                    )}
+                    </StyledSectionDiv>
+                    <StyledSectionDiv>
+                        <KnyttJournalpostTilBehandling />
+                        <br />
+                        {!!alleFeil.length && (
+                            <FeilPanel>
+                                <Undertittel>For å gå videre må du rette opp følgende:</Undertittel>
+                                <ul>
+                                    {alleFeil.map((feil, index) => (
+                                        <li key={index}>{feil}</li>
+                                    ))}
+                                </ul>
+                            </FeilPanel>
+                        )}
+                    </StyledSectionDiv>
                 </StyledSkjema>
             )}
         </div>

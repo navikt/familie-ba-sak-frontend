@@ -67,7 +67,17 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                         </thead>
                         <tbody className="tabell__body">
                             {hentSorterteBehandlinger().map((behandling: IBehandling) => (
-                                <tr key={behandling.behandlingId}>
+                                <tr
+                                    key={behandling.behandlingId}
+                                    className={
+                                        tilknyttedeBehandlingIder.includes(behandling.behandlingId)
+                                            ? 'tabell__tr--valgt'
+                                            : ''
+                                    }
+                                    aria-selected={tilknyttedeBehandlingIder.includes(
+                                        behandling.behandlingId
+                                    )}
+                                >
                                     <KnyttTilBehandlingTd>
                                         <FamilieCheckbox
                                             erLesevisning={false}
