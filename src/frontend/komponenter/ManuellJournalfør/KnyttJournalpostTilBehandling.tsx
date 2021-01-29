@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
@@ -14,6 +13,7 @@ import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { IBehandling } from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
 import { datoformat, formaterDato, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
+import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 
 const KnyttDiv = styled.div`
     margin-top: 20px;
@@ -41,7 +41,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         tilknyttedeBehandlingIder,
         visKnyttTilNyBehandling,
         knyttTilNyBehandling,
-        settKnyttTilNyBehandling,
     } = useManuellJournalfør();
 
     if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
@@ -111,23 +110,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     </table>
                 </>
             )}
-            {visKnyttTilNyBehandling && (
-                <>
-                    <br />
-                    <Undertittel>Knytt til ny behandling</Undertittel>
-                    <br />
-                    <Panel border={true}>
-                        <FamilieCheckbox
-                            erLesevisning={false}
-                            label={'Knytt til ny behandling'}
-                            checked={knyttTilNyBehandling}
-                            onChange={() => {
-                                settKnyttTilNyBehandling(!knyttTilNyBehandling);
-                            }}
-                        />
-                    </Panel>
-                </>
-            )}
+            {visKnyttTilNyBehandling && <KnyttTilNyBehandling />}
             {visGenerellSakInfoStripe && (
                 <>
                     <br />
