@@ -95,9 +95,8 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
             {!deltager.fagsakId && deltager.harTilgang && (
                 <IngenFagsakTekst>
                     {`Ingen fagsak. ${
-                        innloggetSaksbehandlerHarSkrivetilgang ? 'Trykk for å opprette &gt' : ''
+                        innloggetSaksbehandlerHarSkrivetilgang ? 'Trykk for å opprette >' : ''
                     }`}
-                    ;
                 </IngenFagsakTekst>
             )}
         </StyledInfokort>

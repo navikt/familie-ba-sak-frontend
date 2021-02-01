@@ -212,12 +212,15 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             });
         }
 
-        loggFeil(
-            undefined,
-            innloggetSaksbehandler,
-            'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
-        );
-        tilFeilside();
+        if (innloggetSaksbehandler && rolle === BehandlerRolle.UKJENT) {
+            loggFeil(
+                undefined,
+                innloggetSaksbehandler,
+                'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
+            );
+            tilFeilside();
+        }
+
         return rolle;
     };
 
