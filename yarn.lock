@@ -726,10 +726,11 @@
     "@navikt/nap-bem-utils" "1.0.1"
 
 "@navikt/familie-backend@^5.0.18":
-  version "5.0.18"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.18.tgz#05a3b48da783c26ec5035eb7d17ec46695f5820a"
-  integrity sha512-z9HP+nNds2UWLu/dGYoT9yEw54bDTGex4a3rbT2zCIEqN0ru7dmvdHUhA3GtTS4TK80WJ9XR9+atiNG3s0uOpg==
+  version "5.0.20"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.20.tgz#b42f7fca11745f54b8f9dfd467b2a9205660f9dc"
+  integrity sha512-tFCxz2VxeiCyUmYW8lRDSHxXYgAeuapPQh7xN8cyEPpASHmbTbHZxboSNMEjDPbsEffrYDh83O0EI/Rj48HZRA==
   dependencies:
+    "@navikt/familie-logging" "^1.0.2"
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.9"
     "@types/express-session" "^1.15.15"
@@ -752,7 +753,6 @@
     redis "^3.0.2"
     request-promise "^4.2.5"
     snyk "^1.336.0"
-    winston "^3.2.1"
 
 "@navikt/familie-clipboard@^3.1.0":
   version "3.1.0"
@@ -825,6 +825,13 @@
   integrity sha512-A4psvLYg4LasyG4L8rfSySAZjWeG14FOFYOfOX9w3qiRr9vVXJMllyQxHMchO+K0l48xHnpWuvaTvYk1Yzc3bA==
   dependencies:
     "@navikt/familie-typer" "^3.0.10"
+
+"@navikt/familie-logging@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-logging/-/familie-logging-1.0.2.tgz#383db9ffd2993e9e3a84d404ed51858e052e9bd0"
+  integrity sha512-fW6qXQTke32fzqTWN/OXU3RjCxDzCzzYshNc4Ea4+DR0hdZvGW2IIzBxuKKDAp2G6mF7/rWBDn17VSB2rPeOYA==
+  dependencies:
+    winston "^3.2.1"
 
 "@navikt/familie-skjema@^1.0.1":
   version "1.0.1"
