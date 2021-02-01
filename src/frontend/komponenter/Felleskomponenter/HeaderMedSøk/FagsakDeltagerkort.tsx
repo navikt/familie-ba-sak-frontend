@@ -13,6 +13,7 @@ import {
     NøytralPersonIkon,
 } from '@navikt/familie-ikoner';
 
+import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
 import { adressebeskyttelsestyper } from '../../../typer/person';
@@ -20,7 +21,7 @@ import { adressebeskyttelsestyper } from '../../../typer/person';
 export interface IFagsakDeltagerkortProps {
     deltager: IFagsakDeltager;
     index: number;
-    onClick?: (index: number) => void;
+    onClick: () => void;
     children?: React.ReactNode | React.ReactNode[];
 }
 
@@ -40,6 +41,9 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
     index,
     onClick,
 }) => {
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    const innloggetSaksbehandlerHarSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
+
     type IkonerMap = Record<string, React.ReactNode>;
     type RolleNavnMap = Record<string, string>;
 
@@ -86,10 +90,14 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
                       }`
             }
             index={index}
-            onClick={onClick}
+            onClick={() => innloggetSaksbehandlerHarSkrivetilgang && onClick()}
         >
             {!deltager.fagsakId && deltager.harTilgang && (
-                <IngenFagsakTekst>Ingen fagsak. Trykk for å opprette &gt;</IngenFagsakTekst>
+                <IngenFagsakTekst>
+                    {`Ingen fagsak. ${
+                        innloggetSaksbehandlerHarSkrivetilgang ? 'Trykk for å opprette >' : ''
+                    }`}
+                </IngenFagsakTekst>
             )}
         </StyledInfokort>
     );

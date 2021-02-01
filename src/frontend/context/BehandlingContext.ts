@@ -19,14 +19,14 @@ import {
     ISide,
     sider,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
-import { BehandlerRolle, BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
+import { BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
 import { hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
-    const { hentSaksbehandlerRolle } = useApp();
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
     const { fagsak } = useFagsakRessurser();
     const opplysningsplikt =
         åpenBehandling.status === RessursStatus.SUKSESS
@@ -69,17 +69,16 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     };
 
     const erLesevisning = (): boolean => {
-        const rolle = hentSaksbehandlerRolle();
+        const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
         const steg = hentStegPåÅpenBehandling();
 
         if (
-            rolle &&
-            rolle >= BehandlerRolle.SAKSBEHANDLER &&
+            innloggetSaksbehandlerSkrivetilgang &&
             steg &&
             !(hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK))
         ) {
             return false;
-        } else if (rolle && rolle >= BehandlerRolle.VEILEDER) {
+        } else if (!innloggetSaksbehandlerSkrivetilgang) {
             return true;
         } else {
             // Default til lesevisning dersom vi er usikre

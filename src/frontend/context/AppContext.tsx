@@ -204,26 +204,37 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         });
     };
 
-    const hentSaksbehandlerRolle = (): BehandlerRolle | undefined => {
+    const hentSaksbehandlerRolle = (): BehandlerRolle => {
         let rolle = BehandlerRolle.UKJENT;
         if (innloggetSaksbehandler && innloggetSaksbehandler.groups) {
             innloggetSaksbehandler.groups.forEach((id: string) => {
                 rolle = rolle < gruppeIdTilRolle(id) ? gruppeIdTilRolle(id) : rolle;
             });
-            return rolle;
         }
-        loggFeil(
-            undefined,
-            innloggetSaksbehandler,
-            'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
-        );
-        tilFeilside();
+
+        if (innloggetSaksbehandler && rolle === BehandlerRolle.UKJENT) {
+            loggFeil(
+                undefined,
+                innloggetSaksbehandler,
+                'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
+            );
+            tilFeilside();
+        }
+
+        return rolle;
+    };
+
+    const harInnloggetSaksbehandlerSkrivetilgang = () => {
+        const rolle = hentSaksbehandlerRolle();
+
+        return rolle >= BehandlerRolle.SAKSBEHANDLER;
     };
 
     return {
         autentisert,
         hentSaksbehandlerRolle,
         innloggetSaksbehandler,
+        harInnloggetSaksbehandlerSkrivetilgang,
         lukkModal,
         modal,
         settModal,
