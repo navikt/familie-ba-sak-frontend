@@ -91,7 +91,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                                 key={index}
                                 deltager={deltager}
                                 index={index}
-                                onClick={(index: number): void => {
+                                onClick={() => {
                                     resultat[index].fagsakId
                                         ? history.push(
                                               `/fagsak/${resultat[index].fagsakId}/saksoversikt`

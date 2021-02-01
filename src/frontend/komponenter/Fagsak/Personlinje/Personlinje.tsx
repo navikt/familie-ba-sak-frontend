@@ -5,6 +5,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import Visittkort from '@navikt/familie-visittkort';
 
+import { useApp } from '../../../context/AppContext';
 import { IFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
 import { hentFagsakStatusVisning } from '../../../utils/fagsak';
@@ -17,6 +18,7 @@ interface IProps {
 }
 
 const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
     return (
         <Visittkort
             navn={bruker.navn}
@@ -31,7 +33,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
                 <Normaltekst>Gå til saksoversikt</Normaltekst>
             </Lenke>
 
-            <Behandlingsmeny fagsak={fagsak} />
+            {harInnloggetSaksbehandlerSkrivetilgang() && <Behandlingsmeny fagsak={fagsak} />}
         </Visittkort>
     );
 };
