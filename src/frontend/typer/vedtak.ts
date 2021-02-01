@@ -17,6 +17,12 @@ export interface IRestUtbetalingBegrunnelse {
     vedtakBegrunnelse?: VedtakBegrunnelse;
 }
 
+export interface IRestPostUtbetalingBegrunnelse {
+    fom: string;
+    tom?: string;
+    vedtakBegrunnelse: VedtakBegrunnelse;
+}
+
 export interface IRestPutUtbetalingBegrunnelse {
     vedtakBegrunnelseType?: VedtakBegrunnelseType;
     vedtakBegrunnelse?: VedtakBegrunnelse;
@@ -72,3 +78,9 @@ export enum VedtakBegrunnelseType {
     REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
 }
+
+export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
+    INNVILGELSE: 'Innvilgelse',
+    REDUKSJON: 'Reduksjon',
+    OPPHØR: 'Opphør',
+};

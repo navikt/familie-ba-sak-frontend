@@ -7,6 +7,7 @@ import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IFagsak } from '../typer/fagsak';
 import {
+    IRestPostUtbetalingBegrunnelse,
     IRestPutUtbetalingBegrunnelse,
     IRestUtbetalingBegrunnelse,
     IVedtakForBehandling,
@@ -78,11 +79,11 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             });
         };
 
-        const leggTilUtbetalingBegrunnelse = (data: IRestUtbetalingBegrunnelse) => {
+        const leggTilUtbetalingBegrunnelse = (data: IRestPostUtbetalingBegrunnelse) => {
             håndterEndretUtbetalingBegrunnelser(
-                request<IRestUtbetalingBegrunnelse, IFagsak>({
+                request<IRestPostUtbetalingBegrunnelse, IFagsak>({
                     method: 'POST',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse`,
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/v2`,
                     data,
                 })
             );

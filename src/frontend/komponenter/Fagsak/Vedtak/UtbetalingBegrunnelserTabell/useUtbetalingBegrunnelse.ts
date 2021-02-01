@@ -1,14 +1,8 @@
-import { useState } from 'react';
-
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
-import {
-    IRestUtbetalingBegrunnelse,
-    VedtakBegrunnelse,
-    VedtakBegrunnelseType,
-} from '../../../../typer/vedtak';
+import { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../typer/vedtak';
 import {
     IRestPersonResultat,
     IRestVilkårResultat,
@@ -18,50 +12,22 @@ import {
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { isoStringToDayjs } from '../../../../utils/formatter';
 
-const useUtbetalingBegrunnelse = (
-    id: number,
-    personResultater: IRestPersonResultat[],
-    periode: IPeriode,
-    utbetalingBegrunnelse: IRestUtbetalingBegrunnelse
-) => {
-    const { endreUtbetalingBegrunnelse, vilkårBegrunnelser } = useUtbetalingBegrunnelser();
+const useUtbetalingBegrunnelse = (personResultater: IRestPersonResultat[], periode: IPeriode) => {
+    const { vilkårBegrunnelser, leggTilUtbetalingBegrunnelse } = useUtbetalingBegrunnelser();
 
-    const [mutableVedtakBegrunnelse, settMutableVedtakBegrunnelse] = useState<
-        VedtakBegrunnelse | undefined
-    >(utbetalingBegrunnelse.vedtakBegrunnelse);
-    const [mutableVedtakBegrunnelseType, settMutableVedtakBegrunnelseType] = useState<
-        VedtakBegrunnelseType | undefined
-    >(utbetalingBegrunnelse.begrunnelseType);
-    const defaultVelgBehandlingsresultat = 'Velg behandlingsresultat';
-
-    const onChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value ? event.target.value : '';
-        settMutableVedtakBegrunnelseType(value as VedtakBegrunnelseType);
-        settMutableVedtakBegrunnelse(undefined);
-        endreUtbetalingBegrunnelse(id, {
-            vedtakBegrunnelseType:
-                value !== defaultVelgBehandlingsresultat
-                    ? (value as VedtakBegrunnelseType)
-                    : undefined,
-            vedtakBegrunnelse: undefined,
+    const onChangeBegrunnelse = (vedtakBegrunnelse: VedtakBegrunnelse) => {
+        leggTilUtbetalingBegrunnelse({
+            fom: periode.fom ?? '',
+            tom: periode.tom,
+            vedtakBegrunnelse,
         });
     };
 
-    const onChangeBegrunnelse = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value ? event.target.value : '';
-        settMutableVedtakBegrunnelse(value as VedtakBegrunnelse);
-        endreUtbetalingBegrunnelse(id, {
-            vedtakBegrunnelseType: mutableVedtakBegrunnelseType,
-            vedtakBegrunnelse:
-                value !== 'Velg begrunnelse' ? (value as VedtakBegrunnelse) : undefined,
-        });
-    };
-
-    const hentUtgjørendeVilkår = (): VilkårType[] => {
+    const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] => {
         return personResultater
             .flatMap(personResultat => personResultat.vilkårResultater)
             .filter((vilkårResultat: IRestVilkårResultat) => {
-                if (utbetalingBegrunnelse.begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
+                if (begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                     return (
                         familieDayjsDiff(
                             isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN),
@@ -69,9 +35,7 @@ const useUtbetalingBegrunnelse = (
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
                     );
-                } else if (
-                    utbetalingBegrunnelse.begrunnelseType === VedtakBegrunnelseType.REDUKSJON
-                ) {
+                } else if (begrunnelseType === VedtakBegrunnelseType.REDUKSJON) {
                     const oppfyltTomMånedEtter =
                         vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
 
@@ -94,12 +58,8 @@ const useUtbetalingBegrunnelse = (
 
     return {
         begrunnelser,
-        defaultVelgBehandlingsresultat,
         hentUtgjørendeVilkår,
-        mutableVedtakBegrunnelse,
-        mutableVedtakBegrunnelseType,
         onChangeBegrunnelse,
-        onChangeType,
     };
 };
 

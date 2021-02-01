@@ -1,10 +1,7 @@
 import React from 'react';
 
-import { Feilmelding } from 'nav-frontend-typografi';
-
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
-import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
 import { IUtbetalingsperiode } from '../../../../typer/beregning';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
@@ -12,8 +9,7 @@ import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat, isoStringToDayjs } from '../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import UtbetalingBegrunnelseInput from './UtbetalingBegrunnelseInput';
+import UtbetalingBegrunnelseMultiselect from './UtbetalingBegrunnelseMultiselect';
 
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
@@ -23,11 +19,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     åpenBehandling,
 }) => {
     const { erLesevisning } = useBehandling();
-    const {
-        leggTilUtbetalingBegrunnelse,
-        utbetalingBegrunnelser,
-        utbetalingBegrunnelseFeilmelding,
-    } = useUtbetalingBegrunnelser();
+    const { utbetalingBegrunnelser } = useUtbetalingBegrunnelser();
 
     const harAndeler = åpenBehandling.utbetalingsperioder.length > 0;
     const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
@@ -101,55 +93,17 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                 </td>
                                 <td>{`${utbetalingsperiode.utbetaltPerMnd} kr/mnd for ${utbetalingsperiode.antallBarn} barn`}</td>
                                 <td>
-                                    {utbetalingBegrunnelseForPeriode.map(
-                                        (
-                                            utbetalingBegrunnelse: IRestUtbetalingBegrunnelse,
-                                            index: number
-                                        ) => {
-                                            return utbetalingBegrunnelse.id ? (
-                                                <UtbetalingBegrunnelseInput
-                                                    key={index}
-                                                    id={utbetalingBegrunnelse.id}
-                                                    utbetalingBegrunnelse={utbetalingBegrunnelse}
-                                                    erLesevisning={erLesevisning()}
-                                                    personResultater={
-                                                        åpenBehandling.personResultater
-                                                    }
-                                                    periode={{
-                                                        fom: utbetalingsperiode.periodeFom,
-                                                        tom: utbetalingsperiode.periodeTom,
-                                                    }}
-                                                />
-                                            ) : (
-                                                <Feilmelding key={index}>
-                                                    Begrunnelsen mangler id
-                                                </Feilmelding>
-                                            );
+                                    <UtbetalingBegrunnelseMultiselect
+                                        utbetalingBegrunnelseForPeriode={
+                                            utbetalingBegrunnelseForPeriode
                                         }
-                                    )}
-                                    <IkonKnapp
                                         erLesevisning={erLesevisning()}
-                                        id={`legg-til-begrunnelse-${periodeToString({
+                                        personResultater={åpenBehandling.personResultater}
+                                        periode={{
                                             fom: utbetalingsperiode.periodeFom,
                                             tom: utbetalingsperiode.periodeTom,
-                                        })}`}
-                                        onClick={() => {
-                                            leggTilUtbetalingBegrunnelse({
-                                                fom: utbetalingsperiode.periodeFom,
-                                                tom: utbetalingsperiode.periodeTom,
-                                            });
                                         }}
-                                        knappPosisjon={'venstre'}
-                                        mini={true}
-                                        label={'Legg til'}
-                                        ikon={<Pluss />}
-                                        spinner={false}
                                     />
-                                    {!utbetalingBegrunnelseFeilmelding.id && (
-                                        <Feilmelding>
-                                            {utbetalingBegrunnelseFeilmelding.feilmelding}
-                                        </Feilmelding>
-                                    )}
                                 </td>
                             </tr>
                         );
