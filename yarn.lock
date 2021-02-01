@@ -8045,10 +8045,10 @@ nav-frontend-chevron@^1.0.10, nav-frontend-chevron@^1.0.13:
   resolved "https://registry.yarnpkg.com/nav-frontend-chevron/-/nav-frontend-chevron-1.0.24.tgz#3025ca5494ed2d01859a956478eced984a107cbf"
   integrity sha512-wknwiBnNKYz9V4LwppGGKiJGdWxupysCWJ+UIxUGf9ID5xDOELNj8Kgh5vJGyeJLE4ehSgBLai+YJOaNqtvGvw==
 
-nav-frontend-core@^5.0.1, nav-frontend-core@^5.0.10, nav-frontend-core@^5.0.5, nav-frontend-core@^5.0.8:
-  version "5.0.10"
-  resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.10.tgz#6f582c2a09ee18c3d26d68fe09413289a7efed65"
-  integrity sha512-0wo5L2s/OO5Q5pqJg8UWQCuRBzYY5txgbx1dD7OXHuokbva7GA0sZvh25VTrPauUbnDSUB26leJtwzos9Upi0A==
+nav-frontend-core@^5.0.1, nav-frontend-core@^5.0.10, nav-frontend-core@^5.0.11, nav-frontend-core@^5.0.5, nav-frontend-core@^5.0.8:
+  version "5.0.11"
+  resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.11.tgz#d2611a79f5f5372166a467a5f6e5eaccb8725086"
+  integrity sha512-5b1FMK1mPfnpsXgHMDLY8Tj4SiPXVFg9hXj//qTaO3W2lwMY4Df3dKh4R595OiuVu7IRutAIuocPtXv3ysmsag==
 
 nav-frontend-ekspanderbartpanel-style@^1.0.31:
   version "1.0.33"
@@ -8230,11 +8230,11 @@ nav-frontend-tabs@^0.0.57:
   integrity sha512-BecDjM9eISwQ7VEg3ctn/t6DhjBPBV+E1wFtQcquc4wR7fNoln7gN6slaNVapV04fZB+rMJissnD7DJ6GFqYzw==
 
 nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.18, nav-frontend-typografi-style@^1.0.26, nav-frontend-typografi-style@^1.0.29:
-  version "1.0.31"
-  resolved "https://registry.yarnpkg.com/nav-frontend-typografi-style/-/nav-frontend-typografi-style-1.0.31.tgz#c98a270e9c86f3ffb21e026ae82ca262211183c9"
-  integrity sha512-zs3XNGf/8YMO3Pi/xD11B9n8kY1s1okCVVuPJcVu+DVjKwMsScDdmuKCtotm0QDpHUk1CExPDCLwPGuAPAlOsw==
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi-style/-/nav-frontend-typografi-style-1.0.33.tgz#ed1c9214662da8bd714d64ec2a2833736158d692"
+  integrity sha512-HKNQXVEG99YDlgNz22/hTFcN9yyKs3N67xUonQ8Esh7Cr8lJwT1BnAYlkiT3DimJL+oKyx7bnfA/lPJF8aSl2A==
   dependencies:
-    nav-frontend-core "^5.0.10"
+    nav-frontend-core "^5.0.11"
 
 nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.17, nav-frontend-typografi@^2.0.21, nav-frontend-typografi@^2.0.36:
   version "2.0.37"
