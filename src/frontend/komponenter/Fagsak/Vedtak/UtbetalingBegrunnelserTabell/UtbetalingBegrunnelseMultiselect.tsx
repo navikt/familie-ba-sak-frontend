@@ -110,7 +110,7 @@ const UtbetalingBegrunnelseMultiselect: React.FC<IUtbetalingsBegrunnelseMultisel
                 }),
             }}
             label={'Begrunnelser'}
-            creatable={true}
+            creatable={false}
             erLesevisning={erLesevisning}
             isMulti={true}
             onChange={(_, action) => {
