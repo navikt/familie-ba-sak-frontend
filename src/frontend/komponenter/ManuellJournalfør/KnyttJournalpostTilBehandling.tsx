@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
@@ -14,6 +13,7 @@ import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { IBehandling } from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
 import { datoformat, formaterDato, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
+import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 
 const KnyttDiv = styled.div`
     margin-top: 20px;
@@ -41,7 +41,6 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         tilknyttedeBehandlingIder,
         visKnyttTilNyBehandling,
         knyttTilNyBehandling,
-        settKnyttTilNyBehandling,
     } = useManuellJournalfør();
 
     if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
@@ -52,8 +51,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         tilknyttedeBehandlingIder.length === 0 && !knyttTilNyBehandling;
     return (
         <KnyttDiv>
-            <br />
-            {dataForManuellJournalføring.data.fagsak?.behandlinger.length && (
+            {!!dataForManuellJournalføring.data.fagsak?.behandlinger.length && (
                 <>
                     <Undertittel>Knytt til tidligere behandling(er)</Undertittel>
                     <table className="tabell">
@@ -68,7 +66,17 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                         </thead>
                         <tbody className="tabell__body">
                             {hentSorterteBehandlinger().map((behandling: IBehandling) => (
-                                <tr key={behandling.behandlingId}>
+                                <tr
+                                    key={behandling.behandlingId}
+                                    className={
+                                        tilknyttedeBehandlingIder.includes(behandling.behandlingId)
+                                            ? 'tabell__tr--valgt'
+                                            : ''
+                                    }
+                                    aria-selected={tilknyttedeBehandlingIder.includes(
+                                        behandling.behandlingId
+                                    )}
+                                >
                                     <KnyttTilBehandlingTd>
                                         <FamilieCheckbox
                                             erLesevisning={false}
@@ -109,25 +117,10 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                             ))}
                         </tbody>
                     </table>
+                    <br />
                 </>
             )}
-            {visKnyttTilNyBehandling && (
-                <>
-                    <br />
-                    <Undertittel>Knytt til ny behandling</Undertittel>
-                    <br />
-                    <Panel border={true}>
-                        <FamilieCheckbox
-                            erLesevisning={false}
-                            label={'Knytt til ny behandling'}
-                            checked={knyttTilNyBehandling}
-                            onChange={() => {
-                                settKnyttTilNyBehandling(!knyttTilNyBehandling);
-                            }}
-                        />
-                    </Panel>
-                </>
-            )}
+            {visKnyttTilNyBehandling && <KnyttTilNyBehandling />}
             {visGenerellSakInfoStripe && (
                 <>
                     <br />

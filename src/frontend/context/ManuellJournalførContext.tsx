@@ -19,7 +19,12 @@ import {
     IJournalpost,
 } from '@navikt/familie-typer';
 
-import { BehandlingStatus, IBehandling } from '../typer/behandling';
+import {
+    BehandlingStatus,
+    Behandlingstype,
+    BehandlingÅrsak,
+    IBehandling,
+} from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
     BrevkodeMap,
@@ -177,6 +182,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const [tilknyttedeBehandlingIder, settTilknyttedeBehandlingIder] = React.useState<number[]>([]);
     const [knyttTilNyBehandling, settKnyttTilNyBehandling] = React.useState(false);
     const [visKnyttTilNyBehandling, settVisKnyttTilNyBehandling] = React.useState(false);
+    const [nyBehandlingstype, settNyBehandlingstype] = React.useState<Behandlingstype>(
+        Behandlingstype.FØRSTEGANGSBEHANDLING
+    );
+    const [nyBehandlingsårsak, settNyBehandlingsårsak] = React.useState<BehandlingÅrsak>(
+        BehandlingÅrsak.SØKNAD
+    );
 
     const finnDokument = (
         ressurs: Ressurs<IDataForManuellJournalføring>,
@@ -474,6 +485,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,
                     tilknyttedeBehandlingIder: tilknyttedeBehandlingIder,
                     opprettOgKnyttTilNyBehandling: knyttTilNyBehandling,
+                    nyBehandlingstype: nyBehandlingstype,
+                    nyBehandlingsårsak:
+                        nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
+                            ? BehandlingÅrsak.SØKNAD
+                            : nyBehandlingsårsak,
                     navIdent: innloggetSaksbehandler?.navIdent ?? '',
                 },
             })
@@ -552,6 +568,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         visKnyttTilNyBehandling,
         knyttTilNyBehandling,
         settKnyttTilNyBehandling,
+        nyBehandlingstype,
+        settNyBehandlingstype,
+        nyBehandlingsårsak,
+        settNyBehandlingsårsak,
 
         // Validering og tilbakestilling
         harFeil,
