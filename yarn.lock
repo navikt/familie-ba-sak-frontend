@@ -8135,9 +8135,9 @@ nav-frontend-lenker@^1.0.37, nav-frontend-lenker@^1.0.38:
   integrity sha512-S3xlFOr9Jv9MPjw2U7y31IBwex8OtfZjpOiNumZA7kfSHdW19R0OlNkJfGVr5e9GMucsSqganfusgIgJQUfanA==
 
 nav-frontend-lukknapp-style@^0.2.31:
-  version "0.2.34"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp-style/-/nav-frontend-lukknapp-style-0.2.34.tgz#0c245fc3bcfeadbf7bc5851005d9fe354ebacdc9"
-  integrity sha512-FHhNB5AmYk74/jIr1LD54sdRRTd0c1Dh3wOCs/xmEy9TTPfqA4shh20TBARSvuWBuYKAMLfPFtJHQVqRkqjrRQ==
+  version "0.2.37"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp-style/-/nav-frontend-lukknapp-style-0.2.37.tgz#5169f4103add262c9a4e5f3c4a563c1e356686b1"
+  integrity sha512-6ke3BD+MIspbQrOSbVnyGRUoLuHJFDjqH+tUhRJrbmK8hOJ7mBSsbXZmV1/PUG2XMjQ4tZP3tDwhtM8x8PLptw==
 
 nav-frontend-lukknapp@^1.0.39:
   version "1.0.43"
