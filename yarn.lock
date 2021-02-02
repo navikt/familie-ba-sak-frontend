@@ -8160,9 +8160,9 @@ nav-frontend-paneler-style@0.3.25:
   integrity sha512-fph9j5IPF6uukMKLW6QQHcouACaNVLOSu6AwDdtB416icKVyyXfVqpeO/1F+XIzDr+vapjjQl1PjQIj/qqKNAA==
 
 nav-frontend-paneler-style@^0.3.28:
-  version "0.3.31"
-  resolved "https://registry.yarnpkg.com/nav-frontend-paneler-style/-/nav-frontend-paneler-style-0.3.31.tgz#93736a36c70a84f4a55aa94239a9177e07951d33"
-  integrity sha512-UEay8N4N8xrauV1DztFCBmybpAEV2mb/kDgyyast4TuBVSDr8LsYyR5x437Thi1VPowqjSfjB3tTobMeeMy4qA==
+  version "0.3.34"
+  resolved "https://registry.yarnpkg.com/nav-frontend-paneler-style/-/nav-frontend-paneler-style-0.3.34.tgz#48bc6a4331262658490644976c65258d6b3cbcec"
+  integrity sha512-ufqCAPGofVHrof7yh7TGdby9hMHI6HPr4x4KegeTSXg83jPsW5ElynznkBtfMpsGWTD8MoxBxIJkSOlqEvzbvg==
 
 nav-frontend-paneler@^1.0.24:
   version "1.0.24"
