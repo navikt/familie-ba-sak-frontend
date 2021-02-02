@@ -12,7 +12,7 @@ export interface IRestVedtakBegrunnelse {
     fom: string;
     tom?: string;
     begrunnelseType?: VedtakBegrunnelseType;
-    vedtakBegrunnelse?: VedtakBegrunnelse;
+    begrunnelse?: VedtakBegrunnelse;
 }
 
 export interface IRestPostVedtakBegrunnelse {

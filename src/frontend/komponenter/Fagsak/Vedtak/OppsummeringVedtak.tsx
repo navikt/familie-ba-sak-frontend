@@ -122,7 +122,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const minstEnPeriodeErBegrunnet = (vedtakBegrunnelser: IRestVedtakBegrunnelse[]) => {
         const begrunnelsenErUtfylt = (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-            vedtakBegrunnelse.begrunnelseType && vedtakBegrunnelse.vedtakBegrunnelse;
+            vedtakBegrunnelse.begrunnelseType && vedtakBegrunnelse.begrunnelse;
 
         return (
             vedtakBegrunnelser.filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>

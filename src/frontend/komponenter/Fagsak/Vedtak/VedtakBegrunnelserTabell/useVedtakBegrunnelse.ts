@@ -43,7 +43,7 @@ const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: 
                     | IRestVedtakBegrunnelse
                     | undefined = vedtakBegrunnelserForPeriode.find(
                     (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                        vedtakBegrunnelse.vedtakBegrunnelse === action.removedValue?.value
+                        vedtakBegrunnelse.begrunnelse === action.removedValue?.value
                 );
 
                 if (vedtakBegrunnelse) {

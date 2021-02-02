@@ -104,7 +104,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
 
     const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode.map(
         (utbetalingsbegrunnelse: IRestVedtakBegrunnelse) => ({
-            value: utbetalingsbegrunnelse.vedtakBegrunnelse?.toString() ?? '',
+            value: utbetalingsbegrunnelse.begrunnelse?.toString() ?? '',
             label:
                 vilkårBegrunnelser.status === RessursStatus.SUKSESS
                     ? vilkårBegrunnelser.data[
@@ -114,7 +114,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                               restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
                           ) =>
                               restVedtakBegrunnelseTilknyttetVilkår.id ===
-                              utbetalingsbegrunnelse.vedtakBegrunnelse
+                              utbetalingsbegrunnelse.begrunnelse
                       )?.navn ?? ''
                     : '',
         })
