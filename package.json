@@ -33,7 +33,7 @@
   "dependencies": {
     "@navikt/familie-backend": "^5.0.18",
     "@navikt/familie-clipboard": "^3.1.0",
-    "@navikt/familie-form-elements": "2.0.15",
+    "@navikt/familie-form-elements": "2.0.16-alpha.16",
     "@navikt/familie-header": "^2.0.14",
     "@navikt/familie-http": "^1.0.1",
     "@navikt/familie-ikoner": "^3.1.0",

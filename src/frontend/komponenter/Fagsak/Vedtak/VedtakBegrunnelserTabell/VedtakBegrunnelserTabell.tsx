@@ -3,17 +3,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { IUtbetalingsperiode } from '../../../../typer/beregning';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
-import { IRestUtbetalingBegrunnelse } from '../../../../typer/vedtak';
+import { IRestVedtakBegrunnelse } from '../../../../typer/vedtak';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat, isoStringToDayjs } from '../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
-import UtbetalingBegrunnelseMultiselect from './UtbetalingBegrunnelseMultiselect';
+import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 
-interface IUtbetalingBegrunnelseTabell {
+interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
 }
 
@@ -25,11 +25,9 @@ const StyledTable = styled.table`
     }
 `;
 
-const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
-    åpenBehandling,
-}) => {
+const VedtakBegrunnelserTabell: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
     const { erLesevisning } = useBehandling();
-    const { utbetalingBegrunnelser } = useUtbetalingBegrunnelser();
+    const { vedtakBegrunnelser } = useVedtakBegrunnelser();
 
     const harAndeler = åpenBehandling.utbetalingsperioder.length > 0;
     const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
@@ -41,18 +39,18 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
             )
         )
         .filter((utbetalingsperiode: IUtbetalingsperiode) => {
-            const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
-                (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
+            const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
+                (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                     return (
-                        utbetalingBegrunnelse.fom === utbetalingsperiode.periodeFom &&
-                        utbetalingBegrunnelse.tom === utbetalingsperiode.periodeTom
+                        vedtakBegrunnelse.fom === utbetalingsperiode.periodeFom &&
+                        vedtakBegrunnelse.tom === utbetalingsperiode.periodeTom
                     );
                 }
             );
 
             // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
             if (erLesevisning()) {
-                return utbetalingBegrunnelseForPeriode.length !== 0;
+                return vedtakBegrunnelserForPeriode.length !== 0;
             }
 
             // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
@@ -80,11 +78,11 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
             <tbody>
                 {utbetalingsperioderMedBegrunnelseBehov.map(
                     (utbetalingsperiode: IUtbetalingsperiode) => {
-                        const utbetalingBegrunnelseForPeriode = utbetalingBegrunnelser.filter(
-                            (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
+                        const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
+                            (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                                 return (
-                                    utbetalingBegrunnelse.fom === utbetalingsperiode.periodeFom &&
-                                    utbetalingBegrunnelse.tom === utbetalingsperiode.periodeTom
+                                    vedtakBegrunnelse.fom === utbetalingsperiode.periodeFom &&
+                                    vedtakBegrunnelse.tom === utbetalingsperiode.periodeTom
                                 );
                             }
                         );
@@ -103,10 +101,8 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                                 </td>
                                 <td>{`${utbetalingsperiode.utbetaltPerMnd} kr/mnd for ${utbetalingsperiode.antallBarn} barn`}</td>
                                 <td>
-                                    <UtbetalingBegrunnelseMultiselect
-                                        utbetalingBegrunnelseForPeriode={
-                                            utbetalingBegrunnelseForPeriode
-                                        }
+                                    <VedtakBegrunnelserMultiselect
+                                        vedtakBegrunnelserForPeriode={vedtakBegrunnelserForPeriode}
                                         erLesevisning={erLesevisning()}
                                         personResultater={åpenBehandling.personResultater}
                                         periode={{
@@ -124,4 +120,4 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     ) : null;
 };
 
-export default UtbetalingBegrunnelseTabell;
+export default VedtakBegrunnelserTabell;

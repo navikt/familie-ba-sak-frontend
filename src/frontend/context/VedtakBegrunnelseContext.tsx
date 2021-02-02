@@ -8,20 +8,20 @@ import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
 import {
-    IRestPostUtbetalingBegrunnelse,
-    IRestUtbetalingBegrunnelse,
+    IRestPostVedtakBegrunnelse,
+    IRestVedtakBegrunnelse,
     IVedtakForBehandling,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useFagsakRessurser } from './FagsakContext';
 
-export interface IUtbetalingBegrunnelseSubmit {
+export interface IVedtakBegrunnelseSubmit {
     periodeId: string;
     feilmelding: string;
     status: RessursStatus;
 }
 
-const initialUtbetalingBegrunnelseSubmit = {
+const initialVedtakBegrunnelseSubmit = {
     periodeId: '',
     feilmelding: '',
     status: RessursStatus.IKKE_HENTET,
@@ -32,18 +32,18 @@ interface IProps {
     fagsak: IFagsak;
 }
 
-const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
+const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
     ({ aktivVedtak, fagsak }: IProps) => {
         const { request } = useHttp();
 
         const { settFagsak } = useFagsakRessurser();
 
-        const [utbetalingBegrunnelseSubmit, settUtbetalingBegrunnelseSubmit] = useState<
-            IUtbetalingBegrunnelseSubmit
-        >(initialUtbetalingBegrunnelseSubmit);
+        const [vedtakBegrunnelseSubmit, settVedtakBegrunnelseSubmit] = useState<
+            IVedtakBegrunnelseSubmit
+        >(initialVedtakBegrunnelseSubmit);
 
-        const [utbetalingBegrunnelser, settUtbetalingBegrunnelser] = React.useState<
-            IRestUtbetalingBegrunnelse[]
+        const [vedtakBegrunnelser, settVedtakBegrunnelser] = React.useState<
+            IRestVedtakBegrunnelse[]
         >([]);
 
         const [vilkårBegrunnelser, settVilkårbegrunnelser] = React.useState<
@@ -56,7 +56,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
 
         useEffect(() => {
             if (aktivVedtak) {
-                settUtbetalingBegrunnelser(aktivVedtak.utbetalingBegrunnelser);
+                settVedtakBegrunnelser(aktivVedtak.begrunnelser);
             }
         }, [aktivVedtak]);
 
@@ -70,11 +70,11 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             });
         };
 
-        const håndterEndretUtbetalingBegrunnelser = (
+        const håndterEndringerPåVedtakBegrunnelser = (
             promise: Promise<Ressurs<IFagsak>>,
             periodeId: string
         ) => {
-            settUtbetalingBegrunnelseSubmit({
+            settVedtakBegrunnelseSubmit({
                 periodeId,
                 feilmelding: '',
                 status: RessursStatus.HENTER,
@@ -82,13 +82,13 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             promise.then((fagsak: Ressurs<IFagsak>) => {
                 if (fagsak.status === RessursStatus.SUKSESS) {
                     settFagsak(fagsak);
-                    settUtbetalingBegrunnelseSubmit(initialUtbetalingBegrunnelseSubmit);
+                    settVedtakBegrunnelseSubmit(initialVedtakBegrunnelseSubmit);
                 } else if (
                     fagsak.status === RessursStatus.FEILET ||
                     fagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
                     fagsak.status === RessursStatus.IKKE_TILGANG
                 ) {
-                    settUtbetalingBegrunnelseSubmit({
+                    settVedtakBegrunnelseSubmit({
                         periodeId,
                         feilmelding: fagsak.frontendFeilmelding,
                         status: RessursStatus.FEILET,
@@ -97,31 +97,32 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             });
         };
 
-        const leggTilUtbetalingBegrunnelse = (
-            utbetalingBegrunnelse: IRestPostUtbetalingBegrunnelse
-        ) => {
-            håndterEndretUtbetalingBegrunnelser(
-                request<IRestPostUtbetalingBegrunnelse, IFagsak>({
+        const leggTilVedtakBegrunnelse = (postVedtakBegrunnelse: IRestPostVedtakBegrunnelse) => {
+            håndterEndringerPåVedtakBegrunnelser(
+                request<IRestPostVedtakBegrunnelse, IFagsak>({
                     method: 'POST',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser`,
-                    data: utbetalingBegrunnelse,
+                    data: postVedtakBegrunnelse,
                 }),
-                lagPeriodeId({ fom: utbetalingBegrunnelse.fom, tom: utbetalingBegrunnelse.tom })
+                lagPeriodeId({
+                    fom: postVedtakBegrunnelse.fom,
+                    tom: postVedtakBegrunnelse.tom,
+                })
             );
         };
 
-        const slettUtbetalingBegrunnelse = (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
-            håndterEndretUtbetalingBegrunnelser(
+        const slettVedtakBegrunnelse = (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
+            håndterEndringerPåVedtakBegrunnelser(
                 request<void, IFagsak>({
                     method: 'DELETE',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${utbetalingBegrunnelse.id}`,
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${vedtakBegrunnelse.id}`,
                 }),
-                lagPeriodeId({ fom: utbetalingBegrunnelse.fom, tom: utbetalingBegrunnelse.tom })
+                lagPeriodeId({ fom: vedtakBegrunnelse.fom, tom: vedtakBegrunnelse.tom })
             );
         };
 
-        const slettUtbetalingBegrunnelserForPeriode = (fom: string, tom?: string) => {
-            håndterEndretUtbetalingBegrunnelser(
+        const slettVedtakBegrunnelserForPeriode = (fom: string, tom?: string) => {
+            håndterEndringerPåVedtakBegrunnelser(
                 request<IPeriode, IFagsak>({
                     method: 'DELETE',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/perioder`,
@@ -136,15 +137,14 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
 
         return {
             hentVilkårBegrunnelseTekster,
-            leggTilUtbetalingBegrunnelse,
-            settUtbetalingBegrunnelser,
-            slettUtbetalingBegrunnelse,
-            slettUtbetalingBegrunnelserForPeriode,
-            utbetalingBegrunnelseSubmit,
-            utbetalingBegrunnelser,
+            leggTilVedtakBegrunnelse,
+            slettVedtakBegrunnelse,
+            slettVedtakBegrunnelserForPeriode,
+            vedtakBegrunnelseSubmit,
+            vedtakBegrunnelser,
             vilkårBegrunnelser,
         };
     }
 );
 
-export { UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser };
+export { VedtakBegrunnelserProvider, useVedtakBegrunnelser };

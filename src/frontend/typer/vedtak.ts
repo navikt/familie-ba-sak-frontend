@@ -1,15 +1,13 @@
-import { INøkkelPar } from './common';
 import { VilkårType } from './vilkår';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
-    utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[];
+    begrunnelser: IRestVedtakBegrunnelse[];
     vedtaksdato: string;
     id: number;
-    begrunnelse: VedtakBegrunnelseType;
 }
 
-export interface IRestUtbetalingBegrunnelse {
+export interface IRestVedtakBegrunnelse {
     id?: number;
     fom: string;
     tom?: string;
@@ -17,18 +15,13 @@ export interface IRestUtbetalingBegrunnelse {
     vedtakBegrunnelse?: VedtakBegrunnelse;
 }
 
-export interface IRestPostUtbetalingBegrunnelse {
+export interface IRestPostVedtakBegrunnelse {
     fom: string;
     tom?: string;
     vedtakBegrunnelse: VedtakBegrunnelse;
 }
 
-export interface IRestPutUtbetalingBegrunnelse {
-    vedtakBegrunnelseType?: VedtakBegrunnelseType;
-    vedtakBegrunnelse?: VedtakBegrunnelse;
-}
-
-export interface IRestVedtakBegrunnelse {
+export interface IRestVedtakBegrunnelseTilknyttetVilkår {
     id: VedtakBegrunnelse;
     navn: string;
     vilkår?: VilkårType;
@@ -57,21 +50,6 @@ export enum VedtakBegrunnelse {
     OPPHØR_BARN_FLYTTET_FRA_SØKER = 'OPPHØR_BARN_FLYTTET_FRA_SØKER',
     OPPHØR_SØKER_FLYTTET_FRA_BARN = 'OPPHØR_SØKER_FLYTTET_FRA_BARN',
 }
-
-export const begrunnelsetyper: INøkkelPar = {
-    INNVILGELSE: {
-        id: 'INNVILGELSE',
-        navn: 'Innvilgelse',
-    },
-    REDUKSJON: {
-        id: 'REDUKSJON',
-        navn: 'Reduksjon',
-    },
-    OPPHØR: {
-        id: 'OPPHØR',
-        navn: 'Opphør',
-    },
-};
 
 export enum VedtakBegrunnelseType {
     INNVILGELSE = 'INNVILGELSE',

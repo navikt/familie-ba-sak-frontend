@@ -23,7 +23,7 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { UtbetalingBegrunnelserProvider } from '../../../context/UtbetalingBegrunnelseContext';
+import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelseContext';
 import {
     BehandlingStatus,
     BehandlingSteg,
@@ -32,12 +32,12 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { IRestUtbetalingBegrunnelse } from '../../../typer/vedtak';
+import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import UtbetalingBegrunnelseTabell from './UtbetalingBegrunnelserTabell/UtbetalingBegrunnelseTabell';
+import BegrunnelseTabell from './VedtakBegrunnelserTabell/VedtakBegrunnelserTabell';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -120,20 +120,20 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
-    const minstEnPeriodeErBegrunnet = (utbetalingBegrunnelser: IRestUtbetalingBegrunnelse[]) => {
-        const begrunnelsenErUtfylt = (utbetalingsbegrunnelse: IRestUtbetalingBegrunnelse) =>
-            utbetalingsbegrunnelse.begrunnelseType && utbetalingsbegrunnelse.vedtakBegrunnelse;
+    const minstEnPeriodeErBegrunnet = (vedtakBegrunnelser: IRestVedtakBegrunnelse[]) => {
+        const begrunnelsenErUtfylt = (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+            vedtakBegrunnelse.begrunnelseType && vedtakBegrunnelse.vedtakBegrunnelse;
 
         return (
-            utbetalingBegrunnelser.filter((utbetalingsbegrunnelse: IRestUtbetalingBegrunnelse) =>
-                begrunnelsenErUtfylt(utbetalingsbegrunnelse)
+            vedtakBegrunnelser.filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+                begrunnelsenErUtfylt(vedtakBegrunnelse)
             ).length > 0
         );
     };
 
     const sendInn = () => {
         if (
-            (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.utbetalingBegrunnelser)) ||
+            (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
             åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR
         ) {
             settSenderInn(true);
@@ -191,9 +191,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         pdfdata={vedtaksbrev}
                     />
 
-                    <UtbetalingBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                        <UtbetalingBegrunnelseTabell åpenBehandling={åpenBehandling} />
-                    </UtbetalingBegrunnelserProvider>
+                    <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+                        <BegrunnelseTabell åpenBehandling={åpenBehandling} />
+                    </VedtakBegrunnelserProvider>
 
                     <Knapp
                         mini={true}

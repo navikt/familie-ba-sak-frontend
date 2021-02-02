@@ -1,10 +1,10 @@
 import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
 import {
-    IRestUtbetalingBegrunnelse,
+    IRestVedtakBegrunnelse,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
@@ -17,21 +17,21 @@ import {
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { isoStringToDayjs } from '../../../../utils/formatter';
 
-const useUtbetalingBegrunnelse = (personResultater: IRestPersonResultat[], periode: IPeriode) => {
+const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: IPeriode) => {
     const {
         vilkårBegrunnelser,
-        leggTilUtbetalingBegrunnelse,
-        slettUtbetalingBegrunnelse,
-        slettUtbetalingBegrunnelserForPeriode,
-    } = useUtbetalingBegrunnelser();
+        leggTilVedtakBegrunnelse,
+        slettVedtakBegrunnelse,
+        slettVedtakBegrunnelserForPeriode,
+    } = useVedtakBegrunnelser();
 
     const onChangeBegrunnelse = (
         action: ActionMeta<ISelectOption>,
-        utbetalingBegrunnelseForPeriode: IRestUtbetalingBegrunnelse[]
+        vedtakBegrunnelserForPeriode: IRestVedtakBegrunnelse[]
     ) => {
         switch (action.action) {
             case 'select-option':
-                leggTilUtbetalingBegrunnelse({
+                leggTilVedtakBegrunnelse({
                     fom: periode.fom ?? '',
                     tom: periode.tom,
                     vedtakBegrunnelse: (action.option?.value ?? '') as VedtakBegrunnelse,
@@ -39,15 +39,15 @@ const useUtbetalingBegrunnelse = (personResultater: IRestPersonResultat[], perio
                 break;
             case 'pop-value':
             case 'remove-value':
-                const utbetalingBegrunnelse:
-                    | IRestUtbetalingBegrunnelse
-                    | undefined = utbetalingBegrunnelseForPeriode.find(
-                    (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) =>
-                        utbetalingBegrunnelse.vedtakBegrunnelse === action.removedValue?.value
+                const vedtakBegrunnelse:
+                    | IRestVedtakBegrunnelse
+                    | undefined = vedtakBegrunnelserForPeriode.find(
+                    (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+                        vedtakBegrunnelse.vedtakBegrunnelse === action.removedValue?.value
                 );
 
-                if (utbetalingBegrunnelse) {
-                    slettUtbetalingBegrunnelse(utbetalingBegrunnelse);
+                if (vedtakBegrunnelse) {
+                    slettVedtakBegrunnelse(vedtakBegrunnelse);
                 } else {
                     throw new Error(
                         'Finner ikke utbetalingsbegrunnelse id i listen over begrunnelser'
@@ -55,13 +55,13 @@ const useUtbetalingBegrunnelse = (personResultater: IRestPersonResultat[], perio
                 }
                 break;
             case 'clear':
-                const førsteUtbetalingBegrunnelse: IRestUtbetalingBegrunnelse | undefined =
-                    utbetalingBegrunnelseForPeriode[0];
+                const førsteVedtakBegrunnelse: IRestVedtakBegrunnelse | undefined =
+                    vedtakBegrunnelserForPeriode[0];
 
-                if (førsteUtbetalingBegrunnelse) {
-                    slettUtbetalingBegrunnelserForPeriode(
-                        førsteUtbetalingBegrunnelse.fom,
-                        førsteUtbetalingBegrunnelse.tom
+                if (førsteVedtakBegrunnelse) {
+                    slettVedtakBegrunnelserForPeriode(
+                        førsteVedtakBegrunnelse.fom,
+                        førsteVedtakBegrunnelse.tom
                     );
                 } else {
                     throw new Error(
@@ -114,4 +114,4 @@ const useUtbetalingBegrunnelse = (personResultater: IRestPersonResultat[], perio
     };
 };
 
-export default useUtbetalingBegrunnelse;
+export default useVedtakBegrunnelse;
