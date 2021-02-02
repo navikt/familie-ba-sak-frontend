@@ -6,14 +6,26 @@ import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IFagsak } from '../typer/fagsak';
+import { IPeriode, lagPeriodeId } from '../typer/periode';
 import {
     IRestPostUtbetalingBegrunnelse,
-    IRestPutUtbetalingBegrunnelse,
     IRestUtbetalingBegrunnelse,
     IVedtakForBehandling,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useFagsakRessurser } from './FagsakContext';
+
+export interface IUtbetalingBegrunnelseSubmit {
+    periodeId: string;
+    feilmelding: string;
+    status: RessursStatus;
+}
+
+const initialUtbetalingBegrunnelseSubmit = {
+    periodeId: '',
+    feilmelding: '',
+    status: RessursStatus.IKKE_HENTET,
+};
 
 interface IProps {
     aktivVedtak?: IVedtakForBehandling;
@@ -26,10 +38,9 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
 
         const { settFagsak } = useFagsakRessurser();
 
-        const [utbetalingBegrunnelseFeilmelding, settUtbetalingBegrunnelseFeilmelding] = useState<{
-            id?: number;
-            feilmelding: string;
-        }>({ id: undefined, feilmelding: '' });
+        const [utbetalingBegrunnelseSubmit, settUtbetalingBegrunnelseSubmit] = useState<
+            IUtbetalingBegrunnelseSubmit
+        >(initialUtbetalingBegrunnelseSubmit);
 
         const [utbetalingBegrunnelser, settUtbetalingBegrunnelser] = React.useState<
             IRestUtbetalingBegrunnelse[]
@@ -53,6 +64,7 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
             request<void, Vilkårsbegrunnelser>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/vilkaarsvurdering/vilkaarsbegrunnelser`,
+                påvirkerSystemLaster: true,
             }).then((vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>) => {
                 settVilkårbegrunnelser(vilkårBegrunnelser);
             });
@@ -60,66 +72,75 @@ const [UtbetalingBegrunnelserProvider, useUtbetalingBegrunnelser] = constate(
 
         const håndterEndretUtbetalingBegrunnelser = (
             promise: Promise<Ressurs<IFagsak>>,
-            id?: number
+            periodeId: string
         ) => {
+            settUtbetalingBegrunnelseSubmit({
+                periodeId,
+                feilmelding: '',
+                status: RessursStatus.HENTER,
+            });
             promise.then((fagsak: Ressurs<IFagsak>) => {
                 if (fagsak.status === RessursStatus.SUKSESS) {
                     settFagsak(fagsak);
-                    settUtbetalingBegrunnelseFeilmelding({ id, feilmelding: '' });
+                    settUtbetalingBegrunnelseSubmit(initialUtbetalingBegrunnelseSubmit);
                 } else if (
                     fagsak.status === RessursStatus.FEILET ||
                     fagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
                     fagsak.status === RessursStatus.IKKE_TILGANG
                 ) {
-                    settUtbetalingBegrunnelseFeilmelding({
-                        id,
+                    settUtbetalingBegrunnelseSubmit({
+                        periodeId,
                         feilmelding: fagsak.frontendFeilmelding,
+                        status: RessursStatus.FEILET,
                     });
                 }
             });
         };
 
-        const leggTilUtbetalingBegrunnelse = (data: IRestPostUtbetalingBegrunnelse) => {
+        const leggTilUtbetalingBegrunnelse = (
+            utbetalingBegrunnelse: IRestPostUtbetalingBegrunnelse
+        ) => {
             håndterEndretUtbetalingBegrunnelser(
                 request<IRestPostUtbetalingBegrunnelse, IFagsak>({
                     method: 'POST',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/v2`,
-                    data,
-                })
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser`,
+                    data: utbetalingBegrunnelse,
+                }),
+                lagPeriodeId({ fom: utbetalingBegrunnelse.fom, tom: utbetalingBegrunnelse.tom })
             );
         };
 
-        const slettUtbetalingBegrunnelse = (utbetalingBegrunnelseId: number) => {
+        const slettUtbetalingBegrunnelse = (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) => {
             håndterEndretUtbetalingBegrunnelser(
-                request<IRestUtbetalingBegrunnelse, IFagsak>({
+                request<void, IFagsak>({
                     method: 'DELETE',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${utbetalingBegrunnelseId}`,
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${utbetalingBegrunnelse.id}`,
                 }),
-                utbetalingBegrunnelseId
+                lagPeriodeId({ fom: utbetalingBegrunnelse.fom, tom: utbetalingBegrunnelse.tom })
             );
         };
 
-        const endreUtbetalingBegrunnelse = (
-            utbetalingBegrunnelseId: number,
-            data: IRestPutUtbetalingBegrunnelse
-        ) => {
+        const slettUtbetalingBegrunnelserForPeriode = (fom: string, tom?: string) => {
             håndterEndretUtbetalingBegrunnelser(
-                request<IRestPutUtbetalingBegrunnelse, IFagsak>({
-                    method: 'PUT',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${utbetalingBegrunnelseId}`,
-                    data,
+                request<IPeriode, IFagsak>({
+                    method: 'DELETE',
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/perioder`,
+                    data: {
+                        fom,
+                        tom,
+                    },
                 }),
-                utbetalingBegrunnelseId
+                lagPeriodeId({ fom, tom })
             );
         };
 
         return {
-            endreUtbetalingBegrunnelse,
             hentVilkårBegrunnelseTekster,
             leggTilUtbetalingBegrunnelse,
             settUtbetalingBegrunnelser,
             slettUtbetalingBegrunnelse,
-            utbetalingBegrunnelseFeilmelding,
+            slettUtbetalingBegrunnelserForPeriode,
+            utbetalingBegrunnelseSubmit,
             utbetalingBegrunnelser,
             vilkårBegrunnelser,
         };

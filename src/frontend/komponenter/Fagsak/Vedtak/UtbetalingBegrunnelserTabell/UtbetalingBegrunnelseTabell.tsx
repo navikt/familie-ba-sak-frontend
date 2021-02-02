@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import { IBehandling } from '../../../../typer/behandling';
@@ -14,6 +16,14 @@ import UtbetalingBegrunnelseMultiselect from './UtbetalingBegrunnelseMultiselect
 interface IUtbetalingBegrunnelseTabell {
     åpenBehandling: IBehandling;
 }
+
+const StyledTable = styled.table`
+    margin-bottom: 1rem;
+
+    td {
+        vertical-align: top;
+    }
+`;
 
 const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
     åpenBehandling,
@@ -59,7 +69,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
 
     return harAndeler ? (
-        <table className={'tabell'}>
+        <StyledTable className={'tabell'}>
             <thead>
                 <tr>
                     <th>Periode</th>
@@ -110,7 +120,7 @@ const UtbetalingBegrunnelseTabell: React.FC<IUtbetalingBegrunnelseTabell> = ({
                     }
                 )}
             </tbody>
-        </table>
+        </StyledTable>
     ) : null;
 };
 

@@ -1,8 +1,13 @@
+import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useUtbetalingBegrunnelser } from '../../../../context/UtbetalingBegrunnelseContext';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
-import { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../typer/vedtak';
+import {
+    IRestUtbetalingBegrunnelse,
+    VedtakBegrunnelse,
+    VedtakBegrunnelseType,
+} from '../../../../typer/vedtak';
 import {
     IRestPersonResultat,
     IRestVilkårResultat,
@@ -13,14 +18,60 @@ import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { isoStringToDayjs } from '../../../../utils/formatter';
 
 const useUtbetalingBegrunnelse = (personResultater: IRestPersonResultat[], periode: IPeriode) => {
-    const { vilkårBegrunnelser, leggTilUtbetalingBegrunnelse } = useUtbetalingBegrunnelser();
+    const {
+        vilkårBegrunnelser,
+        leggTilUtbetalingBegrunnelse,
+        slettUtbetalingBegrunnelse,
+        slettUtbetalingBegrunnelserForPeriode,
+    } = useUtbetalingBegrunnelser();
 
-    const onChangeBegrunnelse = (vedtakBegrunnelse: VedtakBegrunnelse) => {
-        leggTilUtbetalingBegrunnelse({
-            fom: periode.fom ?? '',
-            tom: periode.tom,
-            vedtakBegrunnelse,
-        });
+    const onChangeBegrunnelse = (
+        action: ActionMeta<ISelectOption>,
+        utbetalingBegrunnelseForPeriode: IRestUtbetalingBegrunnelse[]
+    ) => {
+        switch (action.action) {
+            case 'select-option':
+                leggTilUtbetalingBegrunnelse({
+                    fom: periode.fom ?? '',
+                    tom: periode.tom,
+                    vedtakBegrunnelse: (action.option?.value ?? '') as VedtakBegrunnelse,
+                });
+                break;
+            case 'pop-value':
+            case 'remove-value':
+                const utbetalingBegrunnelse:
+                    | IRestUtbetalingBegrunnelse
+                    | undefined = utbetalingBegrunnelseForPeriode.find(
+                    (utbetalingBegrunnelse: IRestUtbetalingBegrunnelse) =>
+                        utbetalingBegrunnelse.vedtakBegrunnelse === action.removedValue?.value
+                );
+
+                if (utbetalingBegrunnelse) {
+                    slettUtbetalingBegrunnelse(utbetalingBegrunnelse);
+                } else {
+                    throw new Error(
+                        'Finner ikke utbetalingsbegrunnelse id i listen over begrunnelser'
+                    );
+                }
+                break;
+            case 'clear':
+                const førsteUtbetalingBegrunnelse: IRestUtbetalingBegrunnelse | undefined =
+                    utbetalingBegrunnelseForPeriode[0];
+
+                if (førsteUtbetalingBegrunnelse) {
+                    slettUtbetalingBegrunnelserForPeriode(
+                        førsteUtbetalingBegrunnelse.fom,
+                        førsteUtbetalingBegrunnelse.tom
+                    );
+                } else {
+                    throw new Error(
+                        'Prøver å fjerne alle begrunnelser for en periode, men det er ikke satt noen begrunnelser'
+                    );
+                }
+                break;
+            default:
+                throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
+        }
     };
 
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] => {
