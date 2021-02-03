@@ -1,19 +1,21 @@
 .vilkårsvurdering {
-    @listPadding: 1.25rem;
-    @itemPadding: 0.75rem;
-    @tekstMargin: .5rem;
-
     &__person {
         &:first-child {
             padding-top: 2.5rem;
         }
 
-        padding-top: 1.5rem;
-        margin-top: 2rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
 
         &--personlinje {
             display: flex;
             justify-content: space-between;
+            position: -webkit-sticky;
+            position: sticky;
+            top: -1px;
+            z-index: 1000;
+            background-color: white;
+            padding: 1.5rem 0;
         }
     }
 }

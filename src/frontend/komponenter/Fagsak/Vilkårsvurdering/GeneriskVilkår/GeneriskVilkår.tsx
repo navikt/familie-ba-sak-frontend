@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertekst } from 'nav-frontend-typografi';
+import { Element, Undertekst, Undertittel } from 'nav-frontend-typografi';
 
 import { FeltState } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -88,11 +88,10 @@ const GeneriskVilkår: React.FC<IProps> = ({
     return (
         <div className={'generisk-vilkår'}>
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
-                <div className={'horisontal-sentrert-div'}>
+                <Undertittel tag={'h4'} className={'horisontal-sentrert-div'}>
                     <Element children={vilkårFraConfig.tittel} />
                     <Undertekst children={vilkårFraConfig.lovreferanse} />
-                </div>
-                <hr />
+                </Undertittel>
 
                 <table className={'tabell'}>
                     <thead>
