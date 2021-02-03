@@ -35,12 +35,14 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                     <Undertittel className={'navn'} tag={tag} title={navnOgAlder}>
                         {navnOgAlder}
                     </Undertittel>
-                    <Undertittel>&ensp;|&ensp;</Undertittel>
+                    <Undertittel tag={tag}>&ensp;|&ensp;</Undertittel>
                     <Clipboard>
-                        <Undertittel>{formaterPersonIdent(person.personIdent)}</Undertittel>
+                        <Undertittel tag={tag}>
+                            {formaterPersonIdent(person.personIdent)}
+                        </Undertittel>
                     </Clipboard>
-                    <Undertittel>&ensp;|&ensp;</Undertittel>
-                    <Undertittel>{`${personTypeMap[person.type]} `}</Undertittel>
+                    <Undertittel tag={tag}>&ensp;|&ensp;</Undertittel>
+                    <Undertittel tag={tag}>{`${personTypeMap[person.type]} `}</Undertittel>
                 </>
             )}
 

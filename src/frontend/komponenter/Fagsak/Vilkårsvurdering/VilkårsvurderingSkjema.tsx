@@ -61,6 +61,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}
                                 onClick={() =>
                                     settPersonErEkspandert({
+                                        ...personErEkspandert,
                                         [personResultat.personIdent]: !personErEkspandert[
                                             personResultat.personIdent
                                         ],
