@@ -33,7 +33,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                     personResultat.vilkårResultater.filter(
                         (vilkårResultat: FeltState<IVilkårResultat>) =>
                             vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
-                    ).length > 0,
+                    ).length > 0 || true,
             };
         }, {})
     );
@@ -58,6 +58,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}
                                 onClick={() =>
                                     settPersonErEkspandert({
+                                        ...personErEkspandert,
                                         [personResultat.personIdent]: !personErEkspandert[
                                             personResultat.personIdent
                                         ],
