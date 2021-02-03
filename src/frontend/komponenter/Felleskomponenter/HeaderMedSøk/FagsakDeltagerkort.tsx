@@ -90,7 +90,13 @@ const FagsakDeltagerkort: React.FunctionComponent<IFagsakDeltagerkortProps> = ({
                       }`
             }
             index={index}
-            onClick={() => innloggetSaksbehandlerHarSkrivetilgang && onClick()}
+            onClick={() => {
+                if (innloggetSaksbehandlerHarSkrivetilgang) {
+                    onClick();
+                } else {
+                    deltager.fagsakId && deltager.harTilgang && onClick();
+                }
+            }}
         >
             {!deltager.fagsakId && deltager.harTilgang && (
                 <IngenFagsakTekst>
