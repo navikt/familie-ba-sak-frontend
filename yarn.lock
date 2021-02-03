@@ -765,10 +765,10 @@
     react-tooltip "^3.11.4"
     styled-components "^5.2.1"
 
-"@navikt/familie-form-elements@2.0.15":
-  version "2.0.15"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.15.tgz#337ca3a0b971485889a2aaaa694b5d688338a06d"
-  integrity sha512-g5xkSZu8Xavfzz0dCXxgoY9HTs3EXML0x78yhVTZYJ74StrzSIQgv1YWBvidnBosiHLZW2CBjsNO0YauUs0oeQ==
+"@navikt/familie-form-elements@^2.0.16":
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.0.16.tgz#1d6f8fe93e7bcc24130640217ca3812346ab7dd8"
+  integrity sha512-Y9RyyREeqSe0euVC8ilNdVuH3kLqBveH4PsP5/dwUKvsRND/L8zEeEbVhZTsJeanQI+vaeHaj1hFRgfijGckyQ==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
