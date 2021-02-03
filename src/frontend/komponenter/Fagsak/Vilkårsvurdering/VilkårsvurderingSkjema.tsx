@@ -33,7 +33,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                     personResultat.vilkårResultater.filter(
                         (vilkårResultat: FeltState<IVilkårResultat>) =>
                             vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
-                    ).length > 0 || true,
+                    ).length > 0,
             };
         }, {})
     );
