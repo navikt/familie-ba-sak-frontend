@@ -115,7 +115,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             håndterEndringerPåVedtakBegrunnelser(
                 request<void, IFagsak>({
                     method: 'DELETE',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/utbetaling-begrunnelse/${vedtakBegrunnelse.id}`,
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/${vedtakBegrunnelse.id}`,
                 }),
                 lagPeriodeId({ fom: vedtakBegrunnelse.fom, tom: vedtakBegrunnelse.tom })
             );
