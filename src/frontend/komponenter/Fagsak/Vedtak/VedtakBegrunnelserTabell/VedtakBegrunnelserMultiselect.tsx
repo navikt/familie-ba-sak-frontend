@@ -107,7 +107,8 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                 }),
             }}
             placeholder={'Velg begrunnelse(r)'}
-            isLoading={submitForPeriode?.status === RessursStatus.HENTER}
+            isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
+            isDisabled={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             feil={submitForPeriode?.feilmelding}
             label={<SkjultLabel>Begrunnelse(r)</SkjultLabel>}
             creatable={false}
