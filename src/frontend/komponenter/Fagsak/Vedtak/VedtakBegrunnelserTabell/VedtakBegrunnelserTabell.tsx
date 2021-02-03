@@ -78,15 +78,6 @@ const VedtakBegrunnelserTabell: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBe
             <tbody>
                 {utbetalingsperioderMedBegrunnelseBehov.map(
                     (utbetalingsperiode: IUtbetalingsperiode) => {
-                        const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
-                            (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
-                                return (
-                                    vedtakBegrunnelse.fom === utbetalingsperiode.periodeFom &&
-                                    vedtakBegrunnelse.tom === utbetalingsperiode.periodeTom
-                                );
-                            }
-                        );
-
                         return (
                             <tr key={utbetalingsperiode.periodeFom}>
                                 <td>
@@ -102,7 +93,6 @@ const VedtakBegrunnelserTabell: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBe
                                 <td>{`${utbetalingsperiode.utbetaltPerMnd} kr/mnd for ${utbetalingsperiode.antallBarn} barn`}</td>
                                 <td>
                                     <VedtakBegrunnelserMultiselect
-                                        vedtakBegrunnelserForPeriode={vedtakBegrunnelserForPeriode}
                                         erLesevisning={erLesevisning()}
                                         personResultater={åpenBehandling.personResultater}
                                         periode={{

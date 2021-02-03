@@ -21,18 +21,18 @@ import {
 } from '../../../../context/VedtakBegrunnelseContext';
 import { IPeriode, lagPeriodeId } from '../../../../typer/periode';
 import {
-    IRestVedtakBegrunnelse,
-    IRestVedtakBegrunnelseTilknyttetVilkår,
+    finnVedtakBegrunnelseType,
+    hentBakgrunnsfarge,
+    hentBorderfarge,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
 } from '../../../../typer/vedtak';
-import { IRestPersonResultat, VilkårType } from '../../../../typer/vilkår';
+import { IRestPersonResultat } from '../../../../typer/vilkår';
 import SkjultLabel from '../../../Felleskomponenter/SkjultLabel';
 import useVedtakBegrunnelse from './useVedtakBegrunnelse';
 
 interface IVedtakBegrunnelseMultiselect {
-    vedtakBegrunnelserForPeriode: IRestVedtakBegrunnelse[];
     erLesevisning: boolean;
     periode: IPeriode;
     personResultater: IRestPersonResultat[];
@@ -44,15 +44,16 @@ const GroupLabel = styled.div`
 
 const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = ({
     erLesevisning,
-    vedtakBegrunnelserForPeriode,
     periode,
     personResultater,
 }) => {
     const { vedtakBegrunnelseSubmit, vilkårBegrunnelser } = useVedtakBegrunnelser();
-    const { hentUtgjørendeVilkår, onChangeBegrunnelse } = useVedtakBegrunnelse(
-        personResultater,
-        periode
-    );
+    const {
+        gruppertBegrunnelser,
+        onChangeBegrunnelse,
+        valgteBegrunnelser,
+        vedtakBegrunnelserForPeriode,
+    } = useVedtakBegrunnelse(personResultater, periode);
 
     const submitForPeriode: IVedtakBegrunnelseSubmit | undefined =
         lagPeriodeId(periode) === vedtakBegrunnelseSubmit.periodeId
@@ -62,105 +63,6 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
-
-    const gruppertBegrunnelser: GroupType<ISelectOption>[] =
-        vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? Object.keys(vilkårBegrunnelser.data).reduce(
-                  (acc: GroupType<ISelectOption>[], resultat: string) => {
-                      const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
-                          resultat as VedtakBegrunnelseType
-                      );
-
-                      return [
-                          ...acc,
-                          {
-                              label: vedtakBegrunnelseTyper[resultat as VedtakBegrunnelseType],
-                              options: vilkårBegrunnelser.data[resultat as VedtakBegrunnelseType]
-                                  .filter(
-                                      (
-                                          restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
-                                      ) => {
-                                          return restVedtakBegrunnelseTilknyttetVilkår.vilkår
-                                              ? utgjørendeVilkårForPeriodeOgResultat.includes(
-                                                    restVedtakBegrunnelseTilknyttetVilkår.vilkår
-                                                )
-                                              : true;
-                                      }
-                                  )
-                                  .map(
-                                      (
-                                          restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
-                                      ) => ({
-                                          label: restVedtakBegrunnelseTilknyttetVilkår.navn,
-                                          value: restVedtakBegrunnelseTilknyttetVilkår.id,
-                                      })
-                                  ),
-                          },
-                      ];
-                  },
-                  []
-              )
-            : [];
-
-    const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode.map(
-        (utbetalingsbegrunnelse: IRestVedtakBegrunnelse) => ({
-            value: utbetalingsbegrunnelse.begrunnelse?.toString() ?? '',
-            label:
-                vilkårBegrunnelser.status === RessursStatus.SUKSESS
-                    ? vilkårBegrunnelser.data[
-                          utbetalingsbegrunnelse.begrunnelseType as VedtakBegrunnelseType
-                      ].find(
-                          (
-                              restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
-                          ) =>
-                              restVedtakBegrunnelseTilknyttetVilkår.id ===
-                              utbetalingsbegrunnelse.begrunnelse
-                      )?.navn ?? ''
-                    : '',
-        })
-    );
-
-    const finnVedtakBegrunnelseType = (
-        vedtakBegrunnelse: VedtakBegrunnelse
-    ): VedtakBegrunnelseType | undefined => {
-        return vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? (Object.keys(vilkårBegrunnelser.data).find(vedtakBegrunnelseType => {
-                  return (
-                      vilkårBegrunnelser.data[vedtakBegrunnelseType as VedtakBegrunnelseType].find(
-                          (
-                              vedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
-                          ) => vedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelse
-                      ) !== undefined
-                  );
-              }) as VedtakBegrunnelseType)
-            : undefined;
-    };
-
-    const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
-        switch (vedtakBegrunnelseType) {
-            case VedtakBegrunnelseType.INNVILGELSE:
-                return navFarger.navGronnLighten80;
-            case VedtakBegrunnelseType.REDUKSJON:
-                return navFarger.navOransjeLighten80;
-            case VedtakBegrunnelseType.OPPHØR:
-                return navFarger.navLysGra;
-            default:
-                return navFarger.navBlaLighten80;
-        }
-    };
-
-    const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
-        switch (vedtakBegrunnelseType) {
-            case VedtakBegrunnelseType.INNVILGELSE:
-                return navFarger.navGronn;
-            case VedtakBegrunnelseType.REDUKSJON:
-                return navFarger.navOransjeDarken20;
-            case VedtakBegrunnelseType.OPPHØR:
-                return navFarger.navGra60;
-            default:
-                return navFarger.navBlaLighten80;
-        }
-    };
 
     return (
         <FamilieReactSelect
@@ -178,6 +80,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                     const vedtakBegrunnelseType:
                         | VedtakBegrunnelseType
                         | undefined = finnVedtakBegrunnelseType(
+                        vilkårBegrunnelser,
                         props.data.value as VedtakBegrunnelse
                     );
 
@@ -218,6 +121,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                 formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption, true>
             ) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
+                    vilkårBegrunnelser,
                     option.value as VedtakBegrunnelse
                 );
 

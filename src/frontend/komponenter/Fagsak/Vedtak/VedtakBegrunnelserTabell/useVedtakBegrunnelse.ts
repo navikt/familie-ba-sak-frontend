@@ -1,12 +1,14 @@
-import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
+import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelse,
+    IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
+    vedtakBegrunnelseTyper,
 } from '../../../../typer/vedtak';
 import {
     IRestPersonResultat,
@@ -19,6 +21,7 @@ import { isoStringToDayjs } from '../../../../utils/formatter';
 
 const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: IPeriode) => {
     const {
+        vedtakBegrunnelser,
         vilkårBegrunnelser,
         leggTilVedtakBegrunnelse,
         slettVedtakBegrunnelse,
@@ -86,7 +89,10 @@ const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: 
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
                     );
-                } else if (begrunnelseType === VedtakBegrunnelseType.REDUKSJON) {
+                } else if (
+                    begrunnelseType === VedtakBegrunnelseType.REDUKSJON ||
+                    begrunnelseType === VedtakBegrunnelseType.OPPHØR
+                ) {
                     const oppfyltTomMånedEtter =
                         vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
 
@@ -104,13 +110,79 @@ const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: 
             .map((vilkårResultat: IRestVilkårResultat) => vilkårResultat.vilkårType);
     };
 
+    const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
+        (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
+            return vedtakBegrunnelse.fom === periode.fom && vedtakBegrunnelse.tom === periode.tom;
+        }
+    );
+
+    const gruppertBegrunnelser: GroupType<ISelectOption>[] =
+        vilkårBegrunnelser.status === RessursStatus.SUKSESS
+            ? Object.keys(vilkårBegrunnelser.data).reduce(
+                  (acc: GroupType<ISelectOption>[], resultat: string) => {
+                      const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
+                          resultat as VedtakBegrunnelseType
+                      );
+
+                      return [
+                          ...acc,
+                          {
+                              label: vedtakBegrunnelseTyper[resultat as VedtakBegrunnelseType],
+                              options: vilkårBegrunnelser.data[resultat as VedtakBegrunnelseType]
+                                  .filter(
+                                      (
+                                          restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
+                                      ) => {
+                                          return restVedtakBegrunnelseTilknyttetVilkår.vilkår
+                                              ? utgjørendeVilkårForPeriodeOgResultat.includes(
+                                                    restVedtakBegrunnelseTilknyttetVilkår.vilkår
+                                                )
+                                              : true;
+                                      }
+                                  )
+                                  .map(
+                                      (
+                                          restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
+                                      ) => ({
+                                          label: restVedtakBegrunnelseTilknyttetVilkår.navn,
+                                          value: restVedtakBegrunnelseTilknyttetVilkår.id,
+                                      })
+                                  ),
+                          },
+                      ];
+                  },
+                  []
+              )
+            : [];
+
+    const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode.map(
+        (utbetalingsbegrunnelse: IRestVedtakBegrunnelse) => ({
+            value: utbetalingsbegrunnelse.begrunnelse?.toString() ?? '',
+            label:
+                vilkårBegrunnelser.status === RessursStatus.SUKSESS
+                    ? vilkårBegrunnelser.data[
+                          utbetalingsbegrunnelse.begrunnelseType as VedtakBegrunnelseType
+                      ].find(
+                          (
+                              restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
+                          ) =>
+                              restVedtakBegrunnelseTilknyttetVilkår.id ===
+                              utbetalingsbegrunnelse.begrunnelse
+                      )?.navn ?? ''
+                    : '',
+        })
+    );
+
     const begrunnelser =
         vilkårBegrunnelser?.status === RessursStatus.SUKSESS && vilkårBegrunnelser.data;
 
     return {
         begrunnelser,
+        gruppertBegrunnelser,
         hentUtgjørendeVilkår,
         onChangeBegrunnelse,
+        valgteBegrunnelser,
+        vedtakBegrunnelserForPeriode,
     };
 };
 
