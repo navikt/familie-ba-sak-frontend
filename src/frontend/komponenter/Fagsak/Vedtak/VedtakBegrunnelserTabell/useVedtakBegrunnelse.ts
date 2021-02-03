@@ -89,10 +89,7 @@ const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: 
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
                     );
-                } else if (
-                    begrunnelseType === VedtakBegrunnelseType.REDUKSJON ||
-                    begrunnelseType === VedtakBegrunnelseType.OPPHØR
-                ) {
+                } else if (begrunnelseType === VedtakBegrunnelseType.REDUKSJON) {
                     const oppfyltTomMånedEtter =
                         vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
 
@@ -102,6 +99,23 @@ const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: 
                             familieDayjs(periode.fom).subtract(oppfyltTomMånedEtter, 'month'),
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
+                    );
+                } else if (begrunnelseType === VedtakBegrunnelseType.OPPHØR) {
+                    const oppfyltTomMånedEtter =
+                        vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
+
+                    return (
+                        (familieDayjsDiff(
+                            isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
+                            familieDayjs(periode.tom),
+                            'month'
+                        ) === 0 ||
+                            familieDayjsDiff(
+                                isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
+                                familieDayjs(periode.fom).subtract(oppfyltTomMånedEtter, 'month'),
+                                'month'
+                            ) === 0) &&
+                        vilkårResultat.resultat === Resultat.OPPFYLT
                     );
                 } else {
                     return true;
