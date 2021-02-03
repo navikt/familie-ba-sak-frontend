@@ -4,6 +4,7 @@ import { Collapse } from 'react-collapse';
 
 import { FeltState } from '@navikt/familie-skjema';
 
+import { useBehandling } from '../../../context/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
 import {
@@ -25,11 +26,13 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     visFeilmeldinger,
 }) => {
     const { vilkårsvurdering } = useVilkårsvurdering();
+    const { erLesevisning } = useBehandling();
     const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
         vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
             return {
                 ...personMapEkspandert,
                 [personResultat.personIdent]:
+                    erLesevisning() ||
                     personResultat.vilkårResultater.filter(
                         (vilkårResultat: FeltState<IVilkårResultat>) =>
                             vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
