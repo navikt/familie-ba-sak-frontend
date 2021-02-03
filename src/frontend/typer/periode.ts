@@ -31,3 +31,10 @@ export const periodeDiff = (første: IPeriode, annen: IPeriode) => {
         isoStringToDayjs(annen.fom, TIDENES_ENDE)
     );
 };
+
+export const lagPeriodeId = (periode: IPeriode) => {
+    return `${formaterIsoDato(periode.fom, datoformat.ISO_DAG)}-${formaterIsoDato(
+        periode.tom,
+        datoformat.ISO_DAG
+    )}`;
+};

@@ -3,7 +3,7 @@ import { FeltState } from '@navikt/familie-skjema';
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
-import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
+import { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelseType } from './vedtak';
 
 export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
@@ -82,7 +82,7 @@ export interface IRestStegTilstand {
 }
 
 export type Vilkårsbegrunnelser = {
-    [key in VedtakBegrunnelseType]: IRestVedtakBegrunnelse[];
+    [key in VedtakBegrunnelseType]: IRestVedtakBegrunnelseTilknyttetVilkår[];
 };
 
 type IVilkårsconfig = {
