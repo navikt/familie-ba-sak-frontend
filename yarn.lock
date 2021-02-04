@@ -8106,9 +8106,9 @@ nav-frontend-js-utils@^1.0.13, nav-frontend-js-utils@^1.0.14:
     lodash.throttle "^4.1.1"
 
 nav-frontend-knapper-style@^1.0.1, nav-frontend-knapper-style@^1.0.5, nav-frontend-knapper-style@^1.0.8:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-1.0.11.tgz#0b3bcf75e84fcde714d6dda9ec47b417c7cecc5b"
-  integrity sha512-xKA0qx2RmkX+P5sNO94HgM2joP7d8zkwgG54dCzcYMqhiK1hx+Sa3MZSeLlTj7e/X8g3+1vh+0lttw0ZJKtiEg==
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-1.0.15.tgz#22f3c925be788b8b7900dbeeec63af69fe6b3906"
+  integrity sha512-Grb8lk7Un5FZFalE/Mi8VYmNZjRd7gbd4XtKXBb0O4h7/+oLl92nO4wg64QDGK4G2osIe4fhFEZcm/qmvZMsHw==
 
 nav-frontend-knapper@^2.0.16, nav-frontend-knapper@^2.0.4, nav-frontend-knapper@^2.0.9:
   version "2.0.24"
