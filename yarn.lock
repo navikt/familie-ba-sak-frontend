@@ -8072,9 +8072,9 @@ nav-frontend-etiketter@^2.0.14:
   integrity sha512-UxFDFeorfiYWdco0/tV4PuGTZpHQFonUE1XrXN9z16Au0aSLmvMF80SLZasIgl0XUDevwNo45pfhwz9m0CSmTQ==
 
 nav-frontend-hjelpetekst-style@^2.0.25:
-  version "2.0.36"
-  resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-2.0.36.tgz#80b3dcf977f83d36d65fe3fb236534d70e48aa6b"
-  integrity sha512-Zr8NPYkolFP59fO4k4xShRUzavfWO6PanVX/ggpZFU/z+iIsRka1PYfrGPUX8Z1UUhHO9fAUiXLBvb8RNZF41Q==
+  version "2.0.40"
+  resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-2.0.40.tgz#343de925871b81484a51e9e5f15308f3f7116364"
+  integrity sha512-4v9gIqzsTNXH1S3x1Pmg9oKAKi6jkx7YBsadlfaHxKzt/LM6AvSpQwZkv256Kx2m7leg/S9T8rvKDVm6wr5PJw==
 
 nav-frontend-hjelpetekst@^2.0.45:
   version "2.0.47"
