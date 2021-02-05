@@ -18,6 +18,15 @@ export const useAmplitude = () => {
         amplitudeInstance.logEvent(eventName, eventProperties);
     };
 
+    const loggSkjermstørrelse = () => {
+        loggEvent('skjermstorrelse', {
+            width: window.screen.width,
+            height: window.screen.height,
+            team_id,
+            applikasjon,
+        });
+    };
+
     const loggSidevisning = (sidevisning: string) => {
         loggEvent('sidevisning', {
             sidevisning,
@@ -29,5 +38,6 @@ export const useAmplitude = () => {
     return {
         loggEvent,
         loggSidevisning,
+        loggSkjermstørrelse,
     };
 };
