@@ -117,8 +117,10 @@ export enum Behandlingstype {
 export enum BehandlingResultat {
     AVSLÅTT = 'AVSLÅTT',
     DELVIS_INNVILGET = 'DELVIS_INNVILGET',
-    ENDRING_OG_LØPENDE = 'ENDRING_OG_LØPENDE',
-    ENDRING_OG_OPPHØRT = 'ENDRING_OG_OPPHØRT',
+    ENDRING_OG_LØPENDE = 'ENDRING_OG_LØPENDE', // skal fjernes
+    ENDRET_OG_FORTSATT_INNVILGET = 'ENDRET_OG_FORTSATT_INNVILGET',
+    ENDRING_OG_OPPHØRT = 'ENDRING_OG_OPPHØRT', // skal fjernes
+    ENDRET_OG_OPPHØRT = 'ENDRET_OG_OPPHØRT',
     FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
     HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
@@ -225,8 +227,10 @@ export const underkategorier: INøkkelPar = {
 
 export const behandlingsresultater: Record<BehandlingResultat, string> = {
     DELVIS_INNVILGET: 'Delvis innvilget',
-    ENDRING_OG_LØPENDE: 'Endring og løpende',
-    ENDRING_OG_OPPHØRT: 'Endring og opphørt',
+    ENDRING_OG_LØPENDE: 'Endring og løpende', // skal fjernes
+    ENDRING_OG_OPPHØRT: 'Endring og opphørt', // skal fjernes
+    ENDRET_OG_FORTSATT_INNVILGET: 'Endret og fortsatt innvilget',
+    ENDRET_OG_OPPHØRT: 'Endret og opphørt',
     FORTSATT_INNVILGET: 'Fortsatt innvilget',
     AVSLÅTT: 'Avslått',
     IKKE_VURDERT: 'Ikke vurdert',
