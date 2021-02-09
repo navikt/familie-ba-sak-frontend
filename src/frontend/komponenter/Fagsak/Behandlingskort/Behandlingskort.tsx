@@ -76,6 +76,10 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                         label: 'Behandlingsstatus',
                         tekst: behandlingsstatuser[åpenBehandling.status],
                     },
+                ]}
+            />
+            <Informasjonsbolk
+                informasjon={[
                     {
                         label: 'Resultat',
                         tekst: behandlingsresultater[åpenBehandling.resultat],
