@@ -1,0 +1,69 @@
+@import "~nav-frontend-core/less/core";
+
+@spinnerSize: ~"calc("1rem ~"+" 8px ~")";
+@strokeDashArray: ~"calc("3.14 ~"*" @spinnerSize ~")";
+@transformOrigin: ~"calc("0.5 ~"*" @spinnerSize ~")";
+@strokeDashOffset0: ~"calc("0.66 ~"*" @spinnerSize ~")";
+@strokeDashOffset1: ~"calc("3.14 ~"*" @spinnerSize ~")";
+@strokeDashOffset2: ~"calc("0.66 ~"*" @spinnerSize ~")";
+
+svg.familie-ikon-spinner {
+    position: absolute;
+    width: @spinnerSize;
+    height: @spinnerSize;
+    left: 0px;
+    top: 0px;
+    
+    circle {
+        fill: transparent;
+        stroke: @navLysGra;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-dasharray: @strokeDashArray;
+        -webkit-transform-origin: @transformOrigin @transformOrigin 0;
+        -moz-transform-origin: @transformOrigin @transformOrigin 0;
+        transform-origin: @transformOrigin @transformOrigin 0;
+        -webkit-animation: familie-ikon-spinner 2s linear infinite;
+        -moz-animation: familie-ikon-spinner 2s linear infinite;
+        animation: familie-ikon-spinner 2s linear infinite;
+    }
+}
+
+@-webkit-keyframes familie-ikon-spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        stroke-dashoffset: @strokeDashOffset0;
+    } 50% {
+        -webkit-transform: rotate(720deg);
+        stroke-dashoffset: @strokeDashOffset1;
+    } 100% {
+        -webkit-transform: rotate(1080deg);
+        stroke-dashoffset: @strokeDashOffset2;
+    }
+}
+
+@-moz-keyframes familie-ikon-spinner {
+    0% {
+        -moz-transform: rotate(0deg);
+        stroke-dashoffset: @strokeDashOffset0;
+    } 50% {
+        -moz-transform: rotate(720deg);
+        stroke-dashoffset: @strokeDashOffset1;
+    } 100% {
+        -moz-transform: rotate(1080deg);
+        stroke-dashoffset: @strokeDashOffset2;
+    }
+}
+
+@keyframes familie-ikon-spinner {
+    0% {
+        transform: rotate(0deg);
+        stroke-dashoffset: @strokeDashOffset0;
+    } 50% {
+        transform: rotate(720deg);
+        stroke-dashoffset: @strokeDashOffset1;
+    } 100% {
+        transform: rotate(1080deg);
+        stroke-dashoffset: @strokeDashOffset2;
+    }
+}

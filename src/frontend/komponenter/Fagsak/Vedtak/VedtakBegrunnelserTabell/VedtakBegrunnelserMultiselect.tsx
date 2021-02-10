@@ -60,12 +60,15 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             ? vedtakBegrunnelseSubmit
             : undefined;
 
+    const vedtakBegrunnelseId = `vedtakbegrunnelser_${lagPeriodeId(periode)}`;
+
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
 
     return (
         <FamilieReactSelect
+            id={vedtakBegrunnelseId}
             value={valgteBegrunnelser}
             propSelectStyles={{
                 container: (provided, _) => ({
@@ -110,7 +113,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             isDisabled={erLesevisning || vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             feil={submitForPeriode?.feilmelding}
-            label={<SkjultLabel>Begrunnelse(r)</SkjultLabel>}
+            label={<SkjultLabel htmlFor={vedtakBegrunnelseId}>Begrunnelse(r)</SkjultLabel>}
             creatable={false}
             erLesevisning={erLesevisning}
             isMulti={true}

@@ -6,13 +6,13 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { useApp } from '../../../context/AppContext';
-import { IFagsakDeltager } from '../../../typer/fagsakdeltager';
 import UIModalWrapper from '../Modal/UIModalWrapper';
+import { ISøkResultat } from './søk/typer';
 import useOpprettFagsak from './useOpprettFagsak';
 
 export interface IOpprettFagsakModal {
     lukkModal: () => void;
-    deltager: IFagsakDeltager | undefined;
+    søkResultat: ISøkResultat | undefined;
 }
 
 const StyledUndertittel = styled(Undertittel)`
@@ -20,10 +20,10 @@ const StyledUndertittel = styled(Undertittel)`
     margin-bottom: 1.5rem;
 `;
 
-const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, deltager }) => {
+const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkResultat }) => {
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang } = useApp();
-    const visModal = !!deltager;
+    const visModal = !!søkResultat;
 
     return (
         <UIModalWrapper
@@ -36,10 +36,10 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, deltager
                         mini={true}
                         onClick={async () => {
                             settSenderInn(true);
-                            if (deltager && (await sjekkTilgang(deltager.ident))) {
+                            if (søkResultat && (await sjekkTilgang(søkResultat.ident))) {
                                 opprettFagsak(
                                     {
-                                        personIdent: deltager.ident,
+                                        personIdent: søkResultat.ident,
                                         aktørId: null,
                                     },
                                     lukkModal
@@ -61,7 +61,9 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, deltager
                 Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for denne
                 personen?
             </StyledUndertittel>
-            {deltager && <Normaltekst>{`${deltager.navn} (${deltager.ident})`}</Normaltekst>}
+            {søkResultat && (
+                <Normaltekst>{`${søkResultat.navn} (${søkResultat.ident})`}</Normaltekst>
+            )}
             {!!feilmelding && <Feilmelding children={feilmelding} />}
         </UIModalWrapper>
     );
