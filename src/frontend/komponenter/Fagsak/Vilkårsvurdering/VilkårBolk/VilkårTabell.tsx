@@ -17,7 +17,7 @@ import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
+import VilkårTabellRad from './VilkårTabellRad';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -38,7 +38,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const GeneriskVilkår: React.FC<IProps> = ({
+const VilkRBolk: React.FC<IProps> = ({
     person,
     vilkårFraConfig,
     vilkårResultater,
@@ -86,7 +86,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     return (
-        <div className={'generisk-vilkår'}>
+        <div className={'vilkår-tabell'}>
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
                 <Undertittel tag={'h4'} className={'horisontal-sentrert-div'}>
                     <Element children={vilkårFraConfig.tittel} />
@@ -106,7 +106,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     </thead>
                     {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>) => {
                         return (
-                            <GeneriskVilkårVurdering
+                            <VilkårTabellRad
                                 key={`${person.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
                                 vilkårFraConfig={vilkårFraConfig}
                                 person={person}
@@ -119,7 +119,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
-                        className={'generisk-vilkår__legg-til-knapp'}
+                        className={'vilkår-tabell__legg-til-knapp'}
                         erLesevisning={erLesevisning()}
                         onClick={() => {
                             const promise = postVilkår(
@@ -142,4 +142,4 @@ const GeneriskVilkår: React.FC<IProps> = ({
     );
 };
 
-export default GeneriskVilkår;
+export default VilkRBolk;

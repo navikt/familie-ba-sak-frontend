@@ -12,7 +12,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { IVilkårResultat } from '../../../typer/vilkår';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
-import { vilkårFeilmeldingId } from './GeneriskVilkår/GeneriskVilkår';
+import { vilkårFeilmeldingId } from './VilkårBolk/VilkårTabell';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
 
 interface IProps {

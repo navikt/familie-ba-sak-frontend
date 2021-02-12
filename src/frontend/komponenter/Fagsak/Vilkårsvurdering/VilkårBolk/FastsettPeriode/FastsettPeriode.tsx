@@ -13,7 +13,7 @@ import { useBehandling } from '../../../../../context/BehandlingContext';
 import { nyPeriode } from '../../../../../typer/periode';
 import { IVilkårResultat } from '../../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../../utils/formatter';
-import { vilkårPeriodeFeilmeldingId } from '../GeneriskVilkår';
+import { vilkårPeriodeFeilmeldingId } from '../VilkårTabell';
 
 interface IProps {
     hjelpetekst?: string;
