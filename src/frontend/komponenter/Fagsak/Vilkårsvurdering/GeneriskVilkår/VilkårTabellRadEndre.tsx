@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import deepEqual from 'deep-equal';
+import styled from 'styled-components';
 
 import { Radio } from 'nav-frontend-skjema';
 
@@ -31,7 +32,7 @@ import {
     VilkårType,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import FastsettPeriode from './FastsettPeriode/FastsettPeriode';
+import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
     vilkårFeilmeldingId,
@@ -44,6 +45,24 @@ interface IProps {
     vilkårResultat: FeltState<IVilkårResultat>;
     visFeilmeldinger: boolean;
 }
+
+const Container = styled.div`
+    max-width: 30rem;
+    border-left: 1px solid @navBlaLighten20;
+    padding-left: 2rem;
+    .skjemagruppe.radiogruppe {
+        margin-bottom: 0;
+    }
+    .begrunnelse-textarea {
+        min-height: 8rem !important;
+    }
+`;
+
+const Knapperad = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+`;
 
 const VilkårTabellRadEndre: React.FC<IProps> = ({
     person,
@@ -179,7 +198,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <div className={'endre-vilkår'}>
+        <Container>
             <FamilieRadioGruppe
                 erLesevisning={leseVisning}
                 verdi={
@@ -234,7 +253,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 />
             </FamilieRadioGruppe>
 
-            <FastsettPeriode
+            <VelgPeriode
                 hjelpetekst={
                     'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.'
                 }
@@ -249,8 +268,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                 id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
                 label={'Begrunnelse (valgfri)'}
+                textareaClass={'begrunnelse-textarea'}
                 placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
-                textareaClass={'begrunnelse'}
                 value={redigerbartVilkår.verdi.begrunnelse.verdi}
                 feil={
                     redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
@@ -272,7 +291,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 }}
             />
 
-            <div className={'knapperad'}>
+            <Knapperad>
                 <div>
                     <FamilieKnapp
                         erLesevisning={leseVisning}
@@ -285,6 +304,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         Ferdig
                     </FamilieKnapp>
                     <FamilieKnapp
+                        style={{ marginLeft: '1rem' }}
                         erLesevisning={leseVisning}
                         onClick={() => toggleForm(false)}
                         mini={true}
@@ -311,8 +331,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     knappPosisjon={'venstre'}
                     ikon={<Slett />}
                 />
-            </div>
-        </div>
+            </Knapperad>
+        </Container>
     );
 };
 

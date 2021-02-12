@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import deepEqual from 'deep-equal';
+import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
@@ -27,6 +28,34 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
+interface IEkspanderbarTrProps {
+    ekspandert?: boolean;
+}
+
+const BeskrivelseCelle = styled(Normaltekst)`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+const VurderingCelle = styled.div`
+    display: flex;
+    svg {
+        margin-right: 1rem;
+    }
+`;
+
+const EkspandertTd = styled.td`
+    padding: 0 1rem 1rem 1.6rem;
+`;
+
+const EkspanderbarTr = styled.tr`
+    td {
+        border-bottom: ${(props: IEkspanderbarTrProps) =>
+            props.ekspandert ? 'none' : '1px solid rgba(0, 0, 0, 0.15)'} !important;
+    }
+`;
+
 const VilkårTabellRad: React.FC<IProps> = ({
     person,
     vilkårFraConfig,
@@ -52,26 +81,23 @@ const VilkårTabellRad: React.FC<IProps> = ({
     };
 
     return (
-        <tbody>
-            <tr className={ekspandertVilkår ? 'ekspandert' : ''}>
+        <>
+            <EkspanderbarTr {...{ ekspandert: ekspandertVilkår }}>
                 <td>
-                    <div className={'vurdering'}>
+                    <VurderingCelle>
                         <VilkårResultatIkon
                             resultat={vilkårResultat.verdi.resultat.verdi}
                             width={20}
                             heigth={20}
                         />
                         <Normaltekst children={uiResultat[vilkårResultat.verdi.resultat.verdi]} />
-                    </div>
+                    </VurderingCelle>
                 </td>
                 <td>
                     <Normaltekst children={periodeToString(vilkårResultat.verdi.periode.verdi)} />
                 </td>
                 <td>
-                    <Normaltekst
-                        className={'beskrivelse'}
-                        children={vilkårResultat.verdi.begrunnelse.verdi}
-                    />
+                    <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
                 </td>
                 <td>
                     <IkonKnapp
@@ -109,21 +135,21 @@ const VilkårTabellRad: React.FC<IProps> = ({
                             : ''}
                     </i>
                 </td>
-            </tr>
+            </EkspanderbarTr>
 
             {ekspandertVilkår && (
                 <tr>
-                    <td colSpan={6} className={'td-ekspandert'}>
+                    <EkspandertTd colSpan={6}>
                         <VilkårTabellRadEndre
                             person={person}
                             vilkårFraConfig={vilkårFraConfig}
                             vilkårResultat={vilkårResultat}
                             visFeilmeldinger={visFeilmeldinger}
                         />
-                    </td>
+                    </EkspandertTd>
                 </tr>
             )}
-        </tbody>
+        </>
     );
 };
 

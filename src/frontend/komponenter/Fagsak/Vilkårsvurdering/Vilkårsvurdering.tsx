@@ -12,8 +12,8 @@ import { IFagsak } from '../../../typer/fagsak';
 import { IVilkårResultat } from '../../../typer/vilkår';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
+import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
-import { vilkårFeilmeldingId } from './VilkårTabell/VilkårTabell';
 
 interface IProps {
     fagsak: IFagsak;
@@ -68,7 +68,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             }}
             maxWidthStyle={'80rem'}
             senderInn={senderInn}
-            className={'vilkårsvurdering'}
         >
             <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
 

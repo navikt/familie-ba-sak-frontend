@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import navFarger from 'nav-frontend-core';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
@@ -9,11 +10,11 @@ import { Element } from 'nav-frontend-typografi';
 import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { useBehandling } from '../../../../../context/BehandlingContext';
-import { nyPeriode } from '../../../../../typer/periode';
-import { IVilkårResultat } from '../../../../../typer/vilkår';
-import { datoformatNorsk } from '../../../../../utils/formatter';
-import { vilkårPeriodeFeilmeldingId } from '../VilkårTabell';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { nyPeriode } from '../../../../typer/periode';
+import { IVilkårResultat } from '../../../../typer/vilkår';
+import { datoformatNorsk } from '../../../../utils/formatter';
+import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 
 interface IProps {
     hjelpetekst?: string;
@@ -33,7 +34,27 @@ const StyledElement = styled(Element)`
     margin-right: 0.5rem;
 `;
 
-const FastsettPeriode: React.FC<IProps> = ({
+const MarginSkjemaGruppe = styled(SkjemaGruppe)`
+    margin-bottom: 1rem !important;
+`;
+
+const FlexDiv = styled.div`
+    width: 23rem;
+    display: flex;
+    justify-content: space-between;
+    & .lese-element {
+        width: 50%;
+    }
+    .skjemaelement__label {
+        color: ${navFarger.navMorkGra};
+        font-size: 16px;
+        font-weight: normal;
+        height: 22px;
+        line-height: 22px;
+    }
+`;
+
+const VelgPeriode: React.FC<IProps> = ({
     hjelpetekst,
     redigerbartVilkår,
     validerOgSettRedigerbartVilkår,
@@ -43,9 +64,8 @@ const FastsettPeriode: React.FC<IProps> = ({
     const lesevisning = erLesevisning();
 
     return (
-        <SkjemaGruppe
+        <MarginSkjemaGruppe
             feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
-            className={'fastsett-periode'}
             feil={
                 redigerbartVilkår.verdi.periode.valideringsstatus === Valideringsstatus.FEIL &&
                 visFeilmeldinger
@@ -64,7 +84,7 @@ const FastsettPeriode: React.FC<IProps> = ({
                 </StyledLegend>
             )}
 
-            <div className={'fastsett-periode__flex'}>
+            <FlexDiv>
                 <div>
                     <FamilieDatovelger
                         allowInvalidDateSelection={false}
@@ -123,9 +143,9 @@ const FastsettPeriode: React.FC<IProps> = ({
                         />
                     </div>
                 )}
-            </div>
-        </SkjemaGruppe>
+            </FlexDiv>
+        </MarginSkjemaGruppe>
     );
 };
 
-export default FastsettPeriode;
+export default VelgPeriode;
