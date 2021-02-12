@@ -132,6 +132,14 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
 const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
     margin-bottom: 24px;
     width: 49rem;
+
+    .ekspanderbartPanel__hode {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .ekspanderbartPanel__innhold {
+        padding: 16px;
+    }
 `;
 
 const UtbetalingsperiodepanelTittel = styled.p`
