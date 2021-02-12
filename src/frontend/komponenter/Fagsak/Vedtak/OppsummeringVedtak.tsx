@@ -37,7 +37,7 @@ import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import BegrunnelseTabell from './VedtakBegrunnelserTabell/VedtakBegrunnelserTabell';
+import BegrunnelseTabell from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
 
 interface IVedtakProps {
     fagsak: IFagsak;
