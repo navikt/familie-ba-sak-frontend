@@ -38,7 +38,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const VilkRBolk: React.FC<IProps> = ({
+const VilkårTabell: React.FC<IProps> = ({
     person,
     vilkårFraConfig,
     vilkårResultater,
@@ -142,4 +142,4 @@ const VilkRBolk: React.FC<IProps> = ({
     );
 };
 
-export default VilkRBolk;
+export default VilkårTabell;

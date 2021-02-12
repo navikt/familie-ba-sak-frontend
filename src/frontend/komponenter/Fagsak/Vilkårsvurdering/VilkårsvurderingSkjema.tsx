@@ -16,7 +16,7 @@ import {
 } from '../../../typer/vilkår';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import VilkRBolk from './VilkårBolk/VilkårTabell';
+import VilkårTabell from './VilkårBolk/VilkårTabell';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
@@ -100,7 +100,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
 
                                     if (vilkårResultater.length !== 0) {
                                         return (
-                                            <VilkRBolk
+                                            <VilkårTabell
                                                 key={`${personResultat.personIdent}_${vc.key}`}
                                                 person={personResultat.person}
                                                 vilkårResultater={vilkårResultater}
