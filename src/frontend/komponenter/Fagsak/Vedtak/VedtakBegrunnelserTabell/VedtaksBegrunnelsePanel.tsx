@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
+import navFarger from 'nav-frontend-core';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
@@ -179,17 +180,17 @@ const HjelpetekstWrapper = styled.button`
     margin-right: 10px;
 
     &:hover {
-        background-color: #e7e9e9;
+        background-color: ${navFarger.navLysGra};
         .hjelpetekst {
             .hjelpetekst__apneknapp {
                 outline: 0;
                 color: white;
-                background: #0067c5;
+                background: ${navFarger.navBla};
 
                 .hjelpetekst__ikon {
                     fill: white;
                 }
-                box-shadow: 0 0 0 2px #0067c5;
+                box-shadow: 0 0 0 2px ${navFarger.navBla};
             }
         }
     }
