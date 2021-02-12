@@ -46,11 +46,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
 
     const overrideHjelpetekstOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (hjelpetekstRef) {
-            if (e && !hjelpetekstRef.state.ankerEl) {
-                hjelpetekstRef.setState({ ankerEl: e.currentTarget });
-            } else {
-                hjelpetekstRef.setState({ ankerEl: undefined });
-            }
+            hjelpetekstRef.togglePopover(e);
         }
         e.stopPropagation();
     };
