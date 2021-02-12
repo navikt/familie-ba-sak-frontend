@@ -6,6 +6,7 @@ import { Radio } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import {
+    FamilieCheckbox,
     FamilieKnapp,
     FamilieRadioGruppe,
     FamilieTextareaControlled,
@@ -314,6 +315,21 @@ const GeneriskVilkårVurdering: React.FC<IProps> = ({
                                     }
                                 />
                             </FamilieRadioGruppe>
+                            {redigerbartVilkår.verdi.resultat.verdi !== Resultat.OPPFYLT && (
+                                <FamilieCheckbox
+                                    erLesevisning={false}
+                                    label={'Vurderingen er et avslag'}
+                                    onChange={event => {
+                                        validerOgSettRedigerbartVilkår({
+                                            ...redigerbartVilkår,
+                                            verdi: {
+                                                ...redigerbartVilkår.verdi,
+                                                erAvslag: event.target.checked,
+                                            },
+                                        });
+                                    }}
+                                />
+                            )}
 
                             <FastsettPeriode
                                 hjelpetekst={

@@ -49,6 +49,7 @@ export interface IVilkårResultat {
     periode: FeltState<IPeriode>;
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
+    erAvslag: boolean;
 }
 
 // Vilkårsvurdering typer for api

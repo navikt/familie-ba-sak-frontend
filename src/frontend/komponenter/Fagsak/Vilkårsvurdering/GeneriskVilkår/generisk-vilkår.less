@@ -44,6 +44,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        td:first-child .checkboks + .skjemaelement__label {
+            text-indent: 2rem;
+            width: 13rem;
+        }
     }
 
     & ~ .generisk-vilkår {
@@ -58,7 +63,7 @@
         .skjemagruppe {
             margin: 1rem 0;
         }
-        
+
         .begrunnelse {
             min-height: 8rem !important;
         }
@@ -81,12 +86,9 @@
     .horisontal-sentrert-div {
         display: flex;
         align-items: center;
-    
+
         > *:not(:first-child) {
             margin-left: .75rem;
         }
     }
 }
-
-
-
