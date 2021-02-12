@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
@@ -45,6 +44,10 @@ interface IProps {
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: FeltState<IVilkårResultat>;
     visFeilmeldinger: boolean;
+    toggleForm: (visAlert: boolean) => void;
+    redigerbartVilkår: FeltState<IVilkårResultat>;
+    settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
+    settEkspandertVilkår: (ekspandertVilkår: boolean) => void;
 }
 
 const Container = styled.div`
@@ -70,6 +73,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     vilkårFraConfig,
     vilkårResultat,
     visFeilmeldinger,
+    toggleForm,
+    redigerbartVilkår,
+    settRedigerbartVilkår,
+    settEkspandertVilkår,
 }) => {
     const {
         vilkårsvurdering,
@@ -83,14 +90,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { settFagsak } = useFagsakRessurser();
     const leseVisning = erLesevisning();
 
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(
-        erLesevisning() || false || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
-    );
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
-
-    const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(
-        vilkårResultat
-    );
 
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
         settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
@@ -107,15 +107,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 },
             },
         });
-    };
-
-    const toggleForm = (visAlert: boolean) => {
-        if (ekspandertVilkår && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår)) {
-            alert('Vurderingen har endringer som ikke er lagret!');
-        } else {
-            settEkspandertVilkår(!ekspandertVilkår);
-            settRedigerbartVilkår(vilkårResultat);
-        }
     };
 
     const skalViseFeilmeldinger = () => {

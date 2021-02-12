@@ -145,6 +145,10 @@ const VilkårTabellRad: React.FC<IProps> = ({
                             vilkårFraConfig={vilkårFraConfig}
                             vilkårResultat={vilkårResultat}
                             visFeilmeldinger={visFeilmeldinger}
+                            toggleForm={toggleForm}
+                            redigerbartVilkår={redigerbartVilkår}
+                            settRedigerbartVilkår={settRedigerbartVilkår}
+                            settEkspandertVilkår={settEkspandertVilkår}
                         />
                     </EkspandertTd>
                 </tr>
