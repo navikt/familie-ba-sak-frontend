@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
+import navFarger from 'nav-frontend-core';
 import { Radio } from 'nav-frontend-skjema';
 
 import {
@@ -48,7 +49,7 @@ interface IProps {
 
 const Container = styled.div`
     max-width: 30rem;
-    border-left: 1px solid @navBlaLighten20;
+    border-left: 1px solid ${navFarger.navBlaLighten20};
     padding-left: 2rem;
     .skjemagruppe.radiogruppe {
         margin-bottom: 0;

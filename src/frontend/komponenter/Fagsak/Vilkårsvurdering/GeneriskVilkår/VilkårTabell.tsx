@@ -28,7 +28,6 @@ interface IProps {
 }
 
 const Tabell = styled.table`
-    margin-top: 1rem;
     table-layout: fixed;
 `;
 

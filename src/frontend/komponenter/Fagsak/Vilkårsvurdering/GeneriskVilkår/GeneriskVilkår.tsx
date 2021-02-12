@@ -29,6 +29,7 @@ interface IProps {
 }
 
 const Container = styled.div`
+    margin-top: 1rem;
     :not(:first-child) {
         margin-top: 2.5rem;
     }
