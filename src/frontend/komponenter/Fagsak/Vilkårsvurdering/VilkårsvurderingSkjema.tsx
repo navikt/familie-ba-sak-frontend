@@ -16,7 +16,7 @@ import {
 } from '../../../typer/vilkår';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
-import VilkårTabell from './VilkårBolk/VilkårTabell';
+import VilkårTabell from './VilkårTabell/VilkårTabell';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
