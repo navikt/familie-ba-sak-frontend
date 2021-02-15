@@ -13,7 +13,7 @@ import { Behandlingstype } from '../../../../typer/behandling';
 import { IUtbetalingsperiode, IUtbetalingsperiodeDetalj } from '../../../../typer/beregning';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
-import { isoStringToDayjs } from '../../../../utils/formatter';
+import { formaterBeløp, formaterPersonIdent, isoStringToDayjs } from '../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 
@@ -22,6 +22,72 @@ interface IVedtakBegrunnelserTabell {
     personResultater: IRestPersonResultat[];
     behandlingsType: Behandlingstype;
 }
+
+const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
+    margin-bottom: 1.5rem;
+    width: 49rem;
+
+    .ekspanderbartPanel__hode {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .ekspanderbartPanel__innhold {
+        padding: 1rem;
+    }
+`;
+
+const UtbetalingsperiodepanelTittel = styled.p`
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    .typo-normal {
+        margin-left: 1.5rem;
+    }
+`;
+
+const UtbetalingsperiodepanelBody = styled.div`
+    margin-left: 0.625rem;
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+`;
+
+const UtbetalingsperiodeDetalj = styled.div`
+    display: flex;
+    flex-direction: row;
+
+    .typo-normal {
+        margin-right: 1.5rem;
+    }
+`;
+
+const StyledNormaltekst = styled(Normaltekst)`
+    padding: 1rem;
+`;
+
+const HjelpetekstWrapper = styled.button`
+    padding: 0.625rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    margin-right: 0.625rem;
+
+    &:hover {
+        background-color: ${navFarger.navLysGra};
+        .hjelpetekst {
+            .hjelpetekst__apneknapp {
+                outline: 0;
+                color: white;
+                background: ${navFarger.navBla};
+
+                .hjelpetekst__ikon {
+                    fill: white;
+                }
+                box-shadow: 0 0 0 2px ${navFarger.navBla};
+            }
+        }
+    }
+`;
 
 const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     utbetalingsperiode,
@@ -42,9 +108,6 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
 
-    const displayFødselsnummer = (fødselsnummer: string) =>
-        `${fødselsnummer.substring(0, 6)} ${fødselsnummer.substring(6)}`;
-
     const overrideHjelpetekstOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (hjelpetekstRef) {
             hjelpetekstRef.togglePopover(e);
@@ -63,16 +126,16 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                             Dette er en hjelpetekst (tekst kommer senere)
                         </Hjelpetekst>
                     </HjelpetekstWrapper>
-                    <span className="typo-element">
+                    <Element>
                         {periodeToString({
                             fom: utbetalingsperiode.periodeFom,
                             tom: slutterSenereEnnInneværendeMåned(utbetalingsperiode.periodeTom)
                                 ? ''
                                 : utbetalingsperiode.periodeTom,
                         })}
-                    </span>
-                    <span className="typo-normal">Ordinær</span>
-                    <span className="typo-normal">{utbetalingsperiode.utbetaltPerMnd} kr</span>
+                    </Element>
+                    <Normaltekst>Ordinær</Normaltekst>
+                    <Normaltekst>{formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}</Normaltekst>
                 </UtbetalingsperiodepanelTittel>
             }
         >
@@ -92,7 +155,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                                     }
                                     onMouseLeave={() => settFødselsnummerAnker(undefined)}
                                 >
-                                    {displayFødselsnummer(detalj.person.personIdent)}
+                                    {formaterPersonIdent(detalj.person.personIdent)}
                                 </Normaltekst>
 
                                 <Popover
@@ -115,7 +178,6 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     )}
                 </div>
                 <div>
-                    <Element>Begrunnelse(r) i brev</Element>
                     <VedtakBegrunnelserMultiselect
                         erLesevisning={erLesevisning()}
                         personResultater={personResultater}
@@ -129,71 +191,5 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
         </StyledEkspanderbartpanel>
     );
 };
-
-const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
-    margin-bottom: 24px;
-    width: 49rem;
-
-    .ekspanderbartPanel__hode {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-    .ekspanderbartPanel__innhold {
-        padding: 16px;
-    }
-`;
-
-const UtbetalingsperiodepanelTittel = styled.p`
-    display: flex;
-    align-items: center;
-    text-align: center;
-
-    .typo-normal {
-        margin-left: 24px;
-    }
-`;
-
-const UtbetalingsperiodepanelBody = styled.div`
-    margin-left: 10px;
-    display: grid;
-    grid-template-columns: 5fr 4fr;
-`;
-
-const UtbetalingsperiodeDetalj = styled.div`
-    display: flex;
-    flex-direction: row;
-
-    .typo-normal {
-        margin-right: 24px;
-    }
-`;
-
-const StyledNormaltekst = styled(Normaltekst)`
-    padding: 16px;
-`;
-
-const HjelpetekstWrapper = styled.button`
-    padding: 10px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    margin-right: 10px;
-
-    &:hover {
-        background-color: ${navFarger.navLysGra};
-        .hjelpetekst {
-            .hjelpetekst__apneknapp {
-                outline: 0;
-                color: white;
-                background: ${navFarger.navBla};
-
-                .hjelpetekst__ikon {
-                    fill: white;
-                }
-                box-shadow: 0 0 0 2px ${navFarger.navBla};
-            }
-        }
-    }
-`;
 
 export default VedtakBegrunnelsePanel;
