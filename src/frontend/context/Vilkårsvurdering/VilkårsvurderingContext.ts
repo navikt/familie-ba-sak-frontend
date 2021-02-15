@@ -14,7 +14,7 @@ import {
     IVilkårResultat,
     VilkårType,
 } from '../../typer/vilkår';
-import { mapFraRestVilkårsvurderingTilUi, mapFraUiTilRestResultat } from './vilkårsvurdering';
+import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -73,10 +73,9 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                         id: redigerbartVilkår.verdi.id,
                         periodeFom: redigerbartVilkår.verdi.periode.verdi.fom,
                         periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
-                        resultat: mapFraUiTilRestResultat(
-                            redigerbartVilkår.verdi.resultat.verdi,
-                            redigerbartVilkår.verdi.erAvslag
-                        ),
+                        resultat: redigerbartVilkår.verdi.resultat.verdi,
+                        erEksplisittAvslagPåSøknad:
+                            redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
                         vilkårType: redigerbartVilkår.verdi.vilkårType,
                     },
                 ],

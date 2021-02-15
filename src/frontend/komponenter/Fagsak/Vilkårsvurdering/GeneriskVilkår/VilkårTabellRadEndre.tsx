@@ -254,19 +254,21 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
             </FamilieRadioGruppe>
+            {console.log(redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad)}
             {visAvslag &&
                 redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                 !årsakErIkkeSøknad && (
                     <FamilieCheckbox
                         erLesevisning={false}
                         label={'Vurderingen er et avslag'}
-                        checked={redigerbartVilkår.verdi.erAvslag}
+                        checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
                         onChange={() => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
                                 verdi: {
                                     ...redigerbartVilkår.verdi,
-                                    erAvslag: !redigerbartVilkår.verdi.erAvslag,
+                                    erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
+                                        .erEksplisittAvslagPåSøknad,
                                 },
                             });
                         }}
