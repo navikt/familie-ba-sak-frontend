@@ -26,6 +26,13 @@ const UtbetalingsperioderOverskrift = styled.div`
     text-align: center;
 `;
 
+const StyledHjelpetekst44px = styled(Hjelpetekst44px)`
+    .popover {
+        max-width: 18rem;
+        text-align: left;
+    }
+`;
+
 const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
@@ -68,14 +75,9 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
         <>
             <UtbetalingsperioderOverskrift>
                 <Element>Begrunnelser i vedtaksbrev </Element>
-                <Hjelpetekst44px
+                <StyledHjelpetekst44px
                     type={PopoverOrientering.Hoyre}
-                    innhold={
-                        <>
-                            Her skal du sette begrunnelsestekster <br />
-                            for innvilgelse, reduksjon og opphør.
-                        </>
-                    }
+                    innhold="Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør."
                 />
             </UtbetalingsperioderOverskrift>
             {utbetalingsperioderMedBegrunnelseBehov.map(
