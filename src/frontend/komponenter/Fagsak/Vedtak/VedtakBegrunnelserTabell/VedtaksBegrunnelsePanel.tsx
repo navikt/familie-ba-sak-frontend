@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
@@ -61,10 +60,6 @@ const UtbetalingsperiodeDetalj = styled.div`
     }
 `;
 
-const StyledNormaltekst = styled(Normaltekst)`
-    padding: 1rem;
-`;
-
 const HjelpetekstWrapper = styled.button`
     padding: 0.625rem;
     width: 2.75rem;
@@ -97,13 +92,6 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     const [hjelpetekstRef, settHjelpetekstRef] = useState<Hjelpetekst | null>(null);
 
     const { erLesevisning } = useBehandling();
-    const [fødselsnummerAnker, settFødselsnummerAnker] = useState<
-        | {
-              fødselsnummer: string;
-              element: HTMLElement;
-          }
-        | undefined
-    >(undefined);
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
@@ -146,33 +134,11 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     {utbetalingsperiode.utbetalingsperiodeDetaljer.map(
                         (detalj: IUtbetalingsperiodeDetalj) => (
                             <UtbetalingsperiodeDetalj key={detalj.person.personIdent}>
-                                <Normaltekst
-                                    onMouseEnter={event =>
-                                        settFødselsnummerAnker({
-                                            fødselsnummer: detalj.person.personIdent,
-                                            element: event.currentTarget,
-                                        })
-                                    }
-                                    onMouseLeave={() => settFødselsnummerAnker(undefined)}
-                                >
+                                <Normaltekst title={detalj.person.navn}>
                                     {formaterPersonIdent(detalj.person.personIdent)}
                                 </Normaltekst>
 
-                                <Popover
-                                    ankerEl={
-                                        fødselsnummerAnker?.fødselsnummer ===
-                                        detalj.person.personIdent
-                                            ? fødselsnummerAnker.element
-                                            : undefined
-                                    }
-                                    orientering={PopoverOrientering.Under}
-                                    autoFokus={false}
-                                    tabIndex={-1}
-                                >
-                                    <StyledNormaltekst>{detalj.person.navn}</StyledNormaltekst>
-                                </Popover>
-
-                                <Normaltekst>{detalj.utbetaltPerMnd} kr</Normaltekst>
+                                <Normaltekst>{formaterBeløp(detalj.utbetaltPerMnd)}</Normaltekst>
                             </UtbetalingsperiodeDetalj>
                         )
                     )}
