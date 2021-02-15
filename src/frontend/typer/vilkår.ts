@@ -9,18 +9,21 @@ export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
     OPPFYLT = 'OPPFYLT',
     IKKE_VURDERT = 'IKKE_VURDERT',
+    AVSLÅTT = 'AVSLÅTT',
 }
 
 export const uiResultat: Record<Resultat, string> = {
     OPPFYLT: 'Oppfylt',
     IKKE_OPPFYLT: 'Ikke oppfylt',
     IKKE_VURDERT: 'Ikke vurdert',
+    AVSLÅTT: 'Avslått',
 };
 
 export const resultater: Record<Resultat, string> = {
     OPPFYLT: 'Ja',
     IKKE_OPPFYLT: 'Nei',
     IKKE_VURDERT: 'Kanskje',
+    AVSLÅTT: 'Avslag',
 };
 
 export enum VilkårType {
@@ -70,7 +73,6 @@ export interface IRestVilkårResultat {
     endretTidspunkt: string;
     erAutomatiskVurdert: boolean;
     erVurdert: boolean;
-    erAvslag: boolean;
     id: number;
     periodeFom?: string;
     periodeTom?: string;

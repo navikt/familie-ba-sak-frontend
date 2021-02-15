@@ -1,12 +1,13 @@
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { periodeDiff, nyPeriode } from '../../typer/periode';
+import { nyPeriode, periodeDiff } from '../../typer/periode';
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
     IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
+    Resultat,
 } from '../../typer/vilkår';
 import familieDayjs, { familieDayjsDiff } from '../../utils/familieDayjs';
 import { datoformat } from '../../utils/formatter';
@@ -77,14 +78,14 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                         erPeriodeGyldig
                                     ),
                                     resultat: lagInitiellFelt(
-                                        vilkårResultat.resultat,
+                                        mapFraRestResultatTilUi(vilkårResultat.resultat),
                                         erResultatGyldig
                                     ),
                                     vilkårType: vilkårResultat.vilkårType,
                                     endretAv: vilkårResultat.endretAv,
                                     erVurdert: vilkårResultat.erVurdert,
                                     erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
-                                    erAvslag: vilkårResultat.erAvslag,
+                                    erAvslag: vilkårResultat.resultat === Resultat.AVSLÅTT,
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                 },
@@ -115,4 +116,20 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 familieDayjs(a.person.fødselsdato, datoformat.ISO_DAG)
             );
         });
+};
+
+const mapFraRestResultatTilUi = (restResultat: Resultat): Resultat => {
+    if (restResultat === Resultat.AVSLÅTT) {
+        return Resultat.IKKE_OPPFYLT;
+    } else {
+        return restResultat;
+    }
+};
+
+export const mapFraUiTilRestResultat = (uiResultat: Resultat, erAvslag: boolean): Resultat => {
+    if (uiResultat === Resultat.IKKE_OPPFYLT && erAvslag) {
+        return Resultat.AVSLÅTT;
+    } else {
+        return uiResultat;
+    }
 };
