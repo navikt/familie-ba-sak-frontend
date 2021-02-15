@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
@@ -14,6 +12,7 @@ import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
 import { formaterBeløp, formaterPersonIdent, isoStringToDayjs } from '../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
+import Hjelpetekst44px from './Hjelpetekst44px';
 import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 
 interface IVedtakBegrunnelserTabell {
@@ -60,48 +59,15 @@ const UtbetalingsperiodeDetalj = styled.div`
     }
 `;
 
-const HjelpetekstWrapper = styled.button`
-    padding: 0.625rem;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    margin-right: 0.625rem;
-
-    &:hover {
-        background-color: ${navFarger.navLysGra};
-        .hjelpetekst {
-            .hjelpetekst__apneknapp {
-                outline: 0;
-                color: white;
-                background: ${navFarger.navBla};
-
-                .hjelpetekst__ikon {
-                    fill: white;
-                }
-                box-shadow: 0 0 0 2px ${navFarger.navBla};
-            }
-        }
-    }
-`;
-
 const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     utbetalingsperiode,
     personResultater,
     behandlingsType,
 }) => {
-    const [hjelpetekstRef, settHjelpetekstRef] = useState<Hjelpetekst | null>(null);
-
     const { erLesevisning } = useBehandling();
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
-
-    const overrideHjelpetekstOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (hjelpetekstRef) {
-            hjelpetekstRef.togglePopover(e);
-        }
-        e.stopPropagation();
-    };
 
     return (
         <StyledEkspanderbartpanel
@@ -109,11 +75,13 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
             apen={behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING}
             tittel={
                 <UtbetalingsperiodepanelTittel>
-                    <HjelpetekstWrapper tabIndex={-1} onClick={overrideHjelpetekstOnClick}>
-                        <Hjelpetekst ref={element => settHjelpetekstRef(element)}>
-                            Dette er en hjelpetekst (tekst kommer senere)
-                        </Hjelpetekst>
-                    </HjelpetekstWrapper>
+                    {/* TODO legge inn tekst for hjelpeteksten og legg til hjepleteksten */}
+                    {/* eslint-disable-next-line no-constant-condition */}
+                    {true ? (
+                        <div style={{ marginLeft: '0.625rem' }} />
+                    ) : (
+                        <Hjelpetekst44px innhold={'Midlertidig tekst'} />
+                    )}
                     <Element>
                         {periodeToString({
                             fom: utbetalingsperiode.periodeFom,

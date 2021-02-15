@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { Element } from 'nav-frontend-typografi';
 
@@ -14,6 +12,7 @@ import { IUtbetalingsperiode } from '../../../../typer/beregning';
 import { IRestVedtakBegrunnelse } from '../../../../typer/vedtak';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat } from '../../../../utils/formatter';
+import Hjelpetekst44px from './Hjelpetekst44px';
 import VedtakBegrunnelsePanel from './VedtaksBegrunnelsePanel';
 
 interface IVedtakBegrunnelserTabell {
@@ -27,34 +26,9 @@ const UtbetalingsperioderOverskrift = styled.div`
     text-align: center;
 `;
 
-const HjelpetekstWrapper = styled.button`
-    padding: 0.625rem;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    margin-left: 0.625rem;
-
-    &:hover {
-        background-color: ${navFarger.navLysGra};
-        .hjelpetekst {
-            .hjelpetekst__apneknapp {
-                outline: 0;
-                color: white;
-                background: ${navFarger.navBla};
-
-                .hjelpetekst__ikon {
-                    fill: white;
-                }
-                box-shadow: 0 0 0 2px ${navFarger.navBla};
-            }
-        }
-    }
-`;
-
 const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
-    const [hjelpetekstRef, settHjelpetekstRef] = useState<Hjelpetekst | null>(null);
 
     const harAndeler = åpenBehandling.utbetalingsperioder.length > 0;
     const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
@@ -90,26 +64,19 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
             );
         });
 
-    const overrideHjelpetekstOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (hjelpetekstRef) {
-            hjelpetekstRef.togglePopover(e);
-        }
-        e.stopPropagation();
-    };
-
     return harAndeler ? (
         <>
             <UtbetalingsperioderOverskrift>
                 <Element>Begrunnelser i vedtaksbrev </Element>
-                <HjelpetekstWrapper tabIndex={-1} onClick={overrideHjelpetekstOnClick}>
-                    <Hjelpetekst
-                        type={PopoverOrientering.Hoyre}
-                        ref={element => settHjelpetekstRef(element)}
-                    >
-                        Her skal du sette begrunnelsestekster <br />
-                        for innvilgelse, reduksjon og opphør.
-                    </Hjelpetekst>
-                </HjelpetekstWrapper>
+                <Hjelpetekst44px
+                    type={PopoverOrientering.Hoyre}
+                    innhold={
+                        <>
+                            Her skal du sette begrunnelsestekster <br />
+                            for innvilgelse, reduksjon og opphør.
+                        </>
+                    }
+                />
             </UtbetalingsperioderOverskrift>
             {utbetalingsperioderMedBegrunnelseBehov.map(
                 (utbetalingsperiode: IUtbetalingsperiode) => (
