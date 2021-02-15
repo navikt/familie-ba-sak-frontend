@@ -71,6 +71,11 @@ const VilkårTabellRad: React.FC<IProps> = ({
         vilkårResultat
     );
 
+    const visIkkeSatt =
+        !ekspandertVilkår &&
+        !redigerbartVilkår.verdi.periode.verdi.fom &&
+        !redigerbartVilkår.verdi.periode.verdi.tom;
+
     const toggleForm = (visAlert: boolean) => {
         if (ekspandertVilkår && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår)) {
             alert('Vurderingen har endringer som ikke er lagret!');
@@ -94,7 +99,13 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     </VurderingCelle>
                 </td>
                 <td>
-                    <Normaltekst children={periodeToString(vilkårResultat.verdi.periode.verdi)} />
+                    <Normaltekst
+                        children={
+                            visIkkeSatt
+                                ? 'Ikke satt'
+                                : periodeToString(vilkårResultat.verdi.periode.verdi)
+                        }
+                    />
                 </td>
                 <td>
                     <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
