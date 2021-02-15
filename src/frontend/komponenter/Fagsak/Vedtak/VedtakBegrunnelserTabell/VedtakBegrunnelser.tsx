@@ -20,6 +20,37 @@ interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
 }
 
+const UtbetalingsperioderOverskrift = styled.div`
+    margin: 2.75rem 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
+`;
+
+const HjelpetekstWrapper = styled.button`
+    padding: 0.625rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    margin-left: 0.625rem;
+
+    &:hover {
+        background-color: ${navFarger.navLysGra};
+        .hjelpetekst {
+            .hjelpetekst__apneknapp {
+                outline: 0;
+                color: white;
+                background: ${navFarger.navBla};
+
+                .hjelpetekst__ikon {
+                    fill: white;
+                }
+                box-shadow: 0 0 0 2px ${navFarger.navBla};
+            }
+        }
+    }
+`;
+
 const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
@@ -92,36 +123,5 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
         </>
     ) : null;
 };
-
-const UtbetalingsperioderOverskrift = styled.div`
-    margin: 40px 0;
-    display: flex;
-    align-items: center;
-    text-align: center;
-`;
-
-const HjelpetekstWrapper = styled.button`
-    padding: 10px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    margin-left: 10px;
-
-    &:hover {
-        background-color: ${navFarger.navLysGra};
-        .hjelpetekst {
-            .hjelpetekst__apneknapp {
-                outline: 0;
-                color: white;
-                background: ${navFarger.navBla};
-
-                .hjelpetekst__ikon {
-                    fill: white;
-                }
-                box-shadow: 0 0 0 2px ${navFarger.navBla};
-            }
-        }
-    }
-`;
 
 export default VedtakBegrunnelser;
