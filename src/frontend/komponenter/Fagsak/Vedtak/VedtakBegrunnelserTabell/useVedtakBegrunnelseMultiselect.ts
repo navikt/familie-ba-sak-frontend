@@ -19,7 +19,10 @@ import {
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { isoStringToDayjs } from '../../../../utils/formatter';
 
-const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: IPeriode) => {
+const useVedtakBegrunnelseMultiselect = (
+    personResultater: IRestPersonResultat[],
+    periode: IPeriode
+) => {
     const {
         vedtakBegrunnelser,
         vilkårBegrunnelser,
@@ -200,4 +203,4 @@ const useVedtakBegrunnelse = (personResultater: IRestPersonResultat[], periode: 
     };
 };
 
-export default useVedtakBegrunnelse;
+export default useVedtakBegrunnelseMultiselect;
