@@ -35,6 +35,7 @@ const Tabell = styled.table`
         width: 13rem;
     }
 `;
+// Midlertidig styling. Se issue: https://github.com/navikt/nav-frontend-moduler/issues/997
 
 const TabellHeader = styled.th`
     &:nth-of-type(1) {

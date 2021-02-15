@@ -9,21 +9,18 @@ export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
     OPPFYLT = 'OPPFYLT',
     IKKE_VURDERT = 'IKKE_VURDERT',
-    AVSLÅTT = 'AVSLÅTT',
 }
 
 export const uiResultat: Record<Resultat, string> = {
     OPPFYLT: 'Oppfylt',
     IKKE_OPPFYLT: 'Ikke oppfylt',
     IKKE_VURDERT: 'Ikke vurdert',
-    AVSLÅTT: 'Avslått',
 };
 
 export const resultater: Record<Resultat, string> = {
     OPPFYLT: 'Ja',
     IKKE_OPPFYLT: 'Nei',
     IKKE_VURDERT: 'Kanskje',
-    AVSLÅTT: 'Avslag',
 };
 
 export enum VilkårType {
@@ -52,7 +49,7 @@ export interface IVilkårResultat {
     periode: FeltState<IPeriode>;
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
-    erAvslag: boolean;
+    erEksplisittAvslagPåSøknad?: boolean;
 }
 
 // Vilkårsvurdering typer for api
@@ -77,6 +74,7 @@ export interface IRestVilkårResultat {
     periodeFom?: string;
     periodeTom?: string;
     resultat: Resultat;
+    erEksplisittAvslagPåSøknad?: boolean;
     vilkårType: VilkårType;
 }
 

@@ -22,7 +22,6 @@ const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({
         case Resultat.OPPFYLT:
             return <Oppfylt heigth={heigth} className={className} width={width} />;
         case Resultat.IKKE_OPPFYLT:
-        case Resultat.AVSLÅTT:
             return <IkkeOppfylt heigth={heigth} className={className} width={width} />;
         case Resultat.IKKE_VURDERT:
             return <Advarsel heigth={heigth} className={className} width={width} />;
