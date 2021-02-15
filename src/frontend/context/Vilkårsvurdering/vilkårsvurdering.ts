@@ -55,6 +55,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
             if (person === undefined) {
                 throw new Error('Finner ikke person ved validering av vilkårsvurdering');
             } else {
+                console.log(personResultat.vilkårResultater);
                 return {
                     person,
                     personIdent: personResultat.personIdent,
@@ -84,6 +85,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     endretAv: vilkårResultat.endretAv,
                                     erVurdert: vilkårResultat.erVurdert,
                                     erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
+                                    erAvslag: vilkårResultat.erAvslag,
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                 },

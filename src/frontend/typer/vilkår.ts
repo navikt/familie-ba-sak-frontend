@@ -70,6 +70,7 @@ export interface IRestVilkårResultat {
     endretTidspunkt: string;
     erAutomatiskVurdert: boolean;
     erVurdert: boolean;
+    erAvslag: boolean;
     id: number;
     periodeFom?: string;
     periodeTom?: string;
