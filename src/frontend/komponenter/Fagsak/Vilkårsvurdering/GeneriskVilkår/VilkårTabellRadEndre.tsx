@@ -91,9 +91,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
     const leseVisning = erLesevisning();
-    const årsakErSøknad =
+    const årsakErIkkeSøknad =
         åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
+        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
@@ -249,21 +249,22 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
             </FamilieRadioGruppe>
-            {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT && !årsakErSøknad && (
-                <FamilieCheckbox
-                    erLesevisning={false}
-                    label={'Vurderingen er et avslag'}
-                    onChange={event => {
-                        validerOgSettRedigerbartVilkår({
-                            ...redigerbartVilkår,
-                            verdi: {
-                                ...redigerbartVilkår.verdi,
-                                erAvslag: event.target.checked,
-                            },
-                        });
-                    }}
-                />
-            )}
+            {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                !årsakErIkkeSøknad && (
+                    <FamilieCheckbox
+                        erLesevisning={false}
+                        label={'Vurderingen er et avslag'}
+                        onChange={event => {
+                            validerOgSettRedigerbartVilkår({
+                                ...redigerbartVilkår,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    erAvslag: event.target.checked,
+                                },
+                            });
+                        }}
+                    />
+                )}
 
             <VelgPeriode
                 hjelpetekst={
