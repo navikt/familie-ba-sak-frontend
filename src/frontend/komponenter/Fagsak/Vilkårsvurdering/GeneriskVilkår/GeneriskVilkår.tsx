@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import styled from 'styled-components';
+
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Undertekst, Undertittel } from 'nav-frontend-typografi';
 
@@ -16,20 +18,8 @@ import Pluss from '../../../../ikoner/Pluss';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
-import UtførKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import GeneriskVilkårVurdering from './GeneriskVilkårVurdering';
-
-export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
-
-export const vilkårResultatFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-resultat_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
-
-export const vilkårBegrunnelseFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-begrunnelse_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
-
-export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-periode_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
+import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import VilkårTabell from './VilkårTabell';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -37,6 +27,26 @@ interface IProps {
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
 }
+
+const Container = styled.div`
+    margin-top: 1rem;
+    :not(:first-child) {
+        margin-top: 2.5rem;
+    }
+`;
+
+const VilkårTittel = styled(Undertittel)`
+    display: flex;
+    align-items: center;
+
+    > *:not(:first-child) {
+        margin-left: 0.75rem;
+    }
+`;
+
+const UtførKnapp = styled(IkonKnapp)`
+    margin-top: 0.5rem;
+`;
 
 const GeneriskVilkår: React.FC<IProps> = ({
     person,
@@ -86,40 +96,20 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     return (
-        <div className={'generisk-vilkår'}>
+        <Container>
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
-                <Undertittel tag={'h4'} className={'horisontal-sentrert-div'}>
+                <VilkårTittel tag={'h4'}>
                     <Element children={vilkårFraConfig.tittel} />
                     <Undertekst children={vilkårFraConfig.lovreferanse} />
-                </Undertittel>
-
-                <table className={'tabell'}>
-                    <thead>
-                        <tr className={'tr-head'}>
-                            <th>Vurdering</th>
-                            <th>Periode</th>
-                            <th>Begrunnelse</th>
-                            <th />
-                            <th />
-                            <th />
-                        </tr>
-                    </thead>
-                    {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>) => {
-                        return (
-                            <GeneriskVilkårVurdering
-                                key={`${person.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
-                                vilkårFraConfig={vilkårFraConfig}
-                                person={person}
-                                vilkårResultat={vilkårResultat}
-                                visFeilmeldinger={visFeilmeldinger}
-                            />
-                        );
-                    })}
-                </table>
-
+                </VilkårTittel>
+                <VilkårTabell
+                    person={person}
+                    vilkårFraConfig={vilkårFraConfig}
+                    vilkårResultater={vilkårResultater}
+                    visFeilmeldinger={visFeilmeldinger}
+                />
                 {skalViseLeggTilKnapp() ? (
                     <UtførKnapp
-                        className={'generisk-vilkår__legg-til-knapp'}
                         erLesevisning={erLesevisning()}
                         onClick={() => {
                             const promise = postVilkår(
@@ -138,7 +128,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     />
                 ) : null}
             </SkjemaGruppe>
-        </div>
+        </Container>
     );
 };
 
