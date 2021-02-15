@@ -55,7 +55,6 @@ export const mapFraRestPersonResultatTilPersonResultat = (
             if (person === undefined) {
                 throw new Error('Finner ikke person ved validering av vilkårsvurdering');
             } else {
-                console.log(personResultat.vilkårResultater);
                 return {
                     person,
                     personIdent: personResultat.personIdent,

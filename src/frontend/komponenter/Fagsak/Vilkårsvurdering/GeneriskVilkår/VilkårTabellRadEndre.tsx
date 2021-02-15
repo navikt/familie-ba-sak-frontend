@@ -22,6 +22,7 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Slett from '../../../../ikoner/Slett';
+import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import {
@@ -87,9 +88,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         settVilkårSubmit,
     } = useVilkårsvurdering();
 
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, åpenBehandling } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
     const leseVisning = erLesevisning();
+    const årsakErSøknad =
+        åpenBehandling.status === RessursStatus.SUKSESS &&
+        åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
@@ -245,7 +249,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
             </FamilieRadioGruppe>
-            {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT && (
+            {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT && !årsakErSøknad && (
                 <FamilieCheckbox
                     erLesevisning={false}
                     label={'Vurderingen er et avslag'}
