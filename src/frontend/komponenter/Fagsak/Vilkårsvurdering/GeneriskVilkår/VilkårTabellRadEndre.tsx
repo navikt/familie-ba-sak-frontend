@@ -245,7 +245,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
             </FamilieRadioGruppe>
-            {redigerbartVilkår.verdi.resultat.verdi !== Resultat.OPPFYLT && (
+            {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT && (
                 <FamilieCheckbox
                     erLesevisning={false}
                     label={'Vurderingen er et avslag'}
