@@ -95,7 +95,11 @@ const VelgPeriode: React.FC<IProps> = ({
                         id={`${vilkårPeriodeFeilmeldingId(
                             redigerbartVilkår.verdi
                         )}__fastsett-periode-fom`}
-                        label={'F.o.m'}
+                        label={
+                            redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
+                                ? 'F.o.m (valgfri)'
+                                : 'F.o.m'
+                        }
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) => {
                             validerOgSettRedigerbartVilkår({
