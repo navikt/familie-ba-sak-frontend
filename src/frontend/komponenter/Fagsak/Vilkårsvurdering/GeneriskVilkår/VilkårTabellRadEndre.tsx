@@ -254,7 +254,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
             </FamilieRadioGruppe>
-            {console.log(redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad)}
             {visAvslag &&
                 redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                 !årsakErIkkeSøknad && (

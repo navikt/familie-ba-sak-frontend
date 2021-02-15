@@ -66,6 +66,8 @@ export const erPeriodeGyldig = (
     const tom = felt.verdi.tom;
 
     const person: IGrunnlagPerson | undefined = avhengigheter?.person;
+    const erEksplisittAvslagPåSøknad: boolean | undefined =
+        avhengigheter?.erEksplisittAvslagPåSøknad;
 
     if (fom) {
         const fomDatoErGyldig = familieDayjs(fom).isValid();
@@ -88,7 +90,13 @@ export const erPeriodeGyldig = (
             ? ok(felt)
             : feil(felt, 'Ugyldig periode');
     } else {
-        return feil(felt, 'Mangler fra og med dato');
+        if (erEksplisittAvslagPåSøknad) {
+            return !tom
+                ? ok(felt)
+                : feil(felt, 'F.o.m. må settes eller t.o.m må fjernes før du kan gå videre');
+        } else {
+            return feil(felt, 'F.o.m. må settes før du kan gå videre');
+        }
     }
 };
 
