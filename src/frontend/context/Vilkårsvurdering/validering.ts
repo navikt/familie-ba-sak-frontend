@@ -43,7 +43,7 @@ export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonRe
             ...personResultat,
             vilkårResultater: personResultat.vilkårResultater.map(
                 (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
-                    return validerVilkår(vilkårResultat);
+                    return validerVilkår(vilkårResultat, { person: personResultat.person });
                 }
             ),
         };

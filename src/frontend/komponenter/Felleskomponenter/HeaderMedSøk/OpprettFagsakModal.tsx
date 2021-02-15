@@ -5,14 +5,16 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { ISøkeresultat } from '@navikt/familie-header';
+
 import { useApp } from '../../../context/AppContext';
+import { formaterPersonIdent } from '../../../utils/formatter';
 import UIModalWrapper from '../Modal/UIModalWrapper';
-import { ISøkResultat } from './søk/typer';
 import useOpprettFagsak from './useOpprettFagsak';
 
 export interface IOpprettFagsakModal {
     lukkModal: () => void;
-    søkResultat: ISøkResultat | undefined;
+    søkeresultat: ISøkeresultat | undefined;
 }
 
 const StyledUndertittel = styled(Undertittel)`
@@ -20,10 +22,10 @@ const StyledUndertittel = styled(Undertittel)`
     margin-bottom: 1.5rem;
 `;
 
-const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkResultat }) => {
+const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeresultat }) => {
     const { opprettFagsak, feilmelding, senderInn, settSenderInn } = useOpprettFagsak();
     const { sjekkTilgang } = useApp();
-    const visModal = !!søkResultat;
+    const visModal = !!søkeresultat;
 
     return (
         <UIModalWrapper
@@ -36,10 +38,10 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkResu
                         mini={true}
                         onClick={async () => {
                             settSenderInn(true);
-                            if (søkResultat && (await sjekkTilgang(søkResultat.ident))) {
+                            if (søkeresultat && (await sjekkTilgang(søkeresultat.ident))) {
                                 opprettFagsak(
                                     {
-                                        personIdent: søkResultat.ident,
+                                        personIdent: søkeresultat.ident,
                                         aktørId: null,
                                     },
                                     lukkModal
@@ -61,8 +63,10 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkResu
                 Personen har ingen tilknyttet fagsak. Ønsker du å opprette fagsak for denne
                 personen?
             </StyledUndertittel>
-            {søkResultat && (
-                <Normaltekst>{`${søkResultat.navn} (${søkResultat.ident})`}</Normaltekst>
+            {søkeresultat && (
+                <Normaltekst>{`${søkeresultat.navn} (${formaterPersonIdent(
+                    søkeresultat.ident
+                )})`}</Normaltekst>
             )}
             {!!feilmelding && <Feilmelding children={feilmelding} />}
         </UIModalWrapper>

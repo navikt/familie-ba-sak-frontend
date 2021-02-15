@@ -2,22 +2,21 @@ import React, { useState } from 'react';
 
 import { useHistory } from 'react-router';
 
+import { ikoner, Søk, ISøkeresultat } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
+    kjønnType,
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
-import { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
-import { ikoner } from './icons/Ikoner';
+import { fagsakdeltagerRoller, IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import OpprettFagsakModal from './OpprettFagsakModal';
-import { Søk } from './søk';
-import { ISøkResultat } from './søk/typer';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -30,7 +29,7 @@ const FagsakDeltagerSøk: React.FC = () => {
     );
 
     const [deltagerForOpprettFagsak, settDeltagerForOpprettFagsak] = useState<
-        ISøkResultat | undefined
+        ISøkeresultat | undefined
     >(undefined);
 
     const fnrValidator = (verdi: string): boolean => {
@@ -67,26 +66,34 @@ const FagsakDeltagerSøk: React.FC = () => {
                     settFagsakDeltagere(byggFeiletRessurs('Søk feilet'));
                 });
         } else {
-            settFagsakDeltagere(byggFunksjonellFeilRessurs('Personidenten har feil format'));
+            settFagsakDeltagere(
+                byggFunksjonellFeilRessurs('Ugyldig fødsels- eller d-nummer (11 siffer)')
+            );
         }
     };
 
-    const mapTilSøkResultater = (): Ressurs<ISøkResultat[]> => {
+    const mapTilSøkeresultater = (): Ressurs<ISøkeresultat[]> => {
         return fagsakDeltagere.status === RessursStatus.SUKSESS
             ? {
                   ...fagsakDeltagere,
-                  data: fagsakDeltagere.data.map((fagsakDeltager: IFagsakDeltager) => ({
-                      adressebeskyttelseGradering: fagsakDeltager.adressebeskyttelseGradering,
-                      fagsakId: fagsakDeltager.fagsakId,
-                      harTilgang: fagsakDeltager.harTilgang,
-                      navn: fagsakDeltager.navn,
-                      ident: fagsakDeltager.ident,
-                      ikon: fagsakDeltager.harTilgang ? (
-                          ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
-                      ) : (
-                          <IkkeTilgang heigth={30} width={30} />
-                      ),
-                  })),
+                  data: fagsakDeltagere.data.map((fagsakDeltager: IFagsakDeltager) => {
+                      return {
+                          adressebeskyttelseGradering: fagsakDeltager.adressebeskyttelseGradering,
+                          fagsakId: fagsakDeltager.fagsakId,
+                          harTilgang: fagsakDeltager.harTilgang,
+                          navn: fagsakDeltager.navn,
+                          ident: fagsakDeltager.ident,
+                          ikon: fagsakDeltager.harTilgang ? (
+                              ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
+                          ) : (
+                              <IkkeTilgang heigth={30} width={30} />
+                          ),
+                          rolle:
+                              fagsakdeltagerRoller[fagsakDeltager.rolle][
+                                  fagsakDeltager.kjønn ?? kjønnType.UKJENT
+                              ],
+                      };
+                  }),
               }
             : fagsakDeltagere;
     };
@@ -95,19 +102,19 @@ const FagsakDeltagerSøk: React.FC = () => {
         <>
             <Søk
                 søk={søk}
-                label={'Søk på fnr eller d-nummer'}
-                placeholder={'Søk på fnr eller d-nummer'}
-                nullstillSøkResultater={() => settFagsakDeltagere(byggTomRessurs())}
-                søkResultater={mapTilSøkResultater()}
-                søkResultatOnClick={(søkResultat: ISøkResultat) =>
-                    søkResultat.fagsakId
-                        ? history.push(`/fagsak/${søkResultat.fagsakId}/saksoversikt`)
-                        : søkResultat.harTilgang && settDeltagerForOpprettFagsak(søkResultat)
+                label={'Søk. Tast inn fødselsnummer eller d-nummer, 11 siffer'}
+                placeholder={'Søk'}
+                nullstillSøkeresultater={() => settFagsakDeltagere(byggTomRessurs())}
+                søkeresultater={mapTilSøkeresultater()}
+                søkeresultatOnClick={(søkeresultat: ISøkeresultat) =>
+                    søkeresultat.fagsakId
+                        ? history.push(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`)
+                        : søkeresultat.harTilgang && settDeltagerForOpprettFagsak(søkeresultat)
                 }
             />
 
             <OpprettFagsakModal
-                søkResultat={deltagerForOpprettFagsak}
+                søkeresultat={deltagerForOpprettFagsak}
                 lukkModal={() => settDeltagerForOpprettFagsak(undefined)}
             />
         </>
