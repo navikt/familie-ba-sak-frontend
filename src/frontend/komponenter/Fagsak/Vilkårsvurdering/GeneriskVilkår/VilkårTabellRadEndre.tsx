@@ -260,12 +260,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     <FamilieCheckbox
                         erLesevisning={false}
                         label={'Vurderingen er et avslag'}
-                        onChange={event => {
+                        checked={redigerbartVilkår.verdi.erAvslag}
+                        onChange={() => {
                             validerOgSettRedigerbartVilkår({
                                 ...redigerbartVilkår,
                                 verdi: {
                                     ...redigerbartVilkår.verdi,
-                                    erAvslag: event.target.checked,
+                                    erAvslag: !redigerbartVilkår.verdi.erAvslag,
                                 },
                             });
                         }}
