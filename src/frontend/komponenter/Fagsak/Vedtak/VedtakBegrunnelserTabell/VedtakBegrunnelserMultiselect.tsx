@@ -29,7 +29,6 @@ import {
     vedtakBegrunnelseTyper,
 } from '../../../../typer/vedtak';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
-import SkjultLabel from '../../../Felleskomponenter/SkjultLabel';
 import useVedtakBegrunnelseMultiselect from './useVedtakBegrunnelseMultiselect';
 
 interface IVedtakBegrunnelseMultiselect {
@@ -110,7 +109,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             isDisabled={erLesevisning || vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             feil={submitForPeriode?.feilmelding}
-            label={<SkjultLabel>Begrunnelse(r)</SkjultLabel>}
+            label="Begrunnelse(r) i brev"
             creatable={false}
             erLesevisning={erLesevisning}
             isMulti={true}
