@@ -29,7 +29,13 @@ interface IProps {
 
 const Tabell = styled.table`
     table-layout: fixed;
+    td:first-child .checkboks + .skjemaelement__label {
+        margin-bottom: 1rem;
+        text-indent: 2rem;
+        width: 13rem;
+    }
 `;
+// Midlertidig styling. Se issue: https://github.com/navikt/nav-frontend-moduler/issues/997
 
 const TabellHeader = styled.th`
     &:nth-of-type(1) {

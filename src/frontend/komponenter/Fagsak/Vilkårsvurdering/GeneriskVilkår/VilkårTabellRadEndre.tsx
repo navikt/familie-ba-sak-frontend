@@ -6,6 +6,7 @@ import navFarger from 'nav-frontend-core';
 import { Radio } from 'nav-frontend-skjema';
 
 import {
+    FamilieCheckbox,
     FamilieKnapp,
     FamilieRadioGruppe,
     FamilieTextareaControlled,
@@ -13,6 +14,7 @@ import {
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
@@ -21,8 +23,10 @@ import {
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Slett from '../../../../ikoner/Slett';
+import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -86,9 +90,15 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         settVilkårSubmit,
     } = useVilkårsvurdering();
 
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, åpenBehandling } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
+    const { toggles } = useApp();
     const leseVisning = erLesevisning();
+    const årsakErIkkeSøknad =
+        åpenBehandling.status === RessursStatus.SUKSESS &&
+        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD;
+
+    const visAvslag = toggles[ToggleNavn.visAvslag];
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
@@ -244,6 +254,25 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     }
                 />
             </FamilieRadioGruppe>
+            {visAvslag &&
+                redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                !årsakErIkkeSøknad && (
+                    <FamilieCheckbox
+                        erLesevisning={false}
+                        label={'Vurderingen er et avslag'}
+                        checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
+                        onChange={() => {
+                            validerOgSettRedigerbartVilkår({
+                                ...redigerbartVilkår,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
+                                        .erEksplisittAvslagPåSøknad,
+                                },
+                            });
+                        }}
+                    />
+                )}
 
             <VelgPeriode
                 hjelpetekst={
