@@ -277,7 +277,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
             <VelgPeriode
                 hjelpetekst={
-                    'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.'
+                    redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
+                        ? 'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette. AVSLAGSTEKST HER' // TODO: Add
+                        : 'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.'
                 }
                 redigerbartVilkår={redigerbartVilkår}
                 validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
