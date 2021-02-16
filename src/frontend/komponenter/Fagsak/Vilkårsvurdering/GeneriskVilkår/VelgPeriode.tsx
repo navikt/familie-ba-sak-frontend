@@ -12,7 +12,7 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { nyPeriode } from '../../../../typer/periode';
-import { IVilkårResultat } from '../../../../typer/vilkår';
+import { IVilkårResultat, Resultat } from '../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 
@@ -85,6 +85,7 @@ const VelgPeriode: React.FC<IProps> = ({
             <FlexDiv>
                 {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.fom) && (
                     <div>
+                        {console.log(redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad)}
                         <FamilieDatovelger
                             allowInvalidDateSelection={false}
                             limitations={{
@@ -95,6 +96,7 @@ const VelgPeriode: React.FC<IProps> = ({
                                 redigerbartVilkår.verdi
                             )}__fastsett-periode-fom`}
                             label={
+                                redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                                 redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
                                     ? 'F.o.m (valgfri)'
                                     : 'F.o.m'
