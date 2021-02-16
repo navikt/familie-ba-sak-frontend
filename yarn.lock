@@ -755,10 +755,10 @@
     react-day-picker "^7.4.8"
     react-select "^3.1.1"
 
-"@navikt/familie-header@^2.0.26":
-  version "2.0.26"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.26.tgz#6fb5319fa4bd64f2a51056cb12b24d715c15af30"
-  integrity sha512-0k1X8GmxOCLWUEOcHkmJ7qnAiUcMeZlbLgIqUfxaJP2939hZyPoqXscX2C1oHiGSF34eUy/oTnjKvh80p7xw7A==
+"@navikt/familie-header@^2.0.27":
+  version "2.0.27"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-2.0.27.tgz#9862327e941b2f940b1990df261a41f270f36042"
+  integrity sha512-JOJB56LTLNXNAClDQ0Sv+FBTEtMUBqXpMIu4JGqthOoI+NJAJ/ciAfSWHOFyqHVZLJd3/AmZacjMlnwj6B0iVA==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/ds-icons" "^0.1.5"
