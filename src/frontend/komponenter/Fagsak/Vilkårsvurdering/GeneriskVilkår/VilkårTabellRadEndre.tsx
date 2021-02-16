@@ -115,6 +115,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     ...redigerbartVilkår.verdi.resultat,
                     verdi: resultat,
                 },
+                erEksplisittAvslagPåSøknad: undefined,
             },
         });
     };
