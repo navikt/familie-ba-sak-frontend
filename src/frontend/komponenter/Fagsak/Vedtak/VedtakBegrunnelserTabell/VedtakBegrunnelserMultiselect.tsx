@@ -69,7 +69,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             propSelectStyles={{
                 container: (provided, _) => ({
                     ...provided,
-                    width: '25rem',
+                    maxWidth: '25rem',
                 }),
                 groupHeading: (provided, _) => ({
                     ...provided,
