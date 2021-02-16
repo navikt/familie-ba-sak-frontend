@@ -34,7 +34,7 @@
     "@navikt/familie-backend": "^5.0.21",
     "@navikt/familie-clipboard": "^3.1.0",
     "@navikt/familie-form-elements": "^2.0.16",
-    "@navikt/familie-header": "2.0.25-alpha.1",
+    "@navikt/familie-header": "2.0.25-alpha.2",
     "@navikt/familie-http": "^1.0.1",
     "@navikt/familie-ikoner": "^3.1.0",
     "@navikt/familie-logging": "^1.0.2",
