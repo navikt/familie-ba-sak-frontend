@@ -8,6 +8,7 @@ import { IDokumentInfo } from '@navikt/familie-typer';
 
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { EksternLenke } from '../../../ikoner/EksternLenke';
+import StyledBaseButton from '../../Felleskomponenter/StyledBaseButton';
 
 const DokumentInfoStripeContainer = styled.div`
     display: flex;
@@ -34,7 +35,7 @@ const StyledDokumentIkonDiv = styled.div`
     min-height: 48px;
 `;
 
-const StyledÅpenDokument = styled.button`
+const StyledÅpenDokument = styled(StyledBaseButton)`
     margin-left: 10px;
 `;
 

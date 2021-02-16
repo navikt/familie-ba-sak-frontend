@@ -8,12 +8,13 @@ import navFarger from 'nav-frontend-core';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { TidslinjeVindu, useTidslinje } from '../../../context/TidslinjeContext';
+import StyledBaseButton from '../../Felleskomponenter/StyledBaseButton';
 
 interface IEtikettProp {
     etikett: Skalaetikett;
 }
 
-const EtikettKnapp = styled.button<{ disabled: boolean; valgt: boolean }>`
+const EtikettKnapp = styled(StyledBaseButton)<{ disabled: boolean; valgt: boolean }>`
     padding: 3px 3px 3px ${({ valgt }) => (valgt ? '5px' : '3px')};
     width: 90%;
     text-align: left;

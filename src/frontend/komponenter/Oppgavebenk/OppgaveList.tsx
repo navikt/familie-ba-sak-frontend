@@ -20,6 +20,7 @@ import {
     PrioritetFilter,
 } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
+import StyledBaseButton from '../Felleskomponenter/StyledBaseButton';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
@@ -170,7 +171,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                             {oppg.oppgavetype
                                                 ? oppgaveTypeFilter[oppg.oppgavetype]?.id ===
                                                       OppgavetypeFilter.JFR && (
-                                                      <button
+                                                      <StyledBaseButton
                                                           key={'tiloppg'}
                                                           onClick={() => {
                                                               visTilgangsmodalEllerSendVidere(oppg);
