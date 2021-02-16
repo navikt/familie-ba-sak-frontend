@@ -482,7 +482,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                 : dokument.logiskeVedlegg,
                         };
                     }),
-                    knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,
+                    knyttTilFagsak: tilknyttedeBehandlingIder.length > 0 || knyttTilNyBehandling,
                     tilknyttedeBehandlingIder: tilknyttedeBehandlingIder,
                     opprettOgKnyttTilNyBehandling: knyttTilNyBehandling,
                     nyBehandlingstype: nyBehandlingstype,
