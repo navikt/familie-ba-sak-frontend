@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StyledBaseButton = styled.button`
+const FamilieBaseKnapp = styled.button`
     background: none;
     color: inherit;
     border: none;
@@ -10,4 +10,4 @@ const StyledBaseButton = styled.button`
     outline: inherit;
 `;
 
-export default StyledBaseButton;
+export default FamilieBaseKnapp;

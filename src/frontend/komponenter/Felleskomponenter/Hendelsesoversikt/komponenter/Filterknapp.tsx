@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 
 import { randomUUID } from '../../../../utils/commons';
-import StyledBaseButton from '../../StyledBaseButton';
+import FamilieBaseKnapp from '../../FamilieBaseKnapp';
 
 interface IFilterknappProps {
     aktiv?: boolean;
@@ -14,7 +14,7 @@ interface IFilterknappProps {
     onClick: () => void;
 }
 
-const StyledButton = styled(StyledBaseButton)<IFilterknappProps>`
+const StyledButton = styled(FamilieBaseKnapp)<IFilterknappProps>`
     min-height: 50px;
     width: 7.5rem;
     display: flex;

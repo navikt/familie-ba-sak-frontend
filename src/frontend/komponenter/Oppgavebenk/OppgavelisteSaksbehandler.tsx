@@ -9,7 +9,7 @@ import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { IOppgave, OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import StyledBaseButton from '../Felleskomponenter/StyledBaseButton';
+import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
@@ -62,7 +62,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         <div className={'kolonne'}>
             <Normaltekst>{oppgave.tilordnetRessurs}</Normaltekst>
             {oppgaveTypeErStøttet && (
-                <StyledBaseButton
+                <FamilieBaseKnapp
                     key={'tilbakestill'}
                     onClick={() => {
                         tilbakestillFordelingPåOppgave(oppgave).then(
@@ -87,7 +87,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         <div className={'kolonne'}>
             <Normaltekst>Ikke tildelt</Normaltekst>
             {oppgaveTypeErStøttet && (
-                <StyledBaseButton
+                <FamilieBaseKnapp
                     key={'plukk'}
                     onClick={async () => {
                         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
