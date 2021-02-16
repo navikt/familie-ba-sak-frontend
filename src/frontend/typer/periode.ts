@@ -26,6 +26,9 @@ export const periodeToString = (periode: IPeriode, format: datoformat = datoform
 };
 
 export const periodeDiff = (første: IPeriode, annen: IPeriode) => {
+    if (!første.fom && !første.tom) {
+        return 1;
+    }
     return familieDayjsDiff(
         isoStringToDayjs(første.fom, TIDENES_ENDE),
         isoStringToDayjs(annen.fom, TIDENES_ENDE)
