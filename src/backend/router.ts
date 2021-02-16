@@ -3,13 +3,8 @@ import path from 'path';
 import { Response, Request, Router } from 'express';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
 
-import {
-    Client,
-    ensureAuthenticated,
-    logRequest,
-    LOG_LEVEL,
-    envVar,
-} from '@navikt/familie-backend';
+import { Client, ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
+import { LOG_LEVEL } from '@navikt/familie-logging';
 
 import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';

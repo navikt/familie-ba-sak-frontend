@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 
 import styled from 'styled-components';
 
@@ -12,6 +12,7 @@ import {
     FormatOptionLabelMeta,
     GroupType,
     ISelectOption,
+    MultiValueProps,
 } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -29,7 +30,6 @@ import {
     vedtakBegrunnelseTyper,
 } from '../../../../typer/vedtak';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
-import SkjultLabel from '../../../Felleskomponenter/SkjultLabel';
 import useVedtakBegrunnelseMultiselect from './useVedtakBegrunnelseMultiselect';
 
 interface IVedtakBegrunnelseMultiselect {
@@ -60,23 +60,26 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             ? vedtakBegrunnelseSubmit
             : undefined;
 
+    const vedtakBegrunnelseId = `vedtakbegrunnelser_${lagPeriodeId(periode)}`;
+
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
 
     return (
         <FamilieReactSelect
+            id={vedtakBegrunnelseId}
             value={valgteBegrunnelser}
             propSelectStyles={{
-                container: (provided, _) => ({
+                container: (provided: CSSProperties) => ({
                     ...provided,
                     width: '25rem',
                 }),
-                groupHeading: (provided, _) => ({
+                groupHeading: (provided: CSSProperties) => ({
                     ...provided,
                     textTransform: 'none',
                 }),
-                multiValue: (provided, props) => {
+                multiValue: (provided: CSSProperties, props: MultiValueProps<ISelectOption>) => {
                     const vedtakBegrunnelseType:
                         | VedtakBegrunnelseType
                         | undefined = finnVedtakBegrunnelseType(
@@ -91,13 +94,13 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                         borderRadius: '0.5rem',
                     };
                 },
-                multiValueLabel: (provided, _) => ({
+                multiValueLabel: (provided: CSSProperties) => ({
                     ...provided,
                     whiteSpace: 'pre-wrap',
                     textOverflow: 'hidden',
                     overflow: 'hidden',
                 }),
-                multiValueRemove: provided => ({
+                multiValueRemove: (provided: CSSProperties) => ({
                     ...provided,
                     ':hover': {
                         backgroundColor: navFarger.navBla,
@@ -110,7 +113,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             isDisabled={erLesevisning || vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             feil={submitForPeriode?.feilmelding}
-            label={<SkjultLabel>Begrunnelse(r)</SkjultLabel>}
+            label="Begrunnelse(r) i brev"
             creatable={false}
             erLesevisning={erLesevisning}
             isMulti={true}

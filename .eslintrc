@@ -42,7 +42,7 @@
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-unused-vars": ["warn", { "vars": "all","args": "all", "argsIgnorePattern": "^_" }],
         "react-app/react-hooks/exhaustive-deps": "off",
-        "import/named": "error",
+        "import/named": "off",
         "import/namespace": "error",
         "import/default": "error",
         "import/export": "error",

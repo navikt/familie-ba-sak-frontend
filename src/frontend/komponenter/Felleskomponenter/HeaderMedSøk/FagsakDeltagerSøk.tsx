@@ -2,14 +2,20 @@ import React, { useState } from 'react';
 
 import { useHistory } from 'react-router';
 
-import AlertStripe from 'nav-frontend-alertstriper';
-
-import { Søk } from '@navikt/familie-header';
+import { ikoner, Søk, ISøkeresultat } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    byggFeiletRessurs,
+    byggFunksjonellFeilRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    kjønnType,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
-import { IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
-import FagsakDeltagerkort from './FagsakDeltagerkort';
+import IkkeTilgang from '../../../ikoner/IkkeTilgang';
+import { fagsakdeltagerRoller, IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import OpprettFagsakModal from './OpprettFagsakModal';
 
 // eslint-disable-next-line
@@ -18,94 +24,97 @@ const validator = require('@navikt/fnrvalidator');
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
     const history = useHistory();
-    const [resultat, settResultat] = React.useState<IFagsakDeltager[] | undefined>(undefined);
-    const [spinner, settSpinner] = React.useState<boolean>(false);
-    const [søkfeil, settSøkfeil] = React.useState<string | undefined>(undefined);
+    const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(
+        byggTomRessurs()
+    );
+
     const [deltagerForOpprettFagsak, settDeltagerForOpprettFagsak] = useState<
-        IFagsakDeltager | undefined
+        ISøkeresultat | undefined
     >(undefined);
-
-    const slettResultat = (): void => {
-        settSøkfeil(undefined);
-        settResultat(undefined);
-    };
-
-    const søk = (personIdent: string): void => {
-        slettResultat();
-        settSpinner(true);
-        request<ISøkParam, IFagsakDeltager[]>({
-            method: 'POST',
-            url: 'familie-ba-sak/api/fagsaker/sok',
-            data: {
-                personIdent,
-            },
-        })
-            .then((response: Ressurs<IFagsakDeltager[]>) => {
-                settSpinner(false);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settSøkfeil(undefined);
-                    settResultat(response.data);
-                } else if (response.status === RessursStatus.IKKE_HENTET) {
-                    settSøkfeil('Person ikke funnet');
-                } else if (
-                    response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    response.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    settSøkfeil(response.frontendFeilmelding);
-                }
-            })
-            .catch(error => {
-                settSøkfeil('Ukjent API feil: ' + error);
-            });
-    };
 
     const fnrValidator = (verdi: string): boolean => {
         return validator.idnr(verdi).status === 'valid';
+    };
+
+    const søk = (personIdent: string): void => {
+        if (personIdent === '') {
+            settFagsakDeltagere(byggTomRessurs);
+            return;
+        }
+
+        if (fnrValidator(personIdent) || process.env.NODE_ENV === 'development') {
+            settFagsakDeltagere(byggHenterRessurs());
+            request<ISøkParam, IFagsakDeltager[]>({
+                method: 'POST',
+                url: 'familie-ba-sak/api/fagsaker/sok',
+                data: {
+                    personIdent,
+                },
+            })
+                .then((response: Ressurs<IFagsakDeltager[]>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settFagsakDeltagere(response);
+                    } else if (
+                        response.status === RessursStatus.FEILET ||
+                        response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        response.status === RessursStatus.IKKE_TILGANG
+                    ) {
+                        settFagsakDeltagere(response);
+                    }
+                })
+                .catch(_ => {
+                    settFagsakDeltagere(byggFeiletRessurs('Søk feilet'));
+                });
+        } else {
+            settFagsakDeltagere(
+                byggFunksjonellFeilRessurs('Ugyldig fødsels- eller d-nummer (11 siffer)')
+            );
+        }
+    };
+
+    const mapTilSøkeresultater = (): Ressurs<ISøkeresultat[]> => {
+        return fagsakDeltagere.status === RessursStatus.SUKSESS
+            ? {
+                  ...fagsakDeltagere,
+                  data: fagsakDeltagere.data.map((fagsakDeltager: IFagsakDeltager) => {
+                      return {
+                          adressebeskyttelseGradering: fagsakDeltager.adressebeskyttelseGradering,
+                          fagsakId: fagsakDeltager.fagsakId,
+                          harTilgang: fagsakDeltager.harTilgang,
+                          navn: fagsakDeltager.navn,
+                          ident: fagsakDeltager.ident,
+                          ikon: fagsakDeltager.harTilgang ? (
+                              ikoner[`${fagsakDeltager.rolle}_${fagsakDeltager.kjønn}`]
+                          ) : (
+                              <IkkeTilgang heigth={30} width={30} />
+                          ),
+                          rolle:
+                              fagsakdeltagerRoller[fagsakDeltager.rolle][
+                                  fagsakDeltager.kjønn ?? kjønnType.UKJENT
+                              ],
+                      };
+                  }),
+              }
+            : fagsakDeltagere;
     };
 
     return (
         <>
             <Søk
                 søk={søk}
-                validator={(process.env.NODE_ENV !== 'development' && fnrValidator) || undefined}
-                spinner={spinner}
-                autoSøk={true}
-                onChange={slettResultat}
-            >
-                {!resultat && søkfeil && <AlertStripe type="feil">{søkfeil}</AlertStripe>}
-                {!resultat && !søkfeil && spinner && (
-                    <AlertStripe type={'info'}>Søker...</AlertStripe>
-                )}
-                {!resultat && !søkfeil && !spinner && (
-                    <AlertStripe type="info">Tast inn fødselsnummer eller d-nummer</AlertStripe>
-                )}
-                {resultat && resultat.length === 0 && (
-                    <AlertStripe type={'advarsel'}>Beklager, ingen treff</AlertStripe>
-                )}
-                {resultat &&
-                    resultat.length > 0 &&
-                    resultat.map((deltager, index) => {
-                        return (
-                            <FagsakDeltagerkort
-                                key={index}
-                                deltager={deltager}
-                                index={index}
-                                onClick={() => {
-                                    resultat[index].fagsakId
-                                        ? history.push(
-                                              `/fagsak/${resultat[index].fagsakId}/saksoversikt`
-                                          )
-                                        : deltager.harTilgang &&
-                                          settDeltagerForOpprettFagsak(deltager);
-                                }}
-                            />
-                        );
-                    })}
-            </Søk>
+                label={'Søkefelt. Fødsels- eller D-nummer (11 siffer)'}
+                placeholder={'Fødsels- eller D-nummer (11 siffer)'}
+                nullstillSøkeresultater={() => settFagsakDeltagere(byggTomRessurs())}
+                søkeresultater={mapTilSøkeresultater()}
+                søkeresultatOnClick={(søkeresultat: ISøkeresultat) =>
+                    søkeresultat.fagsakId
+                        ? history.push(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`)
+                        : søkeresultat.harTilgang && settDeltagerForOpprettFagsak(søkeresultat)
+                }
+            />
 
             <OpprettFagsakModal
-                deltager={deltagerForOpprettFagsak}
+                søkeresultat={deltagerForOpprettFagsak}
                 lukkModal={() => settDeltagerForOpprettFagsak(undefined)}
             />
         </>

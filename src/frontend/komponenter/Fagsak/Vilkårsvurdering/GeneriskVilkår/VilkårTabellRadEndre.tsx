@@ -58,11 +58,6 @@ const Container = styled.div`
     max-width: 30rem;
     border-left: 1px solid ${navFarger.navBlaLighten20};
     padding-left: 2rem;
-    .skjemagruppe radiogruppe {
-        :last-child {
-            color: red;
-        }
-    }
     .skjemagruppe.radiogruppe {
         margin-bottom: 0;
     }
