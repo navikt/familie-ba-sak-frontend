@@ -102,8 +102,8 @@ const FagsakDeltagerSøk: React.FC = () => {
         <>
             <Søk
                 søk={søk}
-                label={'Søk'}
-                placeholder={'Søk'}
+                label={'Søkefelt. Fødsels- eller D-nummer (11 siffer)'}
+                placeholder={'Fødsels- eller D-nummer (11 siffer)'}
                 nullstillSøkeresultater={() => settFagsakDeltagere(byggTomRessurs())}
                 søkeresultater={mapTilSøkeresultater()}
                 søkeresultatOnClick={(søkeresultat: ISøkeresultat) =>
