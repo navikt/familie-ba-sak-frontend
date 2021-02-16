@@ -71,7 +71,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
         vilkårResultat
     );
 
-    const datofelterErTomme =
+    const periodeErTom =
         !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;
 
     const toggleForm = (visAlert: boolean) => {
@@ -99,9 +99,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                 <td>
                     <Normaltekst
                         children={
-                            datofelterErTomme
-                                ? '-'
-                                : periodeToString(vilkårResultat.verdi.periode.verdi)
+                            periodeErTom ? '-' : periodeToString(vilkårResultat.verdi.periode.verdi)
                         }
                     />
                 </td>
