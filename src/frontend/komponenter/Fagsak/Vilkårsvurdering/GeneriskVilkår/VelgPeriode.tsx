@@ -12,7 +12,7 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { nyPeriode } from '../../../../typer/periode';
-import { IVilkårResultat, Resultat } from '../../../../typer/vilkår';
+import { IVilkårResultat } from '../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 
@@ -61,18 +61,6 @@ const VelgPeriode: React.FC<IProps> = ({
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
 
-    const settHjelpetekst = () => {
-        if (redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT) {
-            return 'Oppgi datoen/perioden hvor vilkåret er oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.';
-        } else if (redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad) {
-            return 'Oppgi eventuell periode/startdato hvor vilkåret ikke er oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.';
-        } else if (redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT) {
-            return 'Oppgi datoen/perioden hvor vilkåret ikke er oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.';
-        } else {
-            return 'Oppgi datoen/perioden hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.';
-        }
-    };
-
     return (
         <MarginSkjemaGruppe
             feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
@@ -87,7 +75,9 @@ const VelgPeriode: React.FC<IProps> = ({
                 <StyledLegend>
                     <StyledElement>Velg periode</StyledElement>
                     <Hjelpetekst tittel={'Hjelpetekst fastsett periode'}>
-                        {settHjelpetekst()}
+                        {
+                            'Oppgi startdato/periode hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut fra dette. Dersom vurderingen gjelder et avslag er ikke periode påkrevd.'
+                        }
                     </Hjelpetekst>
                 </StyledLegend>
             )}
