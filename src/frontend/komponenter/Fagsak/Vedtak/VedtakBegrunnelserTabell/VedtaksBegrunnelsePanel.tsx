@@ -23,7 +23,7 @@ interface IVedtakBegrunnelserTabell {
 
 const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
     margin-bottom: 1.5rem;
-    width: 49rem;
+    max-width: 49rem;
 
     .ekspanderbartPanel__hode {
         padding-top: 0;
