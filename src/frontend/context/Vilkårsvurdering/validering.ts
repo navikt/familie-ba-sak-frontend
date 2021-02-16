@@ -9,7 +9,10 @@ export const validerVilkår = (
 ): FeltState<IVilkårResultat> => {
     const nyPeriode: FeltState<IPeriode> = nyttVilkårResultat.verdi.periode.valider(
         nyttVilkårResultat.verdi.periode,
-        avhengigheter
+        {
+            ...avhengigheter,
+            erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad,
+        }
     );
 
     const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
@@ -43,7 +46,7 @@ export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonRe
             ...personResultat,
             vilkårResultater: personResultat.vilkårResultater.map(
                 (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
-                    return validerVilkår(vilkårResultat);
+                    return validerVilkår(vilkårResultat, { person: personResultat.person });
                 }
             ),
         };
