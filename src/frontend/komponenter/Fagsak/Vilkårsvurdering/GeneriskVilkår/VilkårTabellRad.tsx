@@ -72,7 +72,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
     );
 
     const visIkkeSatt =
-        !ekspandertVilkår &&
+        (erLesevisning() || !ekspandertVilkår) &&
         !redigerbartVilkår.verdi.periode.verdi.fom &&
         !redigerbartVilkår.verdi.periode.verdi.tom;
 

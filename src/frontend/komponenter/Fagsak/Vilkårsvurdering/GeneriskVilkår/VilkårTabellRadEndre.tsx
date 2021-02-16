@@ -259,7 +259,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                 !årsakErIkkeSøknad && (
                     <FamilieCheckbox
-                        erLesevisning={false}
+                        erLesevisning={leseVisning}
                         label={'Vurderingen er et avslag'}
                         checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
                         onChange={() => {

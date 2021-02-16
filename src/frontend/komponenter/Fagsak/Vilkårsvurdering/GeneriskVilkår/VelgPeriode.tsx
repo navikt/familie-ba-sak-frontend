@@ -85,40 +85,42 @@ const VelgPeriode: React.FC<IProps> = ({
             )}
 
             <FlexDiv>
-                <div>
-                    <FamilieDatovelger
-                        allowInvalidDateSelection={false}
-                        limitations={{
-                            maxDate: new Date().toISOString(),
-                        }}
-                        erLesesvisning={lesevisning}
-                        id={`${vilkårPeriodeFeilmeldingId(
-                            redigerbartVilkår.verdi
-                        )}__fastsett-periode-fom`}
-                        label={
-                            redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
-                                ? 'F.o.m (valgfri)'
-                                : 'F.o.m'
-                        }
-                        placeholder={datoformatNorsk.DATO}
-                        onChange={(dato?: ISODateString) => {
-                            validerOgSettRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    periode: {
-                                        ...redigerbartVilkår.verdi.periode,
-                                        verdi: nyPeriode(
-                                            dato,
-                                            redigerbartVilkår.verdi.periode.verdi.tom
-                                        ),
+                {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.fom) && (
+                    <div>
+                        <FamilieDatovelger
+                            allowInvalidDateSelection={false}
+                            limitations={{
+                                maxDate: new Date().toISOString(),
+                            }}
+                            erLesesvisning={lesevisning}
+                            id={`${vilkårPeriodeFeilmeldingId(
+                                redigerbartVilkår.verdi
+                            )}__fastsett-periode-fom`}
+                            label={
+                                redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
+                                    ? 'F.o.m (valgfri)'
+                                    : 'F.o.m'
+                            }
+                            placeholder={datoformatNorsk.DATO}
+                            onChange={(dato?: ISODateString) => {
+                                validerOgSettRedigerbartVilkår({
+                                    ...redigerbartVilkår,
+                                    verdi: {
+                                        ...redigerbartVilkår.verdi,
+                                        periode: {
+                                            ...redigerbartVilkår.verdi.periode,
+                                            verdi: nyPeriode(
+                                                dato,
+                                                redigerbartVilkår.verdi.periode.verdi.tom
+                                            ),
+                                        },
                                     },
-                                },
-                            });
-                        }}
-                        valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
-                    />
-                </div>
+                                });
+                            }}
+                            valgtDato={redigerbartVilkår.verdi.periode.verdi.fom}
+                        />
+                    </div>
+                )}
                 {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.tom) && (
                     <div>
                         <FamilieDatovelger
