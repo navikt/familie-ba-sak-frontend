@@ -38,9 +38,10 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
 
         const { settFagsak } = useFagsakRessurser();
 
-        const [vedtakBegrunnelseSubmit, settVedtakBegrunnelseSubmit] = useState<
-            IVedtakBegrunnelseSubmit
-        >(initialVedtakBegrunnelseSubmit);
+        const [
+            vedtakBegrunnelseSubmit,
+            settVedtakBegrunnelseSubmit,
+        ] = useState<IVedtakBegrunnelseSubmit>(initialVedtakBegrunnelseSubmit);
 
         const [vedtakBegrunnelser, settVedtakBegrunnelser] = React.useState<
             IRestVedtakBegrunnelse[]

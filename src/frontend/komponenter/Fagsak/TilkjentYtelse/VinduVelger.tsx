@@ -6,8 +6,9 @@ import navFarger from 'nav-frontend-core';
 import { Undertekst } from 'nav-frontend-typografi';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
+import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 
-const VinduVelgerKnapp = styled.button<{ valgt: boolean }>`
+const VinduVelgerKnapp = styled(FamilieBaseKnapp)<{ valgt: boolean }>`
     color: ${({ valgt }) => (valgt ? '#fff' : navFarger.navMorkGra)};
     padding: 0.5rem;
     border: 0.0625rem solid ${navFarger.navGra20};
