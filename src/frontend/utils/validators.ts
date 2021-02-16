@@ -93,7 +93,7 @@ export const erPeriodeGyldig = (
         if (erEksplisittAvslagPåSøknad) {
             return !tom
                 ? ok(felt)
-                : feil(felt, 'F.o.m. må settes eller t.o.m må fjernes før du kan gå videre');
+                : feil(felt, 'F.o.m. må settes eller t.o.m. må fjernes før du kan gå videre');
         } else {
             return feil(felt, 'F.o.m. må settes før du kan gå videre');
         }

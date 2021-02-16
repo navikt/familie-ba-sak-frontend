@@ -71,10 +71,8 @@ const VilkårTabellRad: React.FC<IProps> = ({
         vilkårResultat
     );
 
-    const visIkkeSatt =
-        (erLesevisning() || !ekspandertVilkår) &&
-        !redigerbartVilkår.verdi.periode.verdi.fom &&
-        !redigerbartVilkår.verdi.periode.verdi.tom;
+    const datofelterErTomme =
+        !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;
 
     const toggleForm = (visAlert: boolean) => {
         if (ekspandertVilkår && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår)) {
@@ -101,8 +99,8 @@ const VilkårTabellRad: React.FC<IProps> = ({
                 <td>
                     <Normaltekst
                         children={
-                            visIkkeSatt
-                                ? 'Ikke satt'
+                            datofelterErTomme
+                                ? '-'
                                 : periodeToString(vilkårResultat.verdi.periode.verdi)
                         }
                     />

@@ -12,12 +12,11 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { nyPeriode } from '../../../../typer/periode';
-import { IVilkårResultat } from '../../../../typer/vilkår';
+import { IVilkårResultat, Resultat } from '../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 
 interface IProps {
-    hjelpetekst?: string;
     redigerbartVilkår: FeltState<IVilkårResultat>;
     validerOgSettRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
     visFeilmeldinger: boolean;
@@ -55,13 +54,24 @@ const FlexDiv = styled.div`
 `;
 
 const VelgPeriode: React.FC<IProps> = ({
-    hjelpetekst,
     redigerbartVilkår,
     validerOgSettRedigerbartVilkår,
     visFeilmeldinger,
 }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
+
+    const settHjelpetekst = () => {
+        if (redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT) {
+            return 'Oppgi datoen/perioden hvor vilkåret er oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.';
+        } else if (redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad) {
+            return 'Oppgi eventuell periode/startdato hvor vilkåret ikke er oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.';
+        } else if (redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT) {
+            return 'Oppgi datoen/perioden hvor vilkåret ikke er oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.';
+        } else {
+            return 'Oppgi datoen/perioden hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.';
+        }
+    };
 
     return (
         <MarginSkjemaGruppe
@@ -76,11 +86,9 @@ const VelgPeriode: React.FC<IProps> = ({
             {!lesevisning && (
                 <StyledLegend>
                     <StyledElement>Velg periode</StyledElement>
-                    {hjelpetekst && (
-                        <Hjelpetekst tittel={'Hjelpetekst fastsett periode'}>
-                            {hjelpetekst}
-                        </Hjelpetekst>
-                    )}
+                    <Hjelpetekst tittel={'Hjelpetekst fastsett periode'}>
+                        {settHjelpetekst()}
+                    </Hjelpetekst>
                 </StyledLegend>
             )}
 

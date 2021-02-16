@@ -58,6 +58,11 @@ const Container = styled.div`
     max-width: 30rem;
     border-left: 1px solid ${navFarger.navBlaLighten20};
     padding-left: 2rem;
+    .skjemagruppe radiogruppe {
+        :last-child {
+            color: red;
+        }
+    }
     .skjemagruppe.radiogruppe {
         margin-bottom: 0;
     }
@@ -276,11 +281,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 )}
 
             <VelgPeriode
-                hjelpetekst={
-                    redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad
-                        ? 'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette. AVSLAGSTEKST HER' // TODO: Add
-                        : 'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.'
-                }
                 redigerbartVilkår={redigerbartVilkår}
                 validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                 visFeilmeldinger={skalViseFeilmeldinger()}
