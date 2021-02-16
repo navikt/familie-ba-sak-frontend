@@ -8,13 +8,8 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
-import backend, {
-    IApp,
-    ensureAuthenticated,
-    getLogTimestamp,
-    info,
-    envVar,
-} from '@navikt/familie-backend';
+import backend, { IApp, ensureAuthenticated, envVar } from '@navikt/familie-backend';
+import { logInfo } from '@navikt/familie-logging';
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
@@ -64,10 +59,6 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     app.use('/', setupRouter(azureAuthClient, router, middleware));
 
     app.listen(port, '0.0.0.0', () => {
-        info(
-            `${getLogTimestamp()}: server startet på port ${port}. Build version: ${envVar(
-                'APP_VERSION'
-            )}.`
-        );
+        logInfo(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);
     });
 });

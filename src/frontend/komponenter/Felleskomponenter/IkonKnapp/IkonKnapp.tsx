@@ -38,7 +38,7 @@ const IkonKnapp: React.FC<IProps & KnappBaseProps> = ({
             className={classNames(className, 'ikon-knapp', knappPosisjon)}
             id={id}
             onClick={onClick}
-            type="flat"
+            type={props.type ?? 'flat'}
             mini={mini}
             kompakt={true}
             {...props}
