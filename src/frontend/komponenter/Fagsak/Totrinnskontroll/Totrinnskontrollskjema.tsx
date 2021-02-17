@@ -30,10 +30,9 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
     sendInnVedtak,
 }) => {
-    const [
-        totrinnskontrollStatus,
-        settTotrinnskontrollStatus,
-    ] = React.useState<TotrinnskontrollBeslutning>(TotrinnskontrollBeslutning.IKKE_VURDERT);
+    const [totrinnskontrollStatus, settTotrinnskontrollStatus] = React.useState<
+        TotrinnskontrollBeslutning
+    >(TotrinnskontrollBeslutning.IKKE_VURDERT);
     const [totrinnskontrollBegrunnelse, settTotrinnskontrollBegrunnelse] = React.useState<string>(
         ''
     );

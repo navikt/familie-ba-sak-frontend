@@ -452,6 +452,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     innloggetSaksbehandler?.enhet ?? '9999'
                 }&ferdigstill=true`,
                 data: {
+                    journalpostTittel: oppdatertData.data.journalpost.tittel,
                     bruker: {
                         navn: person.navn,
                         id: person.personIdent,

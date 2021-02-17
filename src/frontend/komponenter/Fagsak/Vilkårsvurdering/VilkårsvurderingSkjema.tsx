@@ -111,7 +111,9 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     vc.parterDetteGjelderFor.includes(personResultat.person.type)
                                 )
                                 .map((vc: IVilkårConfig) => {
-                                    const vilkårResultater: FeltState<IVilkårResultat>[] = personResultat.vilkårResultater.filter(
+                                    const vilkårResultater: FeltState<
+                                        IVilkårResultat
+                                    >[] = personResultat.vilkårResultater.filter(
                                         (vilkårResultat: FeltState<IVilkårResultat>) =>
                                             vilkårResultat.verdi.vilkårType === vc.key
                                     );
