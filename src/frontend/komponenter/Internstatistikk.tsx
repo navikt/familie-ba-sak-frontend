@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Normaltekst, Sidetittel, Undertittel } from 'nav-frontend-typografi';
+import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -21,16 +21,14 @@ const Internstatistikk: React.FC = () => {
         <Container>
             {internstatistikk.status === RessursStatus.SUKSESS && (
                 <>
-                    <Sidetittel children={'Internstatistikk BA-SAK'} />
-                    <Undertittel children={internstatistikk.data.antallFagsakerTotalt} />
+                    <Undertittel children={'Internstatistikk BA-SAK'} />
+                    <Element children={internstatistikk.data.antallFagsakerTotalt} />
                     <Normaltekst children={'Antall fagsaker totalt'} />
 
-                    <Undertittel children={internstatistikk.data.antallFagsakerLøpende} />
+                    <Element children={internstatistikk.data.antallFagsakerLøpende} />
                     <Normaltekst children={'Antall løpende saker'} />
 
-                    <Undertittel
-                        children={internstatistikk.data.antallBehandlingerIkkeFerdigstilt}
-                    />
+                    <Element children={internstatistikk.data.antallBehandlingerIkkeFerdigstilt} />
                     <Normaltekst children={'Antall behandlinger som ikke er ferdigstilt'} />
                 </>
             )}
