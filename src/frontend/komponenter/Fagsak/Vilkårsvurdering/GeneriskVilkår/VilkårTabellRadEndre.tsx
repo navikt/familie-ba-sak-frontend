@@ -115,6 +115,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     ...redigerbartVilkår.verdi.resultat,
                     verdi: resultat,
                 },
+                erEksplisittAvslagPåSøknad: false,
             },
         });
     };
@@ -258,7 +259,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                 !årsakErIkkeSøknad && (
                     <FamilieCheckbox
-                        erLesevisning={false}
+                        erLesevisning={leseVisning}
                         label={'Vurderingen er et avslag'}
                         checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
                         onChange={() => {
@@ -275,9 +276,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 )}
 
             <VelgPeriode
-                hjelpetekst={
-                    'Oppgi datoen hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli beregnet ut ifra dette.'
-                }
                 redigerbartVilkår={redigerbartVilkår}
                 validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                 visFeilmeldinger={skalViseFeilmeldinger()}
