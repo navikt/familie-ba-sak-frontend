@@ -41,7 +41,7 @@ const FagsakContainer: React.FunctionComponent = () => {
         if (erPåSaksoversikt) {
             loggSidevisning('saksoversikt');
         }
-    }, [history.location.pathname]);
+    }, []);
 
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
