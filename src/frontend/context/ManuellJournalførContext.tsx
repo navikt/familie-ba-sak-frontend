@@ -452,6 +452,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     innloggetSaksbehandler?.enhet ?? '9999'
                 }&ferdigstill=true`,
                 data: {
+                    journalpostTittel: oppdatertData.data.journalpost.tittel,
                     bruker: {
                         navn: person.navn,
                         id: person.personIdent,
@@ -482,7 +483,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                                 : dokument.logiskeVedlegg,
                         };
                     }),
-                    knyttTilFagsak: tilknyttedeBehandlingIder.length > 0,
+                    knyttTilFagsak: tilknyttedeBehandlingIder.length > 0 || knyttTilNyBehandling,
                     tilknyttedeBehandlingIder: tilknyttedeBehandlingIder,
                     opprettOgKnyttTilNyBehandling: knyttTilNyBehandling,
                     nyBehandlingstype: nyBehandlingstype,

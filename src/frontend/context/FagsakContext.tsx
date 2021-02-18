@@ -12,7 +12,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { IFagsak } from '../typer/fagsak';
+import { IFagsak, IInternstatistikk } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
@@ -21,6 +21,9 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsak, settFagsak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
     const [logg, settLogg] = React.useState<Ressurs<ILogg[]>>(byggTomRessurs());
+    const [internstatistikk, settInternstatistikk] = React.useState<Ressurs<IInternstatistikk>>(
+        byggTomRessurs()
+    );
     const { request } = useHttp();
 
     React.useEffect(() => {
@@ -90,7 +93,23 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
+    const hentInternstatistikk = (): void => {
+        settInternstatistikk(byggHenterRessurs());
+        request<void, IInternstatistikk>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/internstatistikk`,
+        })
+            .then((hentetInternstatistikk: Ressurs<IInternstatistikk>) => {
+                settInternstatistikk(hentetInternstatistikk);
+            })
+            .catch(() => {
+                settInternstatistikk(byggFeiletRessurs('Feil ved lasting av internstatistikk'));
+            });
+    };
+
     return {
+        hentInternstatistikk,
+        internstatistikk,
         bruker,
         fagsak,
         hentFagsak,
