@@ -13,6 +13,7 @@ import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import Internstatistikk from './Internstatistikk';
 import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
+import Migrering from './Migrering/Migrering';
 
 const Container: React.FC = () => {
     const { autentisert, systemetLaster, innloggetSaksbehandler } = useApp();
@@ -45,6 +46,7 @@ const Container: React.FC = () => {
                                     component={ManuellJournalfør}
                                 />
                                 <Route path="/internstatistikk" component={Internstatistikk} />
+                                <Route path="/migrering" component={Migrering} />
                             </Switch>
                         </FagsakProvider>
                     </main>
