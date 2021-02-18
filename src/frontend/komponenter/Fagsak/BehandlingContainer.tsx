@@ -34,7 +34,9 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     const sidevisning = history.location.pathname.split('/')[4];
     useEffect(() => {
-        loggSidevisning(sidevisning);
+        if (sidevisning) {
+            loggSidevisning(sidevisning);
+        }
     }, [sidevisning]);
 
     switch (åpenBehandling.status) {
