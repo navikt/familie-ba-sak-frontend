@@ -49,7 +49,9 @@ export const erGyldigMånedDato = (
 
 const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?: string) => {
     const fødselsdato = familieDayjs(person.fødselsdato);
-    const fødselsdatoPluss18 = familieDayjs(person.fødselsdato).add(18, 'year');
+    const fødselsdatoPluss18 = familieDayjs(person.fødselsdato)
+        .add(18, 'year')
+        .set('date', fødselsdato.get('date'));
     const fomDato = familieDayjs(fom);
     const tomDato = tom ? familieDayjs(tom) : undefined;
     return (
