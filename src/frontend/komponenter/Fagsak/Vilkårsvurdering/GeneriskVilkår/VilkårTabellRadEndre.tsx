@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Radio } from 'nav-frontend-skjema';
+import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import {
     FamilieCheckbox,
@@ -59,7 +59,7 @@ const Container = styled.div`
     border-left: 1px solid ${navFarger.navBlaLighten20};
     padding-left: 2rem;
     .skjemagruppe.radiogruppe {
-        margin-bottom: 0;
+        margin-bottom: 0 !important;
     }
     .begrunnelse-textarea {
         min-height: 8rem !important;
@@ -201,157 +201,164 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <Container>
-            <FamilieRadioGruppe
-                erLesevisning={leseVisning}
-                verdi={
-                    redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                        ? vilkårResultatForEkteskapVisning(redigerbartVilkår.verdi.resultat.verdi)
-                        : resultater[redigerbartVilkår.verdi.resultat.verdi]
-                }
-                legend={
-                    vilkårFraConfig.spørsmål
-                        ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
-                        : ''
-                }
-                feil={
-                    redigerbartVilkår.verdi.resultat.valideringsstatus === Valideringsstatus.FEIL &&
-                    skalViseFeilmeldinger()
-                        ? redigerbartVilkår.verdi.resultat.feilmelding
-                        : ''
-                }
-                feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
-            >
-                <Radio
-                    label={'Ja'}
-                    name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                    checked={
+        <SkjemaGruppe
+            feil={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
+            utenFeilPropagering={true}
+        >
+            <Container>
+                <FamilieRadioGruppe
+                    erLesevisning={leseVisning}
+                    verdi={
                         redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                            ? redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
-                            : redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT
+                            ? vilkårResultatForEkteskapVisning(
+                                  redigerbartVilkår.verdi.resultat.verdi
+                              )
+                            : resultater[redigerbartVilkår.verdi.resultat.verdi]
                     }
-                    onChange={() =>
-                        radioOnChange(
+                    legend={
+                        vilkårFraConfig.spørsmål
+                            ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
+                            : ''
+                    }
+                    feil={
+                        redigerbartVilkår.verdi.resultat.valideringsstatus ===
+                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                            ? redigerbartVilkår.verdi.resultat.feilmelding
+                            : ''
+                    }
+                    feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
+                >
+                    <Radio
+                        label={'Ja'}
+                        name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                        checked={
                             redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                ? Resultat.IKKE_OPPFYLT
-                                : Resultat.OPPFYLT
-                        )
-                    }
-                />
-                <Radio
-                    label={'Nei'}
-                    name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
-                    checked={
-                        redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                            ? redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT
-                            : redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
-                    }
-                    onChange={() =>
-                        radioOnChange(
-                            redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
-                                ? Resultat.OPPFYLT
-                                : Resultat.IKKE_OPPFYLT
-                        )
-                    }
-                />
-            </FamilieRadioGruppe>
-            {visAvslag &&
-                redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                !årsakErIkkeSøknad && (
-                    <FamilieCheckbox
-                        erLesevisning={leseVisning}
-                        label={'Vurderingen er et avslag'}
-                        checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
-                        onChange={() => {
-                            validerOgSettRedigerbartVilkår({
-                                ...redigerbartVilkår,
-                                verdi: {
-                                    ...redigerbartVilkår.verdi,
-                                    erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
-                                        .erEksplisittAvslagPåSøknad,
-                                },
-                            });
-                        }}
+                                ? redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
+                                : redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT
+                        }
+                        onChange={() =>
+                            radioOnChange(
+                                redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
+                                    ? Resultat.IKKE_OPPFYLT
+                                    : Resultat.OPPFYLT
+                            )
+                        }
                     />
-                )}
+                    <Radio
+                        label={'Nei'}
+                        name={`${redigerbartVilkår.verdi.vilkårType}_${redigerbartVilkår.verdi.id}`}
+                        checked={
+                            redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
+                                ? redigerbartVilkår.verdi.resultat.verdi === Resultat.OPPFYLT
+                                : redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
+                        }
+                        onChange={() =>
+                            radioOnChange(
+                                redigerbartVilkår.verdi.vilkårType === VilkårType.GIFT_PARTNERSKAP
+                                    ? Resultat.OPPFYLT
+                                    : Resultat.IKKE_OPPFYLT
+                            )
+                        }
+                    />
+                </FamilieRadioGruppe>
+                {visAvslag &&
+                    redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                    !årsakErIkkeSøknad && (
+                        <FamilieCheckbox
+                            erLesevisning={leseVisning}
+                            label={'Vurderingen er et avslag'}
+                            checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
+                            onChange={() => {
+                                validerOgSettRedigerbartVilkår({
+                                    ...redigerbartVilkår,
+                                    verdi: {
+                                        ...redigerbartVilkår.verdi,
+                                        erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
+                                            .erEksplisittAvslagPåSøknad,
+                                    },
+                                });
+                            }}
+                        />
+                    )}
 
-            <VelgPeriode
-                redigerbartVilkår={redigerbartVilkår}
-                validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
-                visFeilmeldinger={skalViseFeilmeldinger()}
-            />
-
-            <FamilieTextareaControlled
-                tekstLesevisning={''}
-                erLesevisning={leseVisning}
-                defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
-                id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
-                label={'Begrunnelse (valgfri)'}
-                textareaClass={'begrunnelse-textarea'}
-                placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
-                value={redigerbartVilkår.verdi.begrunnelse.verdi}
-                feil={
-                    redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
-                        Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                        ? redigerbartVilkår.verdi.begrunnelse.feilmelding
-                        : ''
-                }
-                onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                    validerOgSettRedigerbartVilkår({
-                        ...redigerbartVilkår,
-                        verdi: {
-                            ...redigerbartVilkår.verdi,
-                            begrunnelse: {
-                                ...redigerbartVilkår.verdi.begrunnelse,
-                                verdi: event?.target.value,
-                            },
-                        },
-                    });
-                }}
-            />
-
-            <Knapperad>
-                <div>
-                    <FamilieKnapp
-                        erLesevisning={leseVisning}
-                        onClick={onClickVilkårFerdig}
-                        mini={true}
-                        type={'standard'}
-                        spinner={vilkårSubmit === VilkårSubmit.PUT}
-                        disabled={vilkårSubmit === VilkårSubmit.PUT}
-                    >
-                        Ferdig
-                    </FamilieKnapp>
-                    <FamilieKnapp
-                        style={{ marginLeft: '1rem' }}
-                        erLesevisning={leseVisning}
-                        onClick={() => toggleForm(false)}
-                        mini={true}
-                        type={'flat'}
-                    >
-                        Avbryt
-                    </FamilieKnapp>
-                </div>
-
-                <IkonKnapp
-                    erLesevisning={erLesevisning()}
-                    onClick={() => {
-                        const promise = deleteVilkår(
-                            person.personIdent,
-                            redigerbartVilkår.verdi.id
-                        );
-                        håndterEndringPåVilkårsvurdering(promise);
-                    }}
-                    id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                    spinner={vilkårSubmit === VilkårSubmit.DELETE}
-                    disabled={vilkårSubmit === VilkårSubmit.DELETE}
-                    mini={true}
-                    label={'Fjern'}
-                    knappPosisjon={'venstre'}
-                    ikon={<Slett />}
+                <VelgPeriode
+                    redigerbartVilkår={redigerbartVilkår}
+                    validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
+                    visFeilmeldinger={skalViseFeilmeldinger()}
                 />
-            </Knapperad>
-        </Container>
+
+                <FamilieTextareaControlled
+                    tekstLesevisning={''}
+                    erLesevisning={leseVisning}
+                    defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
+                    id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
+                    label={'Begrunnelse (valgfri)'}
+                    textareaClass={'begrunnelse-textarea'}
+                    placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
+                    value={redigerbartVilkår.verdi.begrunnelse.verdi}
+                    feil={
+                        redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
+                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                            ? redigerbartVilkår.verdi.begrunnelse.feilmelding
+                            : ''
+                    }
+                    onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                        validerOgSettRedigerbartVilkår({
+                            ...redigerbartVilkår,
+                            verdi: {
+                                ...redigerbartVilkår.verdi,
+                                begrunnelse: {
+                                    ...redigerbartVilkår.verdi.begrunnelse,
+                                    verdi: event?.target.value,
+                                },
+                            },
+                        });
+                    }}
+                />
+
+                <Knapperad>
+                    <div>
+                        <FamilieKnapp
+                            erLesevisning={leseVisning}
+                            onClick={onClickVilkårFerdig}
+                            mini={true}
+                            type={'standard'}
+                            spinner={vilkårSubmit === VilkårSubmit.PUT}
+                            disabled={vilkårSubmit === VilkårSubmit.PUT}
+                        >
+                            Ferdig
+                        </FamilieKnapp>
+                        <FamilieKnapp
+                            style={{ marginLeft: '1rem' }}
+                            erLesevisning={leseVisning}
+                            onClick={() => toggleForm(false)}
+                            mini={true}
+                            type={'flat'}
+                        >
+                            Avbryt
+                        </FamilieKnapp>
+                    </div>
+
+                    <IkonKnapp
+                        erLesevisning={erLesevisning()}
+                        onClick={() => {
+                            const promise = deleteVilkår(
+                                person.personIdent,
+                                redigerbartVilkår.verdi.id
+                            );
+                            håndterEndringPåVilkårsvurdering(promise);
+                        }}
+                        id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+                        spinner={vilkårSubmit === VilkårSubmit.DELETE}
+                        disabled={vilkårSubmit === VilkårSubmit.DELETE}
+                        mini={true}
+                        label={'Fjern'}
+                        knappPosisjon={'venstre'}
+                        ikon={<Slett />}
+                    />
+                </Knapperad>
+            </Container>
+        </SkjemaGruppe>
     );
 };
 
