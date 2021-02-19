@@ -40,8 +40,13 @@ const [MigreringProvider, useMigrering] = createUseContext(() => {
             }
         }
 
-        // TODO: Før vi setter saker, bør vi ha en fast sorteringsrekkefølge?
-        settInfotrygdsaker(hentetData.data.saker);
+        settInfotrygdsaker(
+            hentetData.data.saker.sort((a, b) => {
+                const saksnrA = a.saksnr ? parseInt(a.saksnr) : 1000;
+                const saksnrB = b.saksnr ? parseInt(b.saksnr) : 1000;
+                return saksnrA - saksnrB;
+            })
+        );
 
         return '';
     };

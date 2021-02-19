@@ -12,6 +12,22 @@ import { MigreringProvider, useMigrering } from '../../context/MigreringContext'
 import { IInfotrygdSak } from '../../typer/infotrygd';
 import { identValidator } from '../../utils/validators';
 
+const MigreringContainer = styled.div`
+    margin: 16px;
+`;
+
+const FnrFlex = styled.div`
+    margin-top: 32px;
+    margin-bottom: 32px;
+    display: flex;
+`;
+
+const HentSakerKnapp = styled(Knapp)`
+    margin-left: 1rem;
+    margin-top: auto;
+    height: 1rem;
+`;
+
 const MigreringContent: React.FC = () => {
     const { hentSakerForBruker, infotrygdsaker } = useMigrering();
     const [feilmelding, settFeilmelding] = useState('');
@@ -21,22 +37,6 @@ const MigreringContent: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
-
-    const MigreringContainer = styled.div`
-        margin: 16px;
-    `;
-
-    const FnrFlex = styled.div`
-        margin-top: 32px;
-        margin-bottom: 32px;
-        display: flex;
-    `;
-
-    const HentSakerKnapp = styled(Knapp)`
-        margin-left: 1rem;
-        margin-top: auto;
-        height: 1rem;
-    `;
 
     useEffect(() => {
         settFeilmelding('');
@@ -91,9 +91,9 @@ const MigreringContent: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {infotrygdsaker.map((infotrygdsak: IInfotrygdSak) => {
+                        {infotrygdsaker.map((infotrygdsak: IInfotrygdSak, index: number) => {
                             return (
-                                <tr>
+                                <tr key={index}>
                                     <td>
                                         {(infotrygdsak.saksblokk ?? '') +
                                             (infotrygdsak.saksnr ?? '')}
