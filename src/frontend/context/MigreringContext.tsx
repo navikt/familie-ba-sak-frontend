@@ -41,9 +41,10 @@ const [MigreringProvider, useMigrering] = createUseContext(() => {
         }
 
         settInfotrygdsaker(
-            hentetData.data.saker.sort((a, b) => {
-                const saksnrA = a.saksnr ? parseInt(a.saksnr) : 1000;
-                const saksnrB = b.saksnr ? parseInt(b.saksnr) : 1000;
+            // sorter på saksnr, stigende rekkefølge. Saksnr er sjelden et stort tall. Manglende saksnr settes til 1000.
+            hentetData.data.saker.sort((sakA, sakB) => {
+                const saksnrA = sakA.saksnr ? parseInt(sakA.saksnr) : 1000;
+                const saksnrB = sakB.saksnr ? parseInt(sakB.saksnr) : 1000;
                 return saksnrA - saksnrB;
             })
         );
