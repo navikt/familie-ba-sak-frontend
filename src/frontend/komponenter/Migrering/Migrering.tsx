@@ -79,7 +79,6 @@ const MigreringContent: React.FC = () => {
                         <tr>
                             <th>Saksblokk</th>
                             <th>Mottatt</th>
-                            <th>Gjelder</th>
                             <th>Ru</th>
                             <th>Kode</th>
                             <th>Type</th>
@@ -99,7 +98,6 @@ const MigreringContent: React.FC = () => {
                                             (infotrygdsak.saksnr ?? '')}
                                     </td>
                                     <td>{infotrygdsak.mottattdato}</td>
-                                    <td>Barnetrygd</td>
                                     <td>{infotrygdsak.kapittelnr}</td>
                                     <td>
                                         {(infotrygdsak.valg ?? '') +
