@@ -23,6 +23,7 @@ interface IProps {
     maxWidthStyle?: string;
     skalViseNesteKnapp?: boolean;
     skalViseTilbakestillKnapp?: boolean;
+    skalViseForrigeKnapp?: boolean;
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
@@ -59,6 +60,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     maxWidthStyle = '40rem',
     skalViseNesteKnapp = true,
     skalViseTilbakestillKnapp,
+    skalViseForrigeKnapp = true,
 }) => {
     const history = useHistory();
     const { forrigeÅpneSide } = useBehandling();
@@ -100,7 +102,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                     <div />
                 )}
                 <div>
-                    {forrigeOnClick ? (
+                    {forrigeOnClick && skalViseForrigeKnapp ? (
                         <Knapp
                             onClick={() => {
                                 forrigeOnClick();

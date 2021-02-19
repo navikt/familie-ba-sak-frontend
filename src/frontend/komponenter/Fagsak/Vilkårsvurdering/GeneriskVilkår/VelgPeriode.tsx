@@ -85,7 +85,6 @@ const VelgPeriode: React.FC<IProps> = ({
             <FlexDiv>
                 {(!lesevisning || redigerbartVilkår.verdi.periode.verdi.fom) && (
                     <div>
-                        {console.log(redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad)}
                         <FamilieDatovelger
                             allowInvalidDateSelection={false}
                             limitations={{
