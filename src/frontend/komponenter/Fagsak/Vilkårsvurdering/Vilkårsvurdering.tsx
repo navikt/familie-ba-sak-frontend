@@ -7,7 +7,7 @@ import { Feilmelding } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { IBehandling } from '../../../typer/behandling';
+import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IVilkårResultat } from '../../../typer/vilkår';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -43,6 +43,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
 
     return (
         <Skjemasteg
+            skalViseForrigeKnapp={
+                !åpenBehandling.skalBehandlesAutomatisk &&
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD
+            }
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
                 if (opplysningsplikt) {
