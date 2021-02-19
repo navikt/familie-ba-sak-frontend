@@ -16,7 +16,7 @@ const MigreringContainer = styled.div`
     margin: 16px;
 `;
 
-const FnrFlex = styled.div`
+const HentSakerFlex = styled.div`
     margin-top: 32px;
     margin-bottom: 32px;
     display: flex;
@@ -47,7 +47,7 @@ const MigreringContent: React.FC = () => {
             {/* TODO: Her skal det være et Visittkort, men vi trenger å hente data fra PDL for navn og kjønn. ba-sak må utvides.*/}
             <MigreringContainer>
                 <Innholdstittel>Sakshistorikk fra Infotrygd</Innholdstittel>
-                <FnrFlex>
+                <HentSakerFlex>
                     <FamilieInput
                         {...nyIdent.hentNavInputProps(!!feilmelding)}
                         feil={nyIdent.hentNavInputProps(!!feilmelding).feil || feilmelding}
@@ -72,8 +72,7 @@ const MigreringContent: React.FC = () => {
                         spinner={spinner}
                         mini={true}
                     />
-                </FnrFlex>
-                {/* TODO: Skal tabellen skjules (inkl. headere) når det ikke er noen saker? */}
+                </HentSakerFlex>
                 <table className="tabell">
                     <thead>
                         <tr>
