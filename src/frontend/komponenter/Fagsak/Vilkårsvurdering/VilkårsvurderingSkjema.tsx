@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { Collapse } from 'react-collapse';
+import styled from 'styled-components';
 
 import { FeltState } from '@navikt/familie-skjema';
 
@@ -21,6 +22,26 @@ import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
 }
+
+const Container = styled.div`
+    &:first-child {
+        padding-top: 2.5rem;
+    }
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+`;
+
+const PersonLinje = styled.div`
+    display: flex;
+    justify-content: space-between;
+    position: -webkit-sticky;
+    position: sticky;
+    top: -1px;
+    z-index: 1000;
+    background-color: white;
+    padding: 1.5rem 0;
+`;
 
 const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema> = ({
     visFeilmeldinger,
@@ -45,12 +66,11 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
         <>
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
                 return (
-                    <div
-                        className={'vilkårsvurdering__person'}
+                    <Container
                         key={personResultat.personIdent}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        <div className={'vilkårsvurdering__person--personlinje'}>
+                        <PersonLinje>
                             <PersonInformasjon
                                 person={personResultat.person}
                                 tag={'h3'}
@@ -83,7 +103,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     />
                                 }
                             />
-                        </div>
+                        </PersonLinje>
 
                         <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
                             {Object.values(vilkårConfig)
@@ -91,9 +111,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     vc.parterDetteGjelderFor.includes(personResultat.person.type)
                                 )
                                 .map((vc: IVilkårConfig) => {
-                                    const vilkårResultater: FeltState<
-                                        IVilkårResultat
-                                    >[] = personResultat.vilkårResultater.filter(
+                                    const vilkårResultater: FeltState<IVilkårResultat>[] = personResultat.vilkårResultater.filter(
                                         (vilkårResultat: FeltState<IVilkårResultat>) =>
                                             vilkårResultat.verdi.vilkårType === vc.key
                                     );
@@ -113,7 +131,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     }
                                 })}
                         </Collapse>
-                    </div>
+                    </Container>
                 );
             })}
         </>
