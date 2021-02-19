@@ -13,11 +13,11 @@ const [MigreringProvider, useMigrering] = createUseContext(() => {
 
     const { request } = useHttp();
 
-    const hentSakerForBruker = async (/* skal ha fnr */) => {
+    const hentSakerForBruker = async (ident: string) => {
         const hentetData = await request<{ ident: string }, IInfotrygdsaker>({
             method: 'POST',
             url: '/familie-ba-sak/api/infotrygd/hent-infotrygdsaker-for-soker',
-            data: { ident: '03127743400' },
+            data: { ident },
         });
 
         if (hentetData.status !== RessursStatus.SUKSESS) {
@@ -40,6 +40,7 @@ const [MigreringProvider, useMigrering] = createUseContext(() => {
             }
         }
 
+        // TODO: Før vi setter saker, bør vi ha en fast sorteringsrekkefølge?
         settInfotrygdsaker(hentetData.data.saker);
 
         return '';
