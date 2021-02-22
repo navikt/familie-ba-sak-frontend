@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import { YearMonth } from '../typer/tid';
 import familieDayjs, { Dayjs } from './familieDayjs';
 
@@ -27,4 +29,9 @@ export const hentFørsteDagIYearMonth = (yearMonth: YearMonth) => {
 
 export const hentSisteDagIYearMonth = (yearMonth: YearMonth) => {
     return familieDayjs(yearMonth).endOf('month');
+};
+
+export const leggTilÅr = (dato: string, år: number) => {
+    const dayJs = dayjs(new Date(dato));
+    return dayJs.set('year', dayJs.year() + år);
 };

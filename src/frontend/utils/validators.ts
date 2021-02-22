@@ -13,6 +13,7 @@ import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Resultat } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import { datoformat, isoStringToDayjs } from './formatter';
+import { leggTilÅr } from './tid';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -48,12 +49,10 @@ export const erGyldigMånedDato = (
 };
 
 const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?: string) => {
-    const fødselsdato = familieDayjs(person.fødselsdato);
-    const fødselsdatoPluss18 = familieDayjs(person.fødselsdato)
-        .add(18, 'year')
-        .set('date', fødselsdato.get('date'));
-    const fomDato = familieDayjs(fom);
-    const tomDato = tom ? familieDayjs(tom) : undefined;
+    const fødselsdato = familieDayjs(new Date(person.fødselsdato));
+    const fødselsdatoPluss18 = leggTilÅr(person.fødselsdato, 18);
+    const fomDato = familieDayjs(new Date(fom));
+    const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
     return (
         fomDato.isSameOrAfter(fødselsdato) &&
         (tomDato ? tomDato.isSameOrBefore(fødselsdatoPluss18) : true)
