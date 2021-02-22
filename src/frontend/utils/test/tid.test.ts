@@ -48,7 +48,7 @@ describe('utils/tid', () => {
         });
     });
 
-    describe('År legges til uten av dag i måneden endres for datoen', () => {
+    describe('År legges til dato', () => {
         test('Legger til 18 år', () => {
             expect(leggTilÅr('2018-06-12', 18)).toStrictEqual(dayjs(new Date('2036-06-12')));
         });
