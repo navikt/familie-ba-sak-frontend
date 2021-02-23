@@ -65,7 +65,7 @@ export interface ISelectOptionMedBrevtekst extends OptionType {
 }
 
 // Value settes ved henting av select option basert på label
-export const dokumenter: ISelectOptionMedBrevtekst[] = [
+const dokumenter: ISelectOptionMedBrevtekst[] = [
     {
         value: '',
         label: 'Adopsjon - barna',
@@ -330,4 +330,4 @@ export const dokumenter: ISelectOptionMedBrevtekst[] = [
     },
 ];
 
-export const årsaker: ISelectOptionMedBrevtekst[] = [];
+const årsaker: ISelectOptionMedBrevtekst[] = [];
