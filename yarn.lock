@@ -782,14 +782,16 @@
     nav-frontend-typografi-style "^1.0.18"
     prop-types "^15.7.2"
 
-"@navikt/familie-http@^1.0.1", "@navikt/familie-http@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.2.tgz#dc418a7a161e8674bdc6f3f02efe19ffe6970440"
-  integrity sha512-52yDEveR2va5rJy5Pupuo0uCo4EoaSci8i21iZ72gEa6p0FV18eJnkggv0wnPtfzq/y2BdxX+WFyvKLP6XcWXg==
+"@navikt/familie-http@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.3.tgz#aeb6acf918c1ad86c351f09ed360211438cbbe06"
+  integrity sha512-yMlgvcVjlluscTn+hZnzTCgc8p+v535JieehywOhQKq0mwRaafjaqUKD/hCrqRQX/37aGPZ9+DqjcY2DUfy8DQ==
   dependencies:
-    "@navikt/familie-typer" "^3.0.11"
+    "@navikt/familie-typer" "^3.0.12"
     "@sentry/core" "^5.27.3"
     constate "^3.1.0"
+    nav-frontend-knapper "^2.0.31"
+    nav-frontend-knapper-style "^1.0.16"
 
 "@navikt/familie-ikoner@^3.1.0", "@navikt/familie-ikoner@^3.1.8":
   version "3.1.8"
@@ -823,15 +825,17 @@
     nav-frontend-knapper-style "^1.0.16"
     winston "^3.2.1"
 
-"@navikt/familie-skjema@^1.0.1":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.0.2.tgz#bc90c7ebca6aab7871246400e4a82572f5157057"
-  integrity sha512-Ix4IqDsm4geMlmsEejxEzyKQ74X1TUP/do5lxSvDka7cuGUZlSrBQvu/ivVA0HRJGjIWqPz/spsqXyEbGkfdTw==
+"@navikt/familie-skjema@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.0.4.tgz#07cb740221b6fddf73916322b2f23d883465b1be"
+  integrity sha512-Q1OVTQGGb2UnU3scllNFy75MEYO2iRBmqeutn4WduSVcfA0nt4ABg74JVExbnwOK9rXGL7fMZjrJSVlpsaUeJQ==
   dependencies:
-    "@navikt/familie-http" "^1.0.2"
-    "@navikt/familie-typer" "^3.0.11"
+    "@navikt/familie-http" "^1.0.3"
+    "@navikt/familie-typer" "^3.0.12"
     "@types/deep-equal" "^1.0.1"
     deep-equal "^2.0.5"
+    nav-frontend-knapper "^2.0.31"
+    nav-frontend-knapper-style "^1.0.16"
 
 "@navikt/familie-typer@^3.0.11":
   version "3.0.11"
