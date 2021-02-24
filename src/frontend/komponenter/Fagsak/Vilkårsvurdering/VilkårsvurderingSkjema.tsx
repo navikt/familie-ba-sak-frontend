@@ -122,6 +122,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                                 key={`${personResultat.personIdent}_${vc.key}`}
                                                 person={personResultat.person}
                                                 vilkårResultater={vilkårResultater}
+                                                andreVurderinger={personResultat.andreVurderinger}
                                                 vilkårFraConfig={vc}
                                                 visFeilmeldinger={visFeilmeldinger}
                                             />

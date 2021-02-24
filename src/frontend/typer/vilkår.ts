@@ -23,6 +23,10 @@ export const resultater: Record<Resultat, string> = {
     IKKE_VURDERT: 'Kanskje',
 };
 
+export enum AnnenVurderingType {
+    OPPLYSNINGSPLIKT = 'Opplysningsplikt',
+}
+
 export enum VilkårType {
     UNDER_18_ÅR = 'UNDER_18_ÅR',
     BOR_MED_SØKER = 'BOR_MED_SØKER',
@@ -33,9 +37,18 @@ export enum VilkårType {
 
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
+    andreVurderinger: FeltState<IAnnenVurdering>[];
     personIdent: string;
     vilkårResultater: FeltState<IVilkårResultat>[];
     person: IGrunnlagPerson;
+}
+export interface IAnnenVurdering {
+    begrunnelse: FeltState<string>;
+    endretAv: string;
+    endretTidspunkt: string;
+    id: number;
+    resultat: FeltState<Resultat>;
+    type: AnnenVurderingType;
 }
 
 export interface IVilkårResultat {

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { FeltState } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson } from '../../../../typer/person';
-import { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import { IAnnenVurdering, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import VilkårTabellRad from './VilkårTabellRad';
 
 export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
@@ -23,6 +23,7 @@ export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =
 interface IProps {
     person: IGrunnlagPerson;
     vilkårResultater: FeltState<IVilkårResultat>[];
+    _andreVurderinger: FeltState<IAnnenVurdering>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
 }
@@ -59,6 +60,7 @@ const VilkårTabell: React.FC<IProps> = ({
     person,
     vilkårFraConfig,
     vilkårResultater,
+    _andreVurderinger,
     visFeilmeldinger,
 }) => {
     return (
