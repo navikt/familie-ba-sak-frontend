@@ -17,6 +17,7 @@ import {
 } from '../../../typer/vilkår';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 
 interface IVilkårsvurderingSkjema {
@@ -122,11 +123,19 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                                 key={`${personResultat.personIdent}_${vc.key}`}
                                                 person={personResultat.person}
                                                 vilkårResultater={vilkårResultater}
-                                                andreVurderinger={personResultat.andreVurderinger}
                                                 vilkårFraConfig={vc}
                                                 visFeilmeldinger={visFeilmeldinger}
                                             />
                                         );
+                                        if (vilkårResultater.length !== 0) {
+                                            <GeneriskAnnenVurdering
+                                                key={`${personResultat.personIdent}_${vc.key}`}
+                                                person={personResultat.person}
+                                                andreVurderinger={personResultat.andreVurderinger}
+                                                vilkårFraConfig={vc}
+                                                visFeilmeldinger={visFeilmeldinger}
+                                            />;
+                                        }
                                     } else {
                                         return undefined;
                                     }

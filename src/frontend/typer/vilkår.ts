@@ -37,15 +37,16 @@ export enum VilkårType {
 
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
-    andreVurderinger: FeltState<IAnnenVurdering>[];
     personIdent: string;
     vilkårResultater: FeltState<IVilkårResultat>[];
     person: IGrunnlagPerson;
 }
 export interface IAnnenVurdering {
     begrunnelse: FeltState<string>;
+    behandlingId: number;
     endretAv: string;
     endretTidspunkt: string;
+    erVurdert: boolean;
     id: number;
     resultat: FeltState<Resultat>;
     type: AnnenVurderingType;
@@ -89,6 +90,17 @@ export interface IRestVilkårResultat {
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
     vilkårType: VilkårType;
+}
+
+export interface IRestAnnenVurdering {
+    begrunnelse: string;
+    behandlingId: number;
+    endretAv: string;
+    endretTidspunkt: string;
+    erVurdert: boolean;
+    id: number;
+    resultat: Resultat;
+    type: VilkårType;
 }
 
 export interface IRestStegTilstand {

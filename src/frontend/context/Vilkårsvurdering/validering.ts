@@ -1,7 +1,7 @@
 import { FeltState, Avhengigheter, Valideringsstatus, feil, ok } from '@navikt/familie-skjema';
 
 import { IPeriode } from '../../typer/periode';
-import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
+import { IAnnenVurdering, IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
@@ -51,4 +51,30 @@ export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonRe
             ),
         };
     });
+};
+
+export const validerAnnenVurdering = (
+    nyttAnnenVurdering: FeltState<IAnnenVurdering>
+): FeltState<IAnnenVurdering> => {
+    const nyBegrunnelse: FeltState<string> = nyttAnnenVurdering.verdi.begrunnelse.valider(
+        nyttAnnenVurdering.verdi.begrunnelse
+    );
+
+    const nyttResultat: FeltState<Resultat> = nyttAnnenVurdering.verdi.resultat.valider(
+        nyttAnnenVurdering.verdi.resultat
+    );
+
+    const gyldigVilkår: boolean =
+        nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
+        nyttResultat.valideringsstatus === Valideringsstatus.OK;
+
+    const nyVerdi: IAnnenVurdering = {
+        ...nyttAnnenVurdering.verdi,
+        begrunnelse: nyBegrunnelse,
+        resultat: nyttResultat,
+    };
+
+    return gyldigVilkår
+        ? ok({ ...nyttAnnenVurdering, verdi: nyVerdi })
+        : feil({ ...nyttAnnenVurdering, verdi: nyVerdi }, '');
 };

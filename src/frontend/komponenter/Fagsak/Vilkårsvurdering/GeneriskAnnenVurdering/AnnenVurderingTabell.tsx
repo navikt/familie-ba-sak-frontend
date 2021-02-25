@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import { FeltState } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson } from '../../../../typer/person';
-import { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
-import VilkårTabellRad from './VilkårTabellRad';
+import { IAnnenVurdering, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import AnnenVurderingTabellRad from '../GeneriskAnnenVurdering/AnnenVurderingTabellRad';
 
-export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
+export const annenVurderingFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
+    `vilkår_${annenVurdering.type}_${annenVurdering.id}`;
 
 export const vilkårResultatFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
     `vilkår-resultat_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
@@ -22,7 +22,7 @@ export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =
 
 interface IProps {
     person: IGrunnlagPerson;
-    vilkårResultater: FeltState<IVilkårResultat>[];
+    andreVurderinger: FeltState<IAnnenVurdering>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
 }
@@ -55,10 +55,10 @@ const TabellHeader = styled.th`
     }
 `;
 
-const VilkårTabell: React.FC<IProps> = ({
+const AnnenVurderingTabell: React.FC<IProps> = ({
     person,
     vilkårFraConfig,
-    vilkårResultater,
+    andreVurderinger,
     visFeilmeldinger,
 }) => {
     return (
@@ -73,13 +73,13 @@ const VilkårTabell: React.FC<IProps> = ({
                     <TabellHeader />
                 </tr>
             </thead>
-            {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>) => {
+            {andreVurderinger.map((anneVurdering: FeltState<IAnnenVurdering>) => {
                 return (
-                    <VilkårTabellRad
-                        key={`${person.personIdent}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
+                    <AnnenVurderingTabellRad
+                        key={`${person.personIdent}_${anneVurdering.verdi.type}_${anneVurdering.verdi.id}`}
                         vilkårFraConfig={vilkårFraConfig}
                         person={person}
-                        vilkårResultat={vilkårResultat}
+                        annenVurdering={anneVurdering}
                         visFeilmeldinger={visFeilmeldinger}
                     />
                 );
@@ -88,4 +88,4 @@ const VilkårTabell: React.FC<IProps> = ({
     );
 };
 
-export default VilkårTabell;
+export default AnnenVurderingTabell;

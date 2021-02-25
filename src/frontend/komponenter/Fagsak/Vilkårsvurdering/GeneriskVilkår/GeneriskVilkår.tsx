@@ -17,20 +17,13 @@ import {
 import Pluss from '../../../../ikoner/Pluss';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
-import {
-    IAnnenVurdering,
-    IVilkårConfig,
-    IVilkårResultat,
-    Resultat,
-    VilkårType,
-} from '../../../../typer/vilkår';
+import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import VilkårTabell from './VilkårTabell';
 
 interface IProps {
     person: IGrunnlagPerson;
     vilkårResultater: FeltState<IVilkårResultat>[];
-    andreVurderinger: FeltState<IAnnenVurdering>[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
 }
@@ -59,7 +52,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
     person,
     vilkårFraConfig,
     vilkårResultater,
-    andreVurderinger,
     visFeilmeldinger,
 }) => {
     const { erLesevisning } = useBehandling();
@@ -114,7 +106,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     person={person}
                     vilkårFraConfig={vilkårFraConfig}
                     vilkårResultater={vilkårResultater}
-                    _andreVurderinger={andreVurderinger}
                     visFeilmeldinger={visFeilmeldinger}
                 />
                 {skalViseLeggTilKnapp() ? (
