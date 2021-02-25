@@ -1,14 +1,9 @@
-import { useHttp } from '@navikt/familie-http';
 import { FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
 import { IInfotrygdSak, IInfotrygdsaker } from '../typer/infotrygd';
 import { Adressebeskyttelsegradering } from '../typer/person';
 
 export const useMigrering = () => {
-    const { request } = useHttp();
-
-    console.log(request);
-
     const ident = useFelt({
         verdi: '',
         valideringsfunksjon: (felt: FeltState<string>) => ok(felt),

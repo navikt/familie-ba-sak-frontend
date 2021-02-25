@@ -825,10 +825,10 @@
     nav-frontend-knapper-style "^1.0.16"
     winston "^3.2.1"
 
-"@navikt/familie-skjema@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.0.4.tgz#07cb740221b6fddf73916322b2f23d883465b1be"
-  integrity sha512-Q1OVTQGGb2UnU3scllNFy75MEYO2iRBmqeutn4WduSVcfA0nt4ABg74JVExbnwOK9rXGL7fMZjrJSVlpsaUeJQ==
+"@navikt/familie-skjema@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.0.5.tgz#11801f530d86c7815320000a640687cb23316b62"
+  integrity sha512-XUrf7BVhfPxzVtXhCUQU+feVATBPLfQW06kKe0weUl1NcwP1kZYZ0eIh6tGuUVbNokri6uTsy2F1iKHsYBCqmw==
   dependencies:
     "@navikt/familie-http" "^1.0.3"
     "@navikt/familie-typer" "^3.0.12"
