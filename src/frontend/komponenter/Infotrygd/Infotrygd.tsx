@@ -8,12 +8,12 @@ import { Innholdstittel } from 'nav-frontend-typografi';
 
 import { byggFunksjonellFeilRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useMigrering } from '../../context/MigreringContext';
+import { useInfotrygd } from '../../context/InfotrygdContext';
 import { IInfotrygdsaker } from '../../typer/infotrygd';
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import { Sakstabell } from './Sakstabell';
 
-const MigreringContainer = styled.div`
+const InfotrygdContainer = styled.div`
     margin: 16px;
 `;
 
@@ -30,8 +30,8 @@ const HentSakerKnapp = styled(Knapp)`
     height: 40px;
 `;
 
-const MigreringContent: React.FC = () => {
-    const { onSubmit, tilgangFeilmelding, settSubmitRessurs, skjema } = useMigrering();
+const InfotrygdContent: React.FC = () => {
+    const { onSubmit, tilgangFeilmelding, settSubmitRessurs, skjema } = useInfotrygd();
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
 
@@ -51,7 +51,7 @@ const MigreringContent: React.FC = () => {
     return (
         <>
             {/* TODO: Her skal det være et Visittkort, men vi trenger å hente data fra PDL for navn og kjønn. ba-sak må utvides.*/}
-            <MigreringContainer>
+            <InfotrygdContainer>
                 <Innholdstittel>Sakshistorikk fra Infotrygd</Innholdstittel>
                 <HentSakerFlex>
                     <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
@@ -95,13 +95,13 @@ const MigreringContent: React.FC = () => {
                     </HentSakerKnapp>
                 </HentSakerFlex>
                 {visTabell()}
-            </MigreringContainer>
+            </InfotrygdContainer>
         </>
     );
 };
 
-const Migrering: React.FC = () => {
-    return <MigreringContent />;
+const Infotrygd: React.FC = () => {
+    return <InfotrygdContent />;
 };
 
-export default Migrering;
+export default Infotrygd;
