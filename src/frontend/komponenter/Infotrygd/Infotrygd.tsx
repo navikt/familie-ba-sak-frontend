@@ -30,7 +30,7 @@ const HentSakerKnapp = styled(Knapp)`
     height: 40px;
 `;
 
-const InfotrygdContent: React.FC = () => {
+export const Infotrygd: React.FC = () => {
     const { onSubmit, tilgangFeilmelding, settSubmitRessurs, skjema } = useInfotrygd();
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
@@ -99,9 +99,3 @@ const InfotrygdContent: React.FC = () => {
         </>
     );
 };
-
-const Infotrygd: React.FC = () => {
-    return <InfotrygdContent />;
-};
-
-export default Infotrygd;

@@ -11,7 +11,7 @@ import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
-import Infotrygd from './Infotrygd/Infotrygd';
+import { Infotrygd } from './Infotrygd/Infotrygd';
 import Internstatistikk from './Internstatistikk';
 import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
 
