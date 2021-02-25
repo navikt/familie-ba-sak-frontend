@@ -12,13 +12,18 @@ import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import { IGrunnlagPerson } from '../../../../typer/person';
-import { IAnnenVurdering, IVilkårConfig, Resultat, uiResultat } from '../../../../typer/vilkår';
+import {
+    IAnnenVurdering,
+    IAnnenVurderingConfig,
+    Resultat,
+    uiResultat,
+} from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
 
 interface IProps {
     person: IGrunnlagPerson;
-    vilkårFraConfig: IVilkårConfig;
+    annenVurderingConfig: IAnnenVurderingConfig;
     annenVurdering: FeltState<IAnnenVurdering>;
     visFeilmeldinger: boolean;
 }

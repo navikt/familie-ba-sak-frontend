@@ -24,7 +24,7 @@ export const resultater: Record<Resultat, string> = {
 };
 
 export enum AnnenVurderingType {
-    OPPLYSNINGSPLIKT = 'Opplysningsplikt',
+    OPPLYSNINGSPLIKT = 'OPPLYSNINGSPLIKT',
 }
 
 export enum VilkårType {
@@ -39,6 +39,7 @@ export enum VilkårType {
 export interface IPersonResultat {
     personIdent: string;
     vilkårResultater: FeltState<IVilkårResultat>[];
+    andreVurderinger: FeltState<IAnnenVurdering>[];
     person: IGrunnlagPerson;
 }
 export interface IAnnenVurdering {
@@ -70,6 +71,7 @@ export interface IVilkårResultat {
 export interface IRestPersonResultat {
     personIdent: string;
     vilkårResultater: IRestVilkårResultat[];
+    andreVurderinger: IRestAnnenVurdering[];
 }
 
 export interface IRestNyttVilkår {
@@ -100,7 +102,7 @@ export interface IRestAnnenVurdering {
     erVurdert: boolean;
     id: number;
     resultat: Resultat;
-    type: VilkårType;
+    type: AnnenVurderingType;
 }
 
 export interface IRestStegTilstand {
@@ -165,5 +167,25 @@ export const vilkårConfig: IVilkårsconfig = {
         tittel: 'Lovlig opphold',
         spørsmål: (part?: string) => `Har ${part} lovlig opphold?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
+    },
+};
+
+export interface IAnnenVurderingConfig {
+    beskrivelse: string;
+    key: string;
+    tittel: string;
+    parterDetteGjelderFor: PersonType[];
+}
+
+type IAnnenVurderingsconfig = {
+    [key in AnnenVurderingType]: IAnnenVurderingConfig;
+};
+
+export const annenVurderingConfig: IAnnenVurderingsconfig = {
+    OPPLYSNINGSPLIKT: {
+        beskrivelse: 'Opplysningsplikt',
+        key: 'OPPLYSNINGSPLIKT',
+        tittel: 'Opplysningsplikt',
+        parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER, PersonType.ANNENPART],
     },
 };

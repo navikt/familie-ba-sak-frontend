@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { FeltState } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson } from '../../../../typer/person';
-import { IAnnenVurdering, IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import { IAnnenVurdering, IAnnenVurderingConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import AnnenVurderingTabellRad from '../GeneriskAnnenVurdering/AnnenVurderingTabellRad';
 
 export const annenVurderingFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
@@ -23,7 +23,7 @@ export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =
 interface IProps {
     person: IGrunnlagPerson;
     andreVurderinger: FeltState<IAnnenVurdering>[];
-    vilkårFraConfig: IVilkårConfig;
+    annenVurderingConfig: IAnnenVurderingConfig;
     visFeilmeldinger: boolean;
 }
 
@@ -57,7 +57,7 @@ const TabellHeader = styled.th`
 
 const AnnenVurderingTabell: React.FC<IProps> = ({
     person,
-    vilkårFraConfig,
+    annenVurderingConfig,
     andreVurderinger,
     visFeilmeldinger,
 }) => {
@@ -77,7 +77,7 @@ const AnnenVurderingTabell: React.FC<IProps> = ({
                 return (
                     <AnnenVurderingTabellRad
                         key={`${person.personIdent}_${anneVurdering.verdi.type}_${anneVurdering.verdi.id}`}
-                        vilkårFraConfig={vilkårFraConfig}
+                        annenVurderingConfig={annenVurderingConfig}
                         person={person}
                         annenVurdering={anneVurdering}
                         visFeilmeldinger={visFeilmeldinger}

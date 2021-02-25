@@ -3,18 +3,18 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertekst, Undertittel } from 'nav-frontend-typografi';
+import { Element, Undertittel } from 'nav-frontend-typografi';
 
 import { FeltState } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson } from '../../../../typer/person';
-import { IAnnenVurdering, IVilkårConfig } from '../../../../typer/vilkår';
+import { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
 import AnnenVurderingTabell from './AnnenVurderingTabell';
 
 interface IProps {
     person: IGrunnlagPerson;
     andreVurderinger: FeltState<IAnnenVurdering>[];
-    vilkårFraConfig: IVilkårConfig;
+    annenVurderingConfig: IAnnenVurderingConfig;
     visFeilmeldinger: boolean;
 }
 
@@ -36,7 +36,7 @@ const VilkårTittel = styled(Undertittel)`
 
 const GeneriskAnnenVurdering: React.FC<IProps> = ({
     person,
-    vilkårFraConfig,
+    annenVurderingConfig,
     andreVurderinger,
     visFeilmeldinger,
 }) => {
@@ -47,12 +47,11 @@ const GeneriskAnnenVurdering: React.FC<IProps> = ({
         <Container>
             <SkjemaGruppe feil={visFeilmeldingerForAnnenVurdering ? feilmelding : undefined}>
                 <VilkårTittel tag={'h4'}>
-                    <Element children={vilkårFraConfig.tittel} />
-                    <Undertekst children={vilkårFraConfig.lovreferanse} />
+                    <Element children={annenVurderingConfig.tittel} />
                 </VilkårTittel>
                 <AnnenVurderingTabell
                     person={person}
-                    vilkårFraConfig={vilkårFraConfig}
+                    annenVurderingConfig={annenVurderingConfig}
                     andreVurderinger={andreVurderinger}
                     visFeilmeldinger={visFeilmeldinger}
                 />
