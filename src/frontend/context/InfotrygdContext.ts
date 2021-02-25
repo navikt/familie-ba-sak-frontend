@@ -1,12 +1,13 @@
-import { FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { useFelt, useSkjema } from '@navikt/familie-skjema';
 
 import { IInfotrygdSak, IInfotrygdsaker } from '../typer/infotrygd';
 import { Adressebeskyttelsegradering } from '../typer/person';
+import { identValidator } from '../utils/validators';
 
 export const useInfotrygd = () => {
     const ident = useFelt({
         verdi: '',
-        valideringsfunksjon: (felt: FeltState<string>) => ok(felt),
+        valideringsfunksjon: identValidator,
     });
 
     const { kanSendeSkjema, onSubmit, settSubmitRessurs, skjema } = useSkjema<

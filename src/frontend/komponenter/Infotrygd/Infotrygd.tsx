@@ -31,20 +31,21 @@ const HentSakerKnapp = styled(Knapp)`
 `;
 
 export const Infotrygd: React.FC = () => {
-    const { onSubmit, tilgangFeilmelding, settSubmitRessurs, skjema } = useInfotrygd();
+    const {
+        onSubmit,
+        tilgangFeilmelding,
+        settSubmitRessurs,
+        skjema,
+        sorterSakerEtterSaksnr,
+    } = useInfotrygd();
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
 
     const visTabell = () => {
-        switch (skjema.submitRessurs.status) {
-            case RessursStatus.SUKSESS:
-                return <Sakstabell saker={skjema.submitRessurs.data.saker} />;
-            case RessursStatus.FEILET ||
-                RessursStatus.FUNKSJONELL_FEIL ||
-                RessursStatus.IKKE_TILGANG:
-                return <div />;
-            default:
-                return <div />;
+        if (skjema.submitRessurs.status === RessursStatus.SUKSESS) {
+            return <Sakstabell saker={sorterSakerEtterSaksnr(skjema.submitRessurs.data.saker)} />;
+        } else {
+            return undefined;
         }
     };
 
