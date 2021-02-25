@@ -19,6 +19,7 @@ import {
     uiResultat,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
 
 interface IProps {
@@ -52,7 +53,16 @@ const EkspanderbarTr = styled.tr`
     }
 `;
 
-const AnnenVurderingTabellRad: React.FC<IProps> = ({ annenVurdering }) => {
+const EkspandertTd = styled.td`
+    padding: 0 1rem 1rem 1.6rem;
+`;
+
+const AnnenVurderingTabellRad: React.FC<IProps> = ({
+    person,
+    annenVurderingConfig,
+    visFeilmeldinger,
+    annenVurdering,
+}) => {
     const { erLesevisning } = useBehandling();
 
     const [ekspandertAnnenVurdering, settEkspandertAnnenVurdering] = useState(
@@ -109,6 +119,22 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({ annenVurdering }) => {
                 </td>
                 <ManuellVurdering />
             </EkspanderbarTr>
+            {ekspandertAnnenVurdering && (
+                <tr>
+                    <EkspandertTd colSpan={6}>
+                        <AnnenVurderingRadEndre
+                            person={person}
+                            annenVurderingConfig={annenVurderingConfig}
+                            annenVurdering={annenVurdering}
+                            visFeilmeldinger={visFeilmeldinger}
+                            toggleForm={toggleForm}
+                            redigerbartAnnenVurdering={redigerbartAnnenVurdering}
+                            settRedigerbartAnnenVurdering={settRedigerbartAnnenVurdering}
+                            settEkspandertAnnenVurdering={settEkspandertAnnenVurdering}
+                        />
+                    </EkspandertTd>
+                </tr>
+            )}
         </>
     );
 };

@@ -5,20 +5,20 @@ import styled from 'styled-components';
 import { FeltState } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson } from '../../../../typer/person';
-import { IAnnenVurdering, IAnnenVurderingConfig, IVilkårResultat } from '../../../../typer/vilkår';
+import { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../typer/vilkår';
 import AnnenVurderingTabellRad from '../GeneriskAnnenVurdering/AnnenVurderingTabellRad';
 
 export const annenVurderingFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
-    `vilkår_${annenVurdering.type}_${annenVurdering.id}`;
+    `annen-vurdering_${annenVurdering.type}_${annenVurdering.id}`;
 
-export const vilkårResultatFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-resultat_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
+export const annenVurderingResultatFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
+    `annen-vurdering-resultat_${annenVurdering.type}_${annenVurdering.id}`;
 
-export const vilkårBegrunnelseFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-begrunnelse_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
+export const annenVurderingBegrunnelseFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
+    `annen-vurdering-begrunnelse_${annenVurdering.type}_${annenVurdering.id}`;
 
-export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-periode_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
+export const annenVurderingPeriodeFeilmeldingId = (annenVurdering: IAnnenVurdering) =>
+    `annen-vurdering-periode_${annenVurdering.type}_${annenVurdering.id}`;
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -66,7 +66,6 @@ const AnnenVurderingTabell: React.FC<IProps> = ({
             <thead>
                 <tr>
                     <TabellHeader>Vurdering</TabellHeader>
-                    <TabellHeader>Periode</TabellHeader>
                     <TabellHeader>Begrunnelse</TabellHeader>
                     <TabellHeader />
                     <TabellHeader />

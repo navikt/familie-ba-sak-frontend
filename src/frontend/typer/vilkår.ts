@@ -48,7 +48,6 @@ export interface IAnnenVurdering {
     endretAv: string;
     endretTidspunkt: string;
     erVurdert: boolean;
-    id: number;
     resultat: FeltState<Resultat>;
     type: AnnenVurderingType;
 }
@@ -175,6 +174,7 @@ export interface IAnnenVurderingConfig {
     key: string;
     tittel: string;
     parterDetteGjelderFor: PersonType[];
+    spørsmål?: (part?: string) => string;
 }
 
 type IAnnenVurderingsconfig = {
@@ -187,5 +187,6 @@ export const annenVurderingConfig: IAnnenVurderingsconfig = {
         key: 'OPPLYSNINGSPLIKT',
         tittel: 'Opplysningsplikt',
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER, PersonType.ANNENPART],
+        spørsmål: () => 'Er opplysningsplikten oppfylt?',
     },
 };

@@ -8,6 +8,7 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import {
+    IAnnenVurdering,
     IPersonResultat,
     IRestNyttVilkår,
     IRestPersonResultat,
@@ -84,6 +85,33 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
         });
     };
 
+    const putAnnenVurdering = (
+        vilkårsvurderingForPerson: IPersonResultat,
+        redigerbartAnnenVurdering: FeltState<IAnnenVurdering>
+    ) => {
+        settVilkårSubmit(VilkårSubmit.PUT);
+
+        return request<IRestPersonResultat, IFagsak>({
+            method: 'PUT',
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/annenvurdering`,
+            data: {
+                personIdent: vilkårsvurderingForPerson.personIdent,
+                andreVurderinger: [
+                    {
+                        begrunnelse: redigerbartAnnenVurdering.verdi.begrunnelse.verdi,
+                        behandlingId: redigerbartAnnenVurdering.verdi.behandlingId,
+                        endretAv: redigerbartAnnenVurdering.verdi.endretAv,
+                        endretTidspunkt: redigerbartAnnenVurdering.verdi.endretTidspunkt,
+                        erVurdert: redigerbartAnnenVurdering.verdi.erVurdert,
+                        resultat: redigerbartAnnenVurdering.verdi.resultat.verdi,
+                        type: redigerbartAnnenVurdering.verdi.type,
+                    },
+                ],
+                vilkårResultater: [],
+            },
+        });
+    };
+
     const deleteVilkår = (personIdent: string, vilkårId: number) => {
         settVilkårSubmit(VilkårSubmit.DELETE);
 
@@ -141,6 +169,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
         hentVilkårMedFeil,
         vilkårSubmit,
         putVilkår,
+        putAnnenVurdering,
         settVilkårSubmit,
         settVilkårsvurdering,
         vilkårsvurdering,
