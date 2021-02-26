@@ -7,8 +7,13 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { Behandlingstype } from '../../../../typer/behandling';
-import { IUtbetalingsperiode, IUtbetalingsperiodeDetalj } from '../../../../typer/beregning';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
+import {
+    hentVedtaksperiodeTittel,
+    IUtbetalingsperiodeDetalj,
+    Vedtaksperiode,
+    Vedtaksperiodetype,
+} from '../../../../typer/vedtaksperiode';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
 import { formaterBeløp, formaterPersonIdent, isoStringToDayjs } from '../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
@@ -16,7 +21,7 @@ import Hjelpetekst44px from './Hjelpetekst44px';
 import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 
 interface IVedtakBegrunnelserTabell {
-    utbetalingsperiode: IUtbetalingsperiode;
+    vedtaksperiode: Vedtaksperiode;
     personResultater: IRestPersonResultat[];
     behandlingsType: Behandlingstype;
 }
@@ -60,7 +65,7 @@ const UtbetalingsperiodeDetalj = styled.div`
 `;
 
 const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
-    utbetalingsperiode,
+    vedtaksperiode,
     personResultater,
     behandlingsType,
 }) => {
@@ -71,7 +76,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
 
     return (
         <StyledEkspanderbartpanel
-            key={utbetalingsperiode.periodeFom}
+            key={vedtaksperiode.periodeFom}
             apen={behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING}
             tittel={
                 <UtbetalingsperiodepanelTittel>
@@ -84,41 +89,46 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     )}
                     <Element>
                         {periodeToString({
-                            fom: utbetalingsperiode.periodeFom,
-                            tom: slutterSenereEnnInneværendeMåned(utbetalingsperiode.periodeTom)
+                            fom: vedtaksperiode.periodeFom,
+                            tom: slutterSenereEnnInneværendeMåned(vedtaksperiode.periodeTom)
                                 ? ''
-                                : utbetalingsperiode.periodeTom,
+                                : vedtaksperiode.periodeTom,
                         })}
                     </Element>
-                    <Normaltekst>Ordinær</Normaltekst>
-                    <Normaltekst>{formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}</Normaltekst>
+                    <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
+                    {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING && (
+                        <Normaltekst>{formaterBeløp(vedtaksperiode.utbetaltPerMnd)}</Normaltekst>
+                    )}
                 </UtbetalingsperiodepanelTittel>
             }
         >
             <UtbetalingsperiodepanelBody>
-                <div>
-                    <Element>Resultat</Element>
+                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ? (
+                    <div>
+                        <Element>Resultat</Element>
 
-                    {utbetalingsperiode.utbetalingsperiodeDetaljer.map(
-                        (detalj: IUtbetalingsperiodeDetalj) => (
-                            <UtbetalingsperiodeDetalj key={detalj.person.personIdent}>
-                                <Normaltekst title={detalj.person.navn}>
-                                    {formaterPersonIdent(detalj.person.personIdent)}
-                                </Normaltekst>
+                        {vedtaksperiode.utbetalingsperiodeDetaljer.map(
+                            (detalj: IUtbetalingsperiodeDetalj) => (
+                                <UtbetalingsperiodeDetalj key={detalj.person.personIdent}>
+                                    <Normaltekst title={detalj.person.navn}>
+                                        {formaterPersonIdent(detalj.person.personIdent)}
+                                    </Normaltekst>
 
-                                <Normaltekst>{formaterBeløp(detalj.utbetaltPerMnd)}</Normaltekst>
-                            </UtbetalingsperiodeDetalj>
-                        )
-                    )}
-                </div>
+                                    <Normaltekst>
+                                        {formaterBeløp(detalj.utbetaltPerMnd)}
+                                    </Normaltekst>
+                                </UtbetalingsperiodeDetalj>
+                            )
+                        )}
+                    </div>
+                ) : (
+                    <div />
+                )}
                 <div>
                     <VedtakBegrunnelserMultiselect
                         erLesevisning={erLesevisning()}
                         personResultater={personResultater}
-                        periode={{
-                            fom: utbetalingsperiode.periodeFom,
-                            tom: utbetalingsperiode.periodeTom,
-                        }}
+                        vedtaksperiode={vedtaksperiode}
                     />
                 </div>
             </UtbetalingsperiodepanelBody>
