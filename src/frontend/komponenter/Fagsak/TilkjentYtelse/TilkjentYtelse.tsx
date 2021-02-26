@@ -4,8 +4,8 @@ import { useHistory } from 'react-router';
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
-import { IUtbetalingsperiode } from '../../../typer/beregning';
 import { IFagsak } from '../../../typer/fagsak';
+import { hentUtbetalingsperioder, Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
@@ -31,13 +31,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     };
 
     const filtrerPerioderForAktivEtikett = (
-        utbetalingsperioder: IUtbetalingsperiode[]
-    ): IUtbetalingsperiode[] => {
+        utbetalingsperioder: Vedtaksperiode[]
+    ): Vedtaksperiode[] => {
         return aktivEtikett
-            ? utbetalingsperioder.filter((utbetalingsperioder: IUtbetalingsperiode) =>
+            ? utbetalingsperioder.filter((utbetalingsperiode: Vedtaksperiode) =>
                   periodeOverlapperMedValgtDato(
-                      utbetalingsperioder.periodeFom,
-                      utbetalingsperioder.periodeTom,
+                      utbetalingsperiode.periodeFom,
+                      utbetalingsperiode.periodeTom,
                       aktivEtikett.dato
                   )
               )
@@ -56,8 +56,8 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             <TilkjentYtelseTidslinje />
             {aktivEtikett && (
                 <Oppsummeringsboks
-                    utbetalingsperioder={filtrerPerioderForAktivEtikett(
-                        åpenBehandling.utbetalingsperioder
+                    vedtaksperioder={filtrerPerioderForAktivEtikett(
+                        hentUtbetalingsperioder(åpenBehandling)
                     )}
                     aktivEtikett={aktivEtikett}
                 />

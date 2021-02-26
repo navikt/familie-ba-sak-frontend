@@ -8,9 +8,11 @@ import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
 import {
+    IRestDeleteVedtakBegrunnelser,
     IRestPostVedtakBegrunnelse,
     IRestVedtakBegrunnelse,
     IVedtakForBehandling,
+    VedtakBegrunnelseType,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useFagsakRessurser } from './FagsakContext';
@@ -122,6 +124,25 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             );
         };
 
+        const slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper = (
+            fom: string,
+            vedtakbegrunnelseTyper: VedtakBegrunnelseType[],
+            tom?: string
+        ) => {
+            håndterEndringerPåVedtakBegrunnelser(
+                request<IRestDeleteVedtakBegrunnelser, IFagsak>({
+                    method: 'DELETE',
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/perioder-vedtaksbegrunnelsetyper`,
+                    data: {
+                        fom,
+                        tom,
+                        vedtakbegrunnelseTyper,
+                    },
+                }),
+                lagPeriodeId({ fom, tom })
+            );
+        };
+
         const slettVedtakBegrunnelserForPeriode = (fom: string, tom?: string) => {
             håndterEndringerPåVedtakBegrunnelser(
                 request<IPeriode, IFagsak>({
@@ -141,6 +162,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             leggTilVedtakBegrunnelse,
             slettVedtakBegrunnelse,
             slettVedtakBegrunnelserForPeriode,
+            slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
             vedtakBegrunnelseSubmit,
             vedtakBegrunnelser,
             vilkårBegrunnelser,

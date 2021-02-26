@@ -2,17 +2,23 @@ import React from 'react';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { IUtbetalingsperiodeDetalj, IUtbetalingsperiode } from '../../../typer/beregning';
+import {
+    IUtbetalingsperiodeDetalj,
+    Vedtaksperiode,
+    Vedtaksperiodetype,
+} from '../../../typer/vedtaksperiode';
 import { formaterBeløp, sorterFødselsdato } from '../../../utils/formatter';
 import PersonUtbetaling from './PersonUtbetaling';
 
 interface IUtbetalingerProps {
-    utbetalingsperiode?: IUtbetalingsperiode;
+    vedtaksperiode?: Vedtaksperiode;
 }
 
-const Utbetalinger: React.FC<IUtbetalingerProps> = ({ utbetalingsperiode }) => {
+const Utbetalinger: React.FC<IUtbetalingerProps> = ({ vedtaksperiode }) => {
+    if (vedtaksperiode?.vedtaksperiodetype !== Vedtaksperiodetype.UTBETALING) return null;
+
     const utbetalingsperiodeDetaljerGruppertPåPerson =
-        utbetalingsperiode?.utbetalingsperiodeDetaljer
+        vedtaksperiode?.utbetalingsperiodeDetaljer
             .sort((detaljA, detaljB) =>
                 sorterFødselsdato(detaljA.person.fødselsdato, detaljB.person.fødselsdato)
             )
@@ -48,9 +54,7 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ utbetalingsperiode }) => {
                 <li className={'saksoversikt__utbetalinger__totallinje'}>
                     <Normaltekst>Totalt utbetalt/mnd</Normaltekst>
                     <Normaltekst>
-                        {utbetalingsperiode
-                            ? formaterBeløp(utbetalingsperiode.utbetaltPerMnd)
-                            : '-'}
+                        {vedtaksperiode ? formaterBeløp(vedtaksperiode.utbetaltPerMnd) : '-'}
                     </Normaltekst>
                 </li>
                 <hr />
