@@ -16,6 +16,7 @@ import {
     underkategorier,
 } from '../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
+import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../../utils/formatter';
@@ -62,7 +63,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const utbetalingsperioder = gjeldendeBehandling?.utbetalingsperioder ?? [];
+    const utbetalingsperioder = hentUtbetalingsperioder(gjeldendeBehandling);
     const utbetalingsperiodeInneværendeMåned = utbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
@@ -81,7 +82,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     };
 
     const løpendeMånedligUtbetaling = () => {
-        if (utbetalingsperiodeInneværendeMåned) {
+        if (
+            utbetalingsperiodeInneværendeMåned &&
+            utbetalingsperiodeInneværendeMåned.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING
+        ) {
             return utbetalingsperiodeInneværendeMåned.utbetaltPerMnd < 1 &&
                 gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
                 <AlertStripe className={'saksoversikt__alert'} type={'info'}>
@@ -101,7 +105,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 </FlexSpaceBetween>
                             </AlertStripe>
                         )}
-                    <Utbetalinger utbetalingsperiode={utbetalingsperiodeInneværendeMåned} />
+                    <Utbetalinger vedtaksperiode={utbetalingsperiodeInneværendeMåned} />
                 </>
             );
         } else if (utbetalingsperiodeNesteMåned) {
