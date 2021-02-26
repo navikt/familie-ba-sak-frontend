@@ -45,9 +45,9 @@ export const hentAktivVedtakPåBehandlig = (
  * @param vilkårsvurdering liste av perioder med vilkår
  */
 export const alleVilkårPåVilkårsvurderingOppfylt = (vilkårsvurdering: IPersonResultat[]) =>
-    vilkårsvurdering.every(personResultat => alleVillkarOppfylt(personResultat.vilkårResultater));
+    vilkårsvurdering.every(personResultat => alleVillkårOppfylt(personResultat.vilkårResultater));
 
-export const alleVillkarOppfylt = (vilkårResultater: FeltState<IVilkårResultat>[]) =>
+export const alleVillkårOppfylt = (vilkårResultater: FeltState<IVilkårResultat>[]) =>
     vilkårResultater.every(
         vilkårResultat => vilkårResultat.verdi.resultat.verdi !== Resultat.IKKE_OPPFYLT
     );
