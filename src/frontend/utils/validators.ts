@@ -50,12 +50,11 @@ export const erGyldigMånedDato = (
 
 const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?: string) => {
     const fødselsdato = familieDayjs(new Date(person.fødselsdato));
-    const fødselsdatoPluss18 = leggTilÅr(person.fødselsdato, 18);
+    const fødselsdatoPluss18 = leggTilÅr(person.fødselsdato, 18).subtract(1, 'day');
     const fomDato = familieDayjs(new Date(fom));
     const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
     return (
-        fomDato.isSameOrAfter(fødselsdato) &&
-        (tomDato ? tomDato.isSameOrBefore(fødselsdatoPluss18) : true)
+        fomDato.isSameOrAfter(fødselsdato) && (tomDato ? tomDato.isSame(fødselsdatoPluss18) : true)
     );
 };
 
