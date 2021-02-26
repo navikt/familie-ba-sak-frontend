@@ -11,7 +11,7 @@ import { BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IPersonResultat } from '../../typer/vilkår';
 import {
-    alleVilkårPåPersonresultaterOppfylt,
+    alleVilkårPåVilkårsvurderingOppfylt,
     hentAktivBehandlingPåFagsak,
 } from '../../utils/fagsak';
 
@@ -129,7 +129,7 @@ const useFagsakApi = (
                         response.data
                     );
 
-                    if (alleVilkårPåPersonresultaterOppfylt(vilkårsvurdering)) {
+                    if (alleVilkårPåVilkårsvurderingOppfylt(vilkårsvurdering)) {
                         history.push(
                             `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/tilkjent-ytelse`
                         );
