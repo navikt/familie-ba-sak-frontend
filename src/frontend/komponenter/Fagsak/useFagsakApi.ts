@@ -10,7 +10,10 @@ import { useFagsakRessurser } from '../../context/FagsakContext';
 import { BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IPersonResultat } from '../../typer/vilkår';
-import { erBehandlingenInnvilget, hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
+import {
+    alleVilkårPåPersonresultaterOppfylt,
+    hentAktivBehandlingPåFagsak,
+} from '../../utils/fagsak';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -126,7 +129,7 @@ const useFagsakApi = (
                         response.data
                     );
 
-                    if (erBehandlingenInnvilget(vilkårsvurdering)) {
+                    if (alleVilkårPåPersonresultaterOppfylt(vilkårsvurdering)) {
                         history.push(
                             `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/tilkjent-ytelse`
                         );

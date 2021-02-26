@@ -45,13 +45,14 @@ export const hentAktivVedtakPåBehandlig = (
  *
  * @param vilkårsvurdering liste av perioder med vilkår
  */
-export const erBehandlingenInnvilget = (vilkårsvurdering: IPersonResultat[]) => {
-    return (
-        vilkårsvurdering.find((personResultat: IPersonResultat) =>
-            personResultat.vilkårResultater.find(
-                (vilkårResultat: FeltState<IVilkårResultat>) =>
-                    vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
-            )
-        ) === undefined
+export const alleVilkårPåPersonresultaterOppfylt = (vilkårsvurdering: IPersonResultat[]) => {
+    return vilkårsvurdering.every((personResultat: IPersonResultat) =>
+        alleVillkarOppfylt(personResultat.vilkårResultater)
     );
 };
+
+export const alleVillkarOppfylt = (vilkårResultater: FeltState<IVilkårResultat>[]) =>
+    vilkårResultater.every(
+        (vilkårResultat: FeltState<IVilkårResultat>) =>
+            vilkårResultat.verdi.resultat.verdi !== Resultat.IKKE_OPPFYLT
+    );
