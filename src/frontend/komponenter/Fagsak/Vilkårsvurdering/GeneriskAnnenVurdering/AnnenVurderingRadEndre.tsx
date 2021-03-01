@@ -123,7 +123,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
         vilkårsvurderingForPerson: IPersonResultat | undefined
     ) => {
         if (vilkårsvurderingForPerson && validert.valideringsstatus === Valideringsstatus.OK) {
-            const promise = putAnnenVurdering(vilkårsvurderingForPerson, redigerbartAnnenVurdering);
+            const promise = putAnnenVurdering(redigerbartAnnenVurdering);
             håndterEndringPåVilkårsvurdering(promise);
         } else {
             settRedigerbartAnnenVurdering(validert);

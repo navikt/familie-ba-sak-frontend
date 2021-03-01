@@ -43,6 +43,7 @@ export interface IPersonResultat {
     person: IGrunnlagPerson;
 }
 export interface IAnnenVurdering {
+    id: number;
     begrunnelse: FeltState<string>;
     behandlingId: number;
     endretAv: string;
@@ -94,12 +95,12 @@ export interface IRestVilkårResultat {
 }
 
 export interface IRestAnnenVurdering {
+    id: number;
     begrunnelse: string;
     behandlingId: number;
     endretAv: string;
     endretTidspunkt: string;
     erVurdert: boolean;
-    id: number;
     resultat: Resultat;
     type: AnnenVurderingType;
 }

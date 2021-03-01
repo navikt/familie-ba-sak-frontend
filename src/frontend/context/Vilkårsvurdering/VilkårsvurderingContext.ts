@@ -10,6 +10,7 @@ import { IFagsak } from '../../typer/fagsak';
 import {
     IAnnenVurdering,
     IPersonResultat,
+    IRestAnnenVurdering,
     IRestNyttVilkår,
     IRestPersonResultat,
     IVilkårResultat,
@@ -85,29 +86,21 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
         });
     };
 
-    const putAnnenVurdering = (
-        vilkårsvurderingForPerson: IPersonResultat,
-        redigerbartAnnenVurdering: FeltState<IAnnenVurdering>
-    ) => {
+    const putAnnenVurdering = (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => {
         settVilkårSubmit(VilkårSubmit.PUT);
 
-        return request<IRestPersonResultat, IFagsak>({
+        return request<IRestAnnenVurdering, IFagsak>({
             method: 'PUT',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/annenvurdering`,
             data: {
-                personIdent: vilkårsvurderingForPerson.personIdent,
-                andreVurderinger: [
-                    {
-                        begrunnelse: redigerbartAnnenVurdering.verdi.begrunnelse.verdi,
-                        behandlingId: redigerbartAnnenVurdering.verdi.behandlingId,
-                        endretAv: redigerbartAnnenVurdering.verdi.endretAv,
-                        endretTidspunkt: redigerbartAnnenVurdering.verdi.endretTidspunkt,
-                        erVurdert: redigerbartAnnenVurdering.verdi.erVurdert,
-                        resultat: redigerbartAnnenVurdering.verdi.resultat.verdi,
-                        type: redigerbartAnnenVurdering.verdi.type,
-                    },
-                ],
-                vilkårResultater: [],
+                id: redigerbartAnnenVurdering.verdi.id,
+                begrunnelse: redigerbartAnnenVurdering.verdi.begrunnelse.verdi,
+                behandlingId: redigerbartAnnenVurdering.verdi.behandlingId,
+                endretAv: redigerbartAnnenVurdering.verdi.endretAv,
+                endretTidspunkt: redigerbartAnnenVurdering.verdi.endretTidspunkt,
+                erVurdert: redigerbartAnnenVurdering.verdi.erVurdert,
+                resultat: redigerbartAnnenVurdering.verdi.resultat.verdi,
+                type: redigerbartAnnenVurdering.verdi.type,
             },
         });
     };

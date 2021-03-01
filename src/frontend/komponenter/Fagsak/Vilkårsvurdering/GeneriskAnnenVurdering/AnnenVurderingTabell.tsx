@@ -75,7 +75,7 @@ const AnnenVurderingTabell: React.FC<IProps> = ({
             {andreVurderinger.map((anneVurdering: FeltState<IAnnenVurdering>) => {
                 return (
                     <AnnenVurderingTabellRad
-                        key={`${person.personIdent}_${anneVurdering.verdi.type}_${anneVurdering.verdi.id}`}
+                        key={`${person.personIdent}_${anneVurdering.verdi.type}`}
                         annenVurderingConfig={annenVurderingConfig}
                         person={person}
                         annenVurdering={anneVurdering}
