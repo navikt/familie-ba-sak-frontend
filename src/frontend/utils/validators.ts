@@ -50,7 +50,7 @@ export const erGyldigMånedDato = (
 
 const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?: string) => {
     const fødselsdato = familieDayjs(new Date(person.fødselsdato));
-    const fødselsdatoPluss18 = leggTilÅr(person.fødselsdato, 18); //.subtract(1, 'day');
+    const fødselsdatoPluss18 = leggTilÅr(person.fødselsdato, 18);
     const fomDato = familieDayjs(new Date(fom));
     const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
     return (
