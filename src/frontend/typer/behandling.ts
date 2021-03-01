@@ -1,6 +1,5 @@
 import { IPersonMedAndelerTilkjentYtelse, IUtbetalingsperiode } from './beregning';
 import { INøkkelPar } from './common';
-import { IOpplysningsplikt } from './opplysningsplikt';
 import { IGrunnlagPerson } from './person';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
@@ -159,7 +158,6 @@ export interface IBehandling {
     steg: BehandlingSteg;
     stegTilstand: IRestStegTilstand[];
     totrinnskontroll?: ITotrinnskontroll;
-    opplysningsplikt?: IOpplysningsplikt;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];

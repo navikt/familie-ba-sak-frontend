@@ -134,7 +134,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     );
                                 })}
                         </Collapse>
-                        {andreVurderinger.length &&
+                        {andreVurderinger.length > 0 &&
                             Object.values(annenVurderingConfig)
                                 .filter(annenVurderingConfig =>
                                     annenVurderingConfig.parterDetteGjelderFor.includes(

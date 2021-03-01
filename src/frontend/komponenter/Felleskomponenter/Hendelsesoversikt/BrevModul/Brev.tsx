@@ -50,7 +50,7 @@ const Brev = ({ onOkIModalClick }: IProps) => {
                                     onOkIModalClick();
                                     navigerTilOpplysningsplikt &&
                                         history.push(
-                                            `/fagsak/${fagsakId}/${behandlingId}/opplysningsplikt`
+                                            `/fagsak/${fagsakId}/${behandlingId}/vilkaarsvurdering`
                                         );
                                     settVisInnsendtBrevModal(false);
                                 }}

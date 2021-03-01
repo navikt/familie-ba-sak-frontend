@@ -40,19 +40,6 @@ export const validerVilkår = (
         : feil({ ...nyttVilkårResultat, verdi: nyVerdi }, '');
 };
 
-export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonResultat[] => {
-    return vilkårsvurdering.map((personResultat: IPersonResultat) => {
-        return {
-            ...personResultat,
-            vilkårResultater: personResultat.vilkårResultater.map(
-                (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
-                    return validerVilkår(vilkårResultat, { person: personResultat.person });
-                }
-            ),
-        };
-    });
-};
-
 export const validerAnnenVurdering = (
     nyttAnnenVurdering: FeltState<IAnnenVurdering>
 ): FeltState<IAnnenVurdering> => {
@@ -64,7 +51,7 @@ export const validerAnnenVurdering = (
         nyttAnnenVurdering.verdi.resultat
     );
 
-    const gyldigVilkår: boolean =
+    const gyldigAnnenVurdering: boolean =
         nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
         nyttResultat.valideringsstatus === Valideringsstatus.OK;
 
@@ -74,7 +61,25 @@ export const validerAnnenVurdering = (
         resultat: nyttResultat,
     };
 
-    return gyldigVilkår
+    return gyldigAnnenVurdering
         ? ok({ ...nyttAnnenVurdering, verdi: nyVerdi })
         : feil({ ...nyttAnnenVurdering, verdi: nyVerdi }, '');
+};
+
+export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonResultat[] => {
+    return vilkårsvurdering.map((personResultat: IPersonResultat) => {
+        return {
+            ...personResultat,
+            vilkårResultater: personResultat.vilkårResultater.map(
+                (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
+                    return validerVilkår(vilkårResultat, { person: personResultat.person });
+                }
+            ),
+            andreVurderinger: personResultat.andreVurderinger.map(
+                (annenVurdering: FeltState<IAnnenVurdering>): FeltState<IAnnenVurdering> => {
+                    return validerAnnenVurdering(annenVurdering);
+                }
+            ),
+        };
+    });
 };
