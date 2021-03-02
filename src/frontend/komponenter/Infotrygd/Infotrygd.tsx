@@ -14,12 +14,12 @@ import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import { Sakstabell } from './Sakstabell';
 
 const InfotrygdContainer = styled.div`
-    margin: 16px;
+    margin: 1rem;
 `;
 
 const HentSakerFlex = styled.div`
-    margin-top: 64px;
-    margin-bottom: 32px;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
     display: flex;
 `;
 
@@ -66,7 +66,7 @@ export const Infotrygd: React.FC = () => {
                     </SkjemaGruppe>
                     <HentSakerKnapp
                         mini
-                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        spinner={skjemaErLåst}
                         disabled={skjemaErLåst}
                         onClick={() => {
                             onSubmit(
