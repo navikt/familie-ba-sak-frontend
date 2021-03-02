@@ -72,7 +72,7 @@ const AnnenVurderingTabell: React.FC<IProps> = ({
                     <TabellHeader />
                 </tr>
             </thead>
-            {andreVurderinger.map((anneVurdering: FeltState<IAnnenVurdering>) => {
+            {andreVurderinger.map((annenVurdering: FeltState<IAnnenVurdering>) => {
                 return (
                     <AnnenVurderingTabellRad
                         key={`${person.personIdent}_${anneVurdering.verdi.type}`}
