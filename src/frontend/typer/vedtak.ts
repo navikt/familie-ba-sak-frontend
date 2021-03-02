@@ -12,17 +12,23 @@ export interface IVedtakForBehandling {
 }
 
 export interface IRestVedtakBegrunnelse {
-    id?: number;
-    fom: string;
-    tom?: string;
-    begrunnelseType?: VedtakBegrunnelseType;
     begrunnelse?: VedtakBegrunnelse;
+    begrunnelseType?: VedtakBegrunnelseType;
+    fom: string;
+    id?: number;
+    tom?: string;
 }
 
 export interface IRestPostVedtakBegrunnelse {
     fom: string;
     tom?: string;
     vedtakBegrunnelse: VedtakBegrunnelse;
+}
+
+export interface IRestDeleteVedtakBegrunnelser {
+    fom: string;
+    tom?: string;
+    vedtakbegrunnelseTyper: VedtakBegrunnelseType[];
 }
 
 export interface IRestVedtakBegrunnelseTilknyttetVilkår {

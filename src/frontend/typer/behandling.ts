@@ -1,9 +1,10 @@
-import { IPersonMedAndelerTilkjentYtelse, IUtbetalingsperiode } from './beregning';
+import { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import { INøkkelPar } from './common';
 import { IOpplysningsplikt } from './opplysningsplikt';
 import { IGrunnlagPerson } from './person';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
+import { Vedtaksperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export enum BehandlingKategori {
@@ -115,17 +116,25 @@ export enum Behandlingstype {
 }
 
 export enum BehandlingResultat {
-    AVSLÅTT = 'AVSLÅTT',
+    INNVILGET = 'INNVILGET',
+    INNVILGET_OG_OPPHØRT = 'INNVILGET_OG_OPPHØRT',
+    INNVILGET_OG_ENDRET = 'INNVILGET_OG_ENDRET',
+    INNVILGET_ENDRET_OG_OPPHØRT = 'INNVILGET_ENDRET_OG_OPPHØRT',
     DELVIS_INNVILGET = 'DELVIS_INNVILGET',
-    ENDRET_OG_FORTSATT_INNVILGET = 'ENDRET_OG_FORTSATT_INNVILGET',
+    DELVIS_INNVILGET_OG_OPPHØRT = 'DELVIS_INNVILGET_OG_OPPHØRT',
+    DELVIS_INNVILGET_OG_ENDRET = 'DELVIS_INNVILGET_OG_ENDRET',
+    DELVIS_INNVILGET_ENDRET_OG_OPPHØRT = 'DELVIS_INNVILGET_ENDRET_OG_OPPHØRT',
+    AVSLÅTT = 'AVSLÅTT',
+    AVSLÅTT_OG_OPPHØRT = 'AVSLÅTT_OG_OPPHØRT',
+    AVSLÅTT_OG_ENDRET = 'AVSLÅTT_OG_ENDRET',
+    AVSLÅTT_ENDRET_OG_OPPHØRT = 'AVSLÅTT_ENDRET_OG_OPPHØRT',
+    ENDRET = 'ENDRET',
     ENDRET_OG_OPPHØRT = 'ENDRET_OG_OPPHØRT',
+    OPPHØRT = 'OPPHØRT',
     FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
     HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
-    INNVILGET = 'INNVILGET',
-    INNVILGET_OG_OPPHØRT = 'INNVILGET_OG_OPPHØRT',
-    OPPHØRT = 'OPPHØRT',
 }
 
 export enum BehandlerRolle {
@@ -155,7 +164,7 @@ export interface IBehandling {
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
-    utbetalingsperioder: IUtbetalingsperiode[];
+    vedtaksperioder: Vedtaksperiode[];
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
@@ -224,17 +233,25 @@ export const underkategorier: INøkkelPar = {
 };
 
 export const behandlingsresultater: Record<BehandlingResultat, string> = {
-    DELVIS_INNVILGET: 'Delvis innvilget',
-    ENDRET_OG_FORTSATT_INNVILGET: 'Endret og fortsatt innvilget',
-    ENDRET_OG_OPPHØRT: 'Endret og opphørt',
-    FORTSATT_INNVILGET: 'Fortsatt innvilget',
-    AVSLÅTT: 'Avslått',
-    IKKE_VURDERT: 'Ikke vurdert',
     INNVILGET: 'Innvilget',
     INNVILGET_OG_OPPHØRT: 'Innvilget og opphørt',
+    INNVILGET_OG_ENDRET: 'Innvilget og endret',
+    INNVILGET_ENDRET_OG_OPPHØRT: 'Innvilget, endret og opphørt',
+    DELVIS_INNVILGET: 'Delvis innvilget',
+    DELVIS_INNVILGET_OG_OPPHØRT: 'Delvis innvilget og opphørt',
+    DELVIS_INNVILGET_OG_ENDRET: 'Delvis innvilget og endret',
+    DELVIS_INNVILGET_ENDRET_OG_OPPHØRT: 'Delvis innvilget, endret og opphørt',
+    AVSLÅTT: 'Avslått',
+    AVSLÅTT_OG_OPPHØRT: 'Avslått og opphørt',
+    AVSLÅTT_OG_ENDRET: 'Avslått og endret',
+    AVSLÅTT_ENDRET_OG_OPPHØRT: 'Avslått, endret og opphørt',
+    ENDRET: 'Endret',
+    ENDRET_OG_OPPHØRT: 'Endret og opphørt',
     OPPHØRT: 'Opphørt',
+    FORTSATT_INNVILGET: 'Fortsatt innvilget',
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
+    IKKE_VURDERT: 'Ikke vurdert',
 };
 
 export const behandlingsstatuser: Record<BehandlingStatus, string> = {

@@ -2,12 +2,8 @@ import React from 'react';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import {
-    IUtbetalingsperiodeDetalj,
-    satsBeløp,
-    YtelseType,
-    ytelsetype,
-} from '../../../typer/beregning';
+import { satsBeløp, YtelseType, ytelsetype } from '../../../typer/beregning';
+import { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
 import { formaterBeløp } from '../../../utils/formatter';
 import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';

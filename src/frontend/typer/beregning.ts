@@ -1,21 +1,5 @@
 import { INøkkelPar } from './common';
-import { IGrunnlagPerson } from './person';
 import { YearMonth } from './tid';
-
-export interface IUtbetalingsperiode {
-    periodeFom: string;
-    periodeTom: string;
-    utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
-    ytelseTyper: YtelseType[];
-    antallBarn: number;
-    utbetaltPerMnd: number;
-}
-
-export interface IUtbetalingsperiodeDetalj {
-    person: IGrunnlagPerson;
-    ytelseType: YtelseType;
-    utbetaltPerMnd: number;
-}
 
 export interface IPersonMedAndelerTilkjentYtelse {
     personIdent: string;
