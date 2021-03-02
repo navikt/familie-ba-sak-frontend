@@ -11,6 +11,7 @@ import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
+import { Infotrygd } from './Infotrygd/Infotrygd';
 import Internstatistikk from './Internstatistikk';
 import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
 
@@ -45,6 +46,7 @@ const Container: React.FC = () => {
                                     component={ManuellJournalfør}
                                 />
                                 <Route path="/internstatistikk" component={Internstatistikk} />
+                                <Route path="/infotrygd" component={Infotrygd} />
                             </Switch>
                         </FagsakProvider>
                     </main>
