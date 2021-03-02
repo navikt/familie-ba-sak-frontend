@@ -119,37 +119,33 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                             vilkårResultat.verdi.vilkårType === vc.key
                                     );
 
-                                    return (
-                                        <div>
-                                            {vilkårResultater.length && (
-                                                <GeneriskVilkår
-                                                    key={`${personResultat.personIdent}_${vc.key}`}
-                                                    person={personResultat.person}
-                                                    vilkårResultater={vilkårResultater}
-                                                    vilkårFraConfig={vc}
-                                                    visFeilmeldinger={visFeilmeldinger}
-                                                />
-                                            )}
-                                        </div>
-                                    );
+                                    return vilkårResultater.length ? (
+                                        <GeneriskVilkår
+                                            key={`${personResultat.personIdent}_${vc.key}`}
+                                            person={personResultat.person}
+                                            vilkårResultater={vilkårResultater}
+                                            vilkårFraConfig={vc}
+                                            visFeilmeldinger={visFeilmeldinger}
+                                        />
+                                    ) : undefined;
                                 })}
-                        </Collapse>
-                        {andreVurderinger.length > 0 &&
-                            Object.values(annenVurderingConfig)
-                                .filter(annenVurderingConfig =>
-                                    annenVurderingConfig.parterDetteGjelderFor.includes(
-                                        personResultat.person.type
+                            {andreVurderinger.length > 0 &&
+                                Object.values(annenVurderingConfig)
+                                    .filter(annenVurderingConfig =>
+                                        annenVurderingConfig.parterDetteGjelderFor.includes(
+                                            personResultat.person.type
+                                        )
                                     )
-                                )
-                                .map(annenVurderingConfig => (
-                                    <GeneriskAnnenVurdering
-                                        key={`${personResultat.personIdent}_${annenVurderingConfig.key}`}
-                                        person={personResultat.person}
-                                        andreVurderinger={personResultat.andreVurderinger}
-                                        annenVurderingConfig={annenVurderingConfig}
-                                        visFeilmeldinger={visFeilmeldinger}
-                                    />
-                                ))}
+                                    .map(annenVurderingConfig => (
+                                        <GeneriskAnnenVurdering
+                                            key={`${personResultat.personIdent}_${annenVurderingConfig.key}`}
+                                            person={personResultat.person}
+                                            andreVurderinger={personResultat.andreVurderinger}
+                                            annenVurderingConfig={annenVurderingConfig}
+                                            visFeilmeldinger={visFeilmeldinger}
+                                        />
+                                    ))}
+                        </Collapse>
                     </Container>
                 );
             })}
