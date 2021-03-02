@@ -75,20 +75,18 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                 visFeilmeldinger && (
                     <Feiloppsummering
                         tittel={'For å gå videre må du rette opp følgende:'}
-                        feil={
-                        [...hentVilkårMedFeil()
-                            .map((vilkårResultat: IVilkårResultat) => ({
+                        feil={[
+                            ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
                                 feilmelding: `Vilkåret mangler resultat`,
                                 skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
                             })),
                             ...hentAndreVurderingerMedFeil().map(
-                                    (annenVurdering: IAnnenVurdering) => ({
-                                        feilmelding: `Annen vurdering mangler resultat`,
-                                        skjemaelementId: annenVurderingFeilmeldingId(
-                                            annenVurdering
-                                        ),
-                                    })
-                                )]}
+                                (annenVurdering: IAnnenVurdering) => ({
+                                    feilmelding: `Annen vurdering mangler resultat`,
+                                    skjemaelementId: annenVurderingFeilmeldingId(annenVurdering),
+                                })
+                            ),
+                        ]}
                     />
                 )}
 

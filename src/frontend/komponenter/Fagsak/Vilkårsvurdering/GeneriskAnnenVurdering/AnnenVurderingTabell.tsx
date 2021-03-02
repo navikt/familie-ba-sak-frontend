@@ -75,10 +75,10 @@ const AnnenVurderingTabell: React.FC<IProps> = ({
             {andreVurderinger.map((annenVurdering: FeltState<IAnnenVurdering>) => {
                 return (
                     <AnnenVurderingTabellRad
-                        key={`${person.personIdent}_${anneVurdering.verdi.type}`}
+                        key={`${person.personIdent}_${annenVurdering.verdi.type}`}
                         annenVurderingConfig={annenVurderingConfig}
                         person={person}
-                        annenVurdering={anneVurdering}
+                        annenVurdering={annenVurdering}
                         visFeilmeldinger={visFeilmeldinger}
                     />
                 );

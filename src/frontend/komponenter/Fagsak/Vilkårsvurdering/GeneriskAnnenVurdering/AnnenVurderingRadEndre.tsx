@@ -221,7 +221,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     id={annenVurderingBegrunnelseFeilmeldingId(redigerbartAnnenVurdering.verdi)}
                     label={'Begrunnelse (valgfri)'}
                     textareaClass={'begrunnelse-textarea'}
-                    placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
+                    placeholder={'Begrunn hvorfor det er gjort endringer på annen vurdering'}
                     value={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
                     feil={
                         redigerbartAnnenVurdering.verdi.begrunnelse.valideringsstatus ===
