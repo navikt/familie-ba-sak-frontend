@@ -91,7 +91,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
 
         return request<IRestAnnenVurdering, IFagsak>({
             method: 'PUT',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/annenvurdering`,
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/annenvurdering/${redigerbartAnnenVurdering.verdi.id}`,
             data: {
                 id: redigerbartAnnenVurdering.verdi.id,
                 begrunnelse: redigerbartAnnenVurdering.verdi.begrunnelse.verdi,
