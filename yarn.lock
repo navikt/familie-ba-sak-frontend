@@ -723,14 +723,16 @@
     request-promise "^4.2.5"
     snyk "^1.336.0"
 
-"@navikt/familie-clipboard@^3.1.0", "@navikt/familie-clipboard@^3.1.2":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.1.2.tgz#8ffc848a004c79efc120edb50e4f847b3efac42c"
-  integrity sha512-rLbC9IaEMbhtFN5XcHvL/mYMm1by67LKgdSDeENkH2YkocTu/EQHY50iFQketzDo2o0pso3PIKrl+y/S/4DLMA==
+"@navikt/familie-clipboard@^3.1.2", "@navikt/familie-clipboard@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-clipboard/-/familie-clipboard-3.1.3.tgz#28f074dd8a724a286bd8d9ac2102d66ca661f9d1"
+  integrity sha512-7wgL8uizpYoN++gRl8uSkZ+h3FRAg2qpvtSAW07nJmGhbC9M+QkBfqilGHBdH9KniIOKf+KTF5g30bFAidsdHQ==
   dependencies:
     "@types/react-tooltip" "^3.11.0"
     framer-motion "^2.9.1"
     nav-frontend-core "^5.0.10"
+    nav-frontend-knapper "^2.0.31"
+    nav-frontend-knapper-style "^1.0.16"
     react-tooltip "^3.11.4"
     styled-components "^5.2.1"
 
