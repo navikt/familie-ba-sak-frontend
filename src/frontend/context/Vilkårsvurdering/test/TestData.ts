@@ -202,12 +202,32 @@ export const testFagsak: IFagsak = JSON.parse(`{
     ]
   }`);
 
+export const søkerIdent = '11079219845';
+export const barnIdent = '12061879860';
+
 export const lagAndreVurderingResultater = (fagsak: IFagsak, resultat: Resultat) => {
     fagsak.behandlinger.forEach(behandling =>
         behandling.personResultater.forEach(personResultat =>
             personResultat.andreVurderinger.forEach(
                 annenVurdering => (annenVurdering.resultat = resultat)
             )
+        )
+    );
+    return fagsak;
+};
+
+export const lagPersonAndreVurderingResultater = (
+    fagsak: IFagsak,
+    personIdent: string,
+    resultat: Resultat
+) => {
+    fagsak.behandlinger.forEach(behandling =>
+        behandling.personResultater.forEach(
+            personResultat =>
+                personResultat.personIdent === personIdent &&
+                personResultat.andreVurderinger.forEach(
+                    annenVurdering => (annenVurdering.resultat = resultat)
+                )
         )
     );
     return fagsak;
