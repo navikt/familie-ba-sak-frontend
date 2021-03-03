@@ -66,6 +66,7 @@ const AnnenVurderingTabell: React.FC<IProps> = ({
             <thead>
                 <tr>
                     <TabellHeader>Vurdering</TabellHeader>
+                    <TabellHeader />
                     <TabellHeader>Begrunnelse</TabellHeader>
                     <TabellHeader />
                     <TabellHeader />
