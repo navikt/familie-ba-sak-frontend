@@ -11,7 +11,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import backend, { IApp, ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import { logInfo } from '@navikt/familie-logging';
 
-import webpackDevConfig from '../webpack/webpack.dev';
+import webpackDevConfig from '../webpack/webpack.dev.js';
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
 import { attachToken, doPdfProxy, doProxy } from './proxy';
@@ -28,6 +28,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
             // eslint-disable-next-line
             // @ts-ignore
             publicPath: webpackDevConfig.output.publicPath,
+            writeToDisk: true,
         });
 
         app.use(middleware);
