@@ -1,4 +1,4 @@
-import './konfigurerApp';
+import './konfigurerApp.js';
 
 import path from 'path';
 
@@ -12,10 +12,10 @@ import backend, { IApp, ensureAuthenticated, envVar } from '@navikt/familie-back
 import { logInfo } from '@navikt/familie-logging';
 
 import webpackDevConfig from '../webpack/webpack.dev.js';
-import { sessionConfig } from './config';
-import { prometheusTellere } from './metrikker';
-import { attachToken, doPdfProxy, doProxy } from './proxy';
-import setupRouter from './router';
+import { sessionConfig } from './config.js';
+import { prometheusTellere } from './metrikker.js';
+import { attachToken, doPdfProxy, doProxy } from './proxy.js';
+import setupRouter from './router.js';
 
 const port = 8000;
 

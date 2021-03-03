@@ -1,18 +1,18 @@
 import path from 'path';
 
 import { Response, Request, Router } from 'express';
-import WebpackDevMiddleware from 'webpack-dev-middleware';
+import { WebpackDevMiddleware } from 'webpack-dev-middleware';
 
 import { Client, ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
 import { LOG_LEVEL } from '@navikt/familie-logging';
 
-import { buildPath } from './config';
-import { prometheusTellere } from './metrikker';
+import { buildPath } from './config.js';
+import { prometheusTellere } from './metrikker.js';
 
 export default (
     authClient: Client,
     router: Router,
-    middleware?: WebpackDevMiddleware.WebpackDevMiddleware
+    middleware?: WebpackDevMiddleware
 ) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)

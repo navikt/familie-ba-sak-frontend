@@ -7,7 +7,7 @@
         "outDir": "node_dist",
         "rootDir": "./src",
         "resolveJsonModule": true,
-        "types": ["express-session"]
+        "types": ["express-session"],
     },
     "include": ["./src/backend"],
     "exclude": ["./src/frontend"],

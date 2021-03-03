@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { stdoutLogger } from '@navikt/familie-logging';
 
-import { oboConfig, proxyUrl } from './config';
+import { oboConfig, proxyUrl } from './config.js';
 
 const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     if (req.body) {
