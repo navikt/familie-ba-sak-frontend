@@ -1,8 +1,9 @@
-import { IPersonMedAndelerTilkjentYtelse, IUtbetalingsperiode } from './beregning';
+import { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
+import { Vedtaksperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export enum BehandlingKategori {
@@ -161,7 +162,7 @@ export interface IBehandling {
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
-    utbetalingsperioder: IUtbetalingsperiode[];
+    vedtaksperioder: Vedtaksperiode[];
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;

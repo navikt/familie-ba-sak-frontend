@@ -5,11 +5,13 @@ import styled from 'styled-components';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { Element } from 'nav-frontend-typografi';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import { IBehandling } from '../../../../typer/behandling';
-import { IUtbetalingsperiode } from '../../../../typer/beregning';
+import { ToggleNavn } from '../../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../../typer/vedtak';
+import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat } from '../../../../utils/formatter';
 import Hjelpetekst44px from './Hjelpetekst44px';
@@ -34,11 +36,12 @@ const StyledHjelpetekst44px = styled(Hjelpetekst44px)`
 `;
 
 const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
+    const { toggles } = useApp();
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
 
-    const harAndeler = åpenBehandling.utbetalingsperioder.length > 0;
-    const utbetalingsperioderMedBegrunnelseBehov = åpenBehandling.utbetalingsperioder
+    const harVedtaksperioder = åpenBehandling.vedtaksperioder.length > 0;
+    const vedtaksperioderMedBegrunnelseBehov = åpenBehandling.vedtaksperioder
         .slice()
         .sort((a, b) =>
             familieDayjsDiff(
@@ -46,12 +49,12 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                 familieDayjs(b.periodeFom, datoformat.ISO_DAG)
             )
         )
-        .filter((utbetalingsperiode: IUtbetalingsperiode) => {
+        .filter((vedtaksperiode: Vedtaksperiode) => {
             const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
                 (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                     return (
-                        vedtakBegrunnelse.fom === utbetalingsperiode.periodeFom &&
-                        vedtakBegrunnelse.tom === utbetalingsperiode.periodeTom
+                        vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
+                        vedtakBegrunnelse.tom === vedtaksperiode.periodeTom
                     );
                 }
             );
@@ -63,15 +66,12 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
 
             // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
             return (
-                familieDayjsDiff(
-                    familieDayjs(utbetalingsperiode.periodeFom),
-                    familieDayjs(),
-                    'month'
-                ) < 2
+                familieDayjsDiff(familieDayjs(vedtaksperiode.periodeFom), familieDayjs(), 'month') <
+                2
             );
         });
 
-    return harAndeler ? (
+    return harVedtaksperioder ? (
         <>
             <UtbetalingsperioderOverskrift>
                 <Element>Begrunnelser i vedtaksbrev </Element>
@@ -80,15 +80,24 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                     innhold="Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør."
                 />
             </UtbetalingsperioderOverskrift>
-            {utbetalingsperioderMedBegrunnelseBehov.map(
-                (utbetalingsperiode: IUtbetalingsperiode) => (
+            {vedtaksperioderMedBegrunnelseBehov
+                .filter((vedtaksperiode: Vedtaksperiode) => {
+                    if (toggles[ToggleNavn.visOpphørsperioder])
+                        return (
+                            vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
+                            vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
+                        );
+                    else {
+                        return vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING;
+                    }
+                })
+                .map((vedtaksperiode: Vedtaksperiode) => (
                     <VedtakBegrunnelsePanel
                         behandlingsType={åpenBehandling.type}
                         personResultater={åpenBehandling.personResultater}
-                        utbetalingsperiode={utbetalingsperiode}
+                        vedtaksperiode={vedtaksperiode}
                     />
-                )
-            )}
+                ))}
         </>
     ) : null;
 };

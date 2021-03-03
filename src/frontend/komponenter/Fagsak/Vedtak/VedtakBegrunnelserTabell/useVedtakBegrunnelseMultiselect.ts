@@ -1,8 +1,10 @@
 import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
-import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
+import { TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
+import { ToggleNavn } from '../../../../typer/toggles';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -10,6 +12,7 @@ import {
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
 } from '../../../../typer/vedtak';
+import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import {
     IRestPersonResultat,
     IRestVilkårResultat,
@@ -21,15 +24,22 @@ import { isoStringToDayjs } from '../../../../utils/formatter';
 
 const useVedtakBegrunnelseMultiselect = (
     personResultater: IRestPersonResultat[],
-    periode: IPeriode
+    vedtaksperiode: Vedtaksperiode
 ) => {
+    const { toggles } = useApp();
     const {
         vedtakBegrunnelser,
         vilkårBegrunnelser,
         leggTilVedtakBegrunnelse,
         slettVedtakBegrunnelse,
         slettVedtakBegrunnelserForPeriode,
+        slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
     } = useVedtakBegrunnelser();
+
+    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype =
+        vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING
+            ? [VedtakBegrunnelseType.INNVILGELSE, VedtakBegrunnelseType.REDUKSJON]
+            : [VedtakBegrunnelseType.OPPHØR];
 
     const onChangeBegrunnelse = (
         action: ActionMeta<ISelectOption>,
@@ -38,8 +48,8 @@ const useVedtakBegrunnelseMultiselect = (
         switch (action.action) {
             case 'select-option':
                 leggTilVedtakBegrunnelse({
-                    fom: periode.fom ?? '',
-                    tom: periode.tom,
+                    fom: vedtaksperiode.periodeFom,
+                    tom: vedtaksperiode.periodeTom,
                     vedtakBegrunnelse: (action.option?.value ?? '') as VedtakBegrunnelse,
                 });
                 break;
@@ -65,10 +75,18 @@ const useVedtakBegrunnelseMultiselect = (
                     vedtakBegrunnelserForPeriode[0];
 
                 if (førsteVedtakBegrunnelse) {
-                    slettVedtakBegrunnelserForPeriode(
-                        førsteVedtakBegrunnelse.fom,
-                        førsteVedtakBegrunnelse.tom
-                    );
+                    if (toggles[ToggleNavn.visOpphørsperioder]) {
+                        slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper(
+                            førsteVedtakBegrunnelse.fom,
+                            vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype,
+                            førsteVedtakBegrunnelse.tom
+                        );
+                    } else {
+                        slettVedtakBegrunnelserForPeriode(
+                            førsteVedtakBegrunnelse.fom,
+                            førsteVedtakBegrunnelse.tom
+                        );
+                    }
                 } else {
                     throw new Error(
                         'Prøver å fjerne alle begrunnelser for en periode, men det er ikke satt noen begrunnelser'
@@ -88,7 +106,7 @@ const useVedtakBegrunnelseMultiselect = (
                     return (
                         familieDayjsDiff(
                             isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN),
-                            familieDayjs(periode.fom).subtract(1, 'month'),
+                            familieDayjs(vedtaksperiode.periodeFom).subtract(1, 'month'),
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
                     );
@@ -99,7 +117,10 @@ const useVedtakBegrunnelseMultiselect = (
                     return (
                         familieDayjsDiff(
                             isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
-                            familieDayjs(periode.fom).subtract(oppfyltTomMånedEtter, 'month'),
+                            familieDayjs(vedtaksperiode.periodeFom).subtract(
+                                oppfyltTomMånedEtter,
+                                'month'
+                            ),
                             'month'
                         ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
                     );
@@ -110,12 +131,15 @@ const useVedtakBegrunnelseMultiselect = (
                     return (
                         (familieDayjsDiff(
                             isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
-                            familieDayjs(periode.tom),
+                            familieDayjs(vedtaksperiode.periodeTom),
                             'month'
                         ) === 0 ||
                             familieDayjsDiff(
                                 isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
-                                familieDayjs(periode.fom).subtract(oppfyltTomMånedEtter, 'month'),
+                                familieDayjs(vedtaksperiode.periodeFom).subtract(
+                                    oppfyltTomMånedEtter,
+                                    'month'
+                                ),
                                 'month'
                             ) === 0) &&
                         vilkårResultat.resultat === Resultat.OPPFYLT
@@ -129,23 +153,38 @@ const useVedtakBegrunnelseMultiselect = (
 
     const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
         (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
-            return vedtakBegrunnelse.fom === periode.fom && vedtakBegrunnelse.tom === periode.tom;
+            return (
+                vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
+                vedtakBegrunnelse.tom === vedtaksperiode.periodeTom
+            );
         }
     );
 
-    const gruppertBegrunnelser: GroupType<ISelectOption>[] =
+    const grupperteBegrunnelser =
         vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? Object.keys(vilkårBegrunnelser.data).reduce(
-                  (acc: GroupType<ISelectOption>[], resultat: string) => {
+            ? Object.keys(vilkårBegrunnelser.data)
+                  .filter((vedtakBegrunnelseType: string) =>
+                      toggles[ToggleNavn.visOpphørsperioder]
+                          ? vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype.includes(
+                                vedtakBegrunnelseType as VedtakBegrunnelseType
+                            )
+                          : true
+                  )
+                  .reduce((acc: GroupType<ISelectOption>[], vedtakBegrunnelseType: string) => {
                       const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
-                          resultat as VedtakBegrunnelseType
+                          vedtakBegrunnelseType as VedtakBegrunnelseType
                       );
 
                       return [
                           ...acc,
                           {
-                              label: vedtakBegrunnelseTyper[resultat as VedtakBegrunnelseType],
-                              options: vilkårBegrunnelser.data[resultat as VedtakBegrunnelseType]
+                              label:
+                                  vedtakBegrunnelseTyper[
+                                      vedtakBegrunnelseType as VedtakBegrunnelseType
+                                  ],
+                              options: vilkårBegrunnelser.data[
+                                  vedtakBegrunnelseType as VedtakBegrunnelseType
+                              ]
                                   .filter(
                                       (
                                           restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
@@ -167,9 +206,7 @@ const useVedtakBegrunnelseMultiselect = (
                                   ),
                           },
                       ];
-                  },
-                  []
-              )
+                  }, [])
             : [];
 
     const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode.map(
@@ -195,8 +232,7 @@ const useVedtakBegrunnelseMultiselect = (
 
     return {
         begrunnelser,
-        gruppertBegrunnelser,
-        hentUtgjørendeVilkår,
+        grupperteBegrunnelser,
         onChangeBegrunnelse,
         valgteBegrunnelser,
         vedtakBegrunnelserForPeriode,

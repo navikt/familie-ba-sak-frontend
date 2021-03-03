@@ -20,7 +20,7 @@ import {
     IVedtakBegrunnelseSubmit,
     useVedtakBegrunnelser,
 } from '../../../../context/VedtakBegrunnelseContext';
-import { IPeriode, lagPeriodeId } from '../../../../typer/periode';
+import { lagPeriodeId } from '../../../../typer/periode';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
@@ -29,12 +29,13 @@ import {
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
 } from '../../../../typer/vedtak';
+import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
 import useVedtakBegrunnelseMultiselect from './useVedtakBegrunnelseMultiselect';
 
 interface IVedtakBegrunnelseMultiselect {
     erLesevisning: boolean;
-    periode: IPeriode;
+    vedtaksperiode: Vedtaksperiode;
     personResultater: IRestPersonResultat[];
 }
 
@@ -44,16 +45,20 @@ const GroupLabel = styled.div`
 
 const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = ({
     erLesevisning,
-    periode,
+    vedtaksperiode,
     personResultater,
 }) => {
+    const periode = {
+        fom: vedtaksperiode.periodeFom,
+        tom: vedtaksperiode.periodeTom,
+    };
     const { vedtakBegrunnelseSubmit, vilkårBegrunnelser } = useVedtakBegrunnelser();
     const {
-        gruppertBegrunnelser,
+        grupperteBegrunnelser,
         onChangeBegrunnelse,
         valgteBegrunnelser,
         vedtakBegrunnelserForPeriode,
-    } = useVedtakBegrunnelseMultiselect(personResultater, periode);
+    } = useVedtakBegrunnelseMultiselect(personResultater, vedtaksperiode);
 
     const submitForPeriode: IVedtakBegrunnelseSubmit | undefined =
         lagPeriodeId(periode) === vedtakBegrunnelseSubmit.periodeId
@@ -143,7 +148,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                     </GroupLabel>
                 );
             }}
-            options={gruppertBegrunnelser}
+            options={grupperteBegrunnelser}
         />
     );
 };
