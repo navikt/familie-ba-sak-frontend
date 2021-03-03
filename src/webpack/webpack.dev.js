@@ -16,6 +16,9 @@ const devConfig = mergeWithRules({
     entry: ['webpack-hot-middleware/client'],
     devtool: 'inline-source-map',
     plugins: [new webpack.HotModuleReplacementPlugin(), new ReactRefreshWebpackPlugin()],
+    output: {
+        publicPath: '/assets/',
+    },
     module: {
         rules: [
             {

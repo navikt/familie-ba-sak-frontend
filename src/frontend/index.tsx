@@ -8,7 +8,6 @@ import axe from 'react-axe';
 import * as ReactDOM from 'react-dom';
 import { hot } from 'react-hot-loader';
 
-import { version } from '../../package.json';
 import App from './komponenter/App';
 
 const environment = window.location.hostname;
@@ -16,7 +15,7 @@ const environment = window.location.hostname;
 init({
     dsn: 'https://10239ce4baed4db79d080d85f08b5878@sentry.gc.nav.no/26',
     environment,
-    release: version,
+    release: '1.0.0',
     enabled: process.env.NODE_ENV !== 'development',
 });
 

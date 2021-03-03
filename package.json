@@ -8,16 +8,14 @@
   "type": "module",
   "scripts": {
     "start": "NODE_ENV=production node node_dist/backend/server.js",
-    "start:mock": "tsc -p tsconfig.backend.json && yarn copy-pdf-mock && NODE_ENV=development node node_dist/mock-server/server.js",
     "start:dev": "tsc -p tsconfig.backend.json && NODE_ENV=development node node_dist/backend/server.js",
     "build": "yarn build:prod",
-    "build:prod": "tsc -p tsconfig.backend.json && webpack --config ./build_n_deploy/webpack/webpack.prod.js",
+    "build:prod": "tsc -p tsconfig.backend.json && NODE_ENV=production webpack --config ./src/webpack/webpack.prod.js",
     "snyk-protect": "snyk protect",
     "test": "jest",
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
-    "copy-pdf-mock": "copyfiles -u 1 src/**/**/*.pdf node_dist",
     "prepare": "yarn run snyk-protect"
   },
   "husky": {
@@ -132,6 +130,7 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.12.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@testing-library/react-hooks": "^3.4.2",
     "@types/jest": "^26.0.15",
     "@types/react-axe": "^3.1.0",
@@ -167,7 +166,6 @@
     "lint-staged": "^10.2.9",
     "mini-css-extract-plugin": "^1.3.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "postcss-loader": "^3.0.0",
     "prettier": "^2.0.5",
     "react-axe": "^3.5.3",
     "react-hot-loader": "4.13.0",

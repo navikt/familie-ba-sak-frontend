@@ -1,7 +1,6 @@
 import path from 'path';
 
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import TypeScriptTypeChecker from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
 

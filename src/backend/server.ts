@@ -11,13 +11,11 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import backend, { IApp, ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import { logInfo } from '@navikt/familie-logging';
 
+import webpackDevConfig from '../webpack/webpack.dev';
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
 import { attachToken, doPdfProxy, doProxy } from './proxy';
 import setupRouter from './router';
-
-// eslint-disable-next-line
-const config = require('../../build_n_deploy/webpack/webpack.dev');
 
 const port = 8000;
 
@@ -25,9 +23,11 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     let middleware;
 
     if (process.env.NODE_ENV === 'development') {
-        const compiler = webpack(config);
+        const compiler = webpack(webpackDevConfig);
         middleware = webpackDevMiddleware(compiler, {
-            publicPath: config.output.publicPath,
+            // eslint-disable-next-line
+            // @ts-ignore
+            publicPath: webpackDevConfig.output.publicPath,
         });
 
         app.use(middleware);
