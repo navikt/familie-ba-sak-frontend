@@ -1,36 +1,37 @@
-const path = require('path');
-const webpack = require('webpack');
-const merge = require('webpack-merge');
-const common = require('./webpack.common');
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import webpack from 'webpack';
+import { mergeWithRules } from 'webpack-merge';
 
-const config = merge.strategy({
-    'entry.familie-ba-sak': 'prepend',
-    'module.rules': 'append',
-})(common, {
+import baseConfig from './webpack.common.js';
+
+const devConfig = mergeWithRules({
+    module: {
+        rules: {
+            test: 'match',
+            options: 'replace',
+        },
+    },
+})(baseConfig, {
     mode: 'development',
-    entry: {
-        'familie-ba-sak': [
-            'babel-polyfill',
-            'react-hot-loader/patch',
-            'webpack-hot-middleware/client?reload=true',
+    entry: ['webpack-hot-middleware/client'],
+    devtool: 'inline-source-map',
+    plugins: [new webpack.HotModuleReplacementPlugin(), new ReactRefreshWebpackPlugin()],
+    module: {
+        rules: [
+            {
+                test: /\.(jsx|tsx|ts|js)?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                options: {
+                    presets: ['react-app'],
+                    plugins: ['react-refresh/babel'],
+                },
+            },
         ],
     },
-    output: {
-        path: path.join(__dirname, '../../frontend_development'),
-        filename: '[name].[hash].js',
-        publicPath: '/assets/',
-        globalObject: 'this',
+    optimization: {
+        minimize: false,
     },
-    devtool: 'inline-source-map',
-    resolve: {
-        alias: { react: require.resolve('react') },
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('development'),
-        }),
-        new webpack.HotModuleReplacementPlugin(),
-    ],
 });
 
-module.exports = config;
+export default devConfig;

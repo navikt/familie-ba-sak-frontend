@@ -1,33 +1,50 @@
-const common = require('./webpack.common');
-const merge = require('webpack-merge');
-const path = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
+import path from 'path';
 
-const config = merge.strategy({
-    'entry.familie-ba-sak': 'prepend',
-    'module.rules': 'append',
-})(common, {
-    mode: 'production',
-    entry: {
-        'familie-ba-sak': ['babel-polyfill'],
+import CompressionPlugin from 'compression-webpack-plugin';
+import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TerserWebpackPlugin from 'terser-webpack-plugin';
+import { mergeWithRules } from 'webpack-merge';
+
+import baseConfig from './webpack.common.js';
+
+const prodConfig = mergeWithRules({
+    module: {
+        rules: {
+            test: 'match',
+            use: 'replace',
+        },
     },
+})(baseConfig, {
+    mode: 'production',
     output: {
         path: path.join(__dirname, '../../frontend_production'),
         filename: '[name].[contenthash].js',
         publicPath: '/assets/',
     },
+    optimization: {
+        minimize: true,
+        minimizer: [new TerserWebpackPlugin(), new CssMinimizerWebpackPlugin()],
+        runtimeChunk: {
+            name: 'runtime',
+        },
+        splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+                styles: {
+                    name: 'styles',
+                    type: 'css/mini-extract',
+                    chunks: 'all',
+                    enforce: true,
+                },
+            },
+        },
+    },
+    performance: {
+        maxEntrypointSize: 800000,
+        maxAssetSize: 800000,
+    },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production'),
-        }),
-        new webpack.optimize.OccurrenceOrderPlugin(false),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new MiniCssExtractPlugin({
-            filename: 'familie-ba-sak-frontend.css',
-        }),
         new CompressionPlugin({
             algorithm: 'gzip',
             test: /\.js$|\.css$|\.html$/,
@@ -35,9 +52,6 @@ const config = merge.strategy({
             minRatio: 0.8,
         }),
     ],
-    optimization: {
-        minimizer: [new TerserPlugin()],
-    },
 });
 
-module.exports = config;
+export default prodConfig;

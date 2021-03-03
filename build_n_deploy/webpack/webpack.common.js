@@ -1,37 +1,23 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TypeScriptTypeChecker = require('fork-ts-checker-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+import path from 'path';
 
-module.exports = {
-    entry: {
-        'familie-ba-sak': ['./src/frontend/index.tsx'],
-    },
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import TypeScriptTypeChecker from 'fork-ts-checker-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import TerserWebpackPlugin from 'terser-webpack-plugin';
+
+export default {
+    entry: ['./src/index.tsx'],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
     },
     module: {
         rules: [
             {
-                test: /\.(ts|tsx)$/,
-                enforce: 'pre',
+                test: /\.(jsx|tsx|ts|js)?$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        options: {
-                            eslintPath: require.resolve('eslint'),
-                        },
-                        loader: require.resolve('eslint-loader'),
-                    },
-                ],
-            },
-            {
-                test: /\.(js|ts|tsx)$/,
-                loader: 'ts-loader',
-                exclude: /node_modules/,
+                loader: 'babel-loader',
                 options: {
-                    transpileOnly: true,
+                    presets: ['react-app'],
                 },
             },
             {
@@ -52,16 +38,8 @@ module.exports = {
         ],
     },
     optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'vendors',
-                    chunks: 'all',
-                },
-            },
-        },
-        runtimeChunk: true,
+        minimize: true,
+        minimizer: [new TerserWebpackPlugin()],
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -69,15 +47,6 @@ module.exports = {
             inject: 'body',
             alwaysWriteToDisk: true,
         }),
-        new TypeScriptTypeChecker({
-            typescript: {
-                configFile: path.join(__dirname, '../../src/frontend/tsconfig.json'),
-            },
-            eslint: {
-                files: './src/**/*.{ts,tsx,js,jsx}',
-            },
-        }),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new OptimizeCssAssetsPlugin(),
+        new CaseSensitivePathsPlugin(),
     ],
 };
