@@ -5,6 +5,7 @@
   "repository": "https://github.com/navikt/familie-ba-sak-frontend.git",
   "author": "Henning Håkonsen",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "start": "NODE_ENV=production node node_dist/backend/server.js",
     "start:mock": "tsc -p tsconfig.backend.json && yarn copy-pdf-mock && NODE_ENV=development node node_dist/mock-server/server.js",
@@ -20,8 +21,7 @@
     "prepare": "yarn run snyk-protect"
   },
   "husky": {
-    "hooks": {
-    }
+    "hooks": {}
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css}": [
@@ -142,9 +142,12 @@
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
     "babel-polyfill": "^6.26.0",
+    "babel-preset-react-app": "^10.0.0",
+    "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "compression-webpack-plugin": "^6.1.0",
     "copyfiles": "^2.2.0",
     "css-loader": "^4.2.1",
+    "css-minimizer-webpack-plugin": "^1.2.0",
     "eslint": "^7.13.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.11.0",
@@ -175,11 +178,11 @@
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^4.0.3",
     "typescript-eslint": "^0.0.1-alpha.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^4.2.0",
-    "webpack-dev-middleware": "3.7.2",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-middleware": "^4.1.0",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-merge": "4.2.2"
+    "webpack-merge": "^5.7.3"
   },
   "jest": {
     "preset": "ts-jest",

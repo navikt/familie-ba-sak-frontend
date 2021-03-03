@@ -18,7 +18,7 @@ const prodConfig = mergeWithRules({
 })(baseConfig, {
     mode: 'production',
     output: {
-        path: path.join(__dirname, '../../frontend_production'),
+        path: path.join(process.cwd(), 'frontend_production'),
         filename: '[name].[contenthash].js',
         publicPath: '/assets/',
     },

@@ -6,7 +6,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
 
 export default {
-    entry: ['./src/index.tsx'],
+    entry: [path.join(process.cwd(), 'src/frontend/index.tsx')],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
     },
@@ -23,16 +23,16 @@ export default {
             {
                 test: /\.(less|css)$/,
                 use: [
-                    { loader: require.resolve('style-loader') },
+                    { loader: 'style-loader' },
                     {
-                        loader: require.resolve('css-loader'),
+                        loader: 'css-loader',
                         options: {
                             modules: {
                                 compileType: 'icss',
                             },
                         },
                     },
-                    { loader: require.resolve('less-loader') },
+                    { loader: 'less-loader' },
                 ],
             },
         ],
@@ -43,7 +43,7 @@ export default {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, '../../src/frontend/index.html'),
+            template: path.join(process.cwd(), 'src/frontend/index.html'),
             inject: 'body',
             alwaysWriteToDisk: true,
         }),
