@@ -8,7 +8,6 @@ import {
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
-import { IOpplysningsplikt, OpplysningspliktStatus } from '../../../typer/opplysningsplikt';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
 import { formaterPersonIdent } from '../../../utils/formatter';
 
@@ -27,7 +26,6 @@ export interface IUnderside {
 
 export enum SideId {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
-    OPPLYSNINGSPLIKT = 'OPPLYSNINGSPLIKT',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
     BEHANDLINGRESULTAT = 'BEHANDLINGRESULTAT',
     VEDTAK = 'VEDTAK',
@@ -38,11 +36,6 @@ export const sider: Record<SideId, ISide> = {
         href: 'registrer-soknad',
         navn: 'Registrer søknad',
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
-    },
-    OPPLYSNINGSPLIKT: {
-        href: 'opplysningsplikt',
-        navn: 'Opplysningsplikt',
-        steg: BehandlingSteg.VILKÅRSVURDERING,
     },
     VILKÅRSVURDERING: {
         href: 'vilkaarsvurdering',
@@ -101,34 +94,22 @@ export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
     return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
-export const visSide = (side: ISide, åpenBehandling: IBehandling, harOpplysningsplikt: boolean) => {
-    if (side === sider.OPPLYSNINGSPLIKT) {
-        return harOpplysningsplikt;
-    } else if (
-        åpenBehandling.skalBehandlesAutomatisk ||
-        åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD
-    ) {
+export const visSide = (side: ISide, åpenBehandling: IBehandling) => {
+    if (åpenBehandling.skalBehandlesAutomatisk || åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD) {
         return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
     } else {
         return true;
     }
 };
 
-export const finnSideForBehandlingssteg = (
-    behandling: IBehandling,
-    opplysningsplikt: IOpplysningsplikt | undefined
-): ISide | undefined => {
+export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | undefined => {
     const steg = finnSteg(behandling);
 
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
         return sider.VEDTAK;
-    } else if (opplysningsplikt && opplysningsplikt.status === OpplysningspliktStatus.IKKE_SATT) {
-        return sider.OPPLYSNINGSPLIKT;
     }
 
-    const sideForSteg = Object.entries(sider)
-        .filter(([sideId, _]) => sideId !== SideId.OPPLYSNINGSPLIKT)
-        .find(([_, side]) => side.steg === steg);
+    const sideForSteg = Object.entries(sider).find(([_, side]) => side.steg === steg);
 
     return sideForSteg ? sideForSteg[1] : undefined;
 };
