@@ -146,7 +146,7 @@
     "compression-webpack-plugin": "^6.1.0",
     "copyfiles": "^2.2.0",
     "css-loader": "^4.2.1",
-    "eslint": "^7.13.0",
+    "eslint": "^7.21.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-loader": "^4.0.2",
