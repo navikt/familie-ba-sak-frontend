@@ -22,11 +22,11 @@ describe('utils/fagsak', () => {
             ],
         });
 
-        test('Skal returnere behandling med siste opprettetdato', () => {
+        test('Skal returnere behandling med siste opprettetdato for datoer rundt vintertid', () => {
             expect(hentSisteBehandlingPåFagsak(fagsak1)?.behandlingId).toEqual(2);
         });
 
-        test('Skal returnere dato på format MM.YY', () => {
+        test('Skal returnere behandling med siste opprettetdato for datoer rundt sommertid', () => {
             expect(hentSisteBehandlingPåFagsak(fagsak2)?.behandlingId).toEqual(2);
         });
     });
