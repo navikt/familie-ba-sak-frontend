@@ -1,12 +1,11 @@
 import './index.less';
 import 'nav-frontend-tabell-style';
 
-import * as React from 'react';
+import React from 'react';
 
+import axe from '@axe-core/react';
 import { init } from '@sentry/browser';
-import axe from 'axe-core';
 import * as ReactDOM from 'react-dom';
-import { hot } from 'react-hot-loader';
 
 import App from './komponenter/App';
 
@@ -23,32 +22,13 @@ init({
 });
 
 if (process.env.NODE_ENV !== 'production') {
-    axe.run()
-        .then(results => {
-            if (results.violations.length) {
-                results.violations.forEach(violation => {
-                    console.log(
-                        `Axe feil: ${violation.description} (${violation.helpUrl}) som påvirker: `
-                    );
-                    violation.nodes.forEach(node => {
-                        console.log(`${node.failureSummary}`);
-                    });
-                });
-            }
-        })
-        .catch(err => {
-            console.error('Something bad happened:', err.message);
-        });
+    console.log(axe);
+    axe(React, ReactDOM, 1000);
 }
 
-const rootElement = document.getElementById('app');
-const renderApp = (Component: React.ComponentType): void => {
-    ReactDOM.render(
-        <React.StrictMode>
-            <Component />
-        </React.StrictMode>,
-        rootElement
-    );
-};
-
-renderApp(hot(module)(App));
+ReactDOM.render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+    document.getElementById('app')
+);

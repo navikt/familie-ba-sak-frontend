@@ -5,10 +5,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-    entry: [path.join(process.cwd(), 'src/frontend/index.tsx')],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
     },
+    devtool: 'inline-source-map',
     module: {
         rules: [
             {
@@ -35,10 +35,6 @@ module.exports = {
                 ],
             },
         ],
-    },
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserWebpackPlugin()],
     },
     plugins: [
         new HtmlWebpackPlugin({

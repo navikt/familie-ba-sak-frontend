@@ -15,6 +15,7 @@ const prodConfig = merge.mergeWithRules({
         },
     },
 })(baseConfig, {
+    entry: [path.join(process.cwd(), 'src/frontend/index.tsx')],
     mode: 'production',
     output: {
         path: path.join(process.cwd(), 'frontend_production'),
