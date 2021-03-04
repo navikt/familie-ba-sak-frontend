@@ -7,6 +7,7 @@ import {
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
+    Resultat,
 } from '../../typer/vilkår';
 import familieDayjs, { familieDayjsDiff } from '../../utils/familieDayjs';
 import { datoformat } from '../../utils/formatter';
@@ -108,7 +109,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     erResultatGyldig
                                 ),
                                 endretAv: annenVurdering.endretAv,
-                                erVurdert: annenVurdering.erVurdert,
+                                erVurdert: annenVurdering.resultat !== Resultat.IKKE_VURDERT,
                                 endretTidspunkt: annenVurdering.endretTidspunkt,
                                 behandlingId: annenVurdering.behandlingId,
                                 type: annenVurdering.type,
