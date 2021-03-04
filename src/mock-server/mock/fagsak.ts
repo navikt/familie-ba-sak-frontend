@@ -89,6 +89,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 behandlingId,
             },
         ],
+        andreVurderinger: [],
     };
 
     const barnPersonResultat: IRestPersonResultat = {
@@ -160,6 +161,7 @@ export const mockBehandling = (behandlingId: number, aktiv: boolean, steg: strin
                 behandlingId,
             },
         ],
+        andreVurderinger: [],
     };
 
     return {

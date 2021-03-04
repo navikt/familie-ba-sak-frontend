@@ -16,7 +16,7 @@ import {
     ikkeValider,
     lagInitiellFelt,
 } from '../../utils/validators';
-import { kjørValidering, validerVilkår } from './validering';
+import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
 export const sorterVilkårsvurderingForPerson = (
     vilkårResultater: FeltState<IVilkårResultat>[]
@@ -91,6 +91,29 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                 },
                                 validerVilkår
                             )
+                        )
+                    ),
+                    andreVurderinger: personResultat.andreVurderinger.map(annenVurdering =>
+                        lagInitiellFelt(
+                            {
+                                begrunnelse: {
+                                    feilmelding: '',
+                                    valider: ikkeValider,
+                                    valideringsstatus: Valideringsstatus.OK,
+                                    verdi: annenVurdering.begrunnelse,
+                                },
+                                id: annenVurdering.id,
+                                resultat: lagInitiellFelt(
+                                    annenVurdering.resultat,
+                                    erResultatGyldig
+                                ),
+                                endretAv: annenVurdering.endretAv,
+                                erVurdert: annenVurdering.erVurdert,
+                                endretTidspunkt: annenVurdering.endretTidspunkt,
+                                behandlingId: annenVurdering.behandlingId,
+                                type: annenVurdering.type,
+                            },
+                            validerAnnenVurdering
                         )
                     ),
                 };

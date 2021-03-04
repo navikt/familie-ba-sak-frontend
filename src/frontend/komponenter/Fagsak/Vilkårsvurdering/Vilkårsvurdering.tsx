@@ -9,9 +9,10 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { IVilkårResultat } from '../../../typer/vilkår';
+import { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
+import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
 
@@ -24,9 +25,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     const {
         erVilkårsvurderingenGyldig,
         hentVilkårMedFeil,
+        hentAndreVurderingerMedFeil,
         vilkårsvurdering,
     } = useVilkårsvurdering();
-    const { erLesevisning, opplysningsplikt } = useBehandling();
+    const { erLesevisning } = useBehandling();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -49,15 +51,9 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             }
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
-                if (opplysningsplikt) {
-                    history.push(
-                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/opplysningsplikt`
-                    );
-                } else {
-                    history.push(
-                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
-                    );
-                }
+                history.push(
+                    `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
+                );
             }}
             nesteOnClick={() => {
                 if (erLesevisning()) {
@@ -75,15 +71,24 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         >
             <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
 
-            {hentVilkårMedFeil().length > 0 && visFeilmeldinger && (
-                <Feiloppsummering
-                    tittel={'For å gå videre må du rette opp følgende:'}
-                    feil={hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
-                        feilmelding: `Vilkåret mangler resultat`,
-                        skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
-                    }))}
-                />
-            )}
+            {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
+                visFeilmeldinger && (
+                    <Feiloppsummering
+                        tittel={'For å gå videre må du rette opp følgende:'}
+                        feil={[
+                            ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
+                                feilmelding: `Vilkåret mangler resultat`,
+                                skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
+                            })),
+                            ...hentAndreVurderingerMedFeil().map(
+                                (annenVurdering: IAnnenVurdering) => ({
+                                    feilmelding: `Annen vurdering mangler resultat`,
+                                    skjemaelementId: annenVurderingFeilmeldingId(annenVurdering),
+                                })
+                            ),
+                        ]}
+                    />
+                )}
 
             {visFeilmeldinger && opprettelseFeilmelding !== '' && (
                 <Feilmelding>{opprettelseFeilmelding}</Feilmelding>

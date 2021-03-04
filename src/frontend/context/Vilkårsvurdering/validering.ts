@@ -1,7 +1,7 @@
 import { FeltState, Avhengigheter, Valideringsstatus, feil, ok } from '@navikt/familie-skjema';
 
 import { IPeriode } from '../../typer/periode';
-import { IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
+import { IAnnenVurdering, IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
@@ -40,6 +40,32 @@ export const validerVilkår = (
         : feil({ ...nyttVilkårResultat, verdi: nyVerdi }, '');
 };
 
+export const validerAnnenVurdering = (
+    nyttAnnenVurdering: FeltState<IAnnenVurdering>
+): FeltState<IAnnenVurdering> => {
+    const nyBegrunnelse: FeltState<string> = nyttAnnenVurdering.verdi.begrunnelse.valider(
+        nyttAnnenVurdering.verdi.begrunnelse
+    );
+
+    const nyttResultat: FeltState<Resultat> = nyttAnnenVurdering.verdi.resultat.valider(
+        nyttAnnenVurdering.verdi.resultat
+    );
+
+    const gyldigAnnenVurdering: boolean =
+        nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
+        nyttResultat.valideringsstatus === Valideringsstatus.OK;
+
+    const nyVerdi: IAnnenVurdering = {
+        ...nyttAnnenVurdering.verdi,
+        begrunnelse: nyBegrunnelse,
+        resultat: nyttResultat,
+    };
+
+    return gyldigAnnenVurdering
+        ? ok({ ...nyttAnnenVurdering, verdi: nyVerdi })
+        : feil({ ...nyttAnnenVurdering, verdi: nyVerdi }, '');
+};
+
 export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonResultat[] => {
     return vilkårsvurdering.map((personResultat: IPersonResultat) => {
         return {
@@ -47,6 +73,11 @@ export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonRe
             vilkårResultater: personResultat.vilkårResultater.map(
                 (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
                     return validerVilkår(vilkårResultat, { person: personResultat.person });
+                }
+            ),
+            andreVurderinger: personResultat.andreVurderinger.map(
+                (annenVurdering: FeltState<IAnnenVurdering>): FeltState<IAnnenVurdering> => {
+                    return validerAnnenVurdering(annenVurdering);
                 }
             ),
         };
