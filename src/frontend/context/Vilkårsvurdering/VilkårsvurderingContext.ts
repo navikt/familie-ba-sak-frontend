@@ -8,7 +8,9 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import {
+    IAnnenVurdering,
     IPersonResultat,
+    IRestAnnenVurdering,
     IRestNyttVilkår,
     IRestPersonResultat,
     IVilkårResultat,
@@ -79,6 +81,26 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                         vilkårType: redigerbartVilkår.verdi.vilkårType,
                     },
                 ],
+                andreVurderinger: [],
+            },
+        });
+    };
+
+    const putAnnenVurdering = (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => {
+        settVilkårSubmit(VilkårSubmit.PUT);
+
+        return request<IRestAnnenVurdering, IFagsak>({
+            method: 'PUT',
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/annenvurdering/${redigerbartAnnenVurdering.verdi.id}`,
+            data: {
+                id: redigerbartAnnenVurdering.verdi.id,
+                begrunnelse: redigerbartAnnenVurdering.verdi.begrunnelse.verdi,
+                behandlingId: redigerbartAnnenVurdering.verdi.behandlingId,
+                endretAv: redigerbartAnnenVurdering.verdi.endretAv,
+                endretTidspunkt: redigerbartAnnenVurdering.verdi.endretTidspunkt,
+                erVurdert: redigerbartAnnenVurdering.verdi.erVurdert,
+                resultat: redigerbartAnnenVurdering.verdi.resultat.verdi,
+                type: redigerbartAnnenVurdering.verdi.type,
             },
         });
     };
@@ -110,6 +132,10 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                     personResultat.vilkårResultater.filter(
                         (vilkårResultat: FeltState<IVilkårResultat>) =>
                             vilkårResultat.valideringsstatus !== Valideringsstatus.OK
+                    ).length > 0 ||
+                    personResultat.andreVurderinger.filter(
+                        (annenVurdering: FeltState<IAnnenVurdering>) =>
+                            annenVurdering.valideringsstatus !== Valideringsstatus.OK
                     ).length > 0
                 );
             }).length === 0
@@ -133,13 +159,32 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
         );
     };
 
+    const hentAndreVurderingerMedFeil = (): IAnnenVurdering[] => {
+        return vilkårsvurdering.reduce(
+            (accAndreVurderingerMedFeil: IAnnenVurdering[], personResultat: IPersonResultat) => {
+                return [
+                    ...accAndreVurderingerMedFeil,
+                    ...personResultat.andreVurderinger
+                        .filter(
+                            (vilkårResultat: FeltState<IAnnenVurdering>) =>
+                                vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
+                        )
+                        .map((annenVurdering: FeltState<IAnnenVurdering>) => annenVurdering.verdi),
+                ];
+            },
+            []
+        );
+    };
+
     return {
         deleteVilkår,
         postVilkår,
         erVilkårsvurderingenGyldig,
         hentVilkårMedFeil,
+        hentAndreVurderingerMedFeil,
         vilkårSubmit,
         putVilkår,
+        putAnnenVurdering,
         settVilkårSubmit,
         settVilkårsvurdering,
         vilkårsvurdering,

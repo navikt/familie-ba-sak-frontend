@@ -14,9 +14,11 @@ import {
     IVilkårResultat,
     vilkårConfig,
     Resultat,
+    annenVurderingConfig,
 } from '../../../typer/vilkår';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
+import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
 
 interface IVilkårsvurderingSkjema {
@@ -65,6 +67,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     return (
         <>
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
+                const andreVurderinger = personResultat.andreVurderinger;
                 return (
                     <Container
                         key={personResultat.personIdent}
@@ -116,20 +119,32 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                             vilkårResultat.verdi.vilkårType === vc.key
                                     );
 
-                                    if (vilkårResultater.length !== 0) {
-                                        return (
-                                            <GeneriskVilkår
-                                                key={`${personResultat.personIdent}_${vc.key}`}
-                                                person={personResultat.person}
-                                                vilkårResultater={vilkårResultater}
-                                                vilkårFraConfig={vc}
-                                                visFeilmeldinger={visFeilmeldinger}
-                                            />
-                                        );
-                                    } else {
-                                        return undefined;
-                                    }
+                                    return vilkårResultater.length ? (
+                                        <GeneriskVilkår
+                                            key={`${personResultat.personIdent}_${vc.key}`}
+                                            person={personResultat.person}
+                                            vilkårResultater={vilkårResultater}
+                                            vilkårFraConfig={vc}
+                                            visFeilmeldinger={visFeilmeldinger}
+                                        />
+                                    ) : undefined;
                                 })}
+                            {andreVurderinger.length > 0 &&
+                                Object.values(annenVurderingConfig)
+                                    .filter(annenVurderingConfig =>
+                                        annenVurderingConfig.parterDetteGjelderFor.includes(
+                                            personResultat.person.type
+                                        )
+                                    )
+                                    .map(annenVurderingConfig => (
+                                        <GeneriskAnnenVurdering
+                                            key={`${personResultat.personIdent}_${annenVurderingConfig.key}`}
+                                            person={personResultat.person}
+                                            andreVurderinger={personResultat.andreVurderinger}
+                                            annenVurderingConfig={annenVurderingConfig}
+                                            visFeilmeldinger={visFeilmeldinger}
+                                        />
+                                    ))}
                         </Collapse>
                     </Container>
                 );

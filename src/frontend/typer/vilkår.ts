@@ -23,6 +23,10 @@ export const resultater: Record<Resultat, string> = {
     IKKE_VURDERT: 'Kanskje',
 };
 
+export enum AnnenVurderingType {
+    OPPLYSNINGSPLIKT = 'OPPLYSNINGSPLIKT',
+}
+
 export enum VilkårType {
     UNDER_18_ÅR = 'UNDER_18_ÅR',
     BOR_MED_SØKER = 'BOR_MED_SØKER',
@@ -35,7 +39,18 @@ export enum VilkårType {
 export interface IPersonResultat {
     personIdent: string;
     vilkårResultater: FeltState<IVilkårResultat>[];
+    andreVurderinger: FeltState<IAnnenVurdering>[];
     person: IGrunnlagPerson;
+}
+export interface IAnnenVurdering {
+    id: number;
+    begrunnelse: FeltState<string>;
+    behandlingId: number;
+    endretAv: string;
+    endretTidspunkt: string;
+    erVurdert: boolean;
+    resultat: FeltState<Resultat>;
+    type: AnnenVurderingType;
 }
 
 export interface IVilkårResultat {
@@ -56,6 +71,7 @@ export interface IVilkårResultat {
 export interface IRestPersonResultat {
     personIdent: string;
     vilkårResultater: IRestVilkårResultat[];
+    andreVurderinger: IRestAnnenVurdering[];
 }
 
 export interface IRestNyttVilkår {
@@ -76,6 +92,17 @@ export interface IRestVilkårResultat {
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
     vilkårType: VilkårType;
+}
+
+export interface IRestAnnenVurdering {
+    id: number;
+    begrunnelse: string;
+    behandlingId: number;
+    endretAv: string;
+    endretTidspunkt: string;
+    erVurdert: boolean;
+    resultat: Resultat;
+    type: AnnenVurderingType;
 }
 
 export interface IRestStegTilstand {
@@ -140,5 +167,27 @@ export const vilkårConfig: IVilkårsconfig = {
         tittel: 'Lovlig opphold',
         spørsmål: (part?: string) => `Har ${part} lovlig opphold?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
+    },
+};
+
+export interface IAnnenVurderingConfig {
+    beskrivelse: string;
+    key: string;
+    tittel: string;
+    parterDetteGjelderFor: PersonType[];
+    spørsmål?: (part?: string) => string;
+}
+
+type IAnnenVurderingsconfig = {
+    [key in AnnenVurderingType]: IAnnenVurderingConfig;
+};
+
+export const annenVurderingConfig: IAnnenVurderingsconfig = {
+    OPPLYSNINGSPLIKT: {
+        beskrivelse: 'Opplysningsplikt',
+        key: 'OPPLYSNINGSPLIKT',
+        tittel: 'Opplysningsplikt',
+        parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER, PersonType.ANNENPART],
+        spørsmål: () => 'Er opplysningsplikten oppfylt?',
     },
 };

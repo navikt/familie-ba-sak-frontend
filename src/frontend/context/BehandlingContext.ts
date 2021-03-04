@@ -28,10 +28,6 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
     const { fagsak } = useFagsakRessurser();
-    const opplysningsplikt =
-        åpenBehandling.status === RessursStatus.SUKSESS
-            ? åpenBehandling.data.opplysningsplikt
-            : undefined;
 
     const history = useHistory();
     const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
@@ -91,10 +87,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
             åpenBehandling.status === RessursStatus.SUKSESS &&
             fagsak.status === RessursStatus.SUKSESS
         ) {
-            const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(
-                åpenBehandling.data,
-                opplysningsplikt
-            );
+            const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(åpenBehandling.data);
 
             if (
                 (erViPåUdefinertFagsakSide(history.location.pathname) ||
@@ -110,7 +103,6 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     return {
         åpenBehandling,
-        opplysningsplikt,
         erLesevisning,
         bestemÅpenBehandling,
         forrigeÅpneSide,
