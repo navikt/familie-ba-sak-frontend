@@ -2,6 +2,7 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IPeriode } from '../../../typer/periode';
 import {
+    IRestAnnenVurdering,
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
@@ -14,6 +15,12 @@ interface IMockVilkårResultat {
     id?: number;
     resultat?: Resultat;
     vilkårType?: VilkårType;
+    periode?: IPeriode;
+    begrunnelse?: string;
+    endretAv?: string;
+    erVurdert?: boolean;
+    erAutomatiskVurdert?: boolean;
+    endretTidspunkt?: string;
 }
 
 export const mockFeltstate = <T>(verdi: T): FeltState<T> => ({
@@ -28,22 +35,29 @@ export const mockVilkårResultater = ({
     resultat = Resultat.OPPFYLT,
     behandlingId = 1,
     vilkårType = VilkårType.LOVLIG_OPPHOLD,
+    periode = { fom: '2000-01-01' },
+    begrunnelse = '',
+    endretAv = 'VL',
+    erVurdert = false,
+    erAutomatiskVurdert = false,
+    endretTidspunkt = '2020-03-19T09:08:56.8',
 }: IMockVilkårResultat = {}): IVilkårResultat => ({
     id,
     vilkårType,
     resultat: mockFeltstate(resultat),
-    periode: mockFeltstate<IPeriode>({ fom: '2000-01-01' }),
-    begrunnelse: mockFeltstate(''),
-    endretAv: 'VL',
-    erVurdert: false,
-    erAutomatiskVurdert: false,
-    endretTidspunkt: '2020-03-19T09:08:56.8',
+    periode: mockFeltstate<IPeriode>(periode),
+    begrunnelse: mockFeltstate(begrunnelse),
+    endretAv,
+    erVurdert,
+    erAutomatiskVurdert,
+    endretTidspunkt,
     behandlingId,
 });
 
 interface IMockRestPersonResultat {
     personIdent?: string;
     vilkårResultater?: IRestVilkårResultat[];
+    andreVurderinger?: IRestAnnenVurdering[];
 }
 
 interface IRestResultaterMock {
@@ -86,7 +100,9 @@ export const mockRestPersonResultat = ({
             vilkårType: VilkårType[vilkårType],
         })
     ),
+    andreVurderinger = [],
 }: IMockRestPersonResultat = {}): IRestPersonResultat => ({
     personIdent,
     vilkårResultater,
+    andreVurderinger,
 });
