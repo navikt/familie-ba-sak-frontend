@@ -2,7 +2,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { IVilkårResultat, Resultat, VilkårType } from '../../../typer/vilkår';
 import { alleVillkårOppfylt, hentSisteBehandlingPåFagsak } from '../../fagsak';
 import { mockBehandling } from '../behandling/behandling.mock';
-import { mockFeltstate, mockVilkårResultater } from '../vilkårsvurdering/vilkårsvurdering.mock';
+import { mockFeltstate, mockVilkårResultater } from '../vilkårsvurdering/vilkår.mock';
 import { mockFagsak } from './fagsak.mock';
 
 describe('utils/fagsak', () => {

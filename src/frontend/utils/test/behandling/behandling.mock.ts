@@ -11,7 +11,7 @@ import {
 } from '../../../typer/behandling';
 import { IRestPersonResultat } from '../../../typer/vilkår';
 import { mockBarn, mockSøker } from '../person/person.mock';
-import { mockRestPersonResultat } from '../vilkårsvurdering/vilkårsvurdering.mock';
+import { mockRestPersonResultat } from '../vilkårsvurdering/vilkår.mock';
 
 interface IMockBehandling {
     behandlingId?: number;
