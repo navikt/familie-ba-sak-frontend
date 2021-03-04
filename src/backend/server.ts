@@ -1,4 +1,4 @@
-import './konfigurerApp.js';
+import './konfigurerApp';
 
 import path from 'path';
 
@@ -11,11 +11,13 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import backend, { IApp, ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import { logInfo } from '@navikt/familie-logging';
 
-import webpackDevConfig from '../webpack/webpack.dev.js';
-import { sessionConfig } from './config.js';
-import { prometheusTellere } from './metrikker.js';
-import { attachToken, doPdfProxy, doProxy } from './proxy.js';
-import setupRouter from './router.js';
+import { sessionConfig } from './config';
+import { prometheusTellere } from './metrikker';
+import { attachToken, doPdfProxy, doProxy } from './proxy';
+import setupRouter from './router';
+
+// eslint-disable-next-line
+const webpackDevConfig = require('../webpack/webpack.dev');
 
 const port = 8000;
 
@@ -34,10 +36,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         app.use(middleware);
         app.use(webpackHotMiddleware(compiler));
     } else {
-        app.use(
-            '/assets',
-            expressStaticGzip(path.join(__dirname, '../../frontend_production'), {})
-        );
+        app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_production'), {}));
     }
 
     app.use(
@@ -57,7 +56,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     // Sett opp bodyParser og router etter proxy. Spesielt viktig med tanke på større payloads som blir parset av bodyParser
     app.use(bodyParser.json({ limit: '200mb' }));
     app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
-    app.use('/', setupRouter(azureAuthClient, router, middleware));
+    app.use('/', setupRouter(azureAuthClient, router));
 
     app.listen(port, '0.0.0.0', () => {
         logInfo(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);

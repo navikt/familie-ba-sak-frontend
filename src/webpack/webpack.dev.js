@@ -1,10 +1,12 @@
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-import webpack from 'webpack';
-import { mergeWithRules } from 'webpack-merge';
+const path = require('path');
 
-import baseConfig from './webpack.common.js';
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const webpack = require('webpack');
+const merge = require('webpack-merge');
 
-const devConfig = mergeWithRules({
+const baseConfig = require('./webpack.common.js');
+
+const devConfig = merge.mergeWithRules({
     module: {
         rules: {
             test: 'match',
@@ -17,6 +19,7 @@ const devConfig = mergeWithRules({
     devtool: 'inline-source-map',
     plugins: [new webpack.HotModuleReplacementPlugin(), new ReactRefreshWebpackPlugin()],
     output: {
+        path: path.join(process.cwd(), 'frontend_development'),
         publicPath: '/assets/',
     },
     module: {
@@ -37,4 +40,4 @@ const devConfig = mergeWithRules({
     },
 });
 
-export default devConfig;
+module.exports = devConfig;

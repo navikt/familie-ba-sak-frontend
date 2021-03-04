@@ -1,10 +1,10 @@
-import path from 'path';
+const path = require('path');
 
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import TerserWebpackPlugin from 'terser-webpack-plugin';
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 
-export default {
+module.exports = {
     entry: [path.join(process.cwd(), 'src/frontend/index.tsx')],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],

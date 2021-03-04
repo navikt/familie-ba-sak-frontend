@@ -18,13 +18,13 @@ import {
     byggHenterRessurs,
 } from '@navikt/familie-typer';
 
-import { BehandlerRolle } from '../../../../../node_dist/frontend/typer/behandling';
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelseContext';
 import {
+    BehandlerRolle,
     BehandlingStatus,
     BehandlingSteg,
     BehandlingÅrsak,

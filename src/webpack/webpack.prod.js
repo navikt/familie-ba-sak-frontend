@@ -1,13 +1,13 @@
-import path from 'path';
+const path = require('path');
 
-import CompressionPlugin from 'compression-webpack-plugin';
-import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
-import TerserWebpackPlugin from 'terser-webpack-plugin';
-import { mergeWithRules } from 'webpack-merge';
+const CompressionPlugin = require('compression-webpack-plugin');
+const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
+const merge = require('webpack-merge');
 
-import baseConfig from './webpack.common.js';
+const baseConfig = require('./webpack.common.js');
 
-const prodConfig = mergeWithRules({
+const prodConfig = merge.mergeWithRules({
     module: {
         rules: {
             test: 'match',
@@ -53,4 +53,4 @@ const prodConfig = mergeWithRules({
     ],
 });
 
-export default prodConfig;
+module.exports = prodConfig;
