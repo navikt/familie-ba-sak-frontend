@@ -143,6 +143,7 @@
     "babel-preset-react-app": "^10.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "compression-webpack-plugin": "^6.1.0",
+    "copy-webpack-plugin": "^8.0.0",
     "copyfiles": "^2.2.0",
     "css-loader": "^4.2.1",
     "css-minimizer-webpack-plugin": "^1.2.0",
