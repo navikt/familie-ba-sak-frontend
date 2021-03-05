@@ -64,12 +64,14 @@ export enum VedtakBegrunnelse {
 
 export enum VedtakBegrunnelseType {
     INNVILGELSE = 'INNVILGELSE',
+    AVSLAG = 'AVSLAG',
     REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
 }
 
 export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     INNVILGELSE: 'Innvilgelse',
+    AVSLAG: 'Avslag',
     REDUKSJON: 'Reduksjon',
     OPPHØR: 'Opphør',
 };
@@ -94,6 +96,8 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
             return navFarger.navGronnLighten80;
+        case VedtakBegrunnelseType.AVSLAG:
+            return navFarger.navRodLighten80; // TODO: Kontroller farge
         case VedtakBegrunnelseType.REDUKSJON:
             return navFarger.navOransjeLighten80;
         case VedtakBegrunnelseType.OPPHØR:
@@ -107,6 +111,8 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
             return navFarger.navGronn;
+        case VedtakBegrunnelseType.AVSLAG:
+            return navFarger.navRodDarken20; // TODO: Kontroller farge
         case VedtakBegrunnelseType.REDUKSJON:
             return navFarger.navOransjeDarken20;
         case VedtakBegrunnelseType.OPPHØR:
