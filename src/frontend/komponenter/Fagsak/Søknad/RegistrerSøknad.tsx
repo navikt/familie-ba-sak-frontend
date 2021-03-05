@@ -40,7 +40,7 @@ const StyledSkjemasteg = styled(Skjemasteg)`
 const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { request } = useHttp();
     const { fagsak, settFagsak } = useFagsakRessurser();
-    const { erLesevisning, opplysningsplikt } = useBehandling();
+    const { erLesevisning } = useBehandling();
     const history = useHistory();
 
     const {
@@ -69,15 +69,9 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settFagsak(response);
-                    if (opplysningsplikt) {
-                        history.push(
-                            `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/opplysningsplikt`
-                        );
-                    } else {
-                        history.push(
-                            `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
-                        );
-                    }
+                    history.push(
+                        `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
+                    );
                 } else if (response.status === RessursStatus.FUNKSJONELL_FEIL) {
                     settFrontendFeilmelding(response.frontendFeilmelding);
                     settVisModal(true);

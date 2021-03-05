@@ -16,13 +16,13 @@ interface IProps {
 }
 
 const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
-    const { åpenBehandling, opplysningsplikt } = useBehandling();
+    const { åpenBehandling } = useBehandling();
 
     return (
         <nav className={'venstremeny'}>
             {åpenBehandling.status === RessursStatus.SUKSESS
                 ? Object.entries(sider)
-                      .filter(([_, side]) => visSide(side, åpenBehandling.data, !!opplysningsplikt))
+                      .filter(([_, side]) => visSide(side, åpenBehandling.data))
                       .map(([sideId, side], index: number) => {
                           const tilPath = `/fagsak/${fagsak.id}/${åpenBehandling.data.behandlingId}/${side.href}`;
 
