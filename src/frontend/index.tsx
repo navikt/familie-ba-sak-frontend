@@ -14,12 +14,13 @@ const packageConfig = require('../../package.json');
 
 const environment = window.location.hostname;
 
-init({
-    dsn: 'https://10239ce4baed4db79d080d85f08b5878@sentry.gc.nav.no/26',
-    environment,
-    release: packageConfig.version,
-    enabled: process.env.NODE_ENV !== 'development',
-});
+if (process.env.NODE_ENV !== 'development') {
+    init({
+        dsn: 'https://10239ce4baed4db79d080d85f08b5878@sentry.gc.nav.no/26',
+        environment,
+        release: packageConfig.version,
+    });
+}
 
 if (process.env.NODE_ENV !== 'production') {
     axe(React, ReactDOM, 1000);

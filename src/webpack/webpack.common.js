@@ -28,6 +28,10 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
+                use: [`file-loader`],
+            },
+            {
                 test: /\.(jsx|tsx|ts|js)?$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
