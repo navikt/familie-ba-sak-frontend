@@ -1,21 +1,22 @@
-const common = require('./webpack.common');
-const merge = require('webpack-merge');
+/* eslint-disable */
 const path = require('path');
 const webpack = require('webpack');
+const { mergeWithCustomize } = require('webpack-merge');
+const common = require('./webpack.common');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
-const config = merge.strategy({
-    'entry.familie-ba-sak': 'prepend',
+const config = mergeWithCustomize({
+    'entry.familie-ba-sak-frontend': 'prepend',
     'module.rules': 'append',
 })(common, {
     mode: 'production',
     entry: {
-        'familie-ba-sak': ['babel-polyfill'],
+        'familie-ba-sak-frontend': ['babel-polyfill'],
     },
     output: {
-        path: path.join(__dirname, '../../frontend_production'),
+        path: path.join(process.cwd(), 'frontend_production'),
         filename: '[name].[contenthash].js',
         publicPath: '/assets/',
     },
@@ -23,8 +24,6 @@ const config = merge.strategy({
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),
         }),
-        new webpack.optimize.OccurrenceOrderPlugin(false),
-        new webpack.NoEmitOnErrorsPlugin(),
         new MiniCssExtractPlugin({
             filename: 'familie-ba-sak-frontend.css',
         }),

@@ -1,4 +1,4 @@
-import { Adressebeskyttelsegradering } from '../../../node_dist/frontend/typer/person';
+import { Adressebeskyttelsegradering } from '@navikt/familie-typer';
 
 export interface IInfotrygdsaker {
     adressebeskyttelsegradering?: Adressebeskyttelsegradering;

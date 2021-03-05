@@ -2,12 +2,14 @@
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "outDir": "node_dist",
+        "allowJs": true,
+        "skipLibCheck": true,
         "baseUrl": "./src",
         "rootDir": "./src",
         "resolveJsonModule": true,
         "types": ["express-session"]
     },
-    "include": ["./src/backend", "./src/mock-server", "./src/mock-server/**/*.json"],
+    "include": ["./src/backend", "./src/webpack"],
     "exclude": ["./src/frontend"],
     "lib": ["es2015"]
   }

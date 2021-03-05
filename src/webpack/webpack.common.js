@@ -1,12 +1,12 @@
+/* eslint-disable */
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TypeScriptTypeChecker = require('fork-ts-checker-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
     entry: {
-        'familie-ba-sak': ['./src/frontend/index.tsx'],
+        'familie-ba-sak-frontend': ['./src/frontend/index.tsx'],
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
@@ -54,7 +54,7 @@ module.exports = {
     optimization: {
         splitChunks: {
             cacheGroups: {
-                vendor: {
+                defaultVendors: {
                     test: /[\\/]node_modules[\\/]/,
                     name: 'vendors',
                     chunks: 'all',
@@ -62,22 +62,22 @@ module.exports = {
             },
         },
         runtimeChunk: true,
+        emitOnErrors: false,
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, '../../src/frontend/index.html'),
+            template: path.join(process.cwd(), 'src/frontend/index.html'),
             inject: 'body',
             alwaysWriteToDisk: true,
         }),
         new TypeScriptTypeChecker({
             typescript: {
-                configFile: path.join(__dirname, '../../src/frontend/tsconfig.json'),
+                configFile: path.join(process.cwd(), 'src/frontend/tsconfig.json'),
             },
             eslint: {
                 files: './src/**/*.{ts,tsx,js,jsx}',
             },
         }),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new OptimizeCssAssetsPlugin(),
+        new CssMinimizerPlugin(),
     ],
 };

@@ -17,7 +17,7 @@ import { attachToken, doPdfProxy, doProxy } from './proxy';
 import setupRouter from './router';
 
 // eslint-disable-next-line
-const config = require('../../build_n_deploy/webpack/webpack.dev');
+const config = require('../webpack/webpack.dev');
 
 const port = 8000;
 
@@ -33,10 +33,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         app.use(middleware);
         app.use(webpackHotMiddleware(compiler));
     } else {
-        app.use(
-            '/assets',
-            expressStaticGzip(path.join(__dirname, '../../frontend_production'), {})
-        );
+        app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_production'), {}));
     }
 
     app.use(
@@ -56,7 +53,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     // Sett opp bodyParser og router etter proxy. Spesielt viktig med tanke på større payloads som blir parset av bodyParser
     app.use(bodyParser.json({ limit: '200mb' }));
     app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
-    app.use('/', setupRouter(azureAuthClient, router, middleware));
+    app.use('/', setupRouter(azureAuthClient, router));
 
     app.listen(port, '0.0.0.0', () => {
         logInfo(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);

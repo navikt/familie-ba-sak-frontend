@@ -38,7 +38,9 @@ export default (
 
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.write(
-                middleware.fileSystem.readFileSync(path.join(__dirname, `${buildPath}/index.html`))
+                middleware.fileSystem.readFileSync(
+                    path.join(process.cwd(), `${buildPath}/index.html`)
+                )
             );
             res.end();
         });
@@ -46,7 +48,7 @@ export default (
         router.get('*', ensureAuthenticated(authClient, false), (_: Request, res: Response) => {
             prometheusTellere.appLoad.inc();
 
-            res.sendFile('index.html', { root: path.join(__dirname, buildPath) });
+            res.sendFile('index.html', { root: path.join(process.cwd(), buildPath) });
         });
     }
 

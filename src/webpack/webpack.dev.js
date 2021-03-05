@@ -1,23 +1,24 @@
+/* eslint-disable */
 const path = require('path');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { mergeWithCustomize } = require('webpack-merge');
 const common = require('./webpack.common');
 
-const config = merge.strategy({
-    'entry.familie-ba-sak': 'prepend',
+const config = mergeWithCustomize({
+    'entry.familie-ba-sak-frontend': 'prepend',
     'module.rules': 'append',
 })(common, {
     mode: 'development',
     entry: {
-        'familie-ba-sak': [
+        'familie-ba-sak-frontend': [
             'babel-polyfill',
             'react-hot-loader/patch',
             'webpack-hot-middleware/client?reload=true',
         ],
     },
     output: {
-        path: path.join(__dirname, '../../frontend_development'),
-        filename: '[name].[hash].js',
+        path: path.join(process.cwd(), 'frontend_development'),
+        filename: '[name].[contenthash].js',
         publicPath: '/assets/',
         globalObject: 'this',
     },
