@@ -1,0 +1,106 @@
+{
+  "data": {
+    "oppgave": {
+      "id": 51319,
+      "identer": [
+        {
+          "ident": "01059200247",
+          "gruppe": "FOLKEREGISTERIDENT"
+        },
+        {
+          "ident": "2078377470890",
+          "gruppe": "AKTOERID"
+        }
+      ],
+      "tildeltEnhetsnr": "4842",
+      "journalpostId": "453640012",
+      "aktoerId": "2078377470890",
+      "tilordnetRessurs": "Z994262",
+      "beskrivelse": "Testdag 07. desember",
+      "tema": "BAR",
+      "behandlingstema": "ab0180",
+      "oppgavetype": "JFR",
+      "versjon": 2,
+      "fristFerdigstillelse": "2020-12-07",
+      "aktivDato": "2020-12-04",
+      "opprettetTidspunkt": "2020-12-04T15:21:01.114+01:00",
+      "opprettetAv": "srvfamilie-ks-opps",
+      "endretAv": "srvfamilie-ks-opps",
+      "endretTidspunkt": "2021-03-04T12:14:30.207+01:00",
+      "prioritet": "NORM",
+      "status": "OPPRETTET",
+      "metadata": {}
+    },
+    "person": {
+      "personIdent": "01059200247",
+      "fødselsdato": "1992-05-01",
+      "navn": "MOCK TEST",
+      "kjønn": "KVINNE",
+      "adressebeskyttelseGradering": "UGRADERT",
+      "harTilgang": true,
+      "familierelasjoner": [
+        {
+          "personIdent": "02121350192",
+          "relasjonRolle": "BARN",
+          "navn": "FRODIG RHODODENRON",
+          "fødselsdato": "2013-12-02",
+          "adressebeskyttelseGradering": "UGRADERT"
+        },
+        {
+          "personIdent": "10061750261",
+          "relasjonRolle": "BARN",
+          "navn": "TRIVIELL TAREMEL",
+          "fødselsdato": "2017-06-10",
+          "adressebeskyttelseGradering": "UGRADERT"
+        }
+      ],
+      "familierelasjonerMaskert": []
+    },
+    "journalpost": {
+      "journalpostId": "453640012",
+      "journalposttype": "I",
+      "journalstatus": "MOTTATT",
+      "tema": "BAR",
+      "behandlingstema": "ab0180",
+      "tittel": "Mock Journalpost",
+      "sak": null,
+      "bruker": {
+        "id": "01059200247",
+        "type": "FNR"
+      },
+      "journalforendeEnhet": null,
+      "kanal": "SKAN_NETS",
+      "dokumenter": [
+        {
+          "dokumentInfoId": "454020762",
+          "tittel": "Testdag 07. desember",
+          "brevkode": "NAV 33-00.07",
+          "dokumentstatus": null,
+          "dokumentvarianter": [
+            {
+              "variantformat": "ARKIV",
+              "filnavn": "eksempeldokument.pdf"
+            }
+          ],
+          "logiskeVedlegg": []
+        }
+      ],
+      "relevanteDatoer": [
+        {
+          "dato": "2020-12-04T15:20:31",
+          "datotype": "DATO_DOKUMENT"
+        },
+        {
+          "dato": "2020-12-04T01:00:00",
+          "datotype": "DATO_REGISTRERT"
+        }
+      ],
+      "datoMottatt": "2020-12-04T01:00:00"
+    },
+    "fagsak": null
+  },
+  "status": "SUKSESS",
+  "melding": "Innhenting av data var vellykket",
+  "frontendFeilmelding": null,
+  "stacktrace": null
+}

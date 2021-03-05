@@ -8,6 +8,7 @@ import { LOG_LEVEL } from '@navikt/familie-logging';
 
 import { buildPath } from './config';
 import { prometheusTellere } from './metrikker';
+import setupMock from './mock-server/mock-routes';
 
 export default (
     authClient: Client,
@@ -30,6 +31,8 @@ export default (
         logRequest(req, req.body.melding, LOG_LEVEL.ERROR);
         res.status(200).send();
     });
+
+    setupMock(router);
 
     // APP
     if (process.env.NODE_ENV === 'development' && middleware) {
