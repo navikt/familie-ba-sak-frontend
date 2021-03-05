@@ -10,6 +10,7 @@ const publicUrl = '/assets';
 module.exports = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
+        fallback: { crypto: false },
     },
     entry: ['./src/frontend/index.tsx'],
     plugins: [
