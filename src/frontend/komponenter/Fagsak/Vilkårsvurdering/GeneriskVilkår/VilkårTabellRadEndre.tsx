@@ -36,6 +36,7 @@ import {
     VilkårType,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
@@ -280,6 +281,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             }}
                         />
                     )}
+                {redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
+                    <AvslagBegrunnelseMultiselect visFeilmeldinger={false} />
+                )}
 
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
