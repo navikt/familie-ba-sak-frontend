@@ -17,7 +17,7 @@
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
     "copy-pdf-mock": "copyfiles -u 1 src/**/**/*.pdf node_dist",
-    "copy-json-mock": "copyfiles -u 1 src/**/**/**/*.json node_dist",
+    "copy-json-mock": "copyfiles -u 1 src/**/**/**/*.mock node_dist",
     "prepare": "yarn run snyk-protect"
   },
   "husky": {
