@@ -3,7 +3,6 @@ import 'nav-frontend-tabell-style';
 
 import React from 'react';
 
-import axe from '@axe-core/react';
 import { init } from '@sentry/browser';
 import * as ReactDOM from 'react-dom';
 
@@ -21,8 +20,10 @@ init({
     enabled: process.env.NODE_ENV !== 'development',
 });
 
-if (process.env.NODE_ENV !== 'production') {
-    axe(React, ReactDOM, 1000);
+if (process.env.NODE_ENV === 'production') {
+    import('@axe-core/react').then(({ default: axe }) => {
+        axe(React, ReactDOM, 1000);
+    });
 }
 
 ReactDOM.render(

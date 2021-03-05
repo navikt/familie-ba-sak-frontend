@@ -1,5 +1,7 @@
+/* eslint-disable */
 const path = require('path');
 
+const webpack = require('webpack');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const merge = require('webpack-merge');
 
@@ -14,14 +16,11 @@ const devConfig = merge.mergeWithRules({
     },
 })(baseConfig, {
     mode: 'development',
-    entry: ['webpack-hot-middleware/client', path.join(process.cwd(), 'src/frontend/index.tsx')],
-    plugins: [new ReactRefreshWebpackPlugin()],
-    devServer: {
-        hot: true,
-    },
+    entry: ['webpack-hot-middleware/client'],
+    plugins: [new ReactRefreshWebpackPlugin(), new webpack.HotModuleReplacementPlugin()],
     output: {
         path: path.join(process.cwd(), 'frontend_development'),
-        publicPath: '/assets/',
+        publicPath: '/assets',
     },
     module: {
         rules: [

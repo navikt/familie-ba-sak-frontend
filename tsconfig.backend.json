@@ -8,7 +8,7 @@
         "resolveJsonModule": true,
         "types": ["express-session"],
     },
-    "include": ["./src/backend"],
+    "include": ["./src/backend", "./src/webpack"],
     "exclude": ["./src/frontend"],
     "lib": ["es2015"]
   }

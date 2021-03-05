@@ -1,3 +1,4 @@
+/* eslint-disable */
 const path = require('path');
 
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -7,6 +8,7 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.less'],
     },
+    entry: ['./src/frontend/index.tsx'],
     devtool: 'inline-source-map',
     module: {
         rules: [

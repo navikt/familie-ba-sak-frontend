@@ -3,14 +3,12 @@
     "compilerOptions": {
         "rootDir": ".",
         "module": "esnext",
+        "skipLibCheck": true,
         "resolveJsonModule": true,
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "typeRoots": ["../../node_modules/@types", "./@types"]
     },
-    "exclude": [
-        "../../node_modules"
-    ],
     "lib": [
         "es2015",
         "esnext"
