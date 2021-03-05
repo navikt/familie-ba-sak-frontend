@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { FeltState } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
@@ -63,7 +64,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
     visFeilmeldinger,
     annenVurdering,
 }) => {
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, åpenBehandling } = useBehandling();
 
     const [ekspandertAnnenVurdering, settEkspandertAnnenVurdering] = useState(
         erLesevisning() || false || annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
@@ -98,6 +99,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                         <Normaltekst children={uiResultat[annenVurdering.verdi.resultat.verdi]} />
                     </VurderingCelle>
                 </td>
+                <td />
                 <td>
                     <BeskrivelseCelle children={annenVurdering.verdi.begrunnelse.verdi} />
                 </td>
@@ -117,7 +119,17 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
                         ikon={<FamilieChevron retning={ekspandertAnnenVurdering ? 'opp' : 'ned'} />}
                     />
                 </td>
-                <ManuellVurdering />
+                <td>
+                    <ManuellVurdering />
+                </td>
+                <td>
+                    <i>
+                        {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        annenVurdering.verdi.erVurdert
+                            ? 'Vurdert i denne behandlingen'
+                            : ''}
+                    </i>
+                </td>
             </EkspanderbarTr>
             {ekspandertAnnenVurdering && (
                 <tr>
