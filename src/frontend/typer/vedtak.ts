@@ -3,6 +3,7 @@ import navFarger from 'nav-frontend-core';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { Vilkårsbegrunnelser, VilkårType } from './vilkår';
+import { Vedtaksperiodetype } from './vedtaksperiode';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
@@ -23,6 +24,13 @@ export interface IRestPostVedtakBegrunnelse {
     fom: string;
     tom?: string;
     vedtakBegrunnelse: VedtakBegrunnelse;
+}
+
+export interface IRestPostFritekstVedtakBegrunnelse {
+    fom: string;
+    tom?: string;
+    fritekst: string;
+    vedtaksperiodetype: Vedtaksperiodetype;
 }
 
 export interface IRestDeleteVedtakBegrunnelser {

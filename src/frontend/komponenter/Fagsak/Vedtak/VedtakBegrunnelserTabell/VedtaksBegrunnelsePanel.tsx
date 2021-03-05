@@ -19,6 +19,7 @@ import { formaterBeløp, formaterPersonIdent, isoStringToDayjs } from '../../../
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 import Hjelpetekst44px from './Hjelpetekst44px';
 import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
+import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 
 interface IVedtakBegrunnelserTabell {
     vedtaksperiode: Vedtaksperiode;
@@ -131,6 +132,10 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                         vedtaksperiode={vedtaksperiode}
                     />
                 </div>
+
+                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR && (
+                    <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
+                )}
             </UtbetalingsperiodepanelBody>
         </StyledEkspanderbartpanel>
     );
