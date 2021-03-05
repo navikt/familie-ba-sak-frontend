@@ -6,9 +6,11 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../typer/vedtak';
+import { VilkårType } from '../../../../typer/vilkår';
 
 interface IProps {
     visFeilmeldinger: boolean;
+    vilkårType: VilkårType;
 }
 
 interface IOptionType {
@@ -16,18 +18,19 @@ interface IOptionType {
     label: string;
 }
 
-const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ visFeilmeldinger }) => {
+const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ visFeilmeldinger, vilkårType }) => {
     const { erLesevisning } = useBehandling();
     const { vilkårBegrunnelser } = useVedtakBegrunnelser();
 
     const options: IOptionType[] =
         vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? vilkårBegrunnelser.data.AVSLAG.map(
-                  (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => ({
-                      label: begrunnelse.navn,
-                      value: begrunnelse.id,
-                  })
-              )
+            ? vilkårBegrunnelser.data.AVSLAG.filter(
+                  (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
+                      begrunnelse.vilkår === vilkårType
+              ).map((begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => ({
+                  label: begrunnelse.navn,
+                  value: begrunnelse.id,
+              }))
             : [];
 
     return (

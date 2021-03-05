@@ -282,7 +282,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         />
                     )}
                 {redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
-                    <AvslagBegrunnelseMultiselect visFeilmeldinger={false} />
+                    <AvslagBegrunnelseMultiselect
+                        visFeilmeldinger={false}
+                        vilkårType={redigerbartVilkår.verdi.vilkårType}
+                    />
                 )}
 
                 <VelgPeriode
