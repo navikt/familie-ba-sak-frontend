@@ -12,6 +12,8 @@ import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
 import { Infotrygd } from './Infotrygd/Infotrygd';
+import { Sakshistorikk } from './Infotrygd/Sakshistorikk';
+import { Vedtakshistorikk } from './Infotrygd/Vedtakshistorikk';
 import Internstatistikk from './Internstatistikk';
 import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
 
@@ -46,6 +48,11 @@ const Container: React.FC = () => {
                                     component={ManuellJournalfør}
                                 />
                                 <Route path="/internstatistikk" component={Internstatistikk} />
+                                <Route
+                                    path="/infotrygd/vedtakshistorikk"
+                                    component={Vedtakshistorikk}
+                                />
+                                <Route path="/infotrygd/sakshistorikk" component={Sakshistorikk} />
                                 <Route path="/infotrygd" component={Infotrygd} />
                             </Switch>
                         </FagsakProvider>
