@@ -7,7 +7,7 @@ import { Element } from 'nav-frontend-typografi';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { lagPeriodeId } from '../../../../typer/periode';
 import { ToggleNavn } from '../../../../typer/toggles';

@@ -2,8 +2,8 @@ import navFarger from 'nav-frontend-core';
 
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { Vilkårsbegrunnelser, VilkårType } from './vilkår';
 import { Vedtaksperiodetype } from './vedtaksperiode';
+import { Vilkårsbegrunnelser, VilkårType } from './vilkår';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
@@ -15,6 +15,7 @@ export interface IVedtakForBehandling {
 export interface IRestVedtakBegrunnelse {
     begrunnelse?: VedtakBegrunnelse;
     begrunnelseType?: VedtakBegrunnelseType;
+    brevBegrunnelse?: string;
     fom: string;
     id?: number;
     tom?: string;
@@ -26,10 +27,10 @@ export interface IRestPostVedtakBegrunnelse {
     vedtakBegrunnelse: VedtakBegrunnelse;
 }
 
-export interface IRestPostFritekstVedtakBegrunnelse {
+export interface IRestPostFritekstVedtakBegrunnelser {
     fom: string;
     tom?: string;
-    fritekst: string;
+    fritekster: string[];
     vedtaksperiodetype: Vedtaksperiodetype;
 }
 
@@ -67,6 +68,7 @@ export enum VedtakBegrunnelse {
     INNVILGET_SATSENDRING = 'INNVILGET_SATSENDRING',
     OPPHØR_BARN_FLYTTET_FRA_SØKER = 'OPPHØR_BARN_FLYTTET_FRA_SØKER',
     OPPHØR_SØKER_FLYTTET_FRA_BARN = 'OPPHØR_SØKER_FLYTTET_FRA_BARN',
+    OPPHØR_FRITEKST = 'OPPHØR_FRITEKST',
 }
 
 export enum VedtakBegrunnelseType {

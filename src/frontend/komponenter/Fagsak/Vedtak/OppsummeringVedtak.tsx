@@ -22,7 +22,7 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelseContext';
+import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
 import {
     BehandlerRolle,
     BehandlingStatus,

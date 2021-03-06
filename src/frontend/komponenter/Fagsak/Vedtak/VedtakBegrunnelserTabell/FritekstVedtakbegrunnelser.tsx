@@ -10,66 +10,50 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { IFagsak } from '../../../../typer/fagsak';
+import { IRestPostFritekstVedtakBegrunnelser } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
-import { IRestPostFritekstVedtakBegrunnelse } from '../../../../typer/vedtak';
+import useFritekstVedtakBegrunnelser from './useFritekstVedtakBegrunnelser';
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
 }
 
 const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode }) => {
-    const { fagsak, settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
-    const initialFelt = useFelt<string>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<string>) => ok(felt),
-    });
-    const { skjema, onSubmit } = useSkjema<
-        {
-            fritekst: string;
-        },
-        IFagsak
-    >({
-        felter: {
-            fritekst: initialFelt,
-        },
-        skjemanavn: 'fritekster',
-    });
+    const { fritekster, settFritekster, leggTilFritekst, onSubmit } = useFritekstVedtakBegrunnelser(
+        vedtaksperiode
+    );
 
+    console.log(Object.keys(fritekster));
     return (
         <SkjemaGruppe>
-            <FamilieInput
-                {...initialFelt.hentNavInputProps(skjema.visFeilmeldinger)}
-                erLesevisning={erLesevisning()}
-                id={'hent-person'}
-                label={'Fritekst'}
-                bredde={'XL'}
-                placeholder={'Kulepunkt'}
-            />
+            {Object.keys(fritekster).map((fritekstId: string, index) => {
+                return (
+                    <FamilieInput
+                        key={fritekstId}
+                        value={fritekster[fritekstId].verdi}
+                        feil={fritekster[fritekstId].feilmelding ?? undefined}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            settFritekster({
+                                ...fritekster,
+                                [fritekstId]: fritekster[fritekstId].valider({
+                                    ...fritekster[fritekstId],
+                                    verdi: event.target.value,
+                                }),
+                            });
+                        }}
+                        erLesevisning={erLesevisning()}
+                        id={`kulepunkt-${index}`}
+                        label={'Fritekst'}
+                        bredde={'XL'}
+                        placeholder={'Kulepunkt'}
+                    />
+                );
+            })}
 
-            <KnappBase
-                onClick={() => {
-                    if (fagsak.status === RessursStatus.SUKSESS) {
-                        onSubmit<IRestPostFritekstVedtakBegrunnelse>(
-                            {
-                                method: 'POST',
-                                url: `/familie-ba-sak/api/fagsaker/${fagsak.data.id}/vedtak/begrunnelser/fritekst`,
-                                data: {
-                                    fom: vedtaksperiode.periodeFom,
-                                    tom: vedtaksperiode.periodeTom,
-                                    fritekst: skjema.felter.fritekst.verdi,
-                                    vedtaksperiodetype: vedtaksperiode.vedtaksperiodetype,
-                                },
-                            },
-                            (ressurs: Ressurs<IFagsak>) => {
-                                settFagsak(ressurs);
-                            }
-                        );
-                    }
-                }}
-            >
-                Lagre
-            </KnappBase>
+            <KnappBase onClick={leggTilFritekst}>Legg til</KnappBase>
+
+            <KnappBase onClick={onSubmit}>Lagre</KnappBase>
         </SkjemaGruppe>
     );
 };

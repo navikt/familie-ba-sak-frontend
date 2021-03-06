@@ -19,7 +19,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import {
     IVedtakBegrunnelseSubmit,
     useVedtakBegrunnelser,
-} from '../../../../context/VedtakBegrunnelseContext';
+} from '../../../../context/VedtakBegrunnelserContext';
 import { lagPeriodeId } from '../../../../typer/periode';
 import {
     finnVedtakBegrunnelseType,
