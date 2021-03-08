@@ -174,6 +174,7 @@ export interface IAnnenVurderingConfig {
     beskrivelse: string;
     key: string;
     tittel: string;
+    lovreferanse: string;
     parterDetteGjelderFor: PersonType[];
     spørsmål?: (part?: string) => string;
 }
@@ -187,6 +188,7 @@ export const annenVurderingConfig: IAnnenVurderingsconfig = {
         beskrivelse: 'Opplysningsplikt',
         key: 'OPPLYSNINGSPLIKT',
         tittel: 'Opplysningsplikt',
+        lovreferanse: '§§ 17 OG 18',
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER, PersonType.ANNENPART],
         spørsmål: () => 'Er opplysningsplikten oppfylt?',
     },
