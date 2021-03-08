@@ -8,9 +8,8 @@ import { Undertittel } from 'nav-frontend-typografi';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { behandlingsstatuser } from '../../../../node_dist/frontend/typer/behandling';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import { IBehandling } from '../../typer/behandling';
+import { behandlingsstatuser, IBehandling } from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
 import { datoformat, formaterDato, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';

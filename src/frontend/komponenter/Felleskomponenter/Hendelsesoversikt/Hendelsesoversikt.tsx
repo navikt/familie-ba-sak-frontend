@@ -8,8 +8,6 @@ import Header from './Header/Header';
 import HendelseItem from './komponenter/HendelseItem';
 import { Hendelse, Tabs } from './typer';
 
-export { Hendelse };
-
 export interface IHendelsesoversiktProps {
     className?: string;
     hendelser: Hendelse[];
