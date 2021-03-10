@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=production node node_dist/backend/server.js",
-    "start:mock": "tsc && yarn copy-pdf-mock && NODE_ENV=development node node_dist/mock-server/server.js",
+    "start:mock": "tsc && yarn copy-pdf-mock && && yarn copy-json-mock && NODE_ENV=development node node_dist/mock-server/server.js",
     "start:dev": "tsc && NODE_ENV=development node node_dist/backend/server.js",
     "build": "yarn build:prod",
     "build:prod": "tsc && webpack --config ./build_n_deploy/webpack/webpack.prod.js",
