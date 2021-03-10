@@ -21,7 +21,7 @@ export default (router: Router) => {
     });
 
     router.get('/api/mock/vilkaarsvurdering/vilkaarsbegrunnelser', (_: Request, res: Response) => {
-        const journalpostRes = JSON.parse(lesMockFil(`journalpost.json.mock`));
+        const journalpostRes = JSON.parse(lesMockFil(`vilkaarsbegrunnelser.json.mock`));
         setTimeout(() => res.send(journalpostRes), 500);
     });
 
