@@ -66,7 +66,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         const hentVilkårBegrunnelseTekster = () => {
             request<void, Vilkårsbegrunnelser>({
                 method: 'GET',
-                url: `/familie-ba-sak/api/vilkaarsvurdering/vilkaarsbegrunnelser`,
+                url: `/api/mock/vilkaarsvurdering/vilkaarsbegrunnelser`,
                 påvirkerSystemLaster: true,
             }).then((vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>) => {
                 settVilkårbegrunnelser(vilkårBegrunnelser);

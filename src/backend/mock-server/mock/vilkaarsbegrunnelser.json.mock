@@ -1,0 +1,160 @@
+{
+  "data": {
+    "INNVILGELSE": [
+      {
+        "id": "INNVILGET_BOSATT_I_RIKTET",
+        "navn": "Norsk, nordisk, tredjelandsborger med lovlig opphold samtidig som bosatt i Norge",
+        "vilkår": "BOSATT_I_RIKET"
+      },
+      {
+        "id": "INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE",
+        "navn": "Tredjelandsborger bosatt før lovlig opphold i Norge",
+        "vilkår": "LOVLIG_OPPHOLD"
+      },
+      {
+        "id": "INNVILGET_LOVLIG_OPPHOLD_EØS_BORGER",
+        "navn": "EØS-borger: Søker har oppholdsrett",
+        "vilkår": "LOVLIG_OPPHOLD"
+      },
+      {
+        "id": "INNVILGET_LOVLIG_OPPHOLD_EØS_BORGER_SKJØNNSMESSIG_VURDERING",
+        "navn": "EØS-borger: Skjønnsmessig vurdering av oppholdsrett.",
+        "vilkår": "LOVLIG_OPPHOLD"
+      },
+      {
+        "id": "INNVILGET_LOVLIG_OPPHOLD_SKJØNNSMESSIG_VURDERING_TREDJELANDSBORGER",
+        "navn": "Skjønnsmessig vurdering tålt opphold tredjelandsborger",
+        "vilkår": "LOVLIG_OPPHOLD"
+      },
+      {
+        "id": "INNVILGET_OMSORG_FOR_BARN",
+        "navn": "Adopsjon, surrogati: Omsorgen for barn",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "INNVILGET_BOR_HOS_SØKER",
+        "navn": "Barn har flyttet til søker",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "INNVILGET_FAST_OMSORG_FOR_BARN",
+        "navn": "Søker har fast omsorg for barn",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "INNVILGET_NYFØDT_BARN",
+        "navn": "Nyfødt barn",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "INNVILGET_MEDLEM_I_FOLKETRYGDEN",
+        "navn": "Medlem i Folketrygden",
+        "vilkår": "BOSATT_I_RIKET"
+      },
+      {
+        "id": "INNVILGET_BARN_BOR_SAMMEN_MED_MOTTAKER",
+        "navn": "Foreldrene bor sammen, endret mottaker",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      { "id": "INNVILGET_SATSENDRING", "navn": "Satsendring", "vilkår": null }
+    ],
+    "REDUKSJON": [
+      {
+        "id": "REDUKSJON_BOSATT_I_RIKTET",
+        "navn": "Barn har flyttet fra Norge",
+        "vilkår": "BOSATT_I_RIKET"
+      },
+      {
+        "id": "REDUKSJON_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE_BARN",
+        "navn": "Barn har ikke oppholdstillatelse",
+        "vilkår": "LOVLIG_OPPHOLD"
+      },
+      {
+        "id": "REDUKSJON_FLYTTET_FORELDER",
+        "navn": "Søker har flyttet fra barn",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "REDUKSJON_FLYTTET_BARN",
+        "navn": "Barn har flyttet fra søker (flytting mellom foreldre, andre omsorgspersoner)",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "REDUKSJON_FAST_OMSORG_FOR_BARN",
+        "navn": "Søker har ikke lenger fast omsorg for barn: Beredskapshjem, fosterhjem, institusjon, vurdering fast bosted mellom foreldrene",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "REDUKSJON_UNDER_18_ÅR",
+        "navn": "Barn har fylt 18 år",
+        "vilkår": "UNDER_18_ÅR"
+      },
+      {
+        "id": "REDUKSJON_UNDER_6_ÅR",
+        "navn": "Barn har fylt 6 år",
+        "vilkår": null
+      },
+      {
+        "id": "REDUKSJON_DELT_BOSTED_ENIGHET",
+        "navn": "Enighet om opphør av avtale om delt bosted",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "REDUKSJON_DELT_BOSTED_UENIGHET",
+        "navn": "Uenighet om opphør av avtale om delt bosted",
+        "vilkår": "BOR_MED_SØKER"
+      }
+    ],
+    "OPPHØR": [
+      {
+        "id": "OPPHØR_BARN_FLYTTET_FRA_SØKER",
+        "navn": "Barn har flyttet fra søker (flytting mellom foreldre, andre omsorgspersoner)",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "OPPHØR_SØKER_FLYTTET_FRA_BARN",
+        "navn": "Søker har flyttet fra barn",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "OPPHØR_BARN_UTVANDRET",
+        "navn": "Barn har flyttet fra Norge",
+        "vilkår": "BOSATT_I_RIKET"
+      },
+      {
+        "id": "OPPHØR_SØKER_UTVANDRET",
+        "navn": "Søker har flyttet fra Norge",
+        "vilkår": "BOSATT_I_RIKET"
+      },
+      {
+        "id": "OPPHØR_SØKER_HAR_IKKE_FAST_OMSORG",
+        "navn": "Søker har ikke lenger fast omsorg for barn (beredskapshjem, vurdering av fast bosted)",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "OPPHØR_BARN_HAR_IKKE_OPPHOLDSTILLATELSE",
+        "navn": "Barn har ikke oppholdstillatelse",
+        "vilkår": "LOVLIG_OPPHOLD"
+      },
+      {
+        "id": "OPPHØR_SØKER_HAR_IKKE_OPPHOLDSTILLATELSE",
+        "navn": "Søker har ikke oppholdstillatelse",
+        "vilkår": "LOVLIG_OPPHOLD"
+      },
+      {
+        "id": "OPPHØR_DELT_BOSTED_OPPHØRT_ENIGHET",
+        "navn": "Enighet om opphør av avtale om delt bosted",
+        "vilkår": "BOR_MED_SØKER"
+      },
+      {
+        "id": "OPPHØR_DELT_BOSTED_OPPHØRT_UENIGHET",
+        "navn": "Uenighet om opphør av avtale om delt bosted",
+        "vilkår": "BOR_MED_SØKER"
+      }
+    ]
+  },
+  "status": "SUKSESS",
+  "melding": "Innhenting av data var vellykket",
+  "frontendFeilmelding": null,
+  "stacktrace": null
+}
