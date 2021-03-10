@@ -174,7 +174,7 @@ const useVedtakBegrunnelseMultiselect = (
                       const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
                           vedtakBegrunnelseType as VedtakBegrunnelseType
                       );
-
+                      console.log(vilkårBegrunnelser);
                       return [
                           ...acc,
                           {
@@ -189,6 +189,7 @@ const useVedtakBegrunnelseMultiselect = (
                                       (
                                           restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
                                       ) => {
+                                          console.log(restVedtakBegrunnelseTilknyttetVilkår);
                                           return restVedtakBegrunnelseTilknyttetVilkår.vilkår
                                               ? utgjørendeVilkårForPeriodeOgResultat.includes(
                                                     restVedtakBegrunnelseTilknyttetVilkår.vilkår
