@@ -9,6 +9,7 @@ import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import { IBehandling } from '../../../../typer/behandling';
+import { lagPeriodeId } from '../../../../typer/periode';
 import { ToggleNavn } from '../../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
@@ -74,7 +75,7 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
     return harVedtaksperioder ? (
         <>
             <UtbetalingsperioderOverskrift>
-                <Element>Begrunnelser i vedtaksbrev </Element>
+                <Element>Begrunnelser i vedtaksbrev</Element>
                 <StyledHjelpetekst44px
                     type={PopoverOrientering.Hoyre}
                     innhold="Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør."
@@ -93,6 +94,10 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                 })
                 .map((vedtaksperiode: Vedtaksperiode) => (
                     <VedtakBegrunnelsePanel
+                        key={lagPeriodeId({
+                            fom: vedtaksperiode.periodeFom,
+                            tom: vedtaksperiode.periodeTom,
+                        })}
                         behandlingsType={åpenBehandling.type}
                         personResultater={åpenBehandling.personResultater}
                         vedtaksperiode={vedtaksperiode}

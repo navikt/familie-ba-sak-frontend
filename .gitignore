@@ -2,6 +2,7 @@ node_modules
 frontend_production
 frontend_development
 node_dist
+dist
 .DS_Store
 .idea
 VERSION

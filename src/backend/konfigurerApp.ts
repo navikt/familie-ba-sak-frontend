@@ -5,7 +5,7 @@ if (process.env.NODE_ENV === 'production') {
     dotenv.config();
 }
 
-const konfigurerAzure = () => {
+export const konfigurerAzure = () => {
     const host = 'barnetrygd';
     switch (process.env.ENV) {
         case 'local':
