@@ -7,13 +7,10 @@ import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer
 
 import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { BehandlingÅrsak, IBehandling } from '../../typer/behandling';
+import { BehandlingResultat, BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { IPersonResultat } from '../../typer/vilkår';
-import {
-    alleVilkårPåVilkårsvurderingOppfylt,
-    hentAktivBehandlingPåFagsak,
-} from '../../utils/fagsak';
+import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void,
@@ -129,7 +126,7 @@ const useFagsakApi = (
                         response.data
                     );
 
-                    if (alleVilkårPåVilkårsvurderingOppfylt(vilkårsvurdering)) {
+                    if (aktivBehandling?.resultat === BehandlingResultat.AVSLÅTT) {
                         history.push(
                             `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/tilkjent-ytelse`
                         );

@@ -1,6 +1,6 @@
 import { IFagsak } from '../../../typer/fagsak';
 import { IVilkårResultat, Resultat, VilkårType } from '../../../typer/vilkår';
-import { alleVillkårOppfylt, hentSisteBehandlingPåFagsak } from '../../fagsak';
+import { hentSisteBehandlingPåFagsak } from '../../fagsak';
 import { mockBehandling } from '../behandling/behandling.mock';
 import { mockFeltstate, mockVilkårResultater } from '../vilkårsvurdering/vilkår.mock';
 import { mockFagsak } from './fagsak.mock';
@@ -17,43 +17,6 @@ describe('utils/fagsak', () => {
 
         test('Skal returnere behandling med siste opprettetdato', () => {
             expect(hentSisteBehandlingPåFagsak(fagsak)?.behandlingId).toEqual(2);
-        });
-    });
-
-    describe('alleVilkårOppfylt', () => {
-        const vilkårRestultater1 = [
-            VilkårType.LOVLIG_OPPHOLD,
-            VilkårType.BOSATT_I_RIKET,
-            VilkårType.GIFT_PARTNERSKAP,
-            VilkårType.UNDER_18_ÅR,
-            VilkårType.BOR_MED_SØKER,
-        ].map(vilkårType =>
-            mockVilkårResultater({
-                resultat: Resultat.OPPFYLT,
-                vilkårType,
-            })
-        );
-
-        const ikkeOppfyltResultat = mockFeltstate(Resultat.IKKE_OPPFYLT);
-        const vilkårResultater2: IVilkårResultat[] = [
-            { ...vilkårRestultater1[0], resultat: ikkeOppfyltResultat },
-            ...vilkårRestultater1.slice(1),
-        ];
-
-        test('Skal returnere true', () => {
-            expect(
-                alleVillkårOppfylt(
-                    vilkårRestultater1.map(vilkårRestultat => mockFeltstate(vilkårRestultat))
-                )
-            ).toEqual(true);
-        });
-
-        test('Skal returnere false', () => {
-            expect(
-                alleVillkårOppfylt(
-                    vilkårResultater2.map(vilkårRestultat => mockFeltstate(vilkårRestultat))
-                )
-            ).toEqual(false);
         });
     });
 });

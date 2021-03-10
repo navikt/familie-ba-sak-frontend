@@ -37,17 +37,3 @@ export const hentAktivVedtakPåBehandlig = (
 ): IVedtakForBehandling | undefined => {
     return behandling.vedtakForBehandling.find((vedtak: IVedtakForBehandling) => vedtak.aktiv);
 };
-
-/**
- * Når man får periodisert vilkårsvurdering med aksjonspunkter
- * må denne ta høyde for at noen perioder kan være innvilget, mens andre er avslått.
- *
- * @param vilkårsvurdering liste av perioder med vilkår
- */
-export const alleVilkårPåVilkårsvurderingOppfylt = (vilkårsvurdering: IPersonResultat[]) =>
-    vilkårsvurdering.every(personResultat => alleVillkårOppfylt(personResultat.vilkårResultater));
-
-export const alleVillkårOppfylt = (vilkårResultater: FeltState<IVilkårResultat>[]) =>
-    vilkårResultater.every(
-        vilkårResultat => vilkårResultat.verdi.resultat.verdi !== Resultat.IKKE_OPPFYLT
-    );
