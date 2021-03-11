@@ -27,6 +27,7 @@ import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
+import { VedtakBegrunnelse } from '../../../../typer/vedtak';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -283,9 +284,18 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     )}
                 {redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
                     <AvslagBegrunnelseMultiselect
-                        personident={person.personIdent}
                         vilkårType={redigerbartVilkår.verdi.vilkårType}
                         periode={redigerbartVilkår.verdi.periode.verdi}
+                        begrunnelser={redigerbartVilkår.verdi.avslagBegrunnelser}
+                        onChange={(oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => {
+                            validerOgSettRedigerbartVilkår({
+                                ...redigerbartVilkår,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    avslagBegrunnelser: oppdaterteAvslagbegrunnelser,
+                                },
+                            });
+                        }}
                     />
                 )}
 
@@ -354,7 +364,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 person.personIdent,
                                 redigerbartVilkår.verdi.id
                             );
-                            håndterEndringPåVilkårsvurdering(promise);
+                            håndterEndringPåVilkårsvurdering(promise); // TODO: Håndter fjernning av helt vilkår for avslag
                         }}
                         id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                         spinner={vilkårSubmit === VilkårSubmit.DELETE}
