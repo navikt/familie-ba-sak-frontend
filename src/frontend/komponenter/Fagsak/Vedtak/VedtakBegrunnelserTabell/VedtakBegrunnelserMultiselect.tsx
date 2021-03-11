@@ -20,7 +20,6 @@ import {
     IVedtakBegrunnelseSubmit,
     useVedtakBegrunnelser,
 } from '../../../../context/VedtakBegrunnelseContext';
-import { lagPeriodeId } from '../../../../typer/periode';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
@@ -52,7 +51,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
         fom: vedtaksperiode.periodeFom,
         tom: vedtaksperiode.periodeTom,
     };
-    const { vedtakBegrunnelseSubmit, vilkårBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtakBegrunnelseSubmit, vilkårBegrunnelser, lagKomponentId } = useVedtakBegrunnelser();
     const {
         grupperteBegrunnelser,
         onChangeBegrunnelse,
@@ -60,12 +59,10 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
         vedtakBegrunnelserForPeriode,
     } = useVedtakBegrunnelseMultiselect(personResultater, vedtaksperiode);
 
-    const submitForPeriode: IVedtakBegrunnelseSubmit | undefined =
-        lagPeriodeId(periode) === vedtakBegrunnelseSubmit.periodeId
-            ? vedtakBegrunnelseSubmit
-            : undefined;
+    const komponentId = lagKomponentId(periode);
 
-    const vedtakBegrunnelseId = `vedtakbegrunnelser_${lagPeriodeId(periode)}`;
+    const submitForPeriode: IVedtakBegrunnelseSubmit | undefined =
+        komponentId === vedtakBegrunnelseSubmit.komponentId ? vedtakBegrunnelseSubmit : undefined;
 
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
@@ -73,7 +70,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
 
     return (
         <FamilieReactSelect
-            id={vedtakBegrunnelseId}
+            id={komponentId}
             value={valgteBegrunnelser}
             propSelectStyles={{
                 container: (provided: CSSProperties) => ({
