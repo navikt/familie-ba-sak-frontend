@@ -14,6 +14,7 @@ export interface IVedtakForBehandling {
 export interface IRestVedtakBegrunnelse {
     begrunnelse?: VedtakBegrunnelse;
     begrunnelseType?: VedtakBegrunnelseType;
+    personIdent?: string;
     fom: string;
     id?: number;
     tom?: string;
@@ -23,6 +24,14 @@ export interface IRestPostVedtakBegrunnelse {
     fom: string;
     tom?: string;
     vedtakBegrunnelse: VedtakBegrunnelse;
+}
+
+export interface IRestPostAvslagBegrunnelse {
+    personIdent: string;
+    vilkår: VilkårType;
+    fom?: string;
+    tom?: string;
+    begrunnelser: VedtakBegrunnelse[];
 }
 
 export interface IRestDeleteVedtakBegrunnelser {
@@ -92,12 +101,30 @@ export const finnVedtakBegrunnelseType = (
         : undefined;
 };
 
+export const finnVedtakBegrunnelseVilkår = (
+    vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>,
+    vedtakBegrunnelse: VedtakBegrunnelse
+): VilkårType | undefined => {
+    if (vilkårBegrunnelser.status === RessursStatus.SUKSESS) {
+        Object.keys(vilkårBegrunnelser.data).forEach(vedtakBegrunnelseType => {
+            const match = vilkårBegrunnelser.data[
+                vedtakBegrunnelseType as VedtakBegrunnelseType
+            ].find(
+                (vedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
+                    vedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelse
+            );
+            if (match !== undefined) return match.vilkår;
+        });
+    }
+    return undefined;
+};
+
 export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
             return navFarger.navGronnLighten80;
         case VedtakBegrunnelseType.AVSLAG:
-            return navFarger.navRodLighten80; // TODO: Kontroller farge
+            return navFarger.navRodLighten80;
         case VedtakBegrunnelseType.REDUKSJON:
             return navFarger.navOransjeLighten80;
         case VedtakBegrunnelseType.OPPHØR:
@@ -112,7 +139,7 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
         case VedtakBegrunnelseType.INNVILGELSE:
             return navFarger.navGronn;
         case VedtakBegrunnelseType.AVSLAG:
-            return navFarger.navRodDarken20; // TODO: Kontroller farge
+            return navFarger.navRodDarken20;
         case VedtakBegrunnelseType.REDUKSJON:
             return navFarger.navOransjeDarken20;
         case VedtakBegrunnelseType.OPPHØR:

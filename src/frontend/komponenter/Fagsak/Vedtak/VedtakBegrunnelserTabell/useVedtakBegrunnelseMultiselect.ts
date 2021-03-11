@@ -154,6 +154,7 @@ const useVedtakBegrunnelseMultiselect = (
     const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
         (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
             return (
+                vedtakBegrunnelse.begrunnelseType !== VedtakBegrunnelseType.AVSLAG &&
                 vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
                 vedtakBegrunnelse.tom === vedtaksperiode.periodeTom
             );

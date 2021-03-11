@@ -9,22 +9,23 @@ import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
 import {
     IRestDeleteVedtakBegrunnelser,
+    IRestPostAvslagBegrunnelse,
     IRestPostVedtakBegrunnelse,
     IRestVedtakBegrunnelse,
     IVedtakForBehandling,
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
-import { Vilkårsbegrunnelser } from '../typer/vilkår';
+import { Vilkårsbegrunnelser, VilkårType } from '../typer/vilkår';
 import { useFagsakRessurser } from './FagsakContext';
 
 export interface IVedtakBegrunnelseSubmit {
-    periodeId: string;
+    komponentId: string;
     feilmelding: string;
     status: RessursStatus;
 }
 
 const initialVedtakBegrunnelseSubmit = {
-    periodeId: '',
+    komponentId: '',
     feilmelding: '',
     status: RessursStatus.IKKE_HENTET,
 };
@@ -63,6 +64,12 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             }
         }, [aktivVedtak]);
 
+        const lagKomponentId = (periode: IPeriode, personident?: string, vilkårType?: VilkårType) =>
+            `multiselect
+            _${personident ?? `utenperson`}
+            _${vilkårType ?? `utenvilkår`}
+            _${lagPeriodeId(periode)}`;
+
         const hentVilkårBegrunnelseTekster = () => {
             request<void, Vilkårsbegrunnelser>({
                 method: 'GET',
@@ -75,10 +82,10 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
 
         const håndterEndringerPåVedtakBegrunnelser = (
             promise: Promise<Ressurs<IFagsak>>,
-            periodeId: string
+            submitId: string
         ) => {
             settVedtakBegrunnelseSubmit({
-                periodeId,
+                komponentId: submitId,
                 feilmelding: '',
                 status: RessursStatus.HENTER,
             });
@@ -92,7 +99,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
                     fagsak.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settVedtakBegrunnelseSubmit({
-                        periodeId,
+                        komponentId: submitId,
                         feilmelding: fagsak.frontendFeilmelding,
                         status: RessursStatus.FEILET,
                     });
@@ -107,10 +114,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser`,
                     data: postVedtakBegrunnelse,
                 }),
-                lagPeriodeId({
-                    fom: postVedtakBegrunnelse.fom,
-                    tom: postVedtakBegrunnelse.tom,
-                })
+                lagKomponentId({ fom: postVedtakBegrunnelse.fom, tom: postVedtakBegrunnelse.tom })
             );
         };
 
@@ -120,7 +124,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
                     method: 'DELETE',
                     url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/${vedtakBegrunnelse.id}`,
                 }),
-                lagPeriodeId({ fom: vedtakBegrunnelse.fom, tom: vedtakBegrunnelse.tom })
+                lagKomponentId({ fom: vedtakBegrunnelse.fom, tom: vedtakBegrunnelse.tom })
             );
         };
 
@@ -139,7 +143,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
                         vedtakbegrunnelseTyper,
                     },
                 }),
-                lagPeriodeId({ fom, tom })
+                lagKomponentId({ fom, tom })
             );
         };
 
@@ -153,7 +157,22 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
                         tom,
                     },
                 }),
-                lagPeriodeId({ fom, tom })
+                lagKomponentId({ fom, tom })
+            );
+        };
+
+        const oppdaterAvslagBegrunnelser = (postAvslagBegrunnelser: IRestPostAvslagBegrunnelse) => {
+            håndterEndringerPåVedtakBegrunnelser(
+                request<IRestPostAvslagBegrunnelse, IFagsak>({
+                    method: 'POST',
+                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/avslagbegrunnelser`,
+                    data: postAvslagBegrunnelser,
+                }),
+                lagKomponentId(
+                    { fom: postAvslagBegrunnelser.fom, tom: postAvslagBegrunnelser.tom },
+                    postAvslagBegrunnelser.personIdent,
+                    postAvslagBegrunnelser.vilkår
+                )
             );
         };
 
@@ -163,9 +182,11 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             slettVedtakBegrunnelse,
             slettVedtakBegrunnelserForPeriode,
             slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
+            oppdaterAvslagBegrunnelser,
             vedtakBegrunnelseSubmit,
             vedtakBegrunnelser,
             vilkårBegrunnelser,
+            lagKomponentId,
         };
     }
 );
