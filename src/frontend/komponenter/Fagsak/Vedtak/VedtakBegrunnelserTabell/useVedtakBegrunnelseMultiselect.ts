@@ -14,6 +14,7 @@ import {
 } from '../../../../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import {
+    AnnenVurderingType,
     IRestPersonResultat,
     IRestVilkårResultat,
     Resultat,
@@ -98,7 +99,32 @@ const useVedtakBegrunnelseMultiselect = (
         }
     };
 
+    const skalLeggeTilAndreBegrunnelse = (
+        vedtakBegrunnelser: IRestVedtakBegrunnelseTilknyttetVilkår
+    ) =>
+        vedtakBegrunnelser.id === VedtakBegrunnelse.OPPHØR_IKKE_MOTTATT_OPPLYSNINGER ||
+        vedtakBegrunnelser.id === VedtakBegrunnelse.REDUKSJON_MANGLENDE_OPPLYSNINGER
+            ? personResultater
+                  .flatMap(personResultat => personResultat.andreVurderinger)
+                  .find(
+                      annenVurdering =>
+                          annenVurdering.type === AnnenVurderingType.OPPLYSNINGSPLIKT &&
+                          annenVurdering.resultat === Resultat.IKKE_OPPFYLT
+                  )
+            : true;
+
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] => {
+        console.log(personResultater);
+        console.log(personResultater.flatMap(personResultat => personResultat.andreVurderinger));
+        console.log(
+            personResultater
+                .flatMap(personResultat => personResultat.andreVurderinger)
+                .find(
+                    annenVurdering =>
+                        annenVurdering.type === AnnenVurderingType.OPPLYSNINGSPLIKT &&
+                        annenVurdering.resultat === Resultat.IKKE_OPPFYLT
+                )
+        );
         return personResultater
             .flatMap(personResultat => personResultat.vilkårResultater)
             .filter((vilkårResultat: IRestVilkårResultat) => {
@@ -189,12 +215,13 @@ const useVedtakBegrunnelseMultiselect = (
                                       (
                                           restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
                                       ) => {
-                                          console.log(restVedtakBegrunnelseTilknyttetVilkår);
                                           return restVedtakBegrunnelseTilknyttetVilkår.vilkår
                                               ? utgjørendeVilkårForPeriodeOgResultat.includes(
                                                     restVedtakBegrunnelseTilknyttetVilkår.vilkår
                                                 )
-                                              : true;
+                                              : skalLeggeTilAndreBegrunnelse(
+                                                    restVedtakBegrunnelseTilknyttetVilkår
+                                                );
                                       }
                                   )
                                   .map(

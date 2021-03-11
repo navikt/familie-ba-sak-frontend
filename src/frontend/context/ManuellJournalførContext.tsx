@@ -317,8 +317,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         settDataForManuellJournalføring(byggHenterRessurs());
         return request<void, IDataForManuellJournalføring>({
             method: 'GET',
-            //url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
-            url: `/api/mock/oppgave/${oppgaveId}`,
+            url: `/familie-ba-sak/api/oppgave/${oppgaveId}`,
+            //url: `/api/mock/oppgave/${oppgaveId}`,
             påvirkerSystemLaster: true,
         })
             .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
