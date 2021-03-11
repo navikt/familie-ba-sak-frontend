@@ -126,7 +126,7 @@ const useFagsakApi = (
                         response.data
                     );
 
-                    if (aktivBehandling?.resultat === BehandlingResultat.AVSLÅTT) {
+                    if (aktivBehandling?.resultat !== BehandlingResultat.AVSLÅTT) {
                         history.push(
                             `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/tilkjent-ytelse`
                         );
