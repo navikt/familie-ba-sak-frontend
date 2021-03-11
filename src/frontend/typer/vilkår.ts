@@ -3,7 +3,11 @@ import { FeltState } from '@navikt/familie-skjema';
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
-import { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelseType } from './vedtak';
+import {
+    IRestVedtakBegrunnelseTilknyttetVilkår,
+    VedtakBegrunnelse,
+    VedtakBegrunnelseType,
+} from './vedtak';
 
 export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
@@ -65,6 +69,7 @@ export interface IVilkårResultat {
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
     erEksplisittAvslagPåSøknad?: boolean;
+    avslagBegrunnelser?: VedtakBegrunnelse[];
 }
 
 // Vilkårsvurdering typer for api
@@ -91,6 +96,7 @@ export interface IRestVilkårResultat {
     periodeTom?: string;
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
+    avslagBegrunnelser?: VedtakBegrunnelse[];
     vilkårType: VilkårType;
 }
 

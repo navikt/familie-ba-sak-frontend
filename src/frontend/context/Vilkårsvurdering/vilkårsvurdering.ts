@@ -87,6 +87,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
                                     erEksplisittAvslagPåSøknad:
                                         vilkårResultat.erEksplisittAvslagPåSøknad,
+                                    avslagBegrunnelser: vilkårResultat.avslagBegrunnelser,
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                 },

@@ -14,7 +14,6 @@ export interface IVedtakForBehandling {
 export interface IRestVedtakBegrunnelse {
     begrunnelse?: VedtakBegrunnelse;
     begrunnelseType?: VedtakBegrunnelseType;
-    personIdent?: string;
     fom: string;
     id?: number;
     tom?: string;
@@ -24,14 +23,6 @@ export interface IRestPostVedtakBegrunnelse {
     fom: string;
     tom?: string;
     vedtakBegrunnelse: VedtakBegrunnelse;
-}
-
-export interface IRestPostAvslagBegrunnelse {
-    personIdent: string;
-    vilkår: VilkårType;
-    fom?: string;
-    tom?: string;
-    begrunnelser: VedtakBegrunnelse[];
 }
 
 export interface IRestDeleteVedtakBegrunnelser {

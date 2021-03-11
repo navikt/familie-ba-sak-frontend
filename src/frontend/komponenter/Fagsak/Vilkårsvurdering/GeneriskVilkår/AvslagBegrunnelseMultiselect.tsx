@@ -7,25 +7,27 @@ import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-f
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import {
-    IVedtakBegrunnelseSubmit,
-    useVedtakBegrunnelser,
-} from '../../../../context/VedtakBegrunnelseContext';
+    useVilkårsvurdering,
+    VilkårSubmit,
+} from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IPeriode } from '../../../../typer/periode';
 import {
     hentBakgrunnsfarge,
     hentBorderfarge,
-    IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
+import useAvslagBegrunnelseMultiselect from '../../Vedtak/VedtakBegrunnelserTabell/useAvslagBegrunnelseMultiselect';
 
 interface IProps {
-    personident: string;
     vilkårType: VilkårType;
     periode: IPeriode;
+    begrunnelser: VedtakBegrunnelse[] | undefined;
+    onChange: (oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => void;
 }
 
 interface IOptionType {
@@ -33,136 +35,84 @@ interface IOptionType {
     label: string;
 }
 
-const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ personident, vilkårType, periode }) => {
+const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
+    vilkårType,
+    periode,
+    begrunnelser,
+    onChange,
+}) => {
     const { erLesevisning } = useBehandling();
-    const {
-        vedtakBegrunnelseSubmit,
-        vedtakBegrunnelser,
-        vilkårBegrunnelser,
-        lagKomponentId,
-        oppdaterAvslagBegrunnelser,
-    } = useVedtakBegrunnelser();
+    const { vilkårBegrunnelser } = useVedtakBegrunnelser();
+    const { vilkårSubmit } = useVilkårsvurdering();
 
-    const komponendId = lagKomponentId(periode, personident, vilkårType);
-
-    const submitForPeriode: IVedtakBegrunnelseSubmit | undefined =
-        komponendId === vedtakBegrunnelseSubmit.komponentId ? vedtakBegrunnelseSubmit : undefined;
-
-    const avslagBegrunnelseTeksterForGjeldendeVilkår =
-        vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? vilkårBegrunnelser.data.AVSLAG.filter(
-                  (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-                      begrunnelse.vilkår === vilkårType
-              )
-            : [];
-
-    const tilhørerVilkår = (fastsattBegrunnelse: IRestVedtakBegrunnelse): boolean => {
-        return (
-            !!fastsattBegrunnelse.begrunnelse &&
-            avslagBegrunnelseTeksterForGjeldendeVilkår
-                .map((begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => begrunnelse.id)
-                .includes(fastsattBegrunnelse.begrunnelse)
-        );
-    };
-
-    const fastsatteBegrunnelserForGjeldende = vedtakBegrunnelser.filter(
-        (fastsattBegrunnelse: IRestVedtakBegrunnelse) => {
-            return (
-                tilhørerVilkår(fastsattBegrunnelse) &&
-                fastsattBegrunnelse.begrunnelseType === VedtakBegrunnelseType.AVSLAG &&
-                fastsattBegrunnelse.fom === periode.fom &&
-                fastsattBegrunnelse.tom === periode.tom
-            );
-        }
+    const { avslagBegrunnelseTeksterForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
+        vilkårType,
+        periode
     );
 
-    const oppdaterAvslagBegrunnelserForGjeldende = () => {
-        oppdaterAvslagBegrunnelser({
-            personIdent: personident,
-            vilkår: vilkårType,
-            fom: periode.tom,
-            tom: periode.tom,
-            begrunnelser: valgteOptionsForPeriode.map(
-                (option: ISelectOption): VedtakBegrunnelse => {
-                    return option.value as VedtakBegrunnelse;
-                }
-            ),
-        });
-    };
+    const valgteBegrunnlser = begrunnelser
+        ? begrunnelser.map((valgtBegrunnelse: VedtakBegrunnelse) => ({
+              value: valgtBegrunnelse?.toString() ?? '',
+              label:
+                  avslagBegrunnelseTeksterForGjeldendeVilkår.find(
+                      (
+                          restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
+                      ) => restVedtakBegrunnelseTilknyttetVilkår.id === valgtBegrunnelse
+                  )?.navn ?? '',
+          }))
+        : [];
 
     const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
         switch (action.action) {
             case 'select-option':
-                oppdaterAvslagBegrunnelserForGjeldende();
+                if (action.option) {
+                    valgteBegrunnlser.push(action.option);
+                    onChange(valgteBegrunnlser.map(option => option.value as VedtakBegrunnelse));
+                } else {
+                    throw new Error('Klarer ikke legge til begrunnelse');
+                }
                 break;
             case 'pop-value':
             case 'remove-value':
-                const vedtakBegrunnelse:
-                    | IRestVedtakBegrunnelse
-                    | undefined = fastsatteBegrunnelserForGjeldende.find(
-                    (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                        vedtakBegrunnelse.begrunnelse === action.removedValue?.value
+                onChange(
+                    valgteBegrunnlser
+                        .filter(option => option.value !== action.removedValue?.value)
+                        .map(option => option.value as VedtakBegrunnelse)
                 );
-
-                if (vedtakBegrunnelse) {
-                    oppdaterAvslagBegrunnelserForGjeldende();
-                } else {
-                    throw new Error('Finner ikke avslagsbegrunnelse id i listen over begrunnelser');
-                }
                 break;
             case 'clear':
-                const førsteVedtakBegrunnelse: IRestVedtakBegrunnelse | undefined =
-                    fastsatteBegrunnelserForGjeldende[0];
-                if (førsteVedtakBegrunnelse) {
-                    oppdaterAvslagBegrunnelserForGjeldende();
-                } else {
-                    throw new Error(
-                        'Prøver å fjerne alle begrunnelser for en periode, men det er ikke satt noen begrunnelser'
-                    );
-                }
+                onChange([]);
                 break;
             default:
                 throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
         }
     };
 
-    const options: IOptionType[] = avslagBegrunnelseTeksterForGjeldendeVilkår.map(
+    const muligeOptions: IOptionType[] = avslagBegrunnelseTeksterForGjeldendeVilkår.map(
         (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => ({
             value: begrunnelse.id,
             label: begrunnelse.navn,
-        })
-    );
-    const valgteOptionsForPeriode: ISelectOption[] = fastsatteBegrunnelserForGjeldende.map(
-        (valgtBegrunnelse: IRestVedtakBegrunnelse) => ({
-            value: valgtBegrunnelse.begrunnelse?.toString() ?? '',
-            label:
-                avslagBegrunnelseTeksterForGjeldendeVilkår.find(
-                    (
-                        restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
-                    ) => restVedtakBegrunnelseTilknyttetVilkår.id === valgtBegrunnelse.begrunnelse
-                )?.navn ?? '',
         })
     );
 
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
+
     return (
         <FamilieReactSelect
-            id={komponendId}
-            value={valgteOptionsForPeriode}
+            value={valgteBegrunnlser}
             label={'Begrunnelse(r) til vedtaksbrev'}
             creatable={true}
             placeholder={'Velg begrunnelse(r)'}
-            isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
-            isDisabled={erLesevisning() || vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
-            feil={submitForPeriode?.feilmelding}
+            isLoading={vilkårSubmit !== VilkårSubmit.NONE}
+            isDisabled={erLesevisning() || vilkårSubmit !== VilkårSubmit.NONE}
             erLesevisning={erLesevisning()}
             isMulti={true}
             onChange={(_, action: ActionMeta<ISelectOption>) => {
                 onChangeBegrunnelse(action);
             }}
-            options={options}
+            options={muligeOptions}
             propSelectStyles={{
                 container: (provided: CSSProperties) => ({
                     ...provided,
