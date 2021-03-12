@@ -118,6 +118,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     verdi: resultat,
                 },
                 erEksplisittAvslagPåSøknad: false,
+                avslagBegrunnelser: undefined,
             },
         });
     };
@@ -277,6 +278,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                         ...redigerbartVilkår.verdi,
                                         erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
                                             .erEksplisittAvslagPåSøknad,
+                                        avslagBegrunnelser: undefined,
                                     },
                                 });
                             }}
