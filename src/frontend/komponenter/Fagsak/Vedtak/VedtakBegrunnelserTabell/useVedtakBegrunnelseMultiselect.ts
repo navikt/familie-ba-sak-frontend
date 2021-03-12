@@ -114,17 +114,6 @@ const useVedtakBegrunnelseMultiselect = (
             : true;
 
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] => {
-        console.log(personResultater);
-        console.log(personResultater.flatMap(personResultat => personResultat.andreVurderinger));
-        console.log(
-            personResultater
-                .flatMap(personResultat => personResultat.andreVurderinger)
-                .find(
-                    annenVurdering =>
-                        annenVurdering.type === AnnenVurderingType.OPPLYSNINGSPLIKT &&
-                        annenVurdering.resultat === Resultat.IKKE_OPPFYLT
-                )
-        );
         return personResultater
             .flatMap(personResultat => personResultat.vilkårResultater)
             .filter((vilkårResultat: IRestVilkårResultat) => {
@@ -200,7 +189,6 @@ const useVedtakBegrunnelseMultiselect = (
                       const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
                           vedtakBegrunnelseType as VedtakBegrunnelseType
                       );
-                      console.log(vilkårBegrunnelser);
                       return [
                           ...acc,
                           {

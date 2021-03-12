@@ -13,7 +13,6 @@ import { logInfo } from '@navikt/familie-logging';
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
-import setupMock from './mock-server/mock-routes';
 import { attachToken, doPdfProxy, doProxy } from './proxy';
 import setupRouter from './router';
 
@@ -58,7 +57,6 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     app.use(bodyParser.json({ limit: '200mb' }));
     app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
     app.use('/', setupRouter(azureAuthClient, router));
-    app.use('/', setupMock(router));
 
     app.listen(port, '0.0.0.0', () => {
         logInfo(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);

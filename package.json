@@ -7,7 +7,6 @@
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=production node node_dist/backend/server.js",
-    "start:mock": "tsc -p tsconfig.backend.json && yarn copy-pdf-mock && yarn copy-json-mock && NODE_ENV=development node node_dist/backend/server.js",
     "start:dev": "tsc -p tsconfig.backend.json && NODE_ENV=development node node_dist/backend/server.js",
     "build": "yarn build:prod",
     "build:prod": "tsc -p tsconfig.backend.json && NODE_ENV=production webpack --config ./src/webpack/webpack.prod.js",
@@ -16,8 +15,6 @@
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
-    "copy-pdf-mock": "copyfiles -u 1 src/**/**/*.pdf node_dist",
-    "copy-json-mock": "copyfiles -u 1 src/**/**/**/*.mock node_dist",
     "prepare": "yarn run snyk-protect"
   },
   "husky": {
