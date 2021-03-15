@@ -19,7 +19,13 @@ interface IProps {
 }
 
 const MarginSkjemaGruppe = styled(SkjemaGruppe)`
-    margin-bottom: 1rem !important;
+    margin: 1.5rem 0 2.5rem 0 !important;
+    .skjemaelement {
+        margin-bottom: 0 !important;
+    }
+    > div:nth-child(2) {
+        margin: 0.5rem 0 0 0;
+    }
 `;
 
 const AvslagSkjema: React.FC<IProps> = ({
@@ -32,7 +38,6 @@ const AvslagSkjema: React.FC<IProps> = ({
 
     return (
         <MarginSkjemaGruppe
-            feilmeldingId={'test'} // TODO: Fiks
             feil={
                 redigerbartVilkår.verdi.avslagBegrunnelser.valideringsstatus ===
                     Valideringsstatus.FEIL && visFeilmeldinger
@@ -40,7 +45,6 @@ const AvslagSkjema: React.FC<IProps> = ({
                     : ''
             }
         >
-            {console.log(redigerbartVilkår.verdi.avslagBegrunnelser.valideringsstatus)}
             <FamilieCheckbox
                 erLesevisning={lesevisning}
                 label={'Vurderingen er et avslag'}

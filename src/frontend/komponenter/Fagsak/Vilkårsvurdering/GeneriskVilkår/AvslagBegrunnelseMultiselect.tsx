@@ -103,7 +103,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
         <FamilieReactSelect
             value={valgteBegrunnlser}
             label={'Begrunnelse(r) til vedtaksbrev'}
-            creatable={true}
+            creatable={false}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={vilkårSubmit !== VilkårSubmit.NONE}
             isDisabled={erLesevisning() || vilkårSubmit !== VilkårSubmit.NONE}
