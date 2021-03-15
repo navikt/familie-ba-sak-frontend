@@ -69,7 +69,7 @@ export interface IVilkårResultat {
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
     erEksplisittAvslagPåSøknad?: boolean;
-    avslagBegrunnelser?: VedtakBegrunnelse[];
+    avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
 }
 
 // Vilkårsvurdering typer for api
@@ -96,7 +96,7 @@ export interface IRestVilkårResultat {
     periodeTom?: string;
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
-    avslagBegrunnelser?: VedtakBegrunnelse[];
+    avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
 }
 

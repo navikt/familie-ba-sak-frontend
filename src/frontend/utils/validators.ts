@@ -14,6 +14,7 @@ import { Resultat } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import { datoformat, isoStringToDayjs } from './formatter';
 import { leggTilÅr } from './tid';
+import { VedtakBegrunnelse } from '../typer/vedtak';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -103,6 +104,20 @@ export const erPeriodeGyldig = (
 
 export const erResultatGyldig = (felt: FeltState<Resultat>): FeltState<Resultat> => {
     return felt.verdi !== Resultat.IKKE_VURDERT ? ok(felt) : feil(felt, 'Resultat er ikke satt');
+};
+
+export const erAvslagBegrunnelserGyldig = (
+    felt: FeltState<VedtakBegrunnelse[]>,
+    avhengigheter?: Avhengigheter
+): FeltState<VedtakBegrunnelse[]> => {
+    const erEksplisittAvslagPåSøknad: boolean | undefined =
+        avhengigheter?.erEksplisittAvslagPåSøknad;
+
+    console.log(avhengigheter);
+    console.log(!felt.verdi.length);
+    return erEksplisittAvslagPåSøknad && !felt.verdi.length
+        ? feil(felt, 'Du må velge minst en begrunnelse ved avslag')
+        : ok(felt);
 };
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';

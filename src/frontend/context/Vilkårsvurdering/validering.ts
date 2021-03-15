@@ -1,7 +1,8 @@
-import { FeltState, Avhengigheter, Valideringsstatus, feil, ok } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IPeriode } from '../../typer/periode';
 import { IAnnenVurdering, IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
+import { VedtakBegrunnelse } from '../../typer/vedtak';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
@@ -23,10 +24,20 @@ export const validerVilkår = (
         nyttVilkårResultat.verdi.resultat
     );
 
+    const nyeAvslagbegrunnelser: FeltState<
+        VedtakBegrunnelse[]
+    > = nyttVilkårResultat.verdi.avslagBegrunnelser.valider(
+        nyttVilkårResultat.verdi.avslagBegrunnelser,
+        { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
+    );
+
+    console.log('validering', nyeAvslagbegrunnelser);
+
     const gyldigVilkår: boolean =
         nyPeriode.valideringsstatus === Valideringsstatus.OK &&
         nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
-        nyttResultat.valideringsstatus === Valideringsstatus.OK;
+        nyttResultat.valideringsstatus === Valideringsstatus.OK &&
+        nyeAvslagbegrunnelser.valideringsstatus === Valideringsstatus.OK;
 
     const nyVerdi: IVilkårResultat = {
         ...nyttVilkårResultat.verdi,
@@ -34,16 +45,6 @@ export const validerVilkår = (
         begrunnelse: nyBegrunnelse,
         resultat: nyttResultat,
     };
-
-    if (
-        nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad &&
-        !nyttVilkårResultat.verdi.avslagBegrunnelser?.length
-    ) {
-        return feil(
-            { ...nyttVilkårResultat, verdi: nyVerdi },
-            'Du må sette begrunnelser ved avslag for å kunne gå videre'
-        );
-    }
 
     return gyldigVilkår
         ? ok({ ...nyttVilkårResultat, verdi: nyVerdi })

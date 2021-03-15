@@ -26,7 +26,7 @@ import useAvslagBegrunnelseMultiselect from '../../Vedtak/VedtakBegrunnelserTabe
 interface IProps {
     vilkårType: VilkårType;
     periode: IPeriode;
-    begrunnelser: VedtakBegrunnelse[] | undefined;
+    begrunnelser: VedtakBegrunnelse[];
     onChange: (oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => void;
 }
 

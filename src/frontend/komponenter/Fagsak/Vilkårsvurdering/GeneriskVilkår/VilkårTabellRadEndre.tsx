@@ -44,6 +44,7 @@ import {
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
+import { nyPeriode } from '../../../../typer/periode';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -118,7 +119,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     verdi: resultat,
                 },
                 erEksplisittAvslagPåSøknad: false,
-                avslagBegrunnelser: undefined,
+                avslagBegrunnelser: {
+                    ...redigerbartVilkår.verdi.avslagBegrunnelser,
+                    verdi: [],
+                },
             },
         });
     };
@@ -272,13 +276,16 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             label={'Vurderingen er et avslag'}
                             checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
                             onChange={() => {
-                                validerOgSettRedigerbartVilkår({
+                                settRedigerbartVilkår({
                                     ...redigerbartVilkår,
                                     verdi: {
                                         ...redigerbartVilkår.verdi,
                                         erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
                                             .erEksplisittAvslagPåSøknad,
-                                        avslagBegrunnelser: undefined,
+                                        avslagBegrunnelser: {
+                                            ...redigerbartVilkår.verdi.avslagBegrunnelser,
+                                            verdi: [],
+                                        },
                                     },
                                 });
                             }}
@@ -288,19 +295,21 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     <AvslagBegrunnelseMultiselect
                         vilkårType={redigerbartVilkår.verdi.vilkårType}
                         periode={redigerbartVilkår.verdi.periode.verdi}
-                        begrunnelser={redigerbartVilkår.verdi.avslagBegrunnelser}
+                        begrunnelser={redigerbartVilkår.verdi.avslagBegrunnelser.verdi}
                         onChange={(oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => {
-                            validerOgSettRedigerbartVilkår({
+                            settRedigerbartVilkår({
                                 ...redigerbartVilkår,
                                 verdi: {
                                     ...redigerbartVilkår.verdi,
-                                    avslagBegrunnelser: oppdaterteAvslagbegrunnelser,
+                                    avslagBegrunnelser: {
+                                        ...redigerbartVilkår.verdi.avslagBegrunnelser,
+                                        verdi: oppdaterteAvslagbegrunnelser,
+                                    },
                                 },
                             });
                         }}
                     />
                 )}
-
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}

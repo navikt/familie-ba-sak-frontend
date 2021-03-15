@@ -12,6 +12,7 @@ import {
 import familieDayjs, { familieDayjsDiff } from '../../utils/familieDayjs';
 import { datoformat } from '../../utils/formatter';
 import {
+    erAvslagBegrunnelserGyldig,
     erPeriodeGyldig,
     erResultatGyldig,
     ikkeValider,
@@ -87,7 +88,10 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
                                     erEksplisittAvslagPåSøknad:
                                         vilkårResultat.erEksplisittAvslagPåSøknad,
-                                    avslagBegrunnelser: vilkårResultat.avslagBegrunnelser,
+                                    avslagBegrunnelser: lagInitiellFelt(
+                                        vilkårResultat.avslagBegrunnelser,
+                                        erAvslagBegrunnelserGyldig
+                                    ),
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                 },
