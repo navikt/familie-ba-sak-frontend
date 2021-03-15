@@ -48,8 +48,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             maxWidthStyle={'80rem'}
         >
             <StyledAlertstripe type="info">
-                Det er ingen etterbetaling, feilutbetaling eller neste utbetaling (det er ikke
-                implementert enda.)
+                Det er ingen etterbetaling, feilutbetaling eller neste utbetaling (Visning av
+                simuleringen er ikke implementert enda)
             </StyledAlertstripe>
         </Skjemasteg>
     );
