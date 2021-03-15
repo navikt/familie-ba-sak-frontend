@@ -31,8 +31,6 @@ export const validerVilkår = (
         { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
     );
 
-    console.log('validering', nyeAvslagbegrunnelser);
-
     const gyldigVilkår: boolean =
         nyPeriode.valideringsstatus === Valideringsstatus.OK &&
         nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
@@ -44,6 +42,7 @@ export const validerVilkår = (
         periode: nyPeriode,
         begrunnelse: nyBegrunnelse,
         resultat: nyttResultat,
+        avslagBegrunnelser: nyeAvslagbegrunnelser,
     };
 
     return gyldigVilkår

@@ -112,9 +112,6 @@ export const erAvslagBegrunnelserGyldig = (
 ): FeltState<VedtakBegrunnelse[]> => {
     const erEksplisittAvslagPåSøknad: boolean | undefined =
         avhengigheter?.erEksplisittAvslagPåSøknad;
-
-    console.log(avhengigheter);
-    console.log(!felt.verdi.length);
     return erEksplisittAvslagPåSøknad && !felt.verdi.length
         ? feil(felt, 'Du må velge minst en begrunnelse ved avslag')
         : ok(felt);
