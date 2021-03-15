@@ -23,7 +23,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     const history = useHistory();
     const { aktivEtikett } = useTidslinje();
     const nesteOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
     };
 
     const forrigeOnClick = () => {

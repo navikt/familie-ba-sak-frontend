@@ -27,6 +27,7 @@ export interface IUnderside {
 export enum SideId {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
+    SIMULERING = 'SIMULERING',
     BEHANDLINGRESULTAT = 'BEHANDLINGRESULTAT',
     VEDTAK = 'VEDTAK',
 }
@@ -72,6 +73,11 @@ export const sider: Record<SideId, ISide> = {
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
         steg: BehandlingSteg.SEND_TIL_BESLUTTER,
+    },
+    SIMULERING: {
+        href: 'simulering',
+        navn: 'Simulering',
+        steg: BehandlingSteg.SIMULERING,
     },
     VEDTAK: {
         href: 'vedtak',

@@ -167,7 +167,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         <Skjemasteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
-                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`)
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`)
             }
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
             nesteKnappTittel={'Til godkjenning'}
