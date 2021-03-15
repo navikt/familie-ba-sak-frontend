@@ -366,7 +366,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 person.personIdent,
                                 redigerbartVilkår.verdi.id
                             );
-                            håndterEndringPåVilkårsvurdering(promise); // TODO: Håndter fjernning av helt vilkår for avslag
+                            håndterEndringPåVilkårsvurdering(promise);
                         }}
                         id={vilkårFeilmeldingId(vilkårResultat.verdi)}
                         spinner={vilkårSubmit === VilkårSubmit.DELETE}

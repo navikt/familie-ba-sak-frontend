@@ -35,6 +35,16 @@ export const validerVilkår = (
         resultat: nyttResultat,
     };
 
+    if (
+        nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad &&
+        !nyttVilkårResultat.verdi.avslagBegrunnelser?.length
+    ) {
+        return feil(
+            { ...nyttVilkårResultat, verdi: nyVerdi },
+            'Du må sette begrunnelser ved avslag for å kunne gå videre'
+        );
+    }
+
     return gyldigVilkår
         ? ok({ ...nyttVilkårResultat, verdi: nyVerdi })
         : feil({ ...nyttVilkårResultat, verdi: nyVerdi }, '');
