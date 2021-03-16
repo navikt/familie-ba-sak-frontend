@@ -27,6 +27,7 @@ const MarginSkjemaGruppe = styled(SkjemaGruppe)`
         margin: 0.5rem 0 0 0;
         & > div {
             max-width: 100%;
+            z-index: 100;
         }
     }
 `;
