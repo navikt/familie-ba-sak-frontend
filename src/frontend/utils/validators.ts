@@ -84,11 +84,13 @@ export const erPeriodeGyldig = (
                 ? barnsVilkårErMellom0og18År(fom, person, tom)
                 : true;
 
-        if (fomDatoErFremITid) {
+        if (fomDatoErFremITid && !erEksplisittAvslagPåSøknad) {
             return feil(felt, 'Du kan ikke legge inn en dato frem i tid');
         }
 
-        return fomDatoErGyldig && fomDatoErFørTomDato && periodeErInnenfor18år
+        return fomDatoErGyldig &&
+            fomDatoErFørTomDato &&
+            (periodeErInnenfor18år || erEksplisittAvslagPåSøknad)
             ? ok(felt)
             : feil(felt, 'Ugyldig periode');
     } else {
