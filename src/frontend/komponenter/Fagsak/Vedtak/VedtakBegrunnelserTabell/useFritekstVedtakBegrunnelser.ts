@@ -15,7 +15,6 @@ import {
     VedtakBegrunnelse,
 } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
-import { randomUUID } from '../../../../utils/commons';
 
 interface Fritekster {
     [key: string]: FeltState<string>;
@@ -26,13 +25,11 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
     const { request } = useHttp();
 
+    const [redigerbarefritekster, settRedigerbarefritekster] = useState<Fritekster>({});
     const [fritekster, settFritekster] = useState<Fritekster>({});
-    const [persiterteFritekster, settPersiterteFritekster] = useState<Fritekster>({});
-
-    const [friteksterExp, settFriteksterExp] = useState<boolean>(true);
 
     useEffect(() => {
-        settFritekster(
+        settRedigerbarefritekster(
             vedtakBegrunnelser
                 .filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                     return (
@@ -54,7 +51,7 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
     }, [vedtakBegrunnelser]);
 
     useEffect(() => {
-        settPersiterteFritekster(
+        settFritekster(
             vedtakBegrunnelser
                 .filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                     return (
@@ -86,9 +83,9 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
         valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
     });
 
-    const leggTilFritekst = () => {
-        settFritekster({
-            ...fritekster,
+    const leggTilRedigerbareFritekst = () => {
+        settRedigerbarefritekster({
+            ...redigerbarefritekster,
             [genererIdBasertPåAndreFritekster()]: lagInitiellFritekst(''),
         });
     };
@@ -101,7 +98,9 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
                 data: {
                     fom: vedtaksperiode.periodeFom,
                     tom: vedtaksperiode.periodeTom,
-                    fritekster: Object.values(fritekster).map(fritekst => fritekst.verdi),
+                    fritekster: Object.values(redigerbarefritekster).map(
+                        fritekst => fritekst.verdi
+                    ),
                     vedtaksperiodetype: vedtaksperiode.vedtaksperiodetype,
                 },
                 påvirkerSystemLaster: true,
@@ -116,14 +115,12 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
     };
 
     return {
+        redigerbarefritekster,
         fritekster,
-        persiterteFritekster,
-        leggTilFritekst,
+        leggTilRedigerbareFritekst,
         onSubmit,
-        friteksterExp,
-        settFriteksterExp,
+        settRedigerbarefritekster,
         settFritekster,
-        settPersiterteFritekster,
     };
 };
 

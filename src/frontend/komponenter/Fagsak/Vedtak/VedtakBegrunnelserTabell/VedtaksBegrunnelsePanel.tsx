@@ -77,30 +77,33 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     behandlingsType,
 }) => {
     const { erLesevisning } = useBehandling();
-    const [erAvbrytt, settErAvbrytt] = useState(false);
-    const { persiterteFritekster, fritekster } = useFritekstVedtakBegrunnelser(vedtaksperiode);
 
-    const sjekkAtEndringerErPersistert = () => {
-        if (deepEqual(fritekster, persiterteFritekster)) {
-            settErAvbrytt(false);
-        } else {
+    const [ekspandertFritekst, settEkspandertFritekst] = useState(
+        behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING
+    );
+
+    const {
+        fritekster,
+        redigerbarefritekster,
+        settRedigerbarefritekster,
+    } = useFritekstVedtakBegrunnelser(vedtaksperiode);
+
+    const toggleForm = (visAlert: boolean) => {
+        if (ekspandertFritekst && visAlert && !deepEqual(redigerbarefritekster, fritekster)) {
             alert('Fritekst har endringer som ikke er lagret!');
+        } else {
+            settEkspandertFritekst(!ekspandertFritekst);
+            settRedigerbarefritekster(fritekster);
         }
     };
-
-    const avbryt = () => {
-        settErAvbrytt(true);
-    };
-
-    const key = `${vedtaksperiode.periodeFom}_${erAvbrytt}`;
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
     return (
         <StyledEkspanderbartpanel
-            key={key}
-            apen={behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING && !erAvbrytt}
-            onClick={() => sjekkAtEndringerErPersistert()}
+            key={`${vedtaksperiode.periodeFom}_${ekspandertFritekst}`}
+            apen={ekspandertFritekst}
+            onClick={() => toggleForm(true)}
             tittel={
                 <UtbetalingsperiodepanelTittel>
                     {/* TODO legge inn tekst for hjelpeteksten og legg til hjepleteksten */}
@@ -157,7 +160,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     <div>
                         <FritekstVedtakbegrunnelser
                             vedtaksperiode={vedtaksperiode}
-                            toggleForm={avbryt}
+                            toggleForm={toggleForm}
                         />
                     </div>
                 )}

@@ -60,36 +60,35 @@ const Knapperad = styled.div`
 const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleForm }) => {
     const { erLesevisning } = useBehandling();
     const {
-        persiterteFritekster,
         fritekster,
-        settFritekster,
-        settPersiterteFritekster,
-        leggTilFritekst,
+        redigerbarefritekster,
+        settRedigerbarefritekster,
+        leggTilRedigerbareFritekst,
         onSubmit,
     } = useFritekstVedtakBegrunnelser(vedtaksperiode);
-    const harFritekster = Object.keys(fritekster).length > 0;
+    const harFritekster = Object.keys(redigerbarefritekster).length > 0;
 
     return (
         <StyledSkjemaGruppe>
             {harFritekster && (
                 <StyledElement>Fritekst til kulepunkt i brev (valgfri)</StyledElement>
             )}
-            {Object.keys(fritekster).map((fritekstId: string, index) => {
+            {Object.keys(redigerbarefritekster).map((fritekstId: string, index) => {
                 return (
                     <StyledFamilieFritekstFelt>
                         <FamilieTextareaBegrunnelseFritekst
                             tekstLesevisning={''}
                             erLesevisning={erLesevisning()}
-                            defaultValue={fritekster[fritekstId].verdi}
+                            defaultValue={redigerbarefritekster[fritekstId].verdi}
                             key={`__fritekst-${fritekstId}`}
                             textareaClass={'fritekst-textarea'}
-                            value={fritekster[fritekstId].verdi}
+                            value={redigerbarefritekster[fritekstId].verdi}
                             maxLength={300}
                             onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                                settFritekster({
-                                    ...fritekster,
-                                    [fritekstId]: fritekster[fritekstId].valider({
-                                        ...fritekster[fritekstId],
+                                settRedigerbarefritekster({
+                                    ...redigerbarefritekster,
+                                    [fritekstId]: redigerbarefritekster[fritekstId].valider({
+                                        ...redigerbarefritekster[fritekstId],
                                         verdi: event.target.value,
                                     }),
                                 });
@@ -99,9 +98,9 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleFo
                         <SletteKnapp
                             erLesevisning={erLesevisning()}
                             onClick={() => {
-                                delete fritekster[fritekstId];
-                                settFritekster({
-                                    ...fritekster,
+                                delete redigerbarefritekster[fritekstId];
+                                settRedigerbarefritekster({
+                                    ...redigerbarefritekster,
                                 });
                             }}
                             id={`__fjern_fritekst-${fritekstId}`}
@@ -114,7 +113,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleFo
             })}
             <UtførKnapp
                 erLesevisning={erLesevisning()}
-                onClick={leggTilFritekst}
+                onClick={leggTilRedigerbareFritekst}
                 id={`legg-til-fritekst`}
                 ikon={<Pluss />}
                 knappPosisjon={'venstre'}
@@ -127,8 +126,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleFo
                         erLesevisning={erLesevisning()}
                         onClick={() => {
                             onSubmit();
-                            settPersiterteFritekster({ ...fritekster });
-                            toggleForm(true);
+                            toggleForm(false);
                         }}
                         mini={true}
                         type={'standard'}
@@ -138,8 +136,8 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleFo
                     <FamilieKnapp
                         erLesevisning={erLesevisning()}
                         onClick={() => {
-                            settFritekster({ ...persiterteFritekster });
-                            toggleForm(true);
+                            settRedigerbarefritekster({ ...fritekster });
+                            toggleForm(false);
                         }}
                         mini={true}
                         type={'flat'}
