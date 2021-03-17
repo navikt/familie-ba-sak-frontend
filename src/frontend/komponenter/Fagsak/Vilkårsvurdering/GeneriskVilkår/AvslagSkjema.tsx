@@ -16,6 +16,7 @@ interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
     settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
     visFeilmeldinger: boolean;
+    settVisFeilmeldingerForEttVilkår: (visFeilmeldinger: boolean) => void;
 }
 
 const MarginSkjemaGruppe = styled(SkjemaGruppe)`
@@ -36,6 +37,7 @@ const AvslagSkjema: React.FC<IProps> = ({
     redigerbartVilkår,
     settRedigerbartVilkår,
     visFeilmeldinger,
+    settVisFeilmeldingerForEttVilkår,
 }) => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
@@ -66,6 +68,7 @@ const AvslagSkjema: React.FC<IProps> = ({
                             },
                         },
                     });
+                    settVisFeilmeldingerForEttVilkår(false);
                 }}
             />
             {redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (

@@ -276,6 +276,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             redigerbartVilkår={redigerbartVilkår}
                             settRedigerbartVilkår={settRedigerbartVilkår}
                             visFeilmeldinger={skalViseFeilmeldinger()}
+                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                         />
                     )}
                 <VelgPeriode
