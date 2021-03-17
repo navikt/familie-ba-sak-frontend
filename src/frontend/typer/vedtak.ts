@@ -37,6 +37,14 @@ export interface IRestVedtakBegrunnelseTilknyttetVilkår {
     vilkår?: VilkårType;
 }
 
+export interface ISammenslåttAvslagbegrunnelse {
+    vilkår: VilkårType;
+    personer: string[];
+    fom?: string;
+    tom?: string;
+    brevBegrunnelse: string;
+}
+
 export enum VedtakBegrunnelse {
     INNVILGET_BOSATT_I_RIKTET = 'INNVILGET_BOSATT_I_RIKTET',
     INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE = 'INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE',

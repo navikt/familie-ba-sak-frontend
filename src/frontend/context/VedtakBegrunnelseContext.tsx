@@ -11,11 +11,13 @@ import {
     IRestDeleteVedtakBegrunnelser,
     IRestPostVedtakBegrunnelse,
     IRestVedtakBegrunnelse,
+    ISammenslåttAvslagbegrunnelse,
     IVedtakForBehandling,
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useFagsakRessurser } from './FagsakContext';
+import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
 
 export interface IVedtakBegrunnelseSubmit {
     periodeId: string;
@@ -155,6 +157,29 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
                 }),
                 lagPeriodeId({ fom, tom })
             );
+        };
+
+        const hentSammenslåtteAvslagsbegrunnelser = () => {
+            request<void, ISammenslåttAvslagbegrunnelse[]>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/avslag`,
+            }).then((response: Ressurs<ISammenslåttAvslagbegrunnelse[]>) => {
+                if (response.status === RessursStatus.SUKSESS) {
+                    /*
+                    settSøknadErLastetFraBackend(true);
+                    settSøknadOgValider({
+                        ...response.data,
+                        barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
+                            (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                                ...barnMedOpplysninger,
+                                checked: true,
+                            })
+                        ),
+                    });
+
+                     */
+                }
+            });
         };
 
         return {
