@@ -27,9 +27,34 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
     const { request } = useHttp();
 
     const [fritekster, settFritekster] = useState<Fritekster>({});
+    const [persiterteFritekster, settPersiterteFritekster] = useState<Fritekster>({});
+
+    const [friteksterExp, settFriteksterExp] = useState<boolean>(true);
 
     useEffect(() => {
         settFritekster(
+            vedtakBegrunnelser
+                .filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
+                    return (
+                        vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
+                        vedtakBegrunnelse.tom === vedtaksperiode.periodeTom &&
+                        vedtakBegrunnelse.begrunnelse === VedtakBegrunnelse.OPPHØR_FRITEKST
+                    );
+                })
+                .reduce(
+                    (acc: Fritekster, vedtakBegrunnelse: IRestVedtakBegrunnelse) => ({
+                        ...acc,
+                        [vedtakBegrunnelse.id ?? 0]: lagInitiellFritekst(
+                            vedtakBegrunnelse.brevBegrunnelse ?? ''
+                        ),
+                    }),
+                    {}
+                )
+        );
+    }, [vedtakBegrunnelser]);
+
+    useEffect(() => {
+        settPersiterteFritekster(
             vedtakBegrunnelser
                 .filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                     return (
@@ -92,9 +117,13 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
 
     return {
         fritekster,
+        persiterteFritekster,
         leggTilFritekst,
         onSubmit,
+        friteksterExp,
+        settFriteksterExp,
         settFritekster,
+        settPersiterteFritekster,
     };
 };
 

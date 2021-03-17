@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
@@ -14,12 +15,13 @@ import {
     Vedtaksperiode,
     Vedtaksperiodetype,
 } from '../../../../typer/vedtaksperiode';
-import { IRestPersonResultat } from '../../../../typer/vilkår';
+import { IRestPersonResultat, Resultat } from '../../../../typer/vilkår';
 import { formaterBeløp, formaterPersonIdent, isoStringToDayjs } from '../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
-import Hjelpetekst44px from './Hjelpetekst44px';
-import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
+import Hjelpetekst44px from './Hjelpetekst44px';
+import useFritekstVedtakBegrunnelser from './useFritekstVedtakBegrunnelser';
+import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 
 interface IVedtakBegrunnelserTabell {
     vedtaksperiode: Vedtaksperiode;
@@ -38,6 +40,9 @@ const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
     .ekspanderbartPanel__innhold {
         padding: 1rem;
     }
+    
+    .is
+    
 `;
 
 const UtbetalingsperiodepanelTittel = styled.p`
@@ -53,7 +58,8 @@ const UtbetalingsperiodepanelTittel = styled.p`
 const UtbetalingsperiodepanelBody = styled.div`
     margin-left: 0.625rem;
     display: grid;
-    grid-template-columns: 5fr 4fr;
+    grid-template-columns: 1fr;
+    row-gap: 40px;
 `;
 
 const UtbetalingsperiodeDetalj = styled.div`
@@ -71,14 +77,30 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     behandlingsType,
 }) => {
     const { erLesevisning } = useBehandling();
+    const [erAvbrytt, settErAvbrytt] = useState(false);
+    const { persiterteFritekster, fritekster } = useFritekstVedtakBegrunnelser(vedtaksperiode);
+
+    const sjekkAtEndringerErPersistert = () => {
+        if (deepEqual(fritekster, persiterteFritekster)) {
+            settErAvbrytt(false);
+        } else {
+            alert('Fritekst har endringer som ikke er lagret!');
+        }
+    };
+
+    const avbryt = () => {
+        settErAvbrytt(true);
+    };
+
+    const key = `${vedtaksperiode.periodeFom}_${erAvbrytt}`;
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
-
     return (
         <StyledEkspanderbartpanel
-            key={vedtaksperiode.periodeFom}
-            apen={behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING}
+            key={key}
+            apen={behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING && !erAvbrytt}
+            onClick={() => sjekkAtEndringerErPersistert()}
             tittel={
                 <UtbetalingsperiodepanelTittel>
                     {/* TODO legge inn tekst for hjelpeteksten og legg til hjepleteksten */}
@@ -104,7 +126,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
             }
         >
             <UtbetalingsperiodepanelBody>
-                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ? (
+                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING && (
                     <div>
                         <Element>Resultat</Element>
 
@@ -122,8 +144,6 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                             )
                         )}
                     </div>
-                ) : (
-                    <div />
                 )}
                 <div>
                     <VedtakBegrunnelserMultiselect
@@ -134,7 +154,12 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                 </div>
 
                 {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR && (
-                    <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
+                    <div>
+                        <FritekstVedtakbegrunnelser
+                            vedtaksperiode={vedtaksperiode}
+                            toggleForm={avbryt}
+                        />
+                    </div>
                 )}
             </UtbetalingsperiodepanelBody>
         </StyledEkspanderbartpanel>
