@@ -55,6 +55,10 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             Ressurs<Vilkårsbegrunnelser>
         >(byggTomRessurs());
 
+        const [avslagBegrunnelser, settAvslagBegrunnelser] = React.useState<
+            Ressurs<ISammenslåttAvslagbegrunnelse[]>
+        >(byggTomRessurs());
+
         useEffect(() => {
             hentVilkårBegrunnelseTekster();
         }, []);
@@ -62,6 +66,12 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         useEffect(() => {
             if (aktivVedtak) {
                 settVedtakBegrunnelser(aktivVedtak.begrunnelser);
+            }
+        }, [aktivVedtak]);
+
+        useEffect(() => {
+            if (aktivVedtak) {
+                hentSammenslåtteAvslagsbegrunnelser();
             }
         }, [aktivVedtak]);
 
@@ -162,28 +172,15 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         const hentSammenslåtteAvslagsbegrunnelser = () => {
             request<void, ISammenslåttAvslagbegrunnelse[]>({
                 method: 'GET',
-                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/avslag`,
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/sammenslatte-avslagbegrunnelser`,
             }).then((response: Ressurs<ISammenslåttAvslagbegrunnelse[]>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    /*
-                    settSøknadErLastetFraBackend(true);
-                    settSøknadOgValider({
-                        ...response.data,
-                        barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
-                            (barnMedOpplysninger: IBarnMedOpplysninger) => ({
-                                ...barnMedOpplysninger,
-                                checked: true,
-                            })
-                        ),
-                    });
-
-                     */
-                }
+                settAvslagBegrunnelser(response);
             });
         };
 
         return {
             hentVilkårBegrunnelseTekster,
+            avslagBegrunnelser,
             leggTilVedtakBegrunnelse,
             slettVedtakBegrunnelse,
             slettVedtakBegrunnelserForPeriode,

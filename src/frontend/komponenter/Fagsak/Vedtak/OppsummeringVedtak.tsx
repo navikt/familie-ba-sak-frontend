@@ -37,7 +37,9 @@ import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import AvslagTabell from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
 import BegrunnelseTabell from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
+import { ToggleNavn } from '../../../typer/toggles';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -49,7 +51,7 @@ const StyledFeilmelding = styled(Feilmelding)`
 `;
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { hentSaksbehandlerRolle, innloggetSaksbehandler, toggles } = useApp();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
@@ -193,6 +195,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
                     <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                         <BegrunnelseTabell åpenBehandling={åpenBehandling} />
+                        {toggles[ToggleNavn.visAvslag] && (
+                            <AvslagTabell åpenBehandling={åpenBehandling} />
+                        )}
                     </VedtakBegrunnelserProvider>
 
                     <Knapp
