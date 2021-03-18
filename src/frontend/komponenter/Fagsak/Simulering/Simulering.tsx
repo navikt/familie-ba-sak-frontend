@@ -1,35 +1,34 @@
 import * as React from 'react';
 
 import { useHistory } from 'react-router';
-import styled from 'styled-components';
 
 import Alertstripe from 'nav-frontend-alertstriper';
 
 import { useHttp } from '@navikt/familie-http';
 
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
+import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import SimuleringPanel from './SimuleringPanel';
+import SimuleringTabell from './SimuleringTabell';
 
 interface ISimuleringProps {
     fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
-const StyledAlertstripe = styled(Alertstripe)`
-    margin-bottom: 2rem;
-`;
-
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling, fagsak }) => {
+    const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
     const { request } = useHttp();
     const history = useHistory();
-    const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
+    const { simuleringResultat } = useSimulering();
 
     const nesteOnClick = async () => {
-        await request<IBehandling, any>({
+        await request<IBehandling, string>({
             method: 'POST',
-            url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
+            url: `/familie-ba-sak/api/simuleringResultat/${aktivtVedtak?.id}/bekreft`,
         });
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
     };
@@ -41,18 +40,29 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     return (
         <Skjemasteg
             senderInn={false}
-            tittel="Simulering"
-            className="simulering"
+            tittel="SimuleringResultat"
+            className="simuleringResultat"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            <StyledAlertstripe type="info">
-                Det er ingen etterbetaling, feilutbetaling eller neste utbetaling (Visning av
-                simuleringen er ikke implementert enda)
-            </StyledAlertstripe>
+            {simuleringResultat?.type === 'suksess' ? (
+                Object.keys(simuleringResultat.simulering.periodeDictionary).length === 0 ? (
+                    <Alertstripe type="info">
+                        Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
+                    </Alertstripe>
+                ) : (
+                    <>
+                        <SimuleringPanel simulering={simuleringResultat.simulering} />
+                        <SimuleringTabell simulering={simuleringResultat.simulering} />
+                    </>
+                )
+            ) : (
+                <Alertstripe type="info">
+                    Det har skjedd en feil: {simuleringResultat?.feilmelding}
+                </Alertstripe>
+            )}
         </Skjemasteg>
     );
 };
-
 export default Simulering;
