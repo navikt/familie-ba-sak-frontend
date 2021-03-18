@@ -6,8 +6,11 @@ import { Normaltekst } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
+import { BehandlingSteg } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import Link from './Link';
 import { erSidenAktiv, IUnderside, sider, visSide } from './sider';
 
@@ -18,10 +21,26 @@ interface IProps {
 const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { åpenBehandling } = useBehandling();
 
+    const { toggles } = useApp();
+
+    const alleSiderUtenomSimulering = () => {
+        const { SIMULERING, ...allSiderUtenomSimulering } = sider;
+
+        return {
+            ...allSiderUtenomSimulering,
+            BEHANDLINGRESULTAT: {
+                ...allSiderUtenomSimulering.BEHANDLINGRESULTAT,
+                steg: BehandlingSteg.SEND_TIL_BESLUTTER,
+            },
+        };
+    };
+
     return (
         <nav className={'venstremeny'}>
             {åpenBehandling.status === RessursStatus.SUKSESS
-                ? Object.entries(sider)
+                ? Object.entries(
+                      toggles[ToggleNavn.visSimulering] ? sider : alleSiderUtenomSimulering()
+                  )
                       .filter(([_, side]) => visSide(side, åpenBehandling.data))
                       .map(([sideId, side], index: number) => {
                           const tilPath = `/fagsak/${fagsak.id}/${åpenBehandling.data.behandlingId}/${side.href}`;
