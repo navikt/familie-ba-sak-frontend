@@ -8,16 +8,17 @@ import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
 import {
+    IRestAvslagbegrunnelser,
     IRestDeleteVedtakBegrunnelser,
     IRestPostVedtakBegrunnelse,
     IRestVedtakBegrunnelse,
-    ISammenslåttAvslagbegrunnelse,
     IVedtakForBehandling,
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useFagsakRessurser } from './FagsakContext';
-import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
+import { useApp } from './AppContext';
+import { ToggleNavn } from '../typer/toggles';
 
 export interface IVedtakBegrunnelseSubmit {
     periodeId: string;
@@ -39,6 +40,7 @@ interface IProps {
 const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
     ({ aktivVedtak, fagsak }: IProps) => {
         const { request } = useHttp();
+        const { toggles } = useApp();
 
         const { settFagsak } = useFagsakRessurser();
 
@@ -56,7 +58,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         >(byggTomRessurs());
 
         const [avslagBegrunnelser, settAvslagBegrunnelser] = React.useState<
-            Ressurs<ISammenslåttAvslagbegrunnelse[]>
+            Ressurs<IRestAvslagbegrunnelser[]>
         >(byggTomRessurs());
 
         useEffect(() => {
@@ -70,8 +72,8 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         }, [aktivVedtak]);
 
         useEffect(() => {
-            if (aktivVedtak) {
-                hentSammenslåtteAvslagsbegrunnelser();
+            if (aktivVedtak && toggles[ToggleNavn.visAvslag]) {
+                hentAvslagsbegrunnelser();
             }
         }, [aktivVedtak]);
 
@@ -169,11 +171,11 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             );
         };
 
-        const hentSammenslåtteAvslagsbegrunnelser = () => {
-            request<void, ISammenslåttAvslagbegrunnelse[]>({
+        const hentAvslagsbegrunnelser = () => {
+            request<void, IRestAvslagbegrunnelser[]>({
                 method: 'GET',
-                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/sammenslatte-avslagbegrunnelser`,
-            }).then((response: Ressurs<ISammenslåttAvslagbegrunnelse[]>) => {
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/avslagbegrunnelser`,
+            }).then((response: Ressurs<IRestAvslagbegrunnelser[]>) => {
                 settAvslagBegrunnelser(response);
             });
         };

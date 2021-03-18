@@ -7,13 +7,11 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { periodeToString } from '../../../../typer/periode';
 import Hjelpetekst44px from './Hjelpetekst44px';
-import { ISammenslåttAvslagbegrunnelse } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
-import { IRestPersonResultat } from '../../../../typer/vilkår';
-import { Behandlingstype } from '../../../../typer/behandling';
 
 interface IAvslagBegrunnelseTabellProps {
-    sammenslått: ISammenslåttAvslagbegrunnelse;
+    vedtaksperiode: Vedtaksperiode;
+    begrunnelser: string[];
 }
 
 const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
@@ -41,14 +39,15 @@ const UtbetalingsperiodepanelTittel = styled.p`
 
 const UtbetalingsperiodepanelBody = styled.div`
     margin-left: 0.625rem;
-    display: grid;
-    grid-template-columns: 5fr 4fr;
 `;
 
-const VedtakBegrunnelsePanel: React.FC<IAvslagBegrunnelseTabellProps> = ({ sammenslått }) => {
+const VedtakBegrunnelsePanel: React.FC<IAvslagBegrunnelseTabellProps> = ({
+    vedtaksperiode,
+    begrunnelser,
+}) => {
     return (
         <StyledEkspanderbartpanel
-            key={sammenslått.brevBegrunnelse} // TODO :Fiks
+            key={`avslag_${vedtaksperiode.periodeFom}_${vedtaksperiode.periodeTom}`}
             apen={true} // TODO
             tittel={
                 <UtbetalingsperiodepanelTittel>
@@ -61,8 +60,8 @@ const VedtakBegrunnelsePanel: React.FC<IAvslagBegrunnelseTabellProps> = ({ samme
                     )}
                     <Element>
                         {periodeToString({
-                            fom: sammenslått.fom,
-                            tom: sammenslått.tom,
+                            fom: vedtaksperiode.periodeFom,
+                            tom: vedtaksperiode.periodeTom,
                         })}
                     </Element>
                     <Normaltekst>Avslag</Normaltekst>
@@ -70,11 +69,12 @@ const VedtakBegrunnelsePanel: React.FC<IAvslagBegrunnelseTabellProps> = ({ samme
             }
         >
             <UtbetalingsperiodepanelBody>
-                {sammenslått.personer.toString()}
-                <br />
-                {sammenslått.vilkår.toString()}
-                <br />
-                {sammenslått.brevBegrunnelse.toString()}
+                <Normaltekst children={'Begrunnelse(r) for avslag'} />
+                <ul>
+                    {begrunnelser.map((begrunnelse: string) => (
+                        <li>{begrunnelse}</li>
+                    ))}
+                </ul>
             </UtbetalingsperiodepanelBody>
         </StyledEkspanderbartpanel>
     );

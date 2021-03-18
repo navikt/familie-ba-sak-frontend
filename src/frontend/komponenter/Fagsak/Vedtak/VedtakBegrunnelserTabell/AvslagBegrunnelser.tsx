@@ -7,10 +7,11 @@ import { Element } from 'nav-frontend-typografi';
 
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import { IBehandling } from '../../../../typer/behandling';
-import { ISammenslåttAvslagbegrunnelse } from '../../../../typer/vedtak';
+import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
 import Hjelpetekst44px from './Hjelpetekst44px';
 import { RessursStatus } from '@navikt/familie-typer';
 import AvslagBegrunnelsePanel from './AvslagBegrunnelsePanel';
+import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 
 interface IAvslagTabell {
     åpenBehandling: IBehandling;
@@ -42,11 +43,23 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                     innhold="Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen."
                 />
             </UtbetalingsperioderOverskrift>
-            {avslagBegrunnelser.data.map(
-                (sammenslåttAvslagbegrunnelse: ISammenslåttAvslagbegrunnelse) => (
-                    <AvslagBegrunnelsePanel sammenslått={sammenslåttAvslagbegrunnelse} />
+            {åpenBehandling.vedtaksperioder
+                .filter(
+                    (periode: Vedtaksperiode) =>
+                        periode.vedtaksperiodetype === Vedtaksperiodetype.AVSLAG
                 )
-            )}
+                .map((periode: Vedtaksperiode) => (
+                    <AvslagBegrunnelsePanel
+                        vedtaksperiode={periode}
+                        begrunnelser={
+                            avslagBegrunnelser.data.find(
+                                (avslagBegrunnelser: IRestAvslagbegrunnelser) =>
+                                    avslagBegrunnelser.fom === periode.periodeFom &&
+                                    avslagBegrunnelser.tom === periode.periodeTom
+                            )?.brevBegrunnelser ?? [] //TODO håndter manglende
+                        }
+                    />
+                ))}
         </>
     ) : null;
 };

@@ -37,12 +37,10 @@ export interface IRestVedtakBegrunnelseTilknyttetVilkår {
     vilkår?: VilkårType;
 }
 
-export interface ISammenslåttAvslagbegrunnelse {
-    vilkår: VilkårType;
-    personer: string[];
+export interface IRestAvslagbegrunnelser {
     fom?: string;
     tom?: string;
-    brevBegrunnelse: string;
+    brevBegrunnelser: string[];
 }
 
 export enum VedtakBegrunnelse {
