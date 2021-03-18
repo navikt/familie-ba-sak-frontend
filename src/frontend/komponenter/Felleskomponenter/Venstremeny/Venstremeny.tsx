@@ -23,19 +23,24 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     const { toggles } = useApp();
 
-    const { SIMULERING, ...utenSimulering } = sider;
-    const siderUtenSimulering = {
-        ...utenSimulering,
-        BEHANDLINGRESULTAT: {
-            ...utenSimulering.BEHANDLINGRESULTAT,
-            steg: BehandlingSteg.SEND_TIL_BESLUTTER,
-        },
+    const alleSiderUtenomSimulering = () => {
+        const { SIMULERING, ...allSiderUtenomSimulering } = sider;
+
+        return {
+            ...allSiderUtenomSimulering,
+            BEHANDLINGRESULTAT: {
+                ...allSiderUtenomSimulering.BEHANDLINGRESULTAT,
+                steg: BehandlingSteg.SEND_TIL_BESLUTTER,
+            },
+        };
     };
 
     return (
         <nav className={'venstremeny'}>
             {åpenBehandling.status === RessursStatus.SUKSESS
-                ? Object.entries(toggles[ToggleNavn.visSimulering] ? sider : siderUtenSimulering)
+                ? Object.entries(
+                      toggles[ToggleNavn.visSimulering] ? sider : alleSiderUtenomSimulering()
+                  )
                       .filter(([_, side]) => visSide(side, åpenBehandling.data))
                       .map(([sideId, side], index: number) => {
                           const tilPath = `/fagsak/${fagsak.id}/${åpenBehandling.data.behandlingId}/${side.href}`;
