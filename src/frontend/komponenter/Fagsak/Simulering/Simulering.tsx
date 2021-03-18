@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -6,6 +7,7 @@ import styled from 'styled-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 
 import { useHttp } from '@navikt/familie-http';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { IBehandling } from '../../../typer/behandling';
@@ -25,13 +27,27 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { request } = useHttp();
     const history = useHistory();
     const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
+    const [feilMedBekreft, settErFeilMedBekreft] = useState<undefined | string>(undefined);
+    const [senderInn, settSenderInn] = useState(false);
 
     const nesteOnClick = async () => {
-        await request<IBehandling, any>({
+        settSenderInn(true);
+        const response = await request<IBehandling, any>({
             method: 'POST',
             url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
         });
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+
+        if (response.status === RessursStatus.SUKSESS) {
+            history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+        } else if (
+            response.status === RessursStatus.FEILET ||
+            response.status === RessursStatus.FUNKSJONELL_FEIL ||
+            response.status === RessursStatus.IKKE_TILGANG
+        ) {
+            settErFeilMedBekreft(response.frontendFeilmelding);
+        }
+
+        settSenderInn(false);
     };
 
     const forrigeOnClick = () => {
@@ -40,7 +56,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     return (
         <Skjemasteg
-            senderInn={false}
+            senderInn={senderInn}
             tittel="Simulering"
             className="simulering"
             forrigeOnClick={forrigeOnClick}
@@ -51,6 +67,13 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                 Det er ingen etterbetaling, feilutbetaling eller neste utbetaling (Visning av
                 simuleringen er ikke implementert enda)
             </StyledAlertstripe>
+
+            {feilMedBekreft && (
+                <StyledAlertstripe type="feil">
+                    Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
+                    {feilMedBekreft}
+                </StyledAlertstripe>
+            )}
         </Skjemasteg>
     );
 };
