@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
@@ -29,7 +29,7 @@ interface IVedtakBegrunnelserTabell {
     behandlingsType: Behandlingstype;
 }
 
-const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
+const StyledEkspanderbartpanel = styled(EkspanderbartpanelBase)`
     margin-bottom: 1.5rem;
     max-width: 49rem;
 

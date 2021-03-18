@@ -27,6 +27,7 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
 
     const [redigerbarefritekster, settRedigerbarefritekster] = useState<Fritekster>({});
     const [fritekster, settFritekster] = useState<Fritekster>({});
+    const [idPaSistOpprettetFritekst, settIdPaSistOpprettetFritekst] = useState<number>();
 
     useEffect(() => {
         settRedigerbarefritekster(
@@ -73,7 +74,7 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
     }, [vedtakBegrunnelser]);
 
     const genererIdBasertPåAndreFritekster = () => {
-        return Math.max(...Object.keys(fritekster).map(key => parseInt(key, 10))) + 1;
+        return Math.max(...Object.keys(redigerbarefritekster).map(key => parseInt(key, 10))) + 1;
     };
 
     const lagInitiellFritekst = (initiellVerdi: string) => ({
@@ -84,10 +85,12 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
     });
 
     const leggTilRedigerbareFritekst = () => {
+        const idPåNyFritekste = genererIdBasertPåAndreFritekster();
         settRedigerbarefritekster({
             ...redigerbarefritekster,
-            [genererIdBasertPåAndreFritekster()]: lagInitiellFritekst(''),
+            [idPåNyFritekste]: lagInitiellFritekst(''),
         });
+        settIdPaSistOpprettetFritekst(idPåNyFritekste);
     };
 
     const onSubmit = () => {
@@ -121,6 +124,7 @@ const useFritekstVedtakBegrunnelser = (vedtaksperiode: Vedtaksperiode) => {
         onSubmit,
         settRedigerbarefritekster,
         settFritekster,
+        idPaSistOpprettetFritekst,
     };
 };
 

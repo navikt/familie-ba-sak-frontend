@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -29,13 +29,18 @@ const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextareaControlled)`
 
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     background-color: ${navFarger.navGraBakgrunn};
+    padding-left: 20px;
+    padding-right: 0px;
 `;
 
 const StyledFamilieFritekstFelt = styled.div`
-    display: grid;
-    grid-template-columns: 20fr 1fr;
+    display: flex;
     margin-top: 3px;
     margin-bottom: 3px;
+
+    .textarea__container {
+        width: 100% !important;
+    }
 `;
 
 const StyledElement = styled(Element)`
@@ -48,11 +53,12 @@ const UtførKnapp = styled(IkonKnapp)`
 
 const SletteKnapp = styled(IkonKnapp)`
     margin-top: 0px;
-    margin-right: 20px;
+    margin-right: 0px;
 `;
 
 const Knapperad = styled.div`
     display: grid;
+    column-gap: 1rem;
     grid-template-columns: 100px 100px;
     margin-top: 24px;
 `;
@@ -60,13 +66,20 @@ const Knapperad = styled.div`
 const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleForm }) => {
     const { erLesevisning } = useBehandling();
     const {
-        fritekster,
         redigerbarefritekster,
         settRedigerbarefritekster,
         leggTilRedigerbareFritekst,
+        idPaSistOpprettetFritekst,
         onSubmit,
     } = useFritekstVedtakBegrunnelser(vedtaksperiode);
     const harFritekster = Object.keys(redigerbarefritekster).length > 0;
+
+    useEffect(() => {
+        const element = document.getElementById(`${idPaSistOpprettetFritekst}`);
+        if (element) {
+            element.focus();
+        }
+    }, [idPaSistOpprettetFritekst]);
 
     return (
         <StyledSkjemaGruppe>
@@ -81,6 +94,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleFo
                             erLesevisning={erLesevisning()}
                             defaultValue={redigerbarefritekster[fritekstId].verdi}
                             key={`__fritekst-${fritekstId}`}
+                            id={`${fritekstId}`}
                             textareaClass={'fritekst-textarea'}
                             value={redigerbarefritekster[fritekstId].verdi}
                             maxLength={300}
@@ -136,7 +150,6 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleFo
                     <FamilieKnapp
                         erLesevisning={erLesevisning()}
                         onClick={() => {
-                            settRedigerbarefritekster({ ...fritekster });
                             toggleForm(false);
                         }}
                         mini={true}
