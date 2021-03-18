@@ -100,10 +100,10 @@ const useVedtakBegrunnelseMultiselect = (
     };
 
     const skalLeggeTilAndreBegrunnelse = (
-        vedtakBegrunnelser: IRestVedtakBegrunnelseTilknyttetVilkår
+        vedtakBegrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår
     ) =>
-        vedtakBegrunnelser.id === VedtakBegrunnelse.OPPHØR_IKKE_MOTTATT_OPPLYSNINGER ||
-        vedtakBegrunnelser.id === VedtakBegrunnelse.REDUKSJON_MANGLENDE_OPPLYSNINGER
+        vedtakBegrunnelse.id === VedtakBegrunnelse.OPPHØR_IKKE_MOTTATT_OPPLYSNINGER ||
+        vedtakBegrunnelse.id === VedtakBegrunnelse.REDUKSJON_MANGLENDE_OPPLYSNINGER
             ? personResultater
                   .flatMap(personResultat => personResultat.andreVurderinger)
                   .find(
