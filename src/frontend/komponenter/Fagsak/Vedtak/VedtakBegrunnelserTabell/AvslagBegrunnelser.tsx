@@ -12,6 +12,8 @@ import Hjelpetekst44px from './Hjelpetekst44px';
 import { RessursStatus } from '@navikt/familie-typer';
 import AvslagBegrunnelsePanel from './AvslagBegrunnelsePanel';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
+import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
+import { datoformat } from '../../../../utils/formatter';
 
 interface IAvslagTabell {
     åpenBehandling: IBehandling;
@@ -47,6 +49,14 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                 .filter(
                     (periode: Vedtaksperiode) =>
                         periode.vedtaksperiodetype === Vedtaksperiodetype.AVSLAG
+                )
+                .sort((a, b) =>
+                    !a.periodeFom && !a.periodeTom
+                        ? -1
+                        : familieDayjsDiff(
+                              familieDayjs(a.periodeFom, datoformat.ISO_DAG),
+                              familieDayjs(b.periodeFom, datoformat.ISO_DAG)
+                          )
                 )
                 .map((periode: Vedtaksperiode) => (
                     <AvslagBegrunnelsePanel
