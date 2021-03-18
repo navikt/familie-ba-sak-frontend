@@ -9,6 +9,7 @@ import {
     Resultat,
     VilkårType,
 } from '../../../typer/vilkår';
+import { VedtakBegrunnelse } from '../../../typer/vedtak';
 
 interface IMockVilkårResultat {
     behandlingId?: number;
@@ -52,6 +53,7 @@ export const mockVilkårResultater = ({
     erAutomatiskVurdert,
     endretTidspunkt,
     behandlingId,
+    avslagBegrunnelser: mockFeltstate<VedtakBegrunnelse[]>([]),
 });
 
 interface IMockRestPersonResultat {
@@ -84,6 +86,7 @@ export const mockRestVilkårResultater = ({
     erAutomatiskVurdert: false,
     endretTidspunkt: '2020-03-19T09:08:56.8',
     behandlingId,
+    avslagBegrunnelser: [],
 });
 
 export const mockRestPersonResultat = ({
