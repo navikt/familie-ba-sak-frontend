@@ -32,22 +32,21 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     const nesteOnClick = async () => {
         settSenderInn(true);
-        const response = await request<IBehandling, any>({
+        request<IBehandling, any>({
             method: 'POST',
             url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
-        });
-
-        if (response.status === RessursStatus.SUKSESS) {
-            history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
-        } else if (
-            response.status === RessursStatus.FEILET ||
-            response.status === RessursStatus.FUNKSJONELL_FEIL ||
-            response.status === RessursStatus.IKKE_TILGANG
-        ) {
-            settErFeilMedBekreft(response.frontendFeilmelding);
-        }
-
-        settSenderInn(false);
+        }).then((ressurs: IRessurs<IFagsak>) => {
+            settSenderInn(false);
+            if (response.status === RessursStatus.SUKSESS) {
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+            } else if (
+                response.status === RessursStatus.FEILET ||
+                response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                response.status === RessursStatus.IKKE_TILGANG
+            ) {
+                settErFeilMedBekreft(response.frontendFeilmelding);
+            }
+        }); 
     };
 
     const forrigeOnClick = () => {
