@@ -31,7 +31,6 @@ interface IVedtakBegrunnelserTabell {
 }
 
 const UtbetalingsperiodepanelBody = styled.div`
-    margin-left: 0.625rem;
     display: grid;
     grid-template-columns: 5fr 4fr;
 `;

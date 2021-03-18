@@ -9,15 +9,18 @@ import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat } from '../../../../utils/formatter';
 import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import styled from 'styled-components';
 
 interface IAvslagTabell {
     åpenBehandling: IBehandling;
 }
 
-const MarginDiv = styled.div`
-    margin-left: 0.625rem;
+const PanelBody = styled.div`
+    ul {
+        margin: 0;
+        padding-left
+    }
 `;
 
 const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
@@ -46,17 +49,22 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                 )
                 .map((periode: Vedtaksperiode) => (
                     <EkspanderbartBegrunnelsePanel vedtaksperiode={periode} åpen={true}>
-                        <MarginDiv>
-                            <Normaltekst children={'Begrunnelse(r) for avslag'} />
+                        <PanelBody>
+                            <Element>Begrunnelse(r) for avslag</Element>
                             <ul>
-                                {avslagBegrunnelser.data.find(
-                                    (avslagBegrunnelser: IRestAvslagbegrunnelser) =>
-                                        avslagBegrunnelser.fom === periode.periodeFom &&
-                                        avslagBegrunnelser.tom === periode.periodeTom
-                                )?.brevBegrunnelser ??
-                                    [].map((begrunnelse: string) => <li>{begrunnelse}</li>)}
+                                {avslagBegrunnelser.data
+                                    .find(
+                                        (avslagBegrunnelser: IRestAvslagbegrunnelser) =>
+                                            avslagBegrunnelser.fom === periode.periodeFom &&
+                                            avslagBegrunnelser.tom === periode.periodeTom
+                                    )
+                                    ?.brevBegrunnelser.map((begrunnelse: string) => (
+                                        <li>
+                                            <Normaltekst children={begrunnelse} />
+                                        </li>
+                                    ))}
                             </ul>
-                        </MarginDiv>
+                        </PanelBody>
                     </EkspanderbartBegrunnelsePanel>
                 ))}
         </>

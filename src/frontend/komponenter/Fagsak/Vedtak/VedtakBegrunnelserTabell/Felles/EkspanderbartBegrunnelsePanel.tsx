@@ -23,7 +23,7 @@ const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
         padding-bottom: 0;
     }
     .ekspanderbartPanel__innhold {
-        padding: 1rem;
+        padding: 0 2.75rem 1rem 1.625rem;
     }
 `;
 
