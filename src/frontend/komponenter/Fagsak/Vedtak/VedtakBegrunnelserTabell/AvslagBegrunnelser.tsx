@@ -52,7 +52,7 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                 )
                 .sort((a, b) =>
                     !a.periodeFom && !a.periodeTom
-                        ? -1
+                        ? 1
                         : familieDayjsDiff(
                               familieDayjs(a.periodeFom, datoformat.ISO_DAG),
                               familieDayjs(b.periodeFom, datoformat.ISO_DAG)
@@ -66,7 +66,7 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                                 (avslagBegrunnelser: IRestAvslagbegrunnelser) =>
                                     avslagBegrunnelser.fom === periode.periodeFom &&
                                     avslagBegrunnelser.tom === periode.periodeTom
-                            )?.brevBegrunnelser ?? [] //TODO håndter manglende
+                            )?.brevBegrunnelser ?? []
                         }
                     />
                 ))}

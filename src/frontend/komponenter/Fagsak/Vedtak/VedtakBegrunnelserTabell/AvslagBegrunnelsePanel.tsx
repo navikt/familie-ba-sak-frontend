@@ -41,7 +41,7 @@ const UtbetalingsperiodepanelBody = styled.div`
     margin-left: 0.625rem;
 `;
 
-const VedtakBegrunnelsePanel: React.FC<IAvslagBegrunnelseTabellProps> = ({
+const AvslagBegrunnelsePanel: React.FC<IAvslagBegrunnelseTabellProps> = ({
     vedtaksperiode,
     begrunnelser,
 }) => {
@@ -58,13 +58,15 @@ const VedtakBegrunnelsePanel: React.FC<IAvslagBegrunnelseTabellProps> = ({
                     ) : (
                         <Hjelpetekst44px innhold={'Midlertidig tekst'} />
                     )}
-                    <Element>
-                        {periodeToString({
-                            fom: vedtaksperiode.periodeFom,
-                            tom: vedtaksperiode.periodeTom,
-                        })}
-                    </Element>
-                    <Normaltekst>Avslag</Normaltekst>
+                    {vedtaksperiode.periodeFom && (
+                        <Element>
+                            {periodeToString({
+                                fom: vedtaksperiode.periodeFom,
+                                tom: vedtaksperiode.periodeTom,
+                            })}
+                        </Element>
+                    )}
+                    <Element>Avslag</Element>
                 </UtbetalingsperiodepanelTittel>
             }
         >
@@ -80,4 +82,4 @@ const VedtakBegrunnelsePanel: React.FC<IAvslagBegrunnelseTabellProps> = ({
     );
 };
 
-export default VedtakBegrunnelsePanel;
+export default AvslagBegrunnelsePanel;
