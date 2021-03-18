@@ -1,10 +1,10 @@
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 
-import { IInfotrygdSak, IInfotrygdsaker } from '../../typer/infotrygd';
-import { Adressebeskyttelsegradering } from '../../typer/person';
-import { identValidator } from '../../utils/validators';
+import { IInfotrygdSak, IInfotrygdsaker } from '../typer/infotrygd';
+import { Adressebeskyttelsegradering } from '../typer/person';
+import { identValidator } from '../utils/validators';
 
-export const useSakshistorikk = () => {
+export const useInfotrygd = () => {
     const ident = useFelt({
         verdi: '',
         valideringsfunksjon: identValidator,
@@ -19,7 +19,7 @@ export const useSakshistorikk = () => {
         felter: {
             ident,
         },
-        skjemanavn: 'hentSakshistorikk',
+        skjemanavn: 'hentSakerFraInfotrygd',
     });
 
     const tilgangFeilmelding = (

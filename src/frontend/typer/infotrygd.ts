@@ -24,7 +24,8 @@ export interface IInfotrygdSak {
     saksblokk?: string;
     saksnr?: string;
     status?: string;
-    stønadList?: IInfotrygdStønad[];
+    stønad?: IInfotrygdStønad;
+    stønadList?: IInfotrygdStønad[]; // TODO fjern
     type?: string;
     undervalg?: string;
     valg?: string;
@@ -38,14 +39,22 @@ export interface IInfotrygdStønad {
     opphørsgrunn?: string;
     opphørtFom?: string;
     opphørtIver?: string;
-    sakNr?: string;
     status?: string;
-    stønadId?: number;
     tekstkode?: string;
     virkningFom?: string;
+    delytelse: IDelytelse[];
 }
 
 export interface IInfotrygdBarn {
     barnFnr?: string;
     barnetrygdTom?: string;
+}
+
+export interface IDelytelse {
+    fom?: string;
+    tom?: string;
+    beløp?: number;
+    typeDelytelse?: string;
+    oppgjørsordning?: string;
+    typeUtbetaling?: string;
 }
