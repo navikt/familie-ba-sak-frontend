@@ -8,7 +8,12 @@ import { Undertittel } from 'nav-frontend-typografi';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
+import {
+    Behandlingstype,
+    behandlingstyper,
+    behandlingÅrsak,
+    BehandlingÅrsak,
+} from '../../typer/behandling';
 
 const StyledCheckboxDiv = styled.div`
     width: 20rem;
@@ -18,49 +23,30 @@ const StyledSelect = styled(FamilieReactSelect)`
     width: 20rem;
 `;
 
-const tilAlternativ = (key: Behandlingstype | BehandlingÅrsak) =>
-    (
-        key.toString().charAt(0).toLocaleUpperCase() +
-        key.toString().substring(1, key.toString().length).toLocaleLowerCase()
-    ).replace('_', ' ');
-
-const tilBehandlingstype = (type: string) =>
-    Behandlingstype[type.replace(' ', '_').toLocaleUpperCase() as keyof typeof Behandlingstype];
-
-const tilBehandlingÅrsak = (årsak: string) =>
-    BehandlingÅrsak[årsak.replace(' ', '_').toLocaleUpperCase() as keyof typeof BehandlingÅrsak];
-
 const nyBehandlingstyper = [
     {
-        value: tilAlternativ(Behandlingstype.FØRSTEGANGSBEHANDLING),
-        label: tilAlternativ(Behandlingstype.FØRSTEGANGSBEHANDLING),
+        value: Behandlingstype.FØRSTEGANGSBEHANDLING,
+        label: behandlingstyper[Behandlingstype.FØRSTEGANGSBEHANDLING].navn,
     },
     {
-        value: tilAlternativ(Behandlingstype.REVURDERING),
-        label: tilAlternativ(Behandlingstype.REVURDERING),
+        value: Behandlingstype.REVURDERING,
+        label: behandlingstyper[Behandlingstype.REVURDERING].navn,
     },
 ];
 
 const nyBehandlingsårsaker = [
     {
-        value: tilAlternativ(BehandlingÅrsak.SØKNAD),
-        label: tilAlternativ(BehandlingÅrsak.SØKNAD),
+        value: BehandlingÅrsak.SØKNAD,
+        label: behandlingÅrsak[BehandlingÅrsak.SØKNAD],
     },
     {
-        value: tilAlternativ(BehandlingÅrsak.NYE_OPPLYSNINGER),
-        label: tilAlternativ(BehandlingÅrsak.NYE_OPPLYSNINGER),
+        value: BehandlingÅrsak.NYE_OPPLYSNINGER,
+        label: behandlingÅrsak[BehandlingÅrsak.NYE_OPPLYSNINGER],
     },
 ];
 
 export const KnyttTilNyBehandling: React.FC = () => {
-    const {
-        knyttTilNyBehandling,
-        settKnyttTilNyBehandling,
-        nyBehandlingstype,
-        settNyBehandlingstype,
-        nyBehandlingsårsak,
-        settNyBehandlingsårsak,
-    } = useManuellJournalfør();
+    const { skjema } = useManuellJournalfør();
     return (
         <>
             <Undertittel>Knytt til ny behandling</Undertittel>
@@ -72,15 +58,17 @@ export const KnyttTilNyBehandling: React.FC = () => {
                             label: 'Knytt til ny behandling',
                             value: 'Knytt til ny behandling',
                             id: 'Knytt til ny behandling',
-                            checked: knyttTilNyBehandling,
+                            checked: skjema.felter.knyttTilNyBehandling.verdi,
                         },
                     ]}
                     onChange={() => {
-                        settKnyttTilNyBehandling(!knyttTilNyBehandling);
+                        skjema.felter.knyttTilNyBehandling.validerOgSettFelt(
+                            !skjema.felter.knyttTilNyBehandling.verdi
+                        );
                     }}
                 />
             </StyledCheckboxDiv>
-            {knyttTilNyBehandling && (
+            {skjema.felter.knyttTilNyBehandling.verdi && (
                 <>
                     <br />
                     <StyledSelect
@@ -91,38 +79,46 @@ export const KnyttTilNyBehandling: React.FC = () => {
                         isMulti={false}
                         options={nyBehandlingstyper}
                         value={{
-                            value: tilAlternativ(nyBehandlingstype),
-                            label: tilAlternativ(nyBehandlingstype),
+                            value: skjema.felter.behandlingstype.verdi,
+                            label: behandlingstyper[skjema.felter.behandlingstype.verdi].navn,
                         }}
                         onChange={value => {
                             if (value && 'value' in value) {
-                                settNyBehandlingstype(tilBehandlingstype(value.value));
+                                skjema.felter.behandlingstype.validerOgSettFelt(
+                                    value.value as Behandlingstype
+                                );
                             }
                         }}
                     />
                 </>
             )}
-            {knyttTilNyBehandling && nyBehandlingstype === Behandlingstype.REVURDERING && (
-                <>
-                    <StyledSelect
-                        creatable={false}
-                        erLesevisning={false}
-                        label={'Årsak'}
-                        id="select"
-                        isMulti={false}
-                        options={nyBehandlingsårsaker}
-                        value={{
-                            value: tilAlternativ(nyBehandlingsårsak),
-                            label: tilAlternativ(nyBehandlingsårsak),
-                        }}
-                        onChange={value => {
-                            if (value && 'value' in value) {
-                                settNyBehandlingsårsak(tilBehandlingÅrsak(value.value));
-                            }
-                        }}
-                    />
-                </>
-            )}
+            {skjema.felter.knyttTilNyBehandling.verdi &&
+                skjema.felter.behandlingstype.verdi === Behandlingstype.REVURDERING && (
+                    <>
+                        <StyledSelect
+                            creatable={false}
+                            erLesevisning={false}
+                            label={'Årsak'}
+                            id="select"
+                            isMulti={false}
+                            options={nyBehandlingsårsaker}
+                            value={{
+                                value: skjema.felter.behandlingsårsak.verdi,
+                                label:
+                                    behandlingÅrsak[
+                                        skjema.felter.behandlingsårsak.verdi as BehandlingÅrsak
+                                    ] ?? '',
+                            }}
+                            onChange={value => {
+                                if (value && 'value' in value) {
+                                    skjema.felter.behandlingstype.validerOgSettFelt(
+                                        value.value as Behandlingstype
+                                    );
+                                }
+                            }}
+                        />
+                    </>
+                )}
         </>
     );
 };

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Panel from 'nav-frontend-paneler';
 import { Undertittel } from 'nav-frontend-typografi';
 
+import { Felt, Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -31,40 +32,16 @@ const StyledSectionDiv = styled.div`
     margin-top: 40px;
 `;
 
-interface JournalpostSkjemaProps {
-    settFeilmelding: (feilmelding: string) => void;
-}
-
-export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ settFeilmelding }) => {
+export const JournalpostSkjema: React.FC = () => {
     const {
+        skjema,
+        nullstillSkjema,
         dataForManuellJournalføring,
         journalfør,
-        hentFeil,
         erEndret,
-        tilbakestillData,
     } = useManuellJournalfør();
 
-    const alleFeil = hentFeil() ?? [];
-
     const history = useHistory();
-
-    const [senderInn, settSenderInn] = React.useState(false);
-
-    const onClickManuellJournalfør = () => {
-        settSenderInn(true);
-        journalfør()
-            .then(fagsak => {
-                settFeilmelding(
-                    fagsak.status === RessursStatus.FEILET ||
-                        fagsak.status === RessursStatus.FUNKSJONELL_FEIL
-                        ? `Feil ved manuell journalføring: ${fagsak.frontendFeilmelding}`
-                        : ''
-                );
-            })
-            .finally(() => {
-                settSenderInn(false);
-            });
-    };
 
     return (
         <div>
@@ -75,11 +52,11 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ settFeilme
                     forrigeOnClick={() => {
                         history.push(`/oppgaver`);
                     }}
-                    nesteKnappTittel={alleFeil.length === 0 ? 'Journalfør' : undefined}
-                    nesteOnClick={alleFeil.length === 0 ? onClickManuellJournalfør : undefined}
-                    senderInn={senderInn}
+                    nesteKnappTittel={'Journalfør'}
+                    nesteOnClick={journalfør}
+                    senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
                     tilbakestillOnClick={() => {
-                        tilbakestillData();
+                        nullstillSkjema();
                     }}
                     skalViseTilbakestillKnapp={erEndret()}
                 >
@@ -96,13 +73,18 @@ export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ settFeilme
                     <StyledSectionDiv>
                         <KnyttJournalpostTilBehandling />
                         <br />
-                        {!!alleFeil.length && (
+                        {/*TODO hente fra skjema*/}
+                        {skjema.visFeilmeldinger && (
                             <FeilPanel>
                                 <Undertittel>For å gå videre må du rette opp følgende:</Undertittel>
                                 <ul>
-                                    {alleFeil.map((feil, index) => (
-                                        <li key={index}>{feil}</li>
-                                    ))}
+                                    {Object.values(skjema.felter)
+                                        .filter(
+                                            felt =>
+                                                (felt as Felt<unknown>).valideringsstatus ===
+                                                Valideringsstatus.FEIL
+                                        )
+                                        .map(felt => felt.feilmelding)}
                                 </ul>
                             </FeilPanel>
                         )}

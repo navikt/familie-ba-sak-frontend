@@ -35,7 +35,7 @@ const StyledKnapp = styled(Knapp)`
 `;
 
 export const BrukerPanel: React.FC = () => {
-    const { dataForManuellJournalføring, endreBruker, harFeil } = useManuellJournalfør();
+    const { skjema, endreBruker, harFeil } = useManuellJournalfør();
     const [feilMelding, settFeilMelding] = useState<string | undefined>('');
     const [spinner, settSpinner] = useState(false);
     const [valgt, settValgt] = useState(false);
@@ -48,61 +48,58 @@ export const BrukerPanel: React.FC = () => {
         settFeilMelding('');
     }, [nyIdent.verdi]);
 
-    switch (dataForManuellJournalføring.status) {
-        case RessursStatus.SUKSESS:
-            const bruker = dataForManuellJournalføring.data.person;
-            const navn = formaterTilKunFørstBokstavStor(bruker?.navn) || 'Bruke ikke satt';
-            const ident = bruker?.personIdent ? formaterPersonIdent(bruker.personIdent) : '';
-            const Panel = harFeil(bruker) ? PanelFeil : PanelGyldig;
-            return (
-                <BrukerPanelDiv>
-                    <Panel
+    const navn =
+        formaterTilKunFørstBokstavStor(skjema.felter.bruker.verdi?.navn) || 'Bruke ikke satt';
+    const ident = skjema.felter.bruker.verdi?.personIdent
+        ? formaterPersonIdent(skjema.felter.bruker.verdi.personIdent)
+        : '';
+    const Panel = harFeil(skjema.felter.bruker.verdi) ? PanelFeil : PanelGyldig;
+    return (
+        <BrukerPanelDiv>
+            <Panel
+                onClick={() => {
+                    settValgt(!valgt);
+                }}
+                tittel={
+                    <DeltagerInfo
+                        ikon={<KontoSirkel filled={valgt} width={48} height={48} />}
+                        navn={navn}
+                        undertittel={'Søker/Bruker'}
+                        ident={ident}
+                    />
+                }
+            >
+                <StyledDiv>
+                    <FamilieInput
+                        {...nyIdent.hentNavInputProps(!!feilMelding)}
+                        feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
+                        erLesevisning={false}
+                        id={'hent-person'}
+                        label={'Skriv inn fødselsnummer/D-nummer'}
+                        bredde={'XL'}
+                        placeholder={'fnr/dnr'}
+                    />
+                    <StyledKnapp
                         onClick={() => {
-                            settValgt(!valgt);
+                            if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
+                                settSpinner(true);
+                                endreBruker(nyIdent.verdi)
+                                    .then((feilmelding: string) => {
+                                        settFeilMelding(feilmelding);
+                                    })
+                                    .finally(() => {
+                                        settSpinner(false);
+                                    });
+                            } else {
+                                settFeilMelding('Person ident er ugyldig');
+                            }
                         }}
-                        tittel={
-                            <DeltagerInfo
-                                ikon={<KontoSirkel filled={valgt} width={48} height={48} />}
-                                navn={navn}
-                                undertittel={'Søker/Bruker'}
-                                ident={ident}
-                            />
-                        }
-                    >
-                        <StyledDiv>
-                            <FamilieInput
-                                {...nyIdent.hentNavInputProps(!!feilMelding)}
-                                feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
-                                erLesevisning={false}
-                                id={'hent-person'}
-                                label={'Skriv inn fødselsnummer/D-nummer'}
-                                bredde={'XL'}
-                                placeholder={'fnr/dnr'}
-                            />
-                            <StyledKnapp
-                                onClick={() => {
-                                    if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
-                                        settSpinner(true);
-                                        endreBruker(nyIdent.verdi)
-                                            .then((feilmelding: string) => {
-                                                settFeilMelding(feilmelding);
-                                            })
-                                            .finally(() => {
-                                                settSpinner(false);
-                                            });
-                                    } else {
-                                        settFeilMelding('Person ident er ugyldig');
-                                    }
-                                }}
-                                children={'Endre bruker'}
-                                spinner={spinner}
-                                mini={true}
-                            />
-                        </StyledDiv>
-                    </Panel>
-                </BrukerPanelDiv>
-            );
-        default:
-            return <></>;
-    }
+                        children={'Endre bruker'}
+                        spinner={spinner}
+                        mini={true}
+                    />
+                </StyledDiv>
+            </Panel>
+        </BrukerPanelDiv>
+    );
 };

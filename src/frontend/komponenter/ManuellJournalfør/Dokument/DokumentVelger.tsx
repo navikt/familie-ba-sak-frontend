@@ -61,7 +61,6 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
         dataForManuellJournalføring,
         valgtDokumentId,
         velgOgHentDokumentData,
-        harFeil,
     } = useManuellJournalfør();
 
     if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
@@ -70,7 +69,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
 
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
     const journalpostId = dataForManuellJournalføring.data.journalpost.journalpostId;
-    const DokumentBoks = harFeil(dokument)
+    const DokumentBoks = valgt // TODO feilhåndtering
         ? valgt
             ? PanelFeilValgt
             : PanelFeilUvalgt
@@ -85,7 +84,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                     valgt={valgt}
                     journalpostId={journalpostId}
                     dokument={dokument}
-                ></DokumentInfoStripe>
+                />
             }
             tittelProps="normaltekst"
             href="#"
@@ -100,9 +99,9 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                     valgt={valgt}
                     journalpostId={journalpostId}
                     dokument={dokument}
-                ></DokumentInfoStripe>
+                />
             )}
-            {valgt && <EndreDokumentInfoPanel />}
+            {valgt && <EndreDokumentInfoPanel dokument={dokument} />}
         </DokumentBoks>
     );
 };
