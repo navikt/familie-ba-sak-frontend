@@ -28,9 +28,9 @@ const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
 `;
 
 const PanelTittel = styled.p`
-    display: flex;
-    align-items: center;
-    text-align: center;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 5fr;
 
     .typo-normal {
         margin-left: 1.5rem;
@@ -55,13 +55,6 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
         apen={åpen}
         tittel={
             <PanelTittel>
-                {/* TODO legge inn tekst for hjelpeteksten og legg til hjepleteksten */}
-                {/* eslint-disable-next-line no-constant-condition */}
-                {true ? (
-                    <div style={{ marginLeft: '0.625rem' }} />
-                ) : (
-                    <Hjelpetekst44px innhold={'Midlertidig tekst'} />
-                )}
                 <Element>
                     {periodeToString({
                         fom: vedtaksperiode.periodeFom,

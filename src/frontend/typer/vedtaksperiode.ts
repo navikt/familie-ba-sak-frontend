@@ -46,6 +46,8 @@ export const hentVedtaksperiodeTittel = (vedtaksperiode: Vedtaksperiode) => {
             return ytelsetype[vedtaksperiode.ytelseTyper[0]].navn;
         case Vedtaksperiodetype.OPPHØR:
             return 'Opphør';
+        case Vedtaksperiodetype.AVSLAG:
+            return 'Avslag';
         default:
             return '';
     }
