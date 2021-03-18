@@ -6,9 +6,11 @@ import styled from 'styled-components';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { Behandlingstype } from '../../../../typer/behandling';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
+import { ToggleNavn } from '../../../../typer/toggles';
 import {
     hentVedtaksperiodeTittel,
     IUtbetalingsperiodeDetalj,
@@ -77,6 +79,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     behandlingsType,
 }) => {
     const { erLesevisning } = useBehandling();
+    const { toggles } = useApp();
 
     const [ekspandertFritekst, settEkspandertFritekst] = useState(
         behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING
@@ -99,6 +102,9 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
+
+    const brukFritekst = toggles[ToggleNavn.begrgrunnelseFritekst];
+
     return (
         <StyledEkspanderbartpanel
             key={`${vedtaksperiode.periodeFom}_${ekspandertFritekst}`}
@@ -156,7 +162,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     />
                 </div>
 
-                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR && (
+                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR && brukFritekst && (
                     <div>
                         <FritekstVedtakbegrunnelser
                             vedtaksperiode={vedtaksperiode}
