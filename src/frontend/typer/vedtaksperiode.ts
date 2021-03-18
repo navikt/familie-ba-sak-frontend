@@ -1,7 +1,6 @@
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
 import { IGrunnlagPerson } from './person';
-import { VilkårType } from './vilkår';
 
 export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
@@ -27,9 +26,6 @@ export type Vedtaksperiode =
     | {
           periodeFom: string;
           periodeTom: string;
-          vilkår: VilkårType;
-          personer: string[];
-          brevBegrunnelse: string;
           vedtaksperiodetype: Vedtaksperiodetype.AVSLAG;
       };
 
