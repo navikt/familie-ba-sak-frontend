@@ -30,7 +30,7 @@ const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
 const PanelTittel = styled.p`
     width: 100%;
     display: grid;
-    grid-template-columns: 2fr 1fr 5fr;
+    grid-template-columns: 170px 100px auto;
 
     .typo-normal {
         margin-left: 1.5rem;
