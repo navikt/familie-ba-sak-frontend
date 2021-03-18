@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import Hjelpetekst, { HjelpetekstProps } from 'nav-frontend-hjelpetekst';
 
-import FamilieBaseKnapp from '../../../Felleskomponenter/FamilieBaseKnapp';
+import FamilieBaseKnapp from '../../../../Felleskomponenter/FamilieBaseKnapp';
 
 interface IHjelpetekst44pxProps extends HjelpetekstProps {
     innhold: string | JSX.Element;

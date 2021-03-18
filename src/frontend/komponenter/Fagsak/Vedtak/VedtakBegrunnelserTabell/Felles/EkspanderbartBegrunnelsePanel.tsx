@@ -4,15 +4,15 @@ import styled from 'styled-components';
 
 import Hjelpetekst44px from './Hjelpetekst44px';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
-import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
+import { periodeToString, TIDENES_MORGEN } from '../../../../../typer/periode';
 import {
     hentVedtaksperiodeTittel,
     Vedtaksperiode,
     Vedtaksperiodetype,
-} from '../../../../typer/vedtaksperiode';
-import { formaterBeløp, isoStringToDayjs } from '../../../../utils/formatter';
+} from '../../../../../typer/vedtaksperiode';
+import { formaterBeløp, isoStringToDayjs } from '../../../../../utils/formatter';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import { sisteDagInneværendeMåned } from '../../../../utils/tid';
+import { sisteDagInneværendeMåned } from '../../../../../utils/tid';
 
 const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
     margin-bottom: 1.5rem;
