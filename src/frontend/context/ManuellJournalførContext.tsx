@@ -416,11 +416,19 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                             skjema.felter.knyttTilNyBehandling.verdi,
                         tilknyttedeBehandlingIder: skjema.felter.tilknyttedeBehandlingIder.verdi,
                         opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
-                        nyBehandlingstype: nyBehandlingstype,
+
+                        // TODO her bør vi forbedre APIET slik at disse verdiene ikke er påkrevd. Blir kun brukt om opprettOgKnyttTilNyBehandling=true
+                        nyBehandlingstype:
+                            nyBehandlingstype === ''
+                                ? Behandlingstype.FØRSTEGANGSBEHANDLING
+                                : nyBehandlingstype,
                         nyBehandlingsårsak:
                             nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
                                 ? BehandlingÅrsak.SØKNAD
+                                : nyBehandlingsårsak === ''
+                                ? BehandlingÅrsak.SØKNAD
                                 : nyBehandlingsårsak,
+
                         navIdent: innloggetSaksbehandler?.navIdent ?? '',
                     },
                 },
