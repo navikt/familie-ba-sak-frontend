@@ -33,20 +33,13 @@ const StyledTd = styled.th(
     `
 );
 
-const ElementMedBunnmargin = styled(Element)`
-    margin-bottom: 0.5rem;
-`;
-
-const NormaltekstMedBunnmargin = styled(Normaltekst)`
-    margin-bottom: 0.5rem;
-`;
-
 const ElementMedFarge = styled(Element)`
     color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
 `;
 
 const StyledHr = styled.hr`
     border-top: 1px solid ${navFarger.navGra40};
+    margin-left: 0.125rem;
 `;
 
 interface ISimuleringProps {
@@ -65,15 +58,15 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({ simulering
             <StyledTable>
                 <tr>
                     <StyledTh colSpan={2}>
-                        <ElementMedBunnmargin>
+                        <Element>
                             Totalt for perioden {familieDayjs(simulering.fom).format('DD.MM.YYYY')}{' '}
                             - {familieDayjs(simulering.tom).format('DD.MM.YYYY')}
-                        </ElementMedBunnmargin>
+                        </Element>
                     </StyledTh>
                 </tr>
                 <tr>
                     <StyledTd>
-                        <NormaltekstMedBunnmargin>Feilutbetaling</NormaltekstMedBunnmargin>
+                        <Normaltekst>Feilutbetaling</Normaltekst>
                     </StyledTd>
                     <StyledTd erHøyrestilt={true}>
                         <ElementMedFarge farge={navFarger.navRod}>
@@ -84,7 +77,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({ simulering
 
                 <tr>
                     <StyledTd>
-                        <NormaltekstMedBunnmargin>Etterbetaling</NormaltekstMedBunnmargin>
+                        <Normaltekst>Etterbetaling</Normaltekst>
                     </StyledTd>
                     <StyledTd erHøyrestilt={true}>
                         <ElementMedFarge>{formater(simulering.totalYtelse)}</ElementMedFarge>
@@ -97,19 +90,19 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({ simulering
             <StyledTable>
                 <tr>
                     <StyledTh colSpan={2}>
-                        <ElementMedBunnmargin>Neste utbetaling</ElementMedBunnmargin>
+                        <Element>Neste utbetaling</Element>
                     </StyledTh>
                 </tr>
                 {simulering.nesteUtbetaling.beløp !== undefined && (
                     <tr>
                         <StyledTd>
-                            <NormaltekstMedBunnmargin>
+                            <Normaltekst>
                                 {kapitaliserTekst(
                                     familieDayjs(simulering.nesteUtbetaling.dato).format(
                                         'MMMM YYYY'
                                     )
                                 )}
-                            </NormaltekstMedBunnmargin>
+                            </Normaltekst>
                         </StyledTd>
 
                         <StyledTd erHøyrestilt={true}>
