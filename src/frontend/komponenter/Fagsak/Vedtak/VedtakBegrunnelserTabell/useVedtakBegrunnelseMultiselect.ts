@@ -14,6 +14,7 @@ import {
 } from '../../../../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import {
+    AnnenVurderingType,
     IRestPersonResultat,
     IRestVilkårResultat,
     Resultat,
@@ -98,6 +99,20 @@ const useVedtakBegrunnelseMultiselect = (
         }
     };
 
+    const skalLeggeTilAndreBegrunnelse = (
+        vedtakBegrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår
+    ) =>
+        vedtakBegrunnelse.id === VedtakBegrunnelse.OPPHØR_IKKE_MOTTATT_OPPLYSNINGER ||
+        vedtakBegrunnelse.id === VedtakBegrunnelse.REDUKSJON_MANGLENDE_OPPLYSNINGER
+            ? personResultater
+                  .flatMap(personResultat => personResultat.andreVurderinger)
+                  .find(
+                      annenVurdering =>
+                          annenVurdering.type === AnnenVurderingType.OPPLYSNINGSPLIKT &&
+                          annenVurdering.resultat === Resultat.IKKE_OPPFYLT
+                  )
+            : true;
+
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] => {
         return personResultater
             .flatMap(personResultat => personResultat.vilkårResultater)
@@ -175,7 +190,6 @@ const useVedtakBegrunnelseMultiselect = (
                       const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
                           vedtakBegrunnelseType as VedtakBegrunnelseType
                       );
-
                       return [
                           ...acc,
                           {
@@ -194,7 +208,9 @@ const useVedtakBegrunnelseMultiselect = (
                                               ? utgjørendeVilkårForPeriodeOgResultat.includes(
                                                     restVedtakBegrunnelseTilknyttetVilkår.vilkår
                                                 )
-                                              : true;
+                                              : skalLeggeTilAndreBegrunnelse(
+                                                    restVedtakBegrunnelseTilknyttetVilkår
+                                                );
                                       }
                                   )
                                   .map(
