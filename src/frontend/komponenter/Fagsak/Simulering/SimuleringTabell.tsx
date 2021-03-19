@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import styled from 'styled-components';
+import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
@@ -12,19 +13,43 @@ import familieDayjs from '../../../utils/familieDayjs';
 import { formaterBeløp } from '../../../utils/formatter';
 
 const StyledTable = styled.table`
-    width: 100%;
+    width: auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border-color: red;
 `;
 
 const HøyresiltTd = styled.td`
-    text-align: right;
+    text-align: right !important;
 `;
+
 const NormaltekstMedFarge = styled(Normaltekst)`
     color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
 `;
 
+const VenstreKolonne = styled.col`
+    width: 9.375rem;
+`;
+
+const DataKolonne = styled.col`
+    width: 4.6875rem;
+`;
+
+const SkillelinjeKolonne = styled.col`
+    width: 1.125rem;
+`;
+
 const Skillelinje = styled.div`
-    border-right: 1px dashed ${navFarger.navGra60};
-    margin: 0 0.5rem;
+    position: relative;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+
+    div {
+        border-right: 1px dashed ${navFarger.navGra60};
+        height: 3.25rem;
+        position: absolute;
+        top: 0.125rem;
+    }
 `;
 
 const StyledHjelpetekst = styled(Hjelpetekst)`
@@ -73,15 +98,29 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
             </SimuleringTabellOverskrift>
 
             <StyledTable className="tabell">
+                <colgroup>
+                    <VenstreKolonne />
+                    {periodeStartdatoer.map(fomDato =>
+                        simulering.nesteUtbetaling.dato === fomDato ? (
+                            <>
+                                <SkillelinjeKolonne />
+                                <DataKolonne />
+                            </>
+                        ) : (
+                            <DataKolonne />
+                        )
+                    )}
+                </colgroup>
+
                 <thead>
                     <tr>
                         <td />
                         {periodeStartdatoer.map(fomDato => (
                             <>
                                 {simulering.nesteUtbetaling.dato === fomDato && (
-                                    <th>
-                                        <Skillelinje />
-                                    </th>
+                                    <Skillelinje>
+                                        <div />
+                                    </Skillelinje>
                                 )}
 
                                 <th>
@@ -100,9 +139,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         {periodeStartdatoer.map(fomDato => (
                             <>
                                 {simulering.nesteUtbetaling.dato === fomDato && (
-                                    <td>
-                                        <Skillelinje />
-                                    </td>
+                                    <Skillelinje>
+                                        <div />
+                                    </Skillelinje>
                                 )}
 
                                 <HøyresiltTd>
@@ -122,9 +161,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         {periodeStartdatoer.map(fomDato => (
                             <>
                                 {simulering.nesteUtbetaling.dato === fomDato && (
-                                    <td>
-                                        <Skillelinje />
-                                    </td>
+                                    <Skillelinje>
+                                        <div />
+                                    </Skillelinje>
                                 )}
 
                                 <HøyresiltTd>
@@ -146,9 +185,9 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         {periodeStartdatoer.map(fomDato => (
                             <>
                                 {simulering.nesteUtbetaling.dato === fomDato && (
-                                    <td>
-                                        <Skillelinje />
-                                    </td>
+                                    <Skillelinje>
+                                        <div />
+                                    </Skillelinje>
                                 )}
 
                                 <HøyresiltTd>
