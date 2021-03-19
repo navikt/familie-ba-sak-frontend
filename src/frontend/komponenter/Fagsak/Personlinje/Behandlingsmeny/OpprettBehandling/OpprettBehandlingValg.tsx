@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FamilieSelect } from '@navikt/familie-form-elements';
-import { ISkjema } from '@navikt/familie-skjema';
+import { Felt } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../../context/AppContext';
 import {
@@ -9,20 +9,17 @@ import {
     Behandlingstype,
     BehandlingÅrsak,
     behandlingÅrsak,
+    IBehandling,
 } from '../../../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 
 interface IProps {
-    fagsak: IFagsak;
-    opprettBehandlingSkjema: ISkjema<
-        {
-            behandlingstype: Behandlingstype | '';
-            behandlingsårsak: BehandlingÅrsak | '';
-        },
-        IFagsak
-    >;
+    behandlingstype: Felt<Behandlingstype | ''>;
+    behandlingsårsak: Felt<BehandlingÅrsak | ''>;
+    fagsak?: IFagsak;
+    visFeilmeldinger: boolean;
 }
 
 interface BehandlingstypeSelect extends HTMLSelectElement {
@@ -33,47 +30,50 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
     value: BehandlingÅrsak | '';
 }
 
-const OpprettBehandlingValg: React.FC<IProps> = ({ fagsak, opprettBehandlingSkjema }) => {
+const OpprettBehandlingValg: React.FC<IProps> = ({
+    behandlingstype,
+    behandlingsårsak,
+    fagsak,
+    visFeilmeldinger,
+}) => {
     const { toggles } = useApp();
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
-
-    const behandlingstypeFelt = opprettBehandlingSkjema.felter.behandlingstype;
-    const behandlingsårsakFelt = opprettBehandlingSkjema.felter.behandlingsårsak;
+    const aktivBehandling: IBehandling | undefined = fagsak
+        ? hentAktivBehandlingPåFagsak(fagsak)
+        : undefined;
 
     const kanOppretteBehandling =
         !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
-    const førstegangsbehandlingEnabled =
-        fagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
-    const revurderingEnabled = fagsak.behandlinger.length > 0 && kanOppretteBehandling;
+    const førstegangsbehandlingEnabled = !fagsak
+        ? true
+        : fagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
+    const revurderingEnabled = !fagsak
+        ? false
+        : fagsak.behandlinger.length > 0 && kanOppretteBehandling;
     const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
 
     return (
         <>
             <FamilieSelect
-                {...behandlingstypeFelt.hentNavBaseSkjemaProps(
-                    opprettBehandlingSkjema.visFeilmeldinger
-                )}
+                {...behandlingstype.hentNavBaseSkjemaProps(visFeilmeldinger)}
                 erLesevisning={false}
                 name={'Behandling'}
                 label={'Velg type behandling'}
                 onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
-                    behandlingstypeFelt.onChange(event.target.value);
+                    behandlingstype.onChange(event.target.value);
                 }}
             >
                 <option disabled={true} value={''}>
                     Velg
                 </option>
                 <option
-                    aria-selected={
-                        behandlingstypeFelt.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING
-                    }
+                    aria-selected={behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING}
                     disabled={!førstegangsbehandlingEnabled}
                     value={Behandlingstype.FØRSTEGANGSBEHANDLING}
                 >
                     Førstegangsbehandling
                 </option>
                 <option
-                    aria-selected={behandlingstypeFelt.verdi === Behandlingstype.REVURDERING}
+                    aria-selected={behandlingstype.verdi === Behandlingstype.REVURDERING}
                     disabled={!revurderingEnabled}
                     value={Behandlingstype.REVURDERING}
                 >
@@ -82,7 +82,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({ fagsak, opprettBehandlingSkje
 
                 {visTekniskOpphør && (
                     <option
-                        aria-selected={behandlingstypeFelt.verdi === Behandlingstype.TEKNISK_OPPHØR}
+                        aria-selected={behandlingstype.verdi === Behandlingstype.TEKNISK_OPPHØR}
                         disabled={!revurderingEnabled}
                         value={Behandlingstype.TEKNISK_OPPHØR}
                     >
@@ -91,16 +91,14 @@ const OpprettBehandlingValg: React.FC<IProps> = ({ fagsak, opprettBehandlingSkje
                 )}
             </FamilieSelect>
 
-            {opprettBehandlingSkjema.felter.behandlingsårsak.erSynlig && (
+            {behandlingsårsak.erSynlig && (
                 <FamilieSelect
-                    {...behandlingsårsakFelt.hentNavBaseSkjemaProps(
-                        opprettBehandlingSkjema.visFeilmeldinger
-                    )}
+                    {...behandlingsårsak.hentNavBaseSkjemaProps(visFeilmeldinger)}
                     erLesevisning={false}
                     name={'Behandlingsårsak'}
                     label={'Velg årsak'}
                     onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
-                        behandlingsårsakFelt.onChange(event.target.value);
+                        behandlingsårsak.onChange(event.target.value);
                     }}
                 >
                     <option disabled={true} value={''}>
@@ -116,7 +114,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({ fagsak, opprettBehandlingSkje
                             return (
                                 <option
                                     key={årsak}
-                                    aria-selected={behandlingsårsakFelt.verdi === årsak}
+                                    aria-selected={behandlingsårsak.verdi === årsak}
                                     value={årsak}
                                 >
                                     {behandlingÅrsak[årsak]}

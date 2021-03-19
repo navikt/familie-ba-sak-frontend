@@ -80,7 +80,8 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument }) => {
                 placeholder={'Velg innhold'}
                 onChange={options => {
                     settLogiskeVedlegg(
-                        options instanceof Array ? options.map(({ value }) => value) : []
+                        options instanceof Array ? options.map(({ value }) => value) : [],
+                        dokument.dokumentInfoId
                     );
                 }}
             />

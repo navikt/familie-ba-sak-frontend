@@ -166,7 +166,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     });
 
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
-
     const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit } = useSkjema<
         {
             avsenderMottaker: AvsenderMottaker;
@@ -192,7 +191,14 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             behandlingsårsak,
             dokumenter: useFelt<IDokumentInfo[]>({ verdi: [] }),
             knyttTilNyBehandling,
-            journalpostTittel: useFelt<string>({ verdi: '' }),
+            journalpostTittel: useFelt<string>({
+                verdi: '',
+                valideringsfunksjon: (felt: FeltState<string>) => {
+                    return felt.verdi !== ''
+                        ? ok(felt)
+                        : feil(felt, 'Journalposttittel må ikke være tom');
+                },
+            }),
             tilknyttedeBehandlingIder: useFelt<number[]>({
                 verdi: [],
             }),
@@ -389,6 +395,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     };
 
     const settJournalpostTittel = (tittel: string) => {
+        console.log(tittel);
         skjema.felter.journalpostTittel.validerOgSettFelt(tittel);
     };
 
@@ -501,6 +508,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             );
         }
     };
+    console.log(skjema);
 
     return {
         dataForManuellJournalføring,

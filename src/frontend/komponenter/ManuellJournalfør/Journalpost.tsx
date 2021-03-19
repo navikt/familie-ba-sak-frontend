@@ -6,7 +6,7 @@ import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
+import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
@@ -44,20 +44,8 @@ const JournalpostMetadataDiv = styled.div`
 `;
 
 const EndreJournalpost: React.FC = () => {
-    const {
-        dataForManuellJournalføring,
-        settJournalpostTittel,
-        tilbakestillJournalpostTittel,
-    } = useManuellJournalfør();
-    const journalpostTittel =
-        dataForManuellJournalføring.status === RessursStatus.SUKSESS
-            ? dataForManuellJournalføring.data.journalpost.tittel
-            : undefined;
+    const { skjema, settJournalpostTittel, tilbakestillJournalpostTittel } = useManuellJournalfør();
 
-    const selectValue: ISelectOption = {
-        value: journalpostTittel ?? '',
-        label: journalpostTittel ?? '',
-    };
     return (
         <FamilieReactSelect
             creatable={true}
@@ -67,7 +55,10 @@ const EndreJournalpost: React.FC = () => {
             id="select"
             isMulti={false}
             options={journalpostTittelList}
-            value={selectValue}
+            value={{
+                value: skjema.felter.journalpostTittel.verdi,
+                label: skjema.felter.journalpostTittel.verdi,
+            }}
             onChange={value => {
                 if (value && 'value' in value) {
                     settJournalpostTittel(value.value);
@@ -79,15 +70,22 @@ const EndreJournalpost: React.FC = () => {
     );
 };
 
-export const Journalpost: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalfør();
+const Journalpost: React.FC = () => {
+    const { dataForManuellJournalføring, skjema } = useManuellJournalfør();
     const datoMottatt =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.datoMottatt
             : undefined;
+
     return (
         <JournalpostDiv>
-            <Ekspanderbartpanel tittel={<JournalpostInfo />}>
+            <Ekspanderbartpanel
+                tittel={
+                    <Undertittel>
+                        {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
+                    </Undertittel>
+                }
+            >
                 <JournalpostMetadataDiv>
                     <Normaltekst>
                         Mottatt:{' '}
@@ -101,3 +99,5 @@ export const Journalpost: React.FC = () => {
         </JournalpostDiv>
     );
 };
+
+export default Journalpost;

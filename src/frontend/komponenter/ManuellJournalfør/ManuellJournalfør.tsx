@@ -21,7 +21,7 @@ const ToKolonnerDiv = styled.div`
 
 const ManuellJournalførContent: React.FC = () => {
     const { dataForManuellJournalføring } = useManuellJournalfør();
-    const [feilmelding, settFeilmelding] = React.useState('');
+
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
@@ -30,10 +30,8 @@ const ManuellJournalførContent: React.FC = () => {
                     {dataForManuellJournalføring.data.journalpost.journalstatus ===
                     Journalstatus.MOTTATT ? (
                         <div>
-                            {feilmelding && <AlertStripeFeil>{feilmelding}</AlertStripeFeil>}
-
                             <ToKolonnerDiv>
-                                <JournalpostSkjema settFeilmelding={settFeilmelding} />
+                                <JournalpostSkjema />
                                 <DokumentPanel />
                             </ToKolonnerDiv>
                         </div>

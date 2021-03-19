@@ -75,8 +75,10 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                 <SkjemaGruppe feil={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}>
                     <SkjultLegend>Opprett ny behandling</SkjultLegend>
                     <OpprettBehandlingValg
+                        behandlingstype={opprettBehandlingSkjema.felter.behandlingstype}
+                        behandlingsårsak={opprettBehandlingSkjema.felter.behandlingsårsak}
                         fagsak={fagsak}
-                        opprettBehandlingSkjema={opprettBehandlingSkjema}
+                        visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                     />
                 </SkjemaGruppe>
             </UIModalWrapper>
