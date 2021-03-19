@@ -49,7 +49,10 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
 
-    const harVedtaksperioder = åpenBehandling.vedtaksperioder.length > 0;
+    const harVedtaksperioder =
+        åpenBehandling.vedtaksperioder.filter(
+            (periode: Vedtaksperiode) => periode.vedtaksperiodetype !== Vedtaksperiodetype.AVSLAG
+        ).length > 0;
     const vedtaksperioderMedBegrunnelseBehov = åpenBehandling.vedtaksperioder
         .slice()
         .sort((a, b) =>

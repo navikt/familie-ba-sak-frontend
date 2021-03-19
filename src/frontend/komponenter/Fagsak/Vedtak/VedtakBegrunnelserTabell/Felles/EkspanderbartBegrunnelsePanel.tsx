@@ -2,7 +2,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Hjelpetekst44px from './Hjelpetekst44px';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { periodeToString, TIDENES_MORGEN } from '../../../../../typer/periode';
 import {
@@ -19,22 +18,17 @@ const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
     max-width: 49rem;
 
     .ekspanderbartPanel__hode {
-        padding-top: 0;
-        padding-bottom: 0;
+        padding: 0 1rem 0 1.6rem;
     }
     .ekspanderbartPanel__innhold {
-        padding: 0 2.75rem 1rem 1.625rem;
+        padding: 0 2.75rem 1.5rem 1.6rem;
     }
 `;
 
 const PanelTittel = styled.p`
     width: 100%;
     display: grid;
-    grid-template-columns: 170px 100px auto;
-
-    .typo-normal {
-        margin-left: 1.5rem;
-    }
+    grid-template-columns: 190px 120px auto;
 `;
 
 interface IEkspanderbartBegrunnelsePanelProps {
@@ -54,20 +48,34 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
         key={`${vedtaksperiode.vedtaksperiodetype}_${vedtaksperiode.periodeFom}_${vedtaksperiode.periodeTom}`}
         apen={åpen}
         tittel={
-            <PanelTittel>
-                <Element>
-                    {periodeToString({
-                        fom: vedtaksperiode.periodeFom,
-                        tom: slutterSenereEnnInneværendeMåned(vedtaksperiode.periodeTom)
-                            ? ''
-                            : vedtaksperiode.periodeTom,
-                    })}
-                </Element>
-                <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
-                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING && (
-                    <Normaltekst>{formaterBeløp(vedtaksperiode.utbetaltPerMnd)}</Normaltekst>
-                )}
-            </PanelTittel>
+            vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.AVSLAG ? (
+                <PanelTittel>
+                    {vedtaksperiode.periodeFom && (
+                        <Element>
+                            {periodeToString({
+                                fom: vedtaksperiode.periodeFom,
+                                tom: vedtaksperiode.periodeTom,
+                            })}
+                        </Element>
+                    )}
+                    <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
+                </PanelTittel>
+            ) : (
+                <PanelTittel>
+                    <Element>
+                        {periodeToString({
+                            fom: vedtaksperiode.periodeFom,
+                            tom: slutterSenereEnnInneværendeMåned(vedtaksperiode.periodeTom)
+                                ? ''
+                                : vedtaksperiode.periodeTom,
+                        })}{' '}
+                    </Element>
+                    <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
+                    {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING && (
+                        <Normaltekst>{formaterBeløp(vedtaksperiode.utbetaltPerMnd)}</Normaltekst>
+                    )}
+                </PanelTittel>
+            )
         }
     >
         {children}
