@@ -32,6 +32,7 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
@@ -169,7 +170,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         <Skjemasteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
-                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`)
+                toggles[ToggleNavn.visSimulering]
+                    ? history.push(
+                          `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`
+                      )
+                    : history.push(
+                          `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`
+                      )
             }
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
             nesteKnappTittel={'Til godkjenning'}

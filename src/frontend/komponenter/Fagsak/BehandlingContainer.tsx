@@ -12,6 +12,7 @@ import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IFagsak } from '../../typer/fagsak';
 import { useAmplitude } from '../../utils/amplitude';
+import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
 import OppsummeringVedtak from './Vedtak/OppsummeringVedtak';
@@ -78,6 +79,15 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                         åpenBehandling={åpenBehandling.data}
                                     />
                                 </TidslinjeProvider>
+                            );
+                        }}
+                    />
+                    <Route
+                        exact={true}
+                        path="/fagsak/:fagsakId/:behandlingId/simulering"
+                        render={() => {
+                            return (
+                                <Simulering fagsak={fagsak} åpenBehandling={åpenBehandling.data} />
                             );
                         }}
                     />
