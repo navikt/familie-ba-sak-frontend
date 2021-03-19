@@ -21,9 +21,10 @@ const tittelList = journalpostTittelList
 
 interface IProps {
     dokument: IDokumentInfo;
+    visFeilmeldinger: boolean;
 }
 
-export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument }) => {
+export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeldinger }) => {
     const { skjema, settDokumentTittel, settLogiskeVedlegg } = useManuellJournalfør();
 
     const dokumentFraSkjema = skjema.felter.dokumenter.verdi.find(
@@ -49,9 +50,8 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument }) => {
     };
 
     return (
-        <div>
+        <>
             <FamilieReactSelect
-                id="tittelSelect"
                 label={'Dokumenttittel'}
                 erLesevisning={false}
                 creatable={true}
@@ -59,6 +59,9 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument }) => {
                 isMulti={false}
                 options={tittelList}
                 value={tittelOption()}
+                feil={
+                    visFeilmeldinger && dokument.tittel === '' ? 'Tittel er ikke satt' : undefined
+                }
                 onChange={value => {
                     if (value && 'value' in value) {
                         settDokumentTittel(value.value || '', dokument.dokumentInfoId);
@@ -78,6 +81,11 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument }) => {
                 options={tittelList}
                 value={hentVedleggList()}
                 placeholder={'Velg innhold'}
+                feil={
+                    visFeilmeldinger && dokument.logiskeVedlegg.length === 0
+                        ? 'Annet innhold er ikke satt'
+                        : undefined
+                }
                 onChange={options => {
                     settLogiskeVedlegg(
                         options instanceof Array ? options.map(({ value }) => value) : [],
@@ -85,6 +93,6 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument }) => {
                     );
                 }}
             />
-        </div>
+        </>
     );
 };

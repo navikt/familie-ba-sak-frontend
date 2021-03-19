@@ -20,6 +20,7 @@ interface IProps {
     behandlingsårsak: Felt<BehandlingÅrsak | ''>;
     fagsak?: IFagsak;
     visFeilmeldinger: boolean;
+    erLesevisning?: boolean;
 }
 
 interface BehandlingstypeSelect extends HTMLSelectElement {
@@ -35,6 +36,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     behandlingsårsak,
     fagsak,
     visFeilmeldinger,
+    erLesevisning = false,
 }) => {
     const { toggles } = useApp();
     const aktivBehandling: IBehandling | undefined = fagsak
@@ -55,7 +57,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         <>
             <FamilieSelect
                 {...behandlingstype.hentNavBaseSkjemaProps(visFeilmeldinger)}
-                erLesevisning={false}
+                erLesevisning={erLesevisning}
                 name={'Behandling'}
                 label={'Velg type behandling'}
                 onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
@@ -94,7 +96,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             {behandlingsårsak.erSynlig && (
                 <FamilieSelect
                     {...behandlingsårsak.hentNavBaseSkjemaProps(visFeilmeldinger)}
-                    erLesevisning={false}
+                    erLesevisning={erLesevisning}
                     name={'Behandlingsårsak'}
                     label={'Velg årsak'}
                     onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {

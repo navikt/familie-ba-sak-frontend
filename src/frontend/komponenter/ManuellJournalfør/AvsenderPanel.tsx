@@ -2,78 +2,72 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-
 import { FamilieInput } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { EmailIkon } from '../../ikoner/EmailIkon';
-import { formaterPersonIdent, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
+import { formaterPersonIdent } from '../../utils/formatter';
 import { DeltagerInfo } from './DeltagerInfo';
-import { feilDekoratør } from './FeilDekoratør';
+import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
 const AvsenderPanelDiv = styled.div`
     width: 560px;
     margin-top: 20px;
 `;
 
-const PanelGyldig = Ekspanderbartpanel;
-
-const PanelFeil = feilDekoratør(PanelGyldig);
-
 export const AvsenderPanel: React.FC = () => {
-    const { dataForManuellJournalføring, settAvsender, harFeil } = useManuellJournalfør();
-    const [avsenderFelt, settAvsenderFelt] = useState('');
-    const [valgt, settValgt] = useState(false);
+    const { skjema, erLesevisning } = useManuellJournalfør();
+    const [åpen, settÅpen] = useState(false);
 
     useEffect(() => {
-        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
-            settAvsenderFelt(
-                dataForManuellJournalføring.data.journalpost.avsenderMottaker?.navn ?? ''
-            );
+        if (
+            skjema.visFeilmeldinger &&
+            (skjema.felter.avsenderNavn.valideringsstatus === Valideringsstatus.FEIL ||
+                skjema.felter.avsenderIdent.valideringsstatus === Valideringsstatus.FEIL)
+        ) {
+            settÅpen(true);
         }
-    }, [dataForManuellJournalføring]);
+    }, [skjema.visFeilmeldinger, skjema.felter.avsenderNavn.valideringsstatus]);
 
-    switch (dataForManuellJournalføring.status) {
-        case RessursStatus.SUKSESS:
-            const avsender = dataForManuellJournalføring.data.journalpost.avsenderMottaker;
-            const navn = formaterTilKunFørstBokstavStor(avsender?.navn) || 'Ukjent';
-            const ident = avsender?.id ? formaterPersonIdent(avsender.id) : '';
-            const Panel = harFeil(avsender) ? PanelFeil : PanelGyldig;
-            return (
-                <AvsenderPanelDiv>
-                    <Panel
-                        tittel={
-                            <DeltagerInfo
-                                ikon={<EmailIkon filled={valgt} width={48} height={48} />}
-                                navn={navn}
-                                ident={ident}
-                                undertittel="Avsender"
-                            />
-                        }
-                        onClick={() => {
-                            settValgt(!valgt);
-                        }}
-                    >
-                        <FamilieInput
-                            erLesevisning={false}
-                            id={'avsender'}
-                            label={'Skriv inn avsender'}
-                            bredde={'XL'}
-                            placeholder={'avsender'}
-                            value={avsenderFelt}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                settAvsenderFelt(event.target.value);
-                            }}
-                            onBlur={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                settAvsender(event.target.value);
-                            }}
-                        />
-                    </Panel>
-                </AvsenderPanelDiv>
-            );
-        default:
-            return <></>;
-    }
+    return (
+        <AvsenderPanelDiv>
+            <StyledEkspanderbartpanelBase
+                visFeilmeldinger={
+                    skjema.visFeilmeldinger &&
+                    (skjema.felter.avsenderNavn.valideringsstatus === Valideringsstatus.FEIL ||
+                        skjema.felter.avsenderIdent.valideringsstatus === Valideringsstatus.FEIL)
+                }
+                tittel={
+                    <DeltagerInfo
+                        ikon={<EmailIkon filled={åpen} width={48} height={48} />}
+                        navn={skjema.felter.avsenderNavn.verdi || 'Ukjent'}
+                        ident={formaterPersonIdent(skjema.felter.avsenderIdent.verdi ?? '')}
+                        undertittel="Avsender"
+                    />
+                }
+                apen={åpen}
+                onClick={() => {
+                    settÅpen(!åpen);
+                }}
+            >
+                <FamilieInput
+                    {...skjema.felter.avsenderNavn.hentNavInputProps(skjema.visFeilmeldinger)}
+                    erLesevisning={erLesevisning()}
+                    label={'Navn'}
+                    bredde={'XL'}
+                    placeholder={'navn'}
+                />
+
+                <br />
+                <FamilieInput
+                    {...skjema.felter.avsenderIdent.hentNavInputProps(skjema.visFeilmeldinger)}
+                    erLesevisning={erLesevisning()}
+                    label={'Ident'}
+                    bredde={'XL'}
+                    placeholder={'Fnr/dnr 11 siffer'}
+                />
+            </StyledEkspanderbartpanelBase>
+        </AvsenderPanelDiv>
+    );
 };

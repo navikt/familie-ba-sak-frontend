@@ -5,26 +5,16 @@ import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import {
-    useFelt,
-    feil,
-    Avhengigheter,
-    useSkjema,
-    ok,
-    Felt,
-    FeltState,
-} from '@navikt/familie-skjema';
+import { useFelt, feil, Avhengigheter, useSkjema, ok, FeltState } from '@navikt/familie-skjema';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     IDokumentInfo,
+    Journalstatus,
     Ressurs,
     RessursStatus,
-    AvsenderMottakerIdType,
-    kjønnType,
-    AvsenderMottaker,
 } from '@navikt/familie-typer';
 
 import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
@@ -35,79 +25,10 @@ import {
     IRestJournalføring,
     JournalpostKanal,
 } from '../typer/manuell-journalføring';
-import { Adressebeskyttelsegradering, IPersonInfo, PersonType } from '../typer/person';
+import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import familieDayjs, { familieDayjsDiff } from '../utils/familieDayjs';
 import { useApp } from './AppContext';
-
-const tomPerson: IPersonInfo = {
-    adressebeskyttelseGradering: Adressebeskyttelsegradering.UGRADERT,
-    harTilgang: true,
-    familierelasjoner: [],
-    familierelasjonerMaskert: [],
-    fødselsdato: '',
-    kjønn: kjønnType.UKJENT,
-    navn: '',
-    personIdent: '',
-    type: PersonType.SØKER,
-};
-
-const tomAvsender: AvsenderMottaker = {
-    erLikBruker: false,
-    id: '',
-    land: '',
-    navn: '',
-    type: AvsenderMottakerIdType.UKJENT,
-};
-
-const erPersonTom = (person: IPersonInfo | undefined) => !person || !person.personIdent;
-
-const erAvsenderTom = (avsender: AvsenderMottaker | undefined) => !avsender || !avsender.navn;
-
-const erstattNullVerdiMedTomtObjekt = (res: Ressurs<IDataForManuellJournalføring>) => {
-    // Vi bruker tomt objekt for person og avsender hvis de er null/undefined i hentet data fra backend
-    // fordi vi vil bruke objektene til å indeksere valideringsfeil (Se validaterData())
-    if (res.status === RessursStatus.SUKSESS) {
-        if (!res.data.person) {
-            res.data.person = tomPerson;
-        }
-        if (!res.data.journalpost.avsenderMottaker) {
-            res.data.journalpost.avsenderMottaker = tomAvsender;
-        }
-    }
-    return res;
-};
-
-const validaterData = (dataForValidering: IDataForManuellJournalføring) => {
-    const valideringsfeilMap = new Map<unknown, string[]>();
-
-    const settValideringsfeil = (data: unknown, feil: string) => {
-        valideringsfeilMap.set(data, [...(valideringsfeilMap.get(data) || []), feil]);
-    };
-
-    if (!dataForValidering.journalpost.tittel) {
-        settValideringsfeil(dataForValidering.journalpost, 'Journalposttittel må ikke være tom');
-    }
-
-    dataForValidering.journalpost.dokumenter?.forEach(dokument => {
-        if (!dokument.tittel) {
-            settValideringsfeil(dokument, 'Dokumenttittel må ikke være tom');
-        }
-    });
-
-    if (erPersonTom(dataForValidering.person)) {
-        settValideringsfeil(dataForValidering.person, 'Bruker er ikke satt');
-    }
-
-    if (erAvsenderTom(dataForValidering.journalpost.avsenderMottaker)) {
-        settValideringsfeil(
-            dataForValidering.journalpost.avsenderMottaker,
-            'Avsender er ikke satt'
-        );
-    }
-
-    return valideringsfeilMap;
-};
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
@@ -166,31 +87,21 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     });
 
     const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
-    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit } = useSkjema<
+    const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
         {
-            avsenderMottaker: AvsenderMottaker;
+            journalpostTittel: string;
+            dokumenter: IDokumentInfo[];
             bruker: IPersonInfo | undefined;
+            avsenderNavn: string;
+            avsenderIdent: string;
             knyttTilNyBehandling: boolean;
             behandlingstype: Behandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
-            journalpostTittel: string;
             tilknyttedeBehandlingIder: number[];
-            dokumenter: IDokumentInfo[];
         },
         string
     >({
         felter: {
-            avsenderMottaker: useFelt<AvsenderMottaker>({ verdi: tomAvsender }),
-            bruker: useFelt<IPersonInfo | undefined>({
-                verdi: undefined,
-                valideringsfunksjon: (felt: FeltState<IPersonInfo | undefined>) => {
-                    return felt.verdi !== undefined ? ok(felt) : feil(felt, 'Bruker er ikke satt');
-                },
-            }),
-            behandlingstype,
-            behandlingsårsak,
-            dokumenter: useFelt<IDokumentInfo[]>({ verdi: [] }),
-            knyttTilNyBehandling,
             journalpostTittel: useFelt<string>({
                 verdi: '',
                 valideringsfunksjon: (felt: FeltState<string>) => {
@@ -199,6 +110,37 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         : feil(felt, 'Journalposttittel må ikke være tom');
                 },
             }),
+            dokumenter: useFelt<IDokumentInfo[]>({
+                verdi: [],
+                valideringsfunksjon: (felt: FeltState<IDokumentInfo[]>) => {
+                    return !felt.verdi.some((dokument: IDokumentInfo) => dokument.tittel === '')
+                        ? ok(felt)
+                        : feil(felt, 'Tittel på minst ett dokument er ikke satt');
+                },
+            }),
+            bruker: useFelt<IPersonInfo | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: (felt: FeltState<IPersonInfo | undefined>) => {
+                    return felt.verdi !== undefined ? ok(felt) : feil(felt, 'Bruker er ikke satt');
+                },
+            }),
+            avsenderNavn: useFelt<string>({
+                verdi: '',
+                valideringsfunksjon: (felt: FeltState<string>) => {
+                    return felt.verdi !== '' ? ok(felt) : feil(felt, 'Avsenders navn er ikke satt');
+                },
+            }),
+            avsenderIdent: useFelt<string>({
+                verdi: '',
+                valideringsfunksjon: (felt: FeltState<string>) => {
+                    return felt.verdi !== ''
+                        ? ok(felt)
+                        : feil(felt, 'Avsenders ident er ikke satt');
+                },
+            }),
+            knyttTilNyBehandling,
+            behandlingstype,
+            behandlingsårsak,
             tilknyttedeBehandlingIder: useFelt<number[]>({
                 verdi: [],
             }),
@@ -216,8 +158,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 dataForManuellJournalføring.data.journalpost.tittel ?? ''
             );
 
-            skjema.felter.avsenderMottaker.validerOgSettFelt(
-                dataForManuellJournalføring.data.journalpost.avsenderMottaker ?? tomAvsender
+            skjema.felter.avsenderNavn.validerOgSettFelt(
+                dataForManuellJournalføring.data.journalpost.avsenderMottaker?.navn ?? ''
+            );
+
+            skjema.felter.avsenderIdent.validerOgSettFelt(
+                dataForManuellJournalføring.data.journalpost.avsenderMottaker?.id ?? ''
             );
 
             skjema.felter.bruker.validerOgSettFelt(dataForManuellJournalføring.data.person);
@@ -326,9 +272,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             påvirkerSystemLaster: true,
         })
             .then((hentetDataForManuellJournalføring: Ressurs<IDataForManuellJournalføring>) => {
-                settDataForManuellJournalføring(
-                    erstattNullVerdiMedTomtObjekt(hentetDataForManuellJournalføring)
-                );
+                settDataForManuellJournalføring(hentetDataForManuellJournalføring);
 
                 if (hentetDataForManuellJournalføring.status === RessursStatus.SUKSESS) {
                     const førsteDokument = hentetDataForManuellJournalføring.data.journalpost.dokumenter?.find(
@@ -394,23 +338,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     };
 
-    const settJournalpostTittel = (tittel: string) => {
-        console.log(tittel);
-        skjema.felter.journalpostTittel.validerOgSettFelt(tittel);
-    };
-
-    const settAvsender = (navn: string, id = '') => {
-        skjema.felter.avsenderMottaker.validerOgSettFelt({
-            ...skjema.felter.avsenderMottaker.verdi,
-            navn,
-            id,
-        });
-    };
-
-    const tilbakestillJournalpostTittel = () => {
-        skjema.felter.journalpostTittel.nullstill();
-    };
-
     const hentAktivBehandlingForJournalføring = (): IBehandling | undefined => {
         let aktivBehandling = undefined;
         if (
@@ -458,8 +385,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                             id: skjema.felter.bruker.verdi?.personIdent ?? '',
                         },
                         avsender: {
-                            navn: skjema.felter.avsenderMottaker.verdi.navn,
-                            id: skjema.felter.avsenderMottaker.verdi.id,
+                            navn: skjema.felter.avsenderNavn.verdi,
+                            id: skjema.felter.avsenderIdent.verdi,
                         },
                         datoMottatt: dataForManuellJournalføring.data.journalpost.datoMottatt,
                         dokumenter: skjema.felter.dokumenter.verdi.map(dokument => {
@@ -508,38 +435,33 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             );
         }
     };
-    console.log(skjema);
+
+    const erLesevisning = () => {
+        return (
+            dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
+            dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT
+        );
+    };
 
     return {
         dataForManuellJournalføring,
-
         dokumentData,
-        skjema,
+        endreBruker,
+        erEndret,
+        erLesevisning,
         fagsak,
+        hentAktivBehandlingForJournalføring,
+        hentFeilTilOppsummering,
+        hentSorterteBehandlinger,
+        journalfør,
+        knyttTilNyBehandling,
         nullstillSkjema,
-        valgtDokumentId,
         settDokumentTittel,
         settLogiskeVedlegg,
-        settAvsender,
-        velgOgHentDokumentData,
-
-        // Funksjoner for å endre journalpostmetadata
-        settJournalpostTittel,
-        tilbakestillJournalpostTittel,
-
-        // Funksjoner som omhandler bruker og behandling
-        endreBruker,
-        hentAktivBehandlingForJournalføring,
-        hentSorterteBehandlinger,
-        knyttTilNyBehandling,
-
-        // Validering og tilbakestilling
-        erEndret,
+        skjema,
         tilbakestillData,
-        harFeil: (param: unknown) => false,
-
-        // Journalføring
-        journalfør,
+        valgtDokumentId,
+        velgOgHentDokumentData,
     };
 });
 

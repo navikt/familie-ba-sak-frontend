@@ -25,22 +25,24 @@ const ManuellJournalførContent: React.FC = () => {
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
-                <div>
+                <>
                     <BrukerHeader />
-                    {dataForManuellJournalføring.data.journalpost.journalstatus ===
-                    Journalstatus.MOTTATT ? (
-                        <div>
-                            <ToKolonnerDiv>
-                                <JournalpostSkjema />
-                                <DokumentPanel />
-                            </ToKolonnerDiv>
-                        </div>
-                    ) : (
-                        <AlertStripeAdvarsel
-                            children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
-                        />
+
+                    {dataForManuellJournalføring.data.journalpost.journalstatus !==
+                        Journalstatus.MOTTATT && (
+                        <>
+                            <AlertStripeAdvarsel
+                                children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus} og er allerede journalført.`}
+                            />
+                            <br />
+                        </>
                     )}
-                </div>
+
+                    <ToKolonnerDiv>
+                        <JournalpostSkjema />
+                        <DokumentPanel />
+                    </ToKolonnerDiv>
+                </>
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:

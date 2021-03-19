@@ -1,12 +1,14 @@
 import styled from 'styled-components';
-import { AnyStyledComponent } from 'styled-components/index';
 
 import navFarger from 'nav-frontend-core';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 
-export const feilDekoratør = <T extends unknown>(
-    component: AnyStyledComponent | React.ComponentType<T>
-) => styled(component)`
-    && {
+export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)<{
+    visFeilmeldinger: boolean;
+}>`
+    ${({ visFeilmeldinger: harFeil }) =>
+        harFeil
+            ? `&& {
         border: ${navFarger.navRod} solid;
         &:hover {
             border-color: ${navFarger.navRod};
@@ -14,5 +16,6 @@ export const feilDekoratør = <T extends unknown>(
         &:focus {
             border-color: ${navFarger.navRodDarken40};
         }
-    }
+    }`
+            : ''}
 `;

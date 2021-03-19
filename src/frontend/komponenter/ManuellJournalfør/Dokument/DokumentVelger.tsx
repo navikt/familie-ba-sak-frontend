@@ -1,84 +1,40 @@
-import React from 'react';
-
-import styled from 'styled-components';
-import { AnyStyledComponent } from 'styled-components/index';
-
-import navFarger from 'nav-frontend-core';
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import Lenkepanel from 'nav-frontend-lenkepanel';
+import React, { useEffect, useState } from 'react';
 
 import { IDokumentInfo, RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
-import { feilDekoratør } from '../FeilDekoratør';
+import { StyledEkspanderbartpanelBase } from '../StyledEkspanderbartpanelBase';
 import { DokumentInfoStripe } from './DokumentInfoStripe';
 import { EndreDokumentInfoPanel } from './EndreDokumentInfoPanel';
 
-const dokumentPanelDekoratør = <T extends unknown>(
-    component: AnyStyledComponent | React.ComponentType<T>
-) => styled(component)`
-    && {
-        margin-top: 20px;
-        width: 560px;
-        height: 100%;
-    }
-`;
-
-const DokumentBoksValgt = styled(dokumentPanelDekoratør(Ekspanderbartpanel))`
-    && {
-        border: 3px solid ${navFarger.fokusFarge};
-        &:hover {
-            border-color: ${navFarger.navBla};
-        }
-        &:focus {
-            border-color: ${navFarger.fokusFarge};
-        }
-    }
-`;
-
-const DokumentBoksUvalgt = styled(dokumentPanelDekoratør(Lenkepanel))`
-    && {
-        border: 1px solid ${navFarger.navMorkGra};
-        &:hover {
-            border-color: ${navFarger.navBla};
-        }
-        &:focus {
-            border-color: ${navFarger.fokusFarge};
-        }
-    }
-`;
-
-const PanelFeilValgt = feilDekoratør(DokumentBoksValgt);
-
-const PanelFeilUvalgt = feilDekoratør(DokumentBoksUvalgt);
-
 interface IDokumentVelgerProps {
     dokument: IDokumentInfo;
+    visFeilmeldinger: boolean;
 }
 
-export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => {
+export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFeilmeldinger }) => {
     const {
         dataForManuellJournalføring,
         valgtDokumentId,
         velgOgHentDokumentData,
     } = useManuellJournalfør();
-
-    if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
-        return <></>;
-    }
+    const [åpen, settÅpen] = useState(false);
 
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
-    const journalpostId = dataForManuellJournalføring.data.journalpost.journalpostId;
-    const DokumentBoks = valgt // TODO feilhåndtering
-        ? valgt
-            ? PanelFeilValgt
-            : PanelFeilUvalgt
-        : valgt
-        ? DokumentBoksValgt
-        : DokumentBoksUvalgt;
+    const journalpostId =
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS
+            ? dataForManuellJournalføring.data.journalpost.journalpostId
+            : '';
+
+    useEffect(() => {
+        if (visFeilmeldinger) {
+            settÅpen(true);
+        }
+    }, [visFeilmeldinger]);
 
     return (
-        <DokumentBoks
+        <StyledEkspanderbartpanelBase
+            visFeilmeldinger={visFeilmeldinger}
             tittel={
                 <DokumentInfoStripe
                     valgt={valgt}
@@ -86,9 +42,9 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                     dokument={dokument}
                 />
             }
-            tittelProps="normaltekst"
-            href="#"
+            apen={åpen}
             onClick={() => {
+                settÅpen(!åpen);
                 if (!valgt && journalpostId && dokument.dokumentInfoId) {
                     velgOgHentDokumentData(dokument.dokumentInfoId);
                 }
@@ -101,7 +57,9 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument }) => 
                     dokument={dokument}
                 />
             )}
-            {valgt && <EndreDokumentInfoPanel dokument={dokument} />}
-        </DokumentBoks>
+            {valgt && (
+                <EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={visFeilmeldinger} />
+            )}
+        </StyledEkspanderbartpanelBase>
     );
 };
