@@ -29,14 +29,14 @@ const JournalpostMetadataDiv = styled.div`
 `;
 
 const EndreJournalpost: React.FC = () => {
-    const { skjema } = useManuellJournalfør();
+    const { skjema, erLesevisning } = useManuellJournalfør();
 
     return (
         <FamilieReactSelect
             {...skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger)}
             creatable={true}
             isClearable
-            erLesevisning={false}
+            erLesevisning={erLesevisning()}
             label={'Endre journalposttittel'}
             isMulti={false}
             options={journalpostTittelList}

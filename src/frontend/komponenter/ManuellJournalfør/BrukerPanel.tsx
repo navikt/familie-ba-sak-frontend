@@ -65,15 +65,17 @@ export const BrukerPanel: React.FC = () => {
             }
         >
             <StyledDiv>
-                <FamilieInput
-                    {...nyIdent.hentNavInputProps(!!feilMelding)}
-                    feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
-                    erLesevisning={erLesevisning()}
-                    id={'hent-person'}
-                    label={'Skriv inn fødselsnummer/D-nummer'}
-                    bredde={'XL'}
-                    placeholder={'fnr/dnr'}
-                />
+                {!erLesevisning() && (
+                    <FamilieInput
+                        {...nyIdent.hentNavInputProps(!!feilMelding)}
+                        feil={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
+                        erLesevisning={erLesevisning()}
+                        id={'hent-person'}
+                        label={'Skriv inn fødselsnummer/D-nummer'}
+                        bredde={'XL'}
+                        placeholder={'fnr/dnr'}
+                    />
+                )}
                 <StyledKnapp
                     onClick={() => {
                         if (nyIdent.valideringsstatus === Valideringsstatus.OK) {

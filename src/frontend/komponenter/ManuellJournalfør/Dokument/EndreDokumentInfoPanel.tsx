@@ -25,7 +25,12 @@ interface IProps {
 }
 
 export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeldinger }) => {
-    const { skjema, settDokumentTittel, settLogiskeVedlegg } = useManuellJournalfør();
+    const {
+        skjema,
+        settDokumentTittel,
+        settLogiskeVedlegg,
+        erLesevisning,
+    } = useManuellJournalfør();
 
     const dokumentFraSkjema = skjema.felter.dokumenter.verdi.find(
         findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId
@@ -53,7 +58,7 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
         <>
             <FamilieReactSelect
                 label={'Dokumenttittel'}
-                erLesevisning={false}
+                erLesevisning={erLesevisning()}
                 creatable={true}
                 isClearable
                 isMulti={false}
@@ -76,7 +81,7 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                 label={'Annet innhold'}
                 creatable={true}
                 isClearable
-                erLesevisning={false}
+                erLesevisning={erLesevisning()}
                 isMulti={true}
                 options={tittelList}
                 value={hentVedleggList()}
