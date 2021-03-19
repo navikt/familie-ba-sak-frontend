@@ -35,6 +35,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFe
     return (
         <StyledEkspanderbartpanelBase
             visFeilmeldinger={visFeilmeldinger}
+            valgt={valgt}
             tittel={
                 <DokumentInfoStripe
                     valgt={valgt}
