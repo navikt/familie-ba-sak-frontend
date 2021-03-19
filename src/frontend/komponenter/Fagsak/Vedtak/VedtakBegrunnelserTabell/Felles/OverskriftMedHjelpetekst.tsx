@@ -7,7 +7,7 @@ import { Element } from 'nav-frontend-typografi';
 import { PopoverOrientering } from 'nav-frontend-popover';
 
 const Container = styled.div`
-    margin: 2.75rem 0;
+    margin: 2.75rem 0 1rem;
     display: flex;
     align-items: center;
     text-align: center;
