@@ -69,16 +69,31 @@ export enum VedtakBegrunnelse {
     OPPHØR_BARN_FLYTTET_FRA_SØKER = 'OPPHØR_BARN_FLYTTET_FRA_SØKER',
     OPPHØR_SØKER_FLYTTET_FRA_BARN = 'OPPHØR_SØKER_FLYTTET_FRA_BARN',
     OPPHØR_FRITEKST = 'OPPHØR_FRITEKST',
+    OPPHØR_IKKE_MOTTATT_OPPLYSNINGER = 'OPPHØR_IKKE_MOTTATT_OPPLYSNINGER',
+    AVSLAG_BOSATT_I_RIKET = 'AVSLAG_BOSATT_I_RIKET',
+    AVSLAG_LOVLIG_OPPHOLD_TREDJELANDSBORGER = 'AVSLAG_LOVLIG_OPPHOLD_TREDJELANDSBORGER',
+    AVSLAG_BOR_HOS_SØKER = 'AVSLAG_BOR_HOS_SØKER',
+    AVSLAG_OMSORG_FOR_BARN = 'AVSLAG_OMSORG_FOR_BARN',
+    AVSLAG_LOVLIG_OPPHOLD_EØS_BORGER = 'AVSLAG_LOVLIG_OPPHOLD_EØS_BORGER',
+    AVSLAG_LOVLIG_OPPHOLD_SKJØNNSMESSIG_VURDERING_TREDJELANDSBORGER = 'AVSLAG_LOVLIG_OPPHOLD_SKJØNNSMESSIG_VURDERING_TREDJELANDSBORGER',
+    AVSLAG_MEDLEM_I_FOLKETRYGDEN = 'AVSLAG_MEDLEM_I_FOLKETRYGDEN',
+    AVSLAG_FORELDRENE_BOR_SAMMEN = 'AVSLAG_FORELDRENE_BOR_SAMMEN',
+    AVSLAG_UNDER_18_ÅR = 'AVSLAG_UNDER_18_ÅR',
+    AVSLAG_UGYLDIG_AVTALE_OM_DELT_BOSTED = 'AVSLAG_UGYLDIG_AVTALE_OM_DELT_BOSTED',
+    AVSLAG_IKKE_AVTALE_OM_DELT_BOSTED = 'AVSLAG_IKKE_AVTALE_OM_DELT_BOSTED',
+    AVSLAG_OPPLYSNINGSPLIKT = 'AVSLAG_OPPLYSNINGSPLIKT',
 }
 
 export enum VedtakBegrunnelseType {
     INNVILGELSE = 'INNVILGELSE',
+    AVSLAG = 'AVSLAG',
     REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
 }
 
 export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     INNVILGELSE: 'Innvilgelse',
+    AVSLAG: 'Avslag',
     REDUKSJON: 'Reduksjon',
     OPPHØR: 'Opphør',
 };
@@ -99,10 +114,30 @@ export const finnVedtakBegrunnelseType = (
         : undefined;
 };
 
+export const finnVedtakBegrunnelseVilkår = (
+    vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>,
+    vedtakBegrunnelse: VedtakBegrunnelse
+): VilkårType | undefined => {
+    if (vilkårBegrunnelser.status === RessursStatus.SUKSESS) {
+        Object.keys(vilkårBegrunnelser.data).forEach(vedtakBegrunnelseType => {
+            const match = vilkårBegrunnelser.data[
+                vedtakBegrunnelseType as VedtakBegrunnelseType
+            ].find(
+                (vedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
+                    vedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelse
+            );
+            if (match !== undefined) return match.vilkår;
+        });
+    }
+    return undefined;
+};
+
 export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
             return navFarger.navGronnLighten80;
+        case VedtakBegrunnelseType.AVSLAG:
+            return navFarger.navRodLighten80;
         case VedtakBegrunnelseType.REDUKSJON:
             return navFarger.navOransjeLighten80;
         case VedtakBegrunnelseType.OPPHØR:
@@ -116,6 +151,8 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
             return navFarger.navGronn;
+        case VedtakBegrunnelseType.AVSLAG:
+            return navFarger.navRodDarken20;
         case VedtakBegrunnelseType.REDUKSJON:
             return navFarger.navOransjeDarken20;
         case VedtakBegrunnelseType.OPPHØR:

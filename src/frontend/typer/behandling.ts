@@ -55,6 +55,7 @@ export enum BehandlingSteg {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
+    SIMULERING = 'SIMULERING',
     SEND_TIL_BESLUTTER = 'SEND_TIL_BESLUTTER',
     BESLUTTE_VEDTAK = 'BESLUTTE_VEDTAK',
     IVERKSETT_MOT_OPPDRAG = 'IVERKSETT_MOT_OPPDRAG',
@@ -78,22 +79,24 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
             return 1;
         case BehandlingSteg.VILKÅRSVURDERING:
             return 2;
-        case BehandlingSteg.SEND_TIL_BESLUTTER:
+        case BehandlingSteg.SIMULERING:
             return 3;
-        case BehandlingSteg.BESLUTTE_VEDTAK:
+        case BehandlingSteg.SEND_TIL_BESLUTTER:
             return 4;
-        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
+        case BehandlingSteg.BESLUTTE_VEDTAK:
             return 5;
-        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
+        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
             return 6;
-        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
+        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
             return 7;
-        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
+        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
             return 8;
-        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
+        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
             return 9;
-        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
             return 10;
+        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+            return 11;
         default:
             return 0;
     }

@@ -27,6 +27,7 @@ import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
+import { VedtakBegrunnelse } from '../../../../typer/vedtak';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -36,12 +37,15 @@ import {
     VilkårType,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
+import { nyPeriode } from '../../../../typer/periode';
+import AvslagSkjema from './AvslagSkjema';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -116,6 +120,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     verdi: resultat,
                 },
                 erEksplisittAvslagPåSøknad: false,
+                avslagBegrunnelser: {
+                    ...redigerbartVilkår.verdi.avslagBegrunnelser,
+                    verdi: [],
+                },
             },
         });
     };
@@ -264,23 +272,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 {visAvslag &&
                     redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     !årsakErIkkeSøknad && (
-                        <FamilieCheckbox
-                            erLesevisning={leseVisning}
-                            label={'Vurderingen er et avslag'}
-                            checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
-                            onChange={() => {
-                                validerOgSettRedigerbartVilkår({
-                                    ...redigerbartVilkår,
-                                    verdi: {
-                                        ...redigerbartVilkår.verdi,
-                                        erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
-                                            .erEksplisittAvslagPåSøknad,
-                                    },
-                                });
-                            }}
+                        <AvslagSkjema
+                            redigerbartVilkår={redigerbartVilkår}
+                            settRedigerbartVilkår={settRedigerbartVilkår}
+                            visFeilmeldinger={skalViseFeilmeldinger()}
+                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                         />
                     )}
-
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
