@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
+import { Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
 
 import { byggFunksjonellFeilRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -33,6 +33,16 @@ const HentSakerKnapp = styled(Knapp)`
     margin-top: 30px;
     margin-bottom: auto;
     height: 40px;
+`;
+
+const SakerTekst = styled(Undertittel)`
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+`;
+
+const VedtakTekst = styled(Undertittel)`
+    margin-top: 4rem;
+    margin-bottom: 1rem;
 `;
 
 export const Infotrygd: React.FC = () => {
@@ -66,7 +76,6 @@ export const Infotrygd: React.FC = () => {
         <>
             <InfotrygdContainer>
                 <Innholdstittel>Visningsside for Infotrygd</Innholdstittel>
-                <InfotrygdDataTittel>Infotrygddata fra replikadatabasen</InfotrygdDataTittel>
                 <HentSakerFlex>
                     <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
                         <Input
@@ -108,7 +117,10 @@ export const Infotrygd: React.FC = () => {
                         Hent saker
                     </HentSakerKnapp>
                 </HentSakerFlex>
+                <InfotrygdDataTittel>Infotrygddata fra replikadatabasen</InfotrygdDataTittel>
+                <SakerTekst>Saker</SakerTekst>
                 {visSakstabell()}
+                <VedtakTekst>Vedtak</VedtakTekst>
                 {visVedtakstabell()}
             </InfotrygdContainer>
         </>
