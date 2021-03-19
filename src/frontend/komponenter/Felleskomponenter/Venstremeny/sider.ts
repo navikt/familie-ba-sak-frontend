@@ -28,6 +28,7 @@ export enum SideId {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
     BEHANDLINGRESULTAT = 'BEHANDLINGRESULTAT',
+    SIMULERING = 'SIMULERING',
     VEDTAK = 'VEDTAK',
 }
 
@@ -71,7 +72,12 @@ export const sider: Record<SideId, ISide> = {
     BEHANDLINGRESULTAT: {
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
-        steg: BehandlingSteg.SEND_TIL_BESLUTTER,
+        steg: BehandlingSteg.SIMULERING,
+    },
+    SIMULERING: {
+        href: 'simulering',
+        navn: 'Simulering',
+        steg: BehandlingSteg.SIMULERING,
     },
     VEDTAK: {
         href: 'vedtak',
