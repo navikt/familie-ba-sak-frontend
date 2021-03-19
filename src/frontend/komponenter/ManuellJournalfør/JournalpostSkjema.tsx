@@ -46,6 +46,7 @@ export const JournalpostSkjema: React.FC = () => {
             <StyledSectionDiv>
                 <Undertittel children={'Bruker og avsender'} />
                 <BrukerPanel />
+                <br />
                 <AvsenderPanel />
             </StyledSectionDiv>
             <StyledSectionDiv>

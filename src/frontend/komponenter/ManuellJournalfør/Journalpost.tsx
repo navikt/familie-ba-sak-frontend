@@ -20,10 +20,6 @@ export const journalpostTittelList = Object.keys(JournalpostTittel).map((_, inde
     };
 });
 
-const JournalpostDiv = styled.div`
-    width: 560px;
-`;
-
 const JournalpostMetadataDiv = styled.div`
     margin: 0 0 20px 0;
 `;
@@ -63,26 +59,22 @@ const Journalpost: React.FC = () => {
             : undefined;
 
     return (
-        <JournalpostDiv>
-            <Ekspanderbartpanel
-                id={skjema.felter.journalpostTittel.id}
-                tittel={
-                    <Undertittel>
-                        {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
-                    </Undertittel>
-                }
-            >
-                <JournalpostMetadataDiv>
-                    <Normaltekst>
-                        Mottatt:{' '}
-                        {datoMottatt
-                            ? formaterIsoDato(datoMottatt, datoformat.DATO)
-                            : 'Ingen mottatt dato'}
-                    </Normaltekst>
-                </JournalpostMetadataDiv>
-                <EndreJournalpost />
-            </Ekspanderbartpanel>
-        </JournalpostDiv>
+        <Ekspanderbartpanel
+            id={skjema.felter.journalpostTittel.id}
+            tittel={
+                <Undertittel>{skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}</Undertittel>
+            }
+        >
+            <JournalpostMetadataDiv>
+                <Normaltekst>
+                    Mottatt:{' '}
+                    {datoMottatt
+                        ? formaterIsoDato(datoMottatt, datoformat.DATO)
+                        : 'Ingen mottatt dato'}
+                </Normaltekst>
+            </JournalpostMetadataDiv>
+            <EndreJournalpost />
+        </Ekspanderbartpanel>
     );
 };
 

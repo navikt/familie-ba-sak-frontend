@@ -7,6 +7,8 @@ export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)<{
     visFeilmeldinger: boolean;
     valgt?: boolean;
 }>`
+    width: 100%;
+
     ${({ visFeilmeldinger }) =>
         visFeilmeldinger
             ? `&& {

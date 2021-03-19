@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import styled from 'styled-components';
-
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
@@ -10,11 +8,6 @@ import { EmailIkon } from '../../ikoner/EmailIkon';
 import { formaterPersonIdent } from '../../utils/formatter';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
-
-const AvsenderPanelDiv = styled.div`
-    width: 560px;
-    margin-top: 20px;
-`;
 
 export const AvsenderPanel: React.FC = () => {
     const { skjema, erLesevisning } = useManuellJournalfør();
@@ -31,43 +24,41 @@ export const AvsenderPanel: React.FC = () => {
     }, [skjema.visFeilmeldinger, skjema.felter.avsenderNavn.valideringsstatus]);
 
     return (
-        <AvsenderPanelDiv>
-            <StyledEkspanderbartpanelBase
-                visFeilmeldinger={
-                    skjema.visFeilmeldinger &&
-                    (skjema.felter.avsenderNavn.valideringsstatus === Valideringsstatus.FEIL ||
-                        skjema.felter.avsenderIdent.valideringsstatus === Valideringsstatus.FEIL)
-                }
-                tittel={
-                    <DeltagerInfo
-                        ikon={<EmailIkon filled={åpen} width={48} height={48} />}
-                        navn={skjema.felter.avsenderNavn.verdi || 'Ukjent'}
-                        ident={formaterPersonIdent(skjema.felter.avsenderIdent.verdi ?? '')}
-                        undertittel="Avsender"
-                    />
-                }
-                apen={åpen}
-                onClick={() => {
-                    settÅpen(!åpen);
-                }}
-            >
-                <FamilieInput
-                    {...skjema.felter.avsenderNavn.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning()}
-                    label={'Navn'}
-                    bredde={'XL'}
-                    placeholder={'navn'}
+        <StyledEkspanderbartpanelBase
+            visFeilmeldinger={
+                skjema.visFeilmeldinger &&
+                (skjema.felter.avsenderNavn.valideringsstatus === Valideringsstatus.FEIL ||
+                    skjema.felter.avsenderIdent.valideringsstatus === Valideringsstatus.FEIL)
+            }
+            tittel={
+                <DeltagerInfo
+                    ikon={<EmailIkon filled={åpen} width={48} height={48} />}
+                    navn={skjema.felter.avsenderNavn.verdi || 'Ukjent'}
+                    ident={formaterPersonIdent(skjema.felter.avsenderIdent.verdi ?? '')}
+                    undertittel="Avsender"
                 />
+            }
+            apen={åpen}
+            onClick={() => {
+                settÅpen(!åpen);
+            }}
+        >
+            <FamilieInput
+                {...skjema.felter.avsenderNavn.hentNavInputProps(skjema.visFeilmeldinger)}
+                erLesevisning={erLesevisning()}
+                label={'Navn'}
+                bredde={'XL'}
+                placeholder={'navn'}
+            />
 
-                <br />
-                <FamilieInput
-                    {...skjema.felter.avsenderIdent.hentNavInputProps(skjema.visFeilmeldinger)}
-                    erLesevisning={erLesevisning()}
-                    label={'Ident'}
-                    bredde={'XL'}
-                    placeholder={'Fnr/dnr 11 siffer'}
-                />
-            </StyledEkspanderbartpanelBase>
-        </AvsenderPanelDiv>
+            <br />
+            <FamilieInput
+                {...skjema.felter.avsenderIdent.hentNavInputProps(skjema.visFeilmeldinger)}
+                erLesevisning={erLesevisning()}
+                label={'Ident'}
+                bredde={'XL'}
+                placeholder={'Fnr/dnr 11 siffer'}
+            />
+        </StyledEkspanderbartpanelBase>
     );
 };
