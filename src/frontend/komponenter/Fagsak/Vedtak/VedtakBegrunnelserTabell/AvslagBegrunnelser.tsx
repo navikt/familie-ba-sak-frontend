@@ -19,7 +19,7 @@ interface IAvslagTabell {
 const PanelBody = styled.div`
     ul {
         margin: 0;
-        padding-left
+        padding-left: 1.5rem;
     }
 `;
 

@@ -17,17 +17,10 @@ import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
-import { IRestPersonResultat } from '../../../../typer/vilkår';
 import styled from 'styled-components';
 
 interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
-}
-
-interface IVedtakBegrunnelserTabell {
-    vedtaksperiode: Vedtaksperiode;
-    personResultater: IRestPersonResultat[];
-    behandlingsType: Behandlingstype;
 }
 
 const UtbetalingsperiodepanelBody = styled.div`

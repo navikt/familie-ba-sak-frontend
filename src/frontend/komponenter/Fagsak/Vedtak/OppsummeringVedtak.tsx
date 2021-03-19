@@ -40,7 +40,6 @@ import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningM
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import AvslagTabell from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
 import BegrunnelseTabell from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
-import { ToggleNavn } from '../../../typer/toggles';
 
 interface IVedtakProps {
     fagsak: IFagsak;
