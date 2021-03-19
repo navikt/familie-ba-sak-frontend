@@ -9,11 +9,11 @@ import { Element } from 'nav-frontend-typografi';
 import { FamilieKnapp, FamilieTextareaControlled } from '@navikt/familie-form-elements';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import useFritekstVedtakBegrunnelser from './useFritekstVedtakBegrunnelser';
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
@@ -63,15 +63,18 @@ const Knapperad = styled.div`
     margin-top: 24px;
 `;
 
-const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleForm }) => {
+const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
     const { erLesevisning } = useBehandling();
     const {
+        fritekster,
         redigerbarefritekster,
         settRedigerbarefritekster,
         leggTilRedigerbareFritekst,
         idPaSistOpprettetFritekst,
         onSubmit,
-    } = useFritekstVedtakBegrunnelser(vedtaksperiode);
+        toggleForm,
+    } = useFritekstVedtakBegrunnelser();
+
     const harFritekster = Object.keys(redigerbarefritekster).length > 0;
 
     useEffect(() => {
@@ -86,7 +89,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = ({ vedtaksperiode, toggleFo
             {harFritekster && (
                 <StyledElement>Fritekst til kulepunkt i brev (valgfri)</StyledElement>
             )}
-            {Object.keys(redigerbarefritekster).map((fritekstId: string, index) => {
+            {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
                 return (
                     <StyledFamilieFritekstFelt>
                         <FamilieTextareaBegrunnelseFritekst

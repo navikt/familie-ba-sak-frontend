@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
@@ -8,6 +7,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { Behandlingstype } from '../../../../typer/behandling';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { ToggleNavn } from '../../../../typer/toggles';
@@ -17,12 +17,11 @@ import {
     Vedtaksperiode,
     Vedtaksperiodetype,
 } from '../../../../typer/vedtaksperiode';
-import { IRestPersonResultat, Resultat } from '../../../../typer/vilkår';
+import { IRestPersonResultat } from '../../../../typer/vilkår';
 import { formaterBeløp, formaterPersonIdent, isoStringToDayjs } from '../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../utils/tid';
 import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 import Hjelpetekst44px from './Hjelpetekst44px';
-import useFritekstVedtakBegrunnelser from './useFritekstVedtakBegrunnelser';
 import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 
 interface IVedtakBegrunnelserTabell {
@@ -76,29 +75,11 @@ const UtbetalingsperiodeDetalj = styled.div`
 const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     vedtaksperiode,
     personResultater,
-    behandlingsType,
 }) => {
     const { erLesevisning } = useBehandling();
     const { toggles } = useApp();
 
-    const [ekspandertFritekst, settEkspandertFritekst] = useState(
-        behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING
-    );
-
-    const {
-        fritekster,
-        redigerbarefritekster,
-        settRedigerbarefritekster,
-    } = useFritekstVedtakBegrunnelser(vedtaksperiode);
-
-    const toggleForm = (visAlert: boolean) => {
-        if (ekspandertFritekst && visAlert && !deepEqual(redigerbarefritekster, fritekster)) {
-            alert('Fritekst har endringer som ikke er lagret!');
-        } else {
-            settEkspandertFritekst(!ekspandertFritekst);
-            settRedigerbarefritekster(fritekster);
-        }
-    };
+    const { ekspandertFritekst, toggleForm } = useFritekstVedtakBegrunnelser();
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());

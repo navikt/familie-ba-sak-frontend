@@ -7,8 +7,9 @@ import { Element } from 'nav-frontend-typografi';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { IBehandling } from '../../../../typer/behandling';
+import { Behandlingstype, IBehandling } from '../../../../typer/behandling';
 import { lagPeriodeId } from '../../../../typer/periode';
 import { ToggleNavn } from '../../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../../typer/vedtak';
@@ -93,15 +94,20 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                     }
                 })
                 .map((vedtaksperiode: Vedtaksperiode) => (
-                    <VedtakBegrunnelsePanel
-                        key={lagPeriodeId({
-                            fom: vedtaksperiode.periodeFom,
-                            tom: vedtaksperiode.periodeTom,
-                        })}
-                        behandlingsType={åpenBehandling.type}
-                        personResultater={åpenBehandling.personResultater}
+                    <FritekstVedtakBegrunnelserProvider
                         vedtaksperiode={vedtaksperiode}
-                    />
+                        behandlingsType={åpenBehandling.type}
+                    >
+                        <VedtakBegrunnelsePanel
+                            key={lagPeriodeId({
+                                fom: vedtaksperiode.periodeFom,
+                                tom: vedtaksperiode.periodeTom,
+                            })}
+                            behandlingsType={åpenBehandling.type}
+                            personResultater={åpenBehandling.personResultater}
+                            vedtaksperiode={vedtaksperiode}
+                        />
+                    </FritekstVedtakBegrunnelserProvider>
                 ))}
         </>
     ) : null;
