@@ -57,7 +57,7 @@ export const AvsenderPanel: React.FC = () => {
                 erLesevisning={erLesevisning()}
                 label={'Ident'}
                 bredde={'XL'}
-                placeholder={'Fnr/dnr 11 siffer'}
+                placeholder={'Fnr/dnr/orgnr'}
             />
         </StyledEkspanderbartpanelBase>
     );

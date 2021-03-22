@@ -86,11 +86,6 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                 options={tittelList}
                 value={hentVedleggList()}
                 placeholder={'Velg innhold'}
-                feil={
-                    visFeilmeldinger && dokument.logiskeVedlegg.length === 0
-                        ? 'Annet innhold er ikke satt'
-                        : undefined
-                }
                 onChange={options => {
                     settLogiskeVedlegg(
                         options instanceof Array ? options.map(({ value }) => value) : [],

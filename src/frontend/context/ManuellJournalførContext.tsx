@@ -107,7 +107,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 valideringsfunksjon: (felt: FeltState<string>) => {
                     return felt.verdi !== ''
                         ? ok(felt)
-                        : feil(felt, 'Journalposttittel må ikke være tom');
+                        : feil(felt, 'Journalposttittel kan ikke være tom');
                 },
             }),
             dokumenter: useFelt<IDokumentInfo[]>({
@@ -171,9 +171,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             settFagsak(dataForManuellJournalføring.data.fagsak);
         }
     }, [dataForManuellJournalføring]);
-
-    // TODO - kanskje noe som kan ligge i skjema-hooken?
-    const erEndret = () => false;
 
     const tilbakestillData = () => {
         nullstillSkjema();

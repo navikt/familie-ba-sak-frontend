@@ -3,6 +3,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
@@ -20,15 +21,15 @@ import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 const StyledSkjema = styled.div`
     padding: 2rem;
     max-width: 40rem;
-    min-width: 640px;
-    padding-left: 40px;
-    padding-bottom: 80px;
-    height: calc(100vh - 3rem);
+    min-width: 40rem;
+    padding-left: 2.5rem;
+    padding-bottom: 5rem;
+    height: calc(100vh - 6rem);
     overflow: auto;
 `;
 
 const StyledSectionDiv = styled.div`
-    margin-top: 40px;
+    margin-top: 2.5rem;
 `;
 
 export const JournalpostSkjema: React.FC = () => {
@@ -49,9 +50,15 @@ export const JournalpostSkjema: React.FC = () => {
                 <br />
                 <AvsenderPanel />
             </StyledSectionDiv>
+
             <StyledSectionDiv>
                 {!erLesevisning() && <KnyttJournalpostTilBehandling />}
                 <br />
+                {(skjema.submitRessurs.status === RessursStatus.FEILET ||
+                    skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
+                    <AlertStripeFeil>{skjema.submitRessurs.frontendFeilmelding}</AlertStripeFeil>
+                )}
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                     <Feiloppsummering
                         tittel={'For å gå videre må du rette opp følgende'}
