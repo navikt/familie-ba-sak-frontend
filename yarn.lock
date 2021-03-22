@@ -1550,10 +1550,10 @@
     react-tooltip "^4.2.15"
     styled-components "^5.2.1"
 
-"@navikt/familie-form-elements@2.2.3-alpha.6":
-  version "2.2.3-alpha.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.3-alpha.6.tgz#c4c6fef7b718db8a4e931b843b69f569bdbace71"
-  integrity sha512-oLkJxU8pXDYznqhNIh9fG/MNX54Vtx7+5qYHRYEXUYx0eVJ2R97XN7u63p7h+O8bxLIiWth8hBMqDi42PW63Zg==
+"@navikt/familie-form-elements@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.2.tgz#cd93574b8f9d3f09c2c5113b414a3aa082223f7b"
+  integrity sha512-qU39VBVehWIUkYUF05SRC+lbAY4stAGLTXGcwWnu08PLFEbHJfOfnsd7iBynU4h1RbngbCKpVwgmEVc8WSLRXw==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
@@ -1573,10 +1573,10 @@
     react-select "^4.0.13"
     styled-components "^5.2.1"
 
-"@navikt/familie-form-elements@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.2.tgz#cd93574b8f9d3f09c2c5113b414a3aa082223f7b"
-  integrity sha512-qU39VBVehWIUkYUF05SRC+lbAY4stAGLTXGcwWnu08PLFEbHJfOfnsd7iBynU4h1RbngbCKpVwgmEVc8WSLRXw==
+"@navikt/familie-form-elements@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.3.tgz#8b8f2bf2a94d36c94dbe60a287fee0bd5bdd3ecd"
+  integrity sha512-/y+5sRnonlv6cS+AXRX7kZ9OnyP9cGjdCt0dc8WMFTTZPJjpJH/gHliiY+RQqi6X3CAx5U2C42Pn9U+ZTu3glw==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
@@ -1649,15 +1649,16 @@
   dependencies:
     winston "^3.2.1"
 
-"@navikt/familie-skjema@1.1.1-alpha.5":
-  version "1.1.1-alpha.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.1-alpha.5.tgz#fc2721aeba90da4b2b6f542c9744067fe59072f5"
-  integrity sha512-TefMSNZGmxV1RiG2Z8JY/Zsu6hJDfeo0nkZDYqGDDkz0Bc7PaekTubILoIqJMdZ2WzUSvdlrqf49ztq6vRQ+4A==
+"@navikt/familie-skjema@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.1.tgz#071e23b50b91e7f7fd3165f5d923bbfa8fb97760"
+  integrity sha512-U/aPXahYqsGkPWTn2ED7hgOlpU0O7aqtlgG1+oaLio/qlQKLVBuI44Ljyp5clhcaq2HK081fGTAzxVkgwQRW0g==
   dependencies:
     "@navikt/familie-http" "^1.0.4"
     "@navikt/familie-typer" "^3.0.13"
     "@types/deep-equal" "^1.0.1"
     deep-equal "^2.0.5"
+    hashids "^2.2.8"
 
 "@navikt/familie-typer@^3.0.12", "@navikt/familie-typer@^3.0.13":
   version "3.0.13"
@@ -6360,6 +6361,11 @@ has@^1.0.0, has@^1.0.3:
   integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
   dependencies:
     function-bind "^1.1.1"
+
+hashids@^2.2.8:
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/hashids/-/hashids-2.2.8.tgz#d1e4e1be48e711ad6e5f27b32c37c399d5eeb5b4"
+  integrity sha512-OI6rsk/OqyX60nBsqxnNl3R7CDv9eMOgxzipshZwXE6cUcBcEyHf8rNDlWVdQJZK3TEynILYybCsNUEQfJsdLA==
 
 hcl-to-json@^0.1.1:
   version "0.1.1"
