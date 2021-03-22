@@ -75,7 +75,8 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
         toggleForm,
     } = useFritekstVedtakBegrunnelser();
 
-    const harFritekster = Object.keys(redigerbarefritekster).length > 0;
+    const harFritekster =
+        Object.keys(redigerbarefritekster).length > 0 || Object.keys(fritekster).length > 0;
 
     useEffect(() => {
         const element = document.getElementById(`${idPaSistOpprettetFritekst}`);

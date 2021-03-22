@@ -43,7 +43,7 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         );
 
         useEffect(() => {
-            const v = vedtakBegrunnelser
+            const vedtakBegrunnelserForPeriode = vedtakBegrunnelser
                 .filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                     return (
                         vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
@@ -60,8 +60,8 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
                     }),
                     {}
                 );
-            settRedigerbarefritekster(v);
-            settFritekster(v);
+            settRedigerbarefritekster(vedtakBegrunnelserForPeriode);
+            settFritekster(vedtakBegrunnelserForPeriode);
         }, [vedtakBegrunnelser]);
 
         const genererIdBasertPåAndreFritekster = () => {
