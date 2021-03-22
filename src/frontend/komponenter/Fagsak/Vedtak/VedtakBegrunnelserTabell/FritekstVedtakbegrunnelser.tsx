@@ -33,6 +33,7 @@ const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     background-color: ${navFarger.navGraBakgrunn};
     padding-left: 20px;
     padding-right: 0px;
+    max-width: 50rem;
 `;
 
 const StyledFamilieFritekstFelt = styled.div`
