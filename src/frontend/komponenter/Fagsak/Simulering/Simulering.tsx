@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 
 import { useHttp } from '@navikt/familie-http';
-import { RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { IBehandling } from '../../../typer/behandling';
@@ -32,21 +32,28 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     const nesteOnClick = async () => {
         settSenderInn(true);
-        request<IBehandling, any>({
+        request<IBehandling, IFagsak>({
             method: 'POST',
             url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
-        }).then((ressurs: IRessurs<IFagsak>) => {
+        }).then((ressurs: Ressurs<IFagsak>) => {
             settSenderInn(false);
-            if (response.status === RessursStatus.SUKSESS) {
+            if (ressurs.status === RessursStatus.SUKSESS) {
                 history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
             } else if (
-                response.status === RessursStatus.FEILET ||
-                response.status === RessursStatus.FUNKSJONELL_FEIL ||
-                response.status === RessursStatus.IKKE_TILGANG
+                ressurs.status === RessursStatus.FEILET ||
+                ressurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                ressurs.status === RessursStatus.IKKE_TILGANG
             ) {
-                settErFeilMedBekreft(response.frontendFeilmelding);
+                settErFeilMedBekreft(ressurs.frontendFeilmelding);
+
+                /*
+                 *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
+                 *  Må fjernes når toggelen for simulering fjernes.
+                 */
+                process.env.NODE_ENV !== 'production' &&
+                    history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
             }
-        }); 
+        });
     };
 
     const forrigeOnClick = () => {
