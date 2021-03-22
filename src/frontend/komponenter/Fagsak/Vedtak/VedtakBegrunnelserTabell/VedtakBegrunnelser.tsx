@@ -1,8 +1,16 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
+import {
+    FritekstVedtakBegrunnelserProvider,
+    useFritekstVedtakBegrunnelser,
+} from '../../../../context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { Behandlingstype, IBehandling } from '../../../../typer/behandling';
 import { ToggleNavn } from '../../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../../typer/vedtak';
@@ -13,11 +21,10 @@ import {
 } from '../../../../typer/vedtaksperiode';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat, formaterBeløp, formaterPersonIdent } from '../../../../utils/formatter';
-import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
-import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
-import styled from 'styled-components';
+import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
+import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
+import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 
 interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
@@ -41,6 +48,7 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
     const { toggles } = useApp();
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
+    const { toggleForm } = useFritekstVedtakBegrunnelser();
 
     const harVedtaksperioder =
         åpenBehandling.vedtaksperioder.filter(
@@ -96,43 +104,55 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                     }
                 })
                 .map((vedtaksperiode: Vedtaksperiode) => (
-                    <EkspanderbartBegrunnelsePanel
-                        vedtaksperiode={vedtaksperiode}
-                        åpen={åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING}
-                    >
-                        <UtbetalingsperiodepanelBody>
-                            {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ? (
+                    <FritekstVedtakBegrunnelserProvider vedtaksperiode={vedtaksperiode}>
+                        <EkspanderbartBegrunnelsePanel
+                            vedtaksperiode={vedtaksperiode}
+                            åpen={åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING}
+                        >
+                            <UtbetalingsperiodepanelBody>
+                                {vedtaksperiode.vedtaksperiodetype ===
+                                Vedtaksperiodetype.UTBETALING ? (
+                                    <div>
+                                        <Element>Resultat</Element>
+
+                                        {vedtaksperiode.utbetalingsperiodeDetaljer.map(
+                                            (detalj: IUtbetalingsperiodeDetalj) => (
+                                                <UtbetalingsperiodeDetalj
+                                                    key={detalj.person.personIdent}
+                                                >
+                                                    <Normaltekst title={detalj.person.navn}>
+                                                        {formaterPersonIdent(
+                                                            detalj.person.personIdent
+                                                        )}
+                                                    </Normaltekst>
+
+                                                    <Normaltekst>
+                                                        {formaterBeløp(detalj.utbetaltPerMnd)}
+                                                    </Normaltekst>
+                                                </UtbetalingsperiodeDetalj>
+                                            )
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div />
+                                )}
                                 <div>
-                                    <Element>Resultat</Element>
-
-                                    {vedtaksperiode.utbetalingsperiodeDetaljer.map(
-                                        (detalj: IUtbetalingsperiodeDetalj) => (
-                                            <UtbetalingsperiodeDetalj
-                                                key={detalj.person.personIdent}
-                                            >
-                                                <Normaltekst title={detalj.person.navn}>
-                                                    {formaterPersonIdent(detalj.person.personIdent)}
-                                                </Normaltekst>
-
-                                                <Normaltekst>
-                                                    {formaterBeløp(detalj.utbetaltPerMnd)}
-                                                </Normaltekst>
-                                            </UtbetalingsperiodeDetalj>
-                                        )
-                                    )}
+                                    <VedtakBegrunnelserMultiselect
+                                        erLesevisning={erLesevisning()}
+                                        personResultater={åpenBehandling.personResultater}
+                                        vedtaksperiode={vedtaksperiode}
+                                    />
                                 </div>
-                            ) : (
-                                <div />
-                            )}
-                            <div>
-                                <VedtakBegrunnelserMultiselect
-                                    erLesevisning={erLesevisning()}
-                                    personResultater={åpenBehandling.personResultater}
-                                    vedtaksperiode={vedtaksperiode}
-                                />
-                            </div>
-                        </UtbetalingsperiodepanelBody>
-                    </EkspanderbartBegrunnelsePanel>
+                                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR &&
+                                    toggles[ToggleNavn.begrgrunnelseFritekst] && (
+                                        <FritekstVedtakbegrunnelser
+                                            vedtaksperiode={vedtaksperiode}
+                                            toggleForm={toggleForm}
+                                        />
+                                    )}
+                            </UtbetalingsperiodepanelBody>
+                        </EkspanderbartBegrunnelsePanel>
+                    </FritekstVedtakBegrunnelserProvider>
                 ))}
         </>
     ) : null;
