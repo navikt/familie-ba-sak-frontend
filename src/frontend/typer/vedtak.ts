@@ -7,6 +7,7 @@ import { Vilkårsbegrunnelser, VilkårType } from './vilkår';
 export interface IVedtakForBehandling {
     aktiv: boolean;
     begrunnelser: IRestVedtakBegrunnelse[];
+    avslagBegrunnelser: IRestAvslagbegrunnelser[];
     vedtaksdato: string;
     id: number;
 }
@@ -35,6 +36,12 @@ export interface IRestVedtakBegrunnelseTilknyttetVilkår {
     id: VedtakBegrunnelse;
     navn: string;
     vilkår?: VilkårType;
+}
+
+export interface IRestAvslagbegrunnelser {
+    fom?: string;
+    tom?: string;
+    brevBegrunnelser: string[];
 }
 
 export enum VedtakBegrunnelse {
