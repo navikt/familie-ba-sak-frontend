@@ -38,6 +38,9 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         const { fagsak, settFagsak } = useFagsakRessurser();
         const { vedtakBegrunnelser } = useVedtakBegrunnelser();
         const { request } = useHttp();
+
+        // ekspandertBegrunnelse borde leget i VedtakBegrunnelserContext men ettersom den dekker alle
+        // ekspanderte vedtakbegrunnelser så virket ikke det og derfor ligger den her.
         const [ekspandertBegrunnelse, settEkspandertBegrunnelse] = useState(
             behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
