@@ -3,7 +3,6 @@ import React from 'react';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
-import { RessursStatus } from '@navikt/familie-typer';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat } from '../../../../utils/formatter';
@@ -26,7 +25,15 @@ const PanelBody = styled.div`
 const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
     const { avslagBegrunnelser } = useVedtakBegrunnelser();
 
-    return avslagBegrunnelser.status == RessursStatus.SUKSESS && avslagBegrunnelser.data.length ? (
+    const sorterTommePerioderSist = (a: Vedtaksperiode, b: Vedtaksperiode) =>
+        !a.periodeFom && !a.periodeTom
+            ? 1
+            : familieDayjsDiff(
+                  familieDayjs(a.periodeFom, datoformat.ISO_DAG),
+                  familieDayjs(b.periodeFom, datoformat.ISO_DAG)
+              );
+
+    return avslagBegrunnelser.length ? (
         <>
             <OverskriftMedHjelpetekst
                 overskrift={'Begrunnelser for avslag i vedtaksbrev'}
@@ -39,20 +46,13 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                     (periode: Vedtaksperiode) =>
                         periode.vedtaksperiodetype === Vedtaksperiodetype.AVSLAG
                 )
-                .sort((a, b) =>
-                    !a.periodeFom && !a.periodeTom
-                        ? 1
-                        : familieDayjsDiff(
-                              familieDayjs(a.periodeFom, datoformat.ISO_DAG),
-                              familieDayjs(b.periodeFom, datoformat.ISO_DAG)
-                          )
-                )
+                .sort(sorterTommePerioderSist)
                 .map((periode: Vedtaksperiode) => (
                     <EkspanderbartBegrunnelsePanel vedtaksperiode={periode} åpen={true}>
                         <PanelBody>
                             <Element>Begrunnelse(r) for avslag</Element>
                             <ul>
-                                {avslagBegrunnelser.data
+                                {avslagBegrunnelser
                                     .find(
                                         (avslagBegrunnelser: IRestAvslagbegrunnelser) =>
                                             avslagBegrunnelser.fom === periode.periodeFom &&

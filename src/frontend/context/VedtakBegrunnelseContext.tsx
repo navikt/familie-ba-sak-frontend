@@ -58,8 +58,8 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         >(byggTomRessurs());
 
         const [avslagBegrunnelser, settAvslagBegrunnelser] = React.useState<
-            Ressurs<IRestAvslagbegrunnelser[]>
-        >(byggTomRessurs());
+            IRestAvslagbegrunnelser[]
+        >([]);
 
         useEffect(() => {
             hentVilkårBegrunnelseTekster();
@@ -68,12 +68,9 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         useEffect(() => {
             if (aktivVedtak) {
                 settVedtakBegrunnelser(aktivVedtak.begrunnelser);
-            }
-        }, [aktivVedtak]);
-
-        useEffect(() => {
-            if (aktivVedtak && toggles[ToggleNavn.visAvslag]) {
-                hentAvslagsbegrunnelser();
+                if (toggles[ToggleNavn.visAvslag]) {
+                    settAvslagBegrunnelser(aktivVedtak.avslagBegrunnelser);
+                }
             }
         }, [aktivVedtak]);
 
@@ -169,15 +166,6 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
                 }),
                 lagPeriodeId({ fom, tom })
             );
-        };
-
-        const hentAvslagsbegrunnelser = () => {
-            request<void, IRestAvslagbegrunnelser[]>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/avslagbegrunnelser`,
-            }).then((response: Ressurs<IRestAvslagbegrunnelser[]>) => {
-                settAvslagBegrunnelser(response);
-            });
         };
 
         return {
