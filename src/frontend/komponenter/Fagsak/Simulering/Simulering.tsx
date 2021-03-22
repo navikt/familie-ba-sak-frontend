@@ -50,7 +50,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                  *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
                  *  Må fjernes når toggelen for simulering fjernes.
                  */
-                process.env.NODE_ENV !== 'production' &&
+                process.env.NODE_ENV === 'development' &&
                     history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
             }
         });
