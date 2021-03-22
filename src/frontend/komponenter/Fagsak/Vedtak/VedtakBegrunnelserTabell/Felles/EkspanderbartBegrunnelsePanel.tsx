@@ -28,7 +28,7 @@ const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
 const PanelTittel = styled.p`
     width: 100%;
     display: grid;
-    grid-template-columns: 190px 120px auto;
+    grid-template-columns: 12rem 7.5rem auto;
 `;
 
 interface IEkspanderbartBegrunnelsePanelProps {
@@ -68,7 +68,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                             tom: slutterSenereEnnInneværendeMåned(vedtaksperiode.periodeTom)
                                 ? ''
                                 : vedtaksperiode.periodeTom,
-                        })}{' '}
+                        })}
                     </Element>
                     <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
                     {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING && (
