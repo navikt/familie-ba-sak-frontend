@@ -8,6 +8,7 @@ import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
+import { ToggleNavn } from '../typer/toggles';
 import {
     IRestAvslagbegrunnelser,
     IRestDeleteVedtakBegrunnelser,
@@ -17,9 +18,8 @@ import {
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
-import { useFagsakRessurser } from './FagsakContext';
 import { useApp } from './AppContext';
-import { ToggleNavn } from '../typer/toggles';
+import { useFagsakRessurser } from './FagsakContext';
 
 export interface IVedtakBegrunnelseSubmit {
     periodeId: string;
@@ -36,11 +36,10 @@ const initialVedtakBegrunnelseSubmit = {
 interface IProps {
     aktivVedtak?: IVedtakForBehandling;
     fagsak: IFagsak;
-    behandlingstype: Behandlingstype;
 }
 
 const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
-    ({ aktivVedtak, fagsak, behandlingstype }: IProps) => {
+    ({ aktivVedtak, fagsak }: IProps) => {
         const { request } = useHttp();
         const { toggles } = useApp();
 
@@ -58,10 +57,6 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         const [vilkårBegrunnelser, settVilkårbegrunnelser] = React.useState<
             Ressurs<Vilkårsbegrunnelser>
         >(byggTomRessurs());
-
-        const [ekspandertBegrunnelse, settEkspandertBegrunnelse] = useState(
-            behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
-        );
 
         const [avslagBegrunnelser, settAvslagBegrunnelser] = React.useState<
             IRestAvslagbegrunnelser[]
@@ -184,8 +179,6 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             vedtakBegrunnelseSubmit,
             vedtakBegrunnelser,
             vilkårBegrunnelser,
-            ekspandertBegrunnelse,
-            settEkspandertBegrunnelse,
         };
     }
 );

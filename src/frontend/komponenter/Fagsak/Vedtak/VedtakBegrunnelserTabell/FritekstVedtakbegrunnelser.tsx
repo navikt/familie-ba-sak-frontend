@@ -20,7 +20,6 @@ import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
-    toggleForm: (visAlert: boolean) => void;
 }
 
 const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextareaControlled)`

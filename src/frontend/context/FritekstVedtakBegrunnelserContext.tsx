@@ -8,6 +8,7 @@ import { useHttp } from '@navikt/familie-http';
 import { FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
     IRestPostFritekstVedtakBegrunnelser,
@@ -24,6 +25,7 @@ interface Fritekster {
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
+    behandlingstype: Behandlingstype;
 }
 
 export enum FritekstSubmit {
@@ -32,12 +34,13 @@ export enum FritekstSubmit {
 }
 
 const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = constate(
-    ({ vedtaksperiode }: IProps) => {
+    ({ vedtaksperiode, behandlingstype }: IProps) => {
         const { fagsak, settFagsak } = useFagsakRessurser();
         const { vedtakBegrunnelser } = useVedtakBegrunnelser();
         const { request } = useHttp();
-        const { ekspandertBegrunnelse, settEkspandertBegrunnelse } = useVedtakBegrunnelser();
-
+        const [ekspandertBegrunnelse, settEkspandertBegrunnelse] = useState(
+            behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
+        );
         const [redigerbarefritekster, settRedigerbarefritekster] = useState<Fritekster>({});
         const [fritekster, settFritekster] = useState<Fritekster>({});
         const [fritekstSubmit, settFritekstSubmit] = useState<FritekstSubmit>(FritekstSubmit.NONE);
@@ -136,6 +139,8 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             settFritekstSubmit,
             fritekstSubmit,
             idPaSistOpprettetFritekst: idPåSistOpprettetFritekst,
+            ekspandertBegrunnelse,
+            settEkspandertBegrunnelse,
             toggleForm,
         };
     }
