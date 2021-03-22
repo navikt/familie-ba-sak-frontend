@@ -22,6 +22,11 @@ export type Vedtaksperiode =
           periodeFom: string;
           periodeTom: string;
           vedtaksperiodetype: Vedtaksperiodetype.OPPHØR;
+      }
+    | {
+          periodeFom: string;
+          periodeTom: string;
+          vedtaksperiodetype: Vedtaksperiodetype.AVSLAG;
       };
 
 export interface IUtbetalingsperiodeDetalj {
@@ -41,6 +46,8 @@ export const hentVedtaksperiodeTittel = (vedtaksperiode: Vedtaksperiode) => {
             return ytelsetype[vedtaksperiode.ytelseTyper[0]].navn;
         case Vedtaksperiodetype.OPPHØR:
             return 'Opphør';
+        case Vedtaksperiodetype.AVSLAG:
+            return 'Avslag';
         default:
             return '';
     }

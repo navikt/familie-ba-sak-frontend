@@ -21,7 +21,7 @@ import {
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
-import useAvslagBegrunnelseMultiselect from '../../Vedtak/VedtakBegrunnelserTabell/useAvslagBegrunnelseMultiselect';
+import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
     vilkårType: VilkårType;

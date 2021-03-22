@@ -9,6 +9,7 @@ import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
 import {
+    IRestAvslagbegrunnelser,
     IRestDeleteVedtakBegrunnelser,
     IRestPostVedtakBegrunnelse,
     IRestVedtakBegrunnelse,
@@ -17,6 +18,8 @@ import {
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
 import { useFagsakRessurser } from './FagsakContext';
+import { useApp } from './AppContext';
+import { ToggleNavn } from '../typer/toggles';
 
 export interface IVedtakBegrunnelseSubmit {
     periodeId: string;
@@ -39,6 +42,7 @@ interface IProps {
 const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
     ({ aktivVedtak, fagsak, behandlingstype }: IProps) => {
         const { request } = useHttp();
+        const { toggles } = useApp();
 
         const { settFagsak } = useFagsakRessurser();
 
@@ -59,6 +63,10 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
 
+        const [avslagBegrunnelser, settAvslagBegrunnelser] = React.useState<
+            IRestAvslagbegrunnelser[]
+        >([]);
+
         useEffect(() => {
             hentVilkårBegrunnelseTekster();
         }, []);
@@ -66,6 +74,9 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         useEffect(() => {
             if (aktivVedtak) {
                 settVedtakBegrunnelser(aktivVedtak.begrunnelser);
+                if (toggles[ToggleNavn.visAvslag]) {
+                    settAvslagBegrunnelser(aktivVedtak.avslagBegrunnelser);
+                }
             }
         }, [aktivVedtak]);
 
@@ -165,6 +176,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
 
         return {
             hentVilkårBegrunnelseTekster,
+            avslagBegrunnelser,
             leggTilVedtakBegrunnelse,
             slettVedtakBegrunnelse,
             slettVedtakBegrunnelserForPeriode,
