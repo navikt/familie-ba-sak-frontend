@@ -9,7 +9,10 @@ import { Element } from 'nav-frontend-typografi';
 import { FamilieKnapp, FamilieTextareaControlled } from '@navikt/familie-form-elements';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
+import {
+    FritekstSubmit,
+    useFritekstVedtakBegrunnelser,
+} from '../../../../context/FritekstVedtakBegrunnelserContext';
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
@@ -72,6 +75,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
         leggTilRedigerbareFritekst,
         idPaSistOpprettetFritekst,
         onSubmit,
+        fritekstSubmit,
         toggleForm,
     } = useFritekstVedtakBegrunnelser();
 
@@ -94,10 +98,9 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                 return (
                     <StyledFamilieFritekstFelt>
                         <FamilieTextareaBegrunnelseFritekst
-                            tekstLesevisning={''}
                             erLesevisning={erLesevisning()}
                             defaultValue={redigerbarefritekster[fritekstId].verdi}
-                            key={`__fritekst-${fritekstId}`}
+                            key={`fritekst-${fritekstId}`}
                             id={`${fritekstId}`}
                             textareaClass={'fritekst-textarea'}
                             value={redigerbarefritekster[fritekstId].verdi}
@@ -148,6 +151,8 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                         }}
                         mini={true}
                         type={'standard'}
+                        spinner={fritekstSubmit == FritekstSubmit.POST}
+                        disabled={fritekstSubmit == FritekstSubmit.POST}
                     >
                         Lagre
                     </FamilieKnapp>

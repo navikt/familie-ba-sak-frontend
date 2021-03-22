@@ -94,10 +94,7 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                     }
                 })
                 .map((vedtaksperiode: Vedtaksperiode) => (
-                    <FritekstVedtakBegrunnelserProvider
-                        vedtaksperiode={vedtaksperiode}
-                        behandlingsType={åpenBehandling.type}
-                    >
+                    <FritekstVedtakBegrunnelserProvider vedtaksperiode={vedtaksperiode}>
                         <VedtakBegrunnelsePanel
                             key={lagPeriodeId({
                                 fom: vedtaksperiode.periodeFom,

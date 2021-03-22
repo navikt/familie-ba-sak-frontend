@@ -5,6 +5,7 @@ import constate from 'constate';
 import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
 import {
@@ -32,10 +33,11 @@ const initialVedtakBegrunnelseSubmit = {
 interface IProps {
     aktivVedtak?: IVedtakForBehandling;
     fagsak: IFagsak;
+    behandlingstype: Behandlingstype;
 }
 
 const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
-    ({ aktivVedtak, fagsak }: IProps) => {
+    ({ aktivVedtak, fagsak, behandlingstype }: IProps) => {
         const { request } = useHttp();
 
         const { settFagsak } = useFagsakRessurser();
@@ -52,6 +54,10 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         const [vilkårBegrunnelser, settVilkårbegrunnelser] = React.useState<
             Ressurs<Vilkårsbegrunnelser>
         >(byggTomRessurs());
+
+        const [ekspandertBegrunnelse, settEkspandertBegrunnelse] = useState(
+            behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
+        );
 
         useEffect(() => {
             hentVilkårBegrunnelseTekster();
@@ -166,6 +172,8 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             vedtakBegrunnelseSubmit,
             vedtakBegrunnelser,
             vilkårBegrunnelser,
+            ekspandertBegrunnelse,
+            settEkspandertBegrunnelse,
         };
     }
 );

@@ -8,7 +8,6 @@ import { useHttp } from '@navikt/familie-http';
 import { FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
     IRestPostFritekstVedtakBegrunnelser,
@@ -25,22 +24,24 @@ interface Fritekster {
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
-    behandlingsType: Behandlingstype;
+}
+
+export enum FritekstSubmit {
+    POST,
+    NONE,
 }
 
 const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = constate(
-    ({ vedtaksperiode, behandlingsType }: IProps) => {
+    ({ vedtaksperiode }: IProps) => {
         const { fagsak, settFagsak } = useFagsakRessurser();
         const { vedtakBegrunnelser } = useVedtakBegrunnelser();
         const { request } = useHttp();
+        const { ekspandertBegrunnelse, settEkspandertBegrunnelse } = useVedtakBegrunnelser();
 
         const [redigerbarefritekster, settRedigerbarefritekster] = useState<Fritekster>({});
         const [fritekster, settFritekster] = useState<Fritekster>({});
-        const [idPaSistOpprettetFritekst, settIdPaSistOpprettetFritekst] = useState<number>();
-
-        const [ekspandertFritekst, settEkspandertFritekst] = useState(
-            behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING
-        );
+        const [fritekstSubmit, settFritekstSubmit] = useState<FritekstSubmit>(FritekstSubmit.NONE);
+        const [idPåSistOpprettetFritekst, settIdPåSistOpprettetFritekst] = useState<number>();
 
         useEffect(() => {
             const vedtakBegrunnelserForPeriode = vedtakBegrunnelser
@@ -78,15 +79,17 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         });
 
         const leggTilRedigerbareFritekst = () => {
-            const idPåNyFritekste = genererIdBasertPåAndreFritekster();
+            const idPåNyFritekst = genererIdBasertPåAndreFritekster();
             settRedigerbarefritekster({
                 ...redigerbarefritekster,
-                [idPåNyFritekste]: lagInitiellFritekst(''),
+                [idPåNyFritekst]: lagInitiellFritekst(''),
             });
-            settIdPaSistOpprettetFritekst(idPåNyFritekste);
+            settIdPåSistOpprettetFritekst(idPåNyFritekst);
         };
 
         const onSubmit = () => {
+            settFritekstSubmit(FritekstSubmit.POST);
+
             if (fagsak.status === RessursStatus.SUKSESS) {
                 request<IRestPostFritekstVedtakBegrunnelser, IFagsak>({
                     method: 'POST',
@@ -99,9 +102,9 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
                         ),
                         vedtaksperiodetype: vedtaksperiode.vedtaksperiodetype,
                     },
-                    påvirkerSystemLaster: true,
                 })
                     .then((hentetFagsak: Ressurs<IFagsak>) => {
+                        settFritekstSubmit(FritekstSubmit.NONE);
                         settFagsak(hentetFagsak);
                     })
                     .catch((_error: AxiosError) => {
@@ -111,10 +114,14 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         };
 
         const toggleForm = (visAlert: boolean) => {
-            if (ekspandertFritekst && visAlert && !deepEqual(redigerbarefritekster, fritekster)) {
+            if (
+                ekspandertBegrunnelse &&
+                visAlert &&
+                !deepEqual(redigerbarefritekster, fritekster)
+            ) {
                 alert('Fritekst har endringer som ikke er lagret!');
             } else {
-                settEkspandertFritekst(!ekspandertFritekst);
+                settEkspandertBegrunnelse(!ekspandertBegrunnelse);
                 settRedigerbarefritekster({ ...fritekster });
             }
         };
@@ -122,13 +129,13 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         return {
             redigerbarefritekster,
             fritekster,
-            ekspandertFritekst,
-            settEkspandertFritekst,
             leggTilRedigerbareFritekst,
             onSubmit,
             settRedigerbarefritekster,
             settFritekster,
-            idPaSistOpprettetFritekst,
+            settFritekstSubmit,
+            fritekstSubmit,
+            idPaSistOpprettetFritekst: idPåSistOpprettetFritekst,
             toggleForm,
         };
     }

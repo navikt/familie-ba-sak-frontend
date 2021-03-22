@@ -198,7 +198,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         pdfdata={vedtaksbrev}
                     />
 
-                    <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+                    <VedtakBegrunnelserProvider
+                        fagsak={fagsak}
+                        aktivVedtak={aktivVedtak}
+                        behandlingstype={åpenBehandling.type}
+                    >
                         <BegrunnelseTabell åpenBehandling={åpenBehandling} />
                     </VedtakBegrunnelserProvider>
 

@@ -8,6 +8,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { Behandlingstype } from '../../../../typer/behandling';
 import { periodeToString, TIDENES_MORGEN } from '../../../../typer/periode';
 import { ToggleNavn } from '../../../../typer/toggles';
@@ -41,9 +42,6 @@ const StyledEkspanderbartpanel = styled(EkspanderbartpanelBase)`
     .ekspanderbartPanel__innhold {
         padding: 1rem;
     }
-    
-    .is
-    
 `;
 
 const UtbetalingsperiodepanelTittel = styled.p`
@@ -79,7 +77,8 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     const { erLesevisning } = useBehandling();
     const { toggles } = useApp();
 
-    const { ekspandertFritekst, toggleForm } = useFritekstVedtakBegrunnelser();
+    const { ekspandertBegrunnelse } = useVedtakBegrunnelser();
+    const { toggleForm } = useFritekstVedtakBegrunnelser();
 
     const slutterSenereEnnInneværendeMåned = (dato: string) =>
         isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
@@ -88,8 +87,8 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
 
     return (
         <StyledEkspanderbartpanel
-            key={`${vedtaksperiode.periodeFom}_${ekspandertFritekst}`}
-            apen={ekspandertFritekst}
+            key={`${vedtaksperiode.periodeFom}_${ekspandertBegrunnelse}`}
+            apen={ekspandertBegrunnelse}
             onClick={() => toggleForm(true)}
             tittel={
                 <UtbetalingsperiodepanelTittel>
@@ -143,14 +142,13 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     />
                 </div>
 
-                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR && brukFritekst && (
-                    <div>
+                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR &&
+                    brukFritekst && (
                         <FritekstVedtakbegrunnelser
                             vedtaksperiode={vedtaksperiode}
                             toggleForm={toggleForm}
                         />
-                    </div>
-                )}
+                    )}
             </UtbetalingsperiodepanelBody>
         </StyledEkspanderbartpanel>
     );
