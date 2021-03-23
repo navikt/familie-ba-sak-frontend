@@ -16,6 +16,7 @@ import {
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
+import { fjernElementMedNøkkel } from '../../../../utils/commons';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import SkjultLegend from '../../../Felleskomponenter/SkjultLegend';
 
@@ -122,10 +123,11 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                         <SletteKnapp
                             erLesevisning={erLesevisning()}
                             onClick={() => {
-                                delete redigerbarefritekster[fritekstId];
-                                settRedigerbarefritekster({
-                                    ...redigerbarefritekster,
-                                });
+                                const nyRedigerbarefritekster = fjernElementMedNøkkel(
+                                    redigerbarefritekster,
+                                    fritekstId
+                                );
+                                settRedigerbarefritekster({ ...nyRedigerbarefritekster });
                             }}
                             id={`fjern_fritekst-${fritekstId}`}
                             mini={true}
