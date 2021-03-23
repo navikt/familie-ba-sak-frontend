@@ -14,7 +14,7 @@ import {
 import { formaterBeløp, isoStringToDayjs } from '../../../../../utils/formatter';
 import { sisteDagInneværendeMåned } from '../../../../../utils/tid';
 
-const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
+const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     margin-bottom: 1.5rem;
     max-width: 49rem;
 
@@ -47,7 +47,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
     onClick,
     children,
 }) => (
-    <EkspanderbartpanelBase
+    <StyledEkspanderbartpanelBase
         key={`${vedtaksperiode.vedtaksperiodetype}_${vedtaksperiode.periodeFom}_${vedtaksperiode.periodeTom}`}
         apen={åpen}
         onClick={onClick}
@@ -83,7 +83,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
         }
     >
         {children}
-    </EkspanderbartpanelBase>
+    </StyledEkspanderbartpanelBase>
 );
 
 export default EkspanderbartBegrunnelsePanel;

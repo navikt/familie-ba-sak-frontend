@@ -114,7 +114,7 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
                         settFagsak(hentetFagsak);
                     })
                     .catch((_error: AxiosError) => {
-                        settFagsak(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
+                        settFagsak(byggFeiletRessurs('Ukjent ved lagring av fritekster'));
                     });
             }
         };

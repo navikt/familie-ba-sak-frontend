@@ -7,7 +7,7 @@ export enum ToggleNavn {
     visAvslag = 'familie-ba-sak.behandling.vis-avslag',
     visOpphørsperioder = 'familie-ba-sak.behandling.vis-opphoersperioder',
     visSimulering = 'familie-ba-sak.behandling.vis-simulering',
-    begrgrunnelseFritekst = 'familie-ba-sak.behandling.begrunnelse-fritekst',
+    begrunnelseFritekst = 'familie-ba-sak.behandling.begrunnelse-fritekst',
 }
 
 export const alleTogglerAv = (): IToggles => {

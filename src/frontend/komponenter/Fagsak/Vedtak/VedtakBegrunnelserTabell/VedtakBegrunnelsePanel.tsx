@@ -86,7 +86,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     />
                 </div>
                 {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR &&
-                    toggles[ToggleNavn.begrgrunnelseFritekst] && (
+                    toggles[ToggleNavn.begrunnelseFritekst] && (
                         <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
                     )}
             </UtbetalingsperiodepanelBody>

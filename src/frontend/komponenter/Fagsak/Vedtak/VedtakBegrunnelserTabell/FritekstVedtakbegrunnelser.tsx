@@ -17,6 +17,7 @@ import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import SkjultLegend from '../../../Felleskomponenter/SkjultLegend';
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
@@ -24,22 +25,22 @@ interface IProps {
 
 const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextareaControlled)`
     .skjemaelement {
-        margin-top: 10px;
-        margin-bottom: 10px;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
     }
 `;
 
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     background-color: ${navFarger.navGraBakgrunn};
-    padding-left: 20px;
-    padding-right: 0px;
+    padding-left: 1rem;
+    padding-right: 0rem;
     max-width: 50rem;
 `;
 
 const StyledFamilieFritekstFelt = styled.div`
     display: flex;
-    margin-top: 3px;
-    margin-bottom: 3px;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
 
     .textarea__container {
         width: 100% !important;
@@ -47,23 +48,23 @@ const StyledFamilieFritekstFelt = styled.div`
 `;
 
 const StyledElement = styled(Element)`
-    margin-bottom: 13px;
+    margin-bottom: 0.8rem;
 `;
 
 const UtførKnapp = styled(IkonKnapp)`
-    margin-top: 0px;
+    margin-top: 0rem;
 `;
 
 const SletteKnapp = styled(IkonKnapp)`
-    margin-top: 0px;
-    margin-right: 0px;
+    margin-top: 0rem;
+    margin-right: 0rem;
 `;
 
 const Knapperad = styled.div`
     display: grid;
     column-gap: 1rem;
-    grid-template-columns: 100px 100px;
-    margin-top: 24px;
+    grid-template-columns: 5rem 5rem;
+    margin-top: 1.5rem;
 `;
 
 const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
@@ -91,12 +92,14 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
 
     return (
         <StyledSkjemaGruppe>
+            <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             {harFritekster && (
                 <StyledElement>Fritekst til kulepunkt i brev (valgfri)</StyledElement>
             )}
             {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
                 return (
                     <StyledFamilieFritekstFelt>
+                        <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
                         <FamilieTextareaBegrunnelseFritekst
                             erLesevisning={erLesevisning()}
                             defaultValue={redigerbarefritekster[fritekstId].verdi}
@@ -124,9 +127,10 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                                     ...redigerbarefritekster,
                                 });
                             }}
-                            id={`__fjern_fritekst-${fritekstId}`}
+                            id={`fjern_fritekst-${fritekstId}`}
                             mini={true}
                             label={''}
+                            aria-label={'Slett fritekst'}
                             ikon={<Slett />}
                         />
                     </StyledFamilieFritekstFelt>
