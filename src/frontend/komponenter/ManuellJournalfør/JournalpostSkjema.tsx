@@ -3,112 +3,90 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import Panel from 'nav-frontend-paneler';
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
+import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import Skjemasteg from '../Felleskomponenter/Skjemasteg/Skjemasteg';
+import Knapperekke from '../Felleskomponenter/Knapperekke';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokument/Dokumenter';
-import { feilDekoratør } from './FeilDekoratør';
-import { Journalpost } from './Journalpost';
+import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 
-const StyledSkjema = styled(Skjemasteg)`
-    min-width: 640px;
-    padding-left: 40px;
-    padding-bottom: 80px;
-    height: calc(100vh - 3rem);
+const StyledSkjema = styled.div`
+    padding: 2rem;
+    max-width: 40rem;
+    min-width: 40rem;
+    padding-left: 2.5rem;
+    padding-bottom: 5rem;
+    height: calc(100vh - 6rem);
     overflow: auto;
 `;
 
-const FeilPanel = feilDekoratør(Panel);
-
 const StyledSectionDiv = styled.div`
-    margin-top: 40px;
+    margin-top: 2.5rem;
 `;
 
-interface JournalpostSkjemaProps {
-    settFeilmelding: (feilmelding: string) => void;
-}
-
-export const JournalpostSkjema: React.FC<JournalpostSkjemaProps> = ({ settFeilmelding }) => {
-    const {
-        dataForManuellJournalføring,
-        journalfør,
-        hentFeil,
-        erEndret,
-        tilbakestillData,
-    } = useManuellJournalfør();
-
-    const alleFeil = hentFeil() ?? [];
+export const JournalpostSkjema: React.FC = () => {
+    const { skjema, journalfør, hentFeilTilOppsummering, erLesevisning } = useManuellJournalfør();
 
     const history = useHistory();
 
-    const [senderInn, settSenderInn] = React.useState(false);
-
-    const onClickManuellJournalfør = () => {
-        settSenderInn(true);
-        journalfør()
-            .then(fagsak => {
-                settFeilmelding(
-                    fagsak.status === RessursStatus.FEILET ||
-                        fagsak.status === RessursStatus.FUNKSJONELL_FEIL
-                        ? `Feil ved manuell journalføring: ${fagsak.frontendFeilmelding}`
-                        : ''
-                );
-            })
-            .finally(() => {
-                settSenderInn(false);
-            });
-    };
-
     return (
-        <div>
-            {dataForManuellJournalføring.status === RessursStatus.SUKSESS && (
-                <StyledSkjema
-                    tittel={'Journalføring'}
-                    forrigeKnappTittel={'Avbryt'}
-                    forrigeOnClick={() => {
-                        history.push(`/oppgaver`);
-                    }}
-                    nesteKnappTittel={alleFeil.length === 0 ? 'Journalfør' : undefined}
-                    nesteOnClick={alleFeil.length === 0 ? onClickManuellJournalfør : undefined}
-                    senderInn={senderInn}
-                    tilbakestillOnClick={() => {
-                        tilbakestillData();
-                    }}
-                    skalViseTilbakestillKnapp={erEndret()}
+        <StyledSkjema>
+            <Journalpost />
+            <StyledSectionDiv>
+                <Undertittel children={'Dokumenter'} />
+                <Dokumenter />
+            </StyledSectionDiv>
+            <StyledSectionDiv>
+                <Undertittel children={'Bruker og avsender'} />
+                <BrukerPanel />
+                <br />
+                <AvsenderPanel />
+            </StyledSectionDiv>
+
+            <StyledSectionDiv>
+                {!erLesevisning() && <KnyttJournalpostTilBehandling />}
+                <br />
+                {(skjema.submitRessurs.status === RessursStatus.FEILET ||
+                    skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
+                    <AlertStripeFeil>{skjema.submitRessurs.frontendFeilmelding}</AlertStripeFeil>
+                )}
+                {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
+                    <Feiloppsummering
+                        tittel={'For å gå videre må du rette opp følgende'}
+                        feil={hentFeilTilOppsummering()}
+                    />
+                )}
+            </StyledSectionDiv>
+
+            <Knapperekke>
+                <FamilieKnapp
+                    mini={true}
+                    erLesevisning={false}
+                    onClick={() => history.push(`/oppgaver`)}
+                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 >
-                    <Journalpost />
-                    <StyledSectionDiv>
-                        <Undertittel children={'Dokumenter'} />
-                        <Dokumenter />
-                    </StyledSectionDiv>
-                    <StyledSectionDiv>
-                        <Undertittel children={'Bruker og avsender'} />
-                        <BrukerPanel></BrukerPanel>
-                        <AvsenderPanel></AvsenderPanel>
-                    </StyledSectionDiv>
-                    <StyledSectionDiv>
-                        <KnyttJournalpostTilBehandling />
-                        <br />
-                        {!!alleFeil.length && (
-                            <FeilPanel>
-                                <Undertittel>For å gå videre må du rette opp følgende:</Undertittel>
-                                <ul>
-                                    {alleFeil.map((feil, index) => (
-                                        <li key={index}>{feil}</li>
-                                    ))}
-                                </ul>
-                            </FeilPanel>
-                        )}
-                    </StyledSectionDiv>
-                </StyledSkjema>
-            )}
-        </div>
+                    Avbryt
+                </FamilieKnapp>
+                <FamilieKnapp
+                    mini={true}
+                    type={'hoved'}
+                    erLesevisning={erLesevisning()}
+                    onClick={journalfør}
+                    spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                >
+                    Journalfør
+                </FamilieKnapp>
+            </Knapperekke>
+        </StyledSkjema>
     );
 };

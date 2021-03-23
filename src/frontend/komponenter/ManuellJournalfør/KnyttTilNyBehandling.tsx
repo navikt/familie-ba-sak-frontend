@@ -2,124 +2,50 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { CheckboksPanelGruppe } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
+import OpprettBehandlingValg from '../Fagsak/Personlinje/Behandlingsmeny/OpprettBehandling/OpprettBehandlingValg';
 
 const StyledCheckboxDiv = styled.div`
     width: 20rem;
 `;
 
-const StyledSelect = styled(FamilieReactSelect)`
-    width: 20rem;
-`;
-
-const tilAlternativ = (key: Behandlingstype | BehandlingÅrsak) =>
-    (
-        key.toString().charAt(0).toLocaleUpperCase() +
-        key.toString().substring(1, key.toString().length).toLocaleLowerCase()
-    ).replace('_', ' ');
-
-const tilBehandlingstype = (type: string) =>
-    Behandlingstype[type.replace(' ', '_').toLocaleUpperCase() as keyof typeof Behandlingstype];
-
-const tilBehandlingÅrsak = (årsak: string) =>
-    BehandlingÅrsak[årsak.replace(' ', '_').toLocaleUpperCase() as keyof typeof BehandlingÅrsak];
-
-const nyBehandlingstyper = [
-    {
-        value: tilAlternativ(Behandlingstype.FØRSTEGANGSBEHANDLING),
-        label: tilAlternativ(Behandlingstype.FØRSTEGANGSBEHANDLING),
-    },
-    {
-        value: tilAlternativ(Behandlingstype.REVURDERING),
-        label: tilAlternativ(Behandlingstype.REVURDERING),
-    },
-];
-
-const nyBehandlingsårsaker = [
-    {
-        value: tilAlternativ(BehandlingÅrsak.SØKNAD),
-        label: tilAlternativ(BehandlingÅrsak.SØKNAD),
-    },
-    {
-        value: tilAlternativ(BehandlingÅrsak.NYE_OPPLYSNINGER),
-        label: tilAlternativ(BehandlingÅrsak.NYE_OPPLYSNINGER),
-    },
-];
-
+/**
+ * Legger inn lesevisning slik at på sikt
+ * så kan man kanskje sjekke hvilken behandling
+ * journalposten er journalført på slik at man kan klikke seg inn på behandlingen
+ */
 export const KnyttTilNyBehandling: React.FC = () => {
-    const {
-        knyttTilNyBehandling,
-        settKnyttTilNyBehandling,
-        nyBehandlingstype,
-        settNyBehandlingstype,
-        nyBehandlingsårsak,
-        settNyBehandlingsårsak,
-    } = useManuellJournalfør();
+    const { skjema, fagsak, erLesevisning } = useManuellJournalfør();
     return (
         <>
             <Undertittel>Knytt til ny behandling</Undertittel>
             <br />
             <StyledCheckboxDiv>
-                <CheckboksPanelGruppe
-                    checkboxes={[
-                        {
-                            label: 'Knytt til ny behandling',
-                            value: 'Knytt til ny behandling',
-                            id: 'Knytt til ny behandling',
-                            checked: knyttTilNyBehandling,
-                        },
-                    ]}
+                <FamilieCheckbox
+                    id={skjema.felter.knyttTilNyBehandling.id}
+                    erLesevisning={erLesevisning()}
+                    label={'Knytt til ny behandling'}
+                    checked={skjema.felter.knyttTilNyBehandling.verdi}
                     onChange={() => {
-                        settKnyttTilNyBehandling(!knyttTilNyBehandling);
+                        skjema.felter.knyttTilNyBehandling.validerOgSettFelt(
+                            !skjema.felter.knyttTilNyBehandling.verdi
+                        );
                     }}
                 />
             </StyledCheckboxDiv>
-            {knyttTilNyBehandling && (
+            {skjema.felter.behandlingstype.erSynlig && (
                 <>
                     <br />
-                    <StyledSelect
-                        creatable={false}
-                        erLesevisning={false}
-                        label={'Behandlingstype'}
-                        id="select"
-                        isMulti={false}
-                        options={nyBehandlingstyper}
-                        value={{
-                            value: tilAlternativ(nyBehandlingstype),
-                            label: tilAlternativ(nyBehandlingstype),
-                        }}
-                        onChange={value => {
-                            if (value && 'value' in value) {
-                                settNyBehandlingstype(tilBehandlingstype(value.value));
-                            }
-                        }}
-                    />
-                </>
-            )}
-            {knyttTilNyBehandling && nyBehandlingstype === Behandlingstype.REVURDERING && (
-                <>
-                    <StyledSelect
-                        creatable={false}
-                        erLesevisning={false}
-                        label={'Årsak'}
-                        id="select"
-                        isMulti={false}
-                        options={nyBehandlingsårsaker}
-                        value={{
-                            value: tilAlternativ(nyBehandlingsårsak),
-                            label: tilAlternativ(nyBehandlingsårsak),
-                        }}
-                        onChange={value => {
-                            if (value && 'value' in value) {
-                                settNyBehandlingsårsak(tilBehandlingÅrsak(value.value));
-                            }
-                        }}
+                    <OpprettBehandlingValg
+                        behandlingstype={skjema.felter.behandlingstype}
+                        behandlingsårsak={skjema.felter.behandlingsårsak}
+                        fagsak={fagsak}
+                        visFeilmeldinger={skjema.visFeilmeldinger}
+                        erLesevisning={erLesevisning()}
                     />
                 </>
             )}
