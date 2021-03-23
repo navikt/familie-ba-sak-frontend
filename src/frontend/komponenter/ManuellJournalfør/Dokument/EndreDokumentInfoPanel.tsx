@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
+import { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
 import { DokumentTittel } from '../../../typer/manuell-journalføring';
@@ -18,18 +19,26 @@ const tittelList = journalpostTittelList
     .concat([{ value: '----------', label: '----------', isDisabled: true }])
     .concat(dokumentTittelList);
 
-export const EndreDokumentInfoPanel: React.FC = () => {
+interface IProps {
+    dokument: IDokumentInfo;
+    visFeilmeldinger: boolean;
+}
+
+export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeldinger }) => {
     const {
-        settLogiskeVedlegg,
-        finnValgtDokument,
+        skjema,
         settDokumentTittel,
-        tilbakestillDokumentTittel,
+        settLogiskeVedlegg,
+        erLesevisning,
     } = useManuellJournalfør();
 
+    const dokumentFraSkjema = skjema.felter.dokumenter.verdi.find(
+        findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId
+    );
+
     const hentVedleggList = (): ISelectOption[] => {
-        const valgtDokument = finnValgtDokument();
-        return valgtDokument
-            ? valgtDokument.logiskeVedlegg.map(vedlegg => {
+        return dokumentFraSkjema
+            ? dokumentFraSkjema.logiskeVedlegg.map((vedlegg: ILogiskVedlegg) => {
                   return {
                       value: vedlegg.tittel,
                       label: vedlegg.tittel,
@@ -39,29 +48,30 @@ export const EndreDokumentInfoPanel: React.FC = () => {
     };
 
     const tittelOption = (): ISelectOption => {
-        const valgtDokument = finnValgtDokument();
         return {
-            value: valgtDokument?.tittel ?? '',
-            label: valgtDokument?.tittel ?? '',
+            value: dokumentFraSkjema?.tittel ?? '',
+            label: dokumentFraSkjema?.tittel ?? '',
         };
     };
 
     return (
-        <div>
+        <>
             <FamilieReactSelect
-                id="tittelSelect"
                 label={'Dokumenttittel'}
-                erLesevisning={false}
+                erLesevisning={erLesevisning()}
                 creatable={true}
                 isClearable
                 isMulti={false}
                 options={tittelList}
                 value={tittelOption()}
+                feil={
+                    visFeilmeldinger && dokument.tittel === '' ? 'Tittel er ikke satt' : undefined
+                }
                 onChange={value => {
                     if (value && 'value' in value) {
-                        settDokumentTittel(value.value || '');
+                        settDokumentTittel(value.value || '', dokument.dokumentInfoId);
                     } else {
-                        tilbakestillDokumentTittel();
+                        settDokumentTittel('', dokument.dokumentInfoId);
                     }
                 }}
             />
@@ -71,17 +81,18 @@ export const EndreDokumentInfoPanel: React.FC = () => {
                 label={'Annet innhold'}
                 creatable={true}
                 isClearable
-                erLesevisning={false}
+                erLesevisning={erLesevisning()}
                 isMulti={true}
                 options={tittelList}
                 value={hentVedleggList()}
                 placeholder={'Velg innhold'}
                 onChange={options => {
                     settLogiskeVedlegg(
-                        options instanceof Array ? options.map(({ value }) => value) : []
+                        options instanceof Array ? options.map(({ value }) => value) : [],
+                        dokument.dokumentInfoId
                     );
                 }}
             />
-        </div>
+        </>
     );
 };

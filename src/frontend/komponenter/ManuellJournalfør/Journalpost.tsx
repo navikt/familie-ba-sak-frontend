@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
@@ -20,84 +20,62 @@ export const journalpostTittelList = Object.keys(JournalpostTittel).map((_, inde
     };
 });
 
-const JournalpostDiv = styled.div`
-    width: 560px;
-`;
-
-const JournalpostInfo: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalfør();
-    switch (dataForManuellJournalføring.status) {
-        case RessursStatus.SUKSESS:
-            const journalpost = dataForManuellJournalføring.data.journalpost;
-            return (
-                <div>
-                    <Undertittel>{journalpost.tittel || 'Ingen tittel'}</Undertittel>
-                </div>
-            );
-        default:
-            return <div></div>;
-    }
-};
-
 const JournalpostMetadataDiv = styled.div`
     margin: 0 0 20px 0;
 `;
 
 const EndreJournalpost: React.FC = () => {
-    const {
-        dataForManuellJournalføring,
-        settJournalpostTittel,
-        tilbakestillJournalpostTittel,
-    } = useManuellJournalfør();
-    const journalpostTittel =
-        dataForManuellJournalføring.status === RessursStatus.SUKSESS
-            ? dataForManuellJournalføring.data.journalpost.tittel
-            : undefined;
+    const { skjema, erLesevisning } = useManuellJournalfør();
 
-    const selectValue: ISelectOption = {
-        value: journalpostTittel ?? '',
-        label: journalpostTittel ?? '',
-    };
     return (
         <FamilieReactSelect
+            {...skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger)}
             creatable={true}
             isClearable
-            erLesevisning={false}
+            erLesevisning={erLesevisning()}
             label={'Endre journalposttittel'}
-            id="select"
             isMulti={false}
             options={journalpostTittelList}
-            value={selectValue}
+            value={{
+                value: skjema.felter.journalpostTittel.verdi,
+                label: skjema.felter.journalpostTittel.verdi,
+            }}
             onChange={value => {
                 if (value && 'value' in value) {
-                    settJournalpostTittel(value.value);
+                    skjema.felter.journalpostTittel.validerOgSettFelt(value.value);
                 } else {
-                    tilbakestillJournalpostTittel();
+                    skjema.felter.journalpostTittel.nullstill();
                 }
             }}
         />
     );
 };
 
-export const Journalpost: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalfør();
+const Journalpost: React.FC = () => {
+    const { dataForManuellJournalføring, skjema } = useManuellJournalfør();
     const datoMottatt =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.datoMottatt
             : undefined;
+
     return (
-        <JournalpostDiv>
-            <Ekspanderbartpanel tittel={<JournalpostInfo />}>
-                <JournalpostMetadataDiv>
-                    <Normaltekst>
-                        Mottatt:{' '}
-                        {datoMottatt
-                            ? formaterIsoDato(datoMottatt, datoformat.DATO)
-                            : 'Ingen mottatt dato'}
-                    </Normaltekst>
-                </JournalpostMetadataDiv>
-                <EndreJournalpost />
-            </Ekspanderbartpanel>
-        </JournalpostDiv>
+        <Ekspanderbartpanel
+            id={skjema.felter.journalpostTittel.id}
+            tittel={
+                <Undertittel>{skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}</Undertittel>
+            }
+        >
+            <JournalpostMetadataDiv>
+                <Normaltekst>
+                    Mottatt:{' '}
+                    {datoMottatt
+                        ? formaterIsoDato(datoMottatt, datoformat.DATO)
+                        : 'Ingen mottatt dato'}
+                </Normaltekst>
+            </JournalpostMetadataDiv>
+            <EndreJournalpost />
+        </Ekspanderbartpanel>
     );
 };
+
+export default Journalpost;

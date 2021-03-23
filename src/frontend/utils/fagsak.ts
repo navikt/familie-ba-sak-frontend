@@ -1,9 +1,6 @@
-import { FeltState } from '@navikt/familie-skjema';
-
 import { IBehandling } from '../typer/behandling';
 import { fagsakStatus, IFagsak } from '../typer/fagsak';
 import { IVedtakForBehandling } from '../typer/vedtak';
-import { IPersonResultat, IVilkårResultat, Resultat } from '../typer/vilkår';
 import familieDayjs, { familieDayjsDiff } from './familieDayjs';
 
 export const hentFagsakStatusVisning = (fagsak: IFagsak): string =>

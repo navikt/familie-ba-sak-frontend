@@ -1,23 +1,20 @@
 import React from 'react';
 
-import { kjønnType, RessursStatus } from '@navikt/familie-typer';
+import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { formaterPersonIdent, hentAlder } from '../../utils/formatter';
 
 export const BrukerHeader: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalfør();
-    const person =
-        dataForManuellJournalføring.status === RessursStatus.SUKSESS
-            ? dataForManuellJournalføring.data.person
-            : undefined;
+    const { skjema } = useManuellJournalfør();
+
     return (
         <Visittkort
-            navn={person?.navn || 'Ukjent bruker'}
-            ident={formaterPersonIdent(person?.personIdent || '')}
-            alder={hentAlder(person?.fødselsdato || '')}
-            kjønn={person?.kjønn || kjønnType.UKJENT}
+            navn={skjema.felter.bruker.verdi?.navn || 'Ukjent bruker'}
+            ident={formaterPersonIdent(skjema.felter.bruker.verdi?.personIdent || '')}
+            alder={hentAlder(skjema.felter.bruker.verdi?.fødselsdato || '')}
+            kjønn={skjema.felter.bruker.verdi?.kjønn || kjønnType.UKJENT}
         />
     );
 };
