@@ -21,7 +21,11 @@ export const AvsenderPanel: React.FC = () => {
         ) {
             settÅpen(true);
         }
-    }, [skjema.visFeilmeldinger, skjema.felter.avsenderNavn.valideringsstatus]);
+    }, [
+        skjema.visFeilmeldinger,
+        skjema.felter.avsenderNavn.valideringsstatus,
+        skjema.felter.avsenderIdent.valideringsstatus,
+    ]);
 
     return (
         <StyledEkspanderbartpanelBase
