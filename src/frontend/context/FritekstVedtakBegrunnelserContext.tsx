@@ -141,7 +141,7 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             settFritekster,
             settFritekstSubmit,
             fritekstSubmit,
-            idPaSistOpprettetFritekst: idPåSistOpprettetFritekst,
+            idPåSistOpprettetFritekst,
             ekspandertBegrunnelse,
             settEkspandertBegrunnelse,
             toggleForm,

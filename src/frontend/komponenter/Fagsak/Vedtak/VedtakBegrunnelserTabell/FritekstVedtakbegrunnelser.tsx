@@ -75,7 +75,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
         redigerbarefritekster,
         settRedigerbarefritekster,
         leggTilRedigerbareFritekst,
-        idPaSistOpprettetFritekst,
+        idPåSistOpprettetFritekst,
         onSubmit,
         fritekstSubmit,
         toggleForm,
@@ -85,11 +85,11 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
         Object.keys(redigerbarefritekster).length > 0 || Object.keys(fritekster).length > 0;
 
     useEffect(() => {
-        const element = document.getElementById(`${idPaSistOpprettetFritekst}`);
+        const element = document.getElementById(`${idPåSistOpprettetFritekst}`);
         if (element) {
             element.focus();
         }
-    }, [idPaSistOpprettetFritekst]);
+    }, [idPåSistOpprettetFritekst]);
 
     return (
         <StyledSkjemaGruppe>
