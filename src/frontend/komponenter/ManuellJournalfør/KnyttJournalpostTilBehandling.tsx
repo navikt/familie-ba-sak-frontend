@@ -6,12 +6,16 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import { behandlingsstatuser, IBehandling } from '../../typer/behandling';
+import {
+    behandlingsstatuser,
+    behandlingstyper,
+    behandlingÅrsak,
+    IBehandling,
+} from '../../typer/behandling';
 import familieDayjs from '../../utils/familieDayjs';
-import { datoformat, formaterDato, formaterTilKunFørstBokstavStor } from '../../utils/formatter';
+import { datoformat, formaterDato } from '../../utils/formatter';
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 
 const KnyttDiv = styled.div`
@@ -33,24 +37,14 @@ const GenerellSakInfoStripeTittel = styled.div`
     font-weight: bold;
 `;
 export const KnyttJournalpostTilBehandling: React.FC = () => {
-    const {
-        settTilknyttedeBehandlingIder,
-        dataForManuellJournalføring,
-        hentSorterteBehandlinger,
-        tilknyttedeBehandlingIder,
-        visKnyttTilNyBehandling,
-        knyttTilNyBehandling,
-    } = useManuellJournalfør();
-
-    if (dataForManuellJournalføring.status !== RessursStatus.SUKSESS) {
-        return <></>;
-    }
+    const { skjema, fagsak, hentSorterteBehandlinger, erLesevisning } = useManuellJournalfør();
 
     const visGenerellSakInfoStripe =
-        tilknyttedeBehandlingIder.length === 0 && !knyttTilNyBehandling;
+        skjema.felter.tilknyttedeBehandlingIder.verdi.length === 0 &&
+        !skjema.felter.knyttTilNyBehandling.verdi;
     return (
         <KnyttDiv>
-            {!!dataForManuellJournalføring.data.fagsak?.behandlinger.length && (
+            {!!fagsak?.behandlinger.length && (
                 <>
                     <Undertittel>Knytt til tidligere behandling(er)</Undertittel>
                     <table className="tabell">
@@ -68,32 +62,37 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                 <tr
                                     key={behandling.behandlingId}
                                     className={
-                                        tilknyttedeBehandlingIder.includes(behandling.behandlingId)
+                                        skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                            behandling.behandlingId
+                                        )
                                             ? 'tabell__tr--valgt'
                                             : ''
                                     }
-                                    aria-selected={tilknyttedeBehandlingIder.includes(
+                                    aria-selected={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
                                         behandling.behandlingId
                                     )}
                                 >
                                     <KnyttTilBehandlingTd>
                                         <FamilieCheckbox
-                                            erLesevisning={false}
+                                            id={skjema.felter.tilknyttedeBehandlingIder.id}
+                                            erLesevisning={erLesevisning()}
                                             label={'-'}
-                                            checked={tilknyttedeBehandlingIder.includes(
+                                            checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
                                                 behandling.behandlingId
                                             )}
                                             onChange={() => {
-                                                settTilknyttedeBehandlingIder([
-                                                    ...tilknyttedeBehandlingIder.filter(
-                                                        it => it !== behandling.behandlingId
-                                                    ),
-                                                    ...(tilknyttedeBehandlingIder.includes(
-                                                        behandling.behandlingId
-                                                    )
-                                                        ? []
-                                                        : [behandling.behandlingId]),
-                                                ]);
+                                                skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
+                                                    [
+                                                        ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
+                                                            it => it !== behandling.behandlingId
+                                                        ),
+                                                        ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                                            behandling.behandlingId
+                                                        )
+                                                            ? []
+                                                            : [behandling.behandlingId]),
+                                                    ]
+                                                );
                                             }}
                                         />
                                     </KnyttTilBehandlingTd>
@@ -103,15 +102,11 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             datoformat.DATO_FORKORTTET
                                         )}
                                     </td>
-                                    <td>{formaterTilKunFørstBokstavStor(behandling.årsak)}</td>
+                                    <td>{behandlingÅrsak[behandling.årsak]}</td>
                                     <BehandlingstypeTd>
-                                        {formaterTilKunFørstBokstavStor(behandling.type)}
+                                        {behandlingstyper[behandling.type].navn}
                                     </BehandlingstypeTd>
-                                    <td>
-                                        {formaterTilKunFørstBokstavStor(
-                                            behandlingsstatuser[behandling.status]
-                                        )}
-                                    </td>
+                                    <td>{behandlingsstatuser[behandling.status]}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -119,7 +114,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     <br />
                 </>
             )}
-            {visKnyttTilNyBehandling && <KnyttTilNyBehandling />}
+            {(!fagsak || fagsak?.behandlinger.length === 0) && <KnyttTilNyBehandling />}
             {visGenerellSakInfoStripe && (
                 <>
                     <br />

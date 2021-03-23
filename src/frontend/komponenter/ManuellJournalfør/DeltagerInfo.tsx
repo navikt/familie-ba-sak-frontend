@@ -4,10 +4,6 @@ import styled from 'styled-components';
 
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { RessursStatus } from '@navikt/familie-typer';
-
-import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-
 interface DeltagerProps {
     ikon: React.ReactNode;
     navn: string;
@@ -22,11 +18,11 @@ const HSplit = styled.div`
 `;
 
 export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel, ident }) => {
-    const { dataForManuellJournalføring } = useManuellJournalfør();
     const MarginedDiv = styled.div`
         margin-right: 16px;
     `;
-    return dataForManuellJournalføring.status === RessursStatus.SUKSESS ? (
+
+    return (
         <div>
             <HSplit>
                 <MarginedDiv>{ikon}</MarginedDiv>
@@ -36,7 +32,5 @@ export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel,
                 </div>
             </HSplit>
         </div>
-    ) : (
-        <></>
     );
 };
