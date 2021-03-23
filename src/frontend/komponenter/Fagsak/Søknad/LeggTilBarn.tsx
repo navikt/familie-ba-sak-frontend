@@ -7,7 +7,7 @@ import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { Valideringsstatus } from '@navikt/familie-skjema';
+import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -16,65 +16,75 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { useSøknad } from '../../../context/SøknadContext';
 import Pluss from '../../../ikoner/Pluss';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
-import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
-import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import { identValidator, lagInitiellFelt, validerFelt } from '../../../utils/validators';
+import { IBarnMedOpplysninger } from '../../../typer/søknad';
+import { identValidator } from '../../../utils/validators';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-
-interface IProps {
-    settSøknadOgValider: (søknad: ISøknadDTO) => void;
-    søknad: ISøknadDTO;
-}
 
 const StyledKnapp = styled(Knapp)`
     margin-left: 1rem;
 `;
 
-const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
+const LeggTilBarn: React.FunctionComponent = () => {
     const { request } = useHttp();
 
+    const { skjema } = useSøknad();
     const [visModal, settVisModal] = useState<boolean>(false);
-    const [inputValue, settInputValue] = useState<string>('');
 
-    const [person, settPerson] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
+    const {
+        skjema: hentBarnSkjema,
+        settSubmitRessurs,
+        kanSendeSkjema,
+        nullstillSkjema: nullstillHentBarnSkjema,
+    } = useSkjema<{ ident: string }, IPersonInfo>({
+        felter: {
+            ident: useFelt<string>({
+                verdi: '',
+                valideringsfunksjon:
+                    process.env.NODE_ENV === 'development' ? felt => ok(felt) : identValidator,
+            }),
+        },
+        skjemanavn: 'Hent barn',
+    });
 
     const onAvbryt = () => {
         settVisModal(false);
-        settPerson(byggTomRessurs());
-        settInputValue('');
+        settSubmitRessurs(byggTomRessurs());
+        hentBarnSkjema.felter.ident.nullstill();
     };
 
     const leggTilOnClick = () => {
-        if (søknad.barnaMedOpplysninger.find(barn => barn.ident === inputValue)) {
-            settPerson(byggFeiletRessurs('Barnet er allerede lagt til'));
+        if (
+            skjema.felter.barnaMedOpplysninger.verdi.some(
+                barn => barn.ident === hentBarnSkjema.felter.ident.verdi
+            )
+        ) {
+            settSubmitRessurs(byggFeiletRessurs('Barnet er allerede lagt til'));
             return;
         }
 
-        const ident = validerFelt(inputValue, lagInitiellFelt('', identValidator));
-
-        if (
-            ident.valideringsstatus === Valideringsstatus.OK ||
-            process.env.NODE_ENV === 'development'
-        ) {
-            settPerson(byggHenterRessurs());
+        if (kanSendeSkjema()) {
+            settSubmitRessurs(byggHenterRessurs());
 
             request<{ brukerIdent: string }, IRestTilgang>({
                 method: 'POST',
                 url: '/familie-ba-sak/api/tilgang',
-                data: { brukerIdent: ident.verdi },
+                data: { brukerIdent: hentBarnSkjema.felter.ident.verdi },
             }).then((ressurs: Ressurs<IRestTilgang>) => {
+                nullstillHentBarnSkjema();
+
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     if (ressurs.data.saksbehandlerHarTilgang) {
                         request<void, IPersonInfo>({
                             method: 'GET',
                             url: '/familie-ba-sak/api/person/enkel',
                             headers: {
-                                personIdent: ident.verdi,
+                                personIdent: hentBarnSkjema.felter.ident.verdi,
                             },
                         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
-                            settPerson(hentetPerson);
+                            settSubmitRessurs(hentetPerson);
                             if (hentetPerson.status === RessursStatus.SUKSESS) {
                                 const barn: IBarnMedOpplysninger = {
                                     ident: hentetPerson.data.personIdent,
@@ -83,16 +93,16 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                                     inkludertISøknaden: true,
                                     manueltRegistrert: true,
                                 };
-                                settSøknadOgValider({
-                                    ...søknad,
-                                    barnaMedOpplysninger: [...søknad.barnaMedOpplysninger, barn],
-                                });
+                                skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
+                                    ...skjema.felter.barnaMedOpplysninger.verdi,
+                                    barn,
+                                ]);
 
                                 settVisModal(false);
                             }
                         });
                     } else {
-                        settPerson(
+                        settSubmitRessurs(
                             byggFeiletRessurs(
                                 `Barnet kan ikke legges til på grunn av diskresjonskode ${
                                     adressebeskyttelsestyper[
@@ -109,12 +119,9 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                         RessursStatus.IKKE_TILGANG,
                     ].includes(ressurs.status)
                 ) {
-                    settPerson(ressurs);
+                    settSubmitRessurs(ressurs);
                 }
             });
-        } else {
-            ident.valideringsstatus === Valideringsstatus.FEIL &&
-                settPerson(byggFeiletRessurs(ident.feilmelding));
         }
     };
 
@@ -144,20 +151,18 @@ const LeggTilBarn: React.FunctionComponent<IProps> = ({ settSøknadOgValider, s�
                             mini={true}
                             onClick={leggTilOnClick}
                             children={'Legg til'}
-                            spinner={person.status === RessursStatus.HENTER}
-                            disabled={person.status === RessursStatus.HENTER}
+                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
                 }}
             >
                 <FamilieInput
+                    {...hentBarnSkjema.felter.ident.hentNavInputProps(
+                        hentBarnSkjema.visFeilmeldinger
+                    )}
                     label={'Fødselsnummer'}
                     placeholder={'11 siffer'}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        settPerson(byggTomRessurs());
-                        settInputValue(event.target.value);
-                    }}
-                    feil={hentFrontendFeilmelding(person)}
                 />
             </UIModalWrapper>
         </>
