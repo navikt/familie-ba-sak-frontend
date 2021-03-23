@@ -1,20 +1,16 @@
 import * as React from 'react';
 
-import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 
-import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import { IBehandling } from '../../../typer/behandling';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import Annet from './Annet';
