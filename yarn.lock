@@ -1545,10 +1545,10 @@
     react-tooltip "^4.2.15"
     styled-components "^5.2.1"
 
-"@navikt/familie-form-elements@^2.0.16", "@navikt/familie-form-elements@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.1.tgz#ce14899294e9f986649638a923f9783a14c45fdd"
-  integrity sha512-yy2hssdpX8EtaCwFRJvW4O6xHHTsLFT9xXPMagqybrBFKFAUOX2MO9tMJjA+ktEe8t1NVIaSNzBaH5a6i8r9jA==
+"@navikt/familie-form-elements@^2.2.1", "@navikt/familie-form-elements@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.3.tgz#8b8f2bf2a94d36c94dbe60a287fee0bd5bdd3ecd"
+  integrity sha512-/y+5sRnonlv6cS+AXRX7kZ9OnyP9cGjdCt0dc8WMFTTZPJjpJH/gHliiY+RQqi6X3CAx5U2C42Pn9U+ZTu3glw==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"
