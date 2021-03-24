@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { AxiosError } from 'axios';
 import constate from 'constate';
@@ -19,7 +19,7 @@ import { Vedtaksperiode } from '../typer/vedtaksperiode';
 import { useFagsakRessurser } from './FagsakContext';
 import { useVedtakBegrunnelser } from './VedtakBegrunnelserContext';
 
-interface Fritekster {
+export interface Fritekster {
     [key: string]: FeltState<string>;
 }
 

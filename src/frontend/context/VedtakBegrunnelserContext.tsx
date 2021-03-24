@@ -5,7 +5,6 @@ import constate from 'constate';
 import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
 import { ToggleNavn } from '../typer/toggles';
