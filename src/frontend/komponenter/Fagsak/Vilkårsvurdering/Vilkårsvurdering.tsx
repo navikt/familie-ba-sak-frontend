@@ -61,7 +61,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
                     );
                 } else if (erVilkårsvurderingenGyldig()) {
-                    validerVilkårsvurderingOgSendInn(vilkårsvurdering, fagsak);
+                    validerVilkårsvurderingOgSendInn(fagsak);
                 } else {
                     settVisFeilmeldinger(true);
                 }

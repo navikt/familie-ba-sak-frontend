@@ -10,6 +10,7 @@ import { FamilieKnapp, FamilieTextareaControlled } from '@navikt/familie-form-el
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import {
+    Fritekster,
     FritekstSubmit,
     useFritekstVedtakBegrunnelser,
 } from '../../../../context/FritekstVedtakBegrunnelserContext';
@@ -123,11 +124,12 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                         <SletteKnapp
                             erLesevisning={erLesevisning()}
                             onClick={() => {
-                                const nyRedigerbarefritekster = fjernElementMedNøkkel(
-                                    redigerbarefritekster,
-                                    fritekstId
+                                settRedigerbarefritekster(
+                                    fjernElementMedNøkkel(
+                                        redigerbarefritekster,
+                                        fritekstId
+                                    ) as Fritekster
                                 );
-                                settRedigerbarefritekster({ ...nyRedigerbarefritekster });
                             }}
                             id={`fjern_fritekst-${fritekstId}`}
                             mini={true}
@@ -157,8 +159,8 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                         }}
                         mini={true}
                         type={'standard'}
-                        spinner={fritekstSubmit == FritekstSubmit.POST}
-                        disabled={fritekstSubmit == FritekstSubmit.POST}
+                        spinner={fritekstSubmit === FritekstSubmit.POST}
+                        disabled={fritekstSubmit === FritekstSubmit.POST}
                     >
                         Lagre
                     </FamilieKnapp>

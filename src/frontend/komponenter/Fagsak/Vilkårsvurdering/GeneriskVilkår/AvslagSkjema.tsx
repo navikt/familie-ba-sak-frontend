@@ -8,9 +8,9 @@ import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
+import { VedtakBegrunnelse } from '../../../../typer/vedtak';
 import { IVilkårResultat } from '../../../../typer/vilkår';
 import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
-import { VedtakBegrunnelse } from '../../../../typer/vedtak';
 
 interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
