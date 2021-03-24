@@ -10,10 +10,12 @@ import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import {
     behandlingsstatuser,
+    BehandlingStatus,
     behandlingstyper,
     behandlingÅrsak,
     IBehandling,
 } from '../../typer/behandling';
+import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 import familieDayjs from '../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../utils/formatter';
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
@@ -38,6 +40,9 @@ const GenerellSakInfoStripeTittel = styled.div`
 `;
 export const KnyttJournalpostTilBehandling: React.FC = () => {
     const { skjema, fagsak, hentSorterteBehandlinger, erLesevisning } = useManuellJournalfør();
+    const åpenBehandling: IBehandling | undefined = fagsak
+        ? hentAktivBehandlingPåFagsak(fagsak)
+        : undefined;
 
     const visGenerellSakInfoStripe =
         skjema.felter.tilknyttedeBehandlingIder.verdi.length === 0 &&
@@ -114,7 +119,9 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                     <br />
                 </>
             )}
-            {(!fagsak || fagsak?.behandlinger.length === 0) && <KnyttTilNyBehandling />}
+            {(!åpenBehandling || åpenBehandling.status === BehandlingStatus.AVSLUTTET) && (
+                <KnyttTilNyBehandling />
+            )}
             {visGenerellSakInfoStripe && (
                 <>
                     <br />
