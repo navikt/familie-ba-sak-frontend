@@ -118,4 +118,5 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         </Skjemasteg>
     );
 };
+
 export default Simulering;
