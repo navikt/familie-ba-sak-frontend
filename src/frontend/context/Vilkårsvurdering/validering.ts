@@ -1,6 +1,7 @@
-import { FeltState, Avhengigheter, Valideringsstatus, feil, ok } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IPeriode } from '../../typer/periode';
+import { VedtakBegrunnelse } from '../../typer/vedtak';
 import { IAnnenVurdering, IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
@@ -23,16 +24,25 @@ export const validerVilkår = (
         nyttVilkårResultat.verdi.resultat
     );
 
+    const nyeAvslagbegrunnelser: FeltState<
+        VedtakBegrunnelse[]
+    > = nyttVilkårResultat.verdi.avslagBegrunnelser.valider(
+        nyttVilkårResultat.verdi.avslagBegrunnelser,
+        { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
+    );
+
     const gyldigVilkår: boolean =
         nyPeriode.valideringsstatus === Valideringsstatus.OK &&
         nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
-        nyttResultat.valideringsstatus === Valideringsstatus.OK;
+        nyttResultat.valideringsstatus === Valideringsstatus.OK &&
+        nyeAvslagbegrunnelser.valideringsstatus === Valideringsstatus.OK;
 
     const nyVerdi: IVilkårResultat = {
         ...nyttVilkårResultat.verdi,
         periode: nyPeriode,
         begrunnelse: nyBegrunnelse,
         resultat: nyttResultat,
+        avslagBegrunnelser: nyeAvslagbegrunnelser,
     };
 
     return gyldigVilkår

@@ -19,7 +19,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import {
     IVedtakBegrunnelseSubmit,
     useVedtakBegrunnelser,
-} from '../../../../context/VedtakBegrunnelseContext';
+} from '../../../../context/VedtakBegrunnelserContext';
 import { lagPeriodeId } from '../../../../typer/periode';
 import {
     finnVedtakBegrunnelseType,
@@ -78,7 +78,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             propSelectStyles={{
                 container: (provided: CSSProperties) => ({
                     ...provided,
-                    maxWidth: '25rem',
+                    maxWidth: '50rem',
                 }),
                 groupHeading: (provided: CSSProperties) => ({
                     ...provided,

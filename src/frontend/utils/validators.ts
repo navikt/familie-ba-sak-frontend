@@ -10,6 +10,7 @@ import {
 import { IPersonMedAndelerTilkjentYtelse } from '../typer/beregning';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
+import { VedtakBegrunnelse } from '../typer/vedtak';
 import { Resultat } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import { datoformat, isoStringToDayjs } from './formatter';
@@ -83,11 +84,13 @@ export const erPeriodeGyldig = (
                 ? barnsVilkårErMellom0og18År(fom, person, tom)
                 : true;
 
-        if (fomDatoErFremITid) {
+        if (fomDatoErFremITid && !erEksplisittAvslagPåSøknad) {
             return feil(felt, 'Du kan ikke legge inn en dato frem i tid');
         }
 
-        return fomDatoErGyldig && fomDatoErFørTomDato && periodeErInnenfor18år
+        return fomDatoErGyldig &&
+            fomDatoErFørTomDato &&
+            (periodeErInnenfor18år || erEksplisittAvslagPåSøknad)
             ? ok(felt)
             : feil(felt, 'Ugyldig periode');
     } else {
@@ -103,6 +106,17 @@ export const erPeriodeGyldig = (
 
 export const erResultatGyldig = (felt: FeltState<Resultat>): FeltState<Resultat> => {
     return felt.verdi !== Resultat.IKKE_VURDERT ? ok(felt) : feil(felt, 'Resultat er ikke satt');
+};
+
+export const erAvslagBegrunnelserGyldig = (
+    felt: FeltState<VedtakBegrunnelse[]>,
+    avhengigheter?: Avhengigheter
+): FeltState<VedtakBegrunnelse[]> => {
+    const erEksplisittAvslagPåSøknad: boolean | undefined =
+        avhengigheter?.erEksplisittAvslagPåSøknad;
+    return erEksplisittAvslagPåSøknad && !felt.verdi.length
+        ? feil(felt, 'Du må velge minst en begrunnelse ved avslag')
+        : ok(felt);
 };
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';

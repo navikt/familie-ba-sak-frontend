@@ -6,7 +6,6 @@ import navFarger from 'nav-frontend-core';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import {
-    FamilieCheckbox,
     FamilieKnapp,
     FamilieRadioGruppe,
     FamilieTextareaControlled,
@@ -36,6 +35,7 @@ import {
     VilkårType,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import AvslagSkjema from './AvslagSkjema';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
@@ -116,6 +116,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     verdi: resultat,
                 },
                 erEksplisittAvslagPåSøknad: false,
+                avslagBegrunnelser: {
+                    ...redigerbartVilkår.verdi.avslagBegrunnelser,
+                    verdi: [],
+                },
             },
         });
     };
@@ -264,23 +268,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 {visAvslag &&
                     redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     !årsakErIkkeSøknad && (
-                        <FamilieCheckbox
-                            erLesevisning={leseVisning}
-                            label={'Vurderingen er et avslag'}
-                            checked={redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad}
-                            onChange={() => {
-                                validerOgSettRedigerbartVilkår({
-                                    ...redigerbartVilkår,
-                                    verdi: {
-                                        ...redigerbartVilkår.verdi,
-                                        erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
-                                            .erEksplisittAvslagPåSøknad,
-                                    },
-                                });
-                            }}
+                        <AvslagSkjema
+                            redigerbartVilkår={redigerbartVilkår}
+                            settRedigerbartVilkår={settRedigerbartVilkår}
+                            visFeilmeldinger={skalViseFeilmeldinger()}
+                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                         />
                     )}
-
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}

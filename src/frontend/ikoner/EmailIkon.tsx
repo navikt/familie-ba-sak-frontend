@@ -24,7 +24,7 @@ export const EmailIkon: React.FC<IEmailIkon> = ({
             width={width}
             height={height}
             viewBox="0 0 24 24"
-            enable-background="new 0 0 24 24"
+            enableBackground="new 0 0 24 24"
         >
             <g fill="#0067c5" stroke="none">
                 <path

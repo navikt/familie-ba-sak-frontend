@@ -22,7 +22,7 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelseContext';
+import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
 import {
     BehandlerRolle,
     BehandlingStatus,
@@ -32,11 +32,13 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import AvslagTabell from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
 import BegrunnelseTabell from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
 
 interface IVedtakProps {
@@ -49,7 +51,7 @@ const StyledFeilmelding = styled(Feilmelding)`
 `;
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { hentSaksbehandlerRolle, innloggetSaksbehandler, toggles } = useApp();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
@@ -167,7 +169,13 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         <Skjemasteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
-                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`)
+                toggles[ToggleNavn.visSimulering]
+                    ? history.push(
+                          `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`
+                      )
+                    : history.push(
+                          `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`
+                      )
             }
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
             nesteKnappTittel={'Til godkjenning'}
@@ -190,19 +198,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         }}
                         pdfdata={vedtaksbrev}
                     />
-
                     <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                         <BegrunnelseTabell åpenBehandling={åpenBehandling} />
+                        {toggles[ToggleNavn.visAvslag] && (
+                            <AvslagTabell åpenBehandling={åpenBehandling} />
+                        )}
                     </VedtakBegrunnelserProvider>
-
                     <Knapp
                         mini={true}
                         onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
                         children={'Vis vedtaksbrev'}
                     />
-
                     {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
-
                     {visModal && (
                         <UIModalWrapper
                             modal={{

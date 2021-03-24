@@ -21,6 +21,10 @@ interface ISimuleringProps {
     åpenBehandling: IBehandling;
 }
 
+const StyledAlertstripe = styled(Alertstripe)`
+    margin-bottom: 2rem;
+`;
+
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling, fagsak }) => {
     const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
     const { request } = useHttp();
@@ -28,6 +32,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const [simuleringResultat, settSimuleringResultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
     });
+    const [senderInn, settSenderInn] = useState(false);
+    const [erFeilMedBekreft, settErFeilMedBekreft] = useState<undefined | string>(undefined);
 
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
@@ -39,11 +45,29 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     }, [aktivtVedtak]);
 
     const nesteOnClick = async () => {
-        await request<IBehandling, string>({
+        settSenderInn(true);
+        request<IBehandling, IFagsak>({
             method: 'POST',
-            url: `/familie-ba-sak/api/simuleringResultat/${aktivtVedtak?.id}/bekreft`,
+            url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
+        }).then((ressurs: Ressurs<IFagsak>) => {
+            settSenderInn(false);
+            if (ressurs.status === RessursStatus.SUKSESS) {
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+            } else if (
+                ressurs.status === RessursStatus.FEILET ||
+                ressurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                ressurs.status === RessursStatus.IKKE_TILGANG
+            ) {
+                settErFeilMedBekreft(ressurs.frontendFeilmelding);
+
+                /*
+                 *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
+                 *  Må fjernes når toggelen for simulering fjernes.
+                 */
+                process.env.NODE_ENV === 'development' &&
+                    history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+            }
         });
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
     };
 
     const forrigeOnClick = () => {
@@ -59,29 +83,37 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     return (
         <Skjemasteg
-            senderInn={false}
+            senderInn={senderInn}
             tittel="SimuleringResultat"
             className="simuleringResultat"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            {simuleringResultat?.status === RessursStatus.SUKSESS ? (
-                simuleringResultat.data.perioder.length === 0 ? (
-                    <Alertstripe type="info">
-                        Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
-                    </Alertstripe>
+            <>
+                {simuleringResultat?.status === RessursStatus.SUKSESS ? (
+                    simuleringResultat.data.perioder.length === 0 ? (
+                        <Alertstripe type="info">
+                            Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
+                        </Alertstripe>
+                    ) : (
+                        <>
+                            <SimuleringPanel simulering={simuleringResultat.data} />
+                            <SimuleringTabell simulering={simuleringResultat.data} />
+                        </>
+                    )
                 ) : (
-                    <>
-                        <SimuleringPanel simulering={simuleringResultat.data} />
-                        <SimuleringTabell simulering={simuleringResultat.data} />
-                    </>
-                )
-            ) : (
-                <Alertstripe type="info">
-                    Det har skjedd en feil: {simuleringResultat?.frontendFeilmelding}
-                </Alertstripe>
-            )}
+                    <Alertstripe type="info">
+                        Det har skjedd en feil: {simuleringResultat?.frontendFeilmelding}
+                    </Alertstripe>
+                )}
+                {erFeilMedBekreft && (
+                    <StyledAlertstripe type="feil">
+                        Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
+                        {erFeilMedBekreft}
+                    </StyledAlertstripe>
+                )}
+            </>
         </Skjemasteg>
     );
 };

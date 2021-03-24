@@ -2,7 +2,7 @@ import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-eleme
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
 import { ToggleNavn } from '../../../../typer/toggles';
 import {
@@ -14,6 +14,7 @@ import {
 } from '../../../../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import {
+    AnnenVurderingType,
     IRestPersonResultat,
     IRestVilkårResultat,
     Resultat,
@@ -98,6 +99,20 @@ const useVedtakBegrunnelseMultiselect = (
         }
     };
 
+    const skalLeggeTilAndreBegrunnelse = (
+        vedtakBegrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår
+    ) =>
+        vedtakBegrunnelse.id === VedtakBegrunnelse.OPPHØR_IKKE_MOTTATT_OPPLYSNINGER ||
+        vedtakBegrunnelse.id === VedtakBegrunnelse.REDUKSJON_MANGLENDE_OPPLYSNINGER
+            ? personResultater
+                  .flatMap(personResultat => personResultat.andreVurderinger)
+                  .find(
+                      annenVurdering =>
+                          annenVurdering.type === AnnenVurderingType.OPPLYSNINGSPLIKT &&
+                          annenVurdering.resultat === Resultat.IKKE_OPPFYLT
+                  )
+            : true;
+
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] => {
         return personResultater
             .flatMap(personResultat => personResultat.vilkårResultater)
@@ -154,6 +169,7 @@ const useVedtakBegrunnelseMultiselect = (
     const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
         (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
             return (
+                vedtakBegrunnelse.begrunnelseType !== VedtakBegrunnelseType.AVSLAG &&
                 vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
                 vedtakBegrunnelse.tom === vedtaksperiode.periodeTom
             );
@@ -174,7 +190,6 @@ const useVedtakBegrunnelseMultiselect = (
                       const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
                           vedtakBegrunnelseType as VedtakBegrunnelseType
                       );
-
                       return [
                           ...acc,
                           {
@@ -193,7 +208,9 @@ const useVedtakBegrunnelseMultiselect = (
                                               ? utgjørendeVilkårForPeriodeOgResultat.includes(
                                                     restVedtakBegrunnelseTilknyttetVilkår.vilkår
                                                 )
-                                              : true;
+                                              : skalLeggeTilAndreBegrunnelse(
+                                                    restVedtakBegrunnelseTilknyttetVilkår
+                                                );
                                       }
                                   )
                                   .map(
@@ -209,23 +226,26 @@ const useVedtakBegrunnelseMultiselect = (
                   }, [])
             : [];
 
-    const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode.map(
-        (utbetalingsbegrunnelse: IRestVedtakBegrunnelse) => ({
-            value: utbetalingsbegrunnelse.begrunnelse?.toString() ?? '',
+    const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode
+        .filter(
+            (vedtaksbegrunnelse: IRestVedtakBegrunnelse) =>
+                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.OPPHØR_FRITEKST
+        )
+        .map((vedtaksbegrunnelse: IRestVedtakBegrunnelse) => ({
+            value: vedtaksbegrunnelse.begrunnelse?.toString() ?? '',
             label:
                 vilkårBegrunnelser.status === RessursStatus.SUKSESS
                     ? vilkårBegrunnelser.data[
-                          utbetalingsbegrunnelse.begrunnelseType as VedtakBegrunnelseType
+                          vedtaksbegrunnelse.begrunnelseType as VedtakBegrunnelseType
                       ].find(
                           (
                               restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
                           ) =>
                               restVedtakBegrunnelseTilknyttetVilkår.id ===
-                              utbetalingsbegrunnelse.begrunnelse
+                              vedtaksbegrunnelse.begrunnelse
                       )?.navn ?? ''
                     : '',
-        })
-    );
+        }));
 
     const begrunnelser =
         vilkårBegrunnelser?.status === RessursStatus.SUKSESS && vilkårBegrunnelser.data;

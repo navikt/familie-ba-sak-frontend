@@ -6,10 +6,12 @@ import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
+import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
+import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
@@ -39,6 +41,8 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         settOpprettelseFeilmelding
     );
 
+    const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
+
     if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen.</div>;
     }
@@ -61,7 +65,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
                     );
                 } else if (erVilkårsvurderingenGyldig()) {
-                    validerVilkårsvurderingOgSendInn(vilkårsvurdering, fagsak);
+                    validerVilkårsvurderingOgSendInn(fagsak);
                 } else {
                     settVisFeilmeldinger(true);
                 }
@@ -69,7 +73,9 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             maxWidthStyle={'80rem'}
             senderInn={senderInn}
         >
-            <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
+            <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+                <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
+            </VedtakBegrunnelserProvider>
 
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
                 visFeilmeldinger && (

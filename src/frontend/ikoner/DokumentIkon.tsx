@@ -24,7 +24,7 @@ export const DokumentIkon: React.FC<IDokumentIkon> = ({
             width={width}
             height={height}
             viewBox="0 0 24 24"
-            enable-background="new 0 0 24 24"
+            enableBackground="new 0 0 24 24"
             fill="#0067c5"
         >
             <path

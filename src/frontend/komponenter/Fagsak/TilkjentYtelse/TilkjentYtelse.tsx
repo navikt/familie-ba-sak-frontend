@@ -2,9 +2,11 @@ import * as React from 'react';
 
 import { useHistory } from 'react-router';
 
+import { useApp } from '../../../context/AppContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentUtbetalingsperioder, Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -22,8 +24,11 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
 }) => {
     const history = useHistory();
     const { aktivEtikett } = useTidslinje();
+    const { toggles } = useApp();
     const nesteOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
+        toggles[ToggleNavn.visSimulering]
+            ? history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`)
+            : history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
     };
 
     const forrigeOnClick = () => {
