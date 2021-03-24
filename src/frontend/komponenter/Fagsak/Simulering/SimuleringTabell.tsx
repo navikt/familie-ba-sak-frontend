@@ -1,14 +1,13 @@
 import * as React from 'react';
 
+import dayjs from 'dayjs';
 import styled from 'styled-components';
 import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { PopoverOrientering } from 'nav-frontend-popover';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { ISimulering, useSimulering } from '../../../context/SimuleringContext';
+import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
 import { formaterBeløp } from '../../../utils/formatter';
 
@@ -52,11 +51,6 @@ const Skillelinje = styled.div`
     }
 `;
 
-const StyledHjelpetekst = styled(Hjelpetekst)`
-    margin-left: 0.875rem;
-    margin-bottom: 0.125rem;
-`;
-
 const SimuleringTabellOverskrift = styled.div`
     display: flex;
     flex-direction: row;
@@ -65,150 +59,135 @@ const SimuleringTabellOverskrift = styled.div`
 `;
 
 interface ISimuleringProps {
-    simulering: ISimulering;
+    simulering: ISimuleringDTO;
 }
 
-const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulering }) => {
-    const {
-        hentSumPositiveYtelserIPeriode,
-        hentSumNegativeYtelserIPeriode,
-        hentSumYtelserIPeriode,
-    } = useSimulering();
-
+const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({
+    simulering: { fomDatoNestePeriode, fom, perioder, tomDatoNestePeriode },
+}) => {
     const kapitaliserTekst = (tekst: string): string => {
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
     };
 
     const formaterBeløpUtenPostfiks = (beløp: number) => formaterBeløp(beløp).slice(0, -3);
 
-    const periodeStartdatoer = Object.keys(simulering.periodeDictionary);
+    const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
+        !fomDatoNestePeriode || !dayjs(periode.fom).isAfter(dayjs(fomDatoNestePeriode));
+
+    const TabellSkillelinje = (props: { fomDatoPeriode: string }) => (
+        <>
+            {fomDatoNestePeriode === props.fomDatoPeriode && (
+                <Skillelinje>
+                    <div />
+                </Skillelinje>
+            )}
+        </>
+    );
 
     return (
         <>
             <SimuleringTabellOverskrift>
                 <Element>
-                    Simuleringsresultat for perioden{' '}
-                    {familieDayjs(simulering.fom).format('DD.MM.YYYY')} -{' '}
-                    {familieDayjs(simulering.tom).format('DD.MM.YYYY')}
+                    Simuleringsresultat for perioden {familieDayjs(fom).format('DD.MM.YYYY')} -{' '}
+                    {familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}
                 </Element>
-                <StyledHjelpetekst type={PopoverOrientering.Hoyre}>
-                    Her vises nye og tidligere beløp fra oppdragssystemet. <br />
-                    Neste utbetaling vises som siste celle under resultat.
-                </StyledHjelpetekst>
             </SimuleringTabellOverskrift>
 
             <StyledTable className="tabell">
                 <colgroup>
                     <VenstreKolonne />
-                    {periodeStartdatoer.map(fomDato =>
-                        simulering.nesteUtbetaling.dato === fomDato ? (
-                            <>
-                                <SkillelinjeKolonne />
+                    {perioder.map(
+                        periode =>
+                            periodeSkalVisesITabell(periode) &&
+                            (fomDatoNestePeriode === periode.fom ? (
+                                <>
+                                    <SkillelinjeKolonne />
+                                    <DataKolonne />
+                                </>
+                            ) : (
                                 <DataKolonne />
-                            </>
-                        ) : (
-                            <DataKolonne />
-                        )
+                            ))
                     )}
+                    )
                 </colgroup>
 
                 <thead>
                     <tr>
                         <td />
-                        {periodeStartdatoer.map(fomDato => (
-                            <>
-                                {simulering.nesteUtbetaling.dato === fomDato && (
-                                    <Skillelinje>
-                                        <div />
-                                    </Skillelinje>
-                                )}
-
-                                <th>
-                                    <Element>
-                                        {kapitaliserTekst(familieDayjs(fomDato).format('MMM'))}
-                                    </Element>
-                                </th>
-                            </>
-                        ))}
+                        {perioder.map(
+                            periode =>
+                                periodeSkalVisesITabell(periode) && (
+                                    <>
+                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        <th>
+                                            <Element>
+                                                {kapitaliserTekst(
+                                                    familieDayjs(periode.fom).format('MMM')
+                                                )}
+                                            </Element>
+                                        </th>
+                                    </>
+                                )
+                        )}
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr>
                         <td>Nytt beløp</td>
-                        {periodeStartdatoer.map(fomDato => (
-                            <>
-                                {simulering.nesteUtbetaling.dato === fomDato && (
-                                    <Skillelinje>
-                                        <div />
-                                    </Skillelinje>
-                                )}
-
-                                <HøyresiltTd>
-                                    <Normaltekst>
-                                        {formaterBeløpUtenPostfiks(
-                                            hentSumPositiveYtelserIPeriode(
-                                                simulering.periodeDictionary[fomDato]
-                                            )
-                                        )}
-                                    </Normaltekst>
-                                </HøyresiltTd>
-                            </>
-                        ))}
+                        {perioder.map(
+                            periode =>
+                                periodeSkalVisesITabell(periode) && (
+                                    <>
+                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        <HøyresiltTd>
+                                            <Normaltekst>
+                                                {formaterBeløpUtenPostfiks(periode.nyttBeløp)}
+                                            </Normaltekst>
+                                        </HøyresiltTd>
+                                    </>
+                                )
+                        )}
                     </tr>
                     <tr>
                         <td>Tidligere utbetalt</td>
-                        {periodeStartdatoer.map(fomDato => (
-                            <>
-                                {simulering.nesteUtbetaling.dato === fomDato && (
-                                    <Skillelinje>
-                                        <div />
-                                    </Skillelinje>
-                                )}
-
-                                <HøyresiltTd>
-                                    <Normaltekst>
-                                        {formaterBeløpUtenPostfiks(
-                                            Math.abs(
-                                                hentSumNegativeYtelserIPeriode(
-                                                    simulering.periodeDictionary[fomDato]
-                                                )
-                                            )
-                                        )}
-                                    </Normaltekst>
-                                </HøyresiltTd>
-                            </>
-                        ))}
+                        {perioder.map(
+                            periode =>
+                                periodeSkalVisesITabell(periode) && (
+                                    <>
+                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        <HøyresiltTd>
+                                            <Normaltekst>
+                                                {formaterBeløpUtenPostfiks(
+                                                    periode.tidligereUtbetalt
+                                                )}
+                                            </Normaltekst>
+                                        </HøyresiltTd>
+                                    </>
+                                )
+                        )}
                     </tr>
                     <tr>
                         <td>Resultat</td>
-                        {periodeStartdatoer.map(fomDato => (
-                            <>
-                                {simulering.nesteUtbetaling.dato === fomDato && (
-                                    <Skillelinje>
-                                        <div />
-                                    </Skillelinje>
-                                )}
-
-                                <HøyresiltTd>
-                                    <NormaltekstMedFarge
-                                        farge={
-                                            hentSumYtelserIPeriode(
-                                                simulering.periodeDictionary[fomDato]
-                                            ) < 0
-                                                ? navFarger.navRod
-                                                : navFarger.navMorkGra
-                                        }
-                                    >
-                                        {formaterBeløpUtenPostfiks(
-                                            hentSumYtelserIPeriode(
-                                                simulering.periodeDictionary[fomDato]
-                                            )
-                                        )}
-                                    </NormaltekstMedFarge>
-                                </HøyresiltTd>
-                            </>
-                        ))}
+                        {perioder.map(
+                            periode =>
+                                periodeSkalVisesITabell(periode) && (
+                                    <>
+                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        <HøyresiltTd>
+                                            <NormaltekstMedFarge
+                                                farge={
+                                                    periode.resultat < 0
+                                                        ? navFarger.navRod
+                                                        : navFarger.navMorkGra
+                                                }
+                                            >
+                                                {formaterBeløpUtenPostfiks(periode.resultat)}
+                                            </NormaltekstMedFarge>
+                                        </HøyresiltTd>
+                                    </>
+                                )
+                        )}
                     </tr>
                 </tbody>
             </StyledTable>

@@ -6,13 +6,13 @@ import navFarger from 'nav-frontend-core';
 import Panel from 'nav-frontend-paneler';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { ISimulering, useSimulering } from '../../../context/SimuleringContext';
+import { ISimuleringDTO } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
+import { formaterBeløp } from '../../../utils/formatter';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;
     padding: 2rem;
-    padding-right: 3.4375rem;
     margin-bottom: 2.5rem;
 `;
 
@@ -43,24 +43,38 @@ const StyledHr = styled.hr`
 `;
 
 interface ISimuleringProps {
-    simulering: ISimulering;
+    simulering: ISimuleringDTO;
 }
 
-const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({ simulering }) => {
-    const { formater } = useSimulering();
-
+const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
+    simulering: {
+        feilutbetaling,
+        fom,
+        etterbetaling,
+        tomDatoNestePeriode,
+        fomDatoNestePeriode,
+        perioder,
+    },
+}) => {
     const kapitaliserTekst = (tekst: string): string => {
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
     };
 
+    const formater = (beløp?: number) => {
+        return <>{!beløp || beløp === 0 ? '-' : formaterBeløp(beløp)}</>;
+    };
+
+    const nestePeriode = fomDatoNestePeriode
+        ? perioder.find(periode => periode.fom === fomDatoNestePeriode) ?? undefined
+        : undefined;
     return (
         <StyledPanel border>
             <StyledTable>
                 <tr>
                     <StyledTh colSpan={2}>
                         <Element>
-                            Totalt for perioden {familieDayjs(simulering.fom).format('DD.MM.YYYY')}{' '}
-                            - {familieDayjs(simulering.tom).format('DD.MM.YYYY')}
+                            Totalt for perioden {familieDayjs(fom).format('DD.MM.YYYY')} -{' '}
+                            {familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}
                         </Element>
                     </StyledTh>
                 </tr>
@@ -70,7 +84,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({ simulering
                     </StyledTd>
                     <StyledTd erHøyrestilt={true}>
                         <ElementMedFarge farge={navFarger.navRod}>
-                            {formater(simulering.totalFeilutbetaling)}
+                            {formater(feilutbetaling)}
                         </ElementMedFarge>
                     </StyledTd>
                 </tr>
@@ -80,7 +94,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({ simulering
                         <Normaltekst>Etterbetaling</Normaltekst>
                     </StyledTd>
                     <StyledTd erHøyrestilt={true}>
-                        <ElementMedFarge>{formater(simulering.totalYtelse)}</ElementMedFarge>
+                        <ElementMedFarge>{formater(etterbetaling)}</ElementMedFarge>
                     </StyledTd>
                 </tr>
             </StyledTable>
@@ -93,25 +107,23 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({ simulering
                         <Element>Neste utbetaling</Element>
                     </StyledTh>
                 </tr>
-                {simulering.nesteUtbetaling.beløp !== undefined && (
+                {
                     <tr>
                         <StyledTd>
                             <Normaltekst>
                                 {kapitaliserTekst(
-                                    familieDayjs(simulering.nesteUtbetaling.dato).format(
-                                        'MMMM YYYY'
-                                    )
+                                    familieDayjs(fomDatoNestePeriode).format('MMMM YYYY')
                                 )}
                             </Normaltekst>
                         </StyledTd>
 
                         <StyledTd erHøyrestilt={true}>
                             <ElementMedFarge farge={navFarger.navGronnDarken40}>
-                                {formater(simulering.nesteUtbetaling.beløp)}
+                                {formater(nestePeriode?.resultat)}
                             </ElementMedFarge>
                         </StyledTd>
                     </tr>
-                )}
+                }
             </StyledTable>
         </StyledPanel>
     );
