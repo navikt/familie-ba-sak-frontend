@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
 
 import Alertstripe from 'nav-frontend-alertstriper';
 
