@@ -2,7 +2,7 @@ import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-eleme
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
 import { ToggleNavn } from '../../../../typer/toggles';
 import {
@@ -226,23 +226,26 @@ const useVedtakBegrunnelseMultiselect = (
                   }, [])
             : [];
 
-    const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode.map(
-        (utbetalingsbegrunnelse: IRestVedtakBegrunnelse) => ({
-            value: utbetalingsbegrunnelse.begrunnelse?.toString() ?? '',
+    const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode
+        .filter(
+            (vedtaksbegrunnelse: IRestVedtakBegrunnelse) =>
+                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.OPPHØR_FRITEKST
+        )
+        .map((vedtaksbegrunnelse: IRestVedtakBegrunnelse) => ({
+            value: vedtaksbegrunnelse.begrunnelse?.toString() ?? '',
             label:
                 vilkårBegrunnelser.status === RessursStatus.SUKSESS
                     ? vilkårBegrunnelser.data[
-                          utbetalingsbegrunnelse.begrunnelseType as VedtakBegrunnelseType
+                          vedtaksbegrunnelse.begrunnelseType as VedtakBegrunnelseType
                       ].find(
                           (
                               restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
                           ) =>
                               restVedtakBegrunnelseTilknyttetVilkår.id ===
-                              utbetalingsbegrunnelse.begrunnelse
+                              vedtaksbegrunnelse.begrunnelse
                       )?.navn ?? ''
                     : '',
-        })
-    );
+        }));
 
     const begrunnelser =
         vilkårBegrunnelser?.status === RessursStatus.SUKSESS && vilkårBegrunnelser.data;

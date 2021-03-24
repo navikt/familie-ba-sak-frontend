@@ -6,7 +6,7 @@ import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
-import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelseContext';
+import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
@@ -65,7 +65,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
                     );
                 } else if (erVilkårsvurderingenGyldig()) {
-                    validerVilkårsvurderingOgSendInn(vilkårsvurdering, fagsak);
+                    validerVilkårsvurderingOgSendInn(fagsak);
                 } else {
                     settVisFeilmeldinger(true);
                 }

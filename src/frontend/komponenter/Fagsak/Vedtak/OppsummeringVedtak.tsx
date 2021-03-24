@@ -22,7 +22,7 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelseContext';
+import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
 import {
     BehandlerRolle,
     BehandlingStatus,
@@ -198,22 +198,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         }}
                         pdfdata={vedtaksbrev}
                     />
-
                     <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                         <BegrunnelseTabell åpenBehandling={åpenBehandling} />
                         {toggles[ToggleNavn.visAvslag] && (
                             <AvslagTabell åpenBehandling={åpenBehandling} />
                         )}
                     </VedtakBegrunnelserProvider>
-
                     <Knapp
                         mini={true}
                         onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
                         children={'Vis vedtaksbrev'}
                     />
-
                     {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
-
                     {visModal && (
                         <UIModalWrapper
                             modal={{

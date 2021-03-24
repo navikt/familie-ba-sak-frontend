@@ -2,7 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
+
 import { periodeToString, TIDENES_MORGEN } from '../../../../../typer/periode';
 import {
     hentVedtaksperiodeTittel,
@@ -10,10 +12,9 @@ import {
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
 import { formaterBeløp, isoStringToDayjs } from '../../../../../utils/formatter';
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { sisteDagInneværendeMåned } from '../../../../../utils/tid';
 
-const StyledEkspanderbartpanel = styled(Ekspanderbartpanel)`
+const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     margin-bottom: 1.5rem;
     max-width: 49rem;
 
@@ -34,6 +35,7 @@ const PanelTittel = styled.p`
 interface IEkspanderbartBegrunnelsePanelProps {
     vedtaksperiode: Vedtaksperiode;
     åpen: boolean;
+    onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 }
 
 const slutterSenereEnnInneværendeMåned = (dato: string) =>
@@ -42,11 +44,13 @@ const slutterSenereEnnInneværendeMåned = (dato: string) =>
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     vedtaksperiode,
     åpen,
+    onClick,
     children,
 }) => (
-    <StyledEkspanderbartpanel
+    <StyledEkspanderbartpanelBase
         key={`${vedtaksperiode.vedtaksperiodetype}_${vedtaksperiode.periodeFom}_${vedtaksperiode.periodeTom}`}
         apen={åpen}
+        onClick={onClick}
         tittel={
             vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.AVSLAG ? (
                 <PanelTittel>
@@ -79,7 +83,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
         }
     >
         {children}
-    </StyledEkspanderbartpanel>
+    </StyledEkspanderbartpanelBase>
 );
 
 export default EkspanderbartBegrunnelsePanel;
