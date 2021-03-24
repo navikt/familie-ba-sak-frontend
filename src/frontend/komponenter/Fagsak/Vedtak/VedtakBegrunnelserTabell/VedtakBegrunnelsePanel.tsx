@@ -47,8 +47,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     const { erLesevisning } = useBehandling();
     const { toggles } = useApp();
 
-    const { ekspandertBegrunnelse } = useFritekstVedtakBegrunnelser();
-    const { toggleForm } = useFritekstVedtakBegrunnelser();
+    const { ekspandertBegrunnelse, toggleForm } = useFritekstVedtakBegrunnelser();
 
     return (
         <EkspanderbartBegrunnelsePanel
