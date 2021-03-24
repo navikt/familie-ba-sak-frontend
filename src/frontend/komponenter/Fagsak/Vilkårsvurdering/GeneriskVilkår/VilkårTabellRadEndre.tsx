@@ -6,7 +6,6 @@ import navFarger from 'nav-frontend-core';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import {
-    FamilieCheckbox,
     FamilieKnapp,
     FamilieRadioGruppe,
     FamilieTextareaControlled,
@@ -27,7 +26,6 @@ import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
-import { VedtakBegrunnelse } from '../../../../typer/vedtak';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -37,15 +35,13 @@ import {
     VilkårType,
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
+import AvslagSkjema from './AvslagSkjema';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
     vilkårFeilmeldingId,
     vilkårResultatFeilmeldingId,
 } from './VilkårTabell';
-import { nyPeriode } from '../../../../typer/periode';
-import AvslagSkjema from './AvslagSkjema';
 
 interface IProps {
     person: IGrunnlagPerson;

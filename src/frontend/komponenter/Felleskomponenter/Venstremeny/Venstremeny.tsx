@@ -24,6 +24,7 @@ const Venstremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { toggles } = useApp();
 
     const alleSiderUtenomSimulering = () => {
+        // eslint-disable-next-line
         const { SIMULERING, ...allSiderUtenomSimulering } = sider;
 
         return {

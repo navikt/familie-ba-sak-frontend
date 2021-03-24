@@ -9,7 +9,6 @@ import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/f
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { BehandlingResultat, BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
-import { IPersonResultat } from '../../typer/vilkår';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (
@@ -106,10 +105,7 @@ const useFagsakApi = (
             });
     };
 
-    const validerVilkårsvurderingOgSendInn = (
-        vilkårsvurdering: IPersonResultat[],
-        fagsak: IFagsak
-    ) => {
+    const validerVilkårsvurderingOgSendInn = (fagsak: IFagsak) => {
         const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
         settSenderInn(true);
 
