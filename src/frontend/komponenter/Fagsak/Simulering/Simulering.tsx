@@ -85,8 +85,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     return (
         <Skjemasteg
             senderInn={senderInn}
-            tittel="SimuleringResultat"
-            className="simuleringResultat"
+            tittel="Simulering"
+            className="simulering"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
