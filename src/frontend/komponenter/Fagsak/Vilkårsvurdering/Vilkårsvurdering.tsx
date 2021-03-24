@@ -6,12 +6,10 @@ import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
-import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelseContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
-import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
@@ -40,8 +38,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         settVisFeilmeldinger,
         settOpprettelseFeilmelding
     );
-
-    const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
 
     if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen.</div>;
@@ -73,9 +69,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             maxWidthStyle={'80rem'}
             senderInn={senderInn}
         >
-            <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
-            </VedtakBegrunnelserProvider>
+            <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
 
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
                 visFeilmeldinger && (

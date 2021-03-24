@@ -5,8 +5,10 @@ import constate from 'constate';
 import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IPeriode, lagPeriodeId } from '../typer/periode';
+import { ToggleNavn } from '../typer/toggles';
 import {
     IRestAvslagbegrunnelser,
     IRestDeleteVedtakBegrunnelser,
@@ -16,9 +18,8 @@ import {
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
-import { useFagsakRessurser } from './FagsakContext';
 import { useApp } from './AppContext';
-import { ToggleNavn } from '../typer/toggles';
+import { useFagsakRessurser } from './FagsakContext';
 
 export interface IVedtakBegrunnelseSubmit {
     periodeId: string;

@@ -1,15 +1,17 @@
 import React from 'react';
 
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
+import styled from 'styled-components';
+
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat } from '../../../../utils/formatter';
-import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
-import styled from 'styled-components';
+import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 
 interface IAvslagTabell {
     åpenBehandling: IBehandling;
