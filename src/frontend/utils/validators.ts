@@ -10,11 +10,11 @@ import {
 import { IPersonMedAndelerTilkjentYtelse } from '../typer/beregning';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
+import { VedtakBegrunnelse } from '../typer/vedtak';
 import { Resultat } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import { datoformat, isoStringToDayjs } from './formatter';
 import { leggTilÅr } from './tid';
-import { VedtakBegrunnelse } from '../typer/vedtak';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');

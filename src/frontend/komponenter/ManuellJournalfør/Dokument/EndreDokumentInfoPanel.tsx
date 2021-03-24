@@ -4,7 +4,7 @@ import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements
 import { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
-import { DokumentTittel } from '../../../typer/manuell-journalføring';
+import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';
 import { journalpostTittelList } from '../Journalpost';
 
 const dokumentTittelList = Object.keys(DokumentTittel).map((_, index) => {
@@ -25,14 +25,9 @@ interface IProps {
 }
 
 export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeldinger }) => {
-    const {
-        skjema,
-        settDokumentTittel,
-        settLogiskeVedlegg,
-        erLesevisning,
-    } = useManuellJournalfør();
+    const { skjema, erLesevisning } = useManuellJournalfør();
 
-    const dokumentFraSkjema = skjema.felter.dokumenter.verdi.find(
+    const dokumentFraSkjema: IDokumentInfo | undefined = skjema.felter.dokumenter.verdi.find(
         findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId
     );
 
@@ -47,11 +42,36 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
             : [];
     };
 
-    const tittelOption = (): ISelectOption => {
-        return {
-            value: dokumentFraSkjema?.tittel ?? '',
-            label: dokumentFraSkjema?.tittel ?? '',
-        };
+    const settDokumentTittel = (nyVerdi: string) => {
+        skjema.felter.dokumenter.validerOgSettFelt([
+            ...skjema.felter.dokumenter.verdi.map((dokument: IDokumentInfo) => {
+                return dokumentFraSkjema &&
+                    dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
+                    ? {
+                          ...dokumentFraSkjema,
+                          tittel: nyVerdi,
+                          brevkode: BrevkodeMap.get(nyVerdi) || '',
+                      }
+                    : dokument;
+            }),
+        ]);
+    };
+
+    const settLogiskeVedlegg = (logiskeVedleggNavn: string[]) => {
+        skjema.felter.dokumenter.validerOgSettFelt([
+            ...skjema.felter.dokumenter.verdi.map(dokument => {
+                return dokumentFraSkjema &&
+                    dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
+                    ? {
+                          ...dokumentFraSkjema,
+                          logiskeVedlegg: logiskeVedleggNavn.map(vedlegg => ({
+                              tittel: vedlegg,
+                              logiskVedleggId: '0', // Påkrevd felt, ignoreres av backend. Kan settes til hva som helst.
+                          })),
+                      }
+                    : dokument;
+            }),
+        ]);
     };
 
     return (
@@ -63,15 +83,20 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                 isClearable
                 isMulti={false}
                 options={tittelList}
-                value={tittelOption()}
+                value={{
+                    value: dokumentFraSkjema?.tittel ?? '',
+                    label: dokumentFraSkjema?.tittel ?? '',
+                }}
                 feil={
-                    visFeilmeldinger && dokument.tittel === '' ? 'Tittel er ikke satt' : undefined
+                    visFeilmeldinger && dokumentFraSkjema?.tittel === ''
+                        ? 'Tittel er ikke satt'
+                        : undefined
                 }
                 onChange={value => {
                     if (value && 'value' in value) {
-                        settDokumentTittel(value.value || '', dokument.dokumentInfoId);
+                        settDokumentTittel(value.value);
                     } else {
-                        settDokumentTittel('', dokument.dokumentInfoId);
+                        settDokumentTittel('');
                     }
                 }}
             />
@@ -88,8 +113,7 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                 placeholder={'Velg innhold'}
                 onChange={options => {
                     settLogiskeVedlegg(
-                        options instanceof Array ? options.map(({ value }) => value) : [],
-                        dokument.dokumentInfoId
+                        options instanceof Array ? options.map(({ value }) => value) : []
                     );
                 }}
             />

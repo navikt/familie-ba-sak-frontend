@@ -1,8 +1,8 @@
 import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IPeriode } from '../../typer/periode';
-import { IAnnenVurdering, IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 import { VedtakBegrunnelse } from '../../typer/vedtak';
+import { IAnnenVurdering, IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
