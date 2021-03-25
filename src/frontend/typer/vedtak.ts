@@ -2,11 +2,13 @@ import navFarger from 'nav-frontend-core';
 
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { Vedtaksperiodetype } from './vedtaksperiode';
 import { Vilkårsbegrunnelser, VilkårType } from './vilkår';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
     begrunnelser: IRestVedtakBegrunnelse[];
+    avslagBegrunnelser: IRestAvslagbegrunnelser[];
     vedtaksdato: string;
     id: number;
 }
@@ -14,6 +16,7 @@ export interface IVedtakForBehandling {
 export interface IRestVedtakBegrunnelse {
     begrunnelse?: VedtakBegrunnelse;
     begrunnelseType?: VedtakBegrunnelseType;
+    brevBegrunnelse?: string;
     fom: string;
     id?: number;
     tom?: string;
@@ -23,6 +26,13 @@ export interface IRestPostVedtakBegrunnelse {
     fom: string;
     tom?: string;
     vedtakBegrunnelse: VedtakBegrunnelse;
+}
+
+export interface IRestPostFritekstVedtakBegrunnelser {
+    fom: string;
+    tom?: string;
+    fritekster: string[];
+    vedtaksperiodetype: Vedtaksperiodetype;
 }
 
 export interface IRestDeleteVedtakBegrunnelser {
@@ -35,6 +45,12 @@ export interface IRestVedtakBegrunnelseTilknyttetVilkår {
     id: VedtakBegrunnelse;
     navn: string;
     vilkår?: VilkårType;
+}
+
+export interface IRestAvslagbegrunnelser {
+    fom?: string;
+    tom?: string;
+    brevBegrunnelser: string[];
 }
 
 export enum VedtakBegrunnelse {
@@ -59,6 +75,8 @@ export enum VedtakBegrunnelse {
     INNVILGET_SATSENDRING = 'INNVILGET_SATSENDRING',
     OPPHØR_BARN_FLYTTET_FRA_SØKER = 'OPPHØR_BARN_FLYTTET_FRA_SØKER',
     OPPHØR_SØKER_FLYTTET_FRA_BARN = 'OPPHØR_SØKER_FLYTTET_FRA_BARN',
+    OPPHØR_FRITEKST = 'OPPHØR_FRITEKST',
+    OPPHØR_IKKE_MOTTATT_OPPLYSNINGER = 'OPPHØR_IKKE_MOTTATT_OPPLYSNINGER',
     AVSLAG_BOSATT_I_RIKET = 'AVSLAG_BOSATT_I_RIKET',
     AVSLAG_LOVLIG_OPPHOLD_TREDJELANDSBORGER = 'AVSLAG_LOVLIG_OPPHOLD_TREDJELANDSBORGER',
     AVSLAG_BOR_HOS_SØKER = 'AVSLAG_BOR_HOS_SØKER',
@@ -71,6 +89,7 @@ export enum VedtakBegrunnelse {
     AVSLAG_UGYLDIG_AVTALE_OM_DELT_BOSTED = 'AVSLAG_UGYLDIG_AVTALE_OM_DELT_BOSTED',
     AVSLAG_IKKE_AVTALE_OM_DELT_BOSTED = 'AVSLAG_IKKE_AVTALE_OM_DELT_BOSTED',
     AVSLAG_OPPLYSNINGSPLIKT = 'AVSLAG_OPPLYSNINGSPLIKT',
+    AVSLAG_FRITEKST = 'AVSLAG_FRITEKST',
 }
 
 export enum VedtakBegrunnelseType {

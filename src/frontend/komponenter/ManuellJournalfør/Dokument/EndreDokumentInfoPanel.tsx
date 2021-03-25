@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
+import { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../../context/ManuellJournalførContext';
-import { DokumentTittel } from '../../../typer/manuell-journalføring';
+import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';
 import { journalpostTittelList } from '../Journalpost';
 
 const dokumentTittelList = Object.keys(DokumentTittel).map((_, index) => {
@@ -18,18 +19,21 @@ const tittelList = journalpostTittelList
     .concat([{ value: '----------', label: '----------', isDisabled: true }])
     .concat(dokumentTittelList);
 
-export const EndreDokumentInfoPanel: React.FC = () => {
-    const {
-        settLogiskeVedlegg,
-        finnValgtDokument,
-        settDokumentTittel,
-        tilbakestillDokumentTittel,
-    } = useManuellJournalfør();
+interface IProps {
+    dokument: IDokumentInfo;
+    visFeilmeldinger: boolean;
+}
+
+export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeldinger }) => {
+    const { skjema, erLesevisning } = useManuellJournalfør();
+
+    const dokumentFraSkjema: IDokumentInfo | undefined = skjema.felter.dokumenter.verdi.find(
+        findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId
+    );
 
     const hentVedleggList = (): ISelectOption[] => {
-        const valgtDokument = finnValgtDokument();
-        return valgtDokument
-            ? valgtDokument.logiskeVedlegg.map(vedlegg => {
+        return dokumentFraSkjema
+            ? dokumentFraSkjema.logiskeVedlegg.map((vedlegg: ILogiskVedlegg) => {
                   return {
                       value: vedlegg.tittel,
                       label: vedlegg.tittel,
@@ -38,30 +42,61 @@ export const EndreDokumentInfoPanel: React.FC = () => {
             : [];
     };
 
-    const tittelOption = (): ISelectOption => {
-        const valgtDokument = finnValgtDokument();
-        return {
-            value: valgtDokument?.tittel ?? '',
-            label: valgtDokument?.tittel ?? '',
-        };
+    const settDokumentTittel = (nyVerdi: string) => {
+        skjema.felter.dokumenter.validerOgSettFelt([
+            ...skjema.felter.dokumenter.verdi.map((dokument: IDokumentInfo) => {
+                return dokumentFraSkjema &&
+                    dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
+                    ? {
+                          ...dokumentFraSkjema,
+                          tittel: nyVerdi,
+                          brevkode: BrevkodeMap.get(nyVerdi) || '',
+                      }
+                    : dokument;
+            }),
+        ]);
+    };
+
+    const settLogiskeVedlegg = (logiskeVedleggNavn: string[]) => {
+        skjema.felter.dokumenter.validerOgSettFelt([
+            ...skjema.felter.dokumenter.verdi.map(dokument => {
+                return dokumentFraSkjema &&
+                    dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
+                    ? {
+                          ...dokumentFraSkjema,
+                          logiskeVedlegg: logiskeVedleggNavn.map(vedlegg => ({
+                              tittel: vedlegg,
+                              logiskVedleggId: '0', // Påkrevd felt, ignoreres av backend. Kan settes til hva som helst.
+                          })),
+                      }
+                    : dokument;
+            }),
+        ]);
     };
 
     return (
-        <div>
+        <>
             <FamilieReactSelect
-                id="tittelSelect"
                 label={'Dokumenttittel'}
-                erLesevisning={false}
+                erLesevisning={erLesevisning()}
                 creatable={true}
                 isClearable
                 isMulti={false}
                 options={tittelList}
-                value={tittelOption()}
+                value={{
+                    value: dokumentFraSkjema?.tittel ?? '',
+                    label: dokumentFraSkjema?.tittel ?? '',
+                }}
+                feil={
+                    visFeilmeldinger && dokumentFraSkjema?.tittel === ''
+                        ? 'Tittel er ikke satt'
+                        : undefined
+                }
                 onChange={value => {
                     if (value && 'value' in value) {
-                        settDokumentTittel(value.value || '');
+                        settDokumentTittel(value.value);
                     } else {
-                        tilbakestillDokumentTittel();
+                        settDokumentTittel('');
                     }
                 }}
             />
@@ -71,7 +106,7 @@ export const EndreDokumentInfoPanel: React.FC = () => {
                 label={'Annet innhold'}
                 creatable={true}
                 isClearable
-                erLesevisning={false}
+                erLesevisning={erLesevisning()}
                 isMulti={true}
                 options={tittelList}
                 value={hentVedleggList()}
@@ -82,6 +117,6 @@ export const EndreDokumentInfoPanel: React.FC = () => {
                     );
                 }}
             />
-        </div>
+        </>
     );
 };

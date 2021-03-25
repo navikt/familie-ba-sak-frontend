@@ -21,28 +21,28 @@ const ToKolonnerDiv = styled.div`
 
 const ManuellJournalførContent: React.FC = () => {
     const { dataForManuellJournalføring } = useManuellJournalfør();
-    const [feilmelding, settFeilmelding] = React.useState('');
+
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
-                <div>
+                <>
                     <BrukerHeader />
-                    {dataForManuellJournalføring.data.journalpost.journalstatus ===
-                    Journalstatus.MOTTATT ? (
-                        <div>
-                            {feilmelding && <AlertStripeFeil>{feilmelding}</AlertStripeFeil>}
 
-                            <ToKolonnerDiv>
-                                <JournalpostSkjema settFeilmelding={settFeilmelding} />
-                                <DokumentPanel />
-                            </ToKolonnerDiv>
-                        </div>
-                    ) : (
-                        <AlertStripeAdvarsel
-                            children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus}. Kan bare manuelt journalføre journalposter med status MOTTATT.`}
-                        />
+                    {dataForManuellJournalføring.data.journalpost.journalstatus !==
+                        Journalstatus.MOTTATT && (
+                        <>
+                            <AlertStripeAdvarsel
+                                children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus} og er allerede journalført.`}
+                            />
+                            <br />
+                        </>
                     )}
-                </div>
+
+                    <ToKolonnerDiv>
+                        <JournalpostSkjema />
+                        <DokumentPanel />
+                    </ToKolonnerDiv>
+                </>
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:

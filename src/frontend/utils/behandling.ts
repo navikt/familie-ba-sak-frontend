@@ -1,4 +1,4 @@
-import { BehandlerRolle } from '../typer/behandling';
+import { BehandlerRolle, behandlingstyper } from '../typer/behandling';
 
 export const gruppeIdTilRolle = (gruppeId: string) => {
     const host = window.location.host;
@@ -15,4 +15,8 @@ export const gruppeIdTilRolle = (gruppeId: string) => {
                   ['9449c153-5a1e-44a7-84c6-7cc7a8867233', BehandlerRolle.BESLUTTER],
               ]);
     return rolleConfig.get(gruppeId) ?? BehandlerRolle.UKJENT;
+};
+
+export const muligeBehandlingstyper = () => {
+    return behandlingstyper;
 };

@@ -7,7 +7,7 @@ import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-f
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
@@ -21,7 +21,7 @@ import {
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
-import useAvslagBegrunnelseMultiselect from '../../Vedtak/VedtakBegrunnelserTabell/useAvslagBegrunnelseMultiselect';
+import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
     vilkårType: VilkårType;

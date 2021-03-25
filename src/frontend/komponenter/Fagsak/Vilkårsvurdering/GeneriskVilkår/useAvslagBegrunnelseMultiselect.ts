@@ -3,7 +3,7 @@ import React from 'react';
 import { ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelseContext';
+import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IPeriode } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelse,
