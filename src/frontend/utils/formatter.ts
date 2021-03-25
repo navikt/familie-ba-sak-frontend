@@ -61,6 +61,8 @@ export const erPersonId = (personIdent: string) => {
 };
 
 export const formaterPersonIdent = (personIdent: string) => {
+    if (personIdent === '') return 'ukjent ident';
+
     return erPersonId(personIdent)
         ? `${personIdent.slice(0, 6)} ${personIdent.slice(6, personIdent.length)}`
         : `${personIdent.slice(0, 3)} ${personIdent.slice(3, 6)} ${personIdent.slice(6, 9)}`;

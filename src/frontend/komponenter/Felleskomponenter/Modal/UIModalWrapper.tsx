@@ -13,7 +13,7 @@ interface IProps {
 
 const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) => {
     const useAppModal = useApp().modal;
-    const { tittel, visModal, onClose, lukkKnapp, actions, className, innhold } = modal
+    const { tittel, visModal, onClose, lukkKnapp, actions, className, innhold, style } = modal
         ? modal
         : useAppModal;
 
@@ -25,6 +25,7 @@ const UIModalWrapper: React.FunctionComponent<IProps> = ({ modal, children }) =>
             onRequestClose={(): void => onClose && onClose()}
             contentLabel="ui-modal"
             closeButton={lukkKnapp}
+            {...style}
         >
             <div className="uimodal__content">
                 <Undertittel children={tittel} />

@@ -1,16 +1,17 @@
 import familieDayjs, { Dayjs, familieDayjsDiff } from '../utils/familieDayjs';
 import { datoformat, datoformatNorsk, formaterIsoDato, isoStringToDayjs } from '../utils/formatter';
+import { FamilieIsoDate } from './tid';
 
 export const TIDENES_MORGEN: Dayjs = familieDayjs().subtract(1000, 'year');
 export const TIDENES_ENDE: Dayjs = familieDayjs().add(1000, 'year');
 
 export interface IPeriode {
     // Format YYYY-MM-DD (ISO)
-    fom?: string;
-    tom?: string;
+    fom?: FamilieIsoDate;
+    tom?: FamilieIsoDate;
 }
 
-export const nyPeriode = (fom?: string, tom?: string): IPeriode => {
+export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IPeriode => {
     return {
         fom: fom !== '' && fom !== null ? fom : undefined,
         tom: tom !== '' && tom !== null ? tom : undefined,

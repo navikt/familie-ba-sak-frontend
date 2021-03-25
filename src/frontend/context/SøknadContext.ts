@@ -79,6 +79,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                 navn: relasjon.navn,
                                 fødselsdato: relasjon.fødselsdato,
                                 manueltRegistrert: false,
+                                uregistrert: false,
                             })
                         ) ?? []
                 );
