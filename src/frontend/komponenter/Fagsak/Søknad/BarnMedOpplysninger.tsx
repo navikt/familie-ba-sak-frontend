@@ -13,8 +13,12 @@ import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    index: number;
 }
+
+const CheckboxOgSlettknapp = styled.div`
+    display: flex;
+    text-align: center;
+`;
 
 const StyledFamilieCheckbox = styled(FamilieCheckbox)`
     margin-left: 1rem;
@@ -38,52 +42,56 @@ const FjernBarnKnapp = styled(IkonKnapp)`
     margin-left: 1rem;
 `;
 
-const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn, index }) => {
-    const { settBarn, søknad, settSøknadOgValider } = useSøknad();
+const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
+    const { skjema } = useSøknad();
     const { erLesevisning } = useBehandling();
-    const lesevisning = erLesevisning();
-
-    const finnBarnIndex = (ident: string) =>
-        søknad.barnaMedOpplysninger.findIndex(
-            barn => barn.manueltRegistrert && barn.ident === ident
-        );
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
     )}) | ${formaterPersonIdent(barn.ident)}`;
 
     return (
-        <StyledFamilieCheckbox
-            erLesevisning={lesevisning}
-            id={`barn-${index}`}
-            label={
-                <LabelContent>
-                    <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
-
-                    {barn.manueltRegistrert && (
-                        <FjernBarnKnapp
-                            erLesevisning={erLesevisning()}
-                            id={`fjern__${barn.ident}`}
-                            mini={true}
-                            ikon={<Slett />}
-                            knappPosisjon={'venstre'}
-                            onClick={() => {
-                                søknad.barnaMedOpplysninger.splice(finnBarnIndex(barn.ident), 1);
-                                settSøknadOgValider(søknad);
-                            }}
-                            label={'Fjern barn'}
-                        />
-                    )}
-                </LabelContent>
-            }
-            checked={barn.inkludertISøknaden}
-            onChange={() => {
-                settBarn({
-                    ...barn,
-                    inkludertISøknaden: !barn.inkludertISøknaden,
-                });
-            }}
-        />
+        <CheckboxOgSlettknapp>
+            <StyledFamilieCheckbox
+                erLesevisning={erLesevisning()}
+                label={
+                    <LabelContent>
+                        <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
+                    </LabelContent>
+                }
+                checked={barn.inkludertISøknaden}
+                onChange={() => {
+                    skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+                        skjema.felter.barnaMedOpplysninger.verdi.map(
+                            (barnMedOpplysninger: IBarnMedOpplysninger) =>
+                                barnMedOpplysninger.ident === barn.ident
+                                    ? {
+                                          ...barnMedOpplysninger,
+                                          inkludertISøknaden: !barnMedOpplysninger.inkludertISøknaden,
+                                      }
+                                    : barnMedOpplysninger
+                        )
+                    );
+                }}
+            />
+            {barn.manueltRegistrert && (
+                <FjernBarnKnapp
+                    erLesevisning={erLesevisning()}
+                    id={`fjern__${barn.ident}`}
+                    mini={true}
+                    ikon={<Slett />}
+                    knappPosisjon={'venstre'}
+                    onClick={() => {
+                        skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
+                            ...skjema.felter.barnaMedOpplysninger.verdi.filter(
+                                barnMedOpplysninger => barnMedOpplysninger.ident !== barn.ident
+                            ),
+                        ]);
+                    }}
+                    label={'Fjern barn'}
+                />
+            )}
+        </CheckboxOgSlettknapp>
     );
 };
 export default BarnMedOpplysninger;

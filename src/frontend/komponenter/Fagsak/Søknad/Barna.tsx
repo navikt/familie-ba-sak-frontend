@@ -9,22 +9,18 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
+import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
 import {
     adressebeskyttelsestyper,
     FamilieRelasjonRolle,
     IFamilierelasjonMaskert,
 } from '../../../typer/person';
-import { IBarnMedOpplysninger, ISøknadDTO } from '../../../typer/søknad';
+import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat } from '../../../utils/formatter';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import LeggTilBarn from './LeggTilBarn';
-
-interface IProps {
-    settSøknadOgValider: (søknad: ISøknadDTO) => void;
-    søknad: ISøknadDTO;
-}
 
 const BarnMedDiskresjonskode = styled.div`
     display: flex;
@@ -44,11 +40,13 @@ const StyledCheckboxGruppe = styled(CheckboxGruppe)`
     min-width: 0;
 `;
 
-const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
+const Barna: React.FunctionComponent = () => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
     const { bruker } = useFagsakRessurser();
-    const sorterteBarnMedOpplysninger = søknad.barnaMedOpplysninger.sort(
+    const { skjema } = useSøknad();
+
+    const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
             return familieDayjsDiff(
                 familieDayjs(b.fødselsdato, datoformat.ISO_DAG),
@@ -83,7 +81,9 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
 
             <br />
             <StyledCheckboxGruppe
-                feilmeldingId={'barna'}
+                {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(
+                    skjema.visFeilmeldinger
+                )}
                 legend={
                     !lesevisning ? (
                         <Element>Velg hvilke barn det er søkt om</Element>
@@ -91,20 +91,17 @@ const Barna: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad 
                         <Element>Barn det er søkt om</Element>
                     )
                 }
+                utenFeilPropagering={true}
             >
-                {sorterteBarnMedOpplysninger.map(
-                    (barnMedOpplysninger: IBarnMedOpplysninger, index) => (
-                        <BarnMedOpplysninger
-                            key={barnMedOpplysninger.ident}
-                            barn={barnMedOpplysninger}
-                            index={index}
-                        />
-                    )
-                )}
+                {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
+                    <BarnMedOpplysninger
+                        key={barnMedOpplysninger.ident}
+                        barn={barnMedOpplysninger}
+                    />
+                ))}
+
+                {!lesevisning && <LeggTilBarn />}
             </StyledCheckboxGruppe>
-            {!lesevisning && (
-                <LeggTilBarn settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
-            )}
         </BarnaWrapper>
     );
 };
