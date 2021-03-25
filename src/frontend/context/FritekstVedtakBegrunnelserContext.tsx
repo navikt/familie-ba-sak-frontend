@@ -83,9 +83,7 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
                     break;
                 }
                 default: {
-                    throw new Error(
-                        `Vedtakbegrunnelse ikke definert for vedtaksperiodetype ${vedtaksperiodetype} `
-                    );
+                    return undefined;
                 }
             }
         };
