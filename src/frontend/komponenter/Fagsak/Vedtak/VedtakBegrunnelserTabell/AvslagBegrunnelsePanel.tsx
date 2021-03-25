@@ -25,7 +25,7 @@ const PanelBody = styled.div`
     margin-left: 0.625rem;
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 40px;
+    row-gap: 2.5rem;
 
     ul {
         margin: 0;
@@ -46,20 +46,22 @@ const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({ vedtakspe
             onClick={() => toggleForm(true)}
         >
             <PanelBody>
-                <Element>Begrunnelse(r) for avslag</Element>
-                <ul>
-                    {avslagBegrunnelser
-                        .find(
-                            (avslagBegrunnelser: IRestAvslagbegrunnelser) =>
-                                avslagBegrunnelser.fom === vedtaksperiode.periodeFom &&
-                                avslagBegrunnelser.tom === vedtaksperiode.periodeTom
-                        )
-                        ?.brevBegrunnelser.map((begrunnelse: string) => (
-                            <li>
-                                <Normaltekst children={begrunnelse} />
-                            </li>
-                        ))}
-                </ul>
+                <div>
+                    <Element>Begrunnelse(r) for avslag</Element>
+                    <ul>
+                        {avslagBegrunnelser
+                            .find(
+                                (avslagBegrunnelser: IRestAvslagbegrunnelser) =>
+                                    avslagBegrunnelser.fom === vedtaksperiode.periodeFom &&
+                                    avslagBegrunnelser.tom === vedtaksperiode.periodeTom
+                            )
+                            ?.brevBegrunnelser.map((begrunnelse: string) => (
+                                <li>
+                                    <Normaltekst children={begrunnelse} />
+                                </li>
+                            ))}
+                    </ul>
+                </div>
 
                 {toggles[ToggleNavn.begrunnelseFritekst] && (
                     <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
