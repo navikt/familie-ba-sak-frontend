@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.1.1",
-    "@navikt/familie-backend": "^5.0.21",
+    "@navikt/familie-backend": "^5.0.23",
     "@navikt/familie-clipboard": "^3.1.0",
     "@navikt/familie-form-elements": "^2.2.3",
     "@navikt/familie-header": "^3.0.2",

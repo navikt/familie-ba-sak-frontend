@@ -1508,10 +1508,10 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.1.7.tgz#5e30a5c785aeb18aeed1bb25439975f5b11da5be"
   integrity sha512-Xrihe7Tke/jCL5dsFWYe2qiQDbUhr+Mptan6kuWaXYKu66cN9hspjFDubkIi4QHEIVh3gQCoQi4CtdWc0C4AxQ==
 
-"@navikt/familie-backend@^5.0.21":
-  version "5.0.22"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.22.tgz#2d43e0b5281de7186444f2eab6cc422c85221a6b"
-  integrity sha512-LnPSgnp+uApUQUaGuAFAU2bwqgZY2/lhF4Ddl09/oEY1dN2ptNI5S0dUGv5C32J3Oj5BUVnmRP20r2Bwy7Xv6A==
+"@navikt/familie-backend@^5.0.23":
+  version "5.0.23"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.23.tgz#991404af716cb33fdbb83559e57d40b992082815"
+  integrity sha512-ZME5ZFp2UrTbiE7dUTEMT3HoDKVE/+HIjyO0iF5xcQyP34LnImXlXyeoKihTXoX7uKss7FILR20A3YmIgfxVUQ==
   dependencies:
     "@navikt/familie-logging" "^1.0.4"
     "@types/cookie-parser" "^1.4.2"
