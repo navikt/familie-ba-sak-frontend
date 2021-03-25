@@ -48,14 +48,6 @@ const FlexSpaceBetween = styled.div`
     justify-content: space-between;
 `;
 
-const SaksoversiktContainer = styled.div`
-    max-width: 65rem;
-    margin: 6.8rem;
-    color: @navMorkGra;
-    overflow: auto;
-    height: calc(100vh - 50px);
-`;
-
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
 
@@ -168,7 +160,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     };
 
     return (
-        <SaksoversiktContainer>
+        <div className="saksoversikt">
             <Innholdstittel children={'Saksoversikt'} />
             <Tabs
                 tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
@@ -195,7 +187,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
             ) : (
                 visTabell()
             )}
-        </SaksoversiktContainer>
+        </div>
     );
 };
 export const sakstype = (behandling?: IBehandling) => {
