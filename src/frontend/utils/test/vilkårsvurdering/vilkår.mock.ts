@@ -1,6 +1,7 @@
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IPeriode } from '../../../typer/periode';
+import { VedtakBegrunnelse } from '../../../typer/vedtak';
 import {
     IRestAnnenVurdering,
     IRestPersonResultat,
@@ -9,7 +10,6 @@ import {
     Resultat,
     VilkårType,
 } from '../../../typer/vilkår';
-import { VedtakBegrunnelse } from '../../../typer/vedtak';
 
 interface IMockVilkårResultat {
     behandlingId?: number;

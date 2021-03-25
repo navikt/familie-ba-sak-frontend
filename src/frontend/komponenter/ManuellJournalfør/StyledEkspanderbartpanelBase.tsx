@@ -7,6 +7,7 @@ export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)<{
     visFeilmeldinger: boolean;
     valgt?: boolean;
 }>`
+    margin-top: 1rem;
     width: 100%;
 
     ${({ visFeilmeldinger }) =>

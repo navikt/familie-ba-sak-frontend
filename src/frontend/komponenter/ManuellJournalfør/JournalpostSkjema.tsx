@@ -24,7 +24,7 @@ const StyledSkjema = styled.div`
     min-width: 40rem;
     padding-left: 2.5rem;
     padding-bottom: 5rem;
-    height: calc(100vh - 6rem);
+    height: calc(100vh - 3rem);
     overflow: auto;
 `;
 

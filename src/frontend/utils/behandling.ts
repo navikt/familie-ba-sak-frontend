@@ -17,7 +17,6 @@ export const gruppeIdTilRolle = (gruppeId: string) => {
     return rolleConfig.get(gruppeId) ?? BehandlerRolle.UKJENT;
 };
 
-
 export const muligeBehandlingstyper = () => {
-    return behandlingstyper
-}
+    return behandlingstyper;
+};
