@@ -5,15 +5,11 @@ import styled from 'styled-components';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { useApp } from '../../../../context/AppContext';
-import {
-    FritekstVedtakBegrunnelserProvider,
-    useFritekstVedtakBegrunnelser,
-} from '../../../../context/FritekstVedtakBegrunnelserContext';
+import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { IBehandling } from '../../../../typer/behandling';
 import { ToggleNavn } from '../../../../typer/toggles';
 import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
+import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
 import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 
