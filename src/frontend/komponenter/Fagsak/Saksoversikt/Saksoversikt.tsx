@@ -48,6 +48,11 @@ const FlexSpaceBetween = styled.div`
     justify-content: space-between;
 `;
 
+const StyledTabs = styled(Tabs)`
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+`;
+
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
 
@@ -162,7 +167,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     return (
         <div className="saksoversikt">
             <Innholdstittel children={'Saksoversikt'} />
-            <Tabs
+            <StyledTabs
                 tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
                 onChange={(e, tabnr) => {
                     if (tabnr === basakTab.tabnr) {
