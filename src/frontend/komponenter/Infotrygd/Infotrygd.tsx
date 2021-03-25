@@ -4,26 +4,23 @@ import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Innholdstittel } from 'nav-frontend-typografi';
 
-import { byggFunksjonellFeilRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
-import { useInfotrygd } from '../../context/InfotrygdContext';
-import { IInfotrygdsaker } from '../../typer/infotrygd';
+import { useInfotrygdSkjema, useInfotrygdMigrering } from '../../context/InfotrygdContext';
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
-import { Sakstabell } from './Sakstabell';
-import { Vedtakstabell } from './Vedtakstabell';
+import { Infotrygdtabeller } from './Infotrygdtabeller';
+import AlertStripe from 'nav-frontend-alertstriper';
 
 const InfotrygdContainer = styled.div`
-    margin: 1rem;
-`;
-
-const InfotrygdDataTittel = styled(Systemtittel)`
-    margin-top: 4rem;
+    padding: 1rem;
+    overflow: auto;
+    height: calc(100vh - 50px);
 `;
 
 const HentSakerFlex = styled.div`
-    margin-top: 1rem;
+    margin-top: 2rem;
     margin-bottom: 2rem;
     display: flex;
 `;
@@ -35,94 +32,75 @@ const HentSakerKnapp = styled(Knapp)`
     height: 40px;
 `;
 
-const SakerTekst = styled(Undertittel)`
-    margin-top: 4rem;
-    margin-bottom: 1rem;
-`;
-
-const VedtakTekst = styled(Undertittel)`
-    margin-top: 4rem;
-    margin-bottom: 1rem;
+const FlyttSakKnapp = styled(Knapp)`
+    margin-left: 1rem;
+    margin-top: 30px;
+    margint-bottom: auto;
+    height: 40px;
 `;
 
 export const Infotrygd: React.FC = () => {
-    const {
-        onSubmit,
-        tilgangFeilmelding,
-        settSubmitRessurs,
-        skjema,
-        sorterSakerEtterSaksnr,
-    } = useInfotrygd();
+    const { onSubmitWrapper, skjema } = useInfotrygdSkjema();
+    const { flyttBrukerTilBaSak, infotrygdmigreringRessurs } = useInfotrygdMigrering();
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
 
-    const visSakstabell = () => {
+    const visFlyttSakKnapp = () => {
         if (skjema.submitRessurs.status === RessursStatus.SUKSESS) {
-            return <Sakstabell saker={sorterSakerEtterSaksnr(skjema.submitRessurs.data.saker)} />;
-        } else {
-            return undefined;
+            return (
+                <FlyttSakKnapp
+                    mini
+                    onClick={() => {
+                        flyttBrukerTilBaSak(skjema.felter.ident.verdi);
+                    }}
+                >
+                    Flytt til BA-sak
+                </FlyttSakKnapp>
+            );
         }
     };
 
-    const visVedtakstabell = () => {
-        if (skjema.submitRessurs.status === RessursStatus.SUKSESS) {
-            return <Vedtakstabell saker={skjema.submitRessurs.data.saker} />;
-        } else {
-            return undefined;
+    const visFlyttSakAlert = () => {
+        if (
+            infotrygdmigreringRessurs.status === RessursStatus.FEILET ||
+            infotrygdmigreringRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+        ) {
+            return (
+                <AlertStripe
+                    children={infotrygdmigreringRessurs.frontendFeilmelding}
+                    type={'feil'}
+                />
+            );
         }
     };
 
     return (
-        <>
-            <InfotrygdContainer>
-                <Innholdstittel>Visningsside for Infotrygd</Innholdstittel>
-                <HentSakerFlex>
-                    <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
-                        <Input
-                            {...skjema.felter.ident.hentNavInputProps(skjema.visFeilmeldinger)}
-                            id={'hent-person'}
-                            label={'Skriv inn fødselsnummer/D-nummer'}
-                            bredde={'XL'}
-                            placeholder={'fnr/dnr'}
-                        />
-                    </SkjemaGruppe>
-                    <HentSakerKnapp
-                        mini
-                        spinner={skjemaErLåst}
-                        disabled={skjemaErLåst}
-                        onClick={() => {
-                            onSubmit(
-                                {
-                                    method: 'POST',
-                                    data: { ident: skjema.felter.ident.verdi },
-                                    url:
-                                        '/familie-ba-sak/api/infotrygd/hent-infotrygdsaker-for-soker',
-                                },
-                                (ressurs: Ressurs<IInfotrygdsaker>) => {
-                                    if (ressurs.status === RessursStatus.SUKSESS) {
-                                        if (!ressurs.data.harTilgang) {
-                                            settSubmitRessurs(
-                                                byggFunksjonellFeilRessurs<IInfotrygdsaker>(
-                                                    tilgangFeilmelding(
-                                                        ressurs.data.adressebeskyttelsegradering
-                                                    )
-                                                )
-                                            );
-                                        }
-                                    }
-                                }
-                            );
-                        }}
-                    >
-                        Hent saker
-                    </HentSakerKnapp>
-                </HentSakerFlex>
-                <InfotrygdDataTittel>Infotrygddata fra replikadatabasen</InfotrygdDataTittel>
-                <SakerTekst>Saker</SakerTekst>
-                {visSakstabell()}
-                <VedtakTekst>Vedtak</VedtakTekst>
-                {visVedtakstabell()}
-            </InfotrygdContainer>
-        </>
+        <InfotrygdContainer>
+            <Innholdstittel>Visningsside for Infotrygd</Innholdstittel>
+            <HentSakerFlex>
+                <SkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
+                    <Input
+                        {...skjema.felter.ident.hentNavInputProps(skjema.visFeilmeldinger)}
+                        id={'hent-person'}
+                        label={'Skriv inn fødselsnummer/D-nummer'}
+                        bredde={'XL'}
+                        placeholder={'fnr/dnr'}
+                    />
+                </SkjemaGruppe>
+                <HentSakerKnapp
+                    mini
+                    spinner={skjemaErLåst}
+                    disabled={skjemaErLåst}
+                    onClick={onSubmitWrapper}
+                >
+                    Hent saker
+                </HentSakerKnapp>
+                {visFlyttSakKnapp()}
+            </HentSakerFlex>
+            {visFlyttSakAlert()}
+            {skjema.submitRessurs.status === RessursStatus.SUKSESS ? (
+                <Infotrygdtabeller saker={skjema.submitRessurs.data.saker} />
+            ) : undefined}
+        </InfotrygdContainer>
     );
 };
