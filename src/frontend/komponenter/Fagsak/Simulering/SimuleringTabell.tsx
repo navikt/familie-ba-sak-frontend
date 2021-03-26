@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import dayjs from 'dayjs';
 import styled from 'styled-components';
@@ -7,16 +8,19 @@ import 'nav-frontend-tabell-style';
 import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
+import { useSimulering } from '../../../context/SimuleringContext';
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
 import { formaterBeløp } from '../../../utils/formatter';
 
-const StyledTable = styled.table`
-    width: auto;
+const StyledTable = styled.table(
+    (props: { bredde: number }) => `
+    width: ${props.bredde}rem;
     border-collapse: collapse;
     table-layout: fixed;
     border-color: red;
-`;
+`
+);
 
 const HøyresiltTd = styled.td`
     text-align: right !important;
@@ -58,21 +62,51 @@ const SimuleringTabellOverskrift = styled.div`
     margin-bottom: 1rem;
 `;
 
+const ElementMedFarge = styled(Element)`
+    color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
+`;
+
 interface ISimuleringProps {
     simulering: ISimuleringDTO;
 }
 
-const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({
-    simulering: { fomDatoNestePeriode, fom, perioder, tomDatoNestePeriode },
-}) => {
+const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulering }) => {
+    const {
+        fomDatoNestePeriode,
+        fom,
+        perioder: perioderUtenTommeSimuleringer,
+        tomDatoNestePeriode,
+    } = simulering;
+    const { hentPerioderMedTommePerioder, hentÅrISimuleringen } = useSimulering();
+    const årISimuleringen = hentÅrISimuleringen(perioderUtenTommeSimuleringer);
+    const perioder = hentPerioderMedTommePerioder(perioderUtenTommeSimuleringer);
+    const [indexFramvistÅr, settIndexFramistÅr] = useState(årISimuleringen.length - 1);
+    const aktueltÅr = årISimuleringen[indexFramvistÅr];
+
     const kapitaliserTekst = (tekst: string): string => {
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
     };
 
-    const formaterBeløpUtenPostfiks = (beløp: number) => formaterBeløp(beløp).slice(0, -3);
+    const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
+        fomDatoNestePeriode && dayjs(periode.fom).isAfter(dayjs(fomDatoNestePeriode));
 
     const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
-        !fomDatoNestePeriode || !dayjs(periode.fom).isAfter(dayjs(fomDatoNestePeriode));
+        !periodeErEtterNesteUtbetalingsPeriode(periode) && dayjs(periode.fom).year() === aktueltÅr;
+
+    const formaterBeløpUtenPostfiks = (beløp?: number) =>
+        beløp ? formaterBeløp(beløp).slice(0, -3) : '-';
+
+    const antallPeriodetIFremvistÅr = perioderUtenTommeSimuleringer.filter(p =>
+        periodeSkalVisesITabell(p)
+    ).length;
+
+    const erISisteÅrAvPerioden =
+        indexFramvistÅr === hentÅrISimuleringen(perioderUtenTommeSimuleringer).length - 1;
+
+    const tabellbredde =
+        9.375 +
+        (fomDatoNestePeriode && erISisteÅrAvPerioden ? 1.125 : 0) +
+        4.6875 * antallPeriodetIFremvistÅr;
 
     const TabellSkillelinje = (props: { fomDatoPeriode: string }) => (
         <>
@@ -88,12 +122,32 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({
         <>
             <SimuleringTabellOverskrift>
                 <Element>
-                    Simuleringsresultat for perioden {familieDayjs(fom).format('DD.MM.YYYY')} -{' '}
-                    {familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}
+                    Simuleringsresultat{' '}
+                    {perioder.length > 1 &&
+                        `for perioden ${familieDayjs(fom).format('DD.MM.YYYY')} - ${familieDayjs(
+                            tomDatoNestePeriode
+                        ).format('DD.MM.YYYY')}`}
                 </Element>
             </SimuleringTabellOverskrift>
+            {årISimuleringen.length > 1 && (
+                <div>
+                    <Element>{årISimuleringen[indexFramvistÅr]}</Element>
+                    <button
+                        onClick={() => settIndexFramistÅr(indexFramvistÅr - 1)}
+                        disabled={indexFramvistÅr === 0}
+                    >
+                        -
+                    </button>
+                    <button
+                        onClick={() => settIndexFramistÅr(indexFramvistÅr + 1)}
+                        disabled={erISisteÅrAvPerioden}
+                    >
+                        +
+                    </button>
+                </div>
+            )}
 
-            <StyledTable className="tabell">
+            <StyledTable className="tabell" bredde={tabellbredde}>
                 <colgroup>
                     <VenstreKolonne />
                     {perioder.map(
@@ -175,15 +229,27 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({
                                     <>
                                         <TabellSkillelinje fomDatoPeriode={periode.fom} />
                                         <HøyresiltTd>
-                                            <NormaltekstMedFarge
-                                                farge={
-                                                    periode.resultat < 0
-                                                        ? navFarger.navRod
-                                                        : navFarger.navMorkGra
-                                                }
-                                            >
-                                                {formaterBeløpUtenPostfiks(periode.resultat)}
-                                            </NormaltekstMedFarge>
+                                            {fomDatoNestePeriode === periode.fom ? (
+                                                <ElementMedFarge
+                                                    farge={
+                                                        periode.resultat && periode.resultat < 0
+                                                            ? navFarger.navRod
+                                                            : navFarger.navGronnDarken40
+                                                    }
+                                                >
+                                                    {formaterBeløpUtenPostfiks(periode.resultat)}
+                                                </ElementMedFarge>
+                                            ) : (
+                                                <NormaltekstMedFarge
+                                                    farge={
+                                                        periode.resultat && periode.resultat < 0
+                                                            ? navFarger.navRod
+                                                            : navFarger.navMorkGra
+                                                    }
+                                                >
+                                                    {formaterBeløpUtenPostfiks(periode.resultat)}
+                                                </NormaltekstMedFarge>
+                                            )}
                                         </HøyresiltTd>
                                     </>
                                 )

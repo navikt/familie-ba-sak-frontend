@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -10,9 +10,9 @@ import { useHttp } from '@navikt/familie-http';
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
+import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { ISimuleringDTO } from '../../../typer/simulering';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
@@ -30,20 +30,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
     const { request } = useHttp();
     const history = useHistory();
-    const [simuleringResultat, settSimuleringResultat] = useState<Ressurs<ISimuleringDTO>>({
-        status: RessursStatus.HENTER,
-    });
     const [senderInn, settSenderInn] = useState(false);
-    const [erFeilMedBekreft, settErFeilMedBekreft] = useState<undefined | string>(undefined);
-
-    useEffect(() => {
-        request<IBehandling, ISimuleringDTO>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}`,
-        }).then(response => {
-            settSimuleringResultat(response);
-        });
-    }, [aktivtVedtak]);
+    const [feilMedBekreft, settFeilMedBekreft] = useState<undefined | string>(undefined);
+    const { simuleringResultat } = useSimulering();
 
     const nesteOnClick = async () => {
         settSenderInn(true);
@@ -59,7 +48,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                 ressurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                 ressurs.status === RessursStatus.IKKE_TILGANG
             ) {
-                settErFeilMedBekreft(ressurs.frontendFeilmelding);
+                settFeilMedBekreft(ressurs.frontendFeilmelding);
 
                 /*
                  *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
@@ -108,10 +97,10 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         Det har skjedd en feil: {simuleringResultat?.frontendFeilmelding}
                     </Alertstripe>
                 )}
-                {erFeilMedBekreft && (
+                {feilMedBekreft && (
                     <StyledAlertstripe type="feil">
                         Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
-                        {erFeilMedBekreft}
+                        {feilMedBekreft}
                     </StyledAlertstripe>
                 )}
             </>

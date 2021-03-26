@@ -73,8 +73,11 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                 <tr>
                     <StyledTh colSpan={2}>
                         <Element>
-                            Totalt for perioden {familieDayjs(fom).format('DD.MM.YYYY')} -{' '}
-                            {familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}
+                            Totalt{' '}
+                            {perioder.length > 1 &&
+                                `for perioden ${familieDayjs(fom).format(
+                                    'DD.MM.YYYY'
+                                )} - ${familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}`}
                         </Element>
                     </StyledTh>
                 </tr>
