@@ -51,16 +51,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFe
                 }
             }}
         >
-            {!valgt && (
-                <DokumentInfoStripe
-                    valgt={valgt}
-                    journalpostId={journalpostId}
-                    dokument={dokument}
-                />
-            )}
-            {valgt && (
-                <EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={visFeilmeldinger} />
-            )}
+            <EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={visFeilmeldinger} />
         </StyledEkspanderbartpanelBase>
     );
 };

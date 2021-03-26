@@ -20,7 +20,6 @@ import {
 import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
-    BrevkodeMap,
     IDataForManuellJournalføring,
     IRestJournalføring,
     JournalpostKanal,
@@ -174,40 +173,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const tilbakestillData = () => {
         nullstillSkjema();
-    };
-
-    const settDokumentTittel = (dokumentTittel: string, dokumentInfoId?: string) => {
-        skjema.felter.dokumenter.validerOgSettFelt([
-            ...skjema.felter.dokumenter.verdi.map(dokument => {
-                return dokumentInfoId === valgtDokumentId
-                    ? {
-                          ...dokument,
-                          tittel: dokumentTittel,
-                          brevkode: hentBrevkode(dokumentTittel),
-                      }
-                    : dokument;
-            }),
-        ]);
-    };
-
-    const settLogiskeVedlegg = (logiskeVedleggNavn: string[], dokumentInfoId?: string) => {
-        skjema.felter.dokumenter.validerOgSettFelt([
-            ...skjema.felter.dokumenter.verdi.map(dokument => {
-                return dokumentInfoId === valgtDokumentId
-                    ? {
-                          ...dokument,
-                          logiskeVedlegg: logiskeVedleggNavn.map(vedlegg => ({
-                              tittel: vedlegg,
-                              logiskVedleggId: '0', // Påkrevd felt, ignoreres av backend. Kan settes til hva som helst.
-                          })),
-                      }
-                    : dokument;
-            }),
-        ]);
-    };
-
-    const hentBrevkode = (dokumentTittel: string | undefined): string => {
-        return BrevkodeMap.get(dokumentTittel) || '';
     };
 
     const hentFagsak = async (personId: string) => {
@@ -460,8 +425,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         journalfør,
         knyttTilNyBehandling,
         nullstillSkjema,
-        settDokumentTittel,
-        settLogiskeVedlegg,
         skjema,
         tilbakestillData,
         valgtDokumentId,

@@ -28,7 +28,7 @@ const UtbetalingsperiodepanelBody = styled.div`
     margin-left: 0.625rem;
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 40px;
+    row-gap: 2.5rem;
 `;
 
 const UtbetalingsperiodeDetalj = styled.div`
@@ -47,8 +47,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     const { erLesevisning } = useBehandling();
     const { toggles } = useApp();
 
-    const { ekspandertBegrunnelse } = useFritekstVedtakBegrunnelser();
-    const { toggleForm } = useFritekstVedtakBegrunnelser();
+    const { ekspandertBegrunnelse, toggleForm } = useFritekstVedtakBegrunnelser();
 
     return (
         <EkspanderbartBegrunnelsePanel

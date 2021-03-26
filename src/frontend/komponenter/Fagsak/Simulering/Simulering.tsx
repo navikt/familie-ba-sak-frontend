@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -12,7 +12,10 @@ import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ISimuleringDTO } from '../../../typer/simulering';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import SimuleringPanel from './SimuleringPanel';
+import SimuleringTabell from './SimuleringTabell';
 
 interface ISimuleringProps {
     fagsak: IFagsak;
@@ -24,11 +27,23 @@ const StyledAlertstripe = styled(Alertstripe)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling, fagsak }) => {
+    const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
     const { request } = useHttp();
     const history = useHistory();
-    const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
-    const [feilMedBekreft, settErFeilMedBekreft] = useState<undefined | string>(undefined);
+    const [simuleringResultat, settSimuleringResultat] = useState<Ressurs<ISimuleringDTO>>({
+        status: RessursStatus.HENTER,
+    });
     const [senderInn, settSenderInn] = useState(false);
+    const [erFeilMedBekreft, settErFeilMedBekreft] = useState<undefined | string>(undefined);
+
+    useEffect(() => {
+        request<IBehandling, ISimuleringDTO>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}`,
+        }).then(response => {
+            settSimuleringResultat(response);
+        });
+    }, [aktivtVedtak]);
 
     const nesteOnClick = async () => {
         settSenderInn(true);
@@ -60,6 +75,13 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`);
     };
 
+    if (
+        simuleringResultat.status === RessursStatus.HENTER ||
+        simuleringResultat.status === RessursStatus.IKKE_HENTET
+    ) {
+        return <div />;
+    }
+
     return (
         <Skjemasteg
             senderInn={senderInn}
@@ -69,17 +91,30 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            <StyledAlertstripe type="info">
-                Det er ingen etterbetaling, feilutbetaling eller neste utbetaling (Visning av
-                simuleringen er ikke implementert enda)
-            </StyledAlertstripe>
-
-            {feilMedBekreft && (
-                <StyledAlertstripe type="feil">
-                    Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
-                    {feilMedBekreft}
-                </StyledAlertstripe>
-            )}
+            <>
+                {simuleringResultat?.status === RessursStatus.SUKSESS ? (
+                    simuleringResultat.data.perioder.length === 0 ? (
+                        <Alertstripe type="info">
+                            Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
+                        </Alertstripe>
+                    ) : (
+                        <>
+                            <SimuleringPanel simulering={simuleringResultat.data} />
+                            <SimuleringTabell simulering={simuleringResultat.data} />
+                        </>
+                    )
+                ) : (
+                    <Alertstripe type="info">
+                        Det har skjedd en feil: {simuleringResultat?.frontendFeilmelding}
+                    </Alertstripe>
+                )}
+                {erFeilMedBekreft && (
+                    <StyledAlertstripe type="feil">
+                        Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
+                        {erFeilMedBekreft}
+                    </StyledAlertstripe>
+                )}
+            </>
         </Skjemasteg>
     );
 };
