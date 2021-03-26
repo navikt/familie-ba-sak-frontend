@@ -34,8 +34,7 @@ const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextareaControlled)`
 
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     background-color: ${navFarger.navGraBakgrunn};
-    padding-left: 1rem;
-    padding-right: 0rem;
+    padding: 1rem;
     max-width: 50rem;
 `;
 
@@ -93,90 +92,105 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
     }, [idPåSistOpprettetFritekst]);
 
     return (
-        <StyledSkjemaGruppe>
-            <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
-            {harFritekster && (
-                <StyledElement>Fritekst til kulepunkt i brev (valgfri)</StyledElement>
-            )}
-            {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
-                return (
-                    <StyledFamilieFritekstFelt>
-                        <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
-                        <FamilieTextareaBegrunnelseFritekst
-                            erLesevisning={erLesevisning()}
-                            defaultValue={redigerbarefritekster[fritekstId].verdi}
-                            key={`fritekst-${fritekstId}`}
-                            id={`${fritekstId}`}
-                            textareaClass={'fritekst-textarea'}
-                            value={redigerbarefritekster[fritekstId].verdi}
-                            maxLength={300}
-                            onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                                settRedigerbarefritekster({
-                                    ...redigerbarefritekster,
-                                    [fritekstId]: redigerbarefritekster[fritekstId].valider({
-                                        ...redigerbarefritekster[fritekstId],
-                                        verdi: event.target.value,
-                                    }),
-                                });
-                            }}
-                        />
+        <>
+            {harFritekster ? (
+                <StyledSkjemaGruppe>
+                    <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
+                    <StyledElement>Fritekst til kulepunkt i brev (valgfri)</StyledElement>
+                    {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
+                        return (
+                            <StyledFamilieFritekstFelt>
+                                <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
+                                <FamilieTextareaBegrunnelseFritekst
+                                    erLesevisning={erLesevisning()}
+                                    defaultValue={redigerbarefritekster[fritekstId].verdi}
+                                    key={`fritekst-${fritekstId}`}
+                                    id={`${fritekstId}`}
+                                    textareaClass={'fritekst-textarea'}
+                                    value={redigerbarefritekster[fritekstId].verdi}
+                                    maxLength={220}
+                                    onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                                        settRedigerbarefritekster({
+                                            ...redigerbarefritekster,
+                                            [fritekstId]: redigerbarefritekster[fritekstId].valider(
+                                                {
+                                                    ...redigerbarefritekster[fritekstId],
+                                                    verdi: event.target.value,
+                                                }
+                                            ),
+                                        });
+                                    }}
+                                />
 
-                        <SletteKnapp
+                                <SletteKnapp
+                                    erLesevisning={erLesevisning()}
+                                    onClick={() => {
+                                        settRedigerbarefritekster(
+                                            fjernElementMedNøkkel(
+                                                redigerbarefritekster,
+                                                fritekstId
+                                            ) as Fritekster
+                                        );
+                                    }}
+                                    id={`fjern_fritekst-${fritekstId}`}
+                                    mini={true}
+                                    label={''}
+                                    aria-label={'Slett fritekst'}
+                                    ikon={<Slett />}
+                                />
+                            </StyledFamilieFritekstFelt>
+                        );
+                    })}
+                    <UtførKnapp
+                        erLesevisning={erLesevisning()}
+                        onClick={leggTilRedigerbareFritekst}
+                        id={`legg-til-fritekst`}
+                        ikon={<Pluss />}
+                        knappPosisjon={'venstre'}
+                        label={'Legg til fritekst'}
+                        mini={true}
+                    />
+                    <Knapperad>
+                        <FamilieKnapp
                             erLesevisning={erLesevisning()}
                             onClick={() => {
-                                settRedigerbarefritekster(
-                                    fjernElementMedNøkkel(
-                                        redigerbarefritekster,
-                                        fritekstId
-                                    ) as Fritekster
-                                );
+                                onSubmit();
+                                toggleForm(false);
                             }}
-                            id={`fjern_fritekst-${fritekstId}`}
                             mini={true}
-                            label={''}
-                            aria-label={'Slett fritekst'}
-                            ikon={<Slett />}
-                        />
-                    </StyledFamilieFritekstFelt>
-                );
-            })}
-            <UtførKnapp
-                erLesevisning={erLesevisning()}
-                onClick={leggTilRedigerbareFritekst}
-                id={`legg-til-fritekst`}
-                ikon={<Pluss />}
-                knappPosisjon={'venstre'}
-                label={'Legg til fritekst'}
-                mini={true}
-            />
-            {harFritekster && (
-                <Knapperad>
-                    <FamilieKnapp
+                            type={'standard'}
+                            spinner={fritekstSubmit === FritekstSubmit.POST}
+                            disabled={fritekstSubmit === FritekstSubmit.POST}
+                        >
+                            Lagre
+                        </FamilieKnapp>
+                        <FamilieKnapp
+                            erLesevisning={erLesevisning()}
+                            onClick={() => {
+                                toggleForm(false);
+                            }}
+                            mini={true}
+                            type={'flat'}
+                        >
+                            Avbryt
+                        </FamilieKnapp>
+                    </Knapperad>
+                </StyledSkjemaGruppe>
+            ) : (
+                <SkjemaGruppe style={{ padding: '1rem' }}>
+                    <SkjultLegend>Legg til fritekst til kulepunkt i brev</SkjultLegend>
+                    <UtførKnapp
                         erLesevisning={erLesevisning()}
-                        onClick={() => {
-                            onSubmit();
-                            toggleForm(false);
-                        }}
+                        onClick={leggTilRedigerbareFritekst}
+                        id={`legg-til-fritekst`}
+                        ikon={<Pluss />}
+                        knappPosisjon={'venstre'}
+                        label={'Legg til fritekst'}
                         mini={true}
-                        type={'standard'}
-                        spinner={fritekstSubmit === FritekstSubmit.POST}
-                        disabled={fritekstSubmit === FritekstSubmit.POST}
-                    >
-                        Lagre
-                    </FamilieKnapp>
-                    <FamilieKnapp
-                        erLesevisning={erLesevisning()}
-                        onClick={() => {
-                            toggleForm(false);
-                        }}
-                        mini={true}
-                        type={'flat'}
-                    >
-                        Avbryt
-                    </FamilieKnapp>
-                </Knapperad>
+                    />
+                </SkjemaGruppe>
             )}
-        </StyledSkjemaGruppe>
+        </>
     );
 };
 
