@@ -1,14 +1,14 @@
-import { FeltState } from '@navikt/familie-skjema';
+import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { ValiderIFelt, Valideringsstatus } from '../../../../node_dist/frontend/typer/felt';
 import { IPeriode, nyPeriode } from '../../typer/periode';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
 import { erPeriodeGyldig } from '../validators';
 
-export declare const nyFeltState: <T>(
+export declare const nyFeltTestState: <T>(
     verdi: T,
-    valideringsfunksjon?: ValiderIFelt<T> | undefined
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    valideringsfunksjon?: (felt: any, metadata?: any) => any | undefined
 ) => FeltState<T>;
 
 describe('utils/validators', () => {
