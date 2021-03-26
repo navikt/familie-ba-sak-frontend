@@ -165,7 +165,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     };
 
     return (
-        <div className="saksoversikt">
+        <div className={'saksoversikt'}>
             <Innholdstittel children={'Saksoversikt'} />
             <StyledTabs
                 tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
