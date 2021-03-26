@@ -25,7 +25,6 @@ export interface IInfotrygdSak {
     saksnr?: string;
     status?: string;
     stønad?: IInfotrygdStønad;
-    stønadList?: IInfotrygdStønad[]; // TODO fjern
     type?: string;
     undervalg?: string;
     valg?: string;
