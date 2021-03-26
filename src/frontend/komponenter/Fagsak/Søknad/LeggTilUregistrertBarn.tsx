@@ -39,13 +39,13 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
     return (
         <Container>
             <FamilieCheckbox
-                id={registrerBarnSkjema.felter.erIkkeFolkeregistrert.id}
+                id={registrerBarnSkjema.felter.erFolkeregistrert.id}
                 erLesevisning={erLesevisning()}
                 label={'Barnet er ikke folkeregistrert/har ikke fnr'}
-                checked={registrerBarnSkjema.felter.erIkkeFolkeregistrert.verdi}
+                checked={!registrerBarnSkjema.felter.erFolkeregistrert.verdi}
                 onChange={() => {
-                    registrerBarnSkjema.felter.erIkkeFolkeregistrert.validerOgSettFelt(
-                        !registrerBarnSkjema.felter.erIkkeFolkeregistrert.verdi
+                    registrerBarnSkjema.felter.erFolkeregistrert.validerOgSettFelt(
+                        !registrerBarnSkjema.felter.erFolkeregistrert.verdi
                     );
                     registrerBarnSkjema.felter.ident.nullstill();
                 }}
@@ -67,6 +67,7 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
                             {...registrerBarnSkjema.felter.uregistrertBarnFødselsdato.hentNavInputProps(
                                 registrerBarnSkjema.visFeilmeldinger
                             )}
+                            valgtDato={registrerBarnSkjema.felter.uregistrertBarnFødselsdato.verdi}
                             label={'Fødselsdato (valgfri)'}
                             placeholder={'DD.MM.ÅÅÅÅ'}
                         />

@@ -23,7 +23,7 @@ export interface IBarnMedOpplysninger {
     inkludertISøknaden: boolean;
     manueltRegistrert: boolean;
     navn?: string;
-    uregistrert: boolean;
+    erFolkeregistrert: boolean;
 }
 
 export enum Målform {

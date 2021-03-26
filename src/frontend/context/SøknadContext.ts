@@ -3,7 +3,6 @@ import React from 'react';
 import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
-import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -15,13 +14,12 @@ import {
 } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { FamilieRelasjonRolle, IFamilierelasjon } from '../typer/person';
-import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO, Målform } from '../typer/søknad';
+import { IBarnMedOpplysninger, IRestRegistrerSøknad, Målform } from '../typer/søknad';
 import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
-        const { request } = useHttp();
         const { fagsak, settFagsak } = useFagsakRessurser();
         const { erLesevisning } = useBehandling();
         const history = useHistory();
@@ -41,7 +39,6 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 underkategori: useFelt<BehandlingUnderkategori>({
                     verdi: BehandlingUnderkategori.ORDINÆR,
                 }),
-
                 barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
                     verdi: [],
                     valideringsfunksjon: felt =>
@@ -79,7 +76,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                 navn: relasjon.navn,
                                 fødselsdato: relasjon.fødselsdato,
                                 manueltRegistrert: false,
-                                uregistrert: false,
+                                erFolkeregistrert: true,
                             })
                         ) ?? []
                 );
@@ -95,29 +92,22 @@ const [SøknadProvider, useSøknad] = createUseContext(
             if (
                 parseInt(behandlingId, 10) === åpenBehandling.behandlingId &&
                 hentStegNummer(åpenBehandling.steg) >=
-                    hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
+                    hentStegNummer(BehandlingSteg.VILKÅRSVURDERING) &&
+                åpenBehandling.søknadsgrunnlag
             ) {
-                request<void, ISøknadDTO>({
-                    method: 'GET',
-                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/søknad`,
-                    påvirkerSystemLaster: true,
-                }).then((response: Ressurs<ISøknadDTO>) => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        settSøknadErLastetFraBackend(true);
-                        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                            response.data.barnaMedOpplysninger.map(
-                                (barnMedOpplysninger: IBarnMedOpplysninger) => ({
-                                    ...barnMedOpplysninger,
-                                    checked: true,
-                                })
-                            )
-                        );
+                settSøknadErLastetFraBackend(true);
+                skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+                    åpenBehandling.søknadsgrunnlag.barnaMedOpplysninger.map(
+                        (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                            ...barnMedOpplysninger,
+                            checked: true,
+                        })
+                    )
+                );
 
-                        skjema.felter.målform.validerOgSettFelt(
-                            response.data.søkerMedOpplysninger.målform
-                        );
-                    }
-                });
+                skjema.felter.målform.validerOgSettFelt(
+                    åpenBehandling.søknadsgrunnlag.søkerMedOpplysninger.målform
+                );
             } else {
                 // Ny behandling er lastet som ikke har fullført søknad-steget.
                 tilbakestillSøknad();
@@ -145,7 +135,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                     underkategori: skjema.felter.underkategori.verdi,
                                     søkerMedOpplysninger: {
                                         ident: bruker.data.personIdent,
-                                        målform: undefined, // TODO
+                                        målform: skjema.felter.målform.verdi,
                                     },
                                     barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi,
                                     endringAvOpplysningerBegrunnelse:

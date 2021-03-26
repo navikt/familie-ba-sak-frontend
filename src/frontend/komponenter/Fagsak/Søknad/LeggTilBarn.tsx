@@ -11,7 +11,6 @@ import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skj
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
-    byggTomRessurs,
     hentDataFraRessursMedFallback,
     Ressurs,
     RessursStatus,
@@ -37,7 +36,7 @@ const StyledUIModalWrapper = styled(UIModalWrapper)`
 
 export interface IRegistrerBarnSkjema {
     ident: string;
-    erIkkeFolkeregistrert: boolean;
+    erFolkeregistrert: boolean;
     uregistrertBarnFødselsdato: FamilieIsoDate | undefined;
     uregistrertBarnNavn: string;
 }
@@ -59,8 +58,8 @@ const LeggTilBarn: React.FunctionComponent = () => {
         );
     }, [logg.status]);
 
-    const erIkkeFolkeregistrert = useFelt<boolean>({
-        verdi: false,
+    const erFolkeregistrert = useFelt<boolean>({
+        verdi: true,
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             const { kanLeggeTilUregistrerteBarn } = avhengigheter;
             return kanLeggeTilUregistrerteBarn;
@@ -76,7 +75,7 @@ const LeggTilBarn: React.FunctionComponent = () => {
     } = useSkjema<
         {
             ident: string;
-            erIkkeFolkeregistrert: boolean;
+            erFolkeregistrert: boolean;
             uregistrertBarnFødselsdato: FamilieIsoDate | undefined;
             uregistrertBarnNavn: string;
         },
@@ -86,32 +85,32 @@ const LeggTilBarn: React.FunctionComponent = () => {
             ident: useFelt<string>({
                 verdi: '',
                 valideringsfunksjon:
-                    process.env.NODE_ENV === 'development' ? felt => ok(felt) : identValidator,
+                    process.env.NODE_ENV === 'developments' ? felt => ok(felt) : identValidator,
                 skalFeltetVises: (avhengigheter: Avhengigheter) => {
                     // Bruker logikk i skjema for å disable validering på feltet, men det er fortsatt synlig for bruker.
-                    const { erIkkeFolkeregistrert } = avhengigheter;
-                    return !erIkkeFolkeregistrert;
+                    const { erFolkeregistrert } = avhengigheter;
+                    return erFolkeregistrert;
                 },
-                avhengigheter: { erIkkeFolkeregistrert: erIkkeFolkeregistrert.verdi },
+                avhengigheter: { erFolkeregistrert: erFolkeregistrert.verdi },
             }),
-            erIkkeFolkeregistrert,
+            erFolkeregistrert,
             uregistrertBarnFødselsdato: useFelt<FamilieIsoDate | undefined>({
                 verdi: undefined,
                 skalFeltetVises: (avhengigheter: Avhengigheter) => {
-                    const { erIkkeFolkeregistrert } = avhengigheter;
-                    return erIkkeFolkeregistrert;
+                    const { erFolkeregistrert } = avhengigheter;
+                    return !erFolkeregistrert;
                 },
-                avhengigheter: { erIkkeFolkeregistrert: erIkkeFolkeregistrert.verdi },
+                avhengigheter: { erFolkeregistrert: erFolkeregistrert.verdi },
             }),
             uregistrertBarnNavn: useFelt<string>({
                 verdi: '',
                 valideringsfunksjon: felt =>
                     felt.verdi !== '' ? ok(felt) : feil(felt, 'Må fylle ut navn'),
                 skalFeltetVises: (avhengigheter: Avhengigheter) => {
-                    const { erIkkeFolkeregistrert } = avhengigheter;
-                    return erIkkeFolkeregistrert;
+                    const { erFolkeregistrert } = avhengigheter;
+                    return !erFolkeregistrert;
                 },
-                avhengigheter: { erIkkeFolkeregistrert: erIkkeFolkeregistrert.verdi },
+                avhengigheter: { erFolkeregistrert: erFolkeregistrert.verdi },
             }),
         },
         skjemanavn: 'Hent barn',
@@ -119,8 +118,7 @@ const LeggTilBarn: React.FunctionComponent = () => {
 
     const onAvbryt = () => {
         settVisModal(false);
-        settSubmitRessurs(byggTomRessurs());
-        registrerBarnSkjema.felter.ident.nullstill();
+        nullstillRegistrerBarnSkjema();
     };
 
     const leggTilOnClick = () => {
@@ -134,7 +132,7 @@ const LeggTilBarn: React.FunctionComponent = () => {
         }
 
         if (kanSendeSkjema()) {
-            if (registrerBarnSkjema.felter.erIkkeFolkeregistrert) {
+            if (!registrerBarnSkjema.felter.erFolkeregistrert.verdi) {
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
                     ...skjema.felter.barnaMedOpplysninger.verdi,
                     {
@@ -143,7 +141,7 @@ const LeggTilBarn: React.FunctionComponent = () => {
                         inkludertISøknaden: true,
                         manueltRegistrert: true,
                         navn: registrerBarnSkjema.felter.uregistrertBarnNavn.verdi,
-                        uregistrert: true,
+                        erFolkeregistrert: false,
                     },
                 ]);
                 settVisModal(false);
@@ -177,7 +175,7 @@ const LeggTilBarn: React.FunctionComponent = () => {
                                             inkludertISøknaden: true,
                                             manueltRegistrert: true,
                                             navn: hentetPerson.data.navn,
-                                            uregistrert: false,
+                                            erFolkeregistrert: true,
                                         },
                                     ]);
 
@@ -248,12 +246,15 @@ const LeggTilBarn: React.FunctionComponent = () => {
                     {...registrerBarnSkjema.felter.ident.hentNavInputProps(
                         registrerBarnSkjema.visFeilmeldinger
                     )}
-                    disabled={registrerBarnSkjema.felter.erIkkeFolkeregistrert.verdi}
+                    disabled={
+                        registrerBarnSkjema.felter.erFolkeregistrert.erSynlig &&
+                        !registrerBarnSkjema.felter.erFolkeregistrert.verdi
+                    }
                     label={'Fødselsnummer'}
                     placeholder={'11 siffer'}
                 />
 
-                {registrerBarnSkjema.felter.erIkkeFolkeregistrert.erSynlig && (
+                {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
                     <LeggTilUregistrertBarn registrerBarnSkjema={registrerBarnSkjema} />
                 )}
             </StyledUIModalWrapper>
