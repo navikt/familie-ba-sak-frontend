@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -102,6 +102,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
+    const [tømFeilmelding, settTømFeilmelding] = useState<boolean>(false);
+    useEffect(() => settTømFeilmelding(false), [tømFeilmelding]);
+
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
         settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
     };
@@ -125,10 +128,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     const skalViseFeilmeldinger = () => {
-        return visFeilmeldinger || visFeilmeldingerForEttVilkår;
+        return !tømFeilmelding && (visFeilmeldinger || visFeilmeldingerForEttVilkår);
     };
 
     const onClickVilkårFerdig = () => {
+        // Fjerner feilmeldingen fra DOMen dersom den er der for å trigge aria-live på nytt
+        settTømFeilmelding(true);
+
         const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person });
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
@@ -206,7 +212,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <SkjemaGruppe
-            feil={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
+            feil={
+                redigerbartVilkår.feilmelding !== '' ? (
+                    <div aria-live={'polite'}>redigerbartVilkår.feilmelding</div>
+                ) : undefined
+            }
             utenFeilPropagering={true}
         >
             <Container>
@@ -226,9 +236,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     }
                     feil={
                         redigerbartVilkår.verdi.resultat.valideringsstatus ===
-                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                            ? redigerbartVilkår.verdi.resultat.feilmelding
-                            : ''
+                            Valideringsstatus.FEIL && skalViseFeilmeldinger() ? (
+                            <div aria-live={'polite'}>
+                                {redigerbartVilkår.verdi.resultat.feilmelding}
+                            </div>
+                        ) : (
+                            ''
+                        )
                     }
                     feilmeldingId={vilkårResultatFeilmeldingId(redigerbartVilkår.verdi)}
                 >
@@ -292,9 +306,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     value={redigerbartVilkår.verdi.begrunnelse.verdi}
                     feil={
                         redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
-                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                            ? redigerbartVilkår.verdi.begrunnelse.feilmelding
-                            : ''
+                            Valideringsstatus.FEIL && skalViseFeilmeldinger() ? (
+                            <div aria-live={'polite'}>
+                                redigerbartVilkår.verdi.begrunnelse.feilmelding
+                            </div>
+                        ) : (
+                            ''
+                        )
                     }
                     onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                         validerOgSettRedigerbartVilkår({

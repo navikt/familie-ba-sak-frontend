@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 import { useHistory } from 'react-router';
 
@@ -33,6 +34,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     const { erLesevisning } = useBehandling();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
+
+    const [tømFeilmelding, settTømFeilmelding] = useState<boolean>(false);
+    useEffect(() => settTømFeilmelding(false), [tømFeilmelding]);
+
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
     const history = useHistory();
@@ -67,6 +72,8 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                 } else if (erVilkårsvurderingenGyldig()) {
                     validerVilkårsvurderingOgSendInn(fagsak);
                 } else {
+                    // Fjerner feilmeldingen fra DOMen for å trigge aria-live på nytt
+                    settTømFeilmelding(true);
                     settVisFeilmeldinger(true);
                 }
             }}
@@ -78,8 +85,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             </VedtakBegrunnelserProvider>
 
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
+                !tømFeilmelding &&
                 visFeilmeldinger && (
                     <Feiloppsummering
+                        aria-live={'polite'}
                         tittel={'For å gå videre må du rette opp følgende:'}
                         feil={[
                             ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
@@ -98,8 +107,8 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                     />
                 )}
 
-            {visFeilmeldinger && opprettelseFeilmelding !== '' && (
-                <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
+            {!tømFeilmelding && visFeilmeldinger && opprettelseFeilmelding !== '' && (
+                <Feilmelding aria-live={'polite'}>{opprettelseFeilmelding}</Feilmelding>
             )}
         </Skjemasteg>
     );

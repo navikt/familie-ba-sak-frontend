@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -32,12 +33,17 @@ const RegistrerSøknad: React.FC = () => {
 
     const { nesteAction, hentFeilTilOppsummering, skjema, søknadErLastetFraBackend } = useSøknad();
     const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [tømFeilmelding, settTømFeilmelding] = useState<boolean>(false);
+
+    useEffect(() => settTømFeilmelding(false), [tømFeilmelding]);
 
     return (
         <StyledSkjemasteg
             className={'søknad'}
             tittel={'Registrer opplysninger fra søknaden'}
             nesteOnClick={() => {
+                // Fjerner feilmeldingen fra DOMen for å trigge aria-live på nytt
+                settTømFeilmelding(true);
                 nesteAction(false);
             }}
             nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
@@ -68,8 +74,9 @@ const RegistrerSøknad: React.FC = () => {
                 skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
                 <AlertStripeFeil>{skjema.submitRessurs.frontendFeilmelding}</AlertStripeFeil>
             )}
-            {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
+            {!tømFeilmelding && skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                 <Feiloppsummering
+                    aria-live="polite"
                     tittel={'For å gå videre må du rette opp følgende:'}
                     feil={hentFeilTilOppsummering()}
                 />

@@ -66,9 +66,11 @@ const VelgPeriode: React.FC<IProps> = ({
             feilmeldingId={vilkårPeriodeFeilmeldingId(redigerbartVilkår.verdi)}
             feil={
                 redigerbartVilkår.verdi.periode.valideringsstatus === Valideringsstatus.FEIL &&
-                visFeilmeldinger
-                    ? redigerbartVilkår.verdi.periode.feilmelding
-                    : ''
+                visFeilmeldinger ? (
+                    <div aria-live={'polite'}>{redigerbartVilkår.verdi.periode.feilmelding}</div>
+                ) : (
+                    ''
+                )
             }
         >
             {!lesevisning && (
