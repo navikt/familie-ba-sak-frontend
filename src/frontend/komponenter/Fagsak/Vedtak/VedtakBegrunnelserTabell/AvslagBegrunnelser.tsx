@@ -1,28 +1,17 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
-import { Element, Normaltekst } from 'nav-frontend-typografi';
-
+import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
-import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat } from '../../../../utils/formatter';
-import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
+import AvslagBegrunnelsePanel from './AvslagBegrunnelsePanel';
 import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 
 interface IAvslagTabell {
     åpenBehandling: IBehandling;
 }
-
-const PanelBody = styled.div`
-    ul {
-        margin: 0;
-        padding-left: 1.5rem;
-    }
-`;
 
 const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
     const { avslagBegrunnelser } = useVedtakBegrunnelser();
@@ -50,24 +39,12 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                 )
                 .sort(sorterTommePerioderSist)
                 .map((periode: Vedtaksperiode) => (
-                    <EkspanderbartBegrunnelsePanel vedtaksperiode={periode} åpen={true}>
-                        <PanelBody>
-                            <Element>Begrunnelse(r) for avslag</Element>
-                            <ul>
-                                {avslagBegrunnelser
-                                    .find(
-                                        (avslagBegrunnelser: IRestAvslagbegrunnelser) =>
-                                            avslagBegrunnelser.fom === periode.periodeFom &&
-                                            avslagBegrunnelser.tom === periode.periodeTom
-                                    )
-                                    ?.brevBegrunnelser.map((begrunnelse: string) => (
-                                        <li>
-                                            <Normaltekst children={begrunnelse} />
-                                        </li>
-                                    ))}
-                            </ul>
-                        </PanelBody>
-                    </EkspanderbartBegrunnelsePanel>
+                    <FritekstVedtakBegrunnelserProvider
+                        vedtaksperiode={periode}
+                        behandlingstype={åpenBehandling.type}
+                    >
+                        <AvslagBegrunnelsePanel vedtaksperiode={periode} />
+                    </FritekstVedtakBegrunnelserProvider>
                 ))}
         </>
     ) : null;

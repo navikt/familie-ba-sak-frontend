@@ -7,40 +7,28 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 
 import { useBehandling } from '../../../context/BehandlingContext';
-import { ISøknadDTO } from '../../../typer/søknad';
-
-interface IProps {
-    settSøknadOgValider: (søknad: ISøknadDTO) => void;
-    søknad: ISøknadDTO;
-}
+import { useSøknad } from '../../../context/SøknadContext';
 
 const AnnetWrapper = styled.div`
     margin: 2rem 0;
 `;
 
-const Annet: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
+const Annet: React.FunctionComponent = () => {
     const { erLesevisning } = useBehandling();
+    const { skjema } = useSøknad();
     const lesevisning = erLesevisning();
-
-    const tekstOnChange = (begrunnelse: string) => {
-        settSøknadOgValider({
-            ...søknad,
-            endringAvOpplysningerBegrunnelse: begrunnelse,
-        });
-    };
 
     return (
         <AnnetWrapper>
             <Systemtittel children={'Annet'} />
             <br />
             <FamilieTextarea
+                {...skjema.felter.endringAvOpplysningerBegrunnelse.hentNavInputProps(
+                    skjema.visFeilmeldinger
+                )}
                 erLesevisning={lesevisning}
                 label={!lesevisning && 'Ved endring av opplysningene er begrunnelse obligatorisk'}
-                value={søknad.endringAvOpplysningerBegrunnelse}
                 maxLength={2000}
-                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                    tekstOnChange(event.target.value);
-                }}
             />
         </AnnetWrapper>
     );

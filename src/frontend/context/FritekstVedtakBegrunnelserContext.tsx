@@ -15,7 +15,7 @@ import {
     IRestVedtakBegrunnelse,
     VedtakBegrunnelse,
 } from '../typer/vedtak';
-import { Vedtaksperiode } from '../typer/vedtaksperiode';
+import { Vedtaksperiode, Vedtaksperiodetype } from '../typer/vedtaksperiode';
 import { useFagsakRessurser } from './FagsakContext';
 import { useVedtakBegrunnelser } from './VedtakBegrunnelserContext';
 
@@ -55,7 +55,8 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
                     return (
                         vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
                         vedtakBegrunnelse.tom === vedtaksperiode.periodeTom &&
-                        vedtakBegrunnelse.begrunnelse === VedtakBegrunnelse.OPPHØR_FRITEKST
+                        vedtakBegrunnelse.begrunnelse ===
+                            vedtakBegrunnelsenForPeriodeType(vedtaksperiode.vedtaksperiodetype)
                     );
                 })
                 .reduce(
@@ -70,6 +71,26 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             settRedigerbarefritekster(vedtakBegrunnelserForPeriode);
             settFritekster(vedtakBegrunnelserForPeriode);
         }, [vedtakBegrunnelser]);
+
+        const vedtakBegrunnelsenForPeriodeType = (vedtaksperiodetype: Vedtaksperiodetype) => {
+            switch (vedtaksperiodetype) {
+                case Vedtaksperiodetype.OPPHØR: {
+                    return VedtakBegrunnelse.OPPHØR_FRITEKST;
+                    break;
+                }
+                case Vedtaksperiodetype.AVSLAG: {
+                    return VedtakBegrunnelse.AVSLAG_FRITEKST;
+                    break;
+                }
+                case Vedtaksperiodetype.UTBETALING: {
+                    return VedtakBegrunnelse.REDUKSJON_FRITEKST;
+                    break;
+                }
+                default: {
+                    return undefined;
+                }
+            }
+        };
 
         const genererIdBasertPåAndreFritekster = () => {
             return (
