@@ -10,7 +10,7 @@ import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserC
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
+import { IAnnenVurdering, IVilkårResultat, vilkårConfig } from '../../../typer/vilkår';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
@@ -83,7 +83,9 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         tittel={'For å gå videre må du rette opp følgende:'}
                         feil={[
                             ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
-                                feilmelding: `Vilkåret mangler resultat`,
+                                feilmelding: `Vilkåret "${
+                                    vilkårConfig[vilkårResultat.vilkårType].tittel
+                                }" mangler resultat`,
                                 skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
                             })),
                             ...hentAndreVurderingerMedFeil().map(
