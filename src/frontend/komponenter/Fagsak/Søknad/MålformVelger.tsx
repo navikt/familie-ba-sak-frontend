@@ -8,12 +8,8 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
 
 import { useBehandling } from '../../../context/BehandlingContext';
-import { ISøknadDTO, Målform, målform } from '../../../typer/søknad';
-
-interface IProps {
-    settSøknadOgValider: (søknad: ISøknadDTO) => void;
-    søknad: ISøknadDTO;
-}
+import { useSøknad } from '../../../context/SøknadContext';
+import { Målform, målform } from '../../../typer/søknad';
 
 const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
     margin: 2rem 0;
@@ -23,41 +19,33 @@ const StyledRadio = styled(Radio)`
     padding-left: 1rem;
 `;
 
-const MålformVelger: React.FunctionComponent<IProps> = ({ settSøknadOgValider, søknad }) => {
+const MålformVelger: React.FunctionComponent = () => {
     const { erLesevisning } = useBehandling();
+    const { skjema } = useSøknad();
     const lesevisning = erLesevisning();
 
     const radioOnChange = (målform: Målform) => {
-        settSøknadOgValider({
-            ...søknad,
-            søkerMedOpplysninger: {
-                ...søknad.søkerMedOpplysninger,
-                målform: målform,
-            },
-        });
+        skjema.felter.målform.validerOgSettFelt(målform);
     };
 
     return (
         <StyledFamilieRadioGruppe
+            {...skjema.felter.målform.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
             erLesevisning={lesevisning}
-            verdi={
-                søknad.søkerMedOpplysninger.målform
-                    ? målform[søknad.søkerMedOpplysninger.målform]
-                    : undefined
-            }
+            verdi={skjema.felter.målform.verdi ? målform[skjema.felter.målform.verdi] : undefined}
             legend={<Systemtittel children={'Målform'} />}
         >
             <StyledRadio
                 label={målform[Målform.NB]}
                 name={'registrer-søknad-målform'}
-                checked={søknad.søkerMedOpplysninger.målform === Målform.NB}
+                checked={skjema.felter.målform.verdi === Målform.NB}
                 onChange={() => radioOnChange(Målform.NB)}
                 id={'målform-nb'}
             />
             <StyledRadio
                 label={målform[Målform.NN]}
                 name={'registrer-søknad-målform'}
-                checked={søknad.søkerMedOpplysninger.målform === Målform.NN}
+                checked={skjema.felter.målform.verdi === Målform.NN}
                 onChange={() => radioOnChange(Målform.NN)}
             />
         </StyledFamilieRadioGruppe>
