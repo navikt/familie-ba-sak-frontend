@@ -229,6 +229,8 @@ const useVedtakBegrunnelseMultiselect = (
     const valgteBegrunnelser: ISelectOption[] = vedtakBegrunnelserForPeriode
         .filter(
             (vedtaksbegrunnelse: IRestVedtakBegrunnelse) =>
+                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.REDUKSJON_FRITEKST &&
+                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.AVSLAG_FRITEKST &&
                 vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.OPPHØR_FRITEKST
         )
         .map((vedtaksbegrunnelse: IRestVedtakBegrunnelse) => ({
