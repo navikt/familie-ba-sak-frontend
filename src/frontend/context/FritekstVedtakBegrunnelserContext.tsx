@@ -10,12 +10,15 @@ import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer
 
 import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
+import { IGrunnlagPerson, PersonType } from '../typer/person';
+import { Målform } from '../typer/søknad';
 import {
     IRestPostFritekstVedtakBegrunnelser,
     IRestVedtakBegrunnelse,
     VedtakBegrunnelse,
 } from '../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../typer/vedtaksperiode';
+import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 import { useVedtakBegrunnelser } from './VedtakBegrunnelserContext';
 
@@ -39,6 +42,7 @@ export enum FritekstSubmit {
 
 const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = constate(
     ({ vedtaksperiode, behandlingstype }: IProps) => {
+        const { åpenBehandling } = useBehandling();
         const { fagsak, settFagsak } = useFagsakRessurser();
         const { vedtakBegrunnelser } = useVedtakBegrunnelser();
         const { request } = useHttp();
@@ -164,6 +168,17 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             }
         };
 
+        const personer =
+            åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
+
+        const søkersMålform = () => {
+            return (
+                personer.find((person: IGrunnlagPerson) => {
+                    return person.type === PersonType.SØKER;
+                })?.målform ?? Målform.NB
+            );
+        };
+
         return {
             redigerbarefritekster,
             fritekster,
@@ -179,6 +194,7 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             toggleForm,
             feilMelding,
             settFeilMelding,
+            søkersMålform,
         };
     }
 );

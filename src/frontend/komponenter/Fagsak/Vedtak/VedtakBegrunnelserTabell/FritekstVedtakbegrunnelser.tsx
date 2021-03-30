@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
+import { EtikettInfo } from 'nav-frontend-etiketter';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
@@ -17,6 +18,7 @@ import {
 } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
+import { målform } from '../../../../typer/søknad';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { fjernElementMedNøkkel } from '../../../../utils/commons';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -52,6 +54,12 @@ const StyledFamilieFritekstFelt = styled.div`
 
 const StyledElement = styled(Element)`
     margin-bottom: 0.8rem;
+`;
+
+const StyledEtikettInfo = styled(EtikettInfo)`
+    float: right;
+    background-color: ${navFarger.navLysGra};
+    border-color: ${navFarger.navGra60};
 `;
 
 const UtførKnapp = styled(IkonKnapp)`
@@ -90,6 +98,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
         toggleForm,
         feilMelding,
         settFeilMelding,
+        søkersMålform,
     } = useFritekstVedtakBegrunnelser();
 
     const harFritekster =
@@ -118,6 +127,9 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                                 ' mars 2021” “Opplysningene fra Folkeregisteret viser at barnet ikke bor sammen med deg”'
                             }
                         />
+                        <StyledEtikettInfo mini={true}>
+                            {målform[søkersMålform()]}
+                        </StyledEtikettInfo>
                     </StyledElement>
                     {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
                         return (
