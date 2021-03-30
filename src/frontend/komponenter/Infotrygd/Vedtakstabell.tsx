@@ -15,15 +15,15 @@ const antallBarn = (stønad: IInfotrygdStønad) => {
 };
 
 const visBeløp = (stønad: IInfotrygdStønad) => {
-    return stønad.delytelse.map(delytelse => {
+    return stønad.delytelse.map((delytelse, index) => {
         let beløp = '';
-        beløp += delytelse.beløp ? delytelse.beløp : '?';
+        beløp += delytelse.beløp ?? '?';
         beløp += ' (';
-        beløp += delytelse.typeDelytelse ? delytelse.typeDelytelse : '?';
+        beløp += delytelse.typeDelytelse ?? '?';
         beløp += ', ';
-        beløp += delytelse.typeUtbetaling ? delytelse.typeUtbetaling : '?';
+        beløp += delytelse.typeUtbetaling ?? '?';
         beløp += ')';
-        return <Normaltekst>{beløp}</Normaltekst>;
+        return <Normaltekst key={beløp + index}>{beløp}</Normaltekst>;
     });
 };
 
@@ -76,15 +76,15 @@ export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) =
                         return (
                             <tr key={index}>
                                 <td>{(sak.saksblokk ?? '') + (sak.saksnr ?? '')}</td>
-                                <td>{stønad?.iverksattFom ? stønad.iverksattFom : ''}</td>
-                                <td>{stønad ? stønad.virkningFom : ''}</td>
+                                <td>{stønad?.iverksattFom}</td>
+                                <td>{stønad?.virkningFom}</td>
                                 <td>{/* kommer når vi finner dataene i replikasettet */}</td>
-                                <td>{stønad ? stønad.status : ''}</td>
-                                <td>{stønad ? stønad.tekstkode : ''}</td>
+                                <td>{stønad?.status}</td>
+                                <td>{stønad?.tekstkode}</td>
                                 <td>{stønad ? antallBarn(stønad) : ''}</td>
-                                <td>{stønad ? stønad.opphørtIver : ''}</td>
-                                <td>{stønad ? stønad.opphørtFom : ''}</td>
-                                <td>{stønad ? stønad.opphørsgrunn : ''}</td>
+                                <td>{stønad?.opphørtIver}</td>
+                                <td>{stønad?.opphørtFom}</td>
+                                <td>{stønad?.opphørsgrunn}</td>
                                 <td>{stønad ? visBeløp(stønad) : ''}</td>
                                 <td>{stønad ? visDelytelseFom(stønad) : ''}</td>
                                 <td>{stønad ? visDelytelseTom(stønad) : ''}</td>
