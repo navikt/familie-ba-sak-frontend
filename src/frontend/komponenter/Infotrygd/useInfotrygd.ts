@@ -11,16 +11,9 @@ import {
 import { AxiosError } from 'axios';
 import { useState } from 'react';
 
-import { IInfotrygdSak, IInfotrygdsaker } from '../typer/infotrygd';
-import { Adressebeskyttelsegradering } from '../typer/person';
-import { identValidator } from '../utils/validators';
-
-export const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
-    saker.sort((sakA, sakB) => {
-        const saksnrA = sakA.saksnr ? parseInt(sakA.saksnr) : 1000;
-        const saksnrB = sakB.saksnr ? parseInt(sakB.saksnr) : 1000;
-        return saksnrA - saksnrB;
-    });
+import { IInfotrygdsaker, IInfotrygdsakerRequest } from '../../typer/infotrygd';
+import { Adressebeskyttelsegradering } from '../../typer/person';
+import { identValidator } from '../../utils/validators';
 
 export const useInfotrygdSkjema = () => {
     const ident = useFelt({
@@ -29,7 +22,7 @@ export const useInfotrygdSkjema = () => {
     });
 
     const { onSubmit, settSubmitRessurs, skjema } = useSkjema<
-        HentInfotrygdsakerInput,
+        IInfotrygdsakerRequest,
         IInfotrygdsaker
     >({
         felter: {
@@ -60,7 +53,7 @@ export const useInfotrygdRequest = () => {
 
     const hentInfotrygdsaker = (ident: string) => {
         settInfotrygdsakerRessurs(byggHenterRessurs<IInfotrygdsaker>());
-        request<HentInfotrygdsakerInput, IInfotrygdsaker>(hentInfotrygdsakerRequestConfig(ident))
+        request<IInfotrygdsakerRequest, IInfotrygdsaker>(hentInfotrygdsakerRequestConfig(ident))
             .then((ressurs: Ressurs<IInfotrygdsaker>) => {
                 settInfotrygdsakerRessurs(konverterTilFeiletRessursDersomIkkeTilgang(ressurs));
             })
@@ -106,13 +99,9 @@ export const useInfotrygdMigrering = () => {
     };
 };
 
-interface HentInfotrygdsakerInput {
-    ident: string;
-}
-
 const hentInfotrygdsakerRequestConfig = (
     ident: string
-): FamilieRequestConfig<HentInfotrygdsakerInput> => {
+): FamilieRequestConfig<IInfotrygdsakerRequest> => {
     return {
         method: 'POST',
         data: { ident },

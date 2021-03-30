@@ -2,9 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Undertittel } from 'nav-frontend-typografi';
 
-import { sorterSakerEtterSaksnr } from '../../context/InfotrygdContext';
 import { Sakstabell } from './Sakstabell';
 import { Vedtakstabell } from './Vedtakstabell';
 import { IInfotrygdSak } from '../../typer/infotrygd';
@@ -12,10 +11,6 @@ import { IInfotrygdSak } from '../../typer/infotrygd';
 interface InfotrygdtabellerProps {
     saker: IInfotrygdSak[];
 }
-
-const InfotrygdDataTittel = styled(Systemtittel)`
-    margin-top: 4rem;
-`;
 
 const SakerTekst = styled(Undertittel)`
     margin-top: 4rem;
@@ -26,6 +21,13 @@ const VedtakTekst = styled(Undertittel)`
     margin-top: 4rem;
     margin-bottom: 1rem;
 `;
+
+const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
+    saker.sort((sakA, sakB) => {
+        const saksnrA = sakA.saksnr ? parseInt(sakA.saksnr) : 1000;
+        const saksnrB = sakB.saksnr ? parseInt(sakB.saksnr) : 1000;
+        return saksnrA - saksnrB;
+    });
 
 export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({ saker }) => {
     return (

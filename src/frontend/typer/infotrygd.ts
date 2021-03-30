@@ -6,6 +6,10 @@ export interface IInfotrygdsaker {
     saker: IInfotrygdSak[];
 }
 
+export interface IInfotrygdsakerRequest {
+    ident: string;
+}
+
 export interface IInfotrygdstønader {
     adressebeskyttelsegradering?: Adressebeskyttelsegradering;
     harTilgang: boolean;

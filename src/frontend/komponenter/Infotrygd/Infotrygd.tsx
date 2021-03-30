@@ -8,7 +8,7 @@ import { Innholdstittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useInfotrygdSkjema, useInfotrygdMigrering } from '../../context/InfotrygdContext';
+import { useInfotrygdSkjema, useInfotrygdMigrering } from './useInfotrygd';
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import { Infotrygdtabeller } from './Infotrygdtabeller';
 import AlertStripe from 'nav-frontend-alertstriper';

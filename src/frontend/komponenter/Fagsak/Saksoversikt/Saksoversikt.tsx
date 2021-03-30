@@ -18,7 +18,7 @@ import {
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { useInfotrygdRequest } from '../../../context/InfotrygdContext';
+import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
