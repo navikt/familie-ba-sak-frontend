@@ -1,10 +1,13 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
+import Tabs from 'nav-frontend-tabs';
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
+
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import {
@@ -15,12 +18,15 @@ import {
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
+import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
+import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
+
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import Utbetalinger from './Utbetalinger';
@@ -29,16 +35,34 @@ interface IProps {
     fagsak: IFagsak;
 }
 
+enum Tabvalg {
+    BASAK,
+    INFOTRYGD,
+}
+
+const basakTab = { label: 'BA-sak', tabnr: 0 };
+const infotrygdTab = { label: 'Infotrygd', tabnr: 1 };
+
 const FlexSpaceBetween = styled.div`
     display: flex;
     justify-content: space-between;
 `;
 
+const StyledTabs = styled(Tabs)`
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+`;
+
 const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
+    const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
+
     const { bestemÅpenBehandling } = useBehandling();
+
     React.useEffect(() => {
         bestemÅpenBehandling(undefined);
     }, [fagsak.status]);
+
+    const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
 
     const iverksatteBehandlinger = fagsak.behandlinger.filter(
         (behandling: IBehandling) =>
@@ -127,20 +151,47 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         }
     };
 
+    const visTabell = () => {
+        if (infotrygdsakerRessurs.status === RessursStatus.SUKSESS) {
+            return <Infotrygdtabeller saker={infotrygdsakerRessurs.data.saker} />;
+        } else if (
+            infotrygdsakerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+            infotrygdsakerRessurs.status === RessursStatus.FEILET
+        ) {
+            return (
+                <AlertStripe children={infotrygdsakerRessurs.frontendFeilmelding} type={'feil'} />
+            );
+        }
+    };
+
     return (
         <div className={'saksoversikt'}>
             <Innholdstittel children={'Saksoversikt'} />
-
-            <FagsakLenkepanel fagsak={fagsak} />
-
-            {fagsak.status === FagsakStatus.LØPENDE && (
+            <StyledTabs
+                tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
+                onChange={(e, tabnr) => {
+                    if (tabnr === basakTab.tabnr) {
+                        settTabvalg(Tabvalg.BASAK);
+                    } else {
+                        settTabvalg(Tabvalg.INFOTRYGD);
+                        hentInfotrygdsaker(fagsak.søkerFødselsnummer);
+                    }
+                }}
+            />
+            {tabvalg === Tabvalg.BASAK ? (
                 <>
-                    <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
-                    {løpendeMånedligUtbetaling()}
+                    <FagsakLenkepanel fagsak={fagsak} />
+                    {fagsak.status === FagsakStatus.LØPENDE && (
+                        <>
+                            <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
+                            {løpendeMånedligUtbetaling()}
+                        </>
+                    )}
+                    <Behandlinger fagsak={fagsak} />
                 </>
+            ) : (
+                visTabell()
             )}
-
-            <Behandlinger fagsak={fagsak} />
         </div>
     );
 };
