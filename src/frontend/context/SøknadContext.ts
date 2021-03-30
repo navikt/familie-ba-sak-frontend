@@ -1,148 +1,179 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import createUseContext from 'constate';
-import { useParams } from 'react-router';
-
-import { FeiloppsummeringFeil } from 'nav-frontend-skjema';
+import { useHistory, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { BehandlingSteg, BehandlingUnderkategori, hentStegNummer } from '../typer/behandling';
-import { FamilieRelasjonRolle, IFamilierelasjon, IPersonInfo } from '../typer/person';
-import { IBarnMedOpplysninger, ISøknadDTO } from '../typer/søknad';
+import {
+    BehandlingSteg,
+    BehandlingUnderkategori,
+    hentStegNummer,
+    IBehandling,
+} from '../typer/behandling';
+import { IFagsak } from '../typer/fagsak';
+import { FamilieRelasjonRolle, IFamilierelasjon } from '../typer/person';
+import { IBarnMedOpplysninger, IRestRegistrerSøknad, ISøknadDTO, Målform } from '../typer/søknad';
 import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 
-const initalState = (bruker?: IPersonInfo): ISøknadDTO => {
-    return {
-        underkategori: BehandlingUnderkategori.ORDINÆR,
-        søkerMedOpplysninger: {
-            ident: bruker?.personIdent ?? '',
-            målform: undefined,
-        },
-        barnaMedOpplysninger:
-            bruker?.familierelasjoner
-                .filter(
-                    (relasjon: IFamilierelasjon) =>
-                        relasjon.relasjonRolle === FamilieRelasjonRolle.BARN
-                )
-                .map(
-                    (relasjon: IFamilierelasjon): IBarnMedOpplysninger => ({
-                        inkludertISøknaden: false,
-                        ident: relasjon.personIdent,
-                        navn: relasjon.navn,
-                        fødselsdato: relasjon.fødselsdato,
-                        manueltRegistrert: false,
-                    })
-                ) ?? [],
-        endringAvOpplysningerBegrunnelse: '',
-    };
-};
+const [SøknadProvider, useSøknad] = createUseContext(
+    ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
+        const { request } = useHttp();
+        const { fagsak, settFagsak } = useFagsakRessurser();
+        const { erLesevisning } = useBehandling();
+        const history = useHistory();
+        const { bruker } = useFagsakRessurser();
+        const { behandlingId } = useParams<{ behandlingId: string }>();
 
-const [SøknadProvider, useSøknad] = createUseContext(() => {
-    const { request } = useHttp();
-    const { bruker } = useFagsakRessurser();
-    const { åpenBehandling } = useBehandling();
-    const { behandlingId } = useParams<{ behandlingId: string }>();
+        const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
+            {
+                underkategori: BehandlingUnderkategori;
+                barnaMedOpplysninger: IBarnMedOpplysninger[];
+                endringAvOpplysningerBegrunnelse: string;
+                målform: Målform | undefined;
+            },
+            IFagsak
+        >({
+            felter: {
+                underkategori: useFelt<BehandlingUnderkategori>({
+                    verdi: BehandlingUnderkategori.ORDINÆR,
+                }),
 
-    const [søknad, settSøknad] = React.useState<ISøknadDTO>(initalState());
-    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
-    const [feilmeldinger, settFeilmeldinger] = useState<FeiloppsummeringFeil[]>([]);
+                barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
+                    verdi: [],
+                    valideringsfunksjon: felt =>
+                        felt.verdi.some((barn: IBarnMedOpplysninger) => barn.inkludertISøknaden)
+                            ? ok(felt)
+                            : feil(felt, 'Ingen av barna er valgt.'),
+                }),
+                endringAvOpplysningerBegrunnelse: useFelt<string>({
+                    verdi: '',
+                }),
+                målform: useFelt<Målform | undefined>({
+                    verdi: undefined,
+                    valideringsfunksjon: felt =>
+                        felt.verdi !== undefined ? ok(felt) : feil(felt, 'Målform er ikke valgt.'),
+                }),
+            },
+            skjemanavn: 'Registrer søknad',
+        });
 
-    const nullstillSøknad = () => {
-        if (bruker.status === RessursStatus.SUKSESS) {
-            settSøknad(initalState(bruker.data));
-        }
-        settSøknadErLastetFraBackend(false);
-    };
+        const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
 
-    React.useEffect(() => {
-        nullstillSøknad();
-    }, [bruker.status]);
-
-    React.useEffect(() => {
-        if (
-            åpenBehandling.status === RessursStatus.SUKSESS &&
-            parseInt(behandlingId, 10) === åpenBehandling.data.behandlingId &&
-            hentStegNummer(åpenBehandling.data.steg) >=
-                hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
-        ) {
-            request<void, ISøknadDTO>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.data.behandlingId}/søknad`,
-                påvirkerSystemLaster: true,
-            }).then((response: Ressurs<ISøknadDTO>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settSøknadErLastetFraBackend(true);
-                    settSøknadOgValider({
-                        ...response.data,
-                        barnaMedOpplysninger: response.data.barnaMedOpplysninger.map(
-                            (barnMedOpplysninger: IBarnMedOpplysninger) => ({
-                                ...barnMedOpplysninger,
-                                checked: true,
+        const tilbakestillSøknad = () => {
+            if (bruker.status === RessursStatus.SUKSESS) {
+                nullstillSkjema();
+                skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+                    bruker.data.familierelasjoner
+                        .filter(
+                            (relasjon: IFamilierelasjon) =>
+                                relasjon.relasjonRolle === FamilieRelasjonRolle.BARN
+                        )
+                        .map(
+                            (relasjon: IFamilierelasjon): IBarnMedOpplysninger => ({
+                                inkludertISøknaden: false,
+                                ident: relasjon.personIdent,
+                                navn: relasjon.navn,
+                                fødselsdato: relasjon.fødselsdato,
+                                manueltRegistrert: false,
                             })
-                        ),
-                    });
-                }
-            });
-        } else {
-            // Ny behandling er lastet som ikke har fullført søknad-steget.
-            nullstillSøknad();
-        }
-    }, [åpenBehandling]);
-
-    const validerSøknad = (validerSøknad: ISøknadDTO): boolean => {
-        const søknadFeilmeldinger: FeiloppsummeringFeil[] = [];
-
-        if (validerSøknad.søkerMedOpplysninger.målform === undefined) {
-            søknadFeilmeldinger.push({
-                skjemaelementId: 'målform-nb',
-                feilmelding: 'Målform er ikke valgt.',
-            });
-        }
-
-        if (
-            validerSøknad.barnaMedOpplysninger.filter(
-                (barn: IBarnMedOpplysninger) => barn.inkludertISøknaden
-            ).length === 0
-        ) {
-            søknadFeilmeldinger.push({
-                skjemaelementId: 'barn-0',
-                feilmelding: 'Ingen av barna er valgt.',
-            });
-        }
-
-        settFeilmeldinger(søknadFeilmeldinger);
-
-        return søknadFeilmeldinger.length === 0;
-    };
-
-    const settBarn = (barn: IBarnMedOpplysninger): void => {
-        const nySøknad = {
-            ...søknad,
-            barnaMedOpplysninger: søknad.barnaMedOpplysninger.map((it: IBarnMedOpplysninger) =>
-                it.ident === barn.ident ? barn : it
-            ),
+                        ) ?? []
+                );
+            }
+            settSøknadErLastetFraBackend(false);
         };
 
-        settSøknad(nySøknad);
-        validerSøknad(nySøknad);
-    };
+        React.useEffect(() => {
+            tilbakestillSøknad();
+        }, [bruker.status]);
 
-    const settSøknadOgValider = (søknad: ISøknadDTO) => {
-        settSøknad(søknad);
-        validerSøknad(søknad);
-    };
+        React.useEffect(() => {
+            if (
+                parseInt(behandlingId, 10) === åpenBehandling.behandlingId &&
+                hentStegNummer(åpenBehandling.steg) >=
+                    hentStegNummer(BehandlingSteg.VILKÅRSVURDERING)
+            ) {
+                request<void, ISøknadDTO>({
+                    method: 'GET',
+                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/søknad`,
+                    påvirkerSystemLaster: true,
+                }).then((response: Ressurs<ISøknadDTO>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settSøknadErLastetFraBackend(true);
+                        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+                            response.data.barnaMedOpplysninger.map(
+                                (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                                    ...barnMedOpplysninger,
+                                    checked: true,
+                                })
+                            )
+                        );
 
-    return {
-        erSøknadGyldig: validerSøknad,
-        feilmeldinger,
-        settBarn,
-        settSøknadOgValider,
-        søknad,
-        søknadErLastetFraBackend,
-    };
-});
+                        skjema.felter.målform.validerOgSettFelt(
+                            response.data.søkerMedOpplysninger.målform
+                        );
+                    }
+                });
+            } else {
+                // Ny behandling er lastet som ikke har fullført søknad-steget.
+                tilbakestillSøknad();
+            }
+        }, [åpenBehandling]);
+
+        const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
+            if (bruker.status === RessursStatus.SUKSESS) {
+                if (erLesevisning()) {
+                    if (fagsak.status === RessursStatus.SUKSESS) {
+                        history.push(
+                            `/fagsak/${fagsak.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
+                        );
+                    } else {
+                        throw Error(
+                            'Prøver å gå videre fra søknadsregistrering uten å ha en fagsak'
+                        );
+                    }
+                } else {
+                    onSubmit<IRestRegistrerSøknad>(
+                        {
+                            method: 'POST',
+                            data: {
+                                søknad: {
+                                    underkategori: skjema.felter.underkategori.verdi,
+                                    søkerMedOpplysninger: {
+                                        ident: bruker.data.personIdent,
+                                        målform: undefined, // TODO
+                                    },
+                                    barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi,
+                                    endringAvOpplysningerBegrunnelse:
+                                        skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
+                                },
+                                bekreftEndringerViaFrontend,
+                            },
+                            url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
+                        },
+                        (response: Ressurs<IFagsak>) => {
+                            if (response.status === RessursStatus.SUKSESS) {
+                                settFagsak(response);
+                                history.push(
+                                    `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
+                                );
+                            }
+                        }
+                    );
+                }
+            }
+        };
+
+        return {
+            skjema,
+            nesteAction,
+            hentFeilTilOppsummering,
+            søknadErLastetFraBackend,
+        };
+    }
+);
 
 export { SøknadProvider, useSøknad };
