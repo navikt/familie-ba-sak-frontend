@@ -23,6 +23,10 @@ export interface Fritekster {
     [key: string]: FeltState<string>;
 }
 
+export interface FriteksterFeilmelding {
+    [key: string]: string;
+}
+
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
     behandlingstype: Behandlingstype;
@@ -48,6 +52,8 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         const [fritekster, settFritekster] = useState<Fritekster>({});
         const [fritekstSubmit, settFritekstSubmit] = useState<FritekstSubmit>(FritekstSubmit.NONE);
         const [idPåSistOpprettetFritekst, settIdPåSistOpprettetFritekst] = useState<number>();
+
+        const [feilMelding, settFeilMelding] = useState<FriteksterFeilmelding>({});
 
         useEffect(() => {
             const vedtakBegrunnelserForPeriode = vedtakBegrunnelser
@@ -106,6 +112,11 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         });
 
         const leggTilRedigerbareFritekst = () => {
+            if (Object.keys(redigerbarefritekster).length >= 3) {
+                alert('Du har nådd maks antall kulepunkter: 3');
+                return;
+            }
+
             const idPåNyFritekst = genererIdBasertPåAndreFritekster();
             settRedigerbarefritekster({
                 ...redigerbarefritekster,
@@ -166,6 +177,8 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             ekspandertBegrunnelse,
             settEkspandertBegrunnelse,
             toggleForm,
+            feilMelding,
+            settFeilMelding,
         };
     }
 );

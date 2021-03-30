@@ -3,10 +3,11 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
+import { PopoverOrientering } from 'nav-frontend-popover';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
-import { FamilieKnapp, FamilieTextareaControlled } from '@navikt/familie-form-elements';
+import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import {
@@ -20,12 +21,13 @@ import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { fjernElementMedNøkkel } from '../../../../utils/commons';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import SkjultLegend from '../../../Felleskomponenter/SkjultLegend';
+import Hjelpetekst44px from './Felles/Hjelpetekst44px';
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
 }
 
-const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextareaControlled)`
+const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
     .skjemaelement {
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
@@ -68,6 +70,13 @@ const Knapperad = styled.div`
     margin-top: 1.5rem;
 `;
 
+const StyledHjelpetekst44px = styled(Hjelpetekst44px)`
+    .popover {
+        max-width: 18rem;
+        text-align: left;
+    }
+`;
+
 const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
     const { erLesevisning } = useBehandling();
     const {
@@ -79,6 +88,8 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
         onSubmit,
         fritekstSubmit,
         toggleForm,
+        feilMelding,
+        settFeilMelding,
     } = useFritekstVedtakBegrunnelser();
 
     const harFritekster =
@@ -96,12 +107,24 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
             {harFritekster ? (
                 <StyledSkjemaGruppe>
                     <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
-                    <StyledElement>Fritekst til kulepunkt i brev (valgfri)</StyledElement>
+                    <StyledElement>
+                        Fritekst til kulepunkt i brev (valgfri)
+                        <StyledHjelpetekst44px
+                            type={PopoverOrientering.Hoyre}
+                            innhold={
+                                'Brev som sendes ut bør være så kortfattede og presise som mulig.' +
+                                'Se retningslinjer for klarspråk: \n\n' +
+                                'Eksempler på formulering. ”Barnevernet har bekreftet at de overtok omsorgen for barnet 15.' +
+                                ' mars 2021” “Opplysningene fra Folkeregisteret viser at barnet ikke bor sammen med deg”'
+                            }
+                        />
+                    </StyledElement>
                     {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
                         return (
                             <StyledFamilieFritekstFelt>
                                 <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
                                 <FamilieTextareaBegrunnelseFritekst
+                                    feil={feilMelding[fritekstId]}
                                     erLesevisning={erLesevisning()}
                                     defaultValue={redigerbarefritekster[fritekstId].verdi}
                                     key={`fritekst-${fritekstId}`}
@@ -109,7 +132,17 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                                     textareaClass={'fritekst-textarea'}
                                     value={redigerbarefritekster[fritekstId].verdi}
                                     maxLength={220}
-                                    onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                                    onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                                        if (event.target.value.length > 220) {
+                                            settFeilMelding({
+                                                ...feilMelding,
+                                                [fritekstId]: 'Du har nådd maks antall tegn: 220',
+                                            });
+
+                                            return;
+                                        }
+                                        settFeilMelding({});
+
                                         settRedigerbarefritekster({
                                             ...redigerbarefritekster,
                                             [fritekstId]: redigerbarefritekster[fritekstId].valider(
