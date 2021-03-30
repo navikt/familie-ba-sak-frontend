@@ -6,8 +6,6 @@ import KnappBase, { KnappBaseProps } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { randomUUID } from '../../../utils/commons';
-
 interface IProps {
     className?: string;
     erLesevisning: boolean;
@@ -34,7 +32,6 @@ const IkonKnapp: React.FC<IProps & KnappBaseProps> = ({
 }) => {
     return !erLesevisning ? (
         <KnappBase
-            aria-label={`utfør_${randomUUID()}`}
             className={classNames(className, 'ikon-knapp', knappPosisjon)}
             id={id}
             onClick={onClick}
