@@ -103,9 +103,14 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         };
 
         const genererIdBasertPåAndreFritekster = () => {
-            return (
-                Math.max(...Object.keys(redigerbarefritekster).map(key => parseInt(key, 10))) + 1
-            );
+            if (Object.keys(redigerbarefritekster).length > 0) {
+                return (
+                    Math.max(...Object.keys(redigerbarefritekster).map(key => parseInt(key, 10))) +
+                    1
+                );
+            } else {
+                return 1;
+            }
         };
 
         const lagInitiellFritekst = (initiellVerdi: string) => ({
