@@ -18,7 +18,6 @@ import {
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
@@ -26,7 +25,7 @@ import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
-
+import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import Utbetalinger from './Utbetalinger';
@@ -169,7 +168,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
             <Innholdstittel children={'Saksoversikt'} />
             <StyledTabs
                 tabs={[{ label: basakTab.label }, { label: infotrygdTab.label }]}
-                onChange={(e, tabnr) => {
+                onChange={(_, tabnr) => {
                     if (tabnr === basakTab.tabnr) {
                         settTabvalg(Tabvalg.BASAK);
                     } else {
