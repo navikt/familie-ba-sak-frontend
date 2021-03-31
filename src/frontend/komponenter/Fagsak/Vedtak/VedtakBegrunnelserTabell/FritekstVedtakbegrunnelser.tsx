@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
+import Lenke from 'nav-frontend-lenker';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
@@ -121,10 +122,19 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                         <StyledHjelpetekst44px
                             type={PopoverOrientering.Hoyre}
                             innhold={
-                                'Brev som sendes ut bør være så kortfattede og presise som mulig.' +
-                                'Se retningslinjer for klarspråk: \n\n' +
-                                'Eksempler på formulering. ”Barnevernet har bekreftet at de overtok omsorgen for barnet 15.' +
-                                ' mars 2021” “Opplysningene fra Folkeregisteret viser at barnet ikke bor sammen med deg”'
+                                <div>
+                                    Brev som sendes ut bør være så kortfattede og presise som mulig.
+                                    <br />
+                                    <Lenke href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx">
+                                        Se retningslinjer for klarspråk.
+                                    </Lenke>
+                                    <p />
+                                    <b>Eksempler på formulering:</b>
+                                    <br />
+                                    ”Barnevernet har bekreftet at de overtok omsorgen for barnet 15.
+                                    barnet 15. mars 2021” “Opplysningene fra Folkeregisteret viser
+                                    at barnet ikke bor sammen med deg”
+                                </div>
                             }
                         />
                         <StyledEtikettInfo mini={true}>
