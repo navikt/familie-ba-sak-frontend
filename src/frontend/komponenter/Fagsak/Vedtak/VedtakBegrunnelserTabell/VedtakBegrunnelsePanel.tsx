@@ -16,7 +16,7 @@ import {
     Vedtaksperiode,
     Vedtaksperiodetype,
 } from '../../../../typer/vedtaksperiode';
-import { formaterBeløp, formaterPersonIdent } from '../../../../utils/formatter';
+import { formaterBeløp, formaterPersonIdent, sorterFødselsdato } from '../../../../utils/formatter';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
 import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
 import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
@@ -74,8 +74,14 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     <div>
                         <Element>Resultat</Element>
 
-                        {vedtaksperiode.utbetalingsperiodeDetaljer.map(
-                            (detalj: IUtbetalingsperiodeDetalj) => (
+                        {vedtaksperiode.utbetalingsperiodeDetaljer
+                            .sort((utbetalingA, utbetalingB) =>
+                                sorterFødselsdato(
+                                    utbetalingA.person.fødselsdato,
+                                    utbetalingB.person.fødselsdato
+                                )
+                            )
+                            .map((detalj: IUtbetalingsperiodeDetalj) => (
                                 <UtbetalingsperiodeDetalj key={detalj.person.personIdent}>
                                     <Normaltekst title={detalj.person.navn}>
                                         {formaterPersonIdent(detalj.person.personIdent)}
@@ -85,8 +91,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                                         {formaterBeløp(detalj.utbetaltPerMnd)}
                                     </Normaltekst>
                                 </UtbetalingsperiodeDetalj>
-                            )
-                        )}
+                            ))}
                     </div>
                 ) : (
                     <div />
