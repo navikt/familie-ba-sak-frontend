@@ -138,7 +138,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                             }
                         />
                         <StyledEtikettInfo mini={true}>
-                            {målform[søkersMålform()]}
+                            Skriv {målform[søkersMålform()]}
                         </StyledEtikettInfo>
                     </StyledElement>
                     {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
