@@ -2,7 +2,13 @@ import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/f
 
 import { IPeriode } from '../../typer/periode';
 import { VedtakBegrunnelse } from '../../typer/vedtak';
-import { IAnnenVurdering, IPersonResultat, IVilkårResultat, Resultat } from '../../typer/vilkår';
+import {
+    IAnnenVurdering,
+    IPersonResultat,
+    IVilkårResultat,
+    Resultat,
+    VilkårType,
+} from '../../typer/vilkår';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
@@ -13,6 +19,7 @@ export const validerVilkår = (
         {
             ...avhengigheter,
             erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad,
+            er18ÅrsVilkår: nyttVilkårResultat.verdi.vilkårType === VilkårType.UNDER_18_ÅR,
         }
     );
 
