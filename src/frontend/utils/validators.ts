@@ -54,8 +54,8 @@ const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string
     const fomDato = familieDayjs(new Date(fom));
     const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
     return (
-        fomDato.isAfter(fødselsdatoPluss18) ||
-        (tomDato ? tomDato.isAfter(fødselsdatoPluss18) : false)
+        fomDato.isSameOrAfter(fødselsdatoPluss18) ||
+        (tomDato ? tomDato.isSameOrAfter(fødselsdatoPluss18) : false)
     );
 };
 
