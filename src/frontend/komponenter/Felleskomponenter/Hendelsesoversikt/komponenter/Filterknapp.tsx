@@ -57,7 +57,6 @@ const Filterknapp = ({ children, disabled = false, onClick, aktiv }: IFilterknap
     return (
         <StyledButton
             id={`filter_${randomUUID()}`}
-            aria-label={`filter_${randomUUID()}`}
             onClick={onClick}
             disabled={disabled}
             aktiv={aktiv}

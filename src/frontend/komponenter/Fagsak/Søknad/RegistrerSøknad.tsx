@@ -1,32 +1,22 @@
 import * as React from 'react';
 
-import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { AlertStripeAdvarsel, AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 
-import { useHttp } from '@navikt/familie-http';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import { IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
-import { IRestRegistrerSøknad } from '../../../typer/søknad';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import Annet from './Annet';
 import Barna from './Barna';
 import MålformVelger from './MålformVelger';
 import SøknadType from './SøknadType';
-
-interface IProps {
-    åpenBehandling: IBehandling;
-}
 
 const FjernVilkårAdvarsel = styled(Normaltekst)`
     white-space: pre-wrap;
@@ -37,77 +27,21 @@ const StyledSkjemasteg = styled(Skjemasteg)`
     max-width: 40rem;
 `;
 
-const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
-    const { request } = useHttp();
-    const { fagsak, settFagsak } = useFagsakRessurser();
+const RegistrerSøknad: React.FC = () => {
     const { erLesevisning } = useBehandling();
-    const history = useHistory();
 
-    const {
-        erSøknadGyldig,
-        feilmeldinger,
-        settSøknadOgValider,
-        søknad,
-        søknadErLastetFraBackend,
-    } = useSøknad();
-    const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
-    const [feilmelding, settFeilmelding] = React.useState('');
-    const [frontendFeilmelding, settFrontendFeilmelding] = React.useState('');
-
-    const [senderInn, settSenderInn] = React.useState(false);
+    const { nesteAction, hentFeilTilOppsummering, skjema, søknadErLastetFraBackend } = useSøknad();
     const [visModal, settVisModal] = React.useState<boolean>(false);
-
-    const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
-        if (åpenBehandling && erSøknadGyldig(søknad)) {
-            settSenderInn(true);
-
-            request<IRestRegistrerSøknad, IFagsak>({
-                method: 'POST',
-                data: { søknad, bekreftEndringerViaFrontend },
-                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
-            }).then((response: Ressurs<IFagsak>) => {
-                settSenderInn(false);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settFagsak(response);
-                    history.push(
-                        `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
-                    );
-                } else if (response.status === RessursStatus.FUNKSJONELL_FEIL) {
-                    settFrontendFeilmelding(response.frontendFeilmelding);
-                    settVisModal(true);
-                } else if (
-                    response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    settFeilmelding(response.frontendFeilmelding);
-                } else {
-                    settFeilmelding('Registrering av søknaden feilet');
-                }
-            });
-        } else {
-            settVisFeilmeldinger(true);
-        }
-    };
 
     return (
         <StyledSkjemasteg
             className={'søknad'}
             tittel={'Registrer opplysninger fra søknaden'}
             nesteOnClick={() => {
-                if (erLesevisning()) {
-                    if (fagsak.status === RessursStatus.SUKSESS) {
-                        history.push(
-                            `/fagsak/${fagsak.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
-                        );
-                    } else {
-                        settFeilmelding('Kunne ikke finne id på fagsak.');
-                    }
-                } else {
-                    nesteAction(false);
-                }
+                nesteAction(false);
             }}
             nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
-            senderInn={senderInn}
+            senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
         >
             {søknadErLastetFraBackend && !erLesevisning() && (
                 <>
@@ -121,22 +55,25 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                 </>
             )}
 
-            <SøknadType settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+            <SøknadType />
 
-            <Barna settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+            <Barna />
 
-            <MålformVelger settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+            <MålformVelger />
 
-            <Annet settSøknadOgValider={settSøknadOgValider} søknad={søknad} />
+            <Annet />
 
-            {feilmeldinger.length > 0 && visFeilmeldinger && (
+            {(skjema.submitRessurs.status === RessursStatus.FEILET ||
+                skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
+                <AlertStripeFeil>{skjema.submitRessurs.frontendFeilmelding}</AlertStripeFeil>
+            )}
+            {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                 <Feiloppsummering
                     tittel={'For å gå videre må du rette opp følgende:'}
-                    feil={feilmeldinger}
+                    feil={hentFeilTilOppsummering()}
                 />
             )}
-
-            {feilmelding && <Feilmelding children={feilmelding} />}
 
             {visModal && (
                 <UIModalWrapper
@@ -163,13 +100,17 @@ const RegistrerSøknad: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                                     nesteAction(true);
                                 }}
                                 children={'Ja'}
-                                spinner={senderInn}
-                                disabled={senderInn}
+                                spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             />,
                         ],
                     }}
                 >
-                    <FjernVilkårAdvarsel>{frontendFeilmelding}</FjernVilkårAdvarsel>
+                    <FjernVilkårAdvarsel>
+                        {skjema.submitRessurs.status === RessursStatus.FEILET ||
+                            (skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL &&
+                                skjema.submitRessurs.frontendFeilmelding)}
+                    </FjernVilkårAdvarsel>
                 </UIModalWrapper>
             )}
         </StyledSkjemasteg>
