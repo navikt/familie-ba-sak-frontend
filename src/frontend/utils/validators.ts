@@ -49,15 +49,22 @@ export const erGyldigMånedDato = (
         : feil(felt, 'Ugyldig dato');
 };
 
-const barnsVilkårErMellom0og18År = (fom: string, person: IGrunnlagPerson, tom?: string) => {
-    const fødselsdato = familieDayjs(new Date(person.fødselsdato));
+const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string, tom?: string) => {
     const fødselsdatoPluss18 = leggTilÅr(person.fødselsdato, 18);
     const fomDato = familieDayjs(new Date(fom));
     const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
     return (
-        fomDato.isSameOrAfter(fødselsdato) &&
-        (tomDato ? tomDato.isSameOrBefore(fødselsdatoPluss18) : true)
+        fomDato.isAfter(fødselsdatoPluss18) ||
+        (tomDato ? tomDato.isAfter(fødselsdatoPluss18) : false)
     );
+};
+
+const finnesDatoFørFødselsdato = (person: IGrunnlagPerson, fom: string, tom?: string) => {
+    const fødselsdato = familieDayjs(new Date(person.fødselsdato));
+    const fomDato = familieDayjs(new Date(fom));
+    const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
+
+    return fomDato.isBefore(fødselsdato) || (tomDato ? tomDato.isBefore(fødselsdato) : false);
 };
 
 export const erPeriodeGyldig = (
@@ -70,29 +77,27 @@ export const erPeriodeGyldig = (
     const person: IGrunnlagPerson | undefined = avhengigheter?.person;
     const erEksplisittAvslagPåSøknad: boolean | undefined =
         avhengigheter?.erEksplisittAvslagPåSøknad;
+    const er18ÅrsVilkår: boolean | undefined = avhengigheter?.er18ÅrsVilkår;
 
     if (fom) {
+        if (!erEksplisittAvslagPåSøknad) {
+            if (person && person.type === PersonType.BARN) {
+                if (finnesDatoFørFødselsdato(person, fom, tom)) {
+                    return feil(felt, 'Du kan ikke legge til periode før barnets fødselsdato');
+                }
+                if (er18ÅrsVilkår && finnesDatoEtterFødselsdatoPluss18(person, fom, tom)) {
+                    return feil(
+                        felt,
+                        'Du kan ikke legge til periode på dette vilkåret etter barnet har fylt 18 år'
+                    );
+                }
+            }
+        }
         const fomDatoErGyldig = familieDayjs(fom).isValid();
-
-        const fomDatoErFremITid = familieDayjs(fom).isAfter(familieDayjs());
-
         const fomDatoErFørTomDato = isoStringToDayjs(fom, TIDENES_MORGEN).isBefore(
             isoStringToDayjs(tom, TIDENES_ENDE)
         );
-        const periodeErInnenfor18år =
-            person && person.type === PersonType.BARN
-                ? barnsVilkårErMellom0og18År(fom, person, tom)
-                : true;
-
-        if (fomDatoErFremITid && !erEksplisittAvslagPåSøknad) {
-            return feil(felt, 'Du kan ikke legge inn en dato frem i tid');
-        }
-
-        return fomDatoErGyldig &&
-            fomDatoErFørTomDato &&
-            (periodeErInnenfor18år || erEksplisittAvslagPåSøknad)
-            ? ok(felt)
-            : feil(felt, 'Ugyldig periode');
+        return fomDatoErGyldig && fomDatoErFørTomDato ? ok(felt) : feil(felt, 'Ugyldig periode');
     } else {
         if (erEksplisittAvslagPåSøknad) {
             return !tom
