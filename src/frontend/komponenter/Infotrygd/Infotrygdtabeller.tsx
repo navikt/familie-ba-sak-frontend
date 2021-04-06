@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 import { Undertittel } from 'nav-frontend-typografi';
 
+import { IInfotrygdSak } from '../../typer/infotrygd';
 import { Sakstabell } from './Sakstabell';
 import { Vedtakstabell } from './Vedtakstabell';
-import { IInfotrygdSak } from '../../typer/infotrygd';
 
 interface InfotrygdtabellerProps {
     saker: IInfotrygdSak[];

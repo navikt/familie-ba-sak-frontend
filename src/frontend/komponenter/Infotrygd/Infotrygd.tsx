@@ -2,16 +2,16 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Innholdstittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useInfotrygdSkjema, useInfotrygdMigrering } from './useInfotrygd';
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import { Infotrygdtabeller } from './Infotrygdtabeller';
-import AlertStripe from 'nav-frontend-alertstriper';
+import { useInfotrygdSkjema, useInfotrygdMigrering } from './useInfotrygd';
 
 const InfotrygdContainer = styled.div`
     padding: 1rem;

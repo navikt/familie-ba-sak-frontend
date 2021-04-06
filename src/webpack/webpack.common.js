@@ -4,6 +4,7 @@ const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TypeScriptTypeChecker = require('fork-ts-checker-webpack-plugin');
 
 const publicUrl = '/assets';
 
@@ -23,10 +24,31 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [{ from: 'src/frontend/public/favicon.ico', to: '.' + publicUrl }],
         }),
+        new TypeScriptTypeChecker({
+            typescript: {
+                configFile: path.join(process.cwd(), 'src/frontend/tsconfig.json'),
+            },
+            eslint: {
+                files: './src/**/*.{ts,tsx,js,jsx}',
+            },
+        }),
     ],
     devtool: 'inline-source-map',
     module: {
         rules: [
+            {
+                test: /\.(ts|tsx)$/,
+                enforce: 'pre',
+                exclude: /node_modules/,
+                use: [
+                    {
+                        options: {
+                            eslintPath: require.resolve('eslint'),
+                        },
+                        loader: require.resolve('eslint-loader'),
+                    },
+                ],
+            },
             {
                 test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
                 use: [`file-loader`],
