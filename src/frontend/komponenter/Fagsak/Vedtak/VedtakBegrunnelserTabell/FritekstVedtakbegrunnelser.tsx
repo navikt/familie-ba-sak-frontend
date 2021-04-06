@@ -8,6 +8,7 @@ import Lenke from 'nav-frontend-lenker';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
+import { Feilmelding } from 'nav-frontend-typografi';
 
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 
@@ -41,6 +42,7 @@ const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     background-color: ${navFarger.navGraBakgrunn};
     padding: 1rem;
     max-width: 50rem;
+    margin-top: 1.25rem;
 `;
 
 const StyledFamilieFritekstFelt = styled.div`
@@ -54,11 +56,14 @@ const StyledFamilieFritekstFelt = styled.div`
 `;
 
 const StyledElement = styled(Element)`
-    margin-bottom: 0.8rem;
+    margin: 0 2.8rem 0 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
 `;
 
 const StyledEtikettInfo = styled(EtikettInfo)`
-    float: right;
+    margin-left: auto;
     background-color: ${navFarger.navLysGra};
     border-color: ${navFarger.navGra60};
 `;
@@ -70,6 +75,13 @@ const UtførKnapp = styled(IkonKnapp)`
 const SletteKnapp = styled(IkonKnapp)`
     margin-top: 0rem;
     margin-right: 0rem;
+    height: 2.75rem;
+    width: 2.75rem;
+    border-radius: 50%;
+
+    &:hover {
+        background-color: ${navFarger.navLysGra};
+    }
 `;
 
 const Knapperad = styled.div`
@@ -81,7 +93,7 @@ const Knapperad = styled.div`
 
 const StyledHjelpetekst44px = styled(Hjelpetekst44px)`
     .popover {
-        max-width: 18rem;
+        max-width: 25rem;
         text-align: left;
     }
 `;
@@ -120,20 +132,29 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                     <StyledElement>
                         Fritekst til kulepunkt i brev (valgfri)
                         <StyledHjelpetekst44px
-                            type={PopoverOrientering.Hoyre}
+                            type={PopoverOrientering.OverVenstre}
                             innhold={
                                 <div>
-                                    Brev som sendes ut bør være så kortfattede og presise som mulig.
-                                    <br />
-                                    <Lenke href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx">
+                                    Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
+                                    <Lenke
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
+                                    >
                                         Se retningslinjer for klarspråk.
                                     </Lenke>
                                     <p />
                                     <b>Eksempler på formulering:</b>
                                     <br />
-                                    ”Barnevernet har bekreftet at de overtok omsorgen for barnet 15.
-                                    barnet 15. mars 2021” “Opplysningene fra Folkeregisteret viser
-                                    at barnet ikke bor sammen med deg”
+                                    <text style={{ fontStyle: 'italic' }}>
+                                        Barnevernet har bekreftet at de overtok omsorgen for barnet
+                                        mars 2021
+                                    </text>
+                                    <p />
+                                    <text style={{ fontStyle: 'italic' }}>
+                                        Opplysningene fra Folkeregisteret viser at barnet ikke bor
+                                        sammen med deg
+                                    </text>
                                 </div>
                             }
                         />
@@ -176,7 +197,6 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                                         });
                                     }}
                                 />
-
                                 <SletteKnapp
                                     erLesevisning={erLesevisning()}
                                     onClick={() => {
@@ -205,6 +225,9 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                         label={'Legg til fritekst'}
                         mini={true}
                     />
+                    <Feilmelding style={{ paddingLeft: '0rem' }}>
+                        {feilMelding[`legg-til-fritekst`]}
+                    </Feilmelding>
                     <Knapperad>
                         <FamilieKnapp
                             erLesevisning={erLesevisning()}
@@ -232,7 +255,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                     </Knapperad>
                 </StyledSkjemaGruppe>
             ) : (
-                <SkjemaGruppe style={{ padding: '1rem' }}>
+                <SkjemaGruppe style={{ paddingLeft: '1rem' }}>
                     <SkjultLegend>Legg til fritekst til kulepunkt i brev</SkjultLegend>
                     <UtførKnapp
                         erLesevisning={erLesevisning()}

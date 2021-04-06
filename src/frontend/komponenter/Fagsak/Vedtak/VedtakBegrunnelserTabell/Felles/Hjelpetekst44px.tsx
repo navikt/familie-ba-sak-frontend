@@ -12,7 +12,8 @@ interface IHjelpetekst44pxProps extends HjelpetekstProps {
 }
 
 const HjepetekstWrapper = styled(FamilieBaseKnapp)`
-    padding: 0.625rem;
+    padding: 0rem;
+    margin-left: 0.625rem;
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 50%;

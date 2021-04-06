@@ -122,9 +122,13 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
 
         const leggTilRedigerbareFritekst = () => {
             if (Object.keys(redigerbarefritekster).length >= 3) {
-                alert('Du har nådd maks antall kulepunkter: 3');
+                settFeilMelding({
+                    ...feilMelding,
+                    [`legg-til-fritekst`]: 'Du har nådd maks antall kulepunkter: 3',
+                });
                 return;
             }
+            settFeilMelding({});
 
             const idPåNyFritekst = genererIdBasertPåAndreFritekster();
             settRedigerbarefritekster({
