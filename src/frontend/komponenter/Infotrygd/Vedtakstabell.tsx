@@ -29,7 +29,7 @@ const visBeløp = (stønad: IInfotrygdStønad) => {
 
 // Anta at alle delytelser har samme fom
 const visDelytelseFom = (stønad: IInfotrygdStønad) => {
-    let fom = stønad.delytelse[0].fom;
+    const fom = stønad.delytelse[0].fom;
     return stønad.delytelse.every(delytelse => {
         return fom === delytelse.fom;
     })
@@ -39,7 +39,7 @@ const visDelytelseFom = (stønad: IInfotrygdStønad) => {
 
 // Anta at alle delytelser har samme tom
 const visDelytelseTom = (stønad: IInfotrygdStønad) => {
-    let tom = stønad.delytelse[0].tom;
+    const tom = stønad.delytelse[0].tom;
     return stønad.delytelse.every(delytelse => {
         return tom === delytelse.tom;
     })

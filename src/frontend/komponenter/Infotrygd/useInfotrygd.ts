@@ -1,3 +1,7 @@
+import { useState } from 'react';
+
+import { AxiosError } from 'axios';
+
 import { FamilieRequestConfig, useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import {
@@ -8,8 +12,6 @@ import {
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
-import { AxiosError } from 'axios';
-import { useState } from 'react';
 
 import { IInfotrygdsaker, IInfotrygdsakerRequest } from '../../typer/infotrygd';
 import { Adressebeskyttelsegradering } from '../../typer/person';
