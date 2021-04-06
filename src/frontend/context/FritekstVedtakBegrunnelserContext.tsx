@@ -82,6 +82,10 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
                     return VedtakBegrunnelse.AVSLAG_FRITEKST;
                     break;
                 }
+                case Vedtaksperiodetype.UTBETALING: {
+                    return VedtakBegrunnelse.REDUKSJON_FRITEKST;
+                    break;
+                }
                 default: {
                     return undefined;
                 }
