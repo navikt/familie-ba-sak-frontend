@@ -92,7 +92,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode med etter barnets fødselsdato gir feil på 18 årsvilkåret', () => {
-        const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2000-05-17', '2018-05-18'));
+        const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2000-05-17', '2018-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: mockBarn,
             erEksplisittAvslagPåSøknad: false,
