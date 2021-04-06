@@ -100,7 +100,7 @@ describe('utils/validators', () => {
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
         expect(valideringsresultat.feilmelding).toEqual(
-            'Du kan ikke legge til periode på dette vilkåret etter barnet har fylt 18 år'
+            'Du kan ikke legge til periode på dette vilkåret fra barnet har fylt 18 år'
         );
     });
 

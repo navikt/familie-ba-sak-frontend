@@ -88,7 +88,7 @@ export const erPeriodeGyldig = (
                 if (er18ÅrsVilkår && finnesDatoEtterFødselsdatoPluss18(person, fom, tom)) {
                     return feil(
                         felt,
-                        'Du kan ikke legge til periode på dette vilkåret etter barnet har fylt 18 år'
+                        'Du kan ikke legge til periode på dette vilkåret fra barnet har fylt 18 år'
                     );
                 }
             }
