@@ -98,6 +98,10 @@ const StyledHjelpetekst44px = styled(Hjelpetekst44px)`
     }
 `;
 
+const ItalicText = styled(Normaltekst)`
+    font-style: italic;
+`;
+
 const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
     const { erLesevisning } = useBehandling();
     const {
@@ -138,26 +142,25 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                                     <Normaltekst>
                                         Brev som sendes ut bør være så kortfattede og presise som
                                         mulig.{' '}
+                                        <Lenke
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
+                                        >
+                                            Se retningslinjer for klarspråk.
+                                        </Lenke>
                                     </Normaltekst>
-                                    <Lenke
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
-                                    >
-                                        Se retningslinjer for klarspråk.
-                                    </Lenke>
-                                    <br />
                                     <br />
                                     <Element>Eksempler på formulering:</Element>
-                                    <Normaltekst style={{ fontStyle: 'italic' }}>
+                                    <ItalicText>
                                         Barnevernet har bekreftet at de overtok omsorgen for barnet
                                         mars 2021
-                                    </Normaltekst>
+                                    </ItalicText>
                                     <br />
-                                    <Normaltekst style={{ fontStyle: 'italic' }}>
+                                    <ItalicText>
                                         Opplysningene fra Folkeregisteret viser at barnet ikke bor
                                         sammen med deg
-                                    </Normaltekst>
+                                    </ItalicText>
                                 </div>
                             }
                         />
