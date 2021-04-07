@@ -38,7 +38,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             .map(periode => periode.fom)
             .sort((a, b) => (dayjs(a).isAfter(dayjs(b)) ? 1 : -1));
         const førstePeriode = fomDatoer[0];
-        const sistePeriode = fomDatoer[-1];
+        const sistePeriode = fomDatoer[fomDatoer.length - 1];
 
         let aktuelPeriode = førstePeriode;
         for (let i = 0; i < dayjs(sistePeriode).diff(dayjs(førstePeriode), 'M'); i++) {
