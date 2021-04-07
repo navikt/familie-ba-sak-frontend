@@ -1,6 +1,7 @@
 import { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
+import { ISøknadDTO } from './søknad';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
 import { Vedtaksperiode } from './vedtaksperiode';
@@ -161,6 +162,7 @@ export interface IBehandling {
     status: BehandlingStatus;
     steg: BehandlingSteg;
     stegTilstand: IRestStegTilstand[];
+    søknadsgrunnlag?: ISøknadDTO;
     totrinnskontroll?: ITotrinnskontroll;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;

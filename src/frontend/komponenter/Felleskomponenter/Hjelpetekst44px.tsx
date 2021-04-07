@@ -5,14 +5,15 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import Hjelpetekst, { HjelpetekstProps } from 'nav-frontend-hjelpetekst';
 
-import FamilieBaseKnapp from '../../../../Felleskomponenter/FamilieBaseKnapp';
+import FamilieBaseKnapp from './FamilieBaseKnapp';
 
 interface IHjelpetekst44pxProps extends HjelpetekstProps {
     innhold: string | JSX.Element;
 }
 
 const HjepetekstWrapper = styled(FamilieBaseKnapp)`
-    padding: 0.625rem;
+    padding: 0rem;
+    margin-left: 0.625rem;
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 50%;

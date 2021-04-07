@@ -10,17 +10,24 @@ import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer
 
 import { Behandlingstype } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
+import { IGrunnlagPerson, PersonType } from '../typer/person';
+import { Målform } from '../typer/søknad';
 import {
     IRestPostFritekstVedtakBegrunnelser,
     IRestVedtakBegrunnelse,
     VedtakBegrunnelse,
 } from '../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../typer/vedtaksperiode';
+import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 import { useVedtakBegrunnelser } from './VedtakBegrunnelserContext';
 
 export interface Fritekster {
     [key: string]: FeltState<string>;
+}
+
+export interface FriteksterFeilmelding {
+    [key: string]: string;
 }
 
 interface IProps {
@@ -35,6 +42,7 @@ export enum FritekstSubmit {
 
 const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = constate(
     ({ vedtaksperiode, behandlingstype }: IProps) => {
+        const { åpenBehandling } = useBehandling();
         const { fagsak, settFagsak } = useFagsakRessurser();
         const { vedtakBegrunnelser } = useVedtakBegrunnelser();
         const { request } = useHttp();
@@ -48,6 +56,8 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         const [fritekster, settFritekster] = useState<Fritekster>({});
         const [fritekstSubmit, settFritekstSubmit] = useState<FritekstSubmit>(FritekstSubmit.NONE);
         const [idPåSistOpprettetFritekst, settIdPåSistOpprettetFritekst] = useState<number>();
+
+        const [feilMelding, settFeilMelding] = useState<FriteksterFeilmelding>({});
 
         useEffect(() => {
             const vedtakBegrunnelserForPeriode = vedtakBegrunnelser
@@ -82,6 +92,10 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
                     return VedtakBegrunnelse.AVSLAG_FRITEKST;
                     break;
                 }
+                case Vedtaksperiodetype.UTBETALING: {
+                    return VedtakBegrunnelse.REDUKSJON_FRITEKST;
+                    break;
+                }
                 default: {
                     return undefined;
                 }
@@ -89,9 +103,14 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         };
 
         const genererIdBasertPåAndreFritekster = () => {
-            return (
-                Math.max(...Object.keys(redigerbarefritekster).map(key => parseInt(key, 10))) + 1
-            );
+            if (Object.keys(redigerbarefritekster).length > 0) {
+                return (
+                    Math.max(...Object.keys(redigerbarefritekster).map(key => parseInt(key, 10))) +
+                    1
+                );
+            } else {
+                return 1;
+            }
         };
 
         const lagInitiellFritekst = (initiellVerdi: string) => ({
@@ -102,6 +121,15 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         });
 
         const leggTilRedigerbareFritekst = () => {
+            if (Object.keys(redigerbarefritekster).length >= 3) {
+                settFeilMelding({
+                    ...feilMelding,
+                    [`legg-til-fritekst`]: 'Du har nådd maks antall kulepunkter: 3',
+                });
+                return;
+            }
+            settFeilMelding({});
+
             const idPåNyFritekst = genererIdBasertPåAndreFritekster();
             settRedigerbarefritekster({
                 ...redigerbarefritekster,
@@ -149,6 +177,17 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             }
         };
 
+        const personer =
+            åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
+
+        const søkersMålform = () => {
+            return (
+                personer.find((person: IGrunnlagPerson) => {
+                    return person.type === PersonType.SØKER;
+                })?.målform ?? Målform.NB
+            );
+        };
+
         return {
             redigerbarefritekster,
             fritekster,
@@ -162,6 +201,9 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             ekspandertBegrunnelse,
             settEkspandertBegrunnelse,
             toggleForm,
+            feilMelding,
+            settFeilMelding,
+            søkersMålform,
         };
     }
 );

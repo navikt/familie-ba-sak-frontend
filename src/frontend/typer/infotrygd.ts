@@ -1,9 +1,19 @@
-import { Adressebeskyttelsegradering } from '../../../node_dist/frontend/typer/person';
+import { Adressebeskyttelsegradering } from '@navikt/familie-typer';
 
 export interface IInfotrygdsaker {
     adressebeskyttelsegradering?: Adressebeskyttelsegradering;
     harTilgang: boolean;
     saker: IInfotrygdSak[];
+}
+
+export interface IInfotrygdsakerRequest {
+    ident: string;
+}
+
+export interface IInfotrygdstønader {
+    adressebeskyttelsegradering?: Adressebeskyttelsegradering;
+    harTilgang: boolean;
+    stønader: IInfotrygdStønad[];
 }
 
 export interface IInfotrygdSak {
@@ -18,7 +28,7 @@ export interface IInfotrygdSak {
     saksblokk?: string;
     saksnr?: string;
     status?: string;
-    stønadList?: IInfotrygdStønad[];
+    stønad?: IInfotrygdStønad;
     type?: string;
     undervalg?: string;
     valg?: string;
@@ -27,8 +37,27 @@ export interface IInfotrygdSak {
 }
 
 export interface IInfotrygdStønad {
+    barn: IInfotrygdBarn[];
+    iverksattFom?: string;
     opphørsgrunn?: string;
     opphørtFom?: string;
-    sakNr?: string;
-    stønadId?: string;
+    opphørtIver?: string;
+    status?: string;
+    tekstkode?: string;
+    virkningFom?: string;
+    delytelse: IDelytelse[];
+}
+
+export interface IInfotrygdBarn {
+    barnFnr?: string;
+    barnetrygdTom?: string;
+}
+
+export interface IDelytelse {
+    fom?: string;
+    tom?: string;
+    beløp?: number;
+    typeDelytelse?: string;
+    oppgjørsordning?: string;
+    typeUtbetaling?: string;
 }
