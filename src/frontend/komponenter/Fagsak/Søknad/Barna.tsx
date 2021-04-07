@@ -48,10 +48,12 @@ const Barna: React.FunctionComponent = () => {
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-            return familieDayjsDiff(
-                familieDayjs(b.fødselsdato, datoformat.ISO_DAG),
-                familieDayjs(a.fødselsdato, datoformat.ISO_DAG)
-            );
+            return !a.ident
+                ? 1
+                : familieDayjsDiff(
+                      familieDayjs(b.fødselsdato, datoformat.ISO_DAG),
+                      familieDayjs(a.fødselsdato, datoformat.ISO_DAG)
+                  );
         }
     );
 

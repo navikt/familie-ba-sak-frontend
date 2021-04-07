@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { Element } from 'nav-frontend-typografi';
 
-import Hjelpetekst44px from './Hjelpetekst44px';
+import Hjelpetekst44px from '../../../../Felleskomponenter/Hjelpetekst44px';
 
 const Container = styled.div`
     margin: 2.75rem 0 1rem;

@@ -18,11 +18,12 @@ export interface ISøkerMedOpplysninger {
 }
 
 export interface IBarnMedOpplysninger {
-    inkludertISøknaden: boolean;
-    ident: string;
-    navn?: string;
     fødselsdato?: string;
+    ident: string;
+    inkludertISøknaden: boolean;
     manueltRegistrert: boolean;
+    navn?: string;
+    erFolkeregistrert: boolean;
 }
 
 export enum Målform {

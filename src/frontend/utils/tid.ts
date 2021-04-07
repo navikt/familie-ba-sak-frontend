@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 
-import { YearMonth } from '../typer/tid';
+import { FamilieIsoDate, YearMonth } from '../typer/tid';
 import familieDayjs, { Dayjs } from './familieDayjs';
 
 export const periodeOverlapperMedValgtDato = (
-    periodeFom: string,
-    periodeTom: string,
+    periodeFom: FamilieIsoDate,
+    periodeTom: FamilieIsoDate,
     valgtDato: Date
 ) => {
     const valgtDatoToDayjs = familieDayjs(valgtDato.toISOString()).startOf('day');
