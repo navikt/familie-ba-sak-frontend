@@ -164,12 +164,11 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                     </StyledElement>
                     {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
                         return (
-                            <StyledFamilieFritekstFelt>
+                            <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
                                 <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
                                 <FamilieTextareaBegrunnelseFritekst
                                     feil={feilMelding[fritekstId]}
                                     erLesevisning={erLesevisning()}
-                                    defaultValue={redigerbarefritekster[fritekstId].verdi}
                                     key={`fritekst-${fritekstId}`}
                                     id={`${fritekstId}`}
                                     textareaClass={'fritekst-textarea'}
