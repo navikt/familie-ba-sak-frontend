@@ -18,7 +18,7 @@ interface IProps {
 const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProps) => {
     const { request } = useHttp();
     const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
-    const [simuleringResultat, settSimuleringResultat] = useState<Ressurs<ISimuleringDTO>>({
+    const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
     });
 
@@ -27,7 +27,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             method: 'GET',
             url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}`,
         }).then(response => {
-            settSimuleringResultat(response);
+            settSimuleringresultat(response);
         });
     }, [aktivtVedtak]);
 
@@ -58,7 +58,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         [...new Set(perioder.map(periode => dayjs(periode.fom).year()))].sort();
 
     return {
-        simuleringResultat,
+        simuleringsresultat,
         hentPerioderMedTommePerioder: hentPeriodelisteMedTommePerioder,
         hentÅrISimuleringen,
     };

@@ -34,7 +34,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const [bekreft, settBekreft] = useState<Ressurs<IFagsak>>({
         status: RessursStatus.IKKE_HENTET,
     });
-    const { simuleringResultat } = useSimulering();
+    const { simuleringsresultat } = useSimulering();
 
     const nesteOnClick = async () => {
         settSenderInn(true);
@@ -63,8 +63,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     };
 
     if (
-        simuleringResultat.status === RessursStatus.HENTER ||
-        simuleringResultat.status === RessursStatus.IKKE_HENTET
+        simuleringsresultat.status === RessursStatus.HENTER ||
+        simuleringsresultat.status === RessursStatus.IKKE_HENTET
     ) {
         return <div />;
     }
@@ -79,20 +79,20 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             maxWidthStyle={'80rem'}
         >
             <>
-                {simuleringResultat?.status === RessursStatus.SUKSESS ? (
-                    simuleringResultat.data.perioder.length === 0 ? (
+                {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
+                    simuleringsresultat.data.perioder.length === 0 ? (
                         <Alertstripe type="info">
                             Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
                         </Alertstripe>
                     ) : (
                         <>
-                            <SimuleringPanel simulering={simuleringResultat.data} />
-                            <SimuleringTabell simulering={simuleringResultat.data} />
+                            <SimuleringPanel simulering={simuleringsresultat.data} />
+                            <SimuleringTabell simulering={simuleringsresultat.data} />
                         </>
                     )
                 ) : (
                     <Alertstripe type="info">
-                        Det har skjedd en feil: {simuleringResultat?.frontendFeilmelding}
+                        Det har skjedd en feil: {simuleringsresultat?.frontendFeilmelding}
                     </Alertstripe>
                 )}
                 {(bekreft.status === RessursStatus.FEILET ||
