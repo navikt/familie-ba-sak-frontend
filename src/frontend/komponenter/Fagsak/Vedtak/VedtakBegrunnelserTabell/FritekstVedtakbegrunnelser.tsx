@@ -23,9 +23,9 @@ import Slett from '../../../../ikoner/Slett';
 import { målform } from '../../../../typer/søknad';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { fjernElementMedNøkkel } from '../../../../utils/commons';
+import Hjelpetekst44px from '../../../Felleskomponenter/Hjelpetekst44px';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import SkjultLegend from '../../../Felleskomponenter/SkjultLegend';
-import Hjelpetekst44px from './Felles/Hjelpetekst44px';
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;
