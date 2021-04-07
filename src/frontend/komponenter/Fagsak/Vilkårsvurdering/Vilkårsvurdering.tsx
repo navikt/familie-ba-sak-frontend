@@ -1,9 +1,11 @@
 import * as React from 'react';
 
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
 
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
-import { Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
@@ -12,11 +14,16 @@ import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
+
+const UregistrerteBarnListe = styled.ol`
+    margin: 0.5rem 0;
+`;
 
 interface IProps {
     fagsak: IFagsak;
@@ -76,6 +83,28 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             </VedtakBegrunnelserProvider>
+
+            <AlertStripeInfo>
+                <Normaltekst>
+                    Du har registrert følgende barn som ikke er registrert i folkeregisteret:
+                </Normaltekst>
+                <UregistrerteBarnListe>
+                    {åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger
+                        .filter(barn => !barn.erFolkeregistrert)
+                        .map(barn => (
+                            <li>
+                                <Normaltekst>
+                                    {`${barn.navn} - ${formaterIsoDato(
+                                        barn.fødselsdato,
+                                        datoformat.DATO
+                                    )}`}
+                                </Normaltekst>
+                            </li>
+                        ))}
+                </UregistrerteBarnListe>
+
+                <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
+            </AlertStripeInfo>
 
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
                 visFeilmeldinger && (
