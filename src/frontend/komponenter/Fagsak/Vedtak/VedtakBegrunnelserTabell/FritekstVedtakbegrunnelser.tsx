@@ -7,7 +7,7 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import Lenke from 'nav-frontend-lenker';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { Feilmelding } from 'nav-frontend-typografi';
 
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
@@ -55,7 +55,7 @@ const StyledFamilieFritekstFelt = styled.div`
     }
 `;
 
-const StyledElement = styled(Element)`
+const InfoBoks = styled.div`
     margin: 0 2.8rem 0 0;
     display: flex;
     align-items: center;
@@ -98,6 +98,10 @@ const StyledHjelpetekst44px = styled(Hjelpetekst44px)`
     }
 `;
 
+const ItalicText = styled(Normaltekst)`
+    font-style: italic;
+`;
+
 const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
     const { erLesevisning } = useBehandling();
     const {
@@ -129,47 +133,48 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
             {harFritekster ? (
                 <StyledSkjemaGruppe>
                     <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
-                    <StyledElement>
+                    <InfoBoks>
                         Fritekst til kulepunkt i brev (valgfri)
                         <StyledHjelpetekst44px
                             type={PopoverOrientering.OverVenstre}
                             innhold={
                                 <div>
-                                    Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
-                                    <Lenke
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
-                                    >
-                                        Se retningslinjer for klarspråk.
-                                    </Lenke>
-                                    <p />
-                                    <b>Eksempler på formulering:</b>
+                                    <Normaltekst>
+                                        Brev som sendes ut bør være så kortfattede og presise som
+                                        mulig.{' '}
+                                        <Lenke
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
+                                        >
+                                            Se retningslinjer for klarspråk.
+                                        </Lenke>
+                                    </Normaltekst>
                                     <br />
-                                    <text style={{ fontStyle: 'italic' }}>
+                                    <Element>Eksempler på formulering:</Element>
+                                    <ItalicText>
                                         Barnevernet har bekreftet at de overtok omsorgen for barnet
                                         mars 2021
-                                    </text>
-                                    <p />
-                                    <text style={{ fontStyle: 'italic' }}>
+                                    </ItalicText>
+                                    <br />
+                                    <ItalicText>
                                         Opplysningene fra Folkeregisteret viser at barnet ikke bor
                                         sammen med deg
-                                    </text>
+                                    </ItalicText>
                                 </div>
                             }
                         />
                         <StyledEtikettInfo mini={true}>
                             Skriv {målform[søkersMålform()]}
                         </StyledEtikettInfo>
-                    </StyledElement>
+                    </InfoBoks>
                     {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
                         return (
-                            <StyledFamilieFritekstFelt>
+                            <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
                                 <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
                                 <FamilieTextareaBegrunnelseFritekst
                                     feil={feilMelding[fritekstId]}
                                     erLesevisning={erLesevisning()}
-                                    defaultValue={redigerbarefritekster[fritekstId].verdi}
                                     key={`fritekst-${fritekstId}`}
                                     id={`${fritekstId}`}
                                     textareaClass={'fritekst-textarea'}
@@ -226,7 +231,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                         mini={true}
                     />
                     <Feilmelding style={{ paddingLeft: '0rem' }}>
-                        {feilMelding[`legg-til-fritekst`]}
+                        {feilMelding[`legg-til-fritekst`] ?? ''}
                     </Feilmelding>
                     <Knapperad>
                         <FamilieKnapp
