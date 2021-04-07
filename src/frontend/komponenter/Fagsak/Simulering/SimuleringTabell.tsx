@@ -102,7 +102,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
         !periodeErEtterNesteUtbetalingsPeriode(periode) && dayjs(periode.fom).year() === aktueltÅr;
 
-    const formaterBeløpUtenPostfiks = (beløp?: number) =>
+    const formaterBeløpUtenValutakode = (beløp?: number) =>
         beløp ? formaterBeløp(beløp).slice(0, -3) : '-';
 
     const antallPeriodetIFremvistÅr = perioderUtenTommeSimuleringer.filter(p =>
@@ -202,7 +202,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                         <TabellSkillelinje fomDatoPeriode={periode.fom} />
                                         <HøyresiltTd>
                                             <Normaltekst>
-                                                {formaterBeløpUtenPostfiks(periode.nyttBeløp)}
+                                                {formaterBeløpUtenValutakode(periode.nyttBeløp)}
                                             </Normaltekst>
                                         </HøyresiltTd>
                                     </React.Fragment>
@@ -218,7 +218,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                         <TabellSkillelinje fomDatoPeriode={periode.fom} />
                                         <HøyresiltTd>
                                             <Normaltekst>
-                                                {formaterBeløpUtenPostfiks(
+                                                {formaterBeløpUtenValutakode(
                                                     periode.tidligereUtbetalt
                                                 )}
                                             </Normaltekst>
@@ -243,7 +243,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                             : navFarger.navGronnDarken40
                                                     }
                                                 >
-                                                    {formaterBeløpUtenPostfiks(periode.resultat)}
+                                                    {formaterBeløpUtenValutakode(periode.resultat)}
                                                 </ElementMedFarge>
                                             ) : (
                                                 <NormaltekstMedFarge
@@ -253,7 +253,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                             : navFarger.navMorkGra
                                                     }
                                                 >
-                                                    {formaterBeløpUtenPostfiks(periode.resultat)}
+                                                    {formaterBeløpUtenValutakode(periode.resultat)}
                                                 </NormaltekstMedFarge>
                                             )}
                                         </HøyresiltTd>
