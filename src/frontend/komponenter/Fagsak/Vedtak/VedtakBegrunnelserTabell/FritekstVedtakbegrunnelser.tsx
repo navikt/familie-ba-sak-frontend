@@ -7,7 +7,7 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import Lenke from 'nav-frontend-lenker';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { Feilmelding } from 'nav-frontend-typografi';
 
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
@@ -55,7 +55,7 @@ const StyledFamilieFritekstFelt = styled.div`
     }
 `;
 
-const StyledElement = styled(Element)`
+const InfoBoks = styled.div`
     margin: 0 2.8rem 0 0;
     display: flex;
     align-items: center;
@@ -129,13 +129,16 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
             {harFritekster ? (
                 <StyledSkjemaGruppe>
                     <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
-                    <StyledElement>
+                    <InfoBoks>
                         Fritekst til kulepunkt i brev (valgfri)
                         <StyledHjelpetekst44px
                             type={PopoverOrientering.OverVenstre}
                             innhold={
                                 <div>
-                                    Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
+                                    <Normaltekst>
+                                        Brev som sendes ut bør være så kortfattede og presise som
+                                        mulig.{' '}
+                                    </Normaltekst>
                                     <Lenke
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -143,25 +146,25 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                                     >
                                         Se retningslinjer for klarspråk.
                                     </Lenke>
-                                    <p />
-                                    <b>Eksempler på formulering:</b>
                                     <br />
-                                    <text style={{ fontStyle: 'italic' }}>
+                                    <br />
+                                    <Element>Eksempler på formulering:</Element>
+                                    <Normaltekst style={{ fontStyle: 'italic' }}>
                                         Barnevernet har bekreftet at de overtok omsorgen for barnet
                                         mars 2021
-                                    </text>
-                                    <p />
-                                    <text style={{ fontStyle: 'italic' }}>
+                                    </Normaltekst>
+                                    <br />
+                                    <Normaltekst style={{ fontStyle: 'italic' }}>
                                         Opplysningene fra Folkeregisteret viser at barnet ikke bor
                                         sammen med deg
-                                    </text>
+                                    </Normaltekst>
                                 </div>
                             }
                         />
                         <StyledEtikettInfo mini={true}>
                             Skriv {målform[søkersMålform()]}
                         </StyledEtikettInfo>
-                    </StyledElement>
+                    </InfoBoks>
                     {Object.keys(redigerbarefritekster).map((fritekstId: string) => {
                         return (
                             <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
@@ -225,7 +228,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                         mini={true}
                     />
                     <Feilmelding style={{ paddingLeft: '0rem' }}>
-                        {feilMelding[`legg-til-fritekst`]}
+                        {feilMelding[`legg-til-fritekst`] ?? ''}
                     </Feilmelding>
                     <Knapperad>
                         <FamilieKnapp
