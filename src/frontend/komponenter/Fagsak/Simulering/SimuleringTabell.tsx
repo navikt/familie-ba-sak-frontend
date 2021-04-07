@@ -18,7 +18,6 @@ const StyledTable = styled.table(
     width: ${props.bredde}rem;
     border-collapse: collapse;
     table-layout: fixed;
-    border-color: red;
 `
 );
 
@@ -42,16 +41,17 @@ const SkillelinjeKolonne = styled.col`
     width: 1.125rem;
 `;
 
-const Skillelinje = styled.div`
+const Skillelinje = styled.td`
     position: relative;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+    padding: 0.5rem !important;
+    border: none !important;
 
-    div {
+    hr {
+        border: none;
         border-right: 1px dashed ${navFarger.navGra60};
         height: 3.25rem;
         position: absolute;
-        top: 0.125rem;
+        top: -0.375rem;
     }
 `;
 
@@ -112,7 +112,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         <>
             {fomDatoNestePeriode === props.fomDatoPeriode && (
                 <Skillelinje>
-                    <div />
+                    <hr />
                 </Skillelinje>
             )}
         </>
@@ -154,15 +154,14 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         periode =>
                             periodeSkalVisesITabell(periode) &&
                             (fomDatoNestePeriode === periode.fom ? (
-                                <>
+                                <React.Fragment key={'col - ' + periode.fom}>
                                     <SkillelinjeKolonne />
                                     <DataKolonne />
-                                </>
+                                </React.Fragment>
                             ) : (
-                                <DataKolonne />
+                                <DataKolonne key={'col - ' + periode.fom} />
                             ))
                     )}
-                    )
                 </colgroup>
 
                 <thead>
@@ -171,7 +170,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         {perioder.map(
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
-                                    <>
+                                    <React.Fragment key={'måned - ' + periode.fom}>
                                         <TabellSkillelinje fomDatoPeriode={periode.fom} />
                                         <th>
                                             <Element>
@@ -180,7 +179,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                 )}
                                             </Element>
                                         </th>
-                                    </>
+                                    </React.Fragment>
                                 )
                         )}
                     </tr>
@@ -192,14 +191,14 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         {perioder.map(
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
-                                    <>
+                                    <React.Fragment key={'nytt beløp - ' + periode.fom}>
                                         <TabellSkillelinje fomDatoPeriode={periode.fom} />
                                         <HøyresiltTd>
                                             <Normaltekst>
                                                 {formaterBeløpUtenPostfiks(periode.nyttBeløp)}
                                             </Normaltekst>
                                         </HøyresiltTd>
-                                    </>
+                                    </React.Fragment>
                                 )
                         )}
                     </tr>
@@ -208,7 +207,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         {perioder.map(
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
-                                    <>
+                                    <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
                                         <TabellSkillelinje fomDatoPeriode={periode.fom} />
                                         <HøyresiltTd>
                                             <Normaltekst>
@@ -217,7 +216,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                 )}
                                             </Normaltekst>
                                         </HøyresiltTd>
-                                    </>
+                                    </React.Fragment>
                                 )
                         )}
                     </tr>
@@ -226,7 +225,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         {perioder.map(
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
-                                    <>
+                                    <React.Fragment key={'resultat - ' + periode.fom}>
                                         <TabellSkillelinje fomDatoPeriode={periode.fom} />
                                         <HøyresiltTd>
                                             {fomDatoNestePeriode === periode.fom ? (
@@ -251,7 +250,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                 </NormaltekstMedFarge>
                                             )}
                                         </HøyresiltTd>
-                                    </>
+                                    </React.Fragment>
                                 )
                         )}
                     </tr>

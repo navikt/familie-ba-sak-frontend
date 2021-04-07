@@ -70,63 +70,67 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
     return (
         <StyledPanel border>
             <StyledTable>
-                <tr>
-                    <StyledTh colSpan={2}>
-                        <Element>
-                            Totalt{' '}
-                            {perioder.length > 1 &&
-                                `for perioden ${familieDayjs(fom).format(
-                                    'DD.MM.YYYY'
-                                )} - ${familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}`}
-                        </Element>
-                    </StyledTh>
-                </tr>
-                <tr>
-                    <StyledTd>
-                        <Normaltekst>Feilutbetaling</Normaltekst>
-                    </StyledTd>
-                    <StyledTd erHøyrestilt={true}>
-                        <ElementMedFarge farge={navFarger.navRod}>
-                            {formater(feilutbetaling)}
-                        </ElementMedFarge>
-                    </StyledTd>
-                </tr>
+                <tbody>
+                    <tr>
+                        <StyledTh colSpan={2}>
+                            <Element>
+                                Totalt{' '}
+                                {perioder.length > 1 &&
+                                    `for perioden ${familieDayjs(fom).format(
+                                        'DD.MM.YYYY'
+                                    )} - ${familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}`}
+                            </Element>
+                        </StyledTh>
+                    </tr>
+                    <tr>
+                        <StyledTd>
+                            <Normaltekst>Feilutbetaling</Normaltekst>
+                        </StyledTd>
+                        <StyledTd erHøyrestilt={true}>
+                            <ElementMedFarge farge={navFarger.navRod}>
+                                {formater(feilutbetaling)}
+                            </ElementMedFarge>
+                        </StyledTd>
+                    </tr>
 
-                <tr>
-                    <StyledTd>
-                        <Normaltekst>Etterbetaling</Normaltekst>
-                    </StyledTd>
-                    <StyledTd erHøyrestilt={true}>
-                        <ElementMedFarge>{formater(etterbetaling)}</ElementMedFarge>
-                    </StyledTd>
-                </tr>
+                    <tr>
+                        <StyledTd>
+                            <Normaltekst>Etterbetaling</Normaltekst>
+                        </StyledTd>
+                        <StyledTd erHøyrestilt={true}>
+                            <ElementMedFarge>{formater(etterbetaling)}</ElementMedFarge>
+                        </StyledTd>
+                    </tr>
+                </tbody>
             </StyledTable>
 
             <StyledHr />
 
             <StyledTable>
-                <tr>
-                    <StyledTh colSpan={2}>
-                        <Element>Neste utbetaling</Element>
-                    </StyledTh>
-                </tr>
-                {
+                <tbody>
                     <tr>
-                        <StyledTd>
-                            <Normaltekst>
-                                {kapitaliserTekst(
-                                    familieDayjs(fomDatoNestePeriode).format('MMMM YYYY')
-                                )}
-                            </Normaltekst>
-                        </StyledTd>
-
-                        <StyledTd erHøyrestilt={true}>
-                            <ElementMedFarge farge={navFarger.navGronnDarken40}>
-                                {formater(nestePeriode?.resultat)}
-                            </ElementMedFarge>
-                        </StyledTd>
+                        <StyledTh colSpan={2}>
+                            <Element>Neste utbetaling</Element>
+                        </StyledTh>
                     </tr>
-                }
+                    {
+                        <tr>
+                            <StyledTd>
+                                <Normaltekst>
+                                    {kapitaliserTekst(
+                                        familieDayjs(fomDatoNestePeriode).format('MMMM YYYY')
+                                    )}
+                                </Normaltekst>
+                            </StyledTd>
+
+                            <StyledTd erHøyrestilt={true}>
+                                <ElementMedFarge farge={navFarger.navGronnDarken40}>
+                                    {formater(nestePeriode?.resultat)}
+                                </ElementMedFarge>
+                            </StyledTd>
+                        </tr>
+                    }
+                </tbody>
             </StyledTable>
         </StyledPanel>
     );
