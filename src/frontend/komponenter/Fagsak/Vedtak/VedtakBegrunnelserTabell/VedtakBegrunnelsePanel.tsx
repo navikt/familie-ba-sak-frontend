@@ -71,7 +71,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
         >
             <UtbetalingsperiodepanelBody>
                 {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ? (
-                    <div>
+                    <div style={{ marginBottom: '1rem' }}>
                         <Element>Resultat</Element>
 
                         {vedtaksperiode.utbetalingsperiodeDetaljer
