@@ -8,7 +8,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { ISimuleringDTO } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
-import { formaterBeløp } from '../../../utils/formatter';
+import { formaterBeløp, formaterIsoDato, datoformat } from '../../../utils/formatter';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;
@@ -60,8 +60,8 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
     };
 
-    const formater = (beløp?: number) => {
-        return <>{!beløp || beløp === 0 ? '-' : formaterBeløp(beløp)}</>;
+    const formaterBeløpEllerDashOmUndefined = (beløp?: number): string => {
+        return !beløp || beløp === 0 ? '-' : formaterBeløp(beløp);
     };
 
     const nestePeriode = fomDatoNestePeriode
@@ -76,9 +76,10 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <Element>
                                 Totalt{' '}
                                 {perioder.length > 1 &&
-                                    `for perioden ${familieDayjs(fom).format(
-                                        'DD.MM.YYYY'
-                                    )} - ${familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}`}
+                                    `for perioden ${formaterIsoDato(
+                                        fom,
+                                        datoformat.DATO
+                                    )} - ${formaterIsoDato(tomDatoNestePeriode, datoformat.DATO)}`}
                             </Element>
                         </StyledTh>
                     </tr>
@@ -88,7 +89,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
                             <ElementMedFarge farge={navFarger.navRod}>
-                                {formater(feilutbetaling)}
+                                {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
                             </ElementMedFarge>
                         </StyledTd>
                     </tr>
@@ -98,7 +99,9 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <Normaltekst>Etterbetaling</Normaltekst>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
-                            <ElementMedFarge>{formater(etterbetaling)}</ElementMedFarge>
+                            <ElementMedFarge>
+                                {formaterBeløpEllerDashOmUndefined(etterbetaling)}
+                            </ElementMedFarge>
                         </StyledTd>
                     </tr>
                 </tbody>
@@ -113,23 +116,21 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <Element>Neste utbetaling</Element>
                         </StyledTh>
                     </tr>
-                    {
-                        <tr>
-                            <StyledTd>
-                                <Normaltekst>
-                                    {kapitaliserTekst(
-                                        familieDayjs(fomDatoNestePeriode).format('MMMM YYYY')
-                                    )}
-                                </Normaltekst>
-                            </StyledTd>
+                    <tr>
+                        <StyledTd>
+                            <Normaltekst>
+                                {kapitaliserTekst(
+                                    familieDayjs(fomDatoNestePeriode).format('MMMM YYYY')
+                                )}
+                            </Normaltekst>
+                        </StyledTd>
 
-                            <StyledTd erHøyrestilt={true}>
-                                <ElementMedFarge farge={navFarger.navGronnDarken40}>
-                                    {formater(nestePeriode?.resultat)}
-                                </ElementMedFarge>
-                            </StyledTd>
-                        </tr>
-                    }
+                        <StyledTd erHøyrestilt={true}>
+                            <ElementMedFarge farge={navFarger.navGronnDarken40}>
+                                {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
+                            </ElementMedFarge>
+                        </StyledTd>
+                    </tr>
                 </tbody>
             </StyledTable>
         </StyledPanel>
