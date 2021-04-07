@@ -40,12 +40,12 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         const førstePeriode = fomDatoer[0];
         const sistePeriode = fomDatoer[fomDatoer.length - 1];
 
-        let aktuelPeriode = førstePeriode;
+        let aktuellPeriode = førstePeriode;
         for (let i = 0; i < dayjs(sistePeriode).diff(dayjs(førstePeriode), 'M'); i++) {
-            aktuelPeriode = familieDayjs(aktuelPeriode).add(1, 'M').format();
-            if (!fomDatoer.includes(aktuelPeriode)) {
+            aktuellPeriode = familieDayjs(aktuellPeriode).add(1, 'M').format();
+            if (!fomDatoer.includes(aktuellPeriode)) {
                 perioder.push({
-                    fom: aktuelPeriode,
+                    fom: aktuellPeriode,
                     tom: '',
                 });
             }
