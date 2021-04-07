@@ -31,7 +31,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { request } = useHttp();
     const history = useHistory();
     const [senderInn, settSenderInn] = useState(false);
-    const [feilMedBekreft, settFeilMedBekreft] = useState<undefined | string>(undefined);
+    const [bekreft, settBekreft] = useState<Ressurs<IFagsak>>({
+        status: RessursStatus.IKKE_HENTET,
+    });
     const { simuleringResultat } = useSimulering();
 
     const nesteOnClick = async () => {
@@ -43,20 +45,16 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             settSenderInn(false);
             if (ressurs.status === RessursStatus.SUKSESS) {
                 history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
-            } else if (
-                ressurs.status === RessursStatus.FEILET ||
-                ressurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                ressurs.status === RessursStatus.IKKE_TILGANG
-            ) {
-                settFeilMedBekreft(ressurs.frontendFeilmelding);
-
-                /*
-                 *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
-                 *  Må fjernes når toggelen for simulering fjernes.
-                 */
-                process.env.NODE_ENV === 'development' &&
-                    history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
             }
+
+            settBekreft(ressurs);
+
+            /*
+             *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
+             *  Må fjernes når toggelen for simulering fjernes.
+             */
+            process.env.NODE_ENV === 'development' &&
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
         });
     };
 
@@ -97,10 +95,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         Det har skjedd en feil: {simuleringResultat?.frontendFeilmelding}
                     </Alertstripe>
                 )}
-                {feilMedBekreft && (
+                {(bekreft.status === RessursStatus.FEILET ||
+                    bekreft.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    bekreft.status === RessursStatus.IKKE_TILGANG) && (
                     <StyledAlertstripe type="feil">
                         Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
-                        {feilMedBekreft}
+                        {bekreft.frontendFeilmelding}
                     </StyledAlertstripe>
                 )}
             </>
