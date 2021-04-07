@@ -6,12 +6,21 @@ import styled from 'styled-components';
 import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { useSimulering } from '../../../context/SimuleringContext';
+import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
 import { formaterBeløp } from '../../../utils/formatter';
+import TidslinjeNavigering from '../TilkjentYtelse/TidslinjeNavigering';
+
+const Årsvelger = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+`;
 
 const StyledTable = styled.table(
     (props: { bredde: number }) => `
@@ -129,22 +138,20 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                         ).format('DD.MM.YYYY')}`}
                 </Element>
             </SimuleringTabellOverskrift>
+
             {årISimuleringen.length > 1 && (
-                <div>
-                    <Element>{årISimuleringen[indexFramvistÅr]}</Element>
-                    <button
-                        onClick={() => settIndexFramistÅr(indexFramvistÅr - 1)}
-                        disabled={indexFramvistÅr === 0}
-                    >
-                        -
-                    </button>
-                    <button
-                        onClick={() => settIndexFramistÅr(indexFramvistÅr + 1)}
-                        disabled={erISisteÅrAvPerioden}
-                    >
-                        +
-                    </button>
-                </div>
+                <Årsvelger>
+                    <Undertittel>{årISimuleringen[indexFramvistÅr]}</Undertittel>
+                    <TidslinjeNavigering
+                        naviger={retning =>
+                            retning === NavigeringsRetning.VENSTRE
+                                ? settIndexFramistÅr(indexFramvistÅr - 1)
+                                : settIndexFramistÅr(indexFramvistÅr + 1)
+                        }
+                        kanNavigereTilHøyre={!erISisteÅrAvPerioden}
+                        kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
+                    />
+                </Årsvelger>
             )}
 
             <StyledTable className="tabell" bredde={tabellbredde}>
