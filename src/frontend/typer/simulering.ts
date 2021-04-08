@@ -10,8 +10,8 @@ export interface ISimuleringDTO {
 export interface ISimuleringPeriode {
     fom: string;
     tom: string;
-    forfallsdato: string;
-    nyttBeløp: number;
-    tidligereUtbetalt: number;
-    resultat: number;
+    forfallsdato?: string;
+    nyttBeløp?: number;
+    tidligereUtbetalt?: number;
+    resultat?: number;
 }

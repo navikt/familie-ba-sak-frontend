@@ -8,7 +8,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { ISimuleringDTO } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
-import { formaterBeløp } from '../../../utils/formatter';
+import { formaterBeløp, formaterIsoDato, datoformat } from '../../../utils/formatter';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;
@@ -60,8 +60,8 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
     };
 
-    const formater = (beløp?: number) => {
-        return <>{!beløp || beløp === 0 ? '-' : formaterBeløp(beløp)}</>;
+    const formaterBeløpEllerDashOmUndefined = (beløp?: number): string => {
+        return !beløp || beløp === 0 ? '-' : formaterBeløp(beløp);
     };
 
     const nestePeriode = fomDatoNestePeriode
@@ -70,44 +70,52 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
     return (
         <StyledPanel border>
             <StyledTable>
-                <tr>
-                    <StyledTh colSpan={2}>
-                        <Element>
-                            Totalt for perioden {familieDayjs(fom).format('DD.MM.YYYY')} -{' '}
-                            {familieDayjs(tomDatoNestePeriode).format('DD.MM.YYYY')}
-                        </Element>
-                    </StyledTh>
-                </tr>
-                <tr>
-                    <StyledTd>
-                        <Normaltekst>Feilutbetaling</Normaltekst>
-                    </StyledTd>
-                    <StyledTd erHøyrestilt={true}>
-                        <ElementMedFarge farge={navFarger.navRod}>
-                            {formater(feilutbetaling)}
-                        </ElementMedFarge>
-                    </StyledTd>
-                </tr>
+                <tbody>
+                    <tr>
+                        <StyledTh colSpan={2}>
+                            <Element>
+                                Totalt{' '}
+                                {perioder.length > 1 &&
+                                    `for perioden ${formaterIsoDato(
+                                        fom,
+                                        datoformat.DATO
+                                    )} - ${formaterIsoDato(tomDatoNestePeriode, datoformat.DATO)}`}
+                            </Element>
+                        </StyledTh>
+                    </tr>
+                    <tr>
+                        <StyledTd>
+                            <Normaltekst>Feilutbetaling</Normaltekst>
+                        </StyledTd>
+                        <StyledTd erHøyrestilt={true}>
+                            <ElementMedFarge farge={navFarger.navRod}>
+                                {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
+                            </ElementMedFarge>
+                        </StyledTd>
+                    </tr>
 
-                <tr>
-                    <StyledTd>
-                        <Normaltekst>Etterbetaling</Normaltekst>
-                    </StyledTd>
-                    <StyledTd erHøyrestilt={true}>
-                        <ElementMedFarge>{formater(etterbetaling)}</ElementMedFarge>
-                    </StyledTd>
-                </tr>
+                    <tr>
+                        <StyledTd>
+                            <Normaltekst>Etterbetaling</Normaltekst>
+                        </StyledTd>
+                        <StyledTd erHøyrestilt={true}>
+                            <ElementMedFarge>
+                                {formaterBeløpEllerDashOmUndefined(etterbetaling)}
+                            </ElementMedFarge>
+                        </StyledTd>
+                    </tr>
+                </tbody>
             </StyledTable>
 
             <StyledHr />
 
             <StyledTable>
-                <tr>
-                    <StyledTh colSpan={2}>
-                        <Element>Neste utbetaling</Element>
-                    </StyledTh>
-                </tr>
-                {
+                <tbody>
+                    <tr>
+                        <StyledTh colSpan={2}>
+                            <Element>Neste utbetaling</Element>
+                        </StyledTh>
+                    </tr>
                     <tr>
                         <StyledTd>
                             <Normaltekst>
@@ -119,11 +127,11 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
 
                         <StyledTd erHøyrestilt={true}>
                             <ElementMedFarge farge={navFarger.navGronnDarken40}>
-                                {formater(nestePeriode?.resultat)}
+                                {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
                             </ElementMedFarge>
                         </StyledTd>
                     </tr>
-                }
+                </tbody>
             </StyledTable>
         </StyledPanel>
     );
