@@ -2,7 +2,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Element } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox, FamilieDatovelger, FamilieInput } from '@navikt/familie-form-elements';
@@ -22,15 +21,6 @@ const Container = styled.div`
 
 const UregistrertBarnInputs = styled.div`
     margin: 1rem 0 1rem 1rem;
-`;
-
-const UregistrertBarnLegend = styled.div`
-    margin-top: 1rem;
-    display: flex;
-`;
-
-const StyledHjelpetekst = styled(Hjelpetekst)`
-    margin-left: 0.5rem;
 `;
 
 const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
@@ -54,13 +44,7 @@ const LeggTilUregistrertBarn: React.FC<IProps> = ({ registrerBarnSkjema }) => {
             {registrerBarnSkjema.felter.uregistrertBarnFødselsdato.erSynlig &&
                 registrerBarnSkjema.felter.uregistrertBarnNavn.erSynlig && (
                     <UregistrertBarnInputs>
-                        <UregistrertBarnLegend>
-                            <Element>Tilgjengelige opplysninger om barnet</Element>
-                            <StyledHjelpetekst>
-                                Siden barnet ikke er folkeregistrert/har fnr vil det føre til et
-                                avslag for dette barnet.
-                            </StyledHjelpetekst>
-                        </UregistrertBarnLegend>
+                        <Element>Tilgjengelige opplysninger om barnet</Element>
                         <br />
 
                         <FamilieDatovelger

@@ -3,7 +3,9 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -34,6 +36,19 @@ const StyledKnapp = styled(Knapp)`
 
 const StyledUIModalWrapper = styled(UIModalWrapper)`
     min-height: 20rem !important;
+`;
+
+const LeggTilBarnLegend = styled.div`
+    margin-top: 1rem;
+    display: flex;
+`;
+
+const StyledHjelpetekst = styled(Hjelpetekst)`
+    margin-left: 0.5rem;
+
+    .hjelpetekst__innhold {
+        max-width: 36rem;
+    }
 `;
 
 export interface IRegistrerBarnSkjema {
@@ -226,7 +241,25 @@ const LeggTilBarn: React.FunctionComponent = () => {
 
             <StyledUIModalWrapper
                 modal={{
-                    tittel: 'Legg til barn',
+                    tittel: (
+                        <LeggTilBarnLegend>
+                            <Undertittel children={'Legg til barn'} />
+                            <StyledHjelpetekst>
+                                <Normaltekst>
+                                    Hvis barnet ikke er registrert i Folkeregisteret må du tilskrive
+                                    bruker.
+                                </Normaltekst>
+
+                                <br />
+                                <Normaltekst>
+                                    Hvis barnet ikke er folkeregistrert innen angitt frist, kan du
+                                    registrere barnet med fødselsdato og/eller navn. Det vil det
+                                    føre til et avslag, uten at vilkårene skal vurderes. Har du ikke
+                                    navnet på barnet kan du skrive “ukjent”.
+                                </Normaltekst>
+                            </StyledHjelpetekst>
+                        </LeggTilBarnLegend>
+                    ),
                     visModal: visModal,
                     lukkKnapp: true,
                     onClose: onAvbryt,
