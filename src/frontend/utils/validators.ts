@@ -64,7 +64,10 @@ const finnesDatoFørFødselsdato = (person: IGrunnlagPerson, fom: string, tom?: 
     const fomDato = familieDayjs(new Date(fom));
     const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
 
-    return fomDato.isBefore(fødselsdato) || (tomDato ? tomDato.isBefore(fødselsdato) : false);
+    return (
+        fomDato.isBefore(fødselsdato, 'date') ||
+        (tomDato ? tomDato.isBefore(fødselsdato, 'date') : false)
+    );
 };
 
 export const erPeriodeGyldig = (
@@ -95,7 +98,8 @@ export const erPeriodeGyldig = (
         }
         const fomDatoErGyldig = familieDayjs(fom).isValid();
         const fomDatoErFørTomDato = isoStringToDayjs(fom, TIDENES_MORGEN).isBefore(
-            isoStringToDayjs(tom, TIDENES_ENDE)
+            isoStringToDayjs(tom, TIDENES_ENDE),
+            'date'
         );
         return fomDatoErGyldig && fomDatoErFørTomDato ? ok(felt) : feil(felt, 'Ugyldig periode');
     } else {
