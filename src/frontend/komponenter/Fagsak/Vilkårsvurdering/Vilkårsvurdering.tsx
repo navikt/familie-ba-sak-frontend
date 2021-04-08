@@ -49,6 +49,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     );
 
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
+    const uregistrerteBarn =
+        åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(
+            barn => !barn.erFolkeregistrert
+        ) ?? [];
 
     if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen.</div>;
@@ -84,27 +88,27 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             </VedtakBegrunnelserProvider>
 
-            <AlertStripeInfo>
-                <Normaltekst>
-                    Du har registrert følgende barn som ikke er registrert i folkeregisteret:
-                </Normaltekst>
-                <UregistrerteBarnListe>
-                    {åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger
-                        .filter(barn => !barn.erFolkeregistrert)
-                        .map(barn => (
+            {uregistrerteBarn.length > 0 && (
+                <AlertStripeInfo>
+                    <Normaltekst>
+                        Du har registrert følgende barn som ikke er registrert i folkeregisteret:
+                    </Normaltekst>
+                    <UregistrerteBarnListe>
+                        {uregistrerteBarn.map(uregistrertBarn => (
                             <li>
                                 <Normaltekst>
-                                    {`${barn.navn} - ${formaterIsoDato(
-                                        barn.fødselsdato,
+                                    {`${uregistrertBarn.navn} - ${formaterIsoDato(
+                                        uregistrertBarn.fødselsdato,
                                         datoformat.DATO
                                     )}`}
                                 </Normaltekst>
                             </li>
                         ))}
-                </UregistrerteBarnListe>
+                    </UregistrerteBarnListe>
 
-                <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
-            </AlertStripeInfo>
+                    <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
+                </AlertStripeInfo>
+            )}
 
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
                 visFeilmeldinger && (
