@@ -18,6 +18,7 @@ import {
     FritekstSubmit,
     useFritekstVedtakBegrunnelser,
 } from '../../../../context/FritekstVedtakBegrunnelserContext';
+import { EksternLenke } from '../../../../ikoner/EksternLenke';
 import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
 import { målform } from '../../../../typer/søknad';
@@ -148,6 +149,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                                             href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
                                         >
                                             Se retningslinjer for klarspråk.
+                                            <EksternLenke />
                                         </Lenke>
                                     </Normaltekst>
                                     <br />
