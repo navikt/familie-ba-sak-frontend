@@ -83,7 +83,7 @@ export const useInfotrygdMigrering = () => {
         request<{ ident: string }, string>({
             method: 'POST',
             data: { ident },
-            url: '/familie-ba-sak/api/infotrygd/migrer',
+            url: '/familie-ba-sak/api/migrering?behandlingAarsak=NYE_OPPLYSNINGER',
         })
             .then((ressurs: Ressurs<string>) => {
                 settInfotrygdmigreringRessurs(ressurs);
