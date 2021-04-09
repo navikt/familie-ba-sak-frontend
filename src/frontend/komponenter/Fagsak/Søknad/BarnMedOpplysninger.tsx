@@ -84,7 +84,10 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     onClick={() => {
                         skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
                             ...skjema.felter.barnaMedOpplysninger.verdi.filter(
-                                barnMedOpplysninger => barnMedOpplysninger.ident !== barn.ident
+                                barnMedOpplysninger =>
+                                    barnMedOpplysninger.ident !== barn.ident ||
+                                    barnMedOpplysninger.navn !== barn.navn ||
+                                    barnMedOpplysninger.fødselsdato !== barn.fødselsdato
                             ),
                         ]);
                     }}
