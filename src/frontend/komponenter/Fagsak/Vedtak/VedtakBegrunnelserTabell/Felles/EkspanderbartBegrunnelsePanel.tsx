@@ -30,6 +30,8 @@ const PanelTittel = styled.div`
     width: 100%;
     display: grid;
     grid-template-columns: 12rem 7.5rem auto;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
 `;
 
 interface IEkspanderbartBegrunnelsePanelProps {

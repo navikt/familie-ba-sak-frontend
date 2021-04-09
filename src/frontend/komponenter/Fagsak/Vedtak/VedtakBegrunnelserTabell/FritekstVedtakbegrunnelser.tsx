@@ -262,7 +262,7 @@ const FritekstVedtakbegrunnelser: React.FC<IProps> = () => {
                     </Knapperad>
                 </StyledSkjemaGruppe>
             ) : (
-                <SkjemaGruppe style={{ paddingLeft: '1rem' }}>
+                <SkjemaGruppe>
                     <SkjultLegend>Legg til fritekst til kulepunkt i brev</SkjultLegend>
                     <UtførKnapp
                         erLesevisning={erLesevisning()}

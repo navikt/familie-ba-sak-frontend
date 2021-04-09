@@ -21,7 +21,7 @@ const PanelBody = styled.div`
     margin-left: 0.625rem;
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 2.5rem;
+    row-gap: 0.5rem;
 
     ul {
         margin: 0;
