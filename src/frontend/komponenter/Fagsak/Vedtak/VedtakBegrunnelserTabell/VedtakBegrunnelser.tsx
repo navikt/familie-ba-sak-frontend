@@ -1,11 +1,9 @@
 import React from 'react';
 
-import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
@@ -18,7 +16,6 @@ interface IVedtakBegrunnelserTabell {
 }
 
 const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
-    const { toggles } = useApp();
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
 
@@ -66,14 +63,10 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
             />
             {vedtaksperioderMedBegrunnelseBehov
                 .filter((vedtaksperiode: Vedtaksperiode) => {
-                    if (toggles[ToggleNavn.visOpphørsperioder])
-                        return (
-                            vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
-                            vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
-                        );
-                    else {
-                        return vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING;
-                    }
+                    return (
+                        vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
+                        vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
+                    );
                 })
                 .map((vedtaksperiode: Vedtaksperiode) => (
                     <FritekstVedtakBegrunnelserProvider

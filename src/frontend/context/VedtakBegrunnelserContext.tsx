@@ -6,7 +6,7 @@ import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IFagsak } from '../typer/fagsak';
-import { IPeriode, lagPeriodeId } from '../typer/periode';
+import { lagPeriodeId } from '../typer/periode';
 import { ToggleNavn } from '../typer/toggles';
 import {
     IRestAvslagbegrunnelser,
@@ -154,26 +154,11 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             );
         };
 
-        const slettVedtakBegrunnelserForPeriode = (fom: string, tom?: string) => {
-            håndterEndringerPåVedtakBegrunnelser(
-                request<IPeriode, IFagsak>({
-                    method: 'DELETE',
-                    url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/vedtak/begrunnelser/perioder`,
-                    data: {
-                        fom,
-                        tom,
-                    },
-                }),
-                lagPeriodeId({ fom, tom })
-            );
-        };
-
         return {
             hentVilkårBegrunnelseTekster,
             avslagBegrunnelser,
             leggTilVedtakBegrunnelse,
             slettVedtakBegrunnelse,
-            slettVedtakBegrunnelserForPeriode,
             slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
             vedtakBegrunnelseSubmit,
             vedtakBegrunnelser,
