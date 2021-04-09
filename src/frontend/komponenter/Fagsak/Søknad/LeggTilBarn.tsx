@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
@@ -105,7 +106,7 @@ const LeggTilBarn: React.FunctionComponent = () => {
             ident: useFelt<string>({
                 verdi: '',
                 valideringsfunksjon:
-                    process.env.NODE_ENV === 'developments' ? felt => ok(felt) : identValidator,
+                    process.env.NODE_ENV === 'development' ? felt => ok(felt) : identValidator,
                 skalFeltetVises: (avhengigheter: Avhengigheter) => {
                     // Bruker logikk i skjema for å disable validering på feltet, men det er fortsatt synlig for bruker.
                     const { erFolkeregistrert } = avhengigheter;
@@ -142,16 +143,15 @@ const LeggTilBarn: React.FunctionComponent = () => {
     };
 
     const leggTilOnClick = () => {
+        const erSkjemaOk = kanSendeSkjema();
         if (
             skjema.felter.barnaMedOpplysninger.verdi.some(
-                barn => barn.ident === registrerBarnSkjema.felter.ident.verdi
+                barn =>
+                    barn.erFolkeregistrert && barn.ident === registrerBarnSkjema.felter.ident.verdi
             )
         ) {
             settSubmitRessurs(byggFeiletRessurs('Barnet er allerede lagt til'));
-            return;
-        }
-
-        if (kanSendeSkjema()) {
+        } else if (erSkjemaOk) {
             if (!registrerBarnSkjema.felter.erFolkeregistrert.verdi) {
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
                     ...skjema.felter.barnaMedOpplysninger.verdi,
@@ -247,14 +247,14 @@ const LeggTilBarn: React.FunctionComponent = () => {
                             <StyledHjelpetekst>
                                 <Normaltekst>
                                     Hvis barnet ikke er registrert i Folkeregisteret må du tilskrive
-                                    bruker.
+                                    bruker først.
                                 </Normaltekst>
 
                                 <br />
                                 <Normaltekst>
                                     Hvis barnet ikke er folkeregistrert innen angitt frist, kan du
-                                    registrere barnet med fødselsdato og/eller navn. Det vil det
-                                    føre til et avslag, uten at vilkårene skal vurderes. Har du ikke
+                                    registrere barnet med fødselsdato og/eller navn. Det vil føre
+                                    til et avslag, uten at vilkårene skal vurderes. Har du ikke
                                     navnet på barnet kan du skrive “ukjent”.
                                 </Normaltekst>
                             </StyledHjelpetekst>
@@ -271,8 +271,12 @@ const LeggTilBarn: React.FunctionComponent = () => {
                             mini={true}
                             onClick={leggTilOnClick}
                             children={'Legg til'}
-                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            spinner={
+                                registrerBarnSkjema.submitRessurs.status === RessursStatus.HENTER
+                            }
+                            disabled={
+                                registrerBarnSkjema.submitRessurs.status === RessursStatus.HENTER
+                            }
                         />,
                     ],
                     style: {
@@ -280,21 +284,34 @@ const LeggTilBarn: React.FunctionComponent = () => {
                     },
                 }}
             >
-                <FamilieInput
-                    {...registrerBarnSkjema.felter.ident.hentNavInputProps(
-                        registrerBarnSkjema.visFeilmeldinger
-                    )}
-                    disabled={
-                        registrerBarnSkjema.felter.erFolkeregistrert.erSynlig &&
-                        !registrerBarnSkjema.felter.erFolkeregistrert.verdi
+                <SkjemaGruppe
+                    feil={
+                        registrerBarnSkjema.visFeilmeldinger &&
+                        (registrerBarnSkjema.submitRessurs.status === RessursStatus.FEILET ||
+                            registrerBarnSkjema.submitRessurs.status ===
+                                RessursStatus.FUNKSJONELL_FEIL ||
+                            registrerBarnSkjema.submitRessurs.status === RessursStatus.IKKE_TILGANG)
+                            ? registrerBarnSkjema.submitRessurs.frontendFeilmelding
+                            : undefined
                     }
-                    label={'Fødselsnummer'}
-                    placeholder={'11 siffer'}
-                />
+                    utenFeilPropagering={true}
+                >
+                    <FamilieInput
+                        {...registrerBarnSkjema.felter.ident.hentNavInputProps(
+                            registrerBarnSkjema.visFeilmeldinger
+                        )}
+                        disabled={
+                            registrerBarnSkjema.felter.erFolkeregistrert.erSynlig &&
+                            !registrerBarnSkjema.felter.erFolkeregistrert.verdi
+                        }
+                        label={'Fødselsnummer'}
+                        placeholder={'11 siffer'}
+                    />
 
-                {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
-                    <LeggTilUregistrertBarn registrerBarnSkjema={registrerBarnSkjema} />
-                )}
+                    {registrerBarnSkjema.felter.erFolkeregistrert.erSynlig && (
+                        <LeggTilUregistrertBarn registrerBarnSkjema={registrerBarnSkjema} />
+                    )}
+                </SkjemaGruppe>
             </StyledUIModalWrapper>
         </>
     );
