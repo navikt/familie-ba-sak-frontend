@@ -13,6 +13,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { BehandlingÅrsak } from '../../typer/behandling';
 import { IInfotrygdsaker, IInfotrygdsakerRequest } from '../../typer/infotrygd';
 import { Adressebeskyttelsegradering } from '../../typer/person';
 import { identValidator } from '../../utils/validators';
@@ -78,12 +79,12 @@ export const useInfotrygdMigrering = () => {
         byggTomRessurs()
     );
 
-    const flyttBrukerTilBaSak = (ident: string) => {
+    const flyttBrukerTilBaSak = (ident: string, behandlingÅrsak: BehandlingÅrsak) => {
         settInfotrygdmigreringRessurs(byggHenterRessurs<string>());
         request<{ ident: string }, string>({
             method: 'POST',
             data: { ident },
-            url: '/familie-ba-sak/api/migrering?behandlingAarsak=NYE_OPPLYSNINGER',
+            url: `familie-ba-sak/api/migrering?behandlingAarsak=${behandlingÅrsak}`,
         })
             .then((ressurs: Ressurs<string>) => {
                 settInfotrygdmigreringRessurs(ressurs);
