@@ -23,7 +23,7 @@ const Informasjonsbolk: React.FC<IProps> = ({ informasjon, infoTeksFarve }) => {
             {informasjon.map((info: IInformasjon) => {
                 return (
                     <Element
-                        style={{ color: infoTeksFarve ?? navFarger.navGra80 }}
+                        style={{ color: infoTeksFarve ?? navFarger.navMorkGra }}
                         title={info.tekstTitle}
                         key={info.tekst + info.label}
                         children={info.tekst}
