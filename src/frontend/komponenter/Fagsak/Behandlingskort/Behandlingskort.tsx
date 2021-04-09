@@ -45,6 +45,26 @@ const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
     }
 };
 
+const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
+    switch (behandlingResultat) {
+        case BehandlingResultat.INNVILGET:
+        case BehandlingResultat.DELVIS_INNVILGET:
+        case BehandlingResultat.FORTSATT_INNVILGET:
+            return navFarger.navGronnDarken20;
+        case BehandlingResultat.ENDRET:
+            return navFarger.navDypBlaDarken20;
+        case BehandlingResultat.AVSLÅTT:
+        case BehandlingResultat.OPPHØRT:
+            return navFarger.redErrorDarken20;
+        case BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET:
+        case BehandlingResultat.HENLAGT_SØKNAD_TRUKKET:
+        case BehandlingResultat.IKKE_VURDERT:
+            return navFarger.navMorkGra;
+        default:
+            return navFarger.navMorkGra;
+    }
+};
+
 const Container = styled.div<{ behandlingResultat: BehandlingResultat }>`
     border: 1px solid ${navFarger.navGra40};
     border-left: 0.5rem solid ${navFarger.navGra40};
@@ -87,7 +107,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                 ]}
             />
             <Informasjonsbolk
-                infoTeksFarve={hentResultatfarge(åpenBehandling.resultat)}
+                infoTeksFarve={hentResultatfargeTekst(åpenBehandling.resultat)}
                 informasjon={[
                     {
                         label: 'Resultat',
