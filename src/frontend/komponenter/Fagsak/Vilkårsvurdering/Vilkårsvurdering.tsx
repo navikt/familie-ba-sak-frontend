@@ -95,7 +95,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                     </Normaltekst>
                     <UregistrerteBarnListe>
                         {uregistrerteBarn.map(uregistrertBarn => (
-                            <li>
+                            <li key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
                                 <Normaltekst>
                                     {`${uregistrertBarn.navn} - ${formaterIsoDato(
                                         uregistrertBarn.fødselsdato,

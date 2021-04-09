@@ -1,17 +1,12 @@
 import React from 'react';
 
 import createUseContext from 'constate';
-import { useHistory, useParams } from 'react-router';
+import { useHistory } from 'react-router';
 
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import {
-    BehandlingSteg,
-    BehandlingUnderkategori,
-    hentStegNummer,
-    IBehandling,
-} from '../typer/behandling';
+import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { FamilieRelasjonRolle, IFamilierelasjon } from '../typer/person';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, Målform } from '../typer/søknad';
@@ -24,7 +19,6 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const { erLesevisning } = useBehandling();
         const history = useHistory();
         const { bruker } = useFagsakRessurser();
-        const { behandlingId } = useParams<{ behandlingId: string }>();
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
@@ -88,13 +82,10 @@ const [SøknadProvider, useSøknad] = createUseContext(
             tilbakestillSøknad();
         }, [bruker.status]);
 
+        console.log(åpenBehandling);
         React.useEffect(() => {
-            if (
-                parseInt(behandlingId, 10) === åpenBehandling.behandlingId &&
-                hentStegNummer(åpenBehandling.steg) >=
-                    hentStegNummer(BehandlingSteg.VILKÅRSVURDERING) &&
-                åpenBehandling.søknadsgrunnlag
-            ) {
+            console.log(åpenBehandling);
+            if (åpenBehandling.søknadsgrunnlag) {
                 settSøknadErLastetFraBackend(true);
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
                     åpenBehandling.søknadsgrunnlag.barnaMedOpplysninger.map(
