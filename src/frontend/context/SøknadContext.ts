@@ -82,9 +82,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
             tilbakestillSøknad();
         }, [bruker.status]);
 
-        console.log(åpenBehandling);
         React.useEffect(() => {
-            console.log(åpenBehandling);
             if (åpenBehandling.søknadsgrunnlag) {
                 settSøknadErLastetFraBackend(true);
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
