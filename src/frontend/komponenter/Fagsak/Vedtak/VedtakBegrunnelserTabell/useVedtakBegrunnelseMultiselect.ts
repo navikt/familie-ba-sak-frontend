@@ -1,10 +1,8 @@
 import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
-import { ToggleNavn } from '../../../../typer/toggles';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -27,13 +25,11 @@ const useVedtakBegrunnelseMultiselect = (
     personResultater: IRestPersonResultat[],
     vedtaksperiode: Vedtaksperiode
 ) => {
-    const { toggles } = useApp();
     const {
         vedtakBegrunnelser,
         vilkårBegrunnelser,
         leggTilVedtakBegrunnelse,
         slettVedtakBegrunnelse,
-        slettVedtakBegrunnelserForPeriode,
         slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
     } = useVedtakBegrunnelser();
 
@@ -76,18 +72,11 @@ const useVedtakBegrunnelseMultiselect = (
                     vedtakBegrunnelserForPeriode[0];
 
                 if (førsteVedtakBegrunnelse) {
-                    if (toggles[ToggleNavn.visOpphørsperioder]) {
-                        slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper(
-                            førsteVedtakBegrunnelse.fom,
-                            vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype,
-                            førsteVedtakBegrunnelse.tom
-                        );
-                    } else {
-                        slettVedtakBegrunnelserForPeriode(
-                            førsteVedtakBegrunnelse.fom,
-                            førsteVedtakBegrunnelse.tom
-                        );
-                    }
+                    slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper(
+                        førsteVedtakBegrunnelse.fom,
+                        vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype,
+                        førsteVedtakBegrunnelse.tom
+                    );
                 } else {
                     throw new Error(
                         'Prøver å fjerne alle begrunnelser for en periode, men det er ikke satt noen begrunnelser'
@@ -180,11 +169,9 @@ const useVedtakBegrunnelseMultiselect = (
         vilkårBegrunnelser.status === RessursStatus.SUKSESS
             ? Object.keys(vilkårBegrunnelser.data)
                   .filter((vedtakBegrunnelseType: string) =>
-                      toggles[ToggleNavn.visOpphørsperioder]
-                          ? vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype.includes(
-                                vedtakBegrunnelseType as VedtakBegrunnelseType
-                            )
-                          : true
+                      vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype.includes(
+                          vedtakBegrunnelseType as VedtakBegrunnelseType
+                      )
                   )
                   .reduce((acc: GroupType<ISelectOption>[], vedtakBegrunnelseType: string) => {
                       const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(

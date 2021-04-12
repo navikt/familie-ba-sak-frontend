@@ -9,6 +9,7 @@ import { Innholdstittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { BehandlingÅrsak } from '../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import { Infotrygdtabeller } from './Infotrygdtabeller';
 import { useInfotrygdSkjema, useInfotrygdMigrering } from './useInfotrygd';
@@ -51,7 +52,10 @@ export const Infotrygd: React.FC = () => {
                 <FlyttSakKnapp
                     mini
                     onClick={() => {
-                        flyttBrukerTilBaSak(skjema.felter.ident.verdi);
+                        flyttBrukerTilBaSak(
+                            skjema.felter.ident.verdi,
+                            BehandlingÅrsak.NYE_OPPLYSNINGER
+                        );
                     }}
                 >
                     Flytt til BA-sak
