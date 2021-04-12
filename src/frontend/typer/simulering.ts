@@ -15,3 +15,9 @@ export interface ISimuleringPeriode {
     tidligereUtbetalt?: number;
     resultat?: number;
 }
+
+export enum TilbakekrevingAlternativ {
+    OPPRETT_SEND_VARSEL,
+    OPPRETT_IKKE_SEND_VARSEL,
+    AVVENT_TILMBAKEKREVING,
+}
