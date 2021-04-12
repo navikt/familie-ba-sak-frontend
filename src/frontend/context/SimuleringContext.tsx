@@ -4,11 +4,13 @@ import constate from 'constate';
 import dayjs from 'dayjs';
 
 import { useHttp } from '@navikt/familie-http';
+import { useSkjema, useFelt, feil, ok, Avhengigheter } from '@navikt/familie-skjema';
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { aktivVedtakPåBehandling } from '../api/fagsak';
 import { IBehandling } from '../typer/behandling';
-import { ISimuleringPeriode, ISimuleringDTO } from '../typer/simulering';
+import { IFagsak } from '../typer/fagsak';
+import { ISimuleringPeriode, ISimuleringDTO, TilbakekrevingAlternativ } from '../typer/simulering';
 import familieDayjs from '../utils/familieDayjs';
 
 interface IProps {
@@ -57,10 +59,59 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const hentÅrISimuleringen = (perioder: ISimuleringPeriode[]): number[] =>
         [...new Set(perioder.map(periode => dayjs(periode.fom).year()))].sort();
 
+    const tilbakekreving = useFelt<TilbakekrevingAlternativ | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: felt =>
+            felt.verdi === undefined
+                ? feil(
+                      felt,
+                      'Resultatet medfører en feilutbetaling. Du må velge om det skal opprettes tilbakekrevingsbehandling.'
+                  )
+                : ok(felt),
+    });
+    const fritekstVarsel = useFelt<string>({
+        verdi: '',
+        avhengigheter: { tilbakekreving },
+        valideringsfunksjon: (felt, avhengigheter) =>
+            avhengigheter?.tilbakekreving?.verdi === TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL &&
+            felt.verdi === ''
+                ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
+                : ok(felt),
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            console.log(avhengigheter);
+            return (
+                avhengigheter?.tilbakekreving?.verdi ===
+                TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL
+            );
+        },
+    });
+    const begrunnelse = useFelt<string>({
+        verdi: '',
+        valideringsfunksjon: felt =>
+            felt.verdi === ''
+                ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
+                : ok(felt),
+    });
+
+    const { skjema, kanSendeSkjema, hentFeilTilOppsummering } = useSkjema<
+        {
+            tilbakekreving: TilbakekrevingAlternativ | undefined;
+            fritekstVarsel: string;
+            begrunnelse: string;
+        },
+        IFagsak
+    >({
+        felter: { tilbakekreving, fritekstVarsel, begrunnelse },
+        skjemanavn: 'Du må skrive en bgrunnelse for tilbakekreving',
+    });
+
     return {
         simuleringsresultat,
         hentPerioderMedTommePerioder: hentPeriodelisteMedTommePerioder,
         hentÅrISimuleringen,
+        skjema,
+        kanSendeSkjema,
+        hentFeilTilOppsummering,
     };
 });
 
