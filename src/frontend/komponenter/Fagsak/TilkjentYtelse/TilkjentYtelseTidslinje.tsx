@@ -24,6 +24,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         aktivtTidslinjeVindu,
         mapPersonerMedAndelerTilkjentYtelseTilPersoner,
         mapPersonerTilPersonerMedAndelerTilkjentYtelse,
+        naviger,
     } = useTidslinje();
 
     if (åpenBehandling.status !== RessursStatus.SUKSESS) {
@@ -49,7 +50,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                 <Undertittel>{genererFormatertÅrstall()}</Undertittel>
                 <div className={'tidslinje-header__controls'}>
                     <Vinduvelger />
-                    <TidslinjeNavigering />
+                    <TidslinjeNavigering naviger={naviger} />
                 </div>
             </div>
             <div className={'tidslinje-container'}>

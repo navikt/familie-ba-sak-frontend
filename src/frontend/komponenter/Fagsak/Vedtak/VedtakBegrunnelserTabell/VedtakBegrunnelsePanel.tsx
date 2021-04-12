@@ -30,7 +30,7 @@ const UtbetalingsperiodepanelBody = styled.div`
     margin-left: 0.625rem;
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 2.5rem;
+    row-gap: 0.25rem;
 `;
 
 const UtbetalingsperiodeDetalj = styled.div`
@@ -71,7 +71,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
         >
             <UtbetalingsperiodepanelBody>
                 {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ? (
-                    <div>
+                    <div style={{ marginBottom: '1rem' }}>
                         <Element>Resultat</Element>
 
                         {vedtaksperiode.utbetalingsperiodeDetaljer

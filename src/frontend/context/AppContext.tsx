@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
 
 import { AxiosRequestConfig } from 'axios';
 import createUseContext from 'constate';
@@ -33,7 +33,7 @@ export interface IModal {
     lukkKnapp: boolean;
     onClose?: () => void;
     style?: CSSProperties;
-    tittel: string;
+    tittel: ReactNode;
     visModal: boolean;
 }
 
