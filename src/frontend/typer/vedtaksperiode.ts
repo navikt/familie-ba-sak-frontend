@@ -1,6 +1,7 @@
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
 import { IGrunnlagPerson } from './person';
+import { FamilieIsoDate } from './tid';
 
 export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
@@ -10,8 +11,8 @@ export enum Vedtaksperiodetype {
 
 export type Vedtaksperiode =
     | {
-          periodeFom: string;
-          periodeTom: string;
+          periodeFom: FamilieIsoDate;
+          periodeTom: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.UTBETALING;
           utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
           ytelseTyper: YtelseType[];
@@ -19,13 +20,13 @@ export type Vedtaksperiode =
           utbetaltPerMnd: number;
       }
     | {
-          periodeFom: string;
-          periodeTom: string;
+          periodeFom: FamilieIsoDate;
+          periodeTom: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.OPPHØR;
       }
     | {
-          periodeFom: string;
-          periodeTom: string;
+          periodeFom: FamilieIsoDate;
+          periodeTom: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.AVSLAG;
       };
 
