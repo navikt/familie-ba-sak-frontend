@@ -11,7 +11,9 @@ import { aktivVedtakPåBehandling } from '../api/fagsak';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ISimuleringPeriode, ISimuleringDTO, TilbakekrevingAlternativ } from '../typer/simulering';
+import { ToggleNavn } from '../typer/toggles';
 import familieDayjs from '../utils/familieDayjs';
+import { useApp } from './AppContext';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -23,11 +25,13 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
     });
+    const { toggles } = useApp();
 
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
             method: 'GET',
             url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}`,
+            påvirkerSystemLaster: true,
         }).then(response => {
             settSimuleringresultat(response);
         });
@@ -59,8 +63,17 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const hentÅrISimuleringen = (perioder: ISimuleringPeriode[]): number[] =>
         [...new Set(perioder.map(periode => dayjs(periode.fom).year()))].sort();
 
+    const tilbakekrevingErToggletPå = toggles[ToggleNavn.tilbakekreving];
+
+    const erFeilutbetaling =
+        simuleringsresultat.status === RessursStatus.SUKSESS &&
+        simuleringsresultat.data.feilutbetaling > 0;
+
     const tilbakekreving = useFelt<TilbakekrevingAlternativ | undefined>({
         verdi: undefined,
+        avhengigheter: { tilbakekrevingErToggletPå, erFeilutbetaling },
+        skalFeltetVises: avhengigheter =>
+            avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
         valideringsfunksjon: felt =>
             felt.verdi === undefined
                 ? feil(
@@ -71,29 +84,30 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     });
     const fritekstVarsel = useFelt<string>({
         verdi: '',
-        avhengigheter: { tilbakekreving },
+        avhengigheter: { tilbakekrevingErToggletPå, tilbakekreving, erFeilutbetaling },
         valideringsfunksjon: (felt, avhengigheter) =>
+            avhengigheter?.erFeilutbetaling &&
             avhengigheter?.tilbakekreving?.verdi === TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL &&
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
                 : ok(felt),
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            console.log(avhengigheter);
-            return (
-                avhengigheter?.tilbakekreving?.verdi ===
-                TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL
-            );
-        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) =>
+            avhengigheter?.tilbakekrevingErToggletPå &&
+            avhengigheter?.erFeilutbetaling &&
+            avhengigheter?.tilbakekreving?.verdi === TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL,
     });
     const begrunnelse = useFelt<string>({
         verdi: '',
+        avhengigheter: { erFeilutbetaling, tilbakekrevingErToggletPå },
+        skalFeltetVises: avhengigheter =>
+            avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
         valideringsfunksjon: felt =>
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
                 : ok(felt),
     });
 
-    const { skjema, kanSendeSkjema, hentFeilTilOppsummering } = useSkjema<
+    const { skjema, hentFeilTilOppsummering, onSubmit } = useSkjema<
         {
             tilbakekreving: TilbakekrevingAlternativ | undefined;
             fritekstVarsel: string;
@@ -110,8 +124,10 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         hentPerioderMedTommePerioder: hentPeriodelisteMedTommePerioder,
         hentÅrISimuleringen,
         skjema,
-        kanSendeSkjema,
+        onSubmit,
         hentFeilTilOppsummering,
+        tilbakekrevingErToggletPå,
+        erFeilutbetaling,
     };
 });
 
