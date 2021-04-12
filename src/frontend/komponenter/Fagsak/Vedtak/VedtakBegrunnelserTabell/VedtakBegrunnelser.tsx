@@ -79,6 +79,7 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                     <FritekstVedtakBegrunnelserProvider
                         vedtaksperiode={vedtaksperiode}
                         behandlingstype={åpenBehandling.type}
+                        key={vedtaksperiode.periodeFom}
                     >
                         <VedtakBegrunnelsePanel
                             vedtaksperiode={vedtaksperiode}

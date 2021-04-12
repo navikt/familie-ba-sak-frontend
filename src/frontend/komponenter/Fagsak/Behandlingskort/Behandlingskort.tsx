@@ -27,13 +27,41 @@ interface IBehandlingskortProps {
 const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
-            return navFarger.navGronnDarken40;
-        case BehandlingResultat.INNVILGET_OG_OPPHØRT:
-            return navFarger.navGronnDarken40;
+        case BehandlingResultat.DELVIS_INNVILGET:
+        case BehandlingResultat.FORTSATT_INNVILGET:
+            return navFarger.navGronnDarken20;
+        case BehandlingResultat.ENDRET:
+            return navFarger.navDypBlaDarken20;
         case BehandlingResultat.AVSLÅTT:
+        case BehandlingResultat.OPPHØRT:
             return navFarger.redErrorDarken20;
+        case BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET:
+        case BehandlingResultat.HENLAGT_SØKNAD_TRUKKET:
+            return navFarger.navGra20;
+        case BehandlingResultat.IKKE_VURDERT:
+            return '#F2F2F2';
         default:
-            return navFarger.navGra40;
+            return navFarger.navGra60;
+    }
+};
+
+const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
+    switch (behandlingResultat) {
+        case BehandlingResultat.INNVILGET:
+        case BehandlingResultat.DELVIS_INNVILGET:
+        case BehandlingResultat.FORTSATT_INNVILGET:
+            return navFarger.navGronnDarken20;
+        case BehandlingResultat.ENDRET:
+            return navFarger.navDypBlaDarken20;
+        case BehandlingResultat.AVSLÅTT:
+        case BehandlingResultat.OPPHØRT:
+            return navFarger.redErrorDarken20;
+        case BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET:
+        case BehandlingResultat.HENLAGT_SØKNAD_TRUKKET:
+        case BehandlingResultat.IKKE_VURDERT:
+            return navFarger.navMorkGra;
+        default:
+            return navFarger.navMorkGra;
     }
 };
 
@@ -79,6 +107,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                 ]}
             />
             <Informasjonsbolk
+                infoTeksFarve={hentResultatfargeTekst(åpenBehandling.resultat)}
                 informasjon={[
                     {
                         label: 'Resultat',
