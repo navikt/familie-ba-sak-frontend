@@ -13,9 +13,11 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
+import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 
 interface ISimuleringProps {
     fagsak: IFagsak;
@@ -34,28 +36,30 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const [bekreft, settBekreft] = useState<Ressurs<IFagsak>>({
         status: RessursStatus.IKKE_HENTET,
     });
-    const { simuleringsresultat } = useSimulering();
+    const { simuleringsresultat, kanSendeSkjema } = useSimulering();
 
     const nesteOnClick = async () => {
         settSenderInn(true);
-        const ressurs: Ressurs<IFagsak> = await request<IBehandling, IFagsak>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
-        });
+        if (kanSendeSkjema()) {
+            const ressurs: Ressurs<IFagsak> = await request<IBehandling, IFagsak>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
+            });
 
-        settSenderInn(false);
-        if (ressurs.status === RessursStatus.SUKSESS) {
-            history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+            if (ressurs.status === RessursStatus.SUKSESS) {
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+            }
+
+            settBekreft(ressurs);
+
+            /*
+             *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
+             *  Må fjernes når toggelen for simulering fjernes.
+             */
+            process.env.NODE_ENV === 'development' &&
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
         }
-
-        settBekreft(ressurs);
-
-        /*
-         *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
-         *  Må fjernes når toggelen for simulering fjernes.
-         */
-        process.env.NODE_ENV === 'development' &&
-            history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+        settSenderInn(false);
     };
 
     const forrigeOnClick = () => {
@@ -88,6 +92,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         <>
                             <SimuleringPanel simulering={simuleringsresultat.data} />
                             <SimuleringTabell simulering={simuleringsresultat.data} />
+                            <TilbakekrevingSkjema
+                                søkerMålform={hentSøkersMålform(åpenBehandling)}
+                            />
                         </>
                     )
                 ) : (
