@@ -1550,33 +1550,10 @@
     react-tooltip "^4.2.15"
     styled-components "^5.2.1"
 
-"@navikt/familie-form-elements@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.2.tgz#cd93574b8f9d3f09c2c5113b414a3aa082223f7b"
-  integrity sha512-qU39VBVehWIUkYUF05SRC+lbAY4stAGLTXGcwWnu08PLFEbHJfOfnsd7iBynU4h1RbngbCKpVwgmEVc8WSLRXw==
-  dependencies:
-    "@navikt/fnrvalidator" "^1.1.2"
-    "@types/classnames" "^2.2.10"
-    "@types/react-select" "^3.0.28"
-    classnames "^2.2.6"
-    dayjs "^1.9.6"
-    nav-datovelger "^10.1.1"
-    nav-frontend-knapper "^2.0.32"
-    nav-frontend-knapper-style "^1.0.17"
-    nav-frontend-lenker "^1.0.60"
-    nav-frontend-lenker-style "^1.0.2"
-    nav-frontend-skjema "^3.0.53"
-    nav-frontend-skjema-style "^2.0.33"
-    nav-frontend-toggle "^0.0.57"
-    nav-frontend-toggle-style "^0.0.46"
-    nav-frontend-typografi "^3.0.4"
-    react-select "^4.0.13"
-    styled-components "^5.2.1"
-
-"@navikt/familie-form-elements@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.3.tgz#8b8f2bf2a94d36c94dbe60a287fee0bd5bdd3ecd"
-  integrity sha512-/y+5sRnonlv6cS+AXRX7kZ9OnyP9cGjdCt0dc8WMFTTZPJjpJH/gHliiY+RQqi6X3CAx5U2C42Pn9U+ZTu3glw==
+"@navikt/familie-form-elements@^2.2.2", "@navikt/familie-form-elements@^2.2.6":
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.6.tgz#f5b6292bbb0ded5a84761dd7a53ed4b258b961d3"
+  integrity sha512-ulaziMnzh4nILoTDn1fVjdalC0MOlvzeIeUxQpldVXYeMyuUhBL4FnFFxMBGgOrzsSCJg4Y5O3imz9IPlqx3zw==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.2"
     "@types/classnames" "^2.2.10"

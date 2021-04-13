@@ -27,7 +27,7 @@
     "@axe-core/react": "^4.1.1",
     "@navikt/familie-backend": "^5.0.21",
     "@navikt/familie-clipboard": "^3.1.0",
-    "@navikt/familie-form-elements": "^2.2.3",
+    "@navikt/familie-form-elements": "^2.2.6",
     "@navikt/familie-header": "^3.0.2",
     "@navikt/familie-http": "^1.0.3",
     "@navikt/familie-ikoner": "^3.1.0",
