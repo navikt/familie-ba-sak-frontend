@@ -8743,10 +8743,10 @@ nav-frontend-etiketter@^2.0.14:
   resolved "https://registry.yarnpkg.com/nav-frontend-etiketter/-/nav-frontend-etiketter-2.0.32.tgz#aaa7acef030ae3b98da63a7850a0ee9f40f989f9"
   integrity sha512-LodAu0uxzuElGvAUp+xRBo6KSarB00oRzL2TwyKK2o5qFtwDpBa3d3ta0Q4NJnE0cfELl69KjGk/128BS7Lgqw==
 
-nav-frontend-hjelpetekst-style@^2.0.25:
-  version "2.0.42"
-  resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-2.0.42.tgz#5ddf91ff4679a14cdd7c8ce5d1028969ed9ca51e"
-  integrity sha512-myAxd4650eQIRy1DFXWmrdsrYinHCWzSWX6uk82cdEO6sDR22EjbfagraRSXurKw8zRbeEHzy7o5nHdzMbubAA==
+nav-frontend-hjelpetekst-style@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-2.1.1.tgz#035eeeaa729f9929c26f0aaaa14105bd641119f1"
+  integrity sha512-0vd5T8S9AS3d9KlKqqwfGNc+8Qhd6bKoQfGRMgeljbDeowG3dNbC3kYEBVpNL/XurbfWgDIvDbyzzEKI45hkKg==
 
 nav-frontend-hjelpetekst@^2.0.45:
   version "2.0.57"
