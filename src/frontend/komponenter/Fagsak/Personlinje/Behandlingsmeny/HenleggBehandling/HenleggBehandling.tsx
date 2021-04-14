@@ -134,6 +134,8 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             type={'hoved'}
                             mini={true}
                             onClick={() => onBekreft(behandling.behandlingId)}
+                            spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             children={
                                 skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET
                                     ? 'Bekreft og send brev'
