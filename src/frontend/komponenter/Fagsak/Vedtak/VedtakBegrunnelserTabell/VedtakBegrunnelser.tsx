@@ -4,7 +4,7 @@ import { useBehandling } from '../../../../context/BehandlingContext';
 import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
-import { IRestVedtakBegrunnelse } from '../../../../typer/vedtak';
+import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { datoformat } from '../../../../utils/formatter';
@@ -19,11 +19,11 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
 
-    const harVedtaksperioder =
-        åpenBehandling.vedtaksperioder.filter(
-            (periode: Vedtaksperiode) => periode.vedtaksperiodetype !== Vedtaksperiodetype.AVSLAG
-        ).length > 0;
-    const vedtaksperioderMedBegrunnelseBehov = åpenBehandling.vedtaksperioder
+    const utbetalingsperioder = åpenBehandling.vedtaksperioder.filter(
+        (periode: Vedtaksperiode) => periode.vedtaksperiodetype !== Vedtaksperiodetype.AVSLAG
+    );
+    const harVedtaksperioder = utbetalingsperioder.length > 0;
+    const vedtaksperioderMedBegrunnelseBehov = utbetalingsperioder
         .slice()
         .sort((a, b) =>
             familieDayjsDiff(
@@ -35,22 +35,26 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
             const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
                 (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
                     return (
+                        vedtakBegrunnelse.begrunnelseType !== VedtakBegrunnelseType.AVSLAG &&
                         vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
                         vedtakBegrunnelse.tom === vedtaksperiode.periodeTom
                     );
                 }
             );
 
-            // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
             if (erLesevisning()) {
-                return vedtakBegrunnelserForPeriode.length !== 0;
+                // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
+                return !!vedtakBegrunnelserForPeriode.length;
+            } else {
+                // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
+                return (
+                    familieDayjsDiff(
+                        familieDayjs(vedtaksperiode.periodeFom),
+                        familieDayjs(),
+                        'month'
+                    ) < 2
+                );
             }
-
-            // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
-            return (
-                familieDayjsDiff(familieDayjs(vedtaksperiode.periodeFom), familieDayjs(), 'month') <
-                2
-            );
         });
 
     return harVedtaksperioder ? (
