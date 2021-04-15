@@ -9,7 +9,7 @@ import { Sakstabell } from './Sakstabell';
 import { Vedtakstabell } from './Vedtakstabell';
 
 interface InfotrygdtabellerProps {
-    ident: string;
+    ident?: string;
     saker: IInfotrygdSak[];
 }
 
@@ -33,7 +33,7 @@ const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
 export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({ ident, saker }) => {
     return (
         <>
-            <SakerTekst>{`Saker for ${ident}`}</SakerTekst>
+            <SakerTekst>{ident ? `Saker for ${ident}` : 'Saker'}</SakerTekst>
             <Sakstabell saker={sorterSakerEtterSaksnr(saker)} />
             <VedtakTekst>Vedtak</VedtakTekst>
             <Vedtakstabell saker={saker} />
