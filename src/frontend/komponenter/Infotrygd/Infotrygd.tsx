@@ -41,7 +41,7 @@ const FlyttSakKnapp = styled(Knapp)`
 `;
 
 export const Infotrygd: React.FC = () => {
-    const { onSubmitWrapper, skjema } = useInfotrygdSkjema();
+    const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
     const { flyttBrukerTilBaSak, infotrygdmigreringRessurs } = useInfotrygdMigrering();
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
@@ -52,10 +52,7 @@ export const Infotrygd: React.FC = () => {
                 <FlyttSakKnapp
                     mini
                     onClick={() => {
-                        flyttBrukerTilBaSak(
-                            skjema.felter.ident.verdi,
-                            BehandlingÅrsak.NYE_OPPLYSNINGER
-                        );
+                        flyttBrukerTilBaSak(ident, BehandlingÅrsak.NYE_OPPLYSNINGER);
                     }}
                 >
                     Flytt til BA-sak
@@ -103,7 +100,7 @@ export const Infotrygd: React.FC = () => {
             </HentSakerFlex>
             {visFlyttSakAlert()}
             {skjema.submitRessurs.status === RessursStatus.SUKSESS ? (
-                <Infotrygdtabeller saker={skjema.submitRessurs.data.saker} />
+                <Infotrygdtabeller ident={ident} saker={skjema.submitRessurs.data.saker} />
             ) : undefined}
         </InfotrygdContainer>
     );
