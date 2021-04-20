@@ -18,7 +18,7 @@ import {
     Resultat,
     VilkårType,
 } from '../../../../typer/vilkår';
-import familieDayjs, { Dayjs, familieDayjsDiff } from '../../../../utils/familieDayjs';
+import { Dayjs, familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { isoStringToDayjs } from '../../../../utils/formatter';
 
 export const hentUtgjørendeVilkårImpl = (
@@ -33,7 +33,7 @@ export const hentUtgjørendeVilkårImpl = (
         .filter((vilkårResultat: IRestVilkårResultat) => {
             const vilkårPeriodeFom = isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN);
             const vilkårPeriodeTom = isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE);
-            const vedtakPeriodeFom = familieDayjs(vedtaksperiode.periodeFom);
+            const vedtakPeriodeFom = isoStringToDayjs(vedtaksperiode.periodeFom, TIDENES_MORGEN);
             const oppfyltTomMånedEtter =
                 vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
 
