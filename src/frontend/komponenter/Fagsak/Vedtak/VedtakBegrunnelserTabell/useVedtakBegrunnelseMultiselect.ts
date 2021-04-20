@@ -18,7 +18,7 @@ import {
     Resultat,
     VilkårType,
 } from '../../../../typer/vilkår';
-import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
+import familieDayjs, { Dayjs, familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { isoStringToDayjs } from '../../../../utils/formatter';
 
 const useVedtakBegrunnelseMultiselect = (
@@ -103,50 +103,34 @@ const useVedtakBegrunnelseMultiselect = (
             : true;
 
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] => {
+        const erSammeMåned = (dato1: Dayjs, dato2: Dayjs) =>
+            familieDayjsDiff(dato1, dato2, 'month') === 0;
         return personResultater
             .flatMap(personResultat => personResultat.vilkårResultater)
             .filter((vilkårResultat: IRestVilkårResultat) => {
+                const vilkårPeriodeFom = isoStringToDayjs(
+                    vilkårResultat.periodeFom,
+                    TIDENES_MORGEN
+                );
+                const vilkårPeriodeTom = isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE);
+                const vedtakPeriodeFom = familieDayjs(vedtaksperiode.periodeFom);
+                const oppfyltTomMånedEtter =
+                    vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
+
                 if (begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                     return (
-                        familieDayjsDiff(
-                            isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN),
-                            familieDayjs(vedtaksperiode.periodeFom).subtract(1, 'month'),
-                            'month'
-                        ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
-                    );
-                } else if (begrunnelseType === VedtakBegrunnelseType.REDUKSJON) {
-                    const oppfyltTomMånedEtter =
-                        vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
-
-                    return (
-                        familieDayjsDiff(
-                            isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
-                            familieDayjs(vedtaksperiode.periodeFom).subtract(
-                                oppfyltTomMånedEtter,
-                                'month'
-                            ),
-                            'month'
-                        ) === 0 && vilkårResultat.resultat === Resultat.OPPFYLT
-                    );
-                } else if (begrunnelseType === VedtakBegrunnelseType.OPPHØR) {
-                    const oppfyltTomMånedEtter =
-                        vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
-
-                    return (
-                        (familieDayjsDiff(
-                            isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
-                            familieDayjs(vedtaksperiode.periodeTom),
-                            'month'
-                        ) === 0 ||
-                            familieDayjsDiff(
-                                isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE),
-                                familieDayjs(vedtaksperiode.periodeFom).subtract(
-                                    oppfyltTomMånedEtter,
-                                    'month'
-                                ),
-                                'month'
-                            ) === 0) &&
+                        erSammeMåned(vilkårPeriodeFom, vedtakPeriodeFom.subtract(1, 'month')) &&
                         vilkårResultat.resultat === Resultat.OPPFYLT
+                    );
+                } else if (
+                    begrunnelseType === VedtakBegrunnelseType.REDUKSJON ||
+                    begrunnelseType === VedtakBegrunnelseType.OPPHØR
+                ) {
+                    return (
+                        erSammeMåned(
+                            vilkårPeriodeTom,
+                            vedtakPeriodeFom.subtract(oppfyltTomMånedEtter, 'month')
+                        ) && vilkårResultat.resultat === Resultat.OPPFYLT
                     );
                 } else {
                     return true;
