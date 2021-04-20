@@ -4,6 +4,7 @@ import { YearMonth } from '../../typer/tid';
 import familieDayjs from '../familieDayjs';
 import { datoformat } from '../formatter';
 import {
+    datoDagenFør,
     hentFørsteDagIYearMonth,
     hentSisteDagIYearMonth,
     leggTilÅr,
@@ -30,30 +31,22 @@ describe('utils/tid', () => {
     describe('Tester at dayjs sin substract-funksjon med day fungerer som forventet', () => {
         test('Ukedag mandag skal gi datoen for søndag uka før.', () => {
             expect(
-                familieDayjs('2021-01-18', datoformat.ISO_DAG)
-                    .subtract(1, 'day')
-                    .format(datoformat.DATO)
+                datoDagenFør(familieDayjs('2021-01-18', datoformat.ISO_DAG)).format(datoformat.DATO)
             ).toEqual('17.01.2021');
         });
         test('Første dag i året skal gi siste dag i året før', () => {
             expect(
-                familieDayjs('2021-01-01', datoformat.ISO_DAG)
-                    .subtract(1, 'day')
-                    .format(datoformat.DATO)
+                datoDagenFør(familieDayjs('2021-01-01', datoformat.ISO_DAG)).format(datoformat.DATO)
             ).toEqual('31.12.2020');
         });
         test('Første dag i måneden skal gi siste dag i måneden før', () => {
             expect(
-                familieDayjs('2021-03-01', datoformat.ISO_DAG)
-                    .subtract(1, 'day')
-                    .format(datoformat.DATO)
+                datoDagenFør(familieDayjs('2021-03-01', datoformat.ISO_DAG)).format(datoformat.DATO)
             ).toEqual('28.02.2021');
         });
         test('Første dag i mars for skuddår skal gi 29. februar', () => {
             expect(
-                familieDayjs('2020-03-01', datoformat.ISO_DAG)
-                    .subtract(1, 'day')
-                    .format(datoformat.DATO)
+                datoDagenFør(familieDayjs('2020-03-01', datoformat.ISO_DAG)).format(datoformat.DATO)
             ).toEqual('29.02.2020');
         });
     });

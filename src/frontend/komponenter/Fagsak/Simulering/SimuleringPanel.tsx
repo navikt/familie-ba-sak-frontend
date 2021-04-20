@@ -10,6 +10,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { ISimuleringDTO } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
 import { formaterBeløp, formaterIsoDato, datoformat } from '../../../utils/formatter';
+import { datoDagenFør } from '../../../utils/tid';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;
@@ -67,9 +68,9 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         .slice(-1)
         .pop();
     const utbetaltPeriodeTom = fomDatoNestePeriode
-        ? familieDayjs(fomDatoNestePeriode, datoformat.ISO_DAG)
-              .subtract(1, 'day')
-              .format(datoformat.DATO)
+        ? datoDagenFør(familieDayjs(fomDatoNestePeriode, datoformat.ISO_DAG)).format(
+              datoformat.DATO
+          )
         : sisteUtbetaltePeriode
         ? sisteUtbetaltePeriode.tom
         : '';
