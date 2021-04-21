@@ -41,7 +41,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         onSubmit,
         erFeilutbetaling,
         tilbakekrevingErToggletPå,
-        hentTilbakekrevingDto,
+        hentRestTilbakekreving,
     } = useSimulering();
 
     const { settFagsak } = useFagsakRessurser();
@@ -49,7 +49,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const nesteOnClick = async () => {
         onSubmit<RestTilbakekreving | IFagsak>(
             {
-                data: hentTilbakekrevingDto(),
+                data: hentRestTilbakekreving(),
                 method: 'POST',
                 url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
             },
