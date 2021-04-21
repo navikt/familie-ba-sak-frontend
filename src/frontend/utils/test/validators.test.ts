@@ -1,9 +1,19 @@
-import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
+import { act, renderHook } from '@testing-library/react-hooks';
 
+import { FeltState, useFelt, Valideringsstatus } from '@navikt/familie-skjema';
+
+import generator from '../../testverktøy/fnr/fnr-generator';
 import { IPeriode, nyPeriode } from '../../typer/periode';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
-import { erPeriodeGyldig } from '../validators';
+import { VedtakBegrunnelse } from '../../typer/vedtak';
+import { Resultat } from '../../typer/vilkår';
+import {
+    erAvslagBegrunnelserGyldig,
+    erPeriodeGyldig,
+    erResultatGyldig,
+    identValidator,
+} from '../validators';
 
 export declare const nyFeltTestState: <T>(
     verdi: T,
@@ -121,5 +131,68 @@ describe('utils/validators', () => {
             er18ÅrsVilkår: true,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
+    });
+
+    test('Validering av ident', () => {
+        const fnrGenerator = generator(new Date('10.02.2020'));
+        const { result } = renderHook(() =>
+            useFelt({
+                verdi: '',
+                valideringsfunksjon: identValidator,
+            })
+        );
+
+        const validertTomIdent = result.current.valider(result.current);
+        expect(validertTomIdent.valideringsstatus).toBe(Valideringsstatus.FEIL);
+        expect(validertTomIdent.feilmelding).toBe('Identen har ikke 11 tall');
+
+        act(() => result.current.onChange('12345678910'));
+        const validertUgyldigIdent = result.current.valider(result.current);
+        expect(validertUgyldigIdent.valideringsstatus).toBe(Valideringsstatus.FEIL);
+        expect(validertUgyldigIdent.feilmelding).toBe('Identen er ugyldig');
+
+        const fnr = fnrGenerator.next().value;
+        if (fnr) {
+            act(() => result.current.onChange(fnr));
+        }
+
+        expect(result.current.valider(result.current).valideringsstatus).toBe(Valideringsstatus.OK);
+    });
+
+    test('Validering av resultat på vilkår', () => {
+        const { result } = renderHook(() =>
+            useFelt({
+                verdi: Resultat.IKKE_VURDERT,
+                valideringsfunksjon: erResultatGyldig,
+            })
+        );
+
+        const validertIkkeVurdert = result.current.valider(result.current);
+        expect(validertIkkeVurdert.valideringsstatus).toBe(Valideringsstatus.FEIL);
+        expect(validertIkkeVurdert.feilmelding).toBe('Resultat er ikke satt');
+
+        act(() => result.current.onChange(Resultat.OPPFYLT));
+        expect(result.current.valider(result.current).valideringsstatus).toBe(Valideringsstatus.OK);
+    });
+
+    test('Validering av avslagsbegrunnelser', () => {
+        const { result } = renderHook(() =>
+            useFelt({
+                verdi: [],
+                valideringsfunksjon: erAvslagBegrunnelserGyldig,
+            })
+        );
+
+        const validertTomListe = result.current.valider(result.current, {
+            erEksplisittAvslagPåSøknad: true,
+        });
+        expect(validertTomListe.valideringsstatus).toBe(Valideringsstatus.FEIL);
+        expect(validertTomListe.feilmelding).toBe('Du må velge minst en begrunnelse ved avslag');
+
+        act(() => result.current.onChange([VedtakBegrunnelse.AVSLAG_BOSATT_I_RIKET]));
+        expect(
+            result.current.valider(result.current, { erEksplisittAvslagPåSøknad: true })
+                .valideringsstatus
+        ).toBe(Valideringsstatus.OK);
     });
 });
