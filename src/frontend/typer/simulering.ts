@@ -16,8 +16,15 @@ export interface ISimuleringPeriode {
     resultat?: number;
 }
 
-export enum TilbakekrevingAlternativ {
-    OPPRETT_SEND_VARSEL,
-    OPPRETT_IKKE_SEND_VARSEL,
-    AVVENT_TILMBAKEKREVING,
+export enum Tilbakekrevingsvalg {
+    OPPRETT_TILBAKEKREVING_MED_VARSEL = 'OPPRETT_TILBAKEKREVING_MED_VARSEL',
+    OPPRETT_TILBAKEKREVING_UTEN_VARSEL = 'OPPRETT_TILBAKEKREVING_UTEN_VARSEL',
+    IGNORER_TILBAKEKREVING = 'IGNORER_TILBAKEKREVING',
+}
+
+export interface RestTilbakekreving {
+    vedtakId: number;
+    valg: Tilbakekrevingsvalg;
+    varsel?: string;
+    begrunnelse: string;
 }
