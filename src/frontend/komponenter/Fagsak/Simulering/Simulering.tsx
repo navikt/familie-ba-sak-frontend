@@ -9,9 +9,11 @@ import Alertstripe from 'nav-frontend-alertstriper';
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { RestTilbakekreving } from '../../../typer/simulering';
 import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
@@ -39,16 +41,21 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         onSubmit,
         erFeilutbetaling,
         tilbakekrevingErToggletPå,
+        hentTilbakekrevingDto,
     } = useSimulering();
 
+    const { settFagsak } = useFagsakRessurser();
+
     const nesteOnClick = async () => {
-        onSubmit(
+        onSubmit<RestTilbakekreving | IFagsak>(
             {
+                data: hentTilbakekrevingDto(),
                 method: 'POST',
                 url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
             },
             (ressurs: Ressurs<IFagsak>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
+                    settFagsak(ressurs);
                     history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
                 }
 
