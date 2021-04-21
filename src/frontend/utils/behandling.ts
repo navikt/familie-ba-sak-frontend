@@ -1,4 +1,6 @@
-import { BehandlerRolle, behandlingstyper } from '../typer/behandling';
+import { BehandlerRolle, behandlingstyper, IBehandling } from '../typer/behandling';
+import { IGrunnlagPerson, PersonType } from '../typer/person';
+import { Målform } from '../typer/søknad';
 
 export const gruppeIdTilRolle = (gruppeId: string) => {
     const host = window.location.host;
@@ -20,3 +22,8 @@ export const gruppeIdTilRolle = (gruppeId: string) => {
 export const muligeBehandlingstyper = () => {
     return behandlingstyper;
 };
+
+export const hentSøkersMålform = (behandling: IBehandling) =>
+    behandling.personer.find((person: IGrunnlagPerson) => {
+        return person.type === PersonType.SØKER;
+    })?.målform ?? Målform.NB;
