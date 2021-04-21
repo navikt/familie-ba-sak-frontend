@@ -127,7 +127,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         IFagsak
     >({
         felter: { tilbakekrevingsvalg, fritekstVarsel, begrunnelse },
-        skjemanavn: 'Du må skrive en bgrunnelse for tilbakekreving',
+        skjemanavn: 'Opprett tilbakekreving',
     });
 
     const hentRestTilbakekreving = (): RestTilbakekreving | undefined => {
