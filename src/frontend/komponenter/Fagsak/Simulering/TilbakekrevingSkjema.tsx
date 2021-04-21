@@ -13,7 +13,7 @@ import { FamilieTextarea, FamilieRadioGruppe } from '@navikt/familie-form-elemen
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
-import { TilbakekrevingAlternativ } from '../../../typer/simulering';
+import { Tilbakekrevingsvalg } from '../../../typer/simulering';
 import { Målform, målform } from '../../../typer/søknad';
 
 const TextAreaWrapper = styled.div`
@@ -63,19 +63,21 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
     const { erLesevisning } = useBehandling();
     const { skjema, hentFeilTilOppsummering } = useSimulering();
 
-    const radioOnChange = (tilbakekrevingsalternativ: TilbakekrevingAlternativ) => {
-        skjema.felter.tilbakekreving.validerOgSettFelt(tilbakekrevingsalternativ);
+    const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {
+        skjema.felter.tilbakekrevingsvalg.validerOgSettFelt(tilbakekrevingsalternativ);
     };
 
     return (
         <Tilbakekreving>
             {' '}
             <FamilieRadioGruppe
-                {...skjema.felter.tilbakekreving.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                {...skjema.felter.tilbakekrevingsvalg.hentNavBaseSkjemaProps(
+                    skjema.visFeilmeldinger
+                )}
                 erLesevisning={erLesevisning()}
                 verdi={
-                    skjema.felter.tilbakekreving.verdi
-                        ? skjema.felter.tilbakekreving.verdi.toString()
+                    skjema.felter.tilbakekrevingsvalg.verdi
+                        ? skjema.felter.tilbakekrevingsvalg.verdi.toString()
                         : undefined
                 }
                 legend={<Element>Tilbakekreving</Element>}
@@ -84,10 +86,12 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
                     label={'Opprett tilbakekreving, send varsel'}
                     name={'tilbakekreving'}
                     checked={
-                        skjema.felter.tilbakekreving.verdi ===
-                        TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL
+                        skjema.felter.tilbakekrevingsvalg.verdi ===
+                        Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
                     }
-                    onChange={() => radioOnChange(TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL)}
+                    onChange={() =>
+                        radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL)
+                    }
                     id={'Opprett-tilbakekreving-send-varsel'}
                 />
                 {skjema.felter.fritekstVarsel.erSynlig && (
@@ -141,11 +145,11 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
                     label={'Opprett tilbakekreving, ikke send varsel'}
                     name={'tilbakekreving'}
                     checked={
-                        skjema.felter.tilbakekreving.verdi ===
-                        TilbakekrevingAlternativ.OPPRETT_IKKE_SEND_VARSEL
+                        skjema.felter.tilbakekrevingsvalg.verdi ===
+                        Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL
                     }
                     onChange={() =>
-                        radioOnChange(TilbakekrevingAlternativ.OPPRETT_IKKE_SEND_VARSEL)
+                        radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL)
                     }
                     id={'Opprett-tilbakekreving-ikke-send-varsel'}
                 />
@@ -153,10 +157,10 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
                     label={'Avvent tilbakekreving'}
                     name={'tilbakekreving'}
                     checked={
-                        skjema.felter.tilbakekreving.verdi ===
-                        TilbakekrevingAlternativ.AVVENT_TILMBAKEKREVING
+                        skjema.felter.tilbakekrevingsvalg.verdi ===
+                        Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING
                     }
-                    onChange={() => radioOnChange(TilbakekrevingAlternativ.AVVENT_TILMBAKEKREVING)}
+                    onChange={() => radioOnChange(Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING)}
                     id={'avvent-tilbakekreving'}
                 />
             </FamilieRadioGruppe>
