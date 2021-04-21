@@ -172,7 +172,7 @@ export interface IBehandling {
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
-    restTilbakekreving: RestTilbakekreving;
+    restTilbakekreving?: RestTilbakekreving;
 }
 
 export interface IArbeidsfordelingPåBehandling {
