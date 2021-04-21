@@ -19,14 +19,12 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import Pluss from '../../../ikoner/Pluss';
 import { LoggType } from '../../../typer/logg';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
 import { FamilieIsoDate } from '../../../typer/tid';
-import { ToggleNavn } from '../../../typer/toggles';
 import { identValidator } from '../../../utils/validators';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import LeggTilUregistrertBarn from './LeggTilUregistrertBarn';
@@ -60,7 +58,6 @@ export interface IRegistrerBarnSkjema {
 }
 
 const LeggTilBarn: React.FunctionComponent = () => {
-    const { toggles } = useApp();
     const { request } = useHttp();
     const { logg } = useFagsakRessurser();
 
@@ -71,11 +68,9 @@ const LeggTilBarn: React.FunctionComponent = () => {
 
     React.useEffect(() => {
         settKanLeggeTilUregistrerteBarn(
-            (hentDataFraRessursMedFallback(logg, [])?.some(
+            hentDataFraRessursMedFallback(logg, [])?.some(
                 l => l.type === LoggType.DISTRIBUERE_BREV && l.tekst.includes('Innhenting')
-            ) &&
-                toggles[ToggleNavn.visLeggTilUregistrerteBarn]) ??
-                false
+            )
         );
     }, [logg.status]);
 

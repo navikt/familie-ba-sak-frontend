@@ -1,16 +1,17 @@
 import dayjs from 'dayjs';
 
 import { FamilieIsoDate, YearMonth } from '../typer/tid';
-import familieDayjs, { Dayjs } from './familieDayjs';
+import { Dayjs } from './familieDayjs';
+import { datoformat } from './formatter';
 
 export const periodeOverlapperMedValgtDato = (
     periodeFom: FamilieIsoDate,
     periodeTom: FamilieIsoDate,
     valgtDato: Date
 ) => {
-    const valgtDatoToDayjs = familieDayjs(valgtDato.toISOString()).startOf('day');
-    const periodeFomToDayjs = familieDayjs(periodeFom).startOf('day');
-    const periodeTomToDayjs = familieDayjs(periodeTom).startOf('day');
+    const valgtDatoToDayjs = dayjs(valgtDato.toISOString()).startOf('day');
+    const periodeFomToDayjs = dayjs(periodeFom).startOf('day');
+    const periodeTomToDayjs = dayjs(periodeTom).startOf('day');
 
     return (
         valgtDatoToDayjs.isBetween(periodeFomToDayjs, periodeTomToDayjs, 'date') ||
@@ -20,18 +21,22 @@ export const periodeOverlapperMedValgtDato = (
 };
 
 export const sisteDagInneværendeMåned = (): Dayjs => {
-    return familieDayjs().endOf('month');
+    return dayjs().endOf('month');
 };
 
 export const hentFørsteDagIYearMonth = (yearMonth: YearMonth) => {
-    return familieDayjs(yearMonth).startOf('month');
+    return dayjs(yearMonth, datoformat.ISO_MÅNED).startOf('month');
 };
 
 export const hentSisteDagIYearMonth = (yearMonth: YearMonth) => {
-    return familieDayjs(yearMonth).endOf('month');
+    return dayjs(yearMonth, datoformat.ISO_MÅNED).endOf('month');
 };
 
 export const leggTilÅr = (dato: string, år: number) => {
     const dayJs = dayjs(new Date(dato));
     return dayJs.set('year', dayJs.year() + år);
+};
+
+export const datoDagenFør = (dayjs: Dayjs): Dayjs => {
+    return dayjs.subtract(1, 'day');
 };
