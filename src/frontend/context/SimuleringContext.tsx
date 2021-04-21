@@ -35,7 +35,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
             method: 'GET',
-            url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}`,
+            url: `/familie-ba-sak/api/vedtak/${aktivtVedtak?.id}/simulering`,
             påvirkerSystemLaster: true,
         }).then(response => {
             settSimuleringresultat(response);

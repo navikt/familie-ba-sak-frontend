@@ -47,7 +47,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             {
                 data: hentRestTilbakekreving(),
                 method: 'POST',
-                url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/tilbakekreving`,
+                url: `/familie-ba-sak/api/vedtak/${aktivtVedtak?.id}/tilbakekreving`,
             },
             (ressurs: Ressurs<IFagsak>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
