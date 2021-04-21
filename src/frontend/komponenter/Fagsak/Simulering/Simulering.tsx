@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -32,9 +31,6 @@ const StyledAlertstripe = styled(Alertstripe)`
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling, fagsak }) => {
     const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
     const history = useHistory();
-    const [bekreft, settBekreft] = useState<Ressurs<IFagsak>>({
-        status: RessursStatus.IKKE_HENTET,
-    });
     const {
         simuleringsresultat,
         skjema,
@@ -46,20 +42,18 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     const { settFagsak } = useFagsakRessurser();
 
-    const nesteOnClick = async () => {
-        onSubmit<RestTilbakekreving | IFagsak>(
+    const nesteOnClick = () => {
+        onSubmit<RestTilbakekreving | undefined>(
             {
                 data: hentRestTilbakekreving(),
                 method: 'POST',
-                url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/bekreft`,
+                url: `/familie-ba-sak/api/simulering/${aktivtVedtak?.id}/tilbakekreving`,
             },
             (ressurs: Ressurs<IFagsak>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     settFagsak(ressurs);
                     history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
                 }
-
-                settBekreft(ressurs);
 
                 /*
                  *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
@@ -113,12 +107,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         Det har skjedd en feil: {simuleringsresultat?.frontendFeilmelding}
                     </Alertstripe>
                 )}
-                {(bekreft.status === RessursStatus.FEILET ||
-                    bekreft.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    bekreft.status === RessursStatus.IKKE_TILGANG) && (
+                {(skjema.submitRessurs.status === RessursStatus.FEILET ||
+                    skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
                     <StyledAlertstripe type="feil">
                         Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
-                        {bekreft.frontendFeilmelding}
+                        {skjema.submitRessurs.frontendFeilmelding}
                     </StyledAlertstripe>
                 )}
             </>
