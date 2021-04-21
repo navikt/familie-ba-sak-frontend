@@ -10,7 +10,12 @@ import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 import { aktivVedtakPåBehandling } from '../api/fagsak';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { ISimuleringPeriode, ISimuleringDTO, TilbakekrevingAlternativ } from '../typer/simulering';
+import {
+    ISimuleringPeriode,
+    ISimuleringDTO,
+    Tilbakekrevingsvalg,
+    RestTilbakekreving,
+} from '../typer/simulering';
 import { ToggleNavn } from '../typer/toggles';
 import familieDayjs from '../utils/familieDayjs';
 import { useApp } from './AppContext';
@@ -69,8 +74,8 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         simuleringsresultat.status === RessursStatus.SUKSESS &&
         simuleringsresultat.data.feilutbetaling > 0;
 
-    const tilbakekreving = useFelt<TilbakekrevingAlternativ | undefined>({
-        verdi: undefined,
+    const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
+        verdi: åpenBehandling.restTilbakekreving?.valg,
         avhengigheter: { tilbakekrevingErToggletPå, erFeilutbetaling },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
@@ -83,21 +88,27 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 : ok(felt),
     });
     const fritekstVarsel = useFelt<string>({
-        verdi: '',
-        avhengigheter: { tilbakekrevingErToggletPå, tilbakekreving, erFeilutbetaling },
+        verdi: åpenBehandling.restTilbakekreving?.varsel ?? '',
+        avhengigheter: {
+            tilbakekrevingErToggletPå,
+            tilbakekreving: tilbakekrevingsvalg,
+            erFeilutbetaling,
+        },
         valideringsfunksjon: (felt, avhengigheter) =>
             avhengigheter?.erFeilutbetaling &&
-            avhengigheter?.tilbakekreving?.verdi === TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL &&
+            avhengigheter?.tilbakekreving?.verdi ===
+                Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL &&
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
                 : ok(felt),
         skalFeltetVises: (avhengigheter: Avhengigheter) =>
             avhengigheter?.tilbakekrevingErToggletPå &&
             avhengigheter?.erFeilutbetaling &&
-            avhengigheter?.tilbakekreving?.verdi === TilbakekrevingAlternativ.OPPRETT_SEND_VARSEL,
+            avhengigheter?.tilbakekreving?.verdi ===
+                Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
     });
     const begrunnelse = useFelt<string>({
-        verdi: '',
+        verdi: åpenBehandling.restTilbakekreving?.begrunnelse ?? '',
         avhengigheter: { erFeilutbetaling, tilbakekrevingErToggletPå },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
@@ -109,15 +120,31 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     const { skjema, hentFeilTilOppsummering, onSubmit } = useSkjema<
         {
-            tilbakekreving: TilbakekrevingAlternativ | undefined;
+            tilbakekrevingsvalg: Tilbakekrevingsvalg | undefined;
             fritekstVarsel: string;
             begrunnelse: string;
         },
         IFagsak
     >({
-        felter: { tilbakekreving, fritekstVarsel, begrunnelse },
+        felter: { tilbakekrevingsvalg, fritekstVarsel, begrunnelse },
         skjemanavn: 'Du må skrive en bgrunnelse for tilbakekreving',
     });
+
+    const hentRestTilbakekreving = (): RestTilbakekreving | undefined => {
+        return skjema.felter.tilbakekrevingsvalg.verdi && aktivtVedtak
+            ? {
+                  vedtakId: aktivtVedtak?.id,
+                  valg: skjema.felter.tilbakekrevingsvalg.verdi,
+                  begrunnelse: skjema.felter.begrunnelse.verdi,
+                  varsel:
+                      skjema.felter.fritekstVarsel.verdi === '' ||
+                      skjema.felter.tilbakekrevingsvalg.verdi !==
+                          Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
+                          ? undefined
+                          : skjema.felter.fritekstVarsel.verdi,
+              }
+            : undefined;
+    };
 
     return {
         simuleringsresultat,
@@ -128,6 +155,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         hentFeilTilOppsummering,
         tilbakekrevingErToggletPå,
         erFeilutbetaling,
+        hentRestTilbakekreving,
     };
 });
 
