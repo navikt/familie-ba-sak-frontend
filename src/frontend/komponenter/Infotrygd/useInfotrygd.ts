@@ -19,17 +19,17 @@ import { Adressebeskyttelsegradering } from '../../typer/person';
 import { identValidator } from '../../utils/validators';
 
 export const useInfotrygdSkjema = () => {
-    const ident = useFelt({
-        verdi: '',
-        valideringsfunksjon: identValidator,
-    });
+    const [ident, settIdent] = useState('');
 
     const { onSubmit, settSubmitRessurs, skjema } = useSkjema<
         IInfotrygdsakerRequest,
         IInfotrygdsaker
     >({
         felter: {
-            ident,
+            ident: useFelt({
+                verdi: '',
+                valideringsfunksjon: identValidator,
+            }),
         },
         skjemanavn: 'hentInfotrygdsaker',
     });
@@ -37,12 +37,15 @@ export const useInfotrygdSkjema = () => {
     const onSubmitWrapper = () => {
         onSubmit(
             hentInfotrygdsakerRequestConfig(skjema.felter.ident.verdi),
-            (ressurs: Ressurs<IInfotrygdsaker>) =>
-                settSubmitRessurs(konverterTilFeiletRessursDersomIkkeTilgang(ressurs))
+            (ressurs: Ressurs<IInfotrygdsaker>) => {
+                settIdent(skjema.felter.ident.verdi);
+                settSubmitRessurs(konverterTilFeiletRessursDersomIkkeTilgang(ressurs));
+            }
         );
     };
 
     return {
+        ident,
         onSubmitWrapper,
         skjema,
     };

@@ -11,19 +11,52 @@ import {
     useFelt,
     useSkjema,
 } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import {
     Brevmal,
     IBrevData,
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
-import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { fjernWhitespace } from '../utils/commons';
 import { useBehandling } from './BehandlingContext';
+
+export const hentMuligeBrevmalerImplementering = (
+    åpenBehandling: Ressurs<IBehandling>
+): Brevmal[] => {
+    const brevMaler = [];
+    if (åpenBehandling.status === RessursStatus.SUKSESS) {
+        if (åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD) {
+            brevMaler.push(Brevmal.INNHENTE_OPPLYSNINGER);
+        }
+
+        if (
+            åpenBehandling.data.type === Behandlingstype.REVURDERING &&
+            åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD
+        ) {
+            brevMaler.push(Brevmal.VARSEL_OM_REVURDERING);
+        }
+    }
+
+    return brevMaler;
+};
+
+export const mottakersMålformImplementering = (
+    personer: IGrunnlagPerson[],
+    skjemaValideringsStatus: Valideringsstatus,
+    mottakerIdent: string | readonly string[] | number
+) =>
+    personer.find((person: IGrunnlagPerson) => {
+        if (skjemaValideringsStatus === Valideringsstatus.OK) {
+            return person.personIdent === mottakerIdent;
+        } else {
+            return person.type === PersonType.SØKER;
+        }
+    })?.målform ?? Målform.NB;
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
@@ -117,32 +150,14 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const personer =
         åpenBehandling.status === RessursStatus.SUKSESS ? åpenBehandling.data.personer : [];
 
-    const mottakersMålform = () =>
-        personer.find((person: IGrunnlagPerson) => {
-            if (skjema.felter.mottakerIdent.valideringsstatus === Valideringsstatus.OK) {
-                return person.personIdent === skjema.felter.mottakerIdent.verdi;
-            } else {
-                return person.type === PersonType.SØKER;
-            }
-        })?.målform ?? Målform.NB;
+    const mottakersMålform = (): Målform =>
+        mottakersMålformImplementering(
+            personer,
+            skjema.felter.mottakerIdent.valideringsstatus,
+            skjema.felter.mottakerIdent.verdi
+        );
 
-    const hentMuligeBrevMaler = () => {
-        const brevMaler = [];
-        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-            if (åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD) {
-                brevMaler.push(Brevmal.INNHENTE_OPPLYSNINGER);
-            }
-
-            if (
-                åpenBehandling.data.type === Behandlingstype.REVURDERING &&
-                åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD
-            ) {
-                brevMaler.push(Brevmal.VARSEL_OM_REVURDERING);
-            }
-        }
-
-        return brevMaler;
-    };
+    const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(åpenBehandling);
 
     const hentSkjemaData = (): IBrevData => ({
         mottakerIdent: skjema.felter.mottakerIdent.verdi,

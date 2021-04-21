@@ -12,11 +12,19 @@ export const mockBarn: IGrunnlagPerson = {
     målform: Målform.NB,
 };
 
-export const mockSøker: IGrunnlagPerson = {
-    personIdent: '12345678930',
+interface IMockSøker {
+    målform?: Målform;
+    personIdent?: string;
+}
+
+export const mockSøker = ({
+    målform = Målform.NB,
+    personIdent = '12345678930',
+}: IMockSøker = {}): IGrunnlagPerson => ({
+    personIdent: personIdent,
     fødselsdato: '1979-01-14',
     type: PersonType.SØKER,
     kjønn: 'KVINNE' as kjønnType,
     navn: 'Mock Søker',
-    målform: Målform.NB,
-};
+    målform: målform,
+});
