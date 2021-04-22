@@ -67,19 +67,23 @@ interface IRestResultaterMock {
     id?: number;
     resultat?: Resultat;
     vilkårType?: VilkårType;
+    periodeFom?: string;
+    periodeTom?: string;
 }
 
-export const mockRestVilkårResultater = ({
+export const mockRestVilkårResultat = ({
     id = 1,
     resultat = Resultat.OPPFYLT,
     behandlingId = 1,
     vilkårType = VilkårType.LOVLIG_OPPHOLD,
+    periodeFom = '2000-01-01',
+    periodeTom = undefined,
 }: IRestResultaterMock = {}): IRestVilkårResultat => ({
     id,
     vilkårType,
     resultat,
-    periodeFom: '2000-01-01',
-    periodeTom: undefined,
+    periodeFom,
+    periodeTom,
     begrunnelse: '',
     endretAv: 'VL',
     erVurdert: false,
@@ -98,7 +102,7 @@ export const mockRestPersonResultat = ({
         VilkårType.UNDER_18_ÅR,
         VilkårType.BOR_MED_SØKER,
     ].map((vilkårType, index) =>
-        mockRestVilkårResultater({
+        mockRestVilkårResultat({
             id: index,
             vilkårType: VilkårType[vilkårType],
         })
