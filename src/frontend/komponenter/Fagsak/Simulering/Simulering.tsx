@@ -12,7 +12,7 @@ import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { RestTilbakekreving } from '../../../typer/simulering';
+import { ITilbakekreving } from '../../../typer/simulering';
 import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
@@ -37,15 +37,15 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         onSubmit,
         erFeilutbetaling,
         tilbakekrevingErToggletPå,
-        hentRestTilbakekreving,
+        hentTilbakekreving,
     } = useSimulering();
 
     const { settFagsak } = useFagsakRessurser();
 
     const nesteOnClick = () => {
-        onSubmit<RestTilbakekreving | undefined>(
+        onSubmit<ITilbakekreving | undefined>(
             {
-                data: hentRestTilbakekreving(),
+                data: hentTilbakekreving(),
                 method: 'POST',
                 url: `/familie-ba-sak/api/vedtak/${aktivtVedtak?.id}/tilbakekreving`,
             },

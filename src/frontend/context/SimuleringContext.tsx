@@ -14,7 +14,7 @@ import {
     ISimuleringPeriode,
     ISimuleringDTO,
     Tilbakekrevingsvalg,
-    RestTilbakekreving,
+    ITilbakekreving,
 } from '../typer/simulering';
 import { ToggleNavn } from '../typer/toggles';
 import familieDayjs from '../utils/familieDayjs';
@@ -75,7 +75,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         simuleringsresultat.data.feilutbetaling > 0;
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
-        verdi: åpenBehandling.restTilbakekreving?.valg,
+        verdi: åpenBehandling.tilbakekreving?.valg,
         avhengigheter: { tilbakekrevingErToggletPå, erFeilutbetaling },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
@@ -88,7 +88,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 : ok(felt),
     });
     const fritekstVarsel = useFelt<string>({
-        verdi: åpenBehandling.restTilbakekreving?.varsel ?? '',
+        verdi: åpenBehandling.tilbakekreving?.varsel ?? '',
         avhengigheter: {
             tilbakekrevingErToggletPå,
             tilbakekreving: tilbakekrevingsvalg,
@@ -108,7 +108,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
     });
     const begrunnelse = useFelt<string>({
-        verdi: åpenBehandling.restTilbakekreving?.begrunnelse ?? '',
+        verdi: åpenBehandling.tilbakekreving?.begrunnelse ?? '',
         avhengigheter: { erFeilutbetaling, tilbakekrevingErToggletPå },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
@@ -130,7 +130,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         skjemanavn: 'Opprett tilbakekreving',
     });
 
-    const hentRestTilbakekreving = (): RestTilbakekreving | undefined => {
+    const hentTilbakekreving = (): ITilbakekreving | undefined => {
         return skjema.felter.tilbakekrevingsvalg.verdi && aktivtVedtak
             ? {
                   vedtakId: aktivtVedtak?.id,
@@ -155,7 +155,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         hentFeilTilOppsummering,
         tilbakekrevingErToggletPå,
         erFeilutbetaling,
-        hentRestTilbakekreving,
+        hentTilbakekreving,
     };
 });
 
