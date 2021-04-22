@@ -14,13 +14,12 @@ import {
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IPeriode } from '../../../../typer/periode';
 import {
-    hentBakgrunnsfarge,
-    hentBorderfarge,
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
+import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {

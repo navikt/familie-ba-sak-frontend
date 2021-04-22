@@ -1,7 +1,17 @@
+import dayjs from 'dayjs';
+
 import familieDayjs from '../familieDayjs';
-import { datoformat, formaterIsoDato } from '../formatter';
+import { datoformat, formaterIsoDato, formaterPersonIdent, hentAlder } from '../formatter';
 
 describe('utils/formatter', () => {
+    test('Skal formatere ident', () => {
+        expect(formaterPersonIdent('12345678910')).toBe('123456 78910');
+    });
+
+    test('Skal hente riktig alder fra fødselsdato', () => {
+        expect(hentAlder(dayjs().subtract(2, 'years').toISOString())).toBe(2);
+    });
+
     describe('formaterIsoDato', () => {
         const dato = familieDayjs('2020-12-01T14:02');
         const datoString = dato.toISOString();
