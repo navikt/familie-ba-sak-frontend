@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 import familieDayjs, { familieDayjsDiff } from '../familieDayjs';
 import { datoformat } from '../formatter';
 
@@ -12,18 +10,10 @@ describe('utils/familieDayjs', () => {
     });
 
     test('familieDayjs initialiserer på format spesifisert', () => {
-        const stikkprøve1 = familieDayjs('02.90', datoformat.MÅNED);
-        expect(stikkprøve1.get('date')).toEqual(1);
-        expect(stikkprøve1.get('month')).toEqual(1);
-        expect(stikkprøve1.get('year')).toEqual(1990);
-
-        const stikkprøve2 = familieDayjs('13:37', datoformat.TID);
-        const nå = dayjs();
-        expect(stikkprøve2.get('hour')).toEqual(13);
-        expect(stikkprøve2.get('minute')).toEqual(37);
-        expect(stikkprøve2.get('date')).toEqual(nå.get('date'));
-        expect(stikkprøve2.get('month')).toEqual(nå.get('month'));
-        expect(stikkprøve2.get('year')).toEqual(nå.get('year'));
+        const dato = familieDayjs('02.90', datoformat.MÅNED);
+        expect(dato.get('date')).toEqual(1);
+        expect(dato.get('month')).toEqual(1);
+        expect(dato.get('year')).toEqual(1990);
     });
 
     test('familieDayjsDiff returnerer korrekt differanse', () => {
