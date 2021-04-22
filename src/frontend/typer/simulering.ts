@@ -22,7 +22,7 @@ export enum Tilbakekrevingsvalg {
     IGNORER_TILBAKEKREVING = 'IGNORER_TILBAKEKREVING',
 }
 
-export interface RestTilbakekreving {
+export interface ITilbakekreving {
     vedtakId: number;
     valg: Tilbakekrevingsvalg;
     varsel?: string;

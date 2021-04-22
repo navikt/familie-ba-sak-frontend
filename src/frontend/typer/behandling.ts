@@ -1,7 +1,7 @@
 import { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
-import { RestTilbakekreving } from './simulering';
+import { ITilbakekreving } from './simulering';
 import { ISøknadDTO } from './søknad';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
@@ -172,7 +172,7 @@ export interface IBehandling {
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
-    restTilbakekreving?: RestTilbakekreving;
+    tilbakekreving?: ITilbakekreving;
 }
 
 export interface IArbeidsfordelingPåBehandling {
