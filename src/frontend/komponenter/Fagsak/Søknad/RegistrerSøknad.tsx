@@ -39,6 +39,7 @@ const RegistrerSøknad: React.FC = () => {
             tittel={'Registrer opplysninger fra søknaden'}
             nesteOnClick={() => {
                 nesteAction(false);
+                settVisModal(true);
             }}
             nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
             senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
@@ -75,7 +76,7 @@ const RegistrerSøknad: React.FC = () => {
                 />
             )}
 
-            {visModal && (
+            {skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL && (
                 <UIModalWrapper
                     modal={{
                         className: 'søknad-modal',
@@ -100,16 +101,12 @@ const RegistrerSøknad: React.FC = () => {
                                     nesteAction(true);
                                 }}
                                 children={'Ja'}
-                                spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             />,
                         ],
                     }}
                 >
                     <FjernVilkårAdvarsel>
-                        {skjema.submitRessurs.status === RessursStatus.FEILET ||
-                            (skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL &&
-                                skjema.submitRessurs.frontendFeilmelding)}
+                        {skjema.submitRessurs.frontendFeilmelding}
                     </FjernVilkårAdvarsel>
                 </UIModalWrapper>
             )}
