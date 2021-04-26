@@ -15,15 +15,12 @@ interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
 }
 
-const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
-    const { erLesevisning } = useBehandling();
-    const { vedtakBegrunnelser } = useVedtakBegrunnelser();
-
-    const utbetalingsperioder = åpenBehandling.vedtaksperioder.filter(
-        (periode: Vedtaksperiode) => periode.vedtaksperiodetype !== Vedtaksperiodetype.AVSLAG
-    );
-    const harVedtaksperioder = utbetalingsperioder.length > 0;
-    const vedtaksperioderMedBegrunnelseBehov = utbetalingsperioder
+export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
+    utbetalingsperioder: Vedtaksperiode[],
+    vedtakBegrunnelser: IRestVedtakBegrunnelse[],
+    erLesevisning: boolean
+): Vedtaksperiode[] => {
+    return utbetalingsperioder
         .slice()
         .sort((a, b) =>
             familieDayjsDiff(
@@ -31,6 +28,12 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                 familieDayjs(b.periodeFom, datoformat.ISO_DAG)
             )
         )
+        .filter((vedtaksperiode: Vedtaksperiode) => {
+            return (
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
+            );
+        })
         .filter((vedtaksperiode: Vedtaksperiode) => {
             const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
                 (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
@@ -42,7 +45,7 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                 }
             );
 
-            if (erLesevisning()) {
+            if (erLesevisning) {
                 // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
                 return !!vedtakBegrunnelserForPeriode.length;
             } else {
@@ -56,6 +59,21 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                 );
             }
         });
+};
+
+const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
+    const { erLesevisning } = useBehandling();
+    const { vedtakBegrunnelser } = useVedtakBegrunnelser();
+
+    const utbetalingsperioder = åpenBehandling.vedtaksperioder.filter(
+        (periode: Vedtaksperiode) => periode.vedtaksperiodetype !== Vedtaksperiodetype.AVSLAG
+    );
+    const harVedtaksperioder = utbetalingsperioder.length > 0;
+    const vedtaksperioderMedBegrunnelseBehov = filtrerOgSorterPerioderMedBegrunnelseBehov(
+        utbetalingsperioder,
+        vedtakBegrunnelser,
+        erLesevisning()
+    );
 
     return harVedtaksperioder ? (
         <>
@@ -65,25 +83,18 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                     'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør.'
                 }
             />
-            {vedtaksperioderMedBegrunnelseBehov
-                .filter((vedtaksperiode: Vedtaksperiode) => {
-                    return (
-                        vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
-                        vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
-                    );
-                })
-                .map((vedtaksperiode: Vedtaksperiode) => (
-                    <FritekstVedtakBegrunnelserProvider
+            {vedtaksperioderMedBegrunnelseBehov.map((vedtaksperiode: Vedtaksperiode) => (
+                <FritekstVedtakBegrunnelserProvider
+                    vedtaksperiode={vedtaksperiode}
+                    behandlingstype={åpenBehandling.type}
+                    key={vedtaksperiode.periodeFom}
+                >
+                    <VedtakBegrunnelsePanel
                         vedtaksperiode={vedtaksperiode}
-                        behandlingstype={åpenBehandling.type}
-                        key={vedtaksperiode.periodeFom}
-                    >
-                        <VedtakBegrunnelsePanel
-                            vedtaksperiode={vedtaksperiode}
-                            åpenBehandling={åpenBehandling}
-                        />
-                    </FritekstVedtakBegrunnelserProvider>
-                ))}
+                        åpenBehandling={åpenBehandling}
+                    />
+                </FritekstVedtakBegrunnelserProvider>
+            ))}
         </>
     ) : null;
 };
