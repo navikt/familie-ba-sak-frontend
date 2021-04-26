@@ -1656,10 +1656,10 @@
   dependencies:
     winston "^3.2.1"
 
-"@navikt/familie-skjema@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.2.tgz#45bd0991efc991372766c6907cc1b9407fa36be5"
-  integrity sha512-CIE5uxYQMx8/EdKS9HL1JkqWj6I0OrBgwf9x582kMpcf2vcbv7EfWJQ6quBtEFU2UpFHhwIAeZe1j2lAYHZGEA==
+"@navikt/familie-skjema@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.3.tgz#266a04db98d9b96b48572598419109ea05ee8ad2"
+  integrity sha512-LfRUGdqX+kT5guNsIdrJCv+D1dEVEZnk0dxbgRFMex28IlPiVBjpTlrVFCVpqXvTjeH5EItthSuZxG1FUM1d4w==
   dependencies:
     "@navikt/familie-http" "^1.0.4"
     "@navikt/familie-typer" "^3.0.13"

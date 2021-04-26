@@ -19,6 +19,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const { erLesevisning } = useBehandling();
         const history = useHistory();
         const { bruker } = useFagsakRessurser();
+        const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
@@ -141,6 +142,11 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                     `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
                                 );
                             }
+                        },
+                        (errorResponse: Ressurs<IFagsak>) => {
+                            if (errorResponse.status === RessursStatus.FUNKSJONELL_FEIL) {
+                                settVisBekreftModal(true);
+                            }
                         }
                     );
                 }
@@ -148,10 +154,12 @@ const [SøknadProvider, useSøknad] = createUseContext(
         };
 
         return {
-            skjema,
-            nesteAction,
             hentFeilTilOppsummering,
+            nesteAction,
+            settVisBekreftModal,
+            skjema,
             søknadErLastetFraBackend,
+            visBekreftModal,
         };
     }
 );

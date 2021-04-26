@@ -30,8 +30,14 @@ const StyledSkjemasteg = styled(Skjemasteg)`
 const RegistrerSøknad: React.FC = () => {
     const { erLesevisning } = useBehandling();
 
-    const { nesteAction, hentFeilTilOppsummering, skjema, søknadErLastetFraBackend } = useSøknad();
-    const [visModal, settVisModal] = React.useState<boolean>(false);
+    const {
+        hentFeilTilOppsummering,
+        nesteAction,
+        settVisBekreftModal,
+        skjema,
+        søknadErLastetFraBackend,
+        visBekreftModal,
+    } = useSøknad();
 
     return (
         <StyledSkjemasteg
@@ -64,7 +70,6 @@ const RegistrerSøknad: React.FC = () => {
             <Annet />
 
             {(skjema.submitRessurs.status === RessursStatus.FEILET ||
-                skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                 skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
                 <AlertStripeFeil>{skjema.submitRessurs.frontendFeilmelding}</AlertStripeFeil>
             )}
@@ -75,19 +80,19 @@ const RegistrerSøknad: React.FC = () => {
                 />
             )}
 
-            {visModal && (
+            {visBekreftModal && (
                 <UIModalWrapper
                     modal={{
                         className: 'søknad-modal',
                         tittel: 'Er du sikker på at du vil gå videre?',
                         lukkKnapp: false,
-                        visModal: visModal,
+                        visModal: visBekreftModal,
                         actions: [
                             <Knapp
                                 key={'nei'}
                                 mini={true}
                                 onClick={() => {
-                                    settVisModal(false);
+                                    settVisBekreftModal(false);
                                 }}
                                 children={'Nei'}
                             />,
@@ -96,7 +101,7 @@ const RegistrerSøknad: React.FC = () => {
                                 type={'hoved'}
                                 mini={true}
                                 onClick={() => {
-                                    settVisModal(false);
+                                    settVisBekreftModal(false);
                                     nesteAction(true);
                                 }}
                                 children={'Ja'}
