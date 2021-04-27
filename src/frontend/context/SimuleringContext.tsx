@@ -41,25 +41,23 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         const førstePeriode = fomDatoer[0];
         const sistePeriode = fomDatoer[fomDatoer.length - 1];
         console.log('---henter---');
-
+        console.log('fomDatoer: ' + fomDatoer);
         let aktuellPeriode = førstePeriode;
         for (let i = 0; i < dayjs(sistePeriode).diff(dayjs(førstePeriode), 'M'); i++) {
             aktuellPeriode = familieDayjs(aktuellPeriode).add(1, 'M').format();
-            const p = familieDayjs(aktuellPeriode);
-            const mappa = fomDatoer
-                .map(d => familieDayjs(d))
-                .find(d => p.year() === d.year() && p.date() === d.date());
-            if (mappa === undefined) {
-                console.log('undefined ' + mappa + ' ' + p.format());
+            if (!fomDatoer.includes(aktuellPeriode)) {
+                console.log('Fant ikke aktuellPeriode: ' + aktuellPeriode);
                 perioder.push({
                     fom: aktuellPeriode,
                     tom: '',
                 });
             } else {
-                console.log('fant ' + mappa);
+                console.log('Fant: ' + aktuellPeriode);
             }
         }
         /*
+        Foreslått løsning:
+
         console.log('----henter----');
         const sortertePerioder = perioder
             .map(periode => familieDayjs(periode.fom))
@@ -94,7 +92,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 //console.log('ikke tom ', periodeISimulering);
             }
         }
-        
+
          */
 
         perioder.sort((a, b) => (dayjs(a.fom).isAfter(dayjs(b.fom)) ? 1 : -1));
