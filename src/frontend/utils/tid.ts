@@ -36,3 +36,7 @@ export const leggTilÅr = (dato: string, år: number) => {
     const dayJs = dayjs(new Date(dato));
     return dayJs.set('year', dayJs.year() + år);
 };
+
+export const datoDagenFør = (dayjs: Dayjs): Dayjs => {
+    return dayjs.subtract(1, 'day');
+};

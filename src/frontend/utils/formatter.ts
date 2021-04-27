@@ -55,7 +55,7 @@ export const formaterBeløp = (beløp: number): string => {
     return `${beløp.toLocaleString('no-NO')} kr`;
 };
 
-export const erPersonId = (personIdent: string) => {
+const erPersonId = (personIdent: string) => {
     const id = personIdent.split(' ').join('');
     return /^[+-]?\d+(\.\d+)?$/.test(id) && id.length === 11;
 };

@@ -18,6 +18,8 @@ interface IMockBehandling {
     aktiv?: boolean;
     steg?: string;
     opprettetTidspunkt?: string;
+    årsak?: BehandlingÅrsak;
+    type?: Behandlingstype;
 }
 
 export const mockBehandling = ({
@@ -25,10 +27,12 @@ export const mockBehandling = ({
     opprettetTidspunkt = '2020-03-19T09:08:56.8',
     steg = 'VILKÅRSVURDERING',
     aktiv = true,
+    årsak = BehandlingÅrsak.SØKNAD,
+    type = Behandlingstype.FØRSTEGANGSBEHANDLING,
 }: IMockBehandling = {}): IBehandling => {
     const barn = mockBarn;
 
-    const søker = mockSøker;
+    const søker = mockSøker();
 
     const søkerRestPersonResultat: IRestPersonResultat = mockRestPersonResultat({
         personIdent: søker.personIdent,
@@ -57,7 +61,7 @@ export const mockBehandling = ({
                 behandlingStegStatus: BehandlingStegStatus.UTFØRT,
             },
         ],
-        type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+        type: type,
         personer: [barn, søker],
         begrunnelse: '',
         resultat: BehandlingResultat.INNVILGET,
@@ -76,7 +80,7 @@ export const mockBehandling = ({
         },
         vedtaksperioder: [],
         personerMedAndelerTilkjentYtelse: [],
-        årsak: BehandlingÅrsak.SØKNAD,
+        årsak: årsak,
         skalBehandlesAutomatisk: false,
     };
 };

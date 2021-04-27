@@ -7,7 +7,6 @@ import {
     Valideringsstatus,
 } from '@navikt/familie-skjema';
 
-import { IPersonMedAndelerTilkjentYtelse } from '../typer/beregning';
 import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
@@ -38,15 +37,6 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
     }
 
     return validerIdent(identFelt);
-};
-
-export const erGyldigMånedDato = (
-    felt: FeltState<IPersonMedAndelerTilkjentYtelse>
-): FeltState<IPersonMedAndelerTilkjentYtelse> => {
-    return /^\d{2}\.\d{2}$/.test(felt.verdi.stønadFom) &&
-        familieDayjs(felt.verdi.stønadFom, datoformat.MÅNED).isValid()
-        ? ok(felt)
-        : feil(felt, 'Ugyldig dato');
 };
 
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string, tom?: string) => {

@@ -22,15 +22,17 @@ import {
 } from '../../../../context/VedtakBegrunnelserContext';
 import { lagPeriodeId } from '../../../../typer/periode';
 import {
-    finnVedtakBegrunnelseType,
-    hentBakgrunnsfarge,
-    hentBorderfarge,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
 } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
+import {
+    finnVedtakBegrunnelseType,
+    hentBakgrunnsfarge,
+    hentBorderfarge,
+} from '../../../../utils/vedtakUtils';
 import useVedtakBegrunnelseMultiselect from './useVedtakBegrunnelseMultiselect';
 
 interface IVedtakBegrunnelseMultiselect {
