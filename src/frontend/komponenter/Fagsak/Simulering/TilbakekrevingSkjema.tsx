@@ -10,11 +10,16 @@ import { Radio, Feiloppsummering } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { FamilieTextarea, FamilieRadioGruppe } from '@navikt/familie-form-elements';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
+import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { Tilbakekrevingsvalg } from '../../../typer/simulering';
 import { Målform, målform } from '../../../typer/søknad';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
+import useForhåndsvisning from '../../Felleskomponenter/PdfVisningModal/useForhåndsvisning';
 
 const TextAreaWrapper = styled.div`
     max-width: 25rem;
@@ -59,9 +64,19 @@ const Tilbakekreving = styled.div`
     margin-top: 4rem;
 `;
 
+const ForhåndsvisVarselKnapp = styled(IkonKnapp)`
+    margin: 1rem 0;
+`;
+
 const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerMålform }) => {
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, åpenBehandling } = useBehandling();
     const { skjema, hentFeilTilOppsummering } = useSimulering();
+    const {
+        hentForhåndsvisning,
+        visForhåndsvisningModal,
+        hentetForhåndsvisning,
+        settVisForhåndsviningModal,
+    } = useForhåndsvisning();
 
     const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {
         skjema.felter.tilbakekrevingsvalg.validerOgSettFelt(tilbakekrevingsalternativ);
@@ -69,7 +84,12 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
 
     return (
         <Tilbakekreving>
-            {' '}
+            <PdfVisningModal
+                åpen={visForhåndsvisningModal}
+                onRequestClose={() => settVisForhåndsviningModal(false)}
+                pdfdata={hentetForhåndsvisning}
+            />
+
             <FamilieRadioGruppe
                 {...skjema.felter.tilbakekrevingsvalg.hentNavBaseSkjemaProps(
                     skjema.visFeilmeldinger
@@ -164,6 +184,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
                     id={'avvent-tilbakekreving'}
                 />
             </FamilieRadioGruppe>
+
             <TextAreaWrapper>
                 <StyledTextArea
                     label="Begrunnelse"
@@ -172,6 +193,27 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
                     maxLength={1500}
                 />
             </TextAreaWrapper>
+
+            {skjema.felter.tilbakekrevingsvalg.verdi ===
+                Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL && (
+                <ForhåndsvisVarselKnapp
+                    id={'forhandsvis-varsel'}
+                    erLesevisning={false}
+                    label={'Forhåndsvis varsel'}
+                    ikon={<DokumentIkon />}
+                    onClick={() =>
+                        åpenBehandling.status === RessursStatus.SUKSESS &&
+                        hentForhåndsvisning({
+                            method: 'GET',
+                            url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
+                        })
+                    }
+                    spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
+                    knappPosisjon={'venstre'}
+                    mini={true}
+                />
+            )}
+
             {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                 <Feiloppsummering
                     tittel={'For å gå videre må du rette opp følgende:'}
