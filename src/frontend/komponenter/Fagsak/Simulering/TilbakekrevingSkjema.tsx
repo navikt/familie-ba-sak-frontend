@@ -6,7 +6,7 @@ import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { PopoverOrientering } from 'nav-frontend-popover';
-import { Radio, Feiloppsummering } from 'nav-frontend-skjema';
+import { Radio, Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { FamilieTextarea, FamilieRadioGruppe } from '@navikt/familie-form-elements';
@@ -20,14 +20,14 @@ import { Målform, målform } from '../../../typer/søknad';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import useForhåndsvisning from '../../Felleskomponenter/PdfVisningModal/useForhåndsvisning';
+import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
-const TextAreaWrapper = styled.div`
-    max-width: 25rem;
+const ForhåndsvisVarselKnappContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
 `;
 
-const StyledTextArea = styled(FamilieTextarea)`
-    max-width: 25rem;
-`;
 const FritekstVarsel = styled.div`
     margin-left: 2rem;
 `;
@@ -60,12 +60,9 @@ const StyledEtikettInfo = styled(EtikettInfo)`
     padding: 0 0.5rem;
 `;
 
-const Tilbakekreving = styled.div`
+const TilbakekrevingSkjemaGruppe = styled(SkjemaGruppe)`
     margin-top: 4rem;
-`;
-
-const ForhåndsvisVarselKnapp = styled(IkonKnapp)`
-    margin: 1rem 0;
+    max-width: 25rem;
 `;
 
 const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerMålform }) => {
@@ -83,41 +80,41 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
     };
 
     return (
-        <Tilbakekreving>
+        <>
             <PdfVisningModal
                 åpen={visForhåndsvisningModal}
                 onRequestClose={() => settVisForhåndsviningModal(false)}
                 pdfdata={hentetForhåndsvisning}
             />
 
-            <FamilieRadioGruppe
-                {...skjema.felter.tilbakekrevingsvalg.hentNavBaseSkjemaProps(
-                    skjema.visFeilmeldinger
-                )}
-                erLesevisning={erLesevisning()}
-                verdi={
-                    skjema.felter.tilbakekrevingsvalg.verdi
-                        ? skjema.felter.tilbakekrevingsvalg.verdi.toString()
-                        : undefined
-                }
-                legend={<Element>Tilbakekreving</Element>}
-            >
-                <Radio
-                    label={'Opprett tilbakekreving, send varsel'}
-                    name={'tilbakekreving'}
-                    checked={
-                        skjema.felter.tilbakekrevingsvalg.verdi ===
-                        Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
+            <TilbakekrevingSkjemaGruppe legend={<SkjultLegend>Tilbakekrevingsvalg</SkjultLegend>}>
+                <FamilieRadioGruppe
+                    {...skjema.felter.tilbakekrevingsvalg.hentNavBaseSkjemaProps(
+                        skjema.visFeilmeldinger
+                    )}
+                    erLesevisning={erLesevisning()}
+                    verdi={
+                        skjema.felter.tilbakekrevingsvalg.verdi
+                            ? skjema.felter.tilbakekrevingsvalg.verdi.toString()
+                            : undefined
                     }
-                    onChange={() =>
-                        radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL)
-                    }
-                    id={'Opprett-tilbakekreving-send-varsel'}
-                />
-                {skjema.felter.fritekstVarsel.erSynlig && (
-                    <FritekstVarsel>
-                        <TextAreaWrapper>
-                            <StyledTextArea
+                    legend={<Element>Tilbakekreving</Element>}
+                >
+                    <Radio
+                        label={'Opprett tilbakekreving, send varsel'}
+                        name={'tilbakekreving'}
+                        checked={
+                            skjema.felter.tilbakekrevingsvalg.verdi ===
+                            Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
+                        }
+                        onChange={() =>
+                            radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL)
+                        }
+                        id={'Opprett-tilbakekreving-send-varsel'}
+                    />
+                    {skjema.felter.fritekstVarsel.erSynlig && (
+                        <FritekstVarsel>
+                            <FamilieTextarea
                                 label={
                                     <FritektsVarselLabel>
                                         <FlexRad>
@@ -158,69 +155,66 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
                                 erLesevisning={erLesevisning()}
                                 maxLength={1500}
                             />
-                        </TextAreaWrapper>
-                    </FritekstVarsel>
-                )}
-                <Radio
-                    label={'Opprett tilbakekreving, ikke send varsel'}
-                    name={'tilbakekreving'}
-                    checked={
-                        skjema.felter.tilbakekrevingsvalg.verdi ===
-                        Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL
-                    }
-                    onChange={() =>
-                        radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL)
-                    }
-                    id={'Opprett-tilbakekreving-ikke-send-varsel'}
-                />
-                <Radio
-                    label={'Avvent tilbakekreving'}
-                    name={'tilbakekreving'}
-                    checked={
-                        skjema.felter.tilbakekrevingsvalg.verdi ===
-                        Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING
-                    }
-                    onChange={() => radioOnChange(Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING)}
-                    id={'avvent-tilbakekreving'}
-                />
-            </FamilieRadioGruppe>
 
-            <TextAreaWrapper>
-                <StyledTextArea
+                            <ForhåndsvisVarselKnappContainer>
+                                <IkonKnapp
+                                    id={'forhandsvis-varsel'}
+                                    erLesevisning={false}
+                                    label={'Forhåndsvis varsel'}
+                                    ikon={<DokumentIkon />}
+                                    onClick={() =>
+                                        åpenBehandling.status === RessursStatus.SUKSESS &&
+                                        hentForhåndsvisning({
+                                            method: 'GET',
+                                            url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
+                                        })
+                                    }
+                                    spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
+                                    knappPosisjon={'venstre'}
+                                    mini={true}
+                                />
+                            </ForhåndsvisVarselKnappContainer>
+                        </FritekstVarsel>
+                    )}
+                    <Radio
+                        label={'Opprett tilbakekreving, ikke send varsel'}
+                        name={'tilbakekreving'}
+                        checked={
+                            skjema.felter.tilbakekrevingsvalg.verdi ===
+                            Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL
+                        }
+                        onChange={() =>
+                            radioOnChange(Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL)
+                        }
+                        id={'Opprett-tilbakekreving-ikke-send-varsel'}
+                    />
+                    <Radio
+                        label={'Avvent tilbakekreving'}
+                        name={'tilbakekreving'}
+                        checked={
+                            skjema.felter.tilbakekrevingsvalg.verdi ===
+                            Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING
+                        }
+                        onChange={() => radioOnChange(Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING)}
+                        id={'avvent-tilbakekreving'}
+                    />
+                </FamilieRadioGruppe>
+
+                <FamilieTextarea
                     label="Begrunnelse"
                     {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning()}
                     maxLength={1500}
                 />
-            </TextAreaWrapper>
 
-            {skjema.felter.tilbakekrevingsvalg.verdi ===
-                Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL && (
-                <ForhåndsvisVarselKnapp
-                    id={'forhandsvis-varsel'}
-                    erLesevisning={false}
-                    label={'Forhåndsvis varsel'}
-                    ikon={<DokumentIkon />}
-                    onClick={() =>
-                        åpenBehandling.status === RessursStatus.SUKSESS &&
-                        hentForhåndsvisning({
-                            method: 'GET',
-                            url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
-                        })
-                    }
-                    spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
-                    knappPosisjon={'venstre'}
-                    mini={true}
-                />
-            )}
-
-            {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
-                <Feiloppsummering
-                    tittel={'For å gå videre må du rette opp følgende:'}
-                    feil={hentFeilTilOppsummering()}
-                />
-            )}
-        </Tilbakekreving>
+                {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
+                    <Feiloppsummering
+                        tittel={'For å gå videre må du rette opp følgende:'}
+                        feil={hentFeilTilOppsummering()}
+                    />
+                )}
+            </TilbakekrevingSkjemaGruppe>
+        </>
     );
 };
 export default TilbakekrevingSkjema;
