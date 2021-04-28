@@ -123,7 +123,6 @@ const [SøknadProvider, useSøknad] = createUseContext(
                         );
                     }
                 } else {
-                    console.log(skjema);
                     onSubmit<IRestRegistrerSøknad>(
                         {
                             method: 'POST',
