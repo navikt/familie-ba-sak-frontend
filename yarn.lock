@@ -1557,28 +1557,27 @@
     react-tooltip "^4.2.15"
     styled-components "^5.2.1"
 
-"@navikt/familie-form-elements@^2.2.14":
-  version "2.2.14"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.14.tgz#76ea8a539285d1c1618cde5474dc43e2e6e05055"
-  integrity sha512-3hazycmKcWU1xe5o6inwvAJ0UfYqNqNQY1tCCRgdok1mgbMQdhzhvfrzIqgtJd2cvkB0dGJXJSb5OlHsNU/vIg==
+"@navikt/familie-form-elements@^2.2.18":
+  version "2.2.18"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-2.2.18.tgz#fb3757814ecd2e1fec11acf4292214bfd3905f71"
+  integrity sha512-61dwkjH8s+HLqmVzF5ABp3WhzEMA+w1E/4gkbYwOx1sLlUQkPjmyQ1O305lvQ5oPiwr+WO1vIJErSM5LmUTS4g==
   dependencies:
-    "@navikt/fnrvalidator" "^1.1.2"
+    "@navikt/fnrvalidator" "^1.1.3"
     "@types/classnames" "^2.2.10"
     "@types/react-select" "^3.0.28"
     classnames "^2.2.6"
-    dayjs "^1.9.6"
-    nav-datovelger "^10.1.1"
-    nav-frontend-knapper "^2.0.32"
-    nav-frontend-knapper-style "^1.0.17"
-    nav-frontend-lenker "^1.0.60"
-    nav-frontend-lenker-style "^1.0.2"
-    nav-frontend-skjema "^3.0.53"
-    nav-frontend-skjema-style "^2.0.33"
-    nav-frontend-toggle "^0.0.57"
-    nav-frontend-toggle-style "^0.0.46"
-    nav-frontend-typografi "^3.0.4"
+    dayjs "^1.10.4"
+    nav-datovelger "^11.0.0"
+    nav-frontend-knapper "^2.1.2"
+    nav-frontend-knapper-style "^1.1.2"
+    nav-frontend-lenker "^1.1.1"
+    nav-frontend-lenker-style "^1.1.1"
+    nav-frontend-skjema "^3.2.1"
+    nav-frontend-skjema-style "^2.2.1"
+    nav-frontend-toggle "^1.1.2"
+    nav-frontend-toggle-style "^1.1.2"
+    nav-frontend-typografi "^3.1.1"
     react-select "^4.0.13"
-    styled-components "^5.2.1"
 
 "@navikt/familie-form-elements@^2.2.2":
   version "2.2.2"
@@ -4847,7 +4846,7 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-dayjs@^1.9.6:
+dayjs@^1.10.4, dayjs@^1.9.6:
   version "1.10.4"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
   integrity sha512-RI/Hh4kqRc1UKLOAf/T5zdMMX5DQIlDxwUe3wSyMMnEbGunnpENCdbUgM+dW7kXidZqCttBrmw7BhN4TMddkCw==
@@ -8844,6 +8843,13 @@ nav-datovelger@^10.1.1:
   dependencies:
     focus-trap-react "^8.4.2"
 
+nav-datovelger@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-11.0.0.tgz#e6a85c3296f34f9c7b15b281b62a39112a4ce612"
+  integrity sha512-DxBdC4/7EnH0ykOzTMZtYCVy0zuhwp4sDhoPnRmPYUxUJkLLlZ9fXAPV0O9PzIDU+cgBhha8rQOXT3/AeDDU2w==
+  dependencies:
+    focus-trap-react "^8.4.2"
+
 nav-frontend-alertstriper-style@2.0.38:
   version "2.0.38"
   resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.38.tgz#c68ff029b2821074d062ecfdecf6fd81b0b46443"
@@ -9111,10 +9117,20 @@ nav-frontend-toggle-style@^0.0.46:
   resolved "https://registry.yarnpkg.com/nav-frontend-toggle-style/-/nav-frontend-toggle-style-0.0.46.tgz#be25d69d51322cbd18c4c3d0402dda64025ea7d1"
   integrity sha512-5ejb3YhF3tqLHoA+PZntPmF+H6KpoysuaFfGauKJjTw7yuch6IPXtyZ2rY22LYXgRgFT3f62XaNTpDG6cuSsHA==
 
+nav-frontend-toggle-style@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/nav-frontend-toggle-style/-/nav-frontend-toggle-style-1.1.2.tgz#b85f26f18d63bc72b39be2c6f8537f25ba8f6a64"
+  integrity sha512-ma5DZTt5KNls2Wge3Z/iqbfjOsdhnGIgPhSRIc6YhmhRV6OqFSwbgsURbSmA1xUIoo2MygC9cXnBouYXt/pLww==
+
 nav-frontend-toggle@^0.0.57:
   version "0.0.57"
   resolved "https://registry.yarnpkg.com/nav-frontend-toggle/-/nav-frontend-toggle-0.0.57.tgz#d94fe016cbbcab89508c100f8467b877f7dbd9a0"
   integrity sha512-bozPtfSFR5PnZHhA5DGC4R/CKY4bmad8j8/sjTcHMaBW4nHZzCwhka2+BWhIH03O+TjG5bETzFOo0CWDmwOXdA==
+
+nav-frontend-toggle@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/nav-frontend-toggle/-/nav-frontend-toggle-1.1.2.tgz#a3be9702223e68fbf1cc88a173ca2c12553398c2"
+  integrity sha512-e7sV4uXzf37JIC7BBXNU7vTN4LiGce4xPMzhraXSgPYpt4jw/I9uNv+68RhTg8ygDp3IGDWcw7xvo1sy18/gBg==
 
 nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.34, nav-frontend-typografi-style@^1.0.35:
   version "1.0.35"

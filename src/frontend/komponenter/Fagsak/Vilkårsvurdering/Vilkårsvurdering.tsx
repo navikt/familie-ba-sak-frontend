@@ -12,7 +12,12 @@ import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserC
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { IAnnenVurdering, IVilkårResultat } from '../../../typer/vilkår';
+import {
+    annenVurderingConfig,
+    IAnnenVurdering,
+    IVilkårResultat,
+    vilkårConfig,
+} from '../../../typer/vilkår';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -116,12 +121,16 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         tittel={'For å gå videre må du rette opp følgende:'}
                         feil={[
                             ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
-                                feilmelding: `Vilkåret mangler resultat`,
+                                feilmelding: `Et vilkår av typen '${
+                                    vilkårConfig[vilkårResultat.vilkårType].tittel
+                                }' er ikke fullstendig`,
                                 skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
                             })),
                             ...hentAndreVurderingerMedFeil().map(
                                 (annenVurdering: IAnnenVurdering) => ({
-                                    feilmelding: `Annen vurdering mangler resultat`,
+                                    feilmelding: `Et vilkår av typen '${
+                                        annenVurderingConfig[annenVurdering.type].tittel
+                                    }' er ikke fullstendig`,
                                     skjemaelementId: annenVurderingFeilmeldingId(annenVurdering),
                                 })
                             ),
