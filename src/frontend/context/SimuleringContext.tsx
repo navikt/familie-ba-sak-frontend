@@ -39,7 +39,6 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             url: `/familie-ba-sak/api/vedtak/${aktivtVedtak?.id}/simulering`,
             påvirkerSystemLaster: true,
         }).then(response => {
-            console.log('setter resultat');
             settSimuleringresultat(response);
         });
     }, [aktivtVedtak]);
