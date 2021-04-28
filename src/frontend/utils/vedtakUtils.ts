@@ -3,11 +3,61 @@ import navFarger from 'nav-frontend-core';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import {
+    IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
+import { Vedtaksperiode, Vedtaksperiodetype } from '../typer/vedtaksperiode';
 import { Vilkårsbegrunnelser, VilkårType } from '../typer/vilkår';
+import familieDayjs, { familieDayjsDiff } from './familieDayjs';
+import { datoformat } from './formatter';
+
+export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
+    utbetalingsperioder: Vedtaksperiode[],
+    fastsatteVedtakBegrunnelser: IRestVedtakBegrunnelse[],
+    erLesevisning: boolean
+): Vedtaksperiode[] => {
+    return utbetalingsperioder
+        .slice()
+        .sort((a, b) =>
+            familieDayjsDiff(
+                familieDayjs(a.periodeFom, datoformat.ISO_DAG),
+                familieDayjs(b.periodeFom, datoformat.ISO_DAG)
+            )
+        )
+        .filter((vedtaksperiode: Vedtaksperiode) => {
+            return (
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
+            );
+        })
+        .filter((vedtaksperiode: Vedtaksperiode) => {
+            const vedtakBegrunnelserForPeriode = fastsatteVedtakBegrunnelser.filter(
+                (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
+                    return (
+                        vedtakBegrunnelse.begrunnelseType !== VedtakBegrunnelseType.AVSLAG &&
+                        vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
+                        vedtakBegrunnelse.tom === vedtaksperiode.periodeTom
+                    );
+                }
+            );
+
+            if (erLesevisning) {
+                // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
+                return !!vedtakBegrunnelserForPeriode.length;
+            } else {
+                // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
+                return (
+                    familieDayjsDiff(
+                        familieDayjs(vedtaksperiode.periodeFom),
+                        familieDayjs().startOf('month'),
+                        'month'
+                    ) < 2
+                );
+            }
+        });
+};
 
 export const finnVedtakBegrunnelseType = (
     vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>,
