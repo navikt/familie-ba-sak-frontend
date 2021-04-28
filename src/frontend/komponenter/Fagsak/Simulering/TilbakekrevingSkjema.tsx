@@ -65,6 +65,10 @@ const TilbakekrevingSkjemaGruppe = styled(SkjemaGruppe)`
     max-width: 25rem;
 `;
 
+interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
+    fritekst: string;
+}
+
 const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerMålform }) => {
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { skjema, hentFeilTilOppsummering } = useSimulering();
@@ -164,10 +168,15 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
                                     ikon={<DokumentIkon />}
                                     onClick={() =>
                                         åpenBehandling.status === RessursStatus.SUKSESS &&
-                                        hentForhåndsvisning({
-                                            method: 'GET',
-                                            url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
-                                        })
+                                        hentForhåndsvisning<IForhåndsvisTilbakekrevingsvarselbrevRequest>(
+                                            {
+                                                method: 'POST',
+                                                url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
+                                                data: {
+                                                    fritekst: skjema.felter.fritekstVarsel.verdi,
+                                                },
+                                            }
+                                        )
                                     }
                                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                                     knappPosisjon={'venstre'}
