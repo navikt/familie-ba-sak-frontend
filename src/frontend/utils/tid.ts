@@ -40,3 +40,7 @@ export const leggTilÅr = (dato: string, år: number) => {
 export const datoDagenFør = (dayjs: Dayjs): Dayjs => {
     return dayjs.subtract(1, 'day');
 };
+
+export const erISammeMåned = (dato1: Dayjs, dato2: Dayjs) => {
+    return dato1.get('month') === dato2.get('month') && dato1.get('year') === dato2.get('year');
+};
