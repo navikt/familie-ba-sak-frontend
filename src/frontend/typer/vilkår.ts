@@ -120,10 +120,6 @@ export type Vilkårsbegrunnelser = {
     [key in VedtakBegrunnelseType]: IRestVedtakBegrunnelseTilknyttetVilkår[];
 };
 
-type IVilkårsconfig = {
-    [key in VilkårType]: IVilkårConfig;
-};
-
 export interface IVilkårConfig {
     beskrivelse: string;
     key: string;
@@ -133,7 +129,7 @@ export interface IVilkårConfig {
     parterDetteGjelderFor: PersonType[];
 }
 
-export const vilkårConfig: IVilkårsconfig = {
+export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     UNDER_18_ÅR: {
         beskrivelse: 'under 18 år',
         key: 'UNDER_18_ÅR',
@@ -185,11 +181,7 @@ export interface IAnnenVurderingConfig {
     spørsmål?: (part?: string) => string;
 }
 
-type IAnnenVurderingsconfig = {
-    [key in AnnenVurderingType]: IAnnenVurderingConfig;
-};
-
-export const annenVurderingConfig: IAnnenVurderingsconfig = {
+export const annenVurderingConfig: Record<AnnenVurderingType, IAnnenVurderingConfig> = {
     OPPLYSNINGSPLIKT: {
         beskrivelse: 'Opplysningsplikt',
         key: 'OPPLYSNINGSPLIKT',
