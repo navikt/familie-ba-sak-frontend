@@ -98,6 +98,12 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 skjema.felter.målform.validerOgSettFelt(
                     åpenBehandling.søknadsgrunnlag.søkerMedOpplysninger.målform
                 );
+                skjema.felter.underkategori.validerOgSettFelt(
+                    åpenBehandling.søknadsgrunnlag.underkategori
+                );
+                skjema.felter.endringAvOpplysningerBegrunnelse.validerOgSettFelt(
+                    åpenBehandling.søknadsgrunnlag.endringAvOpplysningerBegrunnelse
+                );
             } else {
                 // Ny behandling er lastet som ikke har fullført søknad-steget.
                 tilbakestillSøknad();
