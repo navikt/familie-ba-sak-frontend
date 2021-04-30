@@ -7,7 +7,6 @@ import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IFagsak } from '../typer/fagsak';
 import { lagPeriodeId } from '../typer/periode';
-import { ToggleNavn } from '../typer/toggles';
 import {
     IRestAvslagbegrunnelser,
     IRestDeleteVedtakBegrunnelser,
@@ -17,7 +16,6 @@ import {
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
-import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 export interface IVedtakBegrunnelseSubmit {
@@ -40,7 +38,6 @@ interface IProps {
 const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
     ({ aktivVedtak, fagsak }: IProps) => {
         const { request } = useHttp();
-        const { toggles } = useApp();
 
         const { settFagsak } = useFagsakRessurser();
 
@@ -68,9 +65,7 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         useEffect(() => {
             if (aktivVedtak) {
                 settVedtakBegrunnelser(aktivVedtak.begrunnelser);
-                if (toggles[ToggleNavn.visAvslag]) {
-                    settAvslagBegrunnelser(aktivVedtak.avslagBegrunnelser);
-                }
+                settAvslagBegrunnelser(aktivVedtak.avslagBegrunnelser);
             }
         }, [aktivVedtak]);
 
