@@ -29,22 +29,30 @@ const visBeløp = (stønad: IInfotrygdStønad) => {
 
 // Anta at alle delytelser har samme fom
 const visDelytelseFom = (stønad: IInfotrygdStønad) => {
-    const fom = stønad.delytelse[0].fom;
-    return stønad.delytelse.every(delytelse => {
-        return fom === delytelse.fom;
-    })
-        ? fom
-        : 'Feil';
+    const fom = stønad.delytelse[0] ? stønad.delytelse[0].fom : undefined;
+    if (fom) {
+        return stønad.delytelse.every(delytelse => {
+            return fom === delytelse.fom;
+        })
+            ? fom
+            : 'Feil';
+    } else {
+        return '';
+    }
 };
 
 // Anta at alle delytelser har samme tom
 const visDelytelseTom = (stønad: IInfotrygdStønad) => {
-    const tom = stønad.delytelse[0].tom;
-    return stønad.delytelse.every(delytelse => {
-        return tom === delytelse.tom;
-    })
-        ? tom
-        : 'Feil';
+    const tom = stønad.delytelse[0] ? stønad.delytelse[0].tom : undefined;
+    if (tom) {
+        return stønad.delytelse.every(delytelse => {
+            return tom === delytelse.tom;
+        })
+            ? tom
+            : 'Feil';
+    } else {
+        return '';
+    }
 };
 
 export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
