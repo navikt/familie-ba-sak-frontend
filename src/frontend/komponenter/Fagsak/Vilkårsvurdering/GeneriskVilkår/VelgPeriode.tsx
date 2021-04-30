@@ -29,6 +29,7 @@ const StyledLegend = styled.legend`
     }
     .hjelpetekst .popover {
         z-index: 1000;
+        margin-left: 1rem;
     }
 `;
 
