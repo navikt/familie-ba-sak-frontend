@@ -132,18 +132,15 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         skjemanavn: 'Opprett tilbakekreving',
     });
 
-    const hentTilbakekreving = (): ITilbakekreving | undefined => {
+    const hentSkjemadata = (): ITilbakekreving | undefined => {
         return skjema.felter.tilbakekrevingsvalg.verdi && aktivtVedtak
             ? {
                   vedtakId: aktivtVedtak?.id,
                   valg: skjema.felter.tilbakekrevingsvalg.verdi,
                   begrunnelse: skjema.felter.begrunnelse.verdi,
-                  varsel:
-                      skjema.felter.fritekstVarsel.verdi === '' ||
-                      skjema.felter.tilbakekrevingsvalg.verdi !==
-                          Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
-                          ? undefined
-                          : skjema.felter.fritekstVarsel.verdi,
+                  varsel: skjema.felter.fritekstVarsel.erSynlig
+                      ? skjema.felter.fritekstVarsel.verdi
+                      : undefined,
               }
             : undefined;
     };
@@ -157,7 +154,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         hentFeilTilOppsummering,
         tilbakekrevingErToggletPå,
         erFeilutbetaling,
-        hentTilbakekreving,
+        hentSkjemadata,
     };
 });
 

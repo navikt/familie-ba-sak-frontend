@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.1.1",
+    "@navikt/ds-icons": "^0.2.1",
     "@navikt/familie-backend": "^5.0.21",
     "@navikt/familie-clipboard": "^3.1.0",
     "@navikt/familie-form-elements": "^2.2.18",
@@ -50,7 +51,6 @@
     "@types/react-collapse": "^5.0.0",
     "@types/react-dom": "^17.0.1",
     "@types/react-modal": "^3.10.5",
-    "@types/react-pdf": "^5.0.0",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-router-hash-link": "^1.2.1",
     "@types/request-promise": "^4.1.46",
@@ -117,7 +117,6 @@
     "react-day-picker": "^7.4.8",
     "react-dom": "^17.0.1",
     "react-modal": "^3.13.1",
-    "react-pdf": "^5.0.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.2.2",
