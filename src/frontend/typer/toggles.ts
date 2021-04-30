@@ -4,7 +4,6 @@ export interface IToggles {
 
 export enum ToggleNavn {
     visTekniskOpphør = 'familie-ba-sak.behandling.vis-teknisk-opphoer',
-    visAvslag = 'familie-ba-sak.behandling.vis-avslag',
     visSimulering = 'familie-ba-sak.behandling.vis-simulering',
     begrunnelseFritekst = 'familie-ba-sak.behandling.begrunnelse-fritekst',
     tilbakekreving = 'familie-ba-sak.behandling.tilbakekreving',
