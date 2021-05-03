@@ -24,4 +24,18 @@ describe('utils/familieDayjs', () => {
         expect(familieDayjsDiff(dato, differanseDato, 'month')).toEqual(12);
         expect(familieDayjsDiff(dato, differanseDato, 'day')).toEqual(366);
     });
+
+    test('familieDayjsDiff returnerer 0 måneders differanse hvis 30 dager eller mindre diff, tross ulike måneder', () => {
+        const dato = familieDayjs('2018-06-29');
+        const differanseDato = familieDayjs('2018-05-31');
+
+        expect(familieDayjsDiff(dato, differanseDato, 'year')).toEqual(0);
+    });
+
+    test('familieDayjsDiff returnerer 0 års differanse hvis 365 dager eller mindre diff, tross ulike årstall', () => {
+        const dato = familieDayjs('2019-06-30');
+        const differanseDato = familieDayjs('2020-05-17');
+
+        expect(familieDayjsDiff(dato, differanseDato, 'year')).toEqual(0);
+    });
 });

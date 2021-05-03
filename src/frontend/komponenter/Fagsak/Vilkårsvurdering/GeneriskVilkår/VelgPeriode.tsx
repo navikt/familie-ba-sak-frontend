@@ -27,6 +27,10 @@ const StyledLegend = styled.legend`
         display: flex;
         margin-bottom: 0;
     }
+    .hjelpetekst .popover {
+        z-index: 1000;
+        margin-left: 1rem;
+    }
 `;
 
 const StyledElement = styled(Element)`

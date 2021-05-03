@@ -4,12 +4,10 @@ import styled from 'styled-components';
 
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../typer/vedtak';
 import {
     IUtbetalingsperiodeDetalj,
@@ -47,7 +45,6 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     åpenBehandling,
 }) => {
     const { erLesevisning } = useBehandling();
-    const { toggles } = useApp();
 
     const { ekspandertBegrunnelse, toggleForm } = useFritekstVedtakBegrunnelser();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
@@ -103,7 +100,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                         vedtaksperiode={vedtaksperiode}
                     />
                 </div>
-                {harBegrunnelserMedFritekstMulighet && toggles[ToggleNavn.begrunnelseFritekst] && (
+                {harBegrunnelserMedFritekstMulighet && (
                     <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
                 )}
             </UtbetalingsperiodepanelBody>
