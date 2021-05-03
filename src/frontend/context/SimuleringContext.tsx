@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import constate from 'constate';
-import dayjs from 'dayjs';
 
 import { useHttp } from '@navikt/familie-http';
 import { useSkjema, useFelt, feil, ok, Avhengigheter } from '@navikt/familie-skjema';
@@ -10,12 +9,7 @@ import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 import { aktivVedtakPåBehandling } from '../api/fagsak';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import {
-    ISimuleringPeriode,
-    ISimuleringDTO,
-    Tilbakekrevingsvalg,
-    ITilbakekreving,
-} from '../typer/simulering';
+import { ISimuleringDTO, Tilbakekrevingsvalg, ITilbakekreving } from '../typer/simulering';
 import { ToggleNavn } from '../typer/toggles';
 import { useApp } from './AppContext';
 
@@ -40,9 +34,6 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             settSimuleringresultat(response);
         });
     }, [aktivtVedtak]);
-
-    const hentÅrISimuleringen = (perioder: ISimuleringPeriode[]): number[] =>
-        [...new Set(perioder.map(periode => dayjs(periode.fom).year()))].sort();
 
     const tilbakekrevingErToggletPå = toggles[ToggleNavn.tilbakekreving];
 
@@ -121,7 +112,6 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     return {
         simuleringsresultat,
-        hentÅrISimuleringen,
         skjema,
         onSubmit,
         hentFeilTilOppsummering,

@@ -27,3 +27,6 @@ export const hentPeriodelisteMedTommePerioder = (
     perioder.sort((a, b) => (dayjs(a.fom).isAfter(dayjs(b.fom)) ? 1 : -1));
     return perioder;
 };
+
+export const hentÅrISimuleringen = (perioder: ISimuleringPeriode[]): number[] =>
+    [...new Set(perioder.map(periode => dayjs(periode.fom).year()))].sort();
