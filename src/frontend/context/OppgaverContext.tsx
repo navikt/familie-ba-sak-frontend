@@ -9,6 +9,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
+    byggSuksessRessurs,
     byggTomRessurs,
     Ressurs,
     RessursStatus,
@@ -282,7 +283,39 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
               )
             : [];
 
-    const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
+    const erBrukerMigrertTilBaSak = async (
+        bruker: string | undefined
+    ): Promise<Ressurs<{ brukerErMigrert: boolean }>> => {
+        if (bruker) {
+            return await request<{ ident: string }, { harLøpendeSak: boolean }>({
+                method: 'POST',
+                data: { ident: bruker },
+                url: '/familie-ba-sak/api/infotrygd/har-lopende-sak',
+            })
+                .then((res: Ressurs<{ harLøpendeSak: boolean }>) => {
+                    if (res.status !== RessursStatus.SUKSESS) {
+                        return byggFeiletRessurs<{ brukerErMigrert: boolean }>(
+                            'Feil ved kall mot backend (har-lopende-sak)'
+                        );
+                    } else if (res.data.harLøpendeSak) {
+                        return byggSuksessRessurs({ brukerErMigrert: false });
+                    } else {
+                        return byggSuksessRessurs({ brukerErMigrert: true });
+                    }
+                })
+                .catch((_error: AxiosError) => {
+                    return byggFeiletRessurs('Ukjent feil ved kall mot backend (har-lopende-sak)');
+                });
+        } else {
+            return byggSuksessRessurs({ brukerErMigrert: true });
+        }
+    };
+
+    const fordelOppgave = (
+        oppgave: IOppgave,
+        saksbehandler: string,
+        bruker?: string
+    ): Promise<Ressurs<string>> => {
         return request<void, string>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
@@ -292,14 +325,31 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
                     OppgavetypeFilter.JFR
                 ) {
-                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                    console.log('0');
+                    return erBrukerMigrertTilBaSak(bruker).then(res => {
+                        console.log('1');
+                        if (res.status === RessursStatus.SUKSESS) {
+                            if (res.data.brukerErMigrert) {
+                                console.log('a');
+                                history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                            } else {
+                                console.log('b');
+                                history.push(`/infotrygd`);
+                            }
+                            return byggSuksessRessurs<string>('');
+                        } else {
+                            return res;
+                        }
+                    });
                 } else {
                     if (oppgave.aktoerId)
                         opprettEllerHentFagsak({
                             personIdent: null,
                             aktørId: oppgave.aktoerId,
                         });
-                    else byggFeiletRessurs('Oppgave mangler aktørid');
+                    else {
+                        return byggFeiletRessurs<string>('Oppgave mangler aktørid');
+                    }
                 }
                 return oppgaverRes;
             })

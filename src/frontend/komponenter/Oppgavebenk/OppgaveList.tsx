@@ -50,6 +50,10 @@ const OppgaveList: React.FunctionComponent = () => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
 
         if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
+            // sjekk om bruker har løpende sak ved å kalle ba-sak.
+            // Dersom bruker har løpende sak, gå til /infotrygd.
+            // Hvis ikke, kjør history.push().
+            // Dette kan være en egen funksjon, delt av plukk / gå til oppg.
             history.push(`/oppgaver/journalfør/${oppgave.id}`);
         }
     };

@@ -91,15 +91,19 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                     key={'plukk'}
                     onClick={async () => {
                         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
+                        console.log('x');
 
                         if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
-                            fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                                (oppgaveResponse: Ressurs<string>) => {
-                                    if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                        settFeilmelding(oppgaveResponse.frontendFeilmelding);
-                                    }
+                            console.log('y');
+                            fordelOppgave(
+                                oppgave,
+                                innloggetSaksbehandler?.navIdent,
+                                brukerident
+                            ).then((oppgaveResponse: Ressurs<string>) => {
+                                if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                    settFeilmelding(oppgaveResponse.frontendFeilmelding);
                                 }
-                            );
+                            });
                         }
                     }}
                     children={'Plukk'}
