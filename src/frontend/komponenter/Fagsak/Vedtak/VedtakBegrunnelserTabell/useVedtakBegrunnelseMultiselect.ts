@@ -18,16 +18,14 @@ import {
     Resultat,
     VilkårType,
 } from '../../../../typer/vilkår';
-import { Dayjs, familieDayjsDiff } from '../../../../utils/familieDayjs';
 import { isoStringToDayjs } from '../../../../utils/formatter';
+import { erISammeMåned } from '../../../../utils/tid';
 
 export const hentUtgjørendeVilkårImpl = (
     begrunnelseType: VedtakBegrunnelseType,
     personResultater: IRestPersonResultat[],
     vedtaksperiode: Vedtaksperiode
 ): VilkårType[] => {
-    const erSammeMåned = (dato1: Dayjs, dato2: Dayjs) =>
-        familieDayjsDiff(dato1, dato2, 'month') === 0;
     return personResultater
         .flatMap(personResultat => personResultat.vilkårResultater)
         .filter((vilkårResultat: IRestVilkårResultat) => {
@@ -39,7 +37,7 @@ export const hentUtgjørendeVilkårImpl = (
 
             if (begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                 return (
-                    erSammeMåned(vilkårPeriodeFom, vedtakPeriodeFom.subtract(1, 'month')) &&
+                    erISammeMåned(vilkårPeriodeFom, vedtakPeriodeFom.subtract(1, 'month')) &&
                     vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else if (
@@ -47,7 +45,7 @@ export const hentUtgjørendeVilkårImpl = (
                 begrunnelseType === VedtakBegrunnelseType.OPPHØR
             ) {
                 return (
-                    erSammeMåned(
+                    erISammeMåned(
                         vilkårPeriodeTom,
                         vedtakPeriodeFom.subtract(oppfyltTomMånedEtter, 'month')
                     ) && vilkårResultat.resultat === Resultat.OPPFYLT

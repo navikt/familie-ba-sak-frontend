@@ -200,9 +200,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                     />
                     <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                         <BegrunnelseTabell åpenBehandling={åpenBehandling} />
-                        {toggles[ToggleNavn.visAvslag] && (
-                            <AvslagTabell åpenBehandling={åpenBehandling} />
-                        )}
+                        <AvslagTabell åpenBehandling={åpenBehandling} />
                     </VedtakBegrunnelserProvider>
                     <Knapp
                         mini={true}

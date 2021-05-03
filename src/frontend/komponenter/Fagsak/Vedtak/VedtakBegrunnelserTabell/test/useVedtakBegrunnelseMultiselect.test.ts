@@ -14,8 +14,8 @@ describe('useVedtakBegrunnelseMultiselect', () => {
         // Barn 2 har lovlig opphold april - november
         //
         // Det vil si:
-        // mai - juni: innvilget to barn pga BOR_MED_SØKER og LOVLIG_OPPHOLD
-        // juli - nov: redusert pga BOR_MED_SØKER
+        // mai: innvilget to barn pga BOR_MED_SØKER og LOVLIG_OPPHOLD
+        // juni - nov: redusert pga BOR_MED_SØKER
         // des - : opphør pga LOVLIG_OPPHOLD
 
         const personResultater = [
@@ -41,7 +41,7 @@ describe('useVedtakBegrunnelseMultiselect', () => {
 
         const innvilgelseperiode: Vedtaksperiode = {
             periodeFom: '2010-05-01',
-            periodeTom: '2010-06-30',
+            periodeTom: '2010-05-31',
             vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
             utbetalingsperiodeDetaljer: [],
             ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
@@ -49,7 +49,7 @@ describe('useVedtakBegrunnelseMultiselect', () => {
             utbetaltPerMnd: 2108,
         };
         const reduksjonsperiode: Vedtaksperiode = {
-            periodeFom: '2010-07-01',
+            periodeFom: '2010-06-01',
             periodeTom: '2010-11-30',
             vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
             utbetalingsperiodeDetaljer: [],
