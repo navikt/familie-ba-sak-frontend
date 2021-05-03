@@ -33,10 +33,13 @@ const StyledInnholdstittel = styled(Innholdstittel)`
 `;
 
 const Navigering = styled.div`
-    padding: 1rem 0;
+    margin: 4rem 0 1rem;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: start;
+    button:not(:first-child) {
+        margin-left: 1rem;
+    }
 `;
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
@@ -75,7 +78,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             {children}
 
             <Navigering>
-                {forrigeOnClick && skalViseForrigeKnapp ? (
+                {forrigeOnClick && skalViseForrigeKnapp && (
                     <Knapp
                         onClick={() => {
                             forrigeOnClick();
@@ -83,10 +86,8 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         mini={true}
                         children={forrigeKnappTittel ?? 'Forrige'}
                     />
-                ) : (
-                    <div />
                 )}
-                {nesteOnClick && skalViseNesteKnapp ? (
+                {nesteOnClick && skalViseNesteKnapp && (
                     <Knapp
                         type={'hoved'}
                         spinner={senderInn}
@@ -99,8 +100,6 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         mini={true}
                         children={nesteKnappTittel ?? 'Neste'}
                     />
-                ) : (
-                    <div />
                 )}
             </Navigering>
         </Container>
