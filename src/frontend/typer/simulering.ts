@@ -27,4 +27,5 @@ export interface ITilbakekreving {
     valg: Tilbakekrevingsvalg;
     varsel?: string;
     begrunnelse: string;
+    tilbakekrevingsbehandlingId: string;
 }
