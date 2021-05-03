@@ -8,11 +8,11 @@ import 'nav-frontend-tabell-style';
 import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { useSimulering } from '../../../context/SimuleringContext';
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
 import { formaterBeløp } from '../../../utils/formatter';
+import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 import TidslinjeNavigering from '../TilkjentYtelse/TidslinjeNavigering';
 
 const Årsvelger = styled.div`
@@ -86,9 +86,8 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         perioder: perioderUtenTommeSimuleringer,
         tomDatoNestePeriode,
     } = simulering;
-    const { hentPerioderMedTommePerioder, hentÅrISimuleringen } = useSimulering();
     const årISimuleringen = hentÅrISimuleringen(perioderUtenTommeSimuleringer);
-    const perioder = hentPerioderMedTommePerioder(perioderUtenTommeSimuleringer);
+    const perioder = hentPeriodelisteMedTommePerioder(perioderUtenTommeSimuleringer);
     const [indexFramvistÅr, settIndexFramistÅr] = useState(årISimuleringen.length - 1);
     const aktueltÅr = årISimuleringen[indexFramvistÅr];
 
