@@ -38,7 +38,7 @@ const StyledInnholdstittel = styled(Innholdstittel)`
 const Navigering = styled.div`
     padding: 1rem 0;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     justify-content: space-between;
 `;
 
@@ -85,22 +85,6 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             {children}
 
             <Navigering>
-                {nesteOnClick && skalViseNesteKnapp ? (
-                    <Knapp
-                        type={'hoved'}
-                        spinner={senderInn}
-                        disabled={senderInn}
-                        onClick={() => {
-                            if (!senderInn) {
-                                nesteOnClick();
-                            }
-                        }}
-                        mini={true}
-                        children={nesteKnappTittel ?? 'Neste'}
-                    />
-                ) : (
-                    <div />
-                )}
                 <div>
                     {forrigeOnClick && skalViseForrigeKnapp ? (
                         <Knapp
@@ -125,6 +109,22 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         <div />
                     )}
                 </div>
+                {nesteOnClick && skalViseNesteKnapp ? (
+                    <Knapp
+                        type={'hoved'}
+                        spinner={senderInn}
+                        disabled={senderInn}
+                        onClick={() => {
+                            if (!senderInn) {
+                                nesteOnClick();
+                            }
+                        }}
+                        mini={true}
+                        children={nesteKnappTittel ?? 'Neste'}
+                    />
+                ) : (
+                    <div />
+                )}
             </Navigering>
         </Container>
     );
