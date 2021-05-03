@@ -18,6 +18,7 @@ import {
 } from '../typer/simulering';
 import { ToggleNavn } from '../typer/toggles';
 import familieDayjs from '../utils/familieDayjs';
+import { datoformat } from '../utils/formatter';
 import { useApp } from './AppContext';
 
 interface IProps {
@@ -50,10 +51,11 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             .sort((a, b) => (dayjs(a).isAfter(dayjs(b)) ? 1 : -1));
         const førstePeriode = fomDatoer[0];
         const sistePeriode = fomDatoer[fomDatoer.length - 1];
-
         let aktuellPeriode = førstePeriode;
         for (let i = 0; i < dayjs(sistePeriode).diff(dayjs(førstePeriode), 'M'); i++) {
-            aktuellPeriode = familieDayjs(aktuellPeriode).add(1, 'M').format();
+            aktuellPeriode = familieDayjs(aktuellPeriode, datoformat.ISO_DAG)
+                .add(1, 'M')
+                .format(datoformat.ISO_DAG);
             if (!fomDatoer.includes(aktuellPeriode)) {
                 perioder.push({
                     fom: aktuellPeriode,
@@ -130,18 +132,15 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         skjemanavn: 'Opprett tilbakekreving',
     });
 
-    const hentTilbakekreving = (): ITilbakekreving | undefined => {
+    const hentSkjemadata = (): ITilbakekreving | undefined => {
         return skjema.felter.tilbakekrevingsvalg.verdi && aktivtVedtak
             ? {
                   vedtakId: aktivtVedtak?.id,
                   valg: skjema.felter.tilbakekrevingsvalg.verdi,
                   begrunnelse: skjema.felter.begrunnelse.verdi,
-                  varsel:
-                      skjema.felter.fritekstVarsel.verdi === '' ||
-                      skjema.felter.tilbakekrevingsvalg.verdi !==
-                          Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
-                          ? undefined
-                          : skjema.felter.fritekstVarsel.verdi,
+                  varsel: skjema.felter.fritekstVarsel.erSynlig
+                      ? skjema.felter.fritekstVarsel.verdi
+                      : undefined,
               }
             : undefined;
     };
@@ -155,7 +154,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         hentFeilTilOppsummering,
         tilbakekrevingErToggletPå,
         erFeilutbetaling,
-        hentTilbakekreving,
+        hentSkjemadata,
     };
 });
 

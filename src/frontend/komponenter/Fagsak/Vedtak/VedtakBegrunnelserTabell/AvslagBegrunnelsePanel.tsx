@@ -4,10 +4,8 @@ import styled from 'styled-components';
 
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { useApp } from '../../../../context/AppContext';
 import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
@@ -30,8 +28,6 @@ const PanelBody = styled.div`
 `;
 
 const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({ vedtaksperiode }) => {
-    const { toggles } = useApp();
-
     const { avslagBegrunnelser } = useVedtakBegrunnelser();
     const { ekspandertBegrunnelse, toggleForm } = useFritekstVedtakBegrunnelser();
 
@@ -58,10 +54,7 @@ const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({ vedtakspe
                             ))}
                     </ul>
                 </div>
-
-                {toggles[ToggleNavn.begrunnelseFritekst] && (
-                    <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
-                )}
+                <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
             </PanelBody>
         </EkspanderbartBegrunnelsePanel>
     );

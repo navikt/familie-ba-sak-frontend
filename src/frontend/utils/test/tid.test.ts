@@ -5,6 +5,7 @@ import familieDayjs from '../familieDayjs';
 import { datoformat } from '../formatter';
 import {
     datoDagenFør,
+    erISammeMåned,
     hentFørsteDagIYearMonth,
     hentSisteDagIYearMonth,
     leggTilÅr,
@@ -83,6 +84,33 @@ describe('utils/tid', () => {
         });
         test('Legger til 4 år på dato 29. februar i et skuddår', () => {
             expect(leggTilÅr('2020-02-29', 4)).toStrictEqual(dayjs(new Date('2024-02-29')));
+        });
+    });
+
+    describe('Returnerer om datoer er innenfor samme måned', () => {
+        test('Datoer innenfor samme måned returnerer true', () => {
+            expect(
+                erISammeMåned(
+                    familieDayjs('2018-10-31', datoformat.ISO_DAG),
+                    familieDayjs('2018-10-01', datoformat.ISO_DAG)
+                )
+            ).toEqual(true);
+        });
+        test('Datoer i forskjellige måneder samme år returnerer false', () => {
+            expect(
+                erISammeMåned(
+                    familieDayjs('2018-10-31', datoformat.ISO_DAG),
+                    familieDayjs('2018-11-01', datoformat.ISO_DAG)
+                )
+            ).toEqual(false);
+        });
+        test('Datoer i samme måned ulike år returnerer false', () => {
+            expect(
+                erISammeMåned(
+                    familieDayjs('2018-10-31', datoformat.ISO_DAG),
+                    familieDayjs('2019-10-31', datoformat.ISO_DAG)
+                )
+            ).toEqual(false);
         });
     });
 });

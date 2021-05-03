@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import {
     ActionMeta,
@@ -136,16 +136,22 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                     option.value as VedtakBegrunnelse
                 );
 
-                return formatOptionLabelMeta.context === 'value'
-                    ? `${vedtakBegrunnelseTyper[vedtakBegrunnelseType as VedtakBegrunnelseType]}: ${
-                          option.label
-                      }`
-                    : option.label;
+                if (formatOptionLabelMeta.context === 'value') {
+                    const type =
+                        vedtakBegrunnelseTyper[vedtakBegrunnelseType as VedtakBegrunnelseType];
+                    return (
+                        <Normaltekst>
+                            <b>{type}</b>: {option.label}
+                        </Normaltekst>
+                    );
+                } else {
+                    return <Normaltekst>{option.label}</Normaltekst>;
+                }
             }}
             formatGroupLabel={(group: GroupType<ISelectOption>) => {
                 return (
                     <GroupLabel>
-                        <Normaltekst>{group.label}</Normaltekst>
+                        <Element>{group.label}</Element>
                         <hr />
                     </GroupLabel>
                 );

@@ -30,14 +30,15 @@ const StyledAlertstripe = styled(Alertstripe)`
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling, fagsak }) => {
     const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
+
     const history = useHistory();
     const {
+        erFeilutbetaling,
+        hentSkjemadata,
+        onSubmit,
         simuleringsresultat,
         skjema,
-        onSubmit,
-        erFeilutbetaling,
         tilbakekrevingErToggletPå,
-        hentTilbakekreving,
     } = useSimulering();
 
     const { settFagsak } = useFagsakRessurser();
@@ -45,7 +46,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const nesteOnClick = () => {
         onSubmit<ITilbakekreving | undefined>(
             {
-                data: hentTilbakekreving(),
+                data: hentSkjemadata(),
                 method: 'POST',
                 url: `/familie-ba-sak/api/vedtak/${aktivtVedtak?.id}/tilbakekreving`,
             },
@@ -85,37 +86,36 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            <>
-                {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
-                    simuleringsresultat.data.perioder.length === 0 ? (
-                        <Alertstripe type="info">
-                            Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
-                        </Alertstripe>
-                    ) : (
-                        <>
-                            <SimuleringPanel simulering={simuleringsresultat.data} />
-                            <SimuleringTabell simulering={simuleringsresultat.data} />
-                            {tilbakekrevingErToggletPå && erFeilutbetaling && (
-                                <TilbakekrevingSkjema
-                                    søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                />
-                            )}
-                        </>
-                    )
-                ) : (
+            {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
+                simuleringsresultat.data.perioder.length === 0 ? (
                     <Alertstripe type="info">
-                        Det har skjedd en feil: {simuleringsresultat?.frontendFeilmelding}
+                        Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
                     </Alertstripe>
-                )}
-                {(skjema.submitRessurs.status === RessursStatus.FEILET ||
-                    skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <StyledAlertstripe type="feil">
-                        Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
-                        {skjema.submitRessurs.frontendFeilmelding}
-                    </StyledAlertstripe>
-                )}
-            </>
+                ) : (
+                    <>
+                        <SimuleringPanel simulering={simuleringsresultat.data} />
+                        <SimuleringTabell simulering={simuleringsresultat.data} />
+                        {tilbakekrevingErToggletPå && erFeilutbetaling && (
+                            <TilbakekrevingSkjema
+                                søkerMålform={hentSøkersMålform(åpenBehandling)}
+                            />
+                        )}
+                    </>
+                )
+            ) : (
+                <Alertstripe type="info">
+                    Det har skjedd en feil: {simuleringsresultat?.frontendFeilmelding}
+                </Alertstripe>
+            )}
+
+            {(skjema.submitRessurs.status === RessursStatus.FEILET ||
+                skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
+                <StyledAlertstripe type="feil">
+                    Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
+                    {skjema.submitRessurs.frontendFeilmelding}
+                </StyledAlertstripe>
+            )}
         </Skjemasteg>
     );
 };

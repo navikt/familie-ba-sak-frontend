@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import Modal from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
 
-import { hentDataFraRessursMedFallback, Ressurs, RessursStatus } from '@navikt/familie-typer';
-
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 interface IPdfVisningModalProps {
     onRequestClose: () => void;
@@ -17,6 +15,17 @@ interface IPdfVisningModalProps {
     pdfdata: Ressurs<string>;
     åpen: boolean;
 }
+
+const StyledModal = styled(Modal)`
+    width: 80%;
+    height: 80%;
+
+    section {
+        height: 100%;
+        width: 90%;
+        margin: 0 auto;
+    }
+`;
 
 const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
     onRequestClose,
@@ -33,20 +42,24 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({
     }, [åpen]);
 
     return (
-        <Modal
+        <StyledModal
             className={'pdfvisning-modal'}
             isOpen={åpen}
             onRequestClose={onRequestClose}
             contentLabel={'pdfvisning'}
         >
             <Dokument pdfdata={pdfdata} />
-        </Modal>
+        </StyledModal>
     );
 };
 
-const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
-    const [antallSider, settAntallSider] = React.useState<number>(0);
+const IframePdfVisning = styled.iframe`
+    maring: 0 auto;
+    height: 100%;
+    width: 100%;
+`;
 
+const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
     switch (pdfdata.status) {
         case RessursStatus.HENTER:
             return (
@@ -56,38 +69,7 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
                 </div>
             );
         case RessursStatus.SUKSESS:
-            return (
-                <Document
-                    className={'pdfvisning-modal__dokument'}
-                    file={hentDataFraRessursMedFallback(pdfdata, undefined)}
-                    error={
-                        <AlertStripeFeil
-                            className={'pdfvisning-modal__document--feil'}
-                            children={'Ukjent feil ved henting av dokument.'}
-                        />
-                    }
-                    noData={
-                        <AlertStripeFeil
-                            className={'pdfvisning-modal__document--feil'}
-                            children={'Dokumentet er tomt.'}
-                        />
-                    }
-                    loading={<NavFrontendSpinner className={'skjemamodal__spinner--item'} />}
-                    onLoadSuccess={({ numPages }) => settAntallSider(numPages)}
-                >
-                    <div className={'pdfvisning-modal__document--pages'}>
-                        {antallSider > 0 &&
-                            [...Array(antallSider)].map((_: number, index: number) => {
-                                return (
-                                    <div key={index + 1}>
-                                        <Page pageNumber={index + 1} />
-                                        <hr />
-                                    </div>
-                                );
-                            })}
-                    </div>
-                </Document>
-            );
+            return <IframePdfVisning title={'Dokument'} src={pdfdata.data} />;
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
