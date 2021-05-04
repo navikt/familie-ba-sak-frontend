@@ -21,6 +21,7 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { erProd } from '../../../utils/miljø';
 
 interface IBehandlingshistorikkProps {
     fagsak: IFagsak;
@@ -115,7 +116,14 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                 {behandling.tilbakekreving
                                                     ?.tilbakekrevingsbehandlingId ? (
                                                     <Lenke
-                                                        href={`https://familie-tilbake-frontend.dev.intern.nav.no/fagsystem/BA/fagsak/${fagsak.id}/behandling/${behandling.tilbakekreving.tilbakekrevingsbehandlingId}`}
+                                                        href={`https://familie-tilbake-frontend${
+                                                            erProd() ? '' : '.dev'
+                                                        }.intern.nav.no/fagsystem/BA/fagsak/${
+                                                            fagsak.id
+                                                        }/behandling/${
+                                                            behandling.tilbakekreving
+                                                                .tilbakekrevingsbehandlingId
+                                                        }`}
                                                     >
                                                         Ja
                                                     </Lenke>
