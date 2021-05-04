@@ -15,8 +15,7 @@ import { formaterBeløp, isoStringToDayjs } from '../../../../../utils/formatter
 import { sisteDagInneværendeMåned } from '../../../../../utils/tid';
 
 const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
-    margin-bottom: 1.5rem;
-    max-width: 49rem;
+    margin-bottom: 1rem;
 
     .ekspanderbartPanel__hode {
         padding: 0 1rem 0 1.6rem;
