@@ -23,6 +23,7 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
+import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import {
     BehandlerRolle,
     BehandlingStatus,
@@ -35,6 +36,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -48,6 +50,13 @@ interface IVedtakProps {
 
 const StyledFeilmelding = styled(Feilmelding)`
     margin-top: 1rem;
+`;
+
+const Container = styled.div`
+    max-width: 49rem;
+    #forhandsvis-vedtaksbrev {
+        float: right;
+    }
 `;
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
@@ -198,16 +207,23 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         }}
                         pdfdata={vedtaksbrev}
                     />
-                    <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                        <BegrunnelseTabell åpenBehandling={åpenBehandling} />
-                        <AvslagTabell åpenBehandling={åpenBehandling} />
-                    </VedtakBegrunnelserProvider>
-                    <Knapp
-                        mini={true}
-                        onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
-                        children={'Vis vedtaksbrev'}
-                    />
-                    {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
+                    <Container>
+                        <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+                            <BegrunnelseTabell åpenBehandling={åpenBehandling} />
+                            <AvslagTabell åpenBehandling={åpenBehandling} />
+                        </VedtakBegrunnelserProvider>
+                        <IkonKnapp
+                            id={'forhandsvis-vedtaksbrev'}
+                            erLesevisning={false}
+                            label={'Vis vedtaksbrev'}
+                            ikon={<DokumentIkon />}
+                            onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
+                            spinner={vedtaksbrev.status === RessursStatus.HENTER}
+                            knappPosisjon={'venstre'}
+                            mini={true}
+                        />
+                        {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
+                    </Container>
                     {visModal && (
                         <UIModalWrapper
                             modal={{

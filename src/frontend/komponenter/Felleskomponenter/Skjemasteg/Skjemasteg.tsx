@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Innholdstittel } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -16,13 +16,10 @@ interface IProps {
     forrigeOnClick?: () => void;
     nesteKnappTittel?: string;
     nesteOnClick?: () => void;
-    tilbakestillOnClick?: () => void;
-    tilbakestillKnappTittel?: string;
     senderInn: boolean;
     tittel: string;
     maxWidthStyle?: string;
     skalViseNesteKnapp?: boolean;
-    skalViseTilbakestillKnapp?: boolean;
     skalViseForrigeKnapp?: boolean;
 }
 
@@ -36,14 +33,13 @@ const StyledInnholdstittel = styled(Innholdstittel)`
 `;
 
 const Navigering = styled.div`
-    padding: 1rem 0;
+    margin: 4rem 0 1rem;
     display: flex;
     flex-direction: row-reverse;
-    justify-content: space-between;
-`;
-
-const TilbakestillKnapp = styled(Flatknapp)`
-    margin-left: 20px;
+    justify-content: end;
+    button:not(:first-child) {
+        margin-right: 1rem;
+    }
 `;
 
 const Skjemasteg: React.FunctionComponent<IProps> = ({
@@ -53,13 +49,10 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     forrigeOnClick,
     nesteKnappTittel,
     nesteOnClick,
-    tilbakestillOnClick,
-    tilbakestillKnappTittel,
     senderInn,
     tittel,
     maxWidthStyle = '40rem',
     skalViseNesteKnapp = true,
-    skalViseTilbakestillKnapp,
     skalViseForrigeKnapp = true,
 }) => {
     const history = useHistory();
@@ -85,7 +78,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             {children}
 
             <Navigering>
-                {nesteOnClick && skalViseNesteKnapp ? (
+                {nesteOnClick && skalViseNesteKnapp && (
                     <Knapp
                         type={'hoved'}
                         spinner={senderInn}
@@ -98,33 +91,16 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         mini={true}
                         children={nesteKnappTittel ?? 'Neste'}
                     />
-                ) : (
-                    <div />
                 )}
-                <div>
-                    {forrigeOnClick && skalViseForrigeKnapp ? (
-                        <Knapp
-                            onClick={() => {
-                                forrigeOnClick();
-                            }}
-                            mini={true}
-                            children={forrigeKnappTittel ?? 'Forrige'}
-                        />
-                    ) : (
-                        <div />
-                    )}
-                    {tilbakestillOnClick && skalViseTilbakestillKnapp ? (
-                        <TilbakestillKnapp
-                            onClick={() => {
-                                tilbakestillOnClick();
-                            }}
-                            mini={true}
-                            children={tilbakestillKnappTittel ?? 'Tilbakestill'}
-                        />
-                    ) : (
-                        <div />
-                    )}
-                </div>
+                {forrigeOnClick && skalViseForrigeKnapp && (
+                    <Knapp
+                        onClick={() => {
+                            forrigeOnClick();
+                        }}
+                        mini={true}
+                        children={forrigeKnappTittel ?? 'Forrige'}
+                    />
+                )}
             </Navigering>
         </Container>
     );
