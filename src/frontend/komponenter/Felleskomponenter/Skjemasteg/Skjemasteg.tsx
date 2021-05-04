@@ -35,10 +35,10 @@ const StyledInnholdstittel = styled(Innholdstittel)`
 const Navigering = styled.div`
     margin: 4rem 0 1rem;
     display: flex;
-    flex-direction: row;
-    justify-content: start;
+    flex-direction: row-reverse;
+    justify-content: end;
     button:not(:first-child) {
-        margin-left: 1rem;
+        margin-right: 1rem;
     }
 `;
 
@@ -78,15 +78,6 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             {children}
 
             <Navigering>
-                {forrigeOnClick && skalViseForrigeKnapp && (
-                    <Knapp
-                        onClick={() => {
-                            forrigeOnClick();
-                        }}
-                        mini={true}
-                        children={forrigeKnappTittel ?? 'Forrige'}
-                    />
-                )}
                 {nesteOnClick && skalViseNesteKnapp && (
                     <Knapp
                         type={'hoved'}
@@ -99,6 +90,15 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                         }}
                         mini={true}
                         children={nesteKnappTittel ?? 'Neste'}
+                    />
+                )}
+                {forrigeOnClick && skalViseForrigeKnapp && (
+                    <Knapp
+                        onClick={() => {
+                            forrigeOnClick();
+                        }}
+                        mini={true}
+                        children={forrigeKnappTittel ?? 'Forrige'}
                     />
                 )}
             </Navigering>
