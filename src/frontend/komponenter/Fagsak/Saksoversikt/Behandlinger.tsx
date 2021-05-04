@@ -46,9 +46,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                             <th children={'Status'} />
                             <th children={'Vedtaksdato'} />
                             <th children={'Resultat'} />
-                            {tilbakekrevingErToggletPå === true && (
-                                <th children={'Tilbakekreving?'} />
-                            )}
+                            {tilbakekrevingErToggletPå && <th children={'Tilbakekreving?'} />}
                         </tr>
                     </thead>
                     <tbody>
@@ -112,16 +110,17 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                 '-'
                                             )}
                                         </td>
-                                        {tilbakekrevingErToggletPå === true && (
+                                        {tilbakekrevingErToggletPå && (
                                             <td>
-                                                {behandling.tilbakekreving ? (
+                                                {behandling.tilbakekreving
+                                                    ?.tilbakekrevingsbehandlingId ? (
                                                     <Lenke
                                                         href={`https://familie-tilbake-frontend.dev.intern.nav.no/fagsystem/BA/fagsak/${fagsak.id}/behandling/${behandling.tilbakekreving.tilbakekrevingsbehandlingId}`}
                                                     >
-                                                        'Ja'
+                                                        Ja
                                                     </Lenke>
                                                 ) : (
-                                                    '-'
+                                                    <Normaltekst>-</Normaltekst>
                                                 )}
                                             </td>
                                         )}
