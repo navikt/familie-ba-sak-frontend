@@ -36,7 +36,7 @@ const Navigering = styled.div`
     margin: 4rem 0 1rem;
     display: flex;
     flex-direction: row-reverse;
-    justify-content: end;
+    justify-content: flex-end;
     button:not(:first-child) {
         margin-right: 1rem;
     }
