@@ -1,7 +1,7 @@
+import { FamilieIsoDate } from '../utils/kalender';
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
 import { IGrunnlagPerson } from './person';
-import { FamilieIsoDate } from './tid';
 
 export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',

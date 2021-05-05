@@ -9,7 +9,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { ISimuleringDTO } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
-import { formaterBeløp, formaterIsoDato, datoformat } from '../../../utils/formatter';
+import { formaterBeløp } from '../../../utils/formatter';
 import { dagenFør, kalenderDato } from '../../../utils/kalender';
 import { tilVisning } from '../../../utils/kalender/formatter';
 
@@ -82,9 +82,8 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <Element>
                                 Totalt{' '}
                                 {perioder.length > 1 &&
-                                    `for perioden ${formaterIsoDato(
-                                        fom,
-                                        datoformat.DATO
+                                    `for perioden ${tilVisning(
+                                        kalenderDato(fom)
                                     )} - ${utbetaltPeriodeTom}`}
                             </Element>
                         </StyledTh>

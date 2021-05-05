@@ -1,6 +1,6 @@
 import familieDayjs, { Dayjs, familieDayjsDiff } from '../utils/familieDayjs';
 import { datoformat, datoformatNorsk, formaterIsoDato, isoStringToDayjs } from '../utils/formatter';
-import { FamilieIsoDate } from './tid';
+import { FamilieIsoDate } from '../utils/kalender';
 
 export const TIDENES_MORGEN_DEP: Dayjs = familieDayjs().subtract(1000, 'year');
 export const TIDENES_ENDE_DEP: Dayjs = familieDayjs().add(1000, 'year');

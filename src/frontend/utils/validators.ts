@@ -13,8 +13,16 @@ import { VedtakBegrunnelse } from '../typer/vedtak';
 import { Resultat } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
 import { datoformat } from './formatter';
-import { erFør, kalenderDatoMedFallback, TIDENES_ENDE, TIDENES_MORGEN } from './kalender';
-import { leggTilÅr } from './tid';
+import {
+    erEtter,
+    erFør,
+    erSamme,
+    kalenderDato,
+    kalenderDatoMedFallback,
+    leggTilÅr,
+    TIDENES_ENDE,
+    TIDENES_MORGEN,
+} from './kalender';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -41,12 +49,15 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
 };
 
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string, tom?: string) => {
-    const fødselsdatoPluss18 = leggTilÅr(person.fødselsdato, 18);
-    const fomDato = familieDayjs(new Date(fom));
-    const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
+    const fødselsdatoPluss18 = leggTilÅr(kalenderDato(person.fødselsdato), 18);
+    const fomDato = kalenderDato(fom);
+    const tomDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
     return (
-        fomDato.isSameOrAfter(fødselsdatoPluss18) ||
-        (tomDato ? tomDato.isSameOrAfter(fødselsdatoPluss18) : false)
+        erSamme(fomDato, fødselsdatoPluss18) ||
+        erEtter(fomDato, fødselsdatoPluss18) ||
+        (tomDato
+            ? erSamme(tomDato, fødselsdatoPluss18) || erEtter(tomDato, fødselsdatoPluss18)
+            : false)
     );
 };
 

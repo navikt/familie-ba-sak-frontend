@@ -6,7 +6,6 @@ import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { periodeToString } from '../../../../../typer/periode';
-import { FamilieIsoDate } from '../../../../../typer/tid';
 import {
     hentVedtaksperiodeTittel,
     Vedtaksperiode,
@@ -15,8 +14,8 @@ import {
 import { formaterBeløp } from '../../../../../utils/formatter';
 import {
     erEtter,
+    FamilieIsoDate,
     kalenderDatoMedFallback,
-    sisteDagInneværendeMåned,
     TIDENES_MORGEN,
 } from '../../../../../utils/kalender';
 

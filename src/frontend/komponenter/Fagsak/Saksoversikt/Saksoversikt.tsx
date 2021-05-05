@@ -21,9 +21,11 @@ import {
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
+import familieDayjs, {
+    familieDayjsDiff,
+    periodeOverlapperMedValgtDato,
+} from '../../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../../utils/formatter';
-import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import Behandlinger from './Behandlinger';

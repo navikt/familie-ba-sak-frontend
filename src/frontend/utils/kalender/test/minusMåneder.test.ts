@@ -32,4 +32,13 @@ describe('Skal teste minus måneder logikk', () => {
         expect(nyDagMånedÅr.år).toBe(2018);
         expect(nyDagMånedÅr.måned).toBe(9);
     });
+
+    test('Minus måneder 12 måneder ved skuddår', () => {
+        const dagMånedÅr = kalenderDato('2020-02-29');
+
+        const nyDagMånedÅr = minusMåneder(dagMånedÅr, 12);
+        expect(nyDagMånedÅr.år).toBe(2019);
+        expect(nyDagMånedÅr.måned).toBe(1);
+        expect(nyDagMånedÅr.dag).toBe(28);
+    });
 });
