@@ -295,7 +295,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 } else if (res.data.harLøpendeSak) {
                     return true;
                 } else {
-                    return true; //skal være false
+                    return false;
                 }
             })
             .catch((_error: AxiosError) => {
@@ -326,11 +326,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                                     history.push(`/oppgaver/journalfør/${oppgave.id}`);
                                 }
                                 return byggSuksessRessurs<string>('');
-                            } else {
-                                return byggFeiletRessurs<string>(
-                                    'Ukjent feil ved kall mot har-lopende-sak'
-                                );
                             }
+                            return byggFeiletRessurs<string>('har-lopende-sak feilet');
                         });
                     } else {
                         history.push(`/oppgaver/journalfør/${oppgave.id}`);
