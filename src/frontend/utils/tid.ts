@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 
 import { FamilieIsoDate, YearMonth } from '../typer/tid';
-import { Dayjs } from './familieDayjs';
 import { datoformat } from './formatter';
 
 export const periodeOverlapperMedValgtDato = (
@@ -20,10 +19,6 @@ export const periodeOverlapperMedValgtDato = (
     );
 };
 
-export const sisteDagInneværendeMåned = (): Dayjs => {
-    return dayjs().endOf('month');
-};
-
 export const hentFørsteDagIYearMonth = (yearMonth: YearMonth) => {
     return dayjs(yearMonth, datoformat.ISO_MÅNED).startOf('month');
 };
@@ -35,12 +30,4 @@ export const hentSisteDagIYearMonth = (yearMonth: YearMonth) => {
 export const leggTilÅr = (dato: string, år: number) => {
     const dayJs = dayjs(new Date(dato));
     return dayJs.set('year', dayJs.year() + år);
-};
-
-export const datoDagenFør = (dayjs: Dayjs): Dayjs => {
-    return dayjs.subtract(1, 'day');
-};
-
-export const erISammeMåned = (dato1: Dayjs, dato2: Dayjs) => {
-    return dato1.get('month') === dato2.get('month') && dato1.get('year') === dato2.get('year');
 };

@@ -7,12 +7,13 @@ import {
     Valideringsstatus,
 } from '@navikt/familie-skjema';
 
-import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
+import { IPeriode } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
 import { Resultat } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
-import { datoformat, isoStringToDayjs } from './formatter';
+import { datoformat } from './formatter';
+import { erFør, kalenderDatoMedFallback, TIDENES_ENDE, TIDENES_MORGEN } from './kalender';
 import { leggTilÅr } from './tid';
 
 // eslint-disable-next-line
@@ -87,10 +88,11 @@ export const erPeriodeGyldig = (
             }
         }
         const fomDatoErGyldig = familieDayjs(fom).isValid();
-        const fomDatoErFørTomDato = isoStringToDayjs(fom, TIDENES_MORGEN).isBefore(
-            isoStringToDayjs(tom, TIDENES_ENDE),
-            'date'
+        const fomDatoErFørTomDato = erFør(
+            kalenderDatoMedFallback(fom, TIDENES_MORGEN),
+            kalenderDatoMedFallback(tom, TIDENES_ENDE)
         );
+
         return fomDatoErGyldig && fomDatoErFørTomDato ? ok(felt) : feil(felt, 'Ugyldig periode');
     } else {
         if (erEksplisittAvslagPåSøknad) {

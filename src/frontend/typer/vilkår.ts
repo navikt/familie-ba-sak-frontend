@@ -3,6 +3,7 @@ import { FeltState } from '@navikt/familie-skjema';
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
+import { FamilieIsoDate } from './tid';
 import {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
@@ -92,8 +93,8 @@ export interface IRestVilkårResultat {
     erAutomatiskVurdert: boolean;
     erVurdert: boolean;
     id: number;
-    periodeFom?: string;
-    periodeTom?: string;
+    periodeFom?: FamilieIsoDate;
+    periodeTom?: FamilieIsoDate;
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];

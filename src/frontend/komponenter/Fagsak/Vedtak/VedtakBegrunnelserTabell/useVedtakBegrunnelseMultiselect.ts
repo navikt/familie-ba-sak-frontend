@@ -2,7 +2,6 @@ import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-eleme
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -18,8 +17,14 @@ import {
     Resultat,
     VilkårType,
 } from '../../../../typer/vilkår';
-import { isoStringToDayjs } from '../../../../utils/formatter';
-import { erISammeMåned } from '../../../../utils/tid';
+import {
+    DagMånedÅr,
+    erISammeMåned,
+    kalenderDatoMedFallback,
+    minusMåneder,
+    TIDENES_ENDE,
+    TIDENES_MORGEN,
+} from '../../../../utils/kalender';
 
 export const hentUtgjørendeVilkårImpl = (
     begrunnelseType: VedtakBegrunnelseType,
@@ -29,15 +34,24 @@ export const hentUtgjørendeVilkårImpl = (
     return personResultater
         .flatMap(personResultat => personResultat.vilkårResultater)
         .filter((vilkårResultat: IRestVilkårResultat) => {
-            const vilkårPeriodeFom = isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN);
-            const vilkårPeriodeTom = isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE);
-            const vedtakPeriodeFom = isoStringToDayjs(vedtaksperiode.periodeFom, TIDENES_MORGEN);
+            const vilkårPeriodeFom: DagMånedÅr = kalenderDatoMedFallback(
+                vilkårResultat.periodeFom,
+                TIDENES_MORGEN
+            );
+            const vilkårPeriodeTom: DagMånedÅr = kalenderDatoMedFallback(
+                vilkårResultat.periodeTom,
+                TIDENES_ENDE
+            );
+            const vedtakPeriodeFom: DagMånedÅr = kalenderDatoMedFallback(
+                vedtaksperiode.periodeFom,
+                TIDENES_MORGEN
+            );
             const oppfyltTomMånedEtter =
                 vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
 
             if (begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                 return (
-                    erISammeMåned(vilkårPeriodeFom, vedtakPeriodeFom.subtract(1, 'month')) &&
+                    erISammeMåned(vilkårPeriodeFom, minusMåneder(vedtakPeriodeFom, 1)) &&
                     vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else if (
@@ -47,7 +61,7 @@ export const hentUtgjørendeVilkårImpl = (
                 return (
                     erISammeMåned(
                         vilkårPeriodeTom,
-                        vedtakPeriodeFom.subtract(oppfyltTomMånedEtter, 'month')
+                        minusMåneder(vedtakPeriodeFom, oppfyltTomMånedEtter)
                     ) && vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else {
