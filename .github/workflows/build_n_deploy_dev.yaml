@@ -25,7 +25,7 @@ jobs:
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE}
   deploy:
-    name: Deploy to NAIS
+    name: Deploy to dev-fss team namespace
     needs: build
     runs-on: ubuntu-latest
     steps:
