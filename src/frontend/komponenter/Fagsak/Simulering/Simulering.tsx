@@ -7,7 +7,6 @@ import Alertstripe from 'nav-frontend-alertstriper';
 
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
-import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';
@@ -29,8 +28,6 @@ const StyledAlertstripe = styled(Alertstripe)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling, fagsak }) => {
-    const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
-
     const history = useHistory();
     const {
         erFeilutbetaling,
@@ -48,20 +45,13 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             {
                 data: hentSkjemadata(),
                 method: 'POST',
-                url: `/familie-ba-sak/api/vedtak/${aktivtVedtak?.id}/tilbakekreving`,
+                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/tilbakekreving`,
             },
             (ressurs: Ressurs<IFagsak>) => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     settFagsak(ressurs);
                     history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
                 }
-
-                /*
-                 *  Todo: Midliertidig slik at man kan jobbe lokalt med toggel på uten at det krasjer.
-                 *  Må fjernes når toggelen for simulering fjernes.
-                 */
-                process.env.NODE_ENV === 'development' &&
-                    history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
             }
         );
     };

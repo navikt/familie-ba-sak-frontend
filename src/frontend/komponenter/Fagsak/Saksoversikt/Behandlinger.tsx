@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 
+import { useApp } from '../../../context/AppContext';
 import {
     behandlingsresultater,
     behandlingstyper,
@@ -16,15 +17,19 @@ import {
     behandlingÅrsak,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
 import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { erProd } from '../../../utils/miljø';
 
 interface IBehandlingshistorikkProps {
     fagsak: IFagsak;
 }
 
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
+    const { toggles } = useApp();
+    const tilbakekrevingErToggletPå = toggles[ToggleNavn.tilbakekreving];
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>
             <Systemtittel children={'Behandlinger'} />
@@ -42,6 +47,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                             <th children={'Status'} />
                             <th children={'Vedtaksdato'} />
                             <th children={'Resultat'} />
+                            {tilbakekrevingErToggletPå && <th children={'Tilbakekreving?'} />}
                         </tr>
                     </thead>
                     <tbody>
@@ -105,6 +111,27 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                 '-'
                                             )}
                                         </td>
+                                        {tilbakekrevingErToggletPå && (
+                                            <td>
+                                                {behandling.tilbakekreving
+                                                    ?.tilbakekrevingsbehandlingId ? (
+                                                    <Lenke
+                                                        href={`https://familie-tilbake-frontend${
+                                                            erProd() ? '' : '.dev'
+                                                        }.intern.nav.no/fagsystem/BA/fagsak/${
+                                                            fagsak.id
+                                                        }/behandling/${
+                                                            behandling.tilbakekreving
+                                                                .tilbakekrevingsbehandlingId
+                                                        }`}
+                                                    >
+                                                        Ja
+                                                    </Lenke>
+                                                ) : (
+                                                    <Normaltekst>-</Normaltekst>
+                                                )}
+                                            </td>
+                                        )}
                                     </tr>
                                 );
                             })}
