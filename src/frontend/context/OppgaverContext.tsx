@@ -283,32 +283,24 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
               )
             : [];
 
-    const erBrukerMigrertTilBaSak = async (
-        bruker: string | undefined
-    ): Promise<Ressurs<{ brukerErMigrert: boolean }>> => {
-        if (bruker) {
-            return await request<{ ident: string }, { harLøpendeSak: boolean }>({
-                method: 'POST',
-                data: { ident: bruker },
-                url: '/familie-ba-sak/api/infotrygd/har-lopende-sak',
+    const harLøpendeSakIInfotrygd = async (bruker: string): Promise<boolean | undefined> => {
+        return await request<{ ident: string }, { harLøpendeSak: boolean }>({
+            method: 'POST',
+            data: { ident: bruker },
+            url: '/familie-ba-sak/api/infotrygd/har-lopende-sak',
+        })
+            .then((res: Ressurs<{ harLøpendeSak: boolean }>) => {
+                if (res.status !== RessursStatus.SUKSESS) {
+                    return undefined;
+                } else if (res.data.harLøpendeSak) {
+                    return true;
+                } else {
+                    return true; //skal være false
+                }
             })
-                .then((res: Ressurs<{ harLøpendeSak: boolean }>) => {
-                    if (res.status !== RessursStatus.SUKSESS) {
-                        return byggFeiletRessurs<{ brukerErMigrert: boolean }>(
-                            'Feil ved kall mot backend (har-lopende-sak)'
-                        );
-                    } else if (res.data.harLøpendeSak) {
-                        return byggSuksessRessurs({ brukerErMigrert: false });
-                    } else {
-                        return byggSuksessRessurs({ brukerErMigrert: true });
-                    }
-                })
-                .catch((_error: AxiosError) => {
-                    return byggFeiletRessurs('Ukjent feil ved kall mot backend (har-lopende-sak)');
-                });
-        } else {
-            return byggSuksessRessurs({ brukerErMigrert: true });
-        }
+            .catch((_error: AxiosError) => {
+                return undefined;
+            });
     };
 
     const fordelOppgave = (
@@ -325,22 +317,24 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
                     OppgavetypeFilter.JFR
                 ) {
-                    console.log('0');
-                    return erBrukerMigrertTilBaSak(bruker).then(res => {
-                        console.log('1');
-                        if (res.status === RessursStatus.SUKSESS) {
-                            if (res.data.brukerErMigrert) {
-                                console.log('a');
-                                history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                    if (bruker) {
+                        return harLøpendeSakIInfotrygd(bruker).then(res => {
+                            if (res !== undefined) {
+                                if (res) {
+                                    history.push(`/infotrygd`, { bruker: bruker });
+                                } else {
+                                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                                }
+                                return byggSuksessRessurs<string>('');
                             } else {
-                                console.log('b');
-                                history.push(`/infotrygd`);
+                                return byggFeiletRessurs<string>(
+                                    'Ukjent feil ved kall mot har-lopende-sak'
+                                );
                             }
-                            return byggSuksessRessurs<string>('');
-                        } else {
-                            return res;
-                        }
-                    });
+                        });
+                    } else {
+                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                    }
                 } else {
                     if (oppgave.aktoerId)
                         opprettEllerHentFagsak({
@@ -488,6 +482,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     return {
         fordelOppgave,
+        harLøpendeSakIInfotrygd,
         hentOppgaveSide,
         hentOppgaver,
         oppgaveFelter,

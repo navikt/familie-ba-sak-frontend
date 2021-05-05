@@ -30,7 +30,13 @@ const intDatoTilNorskDato = (intDato: string) => {
 };
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide } = useOppgaver();
+    const {
+        oppgaver,
+        sortOppgave,
+        oppgaveFelter,
+        hentOppgaveSide,
+        harLøpendeSakIInfotrygd,
+    } = useOppgaver();
     const { innloggetSaksbehandler, sjekkTilgang } = useApp();
     const history = useHistory();
 
@@ -49,11 +55,18 @@ const OppgaveList: React.FunctionComponent = () => {
     const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
 
-        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
-            // sjekk om bruker har løpende sak ved å kalle ba-sak.
-            // Dersom bruker har løpende sak, gå til /infotrygd.
-            // Hvis ikke, kjør history.push().
-            // Dette kan være en egen funksjon, delt av plukk / gå til oppg.
+        if (brukerident) {
+            if (await sjekkTilgang(brukerident)) {
+                const løpendeSak = await harLøpendeSakIInfotrygd(brukerident);
+                if (løpendeSak !== undefined) {
+                    if (løpendeSak) {
+                        history.push('/infotrygd', { bruker: brukerident });
+                    } else {
+                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                    }
+                }
+            }
+        } else {
             history.push(`/oppgaver/journalfør/${oppgave.id}`);
         }
     };

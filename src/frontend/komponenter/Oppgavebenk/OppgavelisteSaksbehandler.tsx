@@ -91,10 +91,8 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                     key={'plukk'}
                     onClick={async () => {
                         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
-                        console.log('x');
 
                         if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
-                            console.log('y');
                             fordelOppgave(
                                 oppgave,
                                 innloggetSaksbehandler?.navIdent,
