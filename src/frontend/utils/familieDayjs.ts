@@ -67,4 +67,6 @@ export const periodeOverlapperMedValgtDato = (
     );
 };
 
+export const TIDENES_MORGEN_DAYJS: Dayjs = familieDayjs().subtract(1000, 'year');
+export const TIDENES_ENDE_DAYJS: Dayjs = familieDayjs().add(1000, 'year');
 export default familieDayjs;

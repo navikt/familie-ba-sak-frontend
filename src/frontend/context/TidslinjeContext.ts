@@ -7,7 +7,10 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
 import { IGrunnlagPerson } from '../typer/person';
-import familieDayjs from '../utils/familieDayjs';
+import familieDayjs, {
+    hentFørsteDagIYearMonth,
+    hentSisteDagIYearMonth,
+} from '../utils/familieDayjs';
 
 export interface ITidslinjeVindu {
     id: number;

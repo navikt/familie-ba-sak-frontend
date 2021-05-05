@@ -11,13 +11,8 @@ import {
     Vedtaksperiode,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
-import { formaterBeløp } from '../../../../../utils/formatter';
-import {
-    erEtter,
-    FamilieIsoDate,
-    kalenderDatoMedFallback,
-    TIDENES_MORGEN,
-} from '../../../../../utils/kalender';
+import { TIDENES_MORGEN_DAYJS } from '../../../../../utils/familieDayjs';
+import { formaterBeløp, isoStringToDayjs } from '../../../../../utils/formatter';
 
 const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     margin-bottom: 1.5rem;
@@ -45,8 +40,8 @@ interface IEkspanderbartBegrunnelsePanelProps {
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 }
 
-const slutterSenereEnnInneværendeMåned = (dato: FamilieIsoDate) =>
-    erEtter(kalenderDatoMedFallback(dato, TIDENES_MORGEN), sisteDagInneværendeMåned());
+const slutterSenereEnnInneværendeMåned = (dato: string) =>
+    isoStringToDayjs(dato, TIDENES_MORGEN_DAYJS).isAfter(sisteDagInneværendeMåned());
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     vedtaksperiode,
@@ -94,3 +89,6 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
 );
 
 export default EkspanderbartBegrunnelsePanel;
+function sisteDagInneværendeMåned(): import('dayjs').ConfigType {
+    throw new Error('Function not implemented.');
+}
