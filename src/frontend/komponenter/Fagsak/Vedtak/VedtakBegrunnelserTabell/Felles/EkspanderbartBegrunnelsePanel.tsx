@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { periodeToString } from '../../../../../typer/periode';
 import {
     hentVedtaksperiodeTittel,
     Vedtaksperiode,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
-import { TIDENES_MORGEN_DAYJS } from '../../../../../utils/familieDayjs';
-import { formaterBeløp, isoStringToDayjs } from '../../../../../utils/formatter';
+import familieDayjs from '../../../../../utils/familieDayjs';
+import { formaterBeløp } from '../../../../../utils/formatter';
+import { periodeToString } from '../../../../../utils/kalender';
 
 const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     margin-bottom: 1.5rem;
@@ -41,7 +41,7 @@ interface IEkspanderbartBegrunnelsePanelProps {
 }
 
 const slutterSenereEnnInneværendeMåned = (dato: string) =>
-    isoStringToDayjs(dato, TIDENES_MORGEN_DAYJS).isAfter(sisteDagInneværendeMåned());
+    familieDayjs(dato).isAfter(sisteDagInneværendeMåned());
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     vedtaksperiode,

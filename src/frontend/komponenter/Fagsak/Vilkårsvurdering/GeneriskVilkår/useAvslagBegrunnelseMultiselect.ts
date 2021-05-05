@@ -4,13 +4,13 @@ import { ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { IPeriode } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
+import { IPeriode } from '../../../../utils/kalender';
 
 const useAvslagBegrunnelseMultiselect = (vilkårType: VilkårType, periode: IPeriode) => {
     const { vedtakBegrunnelser, vilkårBegrunnelser } = useVedtakBegrunnelser();

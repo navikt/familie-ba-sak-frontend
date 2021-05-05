@@ -1,5 +1,5 @@
-import { parseIso8601MånedString, parseIso8601String } from './io';
-import { antallDagerIMåned, DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
+import { parseIso8601String } from './io';
+import { antallDagerIMåned, DagMånedÅr, FamilieIsoDate } from './typer';
 import { mod } from './utils';
 
 export const TIDENES_MORGEN: DagMånedÅr = {
@@ -15,11 +15,40 @@ export const TIDENES_ENDE: DagMånedÅr = {
 
 export const nå = (): DagMånedÅr => kalenderDatoFraDate(new Date());
 
+export const førsteDagIInneværendeMåned = () => {
+    const idag = nå();
+    return {
+        ...idag,
+        dag: 1,
+    };
+};
+
+export const sisteDagIInneværendeMåned = () => {
+    const idag = nå();
+    return {
+        ...idag,
+        dag: antallDagerIMåned({ måned: idag.måned, år: idag.år }),
+    };
+};
+
 export const kalenderDatoFraDate = (date: Date): DagMånedÅr => ({
     dag: date.getDate(),
     måned: date.getMonth(),
     år: date.getFullYear(),
 });
+
+export const kalenderDatoTilDate = (
+    dagMånedÅr: DagMånedÅr,
+    timer?: number,
+    minutter?: number
+): Date =>
+    new Date(
+        dagMånedÅr.år,
+        dagMånedÅr.måned,
+        dagMånedÅr.dag,
+        timer ? timer : 0,
+        minutter ? minutter : 0
+    );
 
 export const kalenderDatoMedFallback = (
     dato: FamilieIsoDate | undefined,
@@ -27,23 +56,6 @@ export const kalenderDatoMedFallback = (
 ): DagMånedÅr => (dato ? parseIso8601String(dato) : fallbackDato);
 
 export const kalenderDato = (dato: FamilieIsoDate): DagMånedÅr => parseIso8601String(dato);
-
-export const kalenderMåned = (dato: FamilieIsoDate): MånedÅr => {
-    const dagMånedÅr = parseIso8601MånedString(dato);
-    return {
-        måned: dagMånedÅr.måned,
-        år: dagMånedÅr.år,
-    };
-};
-
-export const hentSisteDagIYearMonth = (yearMonth: YearMonth) => {
-    const månedÅr = kalenderMåned(yearMonth);
-
-    return {
-        ...månedÅr,
-        dag: antallDagerIMåned(månedÅr),
-    };
-};
 
 export const dagenFør = (dagMånedÅr: DagMånedÅr): DagMånedÅr => {
     if (dagMånedÅr.dag > 1) {
@@ -78,7 +90,22 @@ export const minusMåneder = (dagMånedÅr: DagMånedÅr, måneder: number): Dag
     const nyttÅr = dagMånedÅr.år - Math.abs(Math.floor((dagMånedÅr.måned - måneder) / 12));
     const nyMåned = mod(dagMånedÅr.måned - måneder, 12);
     return {
-        ...dagMånedÅr,
+        år: nyttÅr,
+        måned: nyMåned,
+        dag: dagVedEndringPåÅr(
+            {
+                ...dagMånedÅr,
+                måned: nyMåned,
+            },
+            nyttÅr
+        ),
+    };
+};
+
+export const leggTilMåneder = (dagMånedÅr: DagMånedÅr, måneder: number): DagMånedÅr => {
+    const nyttÅr = dagMånedÅr.år + Math.floor((dagMånedÅr.måned + måneder) / 12);
+    const nyMåned = mod(dagMånedÅr.måned + måneder, 12);
+    return {
         år: nyttÅr,
         måned: nyMåned,
         dag: dagVedEndringPåÅr(
@@ -141,8 +168,7 @@ export const erSamme = (dato1: DagMånedÅr, dato2: DagMånedÅr) => {
     return dato1.dag === dato2.dag && dato1.måned === dato2.måned && dato1.år === dato2.år;
 };
 
-// Private utilfunksjoner
-const dagVedEndringPåÅr = (dagMånedÅr: DagMånedÅr, nyttÅr: number) => {
+export const dagVedEndringPåÅr = (dagMånedÅr: DagMånedÅr, nyttÅr: number) => {
     const antallDagerIMånedINyttÅr = antallDagerIMåned({ år: nyttÅr, måned: dagMånedÅr.måned });
     if (antallDagerIMånedINyttÅr <= dagMånedÅr.dag) {
         return antallDagerIMånedINyttÅr;

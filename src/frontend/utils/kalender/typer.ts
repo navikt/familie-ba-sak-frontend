@@ -11,6 +11,12 @@ export type År = { år: number };
 export type MånedÅr = { måned: number } & År;
 export type DagMånedÅr = { dag: number } & MånedÅr;
 
+export interface IPeriode {
+    // Format YYYY-MM-DD (ISO)
+    fom?: FamilieIsoDate;
+    tom?: FamilieIsoDate;
+}
+
 export const erSkuddår = ({ år }: År) => {
     if (år % 400 === 0) {
         return true;

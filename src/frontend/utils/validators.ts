@@ -7,7 +7,6 @@ import {
     Valideringsstatus,
 } from '@navikt/familie-skjema';
 
-import { IPeriode } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
 import { Resultat } from '../typer/vilkår';
@@ -17,6 +16,7 @@ import {
     erEtter,
     erFør,
     erSamme,
+    IPeriode,
     kalenderDato,
     kalenderDatoMedFallback,
     leggTilÅr,

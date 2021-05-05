@@ -12,13 +12,13 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { IPeriode } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
+import { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
