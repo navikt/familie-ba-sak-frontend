@@ -11,11 +11,12 @@ import {
     hentFørsteDagIYearMonth,
     hentSisteDagIYearMonth,
     kalenderDatoTilDate,
-    leggTilMåneder,
-    minusMåneder,
+    KalenderEnhet,
+    leggTil,
     nå,
     sisteDagIInneværendeMåned,
     sisteDagIMåned,
+    trekkFra,
 } from '../utils/kalender';
 
 export interface ITidslinjeVindu {
@@ -47,7 +48,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
-        startDato: sisteDagIMåned(minusMåneder(nå(), 12)),
+        startDato: sisteDagIMåned(trekkFra(nå(), 12, KalenderEnhet.MÅNED)),
         sluttDato: sisteDagIInneværendeMåned(),
     });
 
@@ -66,14 +67,14 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         if (retning === NavigeringsRetning.VENSTRE) {
             settAktivtTidslinjeVindu(({ sluttDato, startDato, vindu }) => ({
                 ...aktivtTidslinjeVindu,
-                startDato: sisteDagIMåned(minusMåneder(startDato, vindu.måneder)),
-                sluttDato: sisteDagIMåned(minusMåneder(sluttDato, vindu.måneder)),
+                startDato: sisteDagIMåned(trekkFra(startDato, vindu.måneder, KalenderEnhet.MÅNED)),
+                sluttDato: sisteDagIMåned(trekkFra(sluttDato, vindu.måneder, KalenderEnhet.MÅNED)),
             }));
         } else {
             settAktivtTidslinjeVindu(({ sluttDato, startDato, vindu }) => ({
                 ...aktivtTidslinjeVindu,
-                startDato: sisteDagIMåned(leggTilMåneder(startDato, vindu.måneder)),
-                sluttDato: sisteDagIMåned(leggTilMåneder(sluttDato, vindu.måneder)),
+                startDato: sisteDagIMåned(leggTil(startDato, vindu.måneder, KalenderEnhet.MÅNED)),
+                sluttDato: sisteDagIMåned(leggTil(sluttDato, vindu.måneder, KalenderEnhet.MÅNED)),
             }));
         }
     };
@@ -87,7 +88,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         settAktivtTidslinjeVindu(({ sluttDato }) => ({
             ...aktivtTidslinjeVindu,
             vindu: vindu,
-            startDato: sisteDagIMåned(minusMåneder(sluttDato, vindu.måneder)),
+            startDato: sisteDagIMåned(trekkFra(sluttDato, vindu.måneder, KalenderEnhet.MÅNED)),
         }));
     };
 

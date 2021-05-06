@@ -4,3 +4,5 @@ export * from './io';
 export * from './formatter';
 export * from './periode';
 export * from './kalenderMåned';
+export * from './utils';
+export * from './aritmetikk';

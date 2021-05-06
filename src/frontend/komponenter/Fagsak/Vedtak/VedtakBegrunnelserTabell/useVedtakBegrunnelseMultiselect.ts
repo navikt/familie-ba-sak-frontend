@@ -21,9 +21,10 @@ import {
     DagMånedÅr,
     erISammeMåned,
     kalenderDatoMedFallback,
-    minusMåneder,
+    KalenderEnhet,
     TIDENES_ENDE,
     TIDENES_MORGEN,
+    trekkFra,
 } from '../../../../utils/kalender';
 
 export const hentUtgjørendeVilkårImpl = (
@@ -51,8 +52,10 @@ export const hentUtgjørendeVilkårImpl = (
 
             if (begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                 return (
-                    erISammeMåned(vilkårPeriodeFom, minusMåneder(vedtakPeriodeFom, 1)) &&
-                    vilkårResultat.resultat === Resultat.OPPFYLT
+                    erISammeMåned(
+                        vilkårPeriodeFom,
+                        trekkFra(vedtakPeriodeFom, 1, KalenderEnhet.MÅNED)
+                    ) && vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else if (
                 begrunnelseType === VedtakBegrunnelseType.REDUKSJON ||
@@ -61,7 +64,7 @@ export const hentUtgjørendeVilkårImpl = (
                 return (
                     erISammeMåned(
                         vilkårPeriodeTom,
-                        minusMåneder(vedtakPeriodeFom, oppfyltTomMånedEtter)
+                        trekkFra(vedtakPeriodeFom, oppfyltTomMånedEtter, KalenderEnhet.MÅNED)
                     ) && vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else {

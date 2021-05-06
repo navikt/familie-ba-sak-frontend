@@ -10,7 +10,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { ISimuleringDTO } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
 import { formaterBeløp } from '../../../utils/formatter';
-import { dagenFør, kalenderDato } from '../../../utils/kalender';
+import { kalenderDato, KalenderEnhet, trekkFra } from '../../../utils/kalender';
 import { tilVisning } from '../../../utils/kalender/formatter';
 
 const StyledPanel = styled(Panel)`
@@ -69,7 +69,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         .slice(-1)
         .pop();
     const utbetaltPeriodeTom = fomDatoNestePeriode
-        ? tilVisning(dagenFør(kalenderDato(fomDatoNestePeriode)))
+        ? tilVisning(trekkFra(kalenderDato(fomDatoNestePeriode), 1, KalenderEnhet.DAG))
         : sisteUtbetaltePeriode
         ? sisteUtbetaltePeriode.tom
         : '';

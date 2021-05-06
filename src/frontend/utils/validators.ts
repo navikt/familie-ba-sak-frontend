@@ -19,7 +19,8 @@ import {
     IPeriode,
     kalenderDato,
     kalenderDatoMedFallback,
-    leggTilÅr,
+    KalenderEnhet,
+    leggTil,
     TIDENES_ENDE,
     TIDENES_MORGEN,
 } from './kalender';
@@ -49,7 +50,7 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
 };
 
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string, tom?: string) => {
-    const fødselsdatoPluss18 = leggTilÅr(kalenderDato(person.fødselsdato), 18);
+    const fødselsdatoPluss18 = leggTil(kalenderDato(person.fødselsdato), 18, KalenderEnhet.ÅR);
     const fomDato = kalenderDato(fom);
     const tomDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
     return (
