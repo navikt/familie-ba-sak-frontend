@@ -95,6 +95,10 @@ const useVedtakBegrunnelseMultiselect = (
         action: ActionMeta<ISelectOption>,
         vedtakBegrunnelserForPeriode: IRestVedtakBegrunnelse[]
     ) => {
+        if (!vedtaksperiode.periodeFom) {
+            throw new Error('Prøver å legge til en begrunnelse på en periode uten fom');
+        }
+
         switch (action.action) {
             case 'select-option':
                 leggTilVedtakBegrunnelse({

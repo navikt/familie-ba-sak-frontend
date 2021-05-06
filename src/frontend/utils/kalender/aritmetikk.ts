@@ -81,7 +81,7 @@ export const trekkFra = (dagMånedÅr: DagMånedÅr, antall: number, enhet: Kale
 
 export const dagVedEndringPåÅr = (dagMånedÅr: DagMånedÅr, nyttÅr: number) => {
     const antallDagerIMånedINyttÅr = antallDagerIMåned({ år: nyttÅr, måned: dagMånedÅr.måned });
-    if (antallDagerIMånedINyttÅr <= dagMånedÅr.dag) {
+    if (antallDagerIMånedINyttÅr < dagMånedÅr.dag) {
         return antallDagerIMånedINyttÅr;
     } else {
         return dagMånedÅr.dag;

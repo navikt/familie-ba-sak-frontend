@@ -12,7 +12,7 @@ export enum Vedtaksperiodetype {
 export type Vedtaksperiode =
     | {
           periodeFom: FamilieIsoDate;
-          periodeTom: FamilieIsoDate;
+          periodeTom?: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.UTBETALING;
           utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
           ytelseTyper: YtelseType[];
@@ -21,12 +21,12 @@ export type Vedtaksperiode =
       }
     | {
           periodeFom: FamilieIsoDate;
-          periodeTom: FamilieIsoDate;
+          periodeTom?: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.OPPHØR;
       }
     | {
-          periodeFom: FamilieIsoDate;
-          periodeTom: FamilieIsoDate;
+          periodeFom?: FamilieIsoDate;
+          periodeTom?: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.AVSLAG;
       };
 

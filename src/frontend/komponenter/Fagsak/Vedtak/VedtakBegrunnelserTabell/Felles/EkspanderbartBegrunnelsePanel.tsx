@@ -13,9 +13,10 @@ import {
 import { formaterBeløp } from '../../../../../utils/formatter';
 import {
     erEtter,
-    kalenderDato,
+    kalenderDatoMedFallback,
     periodeToString,
     sisteDagIInneværendeMåned,
+    TIDENES_ENDE,
 } from '../../../../../utils/kalender';
 
 const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
@@ -43,8 +44,8 @@ interface IEkspanderbartBegrunnelsePanelProps {
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 }
 
-const slutterSenereEnnInneværendeMåned = (dato: string) =>
-    erEtter(kalenderDato(dato), sisteDagIInneværendeMåned());
+const slutterSenereEnnInneværendeMåned = (tom?: string) =>
+    erEtter(kalenderDatoMedFallback(tom, TIDENES_ENDE), sisteDagIInneværendeMåned());
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     vedtaksperiode,

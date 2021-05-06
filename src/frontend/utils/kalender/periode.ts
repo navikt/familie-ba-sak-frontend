@@ -9,6 +9,9 @@ import {
     kalenderDato,
     kalenderDatoFraDate,
     tilVisning,
+    kalenderDatoMedFallback,
+    TIDENES_ENDE,
+    TIDENES_MORGEN,
 } from '.';
 
 export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IPeriode => {
@@ -19,19 +22,19 @@ export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IPeriode 
 };
 
 export const periodeOverlapperMedValgtDato = (
-    periodeFom: FamilieIsoDate,
-    periodeTom: FamilieIsoDate,
+    periodeFom: FamilieIsoDate | undefined,
+    periodeTom: FamilieIsoDate | undefined,
     valgtDato: Date
 ) => {
-    const valgtDatoToDayjs = kalenderDatoFraDate(valgtDato);
-    const periodeFomToDayjs = kalenderDato(periodeFom);
-    const periodeTomToDayjs = kalenderDato(periodeTom);
+    const valgtDatoDagMånedÅr = kalenderDatoFraDate(valgtDato);
+    const periodeFomDagMånedÅr = kalenderDatoMedFallback(periodeFom, TIDENES_MORGEN);
+    const periodeTomDagMånedÅr = kalenderDatoMedFallback(periodeTom, TIDENES_ENDE);
 
     return (
-        (erEtter(valgtDatoToDayjs, periodeFomToDayjs) &&
-            erFør(valgtDatoToDayjs, periodeTomToDayjs)) ||
-        erSamme(valgtDatoToDayjs, periodeFomToDayjs) ||
-        erSamme(valgtDatoToDayjs, periodeTomToDayjs)
+        (erEtter(valgtDatoDagMånedÅr, periodeFomDagMånedÅr) &&
+            erFør(valgtDatoDagMånedÅr, periodeTomDagMånedÅr)) ||
+        erSamme(valgtDatoDagMånedÅr, periodeFomDagMånedÅr) ||
+        erSamme(valgtDatoDagMånedÅr, periodeTomDagMånedÅr)
     );
 };
 

@@ -51,7 +51,7 @@ export const parseIso8601MånedString = (dato: FamilieIsoDate): DagMånedÅr => 
         throw new Error(`År fra dato '${dato}' er '${år}' og er sannsynligvis feil`);
     }
 
-    if (måned < 0 || måned > 12) {
+    if (måned < 1 || måned > 12) {
         throw new Error(`Måned fra dato '${dato}' er '${måned}' og er sannsynligvis feil`);
     }
 
