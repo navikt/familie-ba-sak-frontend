@@ -67,11 +67,20 @@ describe('Kalender aritmetikk ', () => {
                 expect(nyDagMånedÅr.måned).toBe(9);
             });
 
-            test('Pluss måneder 12 måneder ved skuddår', () => {
+            test('Pluss måneder 12 måneder fra skuddår', () => {
                 const dagMånedÅr = kalenderDato('2020-02-29');
 
                 const nyDagMånedÅr = leggTil(dagMånedÅr, 12, KalenderEnhet.MÅNED);
                 expect(nyDagMånedÅr.år).toBe(2021);
+                expect(nyDagMånedÅr.måned).toBe(1);
+                expect(nyDagMånedÅr.dag).toBe(28);
+            });
+
+            test('Pluss måneder 12 måneder til skuddår', () => {
+                const dagMånedÅr = kalenderDato('2019-02-28');
+
+                const nyDagMånedÅr = leggTil(dagMånedÅr, 12, KalenderEnhet.MÅNED);
+                expect(nyDagMånedÅr.år).toBe(2020);
                 expect(nyDagMånedÅr.måned).toBe(1);
                 expect(nyDagMånedÅr.dag).toBe(28);
             });
