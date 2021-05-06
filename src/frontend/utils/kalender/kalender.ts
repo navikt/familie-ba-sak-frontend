@@ -12,21 +12,21 @@ export const TIDENES_ENDE: DagMånedÅr = {
     år: 3000,
 };
 
-export const nå = (): DagMånedÅr => kalenderDatoFraDate(new Date());
+export const iDag = (): DagMånedÅr => kalenderDatoFraDate(new Date());
 
 export const førsteDagIInneværendeMåned = () => {
-    const idag = nå();
+    const inneværende = iDag();
     return {
-        ...idag,
+        ...inneværende,
         dag: 1,
     };
 };
 
 export const sisteDagIInneværendeMåned = () => {
-    const idag = nå();
+    const inneværende = iDag();
     return {
-        ...idag,
-        dag: antallDagerIMåned({ måned: idag.måned, år: idag.år }),
+        ...inneværende,
+        dag: antallDagerIMåned({ måned: inneværende.måned, år: inneværende.år }),
     };
 };
 

@@ -7,16 +7,20 @@ import {
     mod,
 } from '.';
 
+/**
+ * TODO dokumentasjon
+ */
+
 export const leggTil = (
     dagMånedÅr: DagMånedÅr,
     antall: number,
     enhet: KalenderEnhet
 ): DagMånedÅr => {
-    const date = kalenderDatoTilDate(dagMånedÅr);
-
     switch (enhet) {
         case KalenderEnhet.DAG:
+            const date = kalenderDatoTilDate(dagMånedÅr);
             date.setTime(date.getTime() + antall * 24 * 60 * 60 * 1000);
+
             return kalenderDatoFraDate(date);
         case KalenderEnhet.MÅNED:
             const nyttÅrVedEndringPåMåned =

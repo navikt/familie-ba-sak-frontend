@@ -10,9 +10,13 @@ import {
     Vedtaksperiode,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
-import familieDayjs from '../../../../../utils/familieDayjs';
 import { formaterBeløp } from '../../../../../utils/formatter';
-import { periodeToString } from '../../../../../utils/kalender';
+import {
+    erEtter,
+    kalenderDato,
+    periodeToString,
+    sisteDagIInneværendeMåned,
+} from '../../../../../utils/kalender';
 
 const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     margin-bottom: 1rem;
@@ -40,7 +44,7 @@ interface IEkspanderbartBegrunnelsePanelProps {
 }
 
 const slutterSenereEnnInneværendeMåned = (dato: string) =>
-    familieDayjs(dato).isAfter(sisteDagInneværendeMåned());
+    erEtter(kalenderDato(dato), sisteDagIInneværendeMåned());
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     vedtaksperiode,
@@ -88,6 +92,3 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
 );
 
 export default EkspanderbartBegrunnelsePanel;
-function sisteDagInneværendeMåned(): import('dayjs').ConfigType {
-    throw new Error('Function not implemented.');
-}

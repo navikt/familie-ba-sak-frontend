@@ -20,11 +20,11 @@ export const parseIso8601String = (dato: FamilieIsoDate): DagMånedÅr => {
         throw new Error(`År fra dato '${dato}' er '${år}' og er sannsynligvis feil`);
     }
 
-    if (måned < 0 || måned > 12) {
+    if (måned < 1 || måned > 12) {
         throw new Error(`Måned fra dato '${dato}' er '${måned}' og er sannsynligvis feil`);
     }
 
-    if (dag < 0 || dag > antallDagerIMåned({ år, måned: måned - 1 })) {
+    if (dag < 1 || dag > antallDagerIMåned({ år, måned: måned - 1 })) {
         throw new Error(`Dag fra dato '${dato}' er '${dag}' og er sannsynligvis feil`);
     }
 

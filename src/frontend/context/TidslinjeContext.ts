@@ -13,7 +13,7 @@ import {
     kalenderDatoTilDate,
     KalenderEnhet,
     leggTil,
-    nå,
+    iDag,
     sisteDagIInneværendeMåned,
     sisteDagIMåned,
     trekkFra,
@@ -48,7 +48,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
-        startDato: sisteDagIMåned(trekkFra(nå(), 12, KalenderEnhet.MÅNED)),
+        startDato: sisteDagIMåned(trekkFra(iDag(), 12, KalenderEnhet.MÅNED)),
         sluttDato: sisteDagIInneværendeMåned(),
     });
 
