@@ -11,7 +11,7 @@ import { ISimuleringDTO } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
 import { formaterBeløp } from '../../../utils/formatter';
 import { kalenderDato, KalenderEnhet, trekkFra } from '../../../utils/kalender';
-import { tilVisning } from '../../../utils/kalender/formatter';
+import { tilVisning } from '../../../utils/kalender';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;

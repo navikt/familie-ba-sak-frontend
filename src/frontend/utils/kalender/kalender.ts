@@ -70,11 +70,7 @@ export const erFør = (dato1: DagMånedÅr, dato2: DagMånedÅr) => {
         return true;
     }
 
-    if (dato1.år < dato2.år) {
-        return true;
-    }
-
-    return false;
+    return dato1.år < dato2.år;
 };
 
 export const erEtter = (dato1: DagMånedÅr, dato2: DagMånedÅr) => {
@@ -86,11 +82,7 @@ export const erEtter = (dato1: DagMånedÅr, dato2: DagMånedÅr) => {
         return true;
     }
 
-    if (dato1.år > dato2.år) {
-        return true;
-    }
-
-    return false;
+    return dato1.år > dato2.år;
 };
 
 export const erSamme = (dato1: DagMånedÅr, dato2: DagMånedÅr) => {
