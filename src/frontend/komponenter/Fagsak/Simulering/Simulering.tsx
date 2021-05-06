@@ -88,6 +88,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         {tilbakekrevingErToggletPå && erFeilutbetaling && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                fagsakId={fagsak.id}
                             />
                         )}
                     </>

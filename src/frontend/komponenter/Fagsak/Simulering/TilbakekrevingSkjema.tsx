@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import Alertstripe from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
@@ -10,7 +12,8 @@ import { Radio, Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { FamilieTextarea, FamilieRadioGruppe } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
+import { useHttp } from '@navikt/familie-http';
+import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
@@ -65,13 +68,30 @@ const TilbakekrevingSkjemaGruppe = styled(SkjemaGruppe)`
     max-width: 25rem;
 `;
 
+const StyledAlertstripe = styled(Alertstripe)`
+    margin-top: 1.5rem;
+`;
+
+const StyledElement = styled(Element)`
+    margin-top: 4rem;
+`;
+
 interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
     fritekst: string;
 }
 
-const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerMålform }) => {
+const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: number }> = ({
+    søkerMålform,
+    fagsakId,
+}) => {
+    const { request } = useHttp();
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { skjema, hentFeilTilOppsummering } = useSimulering();
+    const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<
+        Ressurs<boolean>
+    >({
+        status: RessursStatus.HENTER,
+    });
     const {
         hentForhåndsvisning,
         visForhåndsvisningModal,
@@ -79,9 +99,59 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform }> = ({ søkerM�
         settVisForhåndsviningModal,
     } = useForhåndsvisning();
 
+    useEffect(() => {
+        request<undefined, boolean>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/fagsaker/${fagsakId}/har-apen-tilbakekreving`,
+            påvirkerSystemLaster: true,
+        }).then(response => {
+            settHarÅpentTilbakekrevingRessurs(response);
+        });
+    }, [fagsakId]);
+
     const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {
         skjema.felter.tilbakekrevingsvalg.validerOgSettFelt(tilbakekrevingsalternativ);
     };
+
+    if (
+        harÅpenTilbakekrevingRessurs.status === RessursStatus.FEILET ||
+        harÅpenTilbakekrevingRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+        harÅpenTilbakekrevingRessurs.status === RessursStatus.IKKE_TILGANG
+    ) {
+        return (
+            <StyledAlertstripe type="feil">
+                Det har skjedd er feil:
+                {harÅpenTilbakekrevingRessurs.frontendFeilmelding}
+            </StyledAlertstripe>
+        );
+    }
+
+    if (
+        harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS &&
+        harÅpenTilbakekrevingRessurs.data
+    ) {
+        return (
+            <>
+                <StyledElement>Tilbakekrevingsvalg</StyledElement>
+                <StyledAlertstripe type="advarsel">
+                    Det foreligger en åpen tilbakekrevingsbehandling, endringer i vedtaket vil
+                    automatisk oppdatere eksisterende feilutbetalte perioder og beløp.
+                </StyledAlertstripe>
+            </>
+        );
+    }
+
+    if (erLesevisning() && !skjema.felter.tilbakekrevingsvalg.verdi) {
+        return (
+            <>
+                <StyledElement>Tilbakekrevingsvalg</StyledElement>
+                <StyledAlertstripe type="advarsel">
+                    Tilbakekreving uten varsel er valgt automatisk, da feilutbetailngen ble avdekket
+                    etter at saken ble sendt til beslutter.
+                </StyledAlertstripe>
+            </>
+        );
+    }
 
     return (
         <>
