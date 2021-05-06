@@ -41,7 +41,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { settFagsak } = useFagsakRessurser();
 
     const nesteOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
         onSubmit<ITilbakekreving | undefined>(
             {
                 data: hentSkjemadata(),
