@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
-import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
@@ -168,9 +168,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                         kanNavigereTilHøyre={!erISisteÅrAvPerioden}
                                         kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
                                     >
-                                        <Undertittel>
-                                            {årISimuleringen[indexFramvistÅr]}
-                                        </Undertittel>
+                                        <Undertekst>{årISimuleringen[indexFramvistÅr]}</Undertekst>
                                     </TidslinjeNavigering>
                                 </Årsvelger>
                             )}
