@@ -1,6 +1,8 @@
 import React from 'react';
 
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
+import styled from 'styled-components';
+
 import { Flatknapp } from 'nav-frontend-knapper';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
@@ -10,15 +12,28 @@ interface IProps {
     naviger: (retning: NavigeringsRetning) => void;
     kanNavigereTilHøyre?: boolean;
     kanNavigereTilVenstre?: boolean;
+    children?: React.ReactNode | React.ReactChild | React.ReactChildren;
 }
+
+const StyledTidslinjenavigering = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+const DivMedHøyremargin = styled.div`
+    margin-right: 0.625rem;
+    display: flex;
+    align-items: center;
+`;
 
 const TidslinjeNavigering: React.FC<IProps> = ({
     naviger,
     kanNavigereTilHøyre = true,
     kanNavigereTilVenstre = true,
+    children,
 }) => {
     return (
-        <div className={'tidslinje-header__navigering'}>
+        <StyledTidslinjenavigering className={'tidslinje-header__navigering'}>
             <Flatknapp
                 title={'Naviger til venstre'}
                 mini
@@ -29,6 +44,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 <FamilieChevron title={'Naviger til venstre'} retning={'venstre'} />
                 <span className="sr-only">Naviger til venstre i tidslinjen</span>
             </Flatknapp>
+            {children && <DivMedHøyremargin>{children}</DivMedHøyremargin>}
             <Flatknapp
                 title={'Naviger til høyre'}
                 mini
@@ -39,7 +55,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 <FamilieChevron title={'Naviger til høyre'} />
                 <span className="sr-only">Naviger til høyre i tidslinjen</span>
             </Flatknapp>
-        </div>
+        </StyledTidslinjenavigering>
     );
 };
 

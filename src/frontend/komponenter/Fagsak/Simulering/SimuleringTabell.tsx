@@ -17,9 +17,7 @@ import TidslinjeNavigering from '../TilkjentYtelse/TidslinjeNavigering';
 
 const Årsvelger = styled.div`
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 1rem;
+    flex-direction: column;
 `;
 
 const StyledTable = styled.table(
@@ -90,6 +88,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const perioder = hentPeriodelisteMedTommePerioder(perioderUtenTommeSimuleringer);
     const [indexFramvistÅr, settIndexFramistÅr] = useState(årISimuleringen.length - 1);
     const aktueltÅr = årISimuleringen[indexFramvistÅr];
+    const erMerEnn12MånederISimulering = perioder.length > 12;
 
     const kapitaliserTekst = (tekst: string): string => {
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
@@ -99,14 +98,14 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         fomDatoNestePeriode && dayjs(periode.fom).isAfter(dayjs(fomDatoNestePeriode));
 
     const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
-        !periodeErEtterNesteUtbetalingsPeriode(periode) && dayjs(periode.fom).year() === aktueltÅr;
+        !erMerEnn12MånederISimulering ||
+        (!periodeErEtterNesteUtbetalingsPeriode(periode) &&
+            dayjs(periode.fom).year() === aktueltÅr);
 
     const formaterBeløpUtenValutakode = (beløp?: number) =>
         beløp ? formaterBeløp(beløp).slice(0, -3) : '-';
 
-    const antallPeriodetIFremvistÅr = perioderUtenTommeSimuleringer.filter(p =>
-        periodeSkalVisesITabell(p)
-    ).length;
+    const antallPeriodetIFremvistÅr = perioder.filter(p => periodeSkalVisesITabell(p)).length;
 
     const erISisteÅrAvPerioden =
         indexFramvistÅr === hentÅrISimuleringen(perioderUtenTommeSimuleringer).length - 1;
@@ -138,21 +137,6 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                 </Element>
             </SimuleringTabellOverskrift>
 
-            {årISimuleringen.length > 1 && (
-                <Årsvelger>
-                    <Undertittel>{årISimuleringen[indexFramvistÅr]}</Undertittel>
-                    <TidslinjeNavigering
-                        naviger={retning =>
-                            retning === NavigeringsRetning.VENSTRE
-                                ? settIndexFramistÅr(indexFramvistÅr - 1)
-                                : settIndexFramistÅr(indexFramvistÅr + 1)
-                        }
-                        kanNavigereTilHøyre={!erISisteÅrAvPerioden}
-                        kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
-                    />
-                </Årsvelger>
-            )}
-
             <StyledTable className="tabell" bredde={tabellbredde}>
                 <colgroup>
                     <VenstreKolonne />
@@ -172,7 +156,25 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
                 <thead>
                     <tr>
-                        <td />
+                        <td>
+                            {erMerEnn12MånederISimulering && (
+                                <Årsvelger>
+                                    <TidslinjeNavigering
+                                        naviger={retning =>
+                                            retning === NavigeringsRetning.VENSTRE
+                                                ? settIndexFramistÅr(indexFramvistÅr - 1)
+                                                : settIndexFramistÅr(indexFramvistÅr + 1)
+                                        }
+                                        kanNavigereTilHøyre={!erISisteÅrAvPerioden}
+                                        kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
+                                    >
+                                        <Undertittel>
+                                            {årISimuleringen[indexFramvistÅr]}
+                                        </Undertittel>
+                                    </TidslinjeNavigering>
+                                </Årsvelger>
+                            )}
+                        </td>
                         {perioder.map(
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
