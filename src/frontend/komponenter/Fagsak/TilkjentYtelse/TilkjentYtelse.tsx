@@ -8,7 +8,7 @@ import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentUtbetalingsperioder, Vedtaksperiode } from '../../../typer/vedtaksperiode';
-import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
+import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';

@@ -7,13 +7,23 @@ import {
     Valideringsstatus,
 } from '@navikt/familie-skjema';
 
-import { IPeriode, TIDENES_ENDE, TIDENES_MORGEN } from '../typer/periode';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
 import { Resultat } from '../typer/vilkår';
 import familieDayjs from './familieDayjs';
-import { datoformat, isoStringToDayjs } from './formatter';
-import { leggTilÅr } from './tid';
+import { datoformat } from './formatter';
+import {
+    erEtter,
+    erFør,
+    erSamme,
+    IPeriode,
+    kalenderDato,
+    kalenderDatoMedFallback,
+    KalenderEnhet,
+    leggTil,
+    TIDENES_ENDE,
+    TIDENES_MORGEN,
+} from './kalender';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -40,12 +50,15 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
 };
 
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string, tom?: string) => {
-    const fødselsdatoPluss18 = leggTilÅr(person.fødselsdato, 18);
-    const fomDato = familieDayjs(new Date(fom));
-    const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
+    const fødselsdatoPluss18 = leggTil(kalenderDato(person.fødselsdato), 18, KalenderEnhet.ÅR);
+    const fomDato = kalenderDato(fom);
+    const tomDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
     return (
-        fomDato.isSameOrAfter(fødselsdatoPluss18) ||
-        (tomDato ? tomDato.isSameOrAfter(fødselsdatoPluss18) : false)
+        erSamme(fomDato, fødselsdatoPluss18) ||
+        erEtter(fomDato, fødselsdatoPluss18) ||
+        (tomDato
+            ? erSamme(tomDato, fødselsdatoPluss18) || erEtter(tomDato, fødselsdatoPluss18)
+            : false)
     );
 };
 
@@ -87,10 +100,11 @@ export const erPeriodeGyldig = (
             }
         }
         const fomDatoErGyldig = familieDayjs(fom).isValid();
-        const fomDatoErFørTomDato = isoStringToDayjs(fom, TIDENES_MORGEN).isBefore(
-            isoStringToDayjs(tom, TIDENES_ENDE),
-            'date'
+        const fomDatoErFørTomDato = erFør(
+            kalenderDatoMedFallback(fom, TIDENES_MORGEN),
+            kalenderDatoMedFallback(tom, TIDENES_ENDE)
         );
+
         return fomDatoErGyldig && fomDatoErFørTomDato ? ok(felt) : feil(felt, 'Ugyldig periode');
     } else {
         if (erEksplisittAvslagPåSøknad) {

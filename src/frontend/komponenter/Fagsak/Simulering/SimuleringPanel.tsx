@@ -9,8 +9,9 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { ISimuleringDTO } from '../../../typer/simulering';
 import familieDayjs from '../../../utils/familieDayjs';
-import { formaterBeløp, formaterIsoDato, datoformat } from '../../../utils/formatter';
-import { datoDagenFør } from '../../../utils/tid';
+import { formaterBeløp } from '../../../utils/formatter';
+import { kalenderDato, KalenderEnhet, trekkFra } from '../../../utils/kalender';
+import { tilVisning } from '../../../utils/kalender';
 
 const StyledPanel = styled(Panel)`
     max-width: 26rem;
@@ -68,9 +69,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         .slice(-1)
         .pop();
     const utbetaltPeriodeTom = fomDatoNestePeriode
-        ? datoDagenFør(familieDayjs(fomDatoNestePeriode, datoformat.ISO_DAG)).format(
-              datoformat.DATO
-          )
+        ? tilVisning(trekkFra(kalenderDato(fomDatoNestePeriode), 1, KalenderEnhet.DAG))
         : sisteUtbetaltePeriode
         ? sisteUtbetaltePeriode.tom
         : '';
@@ -83,9 +82,8 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <Element>
                                 Totalt{' '}
                                 {perioder.length > 1 &&
-                                    `for perioden ${formaterIsoDato(
-                                        fom,
-                                        datoformat.DATO
+                                    `for perioden ${tilVisning(
+                                        kalenderDato(fom)
                                     )} - ${utbetaltPeriodeTom}`}
                             </Element>
                         </StyledTh>

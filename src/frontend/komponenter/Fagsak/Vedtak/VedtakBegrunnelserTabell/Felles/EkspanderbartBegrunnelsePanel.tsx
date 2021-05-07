@@ -5,14 +5,19 @@ import styled from 'styled-components';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { periodeToString, TIDENES_MORGEN } from '../../../../../typer/periode';
 import {
     hentVedtaksperiodeTittel,
     Vedtaksperiode,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
-import { formaterBeløp, isoStringToDayjs } from '../../../../../utils/formatter';
-import { sisteDagInneværendeMåned } from '../../../../../utils/tid';
+import { formaterBeløp } from '../../../../../utils/formatter';
+import {
+    erEtter,
+    kalenderDatoMedFallback,
+    periodeToString,
+    sisteDagIInneværendeMåned,
+    TIDENES_ENDE,
+} from '../../../../../utils/kalender';
 
 const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     margin-bottom: 1rem;
@@ -39,8 +44,8 @@ interface IEkspanderbartBegrunnelsePanelProps {
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 }
 
-const slutterSenereEnnInneværendeMåned = (dato: string) =>
-    isoStringToDayjs(dato, TIDENES_MORGEN).isAfter(sisteDagInneværendeMåned());
+const slutterSenereEnnInneværendeMåned = (tom?: string) =>
+    erEtter(kalenderDatoMedFallback(tom, TIDENES_ENDE), sisteDagIInneværendeMåned());
 
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     vedtaksperiode,

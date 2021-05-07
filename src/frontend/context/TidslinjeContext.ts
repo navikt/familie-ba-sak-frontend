@@ -7,8 +7,17 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
 import { IGrunnlagPerson } from '../typer/person';
-import familieDayjs from '../utils/familieDayjs';
-import { hentFørsteDagIYearMonth, hentSisteDagIYearMonth } from '../utils/tid';
+import {
+    hentFørsteDagIYearMonth,
+    hentSisteDagIYearMonth,
+    kalenderDatoTilDate,
+    KalenderEnhet,
+    leggTil,
+    iDag,
+    sisteDagIInneværendeMåned,
+    sisteDagIMåned,
+    trekkFra,
+} from '../utils/kalender';
 
 export interface ITidslinjeVindu {
     id: number;
@@ -39,13 +48,13 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
     const [aktivtTidslinjeVindu, settAktivtTidslinjeVindu] = useState({
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
-        sluttDato: familieDayjs().endOf('month'),
-        startDato: familieDayjs().subtract(12, 'month').endOf('month'),
+        startDato: sisteDagIMåned(trekkFra(iDag(), 12, KalenderEnhet.MÅNED)),
+        sluttDato: sisteDagIInneværendeMåned(),
     });
 
     const genererFormatertÅrstall = () => {
-        const startÅr = aktivtTidslinjeVindu.startDato.year();
-        const sluttÅr = aktivtTidslinjeVindu.sluttDato.year();
+        const startÅr = aktivtTidslinjeVindu.startDato.år;
+        const sluttÅr = aktivtTidslinjeVindu.sluttDato.år;
 
         if (startÅr !== sluttÅr) {
             return `${startÅr} - ${sluttÅr}`;
@@ -58,14 +67,14 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         if (retning === NavigeringsRetning.VENSTRE) {
             settAktivtTidslinjeVindu(({ sluttDato, startDato, vindu }) => ({
                 ...aktivtTidslinjeVindu,
-                sluttDato: sluttDato.clone().subtract(vindu.måneder, 'month').endOf('month'),
-                startDato: startDato.clone().subtract(vindu.måneder, 'month').endOf('month'),
+                startDato: sisteDagIMåned(trekkFra(startDato, vindu.måneder, KalenderEnhet.MÅNED)),
+                sluttDato: sisteDagIMåned(trekkFra(sluttDato, vindu.måneder, KalenderEnhet.MÅNED)),
             }));
         } else {
             settAktivtTidslinjeVindu(({ sluttDato, startDato, vindu }) => ({
                 ...aktivtTidslinjeVindu,
-                sluttDato: sluttDato.clone().add(vindu.måneder, 'month').endOf('month'),
-                startDato: startDato.clone().add(vindu.måneder, 'month').endOf('month'),
+                startDato: sisteDagIMåned(leggTil(startDato, vindu.måneder, KalenderEnhet.MÅNED)),
+                sluttDato: sisteDagIMåned(leggTil(sluttDato, vindu.måneder, KalenderEnhet.MÅNED)),
             }));
         }
     };
@@ -79,7 +88,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         settAktivtTidslinjeVindu(({ sluttDato }) => ({
             ...aktivtTidslinjeVindu,
             vindu: vindu,
-            startDato: sluttDato.clone().subtract(vindu.måneder, 'month').endOf('month'),
+            startDato: sisteDagIMåned(trekkFra(sluttDato, vindu.måneder, KalenderEnhet.MÅNED)),
         }));
     };
 
@@ -91,11 +100,11 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                   (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
                       return personMedAndelerTilkjentYtelse.ytelsePerioder.map(
                           (ytelsePeriode: IYtelsePeriode, index: number) => ({
-                              fom: new Date(
-                                  hentFørsteDagIYearMonth(ytelsePeriode.stønadFom).toISOString()
+                              fom: kalenderDatoTilDate(
+                                  hentFørsteDagIYearMonth(ytelsePeriode.stønadFom)
                               ),
-                              tom: new Date(
-                                  hentSisteDagIYearMonth(ytelsePeriode.stønadTom).toISOString()
+                              tom: kalenderDatoTilDate(
+                                  hentSisteDagIYearMonth(ytelsePeriode.stønadTom)
                               ),
                               id: `${personMedAndelerTilkjentYtelse.personIdent}_${index}`,
                               status: 'suksess',
