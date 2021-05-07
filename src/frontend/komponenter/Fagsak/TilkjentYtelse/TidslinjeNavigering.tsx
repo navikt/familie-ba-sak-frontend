@@ -12,6 +12,8 @@ interface IProps {
     naviger: (retning: NavigeringsRetning) => void;
     kanNavigereTilHøyre?: boolean;
     kanNavigereTilVenstre?: boolean;
+    navigerTilVenstreTittel?: string;
+    navigerTilHyøyreTittel?: string;
     children?: React.ReactNode | React.ReactChild | React.ReactChildren;
 }
 
@@ -30,6 +32,8 @@ const TidslinjeNavigering: React.FC<IProps> = ({
     naviger,
     kanNavigereTilHøyre = true,
     kanNavigereTilVenstre = true,
+    navigerTilVenstreTittel,
+    navigerTilHyøyreTittel,
     children,
 }) => {
     return (
@@ -42,7 +46,11 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 onClick={() => naviger(NavigeringsRetning.VENSTRE)}
             >
                 <FamilieChevron title={'Naviger til venstre'} retning={'venstre'} />
-                <span className="sr-only">Naviger til venstre i tidslinjen</span>
+                <span className="sr-only">
+                    {navigerTilVenstreTittel
+                        ? navigerTilVenstreTittel
+                        : 'Naviger til venstre i tidslinjen'}
+                </span>
             </Flatknapp>
             {children && <DivMedHøyremargin>{children}</DivMedHøyremargin>}
             <Flatknapp
@@ -53,7 +61,11 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 onClick={() => naviger(NavigeringsRetning.HØYRE)}
             >
                 <FamilieChevron title={'Naviger til høyre'} />
-                <span className="sr-only">Naviger til høyre i tidslinjen</span>
+                <span className="sr-only">
+                    {navigerTilHyøyreTittel
+                        ? navigerTilHyøyreTittel
+                        : 'Naviger til høyre i tidslinjen'}
+                </span>
             </Flatknapp>
         </StyledTidslinjenavigering>
     );

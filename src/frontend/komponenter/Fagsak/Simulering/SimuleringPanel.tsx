@@ -76,7 +76,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         : '';
     return (
         <StyledPanel border>
-            <StyledTable>
+            <StyledTable aria-label={'Simuleringsoversikt'}>
                 <tbody>
                     <tr>
                         <StyledTh colSpan={2}>
@@ -116,7 +116,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
 
             <StyledHr />
 
-            <StyledTable>
+            <StyledTable aria-label={'Neste utbetaling'}>
                 <tbody>
                     <tr>
                         <StyledTh colSpan={2}>

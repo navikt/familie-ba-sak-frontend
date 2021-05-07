@@ -125,19 +125,28 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         </>
     );
 
+    const tilOgFraDatoForSimulering = `${familieDayjs(fom).format('DD.MM.YYYY')} - ${familieDayjs(
+        tomDatoNestePeriode
+    ).format('DD.MM.YYYY')}`;
+
     return (
         <>
             <SimuleringTabellOverskrift>
                 <Element>
                     Simuleringsresultat{' '}
-                    {perioder.length > 1 &&
-                        `for perioden ${familieDayjs(fom).format('DD.MM.YYYY')} - ${familieDayjs(
-                            tomDatoNestePeriode
-                        ).format('DD.MM.YYYY')}`}
+                    {perioder.length > 1 && `for perioden ${tilOgFraDatoForSimulering}`}
                 </Element>
             </SimuleringTabellOverskrift>
 
-            <StyledTable className="tabell" bredde={tabellbredde}>
+            <StyledTable
+                aria-label={`Simuleringsresultat for ${
+                    erMerEnn12MånederISimulering
+                        ? aktueltÅr
+                        : `perioden ${tilOgFraDatoForSimulering}`
+                }`}
+                className="tabell"
+                bredde={tabellbredde}
+            >
                 <colgroup>
                     <VenstreKolonne />
                     {perioder.map(
@@ -167,6 +176,12 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                         }
                                         kanNavigereTilHøyre={!erISisteÅrAvPerioden}
                                         kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
+                                        navigerTilHyøyreTittel={`Vis simuleringsresultat for ${
+                                            aktueltÅr + 1
+                                        }`}
+                                        navigerTilVenstreTittel={`Vis simuleringsresultat for ${
+                                            aktueltÅr - 1
+                                        }`}
                                     >
                                         <Undertekst>{årISimuleringen[indexFramvistÅr]}</Undertekst>
                                     </TidslinjeNavigering>
