@@ -12,23 +12,12 @@ export const TIDENES_ENDE: DagMånedÅr = {
     år: 3000,
 };
 
-export const iDag = (): DagMånedÅr => kalenderDatoFraDate(new Date());
+export const kalenderDato = (dato: FamilieIsoDate): DagMånedÅr => parseIso8601String(dato);
 
-export const førsteDagIInneværendeMåned = () => {
-    const inneværende = iDag();
-    return {
-        ...inneværende,
-        dag: 1,
-    };
-};
-
-export const sisteDagIInneværendeMåned = () => {
-    const inneværende = iDag();
-    return {
-        ...inneværende,
-        dag: antallDagerIMåned({ måned: inneværende.måned, år: inneværende.år }),
-    };
-};
+export const kalenderDatoMedFallback = (
+    dato: FamilieIsoDate | undefined,
+    fallbackDato: DagMånedÅr
+): DagMånedÅr => (dato ? parseIso8601String(dato) : fallbackDato);
 
 export const kalenderDatoFraDate = (date: Date): DagMånedÅr => ({
     dag: date.getDate(),
@@ -49,9 +38,20 @@ export const kalenderDatoTilDate = (
         minutter ? minutter : 0
     );
 
-export const kalenderDatoMedFallback = (
-    dato: FamilieIsoDate | undefined,
-    fallbackDato: DagMånedÅr
-): DagMånedÅr => (dato ? parseIso8601String(dato) : fallbackDato);
+export const iDag = (): DagMånedÅr => kalenderDatoFraDate(new Date());
 
-export const kalenderDato = (dato: FamilieIsoDate): DagMånedÅr => parseIso8601String(dato);
+export const førsteDagIInneværendeMåned = () => {
+    const inneværende = iDag();
+    return {
+        ...inneværende,
+        dag: 1,
+    };
+};
+
+export const sisteDagIInneværendeMåned = () => {
+    const inneværende = iDag();
+    return {
+        ...inneværende,
+        dag: antallDagerIMåned({ måned: inneværende.måned, år: inneværende.år }),
+    };
+};

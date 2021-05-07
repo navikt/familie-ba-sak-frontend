@@ -1,3 +1,4 @@
+import { serializeIso8601String } from '../io';
 import { kalenderDato } from '../kalender';
 
 describe('Skal teste parsing av datoer', () => {
@@ -27,5 +28,17 @@ describe('Skal teste parsing av datoer', () => {
         expect(() => kalenderDato('2020-02-30')).toThrowError(
             "Dag fra dato '2020-02-30' er '30' og er sannsynligvis feil"
         );
+    });
+
+    test('Serialiser tilbake til ISO string', () => {
+        const dagMånedÅr = kalenderDato('2020-03-12');
+
+        expect(serializeIso8601String(dagMånedÅr)).toBe('2020-03-12');
+    });
+
+    test('Serialiser tilbake til ISO string ved månedsslutt', () => {
+        const dagMånedÅr = kalenderDato('2020-02-29');
+
+        expect(serializeIso8601String(dagMånedÅr)).toBe('2020-02-29');
     });
 });

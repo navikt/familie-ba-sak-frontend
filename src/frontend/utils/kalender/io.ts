@@ -64,7 +64,7 @@ export const parseIso8601MånedString = (dato: FamilieIsoDate): DagMånedÅr => 
 
 export const serializeIso8601String = ({ år, måned, dag }: DagMånedÅr): FamilieIsoDate => {
     const yyyy = capString(4, år);
-    const mm = capString(2, måned);
+    const mm = capString(2, måned + 1);
     const dd = capString(2, dag);
     return `${yyyy}-${mm}-${dd}`;
 };

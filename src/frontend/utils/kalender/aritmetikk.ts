@@ -8,7 +8,12 @@ import {
 } from '.';
 
 /**
- * TODO dokumentasjon
+ * Aritmetikk for kalender er tilnærmet lik logikken for Localdate i kotlin.
+ * Det betyr at ved addisjon og subtraksjon på måneder bruker vi ikke fast størrelse på måned.
+ *
+ * Eksempel:
+ * 31.03.20 minus 1 måned -> 29.02.20
+ * 01.03.20 minus 1 måned -> 01.02.20
  */
 
 export const leggTil = (
