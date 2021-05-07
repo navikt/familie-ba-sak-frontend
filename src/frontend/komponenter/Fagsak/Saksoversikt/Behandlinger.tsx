@@ -19,8 +19,8 @@ import {
 import { IFagsak } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
 import { IVedtakForBehandling } from '../../../typer/vedtak';
-import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { kalenderDiff } from '../../../utils/kalender';
 import { erProd } from '../../../utils/miljø';
 
 interface IBehandlingshistorikkProps {
@@ -53,9 +53,9 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                     <tbody>
                         {fagsak.behandlinger
                             .sort((a, b) =>
-                                familieDayjsDiff(
-                                    familieDayjs(b.opprettetTidspunkt),
-                                    familieDayjs(a.opprettetTidspunkt)
+                                kalenderDiff(
+                                    new Date(b.opprettetTidspunkt),
+                                    new Date(a.opprettetTidspunkt)
                                 )
                             )
                             .map((behandling: IBehandling) => {

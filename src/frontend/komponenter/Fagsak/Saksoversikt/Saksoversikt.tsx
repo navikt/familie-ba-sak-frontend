@@ -22,11 +22,11 @@ import {
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
 import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../../utils/formatter';
 import {
     førsteDagIInneværendeMåned,
     kalenderDatoTilDate,
+    kalenderDiff,
     KalenderEnhet,
     leggTil,
     periodeOverlapperMedValgtDato,
@@ -80,10 +80,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
     let gjeldendeBehandling =
         iverksatteBehandlinger.length > 0
             ? iverksatteBehandlinger.sort((a, b) =>
-                  familieDayjsDiff(
-                      familieDayjs(b.opprettetTidspunkt),
-                      familieDayjs(a.opprettetTidspunkt)
-                  )
+                  kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
               )[0]
             : undefined;
 

@@ -17,8 +17,7 @@ import {
     IFamilierelasjonMaskert,
 } from '../../../typer/person';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
-import { datoformat } from '../../../utils/formatter';
+import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import LeggTilBarn from './LeggTilBarn';
 
@@ -48,11 +47,19 @@ const Barna: React.FunctionComponent = () => {
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
+            if (!a.fødselsdato) {
+                return 1;
+            }
+
+            if (!b.fødselsdato) {
+                return -1;
+            }
+
             return !a.ident
                 ? 1
-                : familieDayjsDiff(
-                      familieDayjs(b.fødselsdato, datoformat.ISO_DAG),
-                      familieDayjs(a.fødselsdato, datoformat.ISO_DAG)
+                : kalenderDiff(
+                      kalenderDatoTilDate(kalenderDato(b.fødselsdato)),
+                      kalenderDatoTilDate(kalenderDato(a.fødselsdato))
                   );
         }
     );

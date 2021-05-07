@@ -8,9 +8,13 @@ import {
     IVilkårResultat,
     Resultat,
 } from '../../typer/vilkår';
-import familieDayjs, { familieDayjsDiff } from '../../utils/familieDayjs';
-import { datoformat } from '../../utils/formatter';
-import { periodeDiff, nyPeriode } from '../../utils/kalender';
+import {
+    periodeDiff,
+    nyPeriode,
+    kalenderDiff,
+    kalenderDatoTilDate,
+    kalenderDato,
+} from '../../utils/kalender';
 import {
     erAvslagBegrunnelserGyldig,
     erPeriodeGyldig,
@@ -140,9 +144,9 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 return -1;
             }
 
-            return familieDayjsDiff(
-                familieDayjs(b.person.fødselsdato, datoformat.ISO_DAG),
-                familieDayjs(a.person.fødselsdato, datoformat.ISO_DAG)
+            return kalenderDiff(
+                kalenderDatoTilDate(kalenderDato(b.person.fødselsdato)),
+                kalenderDatoTilDate(kalenderDato(a.person.fødselsdato))
             );
         });
 };
