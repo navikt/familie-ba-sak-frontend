@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import dayjs from 'dayjs';
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
@@ -23,7 +24,13 @@ import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedt
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
 import { datoformat, formaterDato } from '../../../utils/formatter';
-import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
+import {
+    førsteDagIInneværendeMåned,
+    kalenderDatoTilDate,
+    KalenderEnhet,
+    leggTil,
+    periodeOverlapperMedValgtDato,
+} from '../../../utils/kalender';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import Behandlinger from './Behandlinger';
@@ -91,9 +98,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
 
-    const nesteMåned = familieDayjs().add(1, 'month').startOf('month');
+    const nesteMåned = leggTil(førsteDagIInneværendeMåned(), 1, KalenderEnhet.MÅNED);
+    const nesteMånedVisning = dayjs(kalenderDatoTilDate(nesteMåned));
     const utbetalingsperiodeNesteMåned = utbetalingsperioder.find(periode =>
-        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned.toDate())
+        periodeOverlapperMedValgtDato(
+            periode.periodeFom,
+            periode.periodeTom,
+            kalenderDatoTilDate(nesteMåned)
+        )
     );
 
     const lenkeTilBehandlingsresultat = () => {
@@ -121,7 +133,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                             <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                                 <FlexSpaceBetween>
                                     {`Utbetalingen endres fra og med ${formaterDato(
-                                        nesteMåned,
+                                        nesteMånedVisning,
                                         datoformat.MÅNED_NAVN
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
@@ -135,7 +147,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
             return (
                 <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                     <FlexSpaceBetween>
-                        {`Utbetalingen starter ${formaterDato(nesteMåned, datoformat.MÅNED_NAVN)}`}
+                        {`Utbetalingen starter ${formaterDato(
+                            nesteMånedVisning,
+                            datoformat.MÅNED_NAVN
+                        )}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
                 </AlertStripe>

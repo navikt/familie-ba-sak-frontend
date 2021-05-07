@@ -86,15 +86,12 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             switch (vedtaksperiodetype) {
                 case Vedtaksperiodetype.OPPHØR: {
                     return VedtakBegrunnelse.OPPHØR_FRITEKST;
-                    break;
                 }
                 case Vedtaksperiodetype.AVSLAG: {
                     return VedtakBegrunnelse.AVSLAG_FRITEKST;
-                    break;
                 }
                 case Vedtaksperiodetype.UTBETALING: {
                     return VedtakBegrunnelse.REDUKSJON_FRITEKST;
-                    break;
                 }
                 default: {
                     return undefined;
@@ -139,6 +136,9 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         };
 
         const onSubmit = () => {
+            if (!vedtaksperiode.periodeFom) {
+                throw new Error('Prøver å legge til en begrunnelse på en periode uten fom');
+            }
             settFritekstSubmit(FritekstSubmit.POST);
 
             if (fagsak.status === RessursStatus.SUKSESS) {

@@ -1,6 +1,5 @@
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { nyPeriode, periodeDiff } from '../../typer/periode';
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
     IPersonResultat,
@@ -11,6 +10,7 @@ import {
 } from '../../typer/vilkår';
 import familieDayjs, { familieDayjsDiff } from '../../utils/familieDayjs';
 import { datoformat } from '../../utils/formatter';
+import { periodeDiff, nyPeriode } from '../../utils/kalender';
 import {
     erAvslagBegrunnelserGyldig,
     erPeriodeGyldig,

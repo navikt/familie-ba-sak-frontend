@@ -154,17 +154,6 @@ export const oppgaveTypeFilter: INøkkelPar = {
     VUR_SVAR: { id: 'VUR_SVAR', navn: 'Vurder svar' },
 };
 
-export enum EnhetsmappeFilter {
-    ALLE = 'ALLE',
-    Uplasserte = 'Uplasserte',
-    EM10 = '10 Søknader-klar til behandling',
-    EM20 = '20 Avventer dokumentasjon',
-    EM30 = '30 Klager klar til behandling',
-    EM40 = '40 Revurdering klar til behandling',
-    EM41 = '41 Revurdering',
-    EM50 = '50 Tilbakekreving klar til behandling',
-}
-
 export enum PrioritetFilter {
     ALLE = 'ALLE',
     NORM = 'Normal',

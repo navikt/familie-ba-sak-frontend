@@ -24,7 +24,7 @@ import { useSøknad } from '../../../context/SøknadContext';
 import Pluss from '../../../ikoner/Pluss';
 import { LoggType } from '../../../typer/logg';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
-import { FamilieIsoDate } from '../../../typer/tid';
+import { FamilieIsoDate } from '../../../utils/kalender';
 import { identValidator } from '../../../utils/validators';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import LeggTilUregistrertBarn from './LeggTilUregistrertBarn';

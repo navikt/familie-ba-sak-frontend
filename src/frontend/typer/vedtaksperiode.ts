@@ -1,7 +1,7 @@
+import { FamilieIsoDate } from '../utils/kalender';
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
 import { IGrunnlagPerson } from './person';
-import { FamilieIsoDate } from './tid';
 
 export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
@@ -12,7 +12,7 @@ export enum Vedtaksperiodetype {
 export type Vedtaksperiode =
     | {
           periodeFom: FamilieIsoDate;
-          periodeTom: FamilieIsoDate;
+          periodeTom?: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.UTBETALING;
           utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
           ytelseTyper: YtelseType[];
@@ -21,12 +21,12 @@ export type Vedtaksperiode =
       }
     | {
           periodeFom: FamilieIsoDate;
-          periodeTom: FamilieIsoDate;
+          periodeTom?: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.OPPHØR;
       }
     | {
-          periodeFom: FamilieIsoDate;
-          periodeTom: FamilieIsoDate;
+          periodeFom?: FamilieIsoDate;
+          periodeTom?: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.AVSLAG;
       };
 

@@ -20,7 +20,6 @@ import {
     IVedtakBegrunnelseSubmit,
     useVedtakBegrunnelser,
 } from '../../../../context/VedtakBegrunnelserContext';
-import { lagPeriodeId } from '../../../../typer/periode';
 import {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
@@ -28,6 +27,7 @@ import {
 } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
+import { lagPeriodeId } from '../../../../utils/kalender';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
