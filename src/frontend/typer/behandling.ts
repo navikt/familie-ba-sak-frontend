@@ -33,6 +33,7 @@ export enum BehandlingÅrsak {
     TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
     OMREGNING_6ÅR = 'OMREGNING_6ÅR',
     OMREGNING_18ÅR = 'OMREGNING_18ÅR',
+    MIGRERING = 'MIGRERING',
 }
 
 export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
@@ -45,6 +46,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
     TEKNISK_OPPHØR: 'Teknisk opphør',
     OMREGNING_6ÅR: 'Omregning 6 år',
     OMREGNING_18ÅR: 'Omregning 18 år',
+    MIGRERING: 'Migrering',
 };
 
 export enum BehandlingUnderkategori {
