@@ -20,8 +20,10 @@ import {
 import {
     DagMånedÅr,
     erISammeMåned,
+    erSamme,
     kalenderDatoMedFallback,
     KalenderEnhet,
+    sisteDagIMåned,
     TIDENES_ENDE,
     TIDENES_MORGEN,
     trekkFra,
@@ -48,7 +50,10 @@ export const hentUtgjørendeVilkårImpl = (
                 TIDENES_MORGEN
             );
             const oppfyltTomMånedEtter =
-                vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
+                vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ||
+                erSamme(vilkårPeriodeTom, sisteDagIMåned(vilkårPeriodeTom))
+                    ? 1
+                    : 0;
 
             if (begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                 return (

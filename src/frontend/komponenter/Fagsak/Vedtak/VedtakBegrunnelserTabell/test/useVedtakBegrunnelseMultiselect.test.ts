@@ -92,4 +92,60 @@ describe('useVedtakBegrunnelseMultiselect', () => {
             expect(utgjørendeVilkår).toContain(VilkårType.LOVLIG_OPPHOLD);
         });
     });
+
+    describe('Test hentUtgjørendeVilkår for reduksjon og opphør pga 18 år', () => {
+        const personResultater = [
+            mockRestPersonResultat({
+                vilkårResultater: [
+                    mockRestVilkårResultat({
+                        vilkårType: VilkårType.UNDER_18_ÅR,
+                        periodeFom: '2000-06-01',
+                        periodeTom: '2018-05-31', // Trigger reduksjon måneden etter, siden 18 årsdagen først er måneden etter
+                    }),
+                ],
+            }),
+            mockRestPersonResultat({
+                vilkårResultater: [
+                    mockRestVilkårResultat({
+                        vilkårType: VilkårType.UNDER_18_ÅR,
+                        periodeFom: '2001-02-14',
+                        periodeTom: '2019-02-13', // Trigger opphør samme måned, siden 18 årsdagen er samme måned
+                    }),
+                ],
+            }),
+        ];
+        const reduksjonsperiode: Vedtaksperiode = {
+            periodeFom: '2018-06-01',
+            periodeTom: '2019-01-31',
+            vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
+            utbetalingsperiodeDetaljer: [],
+            ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
+            antallBarn: 1,
+            utbetaltPerMnd: 1054,
+        };
+        const opphørsperiode: Vedtaksperiode = {
+            periodeFom: '2019-02-01',
+            periodeTom: '',
+            vedtaksperiodetype: Vedtaksperiodetype.OPPHØR,
+        };
+
+        test(`Test at utgjørende vilkår hentes ved reduksjon`, () => {
+            const utgjørendeVilkår = hentUtgjørendeVilkårImpl(
+                VedtakBegrunnelseType.REDUKSJON,
+                personResultater,
+                reduksjonsperiode
+            );
+            expect(utgjørendeVilkår.length).toEqual(1);
+            expect(utgjørendeVilkår).toContain(VilkårType.UNDER_18_ÅR);
+        });
+        test(`Test at utgjørende vilkår hentes ved opphør`, () => {
+            const utgjørendeVilkår = hentUtgjørendeVilkårImpl(
+                VedtakBegrunnelseType.OPPHØR,
+                personResultater,
+                opphørsperiode
+            );
+            expect(utgjørendeVilkår.length).toEqual(1);
+            expect(utgjørendeVilkår).toContain(VilkårType.UNDER_18_ÅR);
+        });
+    });
 });
