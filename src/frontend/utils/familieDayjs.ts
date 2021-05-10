@@ -2,12 +2,14 @@ import dayjs, { ConfigType } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 
 export type Dayjs = dayjs.Dayjs;
 
 const norskTidssone = 'Europe/Oslo';
 
 require('dayjs/locale/nb');
+dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 dayjs.extend(customParseFormat);
