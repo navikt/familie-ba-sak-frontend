@@ -11,7 +11,7 @@ import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
-import { periodeToString } from '../../../utils/kalender';
+import { periodeToString, kalenderDato } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 import TidslinjeNavigering from '../TilkjentYtelse/TidslinjeNavigering';
 
@@ -100,7 +100,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
         !erMerEnn12MånederISimulering ||
         (!periodeErEtterNesteUtbetalingsPeriode(periode) &&
-            dayjs(periode.fom).year() === aktueltÅr);
+            kalenderDato(periode.fom).år === aktueltÅr);
 
     const formaterBeløpUtenValutakode = (beløp?: number) =>
         beløp ? formaterBeløp(beløp).slice(0, -3) : '-';
