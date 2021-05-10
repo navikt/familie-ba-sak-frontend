@@ -24,6 +24,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         status: RessursStatus.HENTER,
     });
     const { toggles } = useApp();
+    const maksLengdeFritekst = 1500;
 
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
@@ -60,6 +61,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             tilbakekrevingErToggletPå,
             tilbakekreving: tilbakekrevingsvalg,
             erFeilutbetaling,
+            maksLengdeFritekst,
         },
         valideringsfunksjon: (felt, avhengigheter) =>
             avhengigheter?.erFeilutbetaling &&
@@ -67,6 +69,8 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL &&
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
+                : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
+                ? feil(felt, `Varselet for tilbakemeldingen er for langt.`)
                 : ok(felt),
         skalFeltetVises: (avhengigheter: Avhengigheter) =>
             avhengigheter?.tilbakekrevingErToggletPå &&
@@ -76,12 +80,18 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     });
     const begrunnelse = useFelt<string>({
         verdi: åpenBehandling.tilbakekreving?.begrunnelse ?? '',
-        avhengigheter: { erFeilutbetaling, tilbakekrevingErToggletPå },
+        avhengigheter: {
+            erFeilutbetaling,
+            tilbakekrevingErToggletPå,
+            maksLengdeFritekst,
+        },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
-        valideringsfunksjon: felt =>
+        valideringsfunksjon: (felt, avhengigheter) =>
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
+                : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
+                ? feil(felt, `Begrunnelsesteksten er for langt.`)
                 : ok(felt),
     });
 
@@ -118,6 +128,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         tilbakekrevingErToggletPå,
         erFeilutbetaling,
         hentSkjemadata,
+        maksLengdeFritekst,
     };
 });
 

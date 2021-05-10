@@ -86,7 +86,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 }) => {
     const { request } = useHttp();
     const { erLesevisning, åpenBehandling } = useBehandling();
-    const { skjema, hentFeilTilOppsummering } = useSimulering();
+    const { skjema, hentFeilTilOppsummering, maksLengdeFritekst } = useSimulering();
     const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<
         Ressurs<boolean>
     >({
@@ -227,7 +227,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                                     skjema.visFeilmeldinger
                                 )}
                                 erLesevisning={erLesevisning()}
-                                maxLength={1500}
+                                maxLength={maksLengdeFritekst}
                             />
 
                             <ForhåndsvisVarselKnappContainer>
@@ -283,7 +283,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                     label="Begrunnelse"
                     {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning()}
-                    maxLength={1500}
+                    maxLength={maksLengdeFritekst}
                 />
 
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
