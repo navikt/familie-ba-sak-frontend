@@ -91,7 +91,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
                 : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
-                ? feil(felt, `Begrunnelsesteksten er for langt.`)
+                ? feil(felt, `Begrunnelsesteksten er for lang.`)
                 : ok(felt),
     });
 
