@@ -10,8 +10,8 @@ import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import familieDayjs from '../../../utils/familieDayjs';
-import { formaterBeløp } from '../../../utils/formatter';
+import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
+import { periodeToString } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 import TidslinjeNavigering from '../TilkjentYtelse/TidslinjeNavigering';
 
@@ -132,9 +132,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                 <Element>
                     Simuleringsresultat{' '}
                     {perioder.length > 1 &&
-                        `for perioden ${familieDayjs(fom).format('DD.MM.YYYY')} - ${familieDayjs(
-                            tomDatoNestePeriode
-                        ).format('DD.MM.YYYY')}`}
+                        `for perioden ${periodeToString({ fom, tom: tomDatoNestePeriode })}`}
                 </Element>
             </SimuleringTabellOverskrift>
 
@@ -181,7 +179,10 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                         <th>
                                             <Element>
                                                 {kapitaliserTekst(
-                                                    familieDayjs(periode.fom).format('MMM')
+                                                    formaterIsoDato(
+                                                        periode.fom,
+                                                        datoformat.MÅNED_NAVN
+                                                    )
                                                 )}
                                             </Element>
                                         </th>

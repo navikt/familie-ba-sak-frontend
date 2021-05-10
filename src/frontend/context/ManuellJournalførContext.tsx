@@ -26,7 +26,7 @@ import {
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
-import familieDayjs, { familieDayjsDiff } from '../utils/familieDayjs';
+import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
@@ -315,10 +315,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.data.fagsak?.behandlinger.length
             ? dataForManuellJournalføring.data.fagsak.behandlinger.sort((a, b) =>
-                  familieDayjsDiff(
-                      familieDayjs(b.opprettetTidspunkt),
-                      familieDayjs(a.opprettetTidspunkt)
-                  )
+                  kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
               )
             : [];
     };

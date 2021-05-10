@@ -8,8 +8,7 @@ import Panel from 'nav-frontend-paneler';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { ISimuleringDTO } from '../../../typer/simulering';
-import familieDayjs from '../../../utils/familieDayjs';
-import { formaterBeløp } from '../../../utils/formatter';
+import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
 import { kalenderDato, KalenderEnhet, trekkFra } from '../../../utils/kalender';
 import { tilVisning } from '../../../utils/kalender';
 
@@ -125,7 +124,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                         <StyledTd>
                             <Normaltekst>
                                 {kapitaliserTekst(
-                                    familieDayjs(fomDatoNestePeriode).format('MMMM YYYY')
+                                    formaterIsoDato(fomDatoNestePeriode, datoformat.MÅNED_ÅR_NAVN)
                                 )}
                             </Normaltekst>
                         </StyledTd>
