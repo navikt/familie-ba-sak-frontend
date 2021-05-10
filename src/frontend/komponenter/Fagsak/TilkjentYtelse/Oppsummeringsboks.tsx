@@ -8,15 +8,15 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { ytelsetype } from '../../../typer/beregning';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
-import familieDayjs from '../../../utils/familieDayjs';
 import {
     datoformat,
     formaterBeløp,
-    formaterDato,
+    formaterIsoDato,
     formaterPersonIdent,
     hentAlderSomString,
     sorterFødselsdato,
 } from '../../../utils/formatter';
+import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 
 interface IProps {
     vedtaksperioder: Vedtaksperiode[];
@@ -33,7 +33,10 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
     const { settAktivEtikett } = useTidslinje();
 
     const månedNavnOgÅr = () => {
-        const navn = formaterDato(familieDayjs(aktivEtikett.dato), datoformat.MÅNED_NAVN);
+        const navn = formaterIsoDato(
+            serializeIso8601String(kalenderDatoFraDate(aktivEtikett.dato)),
+            datoformat.MÅNED_ÅR_NAVN
+        );
         return navn[0].toUpperCase() + navn.substr(1);
     };
 

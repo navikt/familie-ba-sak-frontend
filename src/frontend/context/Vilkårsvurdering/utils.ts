@@ -1,7 +1,7 @@
 import { FeltState } from '@navikt/familie-skjema';
 
-import { IPeriode } from '../../typer/periode';
 import { IVilkårResultat, Resultat } from '../../typer/vilkår';
+import { IPeriode } from '../../utils/kalender';
 
 export const hentPeriode = (vilkårResultat: FeltState<IVilkårResultat>): IPeriode => {
     return vilkårResultat.verdi.periode.verdi;

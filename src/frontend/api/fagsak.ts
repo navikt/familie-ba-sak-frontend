@@ -5,7 +5,6 @@ import {
     BehandlingÅrsak,
     IBehandling,
 } from '../typer/behandling';
-import { IRestPersonResultat } from '../typer/vilkår';
 
 export const aktivVedtakPåBehandling = (behandling?: IBehandling) =>
     behandling?.vedtakForBehandling.find(v => v.aktiv);
@@ -22,8 +21,4 @@ export interface IOpprettBehandlingData {
     navIdent?: string;
     søkersIdent: string;
     underkategori: BehandlingUnderkategori;
-}
-
-export interface IRestVilkårsvurdering {
-    personResultater: IRestPersonResultat[];
 }

@@ -6,7 +6,6 @@ import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IFagsak } from '../typer/fagsak';
-import { lagPeriodeId } from '../typer/periode';
 import {
     IRestAvslagbegrunnelser,
     IRestDeleteVedtakBegrunnelser,
@@ -16,6 +15,7 @@ import {
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
 import { Vilkårsbegrunnelser } from '../typer/vilkår';
+import { lagPeriodeId } from '../utils/kalender';
 import { useFagsakRessurser } from './FagsakContext';
 
 export interface IVedtakBegrunnelseSubmit {
