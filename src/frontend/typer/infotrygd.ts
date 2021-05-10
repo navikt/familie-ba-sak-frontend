@@ -61,3 +61,8 @@ export interface IDelytelse {
     oppgjørsordning?: string;
     typeUtbetaling?: string;
 }
+
+export interface IMigreringResponseDto {
+    fagsakId: number;
+    behandlingId: number;
+}
