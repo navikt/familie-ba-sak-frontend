@@ -10,11 +10,10 @@ import {
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
 import { Resultat } from '../typer/vilkår';
-import familieDayjs from './familieDayjs';
-import { datoformat } from './formatter';
 import {
     erEtter,
     erFør,
+    erIsoStringGyldig,
     erSamme,
     IPeriode,
     kalenderDato,
@@ -63,14 +62,11 @@ const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: string
 };
 
 const finnesDatoFørFødselsdato = (person: IGrunnlagPerson, fom: string, tom?: string) => {
-    const fødselsdato = familieDayjs(new Date(person.fødselsdato));
-    const fomDato = familieDayjs(new Date(fom));
-    const tomDato = tom ? familieDayjs(new Date(tom)) : undefined;
+    const fødselsdato = kalenderDato(person.fødselsdato);
+    const fomDato = kalenderDato(fom);
+    const tomDato = tom ? kalenderDato(tom) : undefined;
 
-    return (
-        fomDato.isBefore(fødselsdato, 'date') ||
-        (tomDato ? tomDato.isBefore(fødselsdato, 'date') : false)
-    );
+    return erFør(fomDato, fødselsdato) || (tomDato ? erFør(tomDato, fødselsdato) : false);
 };
 
 export const erPeriodeGyldig = (
@@ -99,7 +95,7 @@ export const erPeriodeGyldig = (
                 }
             }
         }
-        const fomDatoErGyldig = familieDayjs(fom).isValid();
+        const fomDatoErGyldig = erIsoStringGyldig(fom);
         const fomDatoErFørTomDato = erFør(
             kalenderDatoMedFallback(fom, TIDENES_MORGEN),
             kalenderDatoMedFallback(tom, TIDENES_ENDE)
@@ -168,8 +164,4 @@ export const validerFelt = <Value, Context>(
 
 export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => {
     return ok(felt);
-};
-
-export const validerFormatISODag = (dato: string | undefined) => {
-    return familieDayjs(dato, datoformat.ISO_DAG).isValid();
 };

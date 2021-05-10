@@ -1,4 +1,4 @@
-import familieDayjs, { Dayjs } from './familieDayjs';
+import familieDayjs from './familieDayjs';
 import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 
 export enum datoformat {
@@ -11,7 +11,8 @@ export enum datoformat {
     ISO_DAG = 'YYYY-MM-DD',
     DATO_TID = 'DD.MM.YY HH:mm',
     TID = 'HH:mm',
-    MÅNED_NAVN = 'MMMM YYYY',
+    MÅNED_ÅR_NAVN = 'MMMM YYYY',
+    MÅNED_NAVN = 'MMM',
 }
 
 export enum datoformatNorsk {
@@ -30,10 +31,6 @@ export const formaterIsoDato = (
     }
     const dayjsDato = familieDayjs(dato);
     return dayjsDato.isValid() ? dayjsDato.format(tilFormat) : dato;
-};
-
-export const formaterDato = (dato: Dayjs, tilFormat: datoformat): string => {
-    return dato.isValid() ? dato.format(tilFormat) : '';
 };
 
 export const formaterIverksattDato = (dato: string | undefined) =>

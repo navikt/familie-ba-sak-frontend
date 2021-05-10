@@ -57,7 +57,7 @@ describe('utils/formatter', () => {
             expect(formaterIsoDato(datoString, datoformat.TID)).toEqual(dato.format('HH:mm'));
         });
         test('Skal returnere dato på format MMMM YYYY', () => {
-            expect(formaterIsoDato(datoString, datoformat.MÅNED_NAVN)).toEqual('desember 2020');
+            expect(formaterIsoDato(datoString, datoformat.MÅNED_ÅR_NAVN)).toEqual('desember 2020');
         });
     });
 });

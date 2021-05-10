@@ -4,6 +4,12 @@ import { datoformat } from '../formatter';
 import { antallDagerIMåned, DagMånedÅr, FamilieIsoDate } from './typer';
 import { capString } from './utils';
 
+export const erIsoStringGyldig = (dato?: FamilieIsoDate): boolean => {
+    if (!dato) return false;
+
+    return dayjs(dato, datoformat.ISO_DAG).isValid();
+};
+
 export const parseIso8601String = (dato: FamilieIsoDate): DagMånedÅr => {
     const dayjsDato = dayjs(dato, datoformat.ISO_DAG);
 
