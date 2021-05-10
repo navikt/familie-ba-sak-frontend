@@ -320,13 +320,13 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     const validerDatoer = () => {
-        const opprettetTidspunktGyldig = erIsoStringGyldig(
-            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue
-        );
+        const opprettetTidspunktGyldig =
+            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue === '' ||
+            erIsoStringGyldig(oppgaveFelter.opprettetTidspunkt.filter?.selectedValue);
 
-        const fristGyldig = erIsoStringGyldig(
-            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue
-        );
+        const fristGyldig =
+            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue === '' ||
+            erIsoStringGyldig(oppgaveFelter.fristFerdigstillelse.filter?.selectedValue);
 
         const oppdaterteOppgaveFelter = {
             ...oppgaveFelter,
