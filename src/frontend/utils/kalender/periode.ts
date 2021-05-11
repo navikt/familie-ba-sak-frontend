@@ -1,5 +1,3 @@
-import familieDayjs, { familieDayjsDiff, TIDENES_ENDE_DAYJS } from '../familieDayjs';
-
 import {
     FamilieIsoDate,
     IPeriode,
@@ -12,6 +10,8 @@ import {
     kalenderDatoMedFallback,
     TIDENES_ENDE,
     TIDENES_MORGEN,
+    kalenderDiff,
+    kalenderDatoTilDate,
 } from '.';
 
 export const nyPeriode = (fom?: FamilieIsoDate, tom?: FamilieIsoDate): IPeriode => {
@@ -44,14 +44,13 @@ export const periodeToString = (periode: IPeriode) => {
     )}`;
 };
 
-export const periodeDiff = (første: IPeriode, annen: IPeriode) => {
+export const periodeDiff = (første: IPeriode, andre: IPeriode) => {
     if (!første.fom && !første.tom) {
         return 1;
     }
-    return familieDayjsDiff(
-        første.fom ? familieDayjs(første.fom) : TIDENES_ENDE_DAYJS,
-        annen.fom ? familieDayjs(annen.fom) : TIDENES_ENDE_DAYJS,
-        'day'
+    return kalenderDiff(
+        kalenderDatoTilDate(kalenderDatoMedFallback(første.fom, TIDENES_ENDE)),
+        kalenderDatoTilDate(kalenderDatoMedFallback(andre.fom, TIDENES_ENDE))
     );
 };
 

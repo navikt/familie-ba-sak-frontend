@@ -1,7 +1,7 @@
 import { IBehandling } from '../typer/behandling';
 import { fagsakStatus, IFagsak } from '../typer/fagsak';
 import { IVedtakForBehandling } from '../typer/vedtak';
-import familieDayjs, { familieDayjsDiff } from './familieDayjs';
+import { kalenderDiff } from './kalender';
 
 export const hentFagsakStatusVisning = (fagsak: IFagsak): string =>
     fagsak.underBehandling ? 'Under behandling' : fagsakStatus[fagsak.status].navn;
@@ -11,7 +11,7 @@ export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | und
         return undefined;
     } else {
         return fagsak.behandlinger.sort((a, b) =>
-            familieDayjsDiff(familieDayjs(b.opprettetTidspunkt), familieDayjs(a.opprettetTidspunkt))
+            kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
         )[0];
     }
 };

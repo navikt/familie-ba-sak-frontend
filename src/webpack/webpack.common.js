@@ -62,6 +62,12 @@ module.exports = {
                 },
             },
             {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false,
+                },
+            },
+            {
                 test: /\.(less|css)$/,
                 use: [
                     { loader: 'style-loader' },

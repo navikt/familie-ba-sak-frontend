@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
 
 import { ISimuleringPeriode } from '../typer/simulering';
-import familieDayjs from './familieDayjs';
-import { datoformat } from './formatter';
+import { kalenderDato, KalenderEnhet, leggTil, serializeIso8601String } from './kalender';
 
 export const hentPeriodelisteMedTommePerioder = (
     perioder: ISimuleringPeriode[]
@@ -14,9 +13,10 @@ export const hentPeriodelisteMedTommePerioder = (
     const sistePeriode = fomDatoer[fomDatoer.length - 1];
     let aktuellPeriode = førstePeriode;
     for (let i = 0; i < dayjs(sistePeriode).diff(dayjs(førstePeriode), 'M'); i++) {
-        aktuellPeriode = familieDayjs(aktuellPeriode, datoformat.ISO_DAG)
-            .add(1, 'M')
-            .format(datoformat.ISO_DAG);
+        aktuellPeriode = serializeIso8601String(
+            leggTil(kalenderDato(aktuellPeriode), 1, KalenderEnhet.MÅNED)
+        );
+
         if (!fomDatoer.includes(aktuellPeriode)) {
             perioder.push({
                 fom: aktuellPeriode,

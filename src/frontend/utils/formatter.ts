@@ -1,4 +1,5 @@
-import familieDayjs, { Dayjs, familieDayjsDiff } from './familieDayjs';
+import familieDayjs from './familieDayjs';
+import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 
 export enum datoformat {
     MÅNED = 'MM.YY',
@@ -10,12 +11,15 @@ export enum datoformat {
     ISO_DAG = 'YYYY-MM-DD',
     DATO_TID = 'DD.MM.YY HH:mm',
     TID = 'HH:mm',
-    MÅNED_NAVN = 'MMMM YYYY',
+    MÅNED_ÅR_NAVN = 'MMMM YYYY',
+    MÅNED_NAVN = 'MMM',
 }
 
 export enum datoformatNorsk {
     DATO = 'ddmmåå',
 }
+
+export const millisekunderIEttÅr = 3.15576e10;
 
 export const formaterIsoDato = (
     dato: string | undefined,
@@ -29,22 +33,22 @@ export const formaterIsoDato = (
     return dayjsDato.isValid() ? dayjsDato.format(tilFormat) : dato;
 };
 
-export const formaterDato = (dato: Dayjs, tilFormat: datoformat): string => {
-    return dato.isValid() ? dato.format(tilFormat) : '';
-};
-
 export const formaterIverksattDato = (dato: string | undefined) =>
     dato ? familieDayjs(dato).format(datoformat.DATO) : 'Ikke satt';
 
-export const hentAlder = (dato: string): number => {
-    const dayjsDato = familieDayjs(dato);
-    return dayjsDato.isValid() ? familieDayjsDiff(familieDayjs(), dayjsDato, 'year') : 0;
+export const hentAlder = (fødselsdato: string): number => {
+    return fødselsdato !== ''
+        ? Math.floor(
+              kalenderDiff(
+                  kalenderDatoTilDate(iDag()),
+                  kalenderDatoTilDate(kalenderDato(fødselsdato))
+              ) / millisekunderIEttÅr
+          )
+        : 0;
 };
 
 export const hentAlderSomString = (fødselsdato: string | undefined) => {
-    return fødselsdato
-        ? familieDayjsDiff(familieDayjs(), familieDayjs(fødselsdato, 'YYYY-MM-DD'), 'year') + ' år'
-        : 'Alder ukjent';
+    return fødselsdato ? hentAlder(fødselsdato) + ' år' : 'Alder ukjent';
 };
 
 export const formaterBeløp = (beløp: number): string => {
