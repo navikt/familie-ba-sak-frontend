@@ -61,7 +61,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             tilbakekrevingErToggletPå,
             tilbakekreving: tilbakekrevingsvalg,
             erFeilutbetaling,
-            maksLengdeFritekst: maksLengdeTekst,
+            maksLengdeTekst,
         },
         valideringsfunksjon: (felt, avhengigheter) =>
             avhengigheter?.erFeilutbetaling &&
@@ -69,7 +69,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL &&
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
-                : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
+                : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeTekst
                 ? feil(
                       felt,
                       `Du har nådd maks antall tegn i varselbrevet: 1 500. Prøv å forkorte/forenkle teksten.`
@@ -86,14 +86,14 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         avhengigheter: {
             erFeilutbetaling,
             tilbakekrevingErToggletPå,
-            maksLengdeFritekst: maksLengdeTekst,
+            maksLengdeTekst: maksLengdeTekst,
         },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
         valideringsfunksjon: (felt, avhengigheter) =>
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
-                : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
+                : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeTekst
                 ? feil(
                       felt,
                       `Du har nådd maks antall tegn i begrunnelsen: 1 500. Prøv å forkorte/forenkle teksten.`
@@ -134,7 +134,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         tilbakekrevingErToggletPå,
         erFeilutbetaling,
         hentSkjemadata,
-        maksLengdeFritekst: maksLengdeTekst,
+        maksLengdeTekst,
     };
 });
 

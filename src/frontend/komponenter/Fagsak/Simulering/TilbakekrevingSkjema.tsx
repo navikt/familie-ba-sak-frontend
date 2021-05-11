@@ -86,7 +86,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 }) => {
     const { request } = useHttp();
     const { erLesevisning, åpenBehandling } = useBehandling();
-    const { skjema, hentFeilTilOppsummering, maksLengdeFritekst } = useSimulering();
+    const { skjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = skjema.felter;
     const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<
         Ressurs<boolean>
@@ -222,10 +222,10 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                                 }
                                 {...fritekstVarsel.hentNavInputProps(
                                     skjema.visFeilmeldinger ||
-                                        fritekstVarsel.verdi.length > maksLengdeFritekst
+                                        fritekstVarsel.verdi.length > maksLengdeTekst
                                 )}
                                 erLesevisning={erLesevisning()}
-                                maxLength={maksLengdeFritekst}
+                                maxLength={maksLengdeTekst}
                             />
 
                             <ForhåndsvisVarselKnappContainer>
@@ -279,10 +279,10 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                 <FamilieTextarea
                     label="Begrunnelse"
                     {...begrunnelse.hentNavInputProps(
-                        skjema.visFeilmeldinger || begrunnelse.verdi.length > maksLengdeFritekst
+                        skjema.visFeilmeldinger || begrunnelse.verdi.length > maksLengdeTekst
                     )}
                     erLesevisning={erLesevisning()}
-                    maxLength={maksLengdeFritekst}
+                    maxLength={maksLengdeTekst}
                 />
 
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
