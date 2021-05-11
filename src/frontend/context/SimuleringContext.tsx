@@ -70,7 +70,10 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
                 : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
-                ? feil(felt, `Varselet for tilbakemeldingen er for langt.`)
+                ? feil(
+                      felt,
+                      `Du har nådd maks antall tegn: 1 500. Prøv å forkorte/forenkle teksten.`
+                  )
                 : ok(felt),
         skalFeltetVises: (avhengigheter: Avhengigheter) =>
             avhengigheter?.tilbakekrevingErToggletPå &&
@@ -91,7 +94,10 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
                 : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
-                ? feil(felt, `Begrunnelsesteksten er for lang.`)
+                ? feil(
+                      felt,
+                      `Du har nådd maks antall tegn: 1 500. Prøv å forkorte/forenkle teksten.`
+                  )
                 : ok(felt),
     });
 
