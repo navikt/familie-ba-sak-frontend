@@ -56,7 +56,7 @@ const Skillelinje = styled.td`
     hr {
         border: none;
         border-right: 1px dashed ${navFarger.navGra60};
-        height: 3.25rem;
+        height: ${(props: { erHeader?: boolean }) => (props.erHeader ? '3.875rem' : '3.25rem')};
         position: absolute;
         top: -0.375rem;
     }
@@ -115,14 +115,12 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         (fomDatoNestePeriode && erISisteÅrAvPerioden ? 1.125 : 0) +
         4.6875 * antallPeriodetIFremvistÅr;
 
-    const TabellSkillelinje = (props: { fomDatoPeriode: string }) => (
-        <>
-            {fomDatoNestePeriode === props.fomDatoPeriode && (
-                <Skillelinje>
-                    <hr />
-                </Skillelinje>
-            )}
-        </>
+    const erNestePeriode = (periode: ISimuleringPeriode) => periode.fom === fomDatoNestePeriode;
+
+    const TabellSkillelinje = (props: { erHeader?: boolean }) => (
+        <Skillelinje erHeader={props.erHeader}>
+            <hr />
+        </Skillelinje>
     );
 
     const tilOgFraDatoForSimulering = `${periodeToString({ fom, tom: tomDatoNestePeriode })}`;
@@ -190,7 +188,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'måned - ' + periode.fom}>
-                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        {erNestePeriode(periode) && <TabellSkillelinje erHeader />}
                                         <th>
                                             <Element>
                                                 {kapitaliserTekst(
@@ -214,7 +212,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'nytt beløp - ' + periode.fom}>
-                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
                                             <Normaltekst>
                                                 {formaterBeløpUtenValutakode(periode.nyttBeløp)}
@@ -230,7 +228,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
-                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
                                             <Normaltekst>
                                                 {formaterBeløpUtenValutakode(
@@ -248,7 +246,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'resultat - ' + periode.fom}>
-                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
                                             {fomDatoNestePeriode === periode.fom ? (
                                                 <ElementMedFarge
