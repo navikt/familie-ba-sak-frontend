@@ -24,7 +24,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         status: RessursStatus.HENTER,
     });
     const { toggles } = useApp();
-    const maksLengdeFritekst = 1500;
+    const maksLengdeTekst = 1500;
 
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
@@ -61,7 +61,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             tilbakekrevingErToggletPå,
             tilbakekreving: tilbakekrevingsvalg,
             erFeilutbetaling,
-            maksLengdeFritekst,
+            maksLengdeFritekst: maksLengdeTekst,
         },
         valideringsfunksjon: (felt, avhengigheter) =>
             avhengigheter?.erFeilutbetaling &&
@@ -72,7 +72,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
                 ? feil(
                       felt,
-                      `Du har nådd maks antall tegn: 1 500. Prøv å forkorte/forenkle teksten.`
+                      `Du har nådd maks antall tegn i varselbrevet: 1 500. Prøv å forkorte/forenkle teksten.`
                   )
                 : ok(felt),
         skalFeltetVises: (avhengigheter: Avhengigheter) =>
@@ -86,7 +86,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         avhengigheter: {
             erFeilutbetaling,
             tilbakekrevingErToggletPå,
-            maksLengdeFritekst,
+            maksLengdeFritekst: maksLengdeTekst,
         },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå && avhengigheter?.erFeilutbetaling,
@@ -96,7 +96,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeFritekst
                 ? feil(
                       felt,
-                      `Du har nådd maks antall tegn: 1 500. Prøv å forkorte/forenkle teksten.`
+                      `Du har nådd maks antall tegn i begrunnelsen: 1 500. Prøv å forkorte/forenkle teksten.`
                   )
                 : ok(felt),
     });
@@ -134,7 +134,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         tilbakekrevingErToggletPå,
         erFeilutbetaling,
         hentSkjemadata,
-        maksLengdeFritekst,
+        maksLengdeFritekst: maksLengdeTekst,
     };
 });
 
