@@ -7,6 +7,7 @@ export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
     OPPHØR = 'OPPHØR',
     AVSLAG = 'AVSLAG',
+    FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
 }
 
 export type Vedtaksperiode =
@@ -28,6 +29,11 @@ export type Vedtaksperiode =
           periodeFom?: FamilieIsoDate;
           periodeTom?: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.AVSLAG;
+      }
+    | {
+          periodeFom?: FamilieIsoDate;
+          periodeTom?: FamilieIsoDate;
+          vedtaksperiodetype: Vedtaksperiodetype.FORTSATT_INNVILGET;
       };
 
 export interface IUtbetalingsperiodeDetalj {
