@@ -6,6 +6,7 @@ import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import {
+    hentUtbetaltPerMåned,
     hentVedtaksperiodeTittel,
     Vedtaksperiode,
     Vedtaksperiodetype,
@@ -52,44 +53,48 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
     åpen,
     onClick,
     children,
-}) => (
-    <StyledEkspanderbartpanelBase
-        key={`${vedtaksperiode.vedtaksperiodetype}_${vedtaksperiode.periodeFom}_${vedtaksperiode.periodeTom}`}
-        apen={åpen}
-        onClick={onClick}
-        tittel={
-            vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.AVSLAG ? (
-                <PanelTittel>
-                    {vedtaksperiode.periodeFom && (
+}) => {
+    const utbetaltPerMnd = hentUtbetaltPerMåned(vedtaksperiode);
+
+    return (
+        <StyledEkspanderbartpanelBase
+            key={`${vedtaksperiode.vedtaksperiodetype}_${vedtaksperiode.periodeFom}_${vedtaksperiode.periodeTom}`}
+            apen={åpen}
+            onClick={onClick}
+            tittel={
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.AVSLAG ? (
+                    <PanelTittel>
+                        {vedtaksperiode.periodeFom && (
+                            <Element>
+                                {periodeToString({
+                                    fom: vedtaksperiode.periodeFom,
+                                    tom: vedtaksperiode.periodeTom,
+                                })}
+                            </Element>
+                        )}
+                        <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
+                    </PanelTittel>
+                ) : (
+                    <PanelTittel>
                         <Element>
                             {periodeToString({
                                 fom: vedtaksperiode.periodeFom,
-                                tom: vedtaksperiode.periodeTom,
+                                tom: slutterSenereEnnInneværendeMåned(vedtaksperiode.periodeTom)
+                                    ? ''
+                                    : vedtaksperiode.periodeTom,
                             })}
                         </Element>
-                    )}
-                    <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
-                </PanelTittel>
-            ) : (
-                <PanelTittel>
-                    <Element>
-                        {periodeToString({
-                            fom: vedtaksperiode.periodeFom,
-                            tom: slutterSenereEnnInneværendeMåned(vedtaksperiode.periodeTom)
-                                ? ''
-                                : vedtaksperiode.periodeTom,
-                        })}
-                    </Element>
-                    <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
-                    {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING && (
-                        <Normaltekst>{formaterBeløp(vedtaksperiode.utbetaltPerMnd)}</Normaltekst>
-                    )}
-                </PanelTittel>
-            )
-        }
-    >
-        {children}
-    </StyledEkspanderbartpanelBase>
-);
+                        <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
+                        {utbetaltPerMnd && (
+                            <Normaltekst>{formaterBeløp(utbetaltPerMnd)}</Normaltekst>
+                        )}
+                    </PanelTittel>
+                )
+            }
+        >
+            {children}
+        </StyledEkspanderbartpanelBase>
+    );
+};
 
 export default EkspanderbartBegrunnelsePanel;

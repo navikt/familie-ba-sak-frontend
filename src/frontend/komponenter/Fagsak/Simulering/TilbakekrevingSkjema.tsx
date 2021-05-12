@@ -86,7 +86,8 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 }) => {
     const { request } = useHttp();
     const { erLesevisning, åpenBehandling } = useBehandling();
-    const { skjema, hentFeilTilOppsummering } = useSimulering();
+    const { skjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
+    const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = skjema.felter;
     const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<
         Ressurs<boolean>
     >({
@@ -128,7 +129,8 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 
     if (
         harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS &&
-        harÅpenTilbakekrevingRessurs.data
+        harÅpenTilbakekrevingRessurs.data &&
+        !erLesevisning()
     ) {
         return (
             <>
@@ -163,14 +165,10 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 
             <TilbakekrevingSkjemaGruppe legend={<SkjultLegend>Tilbakekrevingsvalg</SkjultLegend>}>
                 <FamilieRadioGruppe
-                    {...skjema.felter.tilbakekrevingsvalg.hentNavBaseSkjemaProps(
-                        skjema.visFeilmeldinger
-                    )}
+                    {...tilbakekrevingsvalg.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning()}
                     verdi={
-                        skjema.felter.tilbakekrevingsvalg.verdi
-                            ? skjema.felter.tilbakekrevingsvalg.verdi.toString()
-                            : undefined
+                        tilbakekrevingsvalg.verdi ? tilbakekrevingsvalg.verdi.toString() : undefined
                     }
                     legend={<Element>Tilbakekreving</Element>}
                 >
@@ -178,7 +176,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                         label={'Opprett tilbakekreving, send varsel'}
                         name={'tilbakekreving'}
                         checked={
-                            skjema.felter.tilbakekrevingsvalg.verdi ===
+                            tilbakekrevingsvalg.verdi ===
                             Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL
                         }
                         onChange={() =>
@@ -186,7 +184,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                         }
                         id={'Opprett-tilbakekreving-send-varsel'}
                     />
-                    {skjema.felter.fritekstVarsel.erSynlig && (
+                    {fritekstVarsel.erSynlig && (
                         <FritekstVarsel>
                             <FamilieTextarea
                                 label={
@@ -223,11 +221,12 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                                         </StyledEtikettInfo>
                                     </FritektsVarselLabel>
                                 }
-                                {...skjema.felter.fritekstVarsel.hentNavInputProps(
-                                    skjema.visFeilmeldinger
+                                {...fritekstVarsel.hentNavInputProps(
+                                    skjema.visFeilmeldinger ||
+                                        fritekstVarsel.verdi.length > maksLengdeTekst
                                 )}
                                 erLesevisning={erLesevisning()}
-                                maxLength={1500}
+                                maxLength={maksLengdeTekst}
                             />
 
                             <ForhåndsvisVarselKnappContainer>
@@ -243,7 +242,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                                                 method: 'POST',
                                                 url: `/familie-ba-sak/api/tilbakekreving/${åpenBehandling.data.behandlingId}/forhandsvis-varselbrev`,
                                                 data: {
-                                                    fritekst: skjema.felter.fritekstVarsel.verdi,
+                                                    fritekst: fritekstVarsel.verdi,
                                                 },
                                             }
                                         )
@@ -259,7 +258,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                         label={'Opprett tilbakekreving, ikke send varsel'}
                         name={'tilbakekreving'}
                         checked={
-                            skjema.felter.tilbakekrevingsvalg.verdi ===
+                            tilbakekrevingsvalg.verdi ===
                             Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL
                         }
                         onChange={() =>
@@ -271,8 +270,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                         label={'Avvent tilbakekreving'}
                         name={'tilbakekreving'}
                         checked={
-                            skjema.felter.tilbakekrevingsvalg.verdi ===
-                            Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING
+                            tilbakekrevingsvalg.verdi === Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING
                         }
                         onChange={() => radioOnChange(Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING)}
                         id={'avvent-tilbakekreving'}
@@ -281,9 +279,11 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 
                 <FamilieTextarea
                     label="Begrunnelse"
-                    {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
+                    {...begrunnelse.hentNavInputProps(
+                        skjema.visFeilmeldinger || begrunnelse.verdi.length > maksLengdeTekst
+                    )}
                     erLesevisning={erLesevisning()}
-                    maxLength={1500}
+                    maxLength={maksLengdeTekst}
                 />
 
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
