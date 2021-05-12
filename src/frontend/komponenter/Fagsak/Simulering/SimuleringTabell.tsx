@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import dayjs from 'dayjs';
 import styled from 'styled-components';
 import 'nav-frontend-tabell-style';
 
@@ -11,7 +10,7 @@ import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
-import { periodeToString, kalenderDato } from '../../../utils/kalender';
+import { periodeToString, kalenderDato, erEtter } from '../../../utils/kalender';
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 import TidslinjeNavigering from '../TilkjentYtelse/TidslinjeNavigering';
 
@@ -95,7 +94,8 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     };
 
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
-        fomDatoNestePeriode && dayjs(periode.fom).isAfter(dayjs(fomDatoNestePeriode));
+        fomDatoNestePeriode &&
+        erEtter(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
 
     const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
         !erMerEnn12MånederISimulering ||
