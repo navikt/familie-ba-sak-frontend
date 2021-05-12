@@ -13,8 +13,8 @@ import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
 import {
     adressebeskyttelsestyper,
-    FamilieRelasjonRolle,
-    IFamilierelasjonMaskert,
+    ForelderBarnRelasjonRolle,
+    IForelderBarnRelasjonMaskert,
 } from '../../../typer/person';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
@@ -68,25 +68,31 @@ const Barna: React.FunctionComponent = () => {
         <BarnaWrapper className={'søknad__barna'}>
             <Systemtittel children={'Opplysninger om barn'} />
             {bruker.status === RessursStatus.SUKSESS &&
-                bruker.data.familierelasjonerMaskert
+                bruker.data.forelderBarnRelasjonMaskert
                     .filter(
-                        (familierelasjonMaskert: IFamilierelasjonMaskert) =>
-                            familierelasjonMaskert.relasjonRolle === FamilieRelasjonRolle.BARN
+                        (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert) =>
+                            forelderBarnRelasjonMaskert.relasjonRolle ===
+                            ForelderBarnRelasjonRolle.BARN
                     )
-                    .map((familierelasjonMaskert: IFamilierelasjonMaskert, index: number) => {
-                        return (
-                            <BarnMedDiskresjonskode
-                                key={`${index}_${familierelasjonMaskert.relasjonRolle}`}
-                            >
-                                <StyledRødError heigth={24} width={24} />
-                                {`Bruker har barn med diskresjonskode ${
-                                    adressebeskyttelsestyper[
-                                        familierelasjonMaskert.adressebeskyttelseGradering
-                                    ] ?? 'ukjent'
-                                }`}
-                            </BarnMedDiskresjonskode>
-                        );
-                    })}
+                    .map(
+                        (
+                            forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert,
+                            index: number
+                        ) => {
+                            return (
+                                <BarnMedDiskresjonskode
+                                    key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}
+                                >
+                                    <StyledRødError heigth={24} width={24} />
+                                    {`Bruker har barn med diskresjonskode ${
+                                        adressebeskyttelsestyper[
+                                            forelderBarnRelasjonMaskert.adressebeskyttelseGradering
+                                        ] ?? 'ukjent'
+                                    }`}
+                                </BarnMedDiskresjonskode>
+                            );
+                        }
+                    )}
 
             <br />
             <StyledCheckboxGruppe
