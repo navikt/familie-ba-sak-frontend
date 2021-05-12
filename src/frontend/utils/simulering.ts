@@ -1,32 +1,51 @@
-import dayjs from 'dayjs';
-
 import { ISimuleringPeriode } from '../typer/simulering';
-import { kalenderDato, KalenderEnhet, leggTil, serializeIso8601String } from './kalender';
+import {
+    kalenderDato,
+    leggTil,
+    serializeIso8601String,
+    erEtter,
+    KalenderEnhet,
+    diffMåned,
+} from './kalender';
 
 export const hentPeriodelisteMedTommePerioder = (
     perioder: ISimuleringPeriode[]
 ): ISimuleringPeriode[] => {
-    const fomDatoer = perioder
-        .map(periode => periode.fom)
-        .sort((a, b) => (dayjs(a).isAfter(dayjs(b)) ? 1 : -1));
-    const førstePeriode = fomDatoer[0];
-    const sistePeriode = fomDatoer[fomDatoer.length - 1];
-    let aktuellPeriode = førstePeriode;
-    for (let i = 0; i < dayjs(sistePeriode).diff(dayjs(førstePeriode), 'M'); i++) {
-        aktuellPeriode = serializeIso8601String(
-            leggTil(kalenderDato(aktuellPeriode), 1, KalenderEnhet.MÅNED)
-        );
+    const fomDatoerISimulering = hentSorterteFomdatoer(perioder);
+    const førstePeriodeFom = kalenderDato(fomDatoerISimulering[0]);
+    const antallMånederISimulering = hentAntallMånederISimuleringen(fomDatoerISimulering);
 
-        if (!fomDatoer.includes(aktuellPeriode)) {
-            perioder.push({
-                fom: aktuellPeriode,
+    const periodelisteMedTommePerioder = [...perioder];
+
+    for (let i = 0; i < antallMånederISimulering; i++) {
+        const aktuellPeriodeFomDato = leggTil(førstePeriodeFom, i, KalenderEnhet.MÅNED);
+        const aktuelPeriodeFom = serializeIso8601String(aktuellPeriodeFomDato);
+
+        if (!fomDatoerISimulering.includes(aktuelPeriodeFom)) {
+            periodelisteMedTommePerioder.push({
+                fom: aktuelPeriodeFom,
                 tom: '',
             });
         }
     }
-    perioder.sort((a, b) => (dayjs(a.fom).isAfter(dayjs(b.fom)) ? 1 : -1));
-    return perioder;
+
+    periodelisteMedTommePerioder.sort((a, b) =>
+        erEtter(kalenderDato(a.fom), kalenderDato(b.fom)) ? 1 : -1
+    );
+    return periodelisteMedTommePerioder;
 };
 
 export const hentÅrISimuleringen = (perioder: ISimuleringPeriode[]): number[] =>
-    [...new Set(perioder.map(periode => dayjs(periode.fom).year()))].sort();
+    [...new Set(perioder.map(periode => kalenderDato(periode.fom).år))].sort();
+
+const hentSorterteFomdatoer = (perioder: ISimuleringPeriode[]): string[] =>
+    perioder
+        .map(periode => periode.fom)
+        .sort((a, b) => (erEtter(kalenderDato(a), kalenderDato(b)) ? 1 : -1));
+
+const hentAntallMånederISimuleringen = (fomListe: string[]): number => {
+    const førstePeriodeFom = kalenderDato(fomListe[0]);
+    const sistePeriodeFom = kalenderDato(fomListe[fomListe.length - 1]);
+
+    return diffMåned(førstePeriodeFom, sistePeriodeFom) + 1;
+};
