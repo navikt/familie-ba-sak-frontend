@@ -123,14 +123,21 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         </Skillelinje>
     );
 
-    const tilOgFraDatoForSimulering = `${periodeToString({ fom, tom: tomDatoNestePeriode })}`;
+    const tilOgFraDatoForSimulering = `${periodeToString({
+        fom,
+        tom: tomDatoNestePeriode ?? tomSisteUtbetaling,
+    })}`;
 
     return (
         <>
             <SimuleringTabellOverskrift>
                 <Element>
-                    Simuleringsresultat{' '}
-                    {perioder.length > 1 && `for perioden ${tilOgFraDatoForSimulering}`}
+                    Simuleringsresultat for{' '}
+                    {perioder.length === 1
+                        ? `${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_NAVN_LANG)} ${
+                              kalenderDato(perioder[0].fom).år
+                          }`
+                        : `perioden ${tilOgFraDatoForSimulering}`}
                 </Element>
             </SimuleringTabellOverskrift>
 

@@ -8,7 +8,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
-import { kalenderDato, KalenderEnhet, trekkFra, erFør, erEtter } from '../../../utils/kalender';
+import { kalenderDato, erFør } from '../../../utils/kalender';
 import { tilVisning } from '../../../utils/kalender';
 
 const StyledPanel = styled(Panel)`
@@ -65,17 +65,18 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
     const erFørNestePeriode = (periode: ISimuleringPeriode) =>
         !fomDatoNestePeriode || erFør(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
 
-    const sisteUtbetaltePeriode = perioder
-        .filter(periode => erFørNestePeriode(periode))
-        .sort((a, b) => (erEtter(kalenderDato(a.fom), kalenderDato(b.fom)) ? 1 : -1))
-        .slice(-1)
-        .pop();
-
-    const utbetaltPeriodeTom = fomDatoNestePeriode
-        ? tilVisning(trekkFra(kalenderDato(fomDatoNestePeriode), 1, KalenderEnhet.DAG))
-        : sisteUtbetaltePeriode
-        ? sisteUtbetaltePeriode.tom
-        : '';
+    const panelTittel = (): string => {
+        const utbetaltePerioder = perioder.filter(periode => erFørNestePeriode(periode));
+        if (utbetaltePerioder.length === 0) {
+            return 'Totalt';
+        }
+        if (utbetaltePerioder.length === 1) {
+            return `Total for ${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_NAVN_LANG)} ${
+                kalenderDato(perioder[0].fom).år
+            }`;
+        }
+        return `Totalt for perioden ${tilVisning(kalenderDato(fom))} - ${tomSisteUtbetaling ?? ''}`;
+    };
 
     return (
         <StyledPanel border>
@@ -83,13 +84,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                 <tbody>
                     <tr>
                         <StyledTh colSpan={2}>
-                            <Element>
-                                Totalt{' '}
-                                {perioder.length > 1 &&
-                                    `for perioden ${tilVisning(
-                                        kalenderDato(fom)
-                                    )} - ${utbetaltPeriodeTom}`}
-                            </Element>
+                            <Element>{panelTittel()}</Element>
                         </StyledTh>
                     </tr>
                     <tr>
