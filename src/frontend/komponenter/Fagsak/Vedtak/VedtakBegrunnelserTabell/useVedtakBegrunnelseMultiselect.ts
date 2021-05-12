@@ -91,10 +91,20 @@ const useVedtakBegrunnelseMultiselect = (
         slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
     } = useVedtakBegrunnelser();
 
-    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype =
-        vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING
-            ? [VedtakBegrunnelseType.INNVILGELSE, VedtakBegrunnelseType.REDUKSJON]
-            : [VedtakBegrunnelseType.OPPHØR];
+    const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
+        switch (vedtaksperiode.vedtaksperiodetype) {
+            case Vedtaksperiodetype.UTBETALING:
+                return [VedtakBegrunnelseType.INNVILGELSE, VedtakBegrunnelseType.REDUKSJON];
+            case Vedtaksperiodetype.FORTSATT_INNVILGET:
+                return [VedtakBegrunnelseType.FORTSATT_INNVILGET];
+            case Vedtaksperiodetype.OPPHØR:
+                return [VedtakBegrunnelseType.OPPHØR];
+            default:
+                return [];
+        }
+    };
+
+    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype = vedtaksperiodeTilVedtakBegrunnelseTyper();
 
     const onChangeBegrunnelse = (
         action: ActionMeta<ISelectOption>,
