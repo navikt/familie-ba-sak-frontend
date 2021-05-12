@@ -8861,10 +8861,10 @@ nav-frontend-ikoner-assets@2.0.10, nav-frontend-ikoner-assets@^2.0.3:
   resolved "https://registry.yarnpkg.com/nav-frontend-ikoner-assets/-/nav-frontend-ikoner-assets-2.0.10.tgz#8525d171ce81c9444f904374057cd77d98bae82d"
   integrity sha512-n/2qIk29rRkR8OZwZBnSIWRKdC25t/8lAhZXEvFZrqmjAC+U4xHHj5+VlCoN5O5VIzq4xtck1Flwj7mJehAj7g==
 
-nav-frontend-ikonknapper@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-1.1.2.tgz#1601ff3a20c179099352768d8d1132479e06d338"
-  integrity sha512-8QDoU3srXEutMHO/YDgckfH8jCmkZgWodKpPZ3p8ohA/DzbXq0s1+O9Cok6TVZ/p5jifQBeJGDGk+bMIBGQIfg==
+nav-frontend-ikonknapper@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-1.1.3.tgz#9e5adf7a0188622371f44c16cc95e45318bf32aa"
+  integrity sha512-6y7Qi6bZgCCDGykWCZHMFhoEYxXgj7P+CkuLHe6ffAAJzBLU5+Eo2IZQymB8HNXYfNYWpf1bADDwRVV49pNvrw==
 
 nav-frontend-js-utils@1.0.17, nav-frontend-js-utils@^1.0.13, nav-frontend-js-utils@^1.0.17:
   version "1.0.17"
