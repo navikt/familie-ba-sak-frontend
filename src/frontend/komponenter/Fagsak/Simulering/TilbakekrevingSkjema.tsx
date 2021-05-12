@@ -129,7 +129,8 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 
     if (
         harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS &&
-        harÅpenTilbakekrevingRessurs.data
+        harÅpenTilbakekrevingRessurs.data &&
+        !erLesevisning()
     ) {
         return (
             <>
