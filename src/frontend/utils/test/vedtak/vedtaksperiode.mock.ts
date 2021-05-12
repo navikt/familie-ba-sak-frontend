@@ -52,5 +52,6 @@ export const mockFortsattInnvilgetperiode = ({
         periodeFom,
         periodeTom,
         vedtaksperiodetype: Vedtaksperiodetype.FORTSATT_INNVILGET,
+        utbetalingsperiode: mockUtbetalingsperiode(),
     };
 };
