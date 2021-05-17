@@ -18,7 +18,7 @@ import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
-import { Tilbakekrevingsvalg } from '../../../typer/simulering';
+import { visTilbakekrevingsvalg, Tilbakekrevingsvalg } from '../../../typer/simulering';
 import { Målform, målform } from '../../../typer/søknad';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -168,7 +168,9 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                     {...tilbakekrevingsvalg.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     erLesevisning={erLesevisning()}
                     verdi={
-                        tilbakekrevingsvalg.verdi ? tilbakekrevingsvalg.verdi.toString() : undefined
+                        tilbakekrevingsvalg.verdi
+                            ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
+                            : undefined
                     }
                     legend={<Element>Tilbakekreving</Element>}
                 >

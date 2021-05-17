@@ -22,6 +22,12 @@ export enum Tilbakekrevingsvalg {
     IGNORER_TILBAKEKREVING = 'IGNORER_TILBAKEKREVING',
 }
 
+export const visTilbakekrevingsvalg: Record<Tilbakekrevingsvalg, string> = {
+    OPPRETT_TILBAKEKREVING_MED_VARSEL: 'Opprett tilbakekreving med varsel',
+    OPPRETT_TILBAKEKREVING_UTEN_VARSEL: 'Opprett tilbakekreving uten varsel',
+    IGNORER_TILBAKEKREVING: 'Ignorer tilbakekreving',
+};
+
 export interface ITilbakekreving {
     vedtakId: number;
     valg: Tilbakekrevingsvalg;
