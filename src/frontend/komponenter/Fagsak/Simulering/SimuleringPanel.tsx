@@ -48,7 +48,14 @@ interface ISimuleringProps {
 }
 
 const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
-    simulering: { feilutbetaling, fom, etterbetaling, fomDatoNestePeriode, perioder },
+    simulering: {
+        feilutbetaling,
+        fom,
+        etterbetaling,
+        fomDatoNestePeriode,
+        perioder,
+        tomSisteUtbetaling,
+    },
 }) => {
     const kapitaliserTekst = (tekst: string): string => {
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
@@ -92,7 +99,9 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <Normaltekst>Feilutbetaling</Normaltekst>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
-                            <ElementMedFarge farge={navFarger.navRod}>
+                            <ElementMedFarge
+                                farge={feilutbetaling > 0 ? navFarger.navRod : navFarger.navMorkGra}
+                            >
                                 {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
                             </ElementMedFarge>
                         </StyledTd>
@@ -119,22 +128,38 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                         <StyledTh colSpan={2}>
                             <Element>Neste utbetaling</Element>
                         </StyledTh>
+                        {!nestePeriode && (
+                            <StyledTh erHøyrestilt={true}>
+                                <Element>-</Element>
+                            </StyledTh>
+                        )}
                     </tr>
-                    <tr>
-                        <StyledTd>
-                            <Normaltekst>
-                                {kapitaliserTekst(
-                                    formaterIsoDato(fomDatoNestePeriode, datoformat.MÅNED_ÅR_NAVN)
-                                )}
-                            </Normaltekst>
-                        </StyledTd>
+                    {nestePeriode && (
+                        <tr>
+                            <StyledTd>
+                                <Normaltekst>
+                                    {kapitaliserTekst(
+                                        formaterIsoDato(
+                                            fomDatoNestePeriode,
+                                            datoformat.MÅNED_ÅR_NAVN
+                                        )
+                                    )}
+                                </Normaltekst>
+                            </StyledTd>
 
-                        <StyledTd erHøyrestilt={true}>
-                            <ElementMedFarge farge={navFarger.navGronnDarken40}>
-                                {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
-                            </ElementMedFarge>
-                        </StyledTd>
-                    </tr>
+                            <StyledTd erHøyrestilt={true}>
+                                <ElementMedFarge
+                                    farge={
+                                        nestePeriode?.resultat && nestePeriode.resultat > 0
+                                            ? navFarger.navGronnDarken40
+                                            : navFarger.navMorkGra
+                                    }
+                                >
+                                    {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
+                                </ElementMedFarge>
+                            </StyledTd>
+                        </tr>
+                    )}
                 </tbody>
             </StyledTable>
         </StyledPanel>
