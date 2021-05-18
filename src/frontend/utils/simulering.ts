@@ -5,7 +5,7 @@ import {
     serializeIso8601String,
     erEtter,
     KalenderEnhet,
-    diffMåned,
+    kalenderDiffMåned,
 } from './kalender';
 
 export const hentPeriodelisteMedTommePerioder = (
@@ -47,5 +47,5 @@ const hentAntallMånederISimuleringen = (fomListe: string[]): number => {
     const førstePeriodeFom = kalenderDato(fomListe[0]);
     const sistePeriodeFom = kalenderDato(fomListe[fomListe.length - 1]);
 
-    return diffMåned(førstePeriodeFom, sistePeriodeFom) + 1;
+    return kalenderDiffMåned(førstePeriodeFom, sistePeriodeFom) + 1;
 };
