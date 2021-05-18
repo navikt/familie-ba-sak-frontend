@@ -1,5 +1,6 @@
 import { YtelseType } from '../../../typer/beregning';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
+import { førsteDagIInneværendeMåned, serializeIso8601String } from '../../kalender';
 
 interface IMockVedtaksperiode {
     periodeFom?: string;
@@ -32,7 +33,7 @@ export const mockOpphørsperiode = ({
     };
 };
 
-export const mockAvslagssperiode = ({
+export const mockAvslagsperiode = ({
     periodeFom = '2019-06-01',
     periodeTom = '2019-06-30',
 }: IMockVedtaksperiode = {}): Vedtaksperiode => {
@@ -40,5 +41,17 @@ export const mockAvslagssperiode = ({
         periodeFom,
         periodeTom,
         vedtaksperiodetype: Vedtaksperiodetype.AVSLAG,
+    };
+};
+
+export const mockFortsattInnvilgetperiode = ({
+    periodeFom = serializeIso8601String(førsteDagIInneværendeMåned()),
+    periodeTom = '',
+}: IMockVedtaksperiode = {}): Vedtaksperiode => {
+    return {
+        periodeFom,
+        periodeTom,
+        vedtaksperiodetype: Vedtaksperiodetype.FORTSATT_INNVILGET,
+        utbetalingsperiode: mockUtbetalingsperiode(),
     };
 };
