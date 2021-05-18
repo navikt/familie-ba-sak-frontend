@@ -88,8 +88,8 @@ export const kalenderDiff = (første: Date, andre: Date) => {
     return første.getTime() - andre.getTime();
 };
 
-export const diffMåned = (første: DagMånedÅr, siste: DagMånedÅr) =>
-    12 * (siste.år - første.år) + (siste.måned - første.måned);
+export const kalenderDiffMåned = (første: DagMånedÅr, andre: DagMånedÅr) =>
+    12 * (andre.år - første.år) + (andre.måned - første.måned);
 
 export const dagVedEndringPåÅr = (dagMånedÅr: DagMånedÅr, nyttÅr: number) => {
     const antallDagerIMånedINyttÅr = antallDagerIMåned({ år: nyttÅr, måned: dagMånedÅr.måned });

@@ -87,6 +87,7 @@ export enum VedtakBegrunnelse {
     AVSLAG_IKKE_AVTALE_OM_DELT_BOSTED = 'AVSLAG_IKKE_AVTALE_OM_DELT_BOSTED',
     AVSLAG_OPPLYSNINGSPLIKT = 'AVSLAG_OPPLYSNINGSPLIKT',
     AVSLAG_FRITEKST = 'AVSLAG_FRITEKST',
+    FORTSATT_INNVILGET_TEST = 'FORTSATT_INNVILGET_TEST',
 }
 
 export enum VedtakBegrunnelseType {
@@ -94,6 +95,7 @@ export enum VedtakBegrunnelseType {
     AVSLAG = 'AVSLAG',
     REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
+    FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
 }
 
 export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
@@ -101,4 +103,5 @@ export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     AVSLAG: 'Avslag',
     REDUKSJON: 'Reduksjon',
     OPPHØR: 'Opphør',
+    FORTSATT_INNVILGET: 'Fortsatt innvilget',
 };

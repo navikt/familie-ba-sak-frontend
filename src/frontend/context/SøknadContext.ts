@@ -8,7 +8,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { FamilieRelasjonRolle, IFamilierelasjon } from '../typer/person';
+import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, Målform } from '../typer/søknad';
 import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
@@ -59,13 +59,13 @@ const [SøknadProvider, useSøknad] = createUseContext(
             if (bruker.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                    bruker.data.familierelasjoner
+                    bruker.data.forelderBarnRelasjon
                         .filter(
-                            (relasjon: IFamilierelasjon) =>
-                                relasjon.relasjonRolle === FamilieRelasjonRolle.BARN
+                            (relasjon: IForelderBarnRelasjon) =>
+                                relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
                         )
                         .map(
-                            (relasjon: IFamilierelasjon): IBarnMedOpplysninger => ({
+                            (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
                                 inkludertISøknaden: false,
                                 ident: relasjon.personIdent,
                                 navn: relasjon.navn,
