@@ -1,15 +1,14 @@
 import * as React from 'react';
 
-import dayjs from 'dayjs';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import Panel from 'nav-frontend-paneler';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { ISimuleringDTO } from '../../../typer/simulering';
+import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
-import { kalenderDato, KalenderEnhet, trekkFra } from '../../../utils/kalender';
+import { kalenderDato, KalenderEnhet, trekkFra, erFør, erEtter } from '../../../utils/kalender';
 import { tilVisning } from '../../../utils/kalender';
 
 const StyledPanel = styled(Panel)`
@@ -62,16 +61,22 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
     const nestePeriode = fomDatoNestePeriode
         ? perioder.find(periode => periode.fom === fomDatoNestePeriode) ?? undefined
         : undefined;
+
+    const erFørNestePeriode = (periode: ISimuleringPeriode) =>
+        !fomDatoNestePeriode || erFør(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
+
     const sisteUtbetaltePeriode = perioder
-        .filter(periode => dayjs(periode.fom) < dayjs(fomDatoNestePeriode))
-        .sort((a, b) => (dayjs(a.fom).isAfter(dayjs(b.fom)) ? 1 : -1))
+        .filter(periode => erFørNestePeriode(periode))
+        .sort((a, b) => (erEtter(kalenderDato(a.fom), kalenderDato(b.fom)) ? 1 : -1))
         .slice(-1)
         .pop();
+
     const utbetaltPeriodeTom = fomDatoNestePeriode
         ? tilVisning(trekkFra(kalenderDato(fomDatoNestePeriode), 1, KalenderEnhet.DAG))
         : sisteUtbetaltePeriode
         ? sisteUtbetaltePeriode.tom
         : '';
+
     return (
         <StyledPanel border>
             <StyledTable aria-label={'Simuleringsoversikt'}>
