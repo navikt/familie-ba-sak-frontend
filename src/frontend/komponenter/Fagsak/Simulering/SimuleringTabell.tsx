@@ -103,9 +103,8 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         erEtter(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
 
     const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
-        !erMerEnn12MånederISimulering ||
-        (!periodeErEtterNesteUtbetalingsPeriode(periode) &&
-            kalenderDato(periode.fom).år === aktueltÅr);
+        !periodeErEtterNesteUtbetalingsPeriode(periode) &&
+        (!erMerEnn12MånederISimulering || kalenderDato(periode.fom).år === aktueltÅr);
 
     const formaterBeløpUtenValutakode = (beløp?: number) =>
         beløp ? formaterBeløp(beløp).slice(0, -3) : '-';
