@@ -13,7 +13,6 @@ export enum datoformat {
     TID = 'HH:mm',
     MÅNED_ÅR_NAVN = 'MMMM YYYY',
     MÅNED_NAVN = 'MMM',
-    MÅNED_NAVN_LANG = 'MMMM',
 }
 
 export enum datoformatNorsk {

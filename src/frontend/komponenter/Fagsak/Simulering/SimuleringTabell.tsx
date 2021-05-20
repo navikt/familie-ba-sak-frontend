@@ -137,9 +137,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                 <Element>
                     Simuleringsresultat for{' '}
                     {perioder.length === 1
-                        ? `${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_NAVN_LANG)} ${
-                              kalenderDato(perioder[0].fom).år
-                          }`
+                        ? `${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_ÅR_NAVN)}`
                         : `perioden ${tilOgFraDatoForSimulering}`}
                 </Element>
             </SimuleringTabellOverskrift>

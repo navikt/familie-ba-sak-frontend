@@ -78,9 +78,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
             return 'Totalt';
         }
         if (utbetaltePerioder.length === 1) {
-            return `Total for ${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_NAVN_LANG)} ${
-                kalenderDato(perioder[0].fom).år
-            }`;
+            return `Total for ${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_ÅR_NAVN)}`;
         }
         return `Totalt for perioden ${tilVisning(kalenderDato(fom))} - ${tomSisteUtbetaling ?? ''}`;
     };
