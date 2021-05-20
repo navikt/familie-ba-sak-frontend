@@ -8866,10 +8866,17 @@ nav-frontend-ikonknapper@^1.1.2:
   resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-1.1.2.tgz#1601ff3a20c179099352768d8d1132479e06d338"
   integrity sha512-8QDoU3srXEutMHO/YDgckfH8jCmkZgWodKpPZ3p8ohA/DzbXq0s1+O9Cok6TVZ/p5jifQBeJGDGk+bMIBGQIfg==
 
-nav-frontend-js-utils@1.0.17, nav-frontend-js-utils@^1.0.13, nav-frontend-js-utils@^1.0.17:
+nav-frontend-js-utils@1.0.17:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.17.tgz#a39160bce2ec194bd6ab0f262529ee242ea44ff6"
   integrity sha512-iP4N25iuPi9uJO6UQUsTQq/D09kgSeEysNz+VqiUdXveJ+U8iAO/ik/tMUO5nIcZt117BvxB5URD4wAV1FkdFg==
+  dependencies:
+    lodash.throttle "^4.1.1"
+
+nav-frontend-js-utils@^1.0.17, nav-frontend-js-utils@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.19.tgz#56a14aa58cc249e34f98caaaeb101f638648e2ac"
+  integrity sha512-Z+ZGNcghkbx0VT0AN3H5ftCWWRMpXGcMI2JnMQJGzS8CkbjIEU8nkxsU63tyzq/n1BK69z1xT/1Vju6DRROidQ==
   dependencies:
     lodash.throttle "^4.1.1"
 
