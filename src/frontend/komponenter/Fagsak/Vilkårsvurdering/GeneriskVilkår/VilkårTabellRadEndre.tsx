@@ -92,9 +92,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
     const leseVisning = erLesevisning();
-    const årsakErIkkeSøknad =
-        åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD;
+    const årsakErSøknad =
+        åpenBehandling.status !== RessursStatus.SUKSESS ||
+        åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
@@ -262,7 +262,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     />
                 </FamilieRadioGruppe>
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                    !årsakErIkkeSøknad && (
+                    årsakErSøknad && (
                         <AvslagSkjema
                             redigerbartVilkår={redigerbartVilkår}
                             settRedigerbartVilkår={settRedigerbartVilkår}
