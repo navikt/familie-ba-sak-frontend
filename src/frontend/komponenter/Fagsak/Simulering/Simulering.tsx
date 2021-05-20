@@ -109,7 +109,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                 tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                 tilbakekrevingSkjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
                 <StyledAlertstripe type="feil">
-                    Det har skjedd en feil og vi greide ikke å lagre tilbakekrevingsvalget:{' '}
+                    Det har skjedd en feil og vi klarte ikke å lagre tilbakekrevingsvalget:{' '}
                     {tilbakekrevingSkjema.submitRessurs.frontendFeilmelding}
                 </StyledAlertstripe>
             )}
