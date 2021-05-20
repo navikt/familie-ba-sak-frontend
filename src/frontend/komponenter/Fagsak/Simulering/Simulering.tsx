@@ -35,7 +35,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         hentSkjemadata,
         onSubmit,
         simuleringsresultat,
-        skjema,
+        tilbakekrevingSkjema,
         tilbakekrevingErToggletPå,
     } = useSimulering();
     const { erLesevisning } = useBehandling();
@@ -75,7 +75,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     return (
         <Skjemasteg
-            senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
+            senderInn={tilbakekrevingSkjema.submitRessurs.status === RessursStatus.HENTER}
             tittel="Simulering"
             className="simulering"
             forrigeOnClick={forrigeOnClick}
@@ -105,12 +105,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                 </Alertstripe>
             )}
 
-            {(skjema.submitRessurs.status === RessursStatus.FEILET ||
-                skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
+            {(tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FEILET ||
+                tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                tilbakekrevingSkjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
                 <StyledAlertstripe type="feil">
-                    Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
-                    {skjema.submitRessurs.frontendFeilmelding}
+                    Det har skjedd en feil og vi greide ikke å lagre tilbakekrevingsvalget:{' '}
+                    {tilbakekrevingSkjema.submitRessurs.frontendFeilmelding}
                 </StyledAlertstripe>
             )}
         </Skjemasteg>

@@ -86,8 +86,8 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 }) => {
     const { request } = useHttp();
     const { erLesevisning, åpenBehandling } = useBehandling();
-    const { skjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
-    const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = skjema.felter;
+    const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
+    const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
     const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<
         Ressurs<boolean>
     >({
@@ -111,7 +111,9 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
     }, [fagsakId]);
 
     const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {
-        skjema.felter.tilbakekrevingsvalg.validerOgSettFelt(tilbakekrevingsalternativ);
+        tilbakekrevingSkjema.felter.tilbakekrevingsvalg.validerOgSettFelt(
+            tilbakekrevingsalternativ
+        );
     };
 
     if (
@@ -143,7 +145,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
         );
     }
 
-    if (erLesevisning() && !skjema.felter.tilbakekrevingsvalg.verdi) {
+    if (erLesevisning() && !tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi) {
         return (
             <>
                 <StyledElement>Tilbakekrevingsvalg</StyledElement>
@@ -165,7 +167,9 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
 
             <TilbakekrevingSkjemaGruppe legend={<SkjultLegend>Tilbakekrevingsvalg</SkjultLegend>}>
                 <FamilieRadioGruppe
-                    {...tilbakekrevingsvalg.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                    {...tilbakekrevingsvalg.hentNavBaseSkjemaProps(
+                        tilbakekrevingSkjema.visFeilmeldinger
+                    )}
                     erLesevisning={erLesevisning()}
                     verdi={
                         tilbakekrevingsvalg.verdi
@@ -224,7 +228,7 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                                     </FritektsVarselLabel>
                                 }
                                 {...fritekstVarsel.hentNavInputProps(
-                                    skjema.visFeilmeldinger ||
+                                    tilbakekrevingSkjema.visFeilmeldinger ||
                                         fritekstVarsel.verdi.length > maksLengdeTekst
                                 )}
                                 erLesevisning={erLesevisning()}
@@ -282,13 +286,14 @@ const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: numbe
                 <FamilieTextarea
                     label="Begrunnelse"
                     {...begrunnelse.hentNavInputProps(
-                        skjema.visFeilmeldinger || begrunnelse.verdi.length > maksLengdeTekst
+                        tilbakekrevingSkjema.visFeilmeldinger ||
+                            begrunnelse.verdi.length > maksLengdeTekst
                     )}
                     erLesevisning={erLesevisning()}
                     maxLength={maksLengdeTekst}
                 />
 
-                {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
+                {tilbakekrevingSkjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                     <Feiloppsummering
                         tittel={'For å gå videre må du rette opp følgende:'}
                         feil={hentFeilTilOppsummering()}
