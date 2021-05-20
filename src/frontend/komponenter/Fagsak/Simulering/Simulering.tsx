@@ -7,6 +7,7 @@ import Alertstripe from 'nav-frontend-alertstriper';
 
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
+import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';
@@ -37,23 +38,28 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         skjema,
         tilbakekrevingErToggletPå,
     } = useSimulering();
+    const { erLesevisning } = useBehandling();
 
     const { settFagsak } = useFagsakRessurser();
 
     const nesteOnClick = () => {
-        onSubmit<ITilbakekreving | undefined>(
-            {
-                data: hentSkjemadata(),
-                method: 'POST',
-                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/tilbakekreving`,
-            },
-            (ressurs: Ressurs<IFagsak>) => {
-                if (ressurs.status === RessursStatus.SUKSESS) {
-                    settFagsak(ressurs);
-                    history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+        if (erLesevisning()) {
+            history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+        } else {
+            onSubmit<ITilbakekreving | undefined>(
+                {
+                    data: hentSkjemadata(),
+                    method: 'POST',
+                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/tilbakekreving`,
+                },
+                (ressurs: Ressurs<IFagsak>) => {
+                    if (ressurs.status === RessursStatus.SUKSESS) {
+                        settFagsak(ressurs);
+                        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     const forrigeOnClick = () => {
