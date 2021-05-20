@@ -80,7 +80,9 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
         if (utbetaltePerioder.length === 1) {
             return `Total for ${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_ÅR_NAVN)}`;
         }
-        return `Totalt for perioden ${tilVisning(kalenderDato(fom))} - ${tomSisteUtbetaling ?? ''}`;
+        return `Totalt for perioden ${tilVisning(kalenderDato(fom))} - ${
+            tomSisteUtbetaling ? tilVisning(kalenderDato(tomSisteUtbetaling)) : ''
+        }`;
     };
 
     return (
