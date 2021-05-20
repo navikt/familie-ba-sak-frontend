@@ -69,6 +69,7 @@ export interface IVilkårResultat {
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
     erEksplisittAvslagPåSøknad?: boolean;
+    erSkjønnsmessigVurdert: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
 }
 
@@ -96,6 +97,7 @@ export interface IRestVilkårResultat {
     periodeTom?: FamilieIsoDate;
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
+    erSkjønnsmessigVurdert: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
 }

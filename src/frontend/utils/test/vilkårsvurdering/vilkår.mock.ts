@@ -21,6 +21,7 @@ interface IMockVilkårResultat {
     endretAv?: string;
     erVurdert?: boolean;
     erAutomatiskVurdert?: boolean;
+    erSkjønnsmessigVurdert?: boolean;
     endretTidspunkt?: string;
 }
 
@@ -41,6 +42,7 @@ export const mockVilkårResultater = ({
     endretAv = 'VL',
     erVurdert = false,
     erAutomatiskVurdert = false,
+    erSkjønnsmessigVurdert = false,
     endretTidspunkt = '2020-03-19T09:08:56.8',
 }: IMockVilkårResultat = {}): IVilkårResultat => ({
     id,
@@ -51,6 +53,7 @@ export const mockVilkårResultater = ({
     endretAv,
     erVurdert,
     erAutomatiskVurdert,
+    erSkjønnsmessigVurdert,
     endretTidspunkt,
     behandlingId,
     avslagBegrunnelser: mockFeltstate<VedtakBegrunnelse[]>([]),
@@ -88,6 +91,7 @@ export const mockRestVilkårResultat = ({
     endretAv: 'VL',
     erVurdert: false,
     erAutomatiskVurdert: false,
+    erSkjønnsmessigVurdert: false,
     endretTidspunkt: '2020-03-19T09:08:56.8',
     behandlingId,
     avslagBegrunnelser: [],
