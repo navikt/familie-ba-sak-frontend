@@ -34,6 +34,7 @@ import {
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
+import SkjønnsvurderingCheckbox from './SkjønnsvurderingCheckbox';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
@@ -273,6 +274,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     visFeilmeldinger={skalViseFeilmeldinger()}
+                />
+
+                <SkjønnsvurderingCheckbox
+                    redigerbartVilkår={redigerbartVilkår}
+                    settRedigerbartVilkår={settRedigerbartVilkår}
+                    settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                 />
 
                 <FamilieTextareaControlled

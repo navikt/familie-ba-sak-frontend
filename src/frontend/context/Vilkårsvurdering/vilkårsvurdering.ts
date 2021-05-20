@@ -21,6 +21,7 @@ import {
     erResultatGyldig,
     ikkeValider,
     lagInitiellFelt,
+    erBegrunnelseGyldig,
 } from '../../utils/validators';
 import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
@@ -68,12 +69,10 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                         personResultat.vilkårResultater.map((vilkårResultat: IRestVilkårResultat) =>
                             lagInitiellFelt(
                                 {
-                                    begrunnelse: {
-                                        feilmelding: '',
-                                        valider: ikkeValider,
-                                        valideringsstatus: Valideringsstatus.OK,
-                                        verdi: vilkårResultat.begrunnelse,
-                                    },
+                                    begrunnelse: lagInitiellFelt(
+                                        vilkårResultat.begrunnelse,
+                                        erBegrunnelseGyldig
+                                    ),
                                     id: vilkårResultat.id,
                                     periode: lagInitiellFelt(
                                         nyPeriode(
@@ -92,6 +91,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
                                     erEksplisittAvslagPåSøknad:
                                         vilkårResultat.erEksplisittAvslagPåSøknad,
+                                    erSkjønnsmessigVurdert: vilkårResultat.erSkjønnsmessigVurdert,
                                     avslagBegrunnelser: lagInitiellFelt(
                                         vilkårResultat.avslagBegrunnelser,
                                         erAvslagBegrunnelserGyldig
