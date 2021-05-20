@@ -21,11 +21,23 @@ import {
 } from './kalender';
 
 export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
-    utbetalingsperioder: Vedtaksperiode[],
+    vedtaksperioder: Vedtaksperiode[],
     fastsatteVedtakBegrunnelser: IRestVedtakBegrunnelse[],
     erLesevisning: boolean
 ): Vedtaksperiode[] => {
-    return utbetalingsperioder
+    if (
+        vedtaksperioder.some(
+            (vedtaksperiode: Vedtaksperiode) =>
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
+        )
+    ) {
+        return vedtaksperioder.filter(
+            vedtaksperiode =>
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
+        );
+    }
+
+    return vedtaksperioder
         .slice()
         .sort((a, b) =>
             kalenderDiff(
@@ -36,7 +48,8 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
         .filter((vedtaksperiode: Vedtaksperiode) => {
             return (
                 vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
-                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR ||
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
             );
         })
         .filter((vedtaksperiode: Vedtaksperiode) => {
@@ -111,6 +124,7 @@ export const finnVedtakBegrunnelseVilkår = (
 export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
+        case VedtakBegrunnelseType.FORTSATT_INNVILGET:
             return navFarger.navGronnLighten80;
         case VedtakBegrunnelseType.AVSLAG:
             return navFarger.navRodLighten80;
@@ -126,6 +140,7 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
 export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
+        case VedtakBegrunnelseType.FORTSATT_INNVILGET:
             return navFarger.navGronn;
         case VedtakBegrunnelseType.AVSLAG:
             return navFarger.navRodDarken20;

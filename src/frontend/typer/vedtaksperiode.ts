@@ -7,6 +7,7 @@ export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
     OPPHØR = 'OPPHØR',
     AVSLAG = 'AVSLAG',
+    FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
 }
 
 export type Vedtaksperiode =
@@ -28,7 +29,43 @@ export type Vedtaksperiode =
           periodeFom?: FamilieIsoDate;
           periodeTom?: FamilieIsoDate;
           vedtaksperiodetype: Vedtaksperiodetype.AVSLAG;
+      }
+    | {
+          periodeFom?: FamilieIsoDate;
+          periodeTom?: FamilieIsoDate;
+          vedtaksperiodetype: Vedtaksperiodetype.FORTSATT_INNVILGET;
+          utbetalingsperiode: Vedtaksperiode;
       };
+
+export const hentUtbetaltPerMåned = (vedtaksperiode: Vedtaksperiode): number | undefined => {
+    switch (vedtaksperiode.vedtaksperiodetype) {
+        case Vedtaksperiodetype.UTBETALING:
+            return vedtaksperiode.utbetaltPerMnd;
+        case Vedtaksperiodetype.FORTSATT_INNVILGET:
+            return vedtaksperiode.utbetalingsperiode.vedtaksperiodetype ===
+                Vedtaksperiodetype.UTBETALING
+                ? vedtaksperiode.utbetalingsperiode.utbetaltPerMnd
+                : undefined;
+        default:
+            return undefined;
+    }
+};
+
+export const hentUtbetalingsperiodeDetaljer = (
+    vedtaksperiode: Vedtaksperiode
+): IUtbetalingsperiodeDetalj[] | undefined => {
+    switch (vedtaksperiode.vedtaksperiodetype) {
+        case Vedtaksperiodetype.UTBETALING:
+            return vedtaksperiode.utbetalingsperiodeDetaljer;
+        case Vedtaksperiodetype.FORTSATT_INNVILGET:
+            return vedtaksperiode.utbetalingsperiode.vedtaksperiodetype ===
+                Vedtaksperiodetype.UTBETALING
+                ? vedtaksperiode.utbetalingsperiode.utbetalingsperiodeDetaljer
+                : undefined;
+        default:
+            return undefined;
+    }
+};
 
 export interface IUtbetalingsperiodeDetalj {
     person: IGrunnlagPerson;

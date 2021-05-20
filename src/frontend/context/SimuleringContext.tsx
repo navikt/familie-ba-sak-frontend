@@ -69,7 +69,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL &&
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
-                : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeTekst
+                : avhengigheter && felt.verdi.length > avhengigheter.maksLengdeTekst
                 ? feil(
                       felt,
                       `Du har nådd maks antall tegn i varselbrevet: 1 500. Prøv å forkorte/forenkle teksten.`
@@ -93,7 +93,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         valideringsfunksjon: (felt, avhengigheter) =>
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
-                : avhengigheter && felt.verdi.length >= avhengigheter.maksLengdeTekst
+                : avhengigheter && felt.verdi.length > avhengigheter.maksLengdeTekst
                 ? feil(
                       felt,
                       `Du har nådd maks antall tegn i begrunnelsen: 1 500. Prøv å forkorte/forenkle teksten.`
@@ -101,7 +101,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 : ok(felt),
     });
 
-    const { skjema, hentFeilTilOppsummering, onSubmit } = useSkjema<
+    const { skjema: tilbakekrevingSkjema, hentFeilTilOppsummering, onSubmit } = useSkjema<
         {
             tilbakekrevingsvalg: Tilbakekrevingsvalg | undefined;
             fritekstVarsel: string;
@@ -114,13 +114,13 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     });
 
     const hentSkjemadata = (): ITilbakekreving | undefined => {
-        return skjema.felter.tilbakekrevingsvalg.verdi && aktivtVedtak
+        return tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi && aktivtVedtak
             ? {
                   vedtakId: aktivtVedtak?.id,
-                  valg: skjema.felter.tilbakekrevingsvalg.verdi,
-                  begrunnelse: skjema.felter.begrunnelse.verdi,
-                  varsel: skjema.felter.fritekstVarsel.erSynlig
-                      ? skjema.felter.fritekstVarsel.verdi
+                  valg: tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi,
+                  begrunnelse: tilbakekrevingSkjema.felter.begrunnelse.verdi,
+                  varsel: tilbakekrevingSkjema.felter.fritekstVarsel.erSynlig
+                      ? tilbakekrevingSkjema.felter.fritekstVarsel.verdi
                       : undefined,
               }
             : undefined;
@@ -128,7 +128,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     return {
         simuleringsresultat,
-        skjema,
+        tilbakekrevingSkjema,
         onSubmit,
         hentFeilTilOppsummering,
         tilbakekrevingErToggletPå,

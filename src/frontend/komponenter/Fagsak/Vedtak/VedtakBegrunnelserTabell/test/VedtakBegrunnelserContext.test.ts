@@ -9,7 +9,8 @@ import {
 } from '../../../../../utils/kalender';
 import { mockVedtakbegrunnelse } from '../../../../../utils/test/vedtak/vedtakbegrunnelse.mock';
 import {
-    mockAvslagssperiode,
+    mockAvslagsperiode,
+    mockFortsattInnvilgetperiode,
     mockOpphørsperiode,
     mockUtbetalingsperiode,
 } from '../../../../../utils/test/vedtak/vedtaksperiode.mock';
@@ -24,8 +25,25 @@ describe('VedtakBegrunnelserContext', () => {
         const vedtaksperioder = [
             mockOpphørsperiode({ periodeFom: opphørFom }),
             mockUtbetalingsperiode({ periodeFom: fom, periodeTom: tom }),
-            mockAvslagssperiode({ periodeFom: fom, periodeTom: tom }),
+            mockAvslagsperiode({ periodeFom: fom, periodeTom: tom }),
         ];
+
+        const vedtaksperioderMedFortsattInnvilget = [
+            mockOpphørsperiode({ periodeFom: opphørFom }),
+            mockUtbetalingsperiode({ periodeFom: fom, periodeTom: tom }),
+            mockAvslagsperiode({ periodeFom: fom, periodeTom: tom }),
+            mockFortsattInnvilgetperiode({ periodeFom: fom, periodeTom: tom }),
+        ];
+
+        test(`Test at kun vedtaksperioder av typen FORTSATT_INNVILGET returneres selv om det finnes andre perioder`, () => {
+            const periodeTyper = filtrerOgSorterPerioderMedBegrunnelseBehov(
+                vedtaksperioderMedFortsattInnvilget,
+                [],
+                false
+            ).map(p => p.vedtaksperiodetype);
+            expect(periodeTyper.length).toBe(1);
+            expect(periodeTyper).toContain(Vedtaksperiodetype.FORTSATT_INNVILGET);
+        });
 
         test(`Test at kun vedtaksperioder av typen OPPHØR og UTBETALING returneres`, () => {
             const periodeTyper = filtrerOgSorterPerioderMedBegrunnelseBehov(
