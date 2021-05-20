@@ -8,7 +8,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
 import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
-import { kalenderDato, KalenderEnhet, trekkFra, erFør, erEtter } from '../../../utils/kalender';
+import { kalenderDato, erFør } from '../../../utils/kalender';
 import { tilVisning } from '../../../utils/kalender';
 
 const StyledPanel = styled(Panel)`
@@ -48,7 +48,14 @@ interface ISimuleringProps {
 }
 
 const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
-    simulering: { feilutbetaling, fom, etterbetaling, fomDatoNestePeriode, perioder },
+    simulering: {
+        feilutbetaling,
+        fom,
+        etterbetaling,
+        fomDatoNestePeriode,
+        perioder,
+        tomSisteUtbetaling,
+    },
 }) => {
     const kapitaliserTekst = (tekst: string): string => {
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
@@ -65,17 +72,16 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
     const erFørNestePeriode = (periode: ISimuleringPeriode) =>
         !fomDatoNestePeriode || erFør(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
 
-    const sisteUtbetaltePeriode = perioder
-        .filter(periode => erFørNestePeriode(periode))
-        .sort((a, b) => (erEtter(kalenderDato(a.fom), kalenderDato(b.fom)) ? 1 : -1))
-        .slice(-1)
-        .pop();
-
-    const utbetaltPeriodeTom = fomDatoNestePeriode
-        ? tilVisning(trekkFra(kalenderDato(fomDatoNestePeriode), 1, KalenderEnhet.DAG))
-        : sisteUtbetaltePeriode
-        ? sisteUtbetaltePeriode.tom
-        : '';
+    const panelTittel = (): string => {
+        const utbetaltePerioder = perioder.filter(periode => erFørNestePeriode(periode));
+        if (utbetaltePerioder.length === 0) {
+            return 'Totalt';
+        }
+        if (utbetaltePerioder.length === 1) {
+            return `Total for ${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_ÅR_NAVN)}`;
+        }
+        return `Totalt for perioden ${tilVisning(kalenderDato(fom))} - ${tomSisteUtbetaling ?? ''}`;
+    };
 
     return (
         <StyledPanel border>
@@ -83,13 +89,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                 <tbody>
                     <tr>
                         <StyledTh colSpan={2}>
-                            <Element>
-                                Totalt{' '}
-                                {perioder.length > 1 &&
-                                    `for perioden ${tilVisning(
-                                        kalenderDato(fom)
-                                    )} - ${utbetaltPeriodeTom}`}
-                            </Element>
+                            <Element>{panelTittel()}</Element>
                         </StyledTh>
                     </tr>
                     <tr>
@@ -97,7 +97,9 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             <Normaltekst>Feilutbetaling</Normaltekst>
                         </StyledTd>
                         <StyledTd erHøyrestilt={true}>
-                            <ElementMedFarge farge={navFarger.navRod}>
+                            <ElementMedFarge
+                                farge={feilutbetaling > 0 ? navFarger.navRod : navFarger.navMorkGra}
+                            >
                                 {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
                             </ElementMedFarge>
                         </StyledTd>
@@ -124,22 +126,38 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                         <StyledTh colSpan={2}>
                             <Element>Neste utbetaling</Element>
                         </StyledTh>
+                        {!nestePeriode && (
+                            <StyledTh erHøyrestilt={true}>
+                                <Element>-</Element>
+                            </StyledTh>
+                        )}
                     </tr>
-                    <tr>
-                        <StyledTd>
-                            <Normaltekst>
-                                {kapitaliserTekst(
-                                    formaterIsoDato(fomDatoNestePeriode, datoformat.MÅNED_ÅR_NAVN)
-                                )}
-                            </Normaltekst>
-                        </StyledTd>
+                    {nestePeriode && (
+                        <tr>
+                            <StyledTd>
+                                <Normaltekst>
+                                    {kapitaliserTekst(
+                                        formaterIsoDato(
+                                            fomDatoNestePeriode,
+                                            datoformat.MÅNED_ÅR_NAVN
+                                        )
+                                    )}
+                                </Normaltekst>
+                            </StyledTd>
 
-                        <StyledTd erHøyrestilt={true}>
-                            <ElementMedFarge farge={navFarger.navGronnDarken40}>
-                                {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
-                            </ElementMedFarge>
-                        </StyledTd>
-                    </tr>
+                            <StyledTd erHøyrestilt={true}>
+                                <ElementMedFarge
+                                    farge={
+                                        nestePeriode?.resultat && nestePeriode.resultat > 0
+                                            ? navFarger.navGronnDarken40
+                                            : navFarger.navMorkGra
+                                    }
+                                >
+                                    {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
+                                </ElementMedFarge>
+                            </StyledTd>
+                        </tr>
+                    )}
                 </tbody>
             </StyledTable>
         </StyledPanel>
