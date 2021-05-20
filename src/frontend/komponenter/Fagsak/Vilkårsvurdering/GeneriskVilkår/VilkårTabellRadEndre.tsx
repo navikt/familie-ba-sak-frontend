@@ -13,6 +13,7 @@ import {
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
@@ -24,6 +25,7 @@ import Slett from '../../../../ikoner/Slett';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -81,6 +83,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settRedigerbartVilkår,
     settEkspandertVilkår,
 }) => {
+    const { toggles } = useApp();
+
     const {
         vilkårsvurdering,
         putVilkår,
@@ -276,12 +280,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
 
-                <SkjønnsvurderingCheckbox
-                    redigerbartVilkår={redigerbartVilkår}
-                    settRedigerbartVilkår={settRedigerbartVilkår}
-                    settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                />
-
+                {toggles[ToggleNavn.skjønnsvurdering] && (
+                    <SkjønnsvurderingCheckbox
+                        redigerbartVilkår={redigerbartVilkår}
+                        settRedigerbartVilkår={settRedigerbartVilkår}
+                        settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                    />
+                )}
                 <FamilieTextareaControlled
                     tekstLesevisning={''}
                     erLesevisning={leseVisning}
