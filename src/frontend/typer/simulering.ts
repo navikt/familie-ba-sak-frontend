@@ -4,7 +4,8 @@ export interface ISimuleringDTO {
     etterbetaling: number;
     feilutbetaling: number;
     fom: string;
-    tomDatoNestePeriode: string;
+    tomDatoNestePeriode?: string;
+    tomSisteUtbetaling?: string;
 }
 
 export interface ISimuleringPeriode {

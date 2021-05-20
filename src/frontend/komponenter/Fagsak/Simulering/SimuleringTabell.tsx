@@ -31,6 +31,10 @@ const HøyresiltTd = styled.td`
     text-align: right !important;
 `;
 
+const HøyresiltTh = styled.th`
+    text-align: right !important;
+`;
+
 const NormaltekstMedFarge = styled(Normaltekst)`
     color: ${(props: { farge?: string }) => (props.farge ? props.farge : navFarger.navMorkGra)};
 `;
@@ -82,9 +86,10 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         fom,
         perioder: perioderUtenTommeSimuleringer,
         tomDatoNestePeriode,
+        tomSisteUtbetaling,
     } = simulering;
-    const årISimuleringen = hentÅrISimuleringen(perioderUtenTommeSimuleringer);
     const perioder = hentPeriodelisteMedTommePerioder(perioderUtenTommeSimuleringer);
+    const årISimuleringen = hentÅrISimuleringen(perioder);
     const [indexFramvistÅr, settIndexFramistÅr] = useState(årISimuleringen.length - 1);
     const aktueltÅr = årISimuleringen[indexFramvistÅr];
     const erMerEnn12MånederISimulering = perioder.length > 12;
@@ -106,8 +111,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const antallPeriodetIFremvistÅr = perioder.filter(p => periodeSkalVisesITabell(p)).length;
 
-    const erISisteÅrAvPerioden =
-        indexFramvistÅr === hentÅrISimuleringen(perioderUtenTommeSimuleringer).length - 1;
+    const erISisteÅrAvPerioden = indexFramvistÅr === hentÅrISimuleringen(perioder).length - 1;
 
     const tabellbredde =
         9.375 +
@@ -122,14 +126,19 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         </Skillelinje>
     );
 
-    const tilOgFraDatoForSimulering = `${periodeToString({ fom, tom: tomDatoNestePeriode })}`;
+    const tilOgFraDatoForSimulering = `${periodeToString({
+        fom,
+        tom: tomDatoNestePeriode ?? tomSisteUtbetaling,
+    })}`;
 
     return (
         <>
             <SimuleringTabellOverskrift>
                 <Element>
-                    Simuleringsresultat{' '}
-                    {perioder.length > 1 && `for perioden ${tilOgFraDatoForSimulering}`}
+                    Simuleringsresultat for{' '}
+                    {perioder.length === 1
+                        ? `${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_ÅR_NAVN)}`
+                        : `perioden ${tilOgFraDatoForSimulering}`}
                 </Element>
             </SimuleringTabellOverskrift>
 
@@ -188,7 +197,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'måned - ' + periode.fom}>
                                         {erNestePeriode(periode) && <TabellSkillelinje erHeader />}
-                                        <th>
+                                        <HøyresiltTh>
                                             <Element>
                                                 {kapitaliserTekst(
                                                     formaterIsoDato(
@@ -197,7 +206,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                                                     )
                                                 )}
                                             </Element>
-                                        </th>
+                                        </HøyresiltTh>
                                     </React.Fragment>
                                 )
                         )}
