@@ -129,9 +129,6 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
         };
 
         const onSubmit = () => {
-            if (!vedtaksperiode.periodeFom) {
-                throw new Error('Prøver å legge til en begrunnelse på en periode uten fom');
-            }
             settFritekstSubmit(FritekstSubmit.POST);
 
             if (fagsak.status === RessursStatus.SUKSESS) {

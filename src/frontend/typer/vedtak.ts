@@ -26,7 +26,7 @@ export interface IRestPostVedtakBegrunnelse {
 }
 
 export interface IRestPostFritekstVedtakBegrunnelser {
-    fom: string;
+    fom?: string;
     tom?: string;
     fritekster: string[];
     vedtaksperiodetype: Vedtaksperiodetype;
