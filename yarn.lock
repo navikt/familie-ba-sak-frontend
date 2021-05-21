@@ -8993,10 +8993,10 @@ nav-frontend-typografi@^2.0.16:
   resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.39.tgz#036e602e1c6253685132b62f05e42aeafc50fb9c"
   integrity sha512-YJ2e+nB2C1GdpxkONM87W8to+6ij058WWa6s2k1ABdODtfiHKQd0hJEfgmW9WrJT5e2WM6kkal5IeH3qF3lVuw==
 
-nav-frontend-typografi@^3.0.3, nav-frontend-typografi@^3.0.4, nav-frontend-typografi@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-3.1.1.tgz#3d4b5fbac3e5a8a8a23969fa835c393bf003e3fc"
-  integrity sha512-wxH1dCmmX/91zIZMKGuq0XcnIr5/nBTM8TSqTUp5UR3KnHZ0+/jID3hPEMwQPhaQTaseNW3yfBIjBolkxHcivQ==
+nav-frontend-typografi@^3.0.3, nav-frontend-typografi@^3.0.4, nav-frontend-typografi@^3.1.1, nav-frontend-typografi@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-3.1.2.tgz#480b18a0fd6be78b11582997166f9c3b97e5e9de"
+  integrity sha512-F8045asErG1zjGHCwT5i+jCv0GQOdIUsH/pZbtME7VaF0V5zkXNaIUTws8iZeGL2hdll0Wk+IAfce9j+K+970g==
 
 nav-hoykontrast@^1.0.7:
   version "1.2.1"
