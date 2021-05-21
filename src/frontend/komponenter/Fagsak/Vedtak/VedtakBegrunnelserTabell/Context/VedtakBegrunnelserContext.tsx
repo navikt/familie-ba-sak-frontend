@@ -151,10 +151,6 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
 
         return {
             avslagBegrunnelser,
-            fortsattInnvilgetBegrunnelser: vedtakBegrunnelser.filter(
-                vedtakBegrunnelse =>
-                    vedtakBegrunnelse.begrunnelseType === VedtakBegrunnelseType.FORTSATT_INNVILGET
-            ),
             hentVilkårBegrunnelseTekster,
             leggTilVedtakBegrunnelse,
             slettVedtakBegrunnelse,
