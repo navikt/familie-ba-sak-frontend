@@ -1673,12 +1673,12 @@
   resolved "https://registry.yarnpkg.com/@navikt/fnrvalidator/-/fnrvalidator-1.1.3.tgz#1bd136977a708120b6069276b0069b2a9cc9ae73"
   integrity sha512-xBwlPOI08kbByUWI4Yyd6NbIYLFs78I0h05mlHPjmrPPikyM89IQRbMac+6ovkgpi2s63OV6ryv3w4QqPubwiw==
 
-"@navikt/helse-frontend-tidslinje@^6.1.8":
-  version "6.1.8"
-  resolved "https://registry.yarnpkg.com/@navikt/helse-frontend-tidslinje/-/helse-frontend-tidslinje-6.1.8.tgz#34369fe4a6b0a90d0a807df326ae225b14d196fe"
-  integrity sha512-VXXWjkh/UT+/8K8iV8mQw2aR2/64/k7OpINJ9z9MUvS/n1Qv6qBEj8n3anz7FR8tyEVkc+jLFKbQ6QNybFQkJw==
+"@navikt/helse-frontend-tidslinje@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@navikt/helse-frontend-tidslinje/-/helse-frontend-tidslinje-3.1.0.tgz#6136c8eee0d79dbfe21c208a8ff0fa83394eb80e"
+  integrity sha512-J4SvS8L5VUowb8Kii+Ko15qkS80VUqEqQgi7S+DfkiWa2wgvQMpV5PrEJUpjaSpE3gp9cQetap/XELbr+QS+vA==
   dependencies:
-    nanoid "^3.1.18"
+    nanoid "^3.1.3"
 
 "@navikt/nap-bem-utils@1.0.1":
   version "1.0.1"
@@ -8721,7 +8721,7 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-nanoid@^3.1.18, nanoid@^3.1.22:
+nanoid@^3.1.22, nanoid@^3.1.3:
   version "3.1.23"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.23.tgz#f744086ce7c2bc47ee0a8472574d5c78e4183a81"
   integrity sha512-FiB0kzdP0FFVGDKlRLEQ1BgDzU87dy5NnzjeW9YZNt+/c3+q82EQDUwniSAUxp/F0gFNI1ZhKU1FqYsMuqZVnw==
