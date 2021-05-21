@@ -105,7 +105,7 @@
     "nav-frontend-tabell-style": "^1.1.2",
     "nav-frontend-tabs": "^1.1.1",
     "nav-frontend-tabs-style": "^1.1.1",
-    "nav-frontend-typografi": "^3.1.1",
+    "nav-frontend-typografi": "^3.1.2",
     "nav-frontend-typografi-style": "^1.1.1",
     "node": "^16.1.0",
     "node-fetch": "^2.6.1",
