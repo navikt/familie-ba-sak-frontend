@@ -1561,10 +1561,10 @@
     nav-frontend-knapper-style "^1.1.2"
     react-tooltip "^4.2.15"
 
-"@navikt/familie-form-elements@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-3.0.1.tgz#6f81be96baf08a869b46d35cc7ae0d4f6e36f725"
-  integrity sha512-bOYlCTjGEtXr4PA0k8OnbkxpESLcUm15rS77HsYCxsnR+s80Ib78K4zAM/shUd0tCa7sNHmDhuhVwwV2dpAc7Q==
+"@navikt/familie-form-elements@^3.0.1", "@navikt/familie-form-elements@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-3.0.2.tgz#858a0e24feabbb5ab1b0486f30e0fffe9fe58d33"
+  integrity sha512-3OCYgg4GSpM9dQhAgq3vZ+XYD2/9wMDbEdfkLA4IQ69gHK2UADjeWnyQ0ASlqa13i//IZlkfbo3wXLPQpzGq3Q==
   dependencies:
     "@navikt/fnrvalidator" "^1.1.3"
     "@types/classnames" "^2.2.10"
@@ -8827,7 +8827,7 @@ nav-frontend-ikoner-assets@2.0.10, nav-frontend-ikoner-assets@^2.0.3:
   resolved "https://registry.yarnpkg.com/nav-frontend-ikoner-assets/-/nav-frontend-ikoner-assets-2.0.10.tgz#8525d171ce81c9444f904374057cd77d98bae82d"
   integrity sha512-n/2qIk29rRkR8OZwZBnSIWRKdC25t/8lAhZXEvFZrqmjAC+U4xHHj5+VlCoN5O5VIzq4xtck1Flwj7mJehAj7g==
 
-nav-frontend-ikonknapper@^1.1.4:
+nav-frontend-ikonknapper@^1.1.2:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-1.1.4.tgz#fe88144f8a76d91f04c24d24eabf681a76969244"
   integrity sha512-qvrBlpSdsFF3WdiSzt49F9UhBGubHKugIEQeR1rXhDwThGIEbt8EcaxF6hFVa0cClZRg/lbqlZptAAE27741Ow==
@@ -8881,12 +8881,7 @@ nav-frontend-lenker-style@^1.0.2, nav-frontend-lenker-style@^1.1.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-1.1.1.tgz#f2275691fe798fb45dba7cccdc2750b90f028bf6"
   integrity sha512-lyg6XLC9oBDRgqWOvcm5aGTjE+5qasVWAvIQV+Gh9iIZw0CubA2a3dBaTuTcwbxeCTHAhjk7Ww0QZxwP+THflA==
 
-nav-frontend-lenker@^1.0.60:
-  version "1.0.60"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.60.tgz#ab32a842c4dd2ed842479ae1e9c742df8f05499e"
-  integrity sha512-Bv7McvpXRARaNsQCYCt/JW1iZYetlYc+kAPxPKaBDSGiZYp5u3ZOM4sorTIiCXMXOe/y3cahO4i3oF2q78/mNA==
-
-nav-frontend-lenker@^1.1.1:
+nav-frontend-lenker@^1.0.60, nav-frontend-lenker@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.1.1.tgz#fcd06c909f1cc0ab5558ea2dc15a0a7446c7004e"
   integrity sha512-rR0IKIZTX/ryk2KkBmZufXsKwYIB0GJF9gqYBRU9Mqy6DbfGDtEcQFxtDPUQZX7lgI4eg+52wv4NGRzpMfPIGA==
@@ -8931,12 +8926,7 @@ nav-frontend-popover@1.1.1, nav-frontend-popover@^1.1.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-popover/-/nav-frontend-popover-1.1.1.tgz#b4f0ae095836b4fd17f946b7692ce0977ae9e10f"
   integrity sha512-OeLsrNQRySRyG3Azb2WFJAxuZRIXXqgkMpeg3VV65rSHmyub8T+V/cLYtl/Gf/8oJ7eADqJrVgY5tLyduqFVig==
 
-nav-frontend-skjema-style@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.1.0.tgz#f6e4f36714cefbd1524109b6881f95431d8805c2"
-  integrity sha512-RZ5RLC+5SDW6O2sqbra5bcXkhwMWNhQex0+wpzwOugOVzoffKA0wPzoA7wEQT6zSD8pomtPkRMAHE9Jz0MswZQ==
-
-nav-frontend-skjema-style@^2.2.1:
+nav-frontend-skjema-style@^2.1.0, nav-frontend-skjema-style@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-2.2.1.tgz#5537e6ec1e89a670065d33fc15b93291d0cd7458"
   integrity sha512-V8M9IeSWHVpQjKnbDJewdmAcPluNcpJX1zgAJ9e66cwGhRe3bEygsYIHhn9W8Bjl/oAvByxPuklT+TEn2UFwEw==

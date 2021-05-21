@@ -28,7 +28,7 @@
     "@navikt/ds-icons": "^0.3.1",
     "@navikt/familie-backend": "^5.0.24",
     "@navikt/familie-clipboard": "^3.1.6",
-    "@navikt/familie-form-elements": "^3.0.1",
+    "@navikt/familie-form-elements": "^3.0.2",
     "@navikt/familie-header": "^3.0.16",
     "@navikt/familie-http": "^1.0.5",
     "@navikt/familie-ikoner": "^3.1.11",
