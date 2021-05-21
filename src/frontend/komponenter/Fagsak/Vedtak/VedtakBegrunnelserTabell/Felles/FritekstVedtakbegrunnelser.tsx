@@ -12,21 +12,21 @@ import { Feilmelding } from 'nav-frontend-typografi';
 
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../../context/BehandlingContext';
+import { EksternLenke } from '../../../../../ikoner/EksternLenke';
+import Pluss from '../../../../../ikoner/Pluss';
+import Slett from '../../../../../ikoner/Slett';
+import { Fritekster } from '../../../../../typer/begrunnelser';
+import { målform } from '../../../../../typer/søknad';
+import { Vedtaksperiode } from '../../../../../typer/vedtaksperiode';
+import { fjernElementMedNøkkel } from '../../../../../utils/commons';
+import Hjelpetekst44px from '../../../../Felleskomponenter/Hjelpetekst44px';
+import IkonKnapp from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import {
-    Fritekster,
     FritekstSubmit,
     useFritekstVedtakBegrunnelser,
-} from '../../../../context/FritekstVedtakBegrunnelserContext';
-import { EksternLenke } from '../../../../ikoner/EksternLenke';
-import Pluss from '../../../../ikoner/Pluss';
-import Slett from '../../../../ikoner/Slett';
-import { målform } from '../../../../typer/søknad';
-import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
-import { fjernElementMedNøkkel } from '../../../../utils/commons';
-import Hjelpetekst44px from '../../../Felleskomponenter/Hjelpetekst44px';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import SkjultLegend from '../../../Felleskomponenter/SkjultLegend';
+} from '../Context/FritekstVedtakBegrunnelserContext';
 
 interface IProps {
     vedtaksperiode: Vedtaksperiode;

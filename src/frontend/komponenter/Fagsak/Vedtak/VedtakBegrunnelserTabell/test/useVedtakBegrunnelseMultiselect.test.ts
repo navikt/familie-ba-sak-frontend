@@ -6,7 +6,7 @@ import {
     mockRestPersonResultat,
     mockRestVilkårResultat,
 } from '../../../../../utils/test/vilkårsvurdering/vilkår.mock';
-import { hentUtgjørendeVilkårImpl } from '../useVedtakBegrunnelseMultiselect';
+import { hentUtgjørendeVilkårImpl } from '../Hooks/useVedtakBegrunnelseMultiselect';
 
 describe('useVedtakBegrunnelseMultiselect', () => {
     describe('Test hentUtgjørendeVilkår', () => {
@@ -67,7 +67,7 @@ describe('useVedtakBegrunnelseMultiselect', () => {
             const utgjørendeVilkår = hentUtgjørendeVilkårImpl(
                 VedtakBegrunnelseType.INNVILGELSE,
                 personResultater,
-                innvilgelseperiode
+                { fom: innvilgelseperiode.periodeFom, tom: innvilgelseperiode.periodeTom }
             );
             expect(utgjørendeVilkår.length).toEqual(2);
             expect(utgjørendeVilkår).toContain(VilkårType.BOR_MED_SØKER);
@@ -77,7 +77,7 @@ describe('useVedtakBegrunnelseMultiselect', () => {
             const utgjørendeVilkår = hentUtgjørendeVilkårImpl(
                 VedtakBegrunnelseType.REDUKSJON,
                 personResultater,
-                reduksjonsperiode
+                { fom: reduksjonsperiode.periodeFom, tom: reduksjonsperiode.periodeTom }
             );
             expect(utgjørendeVilkår.length).toEqual(1);
             expect(utgjørendeVilkår).toContain(VilkårType.BOR_MED_SØKER);
@@ -86,7 +86,7 @@ describe('useVedtakBegrunnelseMultiselect', () => {
             const utgjørendeVilkår = hentUtgjørendeVilkårImpl(
                 VedtakBegrunnelseType.OPPHØR,
                 personResultater,
-                opphørsperiode
+                { fom: opphørsperiode.periodeFom, tom: opphørsperiode.periodeTom }
             );
             expect(utgjørendeVilkår.length).toEqual(1);
             expect(utgjørendeVilkår).toContain(VilkårType.LOVLIG_OPPHOLD);
@@ -133,7 +133,7 @@ describe('useVedtakBegrunnelseMultiselect', () => {
             const utgjørendeVilkår = hentUtgjørendeVilkårImpl(
                 VedtakBegrunnelseType.REDUKSJON,
                 personResultater,
-                reduksjonsperiode
+                { fom: reduksjonsperiode.periodeFom, tom: reduksjonsperiode.periodeTom }
             );
             expect(utgjørendeVilkår.length).toEqual(1);
             expect(utgjørendeVilkår).toContain(VilkårType.UNDER_18_ÅR);
@@ -142,7 +142,7 @@ describe('useVedtakBegrunnelseMultiselect', () => {
             const utgjørendeVilkår = hentUtgjørendeVilkårImpl(
                 VedtakBegrunnelseType.OPPHØR,
                 personResultater,
-                opphørsperiode
+                { fom: opphørsperiode.periodeFom, tom: opphørsperiode.periodeTom }
             );
             expect(utgjørendeVilkår.length).toEqual(1);
             expect(utgjørendeVilkår).toContain(VilkårType.UNDER_18_ÅR);

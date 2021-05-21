@@ -22,7 +22,6 @@ import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import {
     BehandlerRolle,
@@ -40,8 +39,10 @@ import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import AvslagTabell from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
-import BegrunnelseTabell from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
+import AvslagBegrunnelser from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
+import { VedtakBegrunnelserProvider } from './VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
+import VedtakBegrunnelser from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
+import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -209,9 +210,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                     />
                     <Container>
                         <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                            <BegrunnelseTabell åpenBehandling={åpenBehandling} />
-                            <AvslagTabell åpenBehandling={åpenBehandling} />
+                            <VedtakBegrunnelser åpenBehandling={åpenBehandling} />
+                            <AvslagBegrunnelser åpenBehandling={åpenBehandling} />
                         </VedtakBegrunnelserProvider>
+
+                        <VedtaksperioderMedBegrunnelser
+                            fagsak={fagsak}
+                            åpenBehandling={åpenBehandling}
+                        />
+
                         <IkonKnapp
                             id={'forhandsvis-vedtaksbrev'}
                             erLesevisning={false}

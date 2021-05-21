@@ -1,38 +1,39 @@
 import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
-} from '../../../../typer/vedtak';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
+} from '../../../../../typer/vedtak';
+import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import {
     AnnenVurderingType,
     IRestPersonResultat,
     IRestVilkårResultat,
     Resultat,
     VilkårType,
-} from '../../../../typer/vilkår';
+} from '../../../../../typer/vilkår';
 import {
     DagMånedÅr,
     erISammeMåned,
     erSamme,
+    IPeriode,
     kalenderDatoMedFallback,
     KalenderEnhet,
     sisteDagIMåned,
     TIDENES_ENDE,
     TIDENES_MORGEN,
     trekkFra,
-} from '../../../../utils/kalender';
+} from '../../../../../utils/kalender';
+import { useVedtakBegrunnelser } from '../Context/VedtakBegrunnelserContext';
 
 export const hentUtgjørendeVilkårImpl = (
     begrunnelseType: VedtakBegrunnelseType,
     personResultater: IRestPersonResultat[],
-    vedtaksperiode: Vedtaksperiode
+    periode: IPeriode
 ): VilkårType[] => {
     return personResultater
         .flatMap(personResultat => personResultat.vilkårResultater)
@@ -46,7 +47,7 @@ export const hentUtgjørendeVilkårImpl = (
                 TIDENES_ENDE
             );
             const vedtakPeriodeFom: DagMånedÅr = kalenderDatoMedFallback(
-                vedtaksperiode.periodeFom,
+                periode.fom,
                 TIDENES_MORGEN
             );
             const oppfyltTomMånedEtter =
@@ -175,7 +176,10 @@ const useVedtakBegrunnelseMultiselect = (
             : true;
 
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] =>
-        hentUtgjørendeVilkårImpl(begrunnelseType, personResultater, vedtaksperiode);
+        hentUtgjørendeVilkårImpl(begrunnelseType, personResultater, {
+            fom: vedtaksperiode.periodeFom,
+            tom: vedtaksperiode.periodeTom,
+        });
 
     const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
         (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
@@ -240,7 +244,8 @@ const useVedtakBegrunnelseMultiselect = (
             (vedtaksbegrunnelse: IRestVedtakBegrunnelse) =>
                 vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.REDUKSJON_FRITEKST &&
                 vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.AVSLAG_FRITEKST &&
-                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.OPPHØR_FRITEKST
+                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.OPPHØR_FRITEKST &&
+                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.FORTSATT_INNVILGET_FRITEKST
         )
         .map((vedtaksbegrunnelse: IRestVedtakBegrunnelse) => ({
             value: vedtaksbegrunnelse.begrunnelse?.toString() ?? '',

@@ -2,6 +2,24 @@ import { FamilieIsoDate } from '../utils/kalender';
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
 import { IGrunnlagPerson } from './person';
+import { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
+
+// Vedtaksperioder med begrunnelser - POC på ny måte å samle begrunnelser knyttet til vedtaksperioder
+export interface IVedtaksperiodeMedBegrunnelser {
+    id: number;
+    fom?: FamilieIsoDate;
+    tom?: FamilieIsoDate;
+    type: Vedtaksperiodetype;
+    begrunnelser: IRestVedtaksbegrunnelse[];
+    fritekster: string[];
+}
+
+export interface IRestVedtaksbegrunnelse {
+    vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
+    vedtakBegrunnelseType: VedtakBegrunnelseType;
+    personIdenter: string[];
+}
+// POC slutt
 
 export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
@@ -52,8 +70,12 @@ export const hentUtbetaltPerMåned = (vedtaksperiode: Vedtaksperiode): number | 
 };
 
 export const hentUtbetalingsperiodeDetaljer = (
-    vedtaksperiode: Vedtaksperiode
+    vedtaksperiode?: Vedtaksperiode
 ): IUtbetalingsperiodeDetalj[] | undefined => {
+    if (!vedtaksperiode) {
+        return undefined;
+    }
+
     switch (vedtaksperiode.vedtaksperiodetype) {
         case Vedtaksperiodetype.UTBETALING:
             return vedtaksperiode.utbetalingsperiodeDetaljer;
@@ -82,6 +104,15 @@ export const hentVedtaksperiodeTittel = (vedtaksperiode: Vedtaksperiode) => {
     switch (vedtaksperiode.vedtaksperiodetype) {
         case Vedtaksperiodetype.UTBETALING:
             return ytelsetype[vedtaksperiode.ytelseTyper[0]].navn;
+        case Vedtaksperiodetype.FORTSATT_INNVILGET:
+            if (
+                vedtaksperiode.utbetalingsperiode.vedtaksperiodetype ===
+                Vedtaksperiodetype.UTBETALING
+            ) {
+                return ytelsetype[vedtaksperiode.utbetalingsperiode.ytelseTyper[0]].navn;
+            } else {
+                return '';
+            }
         case Vedtaksperiodetype.OPPHØR:
             return 'Opphør';
         case Vedtaksperiodetype.AVSLAG:
