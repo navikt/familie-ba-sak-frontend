@@ -8966,10 +8966,10 @@ nav-frontend-tabs@1.0.3:
   resolved "https://registry.yarnpkg.com/nav-frontend-tabs/-/nav-frontend-tabs-1.0.3.tgz#2ab429ea6d6aaca90f728219a988cce74b2b779a"
   integrity sha512-ZR5xZojkCwkJNPUHijUcf4sDMk7VW6kvTPDX+f5pCmWdVSnOzWNUAGVbIJH2OECcgckFeWCRlpFc8JwSQdiE/Q==
 
-nav-frontend-tabs@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-tabs/-/nav-frontend-tabs-1.1.1.tgz#9084578d44390da995d2db1066901a9187ed6417"
-  integrity sha512-UhS8uzIstxKnBmHEAoDXO3eNNQnvqI4MnvF7CzqBr5O1dpfSXezYb8h1K+WQpr+uNXJ/+3gLMfG8U3qu+2m6ng==
+nav-frontend-tabs@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/nav-frontend-tabs/-/nav-frontend-tabs-1.1.3.tgz#9a2cdda423f2b30d55641ab635088b6832ef24d1"
+  integrity sha512-Gfg1Xm7KkClGGhEOMl5ehd63wC7fOkiAGoRtunYGCUldQRSZsbKgcwBOVdro1YbQla0Ykwls2iXuwE41MBHK8Q==
 
 nav-frontend-toggle-style@^1.1.2:
   version "1.1.2"
