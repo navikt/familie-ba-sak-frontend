@@ -13,12 +13,11 @@ import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
 import {
     adressebeskyttelsestyper,
-    FamilieRelasjonRolle,
-    IFamilierelasjonMaskert,
+    ForelderBarnRelasjonRolle,
+    IForelderBarnRelasjonMaskert,
 } from '../../../typer/person';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
-import { datoformat } from '../../../utils/formatter';
+import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import LeggTilBarn from './LeggTilBarn';
 
@@ -48,11 +47,19 @@ const Barna: React.FunctionComponent = () => {
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
+            if (!a.fødselsdato) {
+                return 1;
+            }
+
+            if (!b.fødselsdato) {
+                return -1;
+            }
+
             return !a.ident
                 ? 1
-                : familieDayjsDiff(
-                      familieDayjs(b.fødselsdato, datoformat.ISO_DAG),
-                      familieDayjs(a.fødselsdato, datoformat.ISO_DAG)
+                : kalenderDiff(
+                      kalenderDatoTilDate(kalenderDato(b.fødselsdato)),
+                      kalenderDatoTilDate(kalenderDato(a.fødselsdato))
                   );
         }
     );
@@ -61,25 +68,31 @@ const Barna: React.FunctionComponent = () => {
         <BarnaWrapper className={'søknad__barna'}>
             <Systemtittel children={'Opplysninger om barn'} />
             {bruker.status === RessursStatus.SUKSESS &&
-                bruker.data.familierelasjonerMaskert
+                bruker.data.forelderBarnRelasjonMaskert
                     .filter(
-                        (familierelasjonMaskert: IFamilierelasjonMaskert) =>
-                            familierelasjonMaskert.relasjonRolle === FamilieRelasjonRolle.BARN
+                        (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert) =>
+                            forelderBarnRelasjonMaskert.relasjonRolle ===
+                            ForelderBarnRelasjonRolle.BARN
                     )
-                    .map((familierelasjonMaskert: IFamilierelasjonMaskert, index: number) => {
-                        return (
-                            <BarnMedDiskresjonskode
-                                key={`${index}_${familierelasjonMaskert.relasjonRolle}`}
-                            >
-                                <StyledRødError heigth={24} width={24} />
-                                {`Bruker har barn med diskresjonskode ${
-                                    adressebeskyttelsestyper[
-                                        familierelasjonMaskert.adressebeskyttelseGradering
-                                    ] ?? 'ukjent'
-                                }`}
-                            </BarnMedDiskresjonskode>
-                        );
-                    })}
+                    .map(
+                        (
+                            forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert,
+                            index: number
+                        ) => {
+                            return (
+                                <BarnMedDiskresjonskode
+                                    key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}
+                                >
+                                    <StyledRødError heigth={24} width={24} />
+                                    {`Bruker har barn med diskresjonskode ${
+                                        adressebeskyttelsestyper[
+                                            forelderBarnRelasjonMaskert.adressebeskyttelseGradering
+                                        ] ?? 'ukjent'
+                                    }`}
+                                </BarnMedDiskresjonskode>
+                            );
+                        }
+                    )}
 
             <br />
             <StyledCheckboxGruppe

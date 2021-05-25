@@ -4,7 +4,7 @@ import { useBehandling } from '../../../../context/BehandlingContext';
 import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
+import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../utils/vedtakUtils';
 import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 import VedtakBegrunnelsePanel from './VedtakBegrunnelsePanel';
@@ -17,22 +17,18 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
 
-    const utbetalingsperioder = åpenBehandling.vedtaksperioder.filter(
-        (periode: Vedtaksperiode) => periode.vedtaksperiodetype !== Vedtaksperiodetype.AVSLAG
-    );
-    const harVedtaksperioder = utbetalingsperioder.length > 0;
     const vedtaksperioderMedBegrunnelseBehov = filtrerOgSorterPerioderMedBegrunnelseBehov(
-        utbetalingsperioder,
+        åpenBehandling.vedtaksperioder,
         vedtakBegrunnelser,
         erLesevisning()
     );
 
-    return harVedtaksperioder ? (
+    return vedtaksperioderMedBegrunnelseBehov.length > 0 ? (
         <>
             <OverskriftMedHjelpetekst
                 overskrift={'Begrunnelser i vedtaksbrev'}
                 hjelpetekst={
-                    'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør.'
+                    'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon, opphør og fortsatt innvilgelse.'
                 }
             />
             {vedtaksperioderMedBegrunnelseBehov.map((vedtaksperiode: Vedtaksperiode) => (

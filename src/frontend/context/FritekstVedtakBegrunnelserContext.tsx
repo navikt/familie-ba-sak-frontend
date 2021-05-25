@@ -86,15 +86,12 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
             switch (vedtaksperiodetype) {
                 case Vedtaksperiodetype.OPPHØR: {
                     return VedtakBegrunnelse.OPPHØR_FRITEKST;
-                    break;
                 }
                 case Vedtaksperiodetype.AVSLAG: {
                     return VedtakBegrunnelse.AVSLAG_FRITEKST;
-                    break;
                 }
                 case Vedtaksperiodetype.UTBETALING: {
                     return VedtakBegrunnelse.REDUKSJON_FRITEKST;
-                    break;
                 }
                 default: {
                     return undefined;

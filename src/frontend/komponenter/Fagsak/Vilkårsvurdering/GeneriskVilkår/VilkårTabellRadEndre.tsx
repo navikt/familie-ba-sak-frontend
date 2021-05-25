@@ -13,6 +13,7 @@ import {
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
@@ -24,6 +25,7 @@ import Slett from '../../../../ikoner/Slett';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -34,6 +36,7 @@ import {
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
+import SkjønnsvurderingCheckbox from './SkjønnsvurderingCheckbox';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
@@ -80,6 +83,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settRedigerbartVilkår,
     settEkspandertVilkår,
 }) => {
+    const { toggles } = useApp();
+
     const {
         vilkårsvurdering,
         putVilkår,
@@ -91,9 +96,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
     const leseVisning = erLesevisning();
-    const årsakErIkkeSøknad =
-        åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD;
+    const årsakErSøknad =
+        åpenBehandling.status !== RessursStatus.SUKSESS ||
+        åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
@@ -261,7 +266,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     />
                 </FamilieRadioGruppe>
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                    !årsakErIkkeSøknad && (
+                    årsakErSøknad && (
                         <AvslagSkjema
                             redigerbartVilkår={redigerbartVilkår}
                             settRedigerbartVilkår={settRedigerbartVilkår}
@@ -275,6 +280,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
 
+                {toggles[ToggleNavn.skjønnsvurdering] && (
+                    <SkjønnsvurderingCheckbox
+                        redigerbartVilkår={redigerbartVilkår}
+                        settRedigerbartVilkår={settRedigerbartVilkår}
+                        settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                    />
+                )}
                 <FamilieTextareaControlled
                     tekstLesevisning={''}
                     erLesevisning={leseVisning}

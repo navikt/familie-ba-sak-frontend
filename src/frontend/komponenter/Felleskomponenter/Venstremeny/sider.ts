@@ -72,12 +72,12 @@ export const sider: Record<SideId, ISide> = {
     BEHANDLINGRESULTAT: {
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
-        steg: BehandlingSteg.SIMULERING,
+        steg: BehandlingSteg.VURDER_TILBAKEKREVING,
     },
     SIMULERING: {
         href: 'simulering',
         navn: 'Simulering',
-        steg: BehandlingSteg.SIMULERING,
+        steg: BehandlingSteg.VURDER_TILBAKEKREVING,
     },
     VEDTAK: {
         href: 'vedtak',

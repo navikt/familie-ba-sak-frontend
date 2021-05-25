@@ -28,7 +28,7 @@ export const personTypeMap: PersonTypeMap = {
     BARN: 'Barn',
 };
 
-export enum FamilieRelasjonRolle {
+export enum ForelderBarnRelasjonRolle {
     BARN = 'BARN',
     FAR = 'FAR',
     MEDMOR = 'MEDMOR',
@@ -55,8 +55,8 @@ export interface IGrunnlagPerson {
 export interface IPersonInfo {
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
     harTilgang?: boolean;
-    familierelasjoner: IFamilierelasjon[];
-    familierelasjonerMaskert: IFamilierelasjonMaskert[];
+    forelderBarnRelasjon: IForelderBarnRelasjon[];
+    forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert[];
     fødselsdato: string;
     kjønn: kjønnType;
     navn: string;
@@ -64,17 +64,17 @@ export interface IPersonInfo {
     type: PersonType;
 }
 
-export interface IFamilierelasjon {
+export interface IForelderBarnRelasjon {
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
     fødselsdato: string;
     navn: string;
     personIdent: string;
-    relasjonRolle: FamilieRelasjonRolle;
+    relasjonRolle: ForelderBarnRelasjonRolle;
 }
 
-export interface IFamilierelasjonMaskert {
+export interface IForelderBarnRelasjonMaskert {
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
-    relasjonRolle: FamilieRelasjonRolle;
+    relasjonRolle: ForelderBarnRelasjonRolle;
 }
 
 export interface IRestTilgang {

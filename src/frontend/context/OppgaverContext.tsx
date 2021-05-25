@@ -30,8 +30,7 @@ import {
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
-import familieDayjs from '../utils/familieDayjs';
-import { validerFormatISODag } from '../utils/validators';
+import { erFør, erIsoStringGyldig, kalenderDato } from '../utils/kalender';
 import { useApp } from './AppContext';
 
 export const oppgaveSideLimit = 15;
@@ -204,8 +203,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 return 0;
             }
 
-            const aValid = familieDayjs(a.substring(0, 10), 'YYYY-MM-DD').isValid();
-            const bValid = familieDayjs(b.substring(0, 10), 'YYYY-MM-DD').isValid();
+            const aValid = erIsoStringGyldig(a.substring(0, 10));
+            const bValid = erIsoStringGyldig(b.substring(0, 10));
 
             if (!aValid && !bValid) {
                 return 0;
@@ -221,9 +220,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
             const aBefore = ascendant ? -1 : 1;
             const aAfter = ascendant ? 1 : -1;
-            return familieDayjs(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
-                familieDayjs(b.substring(0, 10), 'YYYY-MM-DD')
-            )
+            return erFør(kalenderDato(a.substring(0, 10)), kalenderDato(b.substring(0, 10)))
                 ? aBefore
                 : aAfter;
         };
@@ -364,13 +361,13 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     const validerDatoer = () => {
-        const opprettetTidspunktGyldig = validerFormatISODag(
-            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue
-        );
+        const opprettetTidspunktGyldig =
+            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue === '' ||
+            erIsoStringGyldig(oppgaveFelter.opprettetTidspunkt.filter?.selectedValue);
 
-        const fristGyldig = validerFormatISODag(
-            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue
-        );
+        const fristGyldig =
+            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue === '' ||
+            erIsoStringGyldig(oppgaveFelter.fristFerdigstillelse.filter?.selectedValue);
 
         const oppdaterteOppgaveFelter = {
             ...oppgaveFelter,

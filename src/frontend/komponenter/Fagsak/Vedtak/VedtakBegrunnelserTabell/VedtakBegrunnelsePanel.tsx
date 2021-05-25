@@ -10,9 +10,9 @@ import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserCon
 import { IBehandling } from '../../../../typer/behandling';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../typer/vedtak';
 import {
+    hentUtbetalingsperiodeDetaljer,
     IUtbetalingsperiodeDetalj,
     Vedtaksperiode,
-    Vedtaksperiodetype,
 } from '../../../../typer/vedtaksperiode';
 import { formaterBeløp, formaterPersonIdent, sorterFødselsdato } from '../../../../utils/formatter';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
@@ -60,6 +60,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
             );
         }).length > 0;
 
+    const utbetalingsperiodeDetaljer = hentUtbetalingsperiodeDetaljer(vedtaksperiode);
     return (
         <EkspanderbartBegrunnelsePanel
             vedtaksperiode={vedtaksperiode}
@@ -67,11 +68,11 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
             onClick={() => toggleForm(true)}
         >
             <UtbetalingsperiodepanelBody>
-                {vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ? (
+                {utbetalingsperiodeDetaljer ? (
                     <div style={{ marginBottom: '1rem' }}>
                         <Element>Resultat</Element>
 
-                        {vedtaksperiode.utbetalingsperiodeDetaljer
+                        {utbetalingsperiodeDetaljer
                             .sort((utbetalingA, utbetalingB) =>
                                 sorterFødselsdato(
                                     utbetalingA.person.fødselsdato,

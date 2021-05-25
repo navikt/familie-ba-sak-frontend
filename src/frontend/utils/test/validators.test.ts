@@ -3,11 +3,11 @@ import { act, renderHook } from '@testing-library/react-hooks';
 import { FeltState, useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 
 import generator from '../../testverktøy/fnr/fnr-generator';
-import { IPeriode, nyPeriode } from '../../typer/periode';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
 import { VedtakBegrunnelse } from '../../typer/vedtak';
 import { Resultat } from '../../typer/vilkår';
+import { IPeriode, nyPeriode } from '../kalender';
 import {
     erAvslagBegrunnelserGyldig,
     erPeriodeGyldig,

@@ -33,6 +33,7 @@ export enum BehandlingÅrsak {
     TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
     OMREGNING_6ÅR = 'OMREGNING_6ÅR',
     OMREGNING_18ÅR = 'OMREGNING_18ÅR',
+    MIGRERING = 'MIGRERING',
 }
 
 export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
@@ -45,6 +46,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
     TEKNISK_OPPHØR: 'Teknisk opphør',
     OMREGNING_6ÅR: 'Omregning 6 år',
     OMREGNING_18ÅR: 'Omregning 18 år',
+    MIGRERING: 'Migrering',
 };
 
 export enum BehandlingUnderkategori {
@@ -57,7 +59,7 @@ export enum BehandlingSteg {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
-    SIMULERING = 'SIMULERING',
+    VURDER_TILBAKEKREVING = 'VURDER_TILBAKEKREVING',
     SEND_TIL_BESLUTTER = 'SEND_TIL_BESLUTTER',
     BESLUTTE_VEDTAK = 'BESLUTTE_VEDTAK',
     IVERKSETT_MOT_OPPDRAG = 'IVERKSETT_MOT_OPPDRAG',
@@ -81,7 +83,7 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
             return 1;
         case BehandlingSteg.VILKÅRSVURDERING:
             return 2;
-        case BehandlingSteg.SIMULERING:
+        case BehandlingSteg.VURDER_TILBAKEKREVING:
             return 3;
         case BehandlingSteg.SEND_TIL_BESLUTTER:
             return 4;

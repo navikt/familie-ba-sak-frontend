@@ -1,6 +1,5 @@
 import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { IPeriode } from '../../typer/periode';
 import { VedtakBegrunnelse } from '../../typer/vedtak';
 import {
     IAnnenVurdering,
@@ -9,6 +8,7 @@ import {
     Resultat,
     VilkårType,
 } from '../../typer/vilkår';
+import { IPeriode } from '../../utils/kalender';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
@@ -24,7 +24,8 @@ export const validerVilkår = (
     );
 
     const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
-        nyttVilkårResultat.verdi.begrunnelse
+        nyttVilkårResultat.verdi.begrunnelse,
+        { erSkjønnsmessigVurdert: nyttVilkårResultat.verdi.erSkjønnsmessigVurdert }
     );
 
     const nyttResultat: FeltState<Resultat> = nyttVilkårResultat.verdi.resultat.valider(

@@ -7,6 +7,7 @@ import Alertstripe from 'nav-frontend-alertstriper';
 
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
+import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';
@@ -34,26 +35,31 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         hentSkjemadata,
         onSubmit,
         simuleringsresultat,
-        skjema,
+        tilbakekrevingSkjema,
         tilbakekrevingErToggletPå,
     } = useSimulering();
+    const { erLesevisning } = useBehandling();
 
     const { settFagsak } = useFagsakRessurser();
 
     const nesteOnClick = () => {
-        onSubmit<ITilbakekreving | undefined>(
-            {
-                data: hentSkjemadata(),
-                method: 'POST',
-                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/tilbakekreving`,
-            },
-            (ressurs: Ressurs<IFagsak>) => {
-                if (ressurs.status === RessursStatus.SUKSESS) {
-                    settFagsak(ressurs);
-                    history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+        if (erLesevisning()) {
+            history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+        } else {
+            onSubmit<ITilbakekreving | undefined>(
+                {
+                    data: hentSkjemadata(),
+                    method: 'POST',
+                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/tilbakekreving`,
+                },
+                (ressurs: Ressurs<IFagsak>) => {
+                    if (ressurs.status === RessursStatus.SUKSESS) {
+                        settFagsak(ressurs);
+                        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     const forrigeOnClick = () => {
@@ -69,7 +75,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     return (
         <Skjemasteg
-            senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
+            senderInn={tilbakekrevingSkjema.submitRessurs.status === RessursStatus.HENTER}
             tittel="Simulering"
             className="simulering"
             forrigeOnClick={forrigeOnClick}
@@ -88,6 +94,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         {tilbakekrevingErToggletPå && erFeilutbetaling && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                fagsakId={fagsak.id}
                             />
                         )}
                     </>
@@ -98,12 +105,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                 </Alertstripe>
             )}
 
-            {(skjema.submitRessurs.status === RessursStatus.FEILET ||
-                skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
+            {(tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FEILET ||
+                tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                tilbakekrevingSkjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
                 <StyledAlertstripe type="feil">
-                    Det har skjedd en feil og vi klarte ikke å bekrefte simuleringen:{' '}
-                    {skjema.submitRessurs.frontendFeilmelding}
+                    Det har skjedd en feil og vi klarte ikke å lagre tilbakekrevingsvalget:{' '}
+                    {tilbakekrevingSkjema.submitRessurs.frontendFeilmelding}
                 </StyledAlertstripe>
             )}
         </Skjemasteg>

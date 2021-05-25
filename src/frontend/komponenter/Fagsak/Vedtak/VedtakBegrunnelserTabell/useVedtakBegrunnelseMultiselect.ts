@@ -2,7 +2,6 @@ import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-eleme
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -18,8 +17,17 @@ import {
     Resultat,
     VilkårType,
 } from '../../../../typer/vilkår';
-import { isoStringToDayjs } from '../../../../utils/formatter';
-import { erISammeMåned } from '../../../../utils/tid';
+import {
+    DagMånedÅr,
+    erISammeMåned,
+    erSamme,
+    kalenderDatoMedFallback,
+    KalenderEnhet,
+    sisteDagIMåned,
+    TIDENES_ENDE,
+    TIDENES_MORGEN,
+    trekkFra,
+} from '../../../../utils/kalender';
 
 export const hentUtgjørendeVilkårImpl = (
     begrunnelseType: VedtakBegrunnelseType,
@@ -29,16 +37,30 @@ export const hentUtgjørendeVilkårImpl = (
     return personResultater
         .flatMap(personResultat => personResultat.vilkårResultater)
         .filter((vilkårResultat: IRestVilkårResultat) => {
-            const vilkårPeriodeFom = isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN);
-            const vilkårPeriodeTom = isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE);
-            const vedtakPeriodeFom = isoStringToDayjs(vedtaksperiode.periodeFom, TIDENES_MORGEN);
+            const vilkårPeriodeFom: DagMånedÅr = kalenderDatoMedFallback(
+                vilkårResultat.periodeFom,
+                TIDENES_MORGEN
+            );
+            const vilkårPeriodeTom: DagMånedÅr = kalenderDatoMedFallback(
+                vilkårResultat.periodeTom,
+                TIDENES_ENDE
+            );
+            const vedtakPeriodeFom: DagMånedÅr = kalenderDatoMedFallback(
+                vedtaksperiode.periodeFom,
+                TIDENES_MORGEN
+            );
             const oppfyltTomMånedEtter =
-                vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
+                vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ||
+                erSamme(vilkårPeriodeTom, sisteDagIMåned(vilkårPeriodeTom))
+                    ? 1
+                    : 0;
 
             if (begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                 return (
-                    erISammeMåned(vilkårPeriodeFom, vedtakPeriodeFom.subtract(1, 'month')) &&
-                    vilkårResultat.resultat === Resultat.OPPFYLT
+                    erISammeMåned(
+                        vilkårPeriodeFom,
+                        trekkFra(vedtakPeriodeFom, 1, KalenderEnhet.MÅNED)
+                    ) && vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else if (
                 begrunnelseType === VedtakBegrunnelseType.REDUKSJON ||
@@ -47,7 +69,7 @@ export const hentUtgjørendeVilkårImpl = (
                 return (
                     erISammeMåned(
                         vilkårPeriodeTom,
-                        vedtakPeriodeFom.subtract(oppfyltTomMånedEtter, 'month')
+                        trekkFra(vedtakPeriodeFom, oppfyltTomMånedEtter, KalenderEnhet.MÅNED)
                     ) && vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else {
@@ -69,15 +91,29 @@ const useVedtakBegrunnelseMultiselect = (
         slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
     } = useVedtakBegrunnelser();
 
-    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype =
-        vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING
-            ? [VedtakBegrunnelseType.INNVILGELSE, VedtakBegrunnelseType.REDUKSJON]
-            : [VedtakBegrunnelseType.OPPHØR];
+    const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
+        switch (vedtaksperiode.vedtaksperiodetype) {
+            case Vedtaksperiodetype.UTBETALING:
+                return [VedtakBegrunnelseType.INNVILGELSE, VedtakBegrunnelseType.REDUKSJON];
+            case Vedtaksperiodetype.FORTSATT_INNVILGET:
+                return [VedtakBegrunnelseType.FORTSATT_INNVILGET];
+            case Vedtaksperiodetype.OPPHØR:
+                return [VedtakBegrunnelseType.OPPHØR];
+            default:
+                return [];
+        }
+    };
+
+    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype = vedtaksperiodeTilVedtakBegrunnelseTyper();
 
     const onChangeBegrunnelse = (
         action: ActionMeta<ISelectOption>,
         vedtakBegrunnelserForPeriode: IRestVedtakBegrunnelse[]
     ) => {
+        if (!vedtaksperiode.periodeFom) {
+            throw new Error('Prøver å legge til en begrunnelse på en periode uten fom');
+        }
+
         switch (action.action) {
             case 'select-option':
                 leggTilVedtakBegrunnelse({

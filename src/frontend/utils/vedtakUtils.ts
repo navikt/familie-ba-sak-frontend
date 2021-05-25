@@ -10,26 +10,46 @@ import {
 } from '../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../typer/vedtaksperiode';
 import { Vilkårsbegrunnelser, VilkårType } from '../typer/vilkår';
-import familieDayjs, { familieDayjsDiff } from './familieDayjs';
-import { datoformat } from './formatter';
+import {
+    førsteDagIInneværendeMåned,
+    kalenderDatoMedFallback,
+    kalenderDatoTilDate,
+    kalenderDiff,
+    KalenderEnhet,
+    leggTil,
+    TIDENES_MORGEN,
+} from './kalender';
 
 export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
-    utbetalingsperioder: Vedtaksperiode[],
+    vedtaksperioder: Vedtaksperiode[],
     fastsatteVedtakBegrunnelser: IRestVedtakBegrunnelse[],
     erLesevisning: boolean
 ): Vedtaksperiode[] => {
-    return utbetalingsperioder
+    if (
+        vedtaksperioder.some(
+            (vedtaksperiode: Vedtaksperiode) =>
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
+        )
+    ) {
+        return vedtaksperioder.filter(
+            vedtaksperiode =>
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
+        );
+    }
+
+    return vedtaksperioder
         .slice()
         .sort((a, b) =>
-            familieDayjsDiff(
-                familieDayjs(a.periodeFom, datoformat.ISO_DAG),
-                familieDayjs(b.periodeFom, datoformat.ISO_DAG)
+            kalenderDiff(
+                kalenderDatoTilDate(kalenderDatoMedFallback(a.periodeFom, TIDENES_MORGEN)),
+                kalenderDatoTilDate(kalenderDatoMedFallback(b.periodeFom, TIDENES_MORGEN))
             )
         )
         .filter((vedtaksperiode: Vedtaksperiode) => {
             return (
                 vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
-                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR ||
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
             );
         })
         .filter((vedtaksperiode: Vedtaksperiode) => {
@@ -48,12 +68,20 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
                 return !!vedtakBegrunnelserForPeriode.length;
             } else {
                 // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
+                const periodeFom = kalenderDatoMedFallback(
+                    vedtaksperiode.periodeFom,
+                    TIDENES_MORGEN
+                );
+                const toMånederFremITid = leggTil(
+                    førsteDagIInneværendeMåned(),
+                    2,
+                    KalenderEnhet.MÅNED
+                );
                 return (
-                    familieDayjsDiff(
-                        familieDayjs(vedtaksperiode.periodeFom),
-                        familieDayjs().startOf('month'),
-                        'month'
-                    ) < 2
+                    kalenderDiff(
+                        kalenderDatoTilDate(periodeFom),
+                        kalenderDatoTilDate(toMånederFremITid)
+                    ) < 0
                 );
             }
         });
@@ -96,6 +124,7 @@ export const finnVedtakBegrunnelseVilkår = (
 export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
+        case VedtakBegrunnelseType.FORTSATT_INNVILGET:
             return navFarger.navGronnLighten80;
         case VedtakBegrunnelseType.AVSLAG:
             return navFarger.navRodLighten80;
@@ -111,6 +140,7 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
 export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
         case VedtakBegrunnelseType.INNVILGELSE:
+        case VedtakBegrunnelseType.FORTSATT_INNVILGET:
             return navFarger.navGronn;
         case VedtakBegrunnelseType.AVSLAG:
             return navFarger.navRodDarken20;

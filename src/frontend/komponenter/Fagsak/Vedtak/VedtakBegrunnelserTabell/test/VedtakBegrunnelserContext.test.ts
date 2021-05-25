@@ -1,10 +1,16 @@
 import { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
-import familieDayjs from '../../../../../utils/familieDayjs';
-import { datoformat } from '../../../../../utils/formatter';
+import {
+    førsteDagIInneværendeMåned,
+    KalenderEnhet,
+    leggTil,
+    serializeIso8601String,
+    sisteDagIInneværendeMåned,
+} from '../../../../../utils/kalender';
 import { mockVedtakbegrunnelse } from '../../../../../utils/test/vedtak/vedtakbegrunnelse.mock';
 import {
-    mockAvslagssperiode,
+    mockAvslagsperiode,
+    mockFortsattInnvilgetperiode,
     mockOpphørsperiode,
     mockUtbetalingsperiode,
 } from '../../../../../utils/test/vedtak/vedtaksperiode.mock';
@@ -19,8 +25,25 @@ describe('VedtakBegrunnelserContext', () => {
         const vedtaksperioder = [
             mockOpphørsperiode({ periodeFom: opphørFom }),
             mockUtbetalingsperiode({ periodeFom: fom, periodeTom: tom }),
-            mockAvslagssperiode({ periodeFom: fom, periodeTom: tom }),
+            mockAvslagsperiode({ periodeFom: fom, periodeTom: tom }),
         ];
+
+        const vedtaksperioderMedFortsattInnvilget = [
+            mockOpphørsperiode({ periodeFom: opphørFom }),
+            mockUtbetalingsperiode({ periodeFom: fom, periodeTom: tom }),
+            mockAvslagsperiode({ periodeFom: fom, periodeTom: tom }),
+            mockFortsattInnvilgetperiode({ periodeFom: fom, periodeTom: tom }),
+        ];
+
+        test(`Test at kun vedtaksperioder av typen FORTSATT_INNVILGET returneres selv om det finnes andre perioder`, () => {
+            const periodeTyper = filtrerOgSorterPerioderMedBegrunnelseBehov(
+                vedtaksperioderMedFortsattInnvilget,
+                [],
+                false
+            ).map(p => p.vedtaksperiodetype);
+            expect(periodeTyper.length).toBe(1);
+            expect(periodeTyper).toContain(Vedtaksperiodetype.FORTSATT_INNVILGET);
+        });
 
         test(`Test at kun vedtaksperioder av typen OPPHØR og UTBETALING returneres`, () => {
             const periodeTyper = filtrerOgSorterPerioderMedBegrunnelseBehov(
@@ -77,12 +100,21 @@ describe('VedtakBegrunnelserContext', () => {
 
         describe('Test filtrering av perioder frem i tid', () => {
             test(`Test at perioder med fom-dato før 2 mnd frem i tid returneres`, () => {
-                const enMndFremITid = familieDayjs().add(1, 'month');
+                const enMndFremITidFom = leggTil(
+                    førsteDagIInneværendeMåned(),
+                    1,
+                    KalenderEnhet.MÅNED
+                );
+                const enMndFremITidTom = leggTil(
+                    sisteDagIInneværendeMåned(),
+                    1,
+                    KalenderEnhet.MÅNED
+                );
                 const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
                     [
                         mockUtbetalingsperiode({
-                            periodeFom: enMndFremITid.startOf('month').format(datoformat.ISO_DAG),
-                            periodeTom: enMndFremITid.endOf('month').format(datoformat.ISO_DAG),
+                            periodeFom: serializeIso8601String(enMndFremITidFom),
+                            periodeTom: serializeIso8601String(enMndFremITidTom),
                         }),
                     ],
                     [],
@@ -91,12 +123,22 @@ describe('VedtakBegrunnelserContext', () => {
                 expect(perioder.length).toBe(1);
             });
             test(`Test at perioder med fom-dato fra og med 2 mnd frem i tid ikke returneres`, () => {
-                const enMndFremITid = familieDayjs().add(2, 'month');
+                const toMndFremITidFom = leggTil(
+                    førsteDagIInneværendeMåned(),
+                    2,
+                    KalenderEnhet.MÅNED
+                );
+                const toMndFremITidTom = leggTil(
+                    sisteDagIInneværendeMåned(),
+                    2,
+                    KalenderEnhet.MÅNED
+                );
+
                 const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
                     [
                         mockUtbetalingsperiode({
-                            periodeFom: enMndFremITid.startOf('month').format(datoformat.ISO_DAG),
-                            periodeTom: enMndFremITid.endOf('month').format(datoformat.ISO_DAG),
+                            periodeFom: serializeIso8601String(toMndFremITidFom),
+                            periodeTom: serializeIso8601String(toMndFremITidTom),
                         }),
                     ],
                     [],
