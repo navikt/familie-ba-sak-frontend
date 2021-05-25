@@ -58,8 +58,8 @@ const OppgaveList: React.FunctionComponent = () => {
         if (brukerident) {
             if (await sjekkTilgang(brukerident)) {
                 const løpendeSak = await harLøpendeSakIInfotrygd(brukerident);
-                if (løpendeSak !== undefined) {
-                    if (løpendeSak) {
+                if (løpendeSak.status === RessursStatus.SUKSESS) {
+                    if (løpendeSak.data.harLøpendeSak) {
                         history.push('/infotrygd', { bruker: brukerident });
                     } else {
                         history.push(`/oppgaver/journalfør/${oppgave.id}`);
