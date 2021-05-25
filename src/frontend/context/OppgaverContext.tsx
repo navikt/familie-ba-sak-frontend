@@ -280,24 +280,14 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
               )
             : [];
 
-    const harLøpendeSakIInfotrygd = async (bruker: string): Promise<boolean | undefined> => {
+    const harLøpendeSakIInfotrygd = async (
+        bruker: string
+    ): Promise<Ressurs<{ harLøpendeSak: boolean }>> => {
         return await request<{ ident: string }, { harLøpendeSak: boolean }>({
             method: 'POST',
             data: { ident: bruker },
             url: '/familie-ba-sak/api/infotrygd/har-lopende-sak',
-        })
-            .then((res: Ressurs<{ harLøpendeSak: boolean }>) => {
-                if (res.status !== RessursStatus.SUKSESS) {
-                    return undefined;
-                } else if (res.data.harLøpendeSak) {
-                    return true;
-                } else {
-                    return false;
-                }
-            })
-            .catch((_error: AxiosError) => {
-                return undefined;
-            });
+        });
     };
 
     const fordelOppgave = (
@@ -316,8 +306,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 ) {
                     if (bruker) {
                         return harLøpendeSakIInfotrygd(bruker).then(res => {
-                            if (res !== undefined) {
-                                if (res) {
+                            if (res.status === RessursStatus.SUKSESS) {
+                                if (res.data.harLøpendeSak) {
                                     history.push(`/infotrygd`, { bruker: bruker });
                                 } else {
                                     history.push(`/oppgaver/journalfør/${oppgave.id}`);
