@@ -1520,10 +1520,10 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.3.1.tgz#6bfcefbc83921fe7d513edaf63ea1fb72ed80b4a"
   integrity sha512-Mxl34jnL3YdY091LIvx9/XHS3pVVDSEHoIQYrQDVGQN6T+yky3kyoD6pKG1vNzooKzlYUWvpfXhMYgvmfp84Xw==
 
-"@navikt/familie-backend@^5.0.24":
-  version "5.0.24"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.24.tgz#fcc84557267378644e50c6a059d3723894e64a59"
-  integrity sha512-Eua4XcswD+t072cCa0ViyzCzzmi+cJbFjIaFzYRA5MONlgpOkLxucNw9US3d98RKFQc9fQqLtvT9fEC6eDX0vA==
+"@navikt/familie-backend@^5.0.25":
+  version "5.0.25"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.25.tgz#22fd91e93d5791b4682a2041d11197cfe04db27c"
+  integrity sha512-bYlGaYH4lY5gmqQpABzA7MD/4ktiiTwia/IPG9T76WSU/f2oGxqpFlshHXArMYO9kToqFD6ZDyIyNn36uOvKrA==
   dependencies:
     "@navikt/familie-logging" "^1.0.4"
     "@types/cookie-parser" "^1.4.2"
@@ -1533,7 +1533,7 @@
     "@types/passport" "^1.0.6"
     "@types/redis" "^2.8.14"
     "@types/request-promise" "^4.1.47"
-    "@types/tunnel" "^0.0.1"
+    "@types/tunnel" "^0.0.2"
     axios "^0.21.0"
     connect-redis "^5.1.0"
     cookie-parser "^1.4.4"
@@ -2733,10 +2733,10 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-4.0.0.tgz#fef1904e4668b6e5ecee60c52cc6a078ffa6697d"
   integrity sha512-I99sngh224D0M7XgW1s120zxCt3VYQ3IQsuw3P3jbq5GG4yc79+ZjyKznyOGIQrflfylLgcfekeZW/vk0yng6A==
 
-"@types/tunnel@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@types/tunnel/-/tunnel-0.0.1.tgz#0d72774768b73df26f25df9184273a42da72b19c"
-  integrity sha512-AOqu6bQu5MSWwYvehMXLukFHnupHrpZ8nvgae5Ggie9UwzDR1CCwoXgSSWNZJuyOlCdfdsWMA5F2LlmvyoTv8A==
+"@types/tunnel@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@types/tunnel/-/tunnel-0.0.2.tgz#cec1d20f826dcead25f339338ff190ea8bc7af4e"
+  integrity sha512-2gYBYYPhn3/aozRdfS+DSxFnf3YZ9IM9q6Wjee1xVj/vtRm1MwT9EN9yFSiQW05eAVRLkWJj3qpMAhIA6EY9mw==
   dependencies:
     "@types/node" "*"
 
