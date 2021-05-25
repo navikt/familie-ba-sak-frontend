@@ -33,7 +33,6 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { ToggleNavn } from '../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -60,7 +59,7 @@ const Container = styled.div`
 `;
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler, toggles } = useApp();
+    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
@@ -178,13 +177,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         <Skjemasteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
-                toggles[ToggleNavn.visSimulering]
-                    ? history.push(
-                          `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`
-                      )
-                    : history.push(
-                          `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`
-                      )
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`)
             }
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
             nesteKnappTittel={'Til godkjenning'}
