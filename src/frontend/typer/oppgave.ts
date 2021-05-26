@@ -150,6 +150,7 @@ export const oppgaveTypeFilter: INøkkelPar = {
     SVAR_IK_MOT: { id: 'SVAR_IK_MOT', navn: 'Svar ikke mottatt' },
     VUR: { id: 'VUR', navn: 'Vurder dokument' },
     VURD_HENV: { id: 'VURD_HENV', navn: 'Vurder henvendelse' },
+    VURD_LIVS: { id: 'VURD_LIVS', navn: 'Vurder livshendelse' },
     VUR_KONS_YTE: { id: 'VUR_KONS_YTE', navn: 'Vurder konsekvens for ytelse' },
     VUR_SVAR: { id: 'VUR_SVAR', navn: 'Vurder svar' },
 };
