@@ -21,7 +21,7 @@ const HusIkon: React.FunctionComponent<IHusIkon> = ({ className, heigth = 24, wi
                 <path
                     fill-rule="evenodd"
                     clip-rule="evenodd"
-                    d="M19 2H4V22H19V2ZM2 0V24H19C20.1046 24 21 23.1046 21 22V2C21 0.895431 20.1046 0 19 0H2ZM11.5 14C13.5717 13.4081 15 11.5145 15 9.35995V6H8V9.35995C8 11.5145 9.42831 13.4081 11.5 14ZM10 8V9.35995C10 10.4205 10.591 11.373 11.5 11.8556C12.409 11.373 13 10.4205 13 9.35995V8H10ZM16 18V16H7V18H16Z"
+                    d="M12 0L22 10V24H13V18H11V24H2V10L12 0ZM12 2.829L4 10.828V22H9V16H15V22H20V10.829L12 2.829Z"
                     fill="#262626"
                 />
             </g>
