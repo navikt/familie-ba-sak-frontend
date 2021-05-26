@@ -20,22 +20,17 @@ import {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
-} from '../../../../typer/vedtak';
-import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
-import { IRestPersonResultat } from '../../../../typer/vilkår';
-import { lagPeriodeId } from '../../../../utils/kalender';
+} from '../../../../../typer/vedtak';
+import { Vedtaksperiode } from '../../../../../typer/vedtaksperiode';
+import { IRestPersonResultat } from '../../../../../typer/vilkår';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
     hentBorderfarge,
-} from '../../../../utils/vedtakUtils';
-import {
-    IVedtakBegrunnelseSubmit,
-    useVedtakBegrunnelser,
-} from './Context/VedtakBegrunnelserContext';
-import useVedtakBegrunnelseMultiselect from './Hooks/useVedtakBegrunnelseMultiselect';
+} from '../../../../../utils/vedtakUtils';
+import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
-interface IVedtakBegrunnelseMultiselect {
+interface IProps {
     erLesevisning: boolean;
     vedtaksperiode: Vedtaksperiode;
     personResultater: IRestPersonResultat[];
@@ -45,29 +40,15 @@ const GroupLabel = styled.div`
     color: black;
 `;
 
-const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = ({
-    erLesevisning,
-    vedtaksperiode,
-    personResultater,
-}) => {
-    const periode = {
-        fom: vedtaksperiode.periodeFom,
-        tom: vedtaksperiode.periodeTom,
-    };
-    const { vedtakBegrunnelseSubmit, vilkårBegrunnelser } = useVedtakBegrunnelser();
+const BegrunnelserMultiselect: React.FC<IProps> = ({ erLesevisning }) => {
     const {
-        grupperteBegrunnelser,
+        id,
+        skjema,
+        vilkårBegrunnelser,
         onChangeBegrunnelse,
-        valgteBegrunnelser,
-        vedtakBegrunnelserForPeriode,
-    } = useVedtakBegrunnelseMultiselect(personResultater, vedtaksperiode);
-
-    const submitForPeriode: IVedtakBegrunnelseSubmit | undefined =
-        lagPeriodeId(periode) === vedtakBegrunnelseSubmit.periodeId
-            ? vedtakBegrunnelseSubmit
-            : undefined;
-
-    const vedtakBegrunnelseId = `vedtakbegrunnelser_${lagPeriodeId(periode)}`;
+        grupperteBegrunnelser,
+    } = useVedtaksperiodeMedBegrunnelser();
+    const { begrunnelser } = skjema.felter;
 
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
@@ -75,8 +56,8 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
 
     return (
         <FamilieReactSelect
-            id={vedtakBegrunnelseId}
-            value={valgteBegrunnelser}
+            id={`${id}`}
+            value={begrunnelser.verdi}
             propSelectStyles={{
                 container: (provided: CSSProperties) => ({
                     ...provided,
@@ -117,15 +98,14 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                 }),
             }}
             placeholder={'Velg begrunnelse(r)'}
-            isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
-            isDisabled={erLesevisning || vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
-            feil={submitForPeriode?.feilmelding}
+            isDisabled={erLesevisning || skjema.submitRessurs.status === RessursStatus.HENTER}
+            feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
             label="Begrunnelse(r) i brev"
             creatable={false}
             erLesevisning={erLesevisning}
             isMulti={true}
             onChange={(_, action: ActionMeta<ISelectOption>) => {
-                onChangeBegrunnelse(action, vedtakBegrunnelserForPeriode);
+                onChangeBegrunnelse(action);
             }}
             formatOptionLabel={(
                 option: ISelectOption,
@@ -161,4 +141,4 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
     );
 };
 
-export default VedtakBegrunnelserMultiselect;
+export default BegrunnelserMultiselect;

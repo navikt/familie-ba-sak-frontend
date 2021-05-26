@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../utils/vedtakUtils';
+import { FritekstVedtakBegrunnelserProvider } from './Context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from './Context/VedtakBegrunnelserContext';
 import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 import VedtakBegrunnelsePanel from './VedtakBegrunnelsePanel';
 
@@ -28,7 +28,7 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
             <OverskriftMedHjelpetekst
                 overskrift={'Begrunnelser i vedtaksbrev'}
                 hjelpetekst={
-                    'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon, opphør og fortsatt innvilgelse.'
+                    'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør'
                 }
             />
             {vedtaksperioderMedBegrunnelseBehov.map((vedtaksperiode: Vedtaksperiode) => (

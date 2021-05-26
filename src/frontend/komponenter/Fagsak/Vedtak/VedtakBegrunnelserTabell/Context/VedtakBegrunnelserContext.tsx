@@ -5,7 +5,8 @@ import constate from 'constate';
 import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { IFagsak } from '../typer/fagsak';
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { IFagsak } from '../../../../../typer/fagsak';
 import {
     IRestAvslagbegrunnelser,
     IRestDeleteVedtakBegrunnelser,
@@ -13,10 +14,9 @@ import {
     IRestVedtakBegrunnelse,
     IVedtakForBehandling,
     VedtakBegrunnelseType,
-} from '../typer/vedtak';
-import { Vilkårsbegrunnelser } from '../typer/vilkår';
-import { lagPeriodeId } from '../utils/kalender';
-import { useFagsakRessurser } from './FagsakContext';
+} from '../../../../../typer/vedtak';
+import { Vilkårsbegrunnelser } from '../../../../../typer/vilkår';
+import { lagPeriodeId } from '../../../../../utils/kalender';
 
 export interface IVedtakBegrunnelseSubmit {
     periodeId: string;
@@ -150,8 +150,8 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         };
 
         return {
-            hentVilkårBegrunnelseTekster,
             avslagBegrunnelser,
+            hentVilkårBegrunnelseTekster,
             leggTilVedtakBegrunnelse,
             slettVedtakBegrunnelse,
             slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,

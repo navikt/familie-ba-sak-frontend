@@ -8,7 +8,6 @@ import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
-import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
@@ -22,6 +21,7 @@ import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
+import { VedtakBegrunnelserProvider } from '../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';

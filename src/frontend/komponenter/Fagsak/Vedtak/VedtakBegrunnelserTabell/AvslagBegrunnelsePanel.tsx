@@ -4,12 +4,12 @@ import styled from 'styled-components';
 
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
+import { useFritekstVedtakBegrunnelser } from './Context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from './Context/VedtakBegrunnelserContext';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
-import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
+import FritekstVedtakbegrunnelser from './Felles/FritekstVedtakbegrunnelser';
 
 interface IVedtakBegrunnelserTabell {
     vedtaksperiode: Vedtaksperiode;

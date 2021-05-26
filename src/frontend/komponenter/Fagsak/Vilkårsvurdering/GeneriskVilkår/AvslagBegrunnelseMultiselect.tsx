@@ -7,7 +7,6 @@ import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-f
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
@@ -20,6 +19,7 @@ import {
 import { VilkårType } from '../../../../typer/vilkår';
 import { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
+import { useVedtakBegrunnelser } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {

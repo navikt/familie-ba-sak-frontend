@@ -25,18 +25,6 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
     fastsatteVedtakBegrunnelser: IRestVedtakBegrunnelse[],
     erLesevisning: boolean
 ): Vedtaksperiode[] => {
-    if (
-        vedtaksperioder.some(
-            (vedtaksperiode: Vedtaksperiode) =>
-                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
-        )
-    ) {
-        return vedtaksperioder.filter(
-            vedtaksperiode =>
-                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
-        );
-    }
-
     return vedtaksperioder
         .slice()
         .sort((a, b) =>
@@ -48,8 +36,7 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
         .filter((vedtaksperiode: Vedtaksperiode) => {
             return (
                 vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
-                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR ||
-                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET
+                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
             );
         })
         .filter((vedtaksperiode: Vedtaksperiode) => {

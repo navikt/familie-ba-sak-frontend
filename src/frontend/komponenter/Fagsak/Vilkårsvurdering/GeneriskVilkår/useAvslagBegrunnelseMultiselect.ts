@@ -3,7 +3,6 @@ import React from 'react';
 import { ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -11,6 +10,7 @@ import {
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
 import { IPeriode } from '../../../../utils/kalender';
+import { useVedtakBegrunnelser } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
 
 const useAvslagBegrunnelseMultiselect = (vilkårType: VilkårType, periode: IPeriode) => {
     const { vedtakBegrunnelser, vilkårBegrunnelser } = useVedtakBegrunnelser();
