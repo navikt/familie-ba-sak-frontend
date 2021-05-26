@@ -46,9 +46,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
             <SkjemaGruppe>
                 <BegrunnelserMultiselect />
 
-                {skjema.felter.begrunnelser.verdi.map(begrunnelse => (
-                    <Personvelger key={begrunnelse.value} begrunnelse={begrunnelse} />
-                ))}
+                <Personvelger />
 
                 <FritekstVedtakbegrunnelser />
 

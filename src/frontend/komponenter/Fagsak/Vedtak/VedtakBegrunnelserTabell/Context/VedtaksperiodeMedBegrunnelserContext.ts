@@ -10,6 +10,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
+import { PersonType, personTypeMap } from '../../../../../typer/person';
 import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
     hentUtbetalingsperiodePåBehandlingOgPeriode,
@@ -49,19 +50,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             },
         });
 
-        const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
-            verdi: [],
-            valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => ok(felt),
-        });
-
-        const genererIdBasertPåAndreFritekster = () => {
-            if (fritekster.verdi.length > 0) {
-                return Math.max(...fritekster.verdi.map(fritekst => fritekst.verdi.id, 10)) + 1;
-            } else {
-                return 1;
-            }
-        };
-
         const begrunnelser = useFelt<ISelectOption[]>({
             verdi: [],
             valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
@@ -71,6 +59,20 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             verdi: [],
             valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
         });
+
+        const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
+            verdi: [],
+            valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) =>
+                felt.verdi.length > 1 ? feil(felt, 'Kun 1 fritekst er tillatt') : ok(felt),
+        });
+
+        const genererIdBasertPåAndreFritekster = () => {
+            if (fritekster.verdi.length > 0) {
+                return Math.max(...fritekster.verdi.map(fritekst => fritekst.verdi.id, 10)) + 1;
+            } else {
+                return 1;
+            }
+        };
 
         const { skjema, onSubmit } = useSkjema<
             {
@@ -101,6 +103,18 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 fom: vedtaksperiodeMedBegrunnelser.fom,
                 tom: vedtaksperiodeMedBegrunnelser.tom,
             });
+            skjema.felter.personIdenter.validerOgSettFelt(
+                vedtaksperiodeMedBegrunnelser.begrunnelser[0]?.personIdenter.map(personIdent => {
+                    const personType =
+                        åpenBehandling.personer.find(person => person.personIdent === personIdent)
+                            ?.type ?? PersonType.BARN;
+
+                    return {
+                        value: personIdent,
+                        label: personTypeMap[personType],
+                    };
+                }) ?? []
+            );
             skjema.felter.fritekster.validerOgSettFelt(
                 vedtaksperiodeMedBegrunnelser.fritekster.map((fritekst, id) =>
                     lagInitiellFritekst(fritekst, id)
@@ -242,11 +256,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        /**
-         * vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
-    vedtakBegrunnelseType: VedtakBegrunnelseType;
-    personIdenter: string[];
-         */
         const putVedtaksperiodeMedBegrunnelser = () => {
             onSubmit<IRestPutVedtaksperiodeMedBegrunnelser>(
                 {
@@ -256,7 +265,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                         begrunnelser: skjema.felter.begrunnelser.verdi.map(
                             (begrunnelse): IRestPutVedtaksbegrunnelse => ({
                                 vedtakBegrunnelseSpesifikasjon: begrunnelse.value as VedtakBegrunnelse,
-                                personIdenter: [],
+                                personIdenter: skjema.felter.personIdenter.verdi.map(
+                                    personOption => personOption.value
+                                ),
                             })
                         ),
                         fritekster: skjema.felter.fritekster.verdi.map(
