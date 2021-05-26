@@ -47,7 +47,10 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                         vedtaksperiode={periode}
                         behandlingstype={åpenBehandling.type}
                     >
-                        <AvslagBegrunnelsePanel vedtaksperiode={periode} />
+                        <AvslagBegrunnelsePanel
+                            vedtaksperiode={periode}
+                            åpenBehandling={åpenBehandling}
+                        />
                     </FritekstVedtakBegrunnelserProvider>
                 ))}
         </>

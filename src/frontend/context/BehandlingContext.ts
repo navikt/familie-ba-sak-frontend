@@ -20,6 +20,8 @@ import {
     sider,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
 import { BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
+import { PersonType } from '../typer/person';
+import { Målform } from '../typer/søknad';
 import { hentBehandlingPåFagsak } from '../utils/fagsak';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
@@ -101,11 +103,18 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         }
     };
 
+    const søkersMålform: Målform =
+        åpenBehandling.status === RessursStatus.SUKSESS
+            ? åpenBehandling.data.personer.find(person => person.type === PersonType.SØKER)
+                  ?.målform ?? Målform.NB
+            : Målform.NB;
+
     return {
-        åpenBehandling,
-        erLesevisning,
         bestemÅpenBehandling,
+        erLesevisning,
         forrigeÅpneSide,
+        søkersMålform,
+        åpenBehandling,
     };
 });
 

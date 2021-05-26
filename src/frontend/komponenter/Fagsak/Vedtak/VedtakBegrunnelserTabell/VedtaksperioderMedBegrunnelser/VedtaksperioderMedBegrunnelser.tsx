@@ -4,6 +4,7 @@ import { IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
 import { hentAktivVedtakPåBehandlig } from '../../../../../utils/fagsak';
+import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import OverskriftMedHjelpetekst from '../Felles/OverskriftMedHjelpetekst';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
@@ -27,12 +28,16 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
             />
             {vedtaksperioderMedBegrunnelser.map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
-                    <VedtaksperiodeMedBegrunnelserPanel
-                        fagsak={fagsak}
-                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                        åpenBehandling={åpenBehandling}
+                    <VedtaksperiodeMedBegrunnelserProvider
                         key={vedtaksperiodeMedBegrunnelser.id}
-                    />
+                        fagsak={fagsak}
+                        åpenBehandling={åpenBehandling}
+                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                    >
+                        <VedtaksperiodeMedBegrunnelserPanel
+                            vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                        />
+                    </VedtaksperiodeMedBegrunnelserProvider>
                 )
             )}
         </>

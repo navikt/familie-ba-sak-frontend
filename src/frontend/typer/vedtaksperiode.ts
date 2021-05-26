@@ -1,4 +1,13 @@
-import { FamilieIsoDate } from '../utils/kalender';
+import {
+    erEtter,
+    erFør,
+    erSamme,
+    FamilieIsoDate,
+    IPeriode,
+    kalenderDatoMedFallback,
+    TIDENES_ENDE,
+    TIDENES_MORGEN,
+} from '../utils/kalender';
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
 import { IGrunnlagPerson } from './person';
@@ -18,6 +27,11 @@ export interface IRestVedtaksbegrunnelse {
     vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
     vedtakBegrunnelseType: VedtakBegrunnelseType;
     personIdenter: string[];
+}
+
+export interface IRestPutVedtaksperiodeMedBegrunnelser {
+    begrunnelser: IRestVedtaksbegrunnelse[];
+    fritekster: string[];
 }
 // POC slutt
 
@@ -55,17 +69,40 @@ export type Vedtaksperiode =
           utbetalingsperiode: Vedtaksperiode;
       };
 
-export const hentUtbetaltPerMåned = (vedtaksperiode: Vedtaksperiode): number | undefined => {
-    switch (vedtaksperiode.vedtaksperiodetype) {
-        case Vedtaksperiodetype.UTBETALING:
-            return vedtaksperiode.utbetaltPerMnd;
-        case Vedtaksperiodetype.FORTSATT_INNVILGET:
-            return vedtaksperiode.utbetalingsperiode.vedtaksperiodetype ===
-                Vedtaksperiodetype.UTBETALING
-                ? vedtaksperiode.utbetalingsperiode.utbetaltPerMnd
-                : undefined;
-        default:
-            return undefined;
+export type Utbetalingsperiode = {
+    periodeFom: FamilieIsoDate;
+    periodeTom?: FamilieIsoDate;
+    vedtaksperiodetype: Vedtaksperiodetype.UTBETALING;
+    utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
+    ytelseTyper: YtelseType[];
+    antallBarn: number;
+    utbetaltPerMnd: number;
+};
+
+export const hentUtbetalingsperiodePåBehandlingOgPeriode = (
+    periode: IPeriode,
+    behandling: IBehandling
+): Utbetalingsperiode | undefined => {
+    const utbetalingsperioder = behandling.utbetalingsperioder;
+    const periodeFom = kalenderDatoMedFallback(periode.fom, TIDENES_MORGEN);
+    const periodeTom = kalenderDatoMedFallback(periode.tom, TIDENES_ENDE);
+
+    const gjeldendeUtbetalingsperiode = utbetalingsperioder.find(utbetalingsperiode => {
+        const utbetalingFom = kalenderDatoMedFallback(
+            utbetalingsperiode.periodeFom,
+            TIDENES_MORGEN
+        );
+        const utbetalingTom = kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE);
+        return (
+            (erSamme(utbetalingFom, periodeFom) || erEtter(utbetalingFom, periodeFom)) &&
+            (erSamme(utbetalingTom, periodeTom) || erFør(utbetalingTom, periodeTom))
+        );
+    });
+
+    if (gjeldendeUtbetalingsperiode?.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING) {
+        return gjeldendeUtbetalingsperiode;
+    } else {
+        return undefined;
     }
 };
 
@@ -95,24 +132,19 @@ export interface IUtbetalingsperiodeDetalj {
     utbetaltPerMnd: number;
 }
 
-export const hentUtbetalingsperioder = (behandling: IBehandling | undefined) =>
-    behandling?.vedtaksperioder.filter(
-        periode => periode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING
-    ) ?? [];
+export const hentVedtaksperiodeTittel = (
+    vedtaksperiodetype: Vedtaksperiodetype,
+    utbetalingsperiode?: Utbetalingsperiode
+) => {
+    if (
+        (vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
+            vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET) &&
+        utbetalingsperiode
+    ) {
+        return ytelsetype[utbetalingsperiode?.ytelseTyper[0]].navn;
+    }
 
-export const hentVedtaksperiodeTittel = (vedtaksperiode: Vedtaksperiode) => {
-    switch (vedtaksperiode.vedtaksperiodetype) {
-        case Vedtaksperiodetype.UTBETALING:
-            return ytelsetype[vedtaksperiode.ytelseTyper[0]].navn;
-        case Vedtaksperiodetype.FORTSATT_INNVILGET:
-            if (
-                vedtaksperiode.utbetalingsperiode.vedtaksperiodetype ===
-                Vedtaksperiodetype.UTBETALING
-            ) {
-                return ytelsetype[vedtaksperiode.utbetalingsperiode.ytelseTyper[0]].navn;
-            } else {
-                return '';
-            }
+    switch (vedtaksperiodetype) {
         case Vedtaksperiodetype.OPPHØR:
             return 'Opphør';
         case Vedtaksperiodetype.AVSLAG:
