@@ -9,7 +9,7 @@ const Container = styled.div`
     display: flex;
     margin-top: 1rem;
     justify-content: space-between;
-    width: 32rem;
+    width: 100%;
 `;
 
 const TabellHeader = styled.th`

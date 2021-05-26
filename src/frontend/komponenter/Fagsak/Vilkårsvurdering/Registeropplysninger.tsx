@@ -14,6 +14,10 @@ import { IRestRegisterhistorikk, IRestRegisteropplysning } from '../../../typer/
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
+const Container = styled.div`
+    width: 32rem; ;
+`;
+
 const HentetTidspunkt = styled(Undertekst)`
     margin-bottom: 1rem;
     color: ${navFarger.navGra40};
@@ -32,7 +36,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
         finnesTomPeriode(opplysninger.statsborgerskap) ||
         finnesTomPeriode(opplysninger.bostedsadresse);
     return (
-        <>
+        <Container>
             <Ingress children={'Registeropplysninger'} />
             <HentetTidspunkt
                 children={
@@ -67,7 +71,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                 ikon={<HusIkon />}
                 historikk={opplysninger.bostedsadresse}
             />
-        </>
+        </Container>
     );
 };
 
