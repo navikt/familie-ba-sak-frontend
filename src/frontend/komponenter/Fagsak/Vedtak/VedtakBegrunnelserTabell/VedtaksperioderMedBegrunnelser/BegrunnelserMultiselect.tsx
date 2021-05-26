@@ -42,16 +42,16 @@ const BegrunnelserMultiselect: React.FC = () => {
         onChangeBegrunnelse,
         grupperteBegrunnelser,
     } = useVedtaksperiodeMedBegrunnelser();
-    const { begrunnelser } = skjema.felter;
 
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
 
+    console.log(skjema.felter.begrunnelser);
     return (
         <FamilieReactSelect
             id={`${id}`}
-            value={begrunnelser.verdi}
+            value={skjema.felter.begrunnelser.verdi}
             propSelectStyles={{
                 container: (provided: CSSProperties) => ({
                     ...provided,
@@ -93,7 +93,7 @@ const BegrunnelserMultiselect: React.FC = () => {
             }}
             placeholder={'Velg begrunnelse(r)'}
             isDisabled={erLesevisning() || skjema.submitRessurs.status === RessursStatus.HENTER}
-            feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
+            feil={skjema.visFeilmeldinger ? skjema.felter.begrunnelser.feilmelding : undefined}
             label="Begrunnelse(r) i brev"
             creatable={false}
             erLesevisning={erLesevisning()}

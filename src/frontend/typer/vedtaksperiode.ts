@@ -29,8 +29,13 @@ export interface IRestVedtaksbegrunnelse {
     personIdenter: string[];
 }
 
+export interface IRestPutVedtaksbegrunnelse {
+    vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
+    personIdenter: string[];
+}
+
 export interface IRestPutVedtaksperiodeMedBegrunnelser {
-    begrunnelser: IRestVedtaksbegrunnelse[];
+    begrunnelser: IRestPutVedtaksbegrunnelse[];
     fritekster: string[];
 }
 // POC slutt

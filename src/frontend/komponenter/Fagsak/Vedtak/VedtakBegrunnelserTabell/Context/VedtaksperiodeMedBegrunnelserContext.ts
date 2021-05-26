@@ -5,18 +5,24 @@ import deepEqual from 'deep-equal';
 
 import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
 import { feil, FeltState, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
+import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
     hentUtbetalingsperiodePåBehandlingOgPeriode,
+    IRestPutVedtaksbegrunnelse,
     IRestPutVedtaksperiodeMedBegrunnelser,
     IVedtaksperiodeMedBegrunnelser,
     Utbetalingsperiode,
 } from '../../../../../typer/vedtaksperiode';
 import { IPeriode } from '../../../../../utils/kalender';
-import { useVilkårBegrunnelser } from '../Hooks/useVilkårBegrunnelser';
+import {
+    mapBegrunnelserTilSelectOptions,
+    useVilkårBegrunnelser,
+} from '../Hooks/useVilkårBegrunnelser';
 
 interface IProps {
     fagsak: IFagsak;
@@ -31,6 +37,7 @@ export interface IFritekstFelt {
 
 const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] = constate(
     ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
+        const { settFagsak } = useFagsakRessurser();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
@@ -76,6 +83,12 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             skjemanavn: 'Begrunnelser for vedtaksperiode',
         });
 
+        const { grupperteBegrunnelser, vilkårBegrunnelser } = useVilkårBegrunnelser({
+            åpenBehandling,
+            vedtaksperiodeMedBegrunnelser,
+            periode: skjema.felter.periode.verdi,
+        });
+
         useEffect(() => {
             skjema.felter.periode.validerOgSettFelt({
                 fom: vedtaksperiodeMedBegrunnelser.fom,
@@ -87,6 +100,18 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 )
             );
         }, [vedtaksperiodeMedBegrunnelser]);
+
+        useEffect(() => {
+            if (vilkårBegrunnelser.status === RessursStatus.SUKSESS) {
+                console.log(vilkårBegrunnelser, vedtaksperiodeMedBegrunnelser);
+                skjema.felter.begrunnelser.validerOgSettFelt(
+                    mapBegrunnelserTilSelectOptions(
+                        vedtaksperiodeMedBegrunnelser,
+                        vilkårBegrunnelser
+                    )
+                );
+            }
+        }, [vilkårBegrunnelser, vedtaksperiodeMedBegrunnelser]);
 
         const lagInitiellFritekst = (
             initiellVerdi: string,
@@ -104,13 +129,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         });
 
-        const { grupperteBegrunnelser, vilkårBegrunnelser } = useVilkårBegrunnelser({
-            åpenBehandling,
-            vedtaksperiodeMedBegrunnelser,
-            periode: skjema.felter.periode.verdi,
-            begrunnelser,
-        });
-
         const utbetalingsperiode:
             | Utbetalingsperiode
             | undefined = hentUtbetalingsperiodePåBehandlingOgPeriode(
@@ -125,7 +143,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             switch (action.action) {
                 case 'select-option':
                     if (action.option) {
-                        begrunnelser.validerOgSettFelt([
+                        skjema.felter.begrunnelser.validerOgSettFelt([
                             ...skjema.felter.begrunnelser.verdi,
                             action.option,
                         ]);
@@ -135,7 +153,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 case 'pop-value':
                 case 'remove-value':
                     if (action.removedValue) {
-                        begrunnelser.validerOgSettFelt([
+                        skjema.felter.begrunnelser.validerOgSettFelt([
                             ...skjema.felter.begrunnelser.verdi.filter(
                                 selectOption => selectOption.value !== action.removedValue?.value
                             ),
@@ -144,7 +162,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
                     break;
                 case 'clear':
-                    begrunnelser.validerOgSettFelt([]);
+                    skjema.felter.begrunnelser.validerOgSettFelt([]);
 
                     break;
                 default:
@@ -172,18 +190,31 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
+        /**
+         * vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
+    vedtakBegrunnelseType: VedtakBegrunnelseType;
+    personIdenter: string[];
+         */
         const putVedtaksperiodeMedBegrunnelser = () => {
+            console.log(skjema.felter);
             onSubmit<IRestPutVedtaksperiodeMedBegrunnelser>(
                 {
                     method: 'PUT',
                     url: `/familie-ba-sak/api/vedtaksperioder/${vedtaksperiodeMedBegrunnelser.id}`,
                     data: {
-                        begrunnelser: [],
-                        fritekster: [],
+                        begrunnelser: skjema.felter.begrunnelser.verdi.map(
+                            (begrunnelse): IRestPutVedtaksbegrunnelse => ({
+                                vedtakBegrunnelseSpesifikasjon: begrunnelse.value as VedtakBegrunnelse,
+                                personIdenter: [],
+                            })
+                        ),
+                        fritekster: skjema.felter.fritekster.verdi.map(
+                            fritekst => fritekst.verdi.tekst
+                        ),
                     },
                 },
                 (fagsak: Ressurs<IFagsak>) => {
-                    console.log(fagsak);
+                    settFagsak(fagsak);
                 }
             );
         };
