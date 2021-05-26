@@ -93,13 +93,15 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
 
                         if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
-                            fordelOppgave(oppgave, innloggetSaksbehandler?.navIdent).then(
-                                (oppgaveResponse: Ressurs<string>) => {
-                                    if (oppgaveResponse.status === RessursStatus.FEILET) {
-                                        settFeilmelding(oppgaveResponse.frontendFeilmelding);
-                                    }
+                            fordelOppgave(
+                                oppgave,
+                                innloggetSaksbehandler?.navIdent,
+                                brukerident
+                            ).then((oppgaveResponse: Ressurs<string>) => {
+                                if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                    settFeilmelding(oppgaveResponse.frontendFeilmelding);
                                 }
-                            );
+                            });
                         }
                     }}
                     children={'Plukk'}

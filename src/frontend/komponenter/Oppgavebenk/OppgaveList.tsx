@@ -30,7 +30,13 @@ const intDatoTilNorskDato = (intDato: string) => {
 };
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide } = useOppgaver();
+    const {
+        oppgaver,
+        sortOppgave,
+        oppgaveFelter,
+        hentOppgaveSide,
+        harLøpendeSakIInfotrygd,
+    } = useOppgaver();
     const { innloggetSaksbehandler, sjekkTilgang } = useApp();
     const history = useHistory();
 
@@ -49,7 +55,18 @@ const OppgaveList: React.FunctionComponent = () => {
     const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
 
-        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
+        if (brukerident) {
+            if (await sjekkTilgang(brukerident)) {
+                const løpendeSak = await harLøpendeSakIInfotrygd(brukerident);
+                if (løpendeSak.status === RessursStatus.SUKSESS) {
+                    if (løpendeSak.data.harLøpendeSak) {
+                        history.push('/infotrygd', { bruker: brukerident });
+                    } else {
+                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                    }
+                }
+            }
+        } else {
             history.push(`/oppgaver/journalfør/${oppgave.id}`);
         }
     };

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
@@ -42,6 +43,14 @@ const FlyttSakKnapp = styled(Knapp)`
 export const Infotrygd: React.FC = () => {
     const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
     const { flyttBrukerTilBaSak, infotrygdmigreringRessurs } = useInfotrygdMigrering();
+
+    const history = useHistory<{ bruker: string } | undefined>();
+    useEffect(() => {
+        if (history.location.state) {
+            skjema.felter.ident.verdi = history.location.state.bruker;
+            onSubmitWrapper();
+        }
+    }, []);
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
 

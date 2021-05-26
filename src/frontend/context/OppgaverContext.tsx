@@ -9,6 +9,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
+    byggSuksessRessurs,
     byggTomRessurs,
     Ressurs,
     RessursStatus,
@@ -279,7 +280,21 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
               )
             : [];
 
-    const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
+    const harLøpendeSakIInfotrygd = async (
+        bruker: string
+    ): Promise<Ressurs<{ harLøpendeSak: boolean }>> => {
+        return await request<{ ident: string }, { harLøpendeSak: boolean }>({
+            method: 'POST',
+            data: { ident: bruker },
+            url: '/familie-ba-sak/api/infotrygd/har-lopende-sak',
+        });
+    };
+
+    const fordelOppgave = (
+        oppgave: IOppgave,
+        saksbehandler: string,
+        bruker?: string
+    ): Promise<Ressurs<string>> => {
         return request<void, string>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
@@ -289,14 +304,30 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
                     OppgavetypeFilter.JFR
                 ) {
-                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                    if (bruker) {
+                        return harLøpendeSakIInfotrygd(bruker).then(res => {
+                            if (res.status === RessursStatus.SUKSESS) {
+                                if (res.data.harLøpendeSak) {
+                                    history.push(`/infotrygd`, { bruker: bruker });
+                                } else {
+                                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                                }
+                                return byggSuksessRessurs<string>('');
+                            }
+                            return byggFeiletRessurs<string>('har-lopende-sak feilet');
+                        });
+                    } else {
+                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                    }
                 } else {
                     if (oppgave.aktoerId)
                         opprettEllerHentFagsak({
                             personIdent: null,
                             aktørId: oppgave.aktoerId,
                         });
-                    else byggFeiletRessurs('Oppgave mangler aktørid');
+                    else {
+                        return byggFeiletRessurs<string>('Oppgave mangler aktørid');
+                    }
                 }
                 return oppgaverRes;
             })
@@ -435,6 +466,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     return {
         fordelOppgave,
+        harLøpendeSakIInfotrygd,
         hentOppgaveSide,
         hentOppgaver,
         oppgaveFelter,
