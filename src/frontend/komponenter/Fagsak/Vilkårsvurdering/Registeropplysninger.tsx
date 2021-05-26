@@ -1,22 +1,42 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
+import Alertstripe from 'nav-frontend-alertstriper';
 import { Ingress } from 'nav-frontend-typografi';
 
 import HjerteIkon from '../../../ikoner/HjerteIkon';
 import HusIkon from '../../../ikoner/HusIkon';
 import KlodeIkon from '../../../ikoner/KlodeIkon';
 import PassIkon from '../../../ikoner/PassIkon';
-import { IRestRegisterhistorikk } from '../../../typer/person';
+import { IRestRegisterhistorikk, IRestRegisteropplysning } from '../../../typer/person';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
+
+const MarginedIngress = styled(Ingress)`
+    margin-bottom: 1rem;
+`;
 
 interface IRegisteropplysningerProps {
     opplysninger: IRestRegisterhistorikk;
 }
 
 const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysninger }) => {
+    const finnesTomPeriode = (opplysninger: IRestRegisteropplysning[]): boolean =>
+        !!opplysninger.find(opplysning => !opplysning.fom && !opplysning.tom);
+    const finnesTomPeriodePåPerson =
+        finnesTomPeriode(opplysninger.sivilstand) ||
+        finnesTomPeriode(opplysninger.oppholdstillatelse) ||
+        finnesTomPeriode(opplysninger.statsborgerskap) ||
+        finnesTomPeriode(opplysninger.bostedsadresse);
     return (
         <>
-            <Ingress children={'Registeropplysninger'} />
+            <MarginedIngress children={'Registeropplysninger'} />
+            {finnesTomPeriodePåPerson && (
+                <Alertstripe type="info">
+                    Opplysningene presentert er opplysningene som var gjeldende på tidspunktet da
+                    behandlingen ble utført.
+                </Alertstripe>
+            )}
             <RegisteropplysningerTabell
                 opplysningstype={'Sivilstand'}
                 ikon={<HjerteIkon />}
