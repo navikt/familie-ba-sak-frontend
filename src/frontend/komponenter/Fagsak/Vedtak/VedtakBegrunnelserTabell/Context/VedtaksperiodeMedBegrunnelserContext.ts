@@ -67,7 +67,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
         });
 
-        const { skjema, onSubmit, nullstillSkjema } = useSkjema<
+        const { skjema, onSubmit } = useSkjema<
             {
                 periode: IPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
@@ -103,7 +103,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
         useEffect(() => {
             if (vilkårBegrunnelser.status === RessursStatus.SUKSESS) {
-                console.log(vilkårBegrunnelser, vedtaksperiodeMedBegrunnelser);
                 skjema.felter.begrunnelser.validerOgSettFelt(
                     mapBegrunnelserTilSelectOptions(
                         vedtaksperiodeMedBegrunnelser,
@@ -181,12 +180,21 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             if (
                 erPanelEkspandert &&
                 visAlert &&
-                !deepEqual(skjema.felter.fritekster.verdi, vedtaksperiodeMedBegrunnelser.fritekster)
+                (!deepEqual(
+                    skjema.felter.fritekster.verdi.map(fritekst => fritekst.verdi.tekst),
+                    vedtaksperiodeMedBegrunnelser.fritekster
+                ) ||
+                    !deepEqual(
+                        skjema.felter.begrunnelser.verdi.map(begrunnelse => begrunnelse.value),
+                        vedtaksperiodeMedBegrunnelser.begrunnelser.map(
+                            begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon
+                        )
+                    ))
             ) {
                 alert('Periode har endringer som ikke er lagret!');
             } else {
                 settErPanelEkspandert(!erPanelEkspandert);
-                nullstillSkjema();
+                //TODO reinitialiser skjema
             }
         };
 
@@ -196,7 +204,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
     personIdenter: string[];
          */
         const putVedtaksperiodeMedBegrunnelser = () => {
-            console.log(skjema.felter);
             onSubmit<IRestPutVedtaksperiodeMedBegrunnelser>(
                 {
                     method: 'PUT',

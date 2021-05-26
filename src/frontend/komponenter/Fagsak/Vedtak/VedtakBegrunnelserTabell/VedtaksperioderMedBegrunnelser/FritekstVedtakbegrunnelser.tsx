@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import Lenke from 'nav-frontend-lenker';
+import Panel from 'nav-frontend-paneler';
 import { PopoverOrientering } from 'nav-frontend-popover';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieTextarea } from '@navikt/familie-form-elements';
@@ -32,16 +32,15 @@ const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
     }
 `;
 
-const StyledSkjemaGruppe = styled(SkjemaGruppe)`
+const StyledPanel = styled(Panel)`
     background-color: ${navFarger.navGraBakgrunn};
-    padding: 1rem;
     max-width: 50rem;
     margin-top: 1.25rem;
 `;
 
 const StyledFamilieFritekstFelt = styled.div`
     display: flex;
-    margin: 0.5rem 0;
+    margin: 0 0.5rem;
 
     .textarea__container {
         width: 100% !important;
@@ -93,105 +92,100 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
     }, [idPåSistOpprettetFritekst]);*/
 
     return (
-        <>
-            <StyledSkjemaGruppe>
-                <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
-                <InfoBoks>
-                    Fritekst til kulepunkt i brev (valgfri)
-                    <StyledHjelpetekst44px
-                        type={PopoverOrientering.OverVenstre}
-                        innhold={
-                            <div>
-                                <Normaltekst>
-                                    Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
-                                    <Lenke
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
-                                    >
-                                        Se retningslinjer for klarspråk.
-                                        <EksternLenke />
-                                    </Lenke>
-                                </Normaltekst>
-                                <br />
-                                <Element>Eksempler på formulering:</Element>
-                                <ItalicText>
-                                    Barnevernet har bekreftet at de overtok omsorgen for barnet mars
-                                    2021
-                                </ItalicText>
-                                <br />
-                                <ItalicText>
-                                    Opplysningene fra Folkeregisteret viser at barnet ikke bor
-                                    sammen med deg
-                                </ItalicText>
-                            </div>
-                        }
-                    />
-                    <StyledEtikettInfo mini={true}>
-                        Skriv {målform[søkersMålform]}
-                    </StyledEtikettInfo>
-                </InfoBoks>
-                {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
-                    const fritekstId = fritekst.verdi.id;
-
-                    return (
-                        <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
-                            <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
-                            <FamilieTextareaBegrunnelseFritekst
-                                erLesevisning={erLesevisning()}
-                                key={`fritekst-${fritekstId}`}
-                                id={`${fritekstId}`}
-                                textareaClass={'fritekst-textarea'}
-                                value={fritekst.verdi.tekst}
-                                maxLength={220}
-                                onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                                    skjema.felter.fritekster.validerOgSettFelt([
-                                        ...skjema.felter.fritekster.verdi.map(mapFritekst => {
-                                            if (mapFritekst.verdi.id === fritekst.verdi.id) {
-                                                return mapFritekst.valider({
-                                                    ...mapFritekst,
-                                                    verdi: {
-                                                        ...mapFritekst.verdi,
-                                                        tekst: event.target.value,
-                                                    },
-                                                });
-                                            } else {
-                                                return mapFritekst;
-                                            }
-                                        }),
-                                    ]);
-                                }}
-                            />
-                            <SletteKnapp
-                                erLesevisning={erLesevisning()}
-                                onClick={() => {
-                                    skjema.felter.fritekster.validerOgSettFelt([
-                                        ...skjema.felter.fritekster.verdi.filter(
-                                            mapFritekst =>
-                                                mapFritekst.verdi.id !== fritekst.verdi.id
-                                        ),
-                                    ]);
-                                }}
-                                id={`fjern_fritekst-${fritekstId}`}
-                                mini={true}
-                                label={'Fjern'}
-                                aria-label={'Fjern fritekst'}
-                                ikon={<Slett />}
-                            />
-                        </StyledFamilieFritekstFelt>
-                    );
-                })}
-                <UtførKnapp
-                    erLesevisning={erLesevisning()}
-                    onClick={leggTilFritekst}
-                    id={`legg-til-fritekst`}
-                    ikon={<Pluss />}
-                    knappPosisjon={'venstre'}
-                    label={'Legg til fritekst'}
-                    mini={true}
+        <StyledPanel>
+            <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
+            <InfoBoks>
+                Fritekst til kulepunkt i brev (valgfri)
+                <StyledHjelpetekst44px
+                    type={PopoverOrientering.OverVenstre}
+                    innhold={
+                        <div>
+                            <Normaltekst>
+                                Brev som sendes ut bør være så kortfattede og presise som mulig.{' '}
+                                <Lenke
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx"
+                                >
+                                    Se retningslinjer for klarspråk.
+                                    <EksternLenke />
+                                </Lenke>
+                            </Normaltekst>
+                            <br />
+                            <Element>Eksempler på formulering:</Element>
+                            <ItalicText>
+                                Barnevernet har bekreftet at de overtok omsorgen for barnet mars
+                                2021
+                            </ItalicText>
+                            <br />
+                            <ItalicText>
+                                Opplysningene fra Folkeregisteret viser at barnet ikke bor sammen
+                                med deg
+                            </ItalicText>
+                        </div>
+                    }
                 />
-            </StyledSkjemaGruppe>
-        </>
+                <StyledEtikettInfo mini={true}>Skriv {målform[søkersMålform]}</StyledEtikettInfo>
+            </InfoBoks>
+            {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
+                const fritekstId = fritekst.verdi.id;
+
+                return (
+                    <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
+                        <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
+                        <FamilieTextareaBegrunnelseFritekst
+                            erLesevisning={erLesevisning()}
+                            key={`fritekst-${fritekstId}`}
+                            id={`${fritekstId}`}
+                            textareaClass={'fritekst-textarea'}
+                            value={fritekst.verdi.tekst}
+                            maxLength={220}
+                            onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                                skjema.felter.fritekster.validerOgSettFelt([
+                                    ...skjema.felter.fritekster.verdi.map(mapFritekst => {
+                                        if (mapFritekst.verdi.id === fritekst.verdi.id) {
+                                            return mapFritekst.valider({
+                                                ...mapFritekst,
+                                                verdi: {
+                                                    ...mapFritekst.verdi,
+                                                    tekst: event.target.value,
+                                                },
+                                            });
+                                        } else {
+                                            return mapFritekst;
+                                        }
+                                    }),
+                                ]);
+                            }}
+                        />
+                        <SletteKnapp
+                            erLesevisning={erLesevisning()}
+                            onClick={() => {
+                                skjema.felter.fritekster.validerOgSettFelt([
+                                    ...skjema.felter.fritekster.verdi.filter(
+                                        mapFritekst => mapFritekst.verdi.id !== fritekst.verdi.id
+                                    ),
+                                ]);
+                            }}
+                            id={`fjern_fritekst-${fritekstId}`}
+                            mini={true}
+                            label={'Fjern'}
+                            aria-label={'Fjern fritekst'}
+                            ikon={<Slett />}
+                        />
+                    </StyledFamilieFritekstFelt>
+                );
+            })}
+            <UtførKnapp
+                erLesevisning={erLesevisning()}
+                onClick={leggTilFritekst}
+                id={`legg-til-fritekst`}
+                ikon={<Pluss />}
+                knappPosisjon={'venstre'}
+                label={'Legg til fritekst'}
+                mini={true}
+            />
+        </StyledPanel>
     );
 };
 

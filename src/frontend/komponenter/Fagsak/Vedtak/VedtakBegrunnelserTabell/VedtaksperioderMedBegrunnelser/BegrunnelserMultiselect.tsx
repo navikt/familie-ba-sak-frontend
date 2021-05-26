@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -43,15 +43,20 @@ const BegrunnelserMultiselect: React.FC = () => {
         grupperteBegrunnelser,
     } = useVedtaksperiodeMedBegrunnelser();
 
+    // React-hack for å rerende komponent som ligger i et ekspanderbart panel
+    const [begrunnelser, settBegrunnelser] = useState(skjema.felter.begrunnelser);
+    useEffect(() => {
+        settBegrunnelser(skjema.felter.begrunnelser);
+    }, [skjema.felter.begrunnelser]);
+
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
 
-    console.log(skjema.felter.begrunnelser);
     return (
         <FamilieReactSelect
             id={`${id}`}
-            value={skjema.felter.begrunnelser.verdi}
+            value={begrunnelser.verdi}
             propSelectStyles={{
                 container: (provided: CSSProperties) => ({
                     ...provided,
@@ -93,7 +98,7 @@ const BegrunnelserMultiselect: React.FC = () => {
             }}
             placeholder={'Velg begrunnelse(r)'}
             isDisabled={erLesevisning() || skjema.submitRessurs.status === RessursStatus.HENTER}
-            feil={skjema.visFeilmeldinger ? skjema.felter.begrunnelser.feilmelding : undefined}
+            feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
             label="Begrunnelse(r) i brev"
             creatable={false}
             erLesevisning={erLesevisning()}
