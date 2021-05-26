@@ -48,6 +48,7 @@ export interface IGrunnlagPerson {
     kjønn: kjønnType;
     navn: string;
     personIdent: string;
+    registerhistorikk?: IRestRegisterhistorikk;
     type: PersonType;
     målform: Målform;
 }
@@ -61,7 +62,6 @@ export interface IPersonInfo {
     kjønn: kjønnType;
     navn: string;
     personIdent: string;
-    registerhistorikk?: IRestRegisterhistorikk;
     type: PersonType;
 }
 
@@ -85,10 +85,10 @@ export interface IRestTilgang {
 
 export interface IRestRegisterhistorikk {
     hentetTidspunkt: string;
-    sivilstand: IRestRegisteropplysning;
-    oppholdstillatelse: IRestRegisteropplysning;
-    statsborgerskap: IRestRegisteropplysning;
-    bostedsadresse: IRestRegisteropplysning;
+    sivilstand: IRestRegisteropplysning[];
+    oppholdstillatelse: IRestRegisteropplysning[];
+    statsborgerskap: IRestRegisteropplysning[];
+    bostedsadresse: IRestRegisteropplysning[];
 }
 
 export interface IRestRegisteropplysning {
