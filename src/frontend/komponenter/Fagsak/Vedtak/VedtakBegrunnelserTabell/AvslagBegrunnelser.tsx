@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
 import {
@@ -11,6 +9,8 @@ import {
     TIDENES_MORGEN,
 } from '../../../../utils/kalender';
 import AvslagBegrunnelsePanel from './AvslagBegrunnelsePanel';
+import { FritekstVedtakBegrunnelserProvider } from './Context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from './Context/VedtakBegrunnelserContext';
 import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 
 interface IAvslagTabell {

@@ -1,4 +1,4 @@
-import { Vedtaksperiodetype } from './vedtaksperiode';
+import { IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from './vedtaksperiode';
 import { VilkårType } from './vilkår';
 
 export interface IVedtakForBehandling {
@@ -6,6 +6,7 @@ export interface IVedtakForBehandling {
     begrunnelser: IRestVedtakBegrunnelse[];
     avslagBegrunnelser: IRestAvslagbegrunnelser[];
     vedtaksdato: string;
+    vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     id: number;
 }
 
@@ -87,7 +88,13 @@ export enum VedtakBegrunnelse {
     AVSLAG_IKKE_AVTALE_OM_DELT_BOSTED = 'AVSLAG_IKKE_AVTALE_OM_DELT_BOSTED',
     AVSLAG_OPPLYSNINGSPLIKT = 'AVSLAG_OPPLYSNINGSPLIKT',
     AVSLAG_FRITEKST = 'AVSLAG_FRITEKST',
-    FORTSATT_INNVILGET_TEST = 'FORTSATT_INNVILGET_TEST',
+    FORTSATT_INNVILGET_BOSATT_I_RIKET = 'FORTSATT_INNVILGET_BOSATT_I_RIKET',
+    FORTSATT_INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE = 'FORTSATT_INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE',
+    FORTSATT_INNVILGET_BOR_MED_SØKER = 'FORTSATT_INNVILGET_BOR_MED_SØKER',
+    FORTSATT_INNVILGET_FAST_OMSORG = 'FORTSATT_INNVILGET_FAST_OMSORG',
+    FORTSATT_INNVILGET_LOVLIG_OPPHOLD_EØS = 'FORTSATT_INNVILGET_LOVLIG_OPPHOLD_EØS',
+    FORTSATT_INNVILGET_LOVLIG_OPPHOLD_TREDJELANDSBORGER = 'FORTSATT_INNVILGET_LOVLIG_OPPHOLD_TREDJELANDSBORGER',
+    FORTSATT_INNVILGET_FRITEKST = 'FORTSATT_INNVILGET_FRITEKST',
 }
 
 export enum VedtakBegrunnelseType {

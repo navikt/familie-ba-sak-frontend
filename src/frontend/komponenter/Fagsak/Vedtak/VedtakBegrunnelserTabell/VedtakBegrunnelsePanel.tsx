@@ -2,21 +2,15 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Element, Normaltekst } from 'nav-frontend-typografi';
-
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../typer/vedtak';
-import {
-    hentUtbetalingsperiodeDetaljer,
-    IUtbetalingsperiodeDetalj,
-    Vedtaksperiode,
-} from '../../../../typer/vedtaksperiode';
-import { formaterBeløp, formaterPersonIdent, sorterFødselsdato } from '../../../../utils/formatter';
+import { hentUtbetalingsperiodeDetaljer, Vedtaksperiode } from '../../../../typer/vedtaksperiode';
+import { useFritekstVedtakBegrunnelser } from './Context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from './Context/VedtakBegrunnelserContext';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
-import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
+import FritekstVedtakbegrunnelser from './Felles/FritekstVedtakbegrunnelser';
+import Utbetalingsresultat from './Felles/Utbetalingsresultat';
 import VedtakBegrunnelserMultiselect from './VedtakBegrunnelserMultiselect';
 
 interface IVedtakBegrunnelserTabell {
@@ -24,20 +18,11 @@ interface IVedtakBegrunnelserTabell {
     åpenBehandling: IBehandling;
 }
 
-const UtbetalingsperiodepanelBody = styled.div`
+const VedtaksperiodepanelBody = styled.div`
     margin-left: 0.625rem;
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 0.25rem;
-`;
-
-const UtbetalingsperiodeDetalj = styled.div`
-    display: flex;
-    flex-direction: row;
-
-    .typo-normal {
-        margin-right: 1.5rem;
-    }
 `;
 
 const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
@@ -67,30 +52,9 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
             åpen={ekspandertBegrunnelse}
             onClick={() => toggleForm(true)}
         >
-            <UtbetalingsperiodepanelBody>
+            <VedtaksperiodepanelBody>
                 {utbetalingsperiodeDetaljer ? (
-                    <div style={{ marginBottom: '1rem' }}>
-                        <Element>Resultat</Element>
-
-                        {utbetalingsperiodeDetaljer
-                            .sort((utbetalingA, utbetalingB) =>
-                                sorterFødselsdato(
-                                    utbetalingA.person.fødselsdato,
-                                    utbetalingB.person.fødselsdato
-                                )
-                            )
-                            .map((detalj: IUtbetalingsperiodeDetalj) => (
-                                <UtbetalingsperiodeDetalj key={detalj.person.personIdent}>
-                                    <Normaltekst title={detalj.person.navn}>
-                                        {formaterPersonIdent(detalj.person.personIdent)}
-                                    </Normaltekst>
-
-                                    <Normaltekst>
-                                        {formaterBeløp(detalj.utbetaltPerMnd)}
-                                    </Normaltekst>
-                                </UtbetalingsperiodeDetalj>
-                            ))}
-                    </div>
+                    <Utbetalingsresultat utbetalingsperiodeDetaljer={utbetalingsperiodeDetaljer} />
                 ) : (
                     <div />
                 )}
@@ -104,7 +68,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                 {harBegrunnelserMedFritekstMulighet && (
                     <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
                 )}
-            </UtbetalingsperiodepanelBody>
+            </VedtaksperiodepanelBody>
         </EkspanderbartBegrunnelsePanel>
     );
 };
