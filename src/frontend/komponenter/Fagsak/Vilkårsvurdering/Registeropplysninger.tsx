@@ -3,17 +3,20 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Alertstripe from 'nav-frontend-alertstriper';
-import { Ingress } from 'nav-frontend-typografi';
+import navFarger from 'nav-frontend-core';
+import { Ingress, Undertekst } from 'nav-frontend-typografi';
 
 import HjerteIkon from '../../../ikoner/HjerteIkon';
 import HusIkon from '../../../ikoner/HusIkon';
 import KlodeIkon from '../../../ikoner/KlodeIkon';
 import PassIkon from '../../../ikoner/PassIkon';
 import { IRestRegisterhistorikk, IRestRegisteropplysning } from '../../../typer/person';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
-const MarginedIngress = styled(Ingress)`
+const HentetTidspunkt = styled(Undertekst)`
     margin-bottom: 1rem;
+    color: ${navFarger.navGra40};
 `;
 
 interface IRegisteropplysningerProps {
@@ -30,11 +33,18 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
         finnesTomPeriode(opplysninger.bostedsadresse);
     return (
         <>
-            <MarginedIngress children={'Registeropplysninger'} />
+            <Ingress children={'Registeropplysninger'} />
+            <HentetTidspunkt
+                children={
+                    'sist lastet ' +
+                    formaterIsoDato(opplysninger.hentetTidspunkt, datoformat.DATO_TID)
+                }
+            />
             {finnesTomPeriodePåPerson && (
                 <Alertstripe type="info">
-                    Opplysningene presentert er opplysningene som var gjeldende på tidspunktet da
-                    behandlingen ble utført.
+                    Behandlingen ble gjort før registerhistorikk var støttet av systemet, og
+                    opplysningene presentert er opplysningene som var gjeldende på
+                    behandlingstidspunkt.
                 </Alertstripe>
             )}
             <RegisteropplysningerTabell
