@@ -72,7 +72,7 @@ const ItalicText = styled(Normaltekst)`
 
 const FritekstVedtakbegrunnelser: React.FC = () => {
     const { erLesevisning, søkersMålform } = useBehandling();
-    const { skjema, leggTilFritekst, id } = useVedtaksperiodeMedBegrunnelser();
+    const { skjema, leggTilFritekst, id, makslengdeFritekst } = useVedtaksperiodeMedBegrunnelser();
 
     /*useEffect(() => {
         const element = document.getElementById(`${idPåSistOpprettetFritekst}`);
@@ -134,7 +134,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                 id={`${fritekstId}`}
                                 textareaClass={'fritekst-textarea'}
                                 value={fritekst.verdi.tekst}
-                                maxLength={220}
+                                maxLength={makslengdeFritekst}
                                 onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                                     skjema.felter.fritekster.validerOgSettFelt([
                                         ...skjema.felter.fritekster.verdi.map(mapFritekst => {

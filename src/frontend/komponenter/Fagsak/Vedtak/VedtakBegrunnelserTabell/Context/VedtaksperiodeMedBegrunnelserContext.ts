@@ -4,7 +4,15 @@ import constate from 'constate';
 import deepEqual from 'deep-equal';
 
 import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
-import { feil, FeltState, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import {
+    feil,
+    FeltState,
+    ok,
+    useFelt,
+    useSkjema,
+    Valideringsstatus,
+    Avhengigheter,
+} from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
@@ -42,6 +50,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
 
+        const maksAntallKulepunkter = 1;
+        const makslengdeFritekst = 220;
+
         const periode = useFelt<IPeriode>({
             verdi: {
                 fom: vedtaksperiodeMedBegrunnelser.fom,
@@ -56,8 +67,40 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
         const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
             verdi: [],
-            valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) =>
-                felt.verdi.length > 1 ? feil(felt, 'Kun 1 fritekst er tillatt') : ok(felt),
+            avhengigheter: { begrunnelser },
+            valideringsfunksjon: (
+                felt: FeltState<FeltState<IFritekstFelt>[]>,
+                avhengigheter?: Avhengigheter
+            ) => {
+                const erFlerKulepunkterEnnTillat = felt.verdi.length > maksAntallKulepunkter;
+                const erEtTomtFritekstfelt = felt.verdi.some(
+                    fritekst => fritekst.verdi.tekst.length === 0
+                );
+                const erEtForLangtFritekstfelt = felt.verdi.some(
+                    fritekst => fritekst.verdi.tekst.length > makslengdeFritekst
+                );
+                const erEnFritekstEllerBegrunnelse =
+                    avhengigheter?.begrunnelser.verdi.length !== 0 || felt.verdi.length !== 0;
+                const erBådeFritekstogBegrunnelse =
+                    avhengigheter?.begrunnelser.verdi.length !== 0 && felt.verdi.length !== 0;
+
+                if (erFlerKulepunkterEnnTillat) {
+                    return feil(felt, `Kun ${maksAntallKulepunkter} fritekst er tillatt.`);
+                } else if (erEtTomtFritekstfelt) {
+                    return feil(felt, 'En eller fler av fritekstene er tomme.');
+                } else if (erEtForLangtFritekstfelt) {
+                    return feil(felt, 'En eller flere av fritekstene er for lange.');
+                } else if (!erEnFritekstEllerBegrunnelse) {
+                    return feil(felt, 'Du må velge begrunnelse eller skrive en fritekst.');
+                } else if (erBådeFritekstogBegrunnelse) {
+                    return feil(
+                        felt,
+                        'Det kan ikke være både fritekst og begrunnelse. Du kan velge maks én.'
+                    );
+                } else {
+                    return ok(felt);
+                }
+            },
         });
 
         const genererIdBasertPåAndreFritekster = () => {
@@ -68,7 +111,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        const { skjema, onSubmit } = useSkjema<
+        const { skjema, onSubmit, hentFeilTilOppsummering, nullstillSkjema } = useSkjema<
             {
                 periode: IPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
@@ -140,6 +183,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         );
 
         const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
+            nullstillSkjema();
             switch (action.action) {
                 case 'select-option':
                     if (action.option) {
@@ -238,6 +282,8 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             vilkårBegrunnelser,
             putVedtaksperiodeMedBegrunnelser,
             åpenBehandling,
+            makslengdeFritekst,
+            hentFeilTilOppsummering,
         };
     }
 );
