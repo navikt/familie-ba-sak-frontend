@@ -49,6 +49,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
     return (
         <EkspanderbartBegrunnelsePanel
             vedtaksperiode={vedtaksperiode}
+            åpenBehandling={åpenBehandling}
             åpen={ekspandertBegrunnelse}
             onClick={() => toggleForm(true)}
         >

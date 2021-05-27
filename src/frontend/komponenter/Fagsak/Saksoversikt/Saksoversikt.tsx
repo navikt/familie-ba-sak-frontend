@@ -19,7 +19,7 @@ import {
     underkategorier,
 } from '../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
-import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import {
@@ -90,7 +90,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const utbetalingsperioder = hentUtbetalingsperioder(gjeldendeBehandling);
+    const utbetalingsperioder = gjeldendeBehandling?.utbetalingsperioder ?? [];
     const utbetalingsperiodeInneværendeMåned = utbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );

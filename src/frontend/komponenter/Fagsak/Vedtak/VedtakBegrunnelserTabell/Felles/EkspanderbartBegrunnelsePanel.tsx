@@ -5,8 +5,9 @@ import styled from 'styled-components';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
+import { IBehandling } from '../../../../../typer/behandling';
 import {
-    hentUtbetaltPerMåned,
+    hentUtbetalingsperiodePåBehandlingOgPeriode,
     hentVedtaksperiodeTittel,
     Vedtaksperiode,
     Vedtaksperiodetype,
@@ -41,6 +42,7 @@ const PanelTittel = styled.div`
 
 interface IEkspanderbartBegrunnelsePanelProps {
     vedtaksperiode: Vedtaksperiode;
+    åpenBehandling: IBehandling;
     åpen: boolean;
     onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 }
@@ -51,10 +53,22 @@ const slutterSenereEnnInneværendeMåned = (tom?: string) =>
 const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProps> = ({
     vedtaksperiode,
     åpen,
+    åpenBehandling,
     onClick,
     children,
 }) => {
-    const utbetaltPerMnd = hentUtbetaltPerMåned(vedtaksperiode);
+    const utbetalingsperiode = hentUtbetalingsperiodePåBehandlingOgPeriode(
+        {
+            fom: vedtaksperiode.periodeFom,
+            tom: vedtaksperiode.periodeTom,
+        },
+        åpenBehandling
+    );
+
+    const vedtaksperiodeTittel = hentVedtaksperiodeTittel(
+        vedtaksperiode.vedtaksperiodetype,
+        utbetalingsperiode
+    );
 
     return (
         <StyledEkspanderbartpanelBase
@@ -72,7 +86,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                                 })}
                             </Element>
                         )}
-                        <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
+                        <Normaltekst>{vedtaksperiodeTittel}</Normaltekst>
                     </PanelTittel>
                 ) : (
                     <PanelTittel>
@@ -84,9 +98,11 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                                     : vedtaksperiode.periodeTom,
                             })}
                         </Element>
-                        <Normaltekst>{hentVedtaksperiodeTittel(vedtaksperiode)}</Normaltekst>
-                        {utbetaltPerMnd && (
-                            <Normaltekst>{formaterBeløp(utbetaltPerMnd)}</Normaltekst>
+                        <Normaltekst>{vedtaksperiodeTittel}</Normaltekst>
+                        {utbetalingsperiode && (
+                            <Normaltekst>
+                                {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
+                            </Normaltekst>
                         )}
                     </PanelTittel>
                 )

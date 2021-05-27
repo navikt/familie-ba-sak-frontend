@@ -18,11 +18,7 @@ export enum PersonType {
     BARN = 'BARN',
 }
 
-export type PersonTypeMap = {
-    [key in PersonType]: string;
-};
-
-export const personTypeMap: PersonTypeMap = {
+export const personTypeMap: Record<PersonType, string> = {
     SØKER: 'Søker',
     ANNENPART: 'Annen part',
     BARN: 'Barn',
