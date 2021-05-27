@@ -72,7 +72,13 @@ const ItalicText = styled(Normaltekst)`
 
 const FritekstVedtakbegrunnelser: React.FC = () => {
     const { erLesevisning, søkersMålform } = useBehandling();
-    const { skjema, leggTilFritekst, id, makslengdeFritekst } = useVedtaksperiodeMedBegrunnelser();
+    const {
+        skjema,
+        leggTilFritekst,
+        id,
+        makslengdeFritekst,
+        maksAntallKulepunkter,
+    } = useVedtaksperiodeMedBegrunnelser();
 
     /*useEffect(() => {
         const element = document.getElementById(`${idPåSistOpprettetFritekst}`);
@@ -80,6 +86,8 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             element.focus();
         }
     }, [idPåSistOpprettetFritekst]);*/
+
+    const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
     const skjemaGruppeId = `fritekster-${id}`;
     return (
@@ -173,15 +181,17 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                     );
                 })}
             </SkjemaGruppe>
-            <IkonKnapp
-                erLesevisning={erLesevisning()}
-                onClick={leggTilFritekst}
-                id={`legg-til-fritekst`}
-                ikon={<Pluss />}
-                knappPosisjon={'venstre'}
-                label={'Legg til fritekst'}
-                mini={true}
-            />
+            {!erMaksAntallKulepunkter && (
+                <IkonKnapp
+                    erLesevisning={erLesevisning()}
+                    onClick={leggTilFritekst}
+                    id={`legg-til-fritekst`}
+                    ikon={<Pluss />}
+                    knappPosisjon={'venstre'}
+                    label={'Legg til fritekst'}
+                    mini={true}
+                />
+            )}
         </>
     );
 };

@@ -50,7 +50,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
 
-        const maksAntallKulepunkter = 1;
+        const maksAntallKulepunkter = 2;
         const makslengdeFritekst = 220;
 
         const periode = useFelt<IPeriode>({
@@ -72,7 +72,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 felt: FeltState<FeltState<IFritekstFelt>[]>,
                 avhengigheter?: Avhengigheter
             ) => {
-                const erFlerKulepunkterEnnTillat = felt.verdi.length > maksAntallKulepunkter;
                 const erEtTomtFritekstfelt = felt.verdi.some(
                     fritekst => fritekst.verdi.tekst.length === 0
                 );
@@ -84,9 +83,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 const erBådeFritekstogBegrunnelse =
                     avhengigheter?.begrunnelser.verdi.length !== 0 && felt.verdi.length !== 0;
 
-                if (erFlerKulepunkterEnnTillat) {
-                    return feil(felt, `Kun ${maksAntallKulepunkter} fritekst er tillatt.`);
-                } else if (erEtTomtFritekstfelt) {
+                if (erEtTomtFritekstfelt) {
                     return feil(felt, 'En eller fler av fritekstene er tomme.');
                 } else if (erEtForLangtFritekstfelt) {
                     return feil(felt, 'En eller flere av fritekstene er for lange.');
@@ -284,6 +281,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling,
             makslengdeFritekst,
             hentFeilTilOppsummering,
+            maksAntallKulepunkter,
         };
     }
 );
