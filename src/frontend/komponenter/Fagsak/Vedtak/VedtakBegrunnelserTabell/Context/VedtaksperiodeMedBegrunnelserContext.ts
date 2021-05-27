@@ -50,7 +50,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
 
-        const maksAntallKulepunkter = 2;
+        const maksAntallKulepunkter = 1;
         const makslengdeFritekst = 220;
 
         const periode = useFelt<IPeriode>({
