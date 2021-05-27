@@ -39,7 +39,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
             <Ingress children={'Registeropplysninger'} />
             {finnesTomPeriodePåPerson ? (
                 <Alertstripe type="info" style={{ marginTop: '1rem' }}>
-                    Behandlingen ble gjort før registerhistorikk ble lagret i systemet og mangler
+                    Behandlingen ble gjort før registeropplysninger ble lagret i systemet og mangler
                     derfor opplysninger.
                 </Alertstripe>
             ) : (
