@@ -50,7 +50,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
 
-        const maksAntallKulepunkter = 1;
+        const maksAntallKulepunkter = 2;
         const makslengdeFritekst = 220;
 
         const periode = useFelt<IPeriode>({
@@ -72,12 +72,17 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 felt: FeltState<FeltState<IFritekstFelt>[]>,
                 avhengigheter?: Avhengigheter
             ) => {
+                const erFeilIEnFritekst = felt.verdi.some(
+                    fritekst => fritekst.valideringsstatus !== Valideringsstatus.OK
+                );
                 const erFritekstEllerBegrunnelseUtfylt =
                     avhengigheter?.begrunnelser.verdi.length !== 0 || felt.verdi.length !== 0;
                 const erBådeFritekstogBegrunnelse =
                     avhengigheter?.begrunnelser.verdi.length !== 0 && felt.verdi.length !== 0;
 
-                if (!erFritekstEllerBegrunnelseUtfylt) {
+                if (erFeilIEnFritekst) {
+                    return feil(felt, 'En eller fler av fritekstene er ikke gyldige.');
+                } else if (!erFritekstEllerBegrunnelseUtfylt) {
                     return feil(felt, 'Du må velge minst én begrunnelse, eller fritekst.');
                 } else if (erBådeFritekstogBegrunnelse) {
                     return feil(
