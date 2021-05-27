@@ -13,7 +13,6 @@ import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
 import BegrunnelserMultiselect from './BegrunnelserMultiselect';
 import EkspanderbartBegrunnelsePanel from './EkspanderbartBegrunnelsePanel';
 import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
-import Personvelger from './Personvelger';
 
 interface IProps {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
@@ -45,8 +44,6 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
 
             <SkjemaGruppe>
                 <BegrunnelserMultiselect />
-
-                <Personvelger />
 
                 <FritekstVedtakbegrunnelser />
 
