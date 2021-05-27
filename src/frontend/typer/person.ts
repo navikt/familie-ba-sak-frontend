@@ -44,6 +44,7 @@ export interface IGrunnlagPerson {
     kjønn: kjønnType;
     navn: string;
     personIdent: string;
+    registerhistorikk?: IRestRegisterhistorikk;
     type: PersonType;
     målform: Målform;
 }
@@ -76,6 +77,20 @@ export interface IForelderBarnRelasjonMaskert {
 export interface IRestTilgang {
     saksbehandlerHarTilgang: boolean;
     adressebeskyttelsegradering: Adressebeskyttelsegradering;
+}
+
+export interface IRestRegisterhistorikk {
+    hentetTidspunkt: string;
+    sivilstand: IRestRegisteropplysning[];
+    oppholdstillatelse: IRestRegisteropplysning[];
+    statsborgerskap: IRestRegisteropplysning[];
+    bostedsadresse: IRestRegisteropplysning[];
+}
+
+export interface IRestRegisteropplysning {
+    fom?: string;
+    tom?: string;
+    verdi: string;
 }
 
 export enum Adressebeskyttelsegradering {
