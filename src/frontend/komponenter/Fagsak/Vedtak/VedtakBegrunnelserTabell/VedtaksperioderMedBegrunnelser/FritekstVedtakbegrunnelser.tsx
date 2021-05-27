@@ -86,7 +86,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
         <>
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>
-                <Label htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev (valgfri)</Label>
+                <Label htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</Label>
                 <StyledHjelpetekst44px
                     type={PopoverOrientering.OverVenstre}
                     innhold={

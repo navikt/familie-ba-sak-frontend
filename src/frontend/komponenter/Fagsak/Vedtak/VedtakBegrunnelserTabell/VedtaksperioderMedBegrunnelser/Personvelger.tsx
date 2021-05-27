@@ -1,9 +1,10 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties } from 'react';
 
 import navFarger from 'nav-frontend-core';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
+import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
+import { useFelt } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/BehandlingContext';
@@ -12,18 +13,11 @@ import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBe
 
 const Personvelger: React.FC = () => {
     const { erLesevisning } = useBehandling();
-    const {
-        skjema,
-        onChangePersonerTilhørendeBegrunnelser,
-        åpenBehandling,
-        id,
-    } = useVedtaksperiodeMedBegrunnelser();
+    const { skjema, åpenBehandling, id } = useVedtaksperiodeMedBegrunnelser();
 
-    // React-hack for å rerende komponent som ligger i et ekspanderbart panel
-    const [personIdenter, settPersonIdenter] = useState(skjema.felter.personIdenter);
-    useEffect(() => {
-        settPersonIdenter(skjema.felter.personIdenter);
-    }, [skjema.felter.personIdenter]);
+    const personIdenter = useFelt({
+        verdi: [],
+    });
 
     return (
         <FamilieReactSelect
@@ -60,9 +54,6 @@ const Personvelger: React.FC = () => {
             creatable={false}
             erLesevisning={erLesevisning()}
             isMulti={true}
-            onChange={(_, action: ActionMeta<ISelectOption>) => {
-                onChangePersonerTilhørendeBegrunnelser(action);
-            }}
             formatOptionLabel={(option: ISelectOption) => {
                 return (
                     <Normaltekst>

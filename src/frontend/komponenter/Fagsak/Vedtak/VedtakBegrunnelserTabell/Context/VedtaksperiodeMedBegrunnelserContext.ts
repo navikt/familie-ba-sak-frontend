@@ -10,7 +10,6 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { PersonType, personTypeMap } from '../../../../../typer/person';
 import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
     hentUtbetalingsperiodePåBehandlingOgPeriode,
@@ -55,11 +54,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
         });
 
-        const personIdenter = useFelt<ISelectOption[]>({
-            verdi: [],
-            valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
-        });
-
         const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
             verdi: [],
             valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) =>
@@ -79,7 +73,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 periode: IPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
                 begrunnelser: ISelectOption[];
-                personIdenter: ISelectOption[];
             },
             IFagsak
         >({
@@ -87,7 +80,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 periode,
                 fritekster,
                 begrunnelser,
-                personIdenter,
             },
             skjemanavn: 'Begrunnelser for vedtaksperiode',
         });
@@ -103,18 +95,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 fom: vedtaksperiodeMedBegrunnelser.fom,
                 tom: vedtaksperiodeMedBegrunnelser.tom,
             });
-            skjema.felter.personIdenter.validerOgSettFelt(
-                vedtaksperiodeMedBegrunnelser.begrunnelser[0]?.personIdenter.map(personIdent => {
-                    const personType =
-                        åpenBehandling.personer.find(person => person.personIdent === personIdent)
-                            ?.type ?? PersonType.BARN;
-
-                    return {
-                        value: personIdent,
-                        label: personTypeMap[personType],
-                    };
-                }) ?? []
-            );
             skjema.felter.fritekster.validerOgSettFelt(
                 vedtaksperiodeMedBegrunnelser.fritekster.map((fritekst, id) =>
                     lagInitiellFritekst(fritekst, id)
@@ -190,43 +170,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        const onChangePersonerTilhørendeBegrunnelser = (action: ActionMeta<ISelectOption>) => {
-            switch (action.action) {
-                case 'select-option':
-                    if (action.option) {
-                        leggPerson(action.option);
-                    }
-                    break;
-
-                case 'pop-value':
-                case 'remove-value':
-                    if (action.removedValue) {
-                        fjernPerson(action.removedValue);
-                    }
-                    break;
-
-                case 'clear':
-                    skjema.felter.personIdenter.nullstill();
-                    break;
-
-                default:
-                    throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
-            }
-        };
-
-        const leggPerson = (personOption: ISelectOption) =>
-            skjema.felter.personIdenter.validerOgSettFelt([
-                ...skjema.felter.personIdenter.verdi,
-                personOption,
-            ]);
-
-        const fjernPerson = (personOption: ISelectOption) =>
-            skjema.felter.personIdenter.validerOgSettFelt(
-                skjema.felter.personIdenter.verdi.filter(
-                    person => person.value !== personOption.value
-                )
-            );
-
         const leggTilFritekst = () => {
             skjema.felter.fritekster.validerOgSettFelt([
                 ...skjema.felter.fritekster.verdi,
@@ -265,9 +208,11 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                         begrunnelser: skjema.felter.begrunnelser.verdi.map(
                             (begrunnelse): IRestPutVedtaksbegrunnelse => ({
                                 vedtakBegrunnelseSpesifikasjon: begrunnelse.value as VedtakBegrunnelse,
-                                personIdenter: skjema.felter.personIdenter.verdi.map(
-                                    personOption => personOption.value
-                                ),
+                                personIdenter:
+                                    utbetalingsperiode?.utbetalingsperiodeDetaljer.map(
+                                        utbetalingsperiodeDetalj =>
+                                            utbetalingsperiodeDetalj.person.personIdent
+                                    ) ?? [],
                             })
                         ),
                         fritekster: skjema.felter.fritekster.verdi.map(
@@ -292,7 +237,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             utbetalingsperiode,
             vilkårBegrunnelser,
             putVedtaksperiodeMedBegrunnelser,
-            onChangePersonerTilhørendeBegrunnelser,
             åpenBehandling,
         };
     }
