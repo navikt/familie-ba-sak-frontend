@@ -80,7 +80,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                         })
                     ) : (
                         <TabellRad key={`${opplysningstype}_ukjent`}>
-                            <td children={'Mangler opplysninger'} />
+                            <td children={'Ingen opplysninger'} />
                             <td children={'-'} />
                         </TabellRad>
                     )}

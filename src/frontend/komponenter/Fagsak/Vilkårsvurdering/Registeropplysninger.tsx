@@ -6,10 +6,8 @@ import Alertstripe from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 import { Ingress, Undertekst } from 'nav-frontend-typografi';
 
-import HjerteIkon from '../../../ikoner/HjerteIkon';
-import HusIkon from '../../../ikoner/HusIkon';
-import KlodeIkon from '../../../ikoner/KlodeIkon';
-import PassIkon from '../../../ikoner/PassIkon';
+import { Globe, Heart, Home, Passport } from '@navikt/ds-icons';
+
 import { IRestRegisterhistorikk, IRestRegisteropplysning } from '../../../typer/person';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
@@ -35,13 +33,12 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
         finnesTomPeriode(opplysninger.oppholdstillatelse) ||
         finnesTomPeriode(opplysninger.statsborgerskap) ||
         finnesTomPeriode(opplysninger.bostedsadresse);
-    console.log(finnesTomPeriodePåPerson);
-    const test = false;
+
     return (
         <>
             <Ingress children={'Registeropplysninger'} />
-            {test ? (
-                <Alertstripe type="info">
+            {finnesTomPeriodePåPerson ? (
+                <Alertstripe type="info" style={{ marginTop: '1rem' }}>
                     Behandlingen ble gjort før registerhistorikk var støttet av systemet, og
                     opplysningene presentert er opplysningene som var gjeldende på
                     behandlingstidspunkt.
@@ -56,22 +53,50 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                     />
                     <RegisteropplysningerTabell
                         opplysningstype={'Sivilstand'}
-                        ikon={<HjerteIkon />}
+                        ikon={
+                            <Heart
+                                style={{ fontSize: '1.5rem' }}
+                                aria-label="Hjerte ikon"
+                                role="img"
+                                focusable="false"
+                            />
+                        }
                         historikk={opplysninger.sivilstand}
                     />
                     <RegisteropplysningerTabell
                         opplysningstype={'Oppholdstillatelse'}
-                        ikon={<PassIkon />}
+                        ikon={
+                            <Passport
+                                style={{ fontSize: '1.5rem' }}
+                                aria-label="Pass ikon"
+                                role="img"
+                                focusable="false"
+                            />
+                        }
                         historikk={opplysninger.oppholdstillatelse}
                     />
                     <RegisteropplysningerTabell
                         opplysningstype={'Statsborgerskap'}
-                        ikon={<KlodeIkon />}
+                        ikon={
+                            <Globe
+                                style={{ fontSize: '1.5rem' }}
+                                aria-label="Globe ikon"
+                                role="img"
+                                focusable="false"
+                            />
+                        }
                         historikk={opplysninger.statsborgerskap}
                     />
                     <RegisteropplysningerTabell
                         opplysningstype={'Adresse'}
-                        ikon={<HusIkon />}
+                        ikon={
+                            <Home
+                                style={{ fontSize: '1.5rem' }}
+                                aria-label="Hjem ikon"
+                                role="img"
+                                focusable="false"
+                            />
+                        }
                         historikk={opplysninger.bostedsadresse}
                     />
                 </Container>
