@@ -262,6 +262,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     },
                 },
                 (fagsak: Ressurs<IFagsak>) => {
+                    settErPanelEkspandert(false);
                     settFagsak(fagsak);
                 }
             );
@@ -282,6 +283,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             makslengdeFritekst,
             hentFeilTilOppsummering,
             maksAntallKulepunkter,
+            nullstillSkjema,
         };
     }
 );

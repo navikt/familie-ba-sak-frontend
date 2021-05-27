@@ -77,6 +77,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
         id,
         makslengdeFritekst,
         maksAntallKulepunkter,
+        nullstillSkjema,
     } = useVedtaksperiodeMedBegrunnelser();
 
     /*useEffect(() => {
@@ -143,6 +144,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                 value={fritekst.verdi.tekst}
                                 maxLength={makslengdeFritekst}
                                 onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                                    nullstillSkjema();
                                     skjema.felter.fritekster.validerOgSettFelt([
                                         ...skjema.felter.fritekster.verdi.map(mapFritekst => {
                                             if (mapFritekst.verdi.id === fritekst.verdi.id) {
