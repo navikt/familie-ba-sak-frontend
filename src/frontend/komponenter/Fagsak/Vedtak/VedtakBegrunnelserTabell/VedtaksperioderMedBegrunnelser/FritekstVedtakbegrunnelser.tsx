@@ -34,7 +34,6 @@ const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
 
 const StyledFamilieFritekstFelt = styled.div`
     display: flex;
-    margin: 0 0.5rem;
 
     .textarea__container {
         width: 100% !important;
@@ -42,7 +41,7 @@ const StyledFamilieFritekstFelt = styled.div`
 `;
 
 const InfoBoks = styled.div`
-    margin: 0 2.8rem 0 0;
+    margin: 0;
     display: flex;
     align-items: center;
     text-align: center;
@@ -55,7 +54,7 @@ const StyledEtikettInfo = styled(EtikettInfo)`
 `;
 
 const SletteKnapp = styled(IkonKnapp)`
-    margin: 0 0.5rem;
+    margin-left: 0.5rem;
     height: 2.75rem;
 `;
 
