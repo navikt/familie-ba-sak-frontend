@@ -35,43 +35,48 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
         finnesTomPeriode(opplysninger.oppholdstillatelse) ||
         finnesTomPeriode(opplysninger.statsborgerskap) ||
         finnesTomPeriode(opplysninger.bostedsadresse);
+    console.log(finnesTomPeriodePåPerson);
+    const test = false;
     return (
-        <Container>
+        <>
             <Ingress children={'Registeropplysninger'} />
-            <HentetTidspunkt
-                children={
-                    'sist lastet ' +
-                    formaterIsoDato(opplysninger.hentetTidspunkt, datoformat.DATO_TID)
-                }
-            />
-            {finnesTomPeriodePåPerson && (
+            {test ? (
                 <Alertstripe type="info">
                     Behandlingen ble gjort før registerhistorikk var støttet av systemet, og
                     opplysningene presentert er opplysningene som var gjeldende på
                     behandlingstidspunkt.
                 </Alertstripe>
+            ) : (
+                <Container>
+                    <HentetTidspunkt
+                        children={
+                            'sist hentet fra Folkeregisteret ' +
+                            formaterIsoDato(opplysninger.hentetTidspunkt, datoformat.DATO_TID)
+                        }
+                    />
+                    <RegisteropplysningerTabell
+                        opplysningstype={'Sivilstand'}
+                        ikon={<HjerteIkon />}
+                        historikk={opplysninger.sivilstand}
+                    />
+                    <RegisteropplysningerTabell
+                        opplysningstype={'Oppholdstillatelse'}
+                        ikon={<PassIkon />}
+                        historikk={opplysninger.oppholdstillatelse}
+                    />
+                    <RegisteropplysningerTabell
+                        opplysningstype={'Statsborgerskap'}
+                        ikon={<KlodeIkon />}
+                        historikk={opplysninger.statsborgerskap}
+                    />
+                    <RegisteropplysningerTabell
+                        opplysningstype={'Adresse'}
+                        ikon={<HusIkon />}
+                        historikk={opplysninger.bostedsadresse}
+                    />
+                </Container>
             )}
-            <RegisteropplysningerTabell
-                opplysningstype={'Sivilstand'}
-                ikon={<HjerteIkon />}
-                historikk={opplysninger.sivilstand}
-            />
-            <RegisteropplysningerTabell
-                opplysningstype={'Oppholdstillatelse'}
-                ikon={<PassIkon />}
-                historikk={opplysninger.oppholdstillatelse}
-            />
-            <RegisteropplysningerTabell
-                opplysningstype={'Statsborgerskap'}
-                ikon={<KlodeIkon />}
-                historikk={opplysninger.statsborgerskap}
-            />
-            <RegisteropplysningerTabell
-                opplysningstype={'Adresse'}
-                ikon={<HusIkon />}
-                historikk={opplysninger.bostedsadresse}
-            />
-        </Container>
+        </>
     );
 };
 

@@ -64,19 +64,26 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                             <TabellHeader children={'Periode'} />
                         </tr>
                     </thead>
-                    {historikk.map(periode => {
-                        return (
-                            <TabellRad key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
-                                <td children={periode.verdi} />
-                                <td
-                                    children={periodeToString({
-                                        fom: periode.fom,
-                                        tom: periode.tom,
-                                    })}
-                                />
-                            </TabellRad>
-                        );
-                    })}
+                    {historikk.length ? (
+                        historikk.map(periode => {
+                            return (
+                                <TabellRad key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
+                                    <td children={periode.verdi} />
+                                    <td
+                                        children={periodeToString({
+                                            fom: periode.fom,
+                                            tom: periode.tom,
+                                        })}
+                                    />
+                                </TabellRad>
+                            );
+                        })
+                    ) : (
+                        <TabellRad key={`${opplysningstype}_ukjent`}>
+                            <td children={'Mangler opplysninger'} />
+                            <td children={'-'} />
+                        </TabellRad>
+                    )}
                 </Tabell>
             </Container>
         </>
