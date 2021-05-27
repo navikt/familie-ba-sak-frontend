@@ -72,24 +72,12 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 felt: FeltState<FeltState<IFritekstFelt>[]>,
                 avhengigheter?: Avhengigheter
             ) => {
-                const friteksterMedFeil = felt.verdi.filter(
-                    fritekst => fritekst.valideringsstatus !== Valideringsstatus.OK
-                );
-
-                const erFeilIEnFritekst = friteksterMedFeil.length !== 0;
                 const erFritekstEllerBegrunnelseUtfylt =
                     avhengigheter?.begrunnelser.verdi.length !== 0 || felt.verdi.length !== 0;
                 const erBådeFritekstogBegrunnelse =
                     avhengigheter?.begrunnelser.verdi.length !== 0 && felt.verdi.length !== 0;
 
-                if (erFeilIEnFritekst) {
-                    return feil(
-                        felt,
-                        `En eller fler av fritekstene er ikke gyldige:  ${friteksterMedFeil
-                            .map(fritekst => fritekst.feilmelding)
-                            .join(' ')}`
-                    );
-                } else if (!erFritekstEllerBegrunnelseUtfylt) {
+                if (!erFritekstEllerBegrunnelseUtfylt) {
                     return feil(felt, 'Du må velge minst én begrunnelse, eller fritekst.');
                 } else if (erBådeFritekstogBegrunnelse) {
                     return feil(
@@ -159,7 +147,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             initiellVerdi: string,
             id?: number
         ): FeltState<IFritekstFelt> => ({
-            feilmelding: '',
+            feilmelding: 'Fritekstfeltet er tomt.',
             verdi: {
                 tekst: initiellVerdi,
                 id: id ?? genererIdBasertPåAndreFritekster(),
