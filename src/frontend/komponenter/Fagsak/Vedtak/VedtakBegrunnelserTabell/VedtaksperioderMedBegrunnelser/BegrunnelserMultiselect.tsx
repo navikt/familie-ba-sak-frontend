@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -16,13 +16,12 @@ import {
 } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useBehandling } from '../../../../../context/BehandlingContext';
 import {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
 } from '../../../../../typer/vedtak';
-import { Vedtaksperiode } from '../../../../../typer/vedtaksperiode';
-import { IRestPersonResultat } from '../../../../../typer/vilkår';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
@@ -30,17 +29,12 @@ import {
 } from '../../../../../utils/vedtakUtils';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
-interface IProps {
-    erLesevisning: boolean;
-    vedtaksperiode: Vedtaksperiode;
-    personResultater: IRestPersonResultat[];
-}
-
 const GroupLabel = styled.div`
     color: black;
 `;
 
-const BegrunnelserMultiselect: React.FC<IProps> = ({ erLesevisning }) => {
+const BegrunnelserMultiselect: React.FC = () => {
+    const { erLesevisning } = useBehandling();
     const {
         id,
         skjema,
@@ -48,7 +42,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ erLesevisning }) => {
         onChangeBegrunnelse,
         grupperteBegrunnelser,
     } = useVedtaksperiodeMedBegrunnelser();
-    const { begrunnelser } = skjema.felter;
+
+    // React-hack for å rerende komponent som ligger i et ekspanderbart panel
+    const [begrunnelser, settBegrunnelser] = useState(skjema.felter.begrunnelser);
+    useEffect(() => {
+        settBegrunnelser(skjema.felter.begrunnelser);
+    }, [skjema.felter.begrunnelser]);
 
     if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
@@ -98,11 +97,11 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ erLesevisning }) => {
                 }),
             }}
             placeholder={'Velg begrunnelse(r)'}
-            isDisabled={erLesevisning || skjema.submitRessurs.status === RessursStatus.HENTER}
+            isDisabled={erLesevisning() || skjema.submitRessurs.status === RessursStatus.HENTER}
             feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
             label="Begrunnelse(r) i brev"
             creatable={false}
-            erLesevisning={erLesevisning}
+            erLesevisning={erLesevisning()}
             isMulti={true}
             onChange={(_, action: ActionMeta<ISelectOption>) => {
                 onChangeBegrunnelse(action);

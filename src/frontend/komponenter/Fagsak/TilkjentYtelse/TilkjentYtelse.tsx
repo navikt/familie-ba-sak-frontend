@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { hentUtbetalingsperioder, Vedtaksperiode } from '../../../typer/vedtaksperiode';
+import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
@@ -57,7 +57,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             {aktivEtikett && (
                 <Oppsummeringsboks
                     vedtaksperioder={filtrerPerioderForAktivEtikett(
-                        hentUtbetalingsperioder(åpenBehandling)
+                        åpenBehandling.utbetalingsperioder
                     )}
                     aktivEtikett={aktivEtikett}
                 />

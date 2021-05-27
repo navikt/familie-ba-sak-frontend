@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import { GroupType, ISelectOption } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { Felt } from '@navikt/familie-skjema';
 import { Ressurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IBehandling } from '../../../../../typer/behandling';
@@ -22,12 +21,10 @@ import { IPeriode } from '../../../../../utils/kalender';
 import { hentUtgjørendeVilkårImpl } from './useVedtakBegrunnelseMultiselect';
 
 export const useVilkårBegrunnelser = ({
-    begrunnelser,
     vedtaksperiodeMedBegrunnelser,
     periode,
     åpenBehandling,
 }: {
-    begrunnelser: Felt<ISelectOption[]>;
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     periode: IPeriode;
     åpenBehandling: IBehandling;
@@ -41,12 +38,6 @@ export const useVilkårBegrunnelser = ({
     useEffect(() => {
         hentVilkårBegrunnelseTekster();
     }, []);
-
-    useEffect(() => {
-        begrunnelser.validerOgSettFelt(
-            mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, vilkårBegrunnelser)
-        );
-    }, [vilkårBegrunnelser]);
 
     const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
         switch (vedtaksperiodeMedBegrunnelser.type) {
@@ -123,7 +114,7 @@ export const useVilkårBegrunnelser = ({
     return { grupperteBegrunnelser, vilkårBegrunnelser };
 };
 
-const mapBegrunnelserTilSelectOptions = (
+export const mapBegrunnelserTilSelectOptions = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
     vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>
 ): ISelectOption[] => {

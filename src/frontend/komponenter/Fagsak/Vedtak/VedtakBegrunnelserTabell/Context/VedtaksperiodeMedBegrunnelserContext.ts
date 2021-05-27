@@ -1,13 +1,29 @@
+import { useState, useEffect } from 'react';
+
 import constate from 'constate';
+import deepEqual from 'deep-equal';
 
 import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
-import { FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { feil, FeltState, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { IBehandling } from '../../../../../typer/behandling';
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
+import { PersonType, personTypeMap } from '../../../../../typer/person';
+import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
+import {
+    hentUtbetalingsperiodePåBehandlingOgPeriode,
+    IRestPutVedtaksbegrunnelse,
+    IRestPutVedtaksperiodeMedBegrunnelser,
+    IVedtaksperiodeMedBegrunnelser,
+    Utbetalingsperiode,
+} from '../../../../../typer/vedtaksperiode';
 import { IPeriode } from '../../../../../utils/kalender';
-import { useVilkårBegrunnelser } from '../Hooks/useVilkårBegrunnelser';
+import {
+    mapBegrunnelserTilSelectOptions,
+    useVilkårBegrunnelser,
+} from '../Hooks/useVilkårBegrunnelser';
 
 interface IProps {
     fagsak: IFagsak;
@@ -15,8 +31,18 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
+export interface IFritekstFelt {
+    tekst: string;
+    id: number;
+}
+
 const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] = constate(
     ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
+        const { settFagsak } = useFagsakRessurser();
+        const [erPanelEkspandert, settErPanelEkspandert] = useState(
+            åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
+        );
+
         const periode = useFelt<IPeriode>({
             verdi: {
                 fom: vedtaksperiodeMedBegrunnelser.fom,
@@ -24,21 +50,36 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             },
         });
 
-        const fritekster = useFelt<string[]>({
-            verdi: vedtaksperiodeMedBegrunnelser.fritekster,
-            valideringsfunksjon: (felt: FeltState<string[]>) => ok(felt),
-        });
-
         const begrunnelser = useFelt<ISelectOption[]>({
             verdi: [],
             valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
         });
 
-        const { skjema } = useSkjema<
+        const personIdenter = useFelt<ISelectOption[]>({
+            verdi: [],
+            valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
+        });
+
+        const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
+            verdi: [],
+            valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) =>
+                felt.verdi.length > 1 ? feil(felt, 'Kun 1 fritekst er tillatt') : ok(felt),
+        });
+
+        const genererIdBasertPåAndreFritekster = () => {
+            if (fritekster.verdi.length > 0) {
+                return Math.max(...fritekster.verdi.map(fritekst => fritekst.verdi.id, 10)) + 1;
+            } else {
+                return 1;
+            }
+        };
+
+        const { skjema, onSubmit } = useSkjema<
             {
                 periode: IPeriode;
-                fritekster: string[];
+                fritekster: FeltState<IFritekstFelt>[];
                 begrunnelser: ISelectOption[];
+                personIdenter: ISelectOption[];
             },
             IFagsak
         >({
@@ -46,6 +87,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 periode,
                 fritekster,
                 begrunnelser,
+                personIdenter,
             },
             skjemanavn: 'Begrunnelser for vedtaksperiode',
         });
@@ -54,65 +96,204 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling,
             vedtaksperiodeMedBegrunnelser,
             periode: skjema.felter.periode.verdi,
-            begrunnelser,
         });
 
+        useEffect(() => {
+            skjema.felter.periode.validerOgSettFelt({
+                fom: vedtaksperiodeMedBegrunnelser.fom,
+                tom: vedtaksperiodeMedBegrunnelser.tom,
+            });
+            skjema.felter.personIdenter.validerOgSettFelt(
+                vedtaksperiodeMedBegrunnelser.begrunnelser[0]?.personIdenter.map(personIdent => {
+                    const personType =
+                        åpenBehandling.personer.find(person => person.personIdent === personIdent)
+                            ?.type ?? PersonType.BARN;
+
+                    return {
+                        value: personIdent,
+                        label: personTypeMap[personType],
+                    };
+                }) ?? []
+            );
+            skjema.felter.fritekster.validerOgSettFelt(
+                vedtaksperiodeMedBegrunnelser.fritekster.map((fritekst, id) =>
+                    lagInitiellFritekst(fritekst, id)
+                )
+            );
+        }, [vedtaksperiodeMedBegrunnelser]);
+
+        useEffect(() => {
+            if (vilkårBegrunnelser.status === RessursStatus.SUKSESS) {
+                skjema.felter.begrunnelser.validerOgSettFelt(
+                    mapBegrunnelserTilSelectOptions(
+                        vedtaksperiodeMedBegrunnelser,
+                        vilkårBegrunnelser
+                    )
+                );
+            }
+        }, [vilkårBegrunnelser, vedtaksperiodeMedBegrunnelser]);
+
+        const lagInitiellFritekst = (
+            initiellVerdi: string,
+            id?: number
+        ): FeltState<IFritekstFelt> => ({
+            feilmelding: '',
+            verdi: {
+                tekst: initiellVerdi,
+                id: id ?? genererIdBasertPåAndreFritekster(),
+            },
+            valider: (felt: FeltState<IFritekstFelt>) =>
+                felt.verdi.tekst.length > 220
+                    ? feil(felt, 'Du har nådd maks antall tegn: 220')
+                    : ok(felt),
+            valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
+        });
+
+        const utbetalingsperiode:
+            | Utbetalingsperiode
+            | undefined = hentUtbetalingsperiodePåBehandlingOgPeriode(
+            {
+                fom: vedtaksperiodeMedBegrunnelser.fom,
+                tom: vedtaksperiodeMedBegrunnelser.tom,
+            },
+            åpenBehandling
+        );
+
         const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
-            if (action.option)
-                switch (action.action) {
-                    case 'select-option':
-                        if (action.option) {
-                            begrunnelser.validerOgSettFelt([
-                                ...skjema.felter.begrunnelser.verdi,
-                                action.option,
-                            ]);
-                        }
-
-                        break;
-                    /*case 'pop-value':
-                case 'remove-value':
-                    const vedtakBegrunnelse:
-                        | IRestVedtakBegrunnelse
-                        | undefined = vedtakBegrunnelserForPeriode.find(
-                        (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                            vedtakBegrunnelse.begrunnelse === action.removedValue?.value
-                    );
-
-                    if (vedtakBegrunnelse) {
-                        slettVedtakBegrunnelse(vedtakBegrunnelse);
-                    } else {
-                        throw new Error(
-                            'Finner ikke utbetalingsbegrunnelse id i listen over begrunnelser'
-                        );
+            switch (action.action) {
+                case 'select-option':
+                    if (action.option) {
+                        skjema.felter.begrunnelser.validerOgSettFelt([
+                            ...skjema.felter.begrunnelser.verdi,
+                            action.option,
+                        ]);
                     }
+
+                    break;
+                case 'pop-value':
+                case 'remove-value':
+                    if (action.removedValue) {
+                        skjema.felter.begrunnelser.validerOgSettFelt([
+                            ...skjema.felter.begrunnelser.verdi.filter(
+                                selectOption => selectOption.value !== action.removedValue?.value
+                            ),
+                        ]);
+                    }
+
                     break;
                 case 'clear':
-                    const førsteVedtakBegrunnelse: IRestVedtakBegrunnelse | undefined =
-                        vedtakBegrunnelserForPeriode[0];
+                    skjema.felter.begrunnelser.validerOgSettFelt([]);
 
-                    if (førsteVedtakBegrunnelse) {
-                        slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper(
-                            førsteVedtakBegrunnelse.fom,
-                            vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype,
-                            førsteVedtakBegrunnelse.tom
-                        );
-                    } else {
-                        throw new Error(
-                            'Prøver å fjerne alle begrunnelser for en periode, men det er ikke satt noen begrunnelser'
-                        );
+                    break;
+                default:
+                    throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
+            }
+        };
+
+        const onChangePersonerTilhørendeBegrunnelser = (action: ActionMeta<ISelectOption>) => {
+            switch (action.action) {
+                case 'select-option':
+                    if (action.option) {
+                        leggPerson(action.option);
                     }
-                    break;*/
-                    default:
-                        throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
+                    break;
+
+                case 'pop-value':
+                case 'remove-value':
+                    if (action.removedValue) {
+                        fjernPerson(action.removedValue);
+                    }
+                    break;
+
+                case 'clear':
+                    skjema.felter.personIdenter.nullstill();
+                    break;
+
+                default:
+                    throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
+            }
+        };
+
+        const leggPerson = (personOption: ISelectOption) =>
+            skjema.felter.personIdenter.validerOgSettFelt([
+                ...skjema.felter.personIdenter.verdi,
+                personOption,
+            ]);
+
+        const fjernPerson = (personOption: ISelectOption) =>
+            skjema.felter.personIdenter.validerOgSettFelt(
+                skjema.felter.personIdenter.verdi.filter(
+                    person => person.value !== personOption.value
+                )
+            );
+
+        const leggTilFritekst = () => {
+            skjema.felter.fritekster.validerOgSettFelt([
+                ...skjema.felter.fritekster.verdi,
+                lagInitiellFritekst(''),
+            ]);
+        };
+
+        const onPanelClose = (visAlert: boolean) => {
+            if (
+                erPanelEkspandert &&
+                visAlert &&
+                (!deepEqual(
+                    skjema.felter.fritekster.verdi.map(fritekst => fritekst.verdi.tekst),
+                    vedtaksperiodeMedBegrunnelser.fritekster
+                ) ||
+                    !deepEqual(
+                        skjema.felter.begrunnelser.verdi.map(begrunnelse => begrunnelse.value),
+                        vedtaksperiodeMedBegrunnelser.begrunnelser.map(
+                            begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon
+                        )
+                    ))
+            ) {
+                alert('Periode har endringer som ikke er lagret!');
+            } else {
+                settErPanelEkspandert(!erPanelEkspandert);
+                //TODO reinitialiser skjema
+            }
+        };
+
+        const putVedtaksperiodeMedBegrunnelser = () => {
+            onSubmit<IRestPutVedtaksperiodeMedBegrunnelser>(
+                {
+                    method: 'PUT',
+                    url: `/familie-ba-sak/api/vedtaksperioder/${vedtaksperiodeMedBegrunnelser.id}`,
+                    data: {
+                        begrunnelser: skjema.felter.begrunnelser.verdi.map(
+                            (begrunnelse): IRestPutVedtaksbegrunnelse => ({
+                                vedtakBegrunnelseSpesifikasjon: begrunnelse.value as VedtakBegrunnelse,
+                                personIdenter: skjema.felter.personIdenter.verdi.map(
+                                    personOption => personOption.value
+                                ),
+                            })
+                        ),
+                        fritekster: skjema.felter.fritekster.verdi.map(
+                            fritekst => fritekst.verdi.tekst
+                        ),
+                    },
+                },
+                (fagsak: Ressurs<IFagsak>) => {
+                    settFagsak(fagsak);
                 }
+            );
         };
 
         return {
-            id: vedtaksperiodeMedBegrunnelser.id,
-            skjema,
-            onChangeBegrunnelse,
+            erPanelEkspandert,
             grupperteBegrunnelser,
+            id: vedtaksperiodeMedBegrunnelser.id,
+            leggTilFritekst,
+            onChangeBegrunnelse,
+            onPanelClose,
+            skjema,
+            utbetalingsperiode,
             vilkårBegrunnelser,
+            putVedtaksperiodeMedBegrunnelser,
+            onChangePersonerTilhørendeBegrunnelser,
+            åpenBehandling,
         };
     }
 );

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
+import { IBehandling } from '../../../../typer/behandling';
 import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { useFritekstVedtakBegrunnelser } from './Context/FritekstVedtakBegrunnelserContext';
@@ -13,6 +14,7 @@ import FritekstVedtakbegrunnelser from './Felles/FritekstVedtakbegrunnelser';
 
 interface IVedtakBegrunnelserTabell {
     vedtaksperiode: Vedtaksperiode;
+    åpenBehandling: IBehandling;
 }
 
 const PanelBody = styled.div`
@@ -27,7 +29,10 @@ const PanelBody = styled.div`
     }
 `;
 
-const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({ vedtaksperiode }) => {
+const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
+    vedtaksperiode,
+    åpenBehandling,
+}) => {
     const { avslagBegrunnelser } = useVedtakBegrunnelser();
     const { ekspandertBegrunnelse, toggleForm } = useFritekstVedtakBegrunnelser();
 
@@ -35,6 +40,7 @@ const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({ vedtakspe
         <EkspanderbartBegrunnelsePanel
             vedtaksperiode={vedtaksperiode}
             åpen={ekspandertBegrunnelse}
+            åpenBehandling={åpenBehandling}
             onClick={() => toggleForm(true)}
         >
             <PanelBody>

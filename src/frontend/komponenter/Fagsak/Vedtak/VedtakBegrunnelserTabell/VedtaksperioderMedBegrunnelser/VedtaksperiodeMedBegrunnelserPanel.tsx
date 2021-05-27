@@ -1,40 +1,85 @@
 import React from 'react';
 
-import { Normaltekst } from 'nav-frontend-typografi';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 
-import { IBehandling } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
+import { FamilieKnapp } from '@navikt/familie-form-elements';
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { useBehandling } from '../../../../../context/BehandlingContext';
 import { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
-import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
+import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
+import BegrunnelserMultiselect from './BegrunnelserMultiselect';
+import EkspanderbartBegrunnelsePanel from './EkspanderbartBegrunnelsePanel';
+import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
+import Personvelger from './Personvelger';
 
 interface IProps {
-    fagsak: IFagsak;
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
-    åpenBehandling: IBehandling;
 }
 
 const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
-    fagsak,
     vedtaksperiodeMedBegrunnelser,
-    åpenBehandling,
 }) => {
+    const { erLesevisning } = useBehandling();
+    const {
+        skjema,
+        erPanelEkspandert,
+        onPanelClose,
+        utbetalingsperiode,
+        putVedtaksperiodeMedBegrunnelser,
+    } = useVedtaksperiodeMedBegrunnelser();
+
     return (
-        <VedtaksperiodeMedBegrunnelserProvider
-            fagsak={fagsak}
-            åpenBehandling={åpenBehandling}
+        <EkspanderbartBegrunnelsePanel
             vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+            åpen={erPanelEkspandert}
+            onClick={() => onPanelClose(true)}
         >
-            <Normaltekst>{`Vedtaksperiode: ${vedtaksperiodeMedBegrunnelser.type}`}</Normaltekst>
-            {/*<EkspanderbartBegrunnelsePanel
-                vedtaksperiode={vedtaksperiode}
-                åpen={ekspandertBegrunnelse}
-                onClick={() => toggleForm(true)}
-            >
-                <UtbetalingsperiodepanelBody>
+            {utbetalingsperiode && (
+                <Utbetalingsresultat
+                    utbetalingsperiodeDetaljer={utbetalingsperiode.utbetalingsperiodeDetaljer}
+                />
+            )}
+
+            <SkjemaGruppe>
+                <BegrunnelserMultiselect />
+
+                <Personvelger />
+
+                <FritekstVedtakbegrunnelser />
+
+                <Knapperekke>
+                    <FamilieKnapp
+                        erLesevisning={erLesevisning()}
+                        onClick={() => {
+                            putVedtaksperiodeMedBegrunnelser();
+                        }}
+                        mini={true}
+                        type={'standard'}
+                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    >
+                        Lagre
+                    </FamilieKnapp>
+                    <FamilieKnapp
+                        erLesevisning={erLesevisning()}
+                        onClick={() => {
+                            onPanelClose(false);
+                        }}
+                        mini={true}
+                        type={'flat'}
+                    >
+                        Avbryt
+                    </FamilieKnapp>
+                </Knapperekke>
+            </SkjemaGruppe>
+
+            {/* <UtbetalingsperiodepanelBody>
                      TODO - resultater, multiselect, fritekster
-                </UtbetalingsperiodepanelBody>
-            </EkspanderbartBegrunnelsePanel>*/}
-        </VedtaksperiodeMedBegrunnelserProvider>
+               </UtbetalingsperiodepanelBody>*/}
+        </EkspanderbartBegrunnelsePanel>
     );
 };
 

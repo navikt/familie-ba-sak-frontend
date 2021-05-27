@@ -5,7 +5,7 @@ import { ITilbakekreving } from './simulering';
 import { ISøknadDTO } from './søknad';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
-import { Vedtaksperiode } from './vedtaksperiode';
+import { Utbetalingsperiode, Vedtaksperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export enum BehandlingKategori {
@@ -171,6 +171,7 @@ export interface IBehandling {
     underkategori: BehandlingUnderkategori;
     vedtakForBehandling: IVedtakForBehandling[];
     vedtaksperioder: Vedtaksperiode[];
+    utbetalingsperioder: Utbetalingsperiode[];
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
