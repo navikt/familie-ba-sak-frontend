@@ -50,7 +50,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
 
-        const maksAntallKulepunkter = 1;
+        const maksAntallKulepunkter = 2;
         const makslengdeFritekst = 220;
 
         const periode = useFelt<IPeriode>({
@@ -72,27 +72,29 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 felt: FeltState<FeltState<IFritekstFelt>[]>,
                 avhengigheter?: Avhengigheter
             ) => {
-                const erEtTomtFritekstfelt = felt.verdi.some(
-                    fritekst => fritekst.verdi.tekst.length === 0
+                const friteksterMedFeil = felt.verdi.filter(
+                    fritekst => fritekst.valideringsstatus !== Valideringsstatus.OK
                 );
-                const erEtForLangtFritekstfelt = felt.verdi.some(
-                    fritekst => fritekst.verdi.tekst.length > makslengdeFritekst
-                );
-                const erEnFritekstEllerBegrunnelse =
+
+                const erFeilIEnFritekst = friteksterMedFeil.length !== 0;
+                const erFritekstEllerBegrunnelseUtfylt =
                     avhengigheter?.begrunnelser.verdi.length !== 0 || felt.verdi.length !== 0;
                 const erBådeFritekstogBegrunnelse =
                     avhengigheter?.begrunnelser.verdi.length !== 0 && felt.verdi.length !== 0;
 
-                if (erEtTomtFritekstfelt) {
-                    return feil(felt, 'En eller fler av fritekstene er tomme.');
-                } else if (erEtForLangtFritekstfelt) {
-                    return feil(felt, 'En eller flere av fritekstene er for lange.');
-                } else if (!erEnFritekstEllerBegrunnelse) {
-                    return feil(felt, 'Du må velge begrunnelse eller skrive en fritekst.');
+                if (erFeilIEnFritekst) {
+                    return feil(
+                        felt,
+                        `En eller fler av fritekstene er ikke gyldige:  ${friteksterMedFeil
+                            .map(fritekst => fritekst.feilmelding)
+                            .join(' ')}`
+                    );
+                } else if (!erFritekstEllerBegrunnelseUtfylt) {
+                    return feil(felt, 'Du må velge minst én begrunnelse, eller fritekst.');
                 } else if (erBådeFritekstogBegrunnelse) {
                     return feil(
                         felt,
-                        'Det kan ikke være både fritekst og begrunnelse. Du kan velge maks én.'
+                        'Du kan kun ha begrunnelse eller fritekst, og ikke en kombinasjon. Fjern en av tekstene.'
                     );
                 } else {
                     return ok(felt);
@@ -108,7 +110,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        const { skjema, onSubmit, hentFeilTilOppsummering, nullstillSkjema } = useSkjema<
+        const { skjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
                 periode: IPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
@@ -162,10 +164,15 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 tekst: initiellVerdi,
                 id: id ?? genererIdBasertPåAndreFritekster(),
             },
-            valider: (felt: FeltState<IFritekstFelt>) =>
-                felt.verdi.tekst.length > 220
-                    ? feil(felt, 'Du har nådd maks antall tegn: 220')
-                    : ok(felt),
+            valider: (felt: FeltState<IFritekstFelt>) => {
+                if (felt.verdi.tekst.length > 220) {
+                    return feil(felt, 'Du har nådd maks antall tegn: 220.');
+                } else if (felt.verdi.tekst.trim().length === 0) {
+                    return feil(felt, 'Fritekstfeltet er tomt.');
+                } else {
+                    return ok(felt);
+                }
+            },
             valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         });
 
@@ -180,7 +187,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         );
 
         const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
-            nullstillSkjema();
             switch (action.action) {
                 case 'select-option':
                     if (action.option) {
@@ -283,7 +289,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             makslengdeFritekst,
             hentFeilTilOppsummering,
             maksAntallKulepunkter,
-            nullstillSkjema,
         };
     }
 );
