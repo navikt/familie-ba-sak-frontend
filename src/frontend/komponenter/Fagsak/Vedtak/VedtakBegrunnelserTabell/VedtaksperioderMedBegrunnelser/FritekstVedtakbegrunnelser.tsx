@@ -90,6 +90,24 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
     const skjemaGruppeId = `fritekster-${id}`;
+
+    const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
+        skjema.felter.fritekster.validerOgSettFelt([
+            ...skjema.felter.fritekster.verdi.map(mapFritekst => {
+                if (mapFritekst.verdi.id === fritekstId) {
+                    return mapFritekst.valider({
+                        ...mapFritekst,
+                        verdi: {
+                            ...mapFritekst.verdi,
+                            tekst: event.target.value,
+                        },
+                    });
+                } else {
+                    return mapFritekst;
+                }
+            }),
+        ]);
+
     return (
         <>
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
@@ -144,23 +162,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                     textareaClass={'fritekst-textarea'}
                                     value={fritekst.verdi.tekst}
                                     maxLength={makslengdeFritekst}
-                                    onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                                        skjema.felter.fritekster.validerOgSettFelt([
-                                            ...skjema.felter.fritekster.verdi.map(mapFritekst => {
-                                                if (mapFritekst.verdi.id === fritekst.verdi.id) {
-                                                    return mapFritekst.valider({
-                                                        ...mapFritekst,
-                                                        verdi: {
-                                                            ...mapFritekst.verdi,
-                                                            tekst: event.target.value,
-                                                        },
-                                                    });
-                                                } else {
-                                                    return mapFritekst;
-                                                }
-                                            }),
-                                        ]);
-                                    }}
+                                    onChange={event => onChangeFritekst(event, fritekstId)}
                                 />
                                 <SletteKnapp
                                     erLesevisning={erLesevisning()}
