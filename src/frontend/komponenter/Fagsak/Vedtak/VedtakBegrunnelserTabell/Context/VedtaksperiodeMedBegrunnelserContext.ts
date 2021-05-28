@@ -4,7 +4,15 @@ import constate from 'constate';
 import deepEqual from 'deep-equal';
 
 import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
-import { feil, FeltState, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import {
+    feil,
+    FeltState,
+    ok,
+    useFelt,
+    useSkjema,
+    Valideringsstatus,
+    Avhengigheter,
+} from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
@@ -42,6 +50,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
 
+        const maksAntallKulepunkter = 2;
+        const makslengdeFritekst = 220;
+
         const periode = useFelt<IPeriode>({
             verdi: {
                 fom: vedtaksperiodeMedBegrunnelser.fom,
@@ -56,8 +67,32 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
         const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
             verdi: [],
-            valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) =>
-                felt.verdi.length > 1 ? feil(felt, 'Kun 1 fritekst er tillatt') : ok(felt),
+            avhengigheter: { begrunnelser },
+            valideringsfunksjon: (
+                felt: FeltState<FeltState<IFritekstFelt>[]>,
+                avhengigheter?: Avhengigheter
+            ) => {
+                const erFeilIEnFritekst = felt.verdi.some(
+                    fritekst => fritekst.valideringsstatus !== Valideringsstatus.OK
+                );
+                const erFritekstEllerBegrunnelseUtfylt =
+                    avhengigheter?.begrunnelser.verdi.length !== 0 || felt.verdi.length !== 0;
+                const erBådeFritekstogBegrunnelse =
+                    avhengigheter?.begrunnelser.verdi.length !== 0 && felt.verdi.length !== 0;
+
+                if (erFeilIEnFritekst) {
+                    return feil(felt, 'En eller fler av fritekstene er ikke gyldige.');
+                } else if (!erFritekstEllerBegrunnelseUtfylt) {
+                    return feil(felt, 'Du må velge minst én begrunnelse, eller fritekst.');
+                } else if (erBådeFritekstogBegrunnelse) {
+                    return feil(
+                        felt,
+                        'Du kan kun ha begrunnelse eller fritekst, og ikke en kombinasjon. Fjern en av tekstene.'
+                    );
+                } else {
+                    return ok(felt);
+                }
+            },
         });
 
         const genererIdBasertPåAndreFritekster = () => {
@@ -68,7 +103,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        const { skjema, onSubmit } = useSkjema<
+        const { skjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
                 periode: IPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
@@ -117,15 +152,23 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             initiellVerdi: string,
             id?: number
         ): FeltState<IFritekstFelt> => ({
-            feilmelding: '',
+            feilmelding: 'Fritekstfeltet er tomt.',
             verdi: {
                 tekst: initiellVerdi,
                 id: id ?? genererIdBasertPåAndreFritekster(),
             },
-            valider: (felt: FeltState<IFritekstFelt>) =>
-                felt.verdi.tekst.length > 220
-                    ? feil(felt, 'Du har nådd maks antall tegn: 220')
-                    : ok(felt),
+            valider: (felt: FeltState<IFritekstFelt>) => {
+                if (felt.verdi.tekst.length > 220) {
+                    return feil(felt, 'Du har nådd maks antall tegn: 220.');
+                } else if (felt.verdi.tekst.trim().length === 0) {
+                    return feil(
+                        felt,
+                        'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
+                    );
+                } else {
+                    return ok(felt);
+                }
+            },
             valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
         });
 
@@ -221,6 +264,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     },
                 },
                 (fagsak: Ressurs<IFagsak>) => {
+                    settErPanelEkspandert(false);
                     settFagsak(fagsak);
                 }
             );
@@ -238,6 +282,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             vilkårBegrunnelser,
             putVedtaksperiodeMedBegrunnelser,
             åpenBehandling,
+            makslengdeFritekst,
+            hentFeilTilOppsummering,
+            maksAntallKulepunkter,
         };
     }
 );
