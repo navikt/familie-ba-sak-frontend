@@ -29,7 +29,6 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
     const finnesTomPeriode = (opplysninger: IRestRegisteropplysning[]): boolean =>
         !!opplysninger.find(opplysning => !opplysning.fom && !opplysning.tom);
     const finnesTomPeriodePåPerson =
-        finnesTomPeriode(opplysninger.sivilstand) ||
         finnesTomPeriode(opplysninger.oppholdstillatelse) ||
         finnesTomPeriode(opplysninger.statsborgerskap) ||
         finnesTomPeriode(opplysninger.bostedsadresse);
