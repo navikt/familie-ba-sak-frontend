@@ -161,7 +161,10 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 if (felt.verdi.tekst.length > 220) {
                     return feil(felt, 'Du har nådd maks antall tegn: 220.');
                 } else if (felt.verdi.tekst.trim().length === 0) {
-                    return feil(felt, 'Fritekstfeltet er tomt.');
+                    return feil(
+                        felt,
+                        'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
+                    );
                 } else {
                     return ok(felt);
                 }
