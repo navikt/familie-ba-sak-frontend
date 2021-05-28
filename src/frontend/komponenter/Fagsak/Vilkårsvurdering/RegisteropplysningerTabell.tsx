@@ -3,7 +3,13 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { IRestRegisteropplysning } from '../../../typer/person';
-import { periodeToString } from '../../../utils/kalender';
+import {
+    kalenderDatoMedFallback,
+    kalenderDatoTilDate,
+    kalenderDiff,
+    periodeToString,
+    TIDENES_MORGEN,
+} from '../../../utils/kalender';
 
 const Container = styled.div`
     display: flex;
@@ -65,19 +71,32 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                         </tr>
                     </thead>
                     {historikk.length ? (
-                        historikk.map(periode => {
-                            return (
-                                <TabellRad key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
-                                    <td children={periode.verdi} />
-                                    <td
-                                        children={periodeToString({
-                                            fom: periode.fom,
-                                            tom: periode.tom,
-                                        })}
-                                    />
-                                </TabellRad>
-                            );
-                        })
+                        historikk
+                            .sort((a, b) =>
+                                kalenderDiff(
+                                    kalenderDatoTilDate(
+                                        kalenderDatoMedFallback(a.fom, TIDENES_MORGEN)
+                                    ),
+                                    kalenderDatoTilDate(
+                                        kalenderDatoMedFallback(b.fom, TIDENES_MORGEN)
+                                    )
+                                )
+                            )
+                            .map(periode => {
+                                return (
+                                    <TabellRad
+                                        key={`${periode.fom}_${periode.tom}_${periode.verdi}`}
+                                    >
+                                        <td children={periode.verdi} />
+                                        <td
+                                            children={periodeToString({
+                                                fom: periode.fom,
+                                                tom: periode.tom,
+                                            })}
+                                        />
+                                    </TabellRad>
+                                );
+                            })
                     ) : (
                         <TabellRad key={`${opplysningstype}_ukjent`}>
                             <td children={'Ingen opplysninger'} />
