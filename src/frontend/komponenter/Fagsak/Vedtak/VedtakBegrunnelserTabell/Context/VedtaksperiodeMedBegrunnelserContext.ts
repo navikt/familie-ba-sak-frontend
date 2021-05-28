@@ -73,7 +73,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 avhengigheter?: Avhengigheter
             ) => {
                 const erFeilIEnFritekst = felt.verdi.some(
-                    fritekst => fritekst.valideringsstatus === Valideringsstatus.FEIL
+                    fritekst =>
+                        fritekst.valideringsstatus === Valideringsstatus.FEIL ||
+                        fritekst.verdi.tekst.length === 0
                 );
                 const erFritekstEllerBegrunnelseUtfylt =
                     avhengigheter?.begrunnelser.verdi.length !== 0 || felt.verdi.length !== 0;
