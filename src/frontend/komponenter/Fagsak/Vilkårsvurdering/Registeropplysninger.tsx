@@ -30,11 +30,11 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
         !!opplysninger.find(opplysning => !opplysning.fom && !opplysning.tom);
     const finnesTomPeriodePåPerson =
         finnesTomPeriode(opplysninger.oppholdstillatelse) ||
-        !opplysninger.oppholdstillatelse.length ||
+        opplysninger.oppholdstillatelse.length === 0 ||
         finnesTomPeriode(opplysninger.statsborgerskap) ||
-        !opplysninger.statsborgerskap.length ||
+        opplysninger.statsborgerskap.length === 0 ||
         finnesTomPeriode(opplysninger.bostedsadresse) ||
-        !opplysninger.bostedsadresse.length;
+        opplysninger.bostedsadresse.length === 0;
 
     return (
         <>
