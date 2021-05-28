@@ -44,8 +44,12 @@ const StyledFeilmelding = styled(Feilmelding)`
     margin-bottom: 1rem;
 `;
 
+const StyledLabel = styled(Label)`
+    margin-bottom: 0;
+`;
+
 const InfoBoks = styled.div`
-    margin: 0;
+    margin-right: 5.6875rem;
     display: flex;
     align-items: center;
     text-align: center;
@@ -90,7 +94,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
         <>
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>
-                <Label htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</Label>
+                <StyledLabel htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</StyledLabel>
                 <StyledHjelpetekst44px
                     type={PopoverOrientering.OverVenstre}
                     innhold={
