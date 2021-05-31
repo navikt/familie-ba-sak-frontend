@@ -97,6 +97,11 @@ export const useInfotrygdMigrering = () => {
             .then(ressurs => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     history.push(`/fagsak/${ressurs.data.fagsakId}/saksoversikt`);
+                } else if (
+                    ressurs.status === RessursStatus.FEILET ||
+                    ressurs.status === RessursStatus.FUNKSJONELL_FEIL
+                ) {
+                    settInfotrygdmigreringRessurs(byggFeiletRessurs(ressurs.frontendFeilmelding));
                 }
             })
             .catch((_error: AxiosError) => {
