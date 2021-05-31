@@ -8,7 +8,7 @@ import { Ingress, Undertekst } from 'nav-frontend-typografi';
 
 import { Globe, Heart, Home, Passport } from '@navikt/ds-icons';
 
-import { IRestRegisterhistorikk, IRestRegisteropplysning } from '../../../typer/person';
+import { IRestRegisterhistorikk } from '../../../typer/person';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
@@ -26,20 +26,12 @@ interface IRegisteropplysningerProps {
 }
 
 const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysninger }) => {
-    const finnesTomPeriode = (opplysninger: IRestRegisteropplysning[]): boolean =>
-        !!opplysninger.find(opplysning => !opplysning.fom && !opplysning.tom);
-    const finnesTomPeriodePåPerson =
-        finnesTomPeriode(opplysninger.oppholdstillatelse) ||
-        opplysninger.oppholdstillatelse.length === 0 ||
-        finnesTomPeriode(opplysninger.statsborgerskap) ||
-        opplysninger.statsborgerskap.length === 0 ||
-        finnesTomPeriode(opplysninger.bostedsadresse) ||
-        opplysninger.bostedsadresse.length === 0;
+    const bleOpprettetUtenRegisteropplysninger = opplysninger.statsborgerskap.length === 0;
 
     return (
         <>
             <Ingress children={'Registeropplysninger'} />
-            {finnesTomPeriodePåPerson ? (
+            {bleOpprettetUtenRegisteropplysninger ? (
                 <Alertstripe type="info" style={{ marginTop: '1rem' }}>
                     Behandlingen ble gjort før registeropplysninger ble lagret i systemet og mangler
                     derfor opplysninger.
