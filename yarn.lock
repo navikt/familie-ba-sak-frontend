@@ -9657,10 +9657,10 @@ nav-frontend-lenker-style@^1.0.2, nav-frontend-lenker-style@^1.1.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-1.1.1.tgz#f2275691fe798fb45dba7cccdc2750b90f028bf6"
   integrity sha512-lyg6XLC9oBDRgqWOvcm5aGTjE+5qasVWAvIQV+Gh9iIZw0CubA2a3dBaTuTcwbxeCTHAhjk7Ww0QZxwP+THflA==
 
-nav-frontend-lenker@^1.0.60, nav-frontend-lenker@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.1.1.tgz#fcd06c909f1cc0ab5558ea2dc15a0a7446c7004e"
-  integrity sha512-rR0IKIZTX/ryk2KkBmZufXsKwYIB0GJF9gqYBRU9Mqy6DbfGDtEcQFxtDPUQZX7lgI4eg+52wv4NGRzpMfPIGA==
+nav-frontend-lenker@^1.0.60, nav-frontend-lenker@^1.1.1, nav-frontend-lenker@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.1.2.tgz#e9740f4506a96826eb8a8c8bea22a21df63328b0"
+  integrity sha512-kAtI1QL4+xqbxy/uiPSWC0wLVsJ3aplGQP5ZTV4f7Aa3ZGBbFkEmDd95tTOh2oAehE1t6ohXu/lueGKIvPXhLw==
 
 nav-frontend-lukknapp-style@^1.1.1:
   version "1.1.1"
