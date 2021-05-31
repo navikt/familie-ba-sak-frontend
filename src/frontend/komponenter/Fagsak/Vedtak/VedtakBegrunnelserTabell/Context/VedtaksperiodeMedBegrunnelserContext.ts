@@ -50,7 +50,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
         );
 
-        const maksAntallKulepunkter = 2;
+        const maksAntallKulepunkter = 1;
         const makslengdeFritekst = 220;
 
         const periode = useFelt<IPeriode>({
@@ -73,7 +73,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 avhengigheter?: Avhengigheter
             ) => {
                 const erFeilIEnFritekst = felt.verdi.some(
-                    fritekst => fritekst.valideringsstatus !== Valideringsstatus.OK
+                    fritekst =>
+                        fritekst.valideringsstatus === Valideringsstatus.FEIL ||
+                        fritekst.verdi.tekst.length === 0
                 );
                 const erFritekstEllerBegrunnelseUtfylt =
                     avhengigheter?.begrunnelser.verdi.length !== 0 || felt.verdi.length !== 0;
@@ -264,7 +266,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     },
                 },
                 (fagsak: Ressurs<IFagsak>) => {
-                    settErPanelEkspandert(false);
                     settFagsak(fagsak);
                 }
             );

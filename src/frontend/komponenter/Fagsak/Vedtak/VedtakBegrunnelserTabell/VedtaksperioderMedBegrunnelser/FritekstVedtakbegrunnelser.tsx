@@ -44,8 +44,12 @@ const StyledFeilmelding = styled(Feilmelding)`
     margin-bottom: 1rem;
 `;
 
+const StyledLabel = styled(Label)`
+    margin-bottom: 0;
+`;
+
 const InfoBoks = styled.div`
-    margin: 0;
+    margin-right: 5.6875rem;
     display: flex;
     align-items: center;
     text-align: center;
@@ -86,11 +90,29 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
     const skjemaGruppeId = `fritekster-${id}`;
+
+    const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
+        skjema.felter.fritekster.validerOgSettFelt([
+            ...skjema.felter.fritekster.verdi.map(mapFritekst => {
+                if (mapFritekst.verdi.id === fritekstId) {
+                    return mapFritekst.valider({
+                        ...mapFritekst,
+                        verdi: {
+                            ...mapFritekst.verdi,
+                            tekst: event.target.value,
+                        },
+                    });
+                } else {
+                    return mapFritekst;
+                }
+            }),
+        ]);
+
     return (
         <>
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>
-                <Label htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</Label>
+                <StyledLabel htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</StyledLabel>
                 <StyledHjelpetekst44px
                     type={PopoverOrientering.OverVenstre}
                     innhold={
@@ -140,23 +162,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                     textareaClass={'fritekst-textarea'}
                                     value={fritekst.verdi.tekst}
                                     maxLength={makslengdeFritekst}
-                                    onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                                        skjema.felter.fritekster.validerOgSettFelt([
-                                            ...skjema.felter.fritekster.verdi.map(mapFritekst => {
-                                                if (mapFritekst.verdi.id === fritekst.verdi.id) {
-                                                    return mapFritekst.valider({
-                                                        ...mapFritekst,
-                                                        verdi: {
-                                                            ...mapFritekst.verdi,
-                                                            tekst: event.target.value,
-                                                        },
-                                                    });
-                                                } else {
-                                                    return mapFritekst;
-                                                }
-                                            }),
-                                        ]);
-                                    }}
+                                    onChange={event => onChangeFritekst(event, fritekstId)}
                                 />
                                 <SletteKnapp
                                     erLesevisning={erLesevisning()}
