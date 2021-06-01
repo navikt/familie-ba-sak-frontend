@@ -36,6 +36,7 @@ import {
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
+import MedlemskapCheckbox from './MedlemskapCheckbox';
 import SkjønnsvurderingCheckbox from './SkjønnsvurderingCheckbox';
 import VelgPeriode from './VelgPeriode';
 import {
@@ -195,6 +196,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             });
     };
 
+    const Checkboxes = styled.div`
+        display: flex;
+        justify-content: space-between;
+        margin: 1rem 0;
+    `;
+
     const vilkårResultatForEkteskapVisning = (resultat: Resultat) => {
         if (resultat === Resultat.OPPFYLT) {
             return resultater[Resultat.IKKE_OPPFYLT];
@@ -281,11 +288,24 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 />
 
                 {toggles[ToggleNavn.skjønnsvurdering] && (
-                    <SkjønnsvurderingCheckbox
-                        redigerbartVilkår={redigerbartVilkår}
-                        settRedigerbartVilkår={settRedigerbartVilkår}
-                        settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                    />
+                    <>
+                        <Checkboxes>
+                            <SkjønnsvurderingCheckbox
+                                redigerbartVilkår={redigerbartVilkår}
+                                settRedigerbartVilkår={settRedigerbartVilkår}
+                                settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                            />
+                            {redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
+                                <MedlemskapCheckbox
+                                    redigerbartVilkår={redigerbartVilkår}
+                                    settRedigerbartVilkår={settRedigerbartVilkår}
+                                    settVisFeilmeldingerForEttVilkår={
+                                        settVisFeilmeldingerForEttVilkår
+                                    }
+                                />
+                            )}
+                        </Checkboxes>
+                    </>
                 )}
                 <FamilieTextareaControlled
                     tekstLesevisning={''}

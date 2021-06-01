@@ -79,6 +79,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                         erEksplisittAvslagPåSøknad:
                             redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
                         erSkjønnsmessigVurdert: redigerbartVilkår.verdi.erSkjønnsmessigVurdert,
+                        erMedlemskapVurdert: redigerbartVilkår.verdi.erMedlemskapVurdert,
                         avslagBegrunnelser: redigerbartVilkår.verdi.avslagBegrunnelser.verdi,
                         vilkårType: redigerbartVilkår.verdi.vilkårType,
                     },

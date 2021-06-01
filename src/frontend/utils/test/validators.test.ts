@@ -10,6 +10,7 @@ import { Resultat } from '../../typer/vilkår';
 import { IPeriode, nyPeriode } from '../kalender';
 import {
     erAvslagBegrunnelserGyldig,
+    erBegrunnelseGyldig,
     erPeriodeGyldig,
     erResultatGyldig,
     identValidator,
@@ -131,6 +132,36 @@ describe('utils/validators', () => {
             er18ÅrsVilkår: true,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
+    });
+
+    test('Begrunnelse må oppgis dersom medlemskap er vurdert', () => {
+        const valideringsresultatBegrunnelseOppgitt = erBegrunnelseGyldig(
+            nyFeltState('begrunnelse'),
+            {
+                erMedlemskapVurdert: true,
+            }
+        );
+        expect(valideringsresultatBegrunnelseOppgitt.valideringsstatus).toEqual(
+            Valideringsstatus.OK
+        );
+        const valideringsresultatBegrunnelseIkkeOppgitt = erBegrunnelseGyldig(nyFeltState(''), {
+            erMedlemskapVurdert: true,
+        });
+        expect(valideringsresultatBegrunnelseIkkeOppgitt.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
+        );
+        expect(valideringsresultatBegrunnelseIkkeOppgitt.feilmelding).toBe(
+            'Du må skrive en begrunnelse ved skjønnsmessig vurdering.'
+        );
+        const valideringsresultatBegrunnelseIkkeOppgittMedlemskapIkkeVurdert = erBegrunnelseGyldig(
+            nyFeltState(''),
+            {
+                erMedlemskapVurdert: false,
+            }
+        );
+        expect(
+            valideringsresultatBegrunnelseIkkeOppgittMedlemskapIkkeVurdert.valideringsstatus
+        ).toEqual(Valideringsstatus.OK);
     });
 
     test('Validering av ident', () => {

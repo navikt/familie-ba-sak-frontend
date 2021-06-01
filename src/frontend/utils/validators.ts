@@ -167,6 +167,7 @@ export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => 
 };
 
 export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) =>
-    avhengigheter?.erSkjønnsmessigVurdert && felt.verdi.length === 0
+    (avhengigheter?.erSkjønnsmessigVurdert || avhengigheter?.erMedlemskapVurdert) &&
+    felt.verdi.length === 0
         ? feil(felt, 'Du må skrive en begrunnelse ved skjønnsmessig vurdering.')
         : ok(felt);
