@@ -75,10 +75,10 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                             .sort((a, b) =>
                                 kalenderDiff(
                                     kalenderDatoTilDate(
-                                        kalenderDatoMedFallback(a.fom, TIDENES_MORGEN)
+                                        kalenderDatoMedFallback(b.fom, TIDENES_MORGEN)
                                     ),
                                     kalenderDatoTilDate(
-                                        kalenderDatoMedFallback(b.fom, TIDENES_MORGEN)
+                                        kalenderDatoMedFallback(a.fom, TIDENES_MORGEN)
                                     )
                                 )
                             )
