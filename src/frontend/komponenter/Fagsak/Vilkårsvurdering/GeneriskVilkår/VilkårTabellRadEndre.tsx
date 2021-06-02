@@ -287,26 +287,23 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
 
-                {toggles[ToggleNavn.skjønnsvurdering] && (
-                    <>
-                        <Checkboxes>
-                            <SkjønnsvurderingCheckbox
+                <Checkboxes>
+                    {toggles[ToggleNavn.skjønnsvurdering] && (
+                        <SkjønnsvurderingCheckbox
+                            redigerbartVilkår={redigerbartVilkår}
+                            settRedigerbartVilkår={settRedigerbartVilkår}
+                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                        />
+                    )}
+                    {toggles[ToggleNavn.medlemskap] &&
+                        redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
+                            <MedlemskapCheckbox
                                 redigerbartVilkår={redigerbartVilkår}
                                 settRedigerbartVilkår={settRedigerbartVilkår}
                                 settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                             />
-                            {redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
-                                <MedlemskapCheckbox
-                                    redigerbartVilkår={redigerbartVilkår}
-                                    settRedigerbartVilkår={settRedigerbartVilkår}
-                                    settVisFeilmeldingerForEttVilkår={
-                                        settVisFeilmeldingerForEttVilkår
-                                    }
-                                />
-                            )}
-                        </Checkboxes>
-                    </>
-                )}
+                        )}
+                </Checkboxes>
                 <FamilieTextareaControlled
                     tekstLesevisning={''}
                     erLesevisning={leseVisning}

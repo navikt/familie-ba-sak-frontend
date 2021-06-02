@@ -134,34 +134,59 @@ describe('utils/validators', () => {
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
     });
 
-    test('Begrunnelse må oppgis dersom medlemskap er vurdert', () => {
-        const valideringsresultatBegrunnelseOppgitt = erBegrunnelseGyldig(
-            nyFeltState('begrunnelse'),
+    test('Begrunnelse må oppgis dersom medlemskap er vurdert eller ved skjønnsmessig vurdering', () => {
+        const valideringBegrunnelseOppgitt = erBegrunnelseGyldig(nyFeltState('begrunnelse'), {
+            erMedlemskapVurdert: true,
+        });
+        expect(valideringBegrunnelseOppgitt.valideringsstatus).toEqual(Valideringsstatus.OK);
+
+        const valideringMedlemskapVurdertManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
+            erMedlemskapVurdert: true,
+        });
+        expect(valideringMedlemskapVurdertManglerBegrunnelse.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
+        );
+        expect(valideringMedlemskapVurdertManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse ved vurdert medlemskap.'
+        );
+
+        const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
+            nyFeltState(''),
             {
+                erSkjønnsmessigVurdert: true,
+            }
+        );
+        expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
+        );
+        expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse ved skjønnsmessig vurdering.'
+        );
+
+        const valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse = erBegrunnelseGyldig(
+            nyFeltState(''),
+            {
+                erSkjønnsmessigVurdert: true,
                 erMedlemskapVurdert: true,
             }
         );
-        expect(valideringsresultatBegrunnelseOppgitt.valideringsstatus).toEqual(
-            Valideringsstatus.OK
+        expect(
+            valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.valideringsstatus
+        ).toEqual(Valideringsstatus.FEIL);
+        expect(valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse som dekker skjønnsmessig vurdering og vurdert medlemskap.'
         );
-        const valideringsresultatBegrunnelseIkkeOppgitt = erBegrunnelseGyldig(nyFeltState(''), {
-            erMedlemskapVurdert: true,
-        });
-        expect(valideringsresultatBegrunnelseIkkeOppgitt.valideringsstatus).toEqual(
-            Valideringsstatus.FEIL
-        );
-        expect(valideringsresultatBegrunnelseIkkeOppgitt.feilmelding).toBe(
-            'Du må skrive en begrunnelse ved skjønnsmessig vurdering.'
-        );
-        const valideringsresultatBegrunnelseIkkeOppgittMedlemskapIkkeVurdert = erBegrunnelseGyldig(
+
+        const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(
             nyFeltState(''),
             {
+                erSkjønnsmessigVurdert: false,
                 erMedlemskapVurdert: false,
             }
         );
-        expect(
-            valideringsresultatBegrunnelseIkkeOppgittMedlemskapIkkeVurdert.valideringsstatus
-        ).toEqual(Valideringsstatus.OK);
+        expect(valideringBegrunnelseIkkeOppgittNårIngenErValgt.valideringsstatus).toEqual(
+            Valideringsstatus.OK
+        );
     });
 
     test('Validering av ident', () => {
