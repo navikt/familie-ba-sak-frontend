@@ -25,7 +25,10 @@ export const validerVilkår = (
 
     const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
         nyttVilkårResultat.verdi.begrunnelse,
-        { erSkjønnsmessigVurdert: nyttVilkårResultat.verdi.erSkjønnsmessigVurdert }
+        {
+            erSkjønnsmessigVurdert: nyttVilkårResultat.verdi.erSkjønnsmessigVurdert,
+            erMedlemskapVurdert: nyttVilkårResultat.verdi.erMedlemskapVurdert,
+        }
     );
 
     const nyttResultat: FeltState<Resultat> = nyttVilkårResultat.verdi.resultat.valider(

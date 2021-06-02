@@ -10,6 +10,7 @@ import { Resultat } from '../../typer/vilkår';
 import { IPeriode, nyPeriode } from '../kalender';
 import {
     erAvslagBegrunnelserGyldig,
+    erBegrunnelseGyldig,
     erPeriodeGyldig,
     erResultatGyldig,
     identValidator,
@@ -141,6 +142,61 @@ describe('utils/validators', () => {
             er18ÅrsVilkår: true,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
+    });
+
+    test('Begrunnelse må oppgis dersom medlemskap er vurdert eller ved skjønnsmessig vurdering', () => {
+        const valideringBegrunnelseOppgitt = erBegrunnelseGyldig(nyFeltState('begrunnelse'), {
+            erMedlemskapVurdert: true,
+        });
+        expect(valideringBegrunnelseOppgitt.valideringsstatus).toEqual(Valideringsstatus.OK);
+
+        const valideringMedlemskapVurdertManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
+            erMedlemskapVurdert: true,
+        });
+        expect(valideringMedlemskapVurdertManglerBegrunnelse.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
+        );
+        expect(valideringMedlemskapVurdertManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse ved vurdert medlemskap.'
+        );
+
+        const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
+            nyFeltState(''),
+            {
+                erSkjønnsmessigVurdert: true,
+            }
+        );
+        expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
+        );
+        expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse ved skjønnsmessig vurdering.'
+        );
+
+        const valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse = erBegrunnelseGyldig(
+            nyFeltState(''),
+            {
+                erSkjønnsmessigVurdert: true,
+                erMedlemskapVurdert: true,
+            }
+        );
+        expect(
+            valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.valideringsstatus
+        ).toEqual(Valideringsstatus.FEIL);
+        expect(valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse som dekker skjønnsmessig vurdering og vurdert medlemskap.'
+        );
+
+        const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(
+            nyFeltState(''),
+            {
+                erSkjønnsmessigVurdert: false,
+                erMedlemskapVurdert: false,
+            }
+        );
+        expect(valideringBegrunnelseIkkeOppgittNårIngenErValgt.valideringsstatus).toEqual(
+            Valideringsstatus.OK
+        );
     });
 
     test('Validering av ident', () => {
