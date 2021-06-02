@@ -3,12 +3,15 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { IRestRegisteropplysning } from '../../../typer/person';
+import { Registeropplysning, registeropplysning } from '../../../typer/registeropplysning';
 import {
+    kalenderDato,
     kalenderDatoMedFallback,
     kalenderDatoTilDate,
     kalenderDiff,
     periodeToString,
     TIDENES_MORGEN,
+    tilVisning,
 } from '../../../utils/kalender';
 
 const Container = styled.div`
@@ -46,7 +49,7 @@ const OpplysningsIkon = styled.div`
 `;
 
 interface IRegisteropplysningerTabellProps {
-    opplysningstype: string;
+    opplysningstype: Registeropplysning;
     ikon: ReactNode;
     historikk: IRestRegisteropplysning[];
 }
@@ -62,12 +65,18 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                 <OpplysningsIkon children={ikon} />
                 <Tabell
                     className={'tabell'}
-                    aria-label={`Registeropplysninger for ${opplysningstype}`}
+                    aria-label={`Registeropplysninger for ${registeropplysning[opplysningstype]}`}
                 >
                     <thead>
                         <tr>
-                            <TabellHeader children={opplysningstype} />
-                            <TabellHeader children={'Periode'} />
+                            <TabellHeader children={registeropplysning[opplysningstype]} />
+                            <TabellHeader
+                                children={
+                                    opplysningstype === Registeropplysning.SIVILSTAND
+                                        ? 'Dato'
+                                        : 'Periode'
+                                }
+                            />
                         </tr>
                     </thead>
                     {historikk.length ? (
@@ -89,10 +98,18 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                                     >
                                         <td children={periode.verdi} />
                                         <td
-                                            children={periodeToString({
-                                                fom: periode.fom,
-                                                tom: periode.tom,
-                                            })}
+                                            children={
+                                                opplysningstype === Registeropplysning.SIVILSTAND
+                                                    ? tilVisning(
+                                                          periode.fom
+                                                              ? kalenderDato(periode.fom)
+                                                              : undefined
+                                                      )
+                                                    : periodeToString({
+                                                          fom: periode.fom,
+                                                          tom: periode.tom,
+                                                      })
+                                            }
                                         />
                                     </TabellRad>
                                 );

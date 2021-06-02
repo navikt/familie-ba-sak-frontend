@@ -9,6 +9,7 @@ import { Ingress, Undertekst } from 'nav-frontend-typografi';
 import { Globe, Heart, Home, Passport } from '@navikt/ds-icons';
 
 import { IRestRegisterhistorikk } from '../../../typer/person';
+import { Registeropplysning } from '../../../typer/registeropplysning';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
@@ -45,7 +46,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                         }
                     />
                     <RegisteropplysningerTabell
-                        opplysningstype={'Sivilstand'}
+                        opplysningstype={Registeropplysning.SIVILSTAND}
                         ikon={
                             <Heart
                                 style={{ fontSize: '1.5rem' }}
@@ -57,7 +58,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                         historikk={opplysninger.sivilstand}
                     />
                     <RegisteropplysningerTabell
-                        opplysningstype={'Oppholdstillatelse'}
+                        opplysningstype={Registeropplysning.OPPHOLD}
                         ikon={
                             <Passport
                                 style={{ fontSize: '1.5rem' }}
@@ -69,7 +70,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                         historikk={opplysninger.oppholdstillatelse}
                     />
                     <RegisteropplysningerTabell
-                        opplysningstype={'Statsborgerskap'}
+                        opplysningstype={Registeropplysning.STATSBORGERSKAP}
                         ikon={
                             <Globe
                                 style={{ fontSize: '1.5rem' }}
@@ -81,7 +82,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                         historikk={opplysninger.statsborgerskap}
                     />
                     <RegisteropplysningerTabell
-                        opplysningstype={'Adresse'}
+                        opplysningstype={Registeropplysning.BOSTEDSADRESSE}
                         ikon={
                             <Home
                                 style={{ fontSize: '1.5rem' }}
