@@ -131,22 +131,31 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
+    const minstEnPeriodeharBegrunnetelseEllerFritekst = (): boolean => {
+        const vedtaksperioderMedBegrunnelser =
+            hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [];
+        return vedtaksperioderMedBegrunnelser.some(
+            b => b.begrunnelser.length !== 0 || b.fritekster.length !== 0
+        );
+    };
+
     const minstEnPeriodeErBegrunnet = (vedtakBegrunnelser: IRestVedtakBegrunnelse[]) => {
         const begrunnelsenErUtfylt = (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
             vedtakBegrunnelse.begrunnelseType && vedtakBegrunnelse.begrunnelse;
 
-        return (
-            vedtakBegrunnelser.filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                begrunnelsenErUtfylt(vedtakBegrunnelse)
-            ).length > 0
+        return vedtakBegrunnelser.some((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+            begrunnelsenErUtfylt(vedtakBegrunnelse)
         );
     };
 
+    const kanSendeinnVedtak = () =>
+        (aktivVedtak &&
+            (minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser) ||
+                minstEnPeriodeharBegrunnetelseEllerFritekst())) ||
+        åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR;
+
     const sendInn = () => {
-        if (
-            (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
-            åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR
-        ) {
+        if (kanSendeinnVedtak()) {
             settSenderInn(true);
             settSubmitFeil('');
             request<void, IFagsak>({
@@ -171,6 +180,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             settSubmitFeil(
                 'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
             );
+        }
+    };
+
+    const åpneBrevModal = () => {
+        if (kanSendeinnVedtak()) {
+            settSubmitFeil('');
+            settVisVedtaksbrev(true);
+        } else {
+            alert('Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.');
         }
     };
 
@@ -217,7 +235,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             erLesevisning={false}
                             label={'Vis vedtaksbrev'}
                             ikon={<DokumentIkon />}
-                            onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
+                            onClick={åpneBrevModal}
                             spinner={vedtaksbrev.status === RessursStatus.HENTER}
                             knappPosisjon={'venstre'}
                             mini={true}
