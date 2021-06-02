@@ -151,9 +151,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     };
 
     const kanSendeinnVedtak = () =>
-        (aktivVedtak &&
-            (minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser) ||
-                minstEnPeriodeharBegrunnetelseEllerFritekst())) ||
+        (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
+        minstEnPeriodeharBegrunnetelseEllerFritekst() ||
         åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR;
 
     const sendInn = () => {
