@@ -135,7 +135,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         const vedtaksperioderMedBegrunnelser =
             hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [];
         return vedtaksperioderMedBegrunnelser.some(
-            b => b.begrunnelser.length !== 0 || b.fritekster.length !== 0
+            vedtaksperioderMedBegrunnelse =>
+                vedtaksperioderMedBegrunnelse.begrunnelser.length !== 0 ||
+                vedtaksperioderMedBegrunnelse.fritekster.length !== 0
         );
     };
 
