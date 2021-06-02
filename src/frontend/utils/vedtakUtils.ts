@@ -114,7 +114,7 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
             return navFarger.navGronnLighten80;
         case VedtakBegrunnelseType.AVSLAG:
-            return navFarger.navRodLighten80;
+            return navFarger.navRod;
         case VedtakBegrunnelseType.REDUKSJON:
             return navFarger.navOransjeLighten80;
         case VedtakBegrunnelseType.OPPHØR:
@@ -130,7 +130,7 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
             return navFarger.navGronn;
         case VedtakBegrunnelseType.AVSLAG:
-            return navFarger.navRodDarken20;
+            return navFarger.navRod;
         case VedtakBegrunnelseType.REDUKSJON:
             return navFarger.navOransjeDarken20;
         case VedtakBegrunnelseType.OPPHØR:
