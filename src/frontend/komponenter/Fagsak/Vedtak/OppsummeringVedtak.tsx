@@ -239,7 +239,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             erLesevisning={false}
                             label={'Vis vedtaksbrev'}
                             ikon={<DokumentIkon />}
-                            onClick={() => settVisModal(!visModal)}
+                            onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
                             spinner={vedtaksbrev.status === RessursStatus.HENTER}
                             knappPosisjon={'venstre'}
                             mini={true}
