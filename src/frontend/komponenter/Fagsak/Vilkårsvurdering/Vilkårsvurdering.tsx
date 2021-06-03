@@ -4,9 +4,10 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+
+import { Refresh } from '@navikt/ds-icons';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
@@ -21,6 +22,7 @@ import {
 } from '../../../typer/vilkår';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { VedtakBegrunnelserProvider } from '../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
@@ -92,13 +94,22 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             maxWidthStyle={'80rem'}
             senderInn={senderInn}
         >
-            <Knapp
-                key={'oppdater-registeropplysninger'}
-                mini={true}
+            <IkonKnapp
+                id={'oppdater-registeropplysninger'}
+                erLesevisning={erLesevisning()}
+                label={'Oppdater registeropplysninger'}
+                ikon={
+                    <Refresh
+                        style={{ fontSize: '1.5rem' }}
+                        aria-label="Refresh ikon"
+                        role="img"
+                        focusable="false"
+                    />
+                }
                 onClick={() => oppdaterRegisteropplysninger(åpenBehandling.behandlingId)}
-                children={'Test oppdater registeropplysninger'}
+                knappPosisjon={'venstre'}
+                mini={true}
             />
-            ,
             <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             </VedtakBegrunnelserProvider>
