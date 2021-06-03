@@ -153,7 +153,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const kanSendeinnVedtak = () =>
         (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
         minstEnPeriodeharBegrunnetelseEllerFritekst() ||
-        åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR;
+        åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
+        åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
 
     const sendInn = () => {
         if (kanSendeinnVedtak()) {
@@ -181,15 +182,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             settSubmitFeil(
                 'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
             );
-        }
-    };
-
-    const åpneBrevModal = () => {
-        if (kanSendeinnVedtak()) {
-            settSubmitFeil('');
-            settVisVedtaksbrev(true);
-        } else {
-            alert('Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.');
         }
     };
 
@@ -247,7 +239,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             erLesevisning={false}
                             label={'Vis vedtaksbrev'}
                             ikon={<DokumentIkon />}
-                            onClick={åpneBrevModal}
+                            onClick={() => settVisModal(!visModal)}
                             spinner={vedtaksbrev.status === RessursStatus.HENTER}
                             knappPosisjon={'venstre'}
                             mini={true}
