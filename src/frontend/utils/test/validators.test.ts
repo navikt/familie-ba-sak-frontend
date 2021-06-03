@@ -10,6 +10,7 @@ import { Resultat } from '../../typer/vilkår';
 import { IPeriode, nyPeriode } from '../kalender';
 import {
     erAvslagBegrunnelserGyldig,
+    erBegrunnelseGyldig,
     erPeriodeGyldig,
     erResultatGyldig,
     identValidator,
@@ -37,6 +38,26 @@ describe('utils/validators', () => {
         navn: 'Mock Barn',
         målform: Målform.NB,
     };
+
+    test('Periode med ugyldig fom gir feil', () => {
+        const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('400220', undefined));
+        const valideringsresultat = erPeriodeGyldig(periode, {
+            person: mockBarn,
+            erEksplisittAvslagPåSøknad: false,
+        });
+        expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
+        expect(valideringsresultat.feilmelding).toEqual('Ugyldig f.o.m.');
+    });
+
+    test('Periode med ugyldig tom gir feil', () => {
+        const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2020-06-17', '400220'));
+        const valideringsresultat = erPeriodeGyldig(periode, {
+            person: mockBarn,
+            erEksplisittAvslagPåSøknad: false,
+        });
+        expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
+        expect(valideringsresultat.feilmelding).toEqual('Ugyldig t.o.m.');
+    });
 
     test('Periode uten datoer gir feil hvis ikke avslag', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode(undefined, undefined));
@@ -69,24 +90,14 @@ describe('utils/validators', () => {
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
     });
 
-    test('Periode med fom-dato og ugyldig periode gir feil', () => {
+    test('Periode med fom-dato på oppfylt periode senere enn tom', () => {
         const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2010-06-17', '2010-01-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: mockBarn,
             erEksplisittAvslagPåSøknad: true,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
-        expect(valideringsresultat.feilmelding).toEqual('Ugyldig periode');
-    });
-
-    test('Periode med fom-dato på oppfylt periode ', () => {
-        const periode: FeltState<IPeriode> = nyFeltState(nyPeriode('2010-06-17', '2010-01-17'));
-        const valideringsresultat = erPeriodeGyldig(periode, {
-            person: mockBarn,
-            erEksplisittAvslagPåSøknad: true,
-        });
-        expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
-        expect(valideringsresultat.feilmelding).toEqual('Ugyldig periode');
+        expect(valideringsresultat.feilmelding).toEqual('F.o.m må settes tidligere enn t.o.m');
     });
 
     test('Periode med fom-dato før barnets fødselsdato på oppfylt periode gir feil', () => {
@@ -131,6 +142,61 @@ describe('utils/validators', () => {
             er18ÅrsVilkår: true,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
+    });
+
+    test('Begrunnelse må oppgis dersom medlemskap er vurdert eller ved skjønnsmessig vurdering', () => {
+        const valideringBegrunnelseOppgitt = erBegrunnelseGyldig(nyFeltState('begrunnelse'), {
+            erMedlemskapVurdert: true,
+        });
+        expect(valideringBegrunnelseOppgitt.valideringsstatus).toEqual(Valideringsstatus.OK);
+
+        const valideringMedlemskapVurdertManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
+            erMedlemskapVurdert: true,
+        });
+        expect(valideringMedlemskapVurdertManglerBegrunnelse.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
+        );
+        expect(valideringMedlemskapVurdertManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse ved vurdert medlemskap.'
+        );
+
+        const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
+            nyFeltState(''),
+            {
+                erSkjønnsmessigVurdert: true,
+            }
+        );
+        expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
+        );
+        expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse ved skjønnsmessig vurdering.'
+        );
+
+        const valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse = erBegrunnelseGyldig(
+            nyFeltState(''),
+            {
+                erSkjønnsmessigVurdert: true,
+                erMedlemskapVurdert: true,
+            }
+        );
+        expect(
+            valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.valideringsstatus
+        ).toEqual(Valideringsstatus.FEIL);
+        expect(valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.feilmelding).toBe(
+            'Du må skrive en begrunnelse som dekker skjønnsmessig vurdering og vurdert medlemskap.'
+        );
+
+        const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(
+            nyFeltState(''),
+            {
+                erSkjønnsmessigVurdert: false,
+                erMedlemskapVurdert: false,
+            }
+        );
+        expect(valideringBegrunnelseIkkeOppgittNårIngenErValgt.valideringsstatus).toEqual(
+            Valideringsstatus.OK
+        );
     });
 
     test('Validering av ident', () => {

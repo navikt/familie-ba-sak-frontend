@@ -15,10 +15,10 @@ export const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)<{
             ? `&& {
                 border: ${navFarger.navRod} solid;
                 &:hover {
-                    border-color: ${navFarger.navRod};
+                    border-color: ${navFarger.redError};
                 }
                 &:focus {
-                    border-color: ${navFarger.navRodDarken40};
+                    border-color: ${navFarger.redError};
                 }
         }`
             : ''}

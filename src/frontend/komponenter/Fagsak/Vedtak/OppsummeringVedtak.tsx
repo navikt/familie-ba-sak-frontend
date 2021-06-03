@@ -4,18 +4,18 @@ import { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Alertstripe, { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst, Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { useHttp } from '@navikt/familie-http';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
+    byggHenterRessurs,
     byggTomRessurs,
     Ressurs,
     RessursStatus,
-    byggHenterRessurs,
 } from '@navikt/familie-typer';
 
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
@@ -221,15 +221,26 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         pdfdata={vedtaksbrev}
                     />
                     <Container>
-                        <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                            <VedtakBegrunnelser åpenBehandling={åpenBehandling} />
-                            <AvslagBegrunnelser åpenBehandling={åpenBehandling} />
-                        </VedtakBegrunnelserProvider>
+                        {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ? (
+                            <Alertstripe type="info" style={{ margin: '2rem 0 1rem 0' }}>
+                                Vedtak om opphør på grunn av dødsfall er automatisk generert.
+                            </Alertstripe>
+                        ) : (
+                            <>
+                                <VedtakBegrunnelserProvider
+                                    fagsak={fagsak}
+                                    aktivVedtak={aktivVedtak}
+                                >
+                                    <VedtakBegrunnelser åpenBehandling={åpenBehandling} />
+                                    <AvslagBegrunnelser åpenBehandling={åpenBehandling} />
+                                </VedtakBegrunnelserProvider>
 
-                        <VedtaksperioderMedBegrunnelser
-                            fagsak={fagsak}
-                            åpenBehandling={åpenBehandling}
-                        />
+                                <VedtaksperioderMedBegrunnelser
+                                    fagsak={fagsak}
+                                    åpenBehandling={åpenBehandling}
+                                />
+                            </>
+                        )}
 
                         <IkonKnapp
                             id={'forhandsvis-vedtaksbrev'}

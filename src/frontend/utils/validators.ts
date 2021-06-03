@@ -82,6 +82,12 @@ export const erPeriodeGyldig = (
     const er18ÅrsVilkår: boolean | undefined = avhengigheter?.er18ÅrsVilkår;
 
     if (fom) {
+        if (!erIsoStringGyldig(fom)) {
+            return feil(felt, 'Ugyldig f.o.m.');
+        } else if (tom && !erIsoStringGyldig(tom)) {
+            return feil(felt, 'Ugyldig t.o.m.');
+        }
+
         if (!erEksplisittAvslagPåSøknad) {
             if (person && person.type === PersonType.BARN) {
                 if (finnesDatoFørFødselsdato(person, fom, tom)) {
@@ -95,13 +101,12 @@ export const erPeriodeGyldig = (
                 }
             }
         }
-        const fomDatoErGyldig = erIsoStringGyldig(fom);
         const fomDatoErFørTomDato = erFør(
             kalenderDatoMedFallback(fom, TIDENES_MORGEN),
             kalenderDatoMedFallback(tom, TIDENES_ENDE)
         );
 
-        return fomDatoErGyldig && fomDatoErFørTomDato ? ok(felt) : feil(felt, 'Ugyldig periode');
+        return fomDatoErFørTomDato ? ok(felt) : feil(felt, 'F.o.m må settes tidligere enn t.o.m');
     } else {
         if (erEksplisittAvslagPåSøknad) {
             return !tom
@@ -166,7 +171,19 @@ export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => 
     return ok(felt);
 };
 
-export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) =>
-    avhengigheter?.erSkjønnsmessigVurdert && felt.verdi.length === 0
-        ? feil(felt, 'Du må skrive en begrunnelse ved skjønnsmessig vurdering.')
-        : ok(felt);
+export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) => {
+    if (felt.verdi.length > 0) {
+        return ok(felt);
+    } else if (avhengigheter?.erSkjønnsmessigVurdert && !avhengigheter?.erMedlemskapVurdert) {
+        return feil(felt, 'Du må skrive en begrunnelse ved skjønnsmessig vurdering.');
+    } else if (!avhengigheter?.erSkjønnsmessigVurdert && avhengigheter?.erMedlemskapVurdert) {
+        return feil(felt, 'Du må skrive en begrunnelse ved vurdert medlemskap.');
+    } else if (avhengigheter?.erSkjønnsmessigVurdert && avhengigheter?.erMedlemskapVurdert) {
+        return feil(
+            felt,
+            'Du må skrive en begrunnelse som dekker skjønnsmessig vurdering og vurdert medlemskap.'
+        );
+    } else {
+        return ok(felt);
+    }
+};
