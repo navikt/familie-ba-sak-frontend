@@ -6,6 +6,7 @@ export enum ToggleNavn {
     visTekniskOpphør = 'familie-ba-sak.behandling.vis-teknisk-opphoer',
     tilbakekreving = 'familie-ba-sak.behandling.tilbakekreving',
     skjønnsvurdering = 'familie-ba-sak.behandling.skjonnsvurdering',
+    medlemskap = 'familie-ba-sak.behandling.medlemskap',
 }
 
 export const alleTogglerAv = (): IToggles => {

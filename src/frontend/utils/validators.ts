@@ -171,7 +171,19 @@ export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => 
     return ok(felt);
 };
 
-export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) =>
-    avhengigheter?.erSkjønnsmessigVurdert && felt.verdi.length === 0
-        ? feil(felt, 'Du må skrive en begrunnelse ved skjønnsmessig vurdering.')
-        : ok(felt);
+export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) => {
+    if (felt.verdi.length > 0) {
+        return ok(felt);
+    } else if (avhengigheter?.erSkjønnsmessigVurdert && !avhengigheter?.erMedlemskapVurdert) {
+        return feil(felt, 'Du må skrive en begrunnelse ved skjønnsmessig vurdering.');
+    } else if (!avhengigheter?.erSkjønnsmessigVurdert && avhengigheter?.erMedlemskapVurdert) {
+        return feil(felt, 'Du må skrive en begrunnelse ved vurdert medlemskap.');
+    } else if (avhengigheter?.erSkjønnsmessigVurdert && avhengigheter?.erMedlemskapVurdert) {
+        return feil(
+            felt,
+            'Du må skrive en begrunnelse som dekker skjønnsmessig vurdering og vurdert medlemskap.'
+        );
+    } else {
+        return ok(felt);
+    }
+};
