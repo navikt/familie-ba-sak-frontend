@@ -4,10 +4,12 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
@@ -43,6 +45,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         vilkårsvurdering,
     } = useVilkårsvurdering();
     const { erLesevisning } = useBehandling();
+    const { oppdaterRegisteropplysninger } = useFagsakRessurser();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -89,10 +92,16 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             maxWidthStyle={'80rem'}
             senderInn={senderInn}
         >
+            <Knapp
+                key={'oppdater-registeropplysninger'}
+                mini={true}
+                onClick={() => oppdaterRegisteropplysninger(åpenBehandling.behandlingId)}
+                children={'Test oppdater registeropplysninger'}
+            />
+            ,
             <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             </VedtakBegrunnelserProvider>
-
             {uregistrerteBarn.length > 0 && (
                 <AlertStripeInfo>
                     <Normaltekst>
@@ -114,7 +123,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                     <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
                 </AlertStripeInfo>
             )}
-
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
                 visFeilmeldinger && (
                     <Feiloppsummering
@@ -137,7 +145,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         ]}
                     />
                 )}
-
             {visFeilmeldinger && opprettelseFeilmelding !== '' && (
                 <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
             )}

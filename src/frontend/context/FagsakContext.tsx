@@ -79,6 +79,21 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         });
     };
 
+    const oppdaterRegisteropplysninger = (behandlingId: number): void => {
+        settFagsak(byggHenterRessurs());
+        request<void, IFagsak>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/person/oppdater-registeropplysninger/${behandlingId}`,
+            påvirkerSystemLaster: true,
+        })
+            .then((hentetFagsak: Ressurs<IFagsak>) => {
+                settFagsak(hentetFagsak);
+            })
+            .catch((_error: AxiosError) => {
+                settFagsak(byggFeiletRessurs('Ukjent ved oppdatering av registeropplysninger'));
+            });
+    };
+
     const hentLogg = (behandlingId: number): void => {
         settLogg(byggHenterRessurs());
         request<void, ILogg[]>({
@@ -108,6 +123,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     };
 
     return {
+        oppdaterRegisteropplysninger,
         hentInternstatistikk,
         internstatistikk,
         bruker,
