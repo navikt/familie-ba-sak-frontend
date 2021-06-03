@@ -35,6 +35,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
             ) : (
                 <Container>
                     <HentetLabel
+                        style={{ marginBottom: '1rem' }}
                         children={
                             'Sist hentet fra Folkeregisteret ' +
                             formaterIsoDato(

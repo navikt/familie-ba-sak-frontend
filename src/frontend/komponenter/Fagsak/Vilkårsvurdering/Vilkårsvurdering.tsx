@@ -1,19 +1,23 @@
 import * as React from 'react';
 
+import classNames from 'classnames';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import KnappBase from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { Refresh } from '@navikt/ds-icons';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import {
     annenVurderingConfig,
     IAnnenVurdering,
@@ -22,16 +26,22 @@ import {
 } from '../../../typer/vilkår';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
 import { VedtakBegrunnelserProvider } from '../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
+import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
 
 const UregistrerteBarnListe = styled.ol`
     margin: 0.5rem 0;
+`;
+
+const HentetLabelOgKnappDiv = styled.div`
+    display: flex;
+    justify-content: left;
+    align-items: center;
 `;
 
 interface IProps {
@@ -48,6 +58,11 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     } = useVilkårsvurdering();
     const { erLesevisning } = useBehandling();
     const { oppdaterRegisteropplysninger } = useFagsakRessurser();
+    const { toggles } = useApp();
+
+    const skalViseRegisteropplysninger = toggles[ToggleNavn.skjønnsvurdering];
+    const registeropplysningerHentetTidpsunkt =
+        vilkårsvurdering[0].person.registerhistorikk?.hentetTidspunkt;
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
@@ -94,22 +109,32 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             maxWidthStyle={'80rem'}
             senderInn={senderInn}
         >
-            <IkonKnapp
-                id={'oppdater-registeropplysninger'}
-                erLesevisning={erLesevisning()}
-                label={'Oppdater registeropplysninger'}
-                ikon={
-                    <Refresh
-                        style={{ fontSize: '1.5rem' }}
-                        aria-label="Refresh ikon"
-                        role="img"
-                        focusable="false"
+            {skalViseRegisteropplysninger && !erLesevisning() && (
+                <HentetLabelOgKnappDiv>
+                    <HentetLabel
+                        children={
+                            registeropplysningerHentetTidpsunkt
+                                ? `Registeropplysninger hentet ${formaterIsoDato(
+                                      registeropplysningerHentetTidpsunkt,
+                                      datoformat.DATO_TID_SEKUNDER
+                                  )} fra folkeregisteret`
+                                : 'Kunne hente innhentingstidspunkt for registeropplysninger'
+                        }
                     />
-                }
-                onClick={() => oppdaterRegisteropplysninger(åpenBehandling.behandlingId)}
-                knappPosisjon={'venstre'}
-                mini={true}
-            />
+                    <KnappBase
+                        className={classNames('oppdater-registeropplysninger-knapp')}
+                        id={'oppdater-registeropplysninger'}
+                        aria-label={'Oppdater registeropplysninger'}
+                        title={'Oppdater'}
+                        onClick={() => oppdaterRegisteropplysninger(åpenBehandling.behandlingId)}
+                        type={'flat'}
+                        mini={true}
+                        kompakt={true}
+                    >
+                        <Refresh style={{ fontSize: '1.5rem' }} role="img" focusable="false" />
+                    </KnappBase>
+                </HentetLabelOgKnappDiv>
+            )}
             <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             </VedtakBegrunnelserProvider>
