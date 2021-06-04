@@ -79,18 +79,30 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         });
     };
 
-    const oppdaterRegisteropplysninger = (behandlingId: number): void => {
-        settFagsak(byggHenterRessurs());
-        request<void, IFagsak>({
+    const oppdaterRegisteropplysninger = (behandlingId: number): Promise<Ressurs<IFagsak>> => {
+        return request<void, IFagsak>({
             method: 'GET',
             url: `/familie-ba-sak/api/person/oppdater-registeropplysninger/${behandlingId}`,
-            påvirkerSystemLaster: true,
+            påvirkerSystemLaster: false,
         })
             .then((hentetFagsak: Ressurs<IFagsak>) => {
-                settFagsak(hentetFagsak);
+                if (
+                    hentetFagsak.status === RessursStatus.FEILET ||
+                    hentetFagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    hentetFagsak.status === RessursStatus.IKKE_TILGANG
+                ) {
+                    return byggFeiletRessurs(
+                        'Kunne ikke oppdatere registeropplysninger. Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.'
+                    ) as Ressurs<IFagsak>;
+                } else {
+                    settFagsak(hentetFagsak);
+                    return hentetFagsak;
+                }
             })
             .catch((_error: AxiosError) => {
-                settFagsak(byggFeiletRessurs('Ukjent ved oppdatering av registeropplysninger'));
+                return byggFeiletRessurs(
+                    'Ukjent feil ved oppdatering av registeropplysninger'
+                ) as Ressurs<IFagsak>;
             });
     };
 
