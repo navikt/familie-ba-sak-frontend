@@ -91,11 +91,11 @@ export const hentUtbetalingsperiodePåBehandlingOgPeriodeForFortsattInnvilget = 
     behandling: IBehandling
 ): Utbetalingsperiode | undefined => {
     const sorterteUtbetalingsperioder = sorterUtbetalingsperioder(behandling.utbetalingsperioder);
-    const aktuelUtbetalingsperiode = hentSisteUtbetalingsperiodeFørAktuellPeriode(
+    const aktuellUtbetalingsperiode = hentSisteUtbetalingsperiodeFørAktuellPeriode(
         sorterteUtbetalingsperioder,
         akutellPeriode
     );
-    return aktuelUtbetalingsperiode ?? sorterteUtbetalingsperioder[0];
+    return aktuellUtbetalingsperiode ?? sorterteUtbetalingsperioder[0];
 };
 
 export const hentUtbetalingsperiodePåBehandlingOgPeriode = (
