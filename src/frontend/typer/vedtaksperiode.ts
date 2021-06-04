@@ -9,6 +9,7 @@ import {
     TIDENES_MORGEN,
     parseIso8601String,
     kalenderDatoFraDate,
+    kalenderDato,
 } from '../utils/kalender';
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
@@ -178,14 +179,14 @@ const hentSisteUtbetalingsperiodeFørAktuellPeriode = (
     akutellPeriode: IPeriode
 ): Utbetalingsperiode | undefined => {
     const aktuellFomDato = akutellPeriode.fom
-        ? parseIso8601String(akutellPeriode.fom)
-        : kalenderDatoFraDate(new Date(Date.now()));
+        ? kalenderDato(akutellPeriode.fom)
+        : kalenderDatoFraDate(new Date());
 
     return sorterteUtbetalingsperioder
         .filter(
             utbetalingsperiode =>
-                erFør(parseIso8601String(utbetalingsperiode.periodeFom), aktuellFomDato) ||
-                erSamme(parseIso8601String(utbetalingsperiode.periodeFom), aktuellFomDato)
+                erFør(kalenderDato(utbetalingsperiode.periodeFom), aktuellFomDato) ||
+                erSamme(kalenderDato(utbetalingsperiode.periodeFom), aktuellFomDato)
         )
         .slice(-1)[0];
 };
@@ -195,8 +196,8 @@ const sorterUtbetalingsperioder = (
 ): Utbetalingsperiode[] =>
     utbetalingsperioder.sort((utbetalingsperiodeA, utbetalingsperiodeB) =>
         erEtter(
-            parseIso8601String(utbetalingsperiodeA.periodeFom),
-            parseIso8601String(utbetalingsperiodeB.periodeFom)
+            kalenderDato(utbetalingsperiodeA.periodeFom),
+            kalenderDato(utbetalingsperiodeB.periodeFom)
         )
             ? 1
             : -1
