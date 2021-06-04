@@ -1,16 +1,24 @@
 import * as React from 'react';
 
+import classNames from 'classnames';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import KnappBase from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
+import { Refresh } from '@navikt/ds-icons';
+import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { IBehandling, BehandlingÅrsak } from '../../../typer/behandling';
+import { BehandlingÅrsak, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import {
     annenVurderingConfig,
     IAnnenVurdering,
@@ -24,10 +32,20 @@ import useFagsakApi from '../useFagsakApi';
 import { VedtakBegrunnelserProvider } from '../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
+import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './VilkårsvurderingSkjema';
 
 const UregistrerteBarnListe = styled.ol`
     margin: 0.5rem 0;
+`;
+
+const HentetLabelOgKnappDiv = styled.div`
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    .knapp__spinner {
+        margin: 0 !important;
+    }
 `;
 
 interface IProps {
@@ -43,8 +61,15 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         vilkårsvurdering,
     } = useVilkårsvurdering();
     const { erLesevisning } = useBehandling();
+    const { oppdaterRegisteropplysninger } = useFagsakRessurser();
+    const { toggles } = useApp();
+
+    const skalViseRegisteropplysninger = toggles[ToggleNavn.skjønnsvurdering];
+    const registeropplysningerHentetTidpsunkt =
+        vilkårsvurdering[0].person.registerhistorikk?.hentetTidspunkt;
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
+    const [hentOpplysningerRessurs, settHentOpplysningerRessurs] = React.useState(byggTomRessurs());
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
     const history = useHistory();
@@ -89,14 +114,58 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             maxWidthStyle={'80rem'}
             senderInn={senderInn}
         >
+            {skalViseRegisteropplysninger && !erLesevisning() && (
+                <>
+                    <HentetLabelOgKnappDiv>
+                        <HentetLabel
+                            children={
+                                registeropplysningerHentetTidpsunkt
+                                    ? `Registeropplysninger hentet ${formaterIsoDato(
+                                          registeropplysningerHentetTidpsunkt,
+                                          datoformat.DATO_TID_SEKUNDER
+                                      )} fra Folkeregisteret`
+                                    : 'Kunne hente innhentingstidspunkt for registeropplysninger'
+                            }
+                        />
+                        <KnappBase
+                            className={classNames('oppdater-registeropplysninger-knapp')}
+                            id={'oppdater-registeropplysninger'}
+                            aria-label={'Oppdater registeropplysninger'}
+                            title={'Oppdater'}
+                            onClick={() => {
+                                settHentOpplysningerRessurs(byggHenterRessurs());
+                                oppdaterRegisteropplysninger(åpenBehandling.behandlingId).then(
+                                    (response: Ressurs<IFagsak>) => {
+                                        settHentOpplysningerRessurs(response);
+                                    }
+                                );
+                            }}
+                            spinner={hentOpplysningerRessurs.status === RessursStatus.HENTER}
+                            type={'flat'}
+                            mini={true}
+                            kompakt={true}
+                        >
+                            {hentOpplysningerRessurs.status !== RessursStatus.HENTER && (
+                                <Refresh
+                                    style={{ fontSize: '1.5rem' }}
+                                    role="img"
+                                    focusable="false"
+                                />
+                            )}
+                        </KnappBase>
+                    </HentetLabelOgKnappDiv>
+                    {hentOpplysningerRessurs.status === RessursStatus.FEILET && (
+                        <Feilmelding>{hentOpplysningerRessurs.frontendFeilmelding}</Feilmelding>
+                    )}
+                </>
+            )}
             <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             </VedtakBegrunnelserProvider>
-
             {uregistrerteBarn.length > 0 && (
                 <AlertStripeInfo>
                     <Normaltekst>
-                        Du har registrert følgende barn som ikke er registrert i folkeregisteret:
+                        Du har registrert følgende barn som ikke er registrert i Folkeregisteret:
                     </Normaltekst>
                     <UregistrerteBarnListe>
                         {uregistrerteBarn.map(uregistrertBarn => (
@@ -114,7 +183,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                     <Normaltekst>Dette vil føre til avslag for barna i listen.</Normaltekst>
                 </AlertStripeInfo>
             )}
-
             {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
                 visFeilmeldinger && (
                     <Feiloppsummering
@@ -137,7 +205,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         ]}
                     />
                 )}
-
             {visFeilmeldinger && opprettelseFeilmelding !== '' && (
                 <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
             )}

@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 
 import styled from 'styled-components';
 
-import { IRestRegisteropplysning } from '../../../typer/person';
-import { Registeropplysning, registeropplysning } from '../../../typer/registeropplysning';
+import { IRestRegisteropplysning } from '../../../../typer/person';
+import { Registeropplysning, registeropplysning } from '../../../../typer/registeropplysning';
 import {
     kalenderDato,
     kalenderDatoMedFallback,
@@ -12,7 +12,7 @@ import {
     periodeToString,
     TIDENES_MORGEN,
     tilVisning,
-} from '../../../utils/kalender';
+} from '../../../../utils/kalender';
 
 const Container = styled.div`
     display: flex;

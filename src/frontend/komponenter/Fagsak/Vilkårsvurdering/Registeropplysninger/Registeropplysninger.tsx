@@ -3,23 +3,18 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Alertstripe from 'nav-frontend-alertstriper';
-import navFarger from 'nav-frontend-core';
-import { Ingress, Undertekst } from 'nav-frontend-typografi';
+import { Ingress } from 'nav-frontend-typografi';
 
 import { Globe, Heart, Home, Passport } from '@navikt/ds-icons';
 
-import { IRestRegisterhistorikk } from '../../../typer/person';
-import { Registeropplysning } from '../../../typer/registeropplysning';
-import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { IRestRegisterhistorikk } from '../../../../typer/person';
+import { Registeropplysning } from '../../../../typer/registeropplysning';
+import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
+import { HentetLabel } from './HentetLabel';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
 const Container = styled.div`
     width: 32rem; ;
-`;
-
-const HentetTidspunkt = styled(Undertekst)`
-    margin-bottom: 1rem;
-    color: ${navFarger.navGra40};
 `;
 
 interface IRegisteropplysningerProps {
@@ -39,10 +34,14 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysning
                 </Alertstripe>
             ) : (
                 <Container>
-                    <HentetTidspunkt
+                    <HentetLabel
+                        style={{ marginBottom: '1rem' }}
                         children={
-                            'sist hentet fra Folkeregisteret ' +
-                            formaterIsoDato(opplysninger.hentetTidspunkt, datoformat.DATO_TID)
+                            'Sist hentet fra Folkeregisteret ' +
+                            formaterIsoDato(
+                                opplysninger.hentetTidspunkt,
+                                datoformat.DATO_TID_SEKUNDER
+                            )
                         }
                     />
                     <RegisteropplysningerTabell

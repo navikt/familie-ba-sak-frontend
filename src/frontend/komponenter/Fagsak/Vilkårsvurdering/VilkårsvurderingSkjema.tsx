@@ -24,7 +24,7 @@ import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
-import Registeropplysninger from './Registeropplysninger';
+import Registeropplysninger from './Registeropplysninger/Registeropplysninger';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;

@@ -10,6 +10,7 @@ export enum datoformat {
     ISO_MÅNED = 'YYYY-MM',
     ISO_DAG = 'YYYY-MM-DD',
     DATO_TID = 'DD.MM.YY HH:mm',
+    DATO_TID_SEKUNDER = 'DD.MM.YY HH:mm:ss',
     TID = 'HH:mm',
     MÅNED_ÅR_NAVN = 'MMMM YYYY',
     MÅNED_NAVN = 'MMM',
