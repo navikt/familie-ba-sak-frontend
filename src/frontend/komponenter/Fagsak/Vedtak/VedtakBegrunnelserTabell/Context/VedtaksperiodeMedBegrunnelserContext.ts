@@ -20,11 +20,11 @@ import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
-    hentUtbetalingsperiodePåBehandlingOgPeriode,
     IRestPutVedtaksbegrunnelse,
     IRestPutVedtaksperiodeMedBegrunnelser,
     IVedtaksperiodeMedBegrunnelser,
     Utbetalingsperiode,
+    hentUtbetalingsperiodePåBehandlingOgPeriodeForFortsattInnvilget,
 } from '../../../../../typer/vedtaksperiode';
 import { IPeriode } from '../../../../../utils/kalender';
 import {
@@ -176,7 +176,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
         const utbetalingsperiode:
             | Utbetalingsperiode
-            | undefined = hentUtbetalingsperiodePåBehandlingOgPeriode(
+            | undefined = hentUtbetalingsperiodePåBehandlingOgPeriodeForFortsattInnvilget(
             {
                 fom: vedtaksperiodeMedBegrunnelser.fom,
                 tom: vedtaksperiodeMedBegrunnelser.tom,

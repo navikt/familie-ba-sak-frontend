@@ -7,6 +7,8 @@ import {
     kalenderDatoMedFallback,
     TIDENES_ENDE,
     TIDENES_MORGEN,
+    parseIso8601String,
+    kalenderDatoFraDate,
 } from '../utils/kalender';
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
@@ -84,6 +86,18 @@ export type Utbetalingsperiode = {
     utbetaltPerMnd: number;
 };
 
+export const hentUtbetalingsperiodePåBehandlingOgPeriodeForFortsattInnvilget = (
+    akutellPeriode: IPeriode,
+    behandling: IBehandling
+): Utbetalingsperiode | undefined => {
+    const sorterteUtbetalingsperioder = sorterUtbetalingsperioder(behandling.utbetalingsperioder);
+    const aktuelUtbetalingsperiode = hentSisteUtbetalingsperiodeFørAktuellPeriode(
+        sorterteUtbetalingsperioder,
+        akutellPeriode
+    );
+    return aktuelUtbetalingsperiode ?? sorterteUtbetalingsperioder[0];
+};
+
 export const hentUtbetalingsperiodePåBehandlingOgPeriode = (
     periode: IPeriode,
     behandling: IBehandling
@@ -158,3 +172,32 @@ export const hentVedtaksperiodeTittel = (
             return '';
     }
 };
+
+const hentSisteUtbetalingsperiodeFørAktuellPeriode = (
+    sorterteUtbetalingsperioder: Utbetalingsperiode[],
+    akutellPeriode: IPeriode
+): Utbetalingsperiode | undefined => {
+    const aktuellFomDato = akutellPeriode.fom
+        ? parseIso8601String(akutellPeriode.fom)
+        : kalenderDatoFraDate(new Date(Date.now()));
+
+    return sorterteUtbetalingsperioder
+        .filter(
+            utbetalingsperiode =>
+                erFør(parseIso8601String(utbetalingsperiode.periodeFom), aktuellFomDato) ||
+                erSamme(parseIso8601String(utbetalingsperiode.periodeFom), aktuellFomDato)
+        )
+        .slice(-1)[0];
+};
+
+const sorterUtbetalingsperioder = (
+    utbetalingsperioder: Utbetalingsperiode[]
+): Utbetalingsperiode[] =>
+    utbetalingsperioder.sort((utbetalingsperiodeA, utbetalingsperiodeB) =>
+        erEtter(
+            parseIso8601String(utbetalingsperiodeA.periodeFom),
+            parseIso8601String(utbetalingsperiodeB.periodeFom)
+        )
+            ? 1
+            : -1
+    );
