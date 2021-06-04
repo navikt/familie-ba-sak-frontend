@@ -131,22 +131,33 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
+    const minstEnPeriodeharBegrunnetelseEllerFritekst = (): boolean => {
+        const vedtaksperioderMedBegrunnelser =
+            hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [];
+        return vedtaksperioderMedBegrunnelser.some(
+            vedtaksperioderMedBegrunnelse =>
+                vedtaksperioderMedBegrunnelse.begrunnelser.length !== 0 ||
+                vedtaksperioderMedBegrunnelse.fritekster.length !== 0
+        );
+    };
+
     const minstEnPeriodeErBegrunnet = (vedtakBegrunnelser: IRestVedtakBegrunnelse[]) => {
         const begrunnelsenErUtfylt = (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
             vedtakBegrunnelse.begrunnelseType && vedtakBegrunnelse.begrunnelse;
 
-        return (
-            vedtakBegrunnelser.filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                begrunnelsenErUtfylt(vedtakBegrunnelse)
-            ).length > 0
+        return vedtakBegrunnelser.some((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+            begrunnelsenErUtfylt(vedtakBegrunnelse)
         );
     };
 
+    const kanSendeinnVedtak = () =>
+        (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
+        minstEnPeriodeharBegrunnetelseEllerFritekst() ||
+        åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
+        åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
+
     const sendInn = () => {
-        if (
-            (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
-            åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR
-        ) {
+        if (kanSendeinnVedtak()) {
             settSenderInn(true);
             settSubmitFeil('');
             request<void, IFagsak>({
