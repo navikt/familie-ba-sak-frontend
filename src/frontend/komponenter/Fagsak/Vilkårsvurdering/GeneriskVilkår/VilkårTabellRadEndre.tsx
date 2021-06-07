@@ -211,9 +211,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
-const erBegrunnelsePåkrevd = (): boolean => 
+    const erBegrunnelsePåkrevd = (): boolean =>
         (toggles[ToggleNavn.skjønnsvurdering] && redigerbartVilkår.verdi.erSkjønnsmessigVurdert) ||
-        (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert)
+        (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert);
 
     return (
         <SkjemaGruppe
