@@ -124,7 +124,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                                           registeropplysningerHentetTidpsunkt,
                                           datoformat.DATO_TID_SEKUNDER
                                       )} fra Folkeregisteret`
-                                    : 'Kunne hente innhentingstidspunkt for registeropplysninger'
+                                    : 'Kunne ikke hente innhentingstidspunkt for registeropplysninger'
                             }
                         />
                         <KnappBase
