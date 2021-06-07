@@ -73,7 +73,7 @@ export const enhetFilter: INøkkelPar = {
     E4820: { id: 'E4820', navn: '4820 Vadsø' },
     E4833: { id: 'E4833', navn: '4833 Oslo' },
     E4842: { id: 'E4842', navn: '4842 Stord' },
-    E4847: { id: 'E4847', navn: '4847 Levanger-Steinkjer' },
+    E4817: { id: 'E4817', navn: '4817 Steinkjer' },
 };
 
 export enum SaksbehandlerFilter {
