@@ -1568,7 +1568,7 @@
     nav-frontend-knapper-style "^1.1.2"
     react-tooltip "^4.2.15"
 
-"@navikt/familie-form-elements@^3.0.1", "@navikt/familie-form-elements@^3.0.2":
+"@navikt/familie-form-elements@^3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@navikt/familie-form-elements/-/familie-form-elements-3.0.2.tgz#858a0e24feabbb5ab1b0486f30e0fffe9fe58d33"
   integrity sha512-3OCYgg4GSpM9dQhAgq3vZ+XYD2/9wMDbEdfkLA4IQ69gHK2UADjeWnyQ0ASlqa13i//IZlkfbo3wXLPQpzGq3Q==
@@ -1590,14 +1590,14 @@
     nav-frontend-typografi "^3.1.1"
     react-select "^4.0.13"
 
-"@navikt/familie-header@^3.0.16":
-  version "3.0.16"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-3.0.16.tgz#d18c43fc85402ae666e816c0ac7e9c72abdc5113"
-  integrity sha512-yJgCq7U7PIYcH7YANM4FBqx3Sfwq99mCJESFdYhrg/T46npZp89+r7ajqwoo2AwgC1+m1wYzxsU1zinAgHmbAQ==
+"@navikt/familie-header@^3.0.17":
+  version "3.0.17"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-header/-/familie-header-3.0.17.tgz#727b26856540e2b6a396b4f9719275018b1c9e5c"
+  integrity sha512-CQ50IhWORxpcSb4UiXrMQ7PGsrF91NUMae1umEOhawihb3iQ8ec0Ycv0tAYPHZ6NK5NiRenBBAmDjwyPFtF81Q==
   dependencies:
     "@navikt/boxed-list-with-links" "^1.0.2"
     "@navikt/ds-icons" "^0.2.1"
-    "@navikt/familie-form-elements" "^3.0.1"
+    "@navikt/familie-form-elements" "^3.0.2"
     "@navikt/familie-ikoner" "^3.1.11"
     "@navikt/familie-typer" "^3.0.13"
     "@navikt/nap-user-panel" "^1.1.0"
