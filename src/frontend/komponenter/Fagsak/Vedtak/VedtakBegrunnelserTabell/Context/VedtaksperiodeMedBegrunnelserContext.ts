@@ -24,7 +24,7 @@ import {
     IRestPutVedtaksperiodeMedBegrunnelser,
     IVedtaksperiodeMedBegrunnelser,
     Utbetalingsperiode,
-    hentUtbetalingsperiodePåBehandlingOgPeriodeForFortsattInnvilget,
+    hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
 } from '../../../../../typer/vedtaksperiode';
 import { IPeriode } from '../../../../../utils/kalender';
 import {
@@ -176,7 +176,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
         const utbetalingsperiode:
             | Utbetalingsperiode
-            | undefined = hentUtbetalingsperiodePåBehandlingOgPeriodeForFortsattInnvilget(
+            | undefined = hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode(
             {
                 fom: vedtaksperiodeMedBegrunnelser.fom,
                 tom: vedtaksperiodeMedBegrunnelser.tom,
