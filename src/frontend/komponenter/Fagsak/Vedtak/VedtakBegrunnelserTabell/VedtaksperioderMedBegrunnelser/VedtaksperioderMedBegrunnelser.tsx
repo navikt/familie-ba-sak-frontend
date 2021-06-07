@@ -23,7 +23,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     return vedtaksperioderMedBegrunnelser.length > 0 ? (
         <>
             <OverskriftMedHjelpetekst
-                overskrift={'Begrunnelser i vedtaksbrev (POC)'}
+                overskrift={'Begrunnelser i vedtaksbrev'}
                 hjelpetekst={'Her skal du sette begrunnelsestekster for fortsatt innvilgelse'}
             />
             {vedtaksperioderMedBegrunnelser.map(
