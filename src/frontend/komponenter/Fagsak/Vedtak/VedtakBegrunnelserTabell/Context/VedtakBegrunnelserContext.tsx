@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { IFagsak } from '../../../../../typer/fagsak';
@@ -15,7 +15,6 @@ import {
     IVedtakForBehandling,
     VedtakBegrunnelseType,
 } from '../../../../../typer/vedtak';
-import { Vilkårsbegrunnelser } from '../../../../../typer/vilkår';
 import { lagPeriodeId } from '../../../../../utils/kalender';
 
 export interface IVedtakBegrunnelseSubmit {
@@ -50,17 +49,9 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             IRestVedtakBegrunnelse[]
         >([]);
 
-        const [vilkårBegrunnelser, settVilkårbegrunnelser] = React.useState<
-            Ressurs<Vilkårsbegrunnelser>
-        >(byggTomRessurs());
-
         const [avslagBegrunnelser, settAvslagBegrunnelser] = React.useState<
             IRestAvslagbegrunnelser[]
         >([]);
-
-        useEffect(() => {
-            hentVilkårBegrunnelseTekster();
-        }, []);
 
         useEffect(() => {
             if (aktivVedtak) {
@@ -68,16 +59,6 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
                 settAvslagBegrunnelser(aktivVedtak.avslagBegrunnelser);
             }
         }, [aktivVedtak]);
-
-        const hentVilkårBegrunnelseTekster = () => {
-            request<void, Vilkårsbegrunnelser>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/vilkaarsvurdering/vilkaarsbegrunnelser`,
-                påvirkerSystemLaster: true,
-            }).then((vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>) => {
-                settVilkårbegrunnelser(vilkårBegrunnelser);
-            });
-        };
 
         const håndterEndringerPåVedtakBegrunnelser = (
             promise: Promise<Ressurs<IFagsak>>,
@@ -151,13 +132,11 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
 
         return {
             avslagBegrunnelser,
-            hentVilkårBegrunnelseTekster,
             leggTilVedtakBegrunnelse,
             slettVedtakBegrunnelse,
             slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
             vedtakBegrunnelseSubmit,
             vedtakBegrunnelser,
-            vilkårBegrunnelser,
         };
     }
 );

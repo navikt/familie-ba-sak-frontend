@@ -30,7 +30,7 @@ import { IPeriode } from '../../../../../utils/kalender';
 import {
     mapBegrunnelserTilSelectOptions,
     useVilkårBegrunnelser,
-} from '../Hooks/useVilkårBegrunnelser';
+} from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
     fagsak: IFagsak;
@@ -105,7 +105,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        const { skjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
+        const { skjema, onSubmit, hentFeilTilOppsummering, nullstillSkjema } = useSkjema<
             {
                 periode: IPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
@@ -121,13 +121,14 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             skjemanavn: 'Begrunnelser for vedtaksperiode',
         });
 
-        const { grupperteBegrunnelser, vilkårBegrunnelser } = useVilkårBegrunnelser({
+        const { grupperteBegrunnelser, vedtaksbegrunnelseTekster } = useVilkårBegrunnelser({
             åpenBehandling,
             vedtaksperiodeMedBegrunnelser,
             periode: skjema.felter.periode.verdi,
         });
 
-        useEffect(() => {
+        const populerSkjemaFraBackend = () => {
+            nullstillSkjema();
             skjema.felter.periode.validerOgSettFelt({
                 fom: vedtaksperiodeMedBegrunnelser.fom,
                 tom: vedtaksperiodeMedBegrunnelser.tom,
@@ -137,24 +138,26 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     lagInitiellFritekst(fritekst, id)
                 )
             );
-        }, [vedtaksperiodeMedBegrunnelser]);
 
-        useEffect(() => {
-            if (vilkårBegrunnelser.status === RessursStatus.SUKSESS) {
+            if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
                 skjema.felter.begrunnelser.validerOgSettFelt(
                     mapBegrunnelserTilSelectOptions(
                         vedtaksperiodeMedBegrunnelser,
-                        vilkårBegrunnelser
+                        vedtaksbegrunnelseTekster
                     )
                 );
             }
-        }, [vilkårBegrunnelser, vedtaksperiodeMedBegrunnelser]);
+        };
+
+        useEffect(() => {
+            populerSkjemaFraBackend();
+        }, [vedtaksbegrunnelseTekster, vedtaksperiodeMedBegrunnelser]);
 
         const lagInitiellFritekst = (
             initiellVerdi: string,
             id?: number
         ): FeltState<IFritekstFelt> => ({
-            feilmelding: 'Fritekstfeltet er tomt.',
+            feilmelding: initiellVerdi === '' ? 'Fritekstfeltet er tomt.' : '',
             verdi: {
                 tekst: initiellVerdi,
                 id: id ?? genererIdBasertPåAndreFritekster(),
@@ -171,7 +174,8 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     return ok(felt);
                 }
             },
-            valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
+            valideringsstatus:
+                initiellVerdi === '' ? Valideringsstatus.IKKE_VALIDERT : Valideringsstatus.OK,
         });
 
         const utbetalingsperiode:
@@ -240,7 +244,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 alert('Periode har endringer som ikke er lagret!');
             } else {
                 settErPanelEkspandert(!erPanelEkspandert);
-                //TODO reinitialiser skjema
+                populerSkjemaFraBackend();
             }
         };
 
@@ -280,7 +284,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             onPanelClose,
             skjema,
             utbetalingsperiode,
-            vilkårBegrunnelser,
             putVedtaksperiodeMedBegrunnelser,
             åpenBehandling,
             makslengdeFritekst,
