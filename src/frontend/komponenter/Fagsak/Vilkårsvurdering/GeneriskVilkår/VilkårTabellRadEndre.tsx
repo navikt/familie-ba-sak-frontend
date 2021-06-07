@@ -211,6 +211,19 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
+    const erBegrunnelsePåkrevd = (): boolean => {
+        if (
+            toggles[ToggleNavn.skjønnsvurdering] &&
+            redigerbartVilkår.verdi.erSkjønnsmessigVurdert
+        ) {
+            return true;
+        } else if (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     return (
         <SkjemaGruppe
             feil={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
@@ -309,7 +322,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     erLesevisning={leseVisning}
                     defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                     id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
-                    label={'Begrunnelse (valgfri)'}
+                    label={`Begrunnelse ${erBegrunnelsePåkrevd() ? '' : '(valgfri)'}`}
                     textareaClass={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     value={redigerbartVilkår.verdi.begrunnelse.verdi}
