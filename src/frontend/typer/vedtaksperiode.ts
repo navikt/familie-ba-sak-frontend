@@ -92,17 +92,10 @@ export const hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode = (
 ): Utbetalingsperiode | undefined => {
     const sorterteUtbetalingsperioder = sorterUtbetalingsperioder(behandling.utbetalingsperioder);
 
-    let gjeldendeUtbetalingsperiode;
-    if (periode.fom === undefined) {
-        gjeldendeUtbetalingsperiode = hentSistGjeldendeEllerNesteUtbetalingsperiode(
-            sorterteUtbetalingsperioder
-        );
-    } else {
-        gjeldendeUtbetalingsperiode = hentUtbetalingsperiodeInnenforPeriode(
-            sorterteUtbetalingsperioder,
-            periode
-        );
-    }
+    const gjeldendeUtbetalingsperiode =
+        periode.fom === undefined
+            ? hentSistGjeldendeEllerNesteUtbetalingsperiode(sorterteUtbetalingsperioder)
+            : hentUtbetalingsperiodeInnenforPeriode(sorterteUtbetalingsperioder, periode);
 
     if (gjeldendeUtbetalingsperiode?.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING) {
         return gjeldendeUtbetalingsperiode;
