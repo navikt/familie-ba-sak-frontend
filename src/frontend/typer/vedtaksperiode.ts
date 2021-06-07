@@ -94,7 +94,7 @@ export const hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode = (
         behandling.utbetalingsperioder
     ).filter(periode => periode?.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING);
 
-    return periode.fom !== undefined
+    return periode.fom
         ? hentUtbetalingsperiodeInnenforPeriode(sorterteUtbetalingsperioder, periode)
         : hentSistGjeldendeEllerNesteUtbetalingsperiode(sorterteUtbetalingsperioder);
 };
