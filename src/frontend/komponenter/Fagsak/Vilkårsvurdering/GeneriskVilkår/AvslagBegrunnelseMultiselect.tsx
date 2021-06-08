@@ -19,7 +19,7 @@ import {
 import { VilkårType } from '../../../../typer/vilkår';
 import { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
-import { useVedtakBegrunnelser } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
+import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
@@ -41,7 +41,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     onChange,
 }) => {
     const { erLesevisning } = useBehandling();
-    const { vilkårBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
     const { avslagBegrunnelseTeksterForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
@@ -94,7 +94,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
         })
     );
 
-    if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
+    if (vedtaksbegrunnelseTekster.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
 

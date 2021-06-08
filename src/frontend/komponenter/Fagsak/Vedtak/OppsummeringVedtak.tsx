@@ -40,6 +40,7 @@ import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningM
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import AvslagBegrunnelser from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
 import { VedtakBegrunnelserProvider } from './VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
+import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import VedtakBegrunnelser from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
@@ -214,11 +215,15 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                     />
                     <Container>
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ? (
-                            <Alertstripe type="info" style={{ margin: '2rem 0 1rem 0' }}>
-                                Vedtak om opphør på grunn av dødsfall er automatisk generert.
+                            <Alertstripe
+                                type="info"
+                                style={{ margin: '2rem 0 1rem 0' }}
+                                form="inline"
+                            >
+                                <b>Vedtak om opphør på grunn av dødsfall er automatisk generert.</b>
                             </Alertstripe>
                         ) : (
-                            <>
+                            <VedtaksbegrunnelseTeksterProvider>
                                 <VedtakBegrunnelserProvider
                                     fagsak={fagsak}
                                     aktivVedtak={aktivVedtak}
@@ -231,7 +236,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                                     fagsak={fagsak}
                                     åpenBehandling={åpenBehandling}
                                 />
-                            </>
+                            </VedtaksbegrunnelseTeksterProvider>
                         )}
 
                         <IkonKnapp
