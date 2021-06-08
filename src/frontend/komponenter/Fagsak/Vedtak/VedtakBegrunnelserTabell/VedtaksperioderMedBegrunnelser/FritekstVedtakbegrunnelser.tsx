@@ -32,7 +32,11 @@ const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
     }
 `;
 
-const StyledFamilieFritekstFelt = styled.div`
+const StyledList = styled.ol`
+    padding-inline-start: 1rem;
+`;
+
+const StyledFamilieFritekstFelt = styled.li`
     display: flex;
 
     .textarea__container {
@@ -85,7 +89,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
-    const skjemaGruppeId = `fritekster-${id}`;
+    const skjemaGruppeId = `Fritekster ${id}`;
 
     const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
@@ -140,46 +144,53 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 />
                 <StyledEtikettInfo mini={true}>Skriv {målform[søkersMålform]}</StyledEtikettInfo>
             </InfoBoks>
-            <SkjemaGruppe
-                id={skjemaGruppeId}
-                feil={skjema.visFeilmeldinger ? skjema.felter.fritekster.feilmelding : undefined}
-            >
-                {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
-                    const fritekstId = fritekst.verdi.id;
 
-                    return (
-                        <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
-                            <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
-                            <FamilieTextareaBegrunnelseFritekst
-                                erLesevisning={erLesevisning()}
-                                key={`fritekst-${fritekstId}`}
-                                id={`${fritekstId}`}
-                                textareaClass={'fritekst-textarea'}
-                                value={fritekst.verdi.tekst}
-                                maxLength={makslengdeFritekst}
-                                onChange={event => onChangeFritekst(event, fritekstId)}
-                                feil={skjema.visFeilmeldinger && fritekst.feilmelding}
-                            />
-                            <SletteKnapp
-                                erLesevisning={erLesevisning()}
-                                onClick={() => {
-                                    skjema.felter.fritekster.validerOgSettFelt([
-                                        ...skjema.felter.fritekster.verdi.filter(
-                                            mapFritekst =>
-                                                mapFritekst.verdi.id !== fritekst.verdi.id
-                                        ),
-                                    ]);
-                                }}
-                                id={`fjern_fritekst-${fritekstId}`}
-                                mini={true}
-                                label={'Fjern'}
-                                aria-label={'Fjern fritekst'}
-                                ikon={<Slett />}
-                            />
-                        </StyledFamilieFritekstFelt>
-                    );
-                })}
-            </SkjemaGruppe>
+            {erLesevisning() ? (
+                <StyledList>
+                    {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => (
+                        <li>{fritekst.verdi.tekst}</li>
+                    ))}
+                </StyledList>
+            ) : (
+                <SkjemaGruppe id={skjemaGruppeId}>
+                    {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
+                        const fritekstId = fritekst.verdi.id;
+
+                        return (
+                            <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
+                                <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
+                                <FamilieTextareaBegrunnelseFritekst
+                                    erLesevisning={false}
+                                    key={`fritekst-${fritekstId}`}
+                                    id={`${fritekstId}`}
+                                    textareaClass={'fritekst-textarea'}
+                                    value={fritekst.verdi.tekst}
+                                    maxLength={makslengdeFritekst}
+                                    onChange={event => onChangeFritekst(event, fritekstId)}
+                                    feil={skjema.visFeilmeldinger && fritekst.feilmelding}
+                                />
+                                <SletteKnapp
+                                    erLesevisning={false}
+                                    onClick={() => {
+                                        skjema.felter.fritekster.validerOgSettFelt([
+                                            ...skjema.felter.fritekster.verdi.filter(
+                                                mapFritekst =>
+                                                    mapFritekst.verdi.id !== fritekst.verdi.id
+                                            ),
+                                        ]);
+                                    }}
+                                    id={`fjern_fritekst-${fritekstId}`}
+                                    mini={true}
+                                    label={'Fjern'}
+                                    aria-label={'Fjern fritekst'}
+                                    ikon={<Slett />}
+                                />
+                            </StyledFamilieFritekstFelt>
+                        );
+                    })}
+                </SkjemaGruppe>
+            )}
+
             {!erMaksAntallKulepunkter && (
                 <IkonKnapp
                     erLesevisning={erLesevisning()}

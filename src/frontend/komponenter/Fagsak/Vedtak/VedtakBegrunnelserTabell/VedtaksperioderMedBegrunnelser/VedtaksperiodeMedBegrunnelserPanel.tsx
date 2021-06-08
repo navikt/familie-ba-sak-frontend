@@ -24,6 +24,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     const { erLesevisning } = useBehandling();
     const {
         skjema,
+        skjemaFeilmelding,
         erPanelEkspandert,
         onPanelClose,
         utbetalingsperiode,
@@ -42,40 +43,36 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                 />
             )}
 
-            <SkjemaGruppe>
+            <SkjemaGruppe feil={skjema.visFeilmeldinger && skjemaFeilmelding()}>
                 <BegrunnelserMultiselect />
 
                 <FritekstVedtakbegrunnelser />
-
-                <Knapperekke>
-                    <FamilieKnapp
-                        erLesevisning={erLesevisning()}
-                        onClick={() => {
-                            putVedtaksperiodeMedBegrunnelser();
-                        }}
-                        mini={true}
-                        type={'standard'}
-                        spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    >
-                        Lagre
-                    </FamilieKnapp>
-                    <FamilieKnapp
-                        erLesevisning={erLesevisning()}
-                        onClick={() => {
-                            onPanelClose(false);
-                        }}
-                        mini={true}
-                        type={'flat'}
-                    >
-                        Avbryt
-                    </FamilieKnapp>
-                </Knapperekke>
             </SkjemaGruppe>
 
-            {/* <UtbetalingsperiodepanelBody>
-                     TODO - resultater, multiselect, fritekster
-               </UtbetalingsperiodepanelBody>*/}
+            <Knapperekke>
+                <FamilieKnapp
+                    erLesevisning={erLesevisning()}
+                    onClick={() => {
+                        putVedtaksperiodeMedBegrunnelser();
+                    }}
+                    mini={true}
+                    type={'standard'}
+                    spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                >
+                    Lagre
+                </FamilieKnapp>
+                <FamilieKnapp
+                    erLesevisning={erLesevisning()}
+                    onClick={() => {
+                        onPanelClose(false);
+                    }}
+                    mini={true}
+                    type={'flat'}
+                >
+                    Avbryt
+                </FamilieKnapp>
+            </Knapperekke>
         </EkspanderbartBegrunnelsePanel>
     );
 };
