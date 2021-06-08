@@ -27,6 +27,7 @@ import {
     hentBakgrunnsfarge,
     hentBorderfarge,
 } from '../../../../../utils/vedtakUtils';
+import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const GroupLabel = styled.div`
@@ -38,10 +39,10 @@ const BegrunnelserMultiselect: React.FC = () => {
     const {
         id,
         skjema,
-        vilkårBegrunnelser,
         onChangeBegrunnelse,
         grupperteBegrunnelser,
     } = useVedtaksperiodeMedBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     // React-hack for å rerende komponent som ligger i et ekspanderbart panel
     const [begrunnelser, settBegrunnelser] = useState(skjema.felter.begrunnelser);
@@ -49,7 +50,7 @@ const BegrunnelserMultiselect: React.FC = () => {
         settBegrunnelser(skjema.felter.begrunnelser);
     }, [skjema.felter.begrunnelser]);
 
-    if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
+    if (vedtaksbegrunnelseTekster.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
 
@@ -70,7 +71,7 @@ const BegrunnelserMultiselect: React.FC = () => {
                     const vedtakBegrunnelseType:
                         | VedtakBegrunnelseType
                         | undefined = finnVedtakBegrunnelseType(
-                        vilkårBegrunnelser,
+                        vedtaksbegrunnelseTekster,
                         props.data.value as VedtakBegrunnelse
                     );
 
@@ -111,7 +112,7 @@ const BegrunnelserMultiselect: React.FC = () => {
                 formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption, true>
             ) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
-                    vilkårBegrunnelser,
+                    vedtaksbegrunnelseTekster,
                     option.value as VedtakBegrunnelse
                 );
 

@@ -29,6 +29,7 @@ import {
     trekkFra,
 } from '../../../../../utils/kalender';
 import { useVedtakBegrunnelser } from '../Context/VedtakBegrunnelserContext';
+import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 
 export const hentUtgjørendeVilkårImpl = (
     begrunnelseType: VedtakBegrunnelseType,
@@ -86,11 +87,11 @@ const useVedtakBegrunnelseMultiselect = (
 ) => {
     const {
         vedtakBegrunnelser,
-        vilkårBegrunnelser,
         leggTilVedtakBegrunnelse,
         slettVedtakBegrunnelse,
         slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
     } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
         switch (vedtaksperiode.vedtaksperiodetype) {
@@ -192,8 +193,8 @@ const useVedtakBegrunnelseMultiselect = (
     );
 
     const grupperteBegrunnelser =
-        vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? Object.keys(vilkårBegrunnelser.data)
+        vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
+            ? Object.keys(vedtaksbegrunnelseTekster.data)
                   .filter((vedtakBegrunnelseType: string) =>
                       vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype.includes(
                           vedtakBegrunnelseType as VedtakBegrunnelseType
@@ -210,7 +211,7 @@ const useVedtakBegrunnelseMultiselect = (
                                   vedtakBegrunnelseTyper[
                                       vedtakBegrunnelseType as VedtakBegrunnelseType
                                   ],
-                              options: vilkårBegrunnelser.data[
+                              options: vedtaksbegrunnelseTekster.data[
                                   vedtakBegrunnelseType as VedtakBegrunnelseType
                               ]
                                   .filter(
@@ -250,8 +251,8 @@ const useVedtakBegrunnelseMultiselect = (
         .map((vedtaksbegrunnelse: IRestVedtakBegrunnelse) => ({
             value: vedtaksbegrunnelse.begrunnelse?.toString() ?? '',
             label:
-                vilkårBegrunnelser.status === RessursStatus.SUKSESS
-                    ? vilkårBegrunnelser.data[
+                vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
+                    ? vedtaksbegrunnelseTekster.data[
                           vedtaksbegrunnelse.begrunnelseType as VedtakBegrunnelseType
                       ].find(
                           (
@@ -264,7 +265,8 @@ const useVedtakBegrunnelseMultiselect = (
         }));
 
     const begrunnelser =
-        vilkårBegrunnelser?.status === RessursStatus.SUKSESS && vilkårBegrunnelser.data;
+        vedtaksbegrunnelseTekster?.status === RessursStatus.SUKSESS &&
+        vedtaksbegrunnelseTekster.data;
 
     return {
         begrunnelser,

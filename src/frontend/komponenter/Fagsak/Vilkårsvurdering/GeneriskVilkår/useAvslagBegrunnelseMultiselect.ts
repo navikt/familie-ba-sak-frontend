@@ -11,13 +11,15 @@ import {
 import { VilkårType } from '../../../../typer/vilkår';
 import { IPeriode } from '../../../../utils/kalender';
 import { useVedtakBegrunnelser } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
+import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 const useAvslagBegrunnelseMultiselect = (vilkårType: VilkårType, periode: IPeriode) => {
-    const { vedtakBegrunnelser, vilkårBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtakBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const avslagBegrunnelseTeksterForGjeldendeVilkår =
-        vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? vilkårBegrunnelser.data.AVSLAG.filter(
+        vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
+            ? vedtaksbegrunnelseTekster.data.AVSLAG.filter(
                   (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
                       begrunnelse.vilkår === vilkårType
               )

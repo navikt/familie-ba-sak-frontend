@@ -9,7 +9,7 @@ import {
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../typer/vedtaksperiode';
-import { Vilkårsbegrunnelser, VilkårType } from '../typer/vilkår';
+import { VedtaksbegrunnelseTekster, VilkårType } from '../typer/vilkår';
 import {
     førsteDagIInneværendeMåned,
     kalenderDatoMedFallback,
@@ -75,7 +75,7 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
 };
 
 export const finnVedtakBegrunnelseType = (
-    vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>,
+    vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>,
     vedtakBegrunnelse: VedtakBegrunnelse
 ): VedtakBegrunnelseType | undefined => {
     return vilkårBegrunnelser.status === RessursStatus.SUKSESS
@@ -91,7 +91,7 @@ export const finnVedtakBegrunnelseType = (
 };
 
 export const finnVedtakBegrunnelseVilkår = (
-    vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>,
+    vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>,
     vedtakBegrunnelse: VedtakBegrunnelse
 ): VilkårType | undefined => {
     if (vilkårBegrunnelser.status === RessursStatus.SUKSESS) {
