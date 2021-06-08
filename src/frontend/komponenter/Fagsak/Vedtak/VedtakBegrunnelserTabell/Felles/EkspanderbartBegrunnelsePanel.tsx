@@ -7,7 +7,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { IBehandling } from '../../../../../typer/behandling';
 import {
-    hentUtbetalingsperiodePåBehandlingOgPeriode,
+    hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
     hentVedtaksperiodeTittel,
     Vedtaksperiode,
     Vedtaksperiodetype,
@@ -57,7 +57,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
     onClick,
     children,
 }) => {
-    const utbetalingsperiode = hentUtbetalingsperiodePåBehandlingOgPeriode(
+    const utbetalingsperiode = hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode(
         {
             fom: vedtaksperiode.periodeFom,
             tom: vedtaksperiode.periodeTom,

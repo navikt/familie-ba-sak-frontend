@@ -7,6 +7,8 @@ import {
     kalenderDatoMedFallback,
     TIDENES_ENDE,
     TIDENES_MORGEN,
+    kalenderDatoFraDate,
+    kalenderDato,
 } from '../utils/kalender';
 import { IBehandling } from './behandling';
 import { ytelsetype, YtelseType } from './beregning';
@@ -84,31 +86,17 @@ export type Utbetalingsperiode = {
     utbetaltPerMnd: number;
 };
 
-export const hentUtbetalingsperiodePåBehandlingOgPeriode = (
+export const hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode = (
     periode: IPeriode,
     behandling: IBehandling
 ): Utbetalingsperiode | undefined => {
-    const utbetalingsperioder = behandling.utbetalingsperioder;
-    const periodeFom = kalenderDatoMedFallback(periode.fom, TIDENES_MORGEN);
-    const periodeTom = kalenderDatoMedFallback(periode.tom, TIDENES_ENDE);
+    const sorterteUtbetalingsperioder = sorterUtbetalingsperioder(
+        behandling.utbetalingsperioder
+    ).filter(periode => periode?.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING);
 
-    const gjeldendeUtbetalingsperiode = utbetalingsperioder.find(utbetalingsperiode => {
-        const utbetalingFom = kalenderDatoMedFallback(
-            utbetalingsperiode.periodeFom,
-            TIDENES_MORGEN
-        );
-        const utbetalingTom = kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE);
-        return (
-            (erSamme(utbetalingFom, periodeFom) || erEtter(utbetalingFom, periodeFom)) &&
-            (erSamme(utbetalingTom, periodeTom) || erFør(utbetalingTom, periodeTom))
-        );
-    });
-
-    if (gjeldendeUtbetalingsperiode?.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING) {
-        return gjeldendeUtbetalingsperiode;
-    } else {
-        return undefined;
-    }
+    return periode.fom !== undefined
+        ? hentUtbetalingsperiodeInnenforPeriode(sorterteUtbetalingsperioder, periode)
+        : hentSistGjeldendeEllerNesteUtbetalingsperiode(sorterteUtbetalingsperioder);
 };
 
 export const hentUtbetalingsperiodeDetaljer = (
@@ -158,3 +146,55 @@ export const hentVedtaksperiodeTittel = (
             return '';
     }
 };
+
+const hentSistGjeldendeEllerNesteUtbetalingsperiode = (
+    sorterteUtbetalingsperioder: Utbetalingsperiode[]
+): Utbetalingsperiode | undefined => {
+    const nå = kalenderDatoFraDate(new Date());
+
+    const sistGjeldendeUtbetalingsperiode = sorterteUtbetalingsperioder
+        .filter(
+            utbetalingsperiode =>
+                erFør(kalenderDato(utbetalingsperiode.periodeFom), nå) ||
+                erSamme(kalenderDato(utbetalingsperiode.periodeFom), nå)
+        )
+        .slice(-1)[0];
+
+    if (sistGjeldendeUtbetalingsperiode === undefined) {
+        return sorterteUtbetalingsperioder[0];
+    } else {
+        return sistGjeldendeUtbetalingsperiode;
+    }
+};
+
+const hentUtbetalingsperiodeInnenforPeriode = (
+    sorterteUtbetalingsperioder: Utbetalingsperiode[],
+    periode: IPeriode
+): Utbetalingsperiode | undefined => {
+    const periodeFom = kalenderDatoMedFallback(periode.fom, TIDENES_MORGEN);
+    const periodeTom = kalenderDatoMedFallback(periode.tom, TIDENES_ENDE);
+
+    return sorterteUtbetalingsperioder.find(utbetalingsperiode => {
+        const utbetalingFom = kalenderDatoMedFallback(
+            utbetalingsperiode.periodeFom,
+            TIDENES_MORGEN
+        );
+        const utbetalingTom = kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE);
+        return (
+            (erSamme(utbetalingFom, periodeFom) || erEtter(utbetalingFom, periodeFom)) &&
+            (erSamme(utbetalingTom, periodeTom) || erFør(utbetalingTom, periodeTom))
+        );
+    });
+};
+
+const sorterUtbetalingsperioder = (
+    utbetalingsperioder: Utbetalingsperiode[]
+): Utbetalingsperiode[] =>
+    utbetalingsperioder.sort((utbetalingsperiodeA, utbetalingsperiodeB) =>
+        erEtter(
+            kalenderDato(utbetalingsperiodeA.periodeFom),
+            kalenderDato(utbetalingsperiodeB.periodeFom)
+        )
+            ? 1
+            : -1
+    );
