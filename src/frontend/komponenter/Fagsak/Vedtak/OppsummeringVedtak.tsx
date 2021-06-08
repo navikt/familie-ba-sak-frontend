@@ -214,8 +214,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                     />
                     <Container>
                         {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ? (
-                            <Alertstripe type="info" style={{ margin: '2rem 0 1rem 0' }}>
-                                Vedtak om opphør på grunn av dødsfall er automatisk generert.
+                            <Alertstripe
+                                type="info"
+                                style={{ margin: '2rem 0 1rem 0' }}
+                                form="inline"
+                            >
+                                <b>Vedtak om opphør på grunn av dødsfall er automatisk generert.</b>
                             </Alertstripe>
                         ) : (
                             <>
