@@ -7,7 +7,7 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import Lenke from 'nav-frontend-lenker';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst, Feilmelding } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieTextarea } from '@navikt/familie-form-elements';
 import { FeltState } from '@navikt/familie-skjema';
@@ -32,16 +32,16 @@ const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
     }
 `;
 
-const StyledFamilieFritekstFelt = styled.div`
+const StyledList = styled.ol`
+    padding-inline-start: 1rem;
+`;
+
+const StyledFamilieFritekstFelt = styled.li`
     display: flex;
 
     .textarea__container {
         width: 100% !important;
     }
-`;
-
-const StyledFeilmelding = styled(Feilmelding)`
-    margin-bottom: 1rem;
 `;
 
 const StyledLabel = styled(Label)`
@@ -89,7 +89,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
-    const skjemaGruppeId = `fritekster-${id}`;
+    const skjemaGruppeId = `Fritekster ${id}`;
 
     const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
@@ -144,28 +144,33 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 />
                 <StyledEtikettInfo mini={true}>Skriv {målform[søkersMålform]}</StyledEtikettInfo>
             </InfoBoks>
-            <SkjemaGruppe
-                id={skjemaGruppeId}
-                feil={skjema.visFeilmeldinger ? skjema.felter.fritekster.feilmelding : undefined}
-            >
-                {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
-                    const fritekstId = fritekst.verdi.id;
 
-                    return (
-                        <>
+            {erLesevisning() ? (
+                <StyledList>
+                    {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => (
+                        <li>{fritekst.verdi.tekst}</li>
+                    ))}
+                </StyledList>
+            ) : (
+                <SkjemaGruppe id={skjemaGruppeId}>
+                    {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
+                        const fritekstId = fritekst.verdi.id;
+
+                        return (
                             <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
                                 <SkjultLegend>{`Kulepunkt ${fritekstId}`}</SkjultLegend>
                                 <FamilieTextareaBegrunnelseFritekst
-                                    erLesevisning={erLesevisning()}
+                                    erLesevisning={false}
                                     key={`fritekst-${fritekstId}`}
                                     id={`${fritekstId}`}
                                     textareaClass={'fritekst-textarea'}
                                     value={fritekst.verdi.tekst}
                                     maxLength={makslengdeFritekst}
                                     onChange={event => onChangeFritekst(event, fritekstId)}
+                                    feil={skjema.visFeilmeldinger && fritekst.feilmelding}
                                 />
                                 <SletteKnapp
-                                    erLesevisning={erLesevisning()}
+                                    erLesevisning={false}
                                     onClick={() => {
                                         skjema.felter.fritekster.validerOgSettFelt([
                                             ...skjema.felter.fritekster.verdi.filter(
@@ -181,13 +186,11 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                     ikon={<Slett />}
                                 />
                             </StyledFamilieFritekstFelt>
-                            {skjema.visFeilmeldinger && fritekst.feilmelding && (
-                                <StyledFeilmelding>{fritekst.feilmelding}</StyledFeilmelding>
-                            )}
-                        </>
-                    );
-                })}
-            </SkjemaGruppe>
+                        );
+                    })}
+                </SkjemaGruppe>
+            )}
+
             {!erMaksAntallKulepunkter && (
                 <IkonKnapp
                     erLesevisning={erLesevisning()}

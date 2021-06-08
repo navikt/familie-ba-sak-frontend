@@ -1,8 +1,5 @@
-import React, { useEffect } from 'react';
-
 import { GroupType, ISelectOption } from '@navikt/familie-form-elements';
-import { useHttp } from '@navikt/familie-http';
-import { Ressurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { IBehandling } from '../../../../../typer/behandling';
 import {
@@ -16,8 +13,9 @@ import {
     IRestVedtaksbegrunnelse,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
-import { Vilkårsbegrunnelser, VilkårType } from '../../../../../typer/vilkår';
+import { VedtaksbegrunnelseTekster, VilkårType } from '../../../../../typer/vilkår';
 import { IPeriode } from '../../../../../utils/kalender';
+import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { hentUtgjørendeVilkårImpl } from './useVedtakBegrunnelseMultiselect';
 
 export const useVilkårBegrunnelser = ({
@@ -29,15 +27,7 @@ export const useVilkårBegrunnelser = ({
     periode: IPeriode;
     åpenBehandling: IBehandling;
 }) => {
-    const { request } = useHttp();
-
-    const [vilkårBegrunnelser, settVilkårbegrunnelser] = React.useState<
-        Ressurs<Vilkårsbegrunnelser>
-    >(byggTomRessurs());
-
-    useEffect(() => {
-        hentVilkårBegrunnelseTekster();
-    }, []);
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
         switch (vedtaksperiodeMedBegrunnelser.type) {
@@ -57,18 +47,8 @@ export const useVilkårBegrunnelser = ({
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] =>
         hentUtgjørendeVilkårImpl(begrunnelseType, åpenBehandling.personResultater, periode);
 
-    const hentVilkårBegrunnelseTekster = () => {
-        request<void, Vilkårsbegrunnelser>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/vilkaarsbegrunnelser`,
-            påvirkerSystemLaster: true,
-        }).then((vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>) => {
-            settVilkårbegrunnelser(vilkårBegrunnelser);
-        });
-    };
-
     const leggTilBegrunnelserTilhørendeVedtakBegrunnelseType = (
-        vilkårBegrunnelser: Vilkårsbegrunnelser
+        vilkårBegrunnelser: VedtaksbegrunnelseTekster
     ) => {
         return (vedtakBegrunnelseType: string): GroupType<ISelectOption> => {
             const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
@@ -105,18 +85,22 @@ export const useVilkårBegrunnelser = ({
             : false;
 
     const grupperteBegrunnelser =
-        vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? Object.keys(vilkårBegrunnelser.data)
+        vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
+            ? Object.keys(vedtaksbegrunnelseTekster.data)
                   .filter(begrunnelsetypeErTilknyttetVedtaksperiode)
-                  .map(leggTilBegrunnelserTilhørendeVedtakBegrunnelseType(vilkårBegrunnelser.data))
+                  .map(
+                      leggTilBegrunnelserTilhørendeVedtakBegrunnelseType(
+                          vedtaksbegrunnelseTekster.data
+                      )
+                  )
             : [];
 
-    return { grupperteBegrunnelser, vilkårBegrunnelser };
+    return { grupperteBegrunnelser, vedtaksbegrunnelseTekster };
 };
 
 export const mapBegrunnelserTilSelectOptions = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
-    vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>
+    vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
 ): ISelectOption[] => {
     return vedtaksperiodeMedBegrunnelser.begrunnelser
         .filter(
@@ -141,7 +125,7 @@ export const mapBegrunnelserTilSelectOptions = (
 const hentLabelForOption = (
     vedtakBegrunnelseType: VedtakBegrunnelseType,
     vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse,
-    vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>
+    vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
 ) => {
     return vilkårBegrunnelser.status === RessursStatus.SUKSESS
         ? vilkårBegrunnelser.data[vedtakBegrunnelseType].find(
