@@ -33,6 +33,7 @@ import {
     IVedtakBegrunnelseSubmit,
     useVedtakBegrunnelser,
 } from './Context/VedtakBegrunnelserContext';
+import { useVedtaksbegrunnelseTekster } from './Context/VedtaksbegrunnelseTeksterContext';
 import useVedtakBegrunnelseMultiselect from './Hooks/useVedtakBegrunnelseMultiselect';
 
 interface IVedtakBegrunnelseMultiselect {
@@ -54,7 +55,8 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
         fom: vedtaksperiode.periodeFom,
         tom: vedtaksperiode.periodeTom,
     };
-    const { vedtakBegrunnelseSubmit, vilkårBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtakBegrunnelseSubmit } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const {
         grupperteBegrunnelser,
         onChangeBegrunnelse,
@@ -69,7 +71,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
 
     const vedtakBegrunnelseId = `vedtakbegrunnelser_${lagPeriodeId(periode)}`;
 
-    if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
+    if (vedtaksbegrunnelseTekster.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
 
@@ -90,7 +92,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                     const vedtakBegrunnelseType:
                         | VedtakBegrunnelseType
                         | undefined = finnVedtakBegrunnelseType(
-                        vilkårBegrunnelser,
+                        vedtaksbegrunnelseTekster,
                         props.data.value as VedtakBegrunnelse
                     );
 
@@ -132,7 +134,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                 formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption, true>
             ) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
-                    vilkårBegrunnelser,
+                    vedtaksbegrunnelseTekster,
                     option.value as VedtakBegrunnelse
                 );
 
