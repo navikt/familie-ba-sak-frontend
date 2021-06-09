@@ -175,13 +175,13 @@ export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avh
     if (felt.verdi.length > 0) {
         return ok(felt);
     } else if (avhengigheter?.erSkjønnsmessigVurdert && !avhengigheter?.erMedlemskapVurdert) {
-        return feil(felt, 'Du må skrive en begrunnelse ved skjønnsmessig vurdering.');
+        return feil(felt, 'Du må skrive en begrunnelse ved "Vurdering annet grunnlag"');
     } else if (!avhengigheter?.erSkjønnsmessigVurdert && avhengigheter?.erMedlemskapVurdert) {
-        return feil(felt, 'Du må skrive en begrunnelse ved vurdert medlemskap.');
+        return feil(felt, 'Du må skrive en begrunnelse ved "Vurdert medlemskap"');
     } else if (avhengigheter?.erSkjønnsmessigVurdert && avhengigheter?.erMedlemskapVurdert) {
         return feil(
             felt,
-            'Du må skrive en begrunnelse som dekker skjønnsmessig vurdering og vurdert medlemskap.'
+            'Du må skrive en begrunnelse som dekker "Vurdering annet grunnlag" og "Vurdert medlemskap"'
         );
     } else {
         return ok(felt);

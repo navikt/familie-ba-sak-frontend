@@ -32,11 +32,12 @@ const FamilieTextareaBegrunnelseFritekst = styled(FamilieTextarea)`
     }
 `;
 
-const StyledList = styled.ol`
+const StyledList = styled.ul`
     padding-inline-start: 1rem;
+    margin: 0;
 `;
 
-const StyledFamilieFritekstFelt = styled.li`
+const StyledFamilieFritekstFelt = styled.div`
     display: flex;
 
     .textarea__container {
@@ -146,7 +147,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             </InfoBoks>
 
             {erLesevisning() ? (
-                <StyledList>
+                <StyledList id={skjemaGruppeId}>
                     {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => (
                         <li>{fritekst.verdi.tekst}</li>
                     ))}

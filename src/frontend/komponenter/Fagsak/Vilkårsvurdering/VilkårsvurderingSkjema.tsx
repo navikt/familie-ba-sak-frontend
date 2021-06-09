@@ -45,7 +45,7 @@ const PersonLinje = styled.div`
     position: -webkit-sticky;
     position: sticky;
     top: -1px;
-    z-index: 2;
+    z-index: 3;
     background-color: white;
     padding: 1.5rem 0;
 `;

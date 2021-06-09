@@ -79,11 +79,11 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         };
 
         const {
-            skjema,
-            onSubmit,
             hentFeilTilOppsummering,
-            nullstillSkjema,
             kanSendeSkjema,
+            onSubmit,
+            settVisfeilmeldinger,
+            skjema,
         } = useSkjema<
             {
                 periode: IPeriode;
@@ -107,7 +107,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         });
 
         const populerSkjemaFraBackend = () => {
-            nullstillSkjema();
+            settVisfeilmeldinger(false);
             skjema.felter.periode.validerOgSettFelt({
                 fom: vedtaksperiodeMedBegrunnelser.fom,
                 tom: vedtaksperiodeMedBegrunnelser.tom,
@@ -118,18 +118,18 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 )
             );
 
-            if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
-                skjema.felter.begrunnelser.validerOgSettFelt(
-                    mapBegrunnelserTilSelectOptions(
-                        vedtaksperiodeMedBegrunnelser,
-                        vedtaksbegrunnelseTekster
-                    )
-                );
-            }
+            skjema.felter.begrunnelser.validerOgSettFelt(
+                mapBegrunnelserTilSelectOptions(
+                    vedtaksperiodeMedBegrunnelser,
+                    vedtaksbegrunnelseTekster
+                )
+            );
         };
 
         useEffect(() => {
-            populerSkjemaFraBackend();
+            if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
+                populerSkjemaFraBackend();
+            }
         }, [vedtaksbegrunnelseTekster, vedtaksperiodeMedBegrunnelser]);
 
         const lagInitiellFritekst = (

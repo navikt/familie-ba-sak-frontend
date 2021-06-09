@@ -157,7 +157,7 @@ describe('utils/validators', () => {
             Valideringsstatus.FEIL
         );
         expect(valideringMedlemskapVurdertManglerBegrunnelse.feilmelding).toBe(
-            'Du må skrive en begrunnelse ved vurdert medlemskap.'
+            'Du må skrive en begrunnelse ved "Vurdert medlemskap"'
         );
 
         const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
@@ -170,7 +170,7 @@ describe('utils/validators', () => {
             Valideringsstatus.FEIL
         );
         expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.feilmelding).toBe(
-            'Du må skrive en begrunnelse ved skjønnsmessig vurdering.'
+            'Du må skrive en begrunnelse ved "Vurdering annet grunnlag"'
         );
 
         const valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse = erBegrunnelseGyldig(
@@ -184,7 +184,7 @@ describe('utils/validators', () => {
             valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.valideringsstatus
         ).toEqual(Valideringsstatus.FEIL);
         expect(valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.feilmelding).toBe(
-            'Du må skrive en begrunnelse som dekker skjønnsmessig vurdering og vurdert medlemskap.'
+            'Du må skrive en begrunnelse som dekker "Vurdering annet grunnlag" og "Vurdert medlemskap"'
         );
 
         const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(

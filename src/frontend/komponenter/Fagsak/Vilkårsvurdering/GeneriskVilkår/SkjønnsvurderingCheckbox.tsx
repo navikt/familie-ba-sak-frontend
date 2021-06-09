@@ -23,7 +23,7 @@ const SkjønnsvurderingCheckbox: React.FC<IProps> = ({
     return (
         <FamilieCheckbox
             erLesevisning={lesevisning}
-            label={'Skjønnsmessig vurdering'}
+            label={'Vurdering annet grunnlag'}
             checked={redigerbartVilkår.verdi.erSkjønnsmessigVurdert}
             onChange={() => {
                 settRedigerbartVilkår({
