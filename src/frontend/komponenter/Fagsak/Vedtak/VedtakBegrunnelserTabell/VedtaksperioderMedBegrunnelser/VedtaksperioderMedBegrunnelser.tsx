@@ -26,29 +26,32 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     const vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[] =
         hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [];
 
+    if (
+        vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
+        vedtaksbegrunnelseTekster.status === RessursStatus.FUNKSJONELL_FEIL
+    ) {
+        return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vedtak.</AlertStripeFeil>;
+    }
+
     return vedtaksperioderMedBegrunnelser.length > 0 ? (
         <>
             <OverskriftMedHjelpetekst
                 overskrift={'Begrunnelser i vedtaksbrev'}
                 hjelpetekst={'Her skal du sette begrunnelsestekster for fortsatt innvilgelse'}
             />
-            {vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS ? (
-                vedtaksperioderMedBegrunnelser.map(
-                    (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
-                        <VedtaksperiodeMedBegrunnelserProvider
-                            key={vedtaksperiodeMedBegrunnelser.id}
-                            fagsak={fagsak}
-                            åpenBehandling={åpenBehandling}
+            {vedtaksperioderMedBegrunnelser.map(
+                (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
+                    <VedtaksperiodeMedBegrunnelserProvider
+                        key={vedtaksperiodeMedBegrunnelser.id}
+                        fagsak={fagsak}
+                        åpenBehandling={åpenBehandling}
+                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                    >
+                        <VedtaksperiodeMedBegrunnelserPanel
                             vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                        >
-                            <VedtaksperiodeMedBegrunnelserPanel
-                                vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                            />
-                        </VedtaksperiodeMedBegrunnelserProvider>
-                    )
+                        />
+                    </VedtaksperiodeMedBegrunnelserProvider>
                 )
-            ) : (
-                <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vedtak.</AlertStripeFeil>
             )}
         </>
     ) : (
