@@ -29,6 +29,13 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
         erLesevisning()
     );
 
+    if (
+        vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
+        vedtaksbegrunnelseTekster.status === RessursStatus.FUNKSJONELL_FEIL
+    ) {
+        return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vedtak.</AlertStripeFeil>;
+    }
+
     return vedtaksperioderMedBegrunnelseBehov.length > 0 ? (
         <>
             <OverskriftMedHjelpetekst
@@ -37,22 +44,18 @@ const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandli
                     'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør'
                 }
             />
-            {vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS ? (
-                vedtaksperioderMedBegrunnelseBehov.map((vedtaksperiode: Vedtaksperiode) => (
-                    <FritekstVedtakBegrunnelserProvider
+            {vedtaksperioderMedBegrunnelseBehov.map((vedtaksperiode: Vedtaksperiode) => (
+                <FritekstVedtakBegrunnelserProvider
+                    vedtaksperiode={vedtaksperiode}
+                    behandlingstype={åpenBehandling.type}
+                    key={vedtaksperiode.periodeFom}
+                >
+                    <VedtakBegrunnelsePanel
                         vedtaksperiode={vedtaksperiode}
-                        behandlingstype={åpenBehandling.type}
-                        key={vedtaksperiode.periodeFom}
-                    >
-                        <VedtakBegrunnelsePanel
-                            vedtaksperiode={vedtaksperiode}
-                            åpenBehandling={åpenBehandling}
-                        />
-                    </FritekstVedtakBegrunnelserProvider>
-                ))
-            ) : (
-                <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vedtak.</AlertStripeFeil>
-            )}
+                        åpenBehandling={åpenBehandling}
+                    />
+                </FritekstVedtakBegrunnelserProvider>
+            ))}
         </>
     ) : null;
 };
