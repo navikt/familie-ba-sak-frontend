@@ -2,7 +2,6 @@ import React, { CSSProperties } from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
@@ -70,10 +69,6 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             : undefined;
 
     const vedtakBegrunnelseId = `vedtakbegrunnelser_${lagPeriodeId(periode)}`;
-
-    if (vedtaksbegrunnelseTekster.status === RessursStatus.FEILET) {
-        return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
-    }
 
     return (
         <FamilieReactSelect

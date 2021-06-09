@@ -2,7 +2,6 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
@@ -49,10 +48,6 @@ const BegrunnelserMultiselect: React.FC = () => {
     useEffect(() => {
         settBegrunnelser(skjema.felter.begrunnelser);
     }, [skjema.felter.begrunnelser]);
-
-    if (vedtaksbegrunnelseTekster.status === RessursStatus.FEILET) {
-        return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
-    }
 
     return (
         <FamilieReactSelect
