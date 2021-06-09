@@ -1643,10 +1643,10 @@
   dependencies:
     winston "^3.2.1"
 
-"@navikt/familie-skjema@^1.1.5":
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.5.tgz#f3612ae5166a1821c5af1f0a8c6a3fc49727441c"
-  integrity sha512-vXjg5TmmpJpttWQxO/wRPkHvhB61qx2pjnJvnT3fh7tBJKna0+khreEqJT1xP3tNtp8aQ6W+ty9Dmh4WvH++HA==
+"@navikt/familie-skjema@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.6.tgz#24ed2bbf0b31087a9fce1619e845ace8773f4e4b"
+  integrity sha512-MDhZI5m6GprcxJJYY51to3EKrA9IvcPrk86vRokWerPit6uz1DdMeN7LgEqebsTKT9VKQZ6hK5b7IgFK6puXoA==
   dependencies:
     "@navikt/familie-http" "^1.0.5"
     "@navikt/familie-typer" "^3.0.13"
