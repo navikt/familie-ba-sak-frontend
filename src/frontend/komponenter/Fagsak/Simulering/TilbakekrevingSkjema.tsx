@@ -65,7 +65,8 @@ const StyledEtikettInfo = styled(EtikettInfo)`
 
 const TilbakekrevingSkjemaGruppe = styled(SkjemaGruppe)`
     margin-top: 4rem;
-    max-width: 25rem;
+    width: 90%;
+    max-width: 40rem;
 `;
 
 const StyledAlertstripe = styled(Alertstripe)`

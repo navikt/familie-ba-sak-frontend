@@ -109,14 +109,14 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const formaterBeløpUtenValutakode = (beløp?: number) =>
         beløp ? formaterBeløp(beløp).slice(0, -3) : '-';
 
-    const antallPeriodetIFremvistÅr = perioder.filter(p => periodeSkalVisesITabell(p)).length;
+    const antallPerioderIFremvistÅr = perioder.filter(p => periodeSkalVisesITabell(p)).length;
 
     const erISisteÅrAvPerioden = indexFramvistÅr === hentÅrISimuleringen(perioder).length - 1;
 
     const tabellbredde =
         9.375 +
         (fomDatoNestePeriode && erISisteÅrAvPerioden ? 1.125 : 0) +
-        4.6875 * antallPeriodetIFremvistÅr;
+        4.6875 * antallPerioderIFremvistÅr;
 
     const erNestePeriode = (periode: ISimuleringPeriode) => periode.fom === fomDatoNestePeriode;
 
