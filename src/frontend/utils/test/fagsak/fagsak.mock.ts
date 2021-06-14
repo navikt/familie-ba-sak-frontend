@@ -28,4 +28,5 @@ export const mockFagsak = ({
     saksnummer,
     status,
     underBehandling,
+    tilbakekrevingsbehandlinger: [],
 });

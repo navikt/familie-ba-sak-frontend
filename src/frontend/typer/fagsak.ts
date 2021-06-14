@@ -1,5 +1,6 @@
 import { IBehandling } from './behandling';
 import { INøkkelPar } from './common';
+import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 
 // Enum
 export enum FagsakStatus {
@@ -17,6 +18,7 @@ export interface IFagsak {
     status: FagsakStatus;
     søkerFødselsnummer: string;
     underBehandling: boolean;
+    tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[];
 }
 
 export const fagsakStatus: INøkkelPar = {
