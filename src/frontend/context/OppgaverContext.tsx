@@ -400,6 +400,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         hentOppgaverFraBackend(
             hentOppgaveFelt('behandlingstema').filter?.selectedValue,
+            hentOppgaveFelt('behandlingstype').filter?.selectedValue,
             hentOppgaveFelt('oppgavetype').filter?.selectedValue,
             hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
             hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
@@ -421,6 +422,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const hentOppgaverFraBackend = (
         behandlingstema?: string,
+        behandlingstype?: string,
         oppgavetype?: string,
         enhet?: string,
         frist?: string,
@@ -433,6 +435,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         const finnOppgaveRequest: IFinnOppgaveRequest = {
             behandlingstema: erstattAlleMedUndefined(behandlingstema),
+            behandlingstype: erstattAlleMedUndefined(behandlingstype),
             oppgavetype: erstattAlleMedUndefined(oppgavetype),
             enhet: erstattAlleMedUndefined(enhet)?.replace('E', ''),
             tilordnetRessurs,

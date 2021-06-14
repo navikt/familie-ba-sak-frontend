@@ -4,6 +4,7 @@ import { INøkkelPar } from './common';
 
 export interface IFinnOppgaveRequest {
     behandlingstema?: string;
+    behandlingstype?: string;
     oppgavetype?: string;
     enhet?: string;
     journalpostId?: string;
@@ -34,6 +35,7 @@ export interface IOppgave {
     saksreferanse: string;
     aktoerId: string;
     behandlingstema: string;
+    behandlingstype: string;
     beskrivelse: string;
     fristFerdigstillelse: string;
     oppgavetype: string;
@@ -106,6 +108,18 @@ export const gjelderFilter: INøkkelPar = {
     ab0180: { id: 'ab0180', navn: 'Ordinær' },
     ab0096: { id: 'ab0096', navn: 'Utvidet' },
     ab0058: { id: 'ab0058', navn: 'EØS' },
+};
+
+export enum BehandlingstypeFilter {
+    ALLE = 'ALLE',
+    ae0106 = 'ae0106',
+    ae0161 = 'ae0161',
+}
+
+export const behandlingstypeFilter: INøkkelPar = {
+    ALLE: { id: 'ALLE', navn: 'Alle' },
+    ae0106: { id: 'ae0106', navn: 'Utland' },
+    ae0161: { id: 'ae0161', navn: 'Tilbakekreving' },
 };
 
 export enum OppgavetypeFilter {

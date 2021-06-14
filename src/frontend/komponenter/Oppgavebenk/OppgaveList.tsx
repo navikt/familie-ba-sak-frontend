@@ -14,6 +14,7 @@ import { useOppgaver } from '../../context/OppgaverContext';
 import {
     enhetFilter,
     gjelderFilter,
+    behandlingstypeFilter,
     IOppgave,
     OppgavetypeFilter,
     oppgaveTypeFilter,
@@ -141,6 +142,16 @@ const OppgaveList: React.FunctionComponent = () => {
                                             {oppg.behandlingstema
                                                 ? gjelderFilter[oppg.behandlingstema]?.navn ??
                                                   oppg.behandlingstema
+                                                : 'Ikke satt'}
+                                        </td>
+                                        <td
+                                            className={sortertClassName(
+                                                oppgaveFelter.behandlingstype
+                                            )}
+                                        >
+                                            {oppg.behandlingstype
+                                                ? behandlingstypeFilter[oppg.behandlingstype]
+                                                      ?.navn ?? oppg.behandlingstype
                                                 : 'Ikke satt'}
                                         </td>
                                         <td
