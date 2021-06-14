@@ -4,7 +4,7 @@ import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
 import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { hentDataFraRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
@@ -12,6 +12,15 @@ import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/perso
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, Målform } from '../typer/søknad';
 import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
+
+export const hentBarnMedLøpendeUtbetaling = (fagsak: IFagsak) =>
+    fagsak.gjeldendeUtbetalingsperioder.reduce((acc, utbetalingsperiode) => {
+        utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
+            acc.add(utbetalingsperiodeDetalj.person.personIdent)
+        );
+
+        return acc;
+    }, new Set());
 
 const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
@@ -22,16 +31,9 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
         const barnMedLøpendeUtbetaling =
-            hentDataFraRessurs(fagsak)?.gjeldendeUtbetalingsperioder.reduce(
-                (acc, utbetalingsperiode) => {
-                    utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
-                        acc.add(utbetalingsperiodeDetalj.person.personIdent)
-                    );
-
-                    return acc;
-                },
-                new Set()
-            ) ?? new Set();
+            fagsak.status === RessursStatus.SUKSESS
+                ? hentBarnMedLøpendeUtbetaling(fagsak.data)
+                : new Set();
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
