@@ -3,8 +3,8 @@ import React from 'react';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { hentDataFraRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
@@ -21,6 +21,18 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const { bruker } = useFagsakRessurser();
         const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
+        const barnMedLøpendeUtbetaling =
+            hentDataFraRessurs(fagsak)?.gjeldendeUtbetalingsperioder.reduce(
+                (acc, utbetalingsperiode) => {
+                    utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
+                        acc.add(utbetalingsperiodeDetalj.person.personIdent)
+                    );
+
+                    return acc;
+                },
+                new Set()
+            ) ?? new Set();
+
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
                 underkategori: BehandlingUnderkategori;
@@ -36,10 +48,14 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 }),
                 barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
                     verdi: [],
-                    valideringsfunksjon: felt =>
-                        felt.verdi.some((barn: IBarnMedOpplysninger) => barn.inkludertISøknaden)
+                    valideringsfunksjon: (felt, avhengigheter?: Avhengigheter) => {
+                        return felt.verdi.some(
+                            (barn: IBarnMedOpplysninger) => barn.inkludertISøknaden
+                        ) || (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
                             ? ok(felt)
-                            : feil(felt, 'Ingen av barna er valgt.'),
+                            : feil(felt, 'Ingen av barna er valgt.');
+                    },
+                    avhengigheter: { barnMedLøpendeUtbetaling },
                 }),
                 endringAvOpplysningerBegrunnelse: useFelt<string>({
                     verdi: '',
@@ -160,6 +176,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
         };
 
         return {
+            barnMedLøpendeUtbetaling,
             hentFeilTilOppsummering,
             nesteAction,
             settVisBekreftModal,

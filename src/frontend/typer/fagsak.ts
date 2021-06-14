@@ -1,5 +1,6 @@
 import { IBehandling } from './behandling';
 import { INøkkelPar } from './common';
+import { Utbetalingsperiode } from './vedtaksperiode';
 
 // Enum
 export enum FagsakStatus {
@@ -17,6 +18,7 @@ export interface IFagsak {
     status: FagsakStatus;
     søkerFødselsnummer: string;
     underBehandling: boolean;
+    gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 
 export const fagsakStatus: INøkkelPar = {
