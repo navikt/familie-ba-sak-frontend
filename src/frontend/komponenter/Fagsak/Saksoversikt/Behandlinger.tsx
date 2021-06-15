@@ -16,33 +16,11 @@ import {
     BehandlingStatus,
     behandlingÅrsak,
     Behandlingstype,
-    BehandlingResultat,
-    BehandlingÅrsak,
-    BehandlingKategori,
-    BehandlingUnderkategori,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { ITilbakekreving } from '../../../typer/simulering';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { kalenderDiff } from '../../../utils/kalender';
-
-interface VisningVedtakForBehandling {
-    aktiv: boolean;
-    vedtaksdato: string;
-}
-interface VisningBehandling {
-    aktiv: boolean;
-    behandlingId: number | string;
-    type: Behandlingstype;
-    opprettetTidspunkt: string;
-    resultat?: BehandlingResultat;
-    status: BehandlingStatus;
-    årsak?: BehandlingÅrsak;
-    vedtakForBehandling: VisningVedtakForBehandling[];
-    kategori?: BehandlingKategori;
-    underkategori?: BehandlingUnderkategori;
-    tilbakekreving?: ITilbakekreving;
-}
+import { VisningBehandling, VisningVedtakForBehandling } from './visningBehandling';
 
 const tilbakekrevingstyper = [
     Behandlingstype.TILBAKEKREVING,
