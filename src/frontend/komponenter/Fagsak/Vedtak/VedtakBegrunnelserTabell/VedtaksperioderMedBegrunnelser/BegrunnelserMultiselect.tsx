@@ -21,6 +21,7 @@ import {
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
 } from '../../../../../typer/vedtak';
+import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
@@ -29,12 +30,17 @@ import {
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
+interface IProps {
+    vedtaksperiodetype: Vedtaksperiodetype;
+}
+
 const GroupLabel = styled.div`
     color: black;
 `;
 
-const BegrunnelserMultiselect: React.FC = () => {
+const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const { erLesevisning } = useBehandling();
+    const skalIkkeEditeres = erLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
     const {
         id,
         skjema,
@@ -92,12 +98,12 @@ const BegrunnelserMultiselect: React.FC = () => {
                     },
                 }),
             }}
-            placeholder={'Velg begrunnelse(r)'}
-            isDisabled={erLesevisning() || skjema.submitRessurs.status === RessursStatus.HENTER}
+            placeholder={'Valgt(e) begrunnelse(r)'}
+            isDisabled={skalIkkeEditeres || skjema.submitRessurs.status === RessursStatus.HENTER}
             feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
             label="Begrunnelse(r) i brev"
             creatable={false}
-            erLesevisning={erLesevisning()}
+            erLesevisning={skalIkkeEditeres}
             isMulti={true}
             onChange={(_, action: ActionMeta<ISelectOption>) => {
                 onChangeBegrunnelse(action);

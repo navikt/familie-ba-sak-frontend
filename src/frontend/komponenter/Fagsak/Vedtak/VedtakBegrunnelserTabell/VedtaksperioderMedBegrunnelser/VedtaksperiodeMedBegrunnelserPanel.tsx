@@ -44,7 +44,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
             )}
 
             <SkjemaGruppe feil={skjema.visFeilmeldinger && skjemaFeilmelding()}>
-                <BegrunnelserMultiselect />
+                <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
 
                 <FritekstVedtakbegrunnelser />
             </SkjemaGruppe>
