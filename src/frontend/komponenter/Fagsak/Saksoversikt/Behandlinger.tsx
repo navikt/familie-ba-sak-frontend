@@ -72,7 +72,7 @@ const lagLenkePåType = (fagsak: IFagsak, behandling: VisningBehandling): ReactN
     );
 };
 
-const lagLengePåResultat = (fagsak: IFagsak, behandling: VisningBehandling): ReactNode => {
+const lagLenkePåResultat = (fagsak: IFagsak, behandling: VisningBehandling): ReactNode => {
     return !behandling.resultat ? (
         '-'
     ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
