@@ -10,17 +10,30 @@ import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, Målform } from '../typer/søknad';
+import {
+    erEtter,
+    kalenderDatoFraDate,
+    kalenderDatoMedFallback,
+    TIDENES_ENDE,
+} from '../utils/kalender';
 import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 export const hentBarnMedLøpendeUtbetaling = (fagsak: IFagsak) =>
-    fagsak.gjeldendeUtbetalingsperioder.reduce((acc, utbetalingsperiode) => {
-        utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
-            acc.add(utbetalingsperiodeDetalj.person.personIdent)
-        );
+    fagsak.gjeldendeUtbetalingsperioder
+        .filter(utbetalingsperiode =>
+            erEtter(
+                kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE),
+                kalenderDatoFraDate(new Date())
+            )
+        )
+        .reduce((acc, utbetalingsperiode) => {
+            utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
+                acc.add(utbetalingsperiodeDetalj.person.personIdent)
+            );
 
-        return acc;
-    }, new Set());
+            return acc;
+        }, new Set());
 
 const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
