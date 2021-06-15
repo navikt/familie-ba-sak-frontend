@@ -43,12 +43,14 @@ const FjernBarnKnapp = styled(IkonKnapp)`
 `;
 
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
-    const { skjema } = useSøknad();
+    const { skjema, barnMedLøpendeUtbetaling } = useSøknad();
     const { erLesevisning } = useBehandling();
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
-    )}) | ${formaterPersonIdent(barn.ident)}`;
+    )}) | ${formaterPersonIdent(barn.ident)} ${
+        barnMedLøpendeUtbetaling.has(barn.ident) ? '(løpende)' : ''
+    }`;
 
     return (
         <CheckboxOgSlettknapp>

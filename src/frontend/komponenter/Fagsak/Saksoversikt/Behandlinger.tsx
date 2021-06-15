@@ -168,7 +168,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                                     : '-'
                                             }
                                         />
-                                        <td>{lagLengePåResultat(fagsak, behandling)}</td>
+                                        <td>{lagLenkePåResultat(fagsak, behandling)}</td>
                                     </tr>
                                 );
                             })}
