@@ -102,8 +102,10 @@ const finnÅrsak = (behandling: VisningBehandling): ReactNode => {
 };
 
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
-    let behandlinger: Array<VisningBehandling> = fagsak.behandlinger;
-    behandlinger = behandlinger.concat(fagsak.tilbakekrevingsbehandlinger);
+    const behandlinger: Array<VisningBehandling> = [
+        ...fagsak.behandlinger,
+        ...fagsak.tilbakekrevingsbehandlinger,
+    ];
 
     return (
         <div className={'saksoversikt__behandlingshistorikk'}>

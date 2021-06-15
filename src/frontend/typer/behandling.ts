@@ -158,7 +158,6 @@ export enum BehandlingResultat {
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
     /** De neste er resultat for tilbakekrevingsbehandlinger **/
-    IKKE_FASTSATT = 'IKKE_FASTSATT',
     INGEN_TILBAKEBETALING = 'INGEN_TILBAKEBETALING',
     DELVIS_TILBAKEBETALING = 'DELVIS_TILBAKEBETALING',
     FULL_TILBAKEBETALING = 'FULL_TILBAKEBETALING',
@@ -292,7 +291,6 @@ export const behandlingsresultater: Record<BehandlingResultat, string> = {
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
     IKKE_VURDERT: 'Ikke vurdert',
     /** De neste er resultat for tilbakekrevingsbehandlinger **/
-    IKKE_FASTSATT: 'Ikke fastsatt',
     INGEN_TILBAKEBETALING: 'Ingen tilbakebetaling',
     DELVIS_TILBAKEBETALING: 'Delvis tilbakebetaling',
     FULL_TILBAKEBETALING: 'Full tilbakebetaling',

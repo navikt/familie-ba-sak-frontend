@@ -5,7 +5,7 @@ import {
     BehandlingÅrsak,
 } from './behandling';
 
-interface IVedtakForBehandling {
+interface IVedtakForTilbakekreving {
     aktiv: boolean;
     vedtaksdato: string;
 }
@@ -18,5 +18,5 @@ export interface ITilbakekrevingsbehandling {
     resultat?: BehandlingResultat;
     status: BehandlingStatus;
     årsak?: BehandlingÅrsak;
-    vedtakForBehandling: IVedtakForBehandling[];
+    vedtakForBehandling: IVedtakForTilbakekreving[];
 }
