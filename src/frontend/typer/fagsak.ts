@@ -1,5 +1,6 @@
 import { IBehandling } from './behandling';
 import { INøkkelPar } from './common';
+import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 import { Utbetalingsperiode } from './vedtaksperiode';
 
 // Enum
@@ -18,6 +19,7 @@ export interface IFagsak {
     status: FagsakStatus;
     søkerFødselsnummer: string;
     underBehandling: boolean;
+    tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[];
     gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 

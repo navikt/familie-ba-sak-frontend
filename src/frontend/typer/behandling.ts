@@ -34,6 +34,12 @@ export enum BehandlingÅrsak {
     OMREGNING_6ÅR = 'OMREGNING_6ÅR',
     OMREGNING_18ÅR = 'OMREGNING_18ÅR',
     MIGRERING = 'MIGRERING',
+    /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
+    REVURDERING_KLAGE_NFP = 'REVURDERING_KLAGE_NFP',
+    REVURDERING_KLAGE_KA = 'REVURDERING_KLAGE_KA',
+    REVURDERING_OPPLYSNINGER_OM_VILKÅR = 'REVURDERING_OPPLYSNINGER_OM_VILKÅR',
+    REVURDERING_OPPLYSNINGER_OM_FORELDELSE = 'REVURDERING_OPPLYSNINGER_OM_FORELDELSE',
+    REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT = 'REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT',
 }
 
 export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
@@ -47,6 +53,13 @@ export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
     OMREGNING_6ÅR: 'Omregning 6 år',
     OMREGNING_18ÅR: 'Omregning 18 år',
     MIGRERING: 'Migrering',
+    /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
+    REVURDERING_KLAGE_NFP: 'Revurdering etter klage',
+    REVURDERING_KLAGE_KA: 'Revurdering etter klage',
+    REVURDERING_OPPLYSNINGER_OM_VILKÅR: 'Nye opplysninger',
+    REVURDERING_OPPLYSNINGER_OM_FORELDELSE: 'Nye opplysninger',
+    REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT:
+        'Feilutbetalt beløp helt eller delvis bortfalt',
 };
 
 export enum BehandlingUnderkategori {
@@ -119,6 +132,9 @@ export enum Behandlingstype {
     MIGRERING_FRA_INFOTRYGD = 'MIGRERING_FRA_INFOTRYGD',
     REVURDERING = 'REVURDERING',
     TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
+    /** De neste er typer for tilbakekrevingsbehandlinger **/
+    TILBAKEKREVING = 'TILBAKEKREVING',
+    REVURDERING_TILBAKEKREVING = 'REVURDERING_TILBAKEKREVING',
 }
 
 export enum BehandlingResultat {
@@ -141,6 +157,11 @@ export enum BehandlingResultat {
     HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
+    /** De neste er resultat for tilbakekrevingsbehandlinger **/
+    INGEN_TILBAKEBETALING = 'INGEN_TILBAKEBETALING',
+    DELVIS_TILBAKEBETALING = 'DELVIS_TILBAKEBETALING',
+    FULL_TILBAKEBETALING = 'FULL_TILBAKEBETALING',
+    HENLAGT = 'HENLAGT',
 }
 
 export enum BehandlerRolle {
@@ -216,6 +237,15 @@ export const behandlingstyper: INøkkelPar = {
         id: 'KLAGE',
         navn: 'Klage',
     },
+    /** Behandlingstyper for tilbakekreving **/
+    TILBAKEKREVING: {
+        id: 'TILBAKEKREVING',
+        navn: 'Tilbakekreving',
+    },
+    REVURDERING_TILBAKEKREVING: {
+        id: 'REVURDERING_TILBAKEKREVING',
+        navn: 'Revurdering tilbakekreving',
+    },
 };
 
 export const kategorier: INøkkelPar = {
@@ -260,6 +290,11 @@ export const behandlingsresultater: Record<BehandlingResultat, string> = {
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
     IKKE_VURDERT: 'Ikke vurdert',
+    /** De neste er resultat for tilbakekrevingsbehandlinger **/
+    INGEN_TILBAKEBETALING: 'Ingen tilbakebetaling',
+    DELVIS_TILBAKEBETALING: 'Delvis tilbakebetaling',
+    FULL_TILBAKEBETALING: 'Full tilbakebetaling',
+    HENLAGT: 'Henlagt',
 };
 
 export const behandlingsstatuser: Record<BehandlingStatus, string> = {

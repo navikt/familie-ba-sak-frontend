@@ -32,4 +32,5 @@ export const mockFagsak = ({
     status,
     underBehandling,
     gjeldendeUtbetalingsperioder,
+    tilbakekrevingsbehandlinger: [],
 });

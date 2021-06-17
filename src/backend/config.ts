@@ -8,12 +8,14 @@ const Environment = () => {
             buildPath: 'frontend_development',
             namespace: 'local',
             proxyUrl: 'http://localhost:8089',
+            familieTilbakeUrl: 'http://localhost:8000',
         };
     } else if (process.env.ENV === 'e2e') {
         return {
             buildPath: 'frontend_production',
             namespace: 'e2e',
             proxyUrl: 'http://familie-ba-sak:8089',
+            familieTilbakeUrl: 'http://familie-tilbake-frontend:8000',
             redisUrl: 'familie-redis',
         };
     } else if (process.env.ENV === 'preprod') {
@@ -21,6 +23,7 @@ const Environment = () => {
             buildPath: 'frontend_production',
             namespace: 'preprod',
             proxyUrl: 'http://familie-ba-sak',
+            familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
             redisUrl: 'familie-ba-sak-frontend-redis.default.svc.nais.local',
         };
     }
@@ -29,6 +32,7 @@ const Environment = () => {
         buildPath: 'frontend_production',
         namespace: 'production',
         proxyUrl: 'http://familie-ba-sak',
+        familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
         redisUrl: 'familie-ba-sak-frontend-redis.default.svc.nais.local',
     };
 };
@@ -60,3 +64,7 @@ export const oboConfig: IApi = {
 export const buildPath = env.buildPath;
 export const proxyUrl = env.proxyUrl;
 export const namespace = env.namespace;
+
+export const redirectRecords: Record<string, string> = {
+    '/redirect/familie-tilbake': env.familieTilbakeUrl,
+};
