@@ -235,6 +235,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                                 <VedtaksperioderMedBegrunnelser
                                     fagsak={fagsak}
                                     åpenBehandling={åpenBehandling}
+                                    erLesevisning={erLesevisning()}
                                 />
                             </VedtaksbegrunnelseTeksterProvider>
                         )}

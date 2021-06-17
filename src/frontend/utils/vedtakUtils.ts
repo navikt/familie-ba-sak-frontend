@@ -8,7 +8,11 @@ import {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../typer/vedtaksperiode';
+import {
+    IVedtaksperiodeMedBegrunnelser,
+    Vedtaksperiode,
+    Vedtaksperiodetype,
+} from '../typer/vedtaksperiode';
 import { VedtaksbegrunnelseTekster, VilkårType } from '../typer/vilkår';
 import {
     førsteDagIInneværendeMåned,
@@ -59,6 +63,42 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
                     vedtaksperiode.periodeFom,
                     TIDENES_MORGEN
                 );
+                const toMånederFremITid = leggTil(
+                    førsteDagIInneværendeMåned(),
+                    2,
+                    KalenderEnhet.MÅNED
+                );
+                return (
+                    kalenderDiff(
+                        kalenderDatoTilDate(periodeFom),
+                        kalenderDatoTilDate(toMånederFremITid)
+                    ) < 0
+                );
+            }
+        });
+};
+
+export const filtrerOgSorterPerioderMedBegrunnelseBehov2 = (
+    vedtaksperioder: IVedtaksperiodeMedBegrunnelser[],
+    erLesevisning: boolean
+): IVedtaksperiodeMedBegrunnelser[] => {
+    return vedtaksperioder
+        .slice()
+        .sort((a, b) =>
+            kalenderDiff(
+                kalenderDatoTilDate(kalenderDatoMedFallback(a.fom, TIDENES_MORGEN)),
+                kalenderDatoTilDate(kalenderDatoMedFallback(b.fom, TIDENES_MORGEN))
+            )
+        )
+        .filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
+            const vedtakBegrunnelserForPeriode = vedtaksperiode.begrunnelser;
+
+            if (erLesevisning) {
+                // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
+                return !!vedtakBegrunnelserForPeriode.length;
+            } else {
+                // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
+                const periodeFom = kalenderDatoMedFallback(vedtaksperiode.fom, TIDENES_MORGEN);
                 const toMånederFremITid = leggTil(
                     førsteDagIInneværendeMåned(),
                     2,
