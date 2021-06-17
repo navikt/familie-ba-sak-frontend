@@ -6,7 +6,10 @@ import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/BehandlingContext';
-import { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
+import {
+    IVedtaksperiodeMedBegrunnelser,
+    Vedtaksperiodetype,
+} from '../../../../../typer/vedtaksperiode';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import Utbetalingsresultat from '../Felles/Utbetalingsresultat';
@@ -45,8 +48,9 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
 
             <SkjemaGruppe feil={skjema.visFeilmeldinger && skjemaFeilmelding()}>
                 <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
-
-                <FritekstVedtakbegrunnelser />
+                {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING && (
+                    <FritekstVedtakbegrunnelser />
+                )}
             </SkjemaGruppe>
 
             <Knapperekke>
