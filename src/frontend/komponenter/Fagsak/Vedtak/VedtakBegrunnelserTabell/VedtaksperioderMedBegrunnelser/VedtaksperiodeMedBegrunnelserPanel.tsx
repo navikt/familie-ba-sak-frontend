@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Element } from 'nav-frontend-typografi';
 
 import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -47,6 +48,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
             )}
 
             <SkjemaGruppe feil={skjema.visFeilmeldinger && skjemaFeilmelding()}>
+                <Element style={{ marginBottom: '0.5rem' }}>Begrunnelser i brev</Element>
                 <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
                 {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING && (
                     <FritekstVedtakbegrunnelser />
