@@ -15,17 +15,15 @@ import {
     underkategorier,
     BehandlingStatus,
     behandlingÅrsak,
-    Behandlingstype,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import {
+    Tilbakekrevingsbehandlingstype,
+    tilbakekrevingstyper,
+} from '../../../typer/tilbakekrevingsbehandling';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { kalenderDiff } from '../../../utils/kalender';
 import { VisningBehandling, VisningVedtakForBehandling } from './visningBehandling';
-
-const tilbakekrevingstyper = [
-    Behandlingstype.TILBAKEKREVING,
-    Behandlingstype.REVURDERING_TILBAKEKREVING,
-];
 
 interface IBehandlingshistorikkProps {
     fagsak: IFagsak;
@@ -72,7 +70,7 @@ const lagLenkePåResultat = (fagsak: IFagsak, behandling: VisningBehandling): Re
 };
 
 const finnÅrsak = (behandling: VisningBehandling): ReactNode => {
-    return behandling.type === Behandlingstype.TILBAKEKREVING
+    return behandling.type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
         ? 'Feilutbetaling'
         : behandling.årsak
         ? behandlingÅrsak[behandling.årsak]

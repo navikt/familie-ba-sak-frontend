@@ -3,7 +3,10 @@ import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
 import { ITilbakekreving } from './simulering';
 import { ISøknadDTO } from './søknad';
-import { TilbakekrevingbehandlingÅrsak } from './tilbakekrevingsbehandling';
+import {
+    TilbakekrevingsbehandlingResultat,
+    TilbakekrevingsbehandlingÅrsak,
+} from './tilbakekrevingsbehandling';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
 import { Utbetalingsperiode, Vedtaksperiode } from './vedtaksperiode';
@@ -37,7 +40,7 @@ export enum BehandlingÅrsak {
     MIGRERING = 'MIGRERING',
 }
 
-export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingbehandlingÅrsak, string> = {
+export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak, string> = {
     SØKNAD: 'Søknad',
     FØDSELSHENDELSE: 'Fødselshendelse',
     ÅRLIG_KONTROLL: 'Årlig kontroll',
@@ -127,9 +130,6 @@ export enum Behandlingstype {
     MIGRERING_FRA_INFOTRYGD = 'MIGRERING_FRA_INFOTRYGD',
     REVURDERING = 'REVURDERING',
     TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
-    /** De neste er typer for tilbakekrevingsbehandlinger **/
-    TILBAKEKREVING = 'TILBAKEKREVING',
-    REVURDERING_TILBAKEKREVING = 'REVURDERING_TILBAKEKREVING',
 }
 
 export enum BehandlingResultat {
@@ -152,11 +152,6 @@ export enum BehandlingResultat {
     HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
-    /** De neste er resultat for tilbakekrevingsbehandlinger **/
-    INGEN_TILBAKEBETALING = 'INGEN_TILBAKEBETALING',
-    DELVIS_TILBAKEBETALING = 'DELVIS_TILBAKEBETALING',
-    FULL_TILBAKEBETALING = 'FULL_TILBAKEBETALING',
-    HENLAGT = 'HENLAGT',
 }
 
 export enum BehandlerRolle {
@@ -265,7 +260,10 @@ export const underkategorier: INøkkelPar = {
     },
 };
 
-export const behandlingsresultater: Record<BehandlingResultat, string> = {
+export const behandlingsresultater: Record<
+    BehandlingResultat | TilbakekrevingsbehandlingResultat,
+    string
+> = {
     INNVILGET: 'Innvilget',
     INNVILGET_OG_OPPHØRT: 'Innvilget og opphørt',
     INNVILGET_OG_ENDRET: 'Innvilget og endret',
