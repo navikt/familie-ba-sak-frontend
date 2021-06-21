@@ -1,5 +1,7 @@
-import { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../typer/vedtak';
-import { Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
+import {
+    IVedtaksperiodeMedBegrunnelser,
+    Vedtaksperiodetype,
+} from '../../../../../typer/vedtaksperiode';
 import {
     førsteDagIInneværendeMåned,
     KalenderEnhet,
@@ -7,13 +9,12 @@ import {
     serializeIso8601String,
     sisteDagIInneværendeMåned,
 } from '../../../../../utils/kalender';
-import { mockVedtakbegrunnelse } from '../../../../../utils/test/vedtak/vedtakbegrunnelse.mock';
 import {
     mockAvslagsperiode,
     mockOpphørsperiode,
     mockUtbetalingsperiode,
 } from '../../../../../utils/test/vedtak/vedtaksperiode.mock';
-import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../../utils/vedtakUtils';
+import { filtrerOgSorterPerioderMedBegrunnelseBehov2 } from '../../../../../utils/vedtakUtils';
 
 describe('VedtakBegrunnelserContext', () => {
     describe('Test filtrerOgSorterPerioderMedBegrunnelseBehov', () => {
@@ -21,62 +22,32 @@ describe('VedtakBegrunnelserContext', () => {
         const tom = '2020-02-28';
         const opphørFom = '2020-03-01';
 
-        const vedtaksperioder = [
-            mockOpphørsperiode({ periodeFom: opphørFom }),
-            mockUtbetalingsperiode({ periodeFom: fom, periodeTom: tom }),
-            mockAvslagsperiode({ periodeFom: fom, periodeTom: tom }),
-        ];
-
-        test(`Test at kun vedtaksperioder av typen OPPHØR og UTBETALING returneres`, () => {
-            const periodeTyper = filtrerOgSorterPerioderMedBegrunnelseBehov(
-                vedtaksperioder,
-                [],
-                false
-            ).map(p => p.vedtaksperiodetype);
-            expect(periodeTyper.length).toBe(2);
-            expect(periodeTyper).toContain(Vedtaksperiodetype.OPPHØR);
-            expect(periodeTyper).toContain(Vedtaksperiodetype.UTBETALING);
-        });
-
         test(`Test at returnerte perioder er sortert på fom-dato.`, () => {
-            const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(vedtaksperioder, [], false);
-            expect(perioder.length).toBe(2);
-            expect(perioder[0].vedtaksperiodetype).toBe(Vedtaksperiodetype.UTBETALING);
-            expect(perioder[1].vedtaksperiodetype).toBe(Vedtaksperiodetype.OPPHØR);
+            const vedtaksperioder: IVedtaksperiodeMedBegrunnelser[] = [
+                mockOpphørsperiode({ fom: opphørFom }),
+                mockUtbetalingsperiode({ fom: fom, tom: tom }),
+                mockAvslagsperiode({ fom: fom, tom: tom }),
+            ];
+            const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(vedtaksperioder, false);
+            expect(perioder.length).toBe(3);
+            expect(perioder[0].type).toBe(Vedtaksperiodetype.UTBETALING);
+            expect(perioder[1].type).toBe(Vedtaksperiodetype.AVSLAG);
+            expect(perioder[2].type).toBe(Vedtaksperiodetype.OPPHØR);
         });
 
         describe('Test lesevisning', () => {
             const erLesevisning = true;
             test(`Test at ubegrunnede perioder ikke returneres ved lesevisning`, () => {
-                const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
+                const vedtaksperioder: IVedtaksperiodeMedBegrunnelser[] = [
+                    mockOpphørsperiode({ fom: opphørFom }),
+                    mockUtbetalingsperiode({ fom: fom, tom: tom, begrunnelser: [] }),
+                ];
+                const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(
                     vedtaksperioder,
-                    [
-                        mockVedtakbegrunnelse({
-                            begrunnelse: VedtakBegrunnelse.OPPHØR_BARN_FLYTTET_FRA_SØKER,
-                            begrunnelseType: VedtakBegrunnelseType.OPPHØR,
-                            fom: opphørFom,
-                            tom: '',
-                        }),
-                    ],
                     erLesevisning
                 );
                 expect(perioder.length).toBe(1);
-                expect(perioder[0].vedtaksperiodetype).toEqual(Vedtaksperiodetype.OPPHØR);
-            });
-            test(`Test at perioder med kun avslagsbegrunnelse ikke returneres ved lesevisning`, () => {
-                const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
-                    vedtaksperioder,
-                    [
-                        mockVedtakbegrunnelse({
-                            begrunnelse: VedtakBegrunnelse.AVSLAG_MEDLEM_I_FOLKETRYGDEN,
-                            begrunnelseType: VedtakBegrunnelseType.AVSLAG,
-                            fom: fom,
-                            tom: tom,
-                        }),
-                    ],
-                    erLesevisning
-                );
-                expect(perioder.length).toBe(0);
+                expect(perioder[0].type).toEqual(Vedtaksperiodetype.OPPHØR);
             });
         });
 
@@ -92,14 +63,13 @@ describe('VedtakBegrunnelserContext', () => {
                     1,
                     KalenderEnhet.MÅNED
                 );
-                const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
+                const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(
                     [
                         mockUtbetalingsperiode({
-                            periodeFom: serializeIso8601String(enMndFremITidFom),
-                            periodeTom: serializeIso8601String(enMndFremITidTom),
+                            fom: serializeIso8601String(enMndFremITidFom),
+                            tom: serializeIso8601String(enMndFremITidTom),
                         }),
                     ],
-                    [],
                     false
                 );
                 expect(perioder.length).toBe(1);
@@ -116,14 +86,13 @@ describe('VedtakBegrunnelserContext', () => {
                     KalenderEnhet.MÅNED
                 );
 
-                const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov(
+                const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(
                     [
                         mockUtbetalingsperiode({
-                            periodeFom: serializeIso8601String(toMndFremITidFom),
-                            periodeTom: serializeIso8601String(toMndFremITidTom),
+                            fom: serializeIso8601String(toMndFremITidFom),
+                            tom: serializeIso8601String(toMndFremITidTom),
                         }),
                     ],
-                    [],
                     false
                 );
                 expect(perioder.length).toBe(0);

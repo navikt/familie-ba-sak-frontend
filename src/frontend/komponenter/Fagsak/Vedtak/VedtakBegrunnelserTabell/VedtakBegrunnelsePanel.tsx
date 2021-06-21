@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Element } from 'nav-frontend-typografi';
+
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../typer/vedtak';
@@ -60,6 +62,7 @@ const VedtakBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
                     <div />
                 )}
                 <div>
+                    <Element style={{ marginBottom: '0.5rem' }}>Begrunnelser i brev</Element>
                     <VedtakBegrunnelserMultiselect
                         erLesevisning={erLesevisning()}
                         personResultater={åpenBehandling.personResultater}
