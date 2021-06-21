@@ -40,7 +40,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
     ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
         const { settFagsak } = useFagsakRessurser();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
-            åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
+            åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
+                vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0 &&
+                vedtaksperiodeMedBegrunnelser.fritekster.length === 0
         );
 
         const maksAntallKulepunkter =
