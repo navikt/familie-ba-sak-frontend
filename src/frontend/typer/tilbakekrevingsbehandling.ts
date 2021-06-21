@@ -1,9 +1,12 @@
-import {
-    BehandlingResultat,
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingÅrsak,
-} from './behandling';
+import { BehandlingResultat, BehandlingStatus, Behandlingstype } from './behandling';
+
+export enum TilbakekrevingbehandlingÅrsak {
+    REVURDERING_KLAGE_NFP = 'REVURDERING_KLAGE_NFP',
+    REVURDERING_KLAGE_KA = 'REVURDERING_KLAGE_KA',
+    REVURDERING_OPPLYSNINGER_OM_VILKÅR = 'REVURDERING_OPPLYSNINGER_OM_VILKÅR',
+    REVURDERING_OPPLYSNINGER_OM_FORELDELSE = 'REVURDERING_OPPLYSNINGER_OM_FORELDELSE',
+    REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT = 'REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT',
+}
 
 interface IVedtakForTilbakekreving {
     aktiv: boolean;
@@ -17,6 +20,6 @@ export interface ITilbakekrevingsbehandling {
     opprettetTidspunkt: string;
     resultat?: BehandlingResultat;
     status: BehandlingStatus;
-    årsak?: BehandlingÅrsak;
+    årsak?: TilbakekrevingbehandlingÅrsak;
     vedtakForBehandling: IVedtakForTilbakekreving[];
 }

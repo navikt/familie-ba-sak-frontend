@@ -3,6 +3,7 @@ import { INøkkelPar } from './common';
 import { IGrunnlagPerson } from './person';
 import { ITilbakekreving } from './simulering';
 import { ISøknadDTO } from './søknad';
+import { TilbakekrevingbehandlingÅrsak } from './tilbakekrevingsbehandling';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
 import { Utbetalingsperiode, Vedtaksperiode } from './vedtaksperiode';
@@ -34,15 +35,9 @@ export enum BehandlingÅrsak {
     OMREGNING_6ÅR = 'OMREGNING_6ÅR',
     OMREGNING_18ÅR = 'OMREGNING_18ÅR',
     MIGRERING = 'MIGRERING',
-    /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
-    REVURDERING_KLAGE_NFP = 'REVURDERING_KLAGE_NFP',
-    REVURDERING_KLAGE_KA = 'REVURDERING_KLAGE_KA',
-    REVURDERING_OPPLYSNINGER_OM_VILKÅR = 'REVURDERING_OPPLYSNINGER_OM_VILKÅR',
-    REVURDERING_OPPLYSNINGER_OM_FORELDELSE = 'REVURDERING_OPPLYSNINGER_OM_FORELDELSE',
-    REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT = 'REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT',
 }
 
-export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
+export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingbehandlingÅrsak, string> = {
     SØKNAD: 'Søknad',
     FØDSELSHENDELSE: 'Fødselshendelse',
     ÅRLIG_KONTROLL: 'Årlig kontroll',
