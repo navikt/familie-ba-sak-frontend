@@ -5,6 +5,7 @@ import { Route, Switch, useParams } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
 
+import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingProvider } from '../../context/BehandlingContext';
@@ -22,6 +23,8 @@ const FagsakContainer: React.FunctionComponent = () => {
     const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
 
+    const { request } = useHttp();
+
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
     useEffect(() => {
@@ -35,6 +38,21 @@ const FagsakContainer: React.FunctionComponent = () => {
                 hentFagsak(fagsakId);
             }
         }
+
+        bruker.status === RessursStatus.SUKSESS &&
+            request<JournalposterForBrukerRequest, { tittel: string }[]>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/journalpost/for-bruker`,
+                data: {
+                    antall: 100,
+                    brukerId: { id: bruker.data.personIdent, type: 'FNR' },
+                    journalposttype: 'I',
+                },
+            }).then(x => {
+                if (x.status === RessursStatus.SUKSESS) {
+                    x.data.forEach(y => console.log(y.tittel));
+                }
+            });
     }, [fagsakId]);
 
     useEffect(() => {
