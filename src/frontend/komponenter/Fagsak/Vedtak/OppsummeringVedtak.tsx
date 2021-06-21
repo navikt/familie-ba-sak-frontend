@@ -227,13 +227,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             </Alertstripe>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
-                                {brukNyeVedtaksperioder ? (
-                                    <VedtaksperioderMedBegrunnelser
-                                        fagsak={fagsak}
-                                        åpenBehandling={åpenBehandling}
-                                        erLesevisning={erLesevisning()}
-                                    />
-                                ) : (
+                                {brukNyeVedtaksperioder && ( // TODO: Husk å switche toggle før merge
                                     <VedtakBegrunnelserProvider
                                         fagsak={fagsak}
                                         aktivVedtak={aktivVedtak}
@@ -242,6 +236,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                                         <AvslagBegrunnelser åpenBehandling={åpenBehandling} />
                                     </VedtakBegrunnelserProvider>
                                 )}
+                                <VedtaksperioderMedBegrunnelser
+                                    fagsak={fagsak}
+                                    åpenBehandling={åpenBehandling}
+                                    erLesevisning={erLesevisning()}
+                                />
                             </VedtaksbegrunnelseTeksterProvider>
                         )}
 
