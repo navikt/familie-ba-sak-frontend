@@ -277,6 +277,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     },
                     (fagsak: Ressurs<IFagsak>) => {
                         settFagsak(fagsak);
+                        onPanelClose(false);
                     }
                 );
             }
