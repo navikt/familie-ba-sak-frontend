@@ -6,6 +6,11 @@ import {
     BehandlingUnderkategori,
     BehandlingÅrsak,
 } from '../../../typer/behandling';
+import {
+    TilbakekrevingsbehandlingResultat,
+    Tilbakekrevingsbehandlingstype,
+    TilbakekrevingsbehandlingÅrsak,
+} from '../../../typer/tilbakekrevingsbehandling';
 
 export interface VisningVedtakForBehandling {
     aktiv: boolean;
@@ -15,11 +20,11 @@ export interface VisningVedtakForBehandling {
 export interface VisningBehandling {
     aktiv: boolean;
     behandlingId: number | string;
-    type: Behandlingstype;
+    type: Behandlingstype | Tilbakekrevingsbehandlingstype;
     opprettetTidspunkt: string;
-    resultat?: BehandlingResultat;
+    resultat?: BehandlingResultat | TilbakekrevingsbehandlingResultat;
     status: BehandlingStatus;
-    årsak?: BehandlingÅrsak;
+    årsak?: BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak;
     vedtakForBehandling: VisningVedtakForBehandling[];
     kategori?: BehandlingKategori;
     underkategori?: BehandlingUnderkategori;

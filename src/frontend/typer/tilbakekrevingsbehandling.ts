@@ -1,9 +1,29 @@
-import {
-    BehandlingResultat,
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingÅrsak,
-} from './behandling';
+import { BehandlingStatus } from './behandling';
+
+export enum Tilbakekrevingsbehandlingstype {
+    TILBAKEKREVING = 'TILBAKEKREVING',
+    REVURDERING_TILBAKEKREVING = 'REVURDERING_TILBAKEKREVING',
+}
+
+export const tilbakekrevingstyper = [
+    Tilbakekrevingsbehandlingstype.TILBAKEKREVING,
+    Tilbakekrevingsbehandlingstype.REVURDERING_TILBAKEKREVING,
+];
+
+export enum TilbakekrevingsbehandlingÅrsak {
+    REVURDERING_KLAGE_NFP = 'REVURDERING_KLAGE_NFP',
+    REVURDERING_KLAGE_KA = 'REVURDERING_KLAGE_KA',
+    REVURDERING_OPPLYSNINGER_OM_VILKÅR = 'REVURDERING_OPPLYSNINGER_OM_VILKÅR',
+    REVURDERING_OPPLYSNINGER_OM_FORELDELSE = 'REVURDERING_OPPLYSNINGER_OM_FORELDELSE',
+    REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT = 'REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT',
+}
+
+export enum TilbakekrevingsbehandlingResultat {
+    INGEN_TILBAKEBETALING = 'INGEN_TILBAKEBETALING',
+    DELVIS_TILBAKEBETALING = 'DELVIS_TILBAKEBETALING',
+    FULL_TILBAKEBETALING = 'FULL_TILBAKEBETALING',
+    HENLAGT = 'HENLAGT',
+}
 
 interface IVedtakForTilbakekreving {
     aktiv: boolean;
@@ -13,10 +33,10 @@ interface IVedtakForTilbakekreving {
 export interface ITilbakekrevingsbehandling {
     aktiv: boolean;
     behandlingId: string;
-    type: Behandlingstype;
+    type: Tilbakekrevingsbehandlingstype;
     opprettetTidspunkt: string;
-    resultat?: BehandlingResultat;
+    resultat?: TilbakekrevingsbehandlingResultat;
     status: BehandlingStatus;
-    årsak?: BehandlingÅrsak;
+    årsak?: TilbakekrevingsbehandlingÅrsak;
     vedtakForBehandling: IVedtakForTilbakekreving[];
 }
