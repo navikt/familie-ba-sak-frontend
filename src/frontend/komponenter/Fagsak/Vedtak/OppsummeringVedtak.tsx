@@ -227,7 +227,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             </Alertstripe>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
-                                {brukNyeVedtaksperioder && (
+                                {brukNyeVedtaksperioder && ( // TODO: Husk å switche toggle før merge
                                     <VedtakBegrunnelserProvider
                                         fagsak={fagsak}
                                         aktivVedtak={aktivVedtak}
