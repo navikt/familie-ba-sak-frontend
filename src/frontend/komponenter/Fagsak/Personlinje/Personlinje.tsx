@@ -30,7 +30,10 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
             <Normaltekst children={'Status på sak '} />
             <Element className={'visittkort__status'} children={hentFagsakStatusVisning(fagsak)} />
             <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/saksoversikt`}>
-                <Normaltekst>Gå til saksoversikt</Normaltekst>
+                <Normaltekst>Saksoversikt</Normaltekst>
+            </Lenke>
+            <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/dokumentliste`}>
+                <Normaltekst>Dokumentliste</Normaltekst>
             </Lenke>
 
             {harInnloggetSaksbehandlerSkrivetilgang() && <Behandlingsmeny fagsak={fagsak} />}

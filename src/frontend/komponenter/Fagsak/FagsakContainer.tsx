@@ -5,7 +5,6 @@ import { Route, Switch, useParams } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
 
-import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingProvider } from '../../context/BehandlingContext';
@@ -14,6 +13,7 @@ import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
+import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 
@@ -22,8 +22,6 @@ const FagsakContainer: React.FunctionComponent = () => {
     const history = useHistory();
     const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
-
-    const { request } = useHttp();
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
@@ -46,24 +44,6 @@ const FagsakContainer: React.FunctionComponent = () => {
         }
     }, []);
 
-    useEffect(() => {
-        bruker.status === RessursStatus.SUKSESS &&
-            request<JournalposterForBrukerRequest, { tittel: string }[]>({
-                method: 'POST',
-                url: `/familie-ba-sak/api/journalpost/for-bruker`,
-                data: {
-                    antall: 100,
-                    brukerId: { id: bruker.data.personIdent, type: 'FNR' },
-                    journalposttype: 'I',
-                },
-            }).then(x => {
-                console.log('Henter journalposter');
-                if (x.status === RessursStatus.SUKSESS) {
-                    x.data.forEach(y => console.log(y.tittel));
-                }
-            });
-    }, [bruker]);
-
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
             switch (bruker.status) {
@@ -83,6 +63,13 @@ const FagsakContainer: React.FunctionComponent = () => {
                                     className={'fagsakcontainer__content--main'}
                                 >
                                     <Switch>
+                                        <Route
+                                            exact={true}
+                                            path="/fagsak/:fagsakId/dokumentliste"
+                                            render={() => {
+                                                return <JournalpostListe bruker={bruker.data} />;
+                                            }}
+                                        />
                                         <Route
                                             exact={true}
                                             path="/fagsak/:fagsakId/saksoversikt"
