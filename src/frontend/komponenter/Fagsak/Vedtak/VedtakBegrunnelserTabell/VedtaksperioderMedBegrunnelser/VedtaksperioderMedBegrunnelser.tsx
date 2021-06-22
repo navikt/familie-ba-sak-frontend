@@ -69,12 +69,14 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 )
             )}
 
-            <OverskriftMedHjelpetekst
-                overskrift={'Begrunnelser for avslag i vedtaksbrev'}
-                hjelpetekst={
-                    'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
-                }
-            />
+            {avslagOgResterende[0].length > 0 && (
+                <OverskriftMedHjelpetekst
+                    overskrift={'Begrunnelser for avslag i vedtaksbrev'}
+                    hjelpetekst={
+                        'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
+                    }
+                />
+            )}
             {avslagOgResterende[0].map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
                     <VedtaksperiodeMedBegrunnelserProvider
