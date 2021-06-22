@@ -11,6 +11,7 @@ import { IPersonInfo } from '../../../typer/person';
 import { hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { formaterPersonIdent, hentAlder } from '../../../utils/formatter';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
+import { ToggleNavn } from '../../../typer/toggles';
 
 interface IProps {
     bruker: IPersonInfo;
@@ -18,7 +19,7 @@ interface IProps {
 }
 
 const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    const { harInnloggetSaksbehandlerSkrivetilgang, toggles } = useApp();
     return (
         <Visittkort
             navn={bruker.navn}
@@ -30,11 +31,13 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
             <Normaltekst children={'Status på sak '} />
             <Element className={'visittkort__status'} children={hentFagsakStatusVisning(fagsak)} />
             <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/saksoversikt`}>
-                <Normaltekst>Saksoversikt</Normaltekst>
+                <Normaltekst>Gå til saksoversikt</Normaltekst>
             </Lenke>
-            <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/dokumentliste`}>
-                <Normaltekst>Dokumentliste</Normaltekst>
-            </Lenke>
+            {toggles[ToggleNavn.journalpostliste] && (
+                <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/dokumentliste`}>
+                    <Normaltekst>Dokumentliste</Normaltekst>
+                </Lenke>
+            )}
 
             {harInnloggetSaksbehandlerSkrivetilgang() && <Behandlingsmeny fagsak={fagsak} />}
         </Visittkort>

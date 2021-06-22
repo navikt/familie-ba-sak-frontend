@@ -71,6 +71,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                 return <Saksoversikt fagsak={fagsak.data} />;
                                             }}
                                         />
+
                                         <Route
                                             exact={true}
                                             path="/fagsak/:fagsakId/dokumentliste"
@@ -78,6 +79,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                 return <JournalpostListe bruker={bruker.data} />;
                                             }}
                                         />
+
                                         <Route
                                             path="/fagsak/:fagsakId/:behandlingId"
                                             render={() => {
