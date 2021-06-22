@@ -13,7 +13,12 @@ import {
     IRestVedtaksbegrunnelse,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
-import { VedtaksbegrunnelseTekster, VilkårType } from '../../../../../typer/vilkår';
+import {
+    AnnenVurderingType,
+    Resultat,
+    VedtaksbegrunnelseTekster,
+    VilkårType,
+} from '../../../../../typer/vilkår';
 import { IPeriode } from '../../../../../utils/kalender';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { hentUtgjørendeVilkårImpl } from './useVedtakBegrunnelseMultiselect';
@@ -47,52 +52,66 @@ export const useVilkårBegrunnelser = ({
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] =>
         hentUtgjørendeVilkårImpl(begrunnelseType, åpenBehandling.personResultater, periode);
 
-    const leggTilBegrunnelserTilhørendeVedtakBegrunnelseType = (
-        vilkårBegrunnelser: VedtaksbegrunnelseTekster
-    ) => {
-        return (vedtakBegrunnelseType: string): GroupType<ISelectOption> => {
-            const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
-                vedtakBegrunnelseType as VedtakBegrunnelseType
-            );
-            return {
-                label: vedtakBegrunnelseTyper[vedtakBegrunnelseType as VedtakBegrunnelseType],
-                options: vilkårBegrunnelser[vedtakBegrunnelseType as VedtakBegrunnelseType]
-                    .filter(
-                        erVilkårIVedtakBegrunnelseUtgjørendeForPeriodeOgResultat(
-                            utgjørendeVilkårForPeriodeOgResultat
-                        )
-                    )
-                    .map(restVedtakBegrunnelseTilknyttetVilkår => ({
-                        label: restVedtakBegrunnelseTilknyttetVilkår.navn,
-                        value: restVedtakBegrunnelseTilknyttetVilkår.id,
-                    })),
-            };
-        };
-    };
-
-    const begrunnelsetypeErTilknyttetVedtaksperiode = (vedtakBegrunnelseType: string) =>
-        vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype.includes(
-            vedtakBegrunnelseType as VedtakBegrunnelseType
-        );
-
-    const erVilkårIVedtakBegrunnelseUtgjørendeForPeriodeOgResultat = (
-        utgjørendeVilkårForPeriodeOgResultat: VilkårType[]
-    ) => (restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-        restVedtakBegrunnelseTilknyttetVilkår.vilkår
-            ? utgjørendeVilkårForPeriodeOgResultat.includes(
-                  restVedtakBegrunnelseTilknyttetVilkår.vilkår
-              )
-            : false;
+    const skalLeggeTilAndreBegrunnelse = (
+        vedtakBegrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår
+    ) =>
+        vedtakBegrunnelse.id === VedtakBegrunnelse.OPPHØR_IKKE_MOTTATT_OPPLYSNINGER ||
+        vedtakBegrunnelse.id === VedtakBegrunnelse.REDUKSJON_MANGLENDE_OPPLYSNINGER
+            ? åpenBehandling.personResultater
+                  .flatMap(personResultat => personResultat.andreVurderinger)
+                  .find(
+                      annenVurdering =>
+                          annenVurdering.type === AnnenVurderingType.OPPLYSNINGSPLIKT &&
+                          annenVurdering.resultat === Resultat.IKKE_OPPFYLT
+                  )
+            : true;
 
     const grupperteBegrunnelser =
         vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
             ? Object.keys(vedtaksbegrunnelseTekster.data)
-                  .filter(begrunnelsetypeErTilknyttetVedtaksperiode)
-                  .map(
-                      leggTilBegrunnelserTilhørendeVedtakBegrunnelseType(
-                          vedtaksbegrunnelseTekster.data
+                  .filter((vedtakBegrunnelseType: string) =>
+                      vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype.includes(
+                          vedtakBegrunnelseType as VedtakBegrunnelseType
                       )
                   )
+                  .reduce((acc: GroupType<ISelectOption>[], vedtakBegrunnelseType: string) => {
+                      const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
+                          vedtakBegrunnelseType as VedtakBegrunnelseType
+                      );
+                      return [
+                          ...acc,
+                          {
+                              label:
+                                  vedtakBegrunnelseTyper[
+                                      vedtakBegrunnelseType as VedtakBegrunnelseType
+                                  ],
+                              options: vedtaksbegrunnelseTekster.data[
+                                  vedtakBegrunnelseType as VedtakBegrunnelseType
+                              ]
+                                  .filter(
+                                      (
+                                          restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
+                                      ) => {
+                                          return restVedtakBegrunnelseTilknyttetVilkår.vilkår
+                                              ? utgjørendeVilkårForPeriodeOgResultat.includes(
+                                                    restVedtakBegrunnelseTilknyttetVilkår.vilkår
+                                                )
+                                              : skalLeggeTilAndreBegrunnelse(
+                                                    restVedtakBegrunnelseTilknyttetVilkår
+                                                );
+                                      }
+                                  )
+                                  .map(
+                                      (
+                                          restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
+                                      ) => ({
+                                          label: restVedtakBegrunnelseTilknyttetVilkår.navn,
+                                          value: restVedtakBegrunnelseTilknyttetVilkår.id,
+                                      })
+                                  ),
+                          },
+                      ];
+                  }, [])
             : [];
 
     return { grupperteBegrunnelser, vedtaksbegrunnelseTekster };
