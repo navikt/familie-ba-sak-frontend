@@ -2,7 +2,6 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import {
@@ -89,19 +88,11 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     textOverflow: 'hidden',
                     overflow: 'hidden',
                 }),
-                multiValueRemove: (provided: CSSProperties) => ({
-                    ...provided,
-                    ':hover': {
-                        backgroundColor: navFarger.navBla,
-                        color: 'white',
-                        borderRadius: '0 .4rem .4rem 0',
-                    },
-                }),
             }}
             placeholder={'Velg begrunnelse(r)'}
             isDisabled={skalIkkeEditeres || skjema.submitRessurs.status === RessursStatus.HENTER}
             feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
-            label="Begrunnelse(r) i brev"
+            label="Velg standardtekst i brev"
             creatable={false}
             erLesevisning={skalIkkeEditeres}
             isMulti={true}

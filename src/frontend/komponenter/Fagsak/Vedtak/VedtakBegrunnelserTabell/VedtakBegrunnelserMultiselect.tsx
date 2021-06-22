@@ -2,7 +2,6 @@ import React, { CSSProperties } from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import {
@@ -104,20 +103,12 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                     textOverflow: 'hidden',
                     overflow: 'hidden',
                 }),
-                multiValueRemove: (provided: CSSProperties) => ({
-                    ...provided,
-                    ':hover': {
-                        backgroundColor: navFarger.navBla,
-                        color: 'white',
-                        borderRadius: '0 .4rem .4rem 0',
-                    },
-                }),
             }}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             isDisabled={erLesevisning || vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             feil={submitForPeriode?.feilmelding}
-            label="Begrunnelse(r) i brev"
+            label="Velg standardtekst i brev"
             creatable={false}
             erLesevisning={erLesevisning}
             isMulti={true}

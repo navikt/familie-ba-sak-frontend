@@ -8,6 +8,7 @@ export enum ToggleNavn {
     skjønnsvurdering = 'familie-ba-sak.behandling.skjonnsvurdering',
     medlemskap = 'familie-ba-sak.behandling.medlemskap',
     journalpostliste = 'familie-ba-sak.behandling.journalpostliste',
+    brukNyeVedtaksperioder = 'familie-ba-sak.behandling.vedtakstype-med-begrunnelser',
 }
 
 export const alleTogglerAv = (): IToggles => {

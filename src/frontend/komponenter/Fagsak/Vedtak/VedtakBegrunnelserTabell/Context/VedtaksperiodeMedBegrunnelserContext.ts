@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import constate from 'constate';
 import deepEqual from 'deep-equal';
@@ -12,11 +12,12 @@ import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
+    hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
     IRestPutVedtaksbegrunnelse,
     IRestPutVedtaksperiodeMedBegrunnelser,
     IVedtaksperiodeMedBegrunnelser,
     Utbetalingsperiode,
-    hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
+    Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
 import { IPeriode } from '../../../../../utils/kalender';
 import {
@@ -39,10 +40,13 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
     ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
         const { settFagsak } = useFagsakRessurser();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
-            åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING
+            åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
+                vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0 &&
+                vedtaksperiodeMedBegrunnelser.fritekster.length === 0
         );
 
-        const maksAntallKulepunkter = 1;
+        const maksAntallKulepunkter =
+            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
         const makslengdeFritekst = 220;
 
         const periode = useFelt<IPeriode>({
@@ -112,16 +116,16 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 fom: vedtaksperiodeMedBegrunnelser.fom,
                 tom: vedtaksperiodeMedBegrunnelser.tom,
             });
-            skjema.felter.fritekster.validerOgSettFelt(
-                vedtaksperiodeMedBegrunnelser.fritekster.map((fritekst, id) =>
-                    lagInitiellFritekst(fritekst, id)
-                )
-            );
 
             skjema.felter.begrunnelser.validerOgSettFelt(
                 mapBegrunnelserTilSelectOptions(
                     vedtaksperiodeMedBegrunnelser,
                     vedtaksbegrunnelseTekster
+                )
+            );
+            skjema.felter.fritekster.validerOgSettFelt(
+                vedtaksperiodeMedBegrunnelser.fritekster.map((fritekst, id) =>
+                    lagInitiellFritekst(fritekst, id)
                 )
             );
         };
@@ -181,16 +185,37 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 case 'pop-value':
                 case 'remove-value':
                     if (action.removedValue) {
-                        skjema.felter.begrunnelser.validerOgSettFelt([
+                        const oppdatertState = [
                             ...skjema.felter.begrunnelser.verdi.filter(
                                 selectOption => selectOption.value !== action.removedValue?.value
                             ),
-                        ]);
+                        ];
+                        if (
+                            oppdatertState.length === 0 &&
+                            skjema.felter.fritekster.verdi.length > 0 &&
+                            vedtaksperiodeMedBegrunnelser.type !==
+                                Vedtaksperiodetype.FORTSATT_INNVILGET
+                        ) {
+                            alert(
+                                'Fritekst kan kun brukes i kombinasjon med en eller flere begrunnelser. Legg først til en ny begrunnelse eller fjern friteksten(e).'
+                            );
+                        } else {
+                            skjema.felter.begrunnelser.validerOgSettFelt(oppdatertState);
+                        }
                     }
 
                     break;
                 case 'clear':
-                    skjema.felter.begrunnelser.validerOgSettFelt([]);
+                    if (
+                        skjema.felter.fritekster.verdi.length > 0 &&
+                        vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.FORTSATT_INNVILGET
+                    ) {
+                        alert(
+                            'Fritekst kan kun brukes i kombinasjon med en eller flere begrunnelser. Legg først til en ny begrunnelse eller fjern friteksten(e).'
+                        );
+                    } else {
+                        skjema.felter.begrunnelser.validerOgSettFelt([]);
+                    }
 
                     break;
                 default:
@@ -234,12 +259,13 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             skjema.felter.begrunnelser.verdi.length !== 0 &&
             skjema.felter.fritekster.verdi.length !== 0;
 
+        const gyldigFortsattInnvilgetBegrunnelser =
+            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET
+                ? erFritekstEllerBegrunnelseUtfylt && !erBådeFritekstogBegrunnelse
+                : true;
+
         const putVedtaksperiodeMedBegrunnelser = () => {
-            if (
-                kanSendeSkjema() &&
-                erFritekstEllerBegrunnelseUtfylt &&
-                !erBådeFritekstogBegrunnelse
-            ) {
+            if (kanSendeSkjema() && gyldigFortsattInnvilgetBegrunnelser) {
                 onSubmit<IRestPutVedtaksperiodeMedBegrunnelser>(
                     {
                         method: 'PUT',
@@ -262,16 +288,21 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     },
                     (fagsak: Ressurs<IFagsak>) => {
                         settFagsak(fagsak);
+                        onPanelClose(false);
                     }
                 );
             }
         };
 
         const skjemaFeilmelding = () => {
-            if (!erFritekstEllerBegrunnelseUtfylt) {
-                return 'Du må velge minst én begrunnelse, eller fritekst.';
-            } else if (erBådeFritekstogBegrunnelse) {
-                return 'Du kan kun ha begrunnelse eller fritekst, og ikke en kombinasjon. Fjern en av tekstene.';
+            if (vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET) {
+                if (!erFritekstEllerBegrunnelseUtfylt) {
+                    return 'Du må velge minst én begrunnelse, eller fritekst.';
+                } else if (erBådeFritekstogBegrunnelse) {
+                    return 'Du kan kun ha begrunnelse eller fritekst, og ikke en kombinasjon. Fjern en av tekstene.';
+                } else {
+                    return '';
+                }
             } else {
                 return '';
             }

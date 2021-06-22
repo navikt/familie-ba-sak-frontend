@@ -178,40 +178,42 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         value: '',
         label: 'Folkeregistrert i Norge - barna',
         brevtekst: {
-            NB: 'Dokumentasjon på at barna er folkeregistrert i Norge.',
-            NN: 'Dokumentasjon på at barna er folkeregistrert i Noreg.',
+            NB: 'Dokumentasjon som viser at barna har norsk fødselsnummer og er bosatt i Norge.',
+            NN: 'Dokumentasjon på at barna har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
     {
         value: '',
         label: 'Folkeregistrert i Norge - barnet',
         brevtekst: {
-            NB: 'Dokumentasjon på at barnet er folkeregistrert i Norge.',
-            NN: 'Dokumentasjon på at barnet er folkeregistrert i Noreg.',
+            NB: 'Dokumentasjon som viser at barnet har norsk fødselsnummer og er bosatt i Norge.',
+            NN: 'Dokumentasjon på at barnet har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
     {
         value: '',
         label: 'Folkeregistrert i Norge - søker',
         brevtekst: {
-            NB: 'Dokumentasjon på at du er folkeregistrert i Norge.',
-            NN: 'Dokumentasjon på at du er folkeregistrert i Noreg.',
+            NB: 'Dokumentasjon som viser at du har norsk fødselsnummer og er bosatt i Norge.',
+            NN: 'Dokumentasjon på at du har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
     {
         value: '',
         label: 'Folkeregistrert i Norge - søker og barna',
         brevtekst: {
-            NB: 'Dokumentasjon på at du og barna er folkeregistrert i Norge.',
-            NN: 'Dokumentasjon på at du og barna er folkeregistrert i Noreg.',
+            NB:
+                'Dokumentasjon som viser at du og barna har norsk fødselsnummer og er bosatt i Norge.',
+            NN: 'Dokumentasjon på at du og barna har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
     {
         value: '',
         label: 'Folkeregistrert i Norge - søker og barnet',
         brevtekst: {
-            NB: 'Dokumentasjon på at du og barnet er folkeregistrert i Norge.',
-            NN: 'Dokumentasjon på at du og barnet er folkeregistrert i Noreg.',
+            NB:
+                'Dokumentasjon som viser at du og barnet har norsk fødselsnummer og er bosatt i Norge.',
+            NN: 'Dokumentasjon på at du og barnet har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
     {

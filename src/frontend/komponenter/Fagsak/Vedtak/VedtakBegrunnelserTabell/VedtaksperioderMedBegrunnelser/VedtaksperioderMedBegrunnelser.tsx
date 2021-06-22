@@ -12,6 +12,7 @@ import {
 } from '../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../utils/commons';
 import { hentAktivVedtakPåBehandlig } from '../../../../../utils/fagsak';
+import { filtrerOgSorterPerioderMedBegrunnelseBehov2 } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 import OverskriftMedHjelpetekst from '../Felles/OverskriftMedHjelpetekst';
@@ -20,15 +21,20 @@ import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserP
 interface IVedtakBegrunnelserTabell {
     fagsak: IFagsak;
     åpenBehandling: IBehandling;
+    erLesevisning: boolean;
 }
 
 const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
     fagsak,
     åpenBehandling,
+    erLesevisning,
 }) => {
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
-    const vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[] =
-        hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [];
+
+    const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov2(
+        hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [],
+        erLesevisning
+    );
 
     if (
         vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
@@ -39,10 +45,10 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
 
     const avslagOgResterende = partition(
         vedtaksperiode => vedtaksperiode.type === Vedtaksperiodetype.AVSLAG,
-        vedtaksperioderMedBegrunnelser
+        vedtaksperioderSomSkalvises
     );
 
-    return vedtaksperioderMedBegrunnelser.length > 0 ? (
+    return vedtaksperioderSomSkalvises.length > 0 ? (
         <>
             <OverskriftMedHjelpetekst
                 overskrift={'Begrunnelser i vedtaksbrev'}
@@ -62,13 +68,14 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                     </VedtaksperiodeMedBegrunnelserProvider>
                 )
             )}
-
-            <OverskriftMedHjelpetekst
-                overskrift={'Begrunnelser for avslag i vedtaksbrev'}
-                hjelpetekst={
-                    'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
-                }
-            />
+            {avslagOgResterende[0] && (
+                <OverskriftMedHjelpetekst
+                    overskrift={'Begrunnelser for avslag i vedtaksbrev'}
+                    hjelpetekst={
+                        'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
+                    }
+                />
+            )}
             {avslagOgResterende[0].map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
                     <VedtaksperiodeMedBegrunnelserProvider

@@ -32,6 +32,7 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -65,6 +66,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
+    const { toggles } = useApp();
+    const brukNyeVedtaksperioder = toggles[ToggleNavn.brukNyeVedtaksperioder];
 
     const history = useHistory();
 
@@ -224,17 +227,19 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             </Alertstripe>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
-                                <VedtakBegrunnelserProvider
-                                    fagsak={fagsak}
-                                    aktivVedtak={aktivVedtak}
-                                >
-                                    <VedtakBegrunnelser åpenBehandling={åpenBehandling} />
-                                    <AvslagBegrunnelser åpenBehandling={åpenBehandling} />
-                                </VedtakBegrunnelserProvider>
-
+                                {!brukNyeVedtaksperioder && (
+                                    <VedtakBegrunnelserProvider
+                                        fagsak={fagsak}
+                                        aktivVedtak={aktivVedtak}
+                                    >
+                                        <VedtakBegrunnelser åpenBehandling={åpenBehandling} />
+                                        <AvslagBegrunnelser åpenBehandling={åpenBehandling} />
+                                    </VedtakBegrunnelserProvider>
+                                )}
                                 <VedtaksperioderMedBegrunnelser
                                     fagsak={fagsak}
                                     åpenBehandling={åpenBehandling}
+                                    erLesevisning={erLesevisning()}
                                 />
                             </VedtaksbegrunnelseTeksterProvider>
                         )}
