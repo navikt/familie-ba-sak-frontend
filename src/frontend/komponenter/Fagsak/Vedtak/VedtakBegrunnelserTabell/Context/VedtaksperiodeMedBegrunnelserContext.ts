@@ -206,7 +206,16 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
                     break;
                 case 'clear':
-                    skjema.felter.begrunnelser.validerOgSettFelt([]);
+                    if (
+                        skjema.felter.fritekster.verdi.length > 0 &&
+                        vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.FORTSATT_INNVILGET
+                    ) {
+                        alert(
+                            'Fritekst kan kun brukes i kombinasjon med en eller flere begrunnelser. Legg først til en ny begrunnelse eller fjern friteksten(e).'
+                        );
+                    } else {
+                        skjema.felter.begrunnelser.validerOgSettFelt([]);
+                    }
 
                     break;
                 default:
