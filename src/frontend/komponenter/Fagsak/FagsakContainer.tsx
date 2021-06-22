@@ -38,7 +38,15 @@ const FagsakContainer: React.FunctionComponent = () => {
                 hentFagsak(fagsakId);
             }
         }
+    }, [fagsakId]);
 
+    useEffect(() => {
+        if (erPåSaksoversikt) {
+            loggSidevisning('saksoversikt');
+        }
+    }, []);
+
+    useEffect(() => {
         bruker.status === RessursStatus.SUKSESS &&
             request<JournalposterForBrukerRequest, { tittel: string }[]>({
                 method: 'POST',
@@ -49,17 +57,12 @@ const FagsakContainer: React.FunctionComponent = () => {
                     journalposttype: 'I',
                 },
             }).then(x => {
+                console.log('Henter journalposter');
                 if (x.status === RessursStatus.SUKSESS) {
                     x.data.forEach(y => console.log(y.tittel));
                 }
             });
-    }, [fagsakId]);
-
-    useEffect(() => {
-        if (erPåSaksoversikt) {
-            loggSidevisning('saksoversikt');
-        }
-    }, []);
+    }, [bruker]);
 
     switch (fagsak.status) {
         case RessursStatus.SUKSESS:
