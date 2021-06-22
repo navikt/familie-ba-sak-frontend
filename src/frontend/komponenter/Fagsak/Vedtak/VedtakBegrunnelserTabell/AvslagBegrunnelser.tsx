@@ -28,7 +28,7 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                   kalenderDatoTilDate(kalenderDatoMedFallback(b.periodeFom, TIDENES_MORGEN))
               );
 
-    return avslagBegrunnelser.length ? (
+    return avslagBegrunnelser.length > 0 ? (
         <>
             <OverskriftMedHjelpetekst
                 overskrift={'Begrunnelser for avslag i vedtaksbrev'}
