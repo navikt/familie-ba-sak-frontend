@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
+import styled from 'styled-components';
+
+import { Element } from 'nav-frontend-typografi';
+
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { IPersonInfo } from '../../../typer/person';
-import { DagMånedÅr, kalenderDato, tilVisning } from '../../../utils/kalender';
+import { DagMånedÅr, tilVisning } from '../../../utils/kalender';
+
 import 'nav-frontend-tabell-style';
+
+const Container = styled.div`
+    margin: 1rem;
+`;
 
 interface IProps {
     bruker: IPersonInfo;
@@ -36,7 +45,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     }, [bruker]);
 
     return (
-        <>
+        <Container>
+            <h2>Journalposter</h2>
             <table className="tabell">
                 <thead>
                     <tr>
@@ -61,7 +71,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                     ))}
                 </tbody>
             </table>
-        </>
+        </Container>
     );
 };
 
