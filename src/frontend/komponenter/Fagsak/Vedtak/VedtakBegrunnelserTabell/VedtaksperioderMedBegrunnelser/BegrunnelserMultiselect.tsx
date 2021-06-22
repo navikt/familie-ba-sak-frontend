@@ -2,7 +2,6 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import {
@@ -88,14 +87,6 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     whiteSpace: 'pre-wrap',
                     textOverflow: 'hidden',
                     overflow: 'hidden',
-                }),
-                multiValueRemove: (provided: CSSProperties) => ({
-                    ...provided,
-                    ':hover': {
-                        backgroundColor: navFarger.navBla,
-                        color: 'white',
-                        borderRadius: '0 .4rem .4rem 0',
-                    },
                 }),
             }}
             placeholder={'Velg begrunnelse(r)'}
