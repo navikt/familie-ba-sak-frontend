@@ -101,7 +101,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             placeholder={'Velg begrunnelse(r)'}
             isDisabled={skalIkkeEditeres || skjema.submitRessurs.status === RessursStatus.HENTER}
             feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
-            label="Velg standardtekst"
+            label="Velg standardtekst i brev"
             creatable={false}
             erLesevisning={skalIkkeEditeres}
             isMulti={true}

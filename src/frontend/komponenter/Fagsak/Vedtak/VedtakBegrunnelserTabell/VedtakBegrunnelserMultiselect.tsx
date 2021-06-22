@@ -117,7 +117,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             isDisabled={erLesevisning || vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             feil={submitForPeriode?.feilmelding}
-            label="Velg standardtekst"
+            label="Velg standardtekst i brev"
             creatable={false}
             erLesevisning={erLesevisning}
             isMulti={true}

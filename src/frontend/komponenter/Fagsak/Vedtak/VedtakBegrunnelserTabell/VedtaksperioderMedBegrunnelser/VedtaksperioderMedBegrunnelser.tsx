@@ -68,8 +68,7 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                     </VedtaksperiodeMedBegrunnelserProvider>
                 )
             )}
-
-            {avslagOgResterende[0].length > 0 && (
+            {avslagOgResterende[0] && (
                 <OverskriftMedHjelpetekst
                     overskrift={'Begrunnelser for avslag i vedtaksbrev'}
                     hjelpetekst={
