@@ -93,6 +93,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                         vilkårResultat.erEksplisittAvslagPåSøknad,
                                     erSkjønnsmessigVurdert: vilkårResultat.erSkjønnsmessigVurdert,
                                     erMedlemskapVurdert: vilkårResultat.erMedlemskapVurdert,
+                                    erDeltBosted: vilkårResultat.erDeltBosted,
                                     avslagBegrunnelser: lagInitiellFelt(
                                         vilkårResultat.avslagBegrunnelser,
                                         erAvslagBegrunnelserGyldig
