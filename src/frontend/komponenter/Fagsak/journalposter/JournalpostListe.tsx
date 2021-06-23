@@ -37,6 +37,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         request<undefined, Journalpost[]>({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/for-bruker/${bruker.personIdent}`,
+            påvirkerSystemetLaster: true
         }).then(journalposterRessurs => {
             if (journalposterRessurs.status === RessursStatus.SUKSESS) {
                 settjournalposter(journalposterRessurs.data);
