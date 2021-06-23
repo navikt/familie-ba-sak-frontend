@@ -6,7 +6,7 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Sidetittel } from 'nav-frontend-typografi';
 
 import { useHttp } from '@navikt/familie-http';
-import { RessursStatus, Ressurs, byggTomRessurs } from '@navikt/familie-typer';
+import { RessursStatus, Ressurs, byggTomRessurs, byggHenterRessurs } from '@navikt/familie-typer';
 
 import { IPersonInfo } from '../../../typer/person';
 import { DagMånedÅr, tilVisning, kalenderDato } from '../../../utils/kalender';
@@ -38,13 +38,17 @@ interface Journalpost {
 
 const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const { request } = useHttp();
-    const [journalposter, settjournalposter] = useState<Journalpost[]>([]);
+    const [journalposterRessurs, settJournalposterRessurs] = useState<Ressurs<Journalpost[]>>(
+        byggTomRessurs()
+    );
 
     useEffect(() => {
+        settJournalposterRessurs(byggHenterRessurs());
+
         request<undefined, Journalpost[]>({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/for-bruker/${bruker.personIdent}`,
-            påvirkerSystemetLaster: true
+            påvirkerSystemLaster: true,
         }).then(journalposterRessurs => {
             journalposterRessurs.status === RessursStatus.SUKSESS &&
                 settJournalposterRessurs(journalposterRessurs);
