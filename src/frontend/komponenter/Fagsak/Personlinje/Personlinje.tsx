@@ -8,10 +8,10 @@ import Visittkort from '@navikt/familie-visittkort';
 import { useApp } from '../../../context/AppContext';
 import { IFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { formaterPersonIdent, hentAlder } from '../../../utils/formatter';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
-import { ToggleNavn } from '../../../typer/toggles';
 
 interface IProps {
     bruker: IPersonInfo;
