@@ -172,18 +172,19 @@ export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => 
 };
 
 export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) => {
-    if (felt.verdi.length > 0) {
-        return ok(felt);
-    } else if (avhengigheter?.erSkjønnsmessigVurdert && !avhengigheter?.erMedlemskapVurdert) {
-        return feil(felt, 'Du må skrive en begrunnelse ved "Vurdering annet grunnlag"');
-    } else if (!avhengigheter?.erSkjønnsmessigVurdert && avhengigheter?.erMedlemskapVurdert) {
-        return feil(felt, 'Du må skrive en begrunnelse ved "Vurdert medlemskap"');
-    } else if (avhengigheter?.erSkjønnsmessigVurdert && avhengigheter?.erMedlemskapVurdert) {
-        return feil(
-            felt,
-            'Du må skrive en begrunnelse som dekker "Vurdering annet grunnlag" og "Vurdert medlemskap"'
-        );
-    } else {
+    if (
+        felt.verdi.length > 0 ||
+        !(
+            avhengigheter?.erMedlemskapVurdert ||
+            avhengigheter?.erSkjønnsmessigVurdert ||
+            avhengigheter?.erDeltBosted
+        )
+    ) {
         return ok(felt);
     }
+
+    return feil(
+        felt,
+        'Du har haket av under "Andre vurderinger" og må derfor fylle inn en begrunnelse'
+    );
 };

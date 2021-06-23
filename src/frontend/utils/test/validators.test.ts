@@ -144,11 +144,18 @@ describe('utils/validators', () => {
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
     });
 
-    test('Begrunnelse må oppgis dersom medlemskap er vurdert eller ved skjønnsmessig vurdering', () => {
+    test('Begrunnelse må oppgis dersom andre vurderinger er valgt', () => {
         const valideringBegrunnelseOppgitt = erBegrunnelseGyldig(nyFeltState('begrunnelse'), {
             erMedlemskapVurdert: true,
         });
         expect(valideringBegrunnelseOppgitt.valideringsstatus).toEqual(Valideringsstatus.OK);
+
+        const valideringVurderingIkkeValgt = erBegrunnelseGyldig(nyFeltState(''), {
+            erMedlemskapVurdert: false,
+            erSkjønnsmessigVurdert: false,
+            erDeltBosted: false,
+        });
+        expect(valideringVurderingIkkeValgt.valideringsstatus).toEqual(Valideringsstatus.OK);
 
         const valideringMedlemskapVurdertManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
             erMedlemskapVurdert: true,
@@ -157,7 +164,7 @@ describe('utils/validators', () => {
             Valideringsstatus.FEIL
         );
         expect(valideringMedlemskapVurdertManglerBegrunnelse.feilmelding).toBe(
-            'Du må skrive en begrunnelse ved "Vurdert medlemskap"'
+            'Du har haket av under "Andre vurderinger" og må derfor fylle inn en begrunnelse'
         );
 
         const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
@@ -170,21 +177,17 @@ describe('utils/validators', () => {
             Valideringsstatus.FEIL
         );
         expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.feilmelding).toBe(
-            'Du må skrive en begrunnelse ved "Vurdering annet grunnlag"'
+            'Du har haket av under "Andre vurderinger" og må derfor fylle inn en begrunnelse'
         );
 
-        const valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse = erBegrunnelseGyldig(
-            nyFeltState(''),
-            {
-                erSkjønnsmessigVurdert: true,
-                erMedlemskapVurdert: true,
-            }
+        const valideringDeltBostedManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
+            erDeltBosted: true,
+        });
+        expect(valideringDeltBostedManglerBegrunnelse.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
         );
-        expect(
-            valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.valideringsstatus
-        ).toEqual(Valideringsstatus.FEIL);
-        expect(valideringSkjønnsmessigVurderinOgMedlemskapManglerBegrunnelse.feilmelding).toBe(
-            'Du må skrive en begrunnelse som dekker "Vurdering annet grunnlag" og "Vurdert medlemskap"'
+        expect(valideringDeltBostedManglerBegrunnelse.feilmelding).toBe(
+            'Du har haket av under "Andre vurderinger" og må derfor fylle inn en begrunnelse'
         );
 
         const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(

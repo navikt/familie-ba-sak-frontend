@@ -28,6 +28,7 @@ export const validerVilkår = (
         {
             erSkjønnsmessigVurdert: nyttVilkårResultat.verdi.erSkjønnsmessigVurdert,
             erMedlemskapVurdert: nyttVilkårResultat.verdi.erMedlemskapVurdert,
+            erDeltBosted: nyttVilkårResultat.verdi.erDeltBosted,
         }
     );
 
