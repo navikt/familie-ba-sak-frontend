@@ -4,12 +4,20 @@ import constate from 'constate';
 import deepEqual from 'deep-equal';
 
 import { ActionMeta, ISelectOption } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
 import { feil, FeltState, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
+import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
     hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
     IRestPutVedtaksperiodeMedFritekster,
@@ -37,11 +45,13 @@ export interface IFritekstFelt {
 const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] = constate(
     ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
         const { settFagsak } = useFagsakRessurser();
+        const { request } = useHttp();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
                 vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0 &&
                 vedtaksperiodeMedBegrunnelser.fritekster.length === 0
         );
+        const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState(byggTomRessurs());
 
         const maksAntallKulepunkter =
             vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
@@ -173,52 +183,55 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             switch (action.action) {
                 case 'select-option':
                     if (action.option) {
-                        skjema.felter.begrunnelser.validerOgSettFelt([
-                            ...skjema.felter.begrunnelser.verdi,
-                            action.option,
-                        ]);
+                        const oppdatertState = [
+                            ...vedtaksperiodeMedBegrunnelser.begrunnelser.map(
+                                begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon
+                            ),
+                            action.option?.value as VedtakBegrunnelse,
+                        ];
+                        oppdaterStandardbegrunnelser(oppdatertState);
                     }
-
                     break;
                 case 'pop-value':
                 case 'remove-value':
                     if (action.removedValue) {
                         const oppdatertState = [
-                            ...skjema.felter.begrunnelser.verdi.filter(
-                                selectOption => selectOption.value !== action.removedValue?.value
+                            ...vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
+                                persistertBegrunnelse =>
+                                    persistertBegrunnelse.vedtakBegrunnelseSpesifikasjon !==
+                                    (action.removedValue?.value as VedtakBegrunnelse)
                             ),
-                        ];
-                        if (
-                            oppdatertState.length === 0 &&
-                            skjema.felter.fritekster.verdi.length > 0 &&
-                            vedtaksperiodeMedBegrunnelser.type !==
-                                Vedtaksperiodetype.FORTSATT_INNVILGET
-                        ) {
-                            alert(
-                                'Fritekst kan kun brukes i kombinasjon med en eller flere begrunnelser. Legg først til en ny begrunnelse eller fjern friteksten(e).'
-                            );
-                        } else {
-                            skjema.felter.begrunnelser.validerOgSettFelt(oppdatertState);
-                        }
+                        ].map(begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon);
+                        oppdaterStandardbegrunnelser(oppdatertState);
                     }
 
                     break;
                 case 'clear':
-                    if (
-                        skjema.felter.fritekster.verdi.length > 0 &&
-                        vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.FORTSATT_INNVILGET
-                    ) {
-                        alert(
-                            'Fritekst kan kun brukes i kombinasjon med en eller flere begrunnelser. Legg først til en ny begrunnelse eller fjern friteksten(e).'
-                        );
-                    } else {
-                        skjema.felter.begrunnelser.validerOgSettFelt([]);
-                    }
-
+                    oppdaterStandardbegrunnelser([]);
                     break;
                 default:
                     throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
             }
+        };
+
+        const oppdaterStandardbegrunnelser = (standardbegrunnelser: VedtakBegrunnelse[]) => {
+            settStandardBegrunnelserPut(byggHenterRessurs());
+            request<VedtakBegrunnelse[], IFagsak>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/vedtaksperioder/standardbegrunnelser/${vedtaksperiodeMedBegrunnelser.id}`,
+                data: standardbegrunnelser,
+            }).then((fagsak: Ressurs<IFagsak>) => {
+                if (fagsak.status === RessursStatus.SUKSESS) {
+                    settFagsak(fagsak);
+                    settStandardBegrunnelserPut(byggTomRessurs());
+                } else if (fagsak.status === RessursStatus.FUNKSJONELL_FEIL) {
+                    settStandardBegrunnelserPut(byggFeiletRessurs(fagsak.frontendFeilmelding));
+                } else {
+                    settStandardBegrunnelserPut(
+                        byggFeiletRessurs('Klarte ikke oppdatere standardbegrunnelser')
+                    );
+                }
+            });
         };
 
         const leggTilFritekst = () => {
@@ -311,6 +324,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             skjemaFeilmelding,
             utbetalingsperiode,
             åpenBehandling,
+            standardBegrunnelserPut,
         };
     }
 );

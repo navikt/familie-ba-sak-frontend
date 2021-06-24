@@ -45,6 +45,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         skjema,
         onChangeBegrunnelse,
         grupperteBegrunnelser,
+        standardBegrunnelserPut,
     } = useVedtaksperiodeMedBegrunnelser();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
@@ -90,8 +91,13 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 }),
             }}
             placeholder={'Velg begrunnelse(r)'}
-            isDisabled={skalIkkeEditeres || skjema.submitRessurs.status === RessursStatus.HENTER}
-            feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
+            isDisabled={skalIkkeEditeres || standardBegrunnelserPut.status === RessursStatus.HENTER}
+            feil={
+                standardBegrunnelserPut.status === RessursStatus.FUNKSJONELL_FEIL ||
+                standardBegrunnelserPut.status === RessursStatus.FEILET
+                    ? standardBegrunnelserPut.frontendFeilmelding
+                    : undefined
+            }
             label="Velg standardtekst i brev"
             creatable={false}
             erLesevisning={skalIkkeEditeres}
