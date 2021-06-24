@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { PopoverOrientering } from 'nav-frontend-popover';
 import { CheckboxGruppe, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
 
 import {
     FamilieKnapp,
@@ -36,7 +34,6 @@ import {
     resultater,
     VilkårType,
 } from '../../../../typer/vilkår';
-import Hjelpetekst44px from '../../../Felleskomponenter/Hjelpetekst44px';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import DeltBostedCheckbox from './DeltBostedCheckbox';
@@ -69,20 +66,6 @@ const Container = styled.div`
     }
     .begrunnelse-textarea {
         min-height: 8rem !important;
-    }
-`;
-
-const StyledUtdypendeVilkårsvurdering = styled.div`
-    margin: 0;
-    display: flex;
-    align-items: center;
-    text-align: center;
-`;
-
-const StyledHjelpetekst44px = styled(Hjelpetekst44px)`
-    .popover {
-        max-width: 18rem;
-        text-align: left;
     }
 `;
 
@@ -298,14 +281,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         />
                     )}
 
-                <CheckboxGruppe>
-                    <StyledUtdypendeVilkårsvurdering>
-                        <Element>Utdypende vilkårsvurdering</Element>
-                        <StyledHjelpetekst44px
-                            type={PopoverOrientering.Hoyre}
-                            innhold="TODO: Fyll ut tekst"
-                        />
-                    </StyledUtdypendeVilkårsvurdering>
+                <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
                     {toggles[ToggleNavn.skjønnsvurdering] && (
                         <SkjønnsvurderingCheckbox
                             redigerbartVilkår={redigerbartVilkår}
