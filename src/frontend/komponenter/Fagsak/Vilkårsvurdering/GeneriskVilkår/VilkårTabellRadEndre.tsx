@@ -303,7 +303,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         <Element>Utdypende vilkårsvurdering</Element>
                         <StyledHjelpetekst44px
                             type={PopoverOrientering.Hoyre}
-                            innhold="hjelpetekst"
+                            innhold="TODO: Fyll ut tekst"
                         />
                     </StyledUtdypendeVilkårsvurdering>
                     {toggles[ToggleNavn.skjønnsvurdering] && (
