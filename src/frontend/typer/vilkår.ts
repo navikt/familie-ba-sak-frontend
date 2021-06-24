@@ -71,6 +71,7 @@ export interface IVilkårResultat {
     erEksplisittAvslagPåSøknad?: boolean;
     erSkjønnsmessigVurdert: boolean;
     erMedlemskapVurdert: boolean;
+    erDeltBosted: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
 }
 
@@ -100,6 +101,7 @@ export interface IRestVilkårResultat {
     erEksplisittAvslagPåSøknad?: boolean;
     erSkjønnsmessigVurdert: boolean;
     erMedlemskapVurdert: boolean;
+    erDeltBosted: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
 }

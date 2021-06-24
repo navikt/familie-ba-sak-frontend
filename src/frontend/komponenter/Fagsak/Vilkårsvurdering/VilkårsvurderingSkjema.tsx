@@ -7,11 +7,9 @@ import AlertStripe from 'nav-frontend-alertstriper';
 
 import { FeltState } from '@navikt/familie-skjema';
 
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
-import { ToggleNavn } from '../../../typer/toggles';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -55,8 +53,6 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
 }) => {
     const { vilkårsvurdering } = useVilkårsvurdering();
     const { erLesevisning } = useBehandling();
-    const { toggles } = useApp();
-    const skalViseRegisteropplysninger = toggles[ToggleNavn.skjønnsvurdering];
     const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
         vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
             return {
@@ -116,20 +112,18 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                         </PersonLinje>
 
                         <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
-                            {skalViseRegisteropplysninger && (
-                                <>
-                                    {personResultat.person.registerhistorikk ? (
-                                        <Registeropplysninger
-                                            opplysninger={personResultat.person.registerhistorikk}
-                                        />
-                                    ) : (
-                                        <AlertStripe
-                                            type={'advarsel'}
-                                            children={'Klarte ikke hente registeropplysninger'}
-                                        />
-                                    )}
-                                </>
-                            )}
+                            <>
+                                {personResultat.person.registerhistorikk ? (
+                                    <Registeropplysninger
+                                        opplysninger={personResultat.person.registerhistorikk}
+                                    />
+                                ) : (
+                                    <AlertStripe
+                                        type={'advarsel'}
+                                        children={'Klarte ikke hente registeropplysninger'}
+                                    />
+                                )}
+                            </>
                             {Object.values(vilkårConfig)
                                 .filter((vc: IVilkårConfig) =>
                                     vc.parterDetteGjelderFor.includes(personResultat.person.type)

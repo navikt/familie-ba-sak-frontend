@@ -23,6 +23,7 @@ interface IMockVilkårResultat {
     erAutomatiskVurdert?: boolean;
     erSkjønnsmessigVurdert?: boolean;
     erMedlemskapVurdert?: boolean;
+    erDeltBosted?: boolean;
     endretTidspunkt?: string;
 }
 
@@ -45,6 +46,7 @@ export const mockVilkårResultater = ({
     erAutomatiskVurdert = false,
     erSkjønnsmessigVurdert = false,
     erMedlemskapVurdert = false,
+    erDeltBosted = false,
     endretTidspunkt = '2020-03-19T09:08:56.8',
 }: IMockVilkårResultat = {}): IVilkårResultat => ({
     id,
@@ -57,6 +59,7 @@ export const mockVilkårResultater = ({
     erAutomatiskVurdert,
     erSkjønnsmessigVurdert,
     erMedlemskapVurdert,
+    erDeltBosted,
     endretTidspunkt,
     behandlingId,
     avslagBegrunnelser: mockFeltstate<VedtakBegrunnelse[]>([]),
@@ -96,6 +99,7 @@ export const mockRestVilkårResultat = ({
     erAutomatiskVurdert: false,
     erSkjønnsmessigVurdert: false,
     erMedlemskapVurdert: false,
+    erDeltBosted: false,
     endretTidspunkt: '2020-03-19T09:08:56.8',
     behandlingId,
     avslagBegrunnelser: [],
