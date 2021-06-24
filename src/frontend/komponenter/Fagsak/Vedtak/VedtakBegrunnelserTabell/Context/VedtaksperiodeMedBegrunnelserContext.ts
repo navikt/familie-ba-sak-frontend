@@ -274,11 +274,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                             begrunnelser: skjema.felter.begrunnelser.verdi.map(
                                 (begrunnelse): IRestPutVedtaksbegrunnelse => ({
                                     vedtakBegrunnelseSpesifikasjon: begrunnelse.value as VedtakBegrunnelse,
-                                    personIdenter:
-                                        utbetalingsperiode?.utbetalingsperiodeDetaljer.map(
-                                            utbetalingsperiodeDetalj =>
-                                                utbetalingsperiodeDetalj.person.personIdent
-                                        ) ?? [],
                                 })
                             ),
                             fritekster: skjema.felter.fritekster.verdi.map(

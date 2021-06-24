@@ -33,7 +33,6 @@ export interface IRestVedtaksbegrunnelse {
 
 export interface IRestPutVedtaksbegrunnelse {
     vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
-    personIdenter: string[];
 }
 
 export interface IRestPutVedtaksperiodeMedBegrunnelser {
