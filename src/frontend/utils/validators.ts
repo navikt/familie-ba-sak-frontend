@@ -185,6 +185,6 @@ export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avh
 
     return feil(
         felt,
-        'Du har haket av under "Andre vurderinger" og må derfor fylle inn en begrunnelse'
+        'Du har haket av under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
     );
 };

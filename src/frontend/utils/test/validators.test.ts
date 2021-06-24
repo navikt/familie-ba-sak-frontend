@@ -144,7 +144,7 @@ describe('utils/validators', () => {
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
     });
 
-    test('Begrunnelse må oppgis dersom andre vurderinger er valgt', () => {
+    test('Begrunnelse må oppgis dersom Utdypende vilkårsvurdering er valgt', () => {
         const valideringBegrunnelseOppgitt = erBegrunnelseGyldig(nyFeltState('begrunnelse'), {
             erMedlemskapVurdert: true,
         });
@@ -164,7 +164,7 @@ describe('utils/validators', () => {
             Valideringsstatus.FEIL
         );
         expect(valideringMedlemskapVurdertManglerBegrunnelse.feilmelding).toBe(
-            'Du har haket av under "Andre vurderinger" og må derfor fylle inn en begrunnelse'
+            'Du har haket av under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
         );
 
         const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
@@ -177,7 +177,7 @@ describe('utils/validators', () => {
             Valideringsstatus.FEIL
         );
         expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.feilmelding).toBe(
-            'Du har haket av under "Andre vurderinger" og må derfor fylle inn en begrunnelse'
+            'Du har haket av under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
         );
 
         const valideringDeltBostedManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
@@ -187,7 +187,7 @@ describe('utils/validators', () => {
             Valideringsstatus.FEIL
         );
         expect(valideringDeltBostedManglerBegrunnelse.feilmelding).toBe(
-            'Du har haket av under "Andre vurderinger" og må derfor fylle inn en begrunnelse'
+            'Du har haket av under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
         );
 
         const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(
