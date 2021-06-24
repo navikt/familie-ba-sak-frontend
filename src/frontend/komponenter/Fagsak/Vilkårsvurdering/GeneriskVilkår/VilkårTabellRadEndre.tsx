@@ -207,8 +207,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     const erBegrunnelsePåkrevd = (): boolean =>
-        (toggles[ToggleNavn.skjønnsvurdering] && redigerbartVilkår.verdi.erSkjønnsmessigVurdert) ||
-        (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert);
+        redigerbartVilkår.verdi.erSkjønnsmessigVurdert ||
+        (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert) ||
+        (toggles[ToggleNavn.brukErDeltBosted] && redigerbartVilkår.verdi.erDeltBosted);
 
     return (
         <SkjemaGruppe
@@ -282,13 +283,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     )}
 
                 <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
-                    {toggles[ToggleNavn.skjønnsvurdering] && (
-                        <SkjønnsvurderingCheckbox
-                            redigerbartVilkår={redigerbartVilkår}
-                            settRedigerbartVilkår={settRedigerbartVilkår}
-                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                        />
-                    )}
+                    <SkjønnsvurderingCheckbox
+                        redigerbartVilkår={redigerbartVilkår}
+                        settRedigerbartVilkår={settRedigerbartVilkår}
+                        settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                    />
                     {toggles[ToggleNavn.medlemskap] &&
                         redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
                             <MedlemskapCheckbox
