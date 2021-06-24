@@ -10,11 +10,9 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
     hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
-    IRestPutVedtaksbegrunnelse,
-    IRestPutVedtaksperiodeMedBegrunnelser,
+    IRestPutVedtaksperiodeMedFritekster,
     IVedtaksperiodeMedBegrunnelser,
     Utbetalingsperiode,
     Vedtaksperiodetype,
@@ -264,18 +262,13 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 ? erFritekstEllerBegrunnelseUtfylt && !erBådeFritekstogBegrunnelse
                 : true;
 
-        const putVedtaksperiodeMedBegrunnelser = () => {
+        const putVedtaksperiodeMedFritekster = () => {
             if (kanSendeSkjema() && gyldigFortsattInnvilgetBegrunnelser) {
-                onSubmit<IRestPutVedtaksperiodeMedBegrunnelser>(
+                onSubmit<IRestPutVedtaksperiodeMedFritekster>(
                     {
                         method: 'PUT',
-                        url: `/familie-ba-sak/api/vedtaksperioder/${vedtaksperiodeMedBegrunnelser.id}`,
+                        url: `/familie-ba-sak/api/vedtaksperioder/fritekster/${vedtaksperiodeMedBegrunnelser.id}`,
                         data: {
-                            begrunnelser: skjema.felter.begrunnelser.verdi.map(
-                                (begrunnelse): IRestPutVedtaksbegrunnelse => ({
-                                    vedtakBegrunnelseSpesifikasjon: begrunnelse.value as VedtakBegrunnelse,
-                                })
-                            ),
                             fritekster: skjema.felter.fritekster.verdi.map(
                                 fritekst => fritekst.verdi.tekst
                             ),
@@ -313,7 +306,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             makslengdeFritekst,
             onChangeBegrunnelse,
             onPanelClose,
-            putVedtaksperiodeMedBegrunnelser,
+            putVedtaksperiodeMedFritekster,
             skjema,
             skjemaFeilmelding,
             utbetalingsperiode,
