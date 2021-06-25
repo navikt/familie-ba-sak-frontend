@@ -68,6 +68,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
         const journalposter = journalposterRessurs.data;
+        console.log(journalposter);
 
         return (
             <Container>
@@ -87,15 +88,16 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                     <tbody>
                         {journalposter.map(journalpost => (
                             <tr key={journalpost.journalpostId}>
-                                <td>{tilVisning(journalpost.datoMottatt)}</td>
+                                <td>{/*tilVisning(journalpost.datoMottatt)*/}</td>
                                 <td>{journalpost.tittel}</td>
                                 <td>
-                                    {journalpost.behandlingstema}: {journalpost.behandlingstemanavn}
+                                    {/*journalpost.behandlingstema*/}:{' '}
+                                    {/*journalpost.behandlingstemanavn*/}
                                 </td>
-                                <td>{journalpost.sak.fagsaksystem}</td>
-                                <td>{journalpost.sak.tema}</td>
-                                <td>{journalpost.avsenderMottaker.navn}</td>
-                                <td>{journalpost.journalstatus}</td>
+                                <td>{/*journalpost.sak.fagsaksystem*/}</td>
+                                <td>{/*journalpost.sak.tema*/}</td>
+                                <td>{/*journalpost.avsenderMottaker.navn*/}</td>
+                                <td>{/*journalpost.journalstatus*/}</td>
                             </tr>
                         ))}
                     </tbody>
