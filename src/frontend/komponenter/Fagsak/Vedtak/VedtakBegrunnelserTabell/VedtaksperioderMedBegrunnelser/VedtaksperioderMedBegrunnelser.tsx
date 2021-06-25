@@ -50,33 +50,45 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
 
     return vedtaksperioderSomSkalvises.length > 0 ? (
         <>
-            <OverskriftMedHjelpetekst
+            <VedtaksperiodeListe
+                vedtaksperioderMedBegrunnelser={avslagOgResterende[1]}
                 overskrift={'Begrunnelser i vedtaksbrev'}
                 hjelpetekst={'Her skal du sette begrunnelsestekster for fortsatt innvilgelse'}
+                fagsak={fagsak}
+                åpenBehandling={åpenBehandling}
             />
-            {avslagOgResterende[1].map(
-                (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
-                    <VedtaksperiodeMedBegrunnelserProvider
-                        key={vedtaksperiodeMedBegrunnelser.id}
-                        fagsak={fagsak}
-                        åpenBehandling={åpenBehandling}
-                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                    >
-                        <VedtaksperiodeMedBegrunnelserPanel
-                            vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                        />
-                    </VedtaksperiodeMedBegrunnelserProvider>
-                )
-            )}
-            {avslagOgResterende[0] && (
-                <OverskriftMedHjelpetekst
-                    overskrift={'Begrunnelser for avslag i vedtaksbrev'}
-                    hjelpetekst={
-                        'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
-                    }
-                />
-            )}
-            {avslagOgResterende[0].map(
+
+            <VedtaksperiodeListe
+                vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
+                overskrift={'Begrunnelser for avslag i vedtaksbrev'}
+                hjelpetekst={
+                    'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
+                }
+                fagsak={fagsak}
+                åpenBehandling={åpenBehandling}
+            />
+        </>
+    ) : (
+        <Fragment />
+    );
+};
+
+const VedtaksperiodeListe: React.FC<{
+    vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
+    overskrift: string;
+    hjelpetekst: string;
+    fagsak: IFagsak;
+    åpenBehandling: IBehandling;
+}> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, fagsak, åpenBehandling }) => {
+    if (vedtaksperioderMedBegrunnelser.length === 0) {
+        return null;
+    }
+
+    return (
+        <>
+            <OverskriftMedHjelpetekst overskrift={overskrift} hjelpetekst={hjelpetekst} />
+
+            {vedtaksperioderMedBegrunnelser.map(
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
                     <VedtaksperiodeMedBegrunnelserProvider
                         key={vedtaksperiodeMedBegrunnelser.id}
@@ -91,8 +103,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 )
             )}
         </>
-    ) : (
-        <Fragment />
     );
 };
 

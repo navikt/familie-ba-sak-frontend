@@ -18,7 +18,6 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     vedtaksperiodeMedBegrunnelser,
 }) => {
     const {
-        skjema,
         erPanelEkspandert,
         onPanelClose,
         utbetalingsperiode,
@@ -27,7 +26,7 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     const visFritekster = () =>
         vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ||
         (vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING &&
-            skjema.felter.begrunnelser.verdi.length > 0);
+            vedtaksperiodeMedBegrunnelser.begrunnelser.length > 0);
 
     return (
         <EkspanderbartBegrunnelsePanel

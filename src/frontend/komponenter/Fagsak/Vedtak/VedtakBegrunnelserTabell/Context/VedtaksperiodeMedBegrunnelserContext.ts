@@ -26,10 +26,7 @@ import {
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
 import { IPeriode } from '../../../../../utils/kalender';
-import {
-    mapBegrunnelserTilSelectOptions,
-    useVilkårBegrunnelser,
-} from '../Hooks/useVedtaksbegrunnelser';
+import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
     fagsak: IFagsak;
@@ -64,11 +61,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             },
         });
 
-        const begrunnelser = useFelt<ISelectOption[]>({
-            verdi: [],
-            valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
-        });
-
         const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
             verdi: [],
             valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
@@ -100,14 +92,12 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             {
                 periode: IPeriode;
                 fritekster: FeltState<IFritekstFelt>[];
-                begrunnelser: ISelectOption[];
             },
             IFagsak
         >({
             felter: {
                 periode,
                 fritekster,
-                begrunnelser,
             },
             skjemanavn: 'Begrunnelser for vedtaksperiode',
         });
@@ -125,12 +115,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 tom: vedtaksperiodeMedBegrunnelser.tom,
             });
 
-            skjema.felter.begrunnelser.validerOgSettFelt(
-                mapBegrunnelserTilSelectOptions(
-                    vedtaksperiodeMedBegrunnelser,
-                    vedtaksbegrunnelseTekster
-                )
-            );
             skjema.felter.fritekster.validerOgSettFelt(
                 vedtaksperiodeMedBegrunnelser.fritekster.map((fritekst, id) =>
                     lagInitiellFritekst(fritekst, id)
@@ -216,10 +200,10 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
         const oppdaterStandardbegrunnelser = (standardbegrunnelser: VedtakBegrunnelse[]) => {
             settStandardBegrunnelserPut(byggHenterRessurs());
-            request<VedtakBegrunnelse[], IFagsak>({
-                method: 'POST',
+            request<{ standardbegrunnelser: VedtakBegrunnelse[] }, IFagsak>({
+                method: 'PUT',
                 url: `/familie-ba-sak/api/vedtaksperioder/standardbegrunnelser/${vedtaksperiodeMedBegrunnelser.id}`,
-                data: standardbegrunnelser,
+                data: { standardbegrunnelser },
             }).then((fagsak: Ressurs<IFagsak>) => {
                 if (fagsak.status === RessursStatus.SUKSESS) {
                     settFagsak(fagsak);
@@ -245,16 +229,10 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             if (
                 erPanelEkspandert &&
                 visAlert &&
-                (!deepEqual(
+                !deepEqual(
                     skjema.felter.fritekster.verdi.map(fritekst => fritekst.verdi.tekst),
                     vedtaksperiodeMedBegrunnelser.fritekster
-                ) ||
-                    !deepEqual(
-                        skjema.felter.begrunnelser.verdi.map(begrunnelse => begrunnelse.value),
-                        vedtaksperiodeMedBegrunnelser.begrunnelser.map(
-                            begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon
-                        )
-                    ))
+                )
             ) {
                 alert('Periode har endringer som ikke er lagret!');
             } else {
@@ -263,20 +241,8 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        const erFritekstEllerBegrunnelseUtfylt =
-            skjema.felter.begrunnelser.verdi.length !== 0 ||
-            skjema.felter.fritekster.verdi.length !== 0;
-        const erBådeFritekstogBegrunnelse =
-            skjema.felter.begrunnelser.verdi.length !== 0 &&
-            skjema.felter.fritekster.verdi.length !== 0;
-
-        const gyldigFortsattInnvilgetBegrunnelser =
-            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET
-                ? erFritekstEllerBegrunnelseUtfylt && !erBådeFritekstogBegrunnelse
-                : true;
-
         const putVedtaksperiodeMedFritekster = () => {
-            if (kanSendeSkjema() && gyldigFortsattInnvilgetBegrunnelser) {
+            if (kanSendeSkjema()) {
                 onSubmit<IRestPutVedtaksperiodeMedFritekster>(
                     {
                         method: 'PUT',
@@ -295,25 +261,12 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        const skjemaFeilmelding = () => {
-            if (vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET) {
-                if (!erFritekstEllerBegrunnelseUtfylt) {
-                    return 'Du må velge minst én begrunnelse, eller fritekst.';
-                } else if (erBådeFritekstogBegrunnelse) {
-                    return 'Du kan kun ha begrunnelse eller fritekst, og ikke en kombinasjon. Fjern en av tekstene.';
-                } else {
-                    return '';
-                }
-            } else {
-                return '';
-            }
-        };
-
         return {
             erPanelEkspandert,
             grupperteBegrunnelser,
             hentFeilTilOppsummering,
             id: vedtaksperiodeMedBegrunnelser.id,
+            vedtaksperiodeMedBegrunnelser,
             leggTilFritekst,
             maksAntallKulepunkter,
             makslengdeFritekst,
@@ -321,7 +274,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             onPanelClose,
             putVedtaksperiodeMedFritekster,
             skjema,
-            skjemaFeilmelding,
             utbetalingsperiode,
             åpenBehandling,
             standardBegrunnelserPut,

@@ -95,6 +95,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
         maksAntallKulepunkter,
         onPanelClose,
         putVedtaksperiodeMedFritekster,
+        vedtaksperiodeMedBegrunnelser,
     } = useVedtaksperiodeMedBegrunnelser();
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
@@ -118,7 +119,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             }),
         ]);
 
-    return skjema.felter.fritekster.verdi.length > 0 ? (
+    return vedtaksperiodeMedBegrunnelser.fritekster.length > 0 ? (
         <FritekstContainer>
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>
