@@ -5,16 +5,28 @@ import styled from 'styled-components';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Sidetittel } from 'nav-frontend-typografi';
 
+import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus, Ressurs, byggTomRessurs, byggHenterRessurs } from '@navikt/familie-typer';
 
 import { IPersonInfo } from '../../../typer/person';
-import { DagMånedÅr, tilVisning, kalenderDato } from '../../../utils/kalender';
+import { DagMånedÅr, tilVisning, kalenderDato, FamilieIsoDate } from '../../../utils/kalender';
 
 import 'nav-frontend-tabell-style';
 
 const Container = styled.div`
     margin: 4.1875rem 3.3125rem;
+`;
+
+const TittelWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const IkonWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
 `;
 
 const StyledSidetittel = styled(Sidetittel)`
@@ -25,15 +37,19 @@ interface IProps {
     bruker: IPersonInfo;
 }
 
+type JournalpostType = 'I' | 'U' | 'M';
+
 interface Journalpost {
     journalpostId: string;
     tittel: string;
+    journalposttype: JournalpostType;
     behandlingstema: string;
     behandlingstemanavn: string;
     sak: { fagsaksystem: string; tema: string };
     avsenderMottaker: { navn: string };
-    datoMottatt: DagMånedÅr;
+    datoMottatt: FamilieIsoDate;
     journalstatus: string;
+    dokumenter: { logiskeVedlegg: { tittel: string; logiskVedleggId: string } };
 }
 
 const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
@@ -55,6 +71,18 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         });
     }, [bruker]);
 
+    const hentIkonForJournalpostType = (journalpostType: JournalpostType) => {
+        switch (journalpostType) {
+            case 'I':
+                return <LeftFilled />;
+            case 'U':
+                return <RightFilled />;
+            case 'M':
+                return <DownFilled />;
+        }
+    };
+
+    console.log(journalposterRessurs);
     if (
         journalposterRessurs.status === RessursStatus.FEILET ||
         journalposterRessurs.status === RessursStatus.FUNKSJONELL_FEIL
@@ -78,26 +106,28 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         <tr>
                             <th>DatoMottatt</th>
                             <th>Tittel</th>
-                            <th>Behandlingstema</th>
-                            <th>Fagsaksystem</th>
-                            <th>Fagsaktema</th>
-                            <th>Avsender</th>
+                            <th>Fagsystem</th>
+                            <th>Avsender/Mottaker</th>
                             <th>Journalstatus</th>
                         </tr>
                     </thead>
                     <tbody>
                         {journalposter.map(journalpost => (
                             <tr key={journalpost.journalpostId}>
-                                <td>{/*tilVisning(journalpost.datoMottatt)*/}</td>
-                                <td>{journalpost.tittel}</td>
+                                <td>{tilVisning(kalenderDato(journalpost.datoMottatt))}</td>
                                 <td>
-                                    {/*journalpost.behandlingstema*/}:{' '}
-                                    {/*journalpost.behandlingstemanavn*/}
+                                    <TittelWrapper>
+                                        <IkonWrapper>
+                                            {hentIkonForJournalpostType(
+                                                journalpost.journalposttype
+                                            )}{' '}
+                                        </IkonWrapper>
+                                        {journalpost.tittel}
+                                    </TittelWrapper>
                                 </td>
-                                <td>{/*journalpost.sak.fagsaksystem*/}</td>
-                                <td>{/*journalpost.sak.tema*/}</td>
-                                <td>{/*journalpost.avsenderMottaker.navn*/}</td>
-                                <td>{/*journalpost.journalstatus*/}</td>
+                                <td>{journalpost.sak.fagsaksystem}</td>
+                                <td>{journalpost.avsenderMottaker.navn}</td>
+                                <td>{journalpost.journalstatus}</td>
                             </tr>
                         ))}
                     </tbody>
