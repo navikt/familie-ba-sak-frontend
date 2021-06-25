@@ -167,26 +167,26 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             switch (action.action) {
                 case 'select-option':
                     if (action.option) {
-                        const oppdatertState = [
+                        oppdaterStandardbegrunnelser([
                             ...vedtaksperiodeMedBegrunnelser.begrunnelser.map(
                                 begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon
                             ),
                             action.option?.value as VedtakBegrunnelse,
-                        ];
-                        oppdaterStandardbegrunnelser(oppdatertState);
+                        ]);
                     }
                     break;
                 case 'pop-value':
                 case 'remove-value':
                     if (action.removedValue) {
-                        const oppdatertState = [
-                            ...vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
-                                persistertBegrunnelse =>
-                                    persistertBegrunnelse.vedtakBegrunnelseSpesifikasjon !==
-                                    (action.removedValue?.value as VedtakBegrunnelse)
-                            ),
-                        ].map(begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon);
-                        oppdaterStandardbegrunnelser(oppdatertState);
+                        oppdaterStandardbegrunnelser(
+                            [
+                                ...vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
+                                    persistertBegrunnelse =>
+                                        persistertBegrunnelse.vedtakBegrunnelseSpesifikasjon !==
+                                        (action.removedValue?.value as VedtakBegrunnelse)
+                                ),
+                            ].map(begrunnelse => begrunnelse.vedtakBegrunnelseSpesifikasjon)
+                        );
                     }
 
                     break;

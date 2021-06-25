@@ -61,7 +61,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 )
             );
         }
-    }, [vedtaksbegrunnelseTekster]);
+    }, [vedtaksperiodeMedBegrunnelser, vedtaksbegrunnelseTekster]);
 
     return (
         <FamilieReactSelect
