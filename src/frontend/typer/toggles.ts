@@ -5,10 +5,10 @@ export interface IToggles {
 export enum ToggleNavn {
     visTekniskOpphør = 'familie-ba-sak.behandling.vis-teknisk-opphoer',
     tilbakekreving = 'familie-ba-sak.behandling.tilbakekreving',
-    skjønnsvurdering = 'familie-ba-sak.behandling.skjonnsvurdering',
     medlemskap = 'familie-ba-sak.behandling.medlemskap',
     journalpostliste = 'familie-ba-sak.behandling.journalpostliste',
     brukNyeVedtaksperioder = 'familie-ba-sak.behandling.vedtakstype-med-begrunnelser',
+    brukErDeltBosted = 'familie-ba-sak.behandling.delt_bosted',
 }
 
 export const alleTogglerAv = (): IToggles => {

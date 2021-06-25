@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { CheckboxGruppe, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import {
     FamilieKnapp,
@@ -36,6 +36,7 @@ import {
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
+import DeltBostedCheckbox from './DeltBostedCheckbox';
 import MedlemskapCheckbox from './MedlemskapCheckbox';
 import SkjønnsvurderingCheckbox from './SkjønnsvurderingCheckbox';
 import VelgPeriode from './VelgPeriode';
@@ -196,12 +197,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             });
     };
 
-    const Checkboxes = styled.div`
-        display: flex;
-        justify-content: space-between;
-        margin: 1rem 0;
-    `;
-
     const vilkårResultatForEkteskapVisning = (resultat: Resultat) => {
         if (resultat === Resultat.OPPFYLT) {
             return resultater[Resultat.IKKE_OPPFYLT];
@@ -212,8 +207,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     const erBegrunnelsePåkrevd = (): boolean =>
-        (toggles[ToggleNavn.skjønnsvurdering] && redigerbartVilkår.verdi.erSkjønnsmessigVurdert) ||
-        (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert);
+        redigerbartVilkår.verdi.erSkjønnsmessigVurdert ||
+        (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert) ||
+        (toggles[ToggleNavn.brukErDeltBosted] && redigerbartVilkår.verdi.erDeltBosted);
 
     return (
         <SkjemaGruppe
@@ -285,20 +281,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                         />
                     )}
-                <VelgPeriode
-                    redigerbartVilkår={redigerbartVilkår}
-                    validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
-                    visFeilmeldinger={skalViseFeilmeldinger()}
-                />
 
-                <Checkboxes>
-                    {toggles[ToggleNavn.skjønnsvurdering] && (
-                        <SkjønnsvurderingCheckbox
-                            redigerbartVilkår={redigerbartVilkår}
-                            settRedigerbartVilkår={settRedigerbartVilkår}
-                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                        />
-                    )}
+                <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
+                    <SkjønnsvurderingCheckbox
+                        redigerbartVilkår={redigerbartVilkår}
+                        settRedigerbartVilkår={settRedigerbartVilkår}
+                        settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                    />
                     {toggles[ToggleNavn.medlemskap] &&
                         redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
                             <MedlemskapCheckbox
@@ -307,7 +296,22 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                             />
                         )}
-                </Checkboxes>
+                    {toggles[ToggleNavn.brukErDeltBosted] &&
+                        redigerbartVilkår.verdi.vilkårType === VilkårType.BOR_MED_SØKER && (
+                            <DeltBostedCheckbox
+                                redigerbartVilkår={redigerbartVilkår}
+                                settRedigerbartVilkår={settRedigerbartVilkår}
+                                settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                            />
+                        )}
+                </CheckboxGruppe>
+
+                <VelgPeriode
+                    redigerbartVilkår={redigerbartVilkår}
+                    validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
+                    visFeilmeldinger={skalViseFeilmeldinger()}
+                />
+
                 <FamilieTextareaControlled
                     tekstLesevisning={''}
                     erLesevisning={leseVisning}
