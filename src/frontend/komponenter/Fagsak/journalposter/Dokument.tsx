@@ -64,7 +64,7 @@ export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IP
             <DokumentDiv>
                 <iframe
                     title={'dokument'}
-                    src={dokumentRessurs.data}
+                    src={`data:application/pdf;base64,${dokumentRessurs.data}`}
                     width={'100%'}
                     height={'100%'}
                 />
