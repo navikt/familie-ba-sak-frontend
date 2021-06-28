@@ -119,7 +119,8 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             }),
         ]);
 
-    return vedtaksperiodeMedBegrunnelser.fritekster.length > 0 ? (
+    return vedtaksperiodeMedBegrunnelser.fritekster.length > 0 ||
+        skjema.felter.fritekster.verdi.length > 0 ? (
         <FritekstContainer>
             <SkjultLegend>Fritekst til kulepunkt i brev</SkjultLegend>
             <InfoBoks>

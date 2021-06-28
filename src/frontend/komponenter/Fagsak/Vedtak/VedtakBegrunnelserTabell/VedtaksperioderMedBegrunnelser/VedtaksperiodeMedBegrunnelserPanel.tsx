@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import {
     IVedtaksperiodeMedBegrunnelser,
     Vedtaksperiodetype,
@@ -24,9 +25,10 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     } = useVedtaksperiodeMedBegrunnelser();
 
     const visFritekster = () =>
-        vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ||
-        (vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING &&
-            vedtaksperiodeMedBegrunnelser.begrunnelser.length > 0);
+        vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING ||
+        vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
+            begrunnelse => begrunnelse.vedtakBegrunnelseType === VedtakBegrunnelseType.REDUKSJON
+        ).length > 0;
 
     return (
         <EkspanderbartBegrunnelsePanel
