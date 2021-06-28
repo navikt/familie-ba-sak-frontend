@@ -37,6 +37,7 @@ export enum BehandlingÅrsak {
     TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
     OMREGNING_6ÅR = 'OMREGNING_6ÅR',
     OMREGNING_18ÅR = 'OMREGNING_18ÅR',
+    SATSENDRING = 'SATSENDRING',
     MIGRERING = 'MIGRERING',
 }
 
@@ -50,6 +51,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     TEKNISK_OPPHØR: 'Teknisk opphør',
     OMREGNING_6ÅR: 'Omregning 6 år',
     OMREGNING_18ÅR: 'Omregning 18 år',
+    SATSENDRING: 'Satsendring',
     MIGRERING: 'Migrering',
     /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
     REVURDERING_KLAGE_NFP: 'Revurdering etter klage',
