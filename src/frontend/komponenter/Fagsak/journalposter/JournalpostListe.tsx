@@ -17,8 +17,7 @@ import {
 } from '@navikt/familie-typer';
 
 import { IPersonInfo } from '../../../typer/person';
-import { tilVisning, kalenderDato } from '../../../utils/kalender';
-
+import { tilVisning, kalenderDato, erEtter } from '../../../utils/kalender';
 import 'nav-frontend-tabell-style';
 
 const Container = styled.div`
@@ -43,11 +42,19 @@ const StyledSidetittel = styled(Sidetittel)`
 interface IProps {
     bruker: IPersonInfo;
 }
+enum Sorteringsrekefølge {
+    STIGENDE,
+    SYNKENDE,
+    INGEN_SORTERING,
+}
 
 const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const { request } = useHttp();
     const [journalposterRessurs, settJournalposterRessurs] = useState<Ressurs<IJournalpost[]>>(
         byggTomRessurs()
+    );
+    const [sortering, settSortering] = useState<Sorteringsrekefølge>(
+        Sorteringsrekefølge.INGEN_SORTERING
     );
 
     useEffect(() => {
@@ -62,6 +69,30 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         });
     }, [bruker]);
 
+    const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
+        if (!a.datoMottatt) {
+            return -1;
+        }
+        if (!b.datoMottatt) {
+            return 1;
+        }
+        return erEtter(kalenderDato(a.datoMottatt), kalenderDato(b.datoMottatt)) ? 1 : -1;
+    };
+
+    const sorterJournalposterSynkende = (a: IJournalpost, b: IJournalpost) =>
+        -1 * sorterJournalposterStigende(a, b);
+
+    const hentSorterteJournalposter = (journalposter: IJournalpost[]) => {
+        switch (sortering) {
+            case Sorteringsrekefølge.INGEN_SORTERING:
+                return journalposter;
+            case Sorteringsrekefølge.STIGENDE:
+                return [...journalposter].sort(sorterJournalposterStigende);
+            case Sorteringsrekefølge.SYNKENDE:
+                return [...journalposter].sort(sorterJournalposterSynkende);
+        }
+    };
+
     const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
         switch (journalposttype) {
             case Journalposttype.I:
@@ -70,6 +101,28 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 return <RightFilled />;
             case Journalposttype.N:
                 return <DownFilled />;
+        }
+    };
+
+    const hentSorteringsknappCss = () => {
+        switch (sortering) {
+            case Sorteringsrekefølge.INGEN_SORTERING:
+                return '';
+            case Sorteringsrekefølge.STIGENDE:
+                return 'tabell__th--sortert-asc';
+            case Sorteringsrekefølge.SYNKENDE:
+                return 'tabell__th--sortert-desc';
+        }
+    };
+
+    const settNesteSorteringsrekkefølge = (): void => {
+        switch (sortering) {
+            case Sorteringsrekefølge.INGEN_SORTERING:
+                return settSortering(Sorteringsrekefølge.STIGENDE);
+            case Sorteringsrekefølge.STIGENDE:
+                return settSortering(Sorteringsrekefølge.SYNKENDE);
+            case Sorteringsrekefølge.SYNKENDE:
+                return settSortering(Sorteringsrekefølge.INGEN_SORTERING);
         }
     };
 
@@ -86,7 +139,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     }
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
-        const journalposter = journalposterRessurs.data;
+        const journalposter = hentSorterteJournalposter(journalposterRessurs.data);
 
         return (
             <Container>
@@ -94,7 +147,11 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 <table className="tabell tabell--stripet">
                     <thead>
                         <tr>
-                            <th>Dato mottatt</th>
+                            <th className={hentSorteringsknappCss()}>
+                                <button onClick={() => settNesteSorteringsrekkefølge()}>
+                                    Dato mottatt
+                                </button>
+                            </th>
                             <th>Tittel</th>
                             <th>Fagsystem</th>
                             <th>Avsender/Mottaker</th>
@@ -104,7 +161,14 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                     <tbody>
                         {journalposter.sort().map(journalpost => (
                             <tr key={journalpost.journalpostId}>
-                                <td>
+                                <td
+                                    className={
+                                        sortering === Sorteringsrekefølge.STIGENDE ||
+                                        sortering === Sorteringsrekefølge.SYNKENDE
+                                            ? 'tabell__td--sortert'
+                                            : ''
+                                    }
+                                >
                                     {journalpost.datoMottatt &&
                                         tilVisning(kalenderDato(journalpost.datoMottatt))}
                                 </td>
