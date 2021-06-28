@@ -13,6 +13,7 @@ import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
 import Høyremeny from './Høyremeny/Høyremeny';
+import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 
@@ -21,6 +22,7 @@ const FagsakContainer: React.FunctionComponent = () => {
     const history = useHistory();
     const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
+    const erPåDokumentliste = history.location.pathname.includes('dokumentliste');
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
@@ -52,7 +54,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                             <Personlinje bruker={bruker.data} fagsak={fagsak.data} />
 
                             <div className={'fagsakcontainer__content'}>
-                                {!erPåSaksoversikt && (
+                                {!erPåSaksoversikt && !erPåDokumentliste && (
                                     <div className={'fagsakcontainer__content--venstremeny'}>
                                         <Venstremeny fagsak={fagsak.data} />
                                     </div>
@@ -69,6 +71,15 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                 return <Saksoversikt fagsak={fagsak.data} />;
                                             }}
                                         />
+
+                                        <Route
+                                            exact={true}
+                                            path="/fagsak/:fagsakId/dokumentliste"
+                                            render={() => {
+                                                return <JournalpostListe bruker={bruker.data} />;
+                                            }}
+                                        />
+
                                         <Route
                                             path="/fagsak/:fagsakId/:behandlingId"
                                             render={() => {
