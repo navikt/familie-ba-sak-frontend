@@ -9,8 +9,9 @@ import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus, Ressurs, byggTomRessurs, byggHenterRessurs } from '@navikt/familie-typer';
 
+import { Journalpost, JournalpostType } from '../../../typer/Journalpost';
 import { IPersonInfo } from '../../../typer/person';
-import { DagMånedÅr, tilVisning, kalenderDato, FamilieIsoDate } from '../../../utils/kalender';
+import { tilVisning, kalenderDato } from '../../../utils/kalender';
 
 import 'nav-frontend-tabell-style';
 
@@ -35,21 +36,6 @@ const StyledSidetittel = styled(Sidetittel)`
 
 interface IProps {
     bruker: IPersonInfo;
-}
-
-type JournalpostType = 'I' | 'U' | 'M';
-
-interface Journalpost {
-    journalpostId: string;
-    tittel: string;
-    journalposttype: JournalpostType;
-    behandlingstema: string;
-    behandlingstemanavn: string;
-    sak: { fagsaksystem: string; tema: string };
-    avsenderMottaker: { navn: string };
-    datoMottatt: FamilieIsoDate;
-    journalstatus: string;
-    dokumenter: { logiskeVedlegg: { tittel: string; logiskVedleggId: string } };
 }
 
 const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
@@ -82,7 +68,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         }
     };
 
-    console.log(journalposterRessurs);
     if (
         journalposterRessurs.status === RessursStatus.FEILET ||
         journalposterRessurs.status === RessursStatus.FUNKSJONELL_FEIL
@@ -96,7 +81,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
         const journalposter = journalposterRessurs.data;
-        console.log(journalposter);
 
         return (
             <Container>
@@ -104,7 +88,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 <table className="tabell tabell--stripet">
                     <thead>
                         <tr>
-                            <th>DatoMottatt</th>
+                            <th>Dato mottatt</th>
                             <th>Tittel</th>
                             <th>Fagsystem</th>
                             <th>Avsender/Mottaker</th>
