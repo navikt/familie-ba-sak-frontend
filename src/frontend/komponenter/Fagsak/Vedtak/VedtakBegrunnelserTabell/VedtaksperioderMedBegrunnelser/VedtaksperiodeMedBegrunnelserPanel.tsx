@@ -24,7 +24,6 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     } = useVedtaksperiodeMedBegrunnelser();
 
     const visFritekster = () =>
-        vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ||
         vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING;
 
     return (
