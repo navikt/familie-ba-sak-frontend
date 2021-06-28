@@ -159,7 +159,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {journalposter.sort().map(journalpost => (
+                        {journalposter.map(journalpost => (
                             <tr key={journalpost.journalpostId}>
                                 <td
                                     className={
