@@ -35,8 +35,7 @@ export interface IRestPutVedtaksbegrunnelse {
     vedtakBegrunnelseSpesifikasjon: VedtakBegrunnelse;
 }
 
-export interface IRestPutVedtaksperiodeMedBegrunnelser {
-    begrunnelser: IRestPutVedtaksbegrunnelse[];
+export interface IRestPutVedtaksperiodeMedFritekster {
     fritekster: string[];
 }
 // POC slutt

@@ -28,6 +28,7 @@ import {
 } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { mapBegrunnelserTilSelectOptions } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
     vedtaksperiodetype: Vedtaksperiodetype;
@@ -42,22 +43,30 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const skalIkkeEditeres = erLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
     const {
         id,
-        skjema,
         onChangeBegrunnelse,
         grupperteBegrunnelser,
+        standardBegrunnelserPut,
+        vedtaksperiodeMedBegrunnelser,
     } = useVedtaksperiodeMedBegrunnelser();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
-    // React-hack for å rerende komponent som ligger i et ekspanderbart panel
-    const [begrunnelser, settBegrunnelser] = useState(skjema.felter.begrunnelser);
+    const [standardbegrunnelser, settStandardbegrunnelser] = useState<ISelectOption[]>([]);
+
     useEffect(() => {
-        settBegrunnelser(skjema.felter.begrunnelser);
-    }, [skjema.felter.begrunnelser]);
+        if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
+            settStandardbegrunnelser(
+                mapBegrunnelserTilSelectOptions(
+                    vedtaksperiodeMedBegrunnelser,
+                    vedtaksbegrunnelseTekster
+                )
+            );
+        }
+    }, [vedtaksperiodeMedBegrunnelser, vedtaksbegrunnelseTekster]);
 
     return (
         <FamilieReactSelect
             id={`${id}`}
-            value={begrunnelser.verdi}
+            value={standardbegrunnelser}
             propSelectStyles={{
                 container: (provided: CSSProperties) => ({
                     ...provided,
@@ -90,8 +99,13 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 }),
             }}
             placeholder={'Velg begrunnelse(r)'}
-            isDisabled={skalIkkeEditeres || skjema.submitRessurs.status === RessursStatus.HENTER}
-            feil={skjema.visFeilmeldinger ? begrunnelser.feilmelding : undefined}
+            isDisabled={skalIkkeEditeres || standardBegrunnelserPut.status === RessursStatus.HENTER}
+            feil={
+                standardBegrunnelserPut.status === RessursStatus.FUNKSJONELL_FEIL ||
+                standardBegrunnelserPut.status === RessursStatus.FEILET
+                    ? standardBegrunnelserPut.frontendFeilmelding
+                    : undefined
+            }
             label="Velg standardtekst i brev"
             creatable={false}
             erLesevisning={skalIkkeEditeres}
