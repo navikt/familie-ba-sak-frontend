@@ -6,7 +6,7 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
 import { useHttp } from '@navikt/familie-http';
-import { RessursStatus, Ressurs, byggTomRessurs } from '@navikt/familie-typer';
+import { RessursStatus, Ressurs, byggTomRessurs, byggHenterRessurs } from '@navikt/familie-typer';
 
 const SpinnerWrapper = styled.div`
     width: 100%;
@@ -36,10 +36,10 @@ export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IP
     const { request } = useHttp();
 
     useEffect(() => {
+        settDokumentRessurs(byggHenterRessurs());
         request<void, string>({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentInfoId}`,
-            påvirkerSystemLaster: false,
         }).then(dokumentRessurs => settDokumentRessurs(dokumentRessurs));
     }, [dokumentInfoId, journalpostId]);
 
