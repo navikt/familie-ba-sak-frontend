@@ -42,7 +42,7 @@ const StyledSidetittel = styled(Sidetittel)`
 interface IProps {
     bruker: IPersonInfo;
 }
-enum Sorteringsrekefølge {
+enum Sorteringsrekkefølge {
     STIGENDE,
     SYNKENDE,
     INGEN_SORTERING,
@@ -53,8 +53,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const [journalposterRessurs, settJournalposterRessurs] = useState<Ressurs<IJournalpost[]>>(
         byggTomRessurs()
     );
-    const [sortering, settSortering] = useState<Sorteringsrekefølge>(
-        Sorteringsrekefølge.INGEN_SORTERING
+    const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
+        Sorteringsrekkefølge.INGEN_SORTERING
     );
 
     useEffect(() => {
@@ -84,11 +84,11 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
     const hentSorterteJournalposter = (journalposter: IJournalpost[]) => {
         switch (sortering) {
-            case Sorteringsrekefølge.INGEN_SORTERING:
+            case Sorteringsrekkefølge.INGEN_SORTERING:
                 return journalposter;
-            case Sorteringsrekefølge.STIGENDE:
+            case Sorteringsrekkefølge.STIGENDE:
                 return [...journalposter].sort(sorterJournalposterStigende);
-            case Sorteringsrekefølge.SYNKENDE:
+            case Sorteringsrekkefølge.SYNKENDE:
                 return [...journalposter].sort(sorterJournalposterSynkende);
         }
     };
@@ -106,23 +106,23 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
     const hentSorteringsknappCss = () => {
         switch (sortering) {
-            case Sorteringsrekefølge.INGEN_SORTERING:
+            case Sorteringsrekkefølge.INGEN_SORTERING:
                 return '';
-            case Sorteringsrekefølge.STIGENDE:
+            case Sorteringsrekkefølge.STIGENDE:
                 return 'tabell__th--sortert-asc';
-            case Sorteringsrekefølge.SYNKENDE:
+            case Sorteringsrekkefølge.SYNKENDE:
                 return 'tabell__th--sortert-desc';
         }
     };
 
     const settNesteSorteringsrekkefølge = (): void => {
         switch (sortering) {
-            case Sorteringsrekefølge.INGEN_SORTERING:
-                return settSortering(Sorteringsrekefølge.STIGENDE);
-            case Sorteringsrekefølge.STIGENDE:
-                return settSortering(Sorteringsrekefølge.SYNKENDE);
-            case Sorteringsrekefølge.SYNKENDE:
-                return settSortering(Sorteringsrekefølge.INGEN_SORTERING);
+            case Sorteringsrekkefølge.INGEN_SORTERING:
+                return settSortering(Sorteringsrekkefølge.STIGENDE);
+            case Sorteringsrekkefølge.STIGENDE:
+                return settSortering(Sorteringsrekkefølge.SYNKENDE);
+            case Sorteringsrekkefølge.SYNKENDE:
+                return settSortering(Sorteringsrekkefølge.INGEN_SORTERING);
         }
     };
 
@@ -163,8 +163,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                             <tr key={journalpost.journalpostId}>
                                 <td
                                     className={
-                                        sortering === Sorteringsrekefølge.STIGENDE ||
-                                        sortering === Sorteringsrekefølge.SYNKENDE
+                                        sortering === Sorteringsrekkefølge.STIGENDE ||
+                                        sortering === Sorteringsrekkefølge.SYNKENDE
                                             ? 'tabell__td--sortert'
                                             : ''
                                     }
