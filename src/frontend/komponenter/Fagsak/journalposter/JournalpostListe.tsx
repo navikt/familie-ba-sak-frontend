@@ -7,9 +7,15 @@ import { Sidetittel } from 'nav-frontend-typografi';
 
 import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
-import { RessursStatus, Ressurs, byggTomRessurs, byggHenterRessurs } from '@navikt/familie-typer';
+import {
+    RessursStatus,
+    Ressurs,
+    byggTomRessurs,
+    byggHenterRessurs,
+    IJournalpost,
+    Journalposttype,
+} from '@navikt/familie-typer';
 
-import { Journalpost, JournalpostType } from '../../../typer/Journalpost';
 import { IPersonInfo } from '../../../typer/person';
 import { tilVisning, kalenderDato } from '../../../utils/kalender';
 
@@ -40,14 +46,14 @@ interface IProps {
 
 const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const { request } = useHttp();
-    const [journalposterRessurs, settJournalposterRessurs] = useState<Ressurs<Journalpost[]>>(
+    const [journalposterRessurs, settJournalposterRessurs] = useState<Ressurs<IJournalpost[]>>(
         byggTomRessurs()
     );
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
 
-        request<undefined, Journalpost[]>({
+        request<undefined, IJournalpost[]>({
             method: 'GET',
             url: `/familie-ba-sak/api/journalpost/for-bruker/${bruker.personIdent}`,
             påvirkerSystemLaster: true,
@@ -57,13 +63,13 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         });
     }, [bruker]);
 
-    const hentIkonForJournalpostType = (journalpostType: JournalpostType) => {
-        switch (journalpostType) {
-            case 'I':
+    const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
+        switch (journalposttype) {
+            case Journalposttype.I:
                 return <LeftFilled />;
-            case 'U':
+            case Journalposttype.U:
                 return <RightFilled />;
-            case 'M':
+            case Journalposttype.N:
                 return <DownFilled />;
         }
     };
@@ -96,9 +102,12 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {journalposter.map(journalpost => (
+                        {journalposter.sort().map(journalpost => (
                             <tr key={journalpost.journalpostId}>
-                                <td>{tilVisning(kalenderDato(journalpost.datoMottatt))}</td>
+                                <td>
+                                    {journalpost.datoMottatt &&
+                                        tilVisning(kalenderDato(journalpost.datoMottatt))}
+                                </td>
                                 <td>
                                     <TittelWrapper>
                                         <IkonWrapper>
@@ -109,8 +118,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         {journalpost.tittel}
                                     </TittelWrapper>
                                 </td>
-                                <td>{journalpost.sak.fagsaksystem}</td>
-                                <td>{journalpost.avsenderMottaker.navn}</td>
+                                <td>{journalpost.sak?.fagsaksystem}</td>
+                                <td>{journalpost.avsenderMottaker?.navn}</td>
                                 <td>{journalpost.journalstatus}</td>
                             </tr>
                         ))}
