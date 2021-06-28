@@ -58,8 +58,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
             url: `/familie-ba-sak/api/journalpost/for-bruker/${bruker.personIdent}`,
             påvirkerSystemLaster: true,
         }).then(journalposterRessurs => {
-            journalposterRessurs.status === RessursStatus.SUKSESS &&
-                settJournalposterRessurs(journalposterRessurs);
+            settJournalposterRessurs(journalposterRessurs);
         });
     }, [bruker]);
 
@@ -76,7 +75,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
     if (
         journalposterRessurs.status === RessursStatus.FEILET ||
-        journalposterRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+        journalposterRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+        journalposterRessurs.status === RessursStatus.IKKE_TILGANG
     ) {
         return (
             <Container>
