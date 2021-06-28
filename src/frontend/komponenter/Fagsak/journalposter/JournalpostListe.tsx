@@ -139,8 +139,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     }
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
-        const journalposter = hentSorterteJournalposter(journalposterRessurs.data);
-
         return (
             <Container>
                 <StyledSidetittel>Dokumentoversikt</StyledSidetittel>
@@ -159,7 +157,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {journalposter.map(journalpost => (
+                        {hentSorterteJournalposter(journalposterRessurs.data).map(journalpost => (
                             <tr key={journalpost.journalpostId}>
                                 <td
                                     className={
