@@ -25,6 +25,7 @@ import {
     JournalpostKanal,
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
+import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
@@ -53,7 +54,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         verdi: false,
     });
 
-    const behandlingstype = useFelt<Behandlingstype | ''>({
+    const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
         verdi: '',
         valideringsfunksjon: felt => {
             return felt.verdi !== ''
@@ -94,7 +95,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             avsenderNavn: string;
             avsenderIdent: string;
             knyttTilNyBehandling: boolean;
-            behandlingstype: Behandlingstype | '';
+            behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
             tilknyttedeBehandlingIder: number[];
         },
