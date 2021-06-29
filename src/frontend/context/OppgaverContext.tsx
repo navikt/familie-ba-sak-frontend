@@ -23,7 +23,9 @@ import {
     IOppgaveFelt,
     IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
+import { IFagsak } from '../typer/fagsak';
 import {
+    BehandlingstypeFilter,
     IFinnOppgaveRequest,
     IHentOppgaveDto,
     IOppgave,
@@ -31,6 +33,7 @@ import {
     SaksbehandlerFilter,
 } from '../typer/oppgave';
 import { erFør, erIsoStringGyldig, kalenderDato } from '../utils/kalender';
+import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { useApp } from './AppContext';
 
 export const oppgaveSideLimit = 15;
@@ -320,6 +323,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                         history.push(`/oppgaver/journalfør/${oppgave.id}`);
                     }
                 } else {
+                    if (oppgave.behandlingstype === BehandlingstypeFilter.ae0161) {
+                        // tilbakekreving
+                        gåTilTilbakekreving(oppgave);
+                        return byggSuksessRessurs<string>('');
+                    }
                     if (oppgave.aktoerId)
                         opprettEllerHentFagsak({
                             personIdent: null,
@@ -465,6 +473,23 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             .catch((_error: AxiosError) => {
                 return byggFeiletRessurs('Ukjent ved innhenting av oppgaver');
             });
+    };
+
+    const gåTilTilbakekreving = (oppgave: IOppgave) => {
+        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
+        if (brukerident) {
+            request<{ personIdent: string }, IFagsak | undefined>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
+                data: {
+                    personIdent: brukerident,
+                },
+            }).then((fagsak: Ressurs<IFagsak | undefined>) => {
+                if (fagsak.status === RessursStatus.SUKSESS && !!fagsak.data) {
+                    window.location.href = `/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.data.id}/behandling/${oppgave.saksreferanse}`;
+                }
+            });
+        }
     };
 
     return {
