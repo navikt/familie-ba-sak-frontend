@@ -16,6 +16,7 @@ export interface ISide {
     navn: string;
     steg: BehandlingSteg;
     undersider?: (åpenBehandling: IBehandling) => IUnderside[];
+    visSide?: (åpenBehandling: IBehandling) => boolean;
 }
 
 export interface IUnderside {
@@ -37,6 +38,9 @@ export const sider: Record<SideId, ISide> = {
         href: 'registrer-soknad',
         navn: 'Registrer søknad',
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
+        visSide: (åpenBehandling: IBehandling) => {
+            return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
+        },
     },
     VILKÅRSVURDERING: {
         href: 'vilkaarsvurdering',
@@ -78,11 +82,17 @@ export const sider: Record<SideId, ISide> = {
         href: 'simulering',
         navn: 'Simulering',
         steg: BehandlingSteg.VURDER_TILBAKEKREVING,
+        visSide: (åpenBehandling: IBehandling) => {
+            return !åpenBehandling.skalBehandlesAutomatisk;
+        },
     },
     VEDTAK: {
         href: 'vedtak',
         navn: 'Vedtak',
         steg: BehandlingSteg.SEND_TIL_BESLUTTER,
+        visSide: (åpenBehandling: IBehandling) => {
+            return åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING;
+        },
     },
 };
 
@@ -101,15 +111,10 @@ export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
 };
 
 export const visSide = (side: ISide, åpenBehandling: IBehandling) => {
-    switch (side) {
-        case sider.REGISTRERE_SØKNAD:
-            return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
-        case sider.SIMULERING:
-            return !åpenBehandling.skalBehandlesAutomatisk;
-        case sider.VEDTAK:
-            return åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING;
-        default:
-            return true;
+    if (side.visSide) {
+        return side.visSide(åpenBehandling);
+    } else {
+        return true;
     }
 };
 
@@ -117,7 +122,9 @@ export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | und
     const steg = finnSteg(behandling);
 
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
-        return sider.VEDTAK;
+        return sider.VEDTAK.visSide && sider.VEDTAK.visSide(behandling)
+            ? sider.VEDTAK
+            : sider.BEHANDLINGRESULTAT;
     }
 
     const sideForSteg = Object.entries(sider).find(([_, side]) => side.steg === steg);
