@@ -146,6 +146,14 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         return (
             <Container>
                 <StyledSidetittel>Dokumentoversikt</StyledSidetittel>
+
+                {aktivtDokumentId && aktivJournalpostId && (
+                    <Dokument
+                        dokumentInfoId={aktivtDokumentId}
+                        journalpostId={aktivJournalpostId}
+                    />
+                )}
+
                 <table className="tabell tabell--stripet">
                     <thead>
                         <tr>
@@ -189,14 +197,18 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                 <td>{journalpost.avsenderMottaker?.navn}</td>
                                 <td>
                                     {journalpost.dokumenter?.map(dokument => (
-                                        <Knapp
-                                            onClick={() => {
-                                                settAktivJournalpostId(journalpost.journalpostId);
-                                                settAktivtDokumentId(dokument.dokumentInfoId);
-                                            }}
-                                        >
-                                            {dokument.tittel}
-                                        </Knapp>
+                                        <div key={dokument.dokumentInfoId}>
+                                            <Knapp
+                                                onClick={() => {
+                                                    settAktivJournalpostId(
+                                                        journalpost.journalpostId
+                                                    );
+                                                    settAktivtDokumentId(dokument.dokumentInfoId);
+                                                }}
+                                            >
+                                                {dokument.tittel}
+                                            </Knapp>
+                                        </div>
                                     ))}
                                 </td>
                                 <td>{journalpost.journalstatus}</td>
@@ -204,12 +216,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         ))}
                     </tbody>
                 </table>
-                {aktivtDokumentId && aktivJournalpostId && (
-                    <Dokument
-                        dokumentInfoId={aktivtDokumentId}
-                        journalpostId={aktivJournalpostId}
-                    />
-                )}
             </Container>
         );
     } else {
