@@ -101,10 +101,15 @@ export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
 };
 
 export const visSide = (side: ISide, åpenBehandling: IBehandling) => {
-    if (åpenBehandling.skalBehandlesAutomatisk || åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD) {
-        return side.steg !== BehandlingSteg.REGISTRERE_SØKNAD;
-    } else {
-        return true;
+    switch (side) {
+        case sider.REGISTRERE_SØKNAD:
+            return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
+        case sider.SIMULERING:
+            return !åpenBehandling.skalBehandlesAutomatisk;
+        case sider.VEDTAK:
+            return åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING;
+        default:
+            return true;
     }
 };
 
