@@ -9,6 +9,7 @@ export enum ToggleNavn {
     journalpostliste = 'familie-ba-sak.behandling.journalpostliste',
     brukNyeVedtaksperioder = 'familie-ba-sak.behandling.vedtakstype-med-begrunnelser',
     brukErDeltBosted = 'familie-ba-sak.behandling.delt_bosted',
+    manuellSatsendring = 'familie-ba-sak.manuell-satsendring',
 }
 
 export const alleTogglerAv = (): IToggles => {
