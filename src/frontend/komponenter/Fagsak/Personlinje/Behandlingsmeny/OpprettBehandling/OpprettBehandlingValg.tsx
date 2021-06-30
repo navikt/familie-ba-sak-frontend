@@ -12,15 +12,17 @@ import {
     IBehandling,
 } from '../../../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
+import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 
 interface IProps {
-    behandlingstype: Felt<Behandlingstype | ''>;
+    behandlingstype: Felt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>;
     behandlingsårsak: Felt<BehandlingÅrsak | ''>;
     fagsak?: IFagsak;
     visFeilmeldinger: boolean;
     erLesevisning?: boolean;
+    manuellJournalfør?: boolean;
 }
 
 interface BehandlingstypeSelect extends HTMLSelectElement {
@@ -37,6 +39,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     fagsak,
     visFeilmeldinger,
     erLesevisning = false,
+    manuellJournalfør = false,
 }) => {
     const { toggles } = useApp();
     const aktivBehandling: IBehandling | undefined = fagsak
@@ -52,6 +55,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : fagsak.behandlinger.length > 0 && kanOppretteBehandling;
     const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
+    const kanOppretteTilbakekreving = !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
 
     return (
         <>
@@ -89,6 +93,18 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         value={Behandlingstype.TEKNISK_OPPHØR}
                     >
                         Teknisk opphør
+                    </option>
+                )}
+
+                {kanOppretteTilbakekreving && (
+                    <option
+                        aria-selected={
+                            behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
+                        }
+                        disabled={!revurderingEnabled}
+                        value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
+                    >
+                        Tilbakekreving
                     </option>
                 )}
             </FamilieSelect>
