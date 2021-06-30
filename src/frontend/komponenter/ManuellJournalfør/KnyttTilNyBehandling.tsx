@@ -46,6 +46,7 @@ export const KnyttTilNyBehandling: React.FC = () => {
                         fagsak={fagsak}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         erLesevisning={erLesevisning()}
+                        manuellJournalfør
                     />
                 </>
             )}
