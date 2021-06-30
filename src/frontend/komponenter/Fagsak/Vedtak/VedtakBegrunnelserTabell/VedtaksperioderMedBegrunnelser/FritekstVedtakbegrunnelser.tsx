@@ -18,6 +18,7 @@ import { EksternLenke } from '../../../../../ikoner/EksternLenke';
 import Pluss from '../../../../../ikoner/Pluss';
 import Slett from '../../../../../ikoner/Slett';
 import { målform } from '../../../../../typer/søknad';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Hjelpetekst44px from '../../../../Felleskomponenter/Hjelpetekst44px';
 import IkonKnapp from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
@@ -165,7 +166,12 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                 </StyledList>
             ) : (
                 <>
-                    <SkjemaGruppe id={skjemaGruppeId}>
+                    <SkjemaGruppe
+                        id={skjemaGruppeId}
+                        feil={
+                            skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)
+                        }
+                    >
                         {skjema.felter.fritekster.verdi.map(
                             (fritekst: FeltState<IFritekstFelt>) => {
                                 const fritekstId = fritekst.verdi.id;
