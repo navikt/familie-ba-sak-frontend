@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router';
 
 import { useFelt, feil, ok, Avhengigheter, useSkjema } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
@@ -13,14 +13,19 @@ import {
     IBehandling,
 } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
+import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 
-const useOpprettBehandling = (lukkModal: () => void) => {
+const useOpprettBehandling = (
+    lukkModal: () => void,
+    fagsak: IFagsak,
+    onOpprettTilbakekrevingSuccess: () => void
+) => {
     const { innloggetSaksbehandler } = useApp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
-    const behandlingstype = useFelt<Behandlingstype | ''>({
+    const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
         verdi: '',
         valideringsfunksjon: felt => {
             return felt.verdi !== ''
@@ -43,9 +48,9 @@ const useOpprettBehandling = (lukkModal: () => void) => {
         avhengigheter: { behandlingstype },
     });
 
-    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit } = useSkjema<
+    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs } = useSkjema<
         {
-            behandlingstype: Behandlingstype | '';
+            behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
         },
         IFagsak
@@ -67,48 +72,74 @@ const useOpprettBehandling = (lukkModal: () => void) => {
 
     const onBekreft = (søkersIdent: string) => {
         if (kanSendeSkjema()) {
-            onSubmit(
-                {
-                    data: {
-                        behandlingType: skjema.felter.behandlingstype.verdi as Behandlingstype,
-                        behandlingÅrsak: hentBehandlingårsak(),
-                        kategori: BehandlingKategori.NASJONAL,
-                        navIdent: innloggetSaksbehandler?.navIdent,
-                        søkersIdent,
-                        underkategori: BehandlingUnderkategori.ORDINÆR,
+            if (
+                skjema.felter.behandlingstype.verdi ===
+                Tilbakekrevingsbehandlingstype.TILBAKEKREVING
+            ) {
+                onSubmit(
+                    {
+                        method: 'GET',
+                        url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opprett-tilbakekreving`,
                     },
-                    method: 'POST',
-                    url: '/familie-ba-sak/api/behandlinger',
-                },
-                response => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        lukkModal();
-                        nullstillSkjema();
-
-                        settFagsak(response);
-                        const aktivBehandling:
-                            | IBehandling
-                            | undefined = hentAktivBehandlingPåFagsak(response.data);
-
-                        if (aktivBehandling && aktivBehandling.årsak === BehandlingÅrsak.SØKNAD) {
-                            history.push(
-                                `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
-                            );
-                        } else {
-                            history.push(
-                                `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
-                            );
+                    response => {
+                        if (response.status === RessursStatus.SUKSESS) {
+                            nullstillSkjemaStatus();
+                            onOpprettTilbakekrevingSuccess();
                         }
                     }
-                }
-            );
+                );
+            } else {
+                onSubmit(
+                    {
+                        data: {
+                            behandlingType: skjema.felter.behandlingstype.verdi as Behandlingstype,
+                            behandlingÅrsak: hentBehandlingårsak(),
+                            kategori: BehandlingKategori.NASJONAL,
+                            navIdent: innloggetSaksbehandler?.navIdent,
+                            søkersIdent,
+                            underkategori: BehandlingUnderkategori.ORDINÆR,
+                        },
+                        method: 'POST',
+                        url: '/familie-ba-sak/api/behandlinger',
+                    },
+                    response => {
+                        if (response.status === RessursStatus.SUKSESS) {
+                            lukkModal();
+                            nullstillSkjema();
+
+                            settFagsak(response);
+                            const aktivBehandling:
+                                | IBehandling
+                                | undefined = hentAktivBehandlingPåFagsak(response.data);
+
+                            if (
+                                aktivBehandling &&
+                                aktivBehandling.årsak === BehandlingÅrsak.SØKNAD
+                            ) {
+                                history.push(
+                                    `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
+                                );
+                            } else {
+                                history.push(
+                                    `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
+                                );
+                            }
+                        }
+                    }
+                );
+            }
         }
+    };
+
+    const nullstillSkjemaStatus = () => {
+        settSubmitRessurs(byggTomRessurs());
+        nullstillSkjema();
     };
 
     return {
         onBekreft,
         opprettBehandlingSkjema: skjema,
-        nullstillSkjema,
+        nullstillSkjemaStatus,
     };
 };
 
