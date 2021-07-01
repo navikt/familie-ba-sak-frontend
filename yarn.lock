@@ -1522,10 +1522,10 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.2.1.tgz#ac3822fc70c0dce656a54f3040de53d05547cc4f"
   integrity sha512-AYIlCVLcJpH+IJKhr2nZUEOcCcKYL+LgwZuWP2fnR/y00Tw2y4ccCM/bs+h5r5VlB7GOVyzIVBSyesdDhdbwQQ==
 
-"@navikt/ds-icons@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.3.2.tgz#54de6e0a7cd63fca4c81c53487aec8ceba1d253c"
-  integrity sha512-EZkEIRC54Ota6tWd3Fb52YkxDwz8J8o13wbM69lWmI6ijuNT8hqzZaxvFPdig7IPijJjByGQLTeHR8cOnHzHew==
+"@navikt/ds-icons@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.3.3.tgz#19432cc0b711f4643cba611c5b593ff2b7b67626"
+  integrity sha512-851CJ6GJu4u1iLLhqhGW+jeEB4NpOsoN8Guhy6KZUPSGI1mbN1fGkUcu7p2BC7VF3Rcad/EdHGwTmPPAYZ4vDg==
 
 "@navikt/familie-backend@^5.0.26":
   version "5.0.26"
