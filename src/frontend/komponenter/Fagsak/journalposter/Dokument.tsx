@@ -43,35 +43,30 @@ export const Dokument: React.FC<IProps> = ({ dokumentInfoId, journalpostId }: IP
         }).then(dokumentRessurs => settDokumentRessurs(dokumentRessurs));
     }, [dokumentInfoId, journalpostId]);
 
-    if (
-        dokumentRessurs.status === RessursStatus.FEILET ||
-        dokumentRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-        dokumentRessurs.status === RessursStatus.IKKE_TILGANG
-    ) {
-        return <DokumentDataAlert children={dokumentRessurs.frontendFeilmelding} />;
-    }
-
-    if (dokumentRessurs.status === RessursStatus.HENTER) {
-        return (
-            <SpinnerWrapper>
-                Laster dokument <NavFrontendSpinner />
-            </SpinnerWrapper>
-        );
-    }
-
-    if (dokumentRessurs.status === RessursStatus.SUKSESS) {
-        return (
-            <DokumentDiv>
-                <iframe
-                    title={'dokument'}
-                    src={`data:application/pdf;base64,${dokumentRessurs.data}`}
-                    width={'100%'}
-                    height={'100%'}
-                />
-            </DokumentDiv>
-        );
-    } else {
-        return <></>;
+    switch (dokumentRessurs.status) {
+        case RessursStatus.FEILET:
+        case RessursStatus.FUNKSJONELL_FEIL:
+        case RessursStatus.IKKE_TILGANG:
+            return <DokumentDataAlert children={dokumentRessurs.frontendFeilmelding} />;
+        case RessursStatus.HENTER:
+            return (
+                <SpinnerWrapper>
+                    Laster dokument <NavFrontendSpinner />
+                </SpinnerWrapper>
+            );
+        case RessursStatus.SUKSESS:
+            return (
+                <DokumentDiv>
+                    <iframe
+                        title={'dokument'}
+                        src={`data:application/pdf;base64,${dokumentRessurs.data}`}
+                        width={'100%'}
+                        height={'100%'}
+                    />
+                </DokumentDiv>
+            );
+        case RessursStatus.IKKE_HENTET:
+            return <></>;
     }
 };
 
