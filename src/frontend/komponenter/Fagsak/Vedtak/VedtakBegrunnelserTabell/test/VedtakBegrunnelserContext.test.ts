@@ -1,3 +1,4 @@
+import { BehandlingResultat } from '../../../../../typer/behandling';
 import {
     IVedtaksperiodeMedBegrunnelser,
     Vedtaksperiodetype,
@@ -28,7 +29,11 @@ describe('VedtakBegrunnelserContext', () => {
                 mockUtbetalingsperiode({ fom: fom, tom: tom }),
                 mockAvslagsperiode({ fom: fom, tom: tom }),
             ];
-            const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(vedtaksperioder, false);
+            const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(
+                vedtaksperioder,
+                false,
+                BehandlingResultat.AVSLÅTT_ENDRET_OG_OPPHØRT
+            );
             expect(perioder.length).toBe(3);
             expect(perioder[0].type).toBe(Vedtaksperiodetype.UTBETALING);
             expect(perioder[1].type).toBe(Vedtaksperiodetype.AVSLAG);
@@ -44,7 +49,8 @@ describe('VedtakBegrunnelserContext', () => {
                 ];
                 const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(
                     vedtaksperioder,
-                    erLesevisning
+                    erLesevisning,
+                    BehandlingResultat.FORTSATT_INNVILGET
                 );
                 expect(perioder.length).toBe(1);
                 expect(perioder[0].type).toEqual(Vedtaksperiodetype.OPPHØR);
@@ -70,7 +76,8 @@ describe('VedtakBegrunnelserContext', () => {
                             tom: serializeIso8601String(enMndFremITidTom),
                         }),
                     ],
-                    false
+                    false,
+                    BehandlingResultat.INNVILGET
                 );
                 expect(perioder.length).toBe(1);
             });
@@ -93,9 +100,24 @@ describe('VedtakBegrunnelserContext', () => {
                             tom: serializeIso8601String(toMndFremITidTom),
                         }),
                     ],
-                    false
+                    false,
+                    BehandlingResultat.INNVILGET
                 );
                 expect(perioder.length).toBe(0);
+            });
+            test(`Test at opphør kun gir én periode`, () => {
+                const vedtaksperioder: IVedtaksperiodeMedBegrunnelser[] = [
+                    mockOpphørsperiode({ fom: opphørFom }),
+                    mockUtbetalingsperiode({ fom: fom, tom: tom }),
+                    mockAvslagsperiode({ fom: fom, tom: tom }),
+                ];
+                const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(
+                    vedtaksperioder,
+                    false,
+                    BehandlingResultat.OPPHØRT
+                );
+                expect(perioder.length).toBe(1);
+                expect(perioder[0].type).toBe(Vedtaksperiodetype.OPPHØR);
             });
         });
     });
