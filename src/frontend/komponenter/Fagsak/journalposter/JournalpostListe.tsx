@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Sidetittel } from 'nav-frontend-typografi';
 
 import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
@@ -16,9 +17,10 @@ import {
     Journalposttype,
 } from '@navikt/familie-typer';
 
+import 'nav-frontend-tabell-style';
 import { IPersonInfo } from '../../../typer/person';
 import { tilVisning, kalenderDato, erEtter } from '../../../utils/kalender';
-import 'nav-frontend-tabell-style';
+import Dokument from './Dokument';
 
 const Container = styled.div`
     margin: 4.1875rem 3.3125rem;
@@ -56,6 +58,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
+    const [aktivJournalpostId, settAktivJournalpostId] = useState<string | undefined>();
+    const [aktivtDokumentId, settAktivtDokumentId] = useState<string | undefined>();
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -142,6 +146,14 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         return (
             <Container>
                 <StyledSidetittel>Dokumentoversikt</StyledSidetittel>
+
+                {aktivtDokumentId && aktivJournalpostId && (
+                    <Dokument
+                        dokumentInfoId={aktivtDokumentId}
+                        journalpostId={aktivJournalpostId}
+                    />
+                )}
+
                 <table className="tabell tabell--stripet">
                     <thead>
                         <tr>
@@ -153,6 +165,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                             <th>Tittel</th>
                             <th>Fagsystem</th>
                             <th>Avsender/Mottaker</th>
+                            <th>Dokumenter</th>
                             <th>Journalstatus</th>
                         </tr>
                     </thead>
@@ -182,6 +195,22 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                 </td>
                                 <td>{journalpost.sak?.fagsaksystem}</td>
                                 <td>{journalpost.avsenderMottaker?.navn}</td>
+                                <td>
+                                    {journalpost.dokumenter?.map(dokument => (
+                                        <div key={dokument.dokumentInfoId}>
+                                            <Knapp
+                                                onClick={() => {
+                                                    settAktivJournalpostId(
+                                                        journalpost.journalpostId
+                                                    );
+                                                    settAktivtDokumentId(dokument.dokumentInfoId);
+                                                }}
+                                            >
+                                                {dokument.tittel}
+                                            </Knapp>
+                                        </div>
+                                    ))}
+                                </td>
                                 <td>{journalpost.journalstatus}</td>
                             </tr>
                         ))}
