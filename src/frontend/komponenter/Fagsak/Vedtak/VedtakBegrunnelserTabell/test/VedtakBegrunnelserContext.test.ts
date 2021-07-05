@@ -50,7 +50,7 @@ describe('VedtakBegrunnelserContext', () => {
                 const perioder = filtrerOgSorterPerioderMedBegrunnelseBehov2(
                     vedtaksperioder,
                     erLesevisning,
-                    BehandlingResultat.FORTSATT_INNVILGET
+                    BehandlingResultat.INNVILGET_OG_OPPHØRT
                 );
                 expect(perioder.length).toBe(1);
                 expect(perioder[0].type).toEqual(Vedtaksperiodetype.OPPHØR);
