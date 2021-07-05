@@ -32,7 +32,7 @@
     "@navikt/familie-header": "^3.0.17",
     "@navikt/familie-http": "^1.0.5",
     "@navikt/familie-ikoner": "^3.1.11",
-    "@navikt/familie-logging": "^1.0.2",
+    "@navikt/familie-logging": "^1.0.5",
     "@navikt/familie-skjema": "^1.1.6",
     "@navikt/familie-typer": "^3.0.12",
     "@navikt/familie-visittkort": "^2.1.25",
