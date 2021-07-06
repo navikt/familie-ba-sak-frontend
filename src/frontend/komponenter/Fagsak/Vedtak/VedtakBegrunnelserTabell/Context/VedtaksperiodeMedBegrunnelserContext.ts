@@ -153,15 +153,17 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 initiellVerdi === '' ? Valideringsstatus.IKKE_VALIDERT : Valideringsstatus.OK,
         });
 
-        const utbetalingsperiode:
-            | Utbetalingsperiode
-            | undefined = hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode(
-            {
-                fom: vedtaksperiodeMedBegrunnelser.fom,
-                tom: vedtaksperiodeMedBegrunnelser.tom,
-            },
-            åpenBehandling
-        );
+        const utbetalingsperiode: Utbetalingsperiode | undefined =
+            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
+            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET
+                ? hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode(
+                      {
+                          fom: vedtaksperiodeMedBegrunnelser.fom,
+                          tom: vedtaksperiodeMedBegrunnelser.tom,
+                      },
+                      åpenBehandling
+                  )
+                : undefined;
 
         const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
             switch (action.action) {
