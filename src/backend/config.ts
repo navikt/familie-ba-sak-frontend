@@ -16,24 +16,23 @@ const Environment = () => {
             namespace: 'e2e',
             proxyUrl: 'http://familie-ba-sak:8089',
             familieTilbakeUrl: 'http://familie-tilbake-frontend:8000',
-            redisUrl: 'familie-redis',
         };
     } else if (process.env.ENV === 'preprod') {
         return {
             buildPath: 'frontend_production',
             namespace: 'preprod',
-            proxyUrl: 'http://familie-ba-sak',
+            proxyUrl: 'https://familie-ba-sak.dev-fss-pub.nais.io',
             familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
-            redisUrl: 'familie-ba-sak-frontend-redis.default.svc.nais.local',
+            redisUrl: 'familie-ba-sak-frontend-redis',
         };
     }
 
     return {
         buildPath: 'frontend_production',
         namespace: 'production',
-        proxyUrl: 'http://familie-ba-sak',
+        proxyUrl: 'http://familie-ba-sak.prod-fss-pub.nais.io',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
-        redisUrl: 'familie-ba-sak-frontend-redis.default.svc.nais.local',
+        redisUrl: 'familie-ba-sak-frontend-redis',
     };
 };
 const env = Environment();
