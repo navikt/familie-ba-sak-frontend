@@ -131,7 +131,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@types/jest": "^26.0.23",
     "@types/webpack-dev-middleware": "^3.7.1",
-    "@types/webpack-env": "^1.15.2",
+    "@types/webpack-env": "^1.16.2",
     "@types/webpack-hot-middleware": "^2.25.3",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.28.1",
