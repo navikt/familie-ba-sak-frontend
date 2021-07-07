@@ -55,7 +55,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : fagsak.behandlinger.length > 0 && kanOppretteBehandling;
     const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
-    const visManuellSatsendring = revurderingEnabled && toggles[ToggleNavn.manuellSatsendring];
     const kanOppretteTilbakekreving = !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
 
     return (
@@ -128,7 +127,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                             årsak =>
                                 årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
                                 årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
-                                (visManuellSatsendring || årsak !== BehandlingÅrsak.SATSENDRING)
+                                årsak !== BehandlingÅrsak.SATSENDRING
                         )
                         .map(årsak => {
                             return (
