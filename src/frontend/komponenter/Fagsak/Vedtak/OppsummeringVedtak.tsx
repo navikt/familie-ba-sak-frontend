@@ -67,7 +67,9 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
     const { toggles } = useApp();
-    const brukNyeVedtaksperioder = toggles[ToggleNavn.brukNyeVedtaksperioder];
+    const visGammeltFormat =
+        !toggles[ToggleNavn.brukNyeVedtaksperioder] ||
+        åpenBehandling.status === BehandlingStatus.FATTER_VEDTAK;
 
     const history = useHistory();
 
@@ -227,7 +229,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             </Alertstripe>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
-                                {!brukNyeVedtaksperioder && (
+                                {visGammeltFormat && (
                                     <VedtakBegrunnelserProvider
                                         fagsak={fagsak}
                                         aktivVedtak={aktivVedtak}
