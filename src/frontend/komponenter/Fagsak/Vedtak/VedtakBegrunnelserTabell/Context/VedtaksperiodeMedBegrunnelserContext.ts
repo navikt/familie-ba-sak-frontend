@@ -49,6 +49,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 vedtaksperiodeMedBegrunnelser.fritekster.length === 0
         );
         const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState(byggTomRessurs());
+        const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] = useState<
+            Ressurs<string[]>
+        >(byggTomRessurs());
 
         const maksAntallKulepunkter =
             vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
@@ -125,6 +128,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         useEffect(() => {
             if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
                 populerSkjemaFraBackend();
+                genererOgSettBegrunnelserForForhåndsvisning(vedtaksperiodeMedBegrunnelser.id);
             }
         }, [vedtaksbegrunnelseTekster, vedtaksperiodeMedBegrunnelser]);
 
@@ -220,6 +224,28 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             });
         };
 
+        const genererOgSettBegrunnelserForForhåndsvisning = (vedtaksperiodeId: number) => {
+            settGenererteBrevbegrunnelser(byggHenterRessurs());
+            request<void, string[]>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/vedtaksperioder/brevbegrunnelser/${vedtaksperiodeId}`,
+            }).then((hentedeBegrunnelser: Ressurs<string[]>) => {
+                if (hentedeBegrunnelser.status === RessursStatus.SUKSESS) {
+                    settGenererteBrevbegrunnelser(hentedeBegrunnelser);
+                } else if (hentedeBegrunnelser.status === RessursStatus.FUNKSJONELL_FEIL) {
+                    settGenererteBrevbegrunnelser(
+                        byggFeiletRessurs(hentedeBegrunnelser.frontendFeilmelding)
+                    );
+                } else {
+                    settGenererteBrevbegrunnelser(
+                        byggFeiletRessurs(
+                            'Klarte ikke generere forhåndsvisning av brevbegrunnelser'
+                        )
+                    );
+                }
+            });
+        };
+
         const leggTilFritekst = () => {
             skjema.felter.fritekster.validerOgSettFelt([
                 ...skjema.felter.fritekster.verdi,
@@ -279,6 +305,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             utbetalingsperiode,
             åpenBehandling,
             standardBegrunnelserPut,
+            genererteBrevbegrunnelser,
         };
     }
 );
