@@ -53,12 +53,14 @@ export const Infotrygd: React.FC = () => {
     }, []);
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
+    const knappMigrerErLåst = infotrygdmigreringRessurs.status !== RessursStatus.IKKE_HENTET;
 
     const visFlyttSakKnapp = () => {
         if (skjema.submitRessurs.status === RessursStatus.SUKSESS) {
             return (
                 <FlyttSakKnapp
                     mini
+                    disabled={knappMigrerErLåst}
                     onClick={() => {
                         flyttBrukerTilBaSak(ident);
                     }}
