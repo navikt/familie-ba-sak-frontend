@@ -44,7 +44,7 @@ spec:
       external:
         - host: familie-ba-sak.dev-fss-pub.nais.io
   envFrom:
-    - secret: familie-ba-sak-frontend
+    - secret: ba-sak-frontend
   env:
     - name: APP_VERSION
       value: "{{version}}"
