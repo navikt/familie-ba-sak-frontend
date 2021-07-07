@@ -23,13 +23,13 @@ spec:
     enabled: true
     path: /metrics
   ingresses:
-    - https://barnetrygd-gcp.dev.adeo.no
+    - https://barnetrygd.dev.intern.nav.no
   azure:
     application:
       enabled: true
       tenant: trygdeetaten.no
       replyURLs:
-        - https://barnetrygd-gcp.dev.adeo.no/auth/openid/callback
+        - https://barnetrygd.dev.intern.nav.no/auth/openid/callback
   resources:
     limits:
       cpu: 2000m
