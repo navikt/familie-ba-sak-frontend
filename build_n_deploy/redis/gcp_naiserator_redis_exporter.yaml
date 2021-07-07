@@ -27,7 +27,7 @@ spec:
       rules:
         - application: familie-ba-sak-frontend-redis
   envFrom:
-    - secret: familie-ba-sak-frontend-redis
+    - secret: ba-sak-frontend-redis
   env:
     - name: REDIS_ADDR
       value: familie-ba-sak-frontend-redis:6379

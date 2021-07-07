@@ -27,4 +27,4 @@ spec:
         - application: familie-ba-sak-frontend
         - application: familie-ba-sak-frontend-redis-exporter
   envFrom:
-    - secret: familie-ba-sak-frontend-redis
+    - secret: ba-sak-frontend-redis
