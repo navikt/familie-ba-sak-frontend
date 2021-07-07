@@ -70,7 +70,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const visGammeltFormat =
         !toggles[ToggleNavn.brukNyeVedtaksperioder] ||
         åpenBehandling.status === BehandlingStatus.FATTER_VEDTAK ||
-        åpenBehandling.status === BehandlingStatus.AVSLUTTET;
+        åpenBehandling.status === BehandlingStatus.AVSLUTTET ||
+        åpenBehandling.status === BehandlingStatus.UTREDES;
 
     const history = useHistory();
 
