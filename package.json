@@ -122,7 +122,7 @@
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.2.2",
     "request-promise": "^4.2.5",
-    "snyk": "^1.622.0",
+    "snyk": "^1.657.0",
     "styled-components": "^5.2.3",
     "uuid": "^8.3.0"
   },
