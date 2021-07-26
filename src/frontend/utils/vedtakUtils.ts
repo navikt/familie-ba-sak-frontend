@@ -2,6 +2,7 @@ import navFarger from 'nav-frontend-core';
 
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { BehandlingResultat } from '../typer/behandling';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -80,9 +81,10 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
 
 export const filtrerOgSorterPerioderMedBegrunnelseBehov2 = (
     vedtaksperioder: IVedtaksperiodeMedBegrunnelser[],
-    erLesevisning: boolean
+    erLesevisning: boolean,
+    behandlingResultat: BehandlingResultat
 ): IVedtaksperiodeMedBegrunnelser[] => {
-    return vedtaksperioder
+    const sorterteOgFiltrertePerioder = vedtaksperioder
         .slice()
         .sort((a, b) =>
             kalenderDiff(
@@ -91,27 +93,39 @@ export const filtrerOgSorterPerioderMedBegrunnelseBehov2 = (
             )
         )
         .filter((vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
-            const vedtakBegrunnelserForPeriode = vedtaksperiode.begrunnelser;
-
             if (erLesevisning) {
-                // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
-                return !!vedtakBegrunnelserForPeriode.length;
+                return harPeriodeBegrunnelse(vedtaksperiode);
             } else {
-                // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
-                const periodeFom = kalenderDatoMedFallback(vedtaksperiode.fom, TIDENES_MORGEN);
-                const toMånederFremITid = leggTil(
-                    førsteDagIInneværendeMåned(),
-                    2,
-                    KalenderEnhet.MÅNED
-                );
-                return (
-                    kalenderDiff(
-                        kalenderDatoTilDate(periodeFom),
-                        kalenderDatoTilDate(toMånederFremITid)
-                    ) < 0
-                );
+                return erPeriodeFomMindreEnn2MndFramITid(vedtaksperiode);
             }
         });
+
+    if (behandlingResultat === BehandlingResultat.OPPHØRT) {
+        return [hentSisteOpphørsperiode(sorterteOgFiltrertePerioder)];
+    } else {
+        return sorterteOgFiltrertePerioder;
+    }
+};
+
+const erPeriodeFomMindreEnn2MndFramITid = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
+    const periodeFom = kalenderDatoMedFallback(vedtaksperiode.fom, TIDENES_MORGEN);
+    const toMånederFremITid = leggTil(førsteDagIInneværendeMåned(), 2, KalenderEnhet.MÅNED);
+    return (
+        kalenderDiff(kalenderDatoTilDate(periodeFom), kalenderDatoTilDate(toMånederFremITid)) < 0
+    );
+};
+
+const harPeriodeBegrunnelse = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
+    const vedtakBegrunnelserForPeriode = vedtaksperiode.begrunnelser;
+    return !!vedtakBegrunnelserForPeriode.length;
+};
+
+const hentSisteOpphørsperiode = (sortertePerioder: IVedtaksperiodeMedBegrunnelser[]) => {
+    const sorterteOgFiltrerteOpphørsperioder = sortertePerioder.filter(
+        (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) =>
+            vedtaksperiode.type === Vedtaksperiodetype.OPPHØR
+    );
+    return sorterteOgFiltrerteOpphørsperioder[sorterteOgFiltrerteOpphørsperioder.length - 1];
 };
 
 export const finnVedtakBegrunnelseType = (

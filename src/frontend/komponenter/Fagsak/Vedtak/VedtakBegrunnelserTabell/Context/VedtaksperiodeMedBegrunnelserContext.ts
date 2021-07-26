@@ -14,9 +14,11 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
+import { ToggleNavn } from '../../../../../typer/toggles';
 import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
     hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
@@ -42,6 +44,7 @@ export interface IFritekstFelt {
 const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] = constate(
     ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
         const { settFagsak } = useFagsakRessurser();
+        const { toggles } = useApp();
         const { request } = useHttp();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
@@ -49,6 +52,9 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 vedtaksperiodeMedBegrunnelser.fritekster.length === 0
         );
         const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState(byggTomRessurs());
+        const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] = useState<
+            Ressurs<string[]>
+        >(byggTomRessurs());
 
         const maksAntallKulepunkter =
             vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET ? 1 : 3;
@@ -125,6 +131,12 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         useEffect(() => {
             if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
                 populerSkjemaFraBackend();
+                if (
+                    vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.AVSLAG ||
+                    toggles[ToggleNavn.forhåndsvisAlleBrevbegrunnelser]
+                ) {
+                    genererOgSettBegrunnelserForForhåndsvisning(vedtaksperiodeMedBegrunnelser.id);
+                }
             }
         }, [vedtaksbegrunnelseTekster, vedtaksperiodeMedBegrunnelser]);
 
@@ -153,15 +165,17 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 initiellVerdi === '' ? Valideringsstatus.IKKE_VALIDERT : Valideringsstatus.OK,
         });
 
-        const utbetalingsperiode:
-            | Utbetalingsperiode
-            | undefined = hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode(
-            {
-                fom: vedtaksperiodeMedBegrunnelser.fom,
-                tom: vedtaksperiodeMedBegrunnelser.tom,
-            },
-            åpenBehandling
-        );
+        const utbetalingsperiode: Utbetalingsperiode | undefined =
+            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
+            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET
+                ? hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode(
+                      {
+                          fom: vedtaksperiodeMedBegrunnelser.fom,
+                          tom: vedtaksperiodeMedBegrunnelser.tom,
+                      },
+                      åpenBehandling
+                  )
+                : undefined;
 
         const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
             switch (action.action) {
@@ -213,6 +227,28 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 } else {
                     settStandardBegrunnelserPut(
                         byggFeiletRessurs('Klarte ikke oppdatere standardbegrunnelser')
+                    );
+                }
+            });
+        };
+
+        const genererOgSettBegrunnelserForForhåndsvisning = (vedtaksperiodeId: number) => {
+            settGenererteBrevbegrunnelser(byggHenterRessurs());
+            request<void, string[]>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/vedtaksperioder/brevbegrunnelser/${vedtaksperiodeId}`,
+            }).then((hentedeBegrunnelser: Ressurs<string[]>) => {
+                if (hentedeBegrunnelser.status === RessursStatus.SUKSESS) {
+                    settGenererteBrevbegrunnelser(hentedeBegrunnelser);
+                } else if (hentedeBegrunnelser.status === RessursStatus.FUNKSJONELL_FEIL) {
+                    settGenererteBrevbegrunnelser(
+                        byggFeiletRessurs(hentedeBegrunnelser.frontendFeilmelding)
+                    );
+                } else {
+                    settGenererteBrevbegrunnelser(
+                        byggFeiletRessurs(
+                            'Klarte ikke generere forhåndsvisning av brevbegrunnelser'
+                        )
                     );
                 }
             });
@@ -277,6 +313,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             utbetalingsperiode,
             åpenBehandling,
             standardBegrunnelserPut,
+            genererteBrevbegrunnelser,
         };
     }
 );

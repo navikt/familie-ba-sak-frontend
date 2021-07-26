@@ -1,5 +1,11 @@
 import React from 'react';
 
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+
+import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
+
+import { useApp } from '../../../../../context/AppContext';
+import { ToggleNavn } from '../../../../../typer/toggles';
 import { VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import {
     IVedtaksperiodeMedBegrunnelser,
@@ -22,7 +28,12 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
         erPanelEkspandert,
         onPanelClose,
         utbetalingsperiode,
+        genererteBrevbegrunnelser,
     } = useVedtaksperiodeMedBegrunnelser();
+    const { toggles } = useApp();
+    const forhåndvisBegrunnelsetekster =
+        vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.AVSLAG ||
+        toggles[ToggleNavn.forhåndsvisAlleBrevbegrunnelser];
 
     const visFritekster = () =>
         vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING ||
@@ -42,9 +53,21 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                 />
             )}
             <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
+            {genererteBrevbegrunnelser.status === RessursStatus.SUKSESS &&
+                forhåndvisBegrunnelsetekster && (
+                    <>
+                        <Element>Begrunnelse(r)</Element>
+                        <ul>
+                            {genererteBrevbegrunnelser.data.map((begrunnelse: string) => (
+                                <li>
+                                    <Normaltekst children={begrunnelse} />
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
             {visFritekster() && <FritekstVedtakbegrunnelser />}
         </EkspanderbartBegrunnelsePanel>
     );
 };
-
 export default VedtaksperiodeMedBegrunnelserPanel;
