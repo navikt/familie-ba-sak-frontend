@@ -154,6 +154,7 @@ export enum BehandlingResultat {
     HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
+    HENLAGT_AUTOMATISK_FØDSELSHENDELSE = 'HENLAGT_AUTOMATISK_FØDSELSHENDELSE',
 }
 
 export enum BehandlerRolle {
@@ -290,6 +291,7 @@ export const behandlingsresultater: Record<
     DELVIS_TILBAKEBETALING: 'Delvis tilbakebetaling',
     FULL_TILBAKEBETALING: 'Full tilbakebetaling',
     HENLAGT: 'Henlagt',
+    HENLAGT_AUTOMATISK_FØDSELSHENDELSE: 'Henlagt automatisk fødselshendelse',
 };
 
 export const behandlingsstatuser: Record<BehandlingStatus, string> = {
