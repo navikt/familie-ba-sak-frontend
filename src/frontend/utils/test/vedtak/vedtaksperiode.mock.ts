@@ -32,6 +32,7 @@ export const mockUtbetalingsperiode = ({
         type: Vedtaksperiodetype.UTBETALING,
         begrunnelser,
         fritekster: [],
+        gyldigeBegrunnelser: [],
     };
 };
 
@@ -47,6 +48,7 @@ export const mockOpphørsperiode = ({
         type: Vedtaksperiodetype.OPPHØR,
         begrunnelser,
         fritekster: [],
+        gyldigeBegrunnelser: [],
     };
 };
 
@@ -62,5 +64,6 @@ export const mockAvslagsperiode = ({
         type: Vedtaksperiodetype.AVSLAG,
         begrunnelser,
         fritekster: [],
+        gyldigeBegrunnelser: [],
     };
 };
