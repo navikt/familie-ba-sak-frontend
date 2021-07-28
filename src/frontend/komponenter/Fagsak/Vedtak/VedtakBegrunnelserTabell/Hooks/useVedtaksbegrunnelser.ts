@@ -1,6 +1,8 @@
 import { GroupType, ISelectOption } from '@navikt/familie-form-elements';
+import { loggFeil } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
 import { IBehandling } from '../../../../../typer/behandling';
 import {
     VedtakBegrunnelseType,
@@ -32,6 +34,7 @@ export const useVilkårBegrunnelser = ({
     periode: IPeriode;
     åpenBehandling: IBehandling;
 }) => {
+    const { innloggetSaksbehandler } = useApp();
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
@@ -65,6 +68,46 @@ export const useVilkårBegrunnelser = ({
                           annenVurdering.resultat === Resultat.IKKE_OPPFYLT
                   )
             : true;
+
+    const grupperteBegrunnelserFraBackend =
+        vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
+            ? Object.keys(vedtaksbegrunnelseTekster.data)
+                  .filter((vedtakBegrunnelseType: string) =>
+                      vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype.includes(
+                          vedtakBegrunnelseType as VedtakBegrunnelseType
+                      )
+                  )
+                  .reduce((acc: GroupType<ISelectOption>[], vedtakBegrunnelseType: string) => {
+                      const vedtaksbegrunnelsetype =
+                          vedtakBegrunnelseType === 'INNVILGELSE'
+                              ? 'INNVILGET'
+                              : vedtakBegrunnelseType;
+
+                      return [
+                          ...acc,
+                          {
+                              label:
+                                  vedtakBegrunnelseTyper[
+                                      vedtakBegrunnelseType as VedtakBegrunnelseType
+                                  ],
+                              options: vedtaksperiodeMedBegrunnelser.gyldigeBegrunnelser
+                                  .filter((vedtakBegrunnelse: VedtakBegrunnelse) =>
+                                      vedtakBegrunnelse.includes(vedtaksbegrunnelsetype)
+                                  )
+                                  .map((vedtakBegrunnelse: VedtakBegrunnelse) => ({
+                                      label:
+                                          vedtaksbegrunnelseTekster.data[
+                                              vedtakBegrunnelseType as VedtakBegrunnelseType
+                                          ].find(
+                                              vedtaksbegrunnelsestekst =>
+                                                  vedtaksbegrunnelsestekst.id === vedtakBegrunnelse
+                                          )?.navn ?? vedtakBegrunnelse,
+                                      value: vedtakBegrunnelse,
+                                  })),
+                          },
+                      ];
+                  }, [])
+            : [];
 
     const grupperteBegrunnelser =
         vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
@@ -114,7 +157,30 @@ export const useVilkårBegrunnelser = ({
                   }, [])
             : [];
 
-    return { grupperteBegrunnelser, vedtaksbegrunnelseTekster };
+    // Midlertidig kode for å se om det er noe spesiallogikk frontend som det ikke er tatt høyde for backend
+    grupperteBegrunnelser.forEach((gruppeMedBegrunnelser: GroupType<ISelectOption>) => {
+        const gruppeMedBegrunnelserFraBackend = grupperteBegrunnelserFraBackend.find(
+            g => g.label === gruppeMedBegrunnelser.label
+        );
+
+        if (
+            gruppeMedBegrunnelser.options.length !== gruppeMedBegrunnelserFraBackend?.options.length
+        ) {
+            loggFeil(
+                undefined,
+                innloggetSaksbehandler,
+                `Antall begrunnelser generert fra backend er ikke det samme som for frontend for '${
+                    gruppeMedBegrunnelser.label
+                }'. Frontend: ${gruppeMedBegrunnelser.options.map(
+                    option => option.value
+                )}, Backend: ${gruppeMedBegrunnelserFraBackend?.options.map(
+                    option => option.value
+                )}`
+            );
+        }
+    });
+
+    return { grupperteBegrunnelser: grupperteBegrunnelserFraBackend, vedtaksbegrunnelseTekster };
 };
 
 export const mapBegrunnelserTilSelectOptions = (

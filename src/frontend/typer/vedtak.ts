@@ -130,3 +130,19 @@ export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     OPPHØR: 'Opphør',
     FORTSATT_INNVILGET: 'Fortsatt innvilget',
 };
+
+export const vedtaksbegrunnelsetypeTilVedtaksperiodetype = (
+    vedtaksbegrunnelsetype: VedtakBegrunnelseType
+) => {
+    switch (vedtaksbegrunnelsetype) {
+        case VedtakBegrunnelseType.INNVILGELSE:
+        case VedtakBegrunnelseType.REDUKSJON:
+            return Vedtaksperiodetype.UTBETALING;
+        case VedtakBegrunnelseType.AVSLAG:
+            return Vedtaksperiodetype.AVSLAG;
+        case VedtakBegrunnelseType.FORTSATT_INNVILGET:
+            return Vedtaksperiodetype.FORTSATT_INNVILGET;
+        default:
+            throw new Error('Ukjent vedtaksbegrunnelsetype');
+    }
+};

@@ -23,6 +23,7 @@ export interface IVedtaksperiodeMedBegrunnelser {
     type: Vedtaksperiodetype;
     begrunnelser: IRestVedtaksbegrunnelse[];
     fritekster: string[];
+    gyldigeBegrunnelser: VedtakBegrunnelse[];
 }
 
 export interface IRestVedtaksbegrunnelse {
