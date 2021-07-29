@@ -63,7 +63,7 @@
     "body-parser": "^1.19.0",
     "classnames": "^2.2.6",
     "constate": "^3.3.0",
-    "dayjs": "^1.10.5",
+    "dayjs": "^1.10.6",
     "deep-equal": "^2.0.3",
     "dotenv": "^10.0.0",
     "ds-icons": "^1.0.1",
