@@ -157,7 +157,7 @@ export const erViPåUlovligSteg = (pathname: string, behandlingSide?: ISide) => 
 };
 
 export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
-    const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_SØKNAD);
+    const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_BEHANDLING);
 
     if (erHenlagt) {
         if (inneholderSteg(behandling, BehandlingSteg.SEND_TIL_BESLUTTER))
