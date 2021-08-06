@@ -87,14 +87,20 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     return (
         <Skjemasteg
             skalViseForrigeKnapp={
-                !åpenBehandling.skalBehandlesAutomatisk &&
-                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD ||
+                åpenBehandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE
             }
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
-                history.push(
-                    `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
-                );
+                if (åpenBehandling.årsak === BehandlingÅrsak.SØKNAD) {
+                    history.push(
+                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
+                    );
+                } else {
+                    history.push(
+                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/filtreringsregler`
+                    );
+                }
             }}
             nesteOnClick={() => {
                 if (erLesevisning()) {
