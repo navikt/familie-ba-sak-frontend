@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Resultat } from '../typer/vilkår';
-import Advarsel from './Advarsel';
 import IkkeOppfylt from './IkkeOppfylt';
+import IkkeVurdert from './IkkeVurdert';
 import Oppfylt from './Oppfylt';
 
 interface IVilkårResultatIkon {
@@ -24,7 +24,7 @@ const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({
         case Resultat.IKKE_OPPFYLT:
             return <IkkeOppfylt heigth={heigth} className={className} width={width} />;
         case Resultat.IKKE_VURDERT:
-            return <Advarsel heigth={heigth} className={className} width={width} />;
+            return <IkkeVurdert heigth={heigth} className={className} width={width} />;
     }
 };
 
