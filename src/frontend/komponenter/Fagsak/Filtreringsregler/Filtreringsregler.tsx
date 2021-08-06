@@ -8,7 +8,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { filtreringsregler } from '../../../typer/fødselshendelser';
+import { Filtreringsregel, filtreringsregler } from '../../../typer/fødselshendelser';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 interface IProps {
@@ -46,26 +46,30 @@ const Filtreringsregler: React.FC<IProps> = ({ fagsak, åpenBehandling }) => {
             senderInn={false}
         >
             <StyledUl>
-                {åpenBehandling.fødselshendelsefiltreringResultater.map(
-                    fødselshendelsefiltreringResultat => {
-                        return (
-                            <StyledLi key={fødselshendelsefiltreringResultat.filtreringsregel}>
-                                <StyledVilkårResultatIkon
-                                    resultat={fødselshendelsefiltreringResultat.resultat}
-                                    width={24}
-                                    heigth={24}
-                                />
-                                <Normaltekst>
-                                    {
-                                        filtreringsregler[
-                                            fødselshendelsefiltreringResultat.filtreringsregel
-                                        ]
-                                    }
-                                </Normaltekst>
-                            </StyledLi>
-                        );
-                    }
-                )}
+                {Object.keys(Filtreringsregel).map(filtreringsregel => {
+                    const fødselshendelsefiltreringResultat = åpenBehandling.fødselshendelsefiltreringResultater.find(
+                        it => it.filtreringsregel === filtreringsregel
+                    );
+
+                    if (!fødselshendelsefiltreringResultat) return null;
+
+                    return (
+                        <StyledLi key={filtreringsregel}>
+                            <StyledVilkårResultatIkon
+                                resultat={fødselshendelsefiltreringResultat.resultat}
+                                width={24}
+                                heigth={24}
+                            />
+                            <Normaltekst>
+                                {
+                                    filtreringsregler[
+                                        fødselshendelsefiltreringResultat.filtreringsregel
+                                    ]
+                                }
+                            </Normaltekst>
+                        </StyledLi>
+                    );
+                })}
             </StyledUl>
         </Skjemasteg>
     );
