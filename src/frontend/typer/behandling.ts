@@ -1,5 +1,6 @@
 import { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import { INøkkelPar } from './common';
+import { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import { IGrunnlagPerson } from './person';
 import { ITilbakekreving } from './simulering';
 import { ISøknadDTO } from './søknad';
@@ -74,6 +75,7 @@ export enum BehandlingSteg {
     HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
+    FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
     VURDER_TILBAKEKREVING = 'VURDER_TILBAKEKREVING',
     SEND_TIL_BESLUTTER = 'SEND_TIL_BESLUTTER',
@@ -97,6 +99,8 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
             return 1;
         case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
             return 1;
+        case BehandlingSteg.FILTRERING_FØDSELSHENDELSER:
+            return 2;
         case BehandlingSteg.VILKÅRSVURDERING:
             return 2;
         case BehandlingSteg.VURDER_TILBAKEKREVING:
@@ -186,6 +190,7 @@ export interface IBehandling {
     totrinnskontroll?: ITotrinnskontroll;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
+    fødselshendelsefiltreringResultater: IFødselshendelsefiltreringResultat[];
     vedtakForBehandling: IVedtakForBehandling[];
     vedtaksperioder: Vedtaksperiode[];
     utbetalingsperioder: Utbetalingsperiode[];

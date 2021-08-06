@@ -27,6 +27,7 @@ export interface IUnderside {
 
 export enum SideId {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
+    FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
     BEHANDLINGRESULTAT = 'BEHANDLINGRESULTAT',
     SIMULERING = 'SIMULERING',
@@ -40,6 +41,14 @@ export const sider: Record<SideId, ISide> = {
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
         visSide: (åpenBehandling: IBehandling) => {
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
+        },
+    },
+    FILTRERING_FØDSELSHENDELSER: {
+        href: 'filtreringsregler',
+        navn: 'Filtreringsregler',
+        steg: BehandlingSteg.FILTRERING_FØDSELSHENDELSER,
+        visSide: (åpenBehandling: IBehandling) => {
+            return åpenBehandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE;
         },
     },
     VILKÅRSVURDERING: {
