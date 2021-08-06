@@ -49,7 +49,7 @@ const Filtreringsregler: React.FC<IProps> = ({ fagsak, åpenBehandling }) => {
                 {åpenBehandling.fødselshendelsefiltreringResultater.map(
                     fødselshendelsefiltreringResultat => {
                         return (
-                            <StyledLi>
+                            <StyledLi key={fødselshendelsefiltreringResultat.filtreringsregel}>
                                 <StyledVilkårResultatIkon
                                     resultat={fødselshendelsefiltreringResultat.resultat}
                                     width={24}

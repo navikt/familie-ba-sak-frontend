@@ -173,6 +173,8 @@ export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
             return BehandlingSteg.SEND_TIL_BESLUTTER;
         if (inneholderSteg(behandling, BehandlingSteg.VILKÅRSVURDERING))
             return BehandlingSteg.VILKÅRSVURDERING;
+        if (inneholderSteg(behandling, BehandlingSteg.FILTRERING_FØDSELSHENDELSER))
+            return BehandlingSteg.FILTRERING_FØDSELSHENDELSER;
         return BehandlingSteg.REGISTRERE_SØKNAD;
     } else {
         return behandling.steg;

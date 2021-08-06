@@ -102,25 +102,25 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
         case BehandlingSteg.FILTRERING_FØDSELSHENDELSER:
             return 2;
         case BehandlingSteg.VILKÅRSVURDERING:
-            return 2;
-        case BehandlingSteg.VURDER_TILBAKEKREVING:
             return 3;
-        case BehandlingSteg.SEND_TIL_BESLUTTER:
+        case BehandlingSteg.VURDER_TILBAKEKREVING:
             return 4;
-        case BehandlingSteg.BESLUTTE_VEDTAK:
+        case BehandlingSteg.SEND_TIL_BESLUTTER:
             return 5;
-        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
+        case BehandlingSteg.BESLUTTE_VEDTAK:
             return 6;
-        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
+        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
             return 7;
-        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
+        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
             return 8;
-        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
+        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
             return 9;
-        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
+        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
             return 10;
-        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
             return 11;
+        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+            return 12;
         default:
             return 0;
     }
