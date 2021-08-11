@@ -14,7 +14,6 @@ export enum Filtreringsregel {
     MER_ENN_5_MND_SIDEN_FORRIGE_BARN = 'MER_ENN_5_MND_SIDEN_FORRIGE_BARN',
     MOR_ER_OVER_18_ÅR = 'MOR_ER_OVER_18_ÅR',
     MOR_HAR_IKKE_VERGE = 'MOR_HAR_IKKE_VERGE',
-    BARNETS_FØDSELSDATO_TRIGGER_IKKE_ETTERBETALING = 'BARNETS_FØDSELSDATO_TRIGGER_IKKE_ETTERBETALING',
 }
 
 export const filtreringsregler: Record<Filtreringsregel, string> = {
@@ -25,5 +24,4 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
     MER_ENN_5_MND_SIDEN_FORRIGE_BARN: 'Det er mer enn 5 måneder siden forrige barn',
     MOR_ER_OVER_18_ÅR: 'Mor er over 18 år',
     MOR_HAR_IKKE_VERGE: 'Mor har ikke verge',
-    BARNETS_FØDSELSDATO_TRIGGER_IKKE_ETTERBETALING: 'Fødselshendelsen trigger ikke etterbetaling',
 };
