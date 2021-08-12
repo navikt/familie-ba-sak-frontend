@@ -44,9 +44,6 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     if (feilmelding) {
         return <Feilmelding className={'kolonne'}>{feilmelding}</Feilmelding>;
     }
-    if (erTilbakestilt) {
-        return <div className={'kolonne'}>Saksbehandler er tilbakestilt</div>;
-    }
 
     const oppgaveTypeErStøttet = [
         OppgavetypeFilter.JFR,
@@ -58,7 +55,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
             OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] === type
     );
 
-    return oppgave.tilordnetRessurs ? (
+    return oppgave.tilordnetRessurs && !erTilbakestilt ? (
         <div className={'kolonne'}>
             <Normaltekst>{oppgave.tilordnetRessurs}</Normaltekst>
             {oppgaveTypeErStøttet && (
