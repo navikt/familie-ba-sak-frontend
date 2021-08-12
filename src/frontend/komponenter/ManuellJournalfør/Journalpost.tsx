@@ -37,10 +37,14 @@ const EndreJournalpost: React.FC = () => {
             placeholder={'Skriv fritekst for å endre tittel...'}
             isMulti={false}
             options={journalpostTittelList}
-            value={{
-                value: skjema.felter.journalpostTittel.verdi,
-                label: skjema.felter.journalpostTittel.verdi,
-            }}
+            value={
+                skjema.felter.journalpostTittel.verdi === ''
+                    ? null
+                    : {
+                          value: skjema.felter.journalpostTittel.verdi,
+                          label: skjema.felter.journalpostTittel.verdi,
+                      }
+            }
             onChange={value => {
                 if (value && 'value' in value) {
                     skjema.felter.journalpostTittel.validerOgSettFelt(value.value);
