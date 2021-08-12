@@ -27,6 +27,7 @@ export interface IUnderside {
 
 export enum SideId {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
+    FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
     BEHANDLINGRESULTAT = 'BEHANDLINGRESULTAT',
     SIMULERING = 'SIMULERING',
@@ -40,6 +41,14 @@ export const sider: Record<SideId, ISide> = {
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
         visSide: (åpenBehandling: IBehandling) => {
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
+        },
+    },
+    FILTRERING_FØDSELSHENDELSER: {
+        href: 'filtreringsregler',
+        navn: 'Filtreringsregler',
+        steg: BehandlingSteg.FILTRERING_FØDSELSHENDELSER,
+        visSide: (åpenBehandling: IBehandling) => {
+            return åpenBehandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE;
         },
     },
     VILKÅRSVURDERING: {
@@ -157,13 +166,15 @@ export const erViPåUlovligSteg = (pathname: string, behandlingSide?: ISide) => 
 };
 
 export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
-    const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_SØKNAD);
+    const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_BEHANDLING);
 
     if (erHenlagt) {
         if (inneholderSteg(behandling, BehandlingSteg.SEND_TIL_BESLUTTER))
             return BehandlingSteg.SEND_TIL_BESLUTTER;
         if (inneholderSteg(behandling, BehandlingSteg.VILKÅRSVURDERING))
             return BehandlingSteg.VILKÅRSVURDERING;
+        if (inneholderSteg(behandling, BehandlingSteg.FILTRERING_FØDSELSHENDELSER))
+            return BehandlingSteg.FILTRERING_FØDSELSHENDELSER;
         return BehandlingSteg.REGISTRERE_SØKNAD;
     } else {
         return behandling.steg;

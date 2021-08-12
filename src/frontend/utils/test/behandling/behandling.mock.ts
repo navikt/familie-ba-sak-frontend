@@ -70,6 +70,7 @@ export const mockBehandling = ({
         underkategori: BehandlingUnderkategori.ORDINÆR,
         status: BehandlingStatus.FATTER_VEDTAK,
         personResultater: [søkerRestPersonResultat, barnRestPersonResultat],
+        fødselshendelsefiltreringResultater: [],
         vedtakForBehandling: [],
         endretAv: 'VL',
         totrinnskontroll: {
