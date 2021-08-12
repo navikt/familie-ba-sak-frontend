@@ -34,6 +34,7 @@ const EndreJournalpost: React.FC = () => {
             isClearable
             erLesevisning={erLesevisning()}
             label={'Endre journalposttittel'}
+            placeholder={'Skriv fritekst for å endre tittel...'}
             isMulti={false}
             options={journalpostTittelList}
             value={{
