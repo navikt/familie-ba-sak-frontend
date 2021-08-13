@@ -90,10 +90,10 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                     children={'Gå til fagsak'}
                 />
             ) : (
-                feilmelding
+                <>feilmelding</>
             );
         default:
-            return '';
+            return <></>;
     }
 };
 
