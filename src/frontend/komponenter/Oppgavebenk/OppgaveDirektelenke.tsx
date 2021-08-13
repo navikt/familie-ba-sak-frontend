@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router';
 
@@ -16,7 +16,7 @@ interface IOppgaveDirektelenke {
 }
 
 const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
-    const { harLøpendeSakIInfotrygd } = useOppgaver();
+    const { harLøpendeSakIInfotrygd, sideindeks } = useOppgaver();
     const { sjekkTilgang } = useApp();
     const [feilmelding, settFeilmelding] = useState<string>('');
     const history = useHistory();
@@ -30,6 +30,10 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
             'Feilmelding';
         }
     );
+
+    useEffect(() => {
+        settFeilmelding('');
+    }, [sideindeks]);
 
     const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
