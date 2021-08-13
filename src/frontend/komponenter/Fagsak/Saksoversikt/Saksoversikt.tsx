@@ -74,7 +74,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         (behandling: IBehandling) =>
             behandling.status === BehandlingStatus.AVSLUTTET &&
             behandling.resultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
-            behandling.resultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET
+            behandling.resultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET &&
+            behandling.resultat !== BehandlingResultat.HENLAGT_AUTOMATISK_FØDSELSHENDELSE
     );
 
     let gjeldendeBehandling =
@@ -90,13 +91,13 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const utbetalingsperioder = gjeldendeBehandling?.utbetalingsperioder ?? [];
-    const utbetalingsperiodeInneværendeMåned = utbetalingsperioder.find(periode =>
+    const gjeldendeUtbetalingsperioder = fagsak.gjeldendeUtbetalingsperioder;
+    const utbetalingsperiodeInneværendeMåned = gjeldendeUtbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
 
     const nesteMåned = leggTil(førsteDagIInneværendeMåned(), 1, KalenderEnhet.MÅNED);
-    const utbetalingsperiodeNesteMåned = utbetalingsperioder.find(periode =>
+    const utbetalingsperiodeNesteMåned = gjeldendeUtbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(
             periode.periodeFom,
             periode.periodeTom,
