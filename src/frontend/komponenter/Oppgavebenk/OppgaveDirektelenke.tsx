@@ -66,6 +66,9 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
         }
     };
 
+    console.log(oppgave);
+    console.log(oppgavetype);
+
     switch (oppgavetype) {
         case OppgavetypeFilter.JFR:
             return (
@@ -90,10 +93,10 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                     children={'Gå til fagsak'}
                 />
             ) : (
-                <>feilmelding</>
+                <>{feilmelding}</>
             );
         default:
-            return <></>;
+            return <>-</>;
     }
 };
 
