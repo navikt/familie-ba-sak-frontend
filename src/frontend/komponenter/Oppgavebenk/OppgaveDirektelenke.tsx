@@ -80,10 +80,10 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                     children={'Gå til oppgave'}
                 />
             );
-        case (OppgavetypeFilter.BEH_SAK,
-        OppgavetypeFilter.GOD_VED,
-        OppgavetypeFilter.BEH_UND_VED,
-        OppgavetypeFilter.FREM):
+        case OppgavetypeFilter.BEH_SAK:
+        case OppgavetypeFilter.GOD_VED:
+        case OppgavetypeFilter.BEH_UND_VED:
+        case OppgavetypeFilter.FREM:
             return feilmelding === '' ? (
                 <FamilieBaseKnapp
                     key={'tilfagsak'}
@@ -96,7 +96,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                 <>{feilmelding}</>
             );
         default:
-            return <>-</>;
+            return <></>;
     }
 };
 
