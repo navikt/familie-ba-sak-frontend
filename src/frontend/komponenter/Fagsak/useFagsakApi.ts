@@ -149,11 +149,24 @@ const useFagsakApi = (
             });
     };
 
+    const hentFagsakForPerson = async (personId: string) => {
+        return request<{ personIdent: string }, IFagsak | undefined>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
+            data: {
+                personIdent: personId,
+            },
+        }).then((fagsak: Ressurs<IFagsak | undefined>) => {
+            return fagsak;
+        });
+    };
+
     return {
         opprettBehandling,
         opprettEllerHentFagsak,
         validerVilkårsvurderingOgSendInn,
         senderInn,
+        hentFagsakForPerson,
     };
 };
 

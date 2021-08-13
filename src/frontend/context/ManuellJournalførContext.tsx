@@ -17,6 +17,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
@@ -41,6 +42,15 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const [fagsak, settFagsak] = useState<IFagsak | undefined>(undefined);
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
+    );
+
+    const { hentFagsakForPerson } = useFagsakApi(
+        _ => {
+            'Feilmelding';
+        },
+        _ => {
+            'Feilmelding';
+        }
     );
 
     React.useEffect(() => {
@@ -176,18 +186,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         nullstillSkjema();
     };
 
-    const hentFagsak = async (personId: string) => {
-        return request<{ personIdent: string }, IFagsak | undefined>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
-            data: {
-                personIdent: personId,
-            },
-        }).then((fagsak: Ressurs<IFagsak | undefined>) => {
-            return fagsak;
-        });
-    };
-
     const endreBruker = async (personId: string) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
@@ -217,7 +215,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }
         }
 
-        const restFagsak = await hentFagsak(hentetPerson.data.personIdent);
+        const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent);
         if (restFagsak.status === RessursStatus.SUKSESS) {
             skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
             settFagsak(restFagsak.data);
