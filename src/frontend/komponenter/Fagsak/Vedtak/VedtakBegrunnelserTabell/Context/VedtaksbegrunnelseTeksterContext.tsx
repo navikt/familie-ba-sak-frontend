@@ -30,11 +30,14 @@ const [VedtaksbegrunnelseTeksterProvider, useVedtaksbegrunnelseTekster] = consta
                 acc: VedtaksbegrunnelseTekster,
                 begrunnelseMetadata: BegrunnelseMetadata
             ): VedtaksbegrunnelseTekster => {
-                acc[begrunnelseMetadata.begrunnelsetype].push({
-                    id: sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn],
-                    navn: begrunnelseMetadata.navnISystem,
-                    vilkår: begrunnelseMetadata.vilkår,
-                });
+                // Løser dette kun for "Norsk, nordisk bosatt i Norge"-begrunnelsen for POCen
+                begrunnelseMetadata.apiNavn === 'norskNordiskBosattINorge' &&
+                    sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn] &&
+                    acc[begrunnelseMetadata.begrunnelsetype].push({
+                        id: sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn],
+                        navn: begrunnelseMetadata.navnISystem,
+                        vilkår: begrunnelseMetadata.vilkår,
+                    });
                 return acc;
             },
             {
@@ -48,13 +51,13 @@ const [VedtaksbegrunnelseTeksterProvider, useVedtaksbegrunnelseTekster] = consta
 
     useEffect(() => {
         if (toggles[ToggleNavn.brukBegrunnelserFraSanity]) {
-            hentBegrunnelser().then(begrunnelsedataFraSanity =>
+            hentBegrunnelser().then(begrunnelsedataFraSanity => {
                 settVedtaksbegrunnelseTekster(
                     byggSuksessRessurs(
                         byggVedtaksbegrunnelsesteksterFraSanitydata(begrunnelsedataFraSanity)
                     )
-                )
-            );
+                );
+            });
         } else {
             request<void, VedtaksbegrunnelseTekster>({
                 method: 'GET',
