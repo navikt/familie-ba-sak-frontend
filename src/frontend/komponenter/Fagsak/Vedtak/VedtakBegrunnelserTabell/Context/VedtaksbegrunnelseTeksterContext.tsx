@@ -6,7 +6,7 @@ import { useHttp } from '@navikt/familie-http';
 import { Ressurs, byggTomRessurs } from '@navikt/familie-typer';
 import { byggSuksessRessurs } from '@navikt/familie-typer/dist/ressurs';
 
-import { useSanity, BegrunnelseMetadata } from '../../../../../api/sanity/sanityHook';
+import { useSanity, Begrunnelsedata } from '../../../../../api/sanity/sanityHook';
 import { sanityApiNavnTilBegrunnelseDictionary } from '../../../../../api/sanity/typer';
 import { useApp } from '../../../../../context/AppContext';
 import { ToggleNavn } from '../../../../../typer/toggles';
@@ -23,12 +23,12 @@ const [VedtaksbegrunnelseTeksterProvider, useVedtaksbegrunnelseTekster] = consta
     >(byggTomRessurs());
 
     const byggVedtaksbegrunnelsesteksterFraSanitydata = (
-        begrunnelsedataFraSanity: BegrunnelseMetadata[]
+        begrunnelsedataFraSanity: Begrunnelsedata[]
     ) =>
         begrunnelsedataFraSanity.reduce(
             (
                 acc: VedtaksbegrunnelseTekster,
-                begrunnelseMetadata: BegrunnelseMetadata
+                begrunnelseMetadata: Begrunnelsedata
             ): VedtaksbegrunnelseTekster => {
                 // Løser dette kun for "Norsk, nordisk bosatt i Norge"-begrunnelsen for POCen
                 begrunnelseMetadata.apiNavn === 'norskNordiskBosattINorge' &&

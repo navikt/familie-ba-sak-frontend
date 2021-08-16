@@ -3,7 +3,7 @@ import { VilkårType } from '../../typer/vilkår';
 import { hentBegrunnelserQuery } from './queries';
 import { sanity } from './sanity';
 
-export interface BegrunnelseMetadata {
+export interface Begrunnelsedata {
     apiNavn: string;
     navnISystem: string;
     vilkår: VilkårType;
@@ -11,8 +11,7 @@ export interface BegrunnelseMetadata {
 }
 
 export const useSanity = () => {
-    const hentBegrunnelser = (): Promise<BegrunnelseMetadata[]> =>
-        sanity.fetch(hentBegrunnelserQuery);
+    const hentBegrunnelser = (): Promise<Begrunnelsedata[]> => sanity.fetch(hentBegrunnelserQuery);
 
     return { hentBegrunnelser };
 };
