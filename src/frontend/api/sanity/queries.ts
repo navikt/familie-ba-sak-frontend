@@ -1,3 +1,3 @@
 export const hentBegrunnelserQuery = `
- *[_type == "begrunnelse"]{apiNavn, navnISystem, vilkår, begrunnelsetype}
+ *[_type == "begrunnelse"]{apiNavn, navnISystem, vilkaar, begrunnelsetype}
 `;
