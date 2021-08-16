@@ -10,6 +10,7 @@ export enum ToggleNavn {
     brukNyeVedtaksperioder = 'familie-ba-sak.behandling.vedtakstype-med-begrunnelser',
     brukErDeltBosted = 'familie-ba-sak.behandling.delt_bosted',
     forhåndsvisAlleBrevbegrunnelser = 'familie-ba-sak.forhaandsvis-alle-brevbegrunnelser',
+    brukBegrunnelserFraSanity = 'familie-ba-sak.behandling.begrunnelse-fra-sanity',
 }
 
 export const alleTogglerAv = (): IToggles => {
