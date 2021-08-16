@@ -29,9 +29,11 @@ import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandli
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
+import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
+    const { hentFagsakForPerson } = useFagsakRessurser();
     const history = useHistory();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
@@ -176,18 +178,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         nullstillSkjema();
     };
 
-    const hentFagsak = async (personId: string) => {
-        return request<{ personIdent: string }, IFagsak | undefined>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
-            data: {
-                personIdent: personId,
-            },
-        }).then((fagsak: Ressurs<IFagsak | undefined>) => {
-            return fagsak;
-        });
-    };
-
     const endreBruker = async (personId: string) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
@@ -217,7 +207,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }
         }
 
-        const restFagsak = await hentFagsak(hentetPerson.data.personIdent);
+        const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent);
         if (restFagsak.status === RessursStatus.SUKSESS) {
             skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
             settFagsak(restFagsak.data);

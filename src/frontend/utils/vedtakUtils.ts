@@ -116,8 +116,7 @@ const erPeriodeFomMindreEnn2MndFramITid = (vedtaksperiode: IVedtaksperiodeMedBeg
 };
 
 const harPeriodeBegrunnelse = (vedtaksperiode: IVedtaksperiodeMedBegrunnelser) => {
-    const vedtakBegrunnelserForPeriode = vedtaksperiode.begrunnelser;
-    return !!vedtakBegrunnelserForPeriode.length;
+    return !!vedtaksperiode.begrunnelser.length || !!vedtaksperiode.fritekster.length;
 };
 
 const hentSisteOpphørsperiode = (sortertePerioder: IVedtaksperiodeMedBegrunnelser[]) => {

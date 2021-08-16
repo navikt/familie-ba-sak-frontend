@@ -5,11 +5,11 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import KnappBase from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { Refresh } from '@navikt/ds-icons';
+import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -87,14 +87,20 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     return (
         <Skjemasteg
             skalViseForrigeKnapp={
-                !åpenBehandling.skalBehandlesAutomatisk &&
-                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD
+                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD ||
+                åpenBehandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE
             }
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
-                history.push(
-                    `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
-                );
+                if (åpenBehandling.årsak === BehandlingÅrsak.SØKNAD) {
+                    history.push(
+                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
+                    );
+                } else {
+                    history.push(
+                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/filtreringsregler`
+                    );
+                }
             }}
             nesteOnClick={() => {
                 if (erLesevisning()) {
@@ -122,7 +128,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                                 : 'Kunne ikke hente innhentingstidspunkt for registeropplysninger'
                         }
                     />
-                    <KnappBase
+                    <FamilieKnapp
                         className={classNames('oppdater-registeropplysninger-knapp')}
                         id={'oppdater-registeropplysninger'}
                         aria-label={'Oppdater registeropplysninger'}
@@ -139,11 +145,12 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         type={'flat'}
                         mini={true}
                         kompakt={true}
+                        erLesevisning={erLesevisning()}
                     >
                         {hentOpplysningerRessurs.status !== RessursStatus.HENTER && (
                             <Refresh style={{ fontSize: '1.5rem' }} role="img" focusable="false" />
                         )}
-                    </KnappBase>
+                    </FamilieKnapp>
                 </HentetLabelOgKnappDiv>
                 {hentOpplysningerRessurs.status === RessursStatus.FEILET && (
                     <Feilmelding>{hentOpplysningerRessurs.frontendFeilmelding}</Feilmelding>
