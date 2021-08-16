@@ -134,6 +134,18 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
+    const hentFagsakForPerson = async (personId: string) => {
+        return request<{ personIdent: string }, IFagsak | undefined>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
+            data: {
+                personIdent: personId,
+            },
+        }).then((fagsak: Ressurs<IFagsak | undefined>) => {
+            return fagsak;
+        });
+    };
+
     return {
         oppdaterRegisteropplysninger,
         hentInternstatistikk,
@@ -141,6 +153,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         bruker,
         fagsak,
         hentFagsak,
+        hentFagsakForPerson,
         hentLogg,
         logg,
         settFagsak,

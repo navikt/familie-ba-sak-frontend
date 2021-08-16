@@ -5,10 +5,10 @@ import { useHistory } from 'react-router';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
+import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { IOppgave, oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import useFagsakApi from '../Fagsak/useFagsakApi';
 import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
 
 interface IOppgaveDirektelenke {
@@ -17,19 +17,11 @@ interface IOppgaveDirektelenke {
 
 const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { harLøpendeSakIInfotrygd, sideindeks } = useOppgaver();
+    const { hentFagsakForPerson } = useFagsakRessurser();
     const { sjekkTilgang } = useApp();
     const [feilmelding, settFeilmelding] = useState<string>('');
     const history = useHistory();
     const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype]?.id;
-
-    const { hentFagsakForPerson } = useFagsakApi(
-        _ => {
-            'Feilmelding';
-        },
-        _ => {
-            'Feilmelding';
-        }
-    );
 
     useEffect(() => {
         settFeilmelding('');

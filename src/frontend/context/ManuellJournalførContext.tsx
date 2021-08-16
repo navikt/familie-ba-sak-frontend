@@ -17,7 +17,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
 import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
@@ -30,9 +29,11 @@ import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandli
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
+import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
+    const { hentFagsakForPerson } = useFagsakRessurser();
     const history = useHistory();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
@@ -42,15 +43,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const [fagsak, settFagsak] = useState<IFagsak | undefined>(undefined);
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
-    );
-
-    const { hentFagsakForPerson } = useFagsakApi(
-        _ => {
-            'Feilmelding';
-        },
-        _ => {
-            'Feilmelding';
-        }
     );
 
     React.useEffect(() => {
