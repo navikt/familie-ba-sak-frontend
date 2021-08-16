@@ -95,7 +95,11 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                                 innloggetSaksbehandler?.navIdent,
                                 brukerident
                             ).then((oppgaveResponse: Ressurs<string>) => {
-                                if (oppgaveResponse.status === RessursStatus.FEILET) {
+                                if (
+                                    oppgaveResponse.status === RessursStatus.FEILET ||
+                                    oppgaveResponse.status === RessursStatus.FUNKSJONELL_FEIL ||
+                                    oppgaveResponse.status === RessursStatus.IKKE_TILGANG
+                                ) {
                                     settFeilmelding(oppgaveResponse.frontendFeilmelding);
                                 }
                             });
