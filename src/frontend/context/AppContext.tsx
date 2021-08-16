@@ -159,12 +159,15 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         settModal(initalState);
     };
 
-    const sjekkTilgang = async (brukerIdent: string): Promise<boolean> => {
+    const sjekkTilgang = async (
+        brukerIdent: string,
+        visSystemetLaster = true
+    ): Promise<boolean> => {
         return request<{ brukerIdent: string }, IRestTilgang>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
             data: { brukerIdent },
-            påvirkerSystemLaster: true,
+            påvirkerSystemLaster: visSystemetLaster,
         }).then((ressurs: Ressurs<IRestTilgang>) => {
             if (ressurs.status === RessursStatus.SUKSESS) {
                 settModal({
