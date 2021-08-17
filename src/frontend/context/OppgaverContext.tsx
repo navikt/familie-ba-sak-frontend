@@ -302,42 +302,45 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
         })
-            .then((oppgaverRes: Ressurs<string>) => {
-                if (
-                    OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
-                    OppgavetypeFilter.JFR
-                ) {
-                    if (bruker) {
-                        return harLøpendeSakIInfotrygd(bruker).then(res => {
-                            if (res.status === RessursStatus.SUKSESS) {
-                                if (res.data.harLøpendeSak) {
-                                    history.push(`/infotrygd`, { bruker: bruker });
-                                } else {
-                                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
+            .then((oppgaveId: Ressurs<string>) => {
+                if (oppgaveId.status === RessursStatus.SUKSESS) {
+                    if (
+                        OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
+                        OppgavetypeFilter.JFR
+                    ) {
+                        if (bruker) {
+                            return harLøpendeSakIInfotrygd(bruker).then(res => {
+                                if (res.status === RessursStatus.SUKSESS) {
+                                    if (res.data.harLøpendeSak) {
+                                        history.push(`/infotrygd`, { bruker: bruker });
+                                    } else {
+                                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                                    }
+                                    return byggSuksessRessurs<string>('');
                                 }
-                                return byggSuksessRessurs<string>('');
-                            }
-                            return byggFeiletRessurs<string>('har-lopende-sak feilet');
-                        });
+                                return byggFeiletRessurs<string>('har-lopende-sak feilet');
+                            });
+                        } else {
+                            history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                        }
                     } else {
-                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
-                    }
-                } else {
-                    if (oppgave.behandlingstype === BehandlingstypeFilter.ae0161) {
-                        // tilbakekreving
-                        gåTilTilbakekreving(oppgave);
-                        return byggSuksessRessurs<string>('');
-                    }
-                    if (oppgave.aktoerId)
-                        opprettEllerHentFagsak({
-                            personIdent: null,
-                            aktørId: oppgave.aktoerId,
-                        });
-                    else {
-                        return byggFeiletRessurs<string>('Oppgave mangler aktørid');
+                        if (oppgave.behandlingstype === BehandlingstypeFilter.ae0161) {
+                            // tilbakekreving
+                            gåTilTilbakekreving(oppgave);
+                            return byggSuksessRessurs<string>('');
+                        }
+                        if (oppgave.aktoerId)
+                            opprettEllerHentFagsak({
+                                personIdent: null,
+                                aktørId: oppgave.aktoerId,
+                            });
+                        else {
+                            return byggFeiletRessurs<string>('Oppgave mangler aktørid');
+                        }
                     }
                 }
-                return oppgaverRes;
+
+                return oppgaveId;
             })
             .catch((_error: AxiosError) => {
                 return byggFeiletRessurs<string>('Ukjent feil ved fordeling av oppgave');
