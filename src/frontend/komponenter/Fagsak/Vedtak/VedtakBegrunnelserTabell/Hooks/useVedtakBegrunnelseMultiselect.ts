@@ -1,55 +1,77 @@
 import { ActionMeta, GroupType, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { TIDENES_ENDE, TIDENES_MORGEN } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
-} from '../../../../typer/vedtak';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
+} from '../../../../../typer/vedtak';
+import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import {
     AnnenVurderingType,
     IRestPersonResultat,
     IRestVilkårResultat,
     Resultat,
     VilkårType,
-} from '../../../../typer/vilkår';
-import { Dayjs, familieDayjsDiff } from '../../../../utils/familieDayjs';
-import { isoStringToDayjs } from '../../../../utils/formatter';
+} from '../../../../../typer/vilkår';
+import {
+    DagMånedÅr,
+    erISammeMåned,
+    erSamme,
+    IPeriode,
+    kalenderDatoMedFallback,
+    KalenderEnhet,
+    sisteDagIMåned,
+    TIDENES_ENDE,
+    TIDENES_MORGEN,
+    trekkFra,
+} from '../../../../../utils/kalender';
+import { useVedtakBegrunnelser } from '../Context/VedtakBegrunnelserContext';
+import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 
 export const hentUtgjørendeVilkårImpl = (
     begrunnelseType: VedtakBegrunnelseType,
     personResultater: IRestPersonResultat[],
-    vedtaksperiode: Vedtaksperiode
+    periode: IPeriode
 ): VilkårType[] => {
-    const erSammeMåned = (dato1: Dayjs, dato2: Dayjs) =>
-        familieDayjsDiff(dato1, dato2, 'month') === 0;
     return personResultater
         .flatMap(personResultat => personResultat.vilkårResultater)
         .filter((vilkårResultat: IRestVilkårResultat) => {
-            const vilkårPeriodeFom = isoStringToDayjs(vilkårResultat.periodeFom, TIDENES_MORGEN);
-            const vilkårPeriodeTom = isoStringToDayjs(vilkårResultat.periodeTom, TIDENES_ENDE);
-            const vedtakPeriodeFom = isoStringToDayjs(vedtaksperiode.periodeFom, TIDENES_MORGEN);
+            const vilkårPeriodeFom: DagMånedÅr = kalenderDatoMedFallback(
+                vilkårResultat.periodeFom,
+                TIDENES_MORGEN
+            );
+            const vilkårPeriodeTom: DagMånedÅr = kalenderDatoMedFallback(
+                vilkårResultat.periodeTom,
+                TIDENES_ENDE
+            );
+            const vedtakPeriodeFom: DagMånedÅr = kalenderDatoMedFallback(
+                periode.fom,
+                TIDENES_MORGEN
+            );
             const oppfyltTomMånedEtter =
-                vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ? 1 : 0;
+                vilkårResultat.vilkårType !== VilkårType.UNDER_18_ÅR ||
+                erSamme(vilkårPeriodeTom, sisteDagIMåned(vilkårPeriodeTom))
+                    ? 1
+                    : 0;
 
             if (begrunnelseType === VedtakBegrunnelseType.INNVILGELSE) {
                 return (
-                    erSammeMåned(vilkårPeriodeFom, vedtakPeriodeFom.subtract(1, 'month')) &&
-                    vilkårResultat.resultat === Resultat.OPPFYLT
+                    erISammeMåned(
+                        vilkårPeriodeFom,
+                        trekkFra(vedtakPeriodeFom, 1, KalenderEnhet.MÅNED)
+                    ) && vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else if (
                 begrunnelseType === VedtakBegrunnelseType.REDUKSJON ||
                 begrunnelseType === VedtakBegrunnelseType.OPPHØR
             ) {
                 return (
-                    erSammeMåned(
+                    erISammeMåned(
                         vilkårPeriodeTom,
-                        vedtakPeriodeFom.subtract(oppfyltTomMånedEtter, 'month')
+                        trekkFra(vedtakPeriodeFom, oppfyltTomMånedEtter, KalenderEnhet.MÅNED)
                     ) && vilkårResultat.resultat === Resultat.OPPFYLT
                 );
             } else {
@@ -65,21 +87,35 @@ const useVedtakBegrunnelseMultiselect = (
 ) => {
     const {
         vedtakBegrunnelser,
-        vilkårBegrunnelser,
         leggTilVedtakBegrunnelse,
         slettVedtakBegrunnelse,
         slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
     } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
-    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype =
-        vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING
-            ? [VedtakBegrunnelseType.INNVILGELSE, VedtakBegrunnelseType.REDUKSJON]
-            : [VedtakBegrunnelseType.OPPHØR];
+    const vedtaksperiodeTilVedtakBegrunnelseTyper = () => {
+        switch (vedtaksperiode.vedtaksperiodetype) {
+            case Vedtaksperiodetype.UTBETALING:
+                return [VedtakBegrunnelseType.INNVILGELSE, VedtakBegrunnelseType.REDUKSJON];
+            case Vedtaksperiodetype.FORTSATT_INNVILGET:
+                return [VedtakBegrunnelseType.FORTSATT_INNVILGET];
+            case Vedtaksperiodetype.OPPHØR:
+                return [VedtakBegrunnelseType.OPPHØR];
+            default:
+                return [];
+        }
+    };
+
+    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype = vedtaksperiodeTilVedtakBegrunnelseTyper();
 
     const onChangeBegrunnelse = (
         action: ActionMeta<ISelectOption>,
         vedtakBegrunnelserForPeriode: IRestVedtakBegrunnelse[]
     ) => {
+        if (!vedtaksperiode.periodeFom) {
+            throw new Error('Prøver å legge til en begrunnelse på en periode uten fom');
+        }
+
         switch (action.action) {
             case 'select-option':
                 leggTilVedtakBegrunnelse({
@@ -141,7 +177,10 @@ const useVedtakBegrunnelseMultiselect = (
             : true;
 
     const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] =>
-        hentUtgjørendeVilkårImpl(begrunnelseType, personResultater, vedtaksperiode);
+        hentUtgjørendeVilkårImpl(begrunnelseType, personResultater, {
+            fom: vedtaksperiode.periodeFom,
+            tom: vedtaksperiode.periodeTom,
+        });
 
     const vedtakBegrunnelserForPeriode = vedtakBegrunnelser.filter(
         (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
@@ -154,8 +193,8 @@ const useVedtakBegrunnelseMultiselect = (
     );
 
     const grupperteBegrunnelser =
-        vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? Object.keys(vilkårBegrunnelser.data)
+        vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
+            ? Object.keys(vedtaksbegrunnelseTekster.data)
                   .filter((vedtakBegrunnelseType: string) =>
                       vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype.includes(
                           vedtakBegrunnelseType as VedtakBegrunnelseType
@@ -172,7 +211,7 @@ const useVedtakBegrunnelseMultiselect = (
                                   vedtakBegrunnelseTyper[
                                       vedtakBegrunnelseType as VedtakBegrunnelseType
                                   ],
-                              options: vilkårBegrunnelser.data[
+                              options: vedtaksbegrunnelseTekster.data[
                                   vedtakBegrunnelseType as VedtakBegrunnelseType
                               ]
                                   .filter(
@@ -206,13 +245,14 @@ const useVedtakBegrunnelseMultiselect = (
             (vedtaksbegrunnelse: IRestVedtakBegrunnelse) =>
                 vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.REDUKSJON_FRITEKST &&
                 vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.AVSLAG_FRITEKST &&
-                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.OPPHØR_FRITEKST
+                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.OPPHØR_FRITEKST &&
+                vedtaksbegrunnelse.begrunnelse !== VedtakBegrunnelse.FORTSATT_INNVILGET_FRITEKST
         )
         .map((vedtaksbegrunnelse: IRestVedtakBegrunnelse) => ({
             value: vedtaksbegrunnelse.begrunnelse?.toString() ?? '',
             label:
-                vilkårBegrunnelser.status === RessursStatus.SUKSESS
-                    ? vilkårBegrunnelser.data[
+                vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
+                    ? vedtaksbegrunnelseTekster.data[
                           vedtaksbegrunnelse.begrunnelseType as VedtakBegrunnelseType
                       ].find(
                           (
@@ -225,7 +265,8 @@ const useVedtakBegrunnelseMultiselect = (
         }));
 
     const begrunnelser =
-        vilkårBegrunnelser?.status === RessursStatus.SUKSESS && vilkårBegrunnelser.data;
+        vedtaksbegrunnelseTekster?.status === RessursStatus.SUKSESS &&
+        vedtaksbegrunnelseTekster.data;
 
     return {
         begrunnelser,

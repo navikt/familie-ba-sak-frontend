@@ -11,9 +11,9 @@ import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements'
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { nyPeriode } from '../../../../typer/periode';
 import { IVilkårResultat, Resultat } from '../../../../typer/vilkår';
 import { datoformatNorsk } from '../../../../utils/formatter';
+import { nyPeriode } from '../../../../utils/kalender';
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 
 interface IProps {
@@ -26,6 +26,10 @@ const StyledLegend = styled.legend`
     && {
         display: flex;
         margin-bottom: 0;
+    }
+    .hjelpetekst .popover {
+        z-index: 1000;
+        margin-left: 1rem;
     }
 `;
 

@@ -9,6 +9,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
+    byggSuksessRessurs,
     byggTomRessurs,
     Ressurs,
     RessursStatus,
@@ -22,15 +23,17 @@ import {
     IOppgaveFelt,
     IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
+import { IFagsak } from '../typer/fagsak';
 import {
+    BehandlingstypeFilter,
     IFinnOppgaveRequest,
     IHentOppgaveDto,
     IOppgave,
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
-import familieDayjs from '../utils/familieDayjs';
-import { validerFormatISODag } from '../utils/validators';
+import { erFør, erIsoStringGyldig, kalenderDato } from '../utils/kalender';
+import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { useApp } from './AppContext';
 
 export const oppgaveSideLimit = 15;
@@ -203,8 +206,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 return 0;
             }
 
-            const aValid = familieDayjs(a.substring(0, 10), 'YYYY-MM-DD').isValid();
-            const bValid = familieDayjs(b.substring(0, 10), 'YYYY-MM-DD').isValid();
+            const aValid = erIsoStringGyldig(a.substring(0, 10));
+            const bValid = erIsoStringGyldig(b.substring(0, 10));
 
             if (!aValid && !bValid) {
                 return 0;
@@ -220,9 +223,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
             const aBefore = ascendant ? -1 : 1;
             const aAfter = ascendant ? 1 : -1;
-            return familieDayjs(a.substring(0, 10), 'YYYY-MM-DD').isBefore(
-                familieDayjs(b.substring(0, 10), 'YYYY-MM-DD')
-            )
+            return erFør(kalenderDato(a.substring(0, 10)), kalenderDato(b.substring(0, 10)))
                 ? aBefore
                 : aAfter;
         };
@@ -282,26 +283,64 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
               )
             : [];
 
-    const fordelOppgave = (oppgave: IOppgave, saksbehandler: string): Promise<Ressurs<string>> => {
+    const harLøpendeSakIInfotrygd = async (
+        bruker: string
+    ): Promise<Ressurs<{ harLøpendeSak: boolean }>> => {
+        return await request<{ ident: string }, { harLøpendeSak: boolean }>({
+            method: 'POST',
+            data: { ident: bruker },
+            url: '/familie-ba-sak/api/infotrygd/har-lopende-sak',
+        });
+    };
+
+    const fordelOppgave = (
+        oppgave: IOppgave,
+        saksbehandler: string,
+        bruker?: string
+    ): Promise<Ressurs<string>> => {
         return request<void, string>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
         })
-            .then((oppgaverRes: Ressurs<string>) => {
-                if (
-                    OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
-                    OppgavetypeFilter.JFR
-                ) {
-                    history.push(`/oppgaver/journalfør/${oppgave.id}`);
-                } else {
-                    if (oppgave.aktoerId)
-                        opprettEllerHentFagsak({
-                            personIdent: null,
-                            aktørId: oppgave.aktoerId,
-                        });
-                    else byggFeiletRessurs('Oppgave mangler aktørid');
+            .then((oppgaveId: Ressurs<string>) => {
+                if (oppgaveId.status === RessursStatus.SUKSESS) {
+                    if (
+                        OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] ===
+                        OppgavetypeFilter.JFR
+                    ) {
+                        if (bruker) {
+                            return harLøpendeSakIInfotrygd(bruker).then(res => {
+                                if (res.status === RessursStatus.SUKSESS) {
+                                    if (res.data.harLøpendeSak) {
+                                        history.push(`/infotrygd`, { bruker: bruker });
+                                    } else {
+                                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                                    }
+                                    return byggSuksessRessurs<string>('');
+                                }
+                                return byggFeiletRessurs<string>('har-lopende-sak feilet');
+                            });
+                        } else {
+                            history.push(`/oppgaver/journalfør/${oppgave.id}`);
+                        }
+                    } else {
+                        if (oppgave.behandlingstype === BehandlingstypeFilter.ae0161) {
+                            // tilbakekreving
+                            gåTilTilbakekreving(oppgave);
+                            return byggSuksessRessurs<string>('');
+                        }
+                        if (oppgave.aktoerId)
+                            opprettEllerHentFagsak({
+                                personIdent: null,
+                                aktørId: oppgave.aktoerId,
+                            });
+                        else {
+                            return byggFeiletRessurs<string>('Oppgave mangler aktørid');
+                        }
+                    }
                 }
-                return oppgaverRes;
+
+                return oppgaveId;
             })
             .catch((_error: AxiosError) => {
                 return byggFeiletRessurs<string>('Ukjent feil ved fordeling av oppgave');
@@ -323,13 +362,13 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     const validerDatoer = () => {
-        const opprettetTidspunktGyldig = validerFormatISODag(
-            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue
-        );
+        const opprettetTidspunktGyldig =
+            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue === '' ||
+            erIsoStringGyldig(oppgaveFelter.opprettetTidspunkt.filter?.selectedValue);
 
-        const fristGyldig = validerFormatISODag(
-            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue
-        );
+        const fristGyldig =
+            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue === '' ||
+            erIsoStringGyldig(oppgaveFelter.fristFerdigstillelse.filter?.selectedValue);
 
         const oppdaterteOppgaveFelter = {
             ...oppgaveFelter,
@@ -372,6 +411,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         hentOppgaverFraBackend(
             hentOppgaveFelt('behandlingstema').filter?.selectedValue,
+            hentOppgaveFelt('behandlingstype').filter?.selectedValue,
             hentOppgaveFelt('oppgavetype').filter?.selectedValue,
             hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
             hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
@@ -393,6 +433,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const hentOppgaverFraBackend = (
         behandlingstema?: string,
+        behandlingstype?: string,
         oppgavetype?: string,
         enhet?: string,
         frist?: string,
@@ -405,6 +446,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
         const finnOppgaveRequest: IFinnOppgaveRequest = {
             behandlingstema: erstattAlleMedUndefined(behandlingstema),
+            behandlingstype: erstattAlleMedUndefined(behandlingstype),
             oppgavetype: erstattAlleMedUndefined(oppgavetype),
             enhet: erstattAlleMedUndefined(enhet)?.replace('E', ''),
             tilordnetRessurs,
@@ -436,8 +478,26 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
+    const gåTilTilbakekreving = (oppgave: IOppgave) => {
+        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
+        if (brukerident) {
+            request<{ personIdent: string }, IFagsak | undefined>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
+                data: {
+                    personIdent: brukerident,
+                },
+            }).then((fagsak: Ressurs<IFagsak | undefined>) => {
+                if (fagsak.status === RessursStatus.SUKSESS && !!fagsak.data) {
+                    window.location.href = `/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.data.id}/behandling/${oppgave.saksreferanse}`;
+                }
+            });
+        }
+    };
+
     return {
         fordelOppgave,
+        harLøpendeSakIInfotrygd,
         hentOppgaveSide,
         hentOppgaver,
         oppgaveFelter,

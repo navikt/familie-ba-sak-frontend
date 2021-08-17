@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { useHistory } from 'react-router';
+
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 
@@ -19,13 +21,22 @@ interface IProps {
 
 const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => {
     const [visModal, settVisModal] = useState(false);
+    const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] = useState(
+        false
+    );
+    const history = useHistory();
 
-    const { onBekreft, opprettBehandlingSkjema, nullstillSkjema } = useOpprettBehandling(() =>
-        settVisModal(false)
+    const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus } = useOpprettBehandling(
+        () => settVisModal(false),
+        fagsak,
+        () => {
+            settVisModal(false);
+            settVisBekreftelseTilbakekrevingModal(true);
+        }
     );
 
     const lukkOpprettBehandlingModal = () => {
-        nullstillSkjema();
+        nullstillSkjemaStatus();
         settVisModal(false);
     };
 
@@ -82,6 +93,40 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     />
                 </SkjemaGruppe>
             </UIModalWrapper>
+
+            {visBekreftelseTilbakekrevingModal && (
+                <UIModalWrapper
+                    modal={{
+                        tittel: 'Tilbakekreving opprettes...',
+                        lukkKnapp: false,
+                        visModal: visBekreftelseTilbakekrevingModal,
+                        actions: [
+                            <Knapp
+                                key={'saksoversikt'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisBekreftelseTilbakekrevingModal(false);
+                                    history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                }}
+                                children={'Gå til saksoversikten'}
+                            />,
+                            <Knapp
+                                key={'oppgavebenk'}
+                                type={'hoved'}
+                                mini={true}
+                                onClick={() => {
+                                    settVisBekreftelseTilbakekrevingModal(false);
+                                    history.push('/oppgaver');
+                                }}
+                                children={'Gå til oppgavebenken'}
+                            />,
+                        ],
+                    }}
+                >
+                    Tilbakekrevingsbehandling opprettes, men det kan ta litt tid (ca 30 sekunder)
+                    før den blir tilgjengelig i saksoversikten og oppgavebenken.
+                </UIModalWrapper>
+            )}
         </>
     );
 };

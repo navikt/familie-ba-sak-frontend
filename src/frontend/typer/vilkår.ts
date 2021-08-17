@@ -1,7 +1,7 @@
 import { FeltState } from '@navikt/familie-skjema';
 
+import { FamilieIsoDate, IPeriode } from '../utils/kalender';
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
-import { IPeriode } from './periode';
 import { IGrunnlagPerson, PersonType } from './person';
 import {
     IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -69,6 +69,9 @@ export interface IVilkårResultat {
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
     erEksplisittAvslagPåSøknad?: boolean;
+    erSkjønnsmessigVurdert: boolean;
+    erMedlemskapVurdert: boolean;
+    erDeltBosted: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
 }
 
@@ -92,10 +95,13 @@ export interface IRestVilkårResultat {
     erAutomatiskVurdert: boolean;
     erVurdert: boolean;
     id: number;
-    periodeFom?: string;
-    periodeTom?: string;
+    periodeFom?: FamilieIsoDate;
+    periodeTom?: FamilieIsoDate;
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
+    erSkjønnsmessigVurdert: boolean;
+    erMedlemskapVurdert: boolean;
+    erDeltBosted: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
 }
@@ -116,7 +122,7 @@ export interface IRestStegTilstand {
     behandlingStegStatus: BehandlingStegStatus;
 }
 
-export type Vilkårsbegrunnelser = {
+export type VedtaksbegrunnelseTekster = {
     [key in VedtakBegrunnelseType]: IRestVedtakBegrunnelseTilknyttetVilkår[];
 };
 

@@ -5,6 +5,8 @@ import { ISaksbehandler } from '@navikt/familie-typer';
 
 import { hentPar, INøkkelPar } from '../../typer/common';
 import {
+    BehandlingstypeFilter,
+    behandlingstypeFilter,
     EnhetFilter,
     enhetFilter,
     GjelderFilter,
@@ -42,6 +44,7 @@ export interface IOppgaveFelter {
     [key: string]: IOppgaveFelt;
     ident: IOppgaveFelt;
     behandlingstema: IOppgaveFelt;
+    behandlingstype: IOppgaveFelt;
     beskrivelse: IOppgaveFelt;
     fristFerdigstillelse: IOppgaveFelt;
     handlinger: IOppgaveFelt;
@@ -97,6 +100,21 @@ export const initialOppgaveFelter = (
                 ),
                 initialValue: GjelderFilter.ALLE,
                 nøkkelPar: gjelderFilter,
+            },
+            order: FeltSortOrder.NONE,
+        },
+        behandlingstype: {
+            nøkkel: 'behandlingstype',
+            label: 'Behandlingstype',
+            filter: {
+                type: 'select',
+                selectedValue: hentPar(
+                    searchParams['behandlingstype']?.toString(),
+                    behandlingstypeFilter,
+                    BehandlingstypeFilter.ALLE
+                ),
+                initialValue: BehandlingstypeFilter.ALLE,
+                nøkkelPar: behandlingstypeFilter,
             },
             order: FeltSortOrder.NONE,
         },

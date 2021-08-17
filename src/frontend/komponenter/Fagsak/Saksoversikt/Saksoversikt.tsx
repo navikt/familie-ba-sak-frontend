@@ -19,11 +19,18 @@ import {
     underkategorier,
 } from '../../../typer/behandling';
 import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
-import { hentUtbetalingsperioder, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
-import familieDayjs, { familieDayjsDiff } from '../../../utils/familieDayjs';
-import { datoformat, formaterDato } from '../../../utils/formatter';
-import { periodeOverlapperMedValgtDato } from '../../../utils/tid';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import {
+    førsteDagIInneværendeMåned,
+    kalenderDatoTilDate,
+    kalenderDiff,
+    KalenderEnhet,
+    leggTil,
+    periodeOverlapperMedValgtDato,
+    serializeIso8601String,
+} from '../../../utils/kalender';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
 import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import Behandlinger from './Behandlinger';
@@ -67,16 +74,14 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         (behandling: IBehandling) =>
             behandling.status === BehandlingStatus.AVSLUTTET &&
             behandling.resultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
-            behandling.resultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET
+            behandling.resultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET &&
+            behandling.resultat !== BehandlingResultat.HENLAGT_AUTOMATISK_FØDSELSHENDELSE
     );
 
     let gjeldendeBehandling =
         iverksatteBehandlinger.length > 0
             ? iverksatteBehandlinger.sort((a, b) =>
-                  familieDayjsDiff(
-                      familieDayjs(b.opprettetTidspunkt),
-                      familieDayjs(a.opprettetTidspunkt)
-                  )
+                  kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
               )[0]
             : undefined;
 
@@ -86,14 +91,18 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const utbetalingsperioder = hentUtbetalingsperioder(gjeldendeBehandling);
-    const utbetalingsperiodeInneværendeMåned = utbetalingsperioder.find(periode =>
+    const gjeldendeUtbetalingsperioder = fagsak.gjeldendeUtbetalingsperioder;
+    const utbetalingsperiodeInneværendeMåned = gjeldendeUtbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
 
-    const nesteMåned = familieDayjs().add(1, 'month').startOf('month');
-    const utbetalingsperiodeNesteMåned = utbetalingsperioder.find(periode =>
-        periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, nesteMåned.toDate())
+    const nesteMåned = leggTil(førsteDagIInneværendeMåned(), 1, KalenderEnhet.MÅNED);
+    const utbetalingsperiodeNesteMåned = gjeldendeUtbetalingsperioder.find(periode =>
+        periodeOverlapperMedValgtDato(
+            periode.periodeFom,
+            periode.periodeTom,
+            kalenderDatoTilDate(nesteMåned)
+        )
     );
 
     const lenkeTilBehandlingsresultat = () => {
@@ -120,9 +129,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
                             <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                                 <FlexSpaceBetween>
-                                    {`Utbetalingen endres fra og med ${formaterDato(
-                                        nesteMåned,
-                                        datoformat.MÅNED_NAVN
+                                    {`Utbetalingen endres fra og med ${formaterIsoDato(
+                                        serializeIso8601String(nesteMåned),
+                                        datoformat.MÅNED_ÅR_NAVN
                                     )}`}
                                     {lenkeTilBehandlingsresultat()}
                                 </FlexSpaceBetween>
@@ -135,7 +144,10 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
             return (
                 <AlertStripe className={'saksoversikt__alert'} type={'info'}>
                     <FlexSpaceBetween>
-                        {`Utbetalingen starter ${formaterDato(nesteMåned, datoformat.MÅNED_NAVN)}`}
+                        {`Utbetalingen starter ${formaterIsoDato(
+                            serializeIso8601String(nesteMåned),
+                            datoformat.MÅNED_ÅR_NAVN
+                        )}`}
                         {lenkeTilBehandlingsresultat()}
                     </FlexSpaceBetween>
                 </AlertStripe>

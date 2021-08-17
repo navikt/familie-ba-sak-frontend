@@ -28,3 +28,13 @@ export const sjekkTilgangTilPerson = (personRes: Ressurs<IPersonInfo>): Ressurs<
         return personRes;
     }
 };
+
+// Skamløst knabba herfra https://gist.github.com/zachlysobey/71ac85046d0d533287ed85e1caa64660
+export function partition<T>(predicate: (val: T) => boolean, arr: Array<T>): [Array<T>, Array<T>] {
+    const partitioned: [Array<T>, Array<T>] = [[], []];
+    arr.forEach((val: T) => {
+        const partitionIndex: 0 | 1 = predicate(val) ? 0 : 1;
+        partitioned[partitionIndex].push(val);
+    });
+    return partitioned;
+}

@@ -79,6 +79,33 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         });
     };
 
+    const oppdaterRegisteropplysninger = (behandlingId: number): Promise<Ressurs<IFagsak>> => {
+        return request<void, IFagsak>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/person/oppdater-registeropplysninger/${behandlingId}`,
+            påvirkerSystemLaster: false,
+        })
+            .then((hentetFagsak: Ressurs<IFagsak>) => {
+                if (
+                    hentetFagsak.status === RessursStatus.FEILET ||
+                    hentetFagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    hentetFagsak.status === RessursStatus.IKKE_TILGANG
+                ) {
+                    return byggFeiletRessurs(
+                        'Kunne ikke oppdatere registeropplysninger. Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.'
+                    ) as Ressurs<IFagsak>;
+                } else {
+                    settFagsak(hentetFagsak);
+                    return hentetFagsak;
+                }
+            })
+            .catch((_error: AxiosError) => {
+                return byggFeiletRessurs(
+                    'Ukjent feil ved oppdatering av registeropplysninger'
+                ) as Ressurs<IFagsak>;
+            });
+    };
+
     const hentLogg = (behandlingId: number): void => {
         settLogg(byggHenterRessurs());
         request<void, ILogg[]>({
@@ -107,12 +134,26 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
+    const hentFagsakForPerson = async (personId: string) => {
+        return request<{ personIdent: string }, IFagsak | undefined>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
+            data: {
+                personIdent: personId,
+            },
+        }).then((fagsak: Ressurs<IFagsak | undefined>) => {
+            return fagsak;
+        });
+    };
+
     return {
+        oppdaterRegisteropplysninger,
         hentInternstatistikk,
         internstatistikk,
         bruker,
         fagsak,
         hentFagsak,
+        hentFagsakForPerson,
         hentLogg,
         logg,
         settFagsak,

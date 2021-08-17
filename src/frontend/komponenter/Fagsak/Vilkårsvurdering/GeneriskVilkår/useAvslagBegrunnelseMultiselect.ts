@@ -3,21 +3,23 @@ import React from 'react';
 import { ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { IPeriode } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
+import { IPeriode } from '../../../../utils/kalender';
+import { useVedtakBegrunnelser } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
+import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 
 const useAvslagBegrunnelseMultiselect = (vilkårType: VilkårType, periode: IPeriode) => {
-    const { vedtakBegrunnelser, vilkårBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtakBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const avslagBegrunnelseTeksterForGjeldendeVilkår =
-        vilkårBegrunnelser.status === RessursStatus.SUKSESS
-            ? vilkårBegrunnelser.data.AVSLAG.filter(
+        vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS
+            ? vedtaksbegrunnelseTekster.data.AVSLAG.filter(
                   (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
                       begrunnelse.vilkår === vilkårType
               )

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { AxiosError } from 'axios';
+import { useHistory } from 'react-router';
 
 import { FamilieRequestConfig, useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
@@ -13,8 +14,11 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { BehandlingÅrsak } from '../../typer/behandling';
-import { IInfotrygdsaker, IInfotrygdsakerRequest } from '../../typer/infotrygd';
+import {
+    IInfotrygdsaker,
+    IInfotrygdsakerRequest,
+    IMigreringResponseDto,
+} from '../../typer/infotrygd';
 import { Adressebeskyttelsegradering } from '../../typer/person';
 import { identValidator } from '../../utils/validators';
 
@@ -77,20 +81,28 @@ export const useInfotrygdRequest = () => {
 };
 
 export const useInfotrygdMigrering = () => {
+    const history = useHistory();
     const { request } = useHttp();
-    const [infotrygdmigreringRessurs, settInfotrygdmigreringRessurs] = useState<Ressurs<string>>(
-        byggTomRessurs()
-    );
+    const [infotrygdmigreringRessurs, settInfotrygdmigreringRessurs] = useState<
+        Ressurs<IMigreringResponseDto>
+    >(byggTomRessurs());
 
-    const flyttBrukerTilBaSak = (ident: string, behandlingÅrsak: BehandlingÅrsak) => {
-        settInfotrygdmigreringRessurs(byggHenterRessurs<string>());
-        request<{ ident: string }, string>({
+    const flyttBrukerTilBaSak = (ident: string) => {
+        settInfotrygdmigreringRessurs(byggHenterRessurs());
+        request<{ ident: string }, IMigreringResponseDto>({
             method: 'POST',
             data: { ident },
-            url: `familie-ba-sak/api/migrering?behandlingAarsak=${behandlingÅrsak}`,
+            url: `familie-ba-sak/api/migrering`,
         })
-            .then((ressurs: Ressurs<string>) => {
-                settInfotrygdmigreringRessurs(ressurs);
+            .then(ressurs => {
+                if (ressurs.status === RessursStatus.SUKSESS) {
+                    history.push(`/fagsak/${ressurs.data.fagsakId}/saksoversikt`);
+                } else if (
+                    ressurs.status === RessursStatus.FEILET ||
+                    ressurs.status === RessursStatus.FUNKSJONELL_FEIL
+                ) {
+                    settInfotrygdmigreringRessurs(byggFeiletRessurs(ressurs.frontendFeilmelding));
+                }
             })
             .catch((_error: AxiosError) => {
                 settInfotrygdmigreringRessurs(

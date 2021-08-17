@@ -18,17 +18,13 @@ export enum PersonType {
     BARN = 'BARN',
 }
 
-export type PersonTypeMap = {
-    [key in PersonType]: string;
-};
-
-export const personTypeMap: PersonTypeMap = {
+export const personTypeMap: Record<PersonType, string> = {
     SØKER: 'Søker',
     ANNENPART: 'Annen part',
     BARN: 'Barn',
 };
 
-export enum FamilieRelasjonRolle {
+export enum ForelderBarnRelasjonRolle {
     BARN = 'BARN',
     FAR = 'FAR',
     MEDMOR = 'MEDMOR',
@@ -48,6 +44,7 @@ export interface IGrunnlagPerson {
     kjønn: kjønnType;
     navn: string;
     personIdent: string;
+    registerhistorikk?: IRestRegisterhistorikk;
     type: PersonType;
     målform: Målform;
 }
@@ -55,8 +52,8 @@ export interface IGrunnlagPerson {
 export interface IPersonInfo {
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
     harTilgang?: boolean;
-    familierelasjoner: IFamilierelasjon[];
-    familierelasjonerMaskert: IFamilierelasjonMaskert[];
+    forelderBarnRelasjon: IForelderBarnRelasjon[];
+    forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert[];
     fødselsdato: string;
     kjønn: kjønnType;
     navn: string;
@@ -64,22 +61,36 @@ export interface IPersonInfo {
     type: PersonType;
 }
 
-export interface IFamilierelasjon {
+export interface IForelderBarnRelasjon {
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
     fødselsdato: string;
     navn: string;
     personIdent: string;
-    relasjonRolle: FamilieRelasjonRolle;
+    relasjonRolle: ForelderBarnRelasjonRolle;
 }
 
-export interface IFamilierelasjonMaskert {
+export interface IForelderBarnRelasjonMaskert {
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
-    relasjonRolle: FamilieRelasjonRolle;
+    relasjonRolle: ForelderBarnRelasjonRolle;
 }
 
 export interface IRestTilgang {
     saksbehandlerHarTilgang: boolean;
     adressebeskyttelsegradering: Adressebeskyttelsegradering;
+}
+
+export interface IRestRegisterhistorikk {
+    hentetTidspunkt: string;
+    sivilstand: IRestRegisteropplysning[];
+    oppholdstillatelse: IRestRegisteropplysning[];
+    statsborgerskap: IRestRegisteropplysning[];
+    bostedsadresse: IRestRegisteropplysning[];
+}
+
+export interface IRestRegisteropplysning {
+    fom?: string;
+    tom?: string;
+    verdi: string;
 }
 
 export enum Adressebeskyttelsegradering {

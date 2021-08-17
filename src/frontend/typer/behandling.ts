@@ -1,11 +1,16 @@
 import { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import { INøkkelPar } from './common';
+import { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import { IGrunnlagPerson } from './person';
 import { ITilbakekreving } from './simulering';
 import { ISøknadDTO } from './søknad';
+import {
+    TilbakekrevingsbehandlingResultat,
+    TilbakekrevingsbehandlingÅrsak,
+} from './tilbakekrevingsbehandling';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
-import { Vedtaksperiode } from './vedtaksperiode';
+import { Utbetalingsperiode, Vedtaksperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export enum BehandlingKategori {
@@ -13,38 +18,52 @@ export enum BehandlingKategori {
     EØS = 'EØS',
 }
 
-export enum HenleggelseÅrsak {
+export enum HenleggÅrsak {
     SØKNAD_TRUKKET = 'SØKNAD_TRUKKET',
     FEILAKTIG_OPPRETTET = 'FEILAKTIG_OPPRETTET',
+    FØDSELSHENDELSE_UGYLDIG_UTFALL = 'FØDSELSHENDELSE_UGYLDIG_UTFALL',
 }
 
-export const henleggelseÅrsak: Record<HenleggelseÅrsak, string> = {
+export const henleggÅrsak: Record<HenleggÅrsak, string> = {
     SØKNAD_TRUKKET: 'Søknaden er trukket',
     FEILAKTIG_OPPRETTET: 'Behandlingen er feilaktig opprettet',
+    FØDSELSHENDELSE_UGYLDIG_UTFALL:
+        'Automatisk henlagt på grunn av ugyldig utfall fra fødselshendelse',
 };
 
 export enum BehandlingÅrsak {
     SØKNAD = 'SØKNAD',
     FØDSELSHENDELSE = 'FØDSELSHENDELSE',
     ÅRLIG_KONTROLL = 'ÅRLIG_KONTROLL',
-    DØDSFALL = 'DØDSFALL',
+    DØDSFALL_BRUKER = 'DØDSFALL_BRUKER',
     NYE_OPPLYSNINGER = 'NYE_OPPLYSNINGER',
     KLAGE = 'KLAGE',
     TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
     OMREGNING_6ÅR = 'OMREGNING_6ÅR',
     OMREGNING_18ÅR = 'OMREGNING_18ÅR',
+    SATSENDRING = 'SATSENDRING',
+    MIGRERING = 'MIGRERING',
 }
 
-export const behandlingÅrsak: Record<BehandlingÅrsak, string> = {
+export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak, string> = {
     SØKNAD: 'Søknad',
     FØDSELSHENDELSE: 'Fødselshendelse',
     ÅRLIG_KONTROLL: 'Årlig kontroll',
-    DØDSFALL: 'Dødsfall',
+    DØDSFALL_BRUKER: 'Dødsfall bruker',
     NYE_OPPLYSNINGER: 'Nye opplysninger',
     KLAGE: 'Klage',
     TEKNISK_OPPHØR: 'Teknisk opphør',
     OMREGNING_6ÅR: 'Omregning 6 år',
     OMREGNING_18ÅR: 'Omregning 18 år',
+    SATSENDRING: 'Satsendring',
+    MIGRERING: 'Migrering',
+    /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
+    REVURDERING_KLAGE_NFP: 'Revurdering etter klage',
+    REVURDERING_KLAGE_KA: 'Revurdering etter klage',
+    REVURDERING_OPPLYSNINGER_OM_VILKÅR: 'Nye opplysninger',
+    REVURDERING_OPPLYSNINGER_OM_FORELDELSE: 'Nye opplysninger',
+    REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT:
+        'Feilutbetalt beløp helt eller delvis bortfalt',
 };
 
 export enum BehandlingUnderkategori {
@@ -53,11 +72,12 @@ export enum BehandlingUnderkategori {
 }
 
 export enum BehandlingSteg {
-    HENLEGG_SØKNAD = 'HENLEGG_SØKNAD',
+    HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
+    FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
-    SIMULERING = 'SIMULERING',
+    VURDER_TILBAKEKREVING = 'VURDER_TILBAKEKREVING',
     SEND_TIL_BESLUTTER = 'SEND_TIL_BESLUTTER',
     BESLUTTE_VEDTAK = 'BESLUTTE_VEDTAK',
     IVERKSETT_MOT_OPPDRAG = 'IVERKSETT_MOT_OPPDRAG',
@@ -79,26 +99,28 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
             return 1;
         case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
             return 1;
-        case BehandlingSteg.VILKÅRSVURDERING:
+        case BehandlingSteg.FILTRERING_FØDSELSHENDELSER:
             return 2;
-        case BehandlingSteg.SIMULERING:
+        case BehandlingSteg.VILKÅRSVURDERING:
             return 3;
-        case BehandlingSteg.SEND_TIL_BESLUTTER:
+        case BehandlingSteg.VURDER_TILBAKEKREVING:
             return 4;
-        case BehandlingSteg.BESLUTTE_VEDTAK:
+        case BehandlingSteg.SEND_TIL_BESLUTTER:
             return 5;
-        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
+        case BehandlingSteg.BESLUTTE_VEDTAK:
             return 6;
-        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
+        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
             return 7;
-        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
+        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
             return 8;
-        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
+        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
             return 9;
-        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
+        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
             return 10;
-        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
             return 11;
+        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+            return 12;
         default:
             return 0;
     }
@@ -139,6 +161,7 @@ export enum BehandlingResultat {
     HENLAGT_FEILAKTIG_OPPRETTET = 'HENLAGT_FEILAKTIG_OPPRETTET',
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
+    HENLAGT_AUTOMATISK_FØDSELSHENDELSE = 'HENLAGT_AUTOMATISK_FØDSELSHENDELSE',
 }
 
 export enum BehandlerRolle {
@@ -167,8 +190,10 @@ export interface IBehandling {
     totrinnskontroll?: ITotrinnskontroll;
     type: Behandlingstype;
     underkategori: BehandlingUnderkategori;
+    fødselshendelsefiltreringResultater: IFødselshendelsefiltreringResultat[];
     vedtakForBehandling: IVedtakForBehandling[];
     vedtaksperioder: Vedtaksperiode[];
+    utbetalingsperioder: Utbetalingsperiode[];
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
@@ -213,6 +238,15 @@ export const behandlingstyper: INøkkelPar = {
         id: 'KLAGE',
         navn: 'Klage',
     },
+    /** Behandlingstyper for tilbakekreving **/
+    TILBAKEKREVING: {
+        id: 'TILBAKEKREVING',
+        navn: 'Tilbakekreving',
+    },
+    REVURDERING_TILBAKEKREVING: {
+        id: 'REVURDERING_TILBAKEKREVING',
+        navn: 'Revurdering tilbakekreving',
+    },
 };
 
 export const kategorier: INøkkelPar = {
@@ -237,7 +271,10 @@ export const underkategorier: INøkkelPar = {
     },
 };
 
-export const behandlingsresultater: Record<BehandlingResultat, string> = {
+export const behandlingsresultater: Record<
+    BehandlingResultat | TilbakekrevingsbehandlingResultat,
+    string
+> = {
     INNVILGET: 'Innvilget',
     INNVILGET_OG_OPPHØRT: 'Innvilget og opphørt',
     INNVILGET_OG_ENDRET: 'Innvilget og endret',
@@ -257,6 +294,12 @@ export const behandlingsresultater: Record<BehandlingResultat, string> = {
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
     IKKE_VURDERT: 'Ikke vurdert',
+    /** De neste er resultat for tilbakekrevingsbehandlinger **/
+    INGEN_TILBAKEBETALING: 'Ingen tilbakebetaling',
+    DELVIS_TILBAKEBETALING: 'Delvis tilbakebetaling',
+    FULL_TILBAKEBETALING: 'Full tilbakebetaling',
+    HENLAGT: 'Henlagt',
+    HENLAGT_AUTOMATISK_FØDSELSHENDELSE: 'Henlagt automatisk fødselshendelse',
 };
 
 export const behandlingsstatuser: Record<BehandlingStatus, string> = {

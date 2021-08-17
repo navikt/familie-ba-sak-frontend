@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { stdoutLogger, logError } from '@navikt/familie-logging';
 
-import { oboConfig, proxyUrl } from './config.js';
+import { oboConfig, proxyUrl, redirectRecords } from './config.js';
 
 const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     if (req.body) {
@@ -32,6 +32,22 @@ export const doProxy: any = () => {
         target: `${proxyUrl}`,
         logProvider: () => stdoutLogger,
     });
+};
+
+export const doRedirectProxy = () => {
+    return (req: Request, res: Response) => {
+        const urlKey = Object.keys(redirectRecords).find(k => req.originalUrl.includes(k));
+        let newUrl;
+        if (urlKey) {
+            newUrl = req.originalUrl.replace(urlKey, redirectRecords[urlKey]);
+            stdoutLogger.info(`Redirect ${urlKey} -> ${redirectRecords[urlKey]}`);
+            res.redirect(newUrl);
+        } else {
+            console.log(`Ustøttet redirect: ${req.originalUrl}`);
+            newUrl = req.originalUrl;
+            res.sendStatus(404);
+        }
+    };
 };
 
 const pdfProxyUrlRecord: Record<string, string> = {
@@ -94,6 +110,7 @@ export const attachToken = (authClient: Client) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
         getOnBehalfOfAccessToken(authClient, req, oboConfig).then((accessToken: string) => {
             req.headers['Nav-Call-Id'] = uuidv4();
+            req.headers['Nav-Consumer-Id'] = 'familie-ba-sak-front';
             req.headers.Authorization = `Bearer ${accessToken}`;
             return next();
         });

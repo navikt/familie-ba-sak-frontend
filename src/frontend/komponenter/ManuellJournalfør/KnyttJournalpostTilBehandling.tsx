@@ -16,8 +16,7 @@ import {
     IBehandling,
 } from '../../typer/behandling';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
-import familieDayjs from '../../utils/familieDayjs';
-import { datoformat, formaterDato } from '../../utils/formatter';
+import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 
 const KnyttDiv = styled.div`
@@ -102,8 +101,8 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                         />
                                     </KnyttTilBehandlingTd>
                                     <td>
-                                        {formaterDato(
-                                            familieDayjs(behandling.opprettetTidspunkt),
+                                        {formaterIsoDato(
+                                            behandling.opprettetTidspunkt,
                                             datoformat.DATO_FORKORTTET
                                         )}
                                     </td>

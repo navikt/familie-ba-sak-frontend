@@ -10,6 +10,7 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { VedtakBegrunnelse } from '../../../../typer/vedtak';
 import { IVilkårResultat } from '../../../../typer/vilkår';
+import { VedtaksbegrunnelseTeksterProvider } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
 
 interface IProps {
@@ -72,23 +73,25 @@ const AvslagSkjema: React.FC<IProps> = ({
                 }}
             />
             {redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
-                <AvslagBegrunnelseMultiselect
-                    vilkårType={redigerbartVilkår.verdi.vilkårType}
-                    periode={redigerbartVilkår.verdi.periode.verdi}
-                    begrunnelser={redigerbartVilkår.verdi.avslagBegrunnelser.verdi}
-                    onChange={(oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => {
-                        settRedigerbartVilkår({
-                            ...redigerbartVilkår,
-                            verdi: {
-                                ...redigerbartVilkår.verdi,
-                                avslagBegrunnelser: {
-                                    ...redigerbartVilkår.verdi.avslagBegrunnelser,
-                                    verdi: oppdaterteAvslagbegrunnelser,
+                <VedtaksbegrunnelseTeksterProvider>
+                    <AvslagBegrunnelseMultiselect
+                        vilkårType={redigerbartVilkår.verdi.vilkårType}
+                        periode={redigerbartVilkår.verdi.periode.verdi}
+                        begrunnelser={redigerbartVilkår.verdi.avslagBegrunnelser.verdi}
+                        onChange={(oppdaterteAvslagbegrunnelser: VedtakBegrunnelse[]) => {
+                            settRedigerbartVilkår({
+                                ...redigerbartVilkår,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    avslagBegrunnelser: {
+                                        ...redigerbartVilkår.verdi.avslagBegrunnelser,
+                                        verdi: oppdaterteAvslagbegrunnelser,
+                                    },
                                 },
-                            },
-                        });
-                    }}
-                />
+                            });
+                        }}
+                    />
+                </VedtaksbegrunnelseTeksterProvider>
             )}
         </MarginSkjemaGruppe>
     );

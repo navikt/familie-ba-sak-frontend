@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { IFagsak } from '../typer/fagsak';
-import { lagPeriodeId } from '../typer/periode';
-import { ToggleNavn } from '../typer/toggles';
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { IFagsak } from '../../../../../typer/fagsak';
 import {
     IRestAvslagbegrunnelser,
     IRestDeleteVedtakBegrunnelser,
@@ -15,10 +14,8 @@ import {
     IRestVedtakBegrunnelse,
     IVedtakForBehandling,
     VedtakBegrunnelseType,
-} from '../typer/vedtak';
-import { Vilkårsbegrunnelser } from '../typer/vilkår';
-import { useApp } from './AppContext';
-import { useFagsakRessurser } from './FagsakContext';
+} from '../../../../../typer/vedtak';
+import { lagPeriodeId } from '../../../../../utils/kalender';
 
 export interface IVedtakBegrunnelseSubmit {
     periodeId: string;
@@ -40,7 +37,6 @@ interface IProps {
 const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
     ({ aktivVedtak, fagsak }: IProps) => {
         const { request } = useHttp();
-        const { toggles } = useApp();
 
         const { settFagsak } = useFagsakRessurser();
 
@@ -53,36 +49,16 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
             IRestVedtakBegrunnelse[]
         >([]);
 
-        const [vilkårBegrunnelser, settVilkårbegrunnelser] = React.useState<
-            Ressurs<Vilkårsbegrunnelser>
-        >(byggTomRessurs());
-
         const [avslagBegrunnelser, settAvslagBegrunnelser] = React.useState<
             IRestAvslagbegrunnelser[]
         >([]);
 
         useEffect(() => {
-            hentVilkårBegrunnelseTekster();
-        }, []);
-
-        useEffect(() => {
             if (aktivVedtak) {
                 settVedtakBegrunnelser(aktivVedtak.begrunnelser);
-                if (toggles[ToggleNavn.visAvslag]) {
-                    settAvslagBegrunnelser(aktivVedtak.avslagBegrunnelser);
-                }
+                settAvslagBegrunnelser(aktivVedtak.avslagBegrunnelser);
             }
         }, [aktivVedtak]);
-
-        const hentVilkårBegrunnelseTekster = () => {
-            request<void, Vilkårsbegrunnelser>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/vilkaarsvurdering/vilkaarsbegrunnelser`,
-                påvirkerSystemLaster: true,
-            }).then((vilkårBegrunnelser: Ressurs<Vilkårsbegrunnelser>) => {
-                settVilkårbegrunnelser(vilkårBegrunnelser);
-            });
-        };
 
         const håndterEndringerPåVedtakBegrunnelser = (
             promise: Promise<Ressurs<IFagsak>>,
@@ -155,14 +131,12 @@ const [VedtakBegrunnelserProvider, useVedtakBegrunnelser] = constate(
         };
 
         return {
-            hentVilkårBegrunnelseTekster,
             avslagBegrunnelser,
             leggTilVedtakBegrunnelse,
             slettVedtakBegrunnelse,
             slettVedtakBegrunnelserForPeriodeOgVedtakbegrunnelseTyper,
             vedtakBegrunnelseSubmit,
             vedtakBegrunnelser,
-            vilkårBegrunnelser,
         };
     }
 );

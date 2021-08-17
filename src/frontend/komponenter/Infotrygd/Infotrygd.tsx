@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
@@ -9,7 +10,6 @@ import { Innholdstittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { BehandlingÅrsak } from '../../typer/behandling';
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
 import { Infotrygdtabeller } from './Infotrygdtabeller';
 import { useInfotrygdSkjema, useInfotrygdMigrering } from './useInfotrygd';
@@ -44,15 +44,25 @@ export const Infotrygd: React.FC = () => {
     const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
     const { flyttBrukerTilBaSak, infotrygdmigreringRessurs } = useInfotrygdMigrering();
 
+    const history = useHistory<{ bruker: string } | undefined>();
+    useEffect(() => {
+        if (history.location.state) {
+            skjema.felter.ident.verdi = history.location.state.bruker;
+            onSubmitWrapper();
+        }
+    }, []);
+
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
+    const knappMigrerErLåst = infotrygdmigreringRessurs.status !== RessursStatus.IKKE_HENTET;
 
     const visFlyttSakKnapp = () => {
         if (skjema.submitRessurs.status === RessursStatus.SUKSESS) {
             return (
                 <FlyttSakKnapp
                     mini
+                    disabled={knappMigrerErLåst}
                     onClick={() => {
-                        flyttBrukerTilBaSak(ident, BehandlingÅrsak.NYE_OPPLYSNINGER);
+                        flyttBrukerTilBaSak(ident);
                     }}
                 >
                     Flytt til BA-sak

@@ -1,4 +1,5 @@
-import familieDayjs, { Dayjs, familieDayjsDiff } from './familieDayjs';
+import familieDayjs from './familieDayjs';
+import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 
 export enum datoformat {
     MÅNED = 'MM.YY',
@@ -9,17 +10,17 @@ export enum datoformat {
     ISO_MÅNED = 'YYYY-MM',
     ISO_DAG = 'YYYY-MM-DD',
     DATO_TID = 'DD.MM.YY HH:mm',
+    DATO_TID_SEKUNDER = 'DD.MM.YY HH:mm:ss',
     TID = 'HH:mm',
-    MÅNED_NAVN = 'MMMM YYYY',
+    MÅNED_ÅR_NAVN = 'MMMM YYYY',
+    MÅNED_NAVN = 'MMM',
 }
 
 export enum datoformatNorsk {
     DATO = 'ddmmåå',
 }
 
-export const isoStringToDayjs = (dato: string | undefined, defaultValue: Dayjs): Dayjs => {
-    return dato && dato !== '' ? familieDayjs(dato, datoformat.ISO_DAG) : defaultValue;
-};
+export const millisekunderIEttÅr = 3.15576e10;
 
 export const formaterIsoDato = (
     dato: string | undefined,
@@ -33,22 +34,22 @@ export const formaterIsoDato = (
     return dayjsDato.isValid() ? dayjsDato.format(tilFormat) : dato;
 };
 
-export const formaterDato = (dato: Dayjs, tilFormat: datoformat): string => {
-    return dato.isValid() ? dato.format(tilFormat) : '';
-};
-
 export const formaterIverksattDato = (dato: string | undefined) =>
     dato ? familieDayjs(dato).format(datoformat.DATO) : 'Ikke satt';
 
-export const hentAlder = (dato: string): number => {
-    const dayjsDato = familieDayjs(dato);
-    return dayjsDato.isValid() ? familieDayjsDiff(familieDayjs(), dayjsDato, 'year') : 0;
+export const hentAlder = (fødselsdato: string): number => {
+    return fødselsdato !== ''
+        ? Math.floor(
+              kalenderDiff(
+                  kalenderDatoTilDate(iDag()),
+                  kalenderDatoTilDate(kalenderDato(fødselsdato))
+              ) / millisekunderIEttÅr
+          )
+        : 0;
 };
 
 export const hentAlderSomString = (fødselsdato: string | undefined) => {
-    return fødselsdato
-        ? familieDayjsDiff(familieDayjs(), familieDayjs(fødselsdato, 'YYYY-MM-DD'), 'year') + ' år'
-        : 'Alder ukjent';
+    return fødselsdato ? hentAlder(fødselsdato) + ' år' : 'Alder ukjent';
 };
 
 export const formaterBeløp = (beløp: number): string => {
@@ -66,11 +67,6 @@ export const formaterPersonIdent = (personIdent: string) => {
     return erPersonId(personIdent)
         ? `${personIdent.slice(0, 6)} ${personIdent.slice(6, personIdent.length)}`
         : `${personIdent.slice(0, 3)} ${personIdent.slice(3, 6)} ${personIdent.slice(6, 9)}`;
-};
-
-export const sisteDatoIMnd = (måned: number, år: number): Date => {
-    // Måneden i Date objektet er 0-indeksert
-    return new Date(år, måned + 1, 0);
 };
 
 export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>

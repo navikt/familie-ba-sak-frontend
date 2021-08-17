@@ -5,21 +5,23 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import Hjelpetekst, { HjelpetekstProps } from 'nav-frontend-hjelpetekst';
 
-import FamilieBaseKnapp from './FamilieBaseKnapp';
-
 interface IHjelpetekst44pxProps extends HjelpetekstProps {
     innhold: string | JSX.Element;
 }
 
-const HjepetekstWrapper = styled(FamilieBaseKnapp)`
-    padding: 0rem;
+const HjepetekstWrapper = styled.div`
+    padding: 0;
     margin-left: 0.625rem;
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
         background-color: ${navFarger.navLysGra};
+        cursor: pointer;
 
         .hjelpetekst {
             .hjelpetekst__apneknapp {
@@ -40,11 +42,13 @@ const HjepetekstWrapper = styled(FamilieBaseKnapp)`
 const Hjelpetekst44px: React.FC<IHjelpetekst44pxProps> = ({ innhold, ...props }) => {
     const [hjelpetekstRef, settHjelpetekstRef] = useState<Hjelpetekst | null>(null);
 
-    const overrideHjelpetekstOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const overrideHjelpetekstOnClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (hjelpetekstRef) {
-            hjelpetekstRef.togglePopover(e);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            hjelpetekstRef.togglePopover(event as HTMLButtonElement);
         }
-        e.stopPropagation();
+        event.stopPropagation();
     };
 
     return (

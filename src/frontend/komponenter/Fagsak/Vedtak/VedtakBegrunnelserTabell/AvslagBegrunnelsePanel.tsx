@@ -4,17 +4,17 @@ import styled from 'styled-components';
 
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import { useApp } from '../../../../context/AppContext';
-import { useFritekstVedtakBegrunnelser } from '../../../../context/FritekstVedtakBegrunnelserContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
-import { ToggleNavn } from '../../../../typer/toggles';
+import { IBehandling } from '../../../../typer/behandling';
 import { IRestAvslagbegrunnelser } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
+import { useFritekstVedtakBegrunnelser } from './Context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from './Context/VedtakBegrunnelserContext';
 import EkspanderbartBegrunnelsePanel from './Felles/EkspanderbartBegrunnelsePanel';
-import FritekstVedtakbegrunnelser from './FritekstVedtakbegrunnelser';
+import FritekstVedtakbegrunnelser from './Felles/FritekstVedtakbegrunnelser';
 
 interface IVedtakBegrunnelserTabell {
     vedtaksperiode: Vedtaksperiode;
+    åpenBehandling: IBehandling;
 }
 
 const PanelBody = styled.div`
@@ -29,9 +29,10 @@ const PanelBody = styled.div`
     }
 `;
 
-const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({ vedtaksperiode }) => {
-    const { toggles } = useApp();
-
+const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({
+    vedtaksperiode,
+    åpenBehandling,
+}) => {
     const { avslagBegrunnelser } = useVedtakBegrunnelser();
     const { ekspandertBegrunnelse, toggleForm } = useFritekstVedtakBegrunnelser();
 
@@ -39,6 +40,7 @@ const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({ vedtakspe
         <EkspanderbartBegrunnelsePanel
             vedtaksperiode={vedtaksperiode}
             åpen={ekspandertBegrunnelse}
+            åpenBehandling={åpenBehandling}
             onClick={() => toggleForm(true)}
         >
             <PanelBody>
@@ -58,10 +60,7 @@ const AvslagBegrunnelsePanel: React.FC<IVedtakBegrunnelserTabell> = ({ vedtakspe
                             ))}
                     </ul>
                 </div>
-
-                {toggles[ToggleNavn.begrunnelseFritekst] && (
-                    <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
-                )}
+                <FritekstVedtakbegrunnelser vedtaksperiode={vedtaksperiode} />
             </PanelBody>
         </EkspanderbartBegrunnelsePanel>
     );

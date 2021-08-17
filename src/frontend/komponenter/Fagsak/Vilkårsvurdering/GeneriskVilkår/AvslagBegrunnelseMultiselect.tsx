@@ -7,19 +7,19 @@ import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-f
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { IPeriode } from '../../../../typer/periode';
 import {
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from '../../../../typer/vedtak';
 import { VilkårType } from '../../../../typer/vilkår';
+import { IPeriode } from '../../../../utils/kalender';
 import { hentBakgrunnsfarge, hentBorderfarge } from '../../../../utils/vedtakUtils';
+import { useVedtaksbegrunnelseTekster } from '../../Vedtak/VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
@@ -41,7 +41,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
     onChange,
 }) => {
     const { erLesevisning } = useBehandling();
-    const { vilkårBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const { vilkårSubmit } = useVilkårsvurdering();
 
     const { avslagBegrunnelseTeksterForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
@@ -94,14 +94,14 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({
         })
     );
 
-    if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
+    if (vedtaksbegrunnelseTekster.status === RessursStatus.FEILET) {
         return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
     }
 
     return (
         <FamilieReactSelect
             value={valgteBegrunnlser}
-            label={'Begrunnelse(r) til vedtaksbrev'}
+            label={'Velg standardtekst i brev'}
             creatable={false}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={vilkårSubmit !== VilkårSubmit.NONE}

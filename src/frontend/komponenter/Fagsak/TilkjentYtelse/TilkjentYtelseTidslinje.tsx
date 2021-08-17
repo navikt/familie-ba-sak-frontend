@@ -10,7 +10,8 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
-import { formaterPersonIdent, sisteDatoIMnd, sorterFødselsdato } from '../../../utils/formatter';
+import { formaterPersonIdent, sorterFødselsdato } from '../../../utils/formatter';
+import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../../../utils/kalender';
 import TidslinjeEtikett from './TidslinjeEtikett';
 import TidslinjeNavigering from './TidslinjeNavigering';
 import Vinduvelger from './VinduVelger';
@@ -69,14 +70,13 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     etikettRender={(etikett: Skalaetikett) => (
                         <TidslinjeEtikett etikett={etikett} />
                     )}
-                    startDato={aktivtTidslinjeVindu.startDato.toDate()}
-                    sluttDato={aktivtTidslinjeVindu.sluttDato.toDate()}
+                    startDato={kalenderDatoTilDate(aktivtTidslinjeVindu.startDato, 23, 0)}
+                    sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
                     aktivtUtsnitt={
                         aktivEtikett && {
                             fom: aktivEtikett.dato,
-                            tom: sisteDatoIMnd(
-                                aktivEtikett.dato.getMonth(),
-                                aktivEtikett.dato.getFullYear()
+                            tom: kalenderDatoTilDate(
+                                sisteDagIMåned(kalenderDatoFraDate(aktivEtikett.dato))
                             ),
                         }
                     }

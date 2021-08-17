@@ -13,7 +13,7 @@ import { logInfo } from '@navikt/familie-logging';
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
-import { attachToken, doPdfProxy, doProxy } from './proxy';
+import { attachToken, doPdfProxy, doProxy, doRedirectProxy } from './proxy';
 import setupRouter from './router';
 
 // eslint-disable-next-line
@@ -52,6 +52,8 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         attachToken(azureAuthClient),
         doPdfProxy()
     );
+
+    app.use('/redirect', doRedirectProxy());
 
     // Sett opp bodyParser og router etter proxy. Spesielt viktig med tanke på større payloads som blir parset av bodyParser
     app.use(bodyParser.json({ limit: '200mb' }));

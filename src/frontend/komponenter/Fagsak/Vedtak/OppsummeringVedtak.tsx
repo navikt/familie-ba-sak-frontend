@@ -4,25 +4,25 @@ import { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Alertstripe, { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Normaltekst, Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { useHttp } from '@navikt/familie-http';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
+    byggHenterRessurs,
     byggTomRessurs,
     Ressurs,
     RessursStatus,
-    byggHenterRessurs,
 } from '@navikt/familie-typer';
 
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { VedtakBegrunnelserProvider } from '../../../context/VedtakBegrunnelserContext';
+import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import {
     BehandlerRolle,
     BehandlingStatus,
@@ -35,11 +35,15 @@ import { IFagsak } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import AvslagTabell from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
-import BegrunnelseTabell from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
+import AvslagBegrunnelser from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
+import { VedtakBegrunnelserProvider } from './VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
+import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
+import VedtakBegrunnelser from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
+import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
 interface IVedtakProps {
     fagsak: IFagsak;
@@ -50,11 +54,20 @@ const StyledFeilmelding = styled(Feilmelding)`
     margin-top: 1rem;
 `;
 
+const Container = styled.div`
+    max-width: 49rem;
+    #forhandsvis-vedtaksbrev {
+        float: right;
+    }
+`;
+
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler, toggles } = useApp();
+    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
+    const { toggles } = useApp();
+    const brukNyeVedtaksperioder = toggles[ToggleNavn.brukNyeVedtaksperioder];
 
     const history = useHistory();
 
@@ -122,22 +135,33 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
+    const minstEnPeriodeharBegrunnetelseEllerFritekst = (): boolean => {
+        const vedtaksperioderMedBegrunnelser =
+            hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [];
+        return vedtaksperioderMedBegrunnelser.some(
+            vedtaksperioderMedBegrunnelse =>
+                vedtaksperioderMedBegrunnelse.begrunnelser.length !== 0 ||
+                vedtaksperioderMedBegrunnelse.fritekster.length !== 0
+        );
+    };
+
     const minstEnPeriodeErBegrunnet = (vedtakBegrunnelser: IRestVedtakBegrunnelse[]) => {
         const begrunnelsenErUtfylt = (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
             vedtakBegrunnelse.begrunnelseType && vedtakBegrunnelse.begrunnelse;
 
-        return (
-            vedtakBegrunnelser.filter((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                begrunnelsenErUtfylt(vedtakBegrunnelse)
-            ).length > 0
+        return vedtakBegrunnelser.some((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+            begrunnelsenErUtfylt(vedtakBegrunnelse)
         );
     };
 
+    const kanSendeinnVedtak = () =>
+        (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
+        minstEnPeriodeharBegrunnetelseEllerFritekst() ||
+        åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
+        åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
+
     const sendInn = () => {
-        if (
-            (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
-            åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR
-        ) {
+        if (kanSendeinnVedtak()) {
             settSenderInn(true);
             settSubmitFeil('');
             request<void, IFagsak>({
@@ -169,13 +193,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         <Skjemasteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
-                toggles[ToggleNavn.visSimulering]
-                    ? history.push(
-                          `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`
-                      )
-                    : history.push(
-                          `/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`
-                      )
+                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`)
             }
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
             nesteKnappTittel={'Til godkjenning'}
@@ -198,18 +216,46 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         }}
                         pdfdata={vedtaksbrev}
                     />
-                    <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                        <BegrunnelseTabell åpenBehandling={åpenBehandling} />
-                        {toggles[ToggleNavn.visAvslag] && (
-                            <AvslagTabell åpenBehandling={åpenBehandling} />
+                    <Container>
+                        {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ? (
+                            <Alertstripe
+                                type="info"
+                                style={{ margin: '2rem 0 1rem 0' }}
+                                form="inline"
+                            >
+                                <b>Vedtak om opphør på grunn av dødsfall er automatisk generert.</b>
+                            </Alertstripe>
+                        ) : (
+                            <VedtaksbegrunnelseTeksterProvider>
+                                {!brukNyeVedtaksperioder && (
+                                    <VedtakBegrunnelserProvider
+                                        fagsak={fagsak}
+                                        aktivVedtak={aktivVedtak}
+                                    >
+                                        <VedtakBegrunnelser åpenBehandling={åpenBehandling} />
+                                        <AvslagBegrunnelser åpenBehandling={åpenBehandling} />
+                                    </VedtakBegrunnelserProvider>
+                                )}
+                                <VedtaksperioderMedBegrunnelser
+                                    fagsak={fagsak}
+                                    åpenBehandling={åpenBehandling}
+                                    erLesevisning={erLesevisning()}
+                                />
+                            </VedtaksbegrunnelseTeksterProvider>
                         )}
-                    </VedtakBegrunnelserProvider>
-                    <Knapp
-                        mini={true}
-                        onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
-                        children={'Vis vedtaksbrev'}
-                    />
-                    {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
+
+                        <IkonKnapp
+                            id={'forhandsvis-vedtaksbrev'}
+                            erLesevisning={false}
+                            label={'Vis vedtaksbrev'}
+                            ikon={<DokumentIkon />}
+                            onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
+                            spinner={vedtaksbrev.status === RessursStatus.HENTER}
+                            knappPosisjon={'venstre'}
+                            mini={true}
+                        />
+                        {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
+                    </Container>
                     {visModal && (
                         <UIModalWrapper
                             modal={{

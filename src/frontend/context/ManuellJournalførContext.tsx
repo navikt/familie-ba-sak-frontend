@@ -25,12 +25,15 @@ import {
     JournalpostKanal,
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
+import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
-import familieDayjs, { familieDayjsDiff } from '../utils/familieDayjs';
+import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
+import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
+    const { hentFagsakForPerson } = useFagsakRessurser();
     const history = useHistory();
     const { request } = useHttp();
     const { oppgaveId } = useParams<{ oppgaveId: string }>();
@@ -53,7 +56,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         verdi: false,
     });
 
-    const behandlingstype = useFelt<Behandlingstype | ''>({
+    const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
         verdi: '',
         valideringsfunksjon: felt => {
             return felt.verdi !== ''
@@ -94,7 +97,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             avsenderNavn: string;
             avsenderIdent: string;
             knyttTilNyBehandling: boolean;
-            behandlingstype: Behandlingstype | '';
+            behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
             tilknyttedeBehandlingIder: number[];
         },
@@ -175,18 +178,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         nullstillSkjema();
     };
 
-    const hentFagsak = async (personId: string) => {
-        return request<{ personIdent: string }, IFagsak | undefined>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
-            data: {
-                personIdent: personId,
-            },
-        }).then((fagsak: Ressurs<IFagsak | undefined>) => {
-            return fagsak;
-        });
-    };
-
     const endreBruker = async (personId: string) => {
         const hentetPerson = await request<void, IPersonInfo>({
             method: 'GET',
@@ -216,7 +207,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }
         }
 
-        const restFagsak = await hentFagsak(hentetPerson.data.personIdent);
+        const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent);
         if (restFagsak.status === RessursStatus.SUKSESS) {
             skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
             settFagsak(restFagsak.data);
@@ -315,10 +306,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         return dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.data.fagsak?.behandlinger.length
             ? dataForManuellJournalføring.data.fagsak.behandlinger.sort((a, b) =>
-                  familieDayjsDiff(
-                      familieDayjs(b.opprettetTidspunkt),
-                      familieDayjs(a.opprettetTidspunkt)
-                  )
+                  kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
               )
             : [];
     };

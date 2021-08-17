@@ -13,6 +13,7 @@ import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IFagsak } from '../../typer/fagsak';
 import { useAmplitude } from '../../utils/amplitude';
+import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
 import TilkjentYtelse from './TilkjentYtelse/TilkjentYtelse';
@@ -52,6 +53,18 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 <SøknadProvider åpenBehandling={åpenBehandling.data}>
                                     <RegistrerSøknad />
                                 </SøknadProvider>
+                            );
+                        }}
+                    />
+                    <Route
+                        exact={true}
+                        path="/fagsak/:fagsakId/:behandlingId/filtreringsregler"
+                        render={() => {
+                            return (
+                                <Filtreringsregler
+                                    fagsak={fagsak}
+                                    åpenBehandling={åpenBehandling.data}
+                                />
                             );
                         }}
                     />

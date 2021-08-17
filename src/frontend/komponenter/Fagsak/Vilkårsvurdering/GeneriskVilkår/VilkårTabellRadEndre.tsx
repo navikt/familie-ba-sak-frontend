@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { CheckboxGruppe, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import {
     FamilieKnapp,
@@ -36,6 +36,9 @@ import {
 } from '../../../../typer/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
+import DeltBostedCheckbox from './DeltBostedCheckbox';
+import MedlemskapCheckbox from './MedlemskapCheckbox';
+import SkjønnsvurderingCheckbox from './SkjønnsvurderingCheckbox';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
@@ -82,6 +85,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settRedigerbartVilkår,
     settEkspandertVilkår,
 }) => {
+    const { toggles } = useApp();
+
     const {
         vilkårsvurdering,
         putVilkår,
@@ -92,13 +97,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
-    const { toggles } = useApp();
     const leseVisning = erLesevisning();
-    const årsakErIkkeSøknad =
-        åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD;
-
-    const visAvslag = toggles[ToggleNavn.visAvslag];
+    const årsakErSøknad =
+        åpenBehandling.status !== RessursStatus.SUKSESS ||
+        åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
@@ -204,6 +206,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
+    const erBegrunnelsePåkrevd = (): boolean =>
+        redigerbartVilkår.verdi.erSkjønnsmessigVurdert ||
+        (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert) ||
+        (toggles[ToggleNavn.brukErDeltBosted] && redigerbartVilkår.verdi.erDeltBosted);
+
     return (
         <SkjemaGruppe
             feil={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
@@ -265,9 +272,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-                {visAvslag &&
-                    redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                    !årsakErIkkeSøknad && (
+                {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                    årsakErSøknad && (
                         <AvslagSkjema
                             redigerbartVilkår={redigerbartVilkår}
                             settRedigerbartVilkår={settRedigerbartVilkår}
@@ -275,6 +281,31 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                         />
                     )}
+
+                <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
+                    <SkjønnsvurderingCheckbox
+                        redigerbartVilkår={redigerbartVilkår}
+                        settRedigerbartVilkår={settRedigerbartVilkår}
+                        settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                    />
+                    {toggles[ToggleNavn.medlemskap] &&
+                        redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
+                            <MedlemskapCheckbox
+                                redigerbartVilkår={redigerbartVilkår}
+                                settRedigerbartVilkår={settRedigerbartVilkår}
+                                settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                            />
+                        )}
+                    {toggles[ToggleNavn.brukErDeltBosted] &&
+                        redigerbartVilkår.verdi.vilkårType === VilkårType.BOR_MED_SØKER && (
+                            <DeltBostedCheckbox
+                                redigerbartVilkår={redigerbartVilkår}
+                                settRedigerbartVilkår={settRedigerbartVilkår}
+                                settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                            />
+                        )}
+                </CheckboxGruppe>
+
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
@@ -286,7 +317,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     erLesevisning={leseVisning}
                     defaultValue={redigerbartVilkår.verdi.begrunnelse.verdi}
                     id={vilkårBegrunnelseFeilmeldingId(redigerbartVilkår.verdi)}
-                    label={'Begrunnelse (valgfri)'}
+                    label={`Begrunnelse ${erBegrunnelsePåkrevd() ? '' : '(valgfri)'}`}
                     textareaClass={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     value={redigerbartVilkår.verdi.begrunnelse.verdi}

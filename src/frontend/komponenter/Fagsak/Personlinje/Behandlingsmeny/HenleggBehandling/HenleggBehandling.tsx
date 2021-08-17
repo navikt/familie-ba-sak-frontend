@@ -15,8 +15,8 @@ import { useBehandling } from '../../../../../context/BehandlingContext';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
 import {
     BehandlingSteg,
-    henleggelseÅrsak,
-    HenleggelseÅrsak,
+    henleggÅrsak,
+    HenleggÅrsak,
     IBehandling,
 } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
@@ -33,8 +33,8 @@ interface IProps {
     behandling: IBehandling;
 }
 
-interface HenleggelseÅrsakSelect extends HTMLSelectElement {
-    value: HenleggelseÅrsak | '';
+interface HenleggÅrsakSelect extends HTMLSelectElement {
+    value: HenleggÅrsak | '';
 }
 
 const StyledVeivalgTekst = styled(Normaltekst)`
@@ -116,7 +116,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                                     url: `/familie-ba-sak/api/dokument/forhaandsvis-brev/${behandlingId}`,
                                 });
                             }}
-                            visLenke={skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET}
+                            visLenke={skjema.felter.årsak.verdi === HenleggÅrsak.SØKNAD_TRUKKET}
                         >
                             Forhåndsvis
                         </StyledLenke>,
@@ -137,7 +137,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                             spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             children={
-                                skjema.felter.årsak.verdi === HenleggelseÅrsak.SØKNAD_TRUKKET
+                                skjema.felter.årsak.verdi === HenleggÅrsak.SØKNAD_TRUKKET
                                     ? 'Bekreft og send brev'
                                     : 'Bekreft'
                             }
@@ -164,21 +164,21 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
                         {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={'Velg årsak'}
                         value={skjema.felter.årsak.verdi}
-                        onChange={(event: React.ChangeEvent<HenleggelseÅrsakSelect>): void => {
+                        onChange={(event: React.ChangeEvent<HenleggÅrsakSelect>): void => {
                             skjema.felter.årsak.onChange(event.target.value);
                         }}
                     >
                         <option disabled={true} value={''}>
                             Velg
                         </option>
-                        {Object.values(HenleggelseÅrsak).map(årsak => {
+                        {Object.values(HenleggÅrsak).map(årsak => {
                             return (
                                 <option
                                     key={årsak}
                                     aria-selected={skjema.felter.årsak.verdi === årsak}
                                     value={årsak}
                                 >
-                                    {henleggelseÅrsak[årsak]}
+                                    {henleggÅrsak[årsak]}
                                 </option>
                             );
                         })}
@@ -223,7 +223,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsak, behan
             >
                 <StyledVeivalgTekst>
                     <StyledVeivalgIkon />
-                    {årsak === HenleggelseÅrsak.SØKNAD_TRUKKET
+                    {årsak === HenleggÅrsak.SØKNAD_TRUKKET
                         ? 'Behandlingen er henlagt og brev til bruker er sendt'
                         : 'Behandlingen er henlagt'}
                 </StyledVeivalgTekst>

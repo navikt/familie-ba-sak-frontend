@@ -1,44 +1,69 @@
-import { YtelseType } from '../../../typer/beregning';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
+import { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../typer/vedtak';
+import {
+    IRestVedtaksbegrunnelse,
+    IVedtaksperiodeMedBegrunnelser,
+    Vedtaksperiodetype,
+} from '../../../typer/vedtaksperiode';
+import { FamilieIsoDate } from '../../kalender';
 
 interface IMockVedtaksperiode {
-    periodeFom?: string;
-    periodeTom?: string;
+    fom?: FamilieIsoDate;
+    tom?: FamilieIsoDate;
+    begrunnelser?: IRestVedtaksbegrunnelse[];
 }
 
-export const mockUtbetalingsperiode = ({
-    periodeFom = '2020-01-01',
-    periodeTom = '2020-02-28',
-}: IMockVedtaksperiode = {}): Vedtaksperiode => {
+const mockBegrunnelse = (begrunnelseSpesifikasjon: VedtakBegrunnelse): IRestVedtaksbegrunnelse => {
     return {
-        periodeFom,
-        periodeTom,
-        vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
-        utbetalingsperiodeDetaljer: [],
-        ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
-        antallBarn: 1,
-        utbetaltPerMnd: 1054,
+        vedtakBegrunnelseSpesifikasjon: begrunnelseSpesifikasjon,
+        vedtakBegrunnelseType: VedtakBegrunnelseType.INNVILGELSE,
+        personIdenter: ['12345678910'],
+    };
+};
+
+export const mockUtbetalingsperiode = ({
+    fom = '2020-01-01',
+    tom = '2020-02-28',
+    begrunnelser = [mockBegrunnelse(VedtakBegrunnelse.INNVILGET_BOR_HOS_SØKER)],
+}: IMockVedtaksperiode = {}): IVedtaksperiodeMedBegrunnelser => {
+    return {
+        id: 0,
+        fom,
+        tom,
+        type: Vedtaksperiodetype.UTBETALING,
+        begrunnelser,
+        fritekster: [],
+        gyldigeBegrunnelser: [],
     };
 };
 
 export const mockOpphørsperiode = ({
-    periodeFom = '2020-03-01',
-    periodeTom = '',
-}: IMockVedtaksperiode = {}): Vedtaksperiode => {
+    fom = '2020-03-01',
+    tom = '',
+    begrunnelser = [mockBegrunnelse(VedtakBegrunnelse.OPPHØR_IKKE_MOTTATT_OPPLYSNINGER)],
+}: IMockVedtaksperiode = {}): IVedtaksperiodeMedBegrunnelser => {
     return {
-        periodeFom,
-        periodeTom,
-        vedtaksperiodetype: Vedtaksperiodetype.OPPHØR,
+        id: 0,
+        fom,
+        tom,
+        type: Vedtaksperiodetype.OPPHØR,
+        begrunnelser,
+        fritekster: [],
+        gyldigeBegrunnelser: [],
     };
 };
 
-export const mockAvslagssperiode = ({
-    periodeFom = '2019-06-01',
-    periodeTom = '2019-06-30',
-}: IMockVedtaksperiode = {}): Vedtaksperiode => {
+export const mockAvslagsperiode = ({
+    fom = '2019-06-01',
+    tom = '2019-06-30',
+    begrunnelser = [mockBegrunnelse(VedtakBegrunnelse.AVSLAG_MEDLEM_I_FOLKETRYGDEN)],
+}: IMockVedtaksperiode = {}): IVedtaksperiodeMedBegrunnelser => {
     return {
-        periodeFom,
-        periodeTom,
-        vedtaksperiodetype: Vedtaksperiodetype.AVSLAG,
+        id: 0,
+        fom,
+        tom,
+        type: Vedtaksperiodetype.AVSLAG,
+        begrunnelser,
+        fritekster: [],
+        gyldigeBegrunnelser: [],
     };
 };

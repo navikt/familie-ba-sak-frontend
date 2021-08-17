@@ -8,6 +8,7 @@ import Visittkort from '@navikt/familie-visittkort';
 import { useApp } from '../../../context/AppContext';
 import { IFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { formaterPersonIdent, hentAlder } from '../../../utils/formatter';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
@@ -18,7 +19,7 @@ interface IProps {
 }
 
 const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    const { harInnloggetSaksbehandlerSkrivetilgang, toggles } = useApp();
     return (
         <Visittkort
             navn={bruker.navn}
@@ -32,6 +33,11 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
             <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/saksoversikt`}>
                 <Normaltekst>Gå til saksoversikt</Normaltekst>
             </Lenke>
+            {toggles[ToggleNavn.journalpostliste] && (
+                <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/dokumentliste`}>
+                    <Normaltekst>Dokumentliste</Normaltekst>
+                </Lenke>
+            )}
 
             {harInnloggetSaksbehandlerSkrivetilgang() && <Behandlingsmeny fagsak={fagsak} />}
         </Visittkort>

@@ -1,12 +1,16 @@
 import React from 'react';
 
-import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
-import familieDayjs, { familieDayjsDiff } from '../../../../utils/familieDayjs';
-import { datoformat } from '../../../../utils/formatter';
+import {
+    kalenderDatoMedFallback,
+    kalenderDatoTilDate,
+    kalenderDiff,
+    TIDENES_MORGEN,
+} from '../../../../utils/kalender';
 import AvslagBegrunnelsePanel from './AvslagBegrunnelsePanel';
+import { FritekstVedtakBegrunnelserProvider } from './Context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from './Context/VedtakBegrunnelserContext';
 import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 
 interface IAvslagTabell {
@@ -19,9 +23,9 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
     const sorterTommePerioderSist = (a: Vedtaksperiode, b: Vedtaksperiode) =>
         !a.periodeFom && !a.periodeTom
             ? 1
-            : familieDayjsDiff(
-                  familieDayjs(a.periodeFom, datoformat.ISO_DAG),
-                  familieDayjs(b.periodeFom, datoformat.ISO_DAG)
+            : kalenderDiff(
+                  kalenderDatoTilDate(kalenderDatoMedFallback(a.periodeFom, TIDENES_MORGEN)),
+                  kalenderDatoTilDate(kalenderDatoMedFallback(b.periodeFom, TIDENES_MORGEN))
               );
 
     return avslagBegrunnelser.length ? (
@@ -43,7 +47,10 @@ const AvslagBegrunnelser: React.FC<IAvslagTabell> = ({ åpenBehandling }) => {
                         vedtaksperiode={periode}
                         behandlingstype={åpenBehandling.type}
                     >
-                        <AvslagBegrunnelsePanel vedtaksperiode={periode} />
+                        <AvslagBegrunnelsePanel
+                            vedtaksperiode={periode}
+                            åpenBehandling={åpenBehandling}
+                        />
                     </FritekstVedtakBegrunnelserProvider>
                 ))}
         </>

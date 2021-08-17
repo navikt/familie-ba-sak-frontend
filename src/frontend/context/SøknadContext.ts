@@ -3,15 +3,37 @@ import React from 'react';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
 
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { FamilieRelasjonRolle, IFamilierelasjon } from '../typer/person';
+import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import { IBarnMedOpplysninger, IRestRegistrerSøknad, Målform } from '../typer/søknad';
+import {
+    erEtter,
+    kalenderDatoFraDate,
+    kalenderDatoMedFallback,
+    TIDENES_ENDE,
+} from '../utils/kalender';
 import { useBehandling } from './BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
+
+export const hentBarnMedLøpendeUtbetaling = (fagsak: IFagsak) =>
+    fagsak.gjeldendeUtbetalingsperioder
+        .filter(utbetalingsperiode =>
+            erEtter(
+                kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE),
+                kalenderDatoFraDate(new Date())
+            )
+        )
+        .reduce((acc, utbetalingsperiode) => {
+            utbetalingsperiode.utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj =>
+                acc.add(utbetalingsperiodeDetalj.person.personIdent)
+            );
+
+            return acc;
+        }, new Set());
 
 const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
@@ -20,6 +42,11 @@ const [SøknadProvider, useSøknad] = createUseContext(
         const history = useHistory();
         const { bruker } = useFagsakRessurser();
         const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
+
+        const barnMedLøpendeUtbetaling =
+            fagsak.status === RessursStatus.SUKSESS
+                ? hentBarnMedLøpendeUtbetaling(fagsak.data)
+                : new Set();
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
@@ -36,10 +63,14 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 }),
                 barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
                     verdi: [],
-                    valideringsfunksjon: felt =>
-                        felt.verdi.some((barn: IBarnMedOpplysninger) => barn.inkludertISøknaden)
+                    valideringsfunksjon: (felt, avhengigheter?: Avhengigheter) => {
+                        return felt.verdi.some(
+                            (barn: IBarnMedOpplysninger) => barn.inkludertISøknaden
+                        ) || (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
                             ? ok(felt)
-                            : feil(felt, 'Ingen av barna er valgt.'),
+                            : feil(felt, 'Ingen av barna er valgt.');
+                    },
+                    avhengigheter: { barnMedLøpendeUtbetaling },
                 }),
                 endringAvOpplysningerBegrunnelse: useFelt<string>({
                     verdi: '',
@@ -59,13 +90,13 @@ const [SøknadProvider, useSøknad] = createUseContext(
             if (bruker.status === RessursStatus.SUKSESS) {
                 nullstillSkjema();
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                    bruker.data.familierelasjoner
+                    bruker.data.forelderBarnRelasjon
                         .filter(
-                            (relasjon: IFamilierelasjon) =>
-                                relasjon.relasjonRolle === FamilieRelasjonRolle.BARN
+                            (relasjon: IForelderBarnRelasjon) =>
+                                relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
                         )
                         .map(
-                            (relasjon: IFamilierelasjon): IBarnMedOpplysninger => ({
+                            (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
                                 inkludertISøknaden: false,
                                 ident: relasjon.personIdent,
                                 navn: relasjon.navn,
@@ -160,6 +191,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
         };
 
         return {
+            barnMedLøpendeUtbetaling,
             hentFeilTilOppsummering,
             nesteAction,
             settVisBekreftModal,

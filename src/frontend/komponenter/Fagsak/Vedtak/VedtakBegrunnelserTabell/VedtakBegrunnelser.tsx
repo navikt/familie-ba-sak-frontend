@@ -1,11 +1,16 @@
 import React from 'react';
 
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useBehandling } from '../../../../context/BehandlingContext';
-import { FritekstVedtakBegrunnelserProvider } from '../../../../context/FritekstVedtakBegrunnelserContext';
-import { useVedtakBegrunnelser } from '../../../../context/VedtakBegrunnelserContext';
 import { IBehandling } from '../../../../typer/behandling';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../typer/vedtaksperiode';
+import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../utils/vedtakUtils';
+import { FritekstVedtakBegrunnelserProvider } from './Context/FritekstVedtakBegrunnelserContext';
+import { useVedtakBegrunnelser } from './Context/VedtakBegrunnelserContext';
+import { useVedtaksbegrunnelseTekster } from './Context/VedtaksbegrunnelseTeksterContext';
 import OverskriftMedHjelpetekst from './Felles/OverskriftMedHjelpetekst';
 import VedtakBegrunnelsePanel from './VedtakBegrunnelsePanel';
 
@@ -16,23 +21,27 @@ interface IVedtakBegrunnelserTabell {
 const VedtakBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({ åpenBehandling }) => {
     const { erLesevisning } = useBehandling();
     const { vedtakBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
-    const utbetalingsperioder = åpenBehandling.vedtaksperioder.filter(
-        (periode: Vedtaksperiode) => periode.vedtaksperiodetype !== Vedtaksperiodetype.AVSLAG
-    );
-    const harVedtaksperioder = utbetalingsperioder.length > 0;
     const vedtaksperioderMedBegrunnelseBehov = filtrerOgSorterPerioderMedBegrunnelseBehov(
-        utbetalingsperioder,
+        åpenBehandling.vedtaksperioder,
         vedtakBegrunnelser,
         erLesevisning()
     );
 
-    return harVedtaksperioder ? (
+    if (
+        vedtaksbegrunnelseTekster.status === RessursStatus.FEILET ||
+        vedtaksbegrunnelseTekster.status === RessursStatus.FUNKSJONELL_FEIL
+    ) {
+        return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vedtak.</AlertStripeFeil>;
+    }
+
+    return vedtaksperioderMedBegrunnelseBehov.length > 0 ? (
         <>
             <OverskriftMedHjelpetekst
                 overskrift={'Begrunnelser i vedtaksbrev'}
                 hjelpetekst={
-                    'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør.'
+                    'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør'
                 }
             />
             {vedtaksperioderMedBegrunnelseBehov.map((vedtaksperiode: Vedtaksperiode) => (

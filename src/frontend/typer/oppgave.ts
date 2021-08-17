@@ -4,6 +4,7 @@ import { INøkkelPar } from './common';
 
 export interface IFinnOppgaveRequest {
     behandlingstema?: string;
+    behandlingstype?: string;
     oppgavetype?: string;
     enhet?: string;
     journalpostId?: string;
@@ -34,6 +35,7 @@ export interface IOppgave {
     saksreferanse: string;
     aktoerId: string;
     behandlingstema: string;
+    behandlingstype: string;
     beskrivelse: string;
     fristFerdigstillelse: string;
     oppgavetype: string;
@@ -73,7 +75,7 @@ export const enhetFilter: INøkkelPar = {
     E4820: { id: 'E4820', navn: '4820 Vadsø' },
     E4833: { id: 'E4833', navn: '4833 Oslo' },
     E4842: { id: 'E4842', navn: '4842 Stord' },
-    E4847: { id: 'E4847', navn: '4847 Levanger-Steinkjer' },
+    E4817: { id: 'E4817', navn: '4817 Steinkjer' },
 };
 
 export enum SaksbehandlerFilter {
@@ -106,6 +108,18 @@ export const gjelderFilter: INøkkelPar = {
     ab0180: { id: 'ab0180', navn: 'Ordinær' },
     ab0096: { id: 'ab0096', navn: 'Utvidet' },
     ab0058: { id: 'ab0058', navn: 'EØS' },
+};
+
+export enum BehandlingstypeFilter {
+    ALLE = 'ALLE',
+    ae0106 = 'ae0106',
+    ae0161 = 'ae0161',
+}
+
+export const behandlingstypeFilter: INøkkelPar = {
+    ALLE: { id: 'ALLE', navn: 'Alle' },
+    ae0106: { id: 'ae0106', navn: 'Utland' },
+    ae0161: { id: 'ae0161', navn: 'Tilbakekreving' },
 };
 
 export enum OppgavetypeFilter {
@@ -150,20 +164,10 @@ export const oppgaveTypeFilter: INøkkelPar = {
     SVAR_IK_MOT: { id: 'SVAR_IK_MOT', navn: 'Svar ikke mottatt' },
     VUR: { id: 'VUR', navn: 'Vurder dokument' },
     VURD_HENV: { id: 'VURD_HENV', navn: 'Vurder henvendelse' },
+    VURD_LIVS: { id: 'VURD_LIVS', navn: 'Vurder livshendelse' },
     VUR_KONS_YTE: { id: 'VUR_KONS_YTE', navn: 'Vurder konsekvens for ytelse' },
     VUR_SVAR: { id: 'VUR_SVAR', navn: 'Vurder svar' },
 };
-
-export enum EnhetsmappeFilter {
-    ALLE = 'ALLE',
-    Uplasserte = 'Uplasserte',
-    EM10 = '10 Søknader-klar til behandling',
-    EM20 = '20 Avventer dokumentasjon',
-    EM30 = '30 Klager klar til behandling',
-    EM40 = '40 Revurdering klar til behandling',
-    EM41 = '41 Revurdering',
-    EM50 = '50 Tilbakekreving klar til behandling',
-}
 
 export enum PrioritetFilter {
     ALLE = 'ALLE',

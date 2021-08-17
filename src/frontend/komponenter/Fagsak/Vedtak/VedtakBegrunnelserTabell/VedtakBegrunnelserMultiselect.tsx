@@ -2,8 +2,6 @@ import React, { CSSProperties } from 'react';
 
 import styled from 'styled-components';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import navFarger from 'nav-frontend-core';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import {
@@ -17,23 +15,24 @@ import {
 import { RessursStatus } from '@navikt/familie-typer';
 
 import {
-    IVedtakBegrunnelseSubmit,
-    useVedtakBegrunnelser,
-} from '../../../../context/VedtakBegrunnelserContext';
-import { lagPeriodeId } from '../../../../typer/periode';
-import {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
 } from '../../../../typer/vedtak';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { IRestPersonResultat } from '../../../../typer/vilkår';
+import { lagPeriodeId } from '../../../../utils/kalender';
 import {
     finnVedtakBegrunnelseType,
     hentBakgrunnsfarge,
     hentBorderfarge,
 } from '../../../../utils/vedtakUtils';
-import useVedtakBegrunnelseMultiselect from './useVedtakBegrunnelseMultiselect';
+import {
+    IVedtakBegrunnelseSubmit,
+    useVedtakBegrunnelser,
+} from './Context/VedtakBegrunnelserContext';
+import { useVedtaksbegrunnelseTekster } from './Context/VedtaksbegrunnelseTeksterContext';
+import useVedtakBegrunnelseMultiselect from './Hooks/useVedtakBegrunnelseMultiselect';
 
 interface IVedtakBegrunnelseMultiselect {
     erLesevisning: boolean;
@@ -54,7 +53,8 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
         fom: vedtaksperiode.periodeFom,
         tom: vedtaksperiode.periodeTom,
     };
-    const { vedtakBegrunnelseSubmit, vilkårBegrunnelser } = useVedtakBegrunnelser();
+    const { vedtakBegrunnelseSubmit } = useVedtakBegrunnelser();
+    const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
     const {
         grupperteBegrunnelser,
         onChangeBegrunnelse,
@@ -68,10 +68,6 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
             : undefined;
 
     const vedtakBegrunnelseId = `vedtakbegrunnelser_${lagPeriodeId(periode)}`;
-
-    if (vilkårBegrunnelser.status === RessursStatus.FEILET) {
-        return <AlertStripeFeil>Klarte ikke å hente inn begrunnelser for vilkår.</AlertStripeFeil>;
-    }
 
     return (
         <FamilieReactSelect
@@ -90,7 +86,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                     const vedtakBegrunnelseType:
                         | VedtakBegrunnelseType
                         | undefined = finnVedtakBegrunnelseType(
-                        vilkårBegrunnelser,
+                        vedtaksbegrunnelseTekster,
                         props.data.value as VedtakBegrunnelse
                     );
 
@@ -107,20 +103,12 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                     textOverflow: 'hidden',
                     overflow: 'hidden',
                 }),
-                multiValueRemove: (provided: CSSProperties) => ({
-                    ...provided,
-                    ':hover': {
-                        backgroundColor: navFarger.navBla,
-                        color: 'white',
-                        borderRadius: '0 .4rem .4rem 0',
-                    },
-                }),
             }}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             isDisabled={erLesevisning || vedtakBegrunnelseSubmit.status === RessursStatus.HENTER}
             feil={submitForPeriode?.feilmelding}
-            label="Begrunnelse(r) i brev"
+            label="Velg standardtekst i brev"
             creatable={false}
             erLesevisning={erLesevisning}
             isMulti={true}
@@ -132,7 +120,7 @@ const VedtakBegrunnelserMultiselect: React.FC<IVedtakBegrunnelseMultiselect> = (
                 formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption, true>
             ) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
-                    vilkårBegrunnelser,
+                    vedtaksbegrunnelseTekster,
                     option.value as VedtakBegrunnelse
                 );
 

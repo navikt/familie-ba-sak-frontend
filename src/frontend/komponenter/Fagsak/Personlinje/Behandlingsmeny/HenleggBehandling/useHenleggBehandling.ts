@@ -4,7 +4,7 @@ import { useSkjema, useFelt, FeltState, feil, ok } from '@navikt/familie-skjema'
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
-import { HenleggelseÅrsak } from '../../../../../typer/behandling';
+import { HenleggÅrsak } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
 import {
     Brevmal,
@@ -19,7 +19,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
     const { fagsak, settFagsak } = useFagsakRessurser();
     const { onSubmit, skjema, nullstillSkjema } = useSkjema<
         {
-            årsak: HenleggelseÅrsak | '';
+            årsak: HenleggÅrsak | '';
             begrunnelse: '';
         },
         IFagsak
@@ -27,7 +27,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         felter: {
             årsak: useFelt({
                 verdi: '',
-                valideringsfunksjon: (felt: FeltState<HenleggelseÅrsak | ''>) =>
+                valideringsfunksjon: (felt: FeltState<HenleggÅrsak | ''>) =>
                     felt.verdi !== '' ? ok(felt) : feil(felt, 'Du må velge årsak'),
             }),
             begrunnelse: useFelt({

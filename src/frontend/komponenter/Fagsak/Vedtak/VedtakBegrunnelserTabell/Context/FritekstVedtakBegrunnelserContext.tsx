@@ -8,23 +8,20 @@ import { useHttp } from '@navikt/familie-http';
 import { FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { Behandlingstype } from '../typer/behandling';
-import { IFagsak } from '../typer/fagsak';
-import { IGrunnlagPerson, PersonType } from '../typer/person';
-import { Målform } from '../typer/søknad';
+import { useBehandling } from '../../../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { Fritekster } from '../../../../../typer/begrunnelser';
+import { Behandlingstype } from '../../../../../typer/behandling';
+import { IFagsak } from '../../../../../typer/fagsak';
+import { IGrunnlagPerson, PersonType } from '../../../../../typer/person';
+import { Målform } from '../../../../../typer/søknad';
 import {
     IRestPostFritekstVedtakBegrunnelser,
     IRestVedtakBegrunnelse,
     VedtakBegrunnelse,
-} from '../typer/vedtak';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../typer/vedtaksperiode';
-import { useBehandling } from './BehandlingContext';
-import { useFagsakRessurser } from './FagsakContext';
+} from '../../../../../typer/vedtak';
+import { Vedtaksperiode, Vedtaksperiodetype } from '../../../../../typer/vedtaksperiode';
 import { useVedtakBegrunnelser } from './VedtakBegrunnelserContext';
-
-export interface Fritekster {
-    [key: string]: FeltState<string>;
-}
 
 export interface FriteksterFeilmelding {
     [key: string]: string;
@@ -84,21 +81,14 @@ const [FritekstVedtakBegrunnelserProvider, useFritekstVedtakBegrunnelser] = cons
 
         const vedtakBegrunnelsenForPeriodeType = (vedtaksperiodetype: Vedtaksperiodetype) => {
             switch (vedtaksperiodetype) {
-                case Vedtaksperiodetype.OPPHØR: {
+                case Vedtaksperiodetype.OPPHØR:
                     return VedtakBegrunnelse.OPPHØR_FRITEKST;
-                    break;
-                }
-                case Vedtaksperiodetype.AVSLAG: {
+                case Vedtaksperiodetype.AVSLAG:
                     return VedtakBegrunnelse.AVSLAG_FRITEKST;
-                    break;
-                }
-                case Vedtaksperiodetype.UTBETALING: {
+                case Vedtaksperiodetype.UTBETALING:
                     return VedtakBegrunnelse.REDUKSJON_FRITEKST;
-                    break;
-                }
-                default: {
-                    return undefined;
-                }
+                case Vedtaksperiodetype.FORTSATT_INNVILGET:
+                    return VedtakBegrunnelse.FORTSATT_INNVILGET_FRITEKST;
             }
         };
 

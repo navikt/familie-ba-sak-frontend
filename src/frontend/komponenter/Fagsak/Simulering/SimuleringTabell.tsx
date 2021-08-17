@@ -1,25 +1,22 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import dayjs from 'dayjs';
 import styled from 'styled-components';
 import 'nav-frontend-tabell-style';
 
 import navFarger from 'nav-frontend-core';
-import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
-import { useSimulering } from '../../../context/SimuleringContext';
 import { NavigeringsRetning } from '../../../context/TidslinjeContext';
 import { ISimuleringDTO, ISimuleringPeriode } from '../../../typer/simulering';
-import familieDayjs from '../../../utils/familieDayjs';
-import { formaterBeløp } from '../../../utils/formatter';
+import { datoformat, formaterBeløp, formaterIsoDato } from '../../../utils/formatter';
+import { periodeToString, kalenderDato, erEtter } from '../../../utils/kalender';
+import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../utils/simulering';
 import TidslinjeNavigering from '../TilkjentYtelse/TidslinjeNavigering';
 
 const Årsvelger = styled.div`
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 1rem;
+    flex-direction: column;
 `;
 
 const StyledTable = styled.table(
@@ -31,6 +28,10 @@ const StyledTable = styled.table(
 );
 
 const HøyresiltTd = styled.td`
+    text-align: right !important;
+`;
+
+const HøyresiltTh = styled.th`
     text-align: right !important;
 `;
 
@@ -58,7 +59,7 @@ const Skillelinje = styled.td`
     hr {
         border: none;
         border-right: 1px dashed ${navFarger.navGra60};
-        height: 3.25rem;
+        height: ${(props: { erHeader?: boolean }) => (props.erHeader ? '3.875rem' : '3.25rem')};
         position: absolute;
         top: -0.375rem;
     }
@@ -85,76 +86,71 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         fom,
         perioder: perioderUtenTommeSimuleringer,
         tomDatoNestePeriode,
+        tomSisteUtbetaling,
     } = simulering;
-    const { hentPerioderMedTommePerioder, hentÅrISimuleringen } = useSimulering();
-    const årISimuleringen = hentÅrISimuleringen(perioderUtenTommeSimuleringer);
-    const perioder = hentPerioderMedTommePerioder(perioderUtenTommeSimuleringer);
+    const perioder = hentPeriodelisteMedTommePerioder(perioderUtenTommeSimuleringer);
+    const årISimuleringen = hentÅrISimuleringen(perioder);
     const [indexFramvistÅr, settIndexFramistÅr] = useState(årISimuleringen.length - 1);
     const aktueltÅr = årISimuleringen[indexFramvistÅr];
+    const erMerEnn12MånederISimulering = perioder.length > 12;
 
     const kapitaliserTekst = (tekst: string): string => {
         return tekst.charAt(0).toUpperCase() + tekst.slice(1).toLowerCase();
     };
 
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
-        fomDatoNestePeriode && dayjs(periode.fom).isAfter(dayjs(fomDatoNestePeriode));
+        fomDatoNestePeriode &&
+        erEtter(kalenderDato(periode.fom), kalenderDato(fomDatoNestePeriode));
 
     const periodeSkalVisesITabell = (periode: ISimuleringPeriode) =>
-        !periodeErEtterNesteUtbetalingsPeriode(periode) && dayjs(periode.fom).year() === aktueltÅr;
+        !periodeErEtterNesteUtbetalingsPeriode(periode) &&
+        (!erMerEnn12MånederISimulering || kalenderDato(periode.fom).år === aktueltÅr);
 
     const formaterBeløpUtenValutakode = (beløp?: number) =>
         beløp ? formaterBeløp(beløp).slice(0, -3) : '-';
 
-    const antallPeriodetIFremvistÅr = perioderUtenTommeSimuleringer.filter(p =>
-        periodeSkalVisesITabell(p)
-    ).length;
+    const antallPerioderIFremvistÅr = perioder.filter(p => periodeSkalVisesITabell(p)).length;
 
-    const erISisteÅrAvPerioden =
-        indexFramvistÅr === hentÅrISimuleringen(perioderUtenTommeSimuleringer).length - 1;
+    const erISisteÅrAvPerioden = indexFramvistÅr === hentÅrISimuleringen(perioder).length - 1;
 
     const tabellbredde =
         9.375 +
         (fomDatoNestePeriode && erISisteÅrAvPerioden ? 1.125 : 0) +
-        4.6875 * antallPeriodetIFremvistÅr;
+        4.6875 * antallPerioderIFremvistÅr;
 
-    const TabellSkillelinje = (props: { fomDatoPeriode: string }) => (
-        <>
-            {fomDatoNestePeriode === props.fomDatoPeriode && (
-                <Skillelinje>
-                    <hr />
-                </Skillelinje>
-            )}
-        </>
+    const erNestePeriode = (periode: ISimuleringPeriode) => periode.fom === fomDatoNestePeriode;
+
+    const TabellSkillelinje = (props: { erHeader?: boolean }) => (
+        <Skillelinje erHeader={props.erHeader}>
+            <hr />
+        </Skillelinje>
     );
+
+    const tilOgFraDatoForSimulering = `${periodeToString({
+        fom,
+        tom: tomDatoNestePeriode ?? tomSisteUtbetaling,
+    })}`;
 
     return (
         <>
             <SimuleringTabellOverskrift>
                 <Element>
-                    Simuleringsresultat{' '}
-                    {perioder.length > 1 &&
-                        `for perioden ${familieDayjs(fom).format('DD.MM.YYYY')} - ${familieDayjs(
-                            tomDatoNestePeriode
-                        ).format('DD.MM.YYYY')}`}
+                    Simuleringsresultat for{' '}
+                    {perioder.length === 1
+                        ? `${formaterIsoDato(perioder[0].fom, datoformat.MÅNED_ÅR_NAVN)}`
+                        : `perioden ${tilOgFraDatoForSimulering}`}
                 </Element>
             </SimuleringTabellOverskrift>
 
-            {årISimuleringen.length > 1 && (
-                <Årsvelger>
-                    <Undertittel>{årISimuleringen[indexFramvistÅr]}</Undertittel>
-                    <TidslinjeNavigering
-                        naviger={retning =>
-                            retning === NavigeringsRetning.VENSTRE
-                                ? settIndexFramistÅr(indexFramvistÅr - 1)
-                                : settIndexFramistÅr(indexFramvistÅr + 1)
-                        }
-                        kanNavigereTilHøyre={!erISisteÅrAvPerioden}
-                        kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
-                    />
-                </Årsvelger>
-            )}
-
-            <StyledTable className="tabell" bredde={tabellbredde}>
+            <StyledTable
+                aria-label={`Simuleringsresultat for ${
+                    erMerEnn12MånederISimulering
+                        ? aktueltÅr
+                        : `perioden ${tilOgFraDatoForSimulering}`
+                }`}
+                className="tabell"
+                bredde={tabellbredde}
+            >
                 <colgroup>
                     <VenstreKolonne />
                     {perioder.map(
@@ -173,19 +169,44 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
                 <thead>
                     <tr>
-                        <td />
+                        <td>
+                            {erMerEnn12MånederISimulering && (
+                                <Årsvelger>
+                                    <TidslinjeNavigering
+                                        naviger={retning =>
+                                            retning === NavigeringsRetning.VENSTRE
+                                                ? settIndexFramistÅr(indexFramvistÅr - 1)
+                                                : settIndexFramistÅr(indexFramvistÅr + 1)
+                                        }
+                                        kanNavigereTilHøyre={!erISisteÅrAvPerioden}
+                                        kanNavigereTilVenstre={!(indexFramvistÅr === 0)}
+                                        navigerTilHyøyreTittel={`Vis simuleringsresultat for ${
+                                            aktueltÅr + 1
+                                        }`}
+                                        navigerTilVenstreTittel={`Vis simuleringsresultat for ${
+                                            aktueltÅr - 1
+                                        }`}
+                                    >
+                                        <Undertekst>{årISimuleringen[indexFramvistÅr]}</Undertekst>
+                                    </TidslinjeNavigering>
+                                </Årsvelger>
+                            )}
+                        </td>
                         {perioder.map(
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'måned - ' + periode.fom}>
-                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
-                                        <th>
+                                        {erNestePeriode(periode) && <TabellSkillelinje erHeader />}
+                                        <HøyresiltTh>
                                             <Element>
                                                 {kapitaliserTekst(
-                                                    familieDayjs(periode.fom).format('MMM')
+                                                    formaterIsoDato(
+                                                        periode.fom,
+                                                        datoformat.MÅNED_NAVN
+                                                    )
                                                 )}
                                             </Element>
-                                        </th>
+                                        </HøyresiltTh>
                                     </React.Fragment>
                                 )
                         )}
@@ -199,7 +220,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'nytt beløp - ' + periode.fom}>
-                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
                                             <Normaltekst>
                                                 {formaterBeløpUtenValutakode(periode.nyttBeløp)}
@@ -215,7 +236,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'tidligere utbetalt - ' + periode.fom}>
-                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
                                             <Normaltekst>
                                                 {formaterBeløpUtenValutakode(
@@ -233,7 +254,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             periode =>
                                 periodeSkalVisesITabell(periode) && (
                                     <React.Fragment key={'resultat - ' + periode.fom}>
-                                        <TabellSkillelinje fomDatoPeriode={periode.fom} />
+                                        {erNestePeriode(periode) && <TabellSkillelinje />}
                                         <HøyresiltTd>
                                             {fomDatoNestePeriode === periode.fom ? (
                                                 <ElementMedFarge

@@ -1,6 +1,5 @@
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { IPeriode } from '../../../typer/periode';
 import { VedtakBegrunnelse } from '../../../typer/vedtak';
 import {
     IRestAnnenVurdering,
@@ -10,6 +9,7 @@ import {
     Resultat,
     VilkårType,
 } from '../../../typer/vilkår';
+import { IPeriode } from '../../kalender';
 
 interface IMockVilkårResultat {
     behandlingId?: number;
@@ -21,6 +21,9 @@ interface IMockVilkårResultat {
     endretAv?: string;
     erVurdert?: boolean;
     erAutomatiskVurdert?: boolean;
+    erSkjønnsmessigVurdert?: boolean;
+    erMedlemskapVurdert?: boolean;
+    erDeltBosted?: boolean;
     endretTidspunkt?: string;
 }
 
@@ -41,6 +44,9 @@ export const mockVilkårResultater = ({
     endretAv = 'VL',
     erVurdert = false,
     erAutomatiskVurdert = false,
+    erSkjønnsmessigVurdert = false,
+    erMedlemskapVurdert = false,
+    erDeltBosted = false,
     endretTidspunkt = '2020-03-19T09:08:56.8',
 }: IMockVilkårResultat = {}): IVilkårResultat => ({
     id,
@@ -51,6 +57,9 @@ export const mockVilkårResultater = ({
     endretAv,
     erVurdert,
     erAutomatiskVurdert,
+    erSkjønnsmessigVurdert,
+    erMedlemskapVurdert,
+    erDeltBosted,
     endretTidspunkt,
     behandlingId,
     avslagBegrunnelser: mockFeltstate<VedtakBegrunnelse[]>([]),
@@ -88,6 +97,9 @@ export const mockRestVilkårResultat = ({
     endretAv: 'VL',
     erVurdert: false,
     erAutomatiskVurdert: false,
+    erSkjønnsmessigVurdert: false,
+    erMedlemskapVurdert: false,
+    erDeltBosted: false,
     endretTidspunkt: '2020-03-19T09:08:56.8',
     behandlingId,
     avslagBegrunnelser: [],

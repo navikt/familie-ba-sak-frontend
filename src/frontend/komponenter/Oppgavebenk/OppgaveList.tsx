@@ -1,7 +1,6 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import { useHistory } from 'react-router';
 
 import Alertstripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
@@ -14,13 +13,13 @@ import { useOppgaver } from '../../context/OppgaverContext';
 import {
     enhetFilter,
     gjelderFilter,
+    behandlingstypeFilter,
     IOppgave,
-    OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
 } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
+import OppgaveDirektelenke from './OppgaveDirektelenke';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
@@ -31,8 +30,7 @@ const intDatoTilNorskDato = (intDato: string) => {
 
 const OppgaveList: React.FunctionComponent = () => {
     const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide } = useOppgaver();
-    const { innloggetSaksbehandler, sjekkTilgang } = useApp();
-    const history = useHistory();
+    const { innloggetSaksbehandler } = useApp();
 
     const onColumnSort = (felt: IOppgaveFelt) => {
         sortOppgave(felt.nøkkel, felt.order !== FeltSortOrder.ASCENDANT);
@@ -45,14 +43,6 @@ const OppgaveList: React.FunctionComponent = () => {
 
     const sortertClassName = (felt: IOppgaveFelt) =>
         felt.order !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
-
-    const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
-        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
-
-        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
-            history.push(`/oppgaver/journalfør/${oppgave.id}`);
-        }
-    };
 
     return (
         <div className={'oppgavelist'}>
@@ -128,6 +118,16 @@ const OppgaveList: React.FunctionComponent = () => {
                                         </td>
                                         <td
                                             className={sortertClassName(
+                                                oppgaveFelter.behandlingstype
+                                            )}
+                                        >
+                                            {oppg.behandlingstype
+                                                ? behandlingstypeFilter[oppg.behandlingstype]
+                                                      ?.navn ?? oppg.behandlingstype
+                                                : 'Ikke satt'}
+                                        </td>
+                                        <td
+                                            className={sortertClassName(
                                                 oppgaveFelter.fristFerdigstillelse
                                             )}
                                         >
@@ -168,18 +168,7 @@ const OppgaveList: React.FunctionComponent = () => {
                                             />
                                         </td>
                                         <td className={'handlinger'}>
-                                            {oppg.oppgavetype
-                                                ? oppgaveTypeFilter[oppg.oppgavetype]?.id ===
-                                                      OppgavetypeFilter.JFR && (
-                                                      <FamilieBaseKnapp
-                                                          key={'tiloppg'}
-                                                          onClick={() => {
-                                                              visTilgangsmodalEllerSendVidere(oppg);
-                                                          }}
-                                                          children={'Gå til oppg'}
-                                                      />
-                                                  )
-                                                : 'Ukjent'}
+                                            <OppgaveDirektelenke oppgave={oppg} />
                                         </td>
                                     </tr>
                                 ))}

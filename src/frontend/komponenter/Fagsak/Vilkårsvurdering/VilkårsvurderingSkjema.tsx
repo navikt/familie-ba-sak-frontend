@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 
+import AlertStripe from 'nav-frontend-alertstriper';
+
 import { FeltState } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -20,6 +22,7 @@ import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
+import Registeropplysninger from './Registeropplysninger/Registeropplysninger';
 
 interface IVilkårsvurderingSkjema {
     visFeilmeldinger: boolean;
@@ -40,7 +43,7 @@ const PersonLinje = styled.div`
     position: -webkit-sticky;
     position: sticky;
     top: -1px;
-    z-index: 2;
+    z-index: 3;
     background-color: white;
     padding: 1.5rem 0;
 `;
@@ -109,6 +112,18 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                         </PersonLinje>
 
                         <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
+                            <>
+                                {personResultat.person.registerhistorikk ? (
+                                    <Registeropplysninger
+                                        opplysninger={personResultat.person.registerhistorikk}
+                                    />
+                                ) : (
+                                    <AlertStripe
+                                        type={'advarsel'}
+                                        children={'Klarte ikke hente registeropplysninger'}
+                                    />
+                                )}
+                            </>
                             {Object.values(vilkårConfig)
                                 .filter((vc: IVilkårConfig) =>
                                     vc.parterDetteGjelderFor.includes(personResultat.person.type)

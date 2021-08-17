@@ -13,7 +13,6 @@ import {
 } from '@navikt/familie-typer';
 
 import { FamilieAxiosRequestConfig } from '../../../context/AppContext';
-import { IBrevData } from '../Hendelsesoversikt/BrevModul/typer';
 
 const useForhåndsvisning = () => {
     const { request } = useHttp();
@@ -30,7 +29,7 @@ const useForhåndsvisning = () => {
 
     const hentForhåndsvisning = <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => {
         settHentetForhåndsvisning(byggHenterRessurs());
-        request<IBrevData, string>(familieAxiosRequestConfig)
+        request<D, string>(familieAxiosRequestConfig)
             .then((response: Ressurs<string>) => {
                 settVisForhåndsviningModal(true);
                 if (response.status === RessursStatus.SUKSESS) {
