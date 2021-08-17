@@ -37,19 +37,16 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         simuleringsresultat,
         tilbakekrevingSkjema,
         tilbakekrevingErToggletPå,
+        harÅpenTilbakekrevingRessurs,
     } = useSimulering();
     const { erLesevisning } = useBehandling();
 
     const { settFagsak } = useFagsakRessurser();
 
     const nesteOnClick = () => {
-        console.log('hva er der som skjer her?');
-        console.log('Er lesevisning: ', erLesevisning());
         if (erLesevisning()) {
             history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
         } else {
-            console.log('Kaller Ba sak');
-            console.log('Skjemadata: ', hentSkjemadata());
             onSubmit<ITilbakekreving | undefined>(
                 {
                     data: hentSkjemadata(),
@@ -57,7 +54,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/tilbakekreving`,
                 },
                 (ressurs: Ressurs<IFagsak>) => {
-                    console.log('Ressurs fra Ba-sak: ', ressurs);
                     if (ressurs.status === RessursStatus.SUKSESS) {
                         settFagsak(ressurs);
                         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
@@ -99,7 +95,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         {tilbakekrevingErToggletPå && erFeilutbetaling && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                fagsakId={fagsak.id}
+                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
                             />
                         )}
                     </>

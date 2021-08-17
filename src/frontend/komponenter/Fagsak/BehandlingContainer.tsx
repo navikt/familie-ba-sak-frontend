@@ -101,7 +101,10 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         path="/fagsak/:fagsakId/:behandlingId/simulering"
                         render={() => {
                             return (
-                                <SimuleringProvider åpenBehandling={åpenBehandling.data}>
+                                <SimuleringProvider
+                                    åpenBehandling={åpenBehandling.data}
+                                    fagsak={fagsak}
+                                >
                                     <Simulering
                                         fagsak={fagsak}
                                         åpenBehandling={åpenBehandling.data}
