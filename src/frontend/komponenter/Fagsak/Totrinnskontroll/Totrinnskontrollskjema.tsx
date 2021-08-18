@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -15,7 +15,6 @@ import Info from '../../../ikoner/Info';
 import { IFagsak } from '../../../typer/fagsak';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import { ISide, siderForBehandling } from '../../Felleskomponenter/Venstremeny/sider';
 
 interface IProps {
     innsendtVedtak: Ressurs<IFagsak>;
@@ -33,14 +32,8 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
     sendInnVedtak,
 }) => {
-    const { besøkteSider, åpenBehandling } = useBehandling();
-    const [feilmelding, settFeilmelding] = useState<string | undefined>(
-        hentFrontendFeilmelding(innsendtVedtak)
-    );
-    const siderPåBehandling =
-        åpenBehandling.status === RessursStatus.SUKSESS
-            ? siderForBehandling(åpenBehandling.data)
-            : [];
+    const { besøkteSider } = useBehandling();
+    const [feilmelding] = useState<string | undefined>(hentFrontendFeilmelding(innsendtVedtak));
 
     const [
         totrinnskontrollStatus,
@@ -49,26 +42,6 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     const [totrinnskontrollBegrunnelse, settTotrinnskontrollBegrunnelse] = React.useState<string>(
         ''
     );
-
-    const siderForKontroll: Map<ISide, boolean> = new Map(
-        siderPåBehandling.map(([sideId, side]) =>
-            besøkteSider.has(sideId) ? [side, true] : [side, false]
-        )
-    );
-
-    useEffect(() => {
-        settFeilmelding(hentFrontendFeilmelding(innsendtVedtak));
-    }, [besøkteSider.size, totrinnskontrollStatus]);
-
-    const ikkeKontrollerteSider = (): ISide[] => {
-        const mangler = [];
-        for (const [side, erKontrollert] of siderForKontroll) {
-            if (!erKontrollert) {
-                mangler.push(side);
-            }
-        }
-        return mangler;
-    };
 
     const senderInn = innsendtVedtak.status === RessursStatus.HENTER;
 
@@ -79,12 +52,8 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     <Info className="ikon" />
                     <Systemtittel>Totrinnskontroll</Systemtittel>
                 </legend>
-                {siderPåBehandling.map(([_, side]) => {
-                    return siderForKontroll.get(side) ? (
-                        <div>OK {side.navn}</div>
-                    ) : (
-                        <div>X {side.navn}</div>
-                    );
+                {Object.entries(besøkteSider).map(([_, side]) => {
+                    return side.besøkt ? <div>OK {side.navn}</div> : <div>X {side.navn}</div>;
                 })}
                 <RadioGruppe
                     className="totrinnskontroll-radiogruppe"
@@ -128,25 +97,15 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 disabled={senderInn}
                 mini={true}
                 onClick={() => {
-                    const manglerValidering = ikkeKontrollerteSider();
-                    if (manglerValidering.length > 0) {
-                        settFeilmelding(
-                            'Alle steg er ikke kontrollerte. Mangler: ' +
-                                manglerValidering.map(side => `\n ${side.navn}`)
-                        );
-                    } else if (siderPåBehandling.length === 0) {
-                        settFeilmelding(
-                            'Kunne ikke se at alle sider er kontrollert. Ta kontakt med brukerstøtte.'
-                        );
-                    } else if (!senderInn) {
+                    if (!senderInn) {
                         sendInnVedtak({
                             beslutning: totrinnskontrollStatus,
                             begrunnelse:
                                 totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
                                     ? totrinnskontrollBegrunnelse
                                     : '',
+                            kontrollerteSider: [],
                         });
-                        settFeilmelding(hentFrontendFeilmelding(innsendtVedtak));
                     }
                 }}
                 children={

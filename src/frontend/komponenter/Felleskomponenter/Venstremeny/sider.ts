@@ -119,7 +119,7 @@ export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
     return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
-export const siderForBehandling = (åpenBehandling: IBehandling): [SideId, ISide][] => {
+export const siderForBehandling = (åpenBehandling: IBehandling): { [sideId: string]: ISide } => {
     const visSide = (side: ISide) => {
         if (side.visSide) {
             return side.visSide(åpenBehandling);
@@ -127,7 +127,14 @@ export const siderForBehandling = (åpenBehandling: IBehandling): [SideId, ISide
             return true;
         }
     };
-    return Object.entries(sider).filter(([_, side]) => visSide(side)) as [SideId, ISide][];
+    return Object.entries(sider)
+        .filter(([_, side]) => visSide(side))
+        .reduce((acc, [sideId, side]) => {
+            return {
+                ...acc,
+                [sideId]: side,
+            };
+        }, {});
 };
 
 export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | undefined => {

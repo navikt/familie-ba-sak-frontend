@@ -8,6 +8,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
+    byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     Ressurs,
@@ -42,7 +43,7 @@ const initiellModalVerdi = {
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsak }) => {
     const { hentSaksbehandlerRolle } = useApp();
-    const { kanBeslutteVedtak } = useBehandling();
+    const { kanBeslutteVedtak, besøkteSider } = useBehandling();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
@@ -61,6 +62,11 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK; // TODO - Flytte til høyremeny-tab og avklar om man skal vise til veiledere også
 
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
+        if (Object.values(besøkteSider).some(besøkt => !besøkt)) {
+            settInnsendtVedtak(byggFunksjonellFeilRessurs('Alle steg er ikke kontrollerte.'));
+            return;
+        }
+
         settInnsendtVedtak(byggHenterRessurs());
         settModalVerdi({ ...modalVerdi, beslutning: totrinnskontrollData.beslutning });
         const manglerBegrunnelse =

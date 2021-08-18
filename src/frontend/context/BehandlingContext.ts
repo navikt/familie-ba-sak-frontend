@@ -19,6 +19,7 @@ import {
     ISide,
     SideId,
     sider,
+    siderForBehandling,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
 import {
     BehandlerRolle,
@@ -44,10 +45,30 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const history = useHistory();
     const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
-    const [besøkteSider, settBesøkteSider] = React.useState<Set<SideId>>(new Set());
+    const [besøkteSider, settBesøkteSider] = React.useState<{
+        [sideId: string]: ISide & { besøkt: boolean };
+    }>({});
 
     useEffect(() => {
-        settBesøkteSider(new Set()); // TODO: Eller bevare mellom behandlinger innad i state ved map? Kanskje tydeligere om man alltid resetter.
+        const siderPåBehandling =
+            åpenBehandling.status === RessursStatus.SUKSESS
+                ? siderForBehandling(åpenBehandling.data)
+                : [];
+
+        console.log(siderPåBehandling);
+        settBesøkteSider(
+            Object.entries(siderPåBehandling).reduce((acc, [sideId, side]) => {
+                return {
+                    ...acc,
+                    [sideId]: {
+                        ...side,
+                        besøkt: false,
+                    },
+                };
+            }, {})
+        );
+
+        automatiskNavigeringTilSideForSteg();
     }, [åpenBehandling]);
 
     useEffect(() => {
@@ -58,13 +79,15 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         );
     }, [history.location.pathname]);
 
-    useEffect(() => {
-        automatiskNavigeringTilSideForSteg();
-    }, [åpenBehandling]);
-
     const leggTilBesøktSide = (besøktSide: SideId) => {
         if (kanBeslutteVedtak) {
-            besøkteSider.add(besøktSide);
+            settBesøkteSider({
+                ...besøkteSider,
+                [besøktSide]: {
+                    ...besøkteSider[besøktSide],
+                    besøkt: true,
+                },
+            });
         }
     };
 

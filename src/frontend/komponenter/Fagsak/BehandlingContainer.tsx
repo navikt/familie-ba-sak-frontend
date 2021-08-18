@@ -13,7 +13,7 @@ import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IFagsak } from '../../typer/fagsak';
 import { useAmplitude } from '../../utils/amplitude';
-import { SideId } from '../Felleskomponenter/Venstremeny/sider';
+import { SideId, sider } from '../Felleskomponenter/Venstremeny/sider';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
@@ -39,6 +39,9 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
     useEffect(() => {
         if (sidevisning) {
             loggSidevisning(sidevisning);
+            leggTilBesøktSide(
+                Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId
+            );
         }
     }, [sidevisning]);
 
@@ -50,7 +53,6 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         exact={true}
                         path="/fagsak/:fagsakId/:behandlingId/registrer-soknad"
                         render={() => {
-                            leggTilBesøktSide(SideId.REGISTRERE_SØKNAD);
                             return (
                                 <SøknadProvider åpenBehandling={åpenBehandling.data}>
                                     <RegistrerSøknad />
@@ -74,7 +76,6 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         exact={true}
                         path="/fagsak/:fagsakId/:behandlingId/vilkaarsvurdering"
                         render={() => {
-                            leggTilBesøktSide(SideId.VILKÅRSVURDERING);
                             return (
                                 <VilkårsvurderingProvider åpenBehandling={åpenBehandling.data}>
                                     <Vilkårsvurdering
@@ -89,7 +90,6 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         exact={true}
                         path="/fagsak/:fagsakId/:behandlingId/tilkjent-ytelse"
                         render={() => {
-                            leggTilBesøktSide(SideId.BEHANDLINGRESULTAT);
                             return (
                                 <TidslinjeProvider>
                                     <TilkjentYtelse
@@ -104,7 +104,6 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         exact={true}
                         path="/fagsak/:fagsakId/:behandlingId/simulering"
                         render={() => {
-                            leggTilBesøktSide(SideId.SIMULERING);
                             return (
                                 <SimuleringProvider åpenBehandling={åpenBehandling.data}>
                                     <Simulering
@@ -119,7 +118,6 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         exact={true}
                         path="/fagsak/:fagsakId/:behandlingId/vedtak"
                         render={() => {
-                            leggTilBesøktSide(SideId.VEDTAK);
                             return (
                                 <OppsummeringVedtak
                                     fagsak={fagsak}
