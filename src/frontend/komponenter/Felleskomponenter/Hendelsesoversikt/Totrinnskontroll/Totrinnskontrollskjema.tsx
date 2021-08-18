@@ -1,32 +1,24 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import styled from 'styled-components';
-
-import navFarger from 'nav-frontend-core';
 import { Knapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/BehandlingContext';
-import Info from '../../../ikoner/Info';
-import { IFagsak } from '../../../typer/fagsak';
-import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
-import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { IFagsak } from '../../../../typer/fagsak';
+import {
+    ITotrinnskontrollData,
+    TotrinnskontrollBeslutning,
+} from '../../../../typer/totrinnskontroll';
+import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 
 interface IProps {
     innsendtVedtak: Ressurs<IFagsak>;
     sendInnVedtak: (totrinnskontrollData: ITotrinnskontrollData) => void;
 }
-
-const Container = styled.div`
-    margin: 0.5rem;
-    border-radius: 0.25rem;
-    padding: 1.2rem;
-    border: 1.5px solid ${navFarger.navGra40};
-`;
 
 const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
@@ -46,18 +38,29 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     const senderInn = innsendtVedtak.status === RessursStatus.HENTER;
 
     return (
-        <Container className="totrinnskontroll">
+        <div>
             <SkjemaGruppe className="totrinnskontroll-skjemagruppe" feil={feilmelding}>
-                <legend className="totrinnskontroll-tittel">
-                    <Info className="ikon" />
-                    <Systemtittel>Totrinnskontroll</Systemtittel>
-                </legend>
-                {Object.entries(besøkteSider).map(([_, side]) => {
-                    return side.besøkt ? <div>OK {side.navn}</div> : <div>X {side.navn}</div>;
-                })}
                 <RadioGruppe
                     className="totrinnskontroll-radiogruppe"
-                    description="Kontrollér opplysninger og faglige vurderinger som er gjort"
+                    description={
+                        <div>
+                            <Normaltekst>
+                                Kontrollér opplysninger og faglige vurderinger som er gjort
+                            </Normaltekst>
+
+                            <br />
+                            <Element>Kontrolerte trinn</Element>
+                            <br />
+
+                            {Object.entries(besøkteSider).map(([_, side]) => {
+                                return side.besøkt ? (
+                                    <div>OK {side.navn}</div>
+                                ) : (
+                                    <div>X {side.navn}</div>
+                                );
+                            })}
+                        </div>
+                    }
                 >
                     <Radio
                         label={'Godkjent'}
@@ -114,7 +117,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                         : 'Godkjenn vedtaket'
                 }
             />
-        </Container>
+        </div>
     );
 };
 

@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 
@@ -15,13 +16,15 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
-import { useBehandling } from '../../../context/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
-import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { IBehandling } from '../../../../typer/behandling';
+import { IFagsak } from '../../../../typer/fagsak';
+import {
+    TotrinnskontrollBeslutning,
+    ITotrinnskontrollData,
+} from '../../../../typer/totrinnskontroll';
+import UIModalWrapper from '../../Modal/UIModalWrapper';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilBeslutterSkjema';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
@@ -30,6 +33,11 @@ interface IProps {
     åpenBehandling: IBehandling | undefined;
     fagsak: IFagsak;
 }
+
+const Container = styled.div`
+    padding: 0.5rem 1.5rem;
+    display: flex;
+`;
 
 interface IModalVerdier {
     skalVises: boolean;
@@ -42,7 +50,6 @@ const initiellModalVerdi = {
 };
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsak }) => {
-    const { hentSaksbehandlerRolle } = useApp();
     const { kanBeslutteVedtak, besøkteSider } = useBehandling();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
@@ -56,10 +63,6 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
             skalVises: innsendtVedtak.status === RessursStatus.SUKSESS,
         });
     }, [innsendtVedtak.status]);
-
-    const skalViseFane =
-        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK; // TODO - Flytte til høyremeny-tab og avklar om man skal vise til veiledere også
 
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
         if (Object.values(besøkteSider).some(besøkt => !besøkt)) {
@@ -96,15 +99,17 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
 
     return (
         <>
-            {skalViseFane &&
-                (kanBeslutteVedtak ? (
+            <Container className="totrinnskontroll">
+                {kanBeslutteVedtak ? (
                     <Totrinnskontrollskjema
                         sendInnVedtak={sendInnVedtak}
                         innsendtVedtak={innsendtVedtak}
                     />
                 ) : (
                     <TotrinnskontrollSendtTilBeslutterSkjema åpenBehandling={åpenBehandling} />
-                ))}
+                )}
+            </Container>
+
             {modalVerdi && (
                 <UIModalWrapper
                     modal={{

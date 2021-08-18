@@ -1,6 +1,7 @@
 import { BehandlerRolle } from '../../../typer/behandling';
 
 export enum Tabs {
+    Totrinnskontroll,
     Historikk,
     Meldinger,
     Dokumenter,
