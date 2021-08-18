@@ -1,11 +1,9 @@
-import { BehandlingSteg, BehandlingÅrsak } from '../../../typer/behandling';
+import { BehandlingÅrsak } from '../../../typer/behandling';
 import { mockBehandling } from '../../../utils/test/behandling/behandling.mock';
-import { finnSideForBehandlingssteg, ISide, SideId, sider, siderForBehandling } from './sider';
+import { SideId, siderForBehandling } from './sider';
 
 // TODO: Flytt sider.ts til behandling
 describe('sider.ts', () => {
-    //erSidenAktiv
-
     describe('siderForBehandling', () => {
         test('REGISTRERE_SØKNAD returneres ved årsak SØKNAD', () => {
             const behandling = mockBehandling({ årsak: BehandlingÅrsak.SØKNAD });
@@ -37,52 +35,17 @@ describe('sider.ts', () => {
         });
     });
 
-    describe('finnSideForBehandlingssteg', () => {
-        // TODO: Er dette korrekt? Siden simulering returneres aldri.
-        describe('Korrekte sider returneres for gitt steg', () => {
-            const sideForSteg = (side: ISide | undefined, steg: BehandlingSteg) =>
-                expect(finnSideForBehandlingssteg(mockBehandling({ steg: steg }))).toEqual(side);
-            sideForSteg(undefined, BehandlingSteg.HENLEGG_BEHANDLING);
-            sideForSteg(sider.REGISTRERE_SØKNAD, BehandlingSteg.REGISTRERE_SØKNAD);
-            sideForSteg(undefined, BehandlingSteg.REGISTRERE_PERSONGRUNNLAG);
-            sideForSteg(
-                sider.FILTRERING_FØDSELSHENDELSER,
-                BehandlingSteg.FILTRERING_FØDSELSHENDELSER
-            );
-            sideForSteg(sider.VILKÅRSVURDERING, BehandlingSteg.VILKÅRSVURDERING);
-            sideForSteg(sider.BEHANDLINGRESULTAT, BehandlingSteg.VURDER_TILBAKEKREVING);
-            sideForSteg(sider.VEDTAK, BehandlingSteg.SEND_TIL_BESLUTTER);
-            sideForSteg(sider.VEDTAK, BehandlingSteg.BESLUTTE_VEDTAK);
-            sideForSteg(sider.VEDTAK, BehandlingSteg.IVERKSETT_MOT_OPPDRAG);
-            sideForSteg(sider.VEDTAK, BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI);
-            sideForSteg(sider.VEDTAK, BehandlingSteg.JOURNALFØR_VEDTAKSBREV);
-            sideForSteg(sider.VEDTAK, BehandlingSteg.DISTRIBUER_VEDTAKSBREV);
-            sideForSteg(sider.VEDTAK, BehandlingSteg.FERDIGSTILLE_BEHANDLING);
-            sideForSteg(sider.VEDTAK, BehandlingSteg.BEHANDLING_AVSLUTTET);
-        });
-
-        test('Legg til/fjern sjekk for tilhørende side ved endring', () => {
-            const steg = [
-                BehandlingSteg.HENLEGG_BEHANDLING,
-                BehandlingSteg.REGISTRERE_SØKNAD,
-                BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
-                BehandlingSteg.FILTRERING_FØDSELSHENDELSER,
-                BehandlingSteg.VILKÅRSVURDERING,
-                BehandlingSteg.VURDER_TILBAKEKREVING,
-                BehandlingSteg.SEND_TIL_BESLUTTER,
-                BehandlingSteg.BESLUTTE_VEDTAK,
-                BehandlingSteg.IVERKSETT_MOT_OPPDRAG,
-                BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI,
-                BehandlingSteg.JOURNALFØR_VEDTAKSBREV,
-                BehandlingSteg.DISTRIBUER_VEDTAKSBREV,
-                BehandlingSteg.FERDIGSTILLE_BEHANDLING,
-                BehandlingSteg.BEHANDLING_AVSLUTTET,
+    describe('Sjekk ved endring av sider', () => {
+        test('Oppdater siderForBehandling-tester ved nye/fjernede sider', () => {
+            const sider = [
+                SideId.REGISTRERE_SØKNAD,
+                SideId.FILTRERING_FØDSELSHENDELSER,
+                SideId.VILKÅRSVURDERING,
+                SideId.BEHANDLINGRESULTAT,
+                SideId.SIMULERING,
+                SideId.VEDTAK,
             ];
-            expect(Object.values(BehandlingSteg)).toEqual(steg);
+            expect(Object.values(SideId)).toEqual(sider);
         });
     });
-
-    //erViPåUdefinertFagsakSide
-    //erViPåUlovligSteg
-    // generell test som trigges ved endring av sider?
 });
