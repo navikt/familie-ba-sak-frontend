@@ -119,12 +119,15 @@ export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
     return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
-export const visSide = (side: ISide, åpenBehandling: IBehandling) => {
-    if (side.visSide) {
-        return side.visSide(åpenBehandling);
-    } else {
-        return true;
-    }
+export const siderForBehandling = (åpenBehandling: IBehandling): [SideId, ISide][] => {
+    const visSide = (side: ISide) => {
+        if (side.visSide) {
+            return side.visSide(åpenBehandling);
+        } else {
+            return true;
+        }
+    };
+    return Object.entries(sider).filter(([_, side]) => visSide(side)) as [SideId, ISide][];
 };
 
 export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | undefined => {

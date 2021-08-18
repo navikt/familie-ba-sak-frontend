@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -9,10 +10,12 @@ import { Systemtittel } from 'nav-frontend-typografi';
 
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useBehandling } from '../../../context/BehandlingContext';
 import Info from '../../../ikoner/Info';
 import { IFagsak } from '../../../typer/fagsak';
 import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import { ISide, siderForBehandling } from '../../Felleskomponenter/Venstremeny/sider';
 
 interface IProps {
     innsendtVedtak: Ressurs<IFagsak>;
@@ -30,6 +33,15 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
     sendInnVedtak,
 }) => {
+    const { besøkteSider, åpenBehandling } = useBehandling();
+    const [feilmelding, settFeilmelding] = useState<string | undefined>(
+        hentFrontendFeilmelding(innsendtVedtak)
+    );
+    const siderPåBehandling =
+        åpenBehandling.status === RessursStatus.SUKSESS
+            ? siderForBehandling(åpenBehandling.data)
+            : [];
+
     const [
         totrinnskontrollStatus,
         settTotrinnskontrollStatus,
@@ -38,18 +50,39 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
         ''
     );
 
+    const siderForKontroll: Map<ISide, boolean> = new Map(
+        siderPåBehandling.map(([sideId, side]) =>
+            besøkteSider.has(sideId) ? [side, true] : [side, false]
+        )
+    );
+
+    useEffect(() => {
+        settFeilmelding(hentFrontendFeilmelding(innsendtVedtak));
+    }, [besøkteSider.size, totrinnskontrollStatus]);
+
+    const ikkeKontrollerteSider = (): ISide[] => {
+        const mangler = [];
+        for (const [side, erKontrollert] of siderForKontroll) {
+            if (!erKontrollert) {
+                mangler.push(side);
+            }
+        }
+        return mangler;
+    };
+
     const senderInn = innsendtVedtak.status === RessursStatus.HENTER;
 
     return (
         <Container className="totrinnskontroll">
-            <SkjemaGruppe
-                className="totrinnskontroll-skjemagruppe"
-                feil={hentFrontendFeilmelding(innsendtVedtak)}
-            >
+            <SkjemaGruppe className="totrinnskontroll-skjemagruppe" feil={feilmelding}>
                 <legend className="totrinnskontroll-tittel">
                     <Info className="ikon" />
                     <Systemtittel>Totrinnskontroll</Systemtittel>
                 </legend>
+                Sider for totrinn:
+                {console.log(Array.from(siderForKontroll.keys()))}
+                {console.log(Array.from(siderForKontroll.values()))}
+                {siderForKontroll.entries()}
                 <RadioGruppe
                     className="totrinnskontroll-radiogruppe"
                     description="Kontrollér opplysninger og faglige vurderinger som er gjort"
@@ -92,7 +125,17 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 disabled={senderInn}
                 mini={true}
                 onClick={() => {
-                    if (!senderInn) {
+                    const manglerValidering = ikkeKontrollerteSider();
+                    if (manglerValidering.length > 0) {
+                        settFeilmelding(
+                            'Alle steg er ikke kontrollerte. Mangler: ' +
+                                manglerValidering.map(side => `\n ${side.navn}`)
+                        );
+                    } else if (siderPåBehandling.length === 0) {
+                        settFeilmelding(
+                            'Kunne ikke se at alle sider er kontrollert. Ta kontakt med brukerstøtte.'
+                        );
+                    } else if (!senderInn) {
                         sendInnVedtak({
                             beslutning: totrinnskontrollStatus,
                             begrunnelse:
@@ -100,6 +143,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                                     ? totrinnskontrollBegrunnelse
                                     : '',
                         });
+                        settFeilmelding(hentFrontendFeilmelding(innsendtVedtak));
                     }
                 }}
                 children={
