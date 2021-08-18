@@ -24,7 +24,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
     sendInnVedtak,
 }) => {
-    const { besøkteSider } = useBehandling();
+    const { siderForKontroll } = useBehandling();
     const [feilmelding] = useState<string | undefined>(hentFrontendFeilmelding(innsendtVedtak));
 
     const [
@@ -52,7 +52,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                             <Element>Kontrolerte trinn</Element>
                             <br />
 
-                            {Object.entries(besøkteSider).map(([_, side]) => {
+                            {Object.entries(siderForKontroll).map(([_, side]) => {
                                 return side.besøkt ? (
                                     <div>OK {side.navn}</div>
                                 ) : (
@@ -107,7 +107,13 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                                 totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
                                     ? totrinnskontrollBegrunnelse
                                     : '',
-                            kontrollerteSider: [],
+                            kontrollerteSider: Object.entries(siderForKontroll)
+                                .filter(([_, side]) => {
+                                    return side.besøkt;
+                                })
+                                .map(([_, side]) => {
+                                    return side.navn;
+                                }),
                         });
                     }
                 }}

@@ -46,7 +46,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const history = useHistory();
     const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
-    const [besøkteSider, settBesøkteSider] = React.useState<{
+    const [siderForKontroll, settSiderForKontroll] = React.useState<{
         [sideId: string]: ISide & { besøkt: boolean };
     }>({});
 
@@ -57,13 +57,13 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
                 : [];
 
         const sideHref = hentSideHref(history.location.pathname);
-        settBesøkteSider(
+        settSiderForKontroll(
             Object.entries(siderPåBehandling).reduce((acc, [sideId, side]) => {
                 return {
                     ...acc,
                     [sideId]: {
                         ...side,
-                        besøkt: sideHref === side.href ? true : false,
+                        besøkt: sideHref === side.href,
                     },
                 };
             }, {})
@@ -82,10 +82,10 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const leggTilBesøktSide = (besøktSide: SideId) => {
         if (kanBeslutteVedtak) {
-            settBesøkteSider({
-                ...besøkteSider,
+            settSiderForKontroll({
+                ...siderForKontroll,
                 [besøktSide]: {
-                    ...besøkteSider[besøktSide],
+                    ...siderForKontroll[besøktSide],
                     besøkt: true,
                 },
             });
@@ -166,7 +166,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         bestemÅpenBehandling,
         erLesevisning,
         leggTilBesøktSide,
-        besøkteSider,
+        siderForKontroll,
         kanBeslutteVedtak,
         forrigeÅpneSide,
         søkersMålform,
