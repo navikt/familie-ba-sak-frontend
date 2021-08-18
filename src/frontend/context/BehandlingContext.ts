@@ -17,9 +17,16 @@ import {
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
     ISide,
+    SideId,
     sider,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
-import { BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
+import {
+    BehandlerRolle,
+    BehandlingStatus,
+    BehandlingSteg,
+    hentStegNummer,
+    IBehandling,
+} from '../typer/behandling';
 import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { hentBehandlingPåFagsak } from '../utils/fagsak';
@@ -28,11 +35,21 @@ import { useFagsakRessurser } from './FagsakContext';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    const {
+        harInnloggetSaksbehandlerSkrivetilgang,
+        innloggetSaksbehandler,
+        hentSaksbehandlerRolle,
+    } = useApp();
     const { fagsak } = useFagsakRessurser();
 
     const history = useHistory();
     const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
+    const [besøkteSider, settBesøkteSider] = React.useState<Set<SideId>>(new Set());
+
+    useEffect(() => {
+        settBesøkteSider(new Set()); // TODO: Eller bevare mellom behandlinger innad i state ved map? Kanskje tydeligere om man alltid resetter.
+    }, [åpenBehandling]);
+
     useEffect(() => {
         settForrigeÅpneSide(
             Object.values(sider).find((side: ISide) =>
@@ -44,6 +61,12 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     useEffect(() => {
         automatiskNavigeringTilSideForSteg();
     }, [åpenBehandling]);
+
+    const leggTilBesøktSide = (besøktSide: SideId) => {
+        if (kanBeslutteVedtak) {
+            besøkteSider.add(besøktSide);
+        }
+    };
 
     const bestemÅpenBehandling = (behandlingId: string | undefined) => {
         if (fagsak.status === RessursStatus.SUKSESS) {
@@ -109,9 +132,18 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
                   ?.målform ?? Målform.NB
             : Målform.NB;
 
+    const kanBeslutteVedtak =
+        åpenBehandling.status === RessursStatus.SUKSESS &&
+        åpenBehandling.data.status === BehandlingStatus.FATTER_VEDTAK &&
+        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
+        innloggetSaksbehandler?.email !== åpenBehandling.data.endretAv;
+
     return {
         bestemÅpenBehandling,
         erLesevisning,
+        leggTilBesøktSide,
+        besøkteSider,
+        kanBeslutteVedtak,
         forrigeÅpneSide,
         søkersMålform,
         åpenBehandling,

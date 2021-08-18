@@ -15,6 +15,7 @@ import {
 } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
@@ -40,7 +41,8 @@ const initiellModalVerdi = {
 };
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsak }) => {
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { hentSaksbehandlerRolle } = useApp();
+    const { kanBeslutteVedtak } = useBehandling();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
@@ -54,12 +56,9 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         });
     }, [innsendtVedtak.status]);
 
-    const skalViseSkjema =
+    const skalViseFane =
         BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK &&
-        history.location.pathname.includes('vedtak');
-
-    const kanBeslutte = innloggetSaksbehandler?.email !== åpenBehandling?.endretAv ?? false;
+        åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK; // TODO - Flytte til høyremeny-tab og avklar om man skal vise til veiledere også
 
     const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
         settInnsendtVedtak(byggHenterRessurs());
@@ -91,8 +90,8 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
 
     return (
         <>
-            {skalViseSkjema &&
-                (kanBeslutte ? (
+            {skalViseFane &&
+                (kanBeslutteVedtak ? (
                     <Totrinnskontrollskjema
                         sendInnVedtak={sendInnVedtak}
                         innsendtVedtak={innsendtVedtak}
