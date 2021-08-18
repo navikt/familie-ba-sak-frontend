@@ -175,7 +175,7 @@ export const erViPåUlovligSteg = (pathname: string, behandlingSide?: ISide) => 
     return false;
 };
 
-export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
+const finnSteg = (behandling: IBehandling): BehandlingSteg => {
     const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_BEHANDLING);
 
     if (erHenlagt) {
@@ -191,7 +191,7 @@ export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
     }
 };
 
-export const inneholderSteg = (behandling: IBehandling, behandlingSteg: BehandlingSteg): boolean =>
+const inneholderSteg = (behandling: IBehandling, behandlingSteg: BehandlingSteg): boolean =>
     behandling.stegTilstand
         .filter(
             stegTilstand => stegTilstand.behandlingStegStatus !== BehandlingStegStatus.IKKE_UTFØRT

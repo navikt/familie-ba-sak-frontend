@@ -1,73 +1,45 @@
-import { kjønnType } from '@navikt/familie-typer';
+import { BehandlingÅrsak } from '../../../typer/behandling';
+import { mockBehandling } from '../../../utils/test/behandling/behandling.mock';
+import { SideId, siderForBehandling } from './sider';
 
-import { YtelseType } from '../../typer/beregning';
-import { PersonType } from '../../typer/person';
-import { Målform } from '../../typer/søknad';
-import { Vedtaksperiodetype } from '../../typer/vedtaksperiode';
-import {
-    kalenderDatoFraDate,
-    KalenderEnhet,
-    leggTil,
-    serializeIso8601String,
-} from '../../utils/kalender';
-import { mockFagsak } from '../../utils/test/fagsak/fagsak.mock';
-import { hentBarnMedLøpendeUtbetaling } from '../SøknadContext';
+// TODO: Flytt sider.ts til behandling
+describe('sider.ts', () => {
+    //erSidenAktiv
 
-describe('SøknadContext', () => {
-    test('Hent barn med løpende utbetalinger på fagsak', () => {
-        const barnFnr = '12345678910';
-        const person = {
-            fødselsdato: '2020-01-02',
-            kjønn: kjønnType.KVINNE,
-            målform: Målform.NB,
-            navn: 'Mock Mockersen',
-            personIdent: barnFnr,
-            type: PersonType.BARN,
-        };
-
-        const fagsak = mockFagsak({
-            gjeldendeUtbetalingsperioder: [
-                {
-                    periodeFom: '2020-01-01',
-                    periodeTom: '2020-12-31',
-                    vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
-                    utbetalingsperiodeDetaljer: [
-                        {
-                            person: {
-                                ...person,
-                                personIdent: '12345678911',
-                            },
-                            ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
-                            utbetaltPerMnd: 1054,
-                        },
-                    ],
-                    ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
-                    antallBarn: 1,
-                    utbetaltPerMnd: 1054,
-                },
-                {
-                    periodeFom: '2021-01-01',
-                    periodeTom: serializeIso8601String(
-                        leggTil(kalenderDatoFraDate(new Date()), 1, KalenderEnhet.ÅR)
-                    ),
-                    vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
-                    utbetalingsperiodeDetaljer: [
-                        {
-                            person,
-                            ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
-                            utbetaltPerMnd: 1054,
-                        },
-                    ],
-                    ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
-                    antallBarn: 1,
-                    utbetaltPerMnd: 1054,
-                },
-            ],
+    //siderForBehandling
+    describe('siderForBehandling', () => {
+        test('REGISTRERE_SØKNAD returneres ved årsak SØKNAD', () => {
+            const behandling = mockBehandling({ årsak: BehandlingÅrsak.SØKNAD });
+            expect(Object.keys(siderForBehandling(behandling))).toContain(SideId.REGISTRERE_SØKNAD);
         });
-
-        const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
-
-        expect(barnMedLøpendeUtbetaling.size).toBe(1);
-        expect(barnMedLøpendeUtbetaling.has(barnFnr)).toBe(true);
+        test('FILTRERING_FØDSELSHENDELSER returneres ved årsak FØDSELSHENDELSE', () => {
+            const behandling = mockBehandling({ årsak: BehandlingÅrsak.FØDSELSHENDELSE });
+            expect(Object.keys(siderForBehandling(behandling))).toContain(
+                SideId.FILTRERING_FØDSELSHENDELSER
+            );
+        });
+        test('SIMULERING returneres ikke ved automatisk behandling', () => {
+            const behandling = mockBehandling({ skalBehandlesAutomatisk: true });
+            expect(Object.keys(siderForBehandling(behandling))).not.toContain(SideId.SIMULERING);
+        });
+        test('VEDTAK returneres ikke ved årsak SATSENDRING', () => {
+            const behandling = mockBehandling({ årsak: BehandlingÅrsak.SATSENDRING });
+            expect(Object.keys(siderForBehandling(behandling))).not.toContain(SideId.VEDTAK);
+        });
+        test('Standard revurdering uten søknad viser alle sider bortsett fra FILTRERING_FØDSELSHENDELSER og REGISTRERE_SØKNAD', () => {
+            const behandling = mockBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER });
+            expect(Object.keys(siderForBehandling(behandling))).toEqual(
+                Object.values(SideId).filter(
+                    side =>
+                        side !== SideId.FILTRERING_FØDSELSHENDELSER &&
+                        side !== SideId.REGISTRERE_SØKNAD
+                )
+            );
+        });
     });
+
+    //finnSideForBehandlingssteg
+    //erViPåUdefinertFagsakSide
+    //erViPåUlovligSteg
+    // generell test som trigges ved endring av sider?
 });
