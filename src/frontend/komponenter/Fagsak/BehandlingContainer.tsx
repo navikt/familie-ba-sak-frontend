@@ -13,6 +13,7 @@ import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IFagsak } from '../../typer/fagsak';
 import { useAmplitude } from '../../utils/amplitude';
+import { hentSideHref } from '../../utils/miljø';
 import { SideId, sider } from '../Felleskomponenter/Venstremeny/sider';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
 import Simulering from './Simulering/Simulering';
@@ -35,7 +36,7 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
         bestemÅpenBehandling(behandlingId);
     }, [fagsak, behandlingId]);
 
-    const sidevisning = history.location.pathname.split('/')[4];
+    const sidevisning = hentSideHref(history.location.pathname);
     useEffect(() => {
         if (sidevisning) {
             loggSidevisning(sidevisning);

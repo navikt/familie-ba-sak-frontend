@@ -31,6 +31,7 @@ import {
 import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { hentBehandlingPåFagsak } from '../utils/fagsak';
+import { hentSideHref } from '../utils/miljø';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
@@ -55,14 +56,14 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
                 ? siderForBehandling(åpenBehandling.data)
                 : [];
 
-        console.log(siderPåBehandling);
+        const sideHref = hentSideHref(history.location.pathname);
         settBesøkteSider(
             Object.entries(siderPåBehandling).reduce((acc, [sideId, side]) => {
                 return {
                     ...acc,
                     [sideId]: {
                         ...side,
-                        besøkt: false,
+                        besøkt: sideHref === side.href ? true : false,
                     },
                 };
             }, {})
