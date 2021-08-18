@@ -79,10 +79,13 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                     <Info className="ikon" />
                     <Systemtittel>Totrinnskontroll</Systemtittel>
                 </legend>
-                Sider for totrinn:
-                {console.log(Array.from(siderForKontroll.keys()))}
-                {console.log(Array.from(siderForKontroll.values()))}
-                {siderForKontroll.entries()}
+                {siderPåBehandling.map(([_, side]) => {
+                    return siderForKontroll.get(side) ? (
+                        <div>OK {side.navn}</div>
+                    ) : (
+                        <div>X {side.navn}</div>
+                    );
+                })}
                 <RadioGruppe
                     className="totrinnskontroll-radiogruppe"
                     description="Kontrollér opplysninger og faglige vurderinger som er gjort"
