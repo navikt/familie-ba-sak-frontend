@@ -2,7 +2,6 @@ import { BehandlingÅrsak } from '../../../typer/behandling';
 import { mockBehandling } from '../../../utils/test/behandling/behandling.mock';
 import { SideId, siderForBehandling } from './sider';
 
-// TODO: Flytt sider.ts til behandling
 describe('sider.ts', () => {
     describe('siderForBehandling', () => {
         test('REGISTRERE_SØKNAD returneres ved årsak SØKNAD', () => {
