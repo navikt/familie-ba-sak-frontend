@@ -50,7 +50,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                             </Normaltekst>
 
                             <br />
-                            <Element>Kontrolerte trinn</Element>
+                            <Element>Kontrollerte trinn</Element>
                             <br />
 
                             {Object.entries(trinnPåBehandling).map(([_, trinn]) => {

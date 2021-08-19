@@ -4,7 +4,7 @@ import Ikon, { IIkonProps } from './Ikon';
 
 const IkonTotrinnskontroll = ({ width = 32, height = 32 }: IIkonProps) => {
     return (
-        <Ikon width={width} height={height} viewBox={32}>
+        <Ikon width={width} height={height} viewBox={24}>
             <title id={'totrinnskontroll'}>Totrinnskontroll</title>
             <path
                 fillRule="evenodd"
