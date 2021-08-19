@@ -22,6 +22,10 @@ interface IProps {
     sendInnVedtak: (beslutning: TotrinnskontrollBeslutning, begrunnelse: string) => void;
 }
 
+const KontrollerteTrinnOverskrift = styled(Element)`
+    margin-bottom: 1rem;
+`;
+
 const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
     sendInnVedtak,
@@ -50,14 +54,15 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                             </Normaltekst>
 
                             <br />
-                            <Element>Kontrollerte trinn</Element>
-                            <br />
+                            <KontrollerteTrinnOverskrift>
+                                Kontrollerte trinn
+                            </KontrollerteTrinnOverskrift>
 
-                            {Object.entries(trinnPåBehandling).map(([_, trinn]) => {
+                            {Object.entries(trinnPåBehandling).map(([_, trinn], index) => {
                                 return (
                                     <TrinnStatus
                                         kontrollertStatus={trinn.kontrollert}
-                                        navn={trinn.navn}
+                                        navn={`${index + 1}. ${trinn.navn}`}
                                     />
                                 );
                             })}

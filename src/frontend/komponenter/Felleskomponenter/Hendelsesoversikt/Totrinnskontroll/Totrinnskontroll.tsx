@@ -18,7 +18,7 @@ import {
 
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
-import { IBehandling } from '../../../../typer/behandling';
+import { BehandlingStatus, IBehandling } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import {
     TotrinnskontrollBeslutning,
@@ -138,16 +138,18 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
 
     return (
         <>
-            <Container className="totrinnskontroll">
-                {kanBeslutteVedtak ? (
-                    <Totrinnskontrollskjema
-                        sendInnVedtak={sendInnVedtak}
-                        innsendtVedtak={innsendtVedtak}
-                    />
-                ) : (
-                    <TotrinnskontrollSendtTilBeslutterSkjema åpenBehandling={åpenBehandling} />
-                )}
-            </Container>
+            {åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK && (
+                <Container className="totrinnskontroll">
+                    {kanBeslutteVedtak ? (
+                        <Totrinnskontrollskjema
+                            sendInnVedtak={sendInnVedtak}
+                            innsendtVedtak={innsendtVedtak}
+                        />
+                    ) : (
+                        <TotrinnskontrollSendtTilBeslutterSkjema åpenBehandling={åpenBehandling} />
+                    )}
+                </Container>
+            )}
 
             {modalVerdi && (
                 <UIModalWrapper
