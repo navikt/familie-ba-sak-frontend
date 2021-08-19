@@ -25,6 +25,16 @@ export interface IUnderside {
     hash: string;
 }
 
+export interface ITrinn extends ISide {
+    kontrollert: KontrollertStatus;
+}
+
+export enum KontrollertStatus {
+    IKKE_KONTROLLERT,
+    KONTROLLERT,
+    MANGLER_KONTROLL,
+}
+
 export enum SideId {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
@@ -119,7 +129,9 @@ export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
     return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
-export const siderForBehandling = (åpenBehandling: IBehandling): { [sideId: string]: ISide } => {
+export const hentTrinnForBehandling = (
+    åpenBehandling: IBehandling
+): { [sideId: string]: ISide } => {
     const visSide = (side: ISide) => {
         if (side.visSide) {
             return side.visSide(åpenBehandling);

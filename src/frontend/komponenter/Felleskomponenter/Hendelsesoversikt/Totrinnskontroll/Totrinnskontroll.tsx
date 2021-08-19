@@ -25,6 +25,7 @@ import {
     ITotrinnskontrollData,
 } from '../../../../typer/totrinnskontroll';
 import UIModalWrapper from '../../Modal/UIModalWrapper';
+import { KontrollertStatus } from '../../Venstremeny/sider';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilBeslutterSkjema';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
@@ -50,7 +51,11 @@ const initiellModalVerdi = {
 };
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsak }) => {
-    const { kanBeslutteVedtak, besøkteSider } = useBehandling();
+    const {
+        kanBeslutteVedtak,
+        trinnPåBehandling,
+        settIkkeKontrollerteSiderTilManglerKontroll,
+    } = useBehandling();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
@@ -64,25 +69,35 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         });
     }, [innsendtVedtak.status]);
 
-    const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
-        if (Object.values(besøkteSider).some(besøkt => !besøkt)) {
+    const sendInnVedtak = (beslutning: TotrinnskontrollBeslutning, begrunnelse: string) => {
+        if (
+            Object.values(trinnPåBehandling).some(
+                trinn => trinn.kontrollert !== KontrollertStatus.KONTROLLERT
+            )
+        ) {
             settInnsendtVedtak(byggFunksjonellFeilRessurs('Alle steg er ikke kontrollerte.'));
+            settIkkeKontrollerteSiderTilManglerKontroll();
             return;
         }
 
         settInnsendtVedtak(byggHenterRessurs());
-        settModalVerdi({ ...modalVerdi, beslutning: totrinnskontrollData.beslutning });
+        settModalVerdi({ ...modalVerdi, beslutning: beslutning });
         const manglerBegrunnelse =
-            totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.UNDERKJENT &&
-            !totrinnskontrollData.begrunnelse;
-        if (totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
+            beslutning === TotrinnskontrollBeslutning.UNDERKJENT && !begrunnelse;
+        if (beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
             settInnsendtVedtak(byggFeiletRessurs('Totrinnskontroll ikke vurdert ved innsending'));
         } else if (manglerBegrunnelse) {
             settInnsendtVedtak(byggFeiletRessurs('Mangler begrunnelse ved innsending'));
         } else {
             request<ITotrinnskontrollData, IFagsak>({
                 method: 'POST',
-                data: totrinnskontrollData,
+                data: {
+                    beslutning,
+                    begrunnelse,
+                    kontrollerteSider: Object.entries(trinnPåBehandling).map(([_, side]) => {
+                        return side.navn;
+                    }),
+                },
                 url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/iverksett-vedtak`,
             })
                 .then((response: Ressurs<IFagsak>) => {

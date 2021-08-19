@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useState } from 'react';
+
+import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe, SkjemaGruppe, TextareaControlled } from 'nav-frontend-skjema';
@@ -8,42 +9,42 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/BehandlingContext';
+import ØyeGrå from '../../../../ikoner/ØyeGrå';
+import ØyeGrønn from '../../../../ikoner/ØyeGrønn';
+import ØyeRød from '../../../../ikoner/ØyeRød';
 import { IFagsak } from '../../../../typer/fagsak';
-import {
-    ITotrinnskontrollData,
-    TotrinnskontrollBeslutning,
-} from '../../../../typer/totrinnskontroll';
+import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { KontrollertStatus } from '../../Venstremeny/sider';
 
 interface IProps {
     innsendtVedtak: Ressurs<IFagsak>;
-    sendInnVedtak: (totrinnskontrollData: ITotrinnskontrollData) => void;
+    sendInnVedtak: (beslutning: TotrinnskontrollBeslutning, begrunnelse: string) => void;
 }
 
 const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
     innsendtVedtak,
     sendInnVedtak,
 }) => {
-    const { siderForKontroll } = useBehandling();
-    const [feilmelding] = useState<string | undefined>(hentFrontendFeilmelding(innsendtVedtak));
+    const { trinnPåBehandling } = useBehandling();
 
-    const [
-        totrinnskontrollStatus,
-        settTotrinnskontrollStatus,
-    ] = React.useState<TotrinnskontrollBeslutning>(TotrinnskontrollBeslutning.IKKE_VURDERT);
-    const [totrinnskontrollBegrunnelse, settTotrinnskontrollBegrunnelse] = React.useState<string>(
-        ''
+    const [beslutning, settBeslutning] = React.useState<TotrinnskontrollBeslutning>(
+        TotrinnskontrollBeslutning.IKKE_VURDERT
     );
+    const [begrunnelse, settBegrunnelse] = React.useState<string>('');
 
     const senderInn = innsendtVedtak.status === RessursStatus.HENTER;
 
     return (
         <div>
-            <SkjemaGruppe className="totrinnskontroll-skjemagruppe" feil={feilmelding}>
+            <SkjemaGruppe
+                className="totrinnskontroll-skjemagruppe"
+                feil={hentFrontendFeilmelding(innsendtVedtak)}
+            >
                 <RadioGruppe
                     className="totrinnskontroll-radiogruppe"
                     description={
-                        <div>
+                        <>
                             <Normaltekst>
                                 Kontrollér opplysninger og faglige vurderinger som er gjort
                             </Normaltekst>
@@ -52,44 +53,41 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                             <Element>Kontrolerte trinn</Element>
                             <br />
 
-                            {Object.entries(siderForKontroll).map(([_, side]) => {
-                                return side.besøkt ? (
-                                    <div>OK {side.navn}</div>
-                                ) : (
-                                    <div>X {side.navn}</div>
+                            {Object.entries(trinnPåBehandling).map(([_, trinn]) => {
+                                return (
+                                    <TrinnStatus
+                                        kontrollertStatus={trinn.kontrollert}
+                                        navn={trinn.navn}
+                                    />
                                 );
                             })}
-                        </div>
+                        </>
                     }
                 >
                     <Radio
                         label={'Godkjent'}
                         name={'totrinnskontroll'}
                         className="totrinnskontroll-radio"
-                        checked={totrinnskontrollStatus === TotrinnskontrollBeslutning.GODKJENT}
-                        onChange={() =>
-                            settTotrinnskontrollStatus(TotrinnskontrollBeslutning.GODKJENT)
-                        }
+                        checked={beslutning === TotrinnskontrollBeslutning.GODKJENT}
+                        onChange={() => settBeslutning(TotrinnskontrollBeslutning.GODKJENT)}
                         disabled={senderInn}
                     />
                     <Radio
                         label={'Vurdér på nytt'}
                         name={'totrinnskontroll'}
                         className="totrinnskontroll-radio"
-                        checked={totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT}
-                        onChange={() =>
-                            settTotrinnskontrollStatus(TotrinnskontrollBeslutning.UNDERKJENT)
-                        }
+                        checked={beslutning === TotrinnskontrollBeslutning.UNDERKJENT}
+                        onChange={() => settBeslutning(TotrinnskontrollBeslutning.UNDERKJENT)}
                         disabled={senderInn}
                     />
                 </RadioGruppe>
-                {totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT && (
+                {beslutning === TotrinnskontrollBeslutning.UNDERKJENT && (
                     <div className={'totrinnskontroll-begrunnelse'}>
                         <TextareaControlled
-                            defaultValue={totrinnskontrollBegrunnelse}
-                            value={totrinnskontrollBegrunnelse}
+                            defaultValue={begrunnelse}
+                            value={begrunnelse}
                             placeholder={'Begrunnelse'}
-                            onBlur={event => settTotrinnskontrollBegrunnelse(event.target.value)}
+                            onBlur={event => settBegrunnelse(event.target.value)}
                         />
                     </div>
                 )}
@@ -101,29 +99,49 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 mini={true}
                 onClick={() => {
                     if (!senderInn) {
-                        sendInnVedtak({
-                            beslutning: totrinnskontrollStatus,
-                            begrunnelse:
-                                totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
-                                    ? totrinnskontrollBegrunnelse
-                                    : '',
-                            kontrollerteSider: Object.entries(siderForKontroll)
-                                .filter(([_, side]) => {
-                                    return side.besøkt;
-                                })
-                                .map(([_, side]) => {
-                                    return side.navn;
-                                }),
-                        });
+                        sendInnVedtak(
+                            beslutning,
+                            beslutning === TotrinnskontrollBeslutning.UNDERKJENT ? begrunnelse : ''
+                        );
                     }
                 }}
                 children={
-                    totrinnskontrollStatus === TotrinnskontrollBeslutning.UNDERKJENT
+                    beslutning === TotrinnskontrollBeslutning.UNDERKJENT
                         ? 'Send til saksbehandler'
                         : 'Godkjenn vedtaket'
                 }
             />
         </div>
+    );
+};
+
+const Trinn = styled.div`
+    display: flex;
+
+    svg {
+        margin-right: 1rem;
+    }
+`;
+
+const TrinnStatus: React.FC<{
+    kontrollertStatus: KontrollertStatus;
+    navn: string;
+}> = ({ kontrollertStatus, navn }) => {
+    return (
+        <Trinn>
+            {kontrollertStatus === KontrollertStatus.IKKE_KONTROLLERT && (
+                <ØyeGrå heigth={24} width={24} />
+            )}
+
+            {kontrollertStatus === KontrollertStatus.KONTROLLERT && (
+                <ØyeGrønn heigth={24} width={24} />
+            )}
+
+            {kontrollertStatus === KontrollertStatus.MANGLER_KONTROLL && (
+                <ØyeRød heigth={24} width={24} />
+            )}
+            <span>{navn}</span>
+        </Trinn>
     );
 };
 

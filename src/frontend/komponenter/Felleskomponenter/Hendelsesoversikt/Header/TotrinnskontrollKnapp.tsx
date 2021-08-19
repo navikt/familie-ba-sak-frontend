@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import IkonMeldinger from '../ikoner/IkonMeldinger';
+import IkonTotrinnskontroll from '../ikoner/IkonTotrinnskontroll';
 import Filterknapp from '../komponenter/Filterknapp';
 
 interface ITotrinnskontrollKnappProps {
@@ -12,7 +12,7 @@ interface ITotrinnskontrollKnappProps {
 
 const TotrinnskontrollKnapp = ({ aktiv, onClick }: ITotrinnskontrollKnappProps) => (
     <Filterknapp disabled={false} onClick={onClick} aktiv={aktiv}>
-        <IkonMeldinger />
+        <IkonTotrinnskontroll />
         <Normaltekst>Totrinnskontroll</Normaltekst>
     </Filterknapp>
 );

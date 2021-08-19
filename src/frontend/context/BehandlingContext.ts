@@ -19,7 +19,9 @@ import {
     ISide,
     SideId,
     sider,
-    siderForBehandling,
+    hentTrinnForBehandling,
+    ITrinn,
+    KontrollertStatus,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
 import {
     BehandlerRolle,
@@ -46,24 +48,27 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const history = useHistory();
     const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
-    const [siderForKontroll, settSiderForKontroll] = React.useState<{
-        [sideId: string]: ISide & { besøkt: boolean };
+    const [trinnPåBehandling, settTrinnPåBehandling] = React.useState<{
+        [sideId: string]: ITrinn;
     }>({});
 
     useEffect(() => {
         const siderPåBehandling =
             åpenBehandling.status === RessursStatus.SUKSESS
-                ? siderForBehandling(åpenBehandling.data)
+                ? hentTrinnForBehandling(åpenBehandling.data)
                 : [];
 
         const sideHref = hentSideHref(history.location.pathname);
-        settSiderForKontroll(
+        settTrinnPåBehandling(
             Object.entries(siderPåBehandling).reduce((acc, [sideId, side]) => {
                 return {
                     ...acc,
                     [sideId]: {
                         ...side,
-                        besøkt: sideHref === side.href,
+                        kontrollert:
+                            sideHref === side.href
+                                ? KontrollertStatus.KONTROLLERT
+                                : KontrollertStatus.IKKE_KONTROLLERT,
                     },
                 };
             }, {})
@@ -82,14 +87,30 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const leggTilBesøktSide = (besøktSide: SideId) => {
         if (kanBeslutteVedtak) {
-            settSiderForKontroll({
-                ...siderForKontroll,
+            settTrinnPåBehandling({
+                ...trinnPåBehandling,
                 [besøktSide]: {
-                    ...siderForKontroll[besøktSide],
-                    besøkt: true,
+                    ...trinnPåBehandling[besøktSide],
+                    kontrollert: KontrollertStatus.KONTROLLERT,
                 },
             });
         }
+    };
+
+    const settIkkeKontrollerteSiderTilManglerKontroll = () => {
+        settTrinnPåBehandling(
+            Object.entries(trinnPåBehandling).reduce((acc, [sideId, trinn]) => {
+                if (trinn.kontrollert === KontrollertStatus.IKKE_KONTROLLERT) {
+                    return {
+                        ...acc,
+                        [sideId]: {
+                            ...trinn,
+                            kontrollert: KontrollertStatus.MANGLER_KONTROLL,
+                        },
+                    };
+                } else return acc;
+            }, trinnPåBehandling)
+        );
     };
 
     const bestemÅpenBehandling = (behandlingId: string | undefined) => {
@@ -165,11 +186,12 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     return {
         bestemÅpenBehandling,
         erLesevisning,
-        leggTilBesøktSide,
-        siderForKontroll,
-        kanBeslutteVedtak,
         forrigeÅpneSide,
+        kanBeslutteVedtak,
+        leggTilBesøktSide,
+        settIkkeKontrollerteSiderTilManglerKontroll,
         søkersMålform,
+        trinnPåBehandling,
         åpenBehandling,
     };
 });
