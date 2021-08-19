@@ -1,8 +1,6 @@
 import { VedtakBegrunnelse } from '../../typer/vedtak';
 
-export const sanityBegrunnelseTilApiNavnDictionary: {
-    [begrunnelse in VedtakBegrunnelse]: string;
-} = {
+export const sanityBegrunnelseTilApiNavnDictionary: Record<VedtakBegrunnelse, string> = {
     [VedtakBegrunnelse.INNVILGET_BOSATT_I_RIKTET]: 'norskNordiskBosattINorge',
     [VedtakBegrunnelse.INNVILGET_BOSATT_I_RIKTET_LOVLIG_OPPHOLD]: 'tredjelandsborgerMedLovligOpph',
     [VedtakBegrunnelse.INNVILGET_LOVLIG_OPPHOLD_OPPHOLDSTILLATELSE]:
@@ -87,9 +85,10 @@ export const sanityBegrunnelseTilApiNavnDictionary: {
     [VedtakBegrunnelse.FORTSATT_INNVILGET_FRITEKST]: 'FORTSATT_INNVILGET_FRITEKST',
 };
 
-export const sanityApiNavnTilBegrunnelseDictionary: {
-    [apiNavn: string]: VedtakBegrunnelse;
-} = Object.fromEntries(
+export const sanityApiNavnTilBegrunnelseDictionary: Record<
+    string,
+    VedtakBegrunnelse
+> = Object.fromEntries(
     new Map<string, VedtakBegrunnelse>(
         Object.entries(sanityBegrunnelseTilApiNavnDictionary).map(([key, value]) => [
             value,
