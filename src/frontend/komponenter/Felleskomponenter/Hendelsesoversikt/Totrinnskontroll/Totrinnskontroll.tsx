@@ -75,7 +75,9 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                 trinn => trinn.kontrollert !== KontrollertStatus.KONTROLLERT
             )
         ) {
-            settInnsendtVedtak(byggFunksjonellFeilRessurs('Alle steg er ikke kontrollerte.'));
+            settInnsendtVedtak(
+                byggFunksjonellFeilRessurs('Du må kontrollere alle steg i løsningen.')
+            );
             settIkkeKontrollerteSiderTilManglerKontroll();
             return;
         }
