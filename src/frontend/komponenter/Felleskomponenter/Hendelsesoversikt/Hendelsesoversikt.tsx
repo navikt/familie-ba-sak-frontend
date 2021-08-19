@@ -2,28 +2,54 @@ import * as React from 'react';
 
 import classNames from 'classnames';
 
+import { useApp } from '../../../context/AppContext';
 import { BrevModulProvider } from '../../../context/BrevModulContext';
+import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
+import { IFagsak } from '../../../typer/fagsak';
 import Brev from './BrevModul/Brev';
 import Header from './Header/Header';
 import HendelseItem from './komponenter/HendelseItem';
+import Totrinnskontroll from './Totrinnskontroll/Totrinnskontroll';
 import { Hendelse, Tabs } from './typer';
 
 export interface IHendelsesoversiktProps {
     className?: string;
     hendelser: Hendelse[];
+    fagsak: IFagsak;
+    åpenBehandling: IBehandling;
 }
 
 const tilHendelseItem = (hendelse: Hendelse) => (
     <HendelseItem key={hendelse.id} hendelse={hendelse} />
 );
 
-const Hendelsesoversikt = ({ hendelser, className }: IHendelsesoversiktProps) => {
-    const [aktivTab, settAktivTab] = React.useState<Tabs>(Tabs.Historikk);
+const Hendelsesoversikt = ({
+    hendelser,
+    className,
+    fagsak,
+    åpenBehandling,
+}: IHendelsesoversiktProps) => {
+    const { hentSaksbehandlerRolle } = useApp();
+
+    const skalViseTotrinnskontroll =
+        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
+        åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK;
+
+    const [aktivTab, settAktivTab] = React.useState<Tabs>(
+        skalViseTotrinnskontroll ? Tabs.Totrinnskontroll : Tabs.Historikk
+    );
 
     return (
         <div className={classNames('hendelsesoversikt', className)}>
             <BrevModulProvider>
-                <Header aktivTab={aktivTab} settAktivTab={settAktivTab} />
+                <Header
+                    aktivTab={aktivTab}
+                    settAktivTab={settAktivTab}
+                    skalViseTotrinnskontroll={skalViseTotrinnskontroll}
+                />
+                {aktivTab === Tabs.Totrinnskontroll && (
+                    <Totrinnskontroll fagsak={fagsak} åpenBehandling={åpenBehandling} />
+                )}
                 {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                     <div className={'historikk'}>
                         <ul className={'hendelsesoversikt__list'}>

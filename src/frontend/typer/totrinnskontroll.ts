@@ -7,6 +7,7 @@ export enum TotrinnskontrollBeslutning {
 export interface ITotrinnskontrollData {
     beslutning: TotrinnskontrollBeslutning;
     begrunnelse: string;
+    kontrollerteSider: string[];
 }
 
 export interface ITotrinnskontroll {

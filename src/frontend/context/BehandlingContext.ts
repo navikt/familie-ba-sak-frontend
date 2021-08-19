@@ -17,22 +17,66 @@ import {
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
     ISide,
+    SideId,
     sider,
+    hentTrinnForBehandling,
+    ITrinn,
+    KontrollertStatus,
 } from '../komponenter/Felleskomponenter/Venstremeny/sider';
-import { BehandlingSteg, hentStegNummer, IBehandling } from '../typer/behandling';
+import {
+    BehandlerRolle,
+    BehandlingStatus,
+    BehandlingSteg,
+    hentStegNummer,
+    IBehandling,
+} from '../typer/behandling';
 import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { hentBehandlingPåFagsak } from '../utils/fagsak';
+import { hentSideHref } from '../utils/miljø';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
+    const {
+        harInnloggetSaksbehandlerSkrivetilgang,
+        innloggetSaksbehandler,
+        hentSaksbehandlerRolle,
+    } = useApp();
     const { fagsak } = useFagsakRessurser();
 
     const history = useHistory();
     const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
+    const [trinnPåBehandling, settTrinnPåBehandling] = React.useState<{
+        [sideId: string]: ITrinn;
+    }>({});
+
+    useEffect(() => {
+        const siderPåBehandling =
+            åpenBehandling.status === RessursStatus.SUKSESS
+                ? hentTrinnForBehandling(åpenBehandling.data)
+                : [];
+
+        const sideHref = hentSideHref(history.location.pathname);
+        settTrinnPåBehandling(
+            Object.entries(siderPåBehandling).reduce((acc, [sideId, side]) => {
+                return {
+                    ...acc,
+                    [sideId]: {
+                        ...side,
+                        kontrollert:
+                            sideHref === side.href
+                                ? KontrollertStatus.KONTROLLERT
+                                : KontrollertStatus.IKKE_KONTROLLERT,
+                    },
+                };
+            }, {})
+        );
+
+        automatiskNavigeringTilSideForSteg();
+    }, [åpenBehandling]);
+
     useEffect(() => {
         settForrigeÅpneSide(
             Object.values(sider).find((side: ISide) =>
@@ -41,9 +85,33 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         );
     }, [history.location.pathname]);
 
-    useEffect(() => {
-        automatiskNavigeringTilSideForSteg();
-    }, [åpenBehandling]);
+    const leggTilBesøktSide = (besøktSide: SideId) => {
+        if (kanBeslutteVedtak) {
+            settTrinnPåBehandling({
+                ...trinnPåBehandling,
+                [besøktSide]: {
+                    ...trinnPåBehandling[besøktSide],
+                    kontrollert: KontrollertStatus.KONTROLLERT,
+                },
+            });
+        }
+    };
+
+    const settIkkeKontrollerteSiderTilManglerKontroll = () => {
+        settTrinnPåBehandling(
+            Object.entries(trinnPåBehandling).reduce((acc, [sideId, trinn]) => {
+                if (trinn.kontrollert === KontrollertStatus.IKKE_KONTROLLERT) {
+                    return {
+                        ...acc,
+                        [sideId]: {
+                            ...trinn,
+                            kontrollert: KontrollertStatus.MANGLER_KONTROLL,
+                        },
+                    };
+                } else return acc;
+            }, trinnPåBehandling)
+        );
+    };
 
     const bestemÅpenBehandling = (behandlingId: string | undefined) => {
         if (fagsak.status === RessursStatus.SUKSESS) {
@@ -109,11 +177,21 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
                   ?.målform ?? Målform.NB
             : Målform.NB;
 
+    const kanBeslutteVedtak =
+        åpenBehandling.status === RessursStatus.SUKSESS &&
+        åpenBehandling.data.status === BehandlingStatus.FATTER_VEDTAK &&
+        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
+        innloggetSaksbehandler?.email !== åpenBehandling.data.endretAv;
+
     return {
         bestemÅpenBehandling,
         erLesevisning,
         forrigeÅpneSide,
+        kanBeslutteVedtak,
+        leggTilBesøktSide,
+        settIkkeKontrollerteSiderTilManglerKontroll,
         søkersMålform,
+        trinnPåBehandling,
         åpenBehandling,
     };
 });

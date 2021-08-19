@@ -25,6 +25,16 @@ export interface IUnderside {
     hash: string;
 }
 
+export interface ITrinn extends ISide {
+    kontrollert: KontrollertStatus;
+}
+
+export enum KontrollertStatus {
+    IKKE_KONTROLLERT,
+    KONTROLLERT,
+    MANGLER_KONTROLL,
+}
+
 export enum SideId {
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
     FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
@@ -119,12 +129,24 @@ export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
     return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
-export const visSide = (side: ISide, åpenBehandling: IBehandling) => {
-    if (side.visSide) {
-        return side.visSide(åpenBehandling);
-    } else {
-        return true;
-    }
+export const hentTrinnForBehandling = (
+    åpenBehandling: IBehandling
+): { [sideId: string]: ISide } => {
+    const visSide = (side: ISide) => {
+        if (side.visSide) {
+            return side.visSide(åpenBehandling);
+        } else {
+            return true;
+        }
+    };
+    return Object.entries(sider)
+        .filter(([_, side]) => visSide(side))
+        .reduce((acc, [sideId, side]) => {
+            return {
+                ...acc,
+                [sideId]: side,
+            };
+        }, {});
 };
 
 export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | undefined => {
@@ -165,7 +187,7 @@ export const erViPåUlovligSteg = (pathname: string, behandlingSide?: ISide) => 
     return false;
 };
 
-export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
+const finnSteg = (behandling: IBehandling): BehandlingSteg => {
     const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_BEHANDLING);
 
     if (erHenlagt) {
@@ -181,7 +203,7 @@ export const finnSteg = (behandling: IBehandling): BehandlingSteg => {
     }
 };
 
-export const inneholderSteg = (behandling: IBehandling, behandlingSteg: BehandlingSteg): boolean =>
+const inneholderSteg = (behandling: IBehandling, behandlingSteg: BehandlingSteg): boolean =>
     behandling.stegTilstand
         .filter(
             stegTilstand => stegTilstand.behandlingStegStatus !== BehandlingStegStatus.IKKE_UTFØRT
