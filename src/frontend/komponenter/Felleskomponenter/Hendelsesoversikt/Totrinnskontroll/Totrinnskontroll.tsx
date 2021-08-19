@@ -25,7 +25,7 @@ import {
     ITotrinnskontrollData,
 } from '../../../../typer/totrinnskontroll';
 import UIModalWrapper from '../../Modal/UIModalWrapper';
-import { KontrollertStatus } from '../../Venstremeny/sider';
+import { ITrinn, KontrollertStatus } from '../../Venstremeny/sider';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilBeslutterSkjema';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
@@ -69,16 +69,38 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         });
     }, [innsendtVedtak.status]);
 
+    const [forrigeState, settForrigeState] = React.useState(trinnPåBehandling);
+    const nullstillFeilmelding = () => {
+        const erFørsteSjekk = Object.entries(forrigeState).some(([sideId, trinn]) => {
+            const oppdatertTrinn: ITrinn = Object.entries(trinnPåBehandling)
+                .filter(([oppdatertSideId, _]) => sideId === oppdatertSideId)
+                .map(([_, aTrinn]) => aTrinn)[0];
+            return (
+                (trinn.kontrollert === KontrollertStatus.IKKE_KONTROLLERT ||
+                    trinn.kontrollert === KontrollertStatus.MANGLER_KONTROLL) &&
+                oppdatertTrinn.kontrollert === KontrollertStatus.KONTROLLERT
+            );
+        });
+        if (erFørsteSjekk) {
+            settInnsendtVedtak(byggTomRessurs());
+        }
+        settForrigeState(trinnPåBehandling);
+    };
+
+    React.useEffect(() => {
+        nullstillFeilmelding();
+    }, [trinnPåBehandling]);
+
     const sendInnVedtak = (beslutning: TotrinnskontrollBeslutning, begrunnelse: string) => {
         if (
             Object.values(trinnPåBehandling).some(
                 trinn => trinn.kontrollert !== KontrollertStatus.KONTROLLERT
             )
         ) {
+            settIkkeKontrollerteSiderTilManglerKontroll();
             settInnsendtVedtak(
                 byggFunksjonellFeilRessurs('Du må kontrollere alle steg i løsningen.')
             );
-            settIkkeKontrollerteSiderTilManglerKontroll();
             return;
         }
 
