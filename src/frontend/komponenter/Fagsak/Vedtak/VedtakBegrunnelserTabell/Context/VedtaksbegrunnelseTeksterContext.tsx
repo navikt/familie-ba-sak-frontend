@@ -4,13 +4,10 @@ import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
 import { Ressurs, byggTomRessurs } from '@navikt/familie-typer';
-import { byggSuksessRessurs } from '@navikt/familie-typer/dist/ressurs';
 
-import { useSanity, Begrunnelsedata } from '../../../../../api/sanity/sanityHook';
-import { sanityApiNavnTilBegrunnelseDictionary } from '../../../../../api/sanity/typer';
+import { useSanity } from '../../../../../api/sanity/sanityHook';
 import { useApp } from '../../../../../context/AppContext';
 import { ToggleNavn } from '../../../../../typer/toggles';
-import { VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import { VedtaksbegrunnelseTekster } from '../../../../../typer/vilkår';
 
 const [VedtaksbegrunnelseTeksterProvider, useVedtaksbegrunnelseTekster] = constate(() => {
@@ -22,42 +19,11 @@ const [VedtaksbegrunnelseTeksterProvider, useVedtaksbegrunnelseTekster] = consta
         Ressurs<VedtaksbegrunnelseTekster>
     >(byggTomRessurs());
 
-    const byggVedtaksbegrunnelsesteksterFraSanitydata = (
-        begrunnelsedataFraSanity: Begrunnelsedata[]
-    ) =>
-        begrunnelsedataFraSanity.reduce(
-            (
-                acc: VedtaksbegrunnelseTekster,
-                begrunnelseMetadata: Begrunnelsedata
-            ): VedtaksbegrunnelseTekster => {
-                // Løser dette kun for "Norsk, nordisk bosatt i Norge"-begrunnelsen for POCen
-                begrunnelseMetadata.apiNavn === 'norskNordiskBosattINorge' &&
-                    sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn] &&
-                    acc[begrunnelseMetadata.begrunnelsetype].push({
-                        id: sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn],
-                        navn: begrunnelseMetadata.navnISystem,
-                        vilkår: begrunnelseMetadata.vilkår,
-                    });
-                return acc;
-            },
-            {
-                [VedtakBegrunnelseType.INNVILGELSE]: [],
-                [VedtakBegrunnelseType.AVSLAG]: [],
-                [VedtakBegrunnelseType.REDUKSJON]: [],
-                [VedtakBegrunnelseType.OPPHØR]: [],
-                [VedtakBegrunnelseType.FORTSATT_INNVILGET]: [],
-            }
-        );
-
     useEffect(() => {
         if (toggles[ToggleNavn.brukBegrunnelserFraSanity]) {
-            hentBegrunnelser().then(begrunnelsedataFraSanity => {
-                settVedtaksbegrunnelseTekster(
-                    byggSuksessRessurs(
-                        byggVedtaksbegrunnelsesteksterFraSanitydata(begrunnelsedataFraSanity)
-                    )
-                );
-            });
+            hentBegrunnelser().then((begrunnelseData: Ressurs<VedtaksbegrunnelseTekster>) =>
+                settVedtaksbegrunnelseTekster(begrunnelseData)
+            );
         } else {
             request<void, VedtaksbegrunnelseTekster>({
                 method: 'GET',
