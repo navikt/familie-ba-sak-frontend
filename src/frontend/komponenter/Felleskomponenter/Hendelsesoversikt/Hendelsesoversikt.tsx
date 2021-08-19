@@ -47,7 +47,7 @@ const Hendelsesoversikt = ({
                     settAktivTab={settAktivTab}
                     skalViseTotrinnskontroll={skalViseTotrinnskontroll}
                 />
-                {aktivTab === Tabs.Totrinnskontroll && (
+                {aktivTab === Tabs.Totrinnskontroll && skalViseTotrinnskontroll && (
                     <Totrinnskontroll fagsak={fagsak} åpenBehandling={åpenBehandling} />
                 )}
                 {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
