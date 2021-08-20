@@ -43,13 +43,15 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
     }, [aktivtVedtak]);
 
     useEffect(() => {
-        request<undefined, boolean>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/har-apen-tilbakekreving`,
-            påvirkerSystemLaster: true,
-        }).then(response => {
-            settHarÅpentTilbakekrevingRessurs(response);
-        });
+        if (tilbakekrevingErToggletPå) {
+            request<undefined, boolean>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/har-apen-tilbakekreving`,
+                påvirkerSystemLaster: true,
+            }).then(response => {
+                settHarÅpentTilbakekrevingRessurs(response);
+            });
+        }
     }, [fagsak.id]);
 
     const harÅpenTilbakekreving: boolean =
