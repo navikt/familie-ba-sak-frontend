@@ -9,26 +9,26 @@ interface IProps {
 }
 
 const TotrinnskontrollModalInnhold: React.FunctionComponent<IProps> = ({ beslutning }) => {
-    if (beslutning === TotrinnskontrollBeslutning.UNDERKJENT) {
+    if (beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
         return (
             <div className={'totrinnsvurdering-modal-innhold'}>
                 <IkkeOppfylt />
                 <div className={'totrinnsvurdering-modal-tekst'}>
-                    Behandlingen er ikke godkjent og er sendt tilbake til saksbehandler
-                </div>
-            </div>
-        );
-    } else if (beslutning === TotrinnskontrollBeslutning.GODKJENT) {
-        return (
-            <div className={'totrinnsvurdering-modal-innhold'}>
-                <Oppfylt />
-                <div className={'totrinnsvurdering-modal-tekst'}>
-                    Behandlingen er godkjent, og vedtaket er iverksatt
+                    Beslutning er IKKE_VURDERT. Ta kontakt med barnetrygdteamet.
                 </div>
             </div>
         );
     } else {
-        return <p />;
+        return (
+            <div className={'totrinnsvurdering-modal-innhold'}>
+                <Oppfylt />
+                <div className={'totrinnsvurdering-modal-tekst'}>
+                    {beslutning === TotrinnskontrollBeslutning.GODKJENT
+                        ? 'Behandlingen er godkjent, og vedtaket er iverksatt'
+                        : 'Behandlingen er ikke godkjent og er sendt tilbake til saksbehandler'}
+                </div>
+            </div>
+        );
     }
 };
 
