@@ -16,6 +16,7 @@ import {
 } from '@navikt/familie-typer';
 
 import useFagsakApi from '../komponenter/Fagsak/useFagsakApi';
+import { ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import Oppgavebenk from '../komponenter/Oppgavebenk/Oppgavebenk';
 import {
     FeltSortOrder,
@@ -34,6 +35,7 @@ import {
 } from '../typer/oppgave';
 import { erFør, erIsoStringGyldig, kalenderDato } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
+import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useApp } from './AppContext';
 
 export const oppgaveSideLimit = 15;
@@ -42,7 +44,7 @@ export const maksAntallOppgaver = 150;
 
 const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const history = useHistory();
-    const { innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler, settToast } = useApp();
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
@@ -293,14 +295,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         });
     };
 
-    const fordelOppgave = (
-        oppgave: IOppgave,
-        saksbehandler: string,
-        bruker?: string
-    ): Promise<Ressurs<string>> => {
-        return request<void, string>({
+    const fordelOppgave = (oppgave: IOppgave, saksbehandler: string, bruker?: string) => {
+        request<void, string>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/fordel?saksbehandler=${saksbehandler}`,
+            påvirkerSystemLaster: true,
         })
             .then((oppgaveId: Ressurs<string>) => {
                 if (oppgaveId.status === RessursStatus.SUKSESS) {
@@ -338,26 +337,48 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                             return byggFeiletRessurs<string>('Oppgave mangler aktørid');
                         }
                     }
+                } else {
+                    settToast(ToastTyper.OPPGAVE_PLUKKET, {
+                        alertstripeType: 'feil',
+                        tekst: hentFrontendFeilmelding(oppgaveId) ?? 'Fordeling av oppgave feilet',
+                    });
                 }
-
-                return oppgaveId;
             })
             .catch((_error: AxiosError) => {
-                return byggFeiletRessurs<string>('Ukjent feil ved fordeling av oppgave');
+                settToast(ToastTyper.OPPGAVE_PLUKKET, {
+                    alertstripeType: 'feil',
+                    tekst: 'Fordeling av oppgave feilet',
+                });
             });
     };
 
-    const tilbakestillFordelingPåOppgave = (oppgave: IOppgave): Promise<Ressurs<IOppgave>> => {
-        return request<string, IOppgave>({
+    const tilbakestillFordelingPåOppgave = (oppgave: IOppgave) => {
+        request<string, IOppgave>({
             method: 'POST',
             url: `/familie-ba-sak/api/oppgave/${oppgave.id}/tilbakestill`,
+            påvirkerSystemLaster: true,
         })
             .then((oppgaverRes: Ressurs<IOppgave>) => {
-                oppgaverRes.status === RessursStatus.SUKSESS && oppdaterOppgave(oppgaverRes.data);
-                return oppgaverRes;
+                if (oppgaverRes.status === RessursStatus.SUKSESS) {
+                    oppdaterOppgave(oppgaverRes.data);
+                    settToast(ToastTyper.OPPGAVE_TILBAKESTILT, {
+                        alertstripeType: 'suksess',
+                        tekst: 'Oppgave er tilbakestilt',
+                    });
+                } else {
+                    settToast(ToastTyper.OPPGAVE_TILBAKESTILT, {
+                        alertstripeType: 'feil',
+                        tekst:
+                            hentFrontendFeilmelding(oppgaverRes) ??
+                            'Tilbakestilling av oppgave feilet',
+                    });
+                }
             })
             .catch((_error: AxiosError) => {
-                return byggFeiletRessurs('Ukjent feil ved tilbakestilling av oppgave');
+                settToast(ToastTyper.OPPGAVE_TILBAKESTILT, {
+                    alertstripeType: 'feil',
+                    tekst: 'Tilbakestilling av oppgave feilet',
+                });
             });
     };
 

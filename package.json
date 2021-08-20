@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@axe-core/react": "^4.2.1",
+    "@axe-core/react": "^4.2.2",
     "@navikt/ds-icons": "^0.3.3",
     "@navikt/familie-backend": "^5.0.26",
     "@navikt/familie-clipboard": "^3.1.6",
@@ -121,6 +121,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.2.2",
+    "react-toast-notifications": "^2.5.1",
     "request-promise": "^4.2.5",
     "snyk": "^1.668.0",
     "styled-components": "^5.2.3",
