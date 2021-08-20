@@ -38,6 +38,7 @@
     "@navikt/familie-visittkort": "^2.1.25",
     "@navikt/fnrvalidator": "^1.1.3",
     "@navikt/helse-frontend-tidslinje": "^3.1.0",
+    "@sanity/client": "^2.13.0",
     "@sentry/browser": "^6.4.1",
     "@sentry/core": "^6.5.1",
     "@svgr/webpack": "^5.5.0",
