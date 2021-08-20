@@ -6,18 +6,18 @@ import { hentBegrunnelserQuery } from './queries';
 import { sanity } from './sanity';
 import { sanityApiNavnTilBegrunnelseDictionary } from './typer';
 
-export interface Begrunnelsedata {
+export interface SanityBegrunnelse {
     apiNavn: string;
     navnISystem: string;
     vilkår: VilkårType;
     begrunnelsetype: VedtakBegrunnelseType;
 }
 
-const byggVedtaksbegrunnelsesteksterFraSanitydata = (begrunnelsedataFraSanity: Begrunnelsedata[]) =>
-    begrunnelsedataFraSanity.reduce(
+const byggVedtaksbegrunnelsesteksterFraSanitydata = (sanityBegrunnelse: SanityBegrunnelse[]) =>
+    sanityBegrunnelse.reduce(
         (
             acc: VedtaksbegrunnelseTekster,
-            begrunnelseMetadata: Begrunnelsedata
+            begrunnelseMetadata: SanityBegrunnelse
         ): VedtaksbegrunnelseTekster => {
             // Løser dette kun for "Norsk, nordisk bosatt i Norge"-begrunnelsen for POCen
             begrunnelseMetadata.apiNavn === 'norskNordiskBosattINorge' &&
@@ -42,8 +42,8 @@ export const useSanity = () => {
     const hentBegrunnelser = (): Promise<Ressurs<VedtaksbegrunnelseTekster>> =>
         sanity
             .fetch(hentBegrunnelserQuery)
-            .then(begrunnelsedata =>
-                byggSuksessRessurs(byggVedtaksbegrunnelsesteksterFraSanitydata(begrunnelsedata))
+            .then(sanityBegrunnelse =>
+                byggSuksessRessurs(byggVedtaksbegrunnelsesteksterFraSanitydata(sanityBegrunnelse))
             )
             .catch(error => byggFeiletRessurs(error));
 
