@@ -19,14 +19,19 @@ const byggVedtaksbegrunnelsesteksterFraSanitydata = (sanityBegrunnelse: SanityBe
             acc: VedtaksbegrunnelseTekster,
             begrunnelseMetadata: SanityBegrunnelse
         ): VedtaksbegrunnelseTekster => {
-            // Løser dette kun for "Norsk, nordisk bosatt i Norge"-begrunnelsen for POCen
-            begrunnelseMetadata.apiNavn === 'norskNordiskBosattINorge' &&
-                sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn] &&
-                acc[begrunnelseMetadata.begrunnelsetype].push({
-                    id: sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn],
-                    navn: begrunnelseMetadata.navnISystem,
-                    vilkår: begrunnelseMetadata.vilkår,
-                });
+            if (sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn]) {
+                return {
+                    ...acc,
+                    [begrunnelseMetadata.begrunnelsetype]: [
+                        ...acc[begrunnelseMetadata.begrunnelsetype],
+                        {
+                            id: sanityApiNavnTilBegrunnelseDictionary[begrunnelseMetadata.apiNavn],
+                            navn: begrunnelseMetadata.navnISystem,
+                            vilkår: begrunnelseMetadata.vilkår,
+                        },
+                    ],
+                };
+            }
             return acc;
         },
         {
