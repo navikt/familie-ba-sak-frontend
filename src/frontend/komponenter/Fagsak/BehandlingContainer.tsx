@@ -13,6 +13,8 @@ import { TidslinjeProvider } from '../../context/TidslinjeContext';
 import { VilkårsvurderingProvider } from '../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import { IFagsak } from '../../typer/fagsak';
 import { useAmplitude } from '../../utils/amplitude';
+import { hentSideHref } from '../../utils/miljø';
+import { SideId, sider } from '../Felleskomponenter/Venstremeny/sider';
 import Filtreringsregler from './Filtreringsregler/Filtreringsregler';
 import Simulering from './Simulering/Simulering';
 import RegistrerSøknad from './Søknad/RegistrerSøknad';
@@ -28,16 +30,19 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
     const { loggSidevisning } = useAmplitude();
     const history = useHistory();
     const { behandlingId } = useParams<{ behandlingId: string }>();
-    const { bestemÅpenBehandling, åpenBehandling } = useBehandling();
+    const { bestemÅpenBehandling, åpenBehandling, leggTilBesøktSide } = useBehandling();
 
     React.useEffect(() => {
         bestemÅpenBehandling(behandlingId);
     }, [fagsak, behandlingId]);
 
-    const sidevisning = history.location.pathname.split('/')[4];
+    const sidevisning = hentSideHref(history.location.pathname);
     useEffect(() => {
         if (sidevisning) {
             loggSidevisning(sidevisning);
+            leggTilBesøktSide(
+                Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId
+            );
         }
     }, [sidevisning]);
 
@@ -101,7 +106,10 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         path="/fagsak/:fagsakId/:behandlingId/simulering"
                         render={() => {
                             return (
-                                <SimuleringProvider åpenBehandling={åpenBehandling.data}>
+                                <SimuleringProvider
+                                    åpenBehandling={åpenBehandling.data}
+                                    fagsak={fagsak}
+                                >
                                     <Simulering
                                         fagsak={fagsak}
                                         åpenBehandling={åpenBehandling.data}

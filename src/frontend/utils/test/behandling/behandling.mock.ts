@@ -16,19 +16,23 @@ import { mockRestPersonResultat } from '../vilkårsvurdering/vilkår.mock';
 interface IMockBehandling {
     behandlingId?: number;
     aktiv?: boolean;
-    steg?: string;
+    steg?: BehandlingSteg;
+    status?: BehandlingStatus;
     opprettetTidspunkt?: string;
     årsak?: BehandlingÅrsak;
     type?: Behandlingstype;
+    skalBehandlesAutomatisk?: boolean;
 }
 
 export const mockBehandling = ({
     behandlingId = 1,
     opprettetTidspunkt = '2020-03-19T09:08:56.8',
-    steg = 'VILKÅRSVURDERING',
+    steg = BehandlingSteg.VILKÅRSVURDERING,
+    status = BehandlingStatus.FATTER_VEDTAK,
     aktiv = true,
     årsak = BehandlingÅrsak.SØKNAD,
     type = Behandlingstype.FØRSTEGANGSBEHANDLING,
+    skalBehandlesAutomatisk = false,
 }: IMockBehandling = {}): IBehandling => {
     const barn = mockBarn;
 
@@ -50,7 +54,7 @@ export const mockBehandling = ({
             behandlendeEnhetNavn: 'enhet navn',
             manueltOverstyrt: false,
         },
-        steg: (steg as unknown) as BehandlingSteg,
+        steg: steg,
         stegTilstand: [
             {
                 behandlingSteg: BehandlingSteg.REGISTRERE_SØKNAD,
@@ -68,7 +72,7 @@ export const mockBehandling = ({
         opprettetTidspunkt,
         kategori: BehandlingKategori.NASJONAL,
         underkategori: BehandlingUnderkategori.ORDINÆR,
-        status: BehandlingStatus.FATTER_VEDTAK,
+        status,
         personResultater: [søkerRestPersonResultat, barnRestPersonResultat],
         fødselshendelsefiltreringResultater: [],
         vedtakForBehandling: [],
@@ -83,6 +87,6 @@ export const mockBehandling = ({
         utbetalingsperioder: [],
         personerMedAndelerTilkjentYtelse: [],
         årsak: årsak,
-        skalBehandlesAutomatisk: false,
+        skalBehandlesAutomatisk,
     };
 };

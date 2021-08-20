@@ -2,24 +2,30 @@ import * as React from 'react';
 
 import { AxiosError } from 'axios';
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
 
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
+    byggFunksjonellFeilRessurs,
     byggHenterRessurs,
     byggTomRessurs,
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
-import { ITotrinnskontrollData, TotrinnskontrollBeslutning } from '../../../typer/totrinnskontroll';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import { useBehandling } from '../../../../context/BehandlingContext';
+import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { BehandlingStatus, IBehandling } from '../../../../typer/behandling';
+import { IFagsak } from '../../../../typer/fagsak';
+import {
+    TotrinnskontrollBeslutning,
+    ITotrinnskontrollData,
+} from '../../../../typer/totrinnskontroll';
+import UIModalWrapper from '../../Modal/UIModalWrapper';
+import { ITrinn, KontrollertStatus } from '../../Venstremeny/sider';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilBeslutterSkjema';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
@@ -28,6 +34,11 @@ interface IProps {
     åpenBehandling: IBehandling | undefined;
     fagsak: IFagsak;
 }
+
+const Container = styled.div`
+    padding: 0.5rem 1.5rem;
+    display: flex;
+`;
 
 interface IModalVerdier {
     skalVises: boolean;
@@ -40,7 +51,11 @@ const initiellModalVerdi = {
 };
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsak }) => {
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const {
+        kanBeslutteVedtak,
+        trinnPåBehandling,
+        settIkkeKontrollerteSiderTilManglerKontroll,
+    } = useBehandling();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
@@ -54,27 +69,59 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         });
     }, [innsendtVedtak.status]);
 
-    const skalViseSkjema =
-        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK &&
-        history.location.pathname.includes('vedtak');
+    const [forrigeState, settForrigeState] = React.useState(trinnPåBehandling);
+    const nullstillFeilmelding = () => {
+        const erFørsteSjekk = Object.entries(forrigeState).some(([sideId, trinn]) => {
+            const oppdatertTrinn: ITrinn = Object.entries(trinnPåBehandling)
+                .filter(([oppdatertSideId, _]) => sideId === oppdatertSideId)
+                .map(([_, aTrinn]) => aTrinn)[0];
+            return (
+                (trinn.kontrollert === KontrollertStatus.IKKE_KONTROLLERT ||
+                    trinn.kontrollert === KontrollertStatus.MANGLER_KONTROLL) &&
+                oppdatertTrinn.kontrollert === KontrollertStatus.KONTROLLERT
+            );
+        });
+        if (erFørsteSjekk) {
+            settInnsendtVedtak(byggTomRessurs());
+        }
+        settForrigeState(trinnPåBehandling);
+    };
 
-    const kanBeslutte = innloggetSaksbehandler?.email !== åpenBehandling?.endretAv ?? false;
+    React.useEffect(() => {
+        nullstillFeilmelding();
+    }, [trinnPåBehandling]);
 
-    const sendInnVedtak = (totrinnskontrollData: ITotrinnskontrollData) => {
+    const sendInnVedtak = (beslutning: TotrinnskontrollBeslutning, begrunnelse: string) => {
+        if (
+            Object.values(trinnPåBehandling).some(
+                trinn => trinn.kontrollert !== KontrollertStatus.KONTROLLERT
+            )
+        ) {
+            settIkkeKontrollerteSiderTilManglerKontroll();
+            settInnsendtVedtak(
+                byggFunksjonellFeilRessurs('Du må kontrollere alle steg i løsningen.')
+            );
+            return;
+        }
+
         settInnsendtVedtak(byggHenterRessurs());
-        settModalVerdi({ ...modalVerdi, beslutning: totrinnskontrollData.beslutning });
+        settModalVerdi({ ...modalVerdi, beslutning: beslutning });
         const manglerBegrunnelse =
-            totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.UNDERKJENT &&
-            !totrinnskontrollData.begrunnelse;
-        if (totrinnskontrollData.beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
+            beslutning === TotrinnskontrollBeslutning.UNDERKJENT && !begrunnelse;
+        if (beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
             settInnsendtVedtak(byggFeiletRessurs('Totrinnskontroll ikke vurdert ved innsending'));
         } else if (manglerBegrunnelse) {
             settInnsendtVedtak(byggFeiletRessurs('Mangler begrunnelse ved innsending'));
         } else {
             request<ITotrinnskontrollData, IFagsak>({
                 method: 'POST',
-                data: totrinnskontrollData,
+                data: {
+                    beslutning,
+                    begrunnelse,
+                    kontrollerteSider: Object.entries(trinnPåBehandling).map(([_, side]) => {
+                        return side.navn;
+                    }),
+                },
                 url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/iverksett-vedtak`,
             })
                 .then((response: Ressurs<IFagsak>) => {
@@ -91,15 +138,19 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
 
     return (
         <>
-            {skalViseSkjema &&
-                (kanBeslutte ? (
-                    <Totrinnskontrollskjema
-                        sendInnVedtak={sendInnVedtak}
-                        innsendtVedtak={innsendtVedtak}
-                    />
-                ) : (
-                    <TotrinnskontrollSendtTilBeslutterSkjema åpenBehandling={åpenBehandling} />
-                ))}
+            {åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK && (
+                <Container className="totrinnskontroll">
+                    {kanBeslutteVedtak ? (
+                        <Totrinnskontrollskjema
+                            sendInnVedtak={sendInnVedtak}
+                            innsendtVedtak={innsendtVedtak}
+                        />
+                    ) : (
+                        <TotrinnskontrollSendtTilBeslutterSkjema åpenBehandling={åpenBehandling} />
+                    )}
+                </Container>
+            )}
+
             {modalVerdi && (
                 <UIModalWrapper
                     modal={{

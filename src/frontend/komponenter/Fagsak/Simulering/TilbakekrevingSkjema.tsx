@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -12,7 +11,6 @@ import { Radio, Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
 import { FamilieTextarea, FamilieRadioGruppe } from '@navikt/familie-form-elements';
-import { useHttp } from '@navikt/familie-http';
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
@@ -81,35 +79,19 @@ interface IForhåndsvisTilbakekrevingsvarselbrevRequest {
     fritekst: string;
 }
 
-const TilbakekrevingSkjema: React.FC<{ søkerMålform: Målform; fagsakId: number }> = ({
-    søkerMålform,
-    fagsakId,
-}) => {
-    const { request } = useHttp();
+const TilbakekrevingSkjema: React.FC<{
+    søkerMålform: Målform;
+    harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
+}> = ({ søkerMålform, harÅpenTilbakekrevingRessurs }) => {
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimulering();
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
-    const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<
-        Ressurs<boolean>
-    >({
-        status: RessursStatus.HENTER,
-    });
     const {
         hentForhåndsvisning,
         visForhåndsvisningModal,
         hentetForhåndsvisning,
         settVisForhåndsviningModal,
     } = useForhåndsvisning();
-
-    useEffect(() => {
-        request<undefined, boolean>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/fagsaker/${fagsakId}/har-apen-tilbakekreving`,
-            påvirkerSystemLaster: true,
-        }).then(response => {
-            settHarÅpentTilbakekrevingRessurs(response);
-        });
-    }, [fagsakId]);
 
     const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {
         tilbakekrevingSkjema.felter.tilbakekrevingsvalg.validerOgSettFelt(
