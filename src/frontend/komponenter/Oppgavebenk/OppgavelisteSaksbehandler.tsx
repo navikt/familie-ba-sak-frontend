@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 
 import { ISaksbehandler } from '@navikt/familie-typer';
 
@@ -21,7 +21,6 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
     innloggetSaksbehandler,
 }) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgaver();
-    const [feilmelding, settFeilmelding] = React.useState<string>();
     const { sjekkTilgang } = useApp();
     const oppgaveRef = useRef<IOppgave | null>(null);
 
@@ -29,18 +28,11 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         if (oppgaveRef.current === null) {
             oppgaveRef.current = oppgave;
         }
-        if (oppgaveRef.current.id !== oppgave.id) {
-            settFeilmelding('');
-        }
         oppgaveRef.current = oppgave;
     }, [oppgave]);
 
     if (innloggetSaksbehandler == null) {
         return <AlertStripe type="feil">Klarte ikke hente innlogget saksbehandler</AlertStripe>;
-    }
-
-    if (feilmelding) {
-        return <Feilmelding className={'kolonne'}>{feilmelding}</Feilmelding>;
     }
 
     const oppgaveTypeErStøttet = [
