@@ -13,6 +13,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { loggFeil } from '../api/axios';
 import IkkeTilgang from '../ikoner/IkkeTilgang';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
+import { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
 import { adressebeskyttelsestyper, IRestTilgang } from '../typer/person';
 import { IToggles, alleTogglerAv, ToggleNavn } from '../typer/toggles';
@@ -78,6 +79,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
     const [appVersjon, settAppVersjon] = useState('');
 
     const [modal, settModal] = React.useState<IModal>(initalState);
+    const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
 
     const verifiserVersjon = () => {
         request<void, string>({
@@ -242,8 +244,15 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         lukkModal,
         modal,
         settModal,
+        settToast: (toastId: ToastTyper, toast: IToast) =>
+            settToasts({
+                ...toasts,
+                [toastId]: toast,
+            }),
+        settToasts,
         sjekkTilgang,
         systemetLaster,
+        toasts,
         toggles,
         åpneModal,
     };

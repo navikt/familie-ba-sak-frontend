@@ -11,6 +11,7 @@ import { HeaderMedSøk } from './Felleskomponenter/HeaderMedSøk/HeaderMedSøk';
 import UgyldigSesjon from './Felleskomponenter/Modal/SesjonUtløpt';
 import UIModalWrapper from './Felleskomponenter/Modal/UIModalWrapper';
 import SystemetLaster from './Felleskomponenter/SystemetLaster/SystemetLaster';
+import Toasts from './Felleskomponenter/Toast/Toasts';
 import { Infotrygd } from './Infotrygd/Infotrygd';
 import Internstatistikk from './Internstatistikk';
 import ManuellJournalfør from './ManuellJournalfør/ManuellJournalfør';
@@ -24,6 +25,8 @@ const Container: React.FC = () => {
             {autentisert ? (
                 <>
                     {systemetLaster() && <SystemetLaster />}
+                    <Toasts />
+
                     <main className={classNames('container', systemetLaster() && 'blur')}>
                         <HeaderMedSøk
                             brukerNavn={innloggetSaksbehandler?.displayName}

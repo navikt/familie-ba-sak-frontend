@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useHistory } from 'react-router';
 
@@ -12,27 +12,20 @@ import { useOppgaver } from '../../context/OppgaverContext';
 import { IOppgave, oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
+import { ToastTyper } from '../Felleskomponenter/Toast/typer';
 
 interface IOppgaveDirektelenke {
     oppgave: IOppgave;
 }
 
 const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
-    const { harLøpendeSakIInfotrygd, sideindeks } = useOppgaver();
+    const { settToast } = useApp();
+    const { harLøpendeSakIInfotrygd } = useOppgaver();
     const { hentFagsakForPerson } = useFagsakRessurser();
     const { sjekkTilgang } = useApp();
-    const [feilmelding, settFeilmelding] = useState<string>('');
     const [laster, settLaster] = useState<boolean>(false);
     const history = useHistory();
     const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype]?.id;
-
-    useEffect(() => {
-        settFeilmelding('');
-    }, [sideindeks]);
-
-    useEffect(() => {
-        settLaster(false);
-    }, [feilmelding]);
 
     const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
@@ -54,6 +47,8 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     };
 
     const sjekkTilgangOgGåTilBehandling = async (oppgave: IOppgave) => {
+        settLaster(true);
+
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
         if (brukerident) {
             if (await sjekkTilgang(brukerident, false)) {
@@ -61,12 +56,19 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                 if (fagsak.status === RessursStatus.SUKSESS && fagsak.data?.id) {
                     history.push(`/fagsak/${fagsak.data.id}/saksoversikt`);
                 } else {
-                    settFeilmelding('Fant ikke fagsak');
+                    settToast(ToastTyper.FANT_IKKE_FAGSAK, {
+                        alertstripeType: 'advarsel',
+                        tekst: 'Fant ikke fagsak',
+                    });
                 }
             }
         } else {
-            settFeilmelding('Mangler tilgang');
+            settToast(ToastTyper.MANGLER_TILGANG, {
+                alertstripeType: 'advarsel',
+                tekst: 'Mangler tilgang',
+            });
         }
+        settLaster(false);
     };
 
     if (laster) {
@@ -88,17 +90,14 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
             case OppgavetypeFilter.GOD_VED:
             case OppgavetypeFilter.BEH_UND_VED:
             case OppgavetypeFilter.FREM:
-                return feilmelding === '' ? (
+                return (
                     <FamilieBaseKnapp
                         key={'tilfagsak'}
                         onClick={() => {
-                            settLaster(true);
                             sjekkTilgangOgGåTilBehandling(oppgave);
                         }}
                         children={'Gå til fagsak'}
                     />
-                ) : (
-                    <>{feilmelding}</>
                 );
             default:
                 return <></>;
