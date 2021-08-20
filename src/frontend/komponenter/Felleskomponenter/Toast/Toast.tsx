@@ -7,7 +7,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { useApp } from '../../../context/AppContext';
 import { IToast } from './typer';
 
-const Container = styled.div<{ out: boolean }>`
+const Container = styled.div`
     grid-column: 3;
     width: 20rem;
     z-index: 9999;
@@ -51,7 +51,7 @@ const Toast: React.FC<{ toastId: string; toast: IToast }> = ({ toastId, toast })
     });
 
     return (
-        <Container out={false} ref={toastRef}>
+        <Container ref={toastRef}>
             <AlertStripe type={toast.alertstripeType}>{toast.tekst}</AlertStripe>
         </Container>
     );
