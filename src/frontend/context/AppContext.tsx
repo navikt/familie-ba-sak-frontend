@@ -236,7 +236,6 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         return rolle >= BehandlerRolle.SAKSBEHANDLER;
     };
 
-    console.log(toasts);
     return {
         autentisert,
         hentSaksbehandlerRolle,
