@@ -11,7 +11,7 @@ import DokumentutsendingSkjema from './DokumentutsendingSkjema';
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: 40rem 1fr;
+    grid-template-columns: 35rem 1fr;
     grid-template-rows: 1fr;
     grid-gap: 2rem;
     height: calc(100vh - ${fagsakHeaderHøydeRem}rem);

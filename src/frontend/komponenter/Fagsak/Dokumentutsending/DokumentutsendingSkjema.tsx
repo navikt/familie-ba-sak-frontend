@@ -33,7 +33,7 @@ const DokumentutsendingSkjema: React.FC<IProps> = ({ fagsak }) => {
                             hentForhåndsvisning({
                                 method: 'POST',
                                 data: {},
-                                url: `/familie-ba-sak/api/dokument/dokumentutsending/${fagsak.id}`,
+                                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/dokumentutsending`,
                             });
                         }
                     }}

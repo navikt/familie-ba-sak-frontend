@@ -50,7 +50,7 @@ const useForhåndsvisning = () => {
             })
             .catch((_error: AxiosError) => {
                 settHentetForhåndsvisning(
-                    byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning. 🚨')
+                    byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
                 );
             });
     };
