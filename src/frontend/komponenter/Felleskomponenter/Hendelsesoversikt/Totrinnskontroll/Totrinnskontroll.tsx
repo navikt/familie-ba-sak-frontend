@@ -27,11 +27,10 @@ import {
 import UIModalWrapper from '../../Modal/UIModalWrapper';
 import { ITrinn, KontrollertStatus } from '../../Venstremeny/sider';
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
-import TotrinnskontrollSendtTilBeslutterSkjema from './TotrinnskontrollSendtTilBeslutterSkjema';
 import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 
 interface IProps {
-    åpenBehandling: IBehandling | undefined;
+    åpenBehandling: IBehandling;
     fagsak: IFagsak;
 }
 
@@ -51,11 +50,7 @@ const initiellModalVerdi = {
 };
 
 const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsak }) => {
-    const {
-        kanBeslutteVedtak,
-        trinnPåBehandling,
-        settIkkeKontrollerteSiderTilManglerKontroll,
-    } = useBehandling();
+    const { trinnPåBehandling, settIkkeKontrollerteSiderTilManglerKontroll } = useBehandling();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
@@ -91,8 +86,13 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         nullstillFeilmelding();
     }, [trinnPåBehandling]);
 
-    const sendInnVedtak = (beslutning: TotrinnskontrollBeslutning, begrunnelse: string) => {
+    const sendInnVedtak = (
+        beslutning: TotrinnskontrollBeslutning,
+        begrunnelse: string,
+        egetVedtak: boolean
+    ) => {
         if (
+            !egetVedtak &&
             Object.values(trinnPåBehandling).some(
                 trinn => trinn.kontrollert !== KontrollertStatus.KONTROLLERT
             )
@@ -140,14 +140,11 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         <>
             {åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK && (
                 <Container className="totrinnskontroll">
-                    {kanBeslutteVedtak ? (
-                        <Totrinnskontrollskjema
-                            sendInnVedtak={sendInnVedtak}
-                            innsendtVedtak={innsendtVedtak}
-                        />
-                    ) : (
-                        <TotrinnskontrollSendtTilBeslutterSkjema åpenBehandling={åpenBehandling} />
-                    )}
+                    <Totrinnskontrollskjema
+                        åpenBehandling={åpenBehandling}
+                        sendInnVedtak={sendInnVedtak}
+                        innsendtVedtak={innsendtVedtak}
+                    />
                 </Container>
             )}
 
