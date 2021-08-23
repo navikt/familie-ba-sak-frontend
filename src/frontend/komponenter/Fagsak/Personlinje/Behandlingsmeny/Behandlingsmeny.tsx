@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 
+import { useHistory } from 'react-router';
+
 import { Menyknapp } from 'nav-frontend-ikonknapper';
+import KnappBase from 'nav-frontend-knapper';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 
 import { RessursStatus } from '@navikt/familie-typer';
@@ -17,6 +20,7 @@ interface IProps {
 
 const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
     const { åpenBehandling } = useBehandling();
+    const history = useHistory();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
 
     return (
@@ -70,6 +74,17 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             />
                         </li>
                     )}
+
+                    <li>
+                        <KnappBase
+                            mini={true}
+                            onClick={() => {
+                                history.push(`/fagsak/${fagsak.id}/dokumentutsending`);
+                            }}
+                        >
+                            Send informasjonsbrev
+                        </KnappBase>
+                    </li>
                 </ul>
             </Popover>
         </>

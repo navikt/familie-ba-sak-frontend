@@ -12,7 +12,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { FamilieAxiosRequestConfig } from '../../../context/AppContext';
+import { FamilieAxiosRequestConfig } from '../context/AppContext';
 
 const useForhåndsvisning = () => {
     const { request } = useHttp();

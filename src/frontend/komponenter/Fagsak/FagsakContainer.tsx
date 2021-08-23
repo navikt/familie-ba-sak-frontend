@@ -8,10 +8,12 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingProvider } from '../../context/BehandlingContext';
+import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
+import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import Høyremeny from './Høyremeny/Høyremeny';
 import JournalpostListe from './journalposter/JournalpostListe';
 import Personlinje from './Personlinje/Personlinje';
@@ -23,6 +25,9 @@ const FagsakContainer: React.FunctionComponent = () => {
     const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
     const erPåDokumentliste = history.location.pathname.includes('dokumentliste');
+    const erPåDokumentutsending = history.location.pathname.includes('dokumentutsending');
+
+    const skalHaVenstremeny = !erPåSaksoversikt && !erPåDokumentliste && !erPåDokumentutsending;
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
@@ -43,6 +48,10 @@ const FagsakContainer: React.FunctionComponent = () => {
         if (erPåSaksoversikt) {
             loggSidevisning('saksoversikt');
         }
+
+        if (erPåDokumentutsending) {
+            loggSidevisning('dokumentutsending');
+        }
     }, []);
 
     switch (fagsak.status) {
@@ -54,7 +63,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                             <Personlinje bruker={bruker.data} fagsak={fagsak.data} />
 
                             <div className={'fagsakcontainer__content'}>
-                                {!erPåSaksoversikt && !erPåDokumentliste && (
+                                {skalHaVenstremeny && (
                                     <div className={'fagsakcontainer__content--venstremeny'}>
                                         <Venstremeny fagsak={fagsak.data} />
                                     </div>
@@ -69,6 +78,18 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             path="/fagsak/:fagsakId/saksoversikt"
                                             render={() => {
                                                 return <Saksoversikt fagsak={fagsak.data} />;
+                                            }}
+                                        />
+
+                                        <Route
+                                            exact={true}
+                                            path="/fagsak/:fagsakId/dokumentutsending"
+                                            render={() => {
+                                                return (
+                                                    <DokumentutsendingProvider>
+                                                        <Dokumentutsending fagsak={fagsak.data} />
+                                                    </DokumentutsendingProvider>
+                                                );
                                             }}
                                         />
 
