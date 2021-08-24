@@ -7,9 +7,11 @@ import AlertStripe from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../context/AppContext';
 import { BehandlingProvider } from '../../context/BehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
+import { ToggleNavn } from '../../typer/toggles';
 import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
@@ -22,12 +24,15 @@ import Saksoversikt from './Saksoversikt/Saksoversikt';
 const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useParams<{ fagsakId: string }>();
     const history = useHistory();
+    const { toggles } = useApp();
     const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
     const erPåDokumentliste = history.location.pathname.includes('dokumentliste');
     const erPåDokumentutsending = history.location.pathname.includes('dokumentutsending');
+    const visDokumentutsending = toggles[ToggleNavn.brukErDeltBosted];
 
-    const skalHaVenstremeny = !erPåSaksoversikt && !erPåDokumentliste && !erPåDokumentutsending;
+    const skalHaVenstremeny =
+        !erPåSaksoversikt && !erPåDokumentliste && visDokumentutsending && !erPåDokumentutsending;
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
@@ -49,7 +54,7 @@ const FagsakContainer: React.FunctionComponent = () => {
             loggSidevisning('saksoversikt');
         }
 
-        if (erPåDokumentutsending) {
+        if (visDokumentutsending && erPåDokumentutsending) {
             loggSidevisning('dokumentutsending');
         }
     }, []);
@@ -81,17 +86,21 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             }}
                                         />
 
-                                        <Route
-                                            exact={true}
-                                            path="/fagsak/:fagsakId/dokumentutsending"
-                                            render={() => {
-                                                return (
-                                                    <DokumentutsendingProvider>
-                                                        <Dokumentutsending fagsak={fagsak.data} />
-                                                    </DokumentutsendingProvider>
-                                                );
-                                            }}
-                                        />
+                                        {visDokumentutsending && (
+                                            <Route
+                                                exact={true}
+                                                path="/fagsak/:fagsakId/dokumentutsending"
+                                                render={() => {
+                                                    return (
+                                                        <DokumentutsendingProvider>
+                                                            <Dokumentutsending
+                                                                fagsak={fagsak.data}
+                                                            />
+                                                        </DokumentutsendingProvider>
+                                                    );
+                                                }}
+                                            />
+                                        )}
 
                                         <Route
                                             exact={true}
