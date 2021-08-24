@@ -35,6 +35,9 @@ export const DokumentPanel: React.FC = () => {
                 dokumentData.status === RessursStatus.FUNKSJONELL_FEIL) && (
                 <DokumentDataAlert children={dokumentData.frontendFeilmelding} />
             )}
+            {dokumentData.status === RessursStatus.IKKE_TILGANG && (
+                <DokumentDataAlert children={'Ikke tilgang til dokument'} />
+            )}
         </DokumentDiv>
     );
 };
