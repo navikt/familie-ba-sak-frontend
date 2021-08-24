@@ -1,5 +1,3 @@
-import { parse, ParsedQuery } from 'query-string';
-
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { ISaksbehandler } from '@navikt/familie-typer';
 
@@ -55,11 +53,8 @@ export interface IOppgaveFelter {
     tilordnetRessurs: IOppgaveFelt;
 }
 
-export const initialOppgaveFelter = (
-    innloggetSaksbehandler?: ISaksbehandler,
-    search?: string
-): IOppgaveFelter => {
-    const searchParams: ParsedQuery = search ? parse(search) : {};
+export const initialOppgaveFelter = (innloggetSaksbehandler?: ISaksbehandler): IOppgaveFelter => {
+    const searchParams = JSON.parse(localStorage.getItem('oppgaveFeltVerdier') || '{}');
 
     return {
         opprettetTidspunkt: {

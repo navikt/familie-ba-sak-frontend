@@ -15,12 +15,12 @@ import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
+import useForhåndsvisning from '../../../hooks/useForhåndsvisning';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { visTilbakekrevingsvalg, Tilbakekrevingsvalg } from '../../../typer/simulering';
 import { Målform, målform } from '../../../typer/søknad';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import useForhåndsvisning from '../../Felleskomponenter/PdfVisningModal/useForhåndsvisning';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
 const ForhåndsvisVarselKnappContainer = styled.div`

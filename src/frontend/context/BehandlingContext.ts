@@ -187,7 +187,6 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         bestemÅpenBehandling,
         erLesevisning,
         forrigeÅpneSide,
-        kanBeslutteVedtak,
         leggTilBesøktSide,
         settIkkeKontrollerteSiderTilManglerKontroll,
         søkersMålform,
