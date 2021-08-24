@@ -16,6 +16,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import useForhåndsvisning from '../../../../hooks/useForhåndsvisning';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
@@ -24,7 +25,6 @@ import { formaterPersonIdent } from '../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
-import useForhåndsvisning from '../../PdfVisningModal/useForhåndsvisning';
 import SkjultLegend from '../../SkjultLegend';
 import {
     Brevmal,

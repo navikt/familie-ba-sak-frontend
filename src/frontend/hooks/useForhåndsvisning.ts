@@ -12,7 +12,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { FamilieAxiosRequestConfig } from '../../../context/AppContext';
+import { FamilieAxiosRequestConfig } from '../context/AppContext';
 
 const useForhåndsvisning = () => {
     const { request } = useHttp();
@@ -50,7 +50,7 @@ const useForhåndsvisning = () => {
             })
             .catch((_error: AxiosError) => {
                 settHentetForhåndsvisning(
-                    byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning. 🚨')
+                    byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
                 );
             });
     };
