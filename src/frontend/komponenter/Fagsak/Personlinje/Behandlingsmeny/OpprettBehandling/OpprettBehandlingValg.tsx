@@ -127,7 +127,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                             årsak =>
                                 årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
                                 årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
-                                årsak !== BehandlingÅrsak.SATSENDRING
+                                årsak !== BehandlingÅrsak.SATSENDRING &&
+                                årsak !== BehandlingÅrsak.MIGRERING
                         )
                         .map(årsak => {
                             return (
