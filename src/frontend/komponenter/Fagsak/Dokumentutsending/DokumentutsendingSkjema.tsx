@@ -29,6 +29,7 @@ const DokumentutsendingSkjema: React.FC<IProps> = ({ fagsak }) => {
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {
+                        // TODO endre til riktig URL, denne vil heller ikke fungere i miljø
                         if (kanSendeSkjema()) {
                             hentForhåndsvisning({
                                 method: 'POST',
@@ -40,7 +41,7 @@ const DokumentutsendingSkjema: React.FC<IProps> = ({ fagsak }) => {
                 >
                     Forhåndsvis
                 </Flatknapp>
-                {/*<Knapp
+                {/*TODO <Knapp
                     mini
                     spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
