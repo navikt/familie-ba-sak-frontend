@@ -6,7 +6,7 @@ import { Knapp } from 'nav-frontend-knapper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import UIModalWrapper from '../../Modal/UIModalWrapper';

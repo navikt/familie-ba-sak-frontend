@@ -13,7 +13,7 @@ import {
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { validerAnnenVurdering } from '../../../../context/Vilkårsvurdering/validering';
 import {

@@ -8,7 +8,7 @@ import { Element, Undertekst, Undertittel } from 'nav-frontend-typografi';
 import { FeltState } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import {
     useVilkårsvurdering,

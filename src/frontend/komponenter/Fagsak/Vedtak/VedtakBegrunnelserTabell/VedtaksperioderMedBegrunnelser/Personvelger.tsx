@@ -7,7 +7,7 @@ import { FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements
 import { useFelt } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { personTypeMap } from '../../../../../typer/person';
 import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 

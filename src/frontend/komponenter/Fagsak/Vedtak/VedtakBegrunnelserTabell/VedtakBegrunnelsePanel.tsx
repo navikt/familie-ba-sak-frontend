@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { IRestVedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../typer/vedtak';
 import { hentUtbetalingsperiodeDetaljer, Vedtaksperiode } from '../../../../typer/vedtaksperiode';

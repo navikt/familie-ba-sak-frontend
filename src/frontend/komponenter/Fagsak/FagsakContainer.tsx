@@ -8,7 +8,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
-import { BehandlingProvider } from '../../context/BehandlingContext';
+import { BehandlingProvider } from '../../context/behandlingContext/BehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { ToggleNavn } from '../../typer/toggles';

@@ -22,20 +22,20 @@ import {
     hentTrinnForBehandling,
     ITrinn,
     KontrollertStatus,
-} from '../komponenter/Felleskomponenter/Venstremeny/sider';
+} from '../../komponenter/Felleskomponenter/Venstremeny/sider';
 import {
     BehandlerRolle,
     BehandlingStatus,
     BehandlingSteg,
-    hentStegNummer,
     IBehandling,
-} from '../typer/behandling';
-import { PersonType } from '../typer/person';
-import { Målform } from '../typer/søknad';
-import { hentBehandlingPåFagsak } from '../utils/fagsak';
-import { hentSideHref } from '../utils/miljø';
-import { useApp } from './AppContext';
-import { useFagsakRessurser } from './FagsakContext';
+} from '../../typer/behandling';
+import { PersonType } from '../../typer/person';
+import { Målform } from '../../typer/søknad';
+import { hentBehandlingPåFagsak } from '../../utils/fagsak';
+import { hentSideHref } from '../../utils/miljø';
+import { useApp } from '../AppContext';
+import { useFagsakRessurser } from '../FagsakContext';
+import { saksbehandlerHarKunLesevisning } from './util';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
@@ -138,18 +138,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
         const steg = hentStegPåÅpenBehandling();
 
-        if (
-            innloggetSaksbehandlerSkrivetilgang &&
-            steg &&
-            !(hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK))
-        ) {
-            return false;
-        } else if (!innloggetSaksbehandlerSkrivetilgang) {
-            return true;
-        } else {
-            // Default til lesevisning dersom vi er usikre
-            return true;
-        }
+        return saksbehandlerHarKunLesevisning(innloggetSaksbehandlerSkrivetilgang, steg);
     };
 
     const automatiskNavigeringTilSideForSteg = () => {

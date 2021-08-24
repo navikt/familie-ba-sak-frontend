@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Innholdstittel } from 'nav-frontend-typografi';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { ISide, sider } from '../Venstremeny/sider';
 
 interface IProps {
