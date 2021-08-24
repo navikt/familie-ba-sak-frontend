@@ -52,11 +52,11 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         byggTomRessurs<IHentOppgaveDto>()
     );
     const [oppgaveFelter, settOppgaveFelter] = useState<IOppgaveFelter>(
-        initialOppgaveFelter(innloggetSaksbehandler, history.location.search)
+        initialOppgaveFelter(innloggetSaksbehandler)
     );
 
     useEffect(() => {
-        settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler, history.location.search));
+        settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
     }, [innloggetSaksbehandler]);
 
     useEffect(() => {
@@ -75,6 +75,18 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const hentOppgaveFelt = (nøkkel: string) => {
         return oppgaveFelter[nøkkel];
+    };
+
+    const oppdaterOppgaveFeltILocalStorage = (oppgaveFelt: IOppgaveFelt, nyVerdi: string) => {
+        const oppgaveFelterLocalStorage = JSON.parse(
+            localStorage.getItem('oppgaveFeltVerdier') || '{}'
+        );
+        oppgaveFelterLocalStorage[oppgaveFelt.nøkkel] = nyVerdi;
+        localStorage.setItem('oppgaveFeltVerdier', JSON.stringify(oppgaveFelterLocalStorage));
+    };
+
+    const tilbakestillOppgaveFeltILocalStorage = () => {
+        localStorage.removeItem('oppgaveFeltVerdier');
     };
 
     const oppdaterOppgave = (oppdatertOppgave: IOppgave) => {
@@ -108,6 +120,8 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                     },
                 },
             };
+            oppdaterOppgaveFeltILocalStorage(oppgaveFelt, nyVerdi);
+
             settOppgaveFelter(oppdaterteOppgaveFelter);
 
             history.push({
@@ -169,6 +183,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     };
 
     const tilbakestillOppgaveFelter = () => {
+        tilbakestillOppgaveFeltILocalStorage();
         settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
     };
 
