@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 
+import { useHistory } from 'react-router';
+
 import { Menyknapp } from 'nav-frontend-ikonknapper';
+import KnappBase from 'nav-frontend-knapper';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/BehandlingContext';
 import { IFagsak } from '../../../../typer/fagsak';
+import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
@@ -16,7 +21,9 @@ interface IProps {
 }
 
 const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
+    const { toggles } = useApp();
     const { åpenBehandling } = useBehandling();
+    const history = useHistory();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
 
     return (
@@ -68,6 +75,20 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                                 fagsak={fagsak}
                                 behandling={åpenBehandling.data}
                             />
+                        </li>
+                    )}
+
+                    {toggles[ToggleNavn.brukErDeltBosted] && (
+                        <li>
+                            <KnappBase
+                                mini={true}
+                                onClick={() => {
+                                    history.push(`/fagsak/${fagsak.id}/dokumentutsending`);
+                                    settAnker(undefined);
+                                }}
+                            >
+                                Send informasjonsbrev
+                            </KnappBase>
                         </li>
                     )}
                 </ul>

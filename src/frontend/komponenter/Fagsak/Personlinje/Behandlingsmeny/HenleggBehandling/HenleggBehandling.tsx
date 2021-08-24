@@ -12,6 +12,7 @@ import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/BehandlingContext';
+import useForhåndsvisning from '../../../../../hooks/useForhåndsvisning';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
 import {
     BehandlingSteg,
@@ -23,7 +24,6 @@ import { IFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import useForhåndsvisning from '../../../../Felleskomponenter/PdfVisningModal/useForhåndsvisning';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import useHenleggBehandling from './useHenleggBehandling';
 
