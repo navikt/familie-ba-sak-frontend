@@ -35,7 +35,7 @@ import { hentBehandlingPåFagsak } from '../../utils/fagsak';
 import { hentSideHref } from '../../utils/miljø';
 import { useApp } from '../AppContext';
 import { useFagsakRessurser } from '../FagsakContext';
-import { saksbehandlerHarKunLesevisning } from './util';
+import { saksbehandlerHarKunLesevisning } from './utils';
 
 const [BehandlingProvider, useBehandling] = createUseContext(() => {
     const [åpenBehandling, settÅpenBehandling] = useState<Ressurs<IBehandling>>(byggTomRessurs());
