@@ -1,76 +1,82 @@
 import React from 'react';
 
-import { Flatknapp } from 'nav-frontend-knapper';
+import styled from 'styled-components';
+
+import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Innholdstittel } from 'nav-frontend-typografi';
 
+import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useDokumentutsending } from '../../../context/DokumentutsendingContext';
-import { IFagsak } from '../../../typer/fagsak';
+import {
+    dokumentÅrsak,
+    DokumentÅrsak,
+    useDokumentutsending,
+} from '../../../context/DokumentutsendingContext';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
+import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 
-interface IProps {
-    fagsak: IFagsak;
-}
+const StyledSkjemaGruppe = styled(SkjemaGruppe)`
+    max-width: 20rem;
+    margin-top: 2rem;
+`;
 
-const DokumentutsendingSkjema: React.FC<IProps> = ({ fagsak }) => {
-    const { hentetForhåndsvisning, hentForhåndsvisning } = useDokumentutsending();
+const DokumentutsendingSkjema: React.FC = () => {
+    const {
+        hentForhåndsvisningPåFagsak,
+        hentetForhåndsvisning,
+        sendBrevPåFagsak,
+        skjemaErLåst,
+        årsakFelt,
+    } = useDokumentutsending();
 
-    const skjemaErLåst = false; // TODO
-
-    const kanSendeSkjema = () => true; // TODO
     return (
         <div>
             <Innholdstittel children={'Send informasjonsbrev'} />
+
+            <StyledSkjemaGruppe>
+                <FamilieSelect
+                    {...årsakFelt.hentNavBaseSkjemaProps(false)}
+                    label={'Velg årsak'}
+                    value={årsakFelt.verdi}
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                        årsakFelt.onChange(event.target.value as DokumentÅrsak);
+                    }}
+                >
+                    {Object.values(DokumentÅrsak).map(årsak => {
+                        return (
+                            <option
+                                key={årsak}
+                                aria-selected={årsakFelt.verdi === årsak}
+                                value={årsak}
+                            >
+                                {dokumentÅrsak[årsak]}
+                            </option>
+                        );
+                    })}
+                </FamilieSelect>
+
+                {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
+            </StyledSkjemaGruppe>
 
             <Knapperekke>
                 <Flatknapp
                     mini
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
-                    disabled={skjemaErLåst}
-                    onClick={() => {
-                        // TODO endre til riktig URL, denne vil heller ikke fungere i miljø
-                        if (kanSendeSkjema()) {
-                            hentForhåndsvisning({
-                                method: 'POST',
-                                data: {},
-                                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/dokumentutsending`,
-                            });
-                        }
-                    }}
+                    disabled={skjemaErLåst()}
+                    onClick={hentForhåndsvisningPåFagsak}
                 >
                     Forhåndsvis
                 </Flatknapp>
-                {/*TODO <Knapp
+                <Knapp
                     mini
-                    spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    disabled={skjemaErLåst}
-                    onClick={() => {
-                        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-                            const harRegistrertSøknad =
-                                hentStegNummer(åpenBehandling.data.steg) >
-                                hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
-                            settNavigerTilOpplysningsplikt(
-                                harRegistrertSøknad &&
-                                    skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
-                            );
-                            onSubmit(
-                                {
-                                    method: 'POST',
-                                    data: hentSkjemaData(),
-                                    url: `/familie-ba-sak/api/dokument/send-brev/${åpenBehandling.data.behandlingId}`,
-                                },
-                                (ressurs: Ressurs<IFagsak>) => {
-                                    onSubmitSuccess();
-                                    settFagsak(ressurs);
-                                    hentLogg(åpenBehandling.data.behandlingId);
-                                }
-                            );
-                        }
-                    }}
+                    spinner={skjemaErLåst()}
+                    disabled={skjemaErLåst()}
+                    onClick={sendBrevPåFagsak}
                 >
                     Send brev
-                </Knapp>*/}
+                </Knapp>
             </Knapperekke>
         </div>
     );

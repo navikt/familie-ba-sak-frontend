@@ -1,12 +1,15 @@
 import React from 'react';
 
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
+
+import { Knapp } from 'nav-frontend-knapper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useDokumentutsending } from '../../../context/DokumentutsendingContext';
-import { IFagsak } from '../../../typer/fagsak';
 import { fagsakHeaderHøydeRem } from '../../../typer/styling';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import DokumentutsendingSkjema from './DokumentutsendingSkjema';
 
 const Container = styled.div`
@@ -18,16 +21,33 @@ const Container = styled.div`
     padding: 2rem;
 `;
 
-interface IProps {
-    fagsak: IFagsak;
-}
+const Dokumentutsending: React.FC = () => {
+    const history = useHistory();
 
-const Dokumentutsending: React.FC<IProps> = ({ fagsak }) => {
-    const { hentetForhåndsvisning } = useDokumentutsending();
+    const { hentetForhåndsvisning, visInnsendtBrevModal } = useDokumentutsending();
 
     return (
         <Container>
-            <DokumentutsendingSkjema fagsak={fagsak} />
+            {visInnsendtBrevModal && (
+                <UIModalWrapper
+                    modal={{
+                        tittel: 'Brevet er sendt',
+                        lukkKnapp: false,
+                        visModal: visInnsendtBrevModal,
+                        actions: [
+                            <Knapp
+                                key={'til oppgavebenken'}
+                                mini={true}
+                                onClick={() => {
+                                    history.push('/oppgavebenk');
+                                }}
+                                children={'Naviger til oppgavebenken'}
+                            />,
+                        ],
+                    }}
+                />
+            )}
+            <DokumentutsendingSkjema />
 
             <iframe
                 title={'dokument'}

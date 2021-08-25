@@ -115,7 +115,9 @@ const Barna: React.FunctionComponent = () => {
                     />
                 ))}
 
-                {!lesevisning && <LeggTilBarn />}
+                {!lesevisning && (
+                    <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
+                )}
             </StyledCheckboxGruppe>
         </BarnaWrapper>
     );
