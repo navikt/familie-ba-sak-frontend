@@ -20,7 +20,7 @@ import {
 
 import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import {

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import Slett from '../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';

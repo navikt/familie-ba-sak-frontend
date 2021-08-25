@@ -12,7 +12,7 @@ import { Feilmelding } from 'nav-frontend-typografi';
 
 import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 
-import { useBehandling } from '../../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { EksternLenke } from '../../../../../ikoner/EksternLenke';
 import Pluss from '../../../../../ikoner/Pluss';
 import Slett from '../../../../../ikoner/Slett';

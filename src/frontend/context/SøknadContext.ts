@@ -16,7 +16,7 @@ import {
     kalenderDatoMedFallback,
     TIDENES_ENDE,
 } from '../utils/kalender';
-import { useBehandling } from './BehandlingContext';
+import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 export const hentBarnMedLøpendeUtbetaling = (fagsak: IFagsak) =>

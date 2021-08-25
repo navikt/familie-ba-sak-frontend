@@ -6,7 +6,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../context/BehandlingContext';
+import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';

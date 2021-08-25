@@ -7,7 +7,7 @@ import { Element, Systemtittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';

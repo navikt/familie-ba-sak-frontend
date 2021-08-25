@@ -7,7 +7,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { BehandlingUnderkategori, underkategorier } from '../../../typer/behandling';
 

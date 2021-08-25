@@ -6,7 +6,7 @@ import navFarger from 'nav-frontend-core';
 import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,

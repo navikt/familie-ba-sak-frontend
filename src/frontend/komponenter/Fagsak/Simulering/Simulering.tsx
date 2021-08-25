@@ -7,7 +7,7 @@ import Alertstripe from 'nav-frontend-alertstriper';
 
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import { IBehandling } from '../../../typer/behandling';

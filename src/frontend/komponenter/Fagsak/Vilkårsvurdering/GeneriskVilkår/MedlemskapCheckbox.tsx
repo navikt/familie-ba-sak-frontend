@@ -3,7 +3,7 @@ import React from 'react';
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { FeltState } from '@navikt/familie-skjema';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { IVilkårResultat } from '../../../../typer/vilkår';
 
 interface IProps {

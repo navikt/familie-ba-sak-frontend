@@ -9,7 +9,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { IRestEndreBehandlendeEnhet } from '../../../../../typer/enhet';
 import { IFagsak } from '../../../../../typer/fagsak';

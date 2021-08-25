@@ -4,7 +4,7 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { IBehandling } from '../../../../typer/behandling';
 import { Vedtaksperiode } from '../../../../typer/vedtaksperiode';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from '../../../../utils/vedtakUtils';

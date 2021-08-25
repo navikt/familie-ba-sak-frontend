@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { IFagsak } from '../../../typer/fagsak';
 import { ILogg } from '../../../typer/logg';

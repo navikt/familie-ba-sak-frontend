@@ -9,7 +9,7 @@ import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import {
     BehandlingKategori,
     BehandlingResultat,

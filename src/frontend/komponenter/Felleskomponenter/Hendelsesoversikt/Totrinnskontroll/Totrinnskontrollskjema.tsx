@@ -9,7 +9,7 @@ import { Element, Normaltekst, Systemtittel, UndertekstBold } from 'nav-frontend
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import GrønnHake from '../../../../ikoner/GrønnHake';
 import ØyeGrå from '../../../../ikoner/ØyeGrå';
 import ØyeGrønn from '../../../../ikoner/ØyeGrønn';
