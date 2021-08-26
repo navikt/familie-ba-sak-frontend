@@ -27,6 +27,10 @@ const ÅrsakSkjema = styled.div`
     margin-bottom: 2rem;
 `;
 
+const ForhåndsvisKnapp = styled(Flatknapp)`
+    align-content: flex-end;
+`;
+
 const DokumentutsendingSkjema: React.FC = () => {
     const {
         hentForhåndsvisningPåFagsak,
@@ -43,7 +47,7 @@ const DokumentutsendingSkjema: React.FC = () => {
         <div>
             <Innholdstittel children={'Send informasjonsbrev'} />
 
-            <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()}>
+            <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()} utenFeilPropagering={true}>
                 <FamilieSelect
                     {...årsakFelt.hentNavBaseSkjemaProps(false)}
                     label={'Velg årsak'}
@@ -76,7 +80,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
                 </ÅrsakSkjema>
 
-                <Flatknapp
+                <ForhåndsvisKnapp
                     mini
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
@@ -84,7 +88,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     type={'standard'}
                 >
                     Forhåndsvis
-                </Flatknapp>
+                </ForhåndsvisKnapp>
 
                 <Knapperekke>
                     <Knapp

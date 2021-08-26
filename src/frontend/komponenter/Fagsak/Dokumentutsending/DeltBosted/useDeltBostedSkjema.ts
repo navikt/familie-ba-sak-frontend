@@ -6,6 +6,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { IForelderBarnRelasjon, ForelderBarnRelasjonRolle } from '../../../../typer/person';
 import { IBarnMedOpplysninger, Målform } from '../../../../typer/søknad';
+import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { Informasjonsbrev } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 export const useDeltBostedSkjema = () => {
@@ -65,7 +66,11 @@ export const useDeltBostedSkjema = () => {
             return {
                 mottakerIdent: bruker.data.personIdent,
                 multiselectVerdier: barnIBrev.map(
-                    barn => `Barn født ${barn.fødselsdato}. Avtale 15.01.20.`
+                    barn =>
+                        `Barn født ${formaterIsoDato(
+                            barn.fødselsdato,
+                            datoformat.DATO
+                        )}. Avtale 15.01.20.`
                 ),
                 barnIBrev: barnIBrev.map(barn => barn.ident),
                 mottakerMålform: Målform.NB,
