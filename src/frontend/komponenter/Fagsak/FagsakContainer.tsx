@@ -31,8 +31,13 @@ const FagsakContainer: React.FunctionComponent = () => {
     const erPåDokumentutsending = history.location.pathname.includes('dokumentutsending');
     const visDokumentutsending = toggles[ToggleNavn.brukErDeltBosted];
 
-    const skalHaVenstremeny =
-        !erPåSaksoversikt && !erPåDokumentliste && visDokumentutsending && !erPåDokumentutsending;
+    const skalHaVenstremeny = visDokumentutsending
+        ? !erPåSaksoversikt && !erPåDokumentliste && !erPåDokumentutsending
+        : !erPåSaksoversikt && !erPåDokumentliste;
+
+    const skalHaHøyremeny = visDokumentutsending
+        ? !erPåSaksoversikt && !erPåDokumentutsending
+        : !erPåSaksoversikt;
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
@@ -118,7 +123,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         />
                                     </Switch>
                                 </div>
-                                {!erPåSaksoversikt && (
+                                {skalHaHøyremeny && (
                                     <div className={'fagsakcontainer__content--høyremeny'}>
                                         <Høyremeny fagsak={fagsak.data} />
                                     </div>
