@@ -42,14 +42,14 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         });
 
         const nullstillSkjema = () => {
-            årsakFelt.nullstill();
             målformFelt.nullstill();
             nullstillDeltBostedSkjema();
+            hentForhåndsvisningPåFagsak();
         };
 
         useEffect(() => {
-            hentForhåndsvisningPåFagsak();
-        }, []);
+            nullstillSkjema();
+        }, [årsakFelt.verdi]);
 
         const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
             if (bruker.status === RessursStatus.SUKSESS) {
@@ -69,6 +69,13 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                         deltBostedSkjema.submitRessurs.status === RessursStatus.HENTER ||
                         hentetForhåndsvisning.status === RessursStatus.HENTER
                     );
+            }
+        };
+
+        const senderBrev = () => {
+            switch (årsakFelt.verdi) {
+                case DokumentÅrsak.DELT_BOSTED:
+                    return deltBostedSkjema.submitRessurs.status === RessursStatus.HENTER;
             }
         };
 
@@ -110,6 +117,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             målformFelt,
             nullstillSkjema,
             sendBrevPåFagsak,
+            senderBrev,
             skjemaErLåst,
             visInnsendtBrevModal,
             årsakFelt,

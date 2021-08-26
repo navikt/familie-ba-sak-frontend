@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Innholdstittel } from 'nav-frontend-typografi';
 
@@ -14,6 +14,8 @@ import {
     DokumentÅrsak,
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
+import { DokumentIkon } from '../../../ikoner/DokumentIkon';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
@@ -27,16 +29,13 @@ const ÅrsakSkjema = styled.div`
     margin-bottom: 2rem;
 `;
 
-const ForhåndsvisKnapp = styled(Flatknapp)`
-    align-content: flex-end;
-`;
-
 const DokumentutsendingSkjema: React.FC = () => {
     const {
         hentForhåndsvisningPåFagsak,
         hentetForhåndsvisning,
         målformFelt,
         nullstillSkjema,
+        senderBrev,
         sendBrevPåFagsak,
         skjemaErLåst,
         årsakFelt,
@@ -79,32 +78,33 @@ const DokumentutsendingSkjema: React.FC = () => {
                 <ÅrsakSkjema>
                     {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
                 </ÅrsakSkjema>
+            </StyledSkjemaGruppe>
 
-                <ForhåndsvisKnapp
+            <Knapperekke>
+                <Knapp
+                    mini
+                    spinner={senderBrev()}
+                    disabled={skjemaErLåst()}
+                    onClick={sendBrevPåFagsak}
+                    type={'hoved'}
+                >
+                    Send brev
+                </Knapp>
+                <Knapp mini onClick={nullstillSkjema} type={'flat'}>
+                    Avbryt
+                </Knapp>
+
+                <IkonKnapp
+                    id={'forhandsvis-vedtaksbrev'}
+                    erLesevisning={false}
+                    label={'Forhåndsvis'}
+                    ikon={<DokumentIkon />}
                     mini
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
-                    type={'standard'}
-                >
-                    Forhåndsvis
-                </ForhåndsvisKnapp>
-
-                <Knapperekke>
-                    <Knapp
-                        mini
-                        spinner={skjemaErLåst()}
-                        disabled={skjemaErLåst()}
-                        onClick={sendBrevPåFagsak}
-                        type={'hoved'}
-                    >
-                        Send brev
-                    </Knapp>
-                    <Knapp mini disabled={skjemaErLåst()} onClick={nullstillSkjema} type={'flat'}>
-                        Avbryt
-                    </Knapp>
-                </Knapperekke>
-            </StyledSkjemaGruppe>
+                />
+            </Knapperekke>
         </div>
     );
 };
