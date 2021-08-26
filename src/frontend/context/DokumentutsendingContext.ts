@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import createUseContext from 'constate';
 
@@ -46,6 +46,10 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             målformFelt.nullstill();
             nullstillDeltBostedSkjema();
         };
+
+        useEffect(() => {
+            hentForhåndsvisningPåFagsak();
+        }, []);
 
         const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
             if (bruker.status === RessursStatus.SUKSESS) {
