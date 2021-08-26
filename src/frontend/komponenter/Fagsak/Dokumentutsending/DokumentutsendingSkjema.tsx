@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Innholdstittel } from 'nav-frontend-typografi';
+import { Element, Innholdstittel } from 'nav-frontend-typografi';
 
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -15,6 +15,7 @@ import {
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
+import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
@@ -22,20 +23,27 @@ const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     margin-top: 2rem;
 `;
 
+const ÅrsakSkjema = styled.div`
+    margin-bottom: 2rem;
+`;
+
 const DokumentutsendingSkjema: React.FC = () => {
     const {
         hentForhåndsvisningPåFagsak,
         hentetForhåndsvisning,
+        målformFelt,
+        nullstillSkjema,
         sendBrevPåFagsak,
         skjemaErLåst,
         årsakFelt,
+        hentSkjemaFeilmelding,
     } = useDokumentutsending();
 
     return (
         <div>
             <Innholdstittel children={'Send informasjonsbrev'} />
 
-            <StyledSkjemaGruppe>
+            <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()}>
                 <FamilieSelect
                     {...årsakFelt.hentNavBaseSkjemaProps(false)}
                     label={'Velg årsak'}
@@ -57,27 +65,42 @@ const DokumentutsendingSkjema: React.FC = () => {
                     })}
                 </FamilieSelect>
 
-                {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
-            </StyledSkjemaGruppe>
+                <MålformVelger
+                    målformFelt={målformFelt}
+                    visFeilmeldinger={false}
+                    erLesevisning={false}
+                    Legend={<Element children={'Målform'} />}
+                />
 
-            <Knapperekke>
+                <ÅrsakSkjema>
+                    {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
+                </ÅrsakSkjema>
+
                 <Flatknapp
                     mini
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
+                    type={'standard'}
                 >
                     Forhåndsvis
                 </Flatknapp>
-                <Knapp
-                    mini
-                    spinner={skjemaErLåst()}
-                    disabled={skjemaErLåst()}
-                    onClick={sendBrevPåFagsak}
-                >
-                    Send brev
-                </Knapp>
-            </Knapperekke>
+
+                <Knapperekke>
+                    <Knapp
+                        mini
+                        spinner={skjemaErLåst()}
+                        disabled={skjemaErLåst()}
+                        onClick={sendBrevPåFagsak}
+                        type={'hoved'}
+                    >
+                        Send brev
+                    </Knapp>
+                    <Knapp mini disabled={skjemaErLåst()} onClick={nullstillSkjema} type={'flat'}>
+                        Avbryt
+                    </Knapp>
+                </Knapperekke>
+            </StyledSkjemaGruppe>
         </div>
     );
 };

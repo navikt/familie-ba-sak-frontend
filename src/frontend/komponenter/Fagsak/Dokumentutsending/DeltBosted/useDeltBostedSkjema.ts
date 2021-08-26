@@ -5,7 +5,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { IForelderBarnRelasjon, ForelderBarnRelasjonRolle } from '../../../../typer/person';
-import { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import { IBarnMedOpplysninger, Målform } from '../../../../typer/søknad';
+import { Informasjonsbrev } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 export const useDeltBostedSkjema = () => {
     const { bruker } = useFagsakRessurser();
@@ -29,7 +30,7 @@ export const useDeltBostedSkjema = () => {
         skjemanavn: 'Delt bosted',
     });
 
-    useEffect(() => {
+    const nullstillDeltBostedSkjema = () => {
         if (bruker.status === RessursStatus.SUKSESS) {
             nullstillSkjema();
             deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt(
@@ -50,10 +51,36 @@ export const useDeltBostedSkjema = () => {
                     ) ?? []
             );
         }
+    };
+
+    useEffect(() => {
+        nullstillDeltBostedSkjema();
     }, [bruker.status]);
+
+    const hentDeltBostedSkjemaData = () => {
+        if (bruker.status === RessursStatus.SUKSESS) {
+            const barnIBrev = deltBostedSkjema.felter.barnaMedOpplysninger.verdi.filter(
+                barn => barn.merket
+            );
+            return {
+                mottakerIdent: bruker.data.personIdent,
+                multiselectVerdier: barnIBrev.map(
+                    barn => `Barn født ${barn.fødselsdato}. Avtale 15.01.20.`
+                ),
+                barnIBrev: barnIBrev.map(barn => barn.ident),
+                mottakerMålform: Målform.NB,
+                mottakerNavn: bruker.data.navn,
+                brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
+            };
+        } else {
+            throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
+        }
+    };
 
     return {
         deltBostedSkjema,
+        hentDeltBostedSkjemaData,
+        nullstillDeltBostedSkjema,
         onDeltBostedSubmit,
     };
 };
