@@ -10,13 +10,16 @@ import {
     ManuellJournalførProvider,
     useManuellJournalfør,
 } from '../../context/ManuellJournalførContext';
+import { fagsakHeaderHøydeRem } from '../../typer/styling';
 import { BrukerHeader } from './BrukerHeader';
 import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalpostSkjema } from './JournalpostSkjema';
 
 const ToKolonnerDiv = styled.div`
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 40rem 1fr;
+    grid-template-rows: 1fr;
+    height: calc(100vh - ${fagsakHeaderHøydeRem}rem);
 `;
 
 const ManuellJournalførContent: React.FC = () => {

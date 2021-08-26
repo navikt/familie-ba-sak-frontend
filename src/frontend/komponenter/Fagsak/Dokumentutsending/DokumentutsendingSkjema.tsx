@@ -16,17 +16,30 @@ import {
 } from '../../../context/DokumentutsendingContext';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
-import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 
+const Container = styled.div`
+    padding: 2rem;
+    overflow: auto;
+`;
+
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
-    max-width: 20rem;
+    max-width: 25rem;
     margin-top: 2rem;
 `;
 
 const ÅrsakSkjema = styled.div`
     margin-bottom: 2rem;
+`;
+
+const Handlinger = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const SendBrevKnapp = styled(Knapp)`
+    margin-right: 2rem;
 `;
 
 const DokumentutsendingSkjema: React.FC = () => {
@@ -43,7 +56,7 @@ const DokumentutsendingSkjema: React.FC = () => {
     } = useDokumentutsending();
 
     return (
-        <div>
+        <Container>
             <Innholdstittel children={'Send informasjonsbrev'} />
 
             <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()} utenFeilPropagering={true}>
@@ -80,32 +93,36 @@ const DokumentutsendingSkjema: React.FC = () => {
                 </ÅrsakSkjema>
             </StyledSkjemaGruppe>
 
-            <Knapperekke>
-                <Knapp
-                    mini
-                    spinner={senderBrev()}
-                    disabled={skjemaErLåst()}
-                    onClick={sendBrevPåFagsak}
-                    type={'hoved'}
-                >
-                    Send brev
-                </Knapp>
-                <Knapp mini onClick={nullstillSkjema} type={'flat'}>
-                    Avbryt
-                </Knapp>
-
+            <Handlinger>
                 <IkonKnapp
                     id={'forhandsvis-vedtaksbrev'}
                     erLesevisning={false}
                     label={'Forhåndsvis'}
+                    knappPosisjon={'venstre'}
                     ikon={<DokumentIkon />}
-                    mini
+                    mini={true}
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst()}
                     onClick={hentForhåndsvisningPåFagsak}
                 />
-            </Knapperekke>
-        </div>
+
+                <div>
+                    <SendBrevKnapp
+                        mini
+                        spinner={senderBrev()}
+                        disabled={skjemaErLåst()}
+                        onClick={sendBrevPåFagsak}
+                        type={'hoved'}
+                    >
+                        Send brev
+                    </SendBrevKnapp>
+
+                    <Knapp mini onClick={nullstillSkjema} type={'flat'}>
+                        Avbryt
+                    </Knapp>
+                </div>
+            </Handlinger>
+        </Container>
     );
 };
 
