@@ -82,7 +82,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         const hentForhåndsvisningPåFagsak = () =>
             hentForhåndsvisning<IManueltBrevRequestPåFagsak>({
                 method: 'POST',
-                data: hentSkjemaData(),
+                data: { ...hentSkjemaData(), målform: målformFelt.verdi },
                 url: `/familie-ba-sak/api/dokument/fagsak/${fagsak.id}/forhaandsvis-brev`,
             });
 
@@ -92,7 +92,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                     onDeltBostedSubmit(
                         {
                             method: 'POST',
-                            data: hentSkjemaData(),
+                            data: { ...hentSkjemaData(), målform: målformFelt.verdi },
                             url: `/familie-ba-sak/api/dokument/fagsak/${fagsak.id}/send-brev`,
                         },
                         () => {
