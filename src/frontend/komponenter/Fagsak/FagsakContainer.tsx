@@ -97,10 +97,10 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                 path="/fagsak/:fagsakId/dokumentutsending"
                                                 render={() => {
                                                     return (
-                                                        <DokumentutsendingProvider>
-                                                            <Dokumentutsending
-                                                                fagsak={fagsak.data}
-                                                            />
+                                                        <DokumentutsendingProvider
+                                                            fagsak={fagsak.data}
+                                                        >
+                                                            <Dokumentutsending />
                                                         </DokumentutsendingProvider>
                                                     );
                                                 }}

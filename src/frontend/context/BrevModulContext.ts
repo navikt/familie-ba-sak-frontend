@@ -15,10 +15,10 @@ import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import {
     Brevmal,
-    IBrevData,
     ISelectOptionMedBrevtekst,
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
+import { IManueltBrevRequestPåBehandling } from '../typer/dokument';
 import { IFagsak } from '../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
@@ -159,7 +159,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(åpenBehandling);
 
-    const hentSkjemaData = (): IBrevData => ({
+    const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
         mottakerIdent: skjema.felter.mottakerIdent.verdi,
         multiselectVerdier: skjema.felter.multiselect.verdi.map(
             (selectOption: ISelectOptionMedBrevtekst) => {

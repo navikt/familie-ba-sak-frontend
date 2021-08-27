@@ -1,19 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
-import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useSøknad } from '../../../context/SøknadContext';
-import Slett from '../../../ikoner/Slett';
-import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { formaterPersonIdent, hentAlderSomString } from '../../../utils/formatter';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
-
-interface IProps {
-    barn: IBarnMedOpplysninger;
-}
+import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
+import Slett from '../../../../ikoner/Slett';
+import { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import { formaterPersonIdent, hentAlderSomString } from '../../../../utils/formatter';
+import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 const CheckboxOgSlettknapp = styled.div`
     display: flex;
@@ -42,20 +37,21 @@ const FjernBarnKnapp = styled(IkonKnapp)`
     margin-left: 1rem;
 `;
 
-const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
-    const { skjema, barnMedLøpendeUtbetaling } = useSøknad();
-    const { erLesevisning } = useBehandling();
+interface IProps {
+    barn: IBarnMedOpplysninger;
+}
+
+const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
+    const { deltBostedSkjema } = useDokumentutsending();
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
-    )}) | ${formaterPersonIdent(barn.ident)} ${
-        barnMedLøpendeUtbetaling.has(barn.ident) ? '(løpende)' : ''
-    }`;
+    )}) | ${formaterPersonIdent(barn.ident)}`;
 
     return (
         <CheckboxOgSlettknapp>
             <StyledFamilieCheckbox
-                erLesevisning={erLesevisning()}
+                erLesevisning={false}
                 label={
                     <LabelContent>
                         <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
@@ -63,8 +59,8 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                 }
                 checked={barn.merket}
                 onChange={() => {
-                    skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                        skjema.felter.barnaMedOpplysninger.verdi.map(
+                    deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+                        deltBostedSkjema.felter.barnaMedOpplysninger.verdi.map(
                             (barnMedOpplysninger: IBarnMedOpplysninger) =>
                                 barnMedOpplysninger.ident === barn.ident
                                     ? {
@@ -78,14 +74,14 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
             />
             {barn.manueltRegistrert && (
                 <FjernBarnKnapp
-                    erLesevisning={erLesevisning()}
+                    erLesevisning={false}
                     id={`fjern__${barn.ident}`}
                     mini={true}
                     ikon={<Slett />}
                     knappPosisjon={'venstre'}
                     onClick={() => {
-                        skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
-                            ...skjema.felter.barnaMedOpplysninger.verdi.filter(
+                        deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt([
+                            ...deltBostedSkjema.felter.barnaMedOpplysninger.verdi.filter(
                                 barnMedOpplysninger =>
                                     barnMedOpplysninger.ident !== barn.ident ||
                                     barnMedOpplysninger.navn !== barn.navn ||
@@ -99,4 +95,5 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
         </CheckboxOgSlettknapp>
     );
 };
-export default BarnMedOpplysninger;
+
+export default BarnCheckbox;
