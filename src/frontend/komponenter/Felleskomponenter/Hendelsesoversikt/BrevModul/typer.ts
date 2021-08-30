@@ -1,11 +1,5 @@
 import { Målform } from '../../../../typer/søknad';
 
-export interface IBrevData {
-    mottakerIdent: string;
-    multiselectVerdier: string[];
-    brevmal: Brevmal;
-}
-
 export interface BrevtypeSelect extends HTMLSelectElement {
     value: Brevmal | '';
 }
@@ -14,6 +8,10 @@ export enum Brevmal {
     INNHENTE_OPPLYSNINGER = 'INNHENTE_OPPLYSNINGER',
     VARSEL_OM_REVURDERING = 'VARSEL_OM_REVURDERING',
     HENLEGGE_TRUKKET_SØKNAD = 'HENLEGGE_TRUKKET_SØKNAD',
+}
+
+export enum Informasjonsbrev {
+    INFORMASJONSBREV_DELT_BOSTED = 'INFORMASJONSBREV_DELT_BOSTED',
 }
 
 export const brevmaler: Record<Brevmal, string> = {
