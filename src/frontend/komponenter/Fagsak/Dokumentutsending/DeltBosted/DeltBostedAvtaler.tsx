@@ -61,7 +61,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
         deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
 
     return (
-        <Container key={`${barn.fødselsdato}`}>
+        <Container>
             {avtalerOmDeltBosted.map((avtaleDato, index) => {
                 const feilmelding =
                     deltBostedSkjema.visFeilmeldinger && avtaleDato === ''
@@ -69,7 +69,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                         : undefined;
 
                 return (
-                    <>
+                    <div key={`${barn.fødselsdato}`}>
                         <DatovelgerOgSlettknapp feil={feilmelding !== undefined}>
                             <StyledFamilieDatovelger
                                 erLesesvisning={false}
@@ -139,7 +139,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                         </DatovelgerOgSlettknapp>
 
                         {feilmelding && <StyledFeilmelding>{feilmelding}</StyledFeilmelding>}
-                    </>
+                    </div>
                 );
             })}
 

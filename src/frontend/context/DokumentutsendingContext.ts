@@ -97,6 +97,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                         },
                         () => {
                             settVisInnsendtBrevModal(true);
+                            nullstillSkjema();
                         }
                     );
             }
@@ -111,6 +112,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         return {
             deltBostedSkjema,
+            fagsak,
             hentForhåndsvisningPåFagsak,
             hentSkjemaFeilmelding,
             hentetForhåndsvisning,

@@ -23,9 +23,10 @@ const Dokumentutsending: React.FC = () => {
     const history = useHistory();
 
     const {
+        fagsak,
         hentetForhåndsvisning,
-        visInnsendtBrevModal,
         settVisInnsendtBrevModal,
+        visInnsendtBrevModal,
     } = useDokumentutsending();
 
     return (
@@ -43,7 +44,15 @@ const Dokumentutsending: React.FC = () => {
                                 onClick={() => {
                                     history.push('/oppgaver');
                                 }}
-                                children={'Naviger til oppgavebenken'}
+                                children={'Gå til oppgavebenken'}
+                            />,
+                            <Knapp
+                                key={'til dokumentoversikt'}
+                                mini={true}
+                                onClick={() => {
+                                    history.push(`/${fagsak.id}/dokumentliste`);
+                                }}
+                                children={'Gå til Dokumentoversikt'}
                             />,
                         ],
                         onClose: () => settVisInnsendtBrevModal(false),
