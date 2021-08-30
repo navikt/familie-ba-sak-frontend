@@ -48,7 +48,7 @@ interface IProps {
 }
 
 const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
-    const { deltBostedSkjema } = useDokumentutsending();
+    const { deltBostedSkjema, settVisfeilmeldinger } = useDokumentutsending();
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
@@ -81,6 +81,8 @@ const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
                                         : barnMedOpplysninger
                             )
                         );
+                        settVisfeilmeldinger(false);
+
                         if (nyMerketStatus) {
                             deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
                                 ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,

@@ -19,11 +19,16 @@ export const useDeltBostedSkjema = () => {
         valideringsfunksjon: felt => {
             return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
                 ? ok(felt)
-                : feil(felt, 'Ingen av barna er valgt.');
+                : feil(felt, 'Du må velge barn');
         },
     });
 
-    const { skjema: deltBostedSkjema, nullstillSkjema, onSubmit: onDeltBostedSubmit } = useSkjema<
+    const {
+        skjema: deltBostedSkjema,
+        nullstillSkjema,
+        onSubmit: onDeltBostedSubmit,
+        settVisfeilmeldinger: settVisfeilmeldingerDeltBosted,
+    } = useSkjema<
         {
             barnaMedOpplysninger: IBarnMedOpplysninger[];
             avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
@@ -116,5 +121,6 @@ export const useDeltBostedSkjema = () => {
         hentDeltBostedSkjemaData,
         nullstillDeltBostedSkjema,
         onDeltBostedSubmit,
+        settVisfeilmeldingerDeltBosted,
     };
 };

@@ -30,6 +30,8 @@ const StyledFamilieDatovelger = styled(FamilieDatovelger)<{ feil: boolean }>`
     .nav-datovelger__kalenderknapp {
         border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navBla)};
     }
+
+    margin-bottom: ${({ feil }) => (feil ? '.125rem' : '0')};
 `;
 
 const DatovelgerOgSlettknapp = styled.div<{ feil: boolean }>`

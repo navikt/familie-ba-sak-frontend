@@ -31,6 +31,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             hentDeltBostedSkjemaData,
             nullstillDeltBostedSkjema,
             onDeltBostedSubmit,
+            settVisfeilmeldingerDeltBosted,
         } = useDeltBostedSkjema();
 
         const årsakFelt = useFelt<DokumentÅrsak>({
@@ -103,6 +104,13 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             }
         };
 
+        const settVisfeilmeldinger = (visFeilmeldinger: boolean) => {
+            switch (årsakFelt.verdi) {
+                case DokumentÅrsak.DELT_BOSTED:
+                    settVisfeilmeldingerDeltBosted(visFeilmeldinger);
+            }
+        };
+
         const hentSkjemaFeilmelding = () => {
             return (
                 hentFrontendFeilmelding(hentetForhåndsvisning) ||
@@ -121,6 +129,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             sendBrevPåFagsak,
             senderBrev,
             settVisInnsendtBrevModal,
+            settVisfeilmeldinger,
             skjemaErLåst,
             visInnsendtBrevModal,
             årsakFelt,
