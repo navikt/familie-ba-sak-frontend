@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Innholdstittel } from 'nav-frontend-typografi';
@@ -33,6 +34,10 @@ const ÅrsakSkjema = styled.div`
     margin-bottom: 2rem;
 `;
 
+const StyledAlertStripe = styled(AlertStripe)`
+    margin: 1rem 0;
+`;
+
 const Handlinger = styled.div`
     display: flex;
     justify-content: space-between;
@@ -53,6 +58,7 @@ const DokumentutsendingSkjema: React.FC = () => {
         skjemaErLåst,
         årsakFelt,
         hentSkjemaFeilmelding,
+        visForhåndsvisningBeskjed,
     } = useDokumentutsending();
 
     return (
@@ -92,6 +98,12 @@ const DokumentutsendingSkjema: React.FC = () => {
                 <ÅrsakSkjema>
                     {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
                 </ÅrsakSkjema>
+
+                {visForhåndsvisningBeskjed() && (
+                    <StyledAlertStripe type={'info'}>
+                        Du har gjort endringer i brevet som ikke er forhåndsvist
+                    </StyledAlertStripe>
+                )}
             </StyledSkjemaGruppe>
 
             <Handlinger>
