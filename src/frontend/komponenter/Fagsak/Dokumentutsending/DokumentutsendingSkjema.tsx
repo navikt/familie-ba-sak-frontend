@@ -1,78 +1,129 @@
 import React from 'react';
 
-import { Flatknapp } from 'nav-frontend-knapper';
-import { Innholdstittel } from 'nav-frontend-typografi';
+import styled from 'styled-components';
 
+import { Knapp } from 'nav-frontend-knapper';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Element, Innholdstittel } from 'nav-frontend-typografi';
+
+import { FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useDokumentutsending } from '../../../context/DokumentutsendingContext';
-import { IFagsak } from '../../../typer/fagsak';
-import Knapperekke from '../../Felleskomponenter/Knapperekke';
+import {
+    dokumentÅrsak,
+    DokumentÅrsak,
+    useDokumentutsending,
+} from '../../../context/DokumentutsendingContext';
+import { DokumentIkon } from '../../../ikoner/DokumentIkon';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import MålformVelger from '../../Felleskomponenter/MålformVelger';
+import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 
-interface IProps {
-    fagsak: IFagsak;
-}
+const Container = styled.div`
+    padding: 2rem;
+    overflow: auto;
+`;
 
-const DokumentutsendingSkjema: React.FC<IProps> = ({ fagsak }) => {
-    const { hentetForhåndsvisning, hentForhåndsvisning } = useDokumentutsending();
+const StyledSkjemaGruppe = styled(SkjemaGruppe)`
+    max-width: 30rem;
+    margin-top: 2rem;
+`;
 
-    const skjemaErLåst = false; // TODO
+const ÅrsakSkjema = styled.div`
+    margin-bottom: 2rem;
+`;
 
-    const kanSendeSkjema = () => true; // TODO
+const Handlinger = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const SendBrevKnapp = styled(Knapp)`
+    margin-right: 2rem;
+`;
+
+const DokumentutsendingSkjema: React.FC = () => {
+    const {
+        hentForhåndsvisningPåFagsak,
+        hentetForhåndsvisning,
+        målformFelt,
+        nullstillSkjema,
+        senderBrev,
+        sendBrevPåFagsak,
+        skjemaErLåst,
+        årsakFelt,
+        hentSkjemaFeilmelding,
+    } = useDokumentutsending();
+
     return (
-        <div>
+        <Container>
             <Innholdstittel children={'Send informasjonsbrev'} />
 
-            <Knapperekke>
-                <Flatknapp
-                    mini
+            <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()} utenFeilPropagering={true}>
+                <FamilieSelect
+                    {...årsakFelt.hentNavBaseSkjemaProps(false)}
+                    label={'Velg årsak'}
+                    value={årsakFelt.verdi}
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                        årsakFelt.onChange(event.target.value as DokumentÅrsak);
+                    }}
+                    bredde={'m'}
+                >
+                    {Object.values(DokumentÅrsak).map(årsak => {
+                        return (
+                            <option
+                                key={årsak}
+                                aria-selected={årsakFelt.verdi === årsak}
+                                value={årsak}
+                            >
+                                {dokumentÅrsak[årsak]}
+                            </option>
+                        );
+                    })}
+                </FamilieSelect>
+
+                <MålformVelger
+                    målformFelt={målformFelt}
+                    visFeilmeldinger={false}
+                    erLesevisning={false}
+                    Legend={<Element children={'Målform'} />}
+                />
+
+                <ÅrsakSkjema>
+                    {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
+                </ÅrsakSkjema>
+            </StyledSkjemaGruppe>
+
+            <Handlinger>
+                <IkonKnapp
+                    id={'forhandsvis-vedtaksbrev'}
+                    erLesevisning={false}
+                    label={'Forhåndsvis'}
+                    knappPosisjon={'venstre'}
+                    ikon={<DokumentIkon />}
+                    mini={true}
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
-                    disabled={skjemaErLåst}
-                    onClick={() => {
-                        // TODO endre til riktig URL, denne vil heller ikke fungere i miljø
-                        if (kanSendeSkjema()) {
-                            hentForhåndsvisning({
-                                method: 'POST',
-                                data: {},
-                                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/dokumentutsending`,
-                            });
-                        }
-                    }}
-                >
-                    Forhåndsvis
-                </Flatknapp>
-                {/*TODO <Knapp
-                    mini
-                    spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    disabled={skjemaErLåst}
-                    onClick={() => {
-                        if (åpenBehandling.status === RessursStatus.SUKSESS) {
-                            const harRegistrertSøknad =
-                                hentStegNummer(åpenBehandling.data.steg) >
-                                hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD);
-                            settNavigerTilOpplysningsplikt(
-                                harRegistrertSøknad &&
-                                    skjema.felter.brevmal.verdi === Brevmal.INNHENTE_OPPLYSNINGER
-                            );
-                            onSubmit(
-                                {
-                                    method: 'POST',
-                                    data: hentSkjemaData(),
-                                    url: `/familie-ba-sak/api/dokument/send-brev/${åpenBehandling.data.behandlingId}`,
-                                },
-                                (ressurs: Ressurs<IFagsak>) => {
-                                    onSubmitSuccess();
-                                    settFagsak(ressurs);
-                                    hentLogg(åpenBehandling.data.behandlingId);
-                                }
-                            );
-                        }
-                    }}
-                >
-                    Send brev
-                </Knapp>*/}
-            </Knapperekke>
-        </div>
+                    disabled={skjemaErLåst()}
+                    onClick={hentForhåndsvisningPåFagsak}
+                />
+
+                <div>
+                    <SendBrevKnapp
+                        mini
+                        spinner={senderBrev()}
+                        disabled={skjemaErLåst()}
+                        onClick={sendBrevPåFagsak}
+                        type={'hoved'}
+                    >
+                        Send brev
+                    </SendBrevKnapp>
+
+                    <Knapp mini onClick={nullstillSkjema} type={'flat'}>
+                        Avbryt
+                    </Knapp>
+                </div>
+            </Handlinger>
+        </Container>
     );
 };
 

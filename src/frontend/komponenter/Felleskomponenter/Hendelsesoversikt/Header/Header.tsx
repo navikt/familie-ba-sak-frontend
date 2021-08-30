@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { Tabs } from '../typer';
 import Dokumenterknapp from './Dokumenterknapp';
 import Historikkknapp from './Historikkknapp';

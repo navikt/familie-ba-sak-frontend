@@ -8,7 +8,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
-import { BehandlingProvider } from '../../context/BehandlingContext';
+import { BehandlingProvider } from '../../context/behandlingContext/BehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { ToggleNavn } from '../../typer/toggles';
@@ -31,8 +31,13 @@ const FagsakContainer: React.FunctionComponent = () => {
     const erPåDokumentutsending = history.location.pathname.includes('dokumentutsending');
     const visDokumentutsending = toggles[ToggleNavn.brukErDeltBosted];
 
-    const skalHaVenstremeny =
-        !erPåSaksoversikt && !erPåDokumentliste && visDokumentutsending && !erPåDokumentutsending;
+    const skalHaVenstremeny = visDokumentutsending
+        ? !erPåSaksoversikt && !erPåDokumentliste && !erPåDokumentutsending
+        : !erPåSaksoversikt && !erPåDokumentliste;
+
+    const skalHaHøyremeny = visDokumentutsending
+        ? !erPåSaksoversikt && !erPåDokumentutsending
+        : !erPåSaksoversikt;
 
     const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
 
@@ -92,10 +97,10 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                 path="/fagsak/:fagsakId/dokumentutsending"
                                                 render={() => {
                                                     return (
-                                                        <DokumentutsendingProvider>
-                                                            <Dokumentutsending
-                                                                fagsak={fagsak.data}
-                                                            />
+                                                        <DokumentutsendingProvider
+                                                            fagsak={fagsak.data}
+                                                        >
+                                                            <Dokumentutsending />
                                                         </DokumentutsendingProvider>
                                                     );
                                                 }}
@@ -118,7 +123,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         />
                                     </Switch>
                                 </div>
-                                {!erPåSaksoversikt && (
+                                {skalHaHøyremeny && (
                                     <div className={'fagsakcontainer__content--høyremeny'}>
                                         <Høyremeny fagsak={fagsak.data} />
                                     </div>

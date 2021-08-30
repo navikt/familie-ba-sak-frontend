@@ -13,7 +13,7 @@ import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements
 import { Felt } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import useForhåndsvisning from '../../../../hooks/useForhåndsvisning';

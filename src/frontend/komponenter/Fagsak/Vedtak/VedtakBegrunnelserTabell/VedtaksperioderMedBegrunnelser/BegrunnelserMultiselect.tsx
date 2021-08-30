@@ -14,7 +14,7 @@ import {
 } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import {
     VedtakBegrunnelse,
     VedtakBegrunnelseType,

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import Slett from '../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
@@ -61,7 +61,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                         <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
                     </LabelContent>
                 }
-                checked={barn.inkludertISøknaden}
+                checked={barn.merket}
                 onChange={() => {
                     skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
                         skjema.felter.barnaMedOpplysninger.verdi.map(
@@ -69,7 +69,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                                 barnMedOpplysninger.ident === barn.ident
                                     ? {
                                           ...barnMedOpplysninger,
-                                          inkludertISøknaden: !barnMedOpplysninger.inkludertISøknaden,
+                                          merket: !barnMedOpplysninger.merket,
                                       }
                                     : barnMedOpplysninger
                         )

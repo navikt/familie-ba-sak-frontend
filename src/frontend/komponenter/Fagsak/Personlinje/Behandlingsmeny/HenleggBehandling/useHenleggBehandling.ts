@@ -5,11 +5,9 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { HenleggÅrsak } from '../../../../../typer/behandling';
+import { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
 import { IFagsak } from '../../../../../typer/fagsak';
-import {
-    Brevmal,
-    IBrevData,
-} from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
+import { Brevmal } from '../../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 const useHenleggBehandling = (lukkModal: () => void) => {
     const [visVeivalgModal, settVisVeivalgModal] = useState(false);
@@ -56,7 +54,7 @@ const useHenleggBehandling = (lukkModal: () => void) => {
         );
     };
 
-    const hentSkjemaData = (): IBrevData => ({
+    const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
         mottakerIdent:
             fagsak.status === RessursStatus.SUKSESS ? fagsak.data.søkerFødselsnummer : '',
         multiselectVerdier: [],

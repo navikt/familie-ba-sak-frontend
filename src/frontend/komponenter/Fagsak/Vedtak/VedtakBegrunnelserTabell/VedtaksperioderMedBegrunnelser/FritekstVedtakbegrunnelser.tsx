@@ -13,7 +13,7 @@ import { FamilieKnapp, FamilieTextarea } from '@navikt/familie-form-elements';
 import { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { EksternLenke } from '../../../../../ikoner/EksternLenke';
 import Pluss from '../../../../../ikoner/Pluss';
 import Slett from '../../../../../ikoner/Slett';

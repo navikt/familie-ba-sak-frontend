@@ -9,13 +9,13 @@ import { Normaltekst } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
+import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import Annet from './Annet';
 import Barna from './Barna';
-import MålformVelger from './MålformVelger';
 import SøknadType from './SøknadType';
 
 const FjernVilkårAdvarsel = styled(Normaltekst)`
@@ -65,7 +65,11 @@ const RegistrerSøknad: React.FC = () => {
 
             <Barna />
 
-            <MålformVelger />
+            <MålformVelger
+                målformFelt={skjema.felter.målform}
+                visFeilmeldinger={skjema.visFeilmeldinger}
+                erLesevisning={erLesevisning()}
+            />
 
             <Annet />
 

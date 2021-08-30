@@ -1,5 +1,5 @@
 import { IFagsak } from '../../../typer/fagsak';
-import { hentSisteBehandlingPåFagsak } from '../../fagsak';
+import { hentSisteBehandlingPåFagsak, hentBehandlingPåFagsak } from '../../fagsak';
 import { mockBehandling } from '../behandling/behandling.mock';
 import { mockFagsak } from './fagsak.mock';
 
@@ -15,6 +15,24 @@ describe('utils/fagsak', () => {
 
         test('Skal returnere behandling med siste opprettetdato', () => {
             expect(hentSisteBehandlingPåFagsak(fagsak)?.behandlingId).toEqual(2);
+        });
+    });
+    describe('hentBehandlingPåFagsak', () => {
+        const behandling1 = mockBehandling({
+            behandlingId: 1,
+        });
+        const behandling2 = mockBehandling({
+            behandlingId: 2,
+        });
+        const behandling3 = mockBehandling({
+            behandlingId: 3,
+        });
+        const fagsak: IFagsak = mockFagsak({
+            behandlinger: [behandling1, behandling2, behandling3],
+        });
+
+        test('Skal returnere behandling med samme behandlingId', () => {
+            expect(hentBehandlingPåFagsak(fagsak, 1)).toMatchObject(behandling1);
         });
     });
 });

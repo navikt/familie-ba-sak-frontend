@@ -16,7 +16,7 @@ import {
     kalenderDatoMedFallback,
     TIDENES_ENDE,
 } from '../utils/kalender';
-import { useBehandling } from './BehandlingContext';
+import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 export const hentBarnMedLøpendeUtbetaling = (fagsak: IFagsak) =>
@@ -64,9 +64,8 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
                     verdi: [],
                     valideringsfunksjon: (felt, avhengigheter?: Avhengigheter) => {
-                        return felt.verdi.some(
-                            (barn: IBarnMedOpplysninger) => barn.inkludertISøknaden
-                        ) || (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
+                        return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
+                            (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
                             ? ok(felt)
                             : feil(felt, 'Ingen av barna er valgt.');
                     },
@@ -97,7 +96,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                         )
                         .map(
                             (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                                inkludertISøknaden: false,
+                                merket: false,
                                 ident: relasjon.personIdent,
                                 navn: relasjon.navn,
                                 fødselsdato: relasjon.fødselsdato,
@@ -164,7 +163,12 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                         ident: bruker.data.personIdent,
                                         målform: skjema.felter.målform.verdi,
                                     },
-                                    barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi,
+                                    barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
+                                        barn => ({
+                                            ...barn,
+                                            inkludertISøknaden: barn.merket,
+                                        })
+                                    ),
                                     endringAvOpplysningerBegrunnelse:
                                         skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
                                 },

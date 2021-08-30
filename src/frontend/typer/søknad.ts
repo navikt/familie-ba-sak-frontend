@@ -20,7 +20,7 @@ export interface ISøkerMedOpplysninger {
 export interface IBarnMedOpplysninger {
     fødselsdato?: string;
     ident: string;
-    inkludertISøknaden: boolean;
+    merket: boolean;
     manueltRegistrert: boolean;
     navn?: string;
     erFolkeregistrert: boolean;

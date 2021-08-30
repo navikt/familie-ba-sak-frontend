@@ -7,7 +7,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 
 import { FeltState } from '@navikt/familie-skjema';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
 import {

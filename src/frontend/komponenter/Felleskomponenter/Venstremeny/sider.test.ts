@@ -1,6 +1,13 @@
-import { BehandlingÅrsak } from '../../../typer/behandling';
+import { BehandlingÅrsak, BehandlingSteg } from '../../../typer/behandling';
 import { mockBehandling } from '../../../utils/test/behandling/behandling.mock';
-import { SideId, hentTrinnForBehandling } from './sider';
+import {
+    SideId,
+    hentTrinnForBehandling,
+    sider,
+    erViPåUdefinertFagsakSide,
+    erViPåUlovligSteg,
+    finnSideForBehandlingssteg,
+} from './sider';
 
 describe('sider.ts', () => {
     describe('siderForBehandling', () => {
@@ -50,5 +57,71 @@ describe('sider.ts', () => {
             ];
             expect(Object.values(SideId)).toEqual(sider);
         });
+    });
+
+    describe('erViPåUdefinertFagsakSide', () => {
+        test('Skal returnere false dersom den får inn en kjent side og true ved ukjent', () => {
+            const testUrl = 'test-url/';
+            Object.values(sider)
+                .map(side => side.href)
+                .forEach(sideUrl =>
+                    expect(erViPåUdefinertFagsakSide(testUrl + sideUrl)).toBeFalsy()
+                );
+            expect(erViPåUdefinertFagsakSide(testUrl + 'saksoversikt')).toBeFalsy();
+            expect(erViPåUdefinertFagsakSide(testUrl + 'ny-behandling')).toBeFalsy();
+
+            expect(erViPåUdefinertFagsakSide('dette-skal-ikke-være/en-definert-side')).toBeTruthy();
+        });
+    });
+
+    describe('erViPåUlovligSteg', () => {
+        test('Skal returnere true dersom vi er på ulovlig steg', () => {
+            expect(erViPåUlovligSteg('vedtak', sider.REGISTRERE_SØKNAD)).toBeTruthy();
+        });
+        test('Skal returnere false dersom vi ikke er på ulovlig steg', () => {
+            expect(
+                erViPåUlovligSteg('registrer-soknad', sider.FILTRERING_FØDSELSHENDELSER)
+            ).toBeFalsy();
+        });
+    });
+
+    describe('finnSideForBehandlingssteg', () => {
+        test('Skal returnere første side for behandlingssteget dersom der er før "send til beslutter"', () => {
+            const behandling = mockBehandling({
+                årsak: BehandlingÅrsak.SØKNAD,
+                steg: BehandlingSteg.REGISTRERE_SØKNAD,
+            });
+            expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.REGISTRERE_SØKNAD);
+
+            const behandling2 = mockBehandling({
+                årsak: BehandlingÅrsak.SØKNAD,
+                steg: BehandlingSteg.VURDER_TILBAKEKREVING,
+            });
+            expect(finnSideForBehandlingssteg(behandling2)).toEqual(sider.BEHANDLINGRESULTAT);
+        });
+
+        test(
+            'Skal returnere Vedtak-siden dersom behandlingssteget er er etter "send til beslutter" ' +
+                'og behandlinsårsaken ikke er "satsendring"',
+            () => {
+                const behandling = mockBehandling({
+                    årsak: BehandlingÅrsak.SØKNAD,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.VEDTAK);
+            }
+        );
+
+        test(
+            'Skal returnere Behandlingresultat-siden dersom behandlingssteget er er etter "send til beslutter" ' +
+                'og behandlinsårsaken er "satsendring"',
+            () => {
+                const behandling = mockBehandling({
+                    årsak: BehandlingÅrsak.SATSENDRING,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.BEHANDLINGRESULTAT);
+            }
+        );
     });
 });

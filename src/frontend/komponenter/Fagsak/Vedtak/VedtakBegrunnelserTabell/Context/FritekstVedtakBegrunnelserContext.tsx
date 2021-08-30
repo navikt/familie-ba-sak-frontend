@@ -8,7 +8,7 @@ import { useHttp } from '@navikt/familie-http';
 import { FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { Fritekster } from '../../../../../typer/begrunnelser';
 import { Behandlingstype } from '../../../../../typer/behandling';

@@ -10,7 +10,7 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieInput } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, Felt, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
@@ -19,17 +19,18 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { useSøknad } from '../../../context/SøknadContext';
-import Pluss from '../../../ikoner/Pluss';
-import { LoggType } from '../../../typer/logg';
-import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
-import { FamilieIsoDate } from '../../../utils/kalender';
-import { identValidator } from '../../../utils/validators';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-import LeggTilUregistrertBarn from './LeggTilUregistrertBarn';
+import { useFagsakRessurser } from '../../context/FagsakContext';
+import Pluss from '../../ikoner/Pluss';
+import { LoggType } from '../../typer/logg';
+import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../typer/person';
+import { IBarnMedOpplysninger } from '../../typer/søknad';
+import { FamilieIsoDate } from '../../utils/kalender';
+import { identValidator } from '../../utils/validators';
+import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
+import IkonKnapp from './IkonKnapp/IkonKnapp';
+import UIModalWrapper from './Modal/UIModalWrapper';
 
-const StyledKnapp = styled(Knapp)`
+const LeggTilBarnKnapp = styled(IkonKnapp)`
     margin-left: 1rem;
 `;
 
@@ -57,11 +58,14 @@ export interface IRegistrerBarnSkjema {
     uregistrertBarnNavn: string;
 }
 
-const LeggTilBarn: React.FunctionComponent = () => {
+interface IProps {
+    barnaMedOpplysninger: Felt<IBarnMedOpplysninger[]>;
+}
+
+const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger }) => {
     const { request } = useHttp();
     const { logg } = useFagsakRessurser();
 
-    const { skjema } = useSøknad();
     const [visModal, settVisModal] = useState<boolean>(false);
 
     const [kanLeggeTilUregistrerteBarn, settKanLeggeTilUregistrerteBarn] = useState(false);
@@ -140,20 +144,20 @@ const LeggTilBarn: React.FunctionComponent = () => {
     const leggTilOnClick = () => {
         const erSkjemaOk = kanSendeSkjema();
         if (
-            skjema.felter.barnaMedOpplysninger.verdi.some(
-                barn =>
+            barnaMedOpplysninger.verdi.some(
+                (barn: IBarnMedOpplysninger) =>
                     barn.erFolkeregistrert && barn.ident === registrerBarnSkjema.felter.ident.verdi
             )
         ) {
             settSubmitRessurs(byggFeiletRessurs('Barnet er allerede lagt til'));
         } else if (erSkjemaOk) {
             if (!registrerBarnSkjema.felter.erFolkeregistrert.verdi) {
-                skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
-                    ...skjema.felter.barnaMedOpplysninger.verdi,
+                barnaMedOpplysninger.validerOgSettFelt([
+                    ...barnaMedOpplysninger.verdi,
                     {
                         fødselsdato: registrerBarnSkjema.felter.uregistrertBarnFødselsdato.verdi,
                         ident: '',
-                        inkludertISøknaden: true,
+                        merket: true,
                         manueltRegistrert: true,
                         navn: registrerBarnSkjema.felter.uregistrertBarnNavn.verdi,
                         erFolkeregistrert: false,
@@ -182,12 +186,12 @@ const LeggTilBarn: React.FunctionComponent = () => {
                             }).then((hentetPerson: Ressurs<IPersonInfo>) => {
                                 settSubmitRessurs(hentetPerson);
                                 if (hentetPerson.status === RessursStatus.SUKSESS) {
-                                    skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
-                                        ...skjema.felter.barnaMedOpplysninger.verdi,
+                                    barnaMedOpplysninger.validerOgSettFelt([
+                                        ...barnaMedOpplysninger.verdi,
                                         {
                                             fødselsdato: hentetPerson.data.fødselsdato,
                                             ident: hentetPerson.data.personIdent,
-                                            inkludertISøknaden: true,
+                                            merket: true,
                                             manueltRegistrert: true,
                                             navn: hentetPerson.data.navn,
                                             erFolkeregistrert: true,
@@ -224,15 +228,17 @@ const LeggTilBarn: React.FunctionComponent = () => {
 
     return (
         <>
-            <StyledKnapp
+            <LeggTilBarnKnapp
+                id={'legg-til-barn'}
                 mini
+                erLesevisning={false}
                 onClick={() => {
                     settVisModal(true);
                 }}
-            >
-                <Pluss />
-                <span>Legg til barn</span>
-            </StyledKnapp>
+                ikon={<Pluss />}
+                label={'Legg til barn'}
+                knappPosisjon={'venstre'}
+            />
 
             <StyledUIModalWrapper
                 modal={{

@@ -18,13 +18,8 @@ import { Dokumenter } from './Dokument/Dokumenter';
 import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 
-const StyledSkjema = styled.div`
+const Container = styled.div`
     padding: 2rem;
-    max-width: 40rem;
-    min-width: 40rem;
-    padding-left: 2.5rem;
-    padding-bottom: 5rem;
-    height: calc(100vh - 3rem);
     overflow: auto;
 `;
 
@@ -38,7 +33,7 @@ export const JournalpostSkjema: React.FC = () => {
     const history = useHistory();
 
     return (
-        <StyledSkjema>
+        <Container>
             <Journalpost />
             <StyledSectionDiv>
                 <Undertittel children={'Dokumenter'} />
@@ -87,6 +82,6 @@ export const JournalpostSkjema: React.FC = () => {
                     Journalfør
                 </FamilieKnapp>
             </Knapperekke>
-        </StyledSkjema>
+        </Container>
     );
 };

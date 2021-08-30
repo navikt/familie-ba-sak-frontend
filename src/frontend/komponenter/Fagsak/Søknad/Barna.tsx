@@ -7,7 +7,7 @@ import { Element, Systemtittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../context/BehandlingContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import RødError from '../../../ikoner/RødError';
@@ -18,8 +18,8 @@ import {
 } from '../../../typer/person';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
+import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
-import LeggTilBarn from './LeggTilBarn';
 
 const BarnMedDiskresjonskode = styled.div`
     display: flex;
@@ -115,7 +115,9 @@ const Barna: React.FunctionComponent = () => {
                     />
                 ))}
 
-                {!lesevisning && <LeggTilBarn />}
+                {!lesevisning && (
+                    <LeggTilBarn barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger} />
+                )}
             </StyledCheckboxGruppe>
         </BarnaWrapper>
     );

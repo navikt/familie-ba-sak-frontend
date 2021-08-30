@@ -11,7 +11,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useBehandling } from '../../../../../context/BehandlingContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useForhåndsvisning from '../../../../../hooks/useForhåndsvisning';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
 import {
