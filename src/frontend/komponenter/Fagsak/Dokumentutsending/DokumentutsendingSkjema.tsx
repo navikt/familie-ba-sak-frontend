@@ -25,7 +25,7 @@ const Container = styled.div`
 `;
 
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
-    max-width: 25rem;
+    max-width: 30rem;
     margin-top: 2rem;
 `;
 
@@ -67,6 +67,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                         årsakFelt.onChange(event.target.value as DokumentÅrsak);
                     }}
+                    bredde={'m'}
                 >
                     {Object.values(DokumentÅrsak).map(årsak => {
                         return (

@@ -19,17 +19,18 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useFagsakRessurser } from '../../../context/FagsakContext';
-import Pluss from '../../../ikoner/Pluss';
-import { LoggType } from '../../../typer/logg';
-import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../typer/person';
-import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { FamilieIsoDate } from '../../../utils/kalender';
-import { identValidator } from '../../../utils/validators';
-import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
-import LeggTilUregistrertBarn from './LeggTilUregistrertBarn';
+import { useFagsakRessurser } from '../../context/FagsakContext';
+import Pluss from '../../ikoner/Pluss';
+import { LoggType } from '../../typer/logg';
+import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../typer/person';
+import { IBarnMedOpplysninger } from '../../typer/søknad';
+import { FamilieIsoDate } from '../../utils/kalender';
+import { identValidator } from '../../utils/validators';
+import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
+import IkonKnapp from './IkonKnapp/IkonKnapp';
+import UIModalWrapper from './Modal/UIModalWrapper';
 
-const StyledKnapp = styled(Knapp)`
+const LeggTilBarnKnapp = styled(IkonKnapp)`
     margin-left: 1rem;
 `;
 
@@ -227,15 +228,17 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger }) => {
 
     return (
         <>
-            <StyledKnapp
+            <LeggTilBarnKnapp
+                id={'legg-til-barn'}
                 mini
+                erLesevisning={false}
                 onClick={() => {
                     settVisModal(true);
                 }}
-            >
-                <Pluss />
-                <span>Legg til barn</span>
-            </StyledKnapp>
+                ikon={<Pluss />}
+                label={'Legg til barn'}
+                knappPosisjon={'venstre'}
+            />
 
             <StyledUIModalWrapper
                 modal={{

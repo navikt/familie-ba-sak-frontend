@@ -9,14 +9,20 @@ import Slett from '../../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { formaterPersonIdent, hentAlderSomString } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 const CheckboxOgSlettknapp = styled.div`
     display: flex;
-    text-align: center;
+    align-items: flex-start;
+
+    .knapp {
+        height: 2rem;
+    }
 `;
 
 const StyledFamilieCheckbox = styled(FamilieCheckbox)`
     margin-left: 1rem;
+
     > label {
         width: 100%;
     }
@@ -49,50 +55,69 @@ const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
     )}) | ${formaterPersonIdent(barn.ident)}`;
 
     return (
-        <CheckboxOgSlettknapp>
-            <StyledFamilieCheckbox
-                erLesevisning={false}
-                label={
-                    <LabelContent>
-                        <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
-                    </LabelContent>
-                }
-                checked={barn.merket}
-                onChange={() => {
-                    deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                        deltBostedSkjema.felter.barnaMedOpplysninger.verdi.map(
-                            (barnMedOpplysninger: IBarnMedOpplysninger) =>
-                                barnMedOpplysninger.ident === barn.ident
-                                    ? {
-                                          ...barnMedOpplysninger,
-                                          merket: !barnMedOpplysninger.merket,
-                                      }
-                                    : barnMedOpplysninger
-                        )
-                    );
-                }}
-            />
-            {barn.manueltRegistrert && (
-                <FjernBarnKnapp
+        <div>
+            <CheckboxOgSlettknapp>
+                <StyledFamilieCheckbox
                     erLesevisning={false}
-                    id={`fjern__${barn.ident}`}
-                    mini={true}
-                    ikon={<Slett />}
-                    knappPosisjon={'venstre'}
-                    onClick={() => {
-                        deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt([
-                            ...deltBostedSkjema.felter.barnaMedOpplysninger.verdi.filter(
-                                barnMedOpplysninger =>
-                                    barnMedOpplysninger.ident !== barn.ident ||
-                                    barnMedOpplysninger.navn !== barn.navn ||
-                                    barnMedOpplysninger.fødselsdato !== barn.fødselsdato
-                            ),
-                        ]);
+                    label={
+                        <LabelContent>
+                            <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
+                        </LabelContent>
+                    }
+                    checked={barn.merket}
+                    onChange={() => {
+                        const nyMerketStatus = !deltBostedSkjema.felter.barnaMedOpplysninger.verdi.find(
+                            barnMedOpplysninger => barnMedOpplysninger.ident === barn.ident
+                        )?.merket;
+
+                        deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+                            deltBostedSkjema.felter.barnaMedOpplysninger.verdi.map(
+                                (barnMedOpplysninger: IBarnMedOpplysninger) =>
+                                    barnMedOpplysninger.ident === barn.ident
+                                        ? {
+                                              ...barnMedOpplysninger,
+                                              merket: nyMerketStatus,
+                                          }
+                                        : barnMedOpplysninger
+                            )
+                        );
+                        if (nyMerketStatus) {
+                            deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                                ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                                [barn.ident]: [''],
+                            });
+                        } else {
+                            deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                                ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                                [barn.ident]: [],
+                            });
+                        }
                     }}
-                    label={'Fjern barn'}
                 />
-            )}
-        </CheckboxOgSlettknapp>
+                {barn.manueltRegistrert && (
+                    <FjernBarnKnapp
+                        erLesevisning={false}
+                        id={`fjern__${barn.ident}`}
+                        mini={true}
+                        ikon={<Slett />}
+                        knappPosisjon={'venstre'}
+                        onClick={() => {
+                            deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt([
+                                ...deltBostedSkjema.felter.barnaMedOpplysninger.verdi.filter(
+                                    barnMedOpplysninger =>
+                                        barnMedOpplysninger.ident !== barn.ident ||
+                                        barnMedOpplysninger.navn !== barn.navn ||
+                                        barnMedOpplysninger.fødselsdato !== barn.fødselsdato
+                                ),
+                            ]);
+                        }}
+                        label={'Fjern barn'}
+                    />
+                )}
+            </CheckboxOgSlettknapp>
+
+            <DeltBostedAvtaler barn={barn} />
+        </div>
     );
 };
 

@@ -118,6 +118,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             nullstillSkjema,
             sendBrevPåFagsak,
             senderBrev,
+            settVisInnsendtBrevModal,
             skjemaErLåst,
             visInnsendtBrevModal,
             årsakFelt,

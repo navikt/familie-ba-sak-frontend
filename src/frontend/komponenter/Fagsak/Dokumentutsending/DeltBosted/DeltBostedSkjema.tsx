@@ -5,7 +5,7 @@ import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
-import LeggTilBarn from '../../Søknad/LeggTilBarn';
+import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
 import BarnCheckbox from './BarnCheckbox';
 
 const DeltBostedSkjema = () => {

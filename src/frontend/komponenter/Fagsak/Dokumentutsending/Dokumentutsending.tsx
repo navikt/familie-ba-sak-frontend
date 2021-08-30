@@ -22,7 +22,11 @@ const Container = styled.div`
 const Dokumentutsending: React.FC = () => {
     const history = useHistory();
 
-    const { hentetForhåndsvisning, visInnsendtBrevModal } = useDokumentutsending();
+    const {
+        hentetForhåndsvisning,
+        visInnsendtBrevModal,
+        settVisInnsendtBrevModal,
+    } = useDokumentutsending();
 
     return (
         <Container>
@@ -30,18 +34,19 @@ const Dokumentutsending: React.FC = () => {
                 <UIModalWrapper
                     modal={{
                         tittel: 'Brevet er sendt',
-                        lukkKnapp: false,
+                        lukkKnapp: true,
                         visModal: visInnsendtBrevModal,
                         actions: [
                             <Knapp
                                 key={'til oppgavebenken'}
                                 mini={true}
                                 onClick={() => {
-                                    history.push('/oppgavebenk');
+                                    history.push('/oppgaver');
                                 }}
                                 children={'Naviger til oppgavebenken'}
                             />,
                         ],
+                        onClose: () => settVisInnsendtBrevModal(false),
                     }}
                 />
             )}
