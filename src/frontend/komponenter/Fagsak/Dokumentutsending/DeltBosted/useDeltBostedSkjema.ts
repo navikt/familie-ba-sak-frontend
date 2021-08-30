@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 
+import { ISODateString } from '@navikt/familie-form-elements';
 import { ok, useFelt, feil, useSkjema } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import { IManueltBrevRequestPåFagsak } from '../../../../typer/dokument';
 import { IForelderBarnRelasjon, ForelderBarnRelasjonRolle } from '../../../../typer/person';
 import { IBarnMedOpplysninger, Målform } from '../../../../typer/søknad';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
@@ -12,20 +14,43 @@ import { Informasjonsbrev } from '../../../Felleskomponenter/Hendelsesoversikt/B
 export const useDeltBostedSkjema = () => {
     const { bruker } = useFagsakRessurser();
 
-    const { skjema: deltBostedSkjema, nullstillSkjema, onSubmit: onDeltBostedSubmit } = useSkjema<
+    const barnaMedOpplysninger = useFelt<IBarnMedOpplysninger[]>({
+        verdi: [],
+        valideringsfunksjon: felt => {
+            return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
+                ? ok(felt)
+                : feil(felt, 'Du må velge barn');
+        },
+    });
+
+    const {
+        skjema: deltBostedSkjema,
+        nullstillSkjema,
+        onSubmit: onDeltBostedSubmit,
+        settVisfeilmeldinger: settVisfeilmeldingerDeltBosted,
+    } = useSkjema<
         {
             barnaMedOpplysninger: IBarnMedOpplysninger[];
+            avtalerOmDeltBostedPerBarn: Record<string, ISODateString[]>;
         },
         string
     >({
         felter: {
-            barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
-                verdi: [],
-                valideringsfunksjon: felt => {
-                    return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
-                        ? ok(felt)
-                        : feil(felt, 'Ingen av barna er valgt.');
+            barnaMedOpplysninger,
+            avtalerOmDeltBostedPerBarn: useFelt<Record<string, ISODateString[]>>({
+                verdi: {},
+                valideringsfunksjon: (felt, avhengigheter) => {
+                    const barnaMedOpplysninger = avhengigheter?.verdi ?? [];
+
+                    return barnaMedOpplysninger
+                        .filter((barn: IBarnMedOpplysninger) => barn.merket)
+                        .some((barn: IBarnMedOpplysninger) =>
+                            felt.verdi[barn.ident]?.some(avtale => avtale.length === 0)
+                        )
+                        ? feil(felt, 'Minst én av barna mangler avtale om delt bosted')
+                        : ok(felt);
                 },
+                avhengigheter: barnaMedOpplysninger,
             }),
         },
         skjemanavn: 'Delt bosted',
@@ -58,20 +83,29 @@ export const useDeltBostedSkjema = () => {
         nullstillDeltBostedSkjema();
     }, [bruker.status]);
 
-    const hentDeltBostedSkjemaData = () => {
+    const hentDeltBostedSkjemaData = (): IManueltBrevRequestPåFagsak => {
         if (bruker.status === RessursStatus.SUKSESS) {
             const barnIBrev = deltBostedSkjema.felter.barnaMedOpplysninger.verdi.filter(
                 barn => barn.merket
             );
+
             return {
                 mottakerIdent: bruker.data.personIdent,
-                multiselectVerdier: barnIBrev.map(
-                    barn =>
-                        `Barn født ${formaterIsoDato(
-                            barn.fødselsdato,
-                            datoformat.DATO
-                        )}. Avtale 15.01.20.`
-                ),
+                multiselectVerdier: barnIBrev.flatMap(barn => {
+                    const avtalerOmDeltBosted =
+                        deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident];
+
+                    return avtalerOmDeltBosted.map(
+                        avtaleOmDeltBosted =>
+                            `Barn født ${formaterIsoDato(
+                                barn.fødselsdato,
+                                datoformat.DATO
+                            )}. Avtalen gjelder fra ${formaterIsoDato(
+                                avtaleOmDeltBosted,
+                                datoformat.DATO_FORLENGET
+                            )}.`
+                    );
+                }),
                 barnIBrev: barnIBrev.map(barn => barn.ident),
                 mottakerMålform: Målform.NB,
                 mottakerNavn: bruker.data.navn,
@@ -87,5 +121,6 @@ export const useDeltBostedSkjema = () => {
         hentDeltBostedSkjemaData,
         nullstillDeltBostedSkjema,
         onDeltBostedSubmit,
+        settVisfeilmeldingerDeltBosted,
     };
 };

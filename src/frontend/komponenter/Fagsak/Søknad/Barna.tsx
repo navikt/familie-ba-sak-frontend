@@ -18,8 +18,8 @@ import {
 } from '../../../typer/person';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff } from '../../../utils/kalender';
+import LeggTilBarn from '../../Felleskomponenter/LeggTilBarn';
 import BarnMedOpplysninger from './BarnMedOpplysninger';
-import LeggTilBarn from './LeggTilBarn';
 
 const BarnMedDiskresjonskode = styled.div`
     display: flex;

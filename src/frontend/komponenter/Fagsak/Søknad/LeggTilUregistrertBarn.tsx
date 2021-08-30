@@ -9,7 +9,7 @@ import { ISkjema } from '@navikt/familie-skjema';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { IPersonInfo } from '../../../typer/person';
-import { IRegistrerBarnSkjema } from './LeggTilBarn';
+import { IRegistrerBarnSkjema } from '../../Felleskomponenter/LeggTilBarn';
 
 interface IProps {
     registrerBarnSkjema: ISkjema<IRegistrerBarnSkjema, IPersonInfo>;
