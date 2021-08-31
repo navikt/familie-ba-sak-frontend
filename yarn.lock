@@ -9131,7 +9131,7 @@ latest-version@^5.1.0:
   dependencies:
     package-json "^6.3.0"
 
-less-loader@^9.1.0:
+less-loader@^9.0.0:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-9.1.0.tgz#5568a30637edadfebcb576c648ae8336b04b11e7"
   integrity sha512-/BPur/W4NaDBvw4A7pTGMtKpAsAnexeJdw2VWRVzWEQCNX2FboFa1GUIFwkzBFwX5x/q7M/Srtng96QnhV5wIA==
@@ -14072,7 +14072,7 @@ styled-components@^5, styled-components@^5.2.1:
     shallowequal "^1.1.0"
     supports-color "^5.5.0"
 
-styled-components@^5.3.1:
+styled-components@^5.2.3:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-5.3.1.tgz#8a86dcd31bff7049c2ed408bae36fa23f03f071a"
   integrity sha512-JThv2JRzyH0NOIURrk9iskdxMSAAtCfj/b2Sf1WJaCUsloQkblepy1jaCLX/bYE+mhYo3unmwVSI9I5d9ncSiQ==
