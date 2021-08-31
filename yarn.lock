@@ -1604,7 +1604,7 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.3.3.tgz#19432cc0b711f4643cba611c5b593ff2b7b67626"
   integrity sha512-851CJ6GJu4u1iLLhqhGW+jeEB4NpOsoN8Guhy6KZUPSGI1mbN1fGkUcu7p2BC7VF3Rcad/EdHGwTmPPAYZ4vDg==
 
-"@navikt/familie-backend@^5.0.28":
+"@navikt/familie-backend@^5.0.26":
   version "5.0.28"
   resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.28.tgz#e0ab588bd11b7a858e0807425ce501eadca6fee0"
   integrity sha512-6lviV3Rrz+8sUEizY1tJVuvW/bWPaDw/unXQfTFFQbKP28mM/onGE5ryZBzVZPI8vmRMdH5ddRVVnI2aygsGow==
@@ -2937,10 +2937,10 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
-"@types/styled-components@^5.1.12":
-  version "5.1.12"
-  resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.12.tgz#1a3679942746adecd1e736bfc47aea2c938a7d9a"
-  integrity sha512-sTjc0+gMl08JvOHchQKgEGbbiSexSvWg5khUNSH4kosb7Tl4782AtfWMkAhQmeXMg2vIn6PthGVHFW+U/Dpihg==
+"@types/styled-components@^5.1.4":
+  version "5.1.13"
+  resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.13.tgz#a2906b68c2c6c811996216983b74ca02e22c6c34"
+  integrity sha512-nIIsiQ+Ag/4xnYf9mhzO3zIZ/zOmKN6HImEZifKh2TLibYz8OudzJbvzDu1uvMfX/+bs0B0RDPB2OIcbrrptVQ==
   dependencies:
     "@types/hoist-non-react-statics" "*"
     "@types/react" "*"
@@ -10212,7 +10212,7 @@ nav-frontend-hjelpetekst-style@^3.0.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst-style/-/nav-frontend-hjelpetekst-style-3.0.1.tgz#9540aa2bb637bdd252a2dba3309b506906169ab4"
   integrity sha512-O6zIv/6HZUH0/yfuqlRo+jLcuvxtg/1xDQAij/awThvh2tbS7hq0rxwoHmbIW9UDRXEWFf2AZv7cqS3vnziT5Q==
 
-nav-frontend-hjelpetekst@^3.1.1:
+nav-frontend-hjelpetekst@^3.0.2:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/nav-frontend-hjelpetekst/-/nav-frontend-hjelpetekst-3.1.1.tgz#e90dd45e63c1610357423756d7f85c0c6c0b6d9d"
   integrity sha512-TSBsTeKO0pPBwpJiUEV3njL+Rx+hkHQr+Fe3tCtd3Bx2I/BPN+vLWhcfxRXxdtHg2CMdk8WXOwRyi9AR+tHuJg==
