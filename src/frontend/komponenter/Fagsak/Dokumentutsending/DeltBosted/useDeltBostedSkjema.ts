@@ -9,6 +9,7 @@ import { IManueltBrevRequestPåFagsak } from '../../../../typer/dokument';
 import { IForelderBarnRelasjon, ForelderBarnRelasjonRolle } from '../../../../typer/person';
 import { IBarnMedOpplysninger, Målform } from '../../../../typer/søknad';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
+import { erIsoStringGyldig } from '../../../../utils/kalender';
 import { Informasjonsbrev } from '../../../Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 
 export const useDeltBostedSkjema = () => {
@@ -45,7 +46,10 @@ export const useDeltBostedSkjema = () => {
                     return barnaMedOpplysninger
                         .filter((barn: IBarnMedOpplysninger) => barn.merket)
                         .some((barn: IBarnMedOpplysninger) =>
-                            felt.verdi[barn.ident]?.some(avtale => avtale.length === 0)
+                            felt.verdi[barn.ident]?.some(
+                                avtaleDato =>
+                                    avtaleDato.length === 0 || !erIsoStringGyldig(avtaleDato)
+                            )
                         )
                         ? feil(felt, 'Minst én av barna mangler avtale om delt bosted')
                         : ok(felt);
