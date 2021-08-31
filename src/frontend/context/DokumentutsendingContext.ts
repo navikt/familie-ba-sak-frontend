@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import createUseContext from 'constate';
+import deepEqual from 'deep-equal';
 
 import { useFelt } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -26,6 +27,11 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
         const { bruker } = useFagsakRessurser();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
         const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
+
+        const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
+            IManueltBrevRequestPåFagsak | undefined
+        >(undefined);
+
         const {
             deltBostedSkjema,
             hentDeltBostedSkjemaData,
@@ -56,7 +62,10 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             if (bruker.status === RessursStatus.SUKSESS) {
                 switch (årsakFelt.verdi) {
                     case DokumentÅrsak.DELT_BOSTED:
-                        return hentDeltBostedSkjemaData();
+                        return {
+                            ...hentDeltBostedSkjemaData(),
+                            mottakerMålform: målformFelt.verdi ?? Målform.NB,
+                        };
                 }
             } else {
                 throw Error('Bruker ikke hentet inn og vi kan ikke sende inn skjema');
@@ -80,12 +89,15 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             }
         };
 
-        const hentForhåndsvisningPåFagsak = () =>
+        const hentForhåndsvisningPåFagsak = () => {
+            const skjemaData = hentSkjemaData();
+            settSistBrukteDataVedForhåndsvisning(skjemaData);
             hentForhåndsvisning<IManueltBrevRequestPåFagsak>({
                 method: 'POST',
-                data: { ...hentSkjemaData(), målform: målformFelt.verdi },
+                data: skjemaData,
                 url: `/familie-ba-sak/api/dokument/fagsak/${fagsak.id}/forhaandsvis-brev`,
             });
+        };
 
         const sendBrevPåFagsak = () => {
             switch (årsakFelt.verdi) {
@@ -131,6 +143,8 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             settVisInnsendtBrevModal,
             settVisfeilmeldinger,
             skjemaErLåst,
+            visForhåndsvisningBeskjed: () =>
+                !deepEqual(hentSkjemaData(), sistBrukteDataVedForhåndsvisning),
             visInnsendtBrevModal,
             årsakFelt,
         };

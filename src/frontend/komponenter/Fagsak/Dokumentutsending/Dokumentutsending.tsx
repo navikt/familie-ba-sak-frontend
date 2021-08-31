@@ -50,7 +50,7 @@ const Dokumentutsending: React.FC = () => {
                                 key={'til dokumentoversikt'}
                                 mini={true}
                                 onClick={() => {
-                                    history.push(`/${fagsak.id}/dokumentliste`);
+                                    history.push(`/fagsak/${fagsak.id}/dokumentliste`);
                                 }}
                                 children={'Gå til Dokumentoversikt'}
                             />,
