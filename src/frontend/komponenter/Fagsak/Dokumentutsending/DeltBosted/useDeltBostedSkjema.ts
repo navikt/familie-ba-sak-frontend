@@ -93,7 +93,7 @@ export const useDeltBostedSkjema = () => {
                 mottakerIdent: bruker.data.personIdent,
                 multiselectVerdier: barnIBrev.flatMap(barn => {
                     const avtalerOmDeltBosted =
-                        deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident];
+                        deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
 
                     return avtalerOmDeltBosted.map(
                         avtaleOmDeltBosted =>
