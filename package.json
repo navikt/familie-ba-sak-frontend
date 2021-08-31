@@ -26,7 +26,7 @@
   "dependencies": {
     "@axe-core/react": "^4.2.2",
     "@navikt/ds-icons": "^0.3.3",
-    "@navikt/familie-backend": "^5.0.28",
+    "@navikt/familie-backend": "^5.0.26",
     "@navikt/familie-clipboard": "^3.1.6",
     "@navikt/familie-form-elements": "^3.0.3",
     "@navikt/familie-header": "^3.0.19",
@@ -55,7 +55,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-router-hash-link": "^2.4.0",
     "@types/request-promise": "^4.1.46",
-    "@types/styled-components": "^5.1.12",
+    "@types/styled-components": "^5.1.4",
     "@types/uuid": "^8.0.0",
     "amplitude-js": "^8.5.0",
     "autoprefixer": "^10.2.4",
