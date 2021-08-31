@@ -60,9 +60,10 @@ export interface IRegistrerBarnSkjema {
 
 interface IProps {
     barnaMedOpplysninger: Felt<IBarnMedOpplysninger[]>;
+    onSuccess?: (barn: IPersonInfo) => void;
 }
 
-const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger }) => {
+const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     const { request } = useHttp();
     const { logg } = useFagsakRessurser();
 
@@ -197,6 +198,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger }) => {
                                             erFolkeregistrert: true,
                                         },
                                     ]);
+                                    onSuccess && onSuccess(hentetPerson.data);
 
                                     settVisModal(false);
                                 }

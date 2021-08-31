@@ -3,6 +3,7 @@ import React from 'react';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
+import { IPersonInfo } from '../../../../typer/person';
 import { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { kalenderDiff, kalenderDatoTilDate, kalenderDato } from '../../../../utils/kalender';
 import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
@@ -41,7 +42,15 @@ const DeltBostedSkjema = () => {
                 <BarnCheckbox key={barnMedOpplysninger.ident} barn={barnMedOpplysninger} />
             ))}
 
-            <LeggTilBarn barnaMedOpplysninger={deltBostedSkjema.felter.barnaMedOpplysninger} />
+            <LeggTilBarn
+                barnaMedOpplysninger={deltBostedSkjema.felter.barnaMedOpplysninger}
+                onSuccess={(barn: IPersonInfo) => {
+                    deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                        ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                        [barn.personIdent]: [''],
+                    });
+                }}
+            />
         </CheckboxGruppe>
     );
 };
