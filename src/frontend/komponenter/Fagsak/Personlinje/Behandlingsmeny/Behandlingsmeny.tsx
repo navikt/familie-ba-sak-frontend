@@ -14,6 +14,7 @@ import { IFagsak } from '../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
+import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 
 interface IProps {
@@ -77,6 +78,15 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             />
                         </li>
                     )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        //åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD && // TODO: Avklar om det også skal vises ved søknad
+                        toggles[ToggleNavn.brukLeggTilBarnPåBehandling] && (
+                            <li>
+                                <LeggTilBarnPBehandling
+                                    onListElementClick={() => settAnker(undefined)}
+                                />
+                            </li>
+                        )}
 
                     {toggles[ToggleNavn.brukErDeltBosted] && (
                         <li>

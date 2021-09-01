@@ -30,7 +30,7 @@ import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
 import IkonKnapp from './IkonKnapp/IkonKnapp';
 import UIModalWrapper from './Modal/UIModalWrapper';
 
-const LeggTilBarnKnapp = styled(IkonKnapp)`
+const DefaultKnapp = styled(IkonKnapp)`
     margin-left: 1rem;
 `;
 
@@ -59,11 +59,26 @@ export interface IRegistrerBarnSkjema {
 }
 
 interface IProps {
+    åpneModalKnapp?: (leggTilOnClick: () => void) => JSX.Element;
     barnaMedOpplysninger: Felt<IBarnMedOpplysninger[]>;
     onSuccess?: (barn: IPersonInfo) => void;
 }
 
-const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
+const LeggTilBarn: React.FC<IProps> = ({
+    åpneModalKnapp = (leggTilonClick: () => void) => (
+        <DefaultKnapp
+            id={'legg-til-barn'}
+            mini
+            erLesevisning={false}
+            onClick={leggTilonClick}
+            ikon={<Pluss />}
+            label={'Legg til barn'}
+            knappPosisjon={'venstre'}
+        />
+    ),
+    barnaMedOpplysninger,
+    onSuccess,
+}) => {
     const { request } = useHttp();
     const { logg } = useFagsakRessurser();
 
@@ -230,17 +245,9 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
 
     return (
         <>
-            <LeggTilBarnKnapp
-                id={'legg-til-barn'}
-                mini
-                erLesevisning={false}
-                onClick={() => {
-                    settVisModal(true);
-                }}
-                ikon={<Pluss />}
-                label={'Legg til barn'}
-                knappPosisjon={'venstre'}
-            />
+            {åpneModalKnapp(() => {
+                settVisModal(true);
+            })}
 
             <StyledUIModalWrapper
                 modal={{
