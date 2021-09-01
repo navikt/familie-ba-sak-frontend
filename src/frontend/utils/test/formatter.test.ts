@@ -1,10 +1,19 @@
 import familieDayjs from '../familieDayjs';
-import { datoformat, formaterIsoDato, formaterIdent, hentAlder } from '../formatter';
+import { datoformat, formaterIdent, formaterIsoDato, hentAlder, kunSiffer } from '../formatter';
 import { iDag, KalenderEnhet, leggTil, serializeIso8601String, trekkFra } from '../kalender';
 
 describe('utils/formatter', () => {
     test('Skal formatere ident', () => {
         expect(formaterIdent('12345678910')).toBe('123456 78910');
+    });
+
+    test('Tester at kunSiffer håndterer negative tall, desimaler og bokstaver riktig', () => {
+        expect(kunSiffer('0123')).toBe(true);
+        expect(kunSiffer('-123')).toBe(false);
+        expect(kunSiffer('123.4')).toBe(false);
+        expect(kunSiffer('123,4')).toBe(false);
+        expect(kunSiffer('abc')).toBe(false);
+        expect(kunSiffer('1a3')).toBe(false);
     });
 
     test('Skal formatere orgnr', () => {

@@ -56,7 +56,7 @@ export const formaterBeløp = (beløp: number): string => {
     return `${beløp.toLocaleString('no-NO')} kr`;
 };
 
-const erNumerisk = (value: string) => /^-?\d+$/.test(value);
+export const kunSiffer = (value: string) => /^\d+$/.test(value);
 
 const erPersonId = (personIdent: string) => {
     const id = personIdent.split(' ').join('');
@@ -64,11 +64,14 @@ const erPersonId = (personIdent: string) => {
 };
 
 const erOrgNr = (orgNr: string) => {
-    return erNumerisk(orgNr) && orgNr.length === 9;
+    // Sjekker kun etter ni siffer, validerer ikke kontrollsifferet (det 9. sifferet)
+    return kunSiffer(orgNr) && orgNr.length === 9;
 };
 
 export const formaterIdent = (personIdent: string) => {
-    if (personIdent === '') return 'Ukjent id';
+    if (personIdent === '') {
+        return 'Ukjent id';
+    }
 
     return erPersonId(personIdent)
         ? `${personIdent.slice(0, 6)} ${personIdent.slice(6, personIdent.length)}`
