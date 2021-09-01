@@ -10,7 +10,7 @@ import { IFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentFagsakStatusVisning } from '../../../utils/fagsak';
-import { formaterPersonIdent, hentAlder } from '../../../utils/formatter';
+import { formaterIdent, hentAlder } from '../../../utils/formatter';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
 interface IProps {
@@ -23,7 +23,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
     return (
         <Visittkort
             navn={bruker.navn}
-            ident={formaterPersonIdent(fagsak.søkerFødselsnummer)}
+            ident={formaterIdent(fagsak.søkerFødselsnummer)}
             alder={hentAlder(bruker.fødselsdato)}
             kjønn={bruker.kjønn}
         >

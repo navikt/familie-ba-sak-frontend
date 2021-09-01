@@ -5,7 +5,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { EmailIkon } from '../../ikoner/EmailIkon';
-import { formaterPersonIdent } from '../../utils/formatter';
+import { formaterIdent } from '../../utils/formatter';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
 
@@ -38,7 +38,7 @@ export const AvsenderPanel: React.FC = () => {
                 <DeltagerInfo
                     ikon={<EmailIkon filled={åpen} width={48} height={48} />}
                     navn={skjema.felter.avsenderNavn.verdi || 'Ukjent avsender'}
-                    ident={formaterPersonIdent(skjema.felter.avsenderIdent.verdi ?? '')}
+                    ident={formaterIdent(skjema.felter.avsenderIdent.verdi ?? '')}
                     undertittel="Avsender"
                 />
             }

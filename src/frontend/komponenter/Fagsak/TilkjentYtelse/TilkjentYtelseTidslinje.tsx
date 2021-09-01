@@ -10,7 +10,7 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
-import { formaterPersonIdent, sorterFødselsdato } from '../../../utils/formatter';
+import { formaterIdent, sorterFødselsdato } from '../../../utils/formatter';
 import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../../../utils/kalender';
 import TidslinjeEtikett from './TidslinjeEtikett';
 import TidslinjeNavigering from './TidslinjeNavigering';
@@ -59,7 +59,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     {personerFraAndelerTilkjentYtelseSortert.map((person, index) => {
                         return (
                             <Normaltekst key={index} title={person.navn}>
-                                {formaterPersonIdent(person.personIdent)}
+                                {formaterIdent(person.personIdent)}
                             </Normaltekst>
                         );
                     })}

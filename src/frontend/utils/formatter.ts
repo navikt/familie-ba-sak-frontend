@@ -31,7 +31,6 @@ export const formaterIsoDato = (
         return defaultString ?? '';
     }
     const dayjsDato = familieDayjs(dato);
-
     return dayjsDato.isValid() ? dayjsDato.format(tilFormat) : dato;
 };
 
@@ -68,7 +67,7 @@ const erOrgNr = (orgNr: string) => {
     return erNumerisk(orgNr) && orgNr.length === 9;
 };
 
-export const formaterPersonIdent = (personIdent: string) => {
+export const formaterIdent = (personIdent: string) => {
     if (personIdent === '') return 'Ukjent id';
 
     return erPersonId(personIdent)

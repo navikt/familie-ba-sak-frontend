@@ -7,7 +7,7 @@ import { FamilieCheckbox } from '@navikt/familie-form-elements';
 import { useDokumentutsending } from '../../../../context/DokumentutsendingContext';
 import Slett from '../../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { formaterPersonIdent, hentAlderSomString } from '../../../../utils/formatter';
+import { formaterIdent, hentAlderSomString } from '../../../../utils/formatter';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
@@ -52,7 +52,7 @@ const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
-    )}) | ${formaterPersonIdent(barn.ident)}`;
+    )}) | ${formaterIdent(barn.ident)}`;
 
     return (
         <div>

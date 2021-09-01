@@ -12,7 +12,7 @@ import {
     datoformat,
     formaterBeløp,
     formaterIsoDato,
-    formaterPersonIdent,
+    formaterIdent,
     hentAlderSomString,
     sorterFødselsdato,
 } from '../../../utils/formatter';
@@ -104,7 +104,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                                                     detalj.person.navn
                                                 } (${hentAlderSomString(
                                                     detalj.person.fødselsdato
-                                                )}) | ${formaterPersonIdent(
+                                                )}) | ${formaterIdent(
                                                     detalj.person.personIdent
                                                 )}`}</Normaltekst>
                                             </td>
