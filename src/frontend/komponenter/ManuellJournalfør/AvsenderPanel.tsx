@@ -37,7 +37,7 @@ export const AvsenderPanel: React.FC = () => {
             tittel={
                 <DeltagerInfo
                     ikon={<EmailIkon filled={åpen} width={48} height={48} />}
-                    navn={skjema.felter.avsenderNavn.verdi || 'Ukjent'}
+                    navn={skjema.felter.avsenderNavn.verdi || 'Ukjent avsender'}
                     ident={formaterPersonIdent(skjema.felter.avsenderIdent.verdi ?? '')}
                     undertittel="Avsender"
                 />

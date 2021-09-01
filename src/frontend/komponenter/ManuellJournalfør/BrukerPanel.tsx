@@ -58,7 +58,7 @@ export const BrukerPanel: React.FC = () => {
             tittel={
                 <DeltagerInfo
                     ikon={<KontoSirkel filled={åpen} width={48} height={48} />}
-                    navn={skjema.felter.bruker.verdi?.navn || 'Bruke ikke satt'}
+                    navn={skjema.felter.bruker.verdi?.navn || 'Ukjent bruker'}
                     undertittel={'Søker/Bruker'}
                     ident={formaterPersonIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
                 />
