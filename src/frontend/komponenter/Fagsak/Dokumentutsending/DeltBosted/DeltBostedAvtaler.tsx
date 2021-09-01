@@ -12,6 +12,7 @@ import Pluss from '../../../../ikoner/Pluss';
 import Slett from '../../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { datoformatNorsk } from '../../../../utils/formatter';
+import { erIsoStringGyldig } from '../../../../utils/kalender';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
@@ -62,13 +63,22 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
     const avtalerOmDeltBosted: ISODateString[] =
         deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
 
+    const hentFeilmelding = (avtaleDato?: ISODateString) => {
+        if (!deltBostedSkjema.visFeilmeldinger) return undefined;
+
+        if (avtaleDato === '') {
+            return 'Du må fylle inn dato for avtale';
+        } else if (!erIsoStringGyldig(avtaleDato)) {
+            return 'Du må fylle inn en gyldig dato for avtale';
+        } else {
+            return undefined;
+        }
+    };
+
     return (
         <Container>
             {avtalerOmDeltBosted.map((avtaleDato, index) => {
-                const feilmelding =
-                    deltBostedSkjema.visFeilmeldinger && avtaleDato === ''
-                        ? 'Du må fylle inn dato for avtale'
-                        : undefined;
+                const feilmelding = hentFeilmelding(avtaleDato);
 
                 return (
                     <div key={`${barn.fødselsdato}`}>
