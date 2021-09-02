@@ -8,7 +8,7 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { useSøknad } from '../../../context/SøknadContext';
 import Slett from '../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { formaterPersonIdent, hentAlderSomString } from '../../../utils/formatter';
+import { formaterIdent, hentAlderSomString } from '../../../utils/formatter';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
@@ -48,7 +48,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
-    )}) | ${formaterPersonIdent(barn.ident)} ${
+    )}) | ${formaterIdent(barn.ident)} ${
         barnMedLøpendeUtbetaling.has(barn.ident) ? '(løpende)' : ''
     }`;
 
