@@ -7,7 +7,7 @@ import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
-import { formaterPersonIdent } from '../../utils/formatter';
+import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
@@ -58,9 +58,9 @@ export const BrukerPanel: React.FC = () => {
             tittel={
                 <DeltagerInfo
                     ikon={<KontoSirkel filled={åpen} width={48} height={48} />}
-                    navn={skjema.felter.bruker.verdi?.navn || 'Bruke ikke satt'}
+                    navn={skjema.felter.bruker.verdi?.navn || 'Ukjent bruker'}
                     undertittel={'Søker/Bruker'}
-                    ident={formaterPersonIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
+                    ident={formaterIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
                 />
             }
         >

@@ -8,7 +8,7 @@ import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { ISøkeresultat } from '@navikt/familie-header';
 
 import { useApp } from '../../../context/AppContext';
-import { formaterPersonIdent } from '../../../utils/formatter';
+import { formaterIdent } from '../../../utils/formatter';
 import UIModalWrapper from '../Modal/UIModalWrapper';
 import useOpprettFagsak from './useOpprettFagsak';
 
@@ -64,7 +64,7 @@ const OpprettFagsakModal: React.FC<IOpprettFagsakModal> = ({ lukkModal, søkeres
                 personen?
             </StyledUndertittel>
             {søkeresultat && (
-                <Normaltekst>{`${søkeresultat.navn} (${formaterPersonIdent(
+                <Normaltekst>{`${søkeresultat.navn} (${formaterIdent(
                     søkeresultat.ident
                 )})`}</Normaltekst>
             )}
