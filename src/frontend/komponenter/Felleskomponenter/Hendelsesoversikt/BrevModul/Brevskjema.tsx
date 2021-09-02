@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
@@ -17,12 +17,14 @@ import { useBehandling } from '../../../../context/behandlingContext/BehandlingC
 import { useBrevModul } from '../../../../context/BrevModulContext';
 import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import useForhåndsvisning from '../../../../hooks/useForhåndsvisning';
+import { DokumentIkon } from '../../../../ikoner/DokumentIkon';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
-import { formaterPersonIdent } from '../../../../utils/formatter';
+import { formaterIdent } from '../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import IkonKnapp from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
@@ -120,7 +122,7 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                                     key={person.personIdent}
                                     value={person.personIdent}
                                 >
-                                    {formaterPersonIdent(person.personIdent)}
+                                    {formaterIdent(person.personIdent)}
                                 </option>
                             );
                         })}
@@ -177,8 +179,13 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                 )}
             </SkjemaGruppe>
             <Knapperekke>
-                <Flatknapp
-                    mini
+                <IkonKnapp
+                    id={'forhandsvis-vedtaksbrev'}
+                    erLesevisning={erLesevisning()}
+                    label={'Forhåndsvis'}
+                    knappPosisjon={'venstre'}
+                    ikon={<DokumentIkon />}
+                    mini={true}
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {
@@ -190,9 +197,7 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                             });
                         }
                     }}
-                >
-                    Forhåndsvis
-                </Flatknapp>
+                />
                 <Knapp
                     mini
                     spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
