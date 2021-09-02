@@ -81,12 +81,17 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                 erLesevisning={erLesevisning()}
                 creatable={true}
                 isClearable
+                placeholder={'Skriv fritekst for å endre tittel...'}
                 isMulti={false}
                 options={tittelList}
-                value={{
-                    value: dokumentFraSkjema?.tittel ?? '',
-                    label: dokumentFraSkjema?.tittel ?? '',
-                }}
+                value={
+                    !dokumentFraSkjema?.tittel || dokumentFraSkjema.tittel === ''
+                        ? null
+                        : {
+                              value: dokumentFraSkjema.tittel,
+                              label: dokumentFraSkjema.tittel,
+                          }
+                }
                 feil={
                     visFeilmeldinger && dokumentFraSkjema?.tittel === ''
                         ? 'Tittel er ikke satt'
