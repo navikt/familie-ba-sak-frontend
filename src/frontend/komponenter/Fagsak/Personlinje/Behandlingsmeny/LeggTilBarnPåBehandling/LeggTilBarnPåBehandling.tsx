@@ -19,7 +19,9 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { IBehandling } from '../../../../../typer/behandling';
+import { IFagsak } from '../../../../../typer/fagsak';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../../../typer/person';
 import { identValidator } from '../../../../../utils/validators';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
@@ -36,6 +38,7 @@ interface IProps {
 
 const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behandling }) => {
     const { request } = useHttp();
+    const { settFagsak } = useFagsakRessurser();
 
     const [visModal, settVisModal] = useState<boolean>(false);
 
@@ -72,11 +75,11 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                 nullstillSkjema();
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     if (ressurs.data.saksbehandlerHarTilgang) {
-                        request<{ barnIdent: string }, string>({
+                        request<{ barnIdent: string }, IFagsak>({
                             method: 'POST',
                             data: { barnIdent: skjema.felter.ident.verdi },
                             url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/legg-til-barn`,
-                        }).then((leggTilRespons: Ressurs<string>) => {
+                        }).then((leggTilRespons: Ressurs<IFagsak>) => {
                             if (
                                 leggTilRespons.status === RessursStatus.FEILET ||
                                 leggTilRespons.status === RessursStatus.FUNKSJONELL_FEIL ||
@@ -86,6 +89,7 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                                     byggFeiletRessurs(leggTilRespons.frontendFeilmelding)
                                 );
                             } else {
+                                settFagsak(leggTilRespons);
                                 settVisModal(false);
                             }
                         });
