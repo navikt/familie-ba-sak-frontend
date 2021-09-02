@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
@@ -38,7 +39,7 @@ export const KnyttTilNyBehandling: React.FC = () => {
                 />
             </StyledCheckboxDiv>
             {skjema.felter.behandlingstype.erSynlig && (
-                <>
+                <SkjemaGruppe>
                     <br />
                     <OpprettBehandlingValg
                         behandlingstype={skjema.felter.behandlingstype}
@@ -48,7 +49,7 @@ export const KnyttTilNyBehandling: React.FC = () => {
                         erLesevisning={erLesevisning()}
                         manuellJournalfør
                     />
-                </>
+                </SkjemaGruppe>
             )}
         </>
     );
