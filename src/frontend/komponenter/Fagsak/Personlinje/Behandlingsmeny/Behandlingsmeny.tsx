@@ -10,6 +10,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
@@ -23,7 +24,7 @@ interface IProps {
 
 const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
     const { toggles } = useApp();
-    const { åpenBehandling } = useBehandling();
+    const { åpenBehandling, erLesevisning } = useBehandling();
     const history = useHistory();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
 
@@ -79,7 +80,8 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                         </li>
                     )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        //åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD && // TODO: Avklar om det også skal vises ved søknad
+                        !erLesevisning() &&
+                        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD &&
                         toggles[ToggleNavn.brukLeggTilBarnPåBehandling] && (
                             <li>
                                 <LeggTilBarnPBehandling
