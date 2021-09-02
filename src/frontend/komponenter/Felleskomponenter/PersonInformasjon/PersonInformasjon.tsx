@@ -6,7 +6,7 @@ import Clipboard from '@navikt/familie-clipboard';
 import { FamilieIkonVelger } from '@navikt/familie-ikoner';
 
 import { IGrunnlagPerson, personTypeMap } from '../../../typer/person';
-import { hentAlder, formaterPersonIdent } from '../../../utils/formatter';
+import { hentAlder, formaterIdent } from '../../../utils/formatter';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -37,9 +37,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                     </Undertittel>
                     <Undertittel tag={tag}>&ensp;|&ensp;</Undertittel>
                     <Clipboard>
-                        <Undertittel tag={tag}>
-                            {formaterPersonIdent(person.personIdent)}
-                        </Undertittel>
+                        <Undertittel tag={tag}>{formaterIdent(person.personIdent)}</Undertittel>
                     </Clipboard>
                     <Undertittel tag={tag}>&ensp;|&ensp;</Undertittel>
                     <Undertittel tag={tag}>{`${personTypeMap[person.type]} `}</Undertittel>
@@ -60,7 +58,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                     </Normaltekst>
                     <Normaltekst>&ensp;|&ensp;</Normaltekst>
                     <Clipboard>
-                        <Normaltekst>{formaterPersonIdent(person.personIdent)}</Normaltekst>
+                        <Normaltekst>{formaterIdent(person.personIdent)}</Normaltekst>
                     </Clipboard>
                     <Normaltekst>&ensp;|&ensp;</Normaltekst>
                     <Normaltekst>{`${personTypeMap[person.type]} `}</Normaltekst>

@@ -9,7 +9,7 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IPersonResultat, IVilkårResultat, Resultat } from '../../../typer/vilkår';
-import { formaterPersonIdent } from '../../../utils/formatter';
+import { formaterIdent } from '../../../utils/formatter';
 
 export interface ISide {
     href: string;
@@ -74,7 +74,7 @@ export const sider: Record<SideId, ISide> = {
             return personResultater.map(
                 (personResultat: IPersonResultat, index: number): IUnderside => {
                     return {
-                        navn: `${personResultat.person.navn}, ${formaterPersonIdent(
+                        navn: `${personResultat.person.navn}, ${formaterIdent(
                             personResultat.person.personIdent
                         )}`,
                         hash: `${index}_${personResultat.person.fødselsdato}`,

@@ -401,6 +401,29 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         );
     };
 
+    const settAvsenderLikBruker = () => {
+        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
+            skjema.felter.avsenderNavn.validerOgSettFelt(
+                dataForManuellJournalføring.data.person?.navn ?? ''
+            );
+            skjema.felter.avsenderIdent.validerOgSettFelt(
+                dataForManuellJournalføring.data.person?.personIdent ?? ''
+            );
+        }
+    };
+
+    const tilbakestillAvsender = () => {
+        if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
+            skjema.felter.avsenderNavn.validerOgSettFelt(
+                dataForManuellJournalføring.data.journalpost.avsenderMottaker?.navn ?? ''
+            );
+
+            skjema.felter.avsenderIdent.validerOgSettFelt(
+                dataForManuellJournalføring.data.journalpost.avsenderMottaker?.id ?? ''
+            );
+        }
+    };
+
     return {
         dataForManuellJournalføring,
         dokumentData,
@@ -417,6 +440,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         tilbakestillData,
         valgtDokumentId,
         velgOgHentDokumentData,
+        settAvsenderLikBruker,
+        tilbakestillAvsender,
     };
 });
 
