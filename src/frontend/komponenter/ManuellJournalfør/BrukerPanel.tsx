@@ -22,6 +22,14 @@ const StyledKnapp = styled(FamilieKnapp)`
     height: 1rem;
 `;
 
+const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBase)`
+    & .ekspanderbartPanel__innhold {
+        margin-left: 4rem;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+`;
+
 export const BrukerPanel: React.FC = () => {
     const { skjema, endreBruker, erLesevisning } = useManuellJournalfør();
     const [åpen, settÅpen] = useState(false);
@@ -46,7 +54,7 @@ export const BrukerPanel: React.FC = () => {
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
 
     return (
-        <StyledEkspanderbartpanelBase
+        <StyledEkspanderbartpanelBaseMedMargin
             visFeilmeldinger={
                 skjema.visFeilmeldinger &&
                 skjema.felter.bruker.valideringsstatus === Valideringsstatus.FEIL
@@ -97,6 +105,6 @@ export const BrukerPanel: React.FC = () => {
                     erLesevisning={erLesevisning()}
                 />
             </StyledDiv>
-        </StyledEkspanderbartpanelBase>
+        </StyledEkspanderbartpanelBaseMedMargin>
     );
 };
