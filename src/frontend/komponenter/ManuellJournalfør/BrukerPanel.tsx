@@ -7,7 +7,7 @@ import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
-import { formaterPersonIdent } from '../../utils/formatter';
+import { formaterIdent } from '../../utils/formatter';
 import { identValidator } from '../../utils/validators';
 import { DeltagerInfo } from './DeltagerInfo';
 import { StyledEkspanderbartpanelBase } from './StyledEkspanderbartpanelBase';
@@ -20,6 +20,14 @@ const StyledKnapp = styled(FamilieKnapp)`
     margin-left: 1rem;
     margin-top: auto;
     height: 1rem;
+`;
+
+const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBase)`
+    & .ekspanderbartPanel__innhold {
+        margin-left: 4rem;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
 `;
 
 export const BrukerPanel: React.FC = () => {
@@ -46,7 +54,7 @@ export const BrukerPanel: React.FC = () => {
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
 
     return (
-        <StyledEkspanderbartpanelBase
+        <StyledEkspanderbartpanelBaseMedMargin
             visFeilmeldinger={
                 skjema.visFeilmeldinger &&
                 skjema.felter.bruker.valideringsstatus === Valideringsstatus.FEIL
@@ -58,9 +66,9 @@ export const BrukerPanel: React.FC = () => {
             tittel={
                 <DeltagerInfo
                     ikon={<KontoSirkel filled={åpen} width={48} height={48} />}
-                    navn={skjema.felter.bruker.verdi?.navn || 'Bruke ikke satt'}
+                    navn={skjema.felter.bruker.verdi?.navn || 'Ukjent bruker'}
                     undertittel={'Søker/Bruker'}
-                    ident={formaterPersonIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
+                    ident={formaterIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
                 />
             }
         >
@@ -97,6 +105,6 @@ export const BrukerPanel: React.FC = () => {
                     erLesevisning={erLesevisning()}
                 />
             </StyledDiv>
-        </StyledEkspanderbartpanelBase>
+        </StyledEkspanderbartpanelBaseMedMargin>
     );
 };

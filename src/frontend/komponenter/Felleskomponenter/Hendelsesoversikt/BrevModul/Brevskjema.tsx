@@ -22,7 +22,7 @@ import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
-import { formaterPersonIdent } from '../../../../utils/formatter';
+import { formaterIdent } from '../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import IkonKnapp from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
@@ -122,7 +122,7 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                                     key={person.personIdent}
                                     value={person.personIdent}
                                 >
-                                    {formaterPersonIdent(person.personIdent)}
+                                    {formaterIdent(person.personIdent)}
                                 </option>
                             );
                         })}
