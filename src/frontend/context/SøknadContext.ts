@@ -48,6 +48,13 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 ? hentBarnMedLøpendeUtbetaling(fagsak.data)
                 : new Set();
 
+        const hentBarnMarkertISøknaden =
+            fagsak.status === RessursStatus.SUKSESS
+                ? fagsak.data.behandlinger
+                      .filter(behandling => behandling.aktiv)
+                      .flatMap(behandling => behandling.personer.map(person => person.personIdent))
+                : [];
+
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
                 underkategori: BehandlingUnderkategori;
@@ -96,7 +103,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                         )
                         .map(
                             (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                                merket: false,
+                                merket: hentBarnMarkertISøknaden.indexOf(relasjon.personIdent) > -1,
                                 ident: relasjon.personIdent,
                                 navn: relasjon.navn,
                                 fødselsdato: relasjon.fødselsdato,
@@ -120,6 +127,8 @@ const [SøknadProvider, useSøknad] = createUseContext(
                     åpenBehandling.søknadsgrunnlag.barnaMedOpplysninger.map(
                         (barnMedOpplysninger: IBarnMedOpplysninger) => ({
                             ...barnMedOpplysninger,
+                            merket:
+                                hentBarnMarkertISøknaden.indexOf(barnMedOpplysninger.ident) > -1,
                             checked: true,
                         })
                     )
