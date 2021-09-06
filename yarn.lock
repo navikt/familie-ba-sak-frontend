@@ -1604,12 +1604,12 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.3.3.tgz#19432cc0b711f4643cba611c5b593ff2b7b67626"
   integrity sha512-851CJ6GJu4u1iLLhqhGW+jeEB4NpOsoN8Guhy6KZUPSGI1mbN1fGkUcu7p2BC7VF3Rcad/EdHGwTmPPAYZ4vDg==
 
-"@navikt/familie-backend@^5.0.26":
-  version "5.0.26"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.26.tgz#557becaccaa6860786a27e05c3290dd7dbb9c1b4"
-  integrity sha512-4x2EYVGUiSoUPWTNL1LcaGZCablfOxxfDqQ3vxu8UUi+bUYbtFZvF9KOiZzSU/L0QzVB9roAJ4cfIPD86ooVdQ==
+"@navikt/familie-backend@^5.0.28":
+  version "5.0.28"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.28.tgz#e0ab588bd11b7a858e0807425ce501eadca6fee0"
+  integrity sha512-6lviV3Rrz+8sUEizY1tJVuvW/bWPaDw/unXQfTFFQbKP28mM/onGE5ryZBzVZPI8vmRMdH5ddRVVnI2aygsGow==
   dependencies:
-    "@navikt/familie-logging" "^1.0.4"
+    "@navikt/familie-logging" "^1.0.5"
     "@types/cookie-parser" "^1.4.2"
     "@types/express" "^4.17.11"
     "@types/express-session" "^1.17.3"
@@ -1713,7 +1713,7 @@
   dependencies:
     "@navikt/familie-typer" "^3.0.13"
 
-"@navikt/familie-logging@^1.0.4", "@navikt/familie-logging@^1.0.5":
+"@navikt/familie-logging@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@navikt/familie-logging/-/familie-logging-1.0.5.tgz#546ff5855ac10e14a23b28b53d2b27970965b64f"
   integrity sha512-/MLIRqVHG6ihqciquOh9nFtUA4sk3l8eVzbAa/a2E+2QMlOqbDoaC3zZeACFB6PkVEAWzGJQ7rYPlbpKz5QxBA==
