@@ -9,7 +9,12 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
-import { IBarnMedOpplysninger, IRestRegistrerSøknad, Målform } from '../typer/søknad';
+import {
+    IBarnMedOpplysninger,
+    IBarnMedOpplysningerBackend,
+    IRestRegistrerSøknad,
+    Målform,
+} from '../typer/søknad';
 import {
     erEtter,
     kalenderDatoFraDate,
@@ -47,13 +52,6 @@ const [SøknadProvider, useSøknad] = createUseContext(
             fagsak.status === RessursStatus.SUKSESS
                 ? hentBarnMedLøpendeUtbetaling(fagsak.data)
                 : new Set();
-
-        const hentBarnMarkertISøknaden =
-            fagsak.status === RessursStatus.SUKSESS
-                ? fagsak.data.behandlinger
-                      .filter(behandling => behandling.aktiv)
-                      .flatMap(behandling => behandling.personer.map(person => person.personIdent))
-                : [];
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
             {
@@ -103,7 +101,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                         )
                         .map(
                             (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                                merket: hentBarnMarkertISøknaden.indexOf(relasjon.personIdent) > -1,
+                                merket: false,
                                 ident: relasjon.personIdent,
                                 navn: relasjon.navn,
                                 fødselsdato: relasjon.fødselsdato,
@@ -125,11 +123,9 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 settSøknadErLastetFraBackend(true);
                 skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
                     åpenBehandling.søknadsgrunnlag.barnaMedOpplysninger.map(
-                        (barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                        (barnMedOpplysninger: IBarnMedOpplysningerBackend) => ({
                             ...barnMedOpplysninger,
-                            merket:
-                                hentBarnMarkertISøknaden.indexOf(barnMedOpplysninger.ident) > -1,
-                            checked: true,
+                            merket: barnMedOpplysninger.inkludertISøknaden,
                         })
                     )
                 );
@@ -173,7 +169,9 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                         målform: skjema.felter.målform.verdi,
                                     },
                                     barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
-                                        barn => ({
+                                        (
+                                            barn: IBarnMedOpplysninger
+                                        ): IBarnMedOpplysningerBackend => ({
                                             ...barn,
                                             inkludertISøknaden: barn.merket,
                                         })
