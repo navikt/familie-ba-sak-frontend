@@ -10,10 +10,12 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
+import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 
 interface IProps {
@@ -22,7 +24,7 @@ interface IProps {
 
 const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
     const { toggles } = useApp();
-    const { åpenBehandling } = useBehandling();
+    const { åpenBehandling, erLesevisning } = useBehandling();
     const history = useHistory();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
 
@@ -77,6 +79,17 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             />
                         </li>
                     )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        !erLesevisning() &&
+                        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD &&
+                        toggles[ToggleNavn.brukLeggTilBarnPåBehandling] && (
+                            <li>
+                                <LeggTilBarnPBehandling
+                                    onListElementClick={() => settAnker(undefined)}
+                                    behandling={åpenBehandling.data}
+                                />
+                            </li>
+                        )}
 
                     {toggles[ToggleNavn.brukErDeltBosted] && (
                         <li>
