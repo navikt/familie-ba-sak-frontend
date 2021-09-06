@@ -23,6 +23,7 @@ import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../../../typer/person';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { identValidator } from '../../../../../utils/validators';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 
@@ -160,13 +161,7 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                 }}
             >
                 <SkjemaGruppe
-                    feil={
-                        skjema.submitRessurs.status === RessursStatus.FEILET ||
-                        skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                        skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG
-                            ? skjema.submitRessurs.frontendFeilmelding
-                            : undefined
-                    }
+                    feil={hentFrontendFeilmelding(skjema.submitRessurs)}
                     utenFeilPropagering={true}
                 >
                     <FamilieInput
