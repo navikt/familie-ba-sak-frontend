@@ -8,13 +8,22 @@ export interface IRestRegistrerSøknad {
 export interface ISøknadDTO {
     underkategori: BehandlingUnderkategori;
     søkerMedOpplysninger: ISøkerMedOpplysninger;
-    barnaMedOpplysninger: IBarnMedOpplysninger[];
+    barnaMedOpplysninger: IBarnMedOpplysningerBackend[];
     endringAvOpplysningerBegrunnelse: string;
 }
 
 export interface ISøkerMedOpplysninger {
     ident: string;
     målform: Målform | undefined;
+}
+
+export interface IBarnMedOpplysningerBackend {
+    fødselsdato?: string;
+    ident: string;
+    inkludertISøknaden: boolean;
+    manueltRegistrert: boolean;
+    navn?: string;
+    erFolkeregistrert: boolean;
 }
 
 export interface IBarnMedOpplysninger {
