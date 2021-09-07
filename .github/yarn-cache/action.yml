@@ -12,8 +12,8 @@ runs:
       id: yarn-cache
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-ef-sak-frontend-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ runner.os }}-ba-sak-frontend-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-ef-sak-frontend-${{ hashFiles('**/yarn.lock') }}
-          ${{ runner.os }}-ef-sak-frontend-
+          ${{ runner.os }}-ba-sak-frontend-${{ hashFiles('**/yarn.lock') }}
+          ${{ runner.os }}-ba-sak-frontend-
           ${{ runner.os }}-
