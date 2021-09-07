@@ -1,0 +1,22 @@
+name: Yarn install
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+      shell: bash
+    - uses: actions/cache@v2
+      if: github.actor != 'dependabot[bot]'
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-ef-sak-frontend-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-ef-sak-frontend-${{ hashFiles('**/yarn.lock') }}
+          ${{ runner.os }}-ef-sak-frontend-
+          ${{ runner.os }}-
+    - name: Install project dependencies
+      run: yarn --prefer-offline --frozen-lockfile
+      shell: bash

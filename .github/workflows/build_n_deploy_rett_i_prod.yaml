@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: ./.github/yarn-install
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn
           yarn build
           yarn test
           docker build . -t ${IMAGE} -t ${IMAGE_LATEST}
