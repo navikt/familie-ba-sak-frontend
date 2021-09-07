@@ -1,4 +1,5 @@
 name: Yarn install
+description: "Brukes inline i andre filer for å unngå duplikat"
 
 runs:
   using: "composite"
@@ -8,7 +9,6 @@ runs:
       run: echo "::set-output name=dir::$(yarn cache dir)"
       shell: bash
     - uses: actions/cache@v2
-      if: github.actor != 'dependabot[bot]'
       id: yarn-cache
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -17,6 +17,3 @@ runs:
           ${{ runner.os }}-ef-sak-frontend-${{ hashFiles('**/yarn.lock') }}
           ${{ runner.os }}-ef-sak-frontend-
           ${{ runner.os }}-
-    - name: Install project dependencies
-      run: yarn --prefer-offline --frozen-lockfile
-      shell: bash
