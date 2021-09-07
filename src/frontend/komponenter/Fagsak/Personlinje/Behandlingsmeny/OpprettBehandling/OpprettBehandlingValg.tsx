@@ -55,7 +55,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : fagsak.behandlinger.length > 0 && kanOppretteBehandling;
     const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
-    const kanOppretteTilbakekreving = !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
+    const kanOppretteTilbakekreving =
+        revurderingEnabled && !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
 
     return (
         <>
