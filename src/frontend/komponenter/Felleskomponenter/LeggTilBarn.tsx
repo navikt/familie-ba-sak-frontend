@@ -74,7 +74,9 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     React.useEffect(() => {
         settKanLeggeTilUregistrerteBarn(
             hentDataFraRessursMedFallback(logg, [])?.some(
-                l => l.type === LoggType.DISTRIBUERE_BREV && l.tekst.includes('Innhenting')
+                l =>
+                    l.type === LoggType.DISTRIBUERE_BREV &&
+                    (l.tekst.includes('Innhente') || l.tekst.includes('Innhenting'))
             )
         );
     }, [logg.status]);
