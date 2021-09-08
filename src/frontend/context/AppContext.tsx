@@ -6,11 +6,10 @@ import createUseContext from 'constate';
 import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { HttpProvider, useHttp } from '@navikt/familie-http';
+import { HttpProvider, useHttp, loggFeil } from '@navikt/familie-http';
 import { ISaksbehandler } from '@navikt/familie-typer';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { loggFeil } from '../api/axios';
 import IkkeTilgang from '../ikoner/IkkeTilgang';
 import InformasjonSirkel from '../ikoner/InformasjonSirkel';
 import { IToast, ToastTyper } from '../komponenter/Felleskomponenter/Toast/typer';

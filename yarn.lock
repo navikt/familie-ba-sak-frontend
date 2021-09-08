@@ -1706,6 +1706,15 @@
     "@sentry/core" "^6.2.1"
     constate "^3.2.0"
 
+"@navikt/familie-http@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.6.tgz#7271e24546f710ef59d702b50e356fcc8a9e9076"
+  integrity sha512-+9ZaMWMXEKtU2kwWM/9zhuW+BoPEMCuRSFIJnDCFrcqI/4kJKyiSCcGxUcOIrgyPARC2GZRjYeZoSiXhHIUpPQ==
+  dependencies:
+    "@navikt/familie-typer" "^3.0.13"
+    "@sentry/core" "^6.2.1"
+    constate "^3.2.0"
+
 "@navikt/familie-ikoner@^3.1.11":
   version "3.1.11"
   resolved "https://registry.yarnpkg.com/@navikt/familie-ikoner/-/familie-ikoner-3.1.11.tgz#ca393580dd21f606a22862f910ac58692b0f719b"
