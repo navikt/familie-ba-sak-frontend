@@ -154,9 +154,12 @@ export const initialOppgaveFelter = (innloggetSaksbehandler?: ISaksbehandler): I
             },
             order: FeltSortOrder.NONE,
             erSynlig: (par: IPar, innloggetSaksbehandler?: ISaksbehandler) => {
-                return harTilgangTilEnhet(
-                    par.id.replace('E', ''),
-                    innloggetSaksbehandler?.groups ?? []
+                return (
+                    par.id === EnhetFilter.ALLE ||
+                    harTilgangTilEnhet(
+                        par.id.replace('E', ''),
+                        innloggetSaksbehandler?.groups ?? []
+                    )
                 );
             },
         },
