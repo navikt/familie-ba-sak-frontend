@@ -9,7 +9,7 @@ export const behandendeEnheter: IArbeidsfordelingsenhet[] = [
     { enhetId: '4817', enhetNavn: 'NAV Familie- og pensjonsytelser Steinkjer' },
 ];
 
-const enhetsgrupper: Record<string, string> = {
+export const enhetsgrupper: Record<string, string> = {
     '2103': '833f1f77-b64b-4708-b479-389ca4009af5',
     '4806': 'c2cf4114-1f5d-47f2-bb6e-c7a06fd26412',
     '4820': '6c8c5d93-0e08-4bd8-960c-5c4c0ce5c609',
@@ -28,10 +28,14 @@ export interface IRestEndreBehandlendeEnhet {
     begrunnelse: string;
 }
 
-export const harTilgangTilEnhet = (enhet: string, grupper: string[]): boolean => {
+export const harTilgangTilEnhet = (
+    enhet: string,
+    grupper: string[],
+    alltidTilgang: () => boolean = () => !erProd()
+): boolean => {
     const enhetsgruppe: string | undefined = enhetsgrupper[enhet];
 
     if (!enhetsgruppe) return true;
 
-    return erProd() ? grupper.includes(enhetsgrupper[enhet]) : true;
+    return alltidTilgang() ? grupper.includes(enhetsgrupper[enhet]) : true;
 };
