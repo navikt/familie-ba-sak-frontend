@@ -1,7 +1,8 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { ISaksbehandler } from '@navikt/familie-typer';
 
-import { hentPar, INøkkelPar } from '../../typer/common';
+import { hentPar, INøkkelPar, IPar } from '../../typer/common';
+import { harTilgangTilEnhet } from '../../typer/enhet';
 import {
     BehandlingstypeFilter,
     behandlingstypeFilter,
@@ -36,6 +37,7 @@ export interface IOppgaveFelt {
     // TODO: midlertidig - ønsker å bruke FeltState og Skjema-hook
     valideringsstatus?: Valideringsstatus;
     feilmelding?: string;
+    erSynlig?: (par: IPar, innloggetSaksbehandler?: ISaksbehandler) => boolean;
 }
 
 export interface IOppgaveFelter {
@@ -151,6 +153,12 @@ export const initialOppgaveFelter = (innloggetSaksbehandler?: ISaksbehandler): I
                 nøkkelPar: enhetFilter,
             },
             order: FeltSortOrder.NONE,
+            erSynlig: (par: IPar, innloggetSaksbehandler?: ISaksbehandler) => {
+                return harTilgangTilEnhet(
+                    par.id.replace('E', ''),
+                    innloggetSaksbehandler?.groups ?? []
+                );
+            },
         },
         tilordnetRessurs: {
             nøkkel: 'tilordnetRessurs',

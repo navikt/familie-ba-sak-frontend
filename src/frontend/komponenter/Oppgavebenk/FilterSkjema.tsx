@@ -11,6 +11,7 @@ import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements'
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { IPar } from '../../typer/common';
 import { datoformatNorsk } from '../../utils/formatter';
@@ -26,6 +27,7 @@ const DatoVelgerContainer = styled.div`
 `;
 
 const FilterSkjema: React.FunctionComponent = () => {
+    const { innloggetSaksbehandler } = useApp();
     const {
         hentOppgaver,
         oppgaver,
@@ -77,8 +79,16 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         className="filterskjema__filtre--input"
                                     >
                                         {oppgaveFelt.filter.nøkkelPar &&
-                                            Object.values(oppgaveFelt.filter.nøkkelPar).map(
-                                                (par: IPar) => {
+                                            Object.values(oppgaveFelt.filter.nøkkelPar)
+                                                .filter((par: IPar) =>
+                                                    oppgaveFelt.erSynlig
+                                                        ? oppgaveFelt.erSynlig(
+                                                              par,
+                                                              innloggetSaksbehandler
+                                                          )
+                                                        : true
+                                                )
+                                                .map((par: IPar) => {
                                                     return (
                                                         <option
                                                             aria-selected={
@@ -92,8 +102,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                                             {par.navn}
                                                         </option>
                                                     );
-                                                }
-                                            )}
+                                                })}
                                     </Select>
                                 );
                             default:

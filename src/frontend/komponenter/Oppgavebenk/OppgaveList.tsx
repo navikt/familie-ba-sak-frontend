@@ -10,6 +10,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
+import { IPar } from '../../typer/common';
+import { harTilgangTilEnhet } from '../../typer/enhet';
 import {
     enhetFilter,
     gjelderFilter,
@@ -17,6 +19,10 @@ import {
     IOppgave,
     oppgaveTypeFilter,
     PrioritetFilter,
+    EnhetFilter,
+    OppgavetypeFilter,
+    BehandlingstypeFilter,
+    GjelderFilter,
 } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import OppgaveDirektelenke from './OppgaveDirektelenke';
@@ -84,94 +90,124 @@ const OppgaveList: React.FunctionComponent = () => {
                     {oppgaver.status === RessursStatus.SUKSESS &&
                         oppgaver.data.oppgaver.length > 0 && (
                             <tbody>
-                                {hentOppgaveSide().map((oppg: IOppgave, index) => (
-                                    <tr key={index}>
-                                        <td
-                                            className={sortertClassName(
-                                                oppgaveFelter.opprettetTidspunkt
-                                            )}
-                                        >
-                                            {oppg.opprettetTidspunkt
-                                                ? intDatoTilNorskDato(oppg.opprettetTidspunkt)
-                                                : 'Ukjent'}
-                                        </td>
-                                        <td
-                                            className={classNames(
-                                                'oppgavetype',
-                                                sortertClassName(oppgaveFelter.oppgavetype)
-                                            )}
-                                        >
-                                            {oppg.oppgavetype
-                                                ? oppgaveTypeFilter[oppg.oppgavetype]?.navn ??
-                                                  oppg.oppgavetype
-                                                : 'Ukjent'}
-                                        </td>
-                                        <td
-                                            className={sortertClassName(
-                                                oppgaveFelter.behandlingstema
-                                            )}
-                                        >
-                                            {oppg.behandlingstema
-                                                ? gjelderFilter[oppg.behandlingstema]?.navn ??
-                                                  oppg.behandlingstema
-                                                : 'Ikke satt'}
-                                        </td>
-                                        <td
-                                            className={sortertClassName(
-                                                oppgaveFelter.behandlingstype
-                                            )}
-                                        >
-                                            {oppg.behandlingstype
-                                                ? behandlingstypeFilter[oppg.behandlingstype]
-                                                      ?.navn ?? oppg.behandlingstype
-                                                : 'Ikke satt'}
-                                        </td>
-                                        <td
-                                            className={sortertClassName(
-                                                oppgaveFelter.fristFerdigstillelse
-                                            )}
-                                        >
-                                            {oppg.fristFerdigstillelse
-                                                ? intDatoTilNorskDato(oppg.fristFerdigstillelse)
-                                                : 'Ukjent'}
-                                        </td>
-                                        <td className={sortertClassName(oppgaveFelter.prioritet)}>
-                                            {
-                                                PrioritetFilter[
-                                                    oppg.prioritet as keyof typeof PrioritetFilter
-                                                ]
-                                            }
-                                        </td>
-                                        <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
-                                        <td>
-                                            {hentFnrFraOppgaveIdenter(oppg.identer) || 'Ukjent'}
-                                        </td>
-                                        <td
-                                            className={classNames(
-                                                'tildelt-enhetsnr',
-                                                sortertClassName(oppgaveFelter.tildeltEnhetsnr)
-                                            )}
-                                        >
-                                            {oppg.tildeltEnhetsnr
-                                                ? enhetFilter[`E${oppg.tildeltEnhetsnr}`]?.navn
-                                                : 'Ikke satt'}
-                                        </td>
-                                        <td
-                                            className={classNames(
-                                                'tilordnet-ressurs',
-                                                sortertClassName(oppgaveFelter.tilordnetRessurs)
-                                            )}
-                                        >
-                                            <OppgavelisteSaksbehandler
-                                                oppgave={oppg}
-                                                innloggetSaksbehandler={innloggetSaksbehandler}
-                                            />
-                                        </td>
-                                        <td className={'handlinger'}>
-                                            <OppgaveDirektelenke oppgave={oppg} />
-                                        </td>
-                                    </tr>
-                                ))}
+                                {hentOppgaveSide()
+                                    .filter(oppgave =>
+                                        harTilgangTilEnhet(
+                                            oppgave.tildeltEnhetsnr.replace('E', ''),
+                                            innloggetSaksbehandler?.groups ?? []
+                                        )
+                                    )
+                                    .map((oppg: IOppgave, index) => {
+                                        const enhet: IPar | undefined =
+                                            enhetFilter[`E${oppg.tildeltEnhetsnr}` as EnhetFilter];
+
+                                        return (
+                                            <tr key={index}>
+                                                <td
+                                                    className={sortertClassName(
+                                                        oppgaveFelter.opprettetTidspunkt
+                                                    )}
+                                                >
+                                                    {oppg.opprettetTidspunkt
+                                                        ? intDatoTilNorskDato(
+                                                              oppg.opprettetTidspunkt
+                                                          )
+                                                        : 'Ukjent'}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        'oppgavetype',
+                                                        sortertClassName(oppgaveFelter.oppgavetype)
+                                                    )}
+                                                >
+                                                    {oppg.oppgavetype
+                                                        ? oppgaveTypeFilter[
+                                                              oppg.oppgavetype as OppgavetypeFilter
+                                                          ]?.navn ?? oppg.oppgavetype
+                                                        : 'Ukjent'}
+                                                </td>
+                                                <td
+                                                    className={sortertClassName(
+                                                        oppgaveFelter.behandlingstema
+                                                    )}
+                                                >
+                                                    {oppg.behandlingstema
+                                                        ? gjelderFilter[
+                                                              oppg.behandlingstema as GjelderFilter
+                                                          ]?.navn ?? oppg.behandlingstema
+                                                        : 'Ikke satt'}
+                                                </td>
+                                                <td
+                                                    className={sortertClassName(
+                                                        oppgaveFelter.behandlingstype
+                                                    )}
+                                                >
+                                                    {oppg.behandlingstype
+                                                        ? behandlingstypeFilter[
+                                                              oppg.behandlingstype as BehandlingstypeFilter
+                                                          ]?.navn ?? oppg.behandlingstype
+                                                        : 'Ikke satt'}
+                                                </td>
+                                                <td
+                                                    className={sortertClassName(
+                                                        oppgaveFelter.fristFerdigstillelse
+                                                    )}
+                                                >
+                                                    {oppg.fristFerdigstillelse
+                                                        ? intDatoTilNorskDato(
+                                                              oppg.fristFerdigstillelse
+                                                          )
+                                                        : 'Ukjent'}
+                                                </td>
+                                                <td
+                                                    className={sortertClassName(
+                                                        oppgaveFelter.prioritet
+                                                    )}
+                                                >
+                                                    {
+                                                        PrioritetFilter[
+                                                            oppg.prioritet as keyof typeof PrioritetFilter
+                                                        ]
+                                                    }
+                                                </td>
+                                                <td className={'beskrivelse'}>
+                                                    {oppg.beskrivelse}
+                                                </td>
+                                                <td>
+                                                    {hentFnrFraOppgaveIdenter(oppg.identer) ||
+                                                        'Ukjent'}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        'tildelt-enhetsnr',
+                                                        sortertClassName(
+                                                            oppgaveFelter.tildeltEnhetsnr
+                                                        )
+                                                    )}
+                                                >
+                                                    {enhet ? enhet.navn : oppg.tildeltEnhetsnr}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        'tilordnet-ressurs',
+                                                        sortertClassName(
+                                                            oppgaveFelter.tilordnetRessurs
+                                                        )
+                                                    )}
+                                                >
+                                                    <OppgavelisteSaksbehandler
+                                                        oppgave={oppg}
+                                                        innloggetSaksbehandler={
+                                                            innloggetSaksbehandler
+                                                        }
+                                                    />
+                                                </td>
+                                                <td className={'handlinger'}>
+                                                    <OppgaveDirektelenke oppgave={oppg} />
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                             </tbody>
                         )}
                 </table>
