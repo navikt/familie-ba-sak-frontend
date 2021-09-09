@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -43,6 +43,12 @@ const StyledSidetittel = styled(Sidetittel)`
     margin-bottom: 1rem;
 `;
 
+const ToKolonnerDiv = styled.div`
+    display: grid;
+    grid-template-columns: 80rem 1fr;
+    grid-template-rows: 1fr;
+`;
+
 interface IProps {
     bruker: IPersonInfo;
 }
@@ -51,6 +57,27 @@ enum Sorteringsrekkefølge {
     SYNKENDE,
     INGEN_SORTERING,
 }
+
+const useVinduBredde = (): boolean => {
+    const [bredde, setBredde] = useState(0);
+    useLayoutEffect(() => {
+        function oppdaterBredde() {
+            setBredde(window.innerWidth);
+        }
+        window.addEventListener('resize', oppdaterBredde);
+        oppdaterBredde();
+        return () => window.removeEventListener('resize', oppdaterBredde);
+    }, []);
+    return bredde > 1900;
+};
+
+interface IBredSkjermProps {
+    erBredSkjerm: boolean;
+    children: (React.ReactChild | Element | undefined)[];
+}
+
+const BredSkjermWrapper: React.FC<IBredSkjermProps> = ({ erBredSkjerm, children }) =>
+    erBredSkjerm ? <ToKolonnerDiv>{children}</ToKolonnerDiv> : <Container>{children}</Container>;
 
 const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const { request } = useHttp();
@@ -62,6 +89,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     );
     const [aktivJournalpostId, settAktivJournalpostId] = useState<string | undefined>();
     const [aktivtDokumentId, settAktivtDokumentId] = useState<string | undefined>();
+    const erBredSkjerm = useVinduBredde();
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -132,6 +160,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         }
     };
 
+    const visDokument: boolean = aktivtDokumentId && aktivJournalpostId ? true : false;
+
     if (
         journalposterRessurs.status === RessursStatus.FEILET ||
         journalposterRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
@@ -146,85 +176,97 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
         return (
-            <Container>
-                <StyledSidetittel>Dokumentoversikt</StyledSidetittel>
+            <BredSkjermWrapper erBredSkjerm={erBredSkjerm && visDokument}>
+                <Container>
+                    <StyledSidetittel>Dokumentoversikt</StyledSidetittel>
 
-                {aktivtDokumentId && aktivJournalpostId && (
-                    <Dokument
-                        dokumentInfoId={aktivtDokumentId}
-                        journalpostId={aktivJournalpostId}
-                    />
-                )}
-
-                <table className="tabell tabell--stripet">
-                    <thead>
-                        <tr>
-                            <th className={hentSorteringsknappCss()}>
-                                <button onClick={() => settNesteSorteringsrekkefølge()}>
-                                    Dato mottatt
-                                </button>
-                            </th>
-                            <th>Inn/ut</th>
-                            <th>Tittel</th>
-                            <th>Fagsystem</th>
-                            <th>Avsender/Mottaker</th>
-                            <th>Journalpost</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {hentSorterteJournalposter(journalposterRessurs.data).map(journalpost => (
-                            <tr key={journalpost.journalpostId}>
-                                <td
-                                    className={
-                                        sortering === Sorteringsrekkefølge.STIGENDE ||
-                                        sortering === Sorteringsrekkefølge.SYNKENDE
-                                            ? 'tabell__td--sortert'
-                                            : ''
-                                    }
-                                >
-                                    {journalpost.datoMottatt &&
-                                        tilVisning(kalenderDato(journalpost.datoMottatt))}
-                                </td>
-                                <td>
-                                    <InnUtWrapper>
-                                        <IkonWrapper>
-                                            {hentIkonForJournalpostType(
-                                                journalpost.journalposttype
-                                            )}{' '}
-                                        </IkonWrapper>
-                                        {journalpost.journalposttype}
-                                    </InnUtWrapper>
-                                </td>
-                                <td>
-                                    {journalpost.dokumenter?.map(dokument => (
-                                        <div key={dokument.dokumentInfoId}>
-                                            <Knapp
-                                                onClick={() => {
-                                                    settAktivJournalpostId(
-                                                        journalpost.journalpostId
-                                                    );
-                                                    settAktivtDokumentId(dokument.dokumentInfoId);
-                                                }}
-                                            >
-                                                {dokument.tittel}
-                                            </Knapp>
-                                        </div>
-                                    ))}
-                                </td>
-
-                                <td>{journalpost.sak?.fagsaksystem}</td>
-                                <td>{journalpost.avsenderMottaker?.navn}</td>
-                                <td>
-                                    <Lenke href="#">{journalpost.tittel}</Lenke>
-                                </td>
-
-                                <td>{journalpost.journalstatus}</td>
+                    <table className="tabell tabell--stripet">
+                        <thead>
+                            <tr>
+                                <th className={hentSorteringsknappCss()}>
+                                    <button onClick={() => settNesteSorteringsrekkefølge()}>
+                                        Dato mottatt
+                                    </button>
+                                </th>
+                                <th>Inn/ut</th>
+                                <th>Tittel</th>
+                                <th>Fagsystem</th>
+                                <th>Avsender/Mottaker</th>
+                                <th>Journalpost</th>
+                                <th>Status</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </Container>
+                        </thead>
+                        <tbody>
+                            {hentSorterteJournalposter(journalposterRessurs.data).map(
+                                journalpost => (
+                                    <tr key={journalpost.journalpostId}>
+                                        <td
+                                            className={
+                                                sortering === Sorteringsrekkefølge.STIGENDE ||
+                                                sortering === Sorteringsrekkefølge.SYNKENDE
+                                                    ? 'tabell__td--sortert'
+                                                    : ''
+                                            }
+                                        >
+                                            {journalpost.datoMottatt &&
+                                                tilVisning(kalenderDato(journalpost.datoMottatt))}
+                                        </td>
+                                        <td>
+                                            <InnUtWrapper>
+                                                <IkonWrapper>
+                                                    {hentIkonForJournalpostType(
+                                                        journalpost.journalposttype
+                                                    )}{' '}
+                                                </IkonWrapper>
+                                                {journalpost.journalposttype}
+                                            </InnUtWrapper>
+                                        </td>
+                                        <td>
+                                            {journalpost.dokumenter?.map(dokument => (
+                                                <div key={dokument.dokumentInfoId}>
+                                                    <Knapp
+                                                        onClick={() => {
+                                                            settAktivJournalpostId(
+                                                                journalpost.journalpostId
+                                                            );
+                                                            settAktivtDokumentId(
+                                                                dokument.dokumentInfoId
+                                                            );
+                                                        }}
+                                                    >
+                                                        {dokument.tittel}
+                                                    </Knapp>
+                                                    {/* <DokumentInfoStripe
+                                                valgt={false}
+                                                dokument={dokument}
+                                                journalpostId={journalpost.journalpostId}
+                                            /> */}
+                                                </div>
+                                            ))}
+                                        </td>
+
+                                        <td>{journalpost.sak?.fagsakId}</td>
+                                        <td>{journalpost.avsenderMottaker?.navn}</td>
+                                        <td>
+                                            <Lenke href="#">{journalpost.tittel}</Lenke>
+                                        </td>
+
+                                        <td>{journalpost.journalstatus}</td>
+                                    </tr>
+                                )
+                            )}
+                        </tbody>
+                    </table>
+                </Container>
+                <Container>
+                    {aktivtDokumentId && aktivJournalpostId && (
+                        <Dokument
+                            dokumentInfoId={aktivtDokumentId}
+                            journalpostId={aktivJournalpostId}
+                        />
+                    )}
+                </Container>
+            </BredSkjermWrapper>
         );
     } else {
         return <></>;
