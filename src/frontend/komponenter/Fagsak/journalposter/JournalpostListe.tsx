@@ -31,6 +31,12 @@ const TittelWrapper = styled.div`
     align-items: center;
 `;
 
+const InnUtWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+`;
+
 const IkonWrapper = styled.div`
     display: flex;
     align-items: center;
@@ -100,9 +106,9 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
         switch (journalposttype) {
             case Journalposttype.I:
-                return <LeftFilled />;
-            case Journalposttype.U:
                 return <RightFilled />;
+            case Journalposttype.U:
+                return <LeftFilled />;
             case Journalposttype.N:
                 return <DownFilled />;
         }
@@ -162,6 +168,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     Dato mottatt
                                 </button>
                             </th>
+                            <th>Inn/ut</th>
                             <th>Tittel</th>
                             <th>Fagsystem</th>
                             <th>Avsender/Mottaker</th>
@@ -184,14 +191,17 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         tilVisning(kalenderDato(journalpost.datoMottatt))}
                                 </td>
                                 <td>
-                                    <TittelWrapper>
+                                    <InnUtWrapper>
                                         <IkonWrapper>
                                             {hentIkonForJournalpostType(
                                                 journalpost.journalposttype
                                             )}{' '}
                                         </IkonWrapper>
-                                        {journalpost.tittel}
-                                    </TittelWrapper>
+                                        {journalpost.journalposttype}
+                                    </InnUtWrapper>
+                                </td>
+                                <td>
+                                    <TittelWrapper>{journalpost.tittel}</TittelWrapper>
                                 </td>
                                 <td>{journalpost.sak?.fagsaksystem}</td>
                                 <td>{journalpost.avsenderMottaker?.navn}</td>
