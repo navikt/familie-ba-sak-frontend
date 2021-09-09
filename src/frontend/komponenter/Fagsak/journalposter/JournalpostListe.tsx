@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
+import Lenke from 'nav-frontend-lenker';
 import { Sidetittel } from 'nav-frontend-typografi';
 
 import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
@@ -24,11 +25,6 @@ import Dokument from './Dokument';
 
 const Container = styled.div`
     margin: 4.1875rem 3.3125rem;
-`;
-
-const TittelWrapper = styled.div`
-    display: flex;
-    align-items: center;
 `;
 
 const InnUtWrapper = styled.div`
@@ -172,8 +168,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                             <th>Tittel</th>
                             <th>Fagsystem</th>
                             <th>Avsender/Mottaker</th>
-                            <th>Dokumenter</th>
-                            <th>Journalstatus</th>
+                            <th>Journalpost</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -201,11 +197,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     </InnUtWrapper>
                                 </td>
                                 <td>
-                                    <TittelWrapper>{journalpost.tittel}</TittelWrapper>
-                                </td>
-                                <td>{journalpost.sak?.fagsaksystem}</td>
-                                <td>{journalpost.avsenderMottaker?.navn}</td>
-                                <td>
                                     {journalpost.dokumenter?.map(dokument => (
                                         <div key={dokument.dokumentInfoId}>
                                             <Knapp
@@ -221,6 +212,13 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         </div>
                                     ))}
                                 </td>
+
+                                <td>{journalpost.sak?.fagsaksystem}</td>
+                                <td>{journalpost.avsenderMottaker?.navn}</td>
+                                <td>
+                                    <Lenke href="#">{journalpost.tittel}</Lenke>
+                                </td>
+
                                 <td>{journalpost.journalstatus}</td>
                             </tr>
                         ))}
