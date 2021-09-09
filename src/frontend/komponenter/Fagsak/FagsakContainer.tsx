@@ -27,7 +27,7 @@ const FagsakContainer: React.FunctionComponent = () => {
     const { toggles } = useApp();
     const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
-    const erPåDokumentliste = history.location.pathname.includes('dokumentliste');
+    const erPåDokumentliste = history.location.pathname.includes('dokumenter');
     const erPåDokumentutsending = history.location.pathname.includes('dokumentutsending');
     const visDokumentutsending = toggles[ToggleNavn.brukErDeltBosted];
 
@@ -109,7 +109,7 @@ const FagsakContainer: React.FunctionComponent = () => {
 
                                         <Route
                                             exact={true}
-                                            path="/fagsak/:fagsakId/dokumentliste"
+                                            path="/fagsak/:fagsakId/dokumenter"
                                             render={() => {
                                                 return <JournalpostListe bruker={bruker.data} />;
                                             }}
