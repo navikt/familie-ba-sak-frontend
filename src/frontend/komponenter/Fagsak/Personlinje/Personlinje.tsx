@@ -34,8 +34,8 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
                 <Normaltekst>Gå til saksoversikt</Normaltekst>
             </Lenke>
             {toggles[ToggleNavn.journalpostliste] && (
-                <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/dokumentliste`}>
-                    <Normaltekst>Dokumentliste</Normaltekst>
+                <Lenke className={'visittkort__lenke'} href={`/fagsak/${fagsak.id}/dokumenter`}>
+                    <Normaltekst>Dokumenter</Normaltekst>
                 </Lenke>
             )}
 
