@@ -1697,19 +1697,10 @@
     prop-types "^15.7.2"
     styled-components "^5.2.1"
 
-"@navikt/familie-http@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.5.tgz#94831ecf83dfd196c81572ca311c0af683b57516"
-  integrity sha512-0KE0IG4grjDXHVC0ZRbpA43q/hoCotdKDIWzGpT8glKM57utUIbP7K8pmWN/6bt3pX44SDf7KzwhN3GJj1ZWqg==
-  dependencies:
-    "@navikt/familie-typer" "^3.0.13"
-    "@sentry/core" "^6.2.1"
-    constate "^3.2.0"
-
-"@navikt/familie-http@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.0.6.tgz#7271e24546f710ef59d702b50e356fcc8a9e9076"
-  integrity sha512-+9ZaMWMXEKtU2kwWM/9zhuW+BoPEMCuRSFIJnDCFrcqI/4kJKyiSCcGxUcOIrgyPARC2GZRjYeZoSiXhHIUpPQ==
+"@navikt/familie-http@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-http/-/familie-http-1.1.0.tgz#965978738c411244e6d6e21bbe83731fa55498e8"
+  integrity sha512-B4Fvn5VYb/IbeEJhzS1yx7CxdiSigHgn7bdUKv2gHaiJqDGBqSDnYblH0RtO5T/fOBkbIWJiCsX8AHYkGGSbgQ==
   dependencies:
     "@navikt/familie-typer" "^3.0.13"
     "@sentry/core" "^6.2.1"
@@ -1729,12 +1720,12 @@
   dependencies:
     winston "^3.2.1"
 
-"@navikt/familie-skjema@^1.1.6":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.6.tgz#24ed2bbf0b31087a9fce1619e845ace8773f4e4b"
-  integrity sha512-MDhZI5m6GprcxJJYY51to3EKrA9IvcPrk86vRokWerPit6uz1DdMeN7LgEqebsTKT9VKQZ6hK5b7IgFK6puXoA==
+"@navikt/familie-skjema@^1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-skjema/-/familie-skjema-1.1.8.tgz#a97ad7df45bdd11d73d094ffd81f161e832ffcd1"
+  integrity sha512-nDN+Hm1GG48ltcQV8IQUIiQIlup92JL0o/30XCC6L1czjn/ffNZmfG+Sr+RvG8MsZnzmXJktok9gLOUQMdlpnQ==
   dependencies:
-    "@navikt/familie-http" "^1.0.5"
+    "@navikt/familie-http" "^1.1.0"
     "@navikt/familie-typer" "^3.0.13"
     "@types/deep-equal" "^1.0.1"
     deep-equal "^2.0.5"
