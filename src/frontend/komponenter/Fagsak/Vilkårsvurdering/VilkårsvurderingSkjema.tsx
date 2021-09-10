@@ -88,9 +88,8 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 onClick={() =>
                                     settPersonErEkspandert({
                                         ...personErEkspandert,
-                                        [personResultat.personIdent]: !personErEkspandert[
-                                            personResultat.personIdent
-                                        ],
+                                        [personResultat.personIdent]:
+                                            !personErEkspandert[personResultat.personIdent],
                                     })
                                 }
                                 mini={true}
@@ -129,10 +128,11 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                     vc.parterDetteGjelderFor.includes(personResultat.person.type)
                                 )
                                 .map((vc: IVilkårConfig) => {
-                                    const vilkårResultater: FeltState<IVilkårResultat>[] = personResultat.vilkårResultater.filter(
-                                        (vilkårResultat: FeltState<IVilkårResultat>) =>
-                                            vilkårResultat.verdi.vilkårType === vc.key
-                                    );
+                                    const vilkårResultater: FeltState<IVilkårResultat>[] =
+                                        personResultat.vilkårResultater.filter(
+                                            (vilkårResultat: FeltState<IVilkårResultat>) =>
+                                                vilkårResultat.verdi.vilkårType === vc.key
+                                        );
 
                                     return vilkårResultater.length ? (
                                         <GeneriskVilkår

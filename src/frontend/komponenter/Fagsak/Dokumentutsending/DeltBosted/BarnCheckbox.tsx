@@ -66,9 +66,10 @@ const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
                     }
                     checked={barn.merket}
                     onChange={() => {
-                        const nyMerketStatus = !deltBostedSkjema.felter.barnaMedOpplysninger.verdi.find(
-                            barnMedOpplysninger => barnMedOpplysninger.ident === barn.ident
-                        )?.merket;
+                        const nyMerketStatus =
+                            !deltBostedSkjema.felter.barnaMedOpplysninger.verdi.find(
+                                barnMedOpplysninger => barnMedOpplysninger.ident === barn.ident
+                            )?.merket;
 
                         deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt(
                             deltBostedSkjema.felter.barnaMedOpplysninger.verdi.map(

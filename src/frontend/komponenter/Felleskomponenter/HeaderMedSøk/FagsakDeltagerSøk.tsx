@@ -88,10 +88,9 @@ const FagsakDeltagerSøk: React.FC = () => {
                           ) : (
                               <IkkeTilgang heigth={30} width={30} />
                           ),
-                          rolle:
-                              fagsakdeltagerRoller[fagsakDeltager.rolle][
-                                  fagsakDeltager.kjønn ?? kjønnType.UKJENT
-                              ],
+                          rolle: fagsakdeltagerRoller[fagsakDeltager.rolle][
+                              fagsakDeltager.kjønn ?? kjønnType.UKJENT
+                          ],
                       };
                   }),
               }

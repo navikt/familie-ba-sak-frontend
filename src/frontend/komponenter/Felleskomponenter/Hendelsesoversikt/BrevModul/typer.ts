@@ -156,20 +156,16 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         value: '',
         label: 'Flyttet til søker - barna',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser hvilken dato barna flyttet til deg. Du må melde flytting til Folkeregisteret.',
-            NN:
-                'Dokumentasjon som viser frå kva dato barna flytta til deg. Du må melde flytting til Folkeregisteret.',
+            NB: 'Dokumentasjon som viser hvilken dato barna flyttet til deg. Du må melde flytting til Folkeregisteret.',
+            NN: 'Dokumentasjon som viser frå kva dato barna flytta til deg. Du må melde flytting til Folkeregisteret.',
         },
     },
     {
         value: '',
         label: 'Flyttet til søker - barnet',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser hvilken dato barnet flyttet til deg. Du må melde flytting til Folkeregisteret.',
-            NN:
-                'Dokumentasjon som viser frå kva dato barnet flyttet til deg. Du må melde flytting til Folkeregisteret.',
+            NB: 'Dokumentasjon som viser hvilken dato barnet flyttet til deg. Du må melde flytting til Folkeregisteret.',
+            NN: 'Dokumentasjon som viser frå kva dato barnet flyttet til deg. Du må melde flytting til Folkeregisteret.',
         },
     },
     {
@@ -200,8 +196,7 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         value: '',
         label: 'Folkeregistrert i Norge - søker og barna',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser at du og barna har norsk fødselsnummer og er bosatt i Norge.',
+            NB: 'Dokumentasjon som viser at du og barna har norsk fødselsnummer og er bosatt i Norge.',
             NN: 'Dokumentasjon på at du og barna har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
@@ -209,8 +204,7 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         value: '',
         label: 'Folkeregistrert i Norge - søker og barnet',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser at du og barnet har norsk fødselsnummer og er bosatt i Norge.',
+            NB: 'Dokumentasjon som viser at du og barnet har norsk fødselsnummer og er bosatt i Norge.',
             NN: 'Dokumentasjon på at du og barnet har norsk fødselsnummer og er busett  i Noreg.',
         },
     },
@@ -274,50 +268,40 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         value: '',
         label: 'Utenlandsopphold, perioder - barna',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser hvilke perioder barna har vært i Norge og hvilke perioder barna har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole, barnehage eller helsestasjon.',
-            NN:
-                'Dokumentasjon som viser kva for periodar barna har vore i Noreg og kva for periodar dei har vore i utlandet. Til dømes kopi av flybillettar, kopi av pass med stempel, stadfesting frå skule, barnehage eller helsestasjon.',
+            NB: 'Dokumentasjon som viser hvilke perioder barna har vært i Norge og hvilke perioder barna har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole, barnehage eller helsestasjon.',
+            NN: 'Dokumentasjon som viser kva for periodar barna har vore i Noreg og kva for periodar dei har vore i utlandet. Til dømes kopi av flybillettar, kopi av pass med stempel, stadfesting frå skule, barnehage eller helsestasjon.',
         },
     },
     {
         value: '',
         label: 'Utenlandsopphold, perioder - barnet',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser hvilke perioder barnet har vært i Norge og hvilke perioder barnet har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole, barnehage eller helsestasjon.',
-            NN:
-                'Dokumentasjon som viser kva for periodar barnet har vore i Noreg og kva for periodar det har vore i utlandet. Til dømes kopi av flybillettar, kopi av pass med stempel, stadfesting frå skule, barnehage eller helsestasjon.',
+            NB: 'Dokumentasjon som viser hvilke perioder barnet har vært i Norge og hvilke perioder barnet har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole, barnehage eller helsestasjon.',
+            NN: 'Dokumentasjon som viser kva for periodar barnet har vore i Noreg og kva for periodar det har vore i utlandet. Til dømes kopi av flybillettar, kopi av pass med stempel, stadfesting frå skule, barnehage eller helsestasjon.',
         },
     },
     {
         value: '',
         label: 'Utenlandsopphold, perioder - søker',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser hvilke perioder du har vært i Norge og hvilke perioder du har vært i utlandet. For eksempel kopi av flybilletter eller kopi av pass med stempel.',
-            NN:
-                'Dokumentasjon som viser kva for periodar du har vore i Noreg og kva for periodar du har vore i utlandet. Til dømes kopi av flybillettar eller kopi av pass med stempel.',
+            NB: 'Dokumentasjon som viser hvilke perioder du har vært i Norge og hvilke perioder du har vært i utlandet. For eksempel kopi av flybilletter eller kopi av pass med stempel.',
+            NN: 'Dokumentasjon som viser kva for periodar du har vore i Noreg og kva for periodar du har vore i utlandet. Til dømes kopi av flybillettar eller kopi av pass med stempel.',
         },
     },
     {
         value: '',
         label: 'Utenlandsopphold, perioder - søker og barna',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser hvilke perioder du og barna har vært i Norge og hvilke perioder dere har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole barnehage eller helsestasjon.',
-            NN:
-                'Dokumentasjon som viser kva for periodar du og barna har vore i Noreg og kva for periodar de har vore i utlandet. Til dømes kopi av flybillettar, kopi av pass med stempel, stadfesting frå skule, barnehage eller helsestasjon.',
+            NB: 'Dokumentasjon som viser hvilke perioder du og barna har vært i Norge og hvilke perioder dere har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole barnehage eller helsestasjon.',
+            NN: 'Dokumentasjon som viser kva for periodar du og barna har vore i Noreg og kva for periodar de har vore i utlandet. Til dømes kopi av flybillettar, kopi av pass med stempel, stadfesting frå skule, barnehage eller helsestasjon.',
         },
     },
     {
         value: '',
         label: 'Utenlandsopphold, perioder - søker og barnet',
         brevtekst: {
-            NB:
-                'Dokumentasjon som viser hvilke perioder du og barnet har vært i Norge og hvilke perioder dere har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole barnehage eller helsestasjon.',
-            NN:
-                'Dokumentasjon som viser kva for periodar du og barnet har vore i Noreg og kva for periodar de har vore i utlandet. Til dømes kopi av flybillettar, kopi av pass med stempel, stadfesting frå skule, barnehage eller helsestasjon.',
+            NB: 'Dokumentasjon som viser hvilke perioder du og barnet har vært i Norge og hvilke perioder dere har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole barnehage eller helsestasjon.',
+            NN: 'Dokumentasjon som viser kva for periodar du og barnet har vore i Noreg og kva for periodar de har vore i utlandet. Til dømes kopi av flybillettar, kopi av pass med stempel, stadfesting frå skule, barnehage eller helsestasjon.',
         },
     },
     {
