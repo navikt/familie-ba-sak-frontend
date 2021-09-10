@@ -125,7 +125,7 @@
     "react-toast-notifications": "^2.5.1",
     "request-promise": "^4.2.5",
     "snyk": "^1.668.0",
-    "styled-components": "^5.2.3",
+    "styled-components": "^5.3.1",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
