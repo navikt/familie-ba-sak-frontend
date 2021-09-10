@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
-import { Tidslinje } from '@navikt/helse-frontend-tidslinje';
+import { Periode, Tidslinje } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { formaterIdent, sorterFødselsdato } from '../../../utils/formatter';
 import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../../../utils/kalender';
@@ -18,6 +19,7 @@ import Vinduvelger from './VinduVelger';
 
 const TilkjentYtelseTidslinje: React.FC = () => {
     const { åpenBehandling } = useBehandling();
+    const { fagsak } = useFagsakRessurser();
     const {
         genererFormatertÅrstall,
         genererRader,
@@ -27,6 +29,10 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         mapPersonerTilPersonerMedAndelerTilkjentYtelse,
         naviger,
     } = useTidslinje();
+    const [feilmelding, settFeilmelding] = useState<string>();
+    useEffect(() => {
+        genererRader(tidslinjePersonerSortert);
+    }, [fagsak]);
 
     if (åpenBehandling.status !== RessursStatus.SUKSESS) {
         return null;
@@ -38,12 +44,30 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         åpenBehandling.data.personerMedAndelerTilkjentYtelse
     ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
 
-    const personerMedAndelerTilkjentYtelseSortert = mapPersonerTilPersonerMedAndelerTilkjentYtelse(
+    const tidslinjePersonerSortert = mapPersonerTilPersonerMedAndelerTilkjentYtelse(
         personerFraAndelerTilkjentYtelseSortert,
         åpenBehandling.data.personerMedAndelerTilkjentYtelse
     );
 
-    const tidslinjeRader = genererRader(personerMedAndelerTilkjentYtelseSortert);
+    const onSelectPeriode = (periode: Periode) => {
+        settFeilmelding(undefined);
+        const identOgPeriode = periode.id?.split('_');
+        if (identOgPeriode?.length === 2) {
+            const valgtIdent = identOgPeriode[0];
+            const perioderForIdent = tidslinjePersonerSortert.filter(
+                p => p.personIdent === valgtIdent
+            );
+            const valgtPeriode = perioderForIdent[Number(identOgPeriode[1])];
+
+            // TODO: Skal brukes til å fylle ut skjema
+            console.log('valgtIdent ', valgtIdent);
+            console.log('valgtPeriode ', valgtPeriode);
+        } else {
+            settFeilmelding('Klarte ikke hente valgt periode.');
+        }
+    };
+
+    const tidslinjeRader = genererRader(tidslinjePersonerSortert);
 
     return (
         <>
@@ -70,6 +94,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     etikettRender={(etikett: Skalaetikett) => (
                         <TidslinjeEtikett etikett={etikett} />
                     )}
+                    onSelectPeriode={onSelectPeriode}
                     startDato={kalenderDatoTilDate(aktivtTidslinjeVindu.startDato, 23, 0)}
                     sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
                     aktivtUtsnitt={
@@ -82,6 +107,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     }
                 />
             </div>
+            {feilmelding && <Feilmelding children={feilmelding} />}
         </>
     );
 };
