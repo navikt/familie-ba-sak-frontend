@@ -21,9 +21,8 @@ interface IProps {
 
 const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => {
     const [visModal, settVisModal] = useState(false);
-    const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] = useState(
-        false
-    );
+    const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
+        useState(false);
     const history = useHistory();
 
     const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus } = useOpprettBehandling(

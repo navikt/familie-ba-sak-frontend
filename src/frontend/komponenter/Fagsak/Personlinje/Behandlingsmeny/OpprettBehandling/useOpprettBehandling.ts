@@ -108,9 +108,8 @@ const useOpprettBehandling = (
                             nullstillSkjema();
 
                             settFagsak(response);
-                            const aktivBehandling:
-                                | IBehandling
-                                | undefined = hentAktivBehandlingPåFagsak(response.data);
+                            const aktivBehandling: IBehandling | undefined =
+                                hentAktivBehandlingPåFagsak(response.data);
 
                             if (
                                 aktivBehandling &&

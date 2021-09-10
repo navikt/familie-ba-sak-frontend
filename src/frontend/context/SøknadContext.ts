@@ -168,14 +168,15 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                         ident: bruker.data.personIdent,
                                         målform: skjema.felter.målform.verdi,
                                     },
-                                    barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
-                                        (
-                                            barn: IBarnMedOpplysninger
-                                        ): IBarnMedOpplysningerBackend => ({
-                                            ...barn,
-                                            inkludertISøknaden: barn.merket,
-                                        })
-                                    ),
+                                    barnaMedOpplysninger:
+                                        skjema.felter.barnaMedOpplysninger.verdi.map(
+                                            (
+                                                barn: IBarnMedOpplysninger
+                                            ): IBarnMedOpplysningerBackend => ({
+                                                ...barn,
+                                                inkludertISøknaden: barn.merket,
+                                            })
+                                        ),
                                     endringAvOpplysningerBegrunnelse:
                                         skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
                                 },

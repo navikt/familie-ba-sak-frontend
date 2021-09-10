@@ -77,12 +77,11 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                     textTransform: 'none',
                 }),
                 multiValue: (provided: CSSProperties, props: MultiValueProps<ISelectOption>) => {
-                    const vedtakBegrunnelseType:
-                        | VedtakBegrunnelseType
-                        | undefined = finnVedtakBegrunnelseType(
-                        vedtaksbegrunnelseTekster,
-                        props.data.value as VedtakBegrunnelse
-                    );
+                    const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined =
+                        finnVedtakBegrunnelseType(
+                            vedtaksbegrunnelseTekster,
+                            props.data.value as VedtakBegrunnelse
+                        );
 
                     return {
                         ...provided,

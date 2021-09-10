@@ -13,11 +13,8 @@ interface IDokumentVelgerProps {
 }
 
 export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFeilmeldinger }) => {
-    const {
-        dataForManuellJournalføring,
-        valgtDokumentId,
-        velgOgHentDokumentData,
-    } = useManuellJournalfør();
+    const { dataForManuellJournalføring, valgtDokumentId, velgOgHentDokumentData } =
+        useManuellJournalfør();
     const [åpen, settÅpen] = useState(false);
 
     const valgt = dokument.dokumentInfoId === valgtDokumentId;

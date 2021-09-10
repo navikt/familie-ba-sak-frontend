@@ -36,12 +36,11 @@ export const validerVilkår = (
         nyttVilkårResultat.verdi.resultat
     );
 
-    const nyeAvslagbegrunnelser: FeltState<
-        VedtakBegrunnelse[]
-    > = nyttVilkårResultat.verdi.avslagBegrunnelser.valider(
-        nyttVilkårResultat.verdi.avslagBegrunnelser,
-        { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
-    );
+    const nyeAvslagbegrunnelser: FeltState<VedtakBegrunnelse[]> =
+        nyttVilkårResultat.verdi.avslagBegrunnelser.valider(
+            nyttVilkårResultat.verdi.avslagBegrunnelser,
+            { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
+        );
 
     const gyldigVilkår: boolean =
         nyPeriode.valideringsstatus === Valideringsstatus.OK &&

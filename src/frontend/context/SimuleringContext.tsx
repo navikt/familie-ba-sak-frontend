@@ -128,7 +128,11 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
                 : ok(felt),
     });
 
-    const { skjema: tilbakekrevingSkjema, hentFeilTilOppsummering, onSubmit } = useSkjema<
+    const {
+        skjema: tilbakekrevingSkjema,
+        hentFeilTilOppsummering,
+        onSubmit,
+    } = useSkjema<
         {
             tilbakekrevingsvalg: Tilbakekrevingsvalg | undefined;
             fritekstVarsel: string;

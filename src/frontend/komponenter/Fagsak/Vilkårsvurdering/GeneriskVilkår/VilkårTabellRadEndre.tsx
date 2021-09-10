@@ -87,13 +87,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 }) => {
     const { toggles } = useApp();
 
-    const {
-        vilkårsvurdering,
-        putVilkår,
-        deleteVilkår,
-        vilkårSubmit,
-        settVilkårSubmit,
-    } = useVilkårsvurdering();
+    const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
+        useVilkårsvurdering();
 
     const { erLesevisning, åpenBehandling } = useBehandling();
     const { settFagsak } = useFagsakRessurser();

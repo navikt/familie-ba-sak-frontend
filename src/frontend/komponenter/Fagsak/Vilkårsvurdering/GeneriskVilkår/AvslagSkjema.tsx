@@ -61,8 +61,8 @@ const AvslagSkjema: React.FC<IProps> = ({
                         ...redigerbartVilkår,
                         verdi: {
                             ...redigerbartVilkår.verdi,
-                            erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi
-                                .erEksplisittAvslagPåSøknad,
+                            erEksplisittAvslagPåSøknad:
+                                !redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
                             avslagBegrunnelser: {
                                 ...redigerbartVilkår.verdi.avslagBegrunnelser,
                                 verdi: [],
