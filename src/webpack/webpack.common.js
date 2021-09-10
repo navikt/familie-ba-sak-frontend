@@ -71,7 +71,15 @@ module.exports = {
                 test: /\.(less|css)$/,
                 use: [
                     { loader: 'style-loader' },
-                    { loader: 'css-loader' },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                compileType: 'icss',
+                            },
+                            importLoaders: 2,
+                        },
+                    },
                     { loader: 'less-loader' },
                 ],
             },
