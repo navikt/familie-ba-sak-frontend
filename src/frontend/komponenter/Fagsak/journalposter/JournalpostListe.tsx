@@ -146,7 +146,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                             <th>Inn/ut</th>
                             <th className={hentSorteringsknappCss(sortering)}>
                                 <button onClick={() => settNesteSorteringsrekkefølge()}>
-                                    Registrert/sendt
+                                    Dato mottatt
                                 </button>
                             </th>
 
@@ -200,6 +200,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                             '_blank'
                                                                         );
                                                                     }}
+                                                                    aria-label="Åpne dokument i ny fane"
+                                                                    title="Åpne dokument i ny fane"
                                                                 >
                                                                     <EksternLenke />
                                                                 </StyledÅpenDokument>
