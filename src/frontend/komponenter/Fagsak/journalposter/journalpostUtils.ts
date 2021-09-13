@@ -1,6 +1,7 @@
 import { IJournalpost, IJournalpostRelevantDato, JournalpostDatotype } from '@navikt/familie-typer';
 
-import { erEtter, kalenderDato, tilVisning } from '../../../utils/kalender';
+import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { erEtter, kalenderDato } from '../../../utils/kalender';
 
 export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
     if (!a.datoMottatt) {
@@ -64,7 +65,7 @@ export const hentDatoMottatt = (relevanteDatoer: IJournalpostRelevantDato[]) => 
         dato => dato.datotype === JournalpostDatotype.DATO_REGISTRERT
     )?.dato;
 
-    return datoMottatt ? tilVisning(kalenderDato(datoMottatt)) : '-';
+    return datoMottatt ? formaterIsoDato(datoMottatt, datoformat.DATO_TID) : '-';
 };
 
 export const formaterTittel = (tittel: string | undefined) => {

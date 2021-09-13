@@ -50,11 +50,11 @@ const StyledSidetittel = styled(Sidetittel)`
     margin-bottom: 1rem;
 `;
 
-const StyledTd = styled.td`
+const Td = styled.td`
     vertical-align: top;
 `;
 
-const StyledVedleggsliste = styled.ul`
+const Vedleggsliste = styled.ul`
     list-style-type: none;
     margin: 0;
     &:first-child {
@@ -62,14 +62,14 @@ const StyledVedleggsliste = styled.ul`
     }
 `;
 
-const StyledListeElement = styled.li`
+const ListeElement = styled.li`
     margin-bottom: 1rem;
     &:last-child {
         margin-bottom: 0;
     }
 `;
 
-const StyledÅpenDokument = styled(FamilieBaseKnapp)`
+const EksternLenkeWrapper = styled(FamilieBaseKnapp)`
     margin-left: 10px;
 `;
 
@@ -162,7 +162,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         {hentSorterteJournalposter(journalposterRessurs.data, sortering).map(
                             journalpost => (
                                 <tr key={journalpost.journalpostId}>
-                                    <StyledTd>
+                                    <Td>
                                         <InnUtWrapper>
                                             <IkonWrapper>
                                                 {hentIkonForJournalpostType(
@@ -171,8 +171,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                             </IkonWrapper>
                                             {journalpost.journalposttype}
                                         </InnUtWrapper>
-                                    </StyledTd>
-                                    <StyledTd
+                                    </Td>
+                                    <Td
                                         className={
                                             sortering === Sorteringsrekkefølge.STIGENDE ||
                                             sortering === Sorteringsrekkefølge.SYNKENDE
@@ -181,21 +181,19 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         }
                                     >
                                         {hentDatoMottatt(journalpost.relevanteDatoer)}
-                                    </StyledTd>
+                                    </Td>
 
-                                    <StyledTd>
+                                    <Td>
                                         {(journalpost.dokumenter?.length ?? []) > 0 ? (
-                                            <StyledVedleggsliste>
+                                            <Vedleggsliste>
                                                 {journalpost.dokumenter?.map(dokument => (
-                                                    <StyledListeElement
-                                                        key={dokument.dokumentInfoId}
-                                                    >
+                                                    <ListeElement key={dokument.dokumentInfoId}>
                                                         <DokumentTittelMedLenkeWrapper
                                                             title={dokument.tittel}
                                                         >
                                                             {formaterTittel(dokument.tittel)}
                                                             {
-                                                                <StyledÅpenDokument
+                                                                <EksternLenkeWrapper
                                                                     onClick={() => {
                                                                         window.open(
                                                                             `/api/pdf/journalpost/${journalpost.journalpostId}/hent/${dokument.dokumentInfoId}`,
@@ -206,15 +204,15 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                     title="Åpne dokument i ny fane"
                                                                 >
                                                                     <EksternLenke />
-                                                                </StyledÅpenDokument>
+                                                                </EksternLenkeWrapper>
                                                             }
                                                         </DokumentTittelMedLenkeWrapper>
 
-                                                        <StyledVedleggsliste>
+                                                        <Vedleggsliste>
                                                             {dokument.logiskeVedlegg &&
                                                                 dokument.logiskeVedlegg.map(
                                                                     vedlegg => (
-                                                                        <StyledListeElement
+                                                                        <ListeElement
                                                                             key={
                                                                                 vedlegg.logiskVedleggId
                                                                             }
@@ -223,26 +221,24 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                             {formaterTittel(
                                                                                 vedlegg.tittel
                                                                             )}
-                                                                        </StyledListeElement>
+                                                                        </ListeElement>
                                                                     )
                                                                 )}
-                                                        </StyledVedleggsliste>
-                                                    </StyledListeElement>
+                                                        </Vedleggsliste>
+                                                    </ListeElement>
                                                 ))}
-                                            </StyledVedleggsliste>
+                                            </Vedleggsliste>
                                         ) : (
                                             <Normaltekst>Ingen dokumenter</Normaltekst>
                                         )}
-                                    </StyledTd>
+                                    </Td>
 
-                                    <StyledTd>
+                                    <Td>
                                         {mapFagsystemkodeTilTekst(journalpost.sak?.fagsaksystem)}
-                                    </StyledTd>
-                                    <StyledTd>{journalpost.avsenderMottaker?.navn}</StyledTd>
-                                    <StyledTd>{journalpost.tittel}</StyledTd>
-                                    <StyledTd>
-                                        {journalpoststatus[journalpost.journalstatus]}
-                                    </StyledTd>
+                                    </Td>
+                                    <Td>{journalpost.avsenderMottaker?.navn}</Td>
+                                    <Td>{journalpost.tittel}</Td>
+                                    <Td>{journalpoststatus[journalpost.journalstatus]}</Td>
                                 </tr>
                             )
                         )}
