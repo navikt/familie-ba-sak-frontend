@@ -10,6 +10,10 @@ import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
+import EndreUtbetalingAndelSkjema from './EndreUtbetalingAndel/EndreUtbetalingAndelSkjema';
+import { useApp } from '../../../context/AppContext';
+import { ToggleNavn } from '../../../typer/toggles';
+import { sorterFødselsdato } from '../../../utils/formatter';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -20,8 +24,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     fagsak,
     åpenBehandling,
 }) => {
+    const { toggles } = useApp();
     const history = useHistory();
-    const { aktivEtikett } = useTidslinje();
+    const {
+        aktivEtikett,
+        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
+        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
+    } = useTidslinje();
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
     };
@@ -44,6 +53,14 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             : [];
     };
 
+    const tidslinjePersonerSortert = mapPersonerTilPersonerMedAndelerTilkjentYtelse(
+        mapPersonerMedAndelerTilkjentYtelseTilPersoner(
+            åpenBehandling.personer,
+            åpenBehandling.personerMedAndelerTilkjentYtelse
+        ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)),
+        åpenBehandling.personerMedAndelerTilkjentYtelse
+    );
+
     return (
         <Skjemasteg
             senderInn={false}
@@ -53,7 +70,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            <TilkjentYtelseTidslinje />
+            <TilkjentYtelseTidslinje tidslinjePersoner={tidslinjePersonerSortert} />
             {aktivEtikett && (
                 <Oppsummeringsboks
                     vedtaksperioder={filtrerPerioderForAktivEtikett(
@@ -61,6 +78,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     )}
                     aktivEtikett={aktivEtikett}
                 />
+            )}
+            {toggles[ToggleNavn.brukErDeltBosted] && (
+                <EndreUtbetalingAndelSkjema tidslinjePerioder={tidslinjePersonerSortert} />
             )}
         </Skjemasteg>
     );

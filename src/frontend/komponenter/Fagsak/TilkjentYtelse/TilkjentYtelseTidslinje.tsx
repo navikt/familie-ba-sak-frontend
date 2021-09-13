@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import '@navikt/helse-frontend-tidslinje/lib/main.css';
 
-import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
-import { Periode, Tidslinje } from '@navikt/helse-frontend-tidslinje';
+import { Tidslinje } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -16,8 +16,17 @@ import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../..
 import TidslinjeEtikett from './TidslinjeEtikett';
 import TidslinjeNavigering from './TidslinjeNavigering';
 import Vinduvelger from './VinduVelger';
+import { useApp } from '../../../context/AppContext';
+import { ToggleNavn } from '../../../typer/toggles';
+import { useEndreUtbetalingAndelSkjema } from './EndreUtbetalingAndel/useEndeUtbetalingAndelSkjema';
+import { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';
 
-const TilkjentYtelseTidslinje: React.FC = () => {
+interface IProps {
+    tidslinjePersoner: IPersonMedAndelerTilkjentYtelse[];
+}
+
+const TilkjentYtelseTidslinje: React.FunctionComponent<IProps> = ({ tidslinjePersoner }) => {
+    const { toggles } = useApp();
     const { åpenBehandling } = useBehandling();
     const { fagsak } = useFagsakRessurser();
     const {
@@ -26,12 +35,12 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         aktivEtikett,
         aktivtTidslinjeVindu,
         mapPersonerMedAndelerTilkjentYtelseTilPersoner,
-        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
         naviger,
     } = useTidslinje();
-    const [feilmelding, settFeilmelding] = useState<string>();
     useEffect(() => {
-        genererRader(tidslinjePersonerSortert);
+        if (toggles[ToggleNavn.brukErDeltBosted]) {
+            genererRader(tidslinjePersoner);
+        }
     }, [fagsak]);
 
     if (åpenBehandling.status !== RessursStatus.SUKSESS) {
@@ -44,30 +53,9 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         åpenBehandling.data.personerMedAndelerTilkjentYtelse
     ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
 
-    const tidslinjePersonerSortert = mapPersonerTilPersonerMedAndelerTilkjentYtelse(
-        personerFraAndelerTilkjentYtelseSortert,
-        åpenBehandling.data.personerMedAndelerTilkjentYtelse
-    );
+    const { åpneSkjema } = useEndreUtbetalingAndelSkjema(tidslinjePersoner);
 
-    const onSelectPeriode = (periode: Periode) => {
-        settFeilmelding(undefined);
-        const identOgPeriode = periode.id?.split('_');
-        if (identOgPeriode?.length === 2) {
-            const valgtIdent = identOgPeriode[0];
-            const perioderForIdent = tidslinjePersonerSortert.filter(
-                p => p.personIdent === valgtIdent
-            );
-            const valgtPeriode = perioderForIdent[Number(identOgPeriode[1])];
-
-            // TODO: Skal brukes til å fylle ut skjema
-            console.log('valgtIdent ', valgtIdent);
-            console.log('valgtPeriode ', valgtPeriode);
-        } else {
-            settFeilmelding('Klarte ikke hente valgt periode.');
-        }
-    };
-
-    const tidslinjeRader = genererRader(tidslinjePersonerSortert);
+    const tidslinjeRader = genererRader(tidslinjePersoner);
 
     return (
         <>
@@ -94,7 +82,7 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     etikettRender={(etikett: Skalaetikett) => (
                         <TidslinjeEtikett etikett={etikett} />
                     )}
-                    onSelectPeriode={onSelectPeriode}
+                    onSelectPeriode={åpneSkjema}
                     startDato={kalenderDatoTilDate(aktivtTidslinjeVindu.startDato, 23, 0)}
                     sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
                     aktivtUtsnitt={
@@ -107,7 +95,6 @@ const TilkjentYtelseTidslinje: React.FC = () => {
                     }
                 />
             </div>
-            {feilmelding && <Feilmelding children={feilmelding} />}
         </>
     );
 };
