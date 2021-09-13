@@ -37,5 +37,5 @@ export const harTilgangTilEnhet = (
 
     if (!enhetsgruppe) return true;
 
-    return alltidTilgang() ? grupper.includes(enhetsgrupper[enhet]) : true;
+    return alltidTilgang() ? true : grupper.includes(enhetsgruppe);
 };

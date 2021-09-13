@@ -147,9 +147,9 @@ export const initialOppgaveFelter = (innloggetSaksbehandler?: ISaksbehandler): I
                 selectedValue: hentPar(
                     searchParams['tildeltEnhetsnr']?.toString(),
                     enhetFilter,
-                    EnhetFilter.ALLE
+                    EnhetFilter.VELG
                 ),
-                initialValue: EnhetFilter.ALLE,
+                initialValue: EnhetFilter.VELG,
                 nøkkelPar: enhetFilter,
             },
             order: FeltSortOrder.NONE,

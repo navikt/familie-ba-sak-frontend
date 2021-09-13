@@ -34,7 +34,7 @@ const FilterSkjema: React.FunctionComponent = () => {
         oppgaveFelter,
         settVerdiPåOppgaveFelt,
         tilbakestillOppgaveFelter,
-        validerDatoer,
+        validerSkjema,
     } = useOppgaver();
 
     return (
@@ -77,6 +77,11 @@ const FilterSkjema: React.FunctionComponent = () => {
                                         key={oppgaveFelt.nøkkel}
                                         value={oppgaveFelt.filter.selectedValue}
                                         className="filterskjema__filtre--input"
+                                        feil={
+                                            oppgaveFelt.valideringsstatus === Valideringsstatus.FEIL
+                                                ? oppgaveFelt.feilmelding
+                                                : undefined
+                                        }
                                     >
                                         {oppgaveFelt.filter.nøkkelPar &&
                                             Object.values(oppgaveFelt.filter.nøkkelPar)
@@ -116,7 +121,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     type={'hoved'}
                     mini
                     onClick={() => {
-                        validerDatoer() && hentOppgaver();
+                        validerSkjema() && hentOppgaver();
                     }}
                     spinner={oppgaver.status === RessursStatus.HENTER}
                     disabled={oppgaver.status === RessursStatus.HENTER}
