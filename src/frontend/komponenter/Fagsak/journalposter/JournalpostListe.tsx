@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
 import { Sidetittel } from 'nav-frontend-typografi';
 
@@ -16,6 +15,7 @@ import {
     byggHenterRessurs,
     IJournalpost,
     Journalposttype,
+    ILogiskVedlegg,
 } from '@navikt/familie-typer';
 
 import 'nav-frontend-tabell-style';
@@ -40,6 +40,14 @@ const IkonWrapper = styled.div`
 
 const StyledSidetittel = styled(Sidetittel)`
     margin-bottom: 1rem;
+`;
+
+const StyledTd = styled.td`
+    vertical-align: top;
+`;
+
+const StyledVedleggsliste = styled.ul`
+    list-style-type: none;
 `;
 
 interface IProps {
@@ -129,6 +137,10 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         }
     };
 
+    const visLogiskVedlegg = (logiskVedlegg: ILogiskVedlegg) => {
+        return <li key={logiskVedlegg.logiskVedleggId}>{logiskVedlegg.tittel}</li>;
+    };
+
     if (
         journalposterRessurs.status === RessursStatus.FEILET ||
         journalposterRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
@@ -166,7 +178,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                     <tbody>
                         {hentSorterteJournalposter(journalposterRessurs.data).map(journalpost => (
                             <tr key={journalpost.journalpostId}>
-                                <td>
+                                <StyledTd>
                                     <InnUtWrapper>
                                         <IkonWrapper>
                                             {hentIkonForJournalpostType(
@@ -175,34 +187,57 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         </IkonWrapper>
                                         {journalpost.journalposttype}
                                     </InnUtWrapper>
-                                </td>
-                                <td
+                                </StyledTd>
+                                <StyledTd
                                     className={
                                         sortering === Sorteringsrekkefølge.STIGENDE ||
                                         sortering === Sorteringsrekkefølge.SYNKENDE
-                                            ? 'tabell__td--sortert'
+                                            ? 'tabell__StyledTd--sortert'
                                             : ''
                                     }
                                 >
                                     {journalpost.datoMottatt &&
                                         tilVisning(kalenderDato(journalpost.datoMottatt))}
-                                </td>
+                                </StyledTd>
 
-                                <td>
-                                    {journalpost.dokumenter?.map(dokument => (
-                                        <div key={dokument.dokumentInfoId}>
-                                            <Knapp>{dokument.tittel}</Knapp>
+                                <StyledTd>
+                                    {journalpost.dokumenter && (
+                                        <div key={journalpost.dokumenter[0].dokumentInfoId}>
+                                            {journalpost.dokumenter[0].tittel}
+                                            {
+                                                <StyledVedleggsliste>
+                                                    {journalpost.dokumenter[0].logiskeVedlegg.map(
+                                                        vedlegg => visLogiskVedlegg(vedlegg)
+                                                    )}
+                                                    {journalpost.dokumenter
+                                                        .slice(1)
+                                                        .map(dokument => (
+                                                            <div key={dokument.dokumentInfoId}>
+                                                                {dokument.tittel}
+                                                                <StyledVedleggsliste>
+                                                                    {dokument.logiskeVedlegg &&
+                                                                        dokument.logiskeVedlegg.map(
+                                                                            vedlegg =>
+                                                                                visLogiskVedlegg(
+                                                                                    vedlegg
+                                                                                )
+                                                                        )}
+                                                                </StyledVedleggsliste>
+                                                            </div>
+                                                        ))}
+                                                </StyledVedleggsliste>
+                                            }
                                         </div>
-                                    ))}
-                                </td>
+                                    )}
+                                </StyledTd>
 
-                                <td>{journalpost.sak?.fagsakId}</td>
-                                <td>{journalpost.avsenderMottaker?.navn}</td>
-                                <td>
+                                <StyledTd>{journalpost.sak?.fagsakId}</StyledTd>
+                                <StyledTd>{journalpost.avsenderMottaker?.navn}</StyledTd>
+                                <StyledTd>
                                     <Lenke href="#">{journalpost.tittel}</Lenke>
-                                </td>
+                                </StyledTd>
 
-                                <td>{journalpost.journalstatus}</td>
+                                <StyledTd>{journalpost.journalstatus}</StyledTd>
                             </tr>
                         ))}
                     </tbody>
