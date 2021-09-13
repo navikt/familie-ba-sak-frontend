@@ -2,18 +2,18 @@ import * as React from 'react';
 
 import { useHistory } from 'react-router';
 
+import { useApp } from '../../../context/AppContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
+import { sorterFødselsdato } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import EndreUtbetalingAndelSkjema from './EndreUtbetalingAndel/EndreUtbetalingAndelSkjema';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-import EndreUtbetalingAndelSkjema from './EndreUtbetalingAndel/EndreUtbetalingAndelSkjema';
-import { useApp } from '../../../context/AppContext';
-import { ToggleNavn } from '../../../typer/toggles';
-import { sorterFødselsdato } from '../../../utils/formatter';
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -26,11 +26,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
 }) => {
     const { toggles } = useApp();
     const history = useHistory();
-    const {
-        aktivEtikett,
-        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
-        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
-    } = useTidslinje();
+    const { aktivEtikett, filterAndelPersonerIGrunnlag, filterGrunnlagPersonerMedAndeler } =
+        useTidslinje();
+
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
     };
@@ -53,11 +51,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             : [];
     };
 
-    const tidslinjePersonerSortert = mapPersonerTilPersonerMedAndelerTilkjentYtelse(
-        mapPersonerMedAndelerTilkjentYtelseTilPersoner(
-            åpenBehandling.personer,
-            åpenBehandling.personerMedAndelerTilkjentYtelse
-        ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)),
+    const grunnlagPersoner = filterGrunnlagPersonerMedAndeler(
+        åpenBehandling.personer,
+        åpenBehandling.personerMedAndelerTilkjentYtelse
+    ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
+
+    const tidslinjePersoner = filterAndelPersonerIGrunnlag(
+        grunnlagPersoner,
         åpenBehandling.personerMedAndelerTilkjentYtelse
     );
 
@@ -70,7 +70,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            <TilkjentYtelseTidslinje tidslinjePersoner={tidslinjePersonerSortert} />
+            <TilkjentYtelseTidslinje
+                grunnlagPersoner={grunnlagPersoner}
+                tidslinjePersoner={tidslinjePersoner}
+            />
             {aktivEtikett && (
                 <Oppsummeringsboks
                     vedtaksperioder={filtrerPerioderForAktivEtikett(
@@ -80,7 +83,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 />
             )}
             {toggles[ToggleNavn.brukErDeltBosted] && (
-                <EndreUtbetalingAndelSkjema tidslinjePerioder={tidslinjePersonerSortert} />
+                <EndreUtbetalingAndelSkjema tidslinjePerioder={tidslinjePersoner} />
             )}
         </Skjemasteg>
     );

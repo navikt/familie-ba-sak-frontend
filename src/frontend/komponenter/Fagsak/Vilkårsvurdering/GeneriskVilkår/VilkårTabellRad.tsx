@@ -67,9 +67,8 @@ const VilkårTabellRad: React.FC<IProps> = ({
     const [ekspandertVilkår, settEkspandertVilkår] = useState(
         erLesevisning() || false || vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
     );
-    const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(
-        vilkårResultat
-    );
+    const [redigerbartVilkår, settRedigerbartVilkår] =
+        useState<FeltState<IVilkårResultat>>(vilkårResultat);
 
     const periodeErTom =
         !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;

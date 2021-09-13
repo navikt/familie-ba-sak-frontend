@@ -8,8 +8,6 @@ patch:
         patched: '2020-06-12T07:08:46.357Z'
     - '@navikt/familie-backend > openid-client > lodash':
         patched: '2020-06-12T07:08:46.357Z'
-    - request-promise > request-promise-core > lodash:
-        patched: '2020-06-12T07:08:46.357Z'
     - '@navikt/familie-backend > request-promise > request-promise-core > lodash':
         patched: '2020-06-12T07:08:46.357Z'
     - '@navikt/familie-backend > winston > async > lodash':

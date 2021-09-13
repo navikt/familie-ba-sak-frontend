@@ -77,6 +77,7 @@ module.exports = {
                             modules: {
                                 compileType: 'icss',
                             },
+                            importLoaders: 2,
                         },
                     },
                     { loader: 'less-loader' },

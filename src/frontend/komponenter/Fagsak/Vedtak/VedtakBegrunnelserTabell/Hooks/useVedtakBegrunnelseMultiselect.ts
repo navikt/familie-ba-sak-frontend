@@ -106,7 +106,8 @@ const useVedtakBegrunnelseMultiselect = (
         }
     };
 
-    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype = vedtaksperiodeTilVedtakBegrunnelseTyper();
+    const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype =
+        vedtaksperiodeTilVedtakBegrunnelseTyper();
 
     const onChangeBegrunnelse = (
         action: ActionMeta<ISelectOption>,
@@ -126,12 +127,11 @@ const useVedtakBegrunnelseMultiselect = (
                 break;
             case 'pop-value':
             case 'remove-value':
-                const vedtakBegrunnelse:
-                    | IRestVedtakBegrunnelse
-                    | undefined = vedtakBegrunnelserForPeriode.find(
-                    (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-                        vedtakBegrunnelse.begrunnelse === action.removedValue?.value
-                );
+                const vedtakBegrunnelse: IRestVedtakBegrunnelse | undefined =
+                    vedtakBegrunnelserForPeriode.find(
+                        (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
+                            vedtakBegrunnelse.begrunnelse === action.removedValue?.value
+                    );
 
                 if (vedtakBegrunnelse) {
                     slettVedtakBegrunnelse(vedtakBegrunnelse);
@@ -201,16 +201,14 @@ const useVedtakBegrunnelseMultiselect = (
                       )
                   )
                   .reduce((acc: GroupType<ISelectOption>[], vedtakBegrunnelseType: string) => {
-                      const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] = hentUtgjørendeVilkår(
-                          vedtakBegrunnelseType as VedtakBegrunnelseType
-                      );
+                      const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] =
+                          hentUtgjørendeVilkår(vedtakBegrunnelseType as VedtakBegrunnelseType);
                       return [
                           ...acc,
                           {
-                              label:
-                                  vedtakBegrunnelseTyper[
-                                      vedtakBegrunnelseType as VedtakBegrunnelseType
-                                  ],
+                              label: vedtakBegrunnelseTyper[
+                                  vedtakBegrunnelseType as VedtakBegrunnelseType
+                              ],
                               options: vedtaksbegrunnelseTekster.data[
                                   vedtakBegrunnelseType as VedtakBegrunnelseType
                               ]

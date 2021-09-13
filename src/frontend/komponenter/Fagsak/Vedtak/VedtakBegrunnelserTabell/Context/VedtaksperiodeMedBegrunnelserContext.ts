@@ -88,25 +88,20 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             }
         };
 
-        const {
-            hentFeilTilOppsummering,
-            kanSendeSkjema,
-            onSubmit,
-            settVisfeilmeldinger,
-            skjema,
-        } = useSkjema<
-            {
-                periode: IPeriode;
-                fritekster: FeltState<IFritekstFelt>[];
-            },
-            IFagsak
-        >({
-            felter: {
-                periode,
-                fritekster,
-            },
-            skjemanavn: 'Begrunnelser for vedtaksperiode',
-        });
+        const { hentFeilTilOppsummering, kanSendeSkjema, onSubmit, settVisfeilmeldinger, skjema } =
+            useSkjema<
+                {
+                    periode: IPeriode;
+                    fritekster: FeltState<IFritekstFelt>[];
+                },
+                IFagsak
+            >({
+                felter: {
+                    periode,
+                    fritekster,
+                },
+                skjemanavn: 'Begrunnelser for vedtaksperiode',
+            });
 
         const { grupperteBegrunnelser, vedtaksbegrunnelseTekster } = useVilkårBegrunnelser({
             åpenBehandling,
