@@ -27,6 +27,7 @@ import {
 import { IFagsak } from '../typer/fagsak';
 import {
     BehandlingstypeFilter,
+    EnhetFilter,
     IFinnOppgaveRequest,
     IHentOppgaveDto,
     IOppgave,
@@ -397,7 +398,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             });
     };
 
-    const validerDatoer = () => {
+    const validerSkjema = () => {
         const opprettetTidspunktGyldig =
             oppgaveFelter.opprettetTidspunkt.filter?.selectedValue === '' ||
             erIsoStringGyldig(oppgaveFelter.opprettetTidspunkt.filter?.selectedValue);
@@ -405,6 +406,9 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         const fristGyldig =
             oppgaveFelter.fristFerdigstillelse.filter?.selectedValue === '' ||
             erIsoStringGyldig(oppgaveFelter.fristFerdigstillelse.filter?.selectedValue);
+
+        const enhetGyldig =
+            oppgaveFelter.tildeltEnhetsnr.filter?.selectedValue !== EnhetFilter.VELG;
 
         const oppdaterteOppgaveFelter = {
             ...oppgaveFelter,
@@ -420,9 +424,14 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
                 valideringsstatus: fristGyldig ? Valideringsstatus.OK : Valideringsstatus.FEIL,
                 feilmelding: fristGyldig ? '' : 'Dato må skrives på format ddmmåå',
             },
+            tildeltEnhetsnr: {
+                ...oppgaveFelter.tildeltEnhetsnr,
+                valideringsstatus: enhetGyldig ? Valideringsstatus.OK : Valideringsstatus.FEIL,
+                feilmelding: enhetGyldig ? '' : 'Du må velge enhet',
+            },
         };
 
-        const erGyldig = opprettetTidspunktGyldig && fristGyldig;
+        const erGyldig = opprettetTidspunktGyldig && fristGyldig && enhetGyldig;
         !erGyldig && settOppgaveFelter(oppdaterteOppgaveFelter);
 
         return erGyldig;
@@ -545,7 +554,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         sortOppgave,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
-        validerDatoer,
+        validerSkjema,
     };
 });
 const Oppgaver: React.FC = () => {

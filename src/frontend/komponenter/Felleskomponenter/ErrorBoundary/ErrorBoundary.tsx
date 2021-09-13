@@ -5,8 +5,6 @@ import { configureScope, withScope, captureException } from '@sentry/core';
 
 import { ISaksbehandler } from '@navikt/familie-typer';
 
-import { apiLoggFeil } from '../../../api/axios';
-
 interface IProps {
     autentisertSaksbehandler?: ISaksbehandler;
 }
@@ -38,8 +36,6 @@ class ErrorBoundary extends React.Component<IProps> {
                     captureException(error);
                 });
             });
-
-            apiLoggFeil(`En feil har oppstått i vedtaksløsningen: \n*Error*: ${error}`);
 
             showReportDialog({
                 title: 'En feil har oppstått i vedtaksløsningen',

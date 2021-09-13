@@ -22,12 +22,8 @@ const Container = styled.div`
 const Dokumentutsending: React.FC = () => {
     const history = useHistory();
 
-    const {
-        fagsak,
-        hentetForhåndsvisning,
-        settVisInnsendtBrevModal,
-        visInnsendtBrevModal,
-    } = useDokumentutsending();
+    const { fagsak, hentetForhåndsvisning, settVisInnsendtBrevModal, visInnsendtBrevModal } =
+        useDokumentutsending();
 
     return (
         <Container>

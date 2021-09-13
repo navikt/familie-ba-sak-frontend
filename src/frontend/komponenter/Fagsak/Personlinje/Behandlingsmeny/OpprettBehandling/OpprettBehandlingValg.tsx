@@ -55,8 +55,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : fagsak.behandlinger.length > 0 && kanOppretteBehandling;
     const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
-    const kanOppretteTilbakekreving =
-        revurderingEnabled && !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
+    const kanOppretteTilbakekreving = !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
 
     return (
         <>
@@ -102,7 +101,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         aria-selected={
                             behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
                         }
-                        disabled={!revurderingEnabled}
                         value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
                     >
                         Tilbakekreving

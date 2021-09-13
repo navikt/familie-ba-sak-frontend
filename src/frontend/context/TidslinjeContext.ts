@@ -115,42 +115,30 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             : [[]];
     };
 
-    const mapPersonerMedAndelerTilkjentYtelseTilPersoner = (
+    const filterGrunnlagPersonerMedAndeler = (
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IGrunnlagPerson[] => {
-        return personerMedAndelerTilkjentYtelse
-            .map((personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
-                return personer.find(
-                    (person: IGrunnlagPerson) =>
-                        person.personIdent === personMedAndelerTilkjentYtelse.personIdent
-                );
-            })
-            .reduce((acc: IGrunnlagPerson[], person) => {
-                if (person) {
-                    return [...acc, person];
-                }
-                return acc;
-            }, []);
+        return personer.filter(
+            grunnlagPerson =>
+                personerMedAndelerTilkjentYtelse.length &&
+                personerMedAndelerTilkjentYtelse.some(
+                    personMedAndel => personMedAndel.personIdent === grunnlagPerson.personIdent
+                )
+        );
     };
 
-    const mapPersonerTilPersonerMedAndelerTilkjentYtelse = (
+    const filterAndelPersonerIGrunnlag = (
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IPersonMedAndelerTilkjentYtelse[] => {
-        return personer
-            .map((person: IGrunnlagPerson) => {
-                return personerMedAndelerTilkjentYtelse.find(
-                    (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) =>
-                        person.personIdent === personMedAndelerTilkjentYtelse.personIdent
-                );
-            })
-            .reduce((acc: IPersonMedAndelerTilkjentYtelse[], andelTilkjentYtelse) => {
-                if (andelTilkjentYtelse) {
-                    return [...acc, andelTilkjentYtelse];
-                }
-                return acc;
-            }, []);
+        return personerMedAndelerTilkjentYtelse.filter(
+            personMedAndel =>
+                personer.length &&
+                personer.some(
+                    grunnlagPerson => grunnlagPerson.personIdent === personMedAndel.personIdent
+                )
+        );
     };
 
     return {
@@ -164,8 +152,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         genererRader,
         initiellAktivEtikettErSatt,
         setInitiellAktivEtikettErSatt,
-        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
-        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
+        filterGrunnlagPersonerMedAndeler,
+        filterAndelPersonerIGrunnlag,
     };
 });
 

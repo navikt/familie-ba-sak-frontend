@@ -20,12 +20,8 @@ const StyledEkspanderbartpanelBaseMedMargin = styled(StyledEkspanderbartpanelBas
 `;
 
 export const AvsenderPanel: React.FC = () => {
-    const {
-        skjema,
-        erLesevisning,
-        settAvsenderLikBruker,
-        tilbakestillAvsender,
-    } = useManuellJournalfør();
+    const { skjema, erLesevisning, settAvsenderLikBruker, tilbakestillAvsender } =
+        useManuellJournalfør();
     const [åpen, settÅpen] = useState(false);
     const [brukerErAvsender, settBrukerErAvsender] = useState(false);
 

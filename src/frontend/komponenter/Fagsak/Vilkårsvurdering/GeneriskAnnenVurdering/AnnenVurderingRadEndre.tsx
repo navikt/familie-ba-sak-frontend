@@ -72,12 +72,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     settRedigerbartAnnenVurdering,
     settEkspandertAnnenVurdering,
 }) => {
-    const {
-        vilkårsvurdering,
-        putAnnenVurdering,
-        vilkårSubmit,
-        settVilkårSubmit,
-    } = useVilkårsvurdering();
+    const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } =
+        useVilkårsvurdering();
 
     const { erLesevisning } = useBehandling();
     const { settFagsak } = useFagsakRessurser();

@@ -228,9 +228,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 settDataForManuellJournalføring(hentetDataForManuellJournalføring);
 
                 if (hentetDataForManuellJournalføring.status === RessursStatus.SUKSESS) {
-                    const førsteDokument = hentetDataForManuellJournalføring.data.journalpost.dokumenter?.find(
-                        () => true
-                    );
+                    const førsteDokument =
+                        hentetDataForManuellJournalføring.data.journalpost.dokumenter?.find(
+                            () => true
+                        );
                     settValgtDokumentId(førsteDokument?.dokumentInfoId);
                     hentOgVisDokument(
                         hentetDataForManuellJournalføring.data.journalpost.journalpostId,
@@ -340,9 +341,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         },
                         datoMottatt: dataForManuellJournalføring.data.journalpost.datoMottatt,
                         dokumenter: skjema.felter.dokumenter.verdi.map(dokument => {
-                            const exsisterendeLogiskeVedlegg = dataForManuellJournalføring.data.journalpost.dokumenter?.find(
-                                it => it.dokumentInfoId === dokument.dokumentInfoId
-                            )?.logiskeVedlegg;
+                            const exsisterendeLogiskeVedlegg =
+                                dataForManuellJournalføring.data.journalpost.dokumenter?.find(
+                                    it => it.dokumentInfoId === dokument.dokumentInfoId
+                                )?.logiskeVedlegg;
+
                             const tittelsammenkobling = dokument.logiskeVedlegg
                                 .map(current => current.tittel)
                                 .reduce(

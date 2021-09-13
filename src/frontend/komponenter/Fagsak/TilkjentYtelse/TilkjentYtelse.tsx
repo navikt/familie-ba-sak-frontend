@@ -6,6 +6,7 @@ import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
+import { sorterFødselsdato } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
@@ -21,7 +22,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     åpenBehandling,
 }) => {
     const history = useHistory();
-    const { aktivEtikett } = useTidslinje();
+    const { aktivEtikett, filterAndelPersonerIGrunnlag, filterGrunnlagPersonerMedAndeler } =
+        useTidslinje();
+
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
     };
@@ -44,6 +47,16 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             : [];
     };
 
+    const grunnlagPersoner = filterGrunnlagPersonerMedAndeler(
+        åpenBehandling.personer,
+        åpenBehandling.personerMedAndelerTilkjentYtelse
+    ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
+
+    const tidslinjePersoner = filterAndelPersonerIGrunnlag(
+        grunnlagPersoner,
+        åpenBehandling.personerMedAndelerTilkjentYtelse
+    );
+
     return (
         <Skjemasteg
             senderInn={false}
@@ -53,7 +66,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            <TilkjentYtelseTidslinje />
+            <TilkjentYtelseTidslinje
+                grunnlagPersoner={grunnlagPersoner}
+                tidslinjePersoner={tidslinjePersoner}
+            />
             {aktivEtikett && (
                 <Oppsummeringsboks
                     vedtaksperioder={filtrerPerioderForAktivEtikett(
