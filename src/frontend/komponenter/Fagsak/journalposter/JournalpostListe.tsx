@@ -51,10 +51,14 @@ const StyledTd = styled.td`
 
 const StyledVedleggsliste = styled.ul`
     list-style-type: none;
+    margin-bottom: 0;
 `;
 
 const StyledListeElement = styled.li`
     margin-bottom: 1em;
+    &:last-child {
+        margin-bottom: 0;
+    }
 `;
 
 const StyledÅpenDokument = styled(FamilieBaseKnapp)`
