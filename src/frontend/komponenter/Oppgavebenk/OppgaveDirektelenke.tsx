@@ -25,7 +25,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { sjekkTilgang } = useApp();
     const [laster, settLaster] = useState<boolean>(false);
     const history = useHistory();
-    const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype]?.id;
+    const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype as OppgavetypeFilter]?.id;
 
     const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
