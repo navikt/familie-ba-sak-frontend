@@ -23,8 +23,8 @@ const TilkjentYtelseTidslinje: React.FC = () => {
         genererRader,
         aktivEtikett,
         aktivtTidslinjeVindu,
-        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
-        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
+        filterGrunnlagPersonerMedAndeler,
+        filterAndelPersonerIGrunnlag,
         naviger,
     } = useTidslinje();
 
@@ -33,12 +33,12 @@ const TilkjentYtelseTidslinje: React.FC = () => {
     }
 
     const personer = åpenBehandling.data.personer;
-    const personerFraAndelerTilkjentYtelseSortert = mapPersonerMedAndelerTilkjentYtelseTilPersoner(
+    const personerFraAndelerTilkjentYtelseSortert = filterGrunnlagPersonerMedAndeler(
         personer,
         åpenBehandling.data.personerMedAndelerTilkjentYtelse
     ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
 
-    const personerMedAndelerTilkjentYtelseSortert = mapPersonerTilPersonerMedAndelerTilkjentYtelse(
+    const personerMedAndelerTilkjentYtelseSortert = filterAndelPersonerIGrunnlag(
         personerFraAndelerTilkjentYtelseSortert,
         åpenBehandling.data.personerMedAndelerTilkjentYtelse
     );

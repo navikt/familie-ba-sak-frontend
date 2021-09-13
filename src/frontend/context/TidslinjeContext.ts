@@ -115,7 +115,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             : [[]];
     };
 
-    const mapPersonerMedAndelerTilkjentYtelseTilPersoner = (
+    const filterGrunnlagPersonerMedAndeler = (
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IGrunnlagPerson[] => {
@@ -128,7 +128,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         );
     };
 
-    const mapPersonerTilPersonerMedAndelerTilkjentYtelse = (
+    const filterAndelPersonerIGrunnlag = (
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IPersonMedAndelerTilkjentYtelse[] => {
@@ -152,8 +152,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         genererRader,
         initiellAktivEtikettErSatt,
         setInitiellAktivEtikettErSatt,
-        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
-        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
+        filterGrunnlagPersonerMedAndeler,
+        filterAndelPersonerIGrunnlag,
     };
 });
 
