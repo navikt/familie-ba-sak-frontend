@@ -16,6 +16,7 @@ import {
     Journalposttype,
     ILogiskVedlegg,
     IDokumentInfo,
+    Journalstatus,
 } from '@navikt/familie-typer';
 
 import 'nav-frontend-tabell-style';
@@ -67,6 +68,21 @@ const StyledÅpenDokument = styled(FamilieBaseKnapp)`
 const DokumentTittelMedLenkeWrapper = styled.div`
     margin-bottom: 1em;
 `;
+
+const mapJournalstatusTilTekst: Record<Journalstatus, string> = {
+    MOTTATT: 'Mottatt',
+    JOURNALFOERT: 'Journalført',
+    FERDIGSTILT: 'Ferdigstilt',
+    EKSPEDERT: 'Ekspedert',
+    UNDER_ARBEID: 'Under arbeid',
+    FEILREGISTRERT: 'Feilregistrert',
+    UTGAAR: 'Utgår',
+    AVBRUTT: 'Avbrutt',
+    UKJENT_BRUKER: 'Ukjent bruker',
+    RESERVERT: 'Reservert',
+    OPPLASTING_DOKUMENT: 'Opplasting dokument',
+    UKJENT: 'Ukjent',
+};
 
 interface IProps {
     bruker: IPersonInfo;
@@ -284,7 +300,9 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                 <StyledTd>{journalpost.sak?.fagsakId}</StyledTd>
                                 <StyledTd>{journalpost.avsenderMottaker?.navn}</StyledTd>
                                 <StyledTd>{journalpost.tittel}</StyledTd>
-                                <StyledTd>{journalpost.journalstatus}</StyledTd>
+                                <StyledTd>
+                                    {mapJournalstatusTilTekst[journalpost.journalstatus]}
+                                </StyledTd>
                             </tr>
                         ))}
                     </tbody>
