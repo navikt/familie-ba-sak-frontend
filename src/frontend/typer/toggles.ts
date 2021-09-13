@@ -12,6 +12,7 @@ export enum ToggleNavn {
     forhåndsvisAlleBrevbegrunnelser = 'familie-ba-sak.forhaandsvis-alle-brevbegrunnelser',
     brukBegrunnelserFraSanity = 'familie-ba-sak.behandling.begrunnelse-fra-sanity',
     brukLeggTilBarnPåBehandling = 'familie-ba-sak.behandling.legg-til-barn',
+    kanOppretteManueltVedtaksbrev = 'familie-ba-sak.behandling.manuelt-vedtak',
 }
 
 export const alleTogglerAv = (): IToggles => {
