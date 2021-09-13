@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import Lenke from 'nav-frontend-lenker';
 import { Sidetittel } from 'nav-frontend-typografi';
 
 import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
@@ -284,10 +283,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
                                 <StyledTd>{journalpost.sak?.fagsakId}</StyledTd>
                                 <StyledTd>{journalpost.avsenderMottaker?.navn}</StyledTd>
-                                <StyledTd>
-                                    <Lenke href="#">{journalpost.tittel}</Lenke>
-                                </StyledTd>
-
+                                <StyledTd>{journalpost.tittel}</StyledTd>
                                 <StyledTd>{journalpost.journalstatus}</StyledTd>
                             </tr>
                         ))}
