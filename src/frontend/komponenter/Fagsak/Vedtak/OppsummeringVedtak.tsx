@@ -32,17 +32,13 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { ToggleNavn } from '../../../typer/toggles';
 import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import AvslagBegrunnelser from './VedtakBegrunnelserTabell/AvslagBegrunnelser';
-import { VedtakBegrunnelserProvider } from './VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
 import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Context/VedtaksbegrunnelseTeksterContext';
-import VedtakBegrunnelser from './VedtakBegrunnelserTabell/VedtakBegrunnelser';
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
 interface IVedtakProps {
@@ -66,8 +62,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { erLesevisning } = useBehandling();
-    const { toggles } = useApp();
-    const brukNyeVedtaksperioder = toggles[ToggleNavn.brukNyeVedtaksperioder];
 
     const history = useHistory();
 
@@ -227,15 +221,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             </Alertstripe>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
-                                {!brukNyeVedtaksperioder && (
-                                    <VedtakBegrunnelserProvider
-                                        fagsak={fagsak}
-                                        aktivVedtak={aktivVedtak}
-                                    >
-                                        <VedtakBegrunnelser åpenBehandling={åpenBehandling} />
-                                        <AvslagBegrunnelser åpenBehandling={åpenBehandling} />
-                                    </VedtakBegrunnelserProvider>
-                                )}
                                 <VedtaksperioderMedBegrunnelser
                                     fagsak={fagsak}
                                     åpenBehandling={åpenBehandling}
