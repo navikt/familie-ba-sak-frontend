@@ -22,11 +22,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     åpenBehandling,
 }) => {
     const history = useHistory();
-    const {
-        aktivEtikett,
-        filterAndelPersonerIGrunnlag,
-        filterGrunnlagPersonerMedAndeler,
-    } = useTidslinje();
+    const { aktivEtikett, filterAndelPersonerIGrunnlag, filterGrunnlagPersonerMedAndeler } =
+        useTidslinje();
+
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
     };

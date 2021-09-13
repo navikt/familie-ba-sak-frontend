@@ -22,14 +22,8 @@ interface IProps {
 }
 
 const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinjePersoner }) => {
-    const {
-        genererFormatertÅrstall,
-        genererRader,
-        aktivEtikett,
-        aktivtTidslinjeVindu,
-        naviger,
-    } = useTidslinje();
-
+    const { genererFormatertÅrstall, genererRader, aktivEtikett, aktivtTidslinjeVindu, naviger } =
+        useTidslinje();
     const tidslinjeRader = genererRader(tidslinjePersoner);
 
     return (
