@@ -16,11 +16,14 @@ import {
     IJournalpost,
     Journalposttype,
     ILogiskVedlegg,
+    IDokumentInfo,
 } from '@navikt/familie-typer';
 
 import 'nav-frontend-tabell-style';
+import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
 import { tilVisning, kalenderDato, erEtter } from '../../../utils/kalender';
+import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 
 const Container = styled.div`
     margin: 4.1875rem 3.3125rem;
@@ -48,6 +51,18 @@ const StyledTd = styled.td`
 
 const StyledVedleggsliste = styled.ul`
     list-style-type: none;
+`;
+
+const StyledListeElement = styled.li`
+    margin-bottom: 1em;
+`;
+
+const StyledÅpenDokument = styled(FamilieBaseKnapp)`
+    margin-left: 10px;
+`;
+
+const DokumentTittelMedLenkeWrapper = styled.div`
+    margin-bottom: 1em;
 `;
 
 interface IProps {
@@ -138,7 +153,44 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     };
 
     const visLogiskVedlegg = (logiskVedlegg: ILogiskVedlegg) => {
-        return <li key={logiskVedlegg.logiskVedleggId}>{logiskVedlegg.tittel}</li>;
+        return (
+            <StyledListeElement key={logiskVedlegg.logiskVedleggId}>
+                {logiskVedlegg.tittel}
+            </StyledListeElement>
+        );
+    };
+
+    const visDokumentMedLenke = (dokument: IDokumentInfo, journalpostId: string) => {
+        return (
+            <DokumentTittelMedLenkeWrapper>
+                {dokument.tittel}
+                {
+                    <StyledÅpenDokument
+                        onClick={() => {
+                            window.open(
+                                `/api/pdf/journalpost/${journalpostId}/hent/${dokument.dokumentInfoId}`,
+                                '_blank'
+                            );
+                        }}
+                    >
+                        <EksternLenke />
+                    </StyledÅpenDokument>
+                }
+            </DokumentTittelMedLenkeWrapper>
+        );
+    };
+
+    const visDokumentliste = (dokument: IDokumentInfo, journalpostId: string) => {
+        return (
+            <li key={dokument.dokumentInfoId}>
+                {visDokumentMedLenke(dokument, journalpostId)}
+
+                <StyledVedleggsliste>
+                    {dokument.logiskeVedlegg &&
+                        dokument.logiskeVedlegg.map(vedlegg => visLogiskVedlegg(vedlegg))}
+                </StyledVedleggsliste>
+            </li>
+        );
     };
 
     if (
@@ -203,7 +255,10 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                 <StyledTd>
                                     {journalpost.dokumenter && (
                                         <div key={journalpost.dokumenter[0].dokumentInfoId}>
-                                            {journalpost.dokumenter[0].tittel}
+                                            {visDokumentMedLenke(
+                                                journalpost.dokumenter[0],
+                                                journalpost.journalpostId
+                                            )}
                                             {
                                                 <StyledVedleggsliste>
                                                     {journalpost.dokumenter[0].logiskeVedlegg.map(
@@ -211,20 +266,12 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                     )}
                                                     {journalpost.dokumenter
                                                         .slice(1)
-                                                        .map(dokument => (
-                                                            <div key={dokument.dokumentInfoId}>
-                                                                {dokument.tittel}
-                                                                <StyledVedleggsliste>
-                                                                    {dokument.logiskeVedlegg &&
-                                                                        dokument.logiskeVedlegg.map(
-                                                                            vedlegg =>
-                                                                                visLogiskVedlegg(
-                                                                                    vedlegg
-                                                                                )
-                                                                        )}
-                                                                </StyledVedleggsliste>
-                                                            </div>
-                                                        ))}
+                                                        .map(dokument =>
+                                                            visDokumentliste(
+                                                                dokument,
+                                                                journalpost.journalpostId
+                                                            )
+                                                        )}
                                                 </StyledVedleggsliste>
                                             }
                                         </div>
