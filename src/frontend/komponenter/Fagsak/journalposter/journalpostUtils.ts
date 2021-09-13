@@ -45,3 +45,16 @@ export const hentSorteringsknappCss = (sortering: Sorteringsrekkefølge) => {
             return 'tabell__th--sortert-desc';
     }
 };
+
+export const mapFagsystemkodeTilTekst = (kode: string | undefined) => {
+    switch (kode) {
+        case 'BA':
+            return 'NAV Barnetrygd';
+        case 'IT01':
+            return 'Infotrygd';
+        case undefined:
+            return '-';
+        default:
+            return kode;
+    }
+};

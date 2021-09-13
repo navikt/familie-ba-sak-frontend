@@ -25,6 +25,7 @@ import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 import {
     hentSorteringsknappCss,
     hentSorterteJournalposter,
+    mapFagsystemkodeTilTekst,
     Sorteringsrekkefølge,
 } from './journalpostUtils';
 
@@ -227,7 +228,9 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         )}
                                     </StyledTd>
 
-                                    <StyledTd>{journalpost.sak?.fagsaksystem}</StyledTd>
+                                    <StyledTd>
+                                        {mapFagsystemkodeTilTekst(journalpost.sak?.fagsaksystem)}
+                                    </StyledTd>
                                     <StyledTd>{journalpost.avsenderMottaker?.navn}</StyledTd>
                                     <StyledTd>{journalpost.tittel}</StyledTd>
                                     <StyledTd>
