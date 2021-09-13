@@ -1,33 +1,18 @@
 import { useState } from 'react';
 
 import { FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { Periode } from '@navikt/helse-frontend-tidslinje';
 
-import { IPersonMedAndelerTilkjentYtelse } from '../../../../typer/beregning';
 import { IFagsak } from '../../../../typer/fagsak';
 
-export const useEndreUtbetalingAndelSkjema = (
-    tidslinjePersoner: IPersonMedAndelerTilkjentYtelse[]
-) => {
+export const useEndreUtbetalingAndelSkjema = () => {
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const åpneSkjema = (periode: Periode) => {
+    const åpneSkjema = () => {
         settFeilmelding(undefined);
-
-        const identOgPeriode = periode.id?.split('_');
-        const valgtIdent = identOgPeriode?.length === 2 && identOgPeriode[0];
-        const valgtPeriode = identOgPeriode?.length === 2 && identOgPeriode[1];
-        const perioderForIdent = tidslinjePersoner.find(
-            periode => periode.personIdent === valgtIdent
-        )?.ytelsePerioder;
-
-        if (perioderForIdent && valgtPeriode) {
-            const periodePåTidslinje = perioderForIdent[Number(valgtPeriode)];
-            skjema.felter.midlertidigFelt.validerOgSettFelt(
-                `Under utvikling. Her kommer mulighet for å endre utbetaling for ${valgtIdent} periode ${periodePåTidslinje.stønadFom} - ${periodePåTidslinje.stønadTom}.`
-            );
+        if (feilmelding === 'test') {
+            skjema.felter.midlertidigFelt.validerOgSettFelt('Verdi');
         } else {
-            settFeilmelding('Under utvikling. Klarte ikke hente valgt periode.');
+            settFeilmelding('Under utvikling.');
         }
     };
 

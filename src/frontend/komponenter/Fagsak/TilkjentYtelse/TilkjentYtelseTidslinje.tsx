@@ -12,7 +12,6 @@ import { IPersonMedAndelerTilkjentYtelse } from '../../../typer/beregning';
 import { IGrunnlagPerson } from '../../../typer/person';
 import { formaterIdent } from '../../../utils/formatter';
 import { kalenderDatoFraDate, kalenderDatoTilDate, sisteDagIMåned } from '../../../utils/kalender';
-import { useEndreUtbetalingAndelSkjema } from './EndreUtbetalingAndel/useEndeUtbetalingAndelSkjema';
 import TidslinjeEtikett from './TidslinjeEtikett';
 import TidslinjeNavigering from './TidslinjeNavigering';
 import Vinduvelger from './VinduVelger';
@@ -26,8 +25,6 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
     const { genererFormatertÅrstall, genererRader, aktivEtikett, aktivtTidslinjeVindu, naviger } =
         useTidslinje();
     const tidslinjeRader = genererRader(tidslinjePersoner);
-
-    const { åpneSkjema } = useEndreUtbetalingAndelSkjema(tidslinjePersoner);
 
     return (
         <>
@@ -54,7 +51,6 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
                     etikettRender={(etikett: Skalaetikett) => (
                         <TidslinjeEtikett etikett={etikett} />
                     )}
-                    onSelectPeriode={åpneSkjema}
                     startDato={kalenderDatoTilDate(aktivtTidslinjeVindu.startDato, 23, 0)}
                     sluttDato={kalenderDatoTilDate(aktivtTidslinjeVindu.sluttDato)}
                     aktivtUtsnitt={

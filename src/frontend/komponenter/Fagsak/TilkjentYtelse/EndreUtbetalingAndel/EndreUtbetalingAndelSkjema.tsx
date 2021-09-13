@@ -2,19 +2,14 @@ import * as React from 'react';
 
 import { Feilmelding } from 'nav-frontend-typografi';
 
-import { IPersonMedAndelerTilkjentYtelse } from '../../../../typer/beregning';
 import { useEndreUtbetalingAndelSkjema } from './useEndeUtbetalingAndelSkjema';
 
-interface IProps {
-    tidslinjePerioder: IPersonMedAndelerTilkjentYtelse[];
-}
-
-const EndreUtbetalingAndelSkjema: React.FunctionComponent<IProps> = ({ tidslinjePerioder }) => {
-    const { skjema, feilmelding } = useEndreUtbetalingAndelSkjema(tidslinjePerioder);
+const EndreUtbetalingAndelSkjema: React.FC = () => {
+    const { skjema, feilmelding } = useEndreUtbetalingAndelSkjema();
     return feilmelding ? (
         <Feilmelding children={feilmelding} />
     ) : (
-        <div>Verdi her {skjema.felter.midlertidigFelt.verdi}</div>
+        <div>{skjema.felter.midlertidigFelt.verdi.toString()}</div>
     );
 };
 

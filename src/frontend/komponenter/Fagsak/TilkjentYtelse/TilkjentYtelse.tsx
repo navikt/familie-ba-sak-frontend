@@ -82,9 +82,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     aktivEtikett={aktivEtikett}
                 />
             )}
-            {toggles[ToggleNavn.brukErDeltBosted] && (
-                <EndreUtbetalingAndelSkjema tidslinjePerioder={tidslinjePersoner} />
-            )}
+            {toggles[ToggleNavn.brukErDeltBosted] && <EndreUtbetalingAndelSkjema />}
         </Skjemasteg>
     );
 };
