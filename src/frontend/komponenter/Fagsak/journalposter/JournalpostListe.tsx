@@ -22,6 +22,7 @@ import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 import {
+    formaterTittel,
     hentDatoMottatt,
     hentSorteringsknappCss,
     hentSorterteJournalposter,
@@ -189,8 +190,10 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                     <StyledListeElement
                                                         key={dokument.dokumentInfoId}
                                                     >
-                                                        <DokumentTittelMedLenkeWrapper>
-                                                            {dokument.tittel}
+                                                        <DokumentTittelMedLenkeWrapper
+                                                            title={dokument.tittel}
+                                                        >
+                                                            {formaterTittel(dokument.tittel)}
                                                             {
                                                                 <StyledÅpenDokument
                                                                     onClick={() => {
@@ -215,8 +218,11 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                             key={
                                                                                 vedlegg.logiskVedleggId
                                                                             }
+                                                                            title={vedlegg.tittel}
                                                                         >
-                                                                            {vedlegg.tittel}
+                                                                            {formaterTittel(
+                                                                                vedlegg.tittel
+                                                                            )}
                                                                         </StyledListeElement>
                                                                     )
                                                                 )}

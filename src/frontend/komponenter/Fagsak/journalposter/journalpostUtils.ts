@@ -66,3 +66,12 @@ export const hentDatoMottatt = (relevanteDatoer: IJournalpostRelevantDato[]) => 
 
     return datoMottatt ? tilVisning(kalenderDato(datoMottatt)) : '-';
 };
+
+export const formaterTittel = (tittel: string | undefined) => {
+    const maksLengde = 45;
+    if (!tittel) {
+        return '-';
+    } else if (tittel.length > maksLengde) {
+        return tittel.substring(0, maksLengde) + '...';
+    } else return tittel;
+};
