@@ -86,12 +86,12 @@
         "@typescript-eslint/ban-types": [
             "error",
             {
-              "types": {
-                "object": false
-              },
-              "extendDefaults": true
+                "types": {
+                    "object": false
+                },
+                "extendDefaults": true
             }
-          ]
+        ]
     },
     "settings": {
         "react": {

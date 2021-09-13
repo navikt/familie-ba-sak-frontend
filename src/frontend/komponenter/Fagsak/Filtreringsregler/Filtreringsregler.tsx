@@ -47,9 +47,10 @@ const Filtreringsregler: React.FC<IProps> = ({ fagsak, åpenBehandling }) => {
         >
             <StyledUl>
                 {Object.keys(Filtreringsregel).map(filtreringsregel => {
-                    const fødselshendelsefiltreringResultat = åpenBehandling.fødselshendelsefiltreringResultater.find(
-                        it => it.filtreringsregel === filtreringsregel
-                    );
+                    const fødselshendelsefiltreringResultat =
+                        åpenBehandling.fødselshendelsefiltreringResultater.find(
+                            it => it.filtreringsregel === filtreringsregel
+                        );
 
                     if (!fødselshendelsefiltreringResultat) return null;
 

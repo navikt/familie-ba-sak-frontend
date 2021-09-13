@@ -24,12 +24,8 @@ interface IProps {
 const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     vedtaksperiodeMedBegrunnelser,
 }) => {
-    const {
-        erPanelEkspandert,
-        onPanelClose,
-        utbetalingsperiode,
-        genererteBrevbegrunnelser,
-    } = useVedtaksperiodeMedBegrunnelser();
+    const { erPanelEkspandert, onPanelClose, utbetalingsperiode, genererteBrevbegrunnelser } =
+        useVedtaksperiodeMedBegrunnelser();
     const { toggles } = useApp();
     const forhåndvisBegrunnelsetekster =
         vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.AVSLAG ||

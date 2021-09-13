@@ -111,9 +111,10 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                 )
                             )
                             .map((behandling: VisningBehandling) => {
-                                const aktivVedtakForBehandling = behandling.vedtakForBehandling.find(
-                                    (vedtak: VisningVedtakForBehandling) => vedtak.aktiv
-                                );
+                                const aktivVedtakForBehandling =
+                                    behandling.vedtakForBehandling.find(
+                                        (vedtak: VisningVedtakForBehandling) => vedtak.aktiv
+                                    );
 
                                 return (
                                     <tr key={behandling.behandlingId}>

@@ -135,9 +135,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skjemanavn: 'brevmodul',
     });
 
-    const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] = React.useState<boolean>(
-        false
-    );
+    const [navigerTilOpplysningsplikt, settNavigerTilOpplysningsplikt] =
+        React.useState<boolean>(false);
 
     /**
      * Nullstill enkelte felter i skjemaet ved oppdatering av åpenbehandling i staten.

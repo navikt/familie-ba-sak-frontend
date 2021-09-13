@@ -69,9 +69,8 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
     const [ekspandertAnnenVurdering, settEkspandertAnnenVurdering] = useState(
         erLesevisning() || false || annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
     );
-    const [redigerbartAnnenVurdering, settRedigerbartAnnenVurdering] = useState<
-        FeltState<IAnnenVurdering>
-    >(annenVurdering);
+    const [redigerbartAnnenVurdering, settRedigerbartAnnenVurdering] =
+        useState<FeltState<IAnnenVurdering>>(annenVurdering);
 
     const toggleForm = (visAlert: boolean) => {
         if (
