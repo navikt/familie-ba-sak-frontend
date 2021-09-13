@@ -1,6 +1,6 @@
 import { ISaksbehandler } from '@navikt/familie-typer';
 
-import { INøkkelPar } from './common';
+import { IPar } from './common';
 
 export interface IFinnOppgaveRequest {
     behandlingstema?: string;
@@ -59,19 +59,17 @@ export enum IdentGruppe {
 }
 
 export enum EnhetFilter {
-    ALLE = 'ALLE',
+    VELG = 'VELG',
     E4806 = 'E4806',
-    E4811 = 'E4811',
     E4820 = 'E4820',
     E4833 = 'E4833',
     E4842 = 'E4842',
-    E4847 = 'E4847',
+    E4817 = 'E4817',
 }
 
-export const enhetFilter: INøkkelPar = {
-    ALLE: { id: 'ALLE', navn: 'Alle' },
+export const enhetFilter: Record<EnhetFilter, IPar> = {
+    VELG: { id: 'VELG', navn: 'Velg' },
     E4806: { id: 'E4806', navn: '4806 Drammen' },
-    E4811: { id: 'E4811', navn: '4811 Sandnes' },
     E4820: { id: 'E4820', navn: '4820 Vadsø' },
     E4833: { id: 'E4833', navn: '4833 Oslo' },
     E4842: { id: 'E4842', navn: '4842 Stord' },
@@ -87,7 +85,7 @@ export enum SaksbehandlerFilter {
 
 export const saksbehandlerFilter = (
     innloggetSaksbehandler: ISaksbehandler | undefined
-): INøkkelPar => ({
+): Record<SaksbehandlerFilter, IPar> => ({
     INNLOGGET: { id: 'INNLOGGET', navn: innloggetSaksbehandler?.displayName ?? 'INNLOGGET' },
     ALLE: { id: 'ALLE', navn: 'Alle' },
     FORDELTE: { id: 'FORDELTE', navn: 'Fordelte' },
@@ -102,7 +100,7 @@ export enum GjelderFilter {
     ab0058 = 'ab0058',
 }
 
-export const gjelderFilter: INøkkelPar = {
+export const gjelderFilter: Record<GjelderFilter, IPar> = {
     ALLE: { id: 'ALLE', navn: 'Alle' },
     ab0270: { id: 'ab0270', navn: 'Uspesifisert' },
     ab0180: { id: 'ab0180', navn: 'Ordinær' },
@@ -116,7 +114,7 @@ export enum BehandlingstypeFilter {
     ae0161 = 'ae0161',
 }
 
-export const behandlingstypeFilter: INøkkelPar = {
+export const behandlingstypeFilter: Record<BehandlingstypeFilter, IPar> = {
     ALLE: { id: 'ALLE', navn: 'Alle' },
     ae0106: { id: 'ae0106', navn: 'Utland' },
     ae0161: { id: 'ae0161', navn: 'Tilbakekreving' },
@@ -141,11 +139,12 @@ export enum OppgavetypeFilter {
     SVAR_IK_MOT = 'SVAR_IK_MOT',
     VUR = 'VUR',
     VURD_HENV = 'VURD_HENV',
+    VURD_LIVS = 'VURD_LIVS',
     VUR_KONS_YTE = 'VUR_KONS_YTE',
     VUR_SVAR = 'VUR_SVAR',
 }
 
-export const oppgaveTypeFilter: INøkkelPar = {
+export const oppgaveTypeFilter: Record<OppgavetypeFilter, IPar> = {
     ALLE: { id: 'ALLE', navn: 'Alle' },
     RETUR: { id: 'RETUR', navn: 'Behandle returpost' },
     BEH_SAK: { id: 'BEH_SAK', navn: 'Behandle sak' },

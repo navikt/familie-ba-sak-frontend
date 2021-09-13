@@ -101,7 +101,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         aria-selected={
                             behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
                         }
-                        disabled={!revurderingEnabled}
                         value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
                     >
                         Tilbakekreving
