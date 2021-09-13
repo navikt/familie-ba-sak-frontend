@@ -1,9 +1,10 @@
-import { FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { IFagsak } from '../../../../typer/fagsak';
 import { useState } from 'react';
 
+import { FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
+
 import { IPersonMedAndelerTilkjentYtelse } from '../../../../typer/beregning';
+import { IFagsak } from '../../../../typer/fagsak';
 
 export const useEndreUtbetalingAndelSkjema = (
     tidslinjePersoner: IPersonMedAndelerTilkjentYtelse[]

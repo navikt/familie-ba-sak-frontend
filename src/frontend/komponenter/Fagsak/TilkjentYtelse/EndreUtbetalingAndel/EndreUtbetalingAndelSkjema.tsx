@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { useEndreUtbetalingAndelSkjema } from './useEndeUtbetalingAndelSkjema';
-import { IPersonMedAndelerTilkjentYtelse } from '../../../../typer/beregning';
+
 import { Feilmelding } from 'nav-frontend-typografi';
+
+import { IPersonMedAndelerTilkjentYtelse } from '../../../../typer/beregning';
+import { useEndreUtbetalingAndelSkjema } from './useEndeUtbetalingAndelSkjema';
 
 interface IProps {
     tidslinjePerioder: IPersonMedAndelerTilkjentYtelse[];
