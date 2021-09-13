@@ -1,6 +1,6 @@
-import { IJournalpost } from '@navikt/familie-typer';
+import { IJournalpost, IJournalpostRelevantDato, JournalpostDatotype } from '@navikt/familie-typer';
 
-import { erEtter, kalenderDato } from '../../../utils/kalender';
+import { erEtter, kalenderDato, tilVisning } from '../../../utils/kalender';
 
 export const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
     if (!a.datoMottatt) {
@@ -57,4 +57,12 @@ export const mapFagsystemkodeTilTekst = (kode: string | undefined) => {
         default:
             return kode;
     }
+};
+
+export const hentDatoMottatt = (relevanteDatoer: IJournalpostRelevantDato[]) => {
+    const datoMottatt = relevanteDatoer.find(
+        dato => dato.datotype === JournalpostDatotype.DATO_REGISTRERT
+    )?.dato;
+
+    return datoMottatt ? tilVisning(kalenderDato(datoMottatt)) : '-';
 };

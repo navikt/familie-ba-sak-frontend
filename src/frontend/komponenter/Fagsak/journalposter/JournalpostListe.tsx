@@ -20,9 +20,9 @@ import {
 import 'nav-frontend-tabell-style';
 import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
-import { tilVisning, kalenderDato } from '../../../utils/kalender';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 import {
+    hentDatoMottatt,
     hentSorteringsknappCss,
     hentSorterteJournalposter,
     mapFagsystemkodeTilTekst,
@@ -179,8 +179,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                 : ''
                                         }
                                     >
-                                        {journalpost.datoMottatt &&
-                                            tilVisning(kalenderDato(journalpost.datoMottatt))}
+                                        {hentDatoMottatt(journalpost.relevanteDatoer)}
                                     </StyledTd>
 
                                     <StyledTd>
