@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Sidetittel } from 'nav-frontend-typografi';
+import { Normaltekst, Sidetittel } from 'nav-frontend-typografi';
 
 import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
@@ -14,16 +14,19 @@ import {
     byggHenterRessurs,
     IJournalpost,
     Journalposttype,
-    ILogiskVedlegg,
-    IDokumentInfo,
-    Journalstatus,
+    journalpoststatus,
 } from '@navikt/familie-typer';
 
 import 'nav-frontend-tabell-style';
 import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
-import { tilVisning, kalenderDato, erEtter } from '../../../utils/kalender';
+import { tilVisning, kalenderDato } from '../../../utils/kalender';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
+import {
+    hentSorteringsknappCss,
+    hentSorterteJournalposter,
+    Sorteringsrekkefølge,
+} from './journalpostUtils';
 
 const Container = styled.div`
     margin: 4.1875rem 3.3125rem;
@@ -51,11 +54,14 @@ const StyledTd = styled.td`
 
 const StyledVedleggsliste = styled.ul`
     list-style-type: none;
-    margin-bottom: 0;
+    margin: 0;
+    &:first-child {
+        padding-inline-start: 0;
+    }
 `;
 
 const StyledListeElement = styled.li`
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
     &:last-child {
         margin-bottom: 0;
     }
@@ -66,32 +72,23 @@ const StyledÅpenDokument = styled(FamilieBaseKnapp)`
 `;
 
 const DokumentTittelMedLenkeWrapper = styled.div`
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
 `;
-
-const mapJournalstatusTilTekst: Record<Journalstatus, string> = {
-    MOTTATT: 'Mottatt',
-    JOURNALFOERT: 'Journalført',
-    FERDIGSTILT: 'Ferdigstilt',
-    EKSPEDERT: 'Ekspedert',
-    UNDER_ARBEID: 'Under arbeid',
-    FEILREGISTRERT: 'Feilregistrert',
-    UTGAAR: 'Utgår',
-    AVBRUTT: 'Avbrutt',
-    UKJENT_BRUKER: 'Ukjent bruker',
-    RESERVERT: 'Reservert',
-    OPPLASTING_DOKUMENT: 'Opplasting dokument',
-    UKJENT: 'Ukjent',
-};
 
 interface IProps {
     bruker: IPersonInfo;
 }
-enum Sorteringsrekkefølge {
-    STIGENDE,
-    SYNKENDE,
-    INGEN_SORTERING,
-}
+
+const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
+    switch (journalposttype) {
+        case Journalposttype.I:
+            return <RightFilled />;
+        case Journalposttype.U:
+            return <LeftFilled />;
+        case Journalposttype.N:
+            return <DownFilled />;
+    }
+};
 
 const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const { request } = useHttp();
@@ -114,52 +111,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         });
     }, [bruker]);
 
-    const sorterJournalposterStigende = (a: IJournalpost, b: IJournalpost) => {
-        if (!a.datoMottatt) {
-            return -1;
-        }
-        if (!b.datoMottatt) {
-            return 1;
-        }
-        return erEtter(kalenderDato(a.datoMottatt), kalenderDato(b.datoMottatt)) ? 1 : -1;
-    };
-
-    const sorterJournalposterSynkende = (a: IJournalpost, b: IJournalpost) =>
-        -1 * sorterJournalposterStigende(a, b);
-
-    const hentSorterteJournalposter = (journalposter: IJournalpost[]) => {
-        switch (sortering) {
-            case Sorteringsrekkefølge.INGEN_SORTERING:
-                return journalposter;
-            case Sorteringsrekkefølge.STIGENDE:
-                return [...journalposter].sort(sorterJournalposterStigende);
-            case Sorteringsrekkefølge.SYNKENDE:
-                return [...journalposter].sort(sorterJournalposterSynkende);
-        }
-    };
-
-    const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
-        switch (journalposttype) {
-            case Journalposttype.I:
-                return <RightFilled />;
-            case Journalposttype.U:
-                return <LeftFilled />;
-            case Journalposttype.N:
-                return <DownFilled />;
-        }
-    };
-
-    const hentSorteringsknappCss = () => {
-        switch (sortering) {
-            case Sorteringsrekkefølge.INGEN_SORTERING:
-                return '';
-            case Sorteringsrekkefølge.STIGENDE:
-                return 'tabell__th--sortert-asc';
-            case Sorteringsrekkefølge.SYNKENDE:
-                return 'tabell__th--sortert-desc';
-        }
-    };
-
     const settNesteSorteringsrekkefølge = (): void => {
         switch (sortering) {
             case Sorteringsrekkefølge.INGEN_SORTERING:
@@ -169,47 +120,6 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
             case Sorteringsrekkefølge.SYNKENDE:
                 return settSortering(Sorteringsrekkefølge.INGEN_SORTERING);
         }
-    };
-
-    const visLogiskVedlegg = (logiskVedlegg: ILogiskVedlegg) => {
-        return (
-            <StyledListeElement key={logiskVedlegg.logiskVedleggId}>
-                {logiskVedlegg.tittel}
-            </StyledListeElement>
-        );
-    };
-
-    const visDokumentMedLenke = (dokument: IDokumentInfo, journalpostId: string) => {
-        return (
-            <DokumentTittelMedLenkeWrapper>
-                {dokument.tittel}
-                {
-                    <StyledÅpenDokument
-                        onClick={() => {
-                            window.open(
-                                `/api/pdf/journalpost/${journalpostId}/hent/${dokument.dokumentInfoId}`,
-                                '_blank'
-                            );
-                        }}
-                    >
-                        <EksternLenke />
-                    </StyledÅpenDokument>
-                }
-            </DokumentTittelMedLenkeWrapper>
-        );
-    };
-
-    const visDokumentliste = (dokument: IDokumentInfo, journalpostId: string) => {
-        return (
-            <li key={dokument.dokumentInfoId}>
-                {visDokumentMedLenke(dokument, journalpostId)}
-
-                <StyledVedleggsliste>
-                    {dokument.logiskeVedlegg &&
-                        dokument.logiskeVedlegg.map(vedlegg => visLogiskVedlegg(vedlegg))}
-                </StyledVedleggsliste>
-            </li>
-        );
     };
 
     if (
@@ -233,13 +143,13 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                     <thead>
                         <tr>
                             <th>Inn/ut</th>
-                            <th className={hentSorteringsknappCss()}>
+                            <th className={hentSorteringsknappCss(sortering)}>
                                 <button onClick={() => settNesteSorteringsrekkefølge()}>
                                     Registrert/sendt
                                 </button>
                             </th>
 
-                            <th>Tittel</th>
+                            <th>Dokumenter</th>
                             <th>Fagsystem</th>
                             <th>Avsender/Mottaker</th>
                             <th>Journalpost</th>
@@ -247,64 +157,85 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {hentSorterteJournalposter(journalposterRessurs.data).map(journalpost => (
-                            <tr key={journalpost.journalpostId}>
-                                <StyledTd>
-                                    <InnUtWrapper>
-                                        <IkonWrapper>
-                                            {hentIkonForJournalpostType(
-                                                journalpost.journalposttype
-                                            )}{' '}
-                                        </IkonWrapper>
-                                        {journalpost.journalposttype}
-                                    </InnUtWrapper>
-                                </StyledTd>
-                                <StyledTd
-                                    className={
-                                        sortering === Sorteringsrekkefølge.STIGENDE ||
-                                        sortering === Sorteringsrekkefølge.SYNKENDE
-                                            ? 'tabell__StyledTd--sortert'
-                                            : ''
-                                    }
-                                >
-                                    {journalpost.datoMottatt &&
-                                        tilVisning(kalenderDato(journalpost.datoMottatt))}
-                                </StyledTd>
+                        {hentSorterteJournalposter(journalposterRessurs.data, sortering).map(
+                            journalpost => (
+                                <tr key={journalpost.journalpostId}>
+                                    <StyledTd>
+                                        <InnUtWrapper>
+                                            <IkonWrapper>
+                                                {hentIkonForJournalpostType(
+                                                    journalpost.journalposttype
+                                                )}{' '}
+                                            </IkonWrapper>
+                                            {journalpost.journalposttype}
+                                        </InnUtWrapper>
+                                    </StyledTd>
+                                    <StyledTd
+                                        className={
+                                            sortering === Sorteringsrekkefølge.STIGENDE ||
+                                            sortering === Sorteringsrekkefølge.SYNKENDE
+                                                ? 'tabell__StyledTd--sortert'
+                                                : ''
+                                        }
+                                    >
+                                        {journalpost.datoMottatt &&
+                                            tilVisning(kalenderDato(journalpost.datoMottatt))}
+                                    </StyledTd>
 
-                                <StyledTd>
-                                    {journalpost.dokumenter && (
-                                        <div key={journalpost.dokumenter[0].dokumentInfoId}>
-                                            {visDokumentMedLenke(
-                                                journalpost.dokumenter[0],
-                                                journalpost.journalpostId
-                                            )}
-                                            {
-                                                <StyledVedleggsliste>
-                                                    {journalpost.dokumenter[0].logiskeVedlegg.map(
-                                                        vedlegg => visLogiskVedlegg(vedlegg)
-                                                    )}
-                                                    {journalpost.dokumenter
-                                                        .slice(1)
-                                                        .map(dokument =>
-                                                            visDokumentliste(
-                                                                dokument,
-                                                                journalpost.journalpostId
-                                                            )
-                                                        )}
-                                                </StyledVedleggsliste>
-                                            }
-                                        </div>
-                                    )}
-                                </StyledTd>
+                                    <StyledTd>
+                                        {(journalpost.dokumenter?.length ?? []) > 0 ? (
+                                            <StyledVedleggsliste>
+                                                {journalpost.dokumenter?.map(dokument => (
+                                                    <StyledListeElement
+                                                        key={dokument.dokumentInfoId}
+                                                    >
+                                                        <DokumentTittelMedLenkeWrapper>
+                                                            {dokument.tittel}
+                                                            {
+                                                                <StyledÅpenDokument
+                                                                    onClick={() => {
+                                                                        window.open(
+                                                                            `/api/pdf/journalpost/${journalpost.journalpostId}/hent/${dokument.dokumentInfoId}`,
+                                                                            '_blank'
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    <EksternLenke />
+                                                                </StyledÅpenDokument>
+                                                            }
+                                                        </DokumentTittelMedLenkeWrapper>
 
-                                <StyledTd>{journalpost.sak?.fagsakId}</StyledTd>
-                                <StyledTd>{journalpost.avsenderMottaker?.navn}</StyledTd>
-                                <StyledTd>{journalpost.tittel}</StyledTd>
-                                <StyledTd>
-                                    {mapJournalstatusTilTekst[journalpost.journalstatus]}
-                                </StyledTd>
-                            </tr>
-                        ))}
+                                                        <StyledVedleggsliste>
+                                                            {dokument.logiskeVedlegg &&
+                                                                dokument.logiskeVedlegg.map(
+                                                                    vedlegg => (
+                                                                        <StyledListeElement
+                                                                            key={
+                                                                                vedlegg.logiskVedleggId
+                                                                            }
+                                                                        >
+                                                                            {vedlegg.tittel}
+                                                                        </StyledListeElement>
+                                                                    )
+                                                                )}
+                                                        </StyledVedleggsliste>
+                                                    </StyledListeElement>
+                                                ))}
+                                            </StyledVedleggsliste>
+                                        ) : (
+                                            <Normaltekst>Ingen dokumenter</Normaltekst>
+                                        )}
+                                    </StyledTd>
+
+                                    <StyledTd>{journalpost.sak?.fagsaksystem}</StyledTd>
+                                    <StyledTd>{journalpost.avsenderMottaker?.navn}</StyledTd>
+                                    <StyledTd>{journalpost.tittel}</StyledTd>
+                                    <StyledTd>
+                                        {journalpoststatus[journalpost.journalstatus]}
+                                    </StyledTd>
+                                </tr>
+                            )
+                        )}
                     </tbody>
                 </table>
             </Container>

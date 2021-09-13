@@ -1731,10 +1731,15 @@
     deep-equal "^2.0.5"
     hashids "^2.2.8"
 
-"@navikt/familie-typer@^3.0.12", "@navikt/familie-typer@^3.0.13":
+"@navikt/familie-typer@^3.0.13":
   version "3.0.13"
   resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.13.tgz#7e5a6822bced655c3e398cb4e569a0bd557326b5"
   integrity sha512-IUy4RlueQI7bDt8xIWSDTo07uNg0pGyb4F9bg9DwvmLNsZANt9YkOvJQhc86y9sTC4tz2Y+wFCioXxe4Bf4plA==
+
+"@navikt/familie-typer@^3.0.14":
+  version "3.0.14"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-typer/-/familie-typer-3.0.14.tgz#f6a78ca686383e4e2c55d2363ee33b1abf662be9"
+  integrity sha512-c3a+WyHPXwQSJfDZnNS6LbbjeHf9wjN8eQ8PKKM7K3VMbrRWC5lFeltV21J70aU9QWvqApTWXUgS5R4qlKqErA==
 
 "@navikt/familie-visittkort@^2.1.25":
   version "2.1.25"
