@@ -22,7 +22,6 @@ import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 import {
-    formaterTittel,
     hentDatoMottatt,
     hentSorteringsknappCss,
     hentSorterteJournalposter,
@@ -31,7 +30,8 @@ import {
 } from './journalpostUtils';
 
 const Container = styled.div`
-    margin: 4.1875rem 3.3125rem;
+    padding: 2rem;
+    overflow: auto;
 `;
 
 const InnUtWrapper = styled.div`
@@ -52,6 +52,11 @@ const StyledSidetittel = styled(Sidetittel)`
 
 const Td = styled.td`
     vertical-align: top;
+`;
+
+const EllipsisTd = styled(Td)`
+    max-width: 20rem;
+    width: 100%;
 `;
 
 const Vedleggsliste = styled.ul`
@@ -75,6 +80,14 @@ const EksternLenkeWrapper = styled(FamilieBaseKnapp)`
 
 const DokumentTittelMedLenkeWrapper = styled.div`
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+`;
+
+const TittelWrapper = styled.div`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 interface IProps {
@@ -183,15 +196,16 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         {hentDatoMottatt(journalpost.relevanteDatoer)}
                                     </Td>
 
-                                    <Td>
+                                    <EllipsisTd>
                                         {(journalpost.dokumenter?.length ?? []) > 0 ? (
                                             <Vedleggsliste>
                                                 {journalpost.dokumenter?.map(dokument => (
                                                     <ListeElement key={dokument.dokumentInfoId}>
-                                                        <DokumentTittelMedLenkeWrapper
-                                                            title={dokument.tittel}
-                                                        >
-                                                            {formaterTittel(dokument.tittel)}
+                                                        <DokumentTittelMedLenkeWrapper>
+                                                            <TittelWrapper title={dokument.tittel}>
+                                                                {dokument.tittel}
+                                                            </TittelWrapper>
+
                                                             {
                                                                 <EksternLenkeWrapper
                                                                     onClick={() => {
@@ -216,11 +230,14 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                             key={
                                                                                 vedlegg.logiskVedleggId
                                                                             }
-                                                                            title={vedlegg.tittel}
                                                                         >
-                                                                            {formaterTittel(
-                                                                                vedlegg.tittel
-                                                                            )}
+                                                                            <TittelWrapper
+                                                                                title={
+                                                                                    vedlegg.tittel
+                                                                                }
+                                                                            >
+                                                                                {vedlegg.tittel}
+                                                                            </TittelWrapper>
                                                                         </ListeElement>
                                                                     )
                                                                 )}
@@ -231,13 +248,21 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         ) : (
                                             <Normaltekst>Ingen dokumenter</Normaltekst>
                                         )}
-                                    </Td>
+                                    </EllipsisTd>
 
-                                    <Td>
-                                        {mapFagsystemkodeTilTekst(journalpost.sak?.fagsaksystem)}
-                                    </Td>
+                                    <EllipsisTd>
+                                        <TittelWrapper>
+                                            {mapFagsystemkodeTilTekst(
+                                                journalpost.sak?.fagsaksystem
+                                            )}
+                                        </TittelWrapper>
+                                    </EllipsisTd>
                                     <Td>{journalpost.avsenderMottaker?.navn}</Td>
-                                    <Td>{journalpost.tittel}</Td>
+                                    <EllipsisTd>
+                                        <TittelWrapper title={journalpost.tittel}>
+                                            {journalpost.tittel}
+                                        </TittelWrapper>
+                                    </EllipsisTd>
                                     <Td>{journalpoststatus[journalpost.journalstatus]}</Td>
                                 </tr>
                             )
