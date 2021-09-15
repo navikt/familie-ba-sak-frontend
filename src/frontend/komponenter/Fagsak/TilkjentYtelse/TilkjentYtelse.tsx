@@ -6,7 +6,6 @@ import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
-import { sorterFødselsdato } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
@@ -50,7 +49,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     const grunnlagPersoner = filterGrunnlagPersonerMedAndeler(
         åpenBehandling.personer,
         åpenBehandling.personerMedAndelerTilkjentYtelse
-    ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
+    );
 
     const tidslinjePersoner = filterAndelPersonerIGrunnlag(
         grunnlagPersoner,
