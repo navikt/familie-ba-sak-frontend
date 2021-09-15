@@ -52,12 +52,13 @@ const StyledSidetittel = styled(Sidetittel)`
 
 const Td = styled.td`
     vertical-align: top;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
-// Brukes for å gi kolonner med potensielt lange tekster (hvor vi ønsker ellipsis overflyt) "riktig" bredde
-const EllipsisTd = styled(Td)`
-    max-width: 20rem;
-    width: 100%;
+const Th = styled.th`
+    white-space: nowrap;
 `;
 
 const Vedleggsliste = styled.ul`
@@ -89,6 +90,10 @@ const EllipsisNormaltekst = styled(Normaltekst)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+`;
+
+const StyledTabell = styled.table`
+    table-layout: fixed;
 `;
 
 interface IProps {
@@ -155,21 +160,30 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
             <Container>
                 <StyledSidetittel>Dokumentoversikt</StyledSidetittel>
 
-                <table className="tabell tabell--stripet">
+                <StyledTabell className="tabell tabell--stripet">
+                    <colgroup>
+                        <col style={{ width: '5%' }} />
+                        <col style={{ width: '5%', minWidth: '12rem' }} />
+                        <col style={{ width: '25%' }} />
+                        <col style={{ width: '15%', minWidth: '12rem' }} />
+                        <col style={{ width: '20%' }} />
+                        <col style={{ width: '25%' }} />
+                        <col style={{ width: '5%', minWidth: '8rem' }} />
+                    </colgroup>
                     <thead>
                         <tr>
-                            <th>Inn/ut</th>
-                            <th className={hentSorteringsknappCss(sortering)}>
+                            <Th>Inn/ut</Th>
+                            <Th className={hentSorteringsknappCss(sortering)}>
                                 <button onClick={() => settNesteSorteringsrekkefølge()}>
                                     Dato mottatt
                                 </button>
-                            </th>
+                            </Th>
 
-                            <th>Dokumenter</th>
-                            <th>Fagsystem | Saksid</th>
-                            <th>Avsender/Mottaker</th>
-                            <th>Journalpost</th>
-                            <th>Status</th>
+                            <Th>Dokumenter</Th>
+                            <Th>Fagsystem | Saksid</Th>
+                            <Th>Avsender/Mottaker</Th>
+                            <Th>Journalpost</Th>
+                            <Th>Status</Th>
                         </tr>
                     </thead>
                     <tbody>
@@ -197,7 +211,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         {hentDatoMottatt(journalpost.relevanteDatoer)}
                                     </Td>
 
-                                    <EllipsisTd>
+                                    <Td>
                                         {(journalpost.dokumenter?.length ?? []) > 0 ? (
                                             <Vedleggsliste>
                                                 {journalpost.dokumenter?.map(dokument => (
@@ -251,28 +265,39 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                         ) : (
                                             <Normaltekst>Ingen dokumenter</Normaltekst>
                                         )}
-                                    </EllipsisTd>
+                                    </Td>
 
-                                    <EllipsisTd>
-                                        <EllipsisNormaltekst>
+                                    <Td>
+                                        <EllipsisNormaltekst
+                                            title={formaterFagsak(
+                                                journalpost.sak?.fagsaksystem,
+                                                journalpost.sak?.fagsakId
+                                            )}
+                                        >
                                             {formaterFagsak(
                                                 journalpost.sak?.fagsaksystem,
                                                 journalpost.sak?.fagsakId
                                             )}
                                         </EllipsisNormaltekst>
-                                    </EllipsisTd>
-                                    <Td>{journalpost.avsenderMottaker?.navn}</Td>
-                                    <EllipsisTd>
+                                    </Td>
+                                    <Td>
+                                        <EllipsisNormaltekst
+                                            title={journalpost.avsenderMottaker?.navn}
+                                        >
+                                            {journalpost.avsenderMottaker?.navn}
+                                        </EllipsisNormaltekst>
+                                    </Td>
+                                    <Td>
                                         <EllipsisNormaltekst title={journalpost.tittel}>
                                             {journalpost.tittel}
                                         </EllipsisNormaltekst>
-                                    </EllipsisTd>
+                                    </Td>
                                     <Td>{journalpoststatus[journalpost.journalstatus]}</Td>
                                 </tr>
                             )
                         )}
                     </tbody>
-                </table>
+                </StyledTabell>
             </Container>
         );
     } else {
