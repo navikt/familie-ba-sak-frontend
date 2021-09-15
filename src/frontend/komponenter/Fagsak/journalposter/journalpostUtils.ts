@@ -68,11 +68,8 @@ export const hentDatoMottatt = (relevanteDatoer: IJournalpostRelevantDato[]) => 
     return datoMottatt ? formaterIsoDato(datoMottatt, datoformat.DATO_TID) : '-';
 };
 
-export const formaterTittel = (tittel: string | undefined) => {
-    const maksLengde = 45;
-    if (!tittel) {
-        return '-';
-    } else if (tittel.length > maksLengde) {
-        return tittel.substring(0, maksLengde) + '...';
-    } else return tittel;
+export const formaterFagsak = (fagsystemKode: string | undefined, fagsakId: string | undefined) => {
+    const fagsystem = mapFagsystemkodeTilTekst(fagsystemKode);
+    const saksid = fagsakId ?? '-';
+    return fagsystem + ' | ' + saksid;
 };

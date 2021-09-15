@@ -22,10 +22,10 @@ import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 import {
+    formaterFagsak,
     hentDatoMottatt,
     hentSorteringsknappCss,
     hentSorterteJournalposter,
-    mapFagsystemkodeTilTekst,
     Sorteringsrekkefølge,
 } from './journalpostUtils';
 
@@ -165,7 +165,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                             </th>
 
                             <th>Dokumenter</th>
-                            <th>Fagsystem</th>
+                            <th>Fagsystem | Saksid</th>
                             <th>Avsender/Mottaker</th>
                             <th>Journalpost</th>
                             <th>Status</th>
@@ -252,8 +252,9 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
                                     <EllipsisTd>
                                         <TittelWrapper>
-                                            {mapFagsystemkodeTilTekst(
-                                                journalpost.sak?.fagsaksystem
+                                            {formaterFagsak(
+                                                journalpost.sak?.fagsaksystem,
+                                                journalpost.sak?.fagsakId
                                             )}
                                         </TittelWrapper>
                                     </EllipsisTd>
