@@ -54,6 +54,7 @@ const Td = styled.td`
     vertical-align: top;
 `;
 
+// Brukes for å gi kolonner med potensielt lange tekster (hvor vi ønsker ellipsis overflyt) "riktig" bredde
 const EllipsisTd = styled(Td)`
     max-width: 20rem;
     width: 100%;
@@ -84,7 +85,7 @@ const DokumentTittelMedLenkeWrapper = styled.div`
     justify-content: flex-start;
 `;
 
-const TittelWrapper = styled.div`
+const EllipsisNormaltekst = styled(Normaltekst)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -202,9 +203,11 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                 {journalpost.dokumenter?.map(dokument => (
                                                     <ListeElement key={dokument.dokumentInfoId}>
                                                         <DokumentTittelMedLenkeWrapper>
-                                                            <TittelWrapper title={dokument.tittel}>
+                                                            <EllipsisNormaltekst
+                                                                title={dokument.tittel}
+                                                            >
                                                                 {dokument.tittel}
-                                                            </TittelWrapper>
+                                                            </EllipsisNormaltekst>
 
                                                             {
                                                                 <EksternLenkeWrapper
@@ -231,13 +234,13 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                                 vedlegg.logiskVedleggId
                                                                             }
                                                                         >
-                                                                            <TittelWrapper
+                                                                            <EllipsisNormaltekst
                                                                                 title={
                                                                                     vedlegg.tittel
                                                                                 }
                                                                             >
                                                                                 {vedlegg.tittel}
-                                                                            </TittelWrapper>
+                                                                            </EllipsisNormaltekst>
                                                                         </ListeElement>
                                                                     )
                                                                 )}
@@ -251,18 +254,18 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                     </EllipsisTd>
 
                                     <EllipsisTd>
-                                        <TittelWrapper>
+                                        <EllipsisNormaltekst>
                                             {formaterFagsak(
                                                 journalpost.sak?.fagsaksystem,
                                                 journalpost.sak?.fagsakId
                                             )}
-                                        </TittelWrapper>
+                                        </EllipsisNormaltekst>
                                     </EllipsisTd>
                                     <Td>{journalpost.avsenderMottaker?.navn}</Td>
                                     <EllipsisTd>
-                                        <TittelWrapper title={journalpost.tittel}>
+                                        <EllipsisNormaltekst title={journalpost.tittel}>
                                             {journalpost.tittel}
-                                        </TittelWrapper>
+                                        </EllipsisNormaltekst>
                                     </EllipsisTd>
                                     <Td>{journalpoststatus[journalpost.journalstatus]}</Td>
                                 </tr>
