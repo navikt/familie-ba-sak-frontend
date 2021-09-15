@@ -136,10 +136,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IPersonMedAndelerTilkjentYtelse[] => {
-        personer.sort((personA, personB) =>
-            sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)
-        );
         return personer
+            .sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato))
             .map((person: IGrunnlagPerson) => {
                 return personerMedAndelerTilkjentYtelse.find(
                     (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) =>
@@ -165,8 +163,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         genererRader,
         initiellAktivEtikettErSatt,
         setInitiellAktivEtikettErSatt,
-        filterGrunnlagPersonerMedAndeler: filterOgSorterGrunnlagPersonerMedAndeler,
-        filterAndelPersonerIGrunnlag: filterOgSorterAndelPersonerIGrunnlag,
+        filterOgSorterGrunnlagPersonerMedAndeler,
+        filterOgSorterAndelPersonerIGrunnlag,
     };
 });
 
