@@ -21,8 +21,11 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     åpenBehandling,
 }) => {
     const history = useHistory();
-    const { aktivEtikett, filterAndelPersonerIGrunnlag, filterGrunnlagPersonerMedAndeler } =
-        useTidslinje();
+    const {
+        aktivEtikett,
+        filterOgSorterAndelPersonerIGrunnlag,
+        filterOgSorterGrunnlagPersonerMedAndeler,
+    } = useTidslinje();
 
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
@@ -46,12 +49,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             : [];
     };
 
-    const grunnlagPersoner = filterGrunnlagPersonerMedAndeler(
+    const grunnlagPersoner = filterOgSorterGrunnlagPersonerMedAndeler(
         åpenBehandling.personer,
         åpenBehandling.personerMedAndelerTilkjentYtelse
     );
 
-    const tidslinjePersoner = filterAndelPersonerIGrunnlag(
+    const tidslinjePersoner = filterOgSorterAndelPersonerIGrunnlag(
         grunnlagPersoner,
         åpenBehandling.personerMedAndelerTilkjentYtelse
     );
