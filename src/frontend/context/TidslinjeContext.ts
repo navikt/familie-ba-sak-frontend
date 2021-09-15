@@ -107,7 +107,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                                   hentSisteDagIYearMonth(ytelsePeriode.stønadTom)
                               ),
                               id: `${personMedAndelerTilkjentYtelse.personIdent}_${index}`,
-                              status: 'suksess',
+                              status: ytelsePeriode.beløp > 0 ? 'suksess' : 'feil',
                           })
                       );
                   }
