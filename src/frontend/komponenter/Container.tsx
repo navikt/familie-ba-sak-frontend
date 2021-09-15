@@ -34,13 +34,6 @@ const Container: React.FC = () => {
                         />
                         <FagsakProvider>
                             <Switch>
-                                <Route
-                                    exact={true}
-                                    path={'/'}
-                                    render={() => {
-                                        return <Redirect from={'/'} to={'/oppgaver'} />;
-                                    }}
-                                />
                                 <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
                                 <Route exact={true} path="/oppgaver" component={Oppgaver} />
                                 <Route
@@ -50,6 +43,7 @@ const Container: React.FC = () => {
                                 />
                                 <Route path="/internstatistikk" component={Internstatistikk} />
                                 <Route path="/infotrygd" component={Infotrygd} />
+                                <Redirect to="/oppgaver" />
                             </Switch>
                         </FagsakProvider>
                     </main>

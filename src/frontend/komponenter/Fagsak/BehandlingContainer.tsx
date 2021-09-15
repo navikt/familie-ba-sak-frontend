@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Route, Switch, useHistory, useParams } from 'react-router';
+import { Redirect, Route, Switch, useHistory, useParams } from 'react-router';
 
 import AlertStripe from 'nav-frontend-alertstriper';
 
@@ -129,6 +129,10 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                                 />
                             );
                         }}
+                    />
+                    <Redirect
+                        from="/fagsak/:fagsakId/:behandlingsId/"
+                        to="/fagsak/:fagsakId/:behandlingsId"
                     />
                 </Switch>
             );
