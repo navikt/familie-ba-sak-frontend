@@ -15,7 +15,7 @@ export const parseIso8601String = (dato: FamilieIsoDate): DagMånedÅr => {
 
     // Dayjs brukes ikke til noe annet enn å fange ugyldige inputs
     if (!dayjsDato.isValid()) {
-        throw new Error(`Dato '${dato}' er ugyldig`);
+        throw new Error(`Dato er ugyldig`);
     }
 
     const år: number = parseInt(dato.substr(0, 4), 10);
@@ -23,15 +23,15 @@ export const parseIso8601String = (dato: FamilieIsoDate): DagMånedÅr => {
     const dag: number = parseInt(dato.substr(8, 10), 10);
 
     if (år < 1800 || år > 2500) {
-        throw new Error(`År fra dato '${dato}' er '${år}' og er sannsynligvis feil`);
+        throw new Error(`År fra dato er '${år}' og er sannsynligvis feil`);
     }
 
     if (måned < 1 || måned > 12) {
-        throw new Error(`Måned fra dato '${dato}' er '${måned}' og er sannsynligvis feil`);
+        throw new Error(`Måned fra dato er '${måned}' og er sannsynligvis feil`);
     }
 
     if (dag < 1 || dag > antallDagerIMåned({ år, måned: måned - 1 })) {
-        throw new Error(`Dag fra dato '${dato}' er '${dag}' og er sannsynligvis feil`);
+        throw new Error(`Dag fra dato er '${dag}' og er sannsynligvis feil`);
     }
 
     return {
