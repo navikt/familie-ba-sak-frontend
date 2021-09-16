@@ -127,9 +127,9 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                     <Radio
                         label={'Nei'}
                         name={'skal perioden utbetales til søker?'}
-                        checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
+                        checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
                         onChange={() =>
-                            skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
+                            skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
                         }
                         id={'nei-perioden-skal-ikke-utbetales-til-søker'}
                     />

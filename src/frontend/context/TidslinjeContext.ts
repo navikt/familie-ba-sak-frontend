@@ -67,8 +67,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         verdi: undefined,
     });
 
-    const periodeSkalUtbetalesTilSøker = useFelt<boolean | undefined>({
-        verdi: undefined,
+    const periodeSkalUtbetalesTilSøker = useFelt<boolean>({
+        verdi: false,
     });
 
     const årsak = useFelt<{ label: string; value: string } | undefined>({
@@ -84,7 +84,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             person: { label: string; value: string } | undefined;
             fom: string | undefined;
             tom: string | undefined;
-            periodeSkalUtbetalesTilSøker: boolean | undefined;
+            periodeSkalUtbetalesTilSøker: boolean;
             årsak: { label: string; value: string } | undefined;
             begrunnelse: string;
         },
