@@ -52,10 +52,17 @@ const useOpprettBehandling = (
         {
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
+            underkategori: BehandlingUnderkategori | '';
         },
         IFagsak
     >({
-        felter: { behandlingstype, behandlingsårsak },
+        felter: {
+            behandlingstype,
+            behandlingsårsak,
+            underkategori: useFelt<BehandlingUnderkategori | ''>({
+                verdi: BehandlingUnderkategori.ORDINÆR,
+            }),
+        },
         skjemanavn: 'Opprett behandling modal',
     });
 
@@ -97,7 +104,7 @@ const useOpprettBehandling = (
                             kategori: BehandlingKategori.NASJONAL,
                             navIdent: innloggetSaksbehandler?.navIdent,
                             søkersIdent,
-                            underkategori: BehandlingUnderkategori.ORDINÆR,
+                            underkategori: skjema.felter.underkategori.verdi,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',
