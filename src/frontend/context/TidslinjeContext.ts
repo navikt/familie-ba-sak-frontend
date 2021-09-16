@@ -2,10 +2,12 @@ import { useState } from 'react';
 
 import createUseContext from 'constate';
 
+import { useSkjema, useFelt } from '@navikt/familie-skjema';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
+import { IFagsak } from '../typer/fagsak';
 import { IGrunnlagPerson } from '../typer/person';
 import { sorterFødselsdato } from '../utils/formatter';
 import {
@@ -51,6 +53,45 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
         startDato: sisteDagIMåned(trekkFra(iDag(), 12, KalenderEnhet.MÅNED)),
         sluttDato: sisteDagIInneværendeMåned(),
+    });
+
+    const person = useFelt<{ label: string; value: string } | undefined>({
+        verdi: undefined,
+    });
+
+    const fom = useFelt<string | undefined>({
+        verdi: undefined,
+    });
+
+    const tom = useFelt<string | undefined>({
+        verdi: undefined,
+    });
+
+    const periodeSkalUtbetalesTilSøker = useFelt<boolean | undefined>({
+        verdi: undefined,
+    });
+
+    const årsak = useFelt<{ label: string; value: string } | undefined>({
+        verdi: undefined,
+    });
+
+    const begrunnelse = useFelt<string>({
+        verdi: '',
+    });
+
+    const { skjema } = useSkjema<
+        {
+            person: { label: string; value: string } | undefined;
+            fom: string | undefined;
+            tom: string | undefined;
+            periodeSkalUtbetalesTilSøker: boolean | undefined;
+            årsak: { label: string; value: string } | undefined;
+            begrunnelse: string;
+        },
+        IFagsak
+    >({
+        felter: { person, fom, tom, periodeSkalUtbetalesTilSøker, årsak, begrunnelse },
+        skjemanavn: 'Opprett tilbakekreving',
     });
 
     const genererFormatertÅrstall = () => {
@@ -165,6 +206,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         setInitiellAktivEtikettErSatt,
         filterOgSorterGrunnlagPersonerMedAndeler,
         filterOgSorterAndelPersonerIGrunnlag,
+        skjema,
     };
 });
 

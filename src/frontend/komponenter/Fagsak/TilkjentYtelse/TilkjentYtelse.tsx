@@ -1,15 +1,34 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
 
+import { Flatknapp } from 'nav-frontend-knapper';
+import { Element } from 'nav-frontend-typografi';
+
+import { Edit } from '@navikt/ds-icons';
+
+import { useApp } from '../../../context/AppContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import EndreUtbetaingsperiodeSkjema from './EndreUtbetalingsperiodeSkjema';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
+
+const EndreUtbetalingsperiode = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+`;
+
+const StyledEditIkon = styled(Edit)`
+    margin-right: 0.5rem;
+`;
 
 interface ITilkjentYtelseProps {
     fagsak: IFagsak;
@@ -26,6 +45,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         filterOgSorterAndelPersonerIGrunnlag,
         filterOgSorterGrunnlagPersonerMedAndeler,
     } = useTidslinje();
+    const { toggles } = useApp();
+
+    const [leggTilUtbetalingsendring, settLeggTilUtbetalingsendring] = useState<boolean>(false);
 
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
@@ -72,6 +94,16 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}
             />
+
+            {toggles.kanEndreUtbetalingsperiode && (
+                <EndreUtbetalingsperiode>
+                    <Flatknapp onClick={() => settLeggTilUtbetalingsendring(true)}>
+                        <StyledEditIkon />
+                        <Element>Endre utbetalingsperiode</Element>
+                    </Flatknapp>
+                </EndreUtbetalingsperiode>
+            )}
+
             {aktivEtikett && (
                 <Oppsummeringsboks
                     vedtaksperioder={filtrerPerioderForAktivEtikett(
@@ -79,6 +111,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     )}
                     aktivEtikett={aktivEtikett}
                 />
+            )}
+            {leggTilUtbetalingsendring && (
+                <EndreUtbetaingsperiodeSkjema åpenBehandling={åpenBehandling} />
             )}
         </Skjemasteg>
     );
