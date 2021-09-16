@@ -153,7 +153,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </FamilieSelect>
             )}
 
-            {underkategori && (
+            {underkategori && toggles[ToggleNavn.kanBehandleUtvidet] && (
                 <FamilieSelect
                     {...underkategori.hentNavBaseSkjemaProps(visFeilmeldinger)}
                     erLesevisning={erLesevisning}
