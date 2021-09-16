@@ -156,7 +156,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                     <Feilmelding>{hentOpplysningerRessurs.frontendFeilmelding}</Feilmelding>
                 )}
             </>
-            <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
+            <VedtakBegrunnelserProvider aktivVedtak={aktivVedtak}>
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             </VedtakBegrunnelserProvider>
             {uregistrerteBarn.length > 0 && (
