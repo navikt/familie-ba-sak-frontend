@@ -19,7 +19,6 @@ if (process.env.NODE_ENV !== 'development') {
     init({
         dsn: 'https://10239ce4baed4db79d080d85f08b5878@sentry.gc.nav.no/26',
         environment,
-        release: packageConfig.version,
         integrations: [new Integrations.BrowserTracing()],
         tracesSampleRate: 0.2,
     });
