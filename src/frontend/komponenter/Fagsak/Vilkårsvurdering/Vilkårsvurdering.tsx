@@ -62,7 +62,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     const { oppdaterRegisteropplysninger } = useFagsakRessurser();
 
     const registeropplysningerHentetTidpsunkt =
-        vilkårsvurdering[0].person.registerhistorikk?.hentetTidspunkt;
+        vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [hentOpplysningerRessurs, settHentOpplysningerRessurs] = React.useState(byggTomRessurs());

@@ -152,6 +152,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
         minstEnPeriodeharBegrunnetelseEllerFritekst() ||
         åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
+        åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
 
     const sendInn = () => {
@@ -211,13 +212,18 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         pdfdata={vedtaksbrev}
                     />
                     <Container>
-                        {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ? (
+                        {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
+                        åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ? (
                             <Alertstripe
                                 type="info"
                                 style={{ margin: '2rem 0 1rem 0' }}
                                 form="inline"
                             >
-                                <b>Vedtak om opphør på grunn av dødsfall er automatisk generert.</b>
+                                <b>
+                                    {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER
+                                        ? 'Vedtak om opphør på grunn av dødsfall er automatisk generert.'
+                                        : 'Behandling bruker manuelt skrevet vedtaksbrev. Forhåndsvis for å se brevet.'}
+                                </b>
                             </Alertstripe>
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>

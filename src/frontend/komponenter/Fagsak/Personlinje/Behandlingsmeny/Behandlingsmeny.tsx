@@ -82,7 +82,8 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
                         !erLesevisning() &&
                         (åpenBehandling.data.årsak === BehandlingÅrsak.NYE_OPPLYSNINGER ||
-                            åpenBehandling.data.årsak === BehandlingÅrsak.KLAGE) &&
+                            åpenBehandling.data.årsak === BehandlingÅrsak.KLAGE ||
+                            åpenBehandling.data.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV) &&
                         toggles[ToggleNavn.brukLeggTilBarnPåBehandling] && (
                             <li>
                                 <LeggTilBarnPBehandling

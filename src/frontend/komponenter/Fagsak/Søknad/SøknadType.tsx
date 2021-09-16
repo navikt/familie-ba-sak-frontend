@@ -7,9 +7,11 @@ import { Systemtittel } from 'nav-frontend-typografi';
 
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { BehandlingUnderkategori, underkategorier } from '../../../typer/behandling';
+import { ToggleNavn } from '../../../typer/toggles';
 
 const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
     margin: 2rem 0;
@@ -23,6 +25,7 @@ const SøknadType: React.FunctionComponent = () => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
     const { skjema } = useSøknad();
+    const { toggles } = useApp();
 
     const radioOnChange = (underKategori: BehandlingUnderkategori) => {
         skjema.felter.underkategori.validerOgSettFelt(underKategori);
@@ -41,12 +44,14 @@ const SøknadType: React.FunctionComponent = () => {
                 checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.ORDINÆR}
                 onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
             />
-            <StyledRadio
-                label={underkategorier[BehandlingUnderkategori.UTVIDET].navn}
-                name={'registrer-søknad-søknadtype'}
-                checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.UTVIDET}
-                onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
-            />
+            {toggles[ToggleNavn.kanBehandleUtvidet] && (
+                <StyledRadio
+                    label={underkategorier[BehandlingUnderkategori.UTVIDET].navn}
+                    name={'registrer-søknad-søknadtype'}
+                    checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.UTVIDET}
+                    onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
+                />
+            )}
         </StyledFamilieRadioGruppe>
     );
 };

@@ -21,7 +21,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     åpenBehandling,
 }) => {
     const history = useHistory();
-    const { aktivEtikett } = useTidslinje();
+    const {
+        aktivEtikett,
+        filterOgSorterAndelPersonerIGrunnlag,
+        filterOgSorterGrunnlagPersonerMedAndeler,
+    } = useTidslinje();
+
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
     };
@@ -44,6 +49,16 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             : [];
     };
 
+    const grunnlagPersoner = filterOgSorterGrunnlagPersonerMedAndeler(
+        åpenBehandling.personer,
+        åpenBehandling.personerMedAndelerTilkjentYtelse
+    );
+
+    const tidslinjePersoner = filterOgSorterAndelPersonerIGrunnlag(
+        grunnlagPersoner,
+        åpenBehandling.personerMedAndelerTilkjentYtelse
+    );
+
     return (
         <Skjemasteg
             senderInn={false}
@@ -53,7 +68,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
         >
-            <TilkjentYtelseTidslinje />
+            <TilkjentYtelseTidslinje
+                grunnlagPersoner={grunnlagPersoner}
+                tidslinjePersoner={tidslinjePersoner}
+            />
             {aktivEtikett && (
                 <Oppsummeringsboks
                     vedtaksperioder={filtrerPerioderForAktivEtikett(

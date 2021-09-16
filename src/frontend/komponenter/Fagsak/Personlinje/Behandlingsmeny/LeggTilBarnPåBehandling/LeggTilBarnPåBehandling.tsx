@@ -135,7 +135,9 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                         <LeggTilBarnLegend>
                             <Undertittel children={'Legg til barn'} />
                             <Hjelpetekst
-                                children={'Hjelpetekst her'}
+                                children={
+                                    'Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn som ikke lenger ligger på behandlingen fordi vi tidligere har avslått eller opphørt.'
+                                }
                                 style={{ marginLeft: '0.5rem' }}
                             />
                         </LeggTilBarnLegend>
