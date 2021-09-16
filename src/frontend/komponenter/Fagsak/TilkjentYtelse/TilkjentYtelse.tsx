@@ -13,6 +13,7 @@ import { useApp } from '../../../context/AppContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -95,7 +96,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 tidslinjePersoner={tidslinjePersoner}
             />
 
-            {toggles.kanEndreUtbetalingsperiode && (
+            {toggles[ToggleNavn.brukLeggTilBarnPåBehandling] && (
                 <EndreUtbetalingsperiode>
                     <Flatknapp onClick={() => settLeggTilUtbetalingsendring(true)}>
                         <StyledEditIkon />
