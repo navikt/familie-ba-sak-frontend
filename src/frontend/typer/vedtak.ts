@@ -19,12 +19,6 @@ export interface IRestVedtakBegrunnelse {
     tom?: string;
 }
 
-export interface IRestPostVedtakBegrunnelse {
-    fom: string;
-    tom?: string;
-    vedtakBegrunnelse: VedtakBegrunnelse;
-}
-
 export interface IRestPostFritekstVedtakBegrunnelser {
     fom?: string;
     tom?: string;
