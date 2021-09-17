@@ -7,6 +7,7 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 const merge = require('webpack-merge');
 
 const baseConfig = require('./webpack.common.js');
+const SentryCliPlugin = require('@sentry/webpack-plugin');
 
 const prodConfig = merge.mergeWithRules({
     module: {
@@ -18,6 +19,7 @@ const prodConfig = merge.mergeWithRules({
 })(baseConfig, {
     entry: [path.join(process.cwd(), 'src/frontend/index.tsx')],
     mode: 'production',
+    devtool: 'source-map',
     output: {
         path: path.join(process.cwd(), 'frontend_production'),
         filename: '[name].[contenthash].js',
@@ -51,6 +53,15 @@ const prodConfig = merge.mergeWithRules({
             test: /\.js$|\.css$|\.html$/,
             threshold: 10240,
             minRatio: 0.8,
+        }),
+        new SentryCliPlugin({
+            include: 'frontend_production',
+            org: 'nav',
+            project: 'familie-ba-sak-frontend',
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+            url: 'https://sentry.gc.nav.no/',
+            release: process.env.SENTRY_RELEASE,
+            urlPrefix: `~/assets`,
         }),
     ],
 });
