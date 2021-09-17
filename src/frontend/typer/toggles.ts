@@ -14,6 +14,7 @@ export enum ToggleNavn {
     brukLeggTilBarnPåBehandling = 'familie-ba-sak.behandling.legg-til-barn',
     kanManueltKorrigereMedVedtaksbrev = 'familie-ba-sak.behandling.korreksjon-vedtaksbrev',
     kanEndreUtbetalingsperiode = 'familie-ba-sak.behandling.kan-endre-utbetalingsperiode',
+    kanBehandleUtvidet = 'familie-ba-sak.behandling.utvidet',
 }
 
 export const alleTogglerAv = (): IToggles => {
