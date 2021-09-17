@@ -114,7 +114,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 />
             )}
             {leggTilUtbetalingsendring && (
-                <EndreUtbetaingsperiodeSkjema åpenBehandling={åpenBehandling} />
+                <EndreUtbetaingsperiodeSkjema
+                    åpenBehandling={åpenBehandling}
+                    avbrytEndringAvUtbetalingsperiode={() => settLeggTilUtbetalingsendring(false)}
+                />
             )}
         </Skjemasteg>
     );

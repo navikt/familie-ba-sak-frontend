@@ -43,10 +43,12 @@ const StyledFamilieDatovelger = styled(FamilieDatovelger)`
 
 interface IEndreUtbetaingsperiodeSkjemaProps {
     åpenBehandling: IBehandling;
+    avbrytEndringAvUtbetalingsperiode: () => void;
 }
 
 const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperiodeSkjemaProps> = ({
     åpenBehandling,
+    avbrytEndringAvUtbetalingsperiode,
 }) => {
     const { skjema } = useTidslinje();
 
@@ -171,6 +173,21 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                     }}
                 />
             </Feltmargin>
+            <Rad>
+                <StyledFerdigKnapp
+                    mini
+                    onClick={() =>
+                        alert(
+                            'Det er ikke laget funksjonalitet for å lagre endring av utbetalingsperiode.'
+                        )
+                    }
+                >
+                    Ferdig
+                </StyledFerdigKnapp>
+                <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
+                    Avbryt
+                </Flatknapp>
+            </Rad>
         </StyledSkjemaGruppe>
     );
 };
