@@ -73,6 +73,11 @@ export enum BehandlingUnderkategori {
     UTVIDET = 'UTVIDET',
 }
 
+export const behandlingUnderkategori: Record<BehandlingUnderkategori, string> = {
+    ORDINÆR: 'Ordinær',
+    UTVIDET: 'Utvidet',
+};
+
 export enum BehandlingSteg {
     HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
