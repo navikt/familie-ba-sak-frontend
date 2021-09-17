@@ -158,6 +158,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
         minstEnPeriodeharBegrunnetelseEllerFritekst() ||
         åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
+        åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
 
     const sendInn = () => {

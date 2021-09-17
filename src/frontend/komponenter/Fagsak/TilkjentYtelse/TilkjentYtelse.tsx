@@ -6,7 +6,6 @@ import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
-import { sorterFødselsdato } from '../../../utils/formatter';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
@@ -22,8 +21,11 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     åpenBehandling,
 }) => {
     const history = useHistory();
-    const { aktivEtikett, filterAndelPersonerIGrunnlag, filterGrunnlagPersonerMedAndeler } =
-        useTidslinje();
+    const {
+        aktivEtikett,
+        filterOgSorterAndelPersonerIGrunnlag,
+        filterOgSorterGrunnlagPersonerMedAndeler,
+    } = useTidslinje();
 
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
@@ -47,12 +49,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             : [];
     };
 
-    const grunnlagPersoner = filterGrunnlagPersonerMedAndeler(
+    const grunnlagPersoner = filterOgSorterGrunnlagPersonerMedAndeler(
         åpenBehandling.personer,
         åpenBehandling.personerMedAndelerTilkjentYtelse
-    ).sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato));
+    );
 
-    const tidslinjePersoner = filterAndelPersonerIGrunnlag(
+    const tidslinjePersoner = filterOgSorterAndelPersonerIGrunnlag(
         grunnlagPersoner,
         åpenBehandling.personerMedAndelerTilkjentYtelse
     );
