@@ -2988,10 +2988,10 @@ alphanum-sort@^1.0.0, alphanum-sort@^1.0.2:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-amplitude-js@^8.6.0:
-  version "8.6.0"
-  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.6.0.tgz#521bec51fe0f3dfcac929f335e249a40556cb654"
-  integrity sha512-5y9po4Dyf+92KFWzK/nyLNq/haQsA6uLDF88/i5Lp9IxdYryUtdHlA1H+0g35qHnbQLalM87qcA0SBoT5jujrQ==
+amplitude-js@^8.7.0:
+  version "8.7.0"
+  resolved "https://registry.yarnpkg.com/amplitude-js/-/amplitude-js-8.7.0.tgz#9c7d563bcaf8c74363a5cdf2e83918141d0d227d"
+  integrity sha512-NY5RGSjgm3VgVM/FSJR9OyzxoP6UGhjAgM3S3d6Ir+eZd1HGC5vq+RNhHWDUcFDd+gpi0U45gD9qhXcbiByPUA==
   dependencies:
     "@amplitude/ua-parser-js" "0.7.25"
     "@amplitude/utils" "^1.0.5"
@@ -8956,10 +8956,10 @@ node-releases@^1.1.75:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.75.tgz#6dd8c876b9897a1b8e5a02de26afa79bb54ebbfe"
   integrity sha512-Qe5OUajvqrqDSy6wrWFmMwfJ0jVgwiw4T3KqmbTcZ62qW0gQkheXYhcFM1+lOVcGUoRxcEcfyvFMAnDgaF1VWw==
 
-node@^16.6.1:
-  version "16.6.1"
-  resolved "https://registry.yarnpkg.com/node/-/node-16.6.1.tgz#97e0ea529eb11db1fda0eac4f02ccb7b7de71c3c"
-  integrity sha512-qlIQ5vkAAMP+T1bYivwngIqZlUzerPSeaeAQVUvyQ2XZ8WN86ZUdzcpkW/iuEnP9paNcpAsA4p9yCsfrdjG7YQ==
+node@^16.9.1:
+  version "16.9.1"
+  resolved "https://registry.yarnpkg.com/node/-/node-16.9.1.tgz#059e61d8b35f9eb5fcec12bc5e3b6b6fcd2beb2b"
+  integrity sha512-Oz2AIg5iUGjllkWLUk0OeF8fuIqoSVKwBv1RPzq1crlEPF/eg0u+sgBOrkfkSbhM/7JDUb6xatN8jVaUpSGVnA==
   dependencies:
     node-bin-setup "^1.0.0"
 
