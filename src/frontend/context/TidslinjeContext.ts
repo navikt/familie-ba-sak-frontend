@@ -7,6 +7,7 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
 import { IGrunnlagPerson } from '../typer/person';
+import { sorterFødselsdato } from '../utils/formatter';
 import {
     hentFørsteDagIYearMonth,
     hentSisteDagIYearMonth,
@@ -107,7 +108,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                                   hentSisteDagIYearMonth(ytelsePeriode.stønadTom)
                               ),
                               id: `${personMedAndelerTilkjentYtelse.personIdent}_${index}`,
-                              status: 'suksess',
+                              status: ytelsePeriode.beløp > 0 ? 'suksess' : 'feil',
                           })
                       );
                   }
@@ -115,30 +116,28 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
             : [[]];
     };
 
-    const mapPersonerMedAndelerTilkjentYtelseTilPersoner = (
+    const filterOgSorterGrunnlagPersonerMedAndeler = (
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IGrunnlagPerson[] => {
-        return personerMedAndelerTilkjentYtelse
-            .map((personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
-                return personer.find(
-                    (person: IGrunnlagPerson) =>
-                        person.personIdent === personMedAndelerTilkjentYtelse.personIdent
-                );
-            })
-            .reduce((acc: IGrunnlagPerson[], person) => {
-                if (person) {
-                    return [...acc, person];
-                }
-                return acc;
-            }, []);
+        personer.sort((personA, personB) =>
+            sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)
+        );
+        return personer.filter(
+            grunnlagPerson =>
+                personerMedAndelerTilkjentYtelse.length &&
+                personerMedAndelerTilkjentYtelse.some(
+                    personMedAndel => personMedAndel.personIdent === grunnlagPerson.personIdent
+                )
+        );
     };
 
-    const mapPersonerTilPersonerMedAndelerTilkjentYtelse = (
+    const filterOgSorterAndelPersonerIGrunnlag = (
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IPersonMedAndelerTilkjentYtelse[] => {
         return personer
+            .sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato))
             .map((person: IGrunnlagPerson) => {
                 return personerMedAndelerTilkjentYtelse.find(
                     (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) =>
@@ -164,8 +163,8 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         genererRader,
         initiellAktivEtikettErSatt,
         setInitiellAktivEtikettErSatt,
-        mapPersonerMedAndelerTilkjentYtelseTilPersoner,
-        mapPersonerTilPersonerMedAndelerTilkjentYtelse,
+        filterOgSorterGrunnlagPersonerMedAndeler,
+        filterOgSorterAndelPersonerIGrunnlag,
     };
 });
 
