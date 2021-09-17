@@ -32,7 +32,6 @@ import {
     IBehandling,
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { IRestVedtakBegrunnelse } from '../../../typer/vedtak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
@@ -73,7 +72,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
-    const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
     const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const hentVedtaksbrev = () => {
@@ -139,17 +137,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         );
     };
 
-    const minstEnPeriodeErBegrunnet = (vedtakBegrunnelser: IRestVedtakBegrunnelse[]) => {
-        const begrunnelsenErUtfylt = (vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-            vedtakBegrunnelse.begrunnelseType && vedtakBegrunnelse.begrunnelse;
-
-        return vedtakBegrunnelser.some((vedtakBegrunnelse: IRestVedtakBegrunnelse) =>
-            begrunnelsenErUtfylt(vedtakBegrunnelse)
-        );
-    };
-
     const kanSendeinnVedtak = () =>
-        (aktivVedtak && minstEnPeriodeErBegrunnet(aktivVedtak.begrunnelser)) ||
         minstEnPeriodeharBegrunnetelseEllerFritekst() ||
         åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||

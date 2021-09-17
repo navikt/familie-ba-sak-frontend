@@ -4,16 +4,11 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingResultat } from '../typer/behandling';
 import {
-    IRestVedtakBegrunnelse,
     IRestVedtakBegrunnelseTilknyttetVilkår,
     VedtakBegrunnelse,
     VedtakBegrunnelseType,
 } from '../typer/vedtak';
-import {
-    IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiode,
-    Vedtaksperiodetype,
-} from '../typer/vedtaksperiode';
+import { IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from '../typer/vedtaksperiode';
 import { VedtaksbegrunnelseTekster, VilkårType } from '../typer/vilkår';
 import {
     førsteDagIInneværendeMåned,
@@ -24,60 +19,6 @@ import {
     leggTil,
     TIDENES_MORGEN,
 } from './kalender';
-
-export const filtrerOgSorterPerioderMedBegrunnelseBehov = (
-    vedtaksperioder: Vedtaksperiode[],
-    fastsatteVedtakBegrunnelser: IRestVedtakBegrunnelse[],
-    erLesevisning: boolean
-): Vedtaksperiode[] => {
-    return vedtaksperioder
-        .slice()
-        .sort((a, b) =>
-            kalenderDiff(
-                kalenderDatoTilDate(kalenderDatoMedFallback(a.periodeFom, TIDENES_MORGEN)),
-                kalenderDatoTilDate(kalenderDatoMedFallback(b.periodeFom, TIDENES_MORGEN))
-            )
-        )
-        .filter((vedtaksperiode: Vedtaksperiode) => {
-            return (
-                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
-                vedtaksperiode.vedtaksperiodetype === Vedtaksperiodetype.OPPHØR
-            );
-        })
-        .filter((vedtaksperiode: Vedtaksperiode) => {
-            const vedtakBegrunnelserForPeriode = fastsatteVedtakBegrunnelser.filter(
-                (vedtakBegrunnelse: IRestVedtakBegrunnelse) => {
-                    return (
-                        vedtakBegrunnelse.begrunnelseType !== VedtakBegrunnelseType.AVSLAG &&
-                        vedtakBegrunnelse.fom === vedtaksperiode.periodeFom &&
-                        vedtakBegrunnelse.tom === vedtaksperiode.periodeTom
-                    );
-                }
-            );
-
-            if (erLesevisning) {
-                // Viser kun perioder som har begrunnelse dersom man er i lesemodus.
-                return !!vedtakBegrunnelserForPeriode.length;
-            } else {
-                // Fjern perioder hvor fom er mer enn 2 måneder frem i tid.
-                const periodeFom = kalenderDatoMedFallback(
-                    vedtaksperiode.periodeFom,
-                    TIDENES_MORGEN
-                );
-                const toMånederFremITid = leggTil(
-                    førsteDagIInneværendeMåned(),
-                    2,
-                    KalenderEnhet.MÅNED
-                );
-                return (
-                    kalenderDiff(
-                        kalenderDatoTilDate(periodeFom),
-                        kalenderDatoTilDate(toMånederFremITid)
-                    ) < 0
-                );
-            }
-        });
-};
 
 export const filtrerOgSorterPerioderMedBegrunnelseBehov2 = (
     vedtaksperioder: IVedtaksperiodeMedBegrunnelser[],

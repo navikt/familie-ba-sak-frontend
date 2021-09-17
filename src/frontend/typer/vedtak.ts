@@ -3,8 +3,6 @@ import { VilkårType } from './vilkår';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;
-    begrunnelser: IRestVedtakBegrunnelse[];
-    avslagBegrunnelser: IRestAvslagbegrunnelser[];
     vedtaksdato: string;
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     id: number;
