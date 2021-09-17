@@ -33,7 +33,7 @@ const StyledPersonvelger = styled(FamilieReactSelect)`
     max-width: 20rem;
 `;
 
-const Feltmarginer = styled.div`
+const Feltmargin = styled.div`
     margin-bottom: 2.5rem;
 `;
 
@@ -52,7 +52,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
 
     return (
         <StyledSkjemaGruppe legend={<SkjultLegend>Endre periode</SkjultLegend>}>
-            <Feltmarginer>
+            <Feltmargin>
                 <StyledPersonvelger
                     {...skjema.felter.person.hentNavBaseSkjemaProps(false)}
                     label={<Element>Velg hvem det gjelder</Element>}
@@ -72,9 +72,9 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                         label: person.personIdent,
                     }))}
                 />
-            </Feltmarginer>
+            </Feltmargin>
 
-            <Feltmarginer>
+            <Feltmargin>
                 <Element>Fastsett periode</Element>
                 <TilFraDatoRad>
                     <StyledFamilieDatovelger
@@ -108,9 +108,9 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                         erLesesvisning={false}
                     />
                 </TilFraDatoRad>
-            </Feltmarginer>
+            </Feltmargin>
 
-            <Feltmarginer>
+            <Feltmargin>
                 <FamilieRadioGruppe
                     legend={<Element>Skal perioden utbetales til søker?</Element>}
                     erLesevisning={false}
@@ -134,9 +134,9 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                         id={'nei-perioden-skal-ikke-utbetales-til-søker'}
                     />
                 </FamilieRadioGruppe>
-            </Feltmarginer>
+            </Feltmargin>
 
-            <Feltmarginer>
+            <Feltmargin>
                 {' '}
                 <FamilieReactSelect
                     {...skjema.felter.årsak.hentNavBaseSkjemaProps(false)}
@@ -157,9 +157,9 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                         label: årsak,
                     }))}
                 />
-            </Feltmarginer>
+            </Feltmargin>
 
-            <Feltmarginer>
+            <Feltmargin>
                 <FamilieTextarea
                     erLesevisning={false}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
@@ -170,7 +170,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                         skjema.felter.begrunnelse.validerOgSettFelt(event.target.value);
                     }}
                 />
-            </Feltmarginer>
+            </Feltmargin>
         </StyledSkjemaGruppe>
     );
 };
