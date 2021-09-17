@@ -19,15 +19,12 @@ import {
     AnnenVurderingType,
     Resultat,
     VedtaksbegrunnelseTekster,
-    VilkårType,
 } from '../../../../../typer/vilkår';
 import { IPeriode } from '../../../../../utils/kalender';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
-import { hentUtgjørendeVilkårImpl } from './useVedtakBegrunnelseMultiselect';
 
 export const useVilkårBegrunnelser = ({
     vedtaksperiodeMedBegrunnelser,
-    periode,
     åpenBehandling,
 }: {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
@@ -52,9 +49,6 @@ export const useVilkårBegrunnelser = ({
 
     const vedtakBegrunnelseTyperKnyttetTilVedtaksperiodetype =
         vedtaksperiodeTilVedtakBegrunnelseTyper();
-
-    const hentUtgjørendeVilkår = (begrunnelseType: VedtakBegrunnelseType): VilkårType[] =>
-        hentUtgjørendeVilkårImpl(begrunnelseType, åpenBehandling.personResultater, periode);
 
     const skalLeggeTilAndreBegrunnelse = (
         vedtakBegrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår
@@ -118,8 +112,6 @@ export const useVilkårBegrunnelser = ({
                       )
                   )
                   .reduce((acc: GroupType<ISelectOption>[], vedtakBegrunnelseType: string) => {
-                      const utgjørendeVilkårForPeriodeOgResultat: VilkårType[] =
-                          hentUtgjørendeVilkår(vedtakBegrunnelseType as VedtakBegrunnelseType);
                       return [
                           ...acc,
                           {
@@ -133,13 +125,9 @@ export const useVilkårBegrunnelser = ({
                                       (
                                           restVedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår
                                       ) => {
-                                          return restVedtakBegrunnelseTilknyttetVilkår.vilkår
-                                              ? utgjørendeVilkårForPeriodeOgResultat.includes(
-                                                    restVedtakBegrunnelseTilknyttetVilkår.vilkår
-                                                )
-                                              : skalLeggeTilAndreBegrunnelse(
-                                                    restVedtakBegrunnelseTilknyttetVilkår
-                                                );
+                                          return skalLeggeTilAndreBegrunnelse(
+                                              restVedtakBegrunnelseTilknyttetVilkår
+                                          );
                                       }
                                   )
                                   .map(
