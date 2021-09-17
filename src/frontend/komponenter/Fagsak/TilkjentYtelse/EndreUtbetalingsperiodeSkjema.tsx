@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
+import { Knapp, Flatknapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe, Radio } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
@@ -17,7 +18,7 @@ import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
-const TilFraDatoRad = styled.div`
+const Rad = styled.div`
     display: flex;
     flex-direction: row;
 `;
@@ -41,6 +42,14 @@ const StyledFamilieDatovelger = styled(FamilieDatovelger)`
     margin-right: 2rem;
 `;
 
+const StyledFerdigKnapp = styled(Knapp)`
+    margin-right: 0.5rem;
+`;
+
+const StyledFamilieTextarea = styled(FamilieTextarea)`
+    min-height: 8rem;
+`;
+
 interface IEndreUtbetaingsperiodeSkjemaProps {
     åpenBehandling: IBehandling;
     avbrytEndringAvUtbetalingsperiode: () => void;
@@ -53,7 +62,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
     const { skjema } = useTidslinje();
 
     return (
-        <StyledSkjemaGruppe legend={<SkjultLegend>Endre periode</SkjultLegend>}>
+        <StyledSkjemaGruppe>
             <Feltmargin>
                 <StyledPersonvelger
                     {...skjema.felter.person.hentNavBaseSkjemaProps(false)}
@@ -78,7 +87,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
 
             <Feltmargin>
                 <Element>Fastsett periode</Element>
-                <TilFraDatoRad>
+                <Rad>
                     <StyledFamilieDatovelger
                         id={'fom'}
                         placeholder={'Velg f.o.m-dato'}
@@ -109,7 +118,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                         valgtDato={skjema.felter.tom.verdi}
                         erLesesvisning={false}
                     />
-                </TilFraDatoRad>
+                </Rad>
             </Feltmargin>
 
             <Feltmargin>
@@ -162,7 +171,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
             </Feltmargin>
 
             <Feltmargin>
-                <FamilieTextarea
+                <StyledFamilieTextarea
                     erLesevisning={false}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     label={'Begrunnelse'}
