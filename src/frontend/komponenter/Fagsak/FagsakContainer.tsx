@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
@@ -120,6 +120,10 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             render={() => {
                                                 return <BehandlingContainer fagsak={fagsak.data} />;
                                             }}
+                                        />
+                                        <Redirect
+                                            from="/fagsak/:fagsakId"
+                                            to="/fagsak/:fagsakId/saksoversikt"
                                         />
                                     </Switch>
                                 </div>
