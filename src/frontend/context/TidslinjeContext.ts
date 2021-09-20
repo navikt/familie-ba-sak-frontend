@@ -20,6 +20,7 @@ import {
     sisteDagIInneværendeMåned,
     sisteDagIMåned,
     trekkFra,
+    FamilieIsoDate,
 } from '../utils/kalender';
 
 export interface ITidslinjeVindu {
@@ -55,30 +56,6 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         sluttDato: sisteDagIInneværendeMåned(),
     });
 
-    const person = useFelt<{ label: string; value: string } | undefined>({
-        verdi: undefined,
-    });
-
-    const fom = useFelt<string | undefined>({
-        verdi: undefined,
-    });
-
-    const tom = useFelt<string | undefined>({
-        verdi: undefined,
-    });
-
-    const periodeSkalUtbetalesTilSøker = useFelt<boolean>({
-        verdi: false,
-    });
-
-    const årsak = useFelt<{ label: string; value: string } | undefined>({
-        verdi: undefined,
-    });
-
-    const begrunnelse = useFelt<string>({
-        verdi: '',
-    });
-
     const { skjema } = useSkjema<
         {
             person: { label: string; value: string } | undefined;
@@ -90,7 +67,26 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         },
         IFagsak
     >({
-        felter: { person, fom, tom, periodeSkalUtbetalesTilSøker, årsak, begrunnelse },
+        felter: {
+            person: useFelt<{ label: string; value: string } | undefined>({
+                verdi: undefined,
+            }),
+            fom: useFelt<FamilieIsoDate | undefined>({
+                verdi: undefined,
+            }),
+            tom: useFelt<FamilieIsoDate | undefined>({
+                verdi: undefined,
+            }),
+            periodeSkalUtbetalesTilSøker: useFelt<boolean>({
+                verdi: false,
+            }),
+            årsak: useFelt<{ label: string; value: string } | undefined>({
+                verdi: undefined,
+            }),
+            begrunnelse: useFelt<string>({
+                verdi: '',
+            }),
+        },
         skjemanavn: 'Opprett tilbakekreving',
     });
 
