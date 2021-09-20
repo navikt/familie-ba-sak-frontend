@@ -172,7 +172,6 @@ export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => 
 };
 
 export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) => {
-    // TODO: legge inn bedre feilmelding
     if (avhengigheter?.vilkårType === VilkårType.UTVIDET_BARNETRYGD) {
         return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må fylle inn en begrunnelse');
     }
