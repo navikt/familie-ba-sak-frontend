@@ -14,7 +14,7 @@ import {
     FamilieReactSelect,
 } from '@navikt/familie-form-elements';
 
-import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
+import { useEndreUtbetalingAndel } from '../../../context/EndreUtbetalingAndelContext';
 import { IBehandling } from '../../../typer/behandling';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
@@ -56,11 +56,11 @@ interface IEndretUtbetalingAndelSkjemaProps {
     avbrytEndringAvUtbetalingsperiode: () => void;
 }
 
-const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
+const EndreUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
     avbrytEndringAvUtbetalingsperiode,
 }) => {
-    const { skjema } = useEndretUtbetalingAndel();
+    const { skjema } = useEndreUtbetalingAndel();
 
     return (
         <StyledSkjemaGruppe>
@@ -201,4 +201,4 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     );
 };
 
-export default EndretUtbetalingAndelSkjema;
+export default EndreUtbetalingAndelSkjema;
