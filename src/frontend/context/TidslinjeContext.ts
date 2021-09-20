@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import createUseContext from 'constate';
 
+import { OptionType } from '@navikt/familie-form-elements';
 import { useSkjema, useFelt } from '@navikt/familie-skjema';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
@@ -58,11 +59,11 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
 
     const { skjema } = useSkjema<
         {
-            person: { label: string; value: string } | undefined;
+            person: OptionType | undefined;
             fom: string | undefined;
             tom: string | undefined;
             periodeSkalUtbetalesTilSøker: boolean;
-            årsak: { label: string; value: string } | undefined;
+            årsak: OptionType | undefined;
             begrunnelse: string;
         },
         IFagsak
