@@ -103,11 +103,11 @@ interface IProps {
 const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
     switch (journalposttype) {
         case Journalposttype.I:
-            return <RightFilled />;
+            return <RightFilled title="Inngående" />;
         case Journalposttype.U:
-            return <LeftFilled />;
+            return <LeftFilled title="Utgående" />;
         case Journalposttype.N:
-            return <DownFilled />;
+            return <DownFilled title="Notat" />;
     }
 };
 
