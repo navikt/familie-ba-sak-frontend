@@ -23,7 +23,7 @@ import { IPersonInfo } from '../../../typer/person';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
 import {
     formaterFagsak,
-    hentDatoMottatt,
+    hentDatoRegistrertSendt,
     hentSorteringsknappCss,
     hentSorterteJournalposter,
     Sorteringsrekkefølge,
@@ -175,7 +175,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                             <Th>Inn/ut</Th>
                             <Th className={hentSorteringsknappCss(sortering)}>
                                 <button onClick={() => settNesteSorteringsrekkefølge()}>
-                                    Dato mottatt
+                                    Registrert/sendt
                                 </button>
                             </Th>
 
@@ -208,7 +208,10 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                 : ''
                                         }
                                     >
-                                        {hentDatoMottatt(journalpost.relevanteDatoer)}
+                                        {hentDatoRegistrertSendt(
+                                            journalpost.relevanteDatoer,
+                                            journalpost.journalposttype
+                                        )}
                                     </Td>
 
                                     <Td>
