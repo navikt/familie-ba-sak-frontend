@@ -64,13 +64,15 @@ export const hentDatoRegistrertSendt = (
     relevanteDatoer: IJournalpostRelevantDato[],
     journalposttype: string
 ) => {
-    const datotype =
-        journalposttype === 'I'
-            ? JournalpostDatotype.DATO_REGISTRERT
-            : journalposttype === 'U'
-            ? JournalpostDatotype.DATO_EKSPEDERT
-            : JournalpostDatotype.DATO_JOURNALFOERT;
-    const datoMottatt = relevanteDatoer.find(dato => dato.datotype === datotype)?.dato;
+    const datoMottatt = relevanteDatoer.find(dato => {
+        if (journalposttype === 'I') {
+            return dato.datotype === JournalpostDatotype.DATO_REGISTRERT;
+        } else if (journalposttype === 'U') {
+            return dato.datotype === JournalpostDatotype.DATO_EKSPEDERT;
+        } else {
+            return dato.datotype === JournalpostDatotype.DATO_JOURNALFOERT;
+        }
+    })?.dato;
 
     return datoMottatt ? formaterIsoDato(datoMottatt, datoformat.DATO_TID) : '-';
 };
