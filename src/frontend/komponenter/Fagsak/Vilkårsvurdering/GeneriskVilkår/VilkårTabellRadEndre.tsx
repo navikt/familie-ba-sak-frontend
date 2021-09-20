@@ -202,6 +202,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     const erBegrunnelsePåkrevd = (): boolean =>
+        redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
         redigerbartVilkår.verdi.erSkjønnsmessigVurdert ||
         (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert) ||
         (toggles[ToggleNavn.brukErDeltBosted] && redigerbartVilkår.verdi.erDeltBosted);
@@ -277,29 +278,36 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         />
                     )}
 
-                <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
-                    <SkjønnsvurderingCheckbox
-                        redigerbartVilkår={redigerbartVilkår}
-                        settRedigerbartVilkår={settRedigerbartVilkår}
-                        settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                    />
-                    {toggles[ToggleNavn.medlemskap] &&
-                        redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
-                            <MedlemskapCheckbox
-                                redigerbartVilkår={redigerbartVilkår}
-                                settRedigerbartVilkår={settRedigerbartVilkår}
-                                settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                            />
-                        )}
-                    {toggles[ToggleNavn.brukErDeltBosted] &&
-                        redigerbartVilkår.verdi.vilkårType === VilkårType.BOR_MED_SØKER && (
-                            <DeltBostedCheckbox
-                                redigerbartVilkår={redigerbartVilkår}
-                                settRedigerbartVilkår={settRedigerbartVilkår}
-                                settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                            />
-                        )}
-                </CheckboxGruppe>
+                {redigerbartVilkår.verdi.vilkårType !== VilkårType.UTVIDET_BARNETRYGD && (
+                    <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
+                        <SkjønnsvurderingCheckbox
+                            redigerbartVilkår={redigerbartVilkår}
+                            settRedigerbartVilkår={settRedigerbartVilkår}
+                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                        />
+
+                        {toggles[ToggleNavn.medlemskap] &&
+                            redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
+                                <MedlemskapCheckbox
+                                    redigerbartVilkår={redigerbartVilkår}
+                                    settRedigerbartVilkår={settRedigerbartVilkår}
+                                    settVisFeilmeldingerForEttVilkår={
+                                        settVisFeilmeldingerForEttVilkår
+                                    }
+                                />
+                            )}
+                        {toggles[ToggleNavn.brukErDeltBosted] &&
+                            redigerbartVilkår.verdi.vilkårType === VilkårType.BOR_MED_SØKER && (
+                                <DeltBostedCheckbox
+                                    redigerbartVilkår={redigerbartVilkår}
+                                    settRedigerbartVilkår={settRedigerbartVilkår}
+                                    settVisFeilmeldingerForEttVilkår={
+                                        settVisFeilmeldingerForEttVilkår
+                                    }
+                                />
+                            )}
+                    </CheckboxGruppe>
+                )}
 
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
