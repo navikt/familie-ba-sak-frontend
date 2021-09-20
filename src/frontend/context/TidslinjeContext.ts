@@ -88,7 +88,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                 verdi: '',
             }),
         },
-        skjemanavn: 'Opprett tilbakekreving',
+        skjemanavn: 'Endre utbetalingsperiode',
     });
 
     const genererFormatertÅrstall = () => {
