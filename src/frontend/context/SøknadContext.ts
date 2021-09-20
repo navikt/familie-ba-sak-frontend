@@ -64,7 +64,10 @@ const [SøknadProvider, useSøknad] = createUseContext(
         >({
             felter: {
                 underkategori: useFelt<BehandlingUnderkategori>({
-                    verdi: BehandlingUnderkategori.ORDINÆR,
+                    verdi:
+                        åpenBehandling.underkategori === BehandlingUnderkategori.UTVIDET
+                            ? BehandlingUnderkategori.UTVIDET
+                            : BehandlingUnderkategori.ORDINÆR,
                 }),
                 barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
                     verdi: [],
