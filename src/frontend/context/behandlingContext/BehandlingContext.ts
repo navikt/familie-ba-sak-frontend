@@ -29,6 +29,7 @@ import {
     BehandlingSteg,
     IBehandling,
 } from '../../typer/behandling';
+import { harTilgangTilEnhet } from '../../typer/enhet';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
 import { hentBehandlingPåFagsak } from '../../utils/fagsak';
@@ -136,9 +137,18 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const erLesevisning = (): boolean => {
         const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
+        const saksbehandlerHarTilgangTilEnhet = harTilgangTilEnhet(
+            hentDataFraRessurs(åpenBehandling)?.arbeidsfordelingPåBehandling.behandlendeEnhetId ??
+                '',
+            innloggetSaksbehandler?.groups ?? []
+        );
         const steg = hentStegPåÅpenBehandling();
 
-        return saksbehandlerHarKunLesevisning(innloggetSaksbehandlerSkrivetilgang, steg);
+        return saksbehandlerHarKunLesevisning(
+            innloggetSaksbehandlerSkrivetilgang,
+            saksbehandlerHarTilgangTilEnhet,
+            steg
+        );
     };
 
     const automatiskNavigeringTilSideForSteg = () => {
