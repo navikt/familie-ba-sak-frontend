@@ -14,13 +14,14 @@ import {
     FamilieReactSelect,
 } from '@navikt/familie-form-elements';
 
-import { useTidslinje } from '../../../context/TidslinjeContext';
+import { useEndreUtbetalingsperiode } from '../../../context/EndreUtbetalinsperiodeContext';
 import { IBehandling } from '../../../typer/behandling';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
-const Rad = styled.div`
+const Knapperad = styled.div`
     display: flex;
     flex-direction: row;
+    margin: 1rem 0;
 `;
 
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
@@ -59,7 +60,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
     åpenBehandling,
     avbrytEndringAvUtbetalingsperiode,
 }) => {
-    const { skjema } = useTidslinje();
+    const { skjema } = useEndreUtbetalingsperiode();
 
     return (
         <StyledSkjemaGruppe>
@@ -87,7 +88,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
 
             <Feltmargin>
                 <Element>Fastsett periode</Element>
-                <Rad>
+                <Knapperad>
                     <StyledFamilieDatovelger
                         id={'fom'}
                         placeholder={'Velg f.o.m-dato'}
@@ -118,7 +119,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                         valgtDato={skjema.felter.tom.verdi}
                         erLesesvisning={false}
                     />
-                </Rad>
+                </Knapperad>
             </Feltmargin>
 
             <Feltmargin>
@@ -148,7 +149,6 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
             </Feltmargin>
 
             <Feltmargin>
-                {' '}
                 <FamilieReactSelect
                     {...skjema.felter.årsak.hentNavBaseSkjemaProps(false)}
                     label={<Element>Årsak</Element>}
@@ -182,7 +182,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                     }}
                 />
             </Feltmargin>
-            <Rad>
+            <Knapperad>
                 <StyledFerdigKnapp
                     mini
                     onClick={() =>
@@ -196,7 +196,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                 <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
                     Avbryt
                 </Flatknapp>
-            </Rad>
+            </Knapperad>
         </StyledSkjemaGruppe>
     );
 };

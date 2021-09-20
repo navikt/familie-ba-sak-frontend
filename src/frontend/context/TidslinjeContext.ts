@@ -2,13 +2,10 @@ import { useState } from 'react';
 
 import createUseContext from 'constate';
 
-import { OptionType } from '@navikt/familie-form-elements';
-import { useSkjema, useFelt } from '@navikt/familie-skjema';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
 import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
-import { IFagsak } from '../typer/fagsak';
 import { IGrunnlagPerson } from '../typer/person';
 import { sorterFødselsdato } from '../utils/formatter';
 import {
@@ -21,7 +18,6 @@ import {
     sisteDagIInneværendeMåned,
     sisteDagIMåned,
     trekkFra,
-    FamilieIsoDate,
 } from '../utils/kalender';
 
 export interface ITidslinjeVindu {
@@ -55,40 +51,6 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         vindu: tidslinjeVinduer[TidslinjeVindu.ETT_ÅR],
         startDato: sisteDagIMåned(trekkFra(iDag(), 12, KalenderEnhet.MÅNED)),
         sluttDato: sisteDagIInneværendeMåned(),
-    });
-
-    const { skjema } = useSkjema<
-        {
-            person: OptionType | undefined;
-            fom: string | undefined;
-            tom: string | undefined;
-            periodeSkalUtbetalesTilSøker: boolean;
-            årsak: OptionType | undefined;
-            begrunnelse: string;
-        },
-        IFagsak
-    >({
-        felter: {
-            person: useFelt<{ label: string; value: string } | undefined>({
-                verdi: undefined,
-            }),
-            fom: useFelt<FamilieIsoDate | undefined>({
-                verdi: undefined,
-            }),
-            tom: useFelt<FamilieIsoDate | undefined>({
-                verdi: undefined,
-            }),
-            periodeSkalUtbetalesTilSøker: useFelt<boolean>({
-                verdi: false,
-            }),
-            årsak: useFelt<{ label: string; value: string } | undefined>({
-                verdi: undefined,
-            }),
-            begrunnelse: useFelt<string>({
-                verdi: '',
-            }),
-        },
-        skjemanavn: 'Endre utbetalingsperiode',
     });
 
     const genererFormatertÅrstall = () => {
@@ -203,7 +165,6 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         setInitiellAktivEtikettErSatt,
         filterOgSorterGrunnlagPersonerMedAndeler,
         filterOgSorterAndelPersonerIGrunnlag,
-        skjema,
     };
 });
 
