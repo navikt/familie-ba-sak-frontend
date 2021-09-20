@@ -13,7 +13,7 @@ export enum ToggleNavn {
     brukBegrunnelserFraSanity = 'familie-ba-sak.behandling.begrunnelse-fra-sanity',
     brukLeggTilBarnPåBehandling = 'familie-ba-sak.behandling.legg-til-barn',
     kanManueltKorrigereMedVedtaksbrev = 'familie-ba-sak.behandling.korreksjon-vedtaksbrev',
-    kanEndreUtbetalingAndel = 'familie-ba-sak.behandling.kan-endre-utbetalingsperiode',
+    kanEndretUtbetalingAndel = 'familie-ba-sak.behandling.kan-endre-utbetalingsperiode',
     kanBehandleUtvidet = 'familie-ba-sak.behandling.utvidet',
 }
 

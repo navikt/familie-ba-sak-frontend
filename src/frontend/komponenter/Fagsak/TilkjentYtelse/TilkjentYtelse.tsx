@@ -17,7 +17,7 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import EndreUtbetalingAndelSkjema from './EndreUtbetalingAndelSkjema';
+import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 
@@ -114,7 +114,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 />
             )}
             {leggTilUtbetalingsendring && (
-                <EndreUtbetalingAndelSkjema
+                <EndretUtbetalingAndelSkjema
                     åpenBehandling={åpenBehandling}
                     avbrytEndringAvUtbetalingsperiode={() => settLeggTilUtbetalingsendring(false)}
                 />
