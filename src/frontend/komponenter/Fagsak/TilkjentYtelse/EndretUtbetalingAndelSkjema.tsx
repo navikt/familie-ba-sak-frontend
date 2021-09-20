@@ -14,7 +14,7 @@ import {
     FamilieReactSelect,
 } from '@navikt/familie-form-elements';
 
-import { useEndreUtbetalingsperiode } from '../../../context/EndreUtbetalinsperiodeContext';
+import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import { IBehandling } from '../../../typer/behandling';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
@@ -51,16 +51,16 @@ const StyledFamilieTextarea = styled(FamilieTextarea)`
     min-height: 8rem;
 `;
 
-interface IEndreUtbetaingsperiodeSkjemaProps {
+interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     avbrytEndringAvUtbetalingsperiode: () => void;
 }
 
-const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperiodeSkjemaProps> = ({
+const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
     avbrytEndringAvUtbetalingsperiode,
 }) => {
-    const { skjema } = useEndreUtbetalingsperiode();
+    const { skjema } = useEndretUtbetalingAndel();
 
     return (
         <StyledSkjemaGruppe>
@@ -87,14 +87,14 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
             </Feltmargin>
 
             <Feltmargin>
-                <Element>Fastsett periode</Element>
+                <Element>Fastsett andelsperiode</Element>
                 <Knapperad>
                     <StyledFamilieDatovelger
                         id={'fom'}
                         placeholder={'Velg f.o.m-dato'}
                         label={
                             <>
-                                <SkjultLegend>Fastsett periode </SkjultLegend>
+                                <SkjultLegend>Fastsett andelsperiode </SkjultLegend>
                                 <Normaltekst>F.o.m</Normaltekst>
                             </>
                         }
@@ -109,7 +109,7 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
                         placeholder={'Velg t.o.m-dato'}
                         label={
                             <>
-                                <SkjultLegend>Fastsett periode </SkjultLegend>
+                                <SkjultLegend>Fastsett andelsperiode </SkjultLegend>
                                 <Normaltekst>T.o.m</Normaltekst>
                             </>
                         }
@@ -201,4 +201,4 @@ const EndreUtbetaingsperiodeSkjema: React.FunctionComponent<IEndreUtbetaingsperi
     );
 };
 
-export default EndreUtbetaingsperiodeSkjema;
+export default EndretUtbetalingAndelSkjema;

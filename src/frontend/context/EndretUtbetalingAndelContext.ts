@@ -6,7 +6,7 @@ import { useSkjema, useFelt } from '@navikt/familie-skjema';
 import { IFagsak } from '../typer/fagsak';
 import { FamilieIsoDate } from '../utils/kalender';
 
-const [EndreUtbetalingsperiodePriovider, useEndreUtbetalingsperiode] = createUseContext(() => {
+const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseContext(() => {
     const { skjema } = useSkjema<
         {
             person: OptionType | undefined;
@@ -46,4 +46,4 @@ const [EndreUtbetalingsperiodePriovider, useEndreUtbetalingsperiode] = createUse
     };
 });
 
-export { EndreUtbetalingsperiodePriovider, useEndreUtbetalingsperiode };
+export { EndretUtbetalingAndelProvider, useEndretUtbetalingAndel };

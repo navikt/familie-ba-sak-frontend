@@ -17,11 +17,11 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import EndreUtbetaingsperiodeSkjema from './EndreUtbetalingsperiodeSkjema';
+import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 
-const EndreUtbetalingsperiode = styled.div`
+const EndretUtbetalingAndel = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-bottom: 0.5rem;
@@ -97,12 +97,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             />
 
             {toggles[ToggleNavn.brukLeggTilBarnPåBehandling] && (
-                <EndreUtbetalingsperiode>
+                <EndretUtbetalingAndel>
                     <Flatknapp mini onClick={() => settLeggTilUtbetalingsendring(true)}>
                         <StyledEditIkon />
-                        <Element>Endre utbetalingsperiode</Element>
+                        <Element>Endre utbetaling andel</Element>
                     </Flatknapp>
-                </EndreUtbetalingsperiode>
+                </EndretUtbetalingAndel>
             )}
 
             {aktivEtikett && (
@@ -114,7 +114,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 />
             )}
             {leggTilUtbetalingsendring && (
-                <EndreUtbetaingsperiodeSkjema
+                <EndretUtbetalingAndelSkjema
                     åpenBehandling={åpenBehandling}
                     avbrytEndringAvUtbetalingsperiode={() => settLeggTilUtbetalingsendring(false)}
                 />
