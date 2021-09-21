@@ -1,3 +1,5 @@
+import { ISODateString } from '@navikt/familie-form-elements';
+
 import { IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from './vedtaksperiode';
 import { VilkårType } from './vilkår';
 
@@ -42,6 +44,16 @@ export interface IRestVedtakBegrunnelseTilknyttetVilkår {
     id: VedtakBegrunnelse;
     navn: string;
     vilkår?: VilkårType;
+}
+
+export interface IRestEndretUtbetalingAndel {
+    id?: number;
+    personIdent: string;
+    prosent: number;
+    fom: ISODateString;
+    tom: ISODateString;
+    arsak: string;
+    begrunnelse?: string;
 }
 
 export interface IRestAvslagbegrunnelser {
