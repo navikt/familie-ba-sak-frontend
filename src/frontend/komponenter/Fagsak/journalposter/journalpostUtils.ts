@@ -60,10 +60,19 @@ export const mapFagsystemkodeTilTekst = (kode: string | undefined) => {
     }
 };
 
-export const hentDatoMottatt = (relevanteDatoer: IJournalpostRelevantDato[]) => {
-    const datoMottatt = relevanteDatoer.find(
-        dato => dato.datotype === JournalpostDatotype.DATO_REGISTRERT
-    )?.dato;
+export const hentDatoRegistrertSendt = (
+    relevanteDatoer: IJournalpostRelevantDato[],
+    journalposttype: string
+) => {
+    const datoMottatt = relevanteDatoer.find(dato => {
+        if (journalposttype === 'I') {
+            return dato.datotype === JournalpostDatotype.DATO_REGISTRERT;
+        } else if (journalposttype === 'U') {
+            return dato.datotype === JournalpostDatotype.DATO_EKSPEDERT;
+        } else {
+            return dato.datotype === JournalpostDatotype.DATO_JOURNALFOERT;
+        }
+    })?.dato;
 
     return datoMottatt ? formaterIsoDato(datoMottatt, datoformat.DATO_TID) : '-';
 };

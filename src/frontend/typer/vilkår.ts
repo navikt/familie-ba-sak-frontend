@@ -37,6 +37,7 @@ export enum VilkårType {
     GIFT_PARTNERSKAP = 'GIFT_PARTNERSKAP',
     BOSATT_I_RIKET = 'BOSATT_I_RIKET',
     LOVLIG_OPPHOLD = 'LOVLIG_OPPHOLD',
+    UTVIDET_BARNETRYGD = 'UTVIDET_BARNETRYGD',
 }
 
 // Vilkårsvurdering typer for ui
@@ -175,6 +176,14 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
         tittel: 'Lovlig opphold',
         spørsmål: (part?: string) => `Har ${part} lovlig opphold?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
+    },
+    UTVIDET_BARNETRYGD: {
+        beskrivelse: 'utvidet barnetrygd',
+        key: 'UTVIDET_BARNETRYGD',
+        lovreferanse: '§ 9',
+        tittel: 'Utvidet barnetrygd',
+        spørsmål: () => 'Foreligger det rett på utvidet barnetrygd?',
+        parterDetteGjelderFor: [PersonType.SØKER],
     },
 };
 

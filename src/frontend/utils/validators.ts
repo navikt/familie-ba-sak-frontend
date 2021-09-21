@@ -9,7 +9,7 @@ import {
 
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
-import { Resultat } from '../typer/vilkår';
+import { Resultat, VilkårType } from '../typer/vilkår';
 import {
     erEtter,
     erFør,
@@ -172,6 +172,10 @@ export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => 
 };
 
 export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) => {
+    if (avhengigheter?.vilkårType === VilkårType.UTVIDET_BARNETRYGD) {
+        return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må fylle inn en begrunnelse');
+    }
+
     if (
         felt.verdi.length > 0 ||
         !(

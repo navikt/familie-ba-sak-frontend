@@ -153,32 +153,36 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </FamilieSelect>
             )}
 
-            {underkategori && toggles[ToggleNavn.kanBehandleUtvidet] && (
-                <FamilieSelect
-                    {...underkategori.hentNavBaseSkjemaProps(visFeilmeldinger)}
-                    erLesevisning={erLesevisning}
-                    name={'Behandlingsårsak'}
-                    label={'Velg underkategori'}
-                    onChange={(event: React.ChangeEvent<BehandlingUnderkategoriSelect>): void => {
-                        underkategori.onChange(event.target.value);
-                    }}
-                >
-                    <option disabled={true} value={''}>
-                        Velg
-                    </option>
-                    {Object.values(BehandlingUnderkategori).map(mapUnderkategori => {
-                        return (
-                            <option
-                                key={mapUnderkategori}
-                                aria-selected={underkategori.verdi === mapUnderkategori}
-                                value={mapUnderkategori}
-                            >
-                                {behandlingUnderkategori[mapUnderkategori]}
-                            </option>
-                        );
-                    })}
-                </FamilieSelect>
-            )}
+            {underkategori &&
+                behandlingsårsak.verdi === BehandlingÅrsak.SØKNAD &&
+                toggles[ToggleNavn.kanBehandleUtvidet] && (
+                    <FamilieSelect
+                        {...underkategori.hentNavBaseSkjemaProps(visFeilmeldinger)}
+                        erLesevisning={erLesevisning}
+                        name={'Behandlingsårsak'}
+                        label={'Velg underkategori'}
+                        onChange={(
+                            event: React.ChangeEvent<BehandlingUnderkategoriSelect>
+                        ): void => {
+                            underkategori.onChange(event.target.value);
+                        }}
+                    >
+                        <option disabled={true} value={''}>
+                            Velg
+                        </option>
+                        {Object.values(BehandlingUnderkategori).map(mapUnderkategori => {
+                            return (
+                                <option
+                                    key={mapUnderkategori}
+                                    aria-selected={underkategori.verdi === mapUnderkategori}
+                                    value={mapUnderkategori}
+                                >
+                                    {behandlingUnderkategori[mapUnderkategori]}
+                                </option>
+                            );
+                        })}
+                    </FamilieSelect>
+                )}
         </>
     );
 };
