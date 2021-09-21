@@ -1,47 +1,54 @@
 import constate from 'constate';
 
-import { ISODateString, OptionType } from '@navikt/familie-form-elements';
+import { OptionType } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { useSkjema, useFelt } from '@navikt/familie-skjema';
+import { useSkjema, useFelt, feil, ok } from '@navikt/familie-skjema';
 
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { IRestEndretUtbetalingAndel } from '../typer/vedtak';
+import { ÅrsakOption } from '../typer/utbetalingAndel';
 import { FamilieIsoDate } from '../utils/kalender';
 
 interface IProps {
     åpenBehandling: IBehandling;
 }
+
 const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = constate(
     ({ åpenBehandling }: IProps) => {
-        const { request } = useHttp();
-
-        const { skjema } = useSkjema<
+        const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
             {
                 person: OptionType | undefined;
                 fom: string | undefined;
                 tom: string | undefined;
                 periodeSkalUtbetalesTilSøker: boolean;
-                årsak: OptionType | undefined;
+                årsak: ÅrsakOption | undefined;
                 begrunnelse: string;
             },
             IFagsak
         >({
             felter: {
-                person: useFelt<{ label: string; value: string } | undefined>({
+                person: useFelt<OptionType | undefined>({
                     verdi: undefined,
+                    valideringsfunksjon: felt =>
+                        felt !== null ? ok(felt) : feil(felt, 'Du må velge en person'),
                 }),
                 fom: useFelt<FamilieIsoDate | undefined>({
                     verdi: undefined,
+                    valideringsfunksjon: felt =>
+                        felt !== null ? ok(felt) : feil(felt, 'Du må velge T.o.m-dato'),
                 }),
                 tom: useFelt<FamilieIsoDate | undefined>({
                     verdi: undefined,
+                    valideringsfunksjon: felt =>
+                        felt !== null ? ok(felt) : feil(felt, 'Du må velge F.o.m-dato'),
                 }),
                 periodeSkalUtbetalesTilSøker: useFelt<boolean>({
                     verdi: false,
                 }),
-                årsak: useFelt<{ label: string; value: string } | undefined>({
+                årsak: useFelt<ÅrsakOption | undefined>({
                     verdi: undefined,
+                    valideringsfunksjon: felt =>
+                        felt !== null ? ok(felt) : feil(felt, 'Du må velge en årsak'),
                 }),
                 begrunnelse: useFelt<string>({
                     verdi: '',
@@ -52,31 +59,8 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = constate(
 
         return {
             skjema,
-        };
-
-        const postEndretUtbetalingAndel = (
-            behandlingId: number,
-            personIdent: string,
-            prosent: number,
-            fom: ISODateString,
-            tom: ISODateString,
-            arsak: string,
-            begrunnelse: string
-        ) => {
-            //settVilkårSubmit(VilkårSubmit.DELETE);
-
-            return request<IRestEndretUtbetalingAndel, IFagsak>({
-                method: 'POST',
-                url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling}`,
-                data: {
-                    personIdent: personIdent,
-                    prosent: prosent,
-                    fom: fom,
-                    tom: tom,
-                    arsak: arsak,
-                    begrunnelse: begrunnelse,
-                },
-            });
+            kanSendeSkjema,
+            onSubmit,
         };
     }
 );

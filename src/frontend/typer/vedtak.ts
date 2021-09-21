@@ -46,16 +46,6 @@ export interface IRestVedtakBegrunnelseTilknyttetVilkår {
     vilkår?: VilkårType;
 }
 
-export interface IRestEndretUtbetalingAndel {
-    id?: number;
-    personIdent: string;
-    prosent: number;
-    fom: ISODateString;
-    tom: ISODateString;
-    arsak: string;
-    begrunnelse?: string;
-}
-
 export interface IRestAvslagbegrunnelser {
     fom?: string;
     tom?: string;
