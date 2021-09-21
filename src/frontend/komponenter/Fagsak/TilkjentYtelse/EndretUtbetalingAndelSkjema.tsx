@@ -26,8 +26,8 @@ import {
     årsakOptions,
     IRestEndretUtbetalingAndel,
 } from '../../../typer/utbetalingAndel';
+import { FamilieIsoDate, kalenderMåned } from '../../../utils/kalender';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
-import { FamilieIsoDate } from '../../../utils/kalender';
 
 const Knapperad = styled.div`
     display: flex;
@@ -81,7 +81,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             onSubmit<IRestEndretUtbetalingAndel>(
                 {
                     method: 'POST',
-                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling}`,
+                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}`,
                     påvirkerSystemLaster: true,
                     data: {
                         personIdent: person.verdi.value,
