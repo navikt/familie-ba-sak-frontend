@@ -20,6 +20,7 @@ import { useBehandling } from '../../../context/behandlingContext/BehandlingCont
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
+import { PersonType } from '../../../typer/person';
 import {
     ÅrsakOption,
     årsakOptions,
@@ -156,10 +157,12 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     onChange={(valg): void => {
                         skjema.felter.person.validerOgSettFelt(valg as OptionType);
                     }}
-                    options={åpenBehandling.personer.map(person => ({
-                        value: person.personIdent,
-                        label: person.personIdent,
-                    }))}
+                    options={åpenBehandling.personer
+                        .filter(person => person.type === PersonType.BARN)
+                        .map(person => ({
+                            value: person.personIdent,
+                            label: person.personIdent,
+                        }))}
                 />
             </Feltmargin>
 
