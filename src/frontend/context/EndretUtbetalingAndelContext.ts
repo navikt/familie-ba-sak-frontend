@@ -27,17 +27,17 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = constate(() =>
             person: useFelt<OptionType | undefined>({
                 verdi: undefined,
                 valideringsfunksjon: felt =>
-                    felt !== null ? ok(felt) : feil(felt, 'Du må velge en person'),
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
             }),
             fom: useFelt<FamilieIsoDate | undefined>({
                 verdi: undefined,
                 valideringsfunksjon: felt =>
-                    felt !== null ? ok(felt) : feil(felt, 'Du må velge T.o.m-dato'),
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge f.o.m-dato'),
             }),
             tom: useFelt<FamilieIsoDate | undefined>({
                 verdi: undefined,
                 valideringsfunksjon: felt =>
-                    felt !== null ? ok(felt) : feil(felt, 'Du må velge F.o.m-dato'),
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge t.o.m-dato'),
             }),
             periodeSkalUtbetalesTilSøker: useFelt<boolean>({
                 verdi: false,
@@ -45,7 +45,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = constate(() =>
             årsak: useFelt<ÅrsakOption | undefined>({
                 verdi: undefined,
                 valideringsfunksjon: felt =>
-                    felt !== null ? ok(felt) : feil(felt, 'Du må velge en årsak'),
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en årsak'),
             }),
             begrunnelse: useFelt<string>({
                 verdi: '',

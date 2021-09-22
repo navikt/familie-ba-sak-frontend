@@ -9,8 +9,6 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import {
     FamilieRadioGruppe,
-    FamilieDatovelger,
-    ISODateString,
     FamilieTextarea,
     FamilieReactSelect,
     OptionType,
@@ -18,6 +16,7 @@ import {
 import { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs } from '@navikt/familie-typer/dist/ressurs';
 
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
@@ -26,7 +25,8 @@ import {
     årsakOptions,
     IRestEndretUtbetalingAndel,
 } from '../../../typer/utbetalingAndel';
-import { FamilieIsoDate, kalenderMåned } from '../../../utils/kalender';
+import MånedÅrVelger from '../../../utils/input/MånedÅrVelger';
+import { YearMonth } from '../../../utils/kalender';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
 const Knapperad = styled.div`
@@ -50,10 +50,6 @@ const Feltmargin = styled.div`
     margin-bottom: 2.5rem;
 `;
 
-const StyledFamilieDatovelger = styled(FamilieDatovelger)`
-    margin-right: 2rem;
-`;
-
 const StyledFerdigKnapp = styled(Knapp)`
     margin-right: 0.5rem;
 `;
@@ -71,6 +67,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     åpenBehandling,
     avbrytEndringAvUtbetalingsperiode,
 }) => {
+    const { erLesevisning } = useBehandling();
     const { skjema, onSubmit, kanSendeSkjema } = useEndretUtbetalingAndel();
     const [fagsakRessurs, settFagsakressurs] = useState<Ressurs<IFagsak>>(byggTomRessurs());
 
@@ -88,7 +85,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         prosent: periodeSkalUtbetalesTilSøker ? 100 : 0,
                         fom: fom.verdi,
                         tom: tom.verdi,
-                        arsak: årsak.verdi.årsak,
+                        årsak: årsak.verdi.årsak,
                         begrunnelse: begrunnelse.verdi,
                     },
                 },
@@ -121,7 +118,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         prosent: periodeSkalUtbetalesTilSøker ? 100 : 0,
                         fom: fom.verdi,
                         tom: tom.verdi,
-                        arsak: årsak.verdi.årsak,
+                        årsak: årsak.verdi.årsak,
                         begrunnelse: begrunnelse.verdi,
                     },
                 },
@@ -152,7 +149,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         <StyledSkjemaGruppe>
             <Feltmargin>
                 <StyledPersonvelger
-                    {...skjema.felter.person.hentNavBaseSkjemaProps(false)}
+                    {...skjema.felter.person.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     label={<Element>Velg hvem det gjelder</Element>}
                     placeholder={'Velg person'}
                     isMulti={false}
@@ -168,44 +165,42 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 
             <Feltmargin>
                 <Element>Fastsett andelsperiode</Element>
-                <Knapperad>
-                    <StyledFamilieDatovelger
-                        id={'fom'}
-                        placeholder={'Velg f.o.m-dato'}
-                        label={
-                            <>
-                                <SkjultLegend>Fastsett andelsperiode </SkjultLegend>
-                                <Normaltekst>F.o.m</Normaltekst>
-                            </>
-                        }
-                        onChange={(dato?: FamilieIsoDate) => {
-                            skjema.felter.fom.validerOgSettFelt(dato);
-                        }}
-                        valgtDato={skjema.felter.fom.verdi}
-                        erLesesvisning={false}
-                    />
-                    <FamilieDatovelger
-                        id={'tom'}
-                        placeholder={'Velg t.o.m-dato'}
-                        label={
-                            <>
-                                <SkjultLegend>Fastsett andelsperiode </SkjultLegend>
-                                <Normaltekst>T.o.m</Normaltekst>
-                            </>
-                        }
-                        onChange={(dato?: ISODateString) => {
-                            skjema.felter.tom.validerOgSettFelt(dato);
-                        }}
-                        valgtDato={skjema.felter.tom.verdi}
-                        erLesesvisning={false}
-                    />
-                </Knapperad>
+                <MånedÅrVelger
+                    {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                    label={
+                        <>
+                            <SkjultLegend>Fastsett andelsperiode </SkjultLegend>
+                            <Normaltekst>F.o.m</Normaltekst>
+                        </>
+                    }
+                    antallÅrFrem={0}
+                    antallÅrTilbake={3}
+                    onEndret={(dato: YearMonth | undefined) =>
+                        skjema.felter.fom.validerOgSettFelt(dato)
+                    }
+                    lesevisning={erLesevisning()}
+                />
+                <MånedÅrVelger
+                    {...skjema.felter.tom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                    label={
+                        <>
+                            <SkjultLegend>Fastsett andelsperiode </SkjultLegend>
+                            <Normaltekst>T.o.m</Normaltekst>
+                        </>
+                    }
+                    antallÅrFrem={0}
+                    antallÅrTilbake={3}
+                    onEndret={(dato: YearMonth | undefined) => {
+                        skjema.felter.tom.validerOgSettFelt(dato);
+                    }}
+                    lesevisning={erLesevisning()}
+                />
             </Feltmargin>
 
             <Feltmargin>
                 <FamilieRadioGruppe
                     legend={<Element>Skal perioden utbetales til søker?</Element>}
-                    erLesevisning={false}
+                    erLesevisning={erLesevisning()}
                 >
                     <Radio
                         label={'Ja'}
@@ -230,7 +225,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 
             <Feltmargin>
                 <FamilieReactSelect
-                    {...skjema.felter.årsak.hentNavBaseSkjemaProps(false)}
+                    {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     label={<Element>Årsak</Element>}
                     placeholder={'Velg årsak'}
                     isMulti={false}
@@ -243,7 +238,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 
             <Feltmargin>
                 <StyledFamilieTextarea
-                    erLesevisning={false}
+                    erLesevisning={erLesevisning()}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     label={'Begrunnelse'}
                     value={skjema.felter.begrunnelse.verdi}

@@ -6,7 +6,7 @@ export interface IRestEndretUtbetalingAndel {
     fom: ISODateString;
     tom: ISODateString;
     begrunnelse: string;
-    arsak: IEndretUtbetalingAndelÅrsak;
+    årsak: IEndretUtbetalingAndelÅrsak;
 }
 
 export enum IEndretUtbetalingAndelÅrsak {
