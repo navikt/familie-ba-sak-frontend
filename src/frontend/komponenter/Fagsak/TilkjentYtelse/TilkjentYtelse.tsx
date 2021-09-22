@@ -10,6 +10,7 @@ import { Element } from 'nav-frontend-typografi';
 import { Edit } from '@navikt/ds-icons';
 
 import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
@@ -46,6 +47,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         filterOgSorterAndelPersonerIGrunnlag,
         filterOgSorterGrunnlagPersonerMedAndeler,
     } = useTidslinje();
+    const { erLesevisning } = useBehandling();
     const { toggles } = useApp();
 
     const [leggTilUtbetalingsendring, settLeggTilUtbetalingsendring] = useState<boolean>(false);
@@ -96,7 +98,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 tidslinjePersoner={tidslinjePersoner}
             />
 
-            {toggles[ToggleNavn.kanEndretUtbetalingAndel] && (
+            {toggles[ToggleNavn.kanEndretUtbetalingAndel] && erLesevisning() && (
                 <EndretUtbetalingAndel>
                     <Flatknapp mini onClick={() => settLeggTilUtbetalingsendring(true)}>
                         <StyledEditIkon />
