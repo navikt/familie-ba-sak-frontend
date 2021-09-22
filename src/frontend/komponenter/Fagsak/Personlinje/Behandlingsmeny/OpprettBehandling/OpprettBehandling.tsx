@@ -87,6 +87,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                     <OpprettBehandlingValg
                         behandlingstype={opprettBehandlingSkjema.felter.behandlingstype}
                         behandlingsårsak={opprettBehandlingSkjema.felter.behandlingsårsak}
+                        underkategori={opprettBehandlingSkjema.felter.underkategori}
                         fagsak={fagsak}
                         visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                     />
