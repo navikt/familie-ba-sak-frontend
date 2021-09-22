@@ -8,10 +8,6 @@ export const erIsoStringGyldig = (dato?: FamilieIsoDate): boolean => {
     if (!dato) return false;
     else if (!dato.includes('-')) return false;
 
-    if (dayjs(dato, datoformat.ISO_DAG).isValid()) {
-        return true;
-    }
-
     const år: number = parseInt(dato.substr(0, 4), 10);
     const måned: number = parseInt(dato.substr(5, 7), 10);
     const dag: number = parseInt(dato.substr(8, 10), 10);
@@ -26,6 +22,10 @@ export const erIsoStringGyldig = (dato?: FamilieIsoDate): boolean => {
 
     if (dag < 1 || dag > antallDagerIMåned({ år, måned: måned - 1 })) {
         return false;
+    }
+
+    if (dayjs(dato, datoformat.ISO_DAG).isValid()) {
+        return true;
     }
 
     return true;
