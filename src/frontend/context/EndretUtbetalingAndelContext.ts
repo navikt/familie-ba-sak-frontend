@@ -1,21 +1,16 @@
 import constate from 'constate';
 
-import { ISODateString, OptionType } from '@navikt/familie-form-elements';
-import { useHttp } from '@navikt/familie-http';
+import { OptionType } from '@navikt/familie-form-elements';
 import { useSkjema, useFelt, feil, ok } from '@navikt/familie-skjema';
 
-import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import { ÅrsakOption } from '../typer/utbetalingAndel';
 import { FamilieIsoDate } from '../utils/kalender';
 
-interface IProps {
-    åpenBehandling: IBehandling;
-}
-
 const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = constate(() => {
     const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
         {
+            id?: string;
             person: OptionType | undefined;
             fom: FamilieIsoDate | undefined;
             tom: FamilieIsoDate | undefined;
@@ -26,6 +21,9 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = constate(() =>
         IFagsak
     >({
         felter: {
+            id: useFelt<string | undefined>({
+                verdi: undefined,
+            }),
             person: useFelt<OptionType | undefined>({
                 verdi: undefined,
                 valideringsfunksjon: felt =>

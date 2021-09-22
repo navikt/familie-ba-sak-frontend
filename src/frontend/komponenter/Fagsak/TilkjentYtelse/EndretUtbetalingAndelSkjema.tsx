@@ -99,6 +99,55 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         }
     };
 
+    const oppdaterEndretUtbetaling = () => {
+        const { id, person, periodeSkalUtbetalesTilSøker, fom, tom, årsak, begrunnelse } =
+            skjema.felter;
+        if (
+            kanSendeSkjema() &&
+            person.verdi &&
+            årsak.verdi &&
+            fom.verdi &&
+            tom.verdi &&
+            id?.verdi
+        ) {
+            onSubmit<IRestEndretUtbetalingAndel>(
+                {
+                    method: 'PUT',
+                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${id?.verdi}`,
+                    påvirkerSystemLaster: true,
+                    data: {
+                        id: id?.verdi,
+                        personIdent: person.verdi.value,
+                        prosent: periodeSkalUtbetalesTilSøker ? 100 : 0,
+                        fom: fom.verdi,
+                        tom: tom.verdi,
+                        arsak: årsak.verdi.årsak,
+                        begrunnelse: begrunnelse.verdi,
+                    },
+                },
+                (fagsak: Ressurs<IFagsak>) => {
+                    settFagsakressurs(fagsak);
+                }
+            );
+        }
+    };
+
+    const slettEndretUtbetaling = () => {
+        const { id } = skjema.felter;
+        if (kanSendeSkjema() && id !== undefined && id.verdi) {
+            onSubmit<IRestEndretUtbetalingAndel>(
+                {
+                    method: 'DELETE',
+                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${id.verdi}`,
+                    påvirkerSystemLaster: true,
+                },
+                (fagsak: Ressurs<IFagsak>) => {
+                    settFagsakressurs(fagsak);
+                }
+            );
+        }
+    };
+
     return (
         <StyledSkjemaGruppe>
             <Feltmargin>
