@@ -96,7 +96,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 tidslinjePersoner={tidslinjePersoner}
             />
 
-            {toggles[ToggleNavn.kanEndreUtbetalingsperiode] && (
+            {toggles[ToggleNavn.kanEndretUtbetalingAndel] && (
                 <EndretUtbetalingAndel>
                     <Flatknapp mini onClick={() => settLeggTilUtbetalingsendring(true)}>
                         <StyledEditIkon />
