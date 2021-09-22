@@ -98,7 +98,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 tidslinjePersoner={tidslinjePersoner}
             />
 
-            {toggles[ToggleNavn.kanEndretUtbetalingAndel] && erLesevisning() && (
+            {toggles[ToggleNavn.kanEndretUtbetalingAndel] && !erLesevisning() && (
                 <EndretUtbetalingAndel>
                     <Flatknapp mini onClick={() => settLeggTilUtbetalingsendring(true)}>
                         <StyledEditIkon />
