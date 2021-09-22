@@ -67,8 +67,6 @@ export const hentDatoRegistrertSendt = (
     const datoMottatt = relevanteDatoer.find(dato => {
         if (journalposttype === 'I') {
             return dato.datotype === JournalpostDatotype.DATO_REGISTRERT;
-        } else if (journalposttype === 'U') {
-            return dato.datotype === JournalpostDatotype.DATO_EKSPEDERT;
         } else {
             return dato.datotype === JournalpostDatotype.DATO_JOURNALFOERT;
         }
