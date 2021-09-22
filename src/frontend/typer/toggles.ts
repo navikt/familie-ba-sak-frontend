@@ -7,7 +7,6 @@ export enum ToggleNavn {
     tilbakekreving = 'familie-ba-sak.behandling.tilbakekreving',
     medlemskap = 'familie-ba-sak.behandling.medlemskap',
     journalpostliste = 'familie-ba-sak.behandling.journalpostliste',
-    brukNyeVedtaksperioder = 'familie-ba-sak.behandling.vedtakstype-med-begrunnelser',
     brukErDeltBosted = 'familie-ba-sak.behandling.delt_bosted',
     forhåndsvisAlleBrevbegrunnelser = 'familie-ba-sak.forhaandsvis-alle-brevbegrunnelser',
     brukBegrunnelserFraSanity = 'familie-ba-sak.behandling.begrunnelse-fra-sanity',

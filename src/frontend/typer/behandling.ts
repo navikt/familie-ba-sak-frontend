@@ -10,7 +10,7 @@ import {
 } from './tilbakekrevingsbehandling';
 import { ITotrinnskontroll } from './totrinnskontroll';
 import { IVedtakForBehandling } from './vedtak';
-import { Utbetalingsperiode, Vedtaksperiode } from './vedtaksperiode';
+import { Utbetalingsperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export enum BehandlingKategori {
@@ -199,7 +199,6 @@ export interface IBehandling {
     underkategori: BehandlingUnderkategori;
     fødselshendelsefiltreringResultater: IFødselshendelsefiltreringResultat[];
     vedtakForBehandling: IVedtakForBehandling[];
-    vedtaksperioder: Vedtaksperiode[];
     utbetalingsperioder: Utbetalingsperiode[];
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;

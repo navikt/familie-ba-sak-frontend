@@ -23,11 +23,9 @@ import {
     IVilkårResultat,
     vilkårConfig,
 } from '../../../typer/vilkår';
-import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
-import { VedtakBegrunnelserProvider } from '../Vedtak/VedtakBegrunnelserTabell/Context/VedtakBegrunnelserContext';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
@@ -74,7 +72,6 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
         settOpprettelseFeilmelding
     );
 
-    const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
     const uregistrerteBarn =
         åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(
             barn => !barn.erFolkeregistrert
@@ -156,9 +153,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                     <Feilmelding>{hentOpplysningerRessurs.frontendFeilmelding}</Feilmelding>
                 )}
             </>
-            <VedtakBegrunnelserProvider fagsak={fagsak} aktivVedtak={aktivVedtak}>
-                <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
-            </VedtakBegrunnelserProvider>
+            <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
             {uregistrerteBarn.length > 0 && (
                 <AlertStripeInfo>
                     <Normaltekst>
