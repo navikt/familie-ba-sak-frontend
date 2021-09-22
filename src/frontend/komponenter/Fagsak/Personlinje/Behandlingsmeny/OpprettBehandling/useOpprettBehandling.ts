@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useHistory } from 'react-router';
 
 import { useFelt, feil, ok, Avhengigheter, useSkjema } from '@navikt/familie-skjema';
@@ -66,16 +68,16 @@ const useOpprettBehandling = (
         skjemanavn: 'Opprett behandling modal',
     });
 
-    const hentBehandlingårsak = () => {
+    useEffect(() => {
         switch (skjema.felter.behandlingstype.verdi) {
             case Behandlingstype.TEKNISK_OPPHØR:
-                return BehandlingÅrsak.TEKNISK_OPPHØR;
+                skjema.felter.behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.TEKNISK_OPPHØR);
+                break;
             case Behandlingstype.FØRSTEGANGSBEHANDLING:
-                return BehandlingÅrsak.SØKNAD;
-            default:
-                return skjema.felter.behandlingsårsak.verdi;
+                skjema.felter.behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.SØKNAD);
+                break;
         }
-    };
+    }, [skjema.felter.behandlingstype.verdi]);
 
     const onBekreft = (søkersIdent: string) => {
         if (kanSendeSkjema()) {
@@ -100,7 +102,7 @@ const useOpprettBehandling = (
                     {
                         data: {
                             behandlingType: skjema.felter.behandlingstype.verdi as Behandlingstype,
-                            behandlingÅrsak: hentBehandlingårsak(),
+                            behandlingÅrsak: skjema.felter.behandlingsårsak.verdi,
                             kategori: BehandlingKategori.NASJONAL,
                             navIdent: innloggetSaksbehandler?.navIdent,
                             søkersIdent,
