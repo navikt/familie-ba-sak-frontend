@@ -10,6 +10,7 @@ import { Element } from 'nav-frontend-typografi';
 import { Edit } from '@navikt/ds-icons';
 
 import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
@@ -17,12 +18,12 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import EndreUtbetaingsperiodeSkjema from './EndreUtbetalingsperiodeSkjema';
+import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 
-const EndreUtbetalingsperiode = styled.div`
+const EndretUtbetalingAndel = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-bottom: 0.5rem;
@@ -47,6 +48,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         filterOgSorterAndelPersonerIGrunnlag,
         filterOgSorterGrunnlagPersonerMedAndeler,
     } = useTidslinje();
+    const { erLesevisning } = useBehandling();
     const { toggles } = useApp();
 
     const [leggTilUtbetalingsendring, settLeggTilUtbetalingsendring] = useState<boolean>(false);
@@ -97,13 +99,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 tidslinjePersoner={tidslinjePersoner}
             />
 
-            {toggles[ToggleNavn.kanEndreUtbetalingsperiode] && (
-                <EndreUtbetalingsperiode>
+            {toggles[ToggleNavn.kanEndretUtbetalingAndel] && !erLesevisning() && (
+                <EndretUtbetalingAndel>
                     <Flatknapp mini onClick={() => settLeggTilUtbetalingsendring(true)}>
                         <StyledEditIkon />
-                        <Element>Endre utbetalingsperiode</Element>
+                        <Element>Endre utbetalingsandel</Element>
                     </Flatknapp>
-                </EndreUtbetalingsperiode>
+                </EndretUtbetalingAndel>
             )}
 
             {aktivEtikett && (
@@ -120,7 +122,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 )
             }
             {leggTilUtbetalingsendring && (
-                <EndreUtbetaingsperiodeSkjema
+                <EndretUtbetalingAndelSkjema
                     åpenBehandling={åpenBehandling}
                     avbrytEndringAvUtbetalingsperiode={() => settLeggTilUtbetalingsendring(false)}
                 />
