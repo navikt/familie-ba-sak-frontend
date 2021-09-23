@@ -83,7 +83,6 @@ export const mockBehandling = ({
             godkjent: true,
             opprettetTidspunkt,
         },
-        vedtaksperioder: [],
         utbetalingsperioder: [],
         personerMedAndelerTilkjentYtelse: [],
         årsak: årsak,
