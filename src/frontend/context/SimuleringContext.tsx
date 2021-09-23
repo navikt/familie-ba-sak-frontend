@@ -66,11 +66,11 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
-        avhengigheter: { tilbakekrevingErToggletPå, erFeilutbetaling },
+        avhengigheter: { tilbakekrevingErToggletPå, erFeilutbetaling, harÅpenTilbakekreving },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå &&
             avhengigheter?.erFeilutbetaling &&
-            !harÅpenTilbakekreving,
+            !avhengigheter?.harÅpenTilbakekreving,
         valideringsfunksjon: felt =>
             felt.verdi === undefined
                 ? feil(
@@ -112,11 +112,12 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
             erFeilutbetaling,
             tilbakekrevingErToggletPå,
             maksLengdeTekst: maksLengdeTekst,
+            harÅpenTilbakekreving,
         },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.tilbakekrevingErToggletPå &&
             avhengigheter?.erFeilutbetaling &&
-            !harÅpenTilbakekreving,
+            !avhengigheter?.harÅpenTilbakekreving,
         valideringsfunksjon: (felt, avhengigheter) =>
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
