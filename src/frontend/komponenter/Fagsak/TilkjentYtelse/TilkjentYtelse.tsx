@@ -20,6 +20,7 @@ import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import EndreUtbetaingsperiodeSkjema from './EndreUtbetalingsperiodeSkjema';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
+import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 
 const EndreUtbetalingsperiode = styled.div`
     display: flex;
@@ -113,6 +114,11 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     aktivEtikett={aktivEtikett}
                 />
             )}
+            {
+                /*åpenBehandling.endretUtbetalingAndeler*/ [].length > 0 && (
+                    <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
+                )
+            }
             {leggTilUtbetalingsendring && (
                 <EndreUtbetaingsperiodeSkjema
                     åpenBehandling={åpenBehandling}
