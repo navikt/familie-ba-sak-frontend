@@ -162,13 +162,13 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
                 <StyledTabell className="tabell tabell--stripet">
                     <colgroup>
-                        <col style={{ width: '5%' }} />
-                        <col style={{ width: '5%', minWidth: '12rem' }} />
+                        <col style={{ width: '3rem' }} />
+                        <col style={{ width: '10rem' }} />
                         <col style={{ width: '25%' }} />
-                        <col style={{ width: '15%', minWidth: '12rem' }} />
+                        <col style={{ width: '15%' }} />
                         <col style={{ width: '20%' }} />
-                        <col style={{ width: '25%' }} />
-                        <col style={{ width: '5%', minWidth: '8rem' }} />
+                        <col style={{ width: '23%' }} />
+                        <col style={{ width: '7%' }} />
                     </colgroup>
                     <thead>
                         <tr>
@@ -295,7 +295,13 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                             {journalpost.tittel}
                                         </EllipsisNormaltekst>
                                     </Td>
-                                    <Td>{journalpoststatus[journalpost.journalstatus]}</Td>
+                                    <Td>
+                                        <EllipsisNormaltekst
+                                            title={journalpoststatus[journalpost.journalstatus]}
+                                        >
+                                            {journalpoststatus[journalpost.journalstatus]}
+                                        </EllipsisNormaltekst>
+                                    </Td>
                                 </tr>
                             )
                         )}
