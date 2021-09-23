@@ -112,10 +112,14 @@ export enum BehandlingstypeFilter {
     ALLE = 'ALLE',
     ae0106 = 'ae0106',
     ae0161 = 'ae0161',
+    ae0118 = 'ae0118',
+    ae0120 = 'ae0120',
 }
 
 export const behandlingstypeFilter: Record<BehandlingstypeFilter, IPar> = {
     ALLE: { id: 'ALLE', navn: 'Alle' },
+    ae0118: { id: 'ae0118', navn: 'Nasjonal' },
+    ae0120: { id: 'ae0120', navn: 'EØS' },
     ae0106: { id: 'ae0106', navn: 'Utland' },
     ae0161: { id: 'ae0161', navn: 'Tilbakekreving' },
 };
