@@ -14,7 +14,7 @@ import {
     formaterIsoDato,
     formaterIdent,
     hentAlderSomString,
-    sorterFødselsdato,
+    sorterPersonTypeOgFødselsdato,
 } from '../../../utils/formatter';
 import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 
@@ -91,10 +91,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
 
                             return vedtaksperiode.utbetalingsperiodeDetaljer
                                 .sort((detaljA, detaljB) =>
-                                    sorterFødselsdato(
-                                        detaljA.person.fødselsdato,
-                                        detaljB.person.fødselsdato
-                                    )
+                                    sorterPersonTypeOgFødselsdato(detaljA.person, detaljB.person)
                                 )
                                 .map((detalj, index) => {
                                     return (
