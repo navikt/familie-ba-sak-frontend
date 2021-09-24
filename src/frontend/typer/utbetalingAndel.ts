@@ -1,12 +1,13 @@
 import { ISODateString, OptionType } from '@navikt/familie-form-elements';
 
 export interface IRestEndretUtbetalingAndel {
-    personIdent: string;
-    prosent: number;
-    fom: ISODateString;
-    tom: ISODateString;
-    begrunnelse: string;
-    årsak: IEndretUtbetalingAndelÅrsak;
+    id?: number;
+    personIdent?: string;
+    prosent?: number;
+    fom?: ISODateString;
+    tom?: ISODateString;
+    begrunnelse?: string;
+    årsak?: IEndretUtbetalingAndelÅrsak;
 }
 
 export enum IEndretUtbetalingAndelÅrsak {

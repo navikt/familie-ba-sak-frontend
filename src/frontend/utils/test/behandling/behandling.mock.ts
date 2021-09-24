@@ -84,6 +84,7 @@ export const mockBehandling = ({
             opprettetTidspunkt,
         },
         utbetalingsperioder: [],
+        endretUtbetalingAndeler: [],
         personerMedAndelerTilkjentYtelse: [],
         årsak: årsak,
         skalBehandlesAutomatisk,

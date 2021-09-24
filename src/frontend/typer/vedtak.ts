@@ -1,5 +1,3 @@
-import { ISODateString } from '@navikt/familie-form-elements';
-
 import { IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from './vedtaksperiode';
 import { VilkårType } from './vilkår';
 

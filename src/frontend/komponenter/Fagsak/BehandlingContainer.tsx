@@ -7,7 +7,6 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
-import { EndretUtbetalingAndelProvider } from '../../context/EndretUtbetalingAndelContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
@@ -94,12 +93,10 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         render={() => {
                             return (
                                 <TidslinjeProvider>
-                                    <EndretUtbetalingAndelProvider>
-                                        <TilkjentYtelse
-                                            fagsak={fagsak}
-                                            åpenBehandling={åpenBehandling.data}
-                                        />
-                                    </EndretUtbetalingAndelProvider>
+                                    <TilkjentYtelse
+                                        fagsak={fagsak}
+                                        åpenBehandling={åpenBehandling.data}
+                                    />
                                 </TidslinjeProvider>
                             );
                         }}

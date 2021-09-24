@@ -13,11 +13,11 @@ import {
     FamilieReactSelect,
     OptionType,
 } from '@navikt/familie-form-elements';
+import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs } from '@navikt/familie-typer/dist/ressurs';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { PersonType } from '../../../typer/person';
@@ -27,7 +27,7 @@ import {
     IRestEndretUtbetalingAndel,
 } from '../../../typer/utbetalingAndel';
 import MånedÅrVelger from '../../../utils/input/MånedÅrVelger';
-import { YearMonth } from '../../../utils/kalender';
+import { FamilieIsoDate, YearMonth } from '../../../utils/kalender';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
 const Knapperad = styled.div`
@@ -61,60 +61,76 @@ const StyledFamilieTextarea = styled(FamilieTextarea)`
 
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
+    endretUtbetalingAndel: IRestEndretUtbetalingAndel;
     avbrytEndringAvUtbetalingsperiode: () => void;
 }
 
 const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
+    endretUtbetalingAndel,
     avbrytEndringAvUtbetalingsperiode,
 }) => {
     const { erLesevisning } = useBehandling();
-    const { skjema, onSubmit, kanSendeSkjema } = useEndretUtbetalingAndel();
-    const [fagsakRessurs, settFagsakressurs] = useState<Ressurs<IFagsak>>(byggTomRessurs());
 
-    const submitEndretUtbetaling = () => {
+    const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
+        {
+            id?: string;
+            person: OptionType | undefined;
+            fom: FamilieIsoDate | undefined;
+            tom: FamilieIsoDate | undefined;
+            periodeSkalUtbetalesTilSøker: boolean;
+            årsak: ÅrsakOption | undefined;
+            begrunnelse: string;
+        },
+        IFagsak
+    >({
+        felter: {
+            id: useFelt<string | undefined>({
+                verdi: undefined,
+            }),
+            person: useFelt<OptionType | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: felt =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
+            }),
+            fom: useFelt<FamilieIsoDate | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: felt =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge f.o.m-dato'),
+            }),
+            tom: useFelt<FamilieIsoDate | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: felt =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge t.o.m-dato'),
+            }),
+            periodeSkalUtbetalesTilSøker: useFelt<boolean>({
+                verdi: false,
+            }),
+            årsak: useFelt<ÅrsakOption | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: felt =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en årsak'),
+            }),
+            begrunnelse: useFelt<string>({
+                verdi: '',
+            }),
+        },
+        skjemanavn: 'Endre utbetalingsperiode',
+    });
+
+    const [settFagsakressurs] = useState<Ressurs<IFagsak>>(byggTomRessurs());
+
+    const oppdaterEndretUtbetaling = () => {
         const { person, periodeSkalUtbetalesTilSøker, fom, tom, årsak, begrunnelse } =
             skjema.felter;
         if (kanSendeSkjema() && person.verdi && årsak.verdi && fom.verdi && tom.verdi) {
             onSubmit<IRestEndretUtbetalingAndel>(
                 {
-                    method: 'POST',
-                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}`,
-                    påvirkerSystemLaster: true,
-                    data: {
-                        personIdent: person.verdi.value,
-                        prosent: periodeSkalUtbetalesTilSøker ? 100 : 0,
-                        fom: fom.verdi,
-                        tom: tom.verdi,
-                        årsak: årsak.verdi.årsak,
-                        begrunnelse: begrunnelse.verdi,
-                    },
-                },
-                (fagsak: Ressurs<IFagsak>) => {
-                    settFagsakressurs(fagsak);
-                }
-            );
-        }
-    };
-
-    const oppdaterEndretUtbetaling = () => {
-        const { id, person, periodeSkalUtbetalesTilSøker, fom, tom, årsak, begrunnelse } =
-            skjema.felter;
-        if (
-            kanSendeSkjema() &&
-            person.verdi &&
-            årsak.verdi &&
-            fom.verdi &&
-            tom.verdi &&
-            id?.verdi
-        ) {
-            onSubmit<IRestEndretUtbetalingAndel>(
-                {
                     method: 'PUT',
-                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${id?.verdi}`,
+                    url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
                     påvirkerSystemLaster: true,
                     data: {
-                        id: id?.verdi,
+                        id: endretUtbetalingAndel.id,
                         personIdent: person.verdi.value,
                         prosent: periodeSkalUtbetalesTilSøker ? 100 : 0,
                         fom: fom.verdi,
@@ -130,7 +146,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         }
     };
 
-    const slettEndretUtbetaling = () => {
+    /*const slettEndretUtbetaling = () => {
         const { id } = skjema.felter;
         if (kanSendeSkjema() && id !== undefined && id.verdi) {
             onSubmit<IRestEndretUtbetalingAndel>(
@@ -144,7 +160,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 }
             );
         }
-    };
+    };*/
 
     return (
         <StyledSkjemaGruppe>
@@ -252,7 +268,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 />
             </Feltmargin>
             <Knapperad>
-                <StyledFerdigKnapp mini onClick={submitEndretUtbetaling}>
+                <StyledFerdigKnapp mini onClick={oppdaterEndretUtbetaling}>
                     Ferdig
                 </StyledFerdigKnapp>
                 <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
