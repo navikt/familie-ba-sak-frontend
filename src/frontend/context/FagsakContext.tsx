@@ -71,7 +71,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             method: 'GET',
             url: '/familie-ba-sak/api/person',
             headers: {
-                personIdent: personIdent,
+                personIdent,
             },
             påvirkerSystemLaster: true,
         }).then((hentetPerson: Ressurs<IPersonInfo>) => {
