@@ -27,6 +27,8 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
             alder={hentAlder(bruker.fødselsdato)}
             kjønn={bruker.kjønn}
         >
+            <div className="visittkort__pipe">|</div>
+            <Normaltekst>{`Kommunenr: ${bruker.kommunenummer}`}</Normaltekst>
             <div style={{ flex: 1 }}></div>
             <Normaltekst children={'Status på sak '} />
             <Element className={'visittkort__status'} children={hentFagsakStatusVisning(fagsak)} />
