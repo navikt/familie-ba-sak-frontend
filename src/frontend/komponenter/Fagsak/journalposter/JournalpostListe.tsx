@@ -162,8 +162,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
 
                 <StyledTabell className="tabell tabell--stripet">
                     <colgroup>
-                        <col style={{ width: '3rem' }} />
-                        <col style={{ width: '10rem' }} />
+                        <col style={{ width: '3.5rem' }} />
+                        <col style={{ width: '10.5rem' }} />
                         <col style={{ width: '25%' }} />
                         <col style={{ width: '15%' }} />
                         <col style={{ width: '20%' }} />
