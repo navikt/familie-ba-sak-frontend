@@ -18,6 +18,10 @@ export enum BehandlingKategori {
     EØS = 'EØS',
 }
 
+export interface IRestEndreBehandlingUnderkategori {
+    behandlingUnderkategori: BehandlingUnderkategori;
+}
+
 export enum HenleggÅrsak {
     SØKNAD_TRUKKET = 'SØKNAD_TRUKKET',
     FEILAKTIG_OPPRETTET = 'FEILAKTIG_OPPRETTET',

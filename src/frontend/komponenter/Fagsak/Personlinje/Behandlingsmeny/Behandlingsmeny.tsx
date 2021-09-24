@@ -14,6 +14,7 @@ import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
+import EndreBehandling from './EndreBehandling/EndreBehandling';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
@@ -64,6 +65,13 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             />
                         </li>
                     )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        toggles[ToggleNavn.kanBehandleUtvidet] &&
+                        åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD && (
+                            <li>
+                                <EndreBehandling onListElementClick={() => settAnker(undefined)} />
+                            </li>
+                        )}
                     <li>
                         <OpprettBehandling
                             onListElementClick={() => settAnker(undefined)}
