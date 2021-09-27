@@ -19,11 +19,13 @@ const lagÅrOptions = (år: number | undefined, antallÅrFrem: number, antallÅr
     const gjeldendeÅr = new Date().getFullYear();
     const start = år ? Math.min(år, gjeldendeÅr - antallÅrTilbake) : gjeldendeÅr - antallÅrTilbake;
     const slutt = år ? Math.max(år, gjeldendeÅr + antallÅrFrem) : gjeldendeÅr + antallÅrFrem;
-    return range(start, slutt).map(år => (
-        <option value={år} key={år}>
-            {år}
-        </option>
-    ));
+    return range(start, slutt + 1).map(år => {
+        return (
+            <option value={år} key={år}>
+                {år}
+            </option>
+        );
+    });
 };
 
 const Årvelger: React.FC<ÅrProps> = ({
@@ -36,7 +38,7 @@ const Årvelger: React.FC<ÅrProps> = ({
     feil = false,
 }) => {
     const årOptions = lagÅrOptions(år, antallÅrFrem, antallÅrTilbake);
-    console.log(år);
+    console.log('årOptions', årOptions);
     return (
         <FamilieSelect
             lesevisningVerdi={år ? år.toString() : ''}
