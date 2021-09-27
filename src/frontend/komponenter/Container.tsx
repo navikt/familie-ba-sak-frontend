@@ -34,20 +34,20 @@ const Container: React.FC = () => {
                             brukerEnhet={innloggetSaksbehandler?.enhet}
                         />
                         <FagsakProvider>
-                            <Switch>
-                                <BehandlingProvider>
+                            <BehandlingProvider>
+                                <Switch>
                                     <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
                                     <Route
                                         exact={true}
                                         path="/oppgaver/journalfør/:oppgaveId"
                                         component={ManuellJournalfør}
                                     />
-                                </BehandlingProvider>
-                                <Route exact={true} path="/oppgaver" component={Oppgaver} />
-                                <Route path="/internstatistikk" component={Internstatistikk} />
-                                <Route path="/infotrygd" component={Infotrygd} />
-                                <Redirect to="/oppgaver" />
-                            </Switch>
+                                    <Route exact={true} path="/oppgaver" component={Oppgaver} />
+                                    <Route path="/internstatistikk" component={Internstatistikk} />
+                                    <Route path="/infotrygd" component={Infotrygd} />
+                                    <Redirect to="/oppgaver" />
+                                </Switch>
+                            </BehandlingProvider>
                         </FagsakProvider>
                     </main>
                 </>
