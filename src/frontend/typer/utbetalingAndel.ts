@@ -1,3 +1,5 @@
+import webpack from 'webpack';
+
 import { ISODateString, OptionType } from '@navikt/familie-form-elements';
 
 export interface IRestEndretUtbetalingAndel {
@@ -14,23 +16,20 @@ export enum IEndretUtbetalingAndelÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',
 }
 
+export const årsakTekst: { [key in IEndretUtbetalingAndelÅrsak]: string } = {
+    DELT_BOSTED: 'Delt bosted',
+};
+
 export interface ÅrsakOption extends OptionType {
     årsak: IEndretUtbetalingAndelÅrsak;
 }
 
+export const årsakTilOption = (årsak: IEndretUtbetalingAndelÅrsak): ÅrsakOption => ({
+    value: årsak.valueOf(),
+    label: årsakTekst[årsak],
+    årsak: årsak,
+});
+
 export const årsaker: IEndretUtbetalingAndelÅrsak[] = Object.keys(IEndretUtbetalingAndelÅrsak).map(
     k => k as IEndretUtbetalingAndelÅrsak
 );
-
-const snakeCaseTilSentenceCase = (snakeCase: string) =>
-    snakeCase
-        .split('_')
-        .join(' ')
-        .toLowerCase()
-        .replace(/\w/, førsteBokstav => førsteBokstav.toUpperCase());
-
-export const årsakOptions: ÅrsakOption[] = årsaker.map(årsak => ({
-    value: årsak.valueOf(),
-    label: snakeCaseTilSentenceCase(årsak.valueOf()),
-    årsak: årsak,
-}));
