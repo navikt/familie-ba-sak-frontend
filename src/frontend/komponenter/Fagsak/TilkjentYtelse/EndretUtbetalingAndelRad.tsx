@@ -54,13 +54,17 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                 </td>
             </tr>
             {åpenUtbetalingsAndel && (
-                <div>
-                    <EndretUtbetalingAndelSkjema
-                        åpenBehandling={åpenBehandling}
-                        avbrytEndringAvUtbetalingsperiode={() => settÅpenUtbetalingsAndel(false)}
-                        endretUtbetalingAndel={endretUtbetalingAndel}
-                    />
-                </div>
+                <tr>
+                    <td colSpan={5}>
+                        <EndretUtbetalingAndelSkjema
+                            åpenBehandling={åpenBehandling}
+                            avbrytEndringAvUtbetalingsperiode={() =>
+                                settÅpenUtbetalingsAndel(false)
+                            }
+                            endretUtbetalingAndel={endretUtbetalingAndel}
+                        />
+                    </td>
+                </tr>
             )}
         </>
     );
