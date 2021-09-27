@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
 import { useApp } from '../context/AppContext';
+import { BehandlingProvider } from '../context/behandlingContext/BehandlingContext';
 import { FagsakProvider } from '../context/FagsakContext';
 import { Oppgaver } from '../context/OppgaverContext';
 import FagsakContainer from './Fagsak/FagsakContainer';
@@ -33,18 +34,20 @@ const Container: React.FC = () => {
                             brukerEnhet={innloggetSaksbehandler?.enhet}
                         />
                         <FagsakProvider>
-                            <Switch>
-                                <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
-                                <Route exact={true} path="/oppgaver" component={Oppgaver} />
-                                <Route
-                                    exact={true}
-                                    path="/oppgaver/journalfør/:oppgaveId"
-                                    component={ManuellJournalfør}
-                                />
-                                <Route path="/internstatistikk" component={Internstatistikk} />
-                                <Route path="/infotrygd" component={Infotrygd} />
-                                <Redirect to="/oppgaver" />
-                            </Switch>
+                            <BehandlingProvider>
+                                <Switch>
+                                    <Route path="/fagsak/:fagsakId" component={FagsakContainer} />
+                                    <Route
+                                        exact={true}
+                                        path="/oppgaver/journalfør/:oppgaveId"
+                                        component={ManuellJournalfør}
+                                    />
+                                    <Route exact={true} path="/oppgaver" component={Oppgaver} />
+                                    <Route path="/internstatistikk" component={Internstatistikk} />
+                                    <Route path="/infotrygd" component={Infotrygd} />
+                                    <Redirect to="/oppgaver" />
+                                </Switch>
+                            </BehandlingProvider>
                         </FagsakProvider>
                     </main>
                 </>
