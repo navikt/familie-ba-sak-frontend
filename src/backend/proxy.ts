@@ -83,7 +83,6 @@ export const doPdfProxy: any = () => {
                     let visfrontendFeilmelding = true;
                     const ressurs: ApiRessurs<string> = JSON.parse(dokumentData);
 
-                    console.log(ressurs);
                     if (ressurs.status === RessursStatus.SUKSESS) {
                         visfrontendFeilmelding = false;
                         data = ressurs.data;
