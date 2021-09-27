@@ -47,18 +47,20 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             </>
                         ) : (
                             <>
-                                <StyledExpandIkon /> Åpen
+                                <StyledExpandIkon /> Åpne
                             </>
                         )}
                     </Flatknapp>
                 </td>
             </tr>
             {åpenUtbetalingsAndel && (
-                <EndretUtbetalingAndelSkjema
-                    åpenBehandling={åpenBehandling}
-                    avbrytEndringAvUtbetalingsperiode={() => settÅpenUtbetalingsAndel(false)}
-                    endretUtbetalingAndel={endretUtbetalingAndel}
-                />
+                <div>
+                    <EndretUtbetalingAndelSkjema
+                        åpenBehandling={åpenBehandling}
+                        avbrytEndringAvUtbetalingsperiode={() => settÅpenUtbetalingsAndel(false)}
+                        endretUtbetalingAndel={endretUtbetalingAndel}
+                    />
+                </div>
             )}
         </>
     );
