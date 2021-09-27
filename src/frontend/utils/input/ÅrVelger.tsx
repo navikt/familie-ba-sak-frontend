@@ -38,7 +38,6 @@ const Årvelger: React.FC<ÅrProps> = ({
     feil = false,
 }) => {
     const årOptions = lagÅrOptions(år, antallÅrFrem, antallÅrTilbake);
-    console.log('årOptions', årOptions);
     return (
         <FamilieSelect
             lesevisningVerdi={år ? år.toString() : ''}
