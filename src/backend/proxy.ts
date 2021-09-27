@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { stdoutLogger, logError } from '@navikt/familie-logging';
+import { ApiRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { oboConfig, proxyUrl, redirectRecords } from './config.js';
 
@@ -78,25 +79,35 @@ export const doPdfProxy: any = () => {
 
             res.end = () => {
                 try {
-                    let dataVises = 'Ukjent feil ved visning dokument';
+                    let data = 'Ukjent feil ved visning dokument';
                     let visfrontendFeilmelding = true;
-                    JSON.parse(dokumentData, (k, v) => {
-                        if ((k === 'data' || k === 'frontendFeilmelding') && v) {
-                            dataVises = v;
-                        }
-                        if (k === 'data' && v) {
-                            visfrontendFeilmelding = false;
-                        }
-                    });
-                    res.setHeader('content-length', Buffer.byteLength(dataVises));
+                    const ressurs: ApiRessurs<string> = JSON.parse(dokumentData);
+
+                    console.log(ressurs);
+                    if (ressurs.status === RessursStatus.SUKSESS) {
+                        visfrontendFeilmelding = false;
+                        data = ressurs.data;
+                    } else if (
+                        ressurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        ressurs.status === RessursStatus.FEILET ||
+                        ressurs.status === RessursStatus.IKKE_TILGANG
+                    ) {
+                        visfrontendFeilmelding = true;
+                        data =
+                            ressurs.frontendFeilmelding ??
+                            ressurs.melding ??
+                            'Ukjent feil ved visning dokument';
+                    }
+
+                    res.setHeader('content-length', Buffer.byteLength(data));
                     if (visfrontendFeilmelding) {
                         res.setHeader('content-encoding', 'utf-8');
                         res.setHeader('Content-Type', 'text/plain');
-                        _end.call(res, dataVises, 'utf-8');
+                        _end.call(res, data, 'utf-8');
                     } else {
                         res.setHeader('content-encoding', 'base64');
                         res.setHeader('Content-Type', 'application/pdf');
-                        _end.call(res, dataVises, 'base64');
+                        _end.call(res, data, 'base64');
                     }
                 } catch (error) {
                     logError(`Proxying av pdf feilet: ${error}`);
