@@ -9,6 +9,7 @@ import {
     TilbakekrevingsbehandlingÅrsak,
 } from './tilbakekrevingsbehandling';
 import { ITotrinnskontroll } from './totrinnskontroll';
+import { IRestEndretUtbetalingAndel } from './utbetalingAndel';
 import { IVedtakForBehandling } from './vedtak';
 import { Utbetalingsperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
@@ -200,6 +201,7 @@ export interface IBehandling {
     fødselshendelsefiltreringResultater: IFødselshendelsefiltreringResultat[];
     vedtakForBehandling: IVedtakForBehandling[];
     utbetalingsperioder: Utbetalingsperiode[];
+    endretUtbetalingAndeler: IRestEndretUtbetalingAndel[];
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;

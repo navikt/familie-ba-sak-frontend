@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -8,20 +7,25 @@ import { Flatknapp } from 'nav-frontend-knapper';
 import { Element } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
+import { useHttp } from '@navikt/familie-http';
+import { Ressurs } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
+import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import EndreUtbetaingsperiodeSkjema from './EndreUtbetalingsperiodeSkjema';
+import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 
-const EndreUtbetalingsperiode = styled.div`
+const EndretUtbetalingAndel = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-bottom: 0.5rem;
@@ -46,9 +50,12 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         filterOgSorterAndelPersonerIGrunnlag,
         filterOgSorterGrunnlagPersonerMedAndeler,
     } = useTidslinje();
-    const { toggles } = useApp();
 
-    const [leggTilUtbetalingsendring, settLeggTilUtbetalingsendring] = useState<boolean>(false);
+    const { request } = useHttp();
+
+    const { erLesevisning } = useBehandling();
+    const { settFagsak } = useFagsakRessurser();
+    const { toggles } = useApp();
 
     const nesteOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
@@ -82,6 +89,17 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         åpenBehandling.personerMedAndelerTilkjentYtelse
     );
 
+    const opprettEndretUtbetaling = () => {
+        request<IRestEndretUtbetalingAndel, IFagsak>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}`,
+            påvirkerSystemLaster: true,
+            data: {},
+        }).then((response: Ressurs<IFagsak>) => {
+            settFagsak(response);
+        });
+    };
+
     return (
         <Skjemasteg
             senderInn={false}
@@ -95,16 +113,14 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}
             />
-
-            {toggles[ToggleNavn.kanEndreUtbetalingsperiode] && (
-                <EndreUtbetalingsperiode>
-                    <Flatknapp mini onClick={() => settLeggTilUtbetalingsendring(true)}>
+            {toggles[ToggleNavn.kanEndretUtbetalingAndel] && !erLesevisning() && (
+                <EndretUtbetalingAndel>
+                    <Flatknapp mini onClick={() => opprettEndretUtbetaling()}>
                         <StyledEditIkon />
-                        <Element>Endre utbetalingsperiode</Element>
+                        <Element>Endre utbetalingsandel</Element>
                     </Flatknapp>
-                </EndreUtbetalingsperiode>
+                </EndretUtbetalingAndel>
             )}
-
             {aktivEtikett && (
                 <Oppsummeringsboks
                     vedtaksperioder={filtrerPerioderForAktivEtikett(
@@ -113,11 +129,8 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     aktivEtikett={aktivEtikett}
                 />
             )}
-            {leggTilUtbetalingsendring && (
-                <EndreUtbetaingsperiodeSkjema
-                    åpenBehandling={åpenBehandling}
-                    avbrytEndringAvUtbetalingsperiode={() => settLeggTilUtbetalingsendring(false)}
-                />
+            {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
+                <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
             )}
         </Skjemasteg>
     );
