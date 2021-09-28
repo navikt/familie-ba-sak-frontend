@@ -11,7 +11,7 @@ import {
     useManuellJournalfør,
 } from '../../context/ManuellJournalførContext';
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
-import { BrukerHeader } from './BrukerHeader';
+import Personlinje from '../Fagsak/Personlinje/Personlinje';
 import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalpostSkjema } from './JournalpostSkjema';
 
@@ -23,13 +23,13 @@ const ToKolonnerDiv = styled.div`
 `;
 
 const ManuellJournalførContent: React.FC = () => {
-    const { dataForManuellJournalføring } = useManuellJournalfør();
+    const { dataForManuellJournalføring, fagsak } = useManuellJournalfør();
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
                 <>
-                    <BrukerHeader />
+                    <Personlinje bruker={dataForManuellJournalføring.data.person} fagsak={fagsak} />
 
                     {dataForManuellJournalføring.data.journalpost.journalstatus !==
                         Journalstatus.MOTTATT && (
