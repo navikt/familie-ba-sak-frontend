@@ -1,3 +1,4 @@
+import { IGrunnlagPerson, PersonType } from '../typer/person';
 import familieDayjs from './familieDayjs';
 import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 
@@ -82,3 +83,12 @@ export const formaterIdent = (personIdent: string) => {
 
 export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>
     familieDayjs(fødselsDatoA).isBefore(fødselsDatoB) ? 1 : -1;
+
+export const sorterPersonTypeOgFødselsdato = (
+    personA: IGrunnlagPerson,
+    personB: IGrunnlagPerson
+) => {
+    if (personA.type === PersonType.SØKER) return -1;
+    else if (personB.type === PersonType.SØKER) return 1;
+    else return sorterFødselsdato(personA.fødselsdato, personB.fødselsdato);
+};

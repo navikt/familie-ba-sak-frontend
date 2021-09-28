@@ -7,7 +7,7 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
 import { IGrunnlagPerson } from '../typer/person';
-import { sorterFødselsdato } from '../utils/formatter';
+import { sorterPersonTypeOgFødselsdato } from '../utils/formatter';
 import {
     hentFørsteDagIYearMonth,
     hentSisteDagIYearMonth,
@@ -120,9 +120,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IGrunnlagPerson[] => {
-        personer.sort((personA, personB) =>
-            sorterFødselsdato(personA.fødselsdato, personB.fødselsdato)
-        );
+        personer.sort(sorterPersonTypeOgFødselsdato);
         return personer.filter(
             grunnlagPerson =>
                 personerMedAndelerTilkjentYtelse.length &&
@@ -137,7 +135,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IPersonMedAndelerTilkjentYtelse[] => {
         return personer
-            .sort((personA, personB) => sorterFødselsdato(personA.fødselsdato, personB.fødselsdato))
+            .sort(sorterPersonTypeOgFødselsdato)
             .map((person: IGrunnlagPerson) => {
                 return personerMedAndelerTilkjentYtelse.find(
                     (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) =>

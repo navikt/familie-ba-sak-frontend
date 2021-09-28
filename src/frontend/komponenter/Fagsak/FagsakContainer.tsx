@@ -8,7 +8,6 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
-import { BehandlingProvider } from '../../context/behandlingContext/BehandlingContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { ToggleNavn } from '../../typer/toggles';
@@ -69,7 +68,7 @@ const FagsakContainer: React.FunctionComponent = () => {
             switch (bruker.status) {
                 case RessursStatus.SUKSESS:
                     return (
-                        <BehandlingProvider>
+                        <>
                             <Personlinje bruker={bruker.data} fagsak={fagsak.data} />
 
                             <div className={'fagsakcontainer__content'}>
@@ -133,7 +132,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                     </div>
                                 )}
                             </div>
-                        </BehandlingProvider>
+                        </>
                     );
                 case RessursStatus.FEILET:
                 case RessursStatus.FUNKSJONELL_FEIL:
