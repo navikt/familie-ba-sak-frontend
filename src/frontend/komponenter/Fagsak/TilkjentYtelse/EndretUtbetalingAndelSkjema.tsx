@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -14,6 +14,7 @@ import {
     FamilieReactSelect,
     OptionType,
 } from '@navikt/familie-form-elements';
+import { useHttp } from '@navikt/familie-http';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Ressurs } from '@navikt/familie-typer';
 
@@ -28,12 +29,15 @@ import {
     årsakTilOption,
     årsaker,
     IEndretUtbetalingAndelÅrsak,
+    satsTilOption,
+    SatsOption,
+    satser,
+    IEndretUtbetalingAndelFullSats,
 } from '../../../typer/utbetalingAndel';
 import { FamilieIsoDate, YearMonth, erIsoStringGyldig } from '../../../utils/kalender';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
-import { useHttp } from '@navikt/familie-http';
 
 const Knapperad = styled.div`
     display: flex;
@@ -50,6 +54,10 @@ const StyledSkjemaGruppe = styled(SkjemaGruppe)`
 
 const StyledPersonvelger = styled(FamilieReactSelect)`
     max-width: 20rem;
+`;
+
+const StyledSatsvelger = styled(FamilieReactSelect)`
+    max-width: 10rem;
 `;
 
 const Feltmargin = styled.div`
@@ -96,6 +104,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             fom: FamilieIsoDate | undefined;
             tom: FamilieIsoDate | undefined;
             periodeSkalUtbetalesTilSøker: boolean;
+            fullSats: boolean | undefined;
             årsak: IEndretUtbetalingAndelÅrsak | undefined;
             begrunnelse: string;
         },
@@ -122,7 +131,15 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     erIsoStringGyldig(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge t.o.m-dato'),
             }),
             periodeSkalUtbetalesTilSøker: useFelt<boolean>({
-                verdi: endretUtbetalingAndel.prosent === 100,
+                verdi:
+                    endretUtbetalingAndel.prosent !== undefined &&
+                    endretUtbetalingAndel.prosent > 0,
+            }),
+            fullSats: useFelt<boolean | undefined>({
+                verdi:
+                    endretUtbetalingAndel.prosent !== undefined
+                        ? endretUtbetalingAndel.prosent === 100
+                        : undefined,
             }),
             årsak: useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
                 verdi: endretUtbetalingAndel.årsak ? endretUtbetalingAndel.årsak : undefined,
@@ -136,8 +153,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         skjemanavn: 'Endre utbetalingsperiode',
     });
 
-    const oppdaterEndretUtbetaling = () => {
-        const { person, periodeSkalUtbetalesTilSøker, fom, tom, årsak, begrunnelse } =
+    const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
+        const { person, periodeSkalUtbetalesTilSøker, fom, tom, årsak, begrunnelse, fullSats } =
             skjema.felter;
         if (kanSendeSkjema()) {
             onSubmit<IRestEndretUtbetalingAndel>(
@@ -148,7 +165,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     data: {
                         id: endretUtbetalingAndel.id,
                         personIdent: person && person.verdi,
-                        prosent: periodeSkalUtbetalesTilSøker.verdi ? 100 : 0,
+                        prosent:
+                            (periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
+                            (fullSats.verdi ? 1 : 2),
                         fom: fom && fom.verdi,
                         tom: tom && tom.verdi,
                         årsak: årsak && årsak.verdi,
@@ -157,6 +176,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 },
                 (fagsak: Ressurs<IFagsak>) => {
                     settFagsak(fagsak);
+                    avbrytEndringAvUtbetalingsperiode();
                 }
             );
         }
@@ -269,6 +289,33 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 />
             </Feltmargin>
 
+            {skjema.felter.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
+                skjema.felter.periodeSkalUtbetalesTilSøker.verdi && (
+                    <Feltmargin>
+                        <StyledSatsvelger
+                            {...skjema.felter.fullSats.hentNavBaseSkjemaProps(
+                                skjema.visFeilmeldinger
+                            )}
+                            label={<Element>Sats</Element>}
+                            value={
+                                skjema.felter.fullSats.verdi !== undefined
+                                    ? satsTilOption(skjema.felter.fullSats.verdi)
+                                    : undefined
+                            }
+                            placeholder={'Velg sats'}
+                            isMulti={false}
+                            onChange={(valg): void => {
+                                skjema.felter.fullSats.validerOgSettFelt(
+                                    (valg as SatsOption).fullSats
+                                );
+                            }}
+                            options={satser.map(sats =>
+                                satsTilOption(sats === IEndretUtbetalingAndelFullSats.FULL_SATS)
+                            )}
+                        />
+                    </Feltmargin>
+                )}
+
             <Feltmargin>
                 <StyledFamilieTextarea
                     erLesevisning={erLesevisning()}
@@ -282,7 +329,10 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             </Feltmargin>
             <Knapperekke>
                 <Knapperad>
-                    <StyledFerdigKnapp mini onClick={oppdaterEndretUtbetaling}>
+                    <StyledFerdigKnapp
+                        mini
+                        onClick={() => oppdaterEndretUtbetaling(avbrytEndringAvUtbetalingsperiode)}
+                    >
                         Ferdig
                     </StyledFerdigKnapp>
                     <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
