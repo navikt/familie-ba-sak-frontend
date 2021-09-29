@@ -190,6 +190,51 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         }).then((fagsak: Ressurs<IFagsak>) => settFagsak(fagsak));
     };
 
+    const finnÅrTilbakeTilStønadFra = (): number => {
+        const g =
+            new Date().getFullYear() -
+            new Date(
+                Math.min(
+                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
+                        new Date(person.stønadFom).getTime()
+                    )
+                )
+            ).getFullYear();
+        console.log('LOG2', g);
+        return (
+            new Date().getFullYear() -
+            new Date(
+                Math.min(
+                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
+                        new Date(person.stønadFom).getTime()
+                    )
+                )
+            ).getFullYear()
+        );
+    };
+
+    const finnÅrFremTilStønadTom = (): number => {
+        const g =
+            new Date(
+                Math.max(
+                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
+                        new Date(person.stønadFom).getTime()
+                    )
+                )
+            ).getFullYear() - new Date().getFullYear();
+        console.log('LOG1');
+        console.log(g);
+        return (
+            new Date(
+                Math.max(
+                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
+                        new Date(person.stønadFom).getTime()
+                    )
+                )
+            ).getFullYear() - new Date().getFullYear()
+        );
+    };
+
     return (
         <StyledSkjemaGruppe>
             <Feltmargin>
@@ -221,8 +266,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             <Normaltekst>F.o.m</Normaltekst>
                         </>
                     }
-                    antallÅrFrem={0}
-                    antallÅrTilbake={3}
+                    antallÅrFrem={finnÅrFremTilStønadTom()}
+                    antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
                     onEndret={(dato: YearMonth | undefined) =>
                         skjema.felter.fom.validerOgSettFelt(dato)
                     }
@@ -236,8 +281,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             <Normaltekst>T.o.m</Normaltekst>
                         </>
                     }
-                    antallÅrFrem={0}
-                    antallÅrTilbake={3}
+                    antallÅrFrem={finnÅrFremTilStønadTom()}
+                    antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
                     onEndret={(dato: YearMonth | undefined) => {
                         skjema.felter.tom.validerOgSettFelt(dato);
                     }}
