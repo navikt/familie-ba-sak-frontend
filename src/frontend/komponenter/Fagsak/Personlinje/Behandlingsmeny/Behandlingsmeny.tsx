@@ -37,7 +37,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                     settAnker(anker === undefined ? event.currentTarget : undefined)
                 }
             >
-                Behandlingsmeny
+                Meny
             </Menyknapp>
 
             <Popover
