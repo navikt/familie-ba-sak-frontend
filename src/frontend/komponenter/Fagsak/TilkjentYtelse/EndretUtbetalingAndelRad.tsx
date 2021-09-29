@@ -8,7 +8,13 @@ import { Flatknapp } from 'nav-frontend-knapper';
 import { Collapse, Expand } from '@navikt/ds-icons';
 
 import { IBehandling } from '../../../typer/behandling';
-import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
+import {
+    IEndretUtbetalingAndelÅrsak,
+    IRestEndretUtbetalingAndel,
+    årsakTekst,
+} from '../../../typer/utbetalingAndel';
+import { formaterIdent } from '../../../utils/formatter';
+import { yearMonthPeriodeToString } from '../../../utils/kalender';
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 
 interface IEndretUtbetalingAndelRadProps {
@@ -30,15 +36,56 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
 }) => {
     const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(false);
 
+    const fraProsentTilTekst = (prosent: number, årsak?: IEndretUtbetalingAndelÅrsak): string => {
+        switch (årsak) {
+            case IEndretUtbetalingAndelÅrsak.DELT_BOSTED:
+                return fraProsentTilTekstDeltBosted(prosent);
+            default:
+                throw new Error(`Ukjent årsak ${årsak}`);
+        }
+    };
+
+    const fraProsentTilTekstDeltBosted = (prosent: number): string => {
+        switch (prosent) {
+            case 100:
+                return 'Ja - Full utbetaling';
+            case 50:
+                return 'Ja - Delt utbetaling';
+            case 0:
+                return 'Nei';
+            default:
+                throw new Error(`Ikke støttet prosent ${prosent} for delt bosted.`);
+        }
+    };
+
     return (
         <>
             <tr>
-                <td>{endretUtbetalingAndel.personIdent}</td>
                 <td>
-                    {endretUtbetalingAndel.fom} - {endretUtbetalingAndel.tom}
+                    {formaterIdent(
+                        endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : ''
+                    )}
                 </td>
-                <td>{endretUtbetalingAndel.prosent ? `${endretUtbetalingAndel.prosent}%` : ''}</td>
-                <td>{endretUtbetalingAndel.årsak}</td>
+                <td>
+                    {endretUtbetalingAndel.fom
+                        ? yearMonthPeriodeToString({
+                              fom: endretUtbetalingAndel.fom,
+                              tom: endretUtbetalingAndel.tom,
+                          })
+                        : ''}
+                </td>
+                <td>
+                    {typeof endretUtbetalingAndel.prosent === 'number' &&
+                    endretUtbetalingAndel.årsak
+                        ? fraProsentTilTekst(
+                              endretUtbetalingAndel.prosent,
+                              endretUtbetalingAndel.årsak
+                          )
+                        : ''}
+                </td>
+                <td>
+                    {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
+                </td>
                 <td>
                     <Flatknapp mini onClick={() => settÅpenUtbetalingsAndel(!åpenUtbetalingsAndel)}>
                         {åpenUtbetalingsAndel ? (
