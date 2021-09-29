@@ -34,7 +34,9 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     endretUtbetalingAndel,
     åpenBehandling,
 }) => {
-    const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(false);
+    const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
+        endretUtbetalingAndel.personIdent === null
+    );
 
     const fraProsentTilTekst = (prosent: number, årsak?: IEndretUtbetalingAndelÅrsak): string => {
         switch (årsak) {
