@@ -155,7 +155,9 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                         </div>
                     }
                 />
-                <StyledEtikettInfo mini={true}>Skriv {målform[søkersMålform]}</StyledEtikettInfo>
+                <StyledEtikettInfo mini={true}>
+                    Skriv {målform[søkersMålform].toLowerCase()}
+                </StyledEtikettInfo>
             </InfoBoks>
 
             {erLesevisning() ? (
