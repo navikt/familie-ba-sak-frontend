@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, Sidetittel } from 'nav-frontend-typografi';
 
 import { LeftFilled, RightFilled, DownFilled } from '@navikt/ds-icons';
@@ -15,12 +16,15 @@ import {
     IJournalpost,
     Journalposttype,
     journalpoststatus,
+    byggDataRessurs,
+    byggFeiletRessurs,
 } from '@navikt/familie-typer';
 
 import 'nav-frontend-tabell-style';
 import { EksternLenke } from '../../../ikoner/EksternLenke';
 import { IPersonInfo } from '../../../typer/person';
 import FamilieBaseKnapp from '../../Felleskomponenter/FamilieBaseKnapp';
+import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import {
     formaterFagsak,
     hentDatoRegistrertSendt,
@@ -119,6 +123,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
         Sorteringsrekkefølge.INGEN_SORTERING
     );
+    const [visPdfModal, settVisPdfModal] = useState<boolean>(false);
+    const [pdfDokument, settPdfDokument] = useState(byggTomRessurs<string>());
 
     useEffect(() => {
         settJournalposterRessurs(byggHenterRessurs());
@@ -140,6 +146,34 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 return settSortering(Sorteringsrekkefølge.SYNKENDE);
             case Sorteringsrekkefølge.SYNKENDE:
                 return settSortering(Sorteringsrekkefølge.INGEN_SORTERING);
+        }
+    };
+
+    const hentPdfDokument = (journalpostId: string, dokumentId: string | undefined) => {
+        if (dokumentId !== undefined) {
+            request<void, string>({
+                method: 'GET',
+                url: `/api/pdf/journalpost/${journalpostId}/hent/${dokumentId}`,
+            })
+                .then((response: Ressurs<string>) => {
+                    if (response.status === RessursStatus.SUKSESS) {
+                        settPdfDokument(
+                            byggDataRessurs(`data:application/pdf;base64,${response.data}`)
+                        );
+                        settVisPdfModal(true);
+                    } else if (
+                        response.status === RessursStatus.FEILET ||
+                        response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        response.status === RessursStatus.IKKE_TILGANG
+                    ) {
+                        settPdfDokument(response);
+                    } else {
+                        settPdfDokument(byggFeiletRessurs('Ukjent feil, kunne ikke generere pdf'));
+                    }
+                })
+                .catch(() => {
+                    settPdfDokument(byggFeiletRessurs('Ukjent feil, kunne ikke generere pdf'));
+                });
         }
     };
 
@@ -223,7 +257,17 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                             <EllipsisNormaltekst
                                                                 title={dokument.tittel}
                                                             >
-                                                                {dokument.tittel}
+                                                                <Lenke
+                                                                    href="#"
+                                                                    onClick={() =>
+                                                                        hentPdfDokument(
+                                                                            journalpost.journalpostId,
+                                                                            dokument.dokumentInfoId
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {dokument.tittel}
+                                                                </Lenke>
                                                             </EllipsisNormaltekst>
 
                                                             {
@@ -307,6 +351,11 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                         )}
                     </tbody>
                 </StyledTabell>
+                <PdfVisningModal
+                    åpen={visPdfModal}
+                    onRequestClose={() => settVisPdfModal(false)}
+                    pdfdata={pdfDokument}
+                />
             </Container>
         );
     } else {
