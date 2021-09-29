@@ -30,6 +30,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
 
     return (
         <>
+            <div style={{ marginLeft: '3rem' }}></div>
             <Menyknapp
                 id={'behandlingsmeny-arialabel-knapp'}
                 mini={true}
