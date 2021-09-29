@@ -190,6 +190,8 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                                             maxLength={makslengdeFritekst}
                                             onChange={event => onChangeFritekst(event, fritekstId)}
                                             feil={skjema.visFeilmeldinger && fritekst.feilmelding}
+                                            /* eslint-disable-next-line jsx-a11y/no-autofocus */
+                                            autoFocus
                                         />
                                         <SletteKnapp
                                             erLesevisning={false}
