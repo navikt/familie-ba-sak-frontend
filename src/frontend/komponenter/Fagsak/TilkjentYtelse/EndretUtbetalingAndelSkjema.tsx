@@ -191,16 +191,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     };
 
     const finnÅrTilbakeTilStønadFra = (): number => {
-        const g =
-            new Date().getFullYear() -
-            new Date(
-                Math.min(
-                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
-                        new Date(person.stønadFom).getTime()
-                    )
-                )
-            ).getFullYear();
-        console.log('LOG2', g);
         return (
             new Date().getFullYear() -
             new Date(
@@ -214,21 +204,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     };
 
     const finnÅrFremTilStønadTom = (): number => {
-        const g =
-            new Date(
-                Math.max(
-                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
-                        new Date(person.stønadFom).getTime()
-                    )
-                )
-            ).getFullYear() - new Date().getFullYear();
-        console.log('LOG1');
-        console.log(g);
         return (
             new Date(
                 Math.max(
                     ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
-                        new Date(person.stønadFom).getTime()
+                        new Date(person.stønadTom).getTime()
                     )
                 )
             ).getFullYear() - new Date().getFullYear()
