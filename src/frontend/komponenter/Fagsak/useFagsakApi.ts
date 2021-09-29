@@ -149,10 +149,53 @@ const useFagsakApi = (
             });
     };
 
+    const utledBehandlingresultat = (fagsak: IFagsak) => {
+        const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+        settSenderInn(true);
+
+        request<void, IFagsak>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/behandlingresultat`,
+        })
+            .then((response: Ressurs<IFagsak>) => {
+                settSenderInn(false);
+
+                if (response.status === RessursStatus.SUKSESS) {
+                    settFagsak(response);
+
+                    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
+                        response.data
+                    );
+
+                    if (aktivBehandling?.resultat !== BehandlingResultat.AVSLÅTT) {
+                        history.push(
+                            `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/simulering`
+                        );
+                    } else {
+                        history.push(
+                            `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/vedtak`
+                        );
+                    }
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    response.status === RessursStatus.IKKE_TILGANG
+                ) {
+                    settFeilmelding(response.frontendFeilmelding);
+                    settVisFeilmeldinger(true);
+                }
+            })
+            .catch(() => {
+                settSenderInn(false);
+                settFeilmelding('Validering av vilkårsvurdering feilet');
+            });
+    };
+
     return {
         opprettBehandling,
         opprettEllerHentFagsak,
         validerVilkårsvurderingOgSendInn,
+        utledBehandlingresultat,
         senderInn,
     };
 };

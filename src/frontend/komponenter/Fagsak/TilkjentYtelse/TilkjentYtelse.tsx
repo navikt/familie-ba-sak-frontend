@@ -21,6 +21,7 @@ import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import useFagsakApi from '../useFagsakApi';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
@@ -56,10 +57,16 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     const { erLesevisning } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
     const { toggles } = useApp();
+    const { utledBehandlingresultat } = useFagsakApi(
+        _ => {
+            'Feilmelding';
+        },
+        _ => {
+            'Feilmelding';
+        }
+    );
 
-    const nesteOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
-    };
+    const nesteOnClick = () => utledBehandlingresultat(fagsak);
 
     const forrigeOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
