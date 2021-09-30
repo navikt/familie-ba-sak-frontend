@@ -9,6 +9,7 @@ import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/f
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { BehandlingResultat, BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
+import { defaultFunksjonellFeil } from '../../typer/feilmeldinger';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (
@@ -149,13 +150,14 @@ const useFagsakApi = (
             });
     };
 
-    const utledBehandlingresultat = (fagsak: IFagsak) => {
+    const behandlingresultatNesteOnClick = (fagsak: IFagsak) => {
         const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
         settSenderInn(true);
+        settFeilmelding('');
 
         request<void, IFagsak>({
             method: 'POST',
-            url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/behandlingresultat`,
+            url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/steg/behandlingsresultat`,
         })
             .then((response: Ressurs<IFagsak>) => {
                 settSenderInn(false);
@@ -182,12 +184,11 @@ const useFagsakApi = (
                     response.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settFeilmelding(response.frontendFeilmelding);
-                    settVisFeilmeldinger(true);
                 }
             })
             .catch(() => {
                 settSenderInn(false);
-                settFeilmelding('Validering av vilkårsvurdering feilet');
+                settFeilmelding(defaultFunksjonellFeil);
             });
     };
 
@@ -195,7 +196,7 @@ const useFagsakApi = (
         opprettBehandling,
         opprettEllerHentFagsak,
         validerVilkårsvurderingOgSendInn,
-        utledBehandlingresultat,
+        behandlingresultatNesteOnClick,
         senderInn,
     };
 };
