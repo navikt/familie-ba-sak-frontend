@@ -174,6 +174,8 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                 .catch(() => {
                     settPdfDokument(byggFeiletRessurs('Ukjent feil, kunne ikke generere pdf'));
                 });
+        } else {
+            alert('Klarer ikke å åpne dokument. Ta kontakt med teamet.');
         }
     };
 
