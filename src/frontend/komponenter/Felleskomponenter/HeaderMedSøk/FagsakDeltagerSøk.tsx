@@ -16,11 +16,8 @@ import {
 
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import { fagsakdeltagerRoller, IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
-import { isRealOrSynthIdnr } from '../../../utils/artificialIdnr';
+import { isIdnrOrSynthNr } from '../../../utils/artificialIdnr';
 import OpprettFagsakModal from './OpprettFagsakModal';
-
-// eslint-disable-next-line
-const validator = require('@navikt/fnrvalidator');
 
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
@@ -34,7 +31,7 @@ const FagsakDeltagerSøk: React.FC = () => {
     >(undefined);
 
     //Support artificial ident that has the third digit being x+4 or x+8
-    const fnrValidator = (verdi: string): boolean => isRealOrSynthIdnr(verdi);
+    const fnrValidator = (verdi: string): boolean => isIdnrOrSynthNr(verdi);
 
     const søk = (personIdent: string): void => {
         if (personIdent === '') {
