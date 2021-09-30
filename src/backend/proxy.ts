@@ -52,12 +52,12 @@ export const doRedirectProxy = () => {
 };
 
 const pdfProxyUrlRecord: Record<string, string> = {
-    '/api/pdf/journalpost': '/api/journalpost',
+    '/api/pdf-proxy/journalpost': '/api/journalpost',
 };
 
 // eslint-disable-next-line
 export const doPdfProxy: any = () => {
-    return createProxyMiddleware('/api/pdf', {
+    return createProxyMiddleware('/api/pdf-proxy', {
         changeOrigin: true,
         logLevel: 'info',
         onProxyReq: restream,
@@ -98,7 +98,6 @@ export const doPdfProxy: any = () => {
                             'Ukjent feil ved visning dokument';
                     }
 
-                    res.setHeader('content-length', Buffer.byteLength(data));
                     if (visfrontendFeilmelding) {
                         res.setHeader('content-encoding', 'utf-8');
                         res.setHeader('Content-Type', 'text/plain');
