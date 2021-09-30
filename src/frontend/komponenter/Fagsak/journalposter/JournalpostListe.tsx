@@ -153,7 +153,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
         if (dokumentId !== undefined) {
             request<void, string>({
                 method: 'GET',
-                url: `/api/pdf/journalpost/${journalpostId}/hent/${dokumentId}`,
+                url: `/familie-ba-sak/api/journalpost/${journalpostId}/hent/${dokumentId}`,
             })
                 .then((response: Ressurs<string>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -274,7 +274,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                 <EksternLenkeWrapper
                                                                     onClick={() => {
                                                                         window.open(
-                                                                            `/api/pdf/journalpost/${journalpost.journalpostId}/hent/${dokument.dokumentInfoId}`,
+                                                                            `/api/pdf-proxy/journalpost/${journalpost.journalpostId}/hent/${dokument.dokumentInfoId}`,
                                                                             '_blank'
                                                                         );
                                                                     }}
