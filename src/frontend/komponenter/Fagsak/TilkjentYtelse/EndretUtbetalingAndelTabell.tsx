@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import { Element } from 'nav-frontend-typografi';
 
+import { EndretUtbetalingAndelProvider } from '../../../context/EndretUtbetalingAndelContext';
 import { IBehandling } from '../../../typer/behandling';
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
 
@@ -40,11 +41,15 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                     </tr>
                 </thead>
                 <tbody>
-                    {endretUtbetalingAndeler.map(endredUtbetalingAndel => (
-                        <EndretUtbetalingAndelRad
-                            endretUtbetalingAndel={endredUtbetalingAndel}
-                            åpenBehandling={åpenBehandling}
-                        />
+                    {endretUtbetalingAndeler.map(endretUtbetalingAndel => (
+                        <EndretUtbetalingAndelProvider
+                            endretUtbetalingAndel={endretUtbetalingAndel}
+                        >
+                            <EndretUtbetalingAndelRad
+                                endretUtbetalingAndel={endretUtbetalingAndel}
+                                åpenBehandling={åpenBehandling}
+                            />
+                        </EndretUtbetalingAndelProvider>
                     ))}
                 </tbody>
             </table>

@@ -7,6 +7,7 @@ import { Flatknapp } from 'nav-frontend-knapper';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
 
+import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import { IBehandling } from '../../../typer/behandling';
 import {
     IEndretUtbetalingAndelÅrsak,
@@ -37,6 +38,27 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
         endretUtbetalingAndel.personIdent === null
     );
+
+    const { skjema } = useEndretUtbetalingAndel();
+
+    const toggleForm = (visAlert: boolean) => {
+        if (
+            (endretUtbetalingAndel.årsak !== skjema.felter.årsak.verdi ||
+                endretUtbetalingAndel.fom !== skjema.felter.fom.verdi ||
+                endretUtbetalingAndel.tom !== skjema.felter.tom.verdi ||
+                endretUtbetalingAndel.personIdent !== skjema.felter.person.verdi ||
+                endretUtbetalingAndel.prosent !==
+                    (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
+                        (skjema.felter.fullSats.verdi ? 1 : 2) ||
+                endretUtbetalingAndel.begrunnelse !== skjema.felter.begrunnelse.verdi) &&
+            visAlert &&
+            åpenUtbetalingsAndel
+        ) {
+            alert('Endretutbetalingsandelen har endringer som ikke er lagret!');
+        } else {
+            settÅpenUtbetalingsAndel(!åpenUtbetalingsAndel);
+        }
+    };
 
     const fraProsentTilTekst = (prosent: number, årsak?: IEndretUtbetalingAndelÅrsak): string => {
         switch (årsak) {
@@ -89,7 +111,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                     {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
                 </td>
                 <td>
-                    <Flatknapp mini onClick={() => settÅpenUtbetalingsAndel(!åpenUtbetalingsAndel)}>
+                    <Flatknapp mini onClick={() => toggleForm(true)}>
                         {åpenUtbetalingsAndel ? (
                             <>
                                 <StyledCollapseIkon /> Lukk
@@ -107,10 +129,9 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                     <td colSpan={5}>
                         <EndretUtbetalingAndelSkjema
                             åpenBehandling={åpenBehandling}
-                            avbrytEndringAvUtbetalingsperiode={() =>
-                                settÅpenUtbetalingsAndel(false)
-                            }
-                            endretUtbetalingAndel={endretUtbetalingAndel}
+                            avbrytEndringAvUtbetalingsperiode={() => {
+                                settÅpenUtbetalingsAndel(false);
+                            }}
                         />
                     </td>
                 </tr>
