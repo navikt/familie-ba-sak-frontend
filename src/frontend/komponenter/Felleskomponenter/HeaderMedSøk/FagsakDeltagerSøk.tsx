@@ -37,8 +37,10 @@ const FagsakDeltagerSøk: React.FC = () => {
         const tredjeNummer: number = +verdi.substr(2, 1);
         return (
             validator.idnr(verdi).status === 'valid' ||
-            validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 4) + verdi.substr(3)) ||
-            validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 8) + verdi.substr(3))
+            validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 4) + verdi.substr(3)).status ===
+                'valid' ||
+            validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 8) + verdi.substr(3)).status ===
+                'valid'
         );
     };
 
