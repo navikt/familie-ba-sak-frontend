@@ -3,19 +3,19 @@ import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp, Flatknapp } from 'nav-frontend-knapper';
-import { SkjemaGruppe, Radio } from 'nav-frontend-skjema';
+import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
 import {
     FamilieRadioGruppe,
-    FamilieTextarea,
     FamilieReactSelect,
+    FamilieTextarea,
     OptionType,
 } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { Ressurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
@@ -24,15 +24,15 @@ import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { PersonType } from '../../../typer/person';
 import {
-    ÅrsakOption,
-    IRestEndretUtbetalingAndel,
-    årsakTilOption,
-    årsaker,
-    IEndretUtbetalingAndelÅrsak,
-    satsTilOption,
-    SatsOption,
-    satser,
     IEndretUtbetalingAndelFullSats,
+    IEndretUtbetalingAndelÅrsak,
+    IRestEndretUtbetalingAndel,
+    satser,
+    SatsOption,
+    satsTilOption,
+    årsaker,
+    ÅrsakOption,
+    årsakTilOption,
 } from '../../../typer/utbetalingAndel';
 import { YearMonth } from '../../../utils/kalender';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
@@ -121,8 +121,15 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     },
                 },
                 (fagsak: Ressurs<IFagsak>) => {
-                    settFagsak(fagsak);
-                    avbrytEndringAvUtbetalingsperiode();
+                    if (fagsak.status === RessursStatus.SUKSESS) {
+                        avbrytEndringAvUtbetalingsperiode();
+                        settFagsak(fagsak);
+                    } else if (
+                        fagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        fagsak.status === RessursStatus.FEILET
+                    ) {
+                        settFagsak(byggFeiletRessurs(fagsak.frontendFeilmelding));
+                    }
                 }
             );
         }

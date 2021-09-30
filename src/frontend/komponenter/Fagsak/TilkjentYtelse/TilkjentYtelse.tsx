@@ -8,7 +8,7 @@ import { Element } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
-import { Ressurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -96,7 +96,14 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             påvirkerSystemLaster: true,
             data: {},
         }).then((response: Ressurs<IFagsak>) => {
-            settFagsak(response);
+            if (response.status === RessursStatus.SUKSESS) {
+                settFagsak(response);
+            } else if (
+                response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                response.status === RessursStatus.FEILET
+            ) {
+                settFagsak(byggFeiletRessurs(response.frontendFeilmelding));
+            }
         });
     };
 
