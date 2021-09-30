@@ -10,12 +10,12 @@ const validate = (digits: string, isDnr: boolean): boolean => {
         elevenDigits.test(digits) &&
         checksums(digits) &&
         (birthdate(digits, isDnr) ||
-            birthdate(modifyIdnrForSynth(digits, 4), isDnr) ||
-            birthdate(modifyIdnrForSynth(digits, 8), isDnr))
+            birthdate(modifyDigitsForSynth(digits, 4), isDnr) ||
+            birthdate(modifyDigitsForSynth(digits, 8), isDnr))
     );
 };
 
-const modifyIdnrForSynth = (digits: string, minusBy: number): string =>
+const modifyDigitsForSynth = (digits: string, minusBy: number): string =>
     digits.substr(0, 2) + (+digits.substr(2, 1) - minusBy) + digits.substr(3);
 
 const checksums = (digitsString: string): boolean => {
