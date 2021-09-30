@@ -33,11 +33,14 @@ const FagsakDeltagerSøk: React.FC = () => {
     >(undefined);
 
     const fnrValidator = (verdi: string): boolean => {
-        const tredjeNummer: number = + verdi.substr(2, 1);
-        const ikkeDnr = + verdi.substring(0, 1) < 4;
-        return validator.idnr(verdi).status === 'valid' || ikkeDnr && (
-        validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 4) + verdi.substr(3)) ||
-        validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 8) + verdi.substr(3)));
+        const tredjeNummer: number = +verdi.substr(2, 1);
+        const ikkeDnr = +verdi.substring(0, 1) < 4;
+        return (
+            validator.idnr(verdi).status === 'valid' ||
+            (ikkeDnr &&
+                (validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 4) + verdi.substr(3)) ||
+                    validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 8) + verdi.substr(3))))
+        );
     };
 
     const søk = (personIdent: string): void => {
