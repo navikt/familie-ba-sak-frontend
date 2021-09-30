@@ -16,6 +16,7 @@ import {
 
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import { fagsakdeltagerRoller, IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
+import { isRealOrSynthIdnr } from '../../../utils/artificialIdnr';
 import OpprettFagsakModal from './OpprettFagsakModal';
 
 // eslint-disable-next-line
@@ -32,17 +33,8 @@ const FagsakDeltagerSøk: React.FC = () => {
         ISøkeresultat | undefined
     >(undefined);
 
-    const fnrValidator = (verdi: string): boolean => {
-        //Support artificial ident that has the third digit being x+4 or x+8
-        const tredjeNummer: number = +verdi.substr(2, 1);
-        return (
-            validator.idnr(verdi).status === 'valid' ||
-            validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 4) + verdi.substr(3)).status ===
-                'valid' ||
-            validator.idnr(verdi.substr(0, 2) + (tredjeNummer - 8) + verdi.substr(3)).status ===
-                'valid'
-        );
-    };
+    //Support artificial ident that has the third digit being x+4 or x+8
+    const fnrValidator = (verdi: string): boolean => isRealOrSynthIdnr(verdi);
 
     const søk = (personIdent: string): void => {
         if (personIdent === '') {
