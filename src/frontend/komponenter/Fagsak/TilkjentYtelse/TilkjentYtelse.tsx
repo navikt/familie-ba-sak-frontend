@@ -4,11 +4,11 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { Flatknapp } from 'nav-frontend-knapper';
-import { Element } from 'nav-frontend-typografi';
+import { Element, Feilmelding } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -44,6 +44,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     fagsak,
     åpenBehandling,
 }) => {
+    const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
+    const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
+
     const history = useHistory();
     const {
         aktivEtikett,
@@ -97,12 +100,14 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             data: {},
         }).then((response: Ressurs<IFagsak>) => {
             if (response.status === RessursStatus.SUKSESS) {
+                settVisFeilmeldinger(false);
                 settFagsak(response);
             } else if (
                 response.status === RessursStatus.FUNKSJONELL_FEIL ||
                 response.status === RessursStatus.FEILET
             ) {
-                settFagsak(byggFeiletRessurs(response.frontendFeilmelding));
+                settVisFeilmeldinger(true);
+                settOpprettelseFeilmelding(response.frontendFeilmelding);
             }
         });
     };
@@ -137,7 +142,14 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 />
             )}
             {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
-                <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
+                <EndretUtbetalingAndelTabell
+                    åpenBehandling={åpenBehandling}
+                    settVisFeilmeldinger={settVisFeilmeldinger}
+                    settFeilmelding={settOpprettelseFeilmelding}
+                />
+            )}
+            {visFeilmeldinger && opprettelseFeilmelding !== '' && (
+                <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
             )}
         </Skjemasteg>
     );

@@ -15,7 +15,7 @@ import {
     OptionType,
 } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
@@ -79,11 +79,15 @@ const StyledDeleteIkon = styled(Delete)`
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     avbrytEndringAvUtbetalingsperiode: () => void;
+    settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
 const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
     avbrytEndringAvUtbetalingsperiode,
+    settVisFeilmeldinger,
+    settFeilmelding,
 }) => {
     const { request } = useHttp();
     const { erLesevisning } = useBehandling();
@@ -122,13 +126,18 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 },
                 (fagsak: Ressurs<IFagsak>) => {
                     if (fagsak.status === RessursStatus.SUKSESS) {
+                        settVisFeilmeldinger(false);
                         avbrytEndringAvUtbetalingsperiode();
                         settFagsak(fagsak);
-                    } else if (
+                    }
+                },
+                (fagsak: Ressurs<IFagsak>) => {
+                    if (
                         fagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
                         fagsak.status === RessursStatus.FEILET
                     ) {
-                        settFagsak(byggFeiletRessurs(fagsak.frontendFeilmelding));
+                        settVisFeilmeldinger(true);
+                        settFeilmelding(fagsak.frontendFeilmelding);
                     }
                 }
             );
