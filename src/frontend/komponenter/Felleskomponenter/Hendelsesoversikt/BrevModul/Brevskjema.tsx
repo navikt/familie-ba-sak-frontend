@@ -160,7 +160,7 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                                         : ''}
                                 </Normaltekst>
                                 <StyledEtikettInfo mini={true}>
-                                    {målform[mottakersMålform()]}
+                                    Skriv {målform[mottakersMålform()].toLowerCase()}
                                 </StyledEtikettInfo>
                             </LabelOgEtikett>
                         }
