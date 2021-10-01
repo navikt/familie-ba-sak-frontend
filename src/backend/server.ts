@@ -47,7 +47,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     );
 
     app.use(
-        '/api/pdf',
+        '/api/pdf-proxy',
         ensureAuthenticated(azureAuthClient, true),
         attachToken(azureAuthClient),
         doPdfProxy()

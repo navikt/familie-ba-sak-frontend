@@ -28,5 +28,15 @@ describe('BehandlingContext', () => {
                 saksbehandlerHarKunLesevisning(true, false, BehandlingSteg.BESLUTTE_VEDTAK)
             ).toBeTruthy();
         });
+        test('Skal returnere false dersom saksbehandler har skrivetilgang, men ikke tilgang til enhet. Men man skal ikke sjekke tilgang til enhet.', () => {
+            expect(
+                saksbehandlerHarKunLesevisning(
+                    true,
+                    false,
+                    BehandlingSteg.SEND_TIL_BESLUTTER,
+                    false
+                )
+            ).toBeFalsy();
+        });
     });
 });
