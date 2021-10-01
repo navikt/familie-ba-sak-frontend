@@ -12,6 +12,7 @@ import {
     FamilieRadioGruppe,
     FamilieReactSelect,
     FamilieTextarea,
+    ISODateString,
     OptionType,
 } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -24,7 +25,6 @@ import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import {
     IEndretUtbetalingAndelFullSats,
-    IEndretUtbetalingAndelÅrsak,
     IRestEndretUtbetalingAndel,
     satser,
     SatsOption,
@@ -33,10 +33,15 @@ import {
     ÅrsakOption,
     årsakTilOption,
 } from '../../../typer/utbetalingAndel';
+import { datoformatNorsk } from '../../../utils/formatter';
 import { YearMonth } from '../../../utils/kalender';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
+import {
+    StyledFamilieDatovelger,
+    StyledFeilmelding,
+} from '../Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
 const Knapperad = styled.div`
     display: flex;
@@ -273,32 +278,71 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 />
             </Feltmargin>
 
-            {skjema.felter.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
-                skjema.felter.periodeSkalUtbetalesTilSøker.verdi && (
-                    <Feltmargin>
-                        <StyledSatsvelger
-                            {...skjema.felter.fullSats.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            label={<Element>Sats</Element>}
-                            value={
-                                skjema.felter.fullSats.verdi !== undefined
-                                    ? satsTilOption(skjema.felter.fullSats.verdi)
-                                    : undefined
-                            }
-                            placeholder={'Velg sats'}
-                            isMulti={false}
-                            onChange={(valg): void => {
-                                skjema.felter.fullSats.validerOgSettFelt(
-                                    (valg as SatsOption).fullSats
-                                );
-                            }}
-                            options={satser.map(sats =>
-                                satsTilOption(sats === IEndretUtbetalingAndelFullSats.FULL_SATS)
-                            )}
-                        />
-                    </Feltmargin>
+            <Feltmargin>
+                <StyledFamilieDatovelger
+                    {...skjema.felter.søknadstidspunkt.hentNavBaseSkjemaProps(
+                        skjema.visFeilmeldinger
+                    )}
+                    feil={!!skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger}
+                    valgtDato={skjema.felter.søknadstidspunkt.verdi}
+                    label={<Element>Søknadstidspunkt</Element>}
+                    placeholder={datoformatNorsk.DATO}
+                    onChange={(dato?: ISODateString) =>
+                        skjema.felter.søknadstidspunkt.validerOgSettFelt(dato)
+                    }
+                />
+                {skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger && (
+                    <StyledFeilmelding>
+                        {skjema.felter.søknadstidspunkt.feilmelding}
+                    </StyledFeilmelding>
                 )}
+            </Feltmargin>
+
+            {skjema.felter.avtaleOmDeltBosted.erSynlig && (
+                <Feltmargin>
+                    <StyledFamilieDatovelger
+                        {...skjema.felter.avtaleOmDeltBosted.hentNavBaseSkjemaProps(
+                            skjema.visFeilmeldinger
+                        )}
+                        feil={
+                            !!skjema.felter.avtaleOmDeltBosted.feilmelding &&
+                            skjema.visFeilmeldinger
+                        }
+                        valgtDato={skjema.felter.avtaleOmDeltBosted.verdi}
+                        label={<Element>Avtale om delt bosted</Element>}
+                        placeholder={datoformatNorsk.DATO}
+                        onChange={(dato?: ISODateString) =>
+                            skjema.felter.avtaleOmDeltBosted.validerOgSettFelt(dato)
+                        }
+                    />
+                    {skjema.felter.avtaleOmDeltBosted.feilmelding && skjema.visFeilmeldinger && (
+                        <StyledFeilmelding>
+                            {skjema.felter.avtaleOmDeltBosted.feilmelding}
+                        </StyledFeilmelding>
+                    )}
+                </Feltmargin>
+            )}
+            {skjema.felter.fullSats.erSynlig && (
+                <Feltmargin>
+                    <StyledSatsvelger
+                        {...skjema.felter.fullSats.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                        label={<Element>Sats</Element>}
+                        value={
+                            skjema.felter.fullSats.verdi !== undefined
+                                ? satsTilOption(skjema.felter.fullSats.verdi)
+                                : undefined
+                        }
+                        placeholder={'Velg sats'}
+                        isMulti={false}
+                        onChange={(valg): void => {
+                            skjema.felter.fullSats.validerOgSettFelt((valg as SatsOption).fullSats);
+                        }}
+                        options={satser.map(sats =>
+                            satsTilOption(sats === IEndretUtbetalingAndelFullSats.FULL_SATS)
+                        )}
+                    />
+                </Feltmargin>
+            )}
 
             <Feltmargin>
                 <StyledFamilieTextarea
