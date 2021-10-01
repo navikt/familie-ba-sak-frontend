@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -21,6 +22,7 @@ import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
+import useFagsakApi from '../useFagsakApi';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
@@ -59,10 +61,8 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     const { erLesevisning } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
     const { toggles } = useApp();
-
-    const nesteOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`);
-    };
+    const [feilmelding, settFeilmelding] = useState('');
+    const { behandlingresultatNesteOnClick, senderInn } = useFagsakApi(_ => '', settFeilmelding);
 
     const forrigeOnClick = () => {
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
@@ -114,12 +114,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
 
     return (
         <Skjemasteg
-            senderInn={false}
+            senderInn={senderInn}
             tittel="Behandlingsresultat"
             className="tilkjentytelse"
             forrigeOnClick={forrigeOnClick}
-            nesteOnClick={nesteOnClick}
+            nesteOnClick={() => behandlingresultatNesteOnClick(fagsak)}
             maxWidthStyle={'80rem'}
+            feilmelding={feilmelding}
         >
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}

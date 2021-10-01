@@ -86,7 +86,7 @@ describe('sider.ts', () => {
     });
 
     describe('finnSideForBehandlingssteg', () => {
-        test('Skal returnere første side for behandlingssteget dersom der er før "send til beslutter"', () => {
+        test('Skal returnere første side for behandlingssteget dersom det er før "send til beslutter"', () => {
             const behandling = mockBehandling({
                 årsak: BehandlingÅrsak.SØKNAD,
                 steg: BehandlingSteg.REGISTRERE_SØKNAD,
@@ -97,7 +97,7 @@ describe('sider.ts', () => {
                 årsak: BehandlingÅrsak.SØKNAD,
                 steg: BehandlingSteg.VURDER_TILBAKEKREVING,
             });
-            expect(finnSideForBehandlingssteg(behandling2)).toEqual(sider.BEHANDLINGRESULTAT);
+            expect(finnSideForBehandlingssteg(behandling2)).toEqual(sider.SIMULERING);
         });
 
         test(
@@ -113,14 +113,14 @@ describe('sider.ts', () => {
         );
 
         test(
-            'Skal returnere Behandlingresultat-siden dersom behandlingssteget er er etter "send til beslutter" ' +
+            'Skal returnere Simulering-siden dersom behandlingssteget er etter "send til beslutter" ' +
                 'og behandlinsårsaken er "satsendring"',
             () => {
                 const behandling = mockBehandling({
                     årsak: BehandlingÅrsak.SATSENDRING,
                     steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
                 });
-                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.BEHANDLINGRESULTAT);
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.SIMULERING);
             }
         );
     });

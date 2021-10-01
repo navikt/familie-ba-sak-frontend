@@ -9,6 +9,7 @@ import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/f
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import { BehandlingResultat, BehandlingÅrsak, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
+import { defaultFunksjonellFeil } from '../../typer/feilmeldinger';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
 
 const useFagsakApi = (
@@ -149,10 +150,53 @@ const useFagsakApi = (
             });
     };
 
+    const behandlingresultatNesteOnClick = (fagsak: IFagsak) => {
+        const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+        settSenderInn(true);
+        settFeilmelding('');
+
+        request<void, IFagsak>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/behandlinger/${aktivBehandling?.behandlingId}/steg/behandlingsresultat`,
+        })
+            .then((response: Ressurs<IFagsak>) => {
+                settSenderInn(false);
+
+                if (response.status === RessursStatus.SUKSESS) {
+                    settFagsak(response);
+
+                    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
+                        response.data
+                    );
+
+                    if (aktivBehandling?.resultat !== BehandlingResultat.AVSLÅTT) {
+                        history.push(
+                            `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/simulering`
+                        );
+                    } else {
+                        history.push(
+                            `/fagsak/${fagsak.id}/${aktivBehandling?.behandlingId}/vedtak`
+                        );
+                    }
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    response.status === RessursStatus.IKKE_TILGANG
+                ) {
+                    settFeilmelding(response.frontendFeilmelding);
+                }
+            })
+            .catch(() => {
+                settSenderInn(false);
+                settFeilmelding(defaultFunksjonellFeil);
+            });
+    };
+
     return {
         opprettBehandling,
         opprettEllerHentFagsak,
         validerVilkårsvurderingOgSendInn,
+        behandlingresultatNesteOnClick,
         senderInn,
     };
 };

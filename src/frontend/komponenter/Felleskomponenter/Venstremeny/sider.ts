@@ -95,7 +95,7 @@ export const sider: Record<SideId, ISide> = {
     BEHANDLINGRESULTAT: {
         href: 'tilkjent-ytelse',
         navn: 'Behandlingsresultat',
-        steg: BehandlingSteg.VURDER_TILBAKEKREVING,
+        steg: BehandlingSteg.BEHANDLINGSRESULTAT,
     },
     SIMULERING: {
         href: 'simulering',
@@ -155,7 +155,7 @@ export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | und
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
         return sider.VEDTAK.visSide && sider.VEDTAK.visSide(behandling)
             ? sider.VEDTAK
-            : sider.BEHANDLINGRESULTAT;
+            : sider.SIMULERING;
     }
 
     const sideForSteg = Object.entries(sider).find(([_, side]) => side.steg === steg);
