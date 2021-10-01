@@ -135,7 +135,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         return hentDataFraRessurs(åpenBehandling)?.steg;
     };
 
-    const erLesevisning = (): boolean => {
+    const erLesevisning = (sjekkTilgangTilEnhet = true): boolean => {
         const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
         const saksbehandlerHarTilgangTilEnhet = harTilgangTilEnhet(
             hentDataFraRessurs(åpenBehandling)?.arbeidsfordelingPåBehandling.behandlendeEnhetId ??
@@ -147,7 +147,8 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         return saksbehandlerHarKunLesevisning(
             innloggetSaksbehandlerSkrivetilgang,
             saksbehandlerHarTilgangTilEnhet,
-            steg
+            steg,
+            sjekkTilgangTilEnhet
         );
     };
 
@@ -186,6 +187,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         bestemÅpenBehandling,
         erLesevisning,
         forrigeÅpneSide,
+        hentStegPåÅpenBehandling,
         leggTilBesøktSide,
         settIkkeKontrollerteSiderTilManglerKontroll,
         søkersMålform,
