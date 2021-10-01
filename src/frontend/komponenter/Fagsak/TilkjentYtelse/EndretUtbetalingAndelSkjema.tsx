@@ -22,7 +22,6 @@ import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndel
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { PersonType } from '../../../typer/person';
 import {
     IEndretUtbetalingAndelFullSats,
     IEndretUtbetalingAndelÅrsak,
@@ -189,12 +188,10 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     onChange={(valg): void => {
                         skjema.felter.person.validerOgSettFelt((valg as OptionType).value);
                     }}
-                    options={åpenBehandling.personer
-                        .filter(person => person.type === PersonType.BARN)
-                        .map(person => ({
-                            value: person.personIdent,
-                            label: person.personIdent,
-                        }))}
+                    options={åpenBehandling.personer.map(person => ({
+                        value: person.personIdent,
+                        label: person.personIdent,
+                    }))}
                 />
             </Feltmargin>
 
