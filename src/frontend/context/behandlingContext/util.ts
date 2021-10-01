@@ -3,9 +3,14 @@ import { BehandlingSteg, hentStegNummer } from '../../typer/behandling';
 export const saksbehandlerHarKunLesevisning = (
     innloggetSaksbehandlerSkrivetilgang: boolean,
     saksbehandlerHarTilgangTilEnhet: boolean,
-    steg: BehandlingSteg | undefined
+    steg: BehandlingSteg | undefined,
+    sjekkTilgangTilEnhet = true
 ) => {
-    if (!saksbehandlerHarTilgangTilEnhet || !innloggetSaksbehandlerSkrivetilgang) {
+    if (sjekkTilgangTilEnhet) {
+        if (!saksbehandlerHarTilgangTilEnhet || !innloggetSaksbehandlerSkrivetilgang) {
+            return true;
+        }
+    } else if (!innloggetSaksbehandlerSkrivetilgang) {
         return true;
     }
 
