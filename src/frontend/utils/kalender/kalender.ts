@@ -1,5 +1,5 @@
-import { parseIso8601String } from './io';
-import { antallDagerIMåned, DagMånedÅr, FamilieIsoDate } from './typer';
+import { parseIso8601String, parseIso8601StringMånedÅr } from './io';
+import { antallDagerIMåned, DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
 
 export const TIDENES_MORGEN: DagMånedÅr = {
     dag: 1,
@@ -13,6 +13,9 @@ export const TIDENES_ENDE: DagMånedÅr = {
 };
 
 export const kalenderDato = (dato: FamilieIsoDate): DagMånedÅr => parseIso8601String(dato);
+
+export const yearMonthTilKalenderMåned = (yearMonth: YearMonth): MånedÅr =>
+    parseIso8601StringMånedÅr(yearMonth);
 
 export const kalenderDatoMedFallback = (
     dato: FamilieIsoDate | undefined,

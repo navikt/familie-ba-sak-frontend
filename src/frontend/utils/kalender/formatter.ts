@@ -1,4 +1,4 @@
-import { DagMånedÅr } from './typer';
+import { DagMånedÅr, MånedÅr } from './typer';
 import { capString } from './utils';
 
 // Plusser på 1 måned da dato objektet bruker 0-11 tallrekke for måneder
@@ -9,4 +9,8 @@ export const tilVisning = (dagMånedÅr?: DagMånedÅr) => {
               dagMånedÅr.år
           )}`
         : '';
+};
+
+export const yearMonthTilVisning = (månedÅr?: MånedÅr) => {
+    return månedÅr ? `${capString(2, månedÅr.måned + 1)}.${capString(4, månedÅr.år)}` : '';
 };

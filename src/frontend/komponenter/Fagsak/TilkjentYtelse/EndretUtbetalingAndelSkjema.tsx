@@ -3,38 +3,37 @@ import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { Knapp, Flatknapp } from 'nav-frontend-knapper';
-import { SkjemaGruppe, Radio } from 'nav-frontend-skjema';
+import { Flatknapp, Knapp } from 'nav-frontend-knapper';
+import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
 import {
     FamilieRadioGruppe,
-    FamilieTextarea,
     FamilieReactSelect,
+    FamilieTextarea,
     OptionType,
 } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { Ressurs } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
-import { PersonType } from '../../../typer/person';
 import {
-    ÅrsakOption,
-    IRestEndretUtbetalingAndel,
-    årsakTilOption,
-    årsaker,
-    IEndretUtbetalingAndelÅrsak,
-    satsTilOption,
-    SatsOption,
-    satser,
     IEndretUtbetalingAndelFullSats,
+    IEndretUtbetalingAndelÅrsak,
+    IRestEndretUtbetalingAndel,
+    satser,
+    SatsOption,
+    satsTilOption,
+    årsaker,
+    ÅrsakOption,
+    årsakTilOption,
 } from '../../../typer/utbetalingAndel';
-import { FamilieIsoDate, YearMonth, erIsoStringGyldig } from '../../../utils/kalender';
+import { YearMonth } from '../../../utils/kalender';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
@@ -78,14 +77,16 @@ const StyledDeleteIkon = styled(Delete)`
 
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
-    endretUtbetalingAndel: IRestEndretUtbetalingAndel;
     avbrytEndringAvUtbetalingsperiode: () => void;
+    settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
 const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
-    endretUtbetalingAndel,
     avbrytEndringAvUtbetalingsperiode,
+    settVisFeilmeldinger,
+    settFeilmelding,
 }) => {
     const { request } = useHttp();
     const { erLesevisning } = useBehandling();
@@ -94,64 +95,12 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     const tilOptionType = (value?: string): OptionType | undefined =>
         value ? { value: value, label: value } : undefined;
 
+    const { endretUtbetalingAndel, skjema, kanSendeSkjema, onSubmit, nullstillSkjema } =
+        useEndretUtbetalingAndel();
+
     useEffect(() => {
         nullstillSkjema();
     }, [endretUtbetalingAndel]);
-
-    const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
-        {
-            person: string | undefined;
-            fom: FamilieIsoDate | undefined;
-            tom: FamilieIsoDate | undefined;
-            periodeSkalUtbetalesTilSøker: boolean;
-            fullSats: boolean | undefined;
-            årsak: IEndretUtbetalingAndelÅrsak | undefined;
-            begrunnelse: string;
-        },
-        IFagsak
-    >({
-        felter: {
-            person: useFelt<string | undefined>({
-                verdi: endretUtbetalingAndel
-                    ? endretUtbetalingAndel.personIdent
-                        ? endretUtbetalingAndel.personIdent
-                        : undefined
-                    : undefined,
-                valideringsfunksjon: felt =>
-                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
-            }),
-            fom: useFelt<FamilieIsoDate | undefined>({
-                verdi: endretUtbetalingAndel.fom,
-                valideringsfunksjon: felt =>
-                    erIsoStringGyldig(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge f.o.m-dato'),
-            }),
-            tom: useFelt<FamilieIsoDate | undefined>({
-                verdi: endretUtbetalingAndel.tom,
-                valideringsfunksjon: felt =>
-                    erIsoStringGyldig(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge t.o.m-dato'),
-            }),
-            periodeSkalUtbetalesTilSøker: useFelt<boolean>({
-                verdi:
-                    endretUtbetalingAndel.prosent !== undefined &&
-                    endretUtbetalingAndel.prosent > 0,
-            }),
-            fullSats: useFelt<boolean | undefined>({
-                verdi:
-                    endretUtbetalingAndel.prosent !== undefined
-                        ? endretUtbetalingAndel.prosent === 100
-                        : undefined,
-            }),
-            årsak: useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
-                verdi: endretUtbetalingAndel.årsak ? endretUtbetalingAndel.årsak : undefined,
-                valideringsfunksjon: felt =>
-                    felt.verdi ? ok(felt) : feil(felt, 'Du må velge en årsak'),
-            }),
-            begrunnelse: useFelt<string>({
-                verdi: endretUtbetalingAndel.begrunnelse ? endretUtbetalingAndel.begrunnelse : '',
-            }),
-        },
-        skjemanavn: 'Endre utbetalingsperiode',
-    });
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
         const { person, periodeSkalUtbetalesTilSøker, fom, tom, årsak, begrunnelse, fullSats } =
@@ -175,8 +124,20 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     },
                 },
                 (fagsak: Ressurs<IFagsak>) => {
-                    settFagsak(fagsak);
-                    avbrytEndringAvUtbetalingsperiode();
+                    if (fagsak.status === RessursStatus.SUKSESS) {
+                        settVisFeilmeldinger(false);
+                        avbrytEndringAvUtbetalingsperiode();
+                        settFagsak(fagsak);
+                    }
+                },
+                (fagsak: Ressurs<IFagsak>) => {
+                    if (
+                        fagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
+                        fagsak.status === RessursStatus.FEILET
+                    ) {
+                        settVisFeilmeldinger(true);
+                        settFeilmelding(fagsak.frontendFeilmelding);
+                    }
                 }
             );
         }
@@ -188,6 +149,31 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
             påvirkerSystemLaster: true,
         }).then((fagsak: Ressurs<IFagsak>) => settFagsak(fagsak));
+    };
+
+    const finnÅrTilbakeTilStønadFra = (): number => {
+        return (
+            new Date().getFullYear() -
+            new Date(
+                Math.min(
+                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
+                        new Date(person.stønadFom).getTime()
+                    )
+                )
+            ).getFullYear()
+        );
+    };
+
+    const finnÅrFremTilStønadTom = (): number => {
+        return (
+            new Date(
+                Math.max(
+                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
+                        new Date(person.stønadTom).getTime()
+                    )
+                )
+            ).getFullYear() - new Date().getFullYear()
+        );
     };
 
     return (
@@ -202,12 +188,10 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     onChange={(valg): void => {
                         skjema.felter.person.validerOgSettFelt((valg as OptionType).value);
                     }}
-                    options={åpenBehandling.personer
-                        .filter(person => person.type === PersonType.BARN)
-                        .map(person => ({
-                            value: person.personIdent,
-                            label: person.personIdent,
-                        }))}
+                    options={åpenBehandling.personer.map(person => ({
+                        value: person.personIdent,
+                        label: person.personIdent,
+                    }))}
                 />
             </Feltmargin>
 
@@ -221,8 +205,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             <Normaltekst>F.o.m</Normaltekst>
                         </>
                     }
-                    antallÅrFrem={0}
-                    antallÅrTilbake={3}
+                    antallÅrFrem={finnÅrFremTilStønadTom()}
+                    antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
                     onEndret={(dato: YearMonth | undefined) =>
                         skjema.felter.fom.validerOgSettFelt(dato)
                     }
@@ -236,8 +220,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             <Normaltekst>T.o.m</Normaltekst>
                         </>
                     }
-                    antallÅrFrem={0}
-                    antallÅrTilbake={3}
+                    antallÅrFrem={finnÅrFremTilStønadTom()}
+                    antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
                     onEndret={(dato: YearMonth | undefined) => {
                         skjema.felter.tom.validerOgSettFelt(dato);
                     }}
