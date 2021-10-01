@@ -45,19 +45,21 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
 
     const { skjema } = useEndretUtbetalingAndel();
 
-    const toggleForm = (visAlert: boolean) => {
-        if (
-            (endretUtbetalingAndel.årsak !== skjema.felter.årsak.verdi ||
-                endretUtbetalingAndel.fom !== skjema.felter.fom.verdi ||
-                endretUtbetalingAndel.tom !== skjema.felter.tom.verdi ||
-                endretUtbetalingAndel.personIdent !== skjema.felter.person.verdi ||
-                endretUtbetalingAndel.prosent !==
-                    (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
-                        (skjema.felter.fullSats.verdi ? 1 : 2) ||
-                endretUtbetalingAndel.begrunnelse !== skjema.felter.begrunnelse.verdi) &&
-            visAlert &&
-            åpenUtbetalingsAndel
-        ) {
+    function erSkjemaForandret() {
+        return (
+            endretUtbetalingAndel.årsak !== skjema.felter.årsak.verdi ||
+            endretUtbetalingAndel.fom !== skjema.felter.fom.verdi ||
+            endretUtbetalingAndel.tom !== skjema.felter.tom.verdi ||
+            endretUtbetalingAndel.personIdent !== skjema.felter.person.verdi ||
+            endretUtbetalingAndel.prosent !==
+                (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
+                    (skjema.felter.fullSats.verdi ? 1 : 2) ||
+            endretUtbetalingAndel.begrunnelse !== skjema.felter.begrunnelse.verdi
+        );
+    }
+
+    const toggleForm = () => {
+        if (erSkjemaForandret() && åpenUtbetalingsAndel) {
             alert('Endretutbetalingsandelen har endringer som ikke er lagret!');
         } else {
             settÅpenUtbetalingsAndel(!åpenUtbetalingsAndel);
@@ -115,7 +117,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                     {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
                 </td>
                 <td>
-                    <Flatknapp mini onClick={() => toggleForm(true)}>
+                    <Flatknapp mini onClick={() => toggleForm()}>
                         {åpenUtbetalingsAndel ? (
                             <>
                                 <StyledCollapseIkon /> Lukk
