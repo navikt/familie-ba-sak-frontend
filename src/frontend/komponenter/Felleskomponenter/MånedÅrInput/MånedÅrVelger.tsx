@@ -34,7 +34,7 @@ const StyledMånedVelger = styled(MånedVelger)`
 `;
 
 const StyledFeilmelding = styled(Feilmelding)`
-    margin-top: -0.5rem;
+    margin-top: 0rem;
     margin-bottom: 0.5rem;
 `;
 

@@ -23,6 +23,12 @@ export interface IPeriode {
     tom?: FamilieIsoDate;
 }
 
+export interface IYearMonthPeriode {
+    // Format YYYY-MM
+    fom?: YearMonth;
+    tom?: YearMonth;
+}
+
 export const erSkuddår = ({ år }: År) => {
     if (år % 400 === 0) {
         return true;
