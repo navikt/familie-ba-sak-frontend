@@ -129,7 +129,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 <EndretUtbetalingAndel>
                     <Flatknapp mini onClick={() => opprettEndretUtbetaling()}>
                         <StyledEditIkon />
-                        <Element>Endre utbetalingsandel</Element>
+                        <Element>Endre utbetalingsperiode</Element>
                     </Flatknapp>
                 </EndretUtbetalingAndel>
             )}

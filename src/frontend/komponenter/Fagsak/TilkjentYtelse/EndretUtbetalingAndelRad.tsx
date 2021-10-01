@@ -122,7 +122,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             </>
                         ) : (
                             <>
-                                <StyledExpandIkon /> Åpne
+                                <StyledExpandIkon /> Endre
                             </>
                         )}
                     </Flatknapp>
