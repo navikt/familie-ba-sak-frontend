@@ -31,7 +31,7 @@ const FagsakDeltagerSøk: React.FC = () => {
     >(undefined);
 
     //Support artificial ident that has the third digit being x+4 or x+8
-    const fnrValidator = (verdi: string): boolean => idnr(verdi).status === 'valid';
+    const fnrValidator = (verdi: string): boolean => idnr(verdi, true).status === 'valid';
 
     const søk = (personIdent: string): void => {
         if (personIdent === '') {
