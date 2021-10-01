@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 import { datoformat } from '../formatter';
-import { antallDagerIMåned, DagMånedÅr, FamilieIsoDate } from './typer';
+import { antallDagerIMåned, DagMånedÅr, FamilieIsoDate, MånedÅr, YearMonth } from './typer';
 import { capString } from './utils';
 
 export const erIsoStringGyldig = (dato?: FamilieIsoDate): boolean => {
@@ -58,6 +58,32 @@ export const parseIso8601String = (dato: FamilieIsoDate): DagMånedÅr => {
 
     return {
         dag,
+        måned: måned - 1,
+        år,
+    };
+};
+
+export const parseIso8601StringMånedÅr = (dato: YearMonth): MånedÅr => {
+    const dayjsDato = dayjs(dato, datoformat.ISO_MÅNED);
+
+    // Dayjs brukes ikke til noe annet enn å fange ugyldige inputs
+    if (!dayjsDato.isValid()) {
+        throw new Error(`Dato '${dato}' er ugyldig`);
+    }
+
+    const år: number = parseInt(dato.substr(0, 4), 10);
+    const måned: number = parseInt(dato.substr(5, 7), 10);
+    const logDato = dato.substr(0, 7);
+
+    if (år < 1800 || år > 2500) {
+        throw new Error(`År fra dato '${logDato}' er '${år}' og er sannsynligvis feil`);
+    }
+
+    if (måned < 1 || måned > 12) {
+        throw new Error(`Måned fra dato '${logDato}' er '${måned}' og er sannsynligvis feil`);
+    }
+
+    return {
         måned: måned - 1,
         år,
     };
