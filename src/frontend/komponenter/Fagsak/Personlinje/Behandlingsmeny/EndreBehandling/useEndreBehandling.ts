@@ -6,6 +6,7 @@ import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navi
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import {
+    BehandlingKategori,
     BehandlingUnderkategori,
     IRestEndreBehandlingUnderkategori,
 } from '../../../../../typer/behandling';
@@ -16,26 +17,27 @@ const useEndreBehandling = (lukkModal: () => void) => {
     const { settFagsak } = useFagsakRessurser();
     const { åpenBehandling } = useBehandling();
 
-    const [underkategori, settUnderkategori] = useState<BehandlingUnderkategori | undefined>(
-        undefined
-    );
+    const [underkategori, settUnderkategori] = useState<BehandlingUnderkategori>();
+
+    const [kategori, settKategori] = useState<BehandlingKategori>();
 
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
 
     useEffect(() => {
         if (åpenBehandling.status === RessursStatus.SUKSESS) {
             settUnderkategori(åpenBehandling.data.underkategori);
+            settKategori(åpenBehandling.data.kategori);
             settSubmitRessurs(byggTomRessurs());
         }
     }, [åpenBehandling]);
 
-    const endreBehandlingUnderkategori = (behandlingId: number) => {
+    const endreBehandlingstema = (behandlingId: number) => {
         if (underkategori !== undefined) {
             settSubmitRessurs(byggHenterRessurs());
             request<IRestEndreBehandlingUnderkategori, IFagsak>({
                 method: 'PUT',
-                data: { behandlingUnderkategori: underkategori },
-                url: `/familie-ba-sak/api/behandlinger/${behandlingId}/underkategori`,
+                data: { behandlingUnderkategori: underkategori, behandlingKategori: kategori },
+                url: `/familie-ba-sak/api/behandlinger/${behandlingId}/behandlingstema`,
             }).then((oppdatertFagsak: Ressurs<IFagsak>) => {
                 if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
                     settFagsak(oppdatertFagsak);
@@ -48,18 +50,19 @@ const useEndreBehandling = (lukkModal: () => void) => {
     };
 
     const fjernState = () => {
-        settUnderkategori(
-            åpenBehandling.status === RessursStatus.SUKSESS
-                ? åpenBehandling.data.underkategori
-                : undefined
-        );
-        settSubmitRessurs(byggTomRessurs());
+        if (åpenBehandling.status === RessursStatus.SUKSESS) {
+            settUnderkategori(åpenBehandling.data.underkategori);
+            settKategori(åpenBehandling.data.kategori);
+            settSubmitRessurs(byggTomRessurs());
+        }
     };
 
     return {
         underkategori,
         settUnderkategori,
-        endreBehandlingUnderkategori,
+        kategori,
+        settKategori,
+        endreBehandlingstema,
         submitRessurs,
         settSubmitRessurs,
         fjernState,
