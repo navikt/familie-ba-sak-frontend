@@ -21,6 +21,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         const periodeSkalUtbetalesTilSøkerFelt = useFelt<boolean>({
             verdi: endretUtbetalingAndel.prosent !== undefined && endretUtbetalingAndel.prosent > 0,
         });
+
         const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
             {
                 person: string | undefined;
