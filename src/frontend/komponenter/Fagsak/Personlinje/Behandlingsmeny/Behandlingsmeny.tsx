@@ -31,6 +31,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
 
     return (
         <>
+            <div style={{ marginLeft: '3rem' }}></div>
             <Menyknapp
                 id={'behandlingsmeny-arialabel-knapp'}
                 mini={true}
@@ -38,7 +39,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                     settAnker(anker === undefined ? event.currentTarget : undefined)
                 }
             >
-                Behandlingsmeny
+                Meny
             </Menyknapp>
 
             <Popover

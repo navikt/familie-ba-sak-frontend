@@ -9,6 +9,7 @@ import {
     TilbakekrevingsbehandlingÅrsak,
 } from './tilbakekrevingsbehandling';
 import { ITotrinnskontroll } from './totrinnskontroll';
+import { IRestEndretUtbetalingAndel } from './utbetalingAndel';
 import { IVedtakForBehandling } from './vedtak';
 import { Utbetalingsperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
@@ -88,6 +89,7 @@ export enum BehandlingSteg {
     REGISTRERE_PERSONGRUNNLAG = 'REGISTRERE_PERSONGRUNNLAG',
     FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
+    BEHANDLINGSRESULTAT = 'BEHANDLINGSRESULTAT',
     VURDER_TILBAKEKREVING = 'VURDER_TILBAKEKREVING',
     SEND_TIL_BESLUTTER = 'SEND_TIL_BESLUTTER',
     BESLUTTE_VEDTAK = 'BESLUTTE_VEDTAK',
@@ -114,24 +116,26 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
             return 2;
         case BehandlingSteg.VILKÅRSVURDERING:
             return 3;
-        case BehandlingSteg.VURDER_TILBAKEKREVING:
+        case BehandlingSteg.BEHANDLINGSRESULTAT:
             return 4;
-        case BehandlingSteg.SEND_TIL_BESLUTTER:
+        case BehandlingSteg.VURDER_TILBAKEKREVING:
             return 5;
-        case BehandlingSteg.BESLUTTE_VEDTAK:
+        case BehandlingSteg.SEND_TIL_BESLUTTER:
             return 6;
-        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
+        case BehandlingSteg.BESLUTTE_VEDTAK:
             return 7;
-        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
+        case BehandlingSteg.IVERKSETT_MOT_OPPDRAG:
             return 8;
-        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
+        case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
             return 9;
-        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
+        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
             return 10;
-        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
+        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
             return 11;
-        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
             return 12;
+        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+            return 13;
         default:
             return 0;
     }
@@ -204,6 +208,7 @@ export interface IBehandling {
     fødselshendelsefiltreringResultater: IFødselshendelsefiltreringResultat[];
     vedtakForBehandling: IVedtakForBehandling[];
     utbetalingsperioder: Utbetalingsperiode[];
+    endretUtbetalingAndeler: IRestEndretUtbetalingAndel[];
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;

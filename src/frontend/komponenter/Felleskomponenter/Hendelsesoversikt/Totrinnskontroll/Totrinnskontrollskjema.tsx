@@ -10,7 +10,6 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import GrønnHake from '../../../../ikoner/GrønnHake';
 import ØyeGrå from '../../../../ikoner/ØyeGrå';
 import ØyeGrønn from '../../../../ikoner/ØyeGrønn';
 import ØyeRød from '../../../../ikoner/ØyeRød';
@@ -37,10 +36,6 @@ const KontrollerteTrinnOverskrift = styled(Element)`
 
 const SendtTilBeslutterContainer = styled.div`
     display: flex;
-`;
-
-const StyledGrønnHake = styled(GrønnHake)`
-    margin-right: 0.5rem;
 `;
 
 const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
@@ -76,7 +71,6 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({
                 description={
                     egetVedtak ? (
                         <SendtTilBeslutterContainer>
-                            <StyledGrønnHake />
                             <div>
                                 <Systemtittel>Totrinnskontroll</Systemtittel>
                                 <br />

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { Knapp } from 'nav-frontend-knapper';
-import { Innholdstittel } from 'nav-frontend-typografi';
+import { Feilmelding, Innholdstittel } from 'nav-frontend-typografi';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { ISide, sider } from '../Venstremeny/sider';
@@ -21,6 +21,7 @@ interface IProps {
     maxWidthStyle?: string;
     skalViseNesteKnapp?: boolean;
     skalViseForrigeKnapp?: boolean;
+    feilmelding?: string;
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
@@ -30,6 +31,10 @@ const Container = styled.div<{ maxWidthStyle: string }>`
 
 const StyledInnholdstittel = styled(Innholdstittel)`
     padding-bottom: 1rem;
+`;
+
+const StyledFeilmelding = styled(Feilmelding)`
+    margin-top: 1rem;
 `;
 
 const Navigering = styled.div`
@@ -54,6 +59,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     maxWidthStyle = '40rem',
     skalViseNesteKnapp = true,
     skalViseForrigeKnapp = true,
+    feilmelding = '',
 }) => {
     const history = useHistory();
     const { forrigeÅpneSide } = useBehandling();
@@ -76,6 +82,8 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
             <StyledInnholdstittel children={tittel} />
 
             {children}
+
+            {feilmelding !== '' && <StyledFeilmelding>{feilmelding}</StyledFeilmelding>}
 
             <Navigering>
                 {nesteOnClick && skalViseNesteKnapp && (
