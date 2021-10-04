@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { ikoner, Søk, ISøkeresultat } from '@navikt/familie-header';
-import { idnr } from '@navikt/familie-header';
+import { erIdnr } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
@@ -31,7 +31,7 @@ const FagsakDeltagerSøk: React.FC = () => {
     >(undefined);
 
     //Support artificial ident that has the third digit being x+4 or x+8
-    const fnrValidator = (verdi: string): boolean => idnr(verdi, true).status === 'valid';
+    const fnrValidator = (verdi: string): boolean => erIdnr(verdi, true);
 
     const søk = (personIdent: string): void => {
         if (personIdent === '') {
@@ -107,6 +107,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                         ? history.push(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`)
                         : søkeresultat.harTilgang && settDeltagerForOpprettFagsak(søkeresultat)
                 }
+                acceptSynthNr={true}
             />
 
             <OpprettFagsakModal
