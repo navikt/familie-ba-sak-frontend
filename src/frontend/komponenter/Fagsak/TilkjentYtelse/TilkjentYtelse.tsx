@@ -118,7 +118,13 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             tittel="Behandlingsresultat"
             className="tilkjentytelse"
             forrigeOnClick={forrigeOnClick}
-            nesteOnClick={() => behandlingresultatNesteOnClick(fagsak)}
+            nesteOnClick={() => {
+                if (erLesevisning()) {
+                    history.push(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/simulering`);
+                } else {
+                    behandlingresultatNesteOnClick(fagsak);
+                }
+            }}
             maxWidthStyle={'80rem'}
             feilmelding={feilmelding}
         >
