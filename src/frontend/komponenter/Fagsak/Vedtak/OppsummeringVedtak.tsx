@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import Alertstripe, { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Feilmelding, Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst } from 'nav-frontend-typografi';
 
 import { useHttp } from '@navikt/familie-http';
 import {
@@ -44,10 +44,6 @@ interface IVedtakProps {
     fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
-
-const StyledFeilmelding = styled(Feilmelding)`
-    margin-top: 1rem;
-`;
 
 const Container = styled.div`
     max-width: 49rem;
@@ -183,6 +179,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
             senderInn={senderInn}
             maxWidthStyle="100%"
             className={'vedtak'}
+            feilmelding={submitFeil}
         >
             {åpenBehandling.årsak !== BehandlingÅrsak.TEKNISK_OPPHØR ? (
                 <>
@@ -233,7 +230,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             knappPosisjon={'venstre'}
                             mini={true}
                         />
-                        {submitFeil !== '' && <StyledFeilmelding>{submitFeil}</StyledFeilmelding>}
                     </Container>
                     {visModal && (
                         <UIModalWrapper
