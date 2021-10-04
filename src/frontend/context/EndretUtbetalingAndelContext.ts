@@ -21,7 +21,6 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         const periodeSkalUtbetalesTilSøkerFelt = useFelt<boolean>({
             verdi: endretUtbetalingAndel.prosent !== undefined && endretUtbetalingAndel.prosent > 0,
         });
-
         const { skjema, kanSendeSkjema, onSubmit, nullstillSkjema } = useSkjema<
             {
                 person: string | undefined;
@@ -30,7 +29,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 periodeSkalUtbetalesTilSøker: boolean;
                 årsak: IEndretUtbetalingAndelÅrsak | undefined;
                 søknadstidspunkt: FamilieIsoDate | undefined;
-                avtaleOmDeltBosted: FamilieIsoDate | undefined;
+                avtaletidspunktDeltBosted: FamilieIsoDate | undefined;
                 fullSats: boolean | undefined;
                 begrunnelse: string;
             },
@@ -71,9 +70,9 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                             ? ok(felt)
                             : feil(felt, 'Du må velge et søknadstidspunkt.'),
                 }),
-                avtaleOmDeltBosted: useFelt<FamilieIsoDate | undefined>({
-                    verdi: endretUtbetalingAndel.avtaleOmDeltBosted
-                        ? endretUtbetalingAndel.avtaleOmDeltBosted
+                avtaletidspunktDeltBosted: useFelt<FamilieIsoDate | undefined>({
+                    verdi: endretUtbetalingAndel.avtaletidspunktDeltBosted
+                        ? endretUtbetalingAndel.avtaletidspunktDeltBosted
                         : undefined,
                     avhengigheter: {
                         årsak: årsakFelt,
@@ -98,7 +97,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                         avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
                         periodeSkalUtbetalesTilSøkerFelt.verdi,
                     valideringsfunksjon: felt =>
-                        felt.verdi
+                        felt.verdi !== undefined
                             ? ok(felt)
                             : feil(felt, 'Du må velge om brukeren skal ha full sats eller ikke.'),
                 }),

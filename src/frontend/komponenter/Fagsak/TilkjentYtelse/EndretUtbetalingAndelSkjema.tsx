@@ -108,8 +108,17 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     }, [endretUtbetalingAndel]);
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
-        const { person, periodeSkalUtbetalesTilSøker, fom, tom, årsak, begrunnelse, fullSats } =
-            skjema.felter;
+        const {
+            person,
+            periodeSkalUtbetalesTilSøker,
+            fom,
+            tom,
+            årsak,
+            begrunnelse,
+            fullSats,
+            søknadstidspunkt,
+            avtaletidspunktDeltBosted,
+        } = skjema.felter;
         if (kanSendeSkjema()) {
             onSubmit<IRestEndretUtbetalingAndel>(
                 {
@@ -126,6 +135,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         tom: tom && tom.verdi,
                         årsak: årsak && årsak.verdi,
                         begrunnelse: begrunnelse.verdi,
+                        søknadstidspunkt: søknadstidspunkt.verdi,
+                        avtaletidspunktDeltBosted: avtaletidspunktDeltBosted.verdi,
                     },
                 },
                 (fagsak: Ressurs<IFagsak>) => {
@@ -298,28 +309,29 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 )}
             </Feltmargin>
 
-            {skjema.felter.avtaleOmDeltBosted.erSynlig && (
+            {skjema.felter.avtaletidspunktDeltBosted.erSynlig && (
                 <Feltmargin>
                     <StyledFamilieDatovelger
-                        {...skjema.felter.avtaleOmDeltBosted.hentNavBaseSkjemaProps(
+                        {...skjema.felter.avtaletidspunktDeltBosted.hentNavBaseSkjemaProps(
                             skjema.visFeilmeldinger
                         )}
                         feil={
-                            !!skjema.felter.avtaleOmDeltBosted.feilmelding &&
+                            !!skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
                             skjema.visFeilmeldinger
                         }
-                        valgtDato={skjema.felter.avtaleOmDeltBosted.verdi}
+                        valgtDato={skjema.felter.avtaletidspunktDeltBosted.verdi}
                         label={<Element>Avtale om delt bosted</Element>}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) =>
-                            skjema.felter.avtaleOmDeltBosted.validerOgSettFelt(dato)
+                            skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(dato)
                         }
                     />
-                    {skjema.felter.avtaleOmDeltBosted.feilmelding && skjema.visFeilmeldinger && (
-                        <StyledFeilmelding>
-                            {skjema.felter.avtaleOmDeltBosted.feilmelding}
-                        </StyledFeilmelding>
-                    )}
+                    {skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
+                        skjema.visFeilmeldinger && (
+                            <StyledFeilmelding>
+                                {skjema.felter.avtaletidspunktDeltBosted.feilmelding}
+                            </StyledFeilmelding>
+                        )}
                 </Feltmargin>
             )}
             {skjema.felter.fullSats.erSynlig && (

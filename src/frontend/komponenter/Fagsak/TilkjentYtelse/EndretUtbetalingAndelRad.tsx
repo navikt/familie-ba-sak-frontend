@@ -47,14 +47,19 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
 
     function erSkjemaForandret() {
         return (
-            endretUtbetalingAndel.årsak !== skjema.felter.årsak.verdi ||
+            (endretUtbetalingAndel.årsak !== null ? endretUtbetalingAndel.årsak : undefined) !==
+                skjema.felter.årsak.verdi ||
             endretUtbetalingAndel.fom !== skjema.felter.fom.verdi ||
             endretUtbetalingAndel.tom !== skjema.felter.tom.verdi ||
-            endretUtbetalingAndel.personIdent !== skjema.felter.person.verdi ||
-            endretUtbetalingAndel.prosent !==
+            (endretUtbetalingAndel.personIdent !== null
+                ? endretUtbetalingAndel.personIdent
+                : undefined) !== skjema.felter.person.verdi ||
+            (endretUtbetalingAndel.prosent !== null ? endretUtbetalingAndel.prosent : 0) !==
                 (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
                     (skjema.felter.fullSats.verdi ? 1 : 2) ||
-            endretUtbetalingAndel.begrunnelse !== skjema.felter.begrunnelse.verdi
+            (endretUtbetalingAndel.begrunnelse !== null
+                ? endretUtbetalingAndel.begrunnelse
+                : '') !== skjema.felter.begrunnelse.verdi
         );
     }
 
