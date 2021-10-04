@@ -32,17 +32,13 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 søknadstidspunkt: FamilieIsoDate | undefined;
                 avtaletidspunktDeltBosted: FamilieIsoDate | undefined;
                 fullSats: boolean | undefined;
-                begrunnelse: string;
+                begrunnelse: string | undefined;
             },
             IFagsak
         >({
             felter: {
                 person: useFelt<string | undefined>({
-                    verdi: endretUtbetalingAndel
-                        ? endretUtbetalingAndel.personIdent
-                            ? endretUtbetalingAndel.personIdent
-                            : undefined
-                        : undefined,
+                    verdi: endretUtbetalingAndel.personIdent,
                     valideringsfunksjon: felt =>
                         felt.verdi ? ok(felt) : feil(felt, 'Du må velge en person'),
                 }),
@@ -63,18 +59,14 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 periodeSkalUtbetalesTilSøker: periodeSkalUtbetalesTilSøkerFelt,
                 årsak: årsakFelt,
                 søknadstidspunkt: useFelt<FamilieIsoDate | undefined>({
-                    verdi: endretUtbetalingAndel.søknadstidspunkt
-                        ? endretUtbetalingAndel.søknadstidspunkt
-                        : undefined,
+                    verdi: endretUtbetalingAndel.søknadstidspunkt,
                     valideringsfunksjon: felt =>
                         erIsoStringGyldig(felt.verdi)
                             ? ok(felt)
                             : feil(felt, 'Du må velge et søknadstidspunkt.'),
                 }),
                 avtaletidspunktDeltBosted: useFelt<FamilieIsoDate | undefined>({
-                    verdi: endretUtbetalingAndel.avtaletidspunktDeltBosted
-                        ? endretUtbetalingAndel.avtaletidspunktDeltBosted
-                        : undefined,
+                    verdi: endretUtbetalingAndel.avtaletidspunktDeltBosted,
                     avhengigheter: {
                         årsak: årsakFelt,
                     },
@@ -98,14 +90,12 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                         avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
                         periodeSkalUtbetalesTilSøkerFelt.verdi,
                     valideringsfunksjon: felt =>
-                        felt.verdi !== undefined
+                        typeof felt.verdi == 'boolean'
                             ? ok(felt)
                             : feil(felt, 'Du må velge om brukeren skal ha full sats eller ikke.'),
                 }),
-                begrunnelse: useFelt<string>({
-                    verdi: endretUtbetalingAndel.begrunnelse
-                        ? endretUtbetalingAndel.begrunnelse
-                        : '',
+                begrunnelse: useFelt<string | undefined>({
+                    verdi: endretUtbetalingAndel.begrunnelse,
                 }),
             },
             skjemanavn: 'Endre utbetalingsperiode',

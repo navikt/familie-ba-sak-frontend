@@ -298,7 +298,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         skjema.visFeilmeldinger
                     )}
                     feil={!!skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger}
-                    valgtDato={skjema.felter.søknadstidspunkt.verdi}
+                    valgtDato={
+                        skjema.felter.søknadstidspunkt.verdi !== null
+                            ? skjema.felter.søknadstidspunkt.verdi
+                            : undefined
+                    }
                     label={<Element>Søknadstidspunkt</Element>}
                     placeholder={datoformatNorsk.DATO}
                     onChange={(dato?: ISODateString) =>
@@ -322,7 +326,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             !!skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
                             skjema.visFeilmeldinger
                         }
-                        valgtDato={skjema.felter.avtaletidspunktDeltBosted.verdi}
+                        valgtDato={
+                            skjema.felter.avtaletidspunktDeltBosted.verdi !== null
+                                ? skjema.felter.avtaletidspunktDeltBosted.verdi
+                                : undefined
+                        }
                         label={<Element>Avtale om delt bosted</Element>}
                         placeholder={datoformatNorsk.DATO}
                         onChange={(dato?: ISODateString) =>
@@ -364,7 +372,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     erLesevisning={erLesevisning()}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     label={'Begrunnelse'}
-                    value={skjema.felter.begrunnelse.verdi}
+                    value={
+                        skjema.felter.begrunnelse.verdi !== null
+                            ? skjema.felter.begrunnelse.verdi
+                            : ''
+                    }
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
                         skjema.felter.begrunnelse.validerOgSettFelt(event.target.value);
                     }}
