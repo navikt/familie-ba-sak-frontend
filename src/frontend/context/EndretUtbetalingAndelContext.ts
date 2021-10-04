@@ -83,7 +83,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     valideringsfunksjon: felt =>
                         erIsoStringGyldig(felt.verdi)
                             ? ok(felt)
-                            : feil(felt, 'Du må tidspunkt for avtale om delt bosted.'),
+                            : feil(felt, 'Du må velge tidspunkt for avtale om delt bosted.'),
                 }),
                 fullSats: useFelt<boolean | undefined>({
                     verdi:
