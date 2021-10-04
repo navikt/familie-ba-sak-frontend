@@ -105,6 +105,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 
     useEffect(() => {
         nullstillSkjema();
+        skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(
+            endretUtbetalingAndel.avtaletidspunktDeltBosted
+        );
     }, [endretUtbetalingAndel]);
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
