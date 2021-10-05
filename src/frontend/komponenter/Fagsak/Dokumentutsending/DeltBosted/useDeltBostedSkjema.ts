@@ -100,12 +100,12 @@ export const useDeltBostedSkjema = () => {
                         deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
 
                     return avtalerOmDeltBosted.map(
-                        avtaleOmDeltBosted =>
+                        avtaletidspunktDeltBosted =>
                             `Barn født ${formaterIsoDato(
                                 barn.fødselsdato,
                                 datoformat.DATO
                             )}. Avtalen gjelder fra ${formaterIsoDato(
-                                avtaleOmDeltBosted,
+                                avtaletidspunktDeltBosted,
                                 datoformat.DATO_FORLENGET
                             )}.`
                     );
