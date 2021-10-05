@@ -3,7 +3,7 @@ import { oppgaveMock } from '../../src/backend/mock-data';
 
 describe('Oppgavebenken', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:8000');
+        cy.visit('/');
     });
 
     it('Redirects til /oppgaver', () => {
@@ -22,7 +22,7 @@ describe('Oppgavebenken', () => {
 
 describe('Fagsak saksoversikt', () => {
     beforeEach(() => {
-        cy.visit(`http://localhost:8000/fagsak/${fagsakMock.data.id}`);
+        cy.visit(`/fagsak/${fagsakMock.data.id}`);
     });
 
     it('Viser saksoversikt', () => {
