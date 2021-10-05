@@ -12,6 +12,7 @@ import {
     FamilieRadioGruppe,
     FamilieReactSelect,
     FamilieTextarea,
+    ISODateString,
     OptionType,
 } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
@@ -24,7 +25,6 @@ import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import {
     IEndretUtbetalingAndelFullSats,
-    IEndretUtbetalingAndelÅrsak,
     IRestEndretUtbetalingAndel,
     satser,
     SatsOption,
@@ -33,10 +33,15 @@ import {
     ÅrsakOption,
     årsakTilOption,
 } from '../../../typer/utbetalingAndel';
+import { datoformatNorsk } from '../../../utils/formatter';
 import { YearMonth } from '../../../utils/kalender';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
+import {
+    StyledFamilieDatovelger,
+    StyledFeilmelding,
+} from '../Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
 const Knapperad = styled.div`
     display: flex;
@@ -53,6 +58,7 @@ const StyledSkjemaGruppe = styled(SkjemaGruppe)`
 
 const StyledPersonvelger = styled(FamilieReactSelect)`
     max-width: 20rem;
+    z-index: 1000;
 `;
 
 const StyledSatsvelger = styled(FamilieReactSelect)`
@@ -100,11 +106,23 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 
     useEffect(() => {
         nullstillSkjema();
+        skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(
+            endretUtbetalingAndel.avtaletidspunktDeltBosted
+        );
     }, [endretUtbetalingAndel]);
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
-        const { person, periodeSkalUtbetalesTilSøker, fom, tom, årsak, begrunnelse, fullSats } =
-            skjema.felter;
+        const {
+            person,
+            periodeSkalUtbetalesTilSøker,
+            fom,
+            tom,
+            årsak,
+            begrunnelse,
+            fullSats,
+            søknadstidspunkt,
+            avtaletidspunktDeltBosted,
+        } = skjema.felter;
         if (kanSendeSkjema()) {
             onSubmit<IRestEndretUtbetalingAndel>(
                 {
@@ -121,6 +139,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         tom: tom && tom.verdi,
                         årsak: årsak && årsak.verdi,
                         begrunnelse: begrunnelse.verdi,
+                        søknadstidspunkt: søknadstidspunkt.verdi,
+                        avtaletidspunktDeltBosted: avtaletidspunktDeltBosted.verdi,
                     },
                 },
                 (fagsak: Ressurs<IFagsak>) => {
@@ -273,39 +293,92 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 />
             </Feltmargin>
 
-            {skjema.felter.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
-                skjema.felter.periodeSkalUtbetalesTilSøker.verdi && (
-                    <Feltmargin>
-                        <StyledSatsvelger
-                            {...skjema.felter.fullSats.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
-                            label={<Element>Sats</Element>}
-                            value={
-                                skjema.felter.fullSats.verdi !== undefined
-                                    ? satsTilOption(skjema.felter.fullSats.verdi)
-                                    : undefined
-                            }
-                            placeholder={'Velg sats'}
-                            isMulti={false}
-                            onChange={(valg): void => {
-                                skjema.felter.fullSats.validerOgSettFelt(
-                                    (valg as SatsOption).fullSats
-                                );
-                            }}
-                            options={satser.map(sats =>
-                                satsTilOption(sats === IEndretUtbetalingAndelFullSats.FULL_SATS)
-                            )}
-                        />
-                    </Feltmargin>
+            <Feltmargin>
+                <StyledFamilieDatovelger
+                    {...skjema.felter.søknadstidspunkt.hentNavBaseSkjemaProps(
+                        skjema.visFeilmeldinger
+                    )}
+                    feil={!!skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger}
+                    valgtDato={
+                        skjema.felter.søknadstidspunkt.verdi !== null
+                            ? skjema.felter.søknadstidspunkt.verdi
+                            : undefined
+                    }
+                    label={<Element>Søknadstidspunkt</Element>}
+                    placeholder={datoformatNorsk.DATO}
+                    onChange={(dato?: ISODateString) =>
+                        skjema.felter.søknadstidspunkt.validerOgSettFelt(dato)
+                    }
+                />
+                {skjema.felter.søknadstidspunkt.feilmelding && skjema.visFeilmeldinger && (
+                    <StyledFeilmelding>
+                        {skjema.felter.søknadstidspunkt.feilmelding}
+                    </StyledFeilmelding>
                 )}
+            </Feltmargin>
+
+            {skjema.felter.avtaletidspunktDeltBosted.erSynlig && (
+                <Feltmargin>
+                    <StyledFamilieDatovelger
+                        {...skjema.felter.avtaletidspunktDeltBosted.hentNavBaseSkjemaProps(
+                            skjema.visFeilmeldinger
+                        )}
+                        feil={
+                            !!skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
+                            skjema.visFeilmeldinger
+                        }
+                        valgtDato={
+                            skjema.felter.avtaletidspunktDeltBosted.verdi !== null
+                                ? skjema.felter.avtaletidspunktDeltBosted.verdi
+                                : undefined
+                        }
+                        label={<Element>Avtale om delt bosted</Element>}
+                        placeholder={datoformatNorsk.DATO}
+                        onChange={(dato?: ISODateString) =>
+                            skjema.felter.avtaletidspunktDeltBosted.validerOgSettFelt(dato)
+                        }
+                    />
+                    {skjema.felter.avtaletidspunktDeltBosted.feilmelding &&
+                        skjema.visFeilmeldinger && (
+                            <StyledFeilmelding>
+                                {skjema.felter.avtaletidspunktDeltBosted.feilmelding}
+                            </StyledFeilmelding>
+                        )}
+                </Feltmargin>
+            )}
+            {skjema.felter.fullSats.erSynlig && (
+                <Feltmargin>
+                    <StyledSatsvelger
+                        {...skjema.felter.fullSats.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                        label={<Element>Sats</Element>}
+                        value={
+                            skjema.felter.fullSats.verdi !== undefined
+                                ? satsTilOption(skjema.felter.fullSats.verdi)
+                                : undefined
+                        }
+                        placeholder={'Velg sats'}
+                        isMulti={false}
+                        onChange={(valg): void => {
+                            skjema.felter.fullSats.validerOgSettFelt((valg as SatsOption).fullSats);
+                        }}
+                        options={satser.map(sats =>
+                            satsTilOption(sats === IEndretUtbetalingAndelFullSats.FULL_SATS)
+                        )}
+                    />
+                </Feltmargin>
+            )}
 
             <Feltmargin>
                 <StyledFamilieTextarea
                     erLesevisning={erLesevisning()}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     label={'Begrunnelse'}
-                    value={skjema.felter.begrunnelse.verdi}
+                    value={
+                        skjema.felter.begrunnelse.verdi !== null &&
+                        skjema.felter.begrunnelse.verdi !== undefined
+                            ? skjema.felter.begrunnelse.verdi
+                            : ''
+                    }
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
                         skjema.felter.begrunnelse.validerOgSettFelt(event.target.value);
                     }}

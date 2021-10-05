@@ -19,6 +19,11 @@ export enum BehandlingKategori {
     EØS = 'EØS',
 }
 
+export interface IRestEndreBehandlingUnderkategori {
+    behandlingUnderkategori: BehandlingUnderkategori;
+    behandlingKategori: BehandlingKategori;
+}
+
 export enum HenleggÅrsak {
     SØKNAD_TRUKKET = 'SØKNAD_TRUKKET',
     FEILAKTIG_OPPRETTET = 'FEILAKTIG_OPPRETTET',
@@ -280,6 +285,54 @@ export const underkategorier: INøkkelPar = {
         id: 'UTVIDET',
         navn: 'Utvidet',
     },
+};
+
+export interface IBehandlingstema {
+    kategori: BehandlingKategori;
+    underkategori: BehandlingUnderkategori;
+    navn: string;
+    id: string;
+}
+
+export interface INøkkelParBehandlingstema {
+    [key: string]: IBehandlingstema;
+}
+
+export const behandlingstemaer: INøkkelParBehandlingstema = {
+    NASJONAL_ORDINÆR: {
+        kategori: BehandlingKategori.NASJONAL,
+        underkategori: BehandlingUnderkategori.ORDINÆR,
+        navn: 'Nasjonal ordinær',
+        id: 'NASJONAL_ORDINÆR',
+    },
+    NASJONAL_UTVIDET: {
+        kategori: BehandlingKategori.NASJONAL,
+        underkategori: BehandlingUnderkategori.UTVIDET,
+        navn: 'Nasjonal utvidet',
+        id: 'NASJONAL_UTVIDET',
+    },
+    EØS_ORDINÆR: {
+        kategori: BehandlingKategori.EØS,
+        underkategori: BehandlingUnderkategori.ORDINÆR,
+        navn: 'EØS ordinær',
+        id: 'EØS_ORDINÆR',
+    },
+    EØS_UTVIDET: {
+        kategori: BehandlingKategori.EØS,
+        underkategori: BehandlingUnderkategori.UTVIDET,
+        navn: 'EØS utvidet',
+        id: 'EØS_UTVIDET',
+    },
+};
+
+export const tilBehandlingstema = (
+    kategori: BehandlingKategori,
+    underkategori: BehandlingUnderkategori
+): IBehandlingstema => {
+    return Object.values(behandlingstemaer).find(
+        (tema: IBehandlingstema) =>
+            tema.kategori === kategori && tema.underkategori === underkategori
+    ) as IBehandlingstema;
 };
 
 export const behandlingsresultater: Record<

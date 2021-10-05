@@ -1,5 +1,7 @@
 import { ISODateString, OptionType } from '@navikt/familie-form-elements';
 
+import { FamilieIsoDate } from '../utils/kalender';
+
 export interface IRestEndretUtbetalingAndel {
     id?: number;
     personIdent?: string;
@@ -7,6 +9,8 @@ export interface IRestEndretUtbetalingAndel {
     fom?: ISODateString;
     tom?: ISODateString;
     begrunnelse?: string;
+    søknadstidspunkt?: FamilieIsoDate;
+    avtaletidspunktDeltBosted?: FamilieIsoDate;
     årsak?: IEndretUtbetalingAndelÅrsak;
 }
 
