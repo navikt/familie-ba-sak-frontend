@@ -17,9 +17,11 @@ const useEndreBehandling = (lukkModal: () => void) => {
     const { settFagsak } = useFagsakRessurser();
     const { åpenBehandling } = useBehandling();
 
-    const [underkategori, settUnderkategori] = useState<BehandlingUnderkategori>();
+    const [underkategori, settUnderkategori] = useState<BehandlingUnderkategori>(
+        BehandlingUnderkategori.ORDINÆR
+    );
 
-    const [kategori, settKategori] = useState<BehandlingKategori>();
+    const [kategori, settKategori] = useState<BehandlingKategori>(BehandlingKategori.NASJONAL);
 
     const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
 
@@ -32,21 +34,19 @@ const useEndreBehandling = (lukkModal: () => void) => {
     }, [åpenBehandling]);
 
     const endreBehandlingstema = (behandlingId: number) => {
-        if (underkategori !== undefined) {
-            settSubmitRessurs(byggHenterRessurs());
-            request<IRestEndreBehandlingUnderkategori, IFagsak>({
-                method: 'PUT',
-                data: { behandlingUnderkategori: underkategori, behandlingKategori: kategori },
-                url: `/familie-ba-sak/api/behandlinger/${behandlingId}/behandlingstema`,
-            }).then((oppdatertFagsak: Ressurs<IFagsak>) => {
-                if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
-                    settFagsak(oppdatertFagsak);
-                    settSubmitRessurs(byggTomRessurs());
-                    lukkModal();
-                }
-                settSubmitRessurs(oppdatertFagsak);
-            });
-        }
+        settSubmitRessurs(byggHenterRessurs());
+        request<IRestEndreBehandlingUnderkategori, IFagsak>({
+            method: 'PUT',
+            data: { behandlingUnderkategori: underkategori, behandlingKategori: kategori },
+            url: `/familie-ba-sak/api/behandlinger/${behandlingId}/behandlingstema`,
+        }).then((oppdatertFagsak: Ressurs<IFagsak>) => {
+            if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
+                settFagsak(oppdatertFagsak);
+                settSubmitRessurs(byggTomRessurs());
+                lukkModal();
+            }
+            settSubmitRessurs(oppdatertFagsak);
+        });
     };
 
     const fjernState = () => {

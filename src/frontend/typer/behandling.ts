@@ -21,6 +21,7 @@ export enum BehandlingKategori {
 
 export interface IRestEndreBehandlingUnderkategori {
     behandlingUnderkategori: BehandlingUnderkategori;
+    behandlingKategori: BehandlingKategori;
 }
 
 export enum HenleggÅrsak {
