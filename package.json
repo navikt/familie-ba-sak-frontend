@@ -8,7 +8,6 @@
   "scripts": {
     "start": "NODE_ENV=production node node_dist/backend/server.js",
     "start:dev": "tsc -p tsconfig.backend.json && NODE_ENV=development node node_dist/backend/server.js",
-    "start:cypress": "tsc -p tsconfig.backend.json && NODE_ENV=development node node_dist/backend/cypress-server.js",
     "build": "yarn build:prod",
     "build:prod": "tsc -p tsconfig.backend.json && NODE_ENV=production webpack --config ./src/webpack/webpack.prod.js",
     "snyk-protect": "snyk protect",
@@ -16,7 +15,10 @@
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start:cypress": "tsc -p tsconfig.backend.json && NODE_ENV=development node node_dist/backend/cypress-server.js",
+    "run:cypress": "cypress run",
+    "cypress": "npm-run-all -p start:cypress -r run:cypress"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css}": [
@@ -166,6 +168,7 @@
     "less-loader": "^9.0.0",
     "lint-staged": "^11.1.2",
     "mini-css-extract-plugin": "^2.2.2",
+    "npm-run-all": "^4.1.5",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "prettier": "^2.0.5",
     "react-hooks-testing-library": "^0.6.0",
