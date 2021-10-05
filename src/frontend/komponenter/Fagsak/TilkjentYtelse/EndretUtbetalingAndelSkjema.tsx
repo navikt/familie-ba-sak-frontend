@@ -373,7 +373,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     label={'Begrunnelse'}
                     value={
-                        skjema.felter.begrunnelse.verdi !== null
+                        skjema.felter.begrunnelse.verdi !== null &&
+                        skjema.felter.begrunnelse.verdi !== undefined
                             ? skjema.felter.begrunnelse.verdi
                             : ''
                     }
