@@ -17,8 +17,6 @@ jobs:
       - uses: ./.github/yarn-cache
       - name: Yarn install
         run: yarn --prefer-offline --frozen-lockfile
-      - name: Cypress testing
-        run: yarn run cypress
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,6 +25,7 @@ jobs:
         run: |
           yarn build
           yarn test
+          yarn run cypress
           docker build . -t ${IMAGE}
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE}

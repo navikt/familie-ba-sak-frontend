@@ -1,5 +1,3 @@
-import './konfigurerApp';
-
 import path from 'path';
 
 import bodyParser from 'body-parser';
@@ -9,12 +7,9 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
-import { envVar } from '@navikt/familie-backend';
 import { logInfo } from '@navikt/familie-logging';
 
-import { buildPath } from './config';
 import { featureMock, oppgaveMock, fagsakMock, personMock, profileMock } from './mock-data';
-import { doRedirectProxy } from './proxy';
 
 // eslint-disable-next-line
 const webpackDevConfig = require('../webpack/webpack.dev');
@@ -58,36 +53,14 @@ app.get('/user/profile', (_, res) => {
     res.status(200).send(profileMock);
 });
 
-app.use('/redirect', doRedirectProxy());
-
 // Sett opp bodyParser og router etter proxy. Spesielt viktig med tanke på større payloads som blir parset av bodyParser
 app.use(bodyParser.json({ limit: '200mb' }));
 app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
 
-const setupRouter = (app: Express) => {
-    app.get('/version', (_: Request, res: Response) => {
-        res.status(200)
-            .send({ status: 'SUKSESS', data: envVar('APP_VERSION') })
-            .end();
-    });
-
-    app.get('/error', (_: Request, res: Response) => {
-        res.sendFile('error.html', { root: path.join(`assets/`) });
-    });
-
-    // Feilhåndtering
-    app.post('/logg-feil', (_: Request, res: Response) => {
-        res.status(200).send();
-    });
-
-    // APP
-    app.get('*', (_: Request, res: Response) => {
-        res.sendFile('index.html', { root: path.join(process.cwd(), buildPath) });
-    });
-};
-
-setupRouter(app);
+app.get('*', (_: Request, res: Response) => {
+    res.sendFile('index.html', { root: path.join(process.cwd(), 'frontend_production') });
+});
 
 app.listen(port, '0.0.0.0', () => {
-    logInfo(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);
+    logInfo(`Server startet på port ${port}.`);
 });

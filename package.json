@@ -16,7 +16,7 @@
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
     "prepare": "husky install",
-    "start:cypress": "tsc -p tsconfig.backend.json && NODE_ENV=development node node_dist/backend/cypress-server.js",
+    "start:cypress": "tsc -p tsconfig.backend.json && NODE_ENV=production node node_dist/backend/cypress-server.js",
     "run:cypress": "cypress run",
     "cypress": "npm-run-all -p start:cypress -r run:cypress"
   },
