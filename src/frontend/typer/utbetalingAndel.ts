@@ -10,7 +10,7 @@ export interface IRestEndretUtbetalingAndel {
     tom?: ISODateString;
     begrunnelse?: string;
     søknadstidspunkt?: FamilieIsoDate;
-    avtaleOmDeltBosted?: FamilieIsoDate;
+    avtaletidspunktDeltBosted?: FamilieIsoDate;
     årsak?: IEndretUtbetalingAndelÅrsak;
 }
 
