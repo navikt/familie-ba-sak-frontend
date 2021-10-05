@@ -5,7 +5,7 @@ import createUseContext from 'constate';
 import { Periode } from '@navikt/helse-frontend-tidslinje';
 import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/components/types.internal';
 
-import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../typer/beregning';
+import { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode, YtelseType } from '../typer/beregning';
 import { IGrunnlagPerson } from '../typer/person';
 import { sorterPersonTypeOgFødselsdato } from '../utils/formatter';
 import {
@@ -19,6 +19,7 @@ import {
     sisteDagIMåned,
     trekkFra,
 } from '../utils/kalender';
+import { splittUtvidetVedEndringerPåSmåbarnstillegg } from '../utils/tidslinje';
 
 export interface ITidslinjeVindu {
     id: number;
@@ -99,17 +100,45 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         return personerMedAndelerTilkjentYtelse
             ? personerMedAndelerTilkjentYtelse.map(
                   (personMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse) => {
-                      return personMedAndelerTilkjentYtelse.ytelsePerioder.map(
-                          (ytelsePeriode: IYtelsePeriode, index: number) => ({
-                              fom: kalenderDatoTilDate(
+                      return personMedAndelerTilkjentYtelse.ytelsePerioder.reduce(
+                          (acc: Periode[], ytelsePeriode: IYtelsePeriode) => {
+                              const fom = kalenderDatoTilDate(
                                   hentFørsteDagIYearMonth(ytelsePeriode.stønadFom)
-                              ),
-                              tom: kalenderDatoTilDate(
-                                  hentSisteDagIYearMonth(ytelsePeriode.stønadTom)
-                              ),
-                              id: `${personMedAndelerTilkjentYtelse.personIdent}_${index}`,
-                              status: ytelsePeriode.beløp > 0 ? 'suksess' : 'feil',
-                          })
+                              );
+                              const periode: Periode = {
+                                  fom,
+                                  tom: kalenderDatoTilDate(
+                                      hentSisteDagIYearMonth(ytelsePeriode.stønadTom)
+                                  ),
+                                  id: `${
+                                      personMedAndelerTilkjentYtelse.personIdent
+                                  }_${fom.getMonth()}_${fom.getDay()}`,
+                                  status: ytelsePeriode.beløp > 0 ? 'suksess' : 'feil',
+                              };
+
+                              if (ytelsePeriode.ytelseType === YtelseType.UTVIDET_BARNETRYGD) {
+                                  const småbarnstilleggAndeler =
+                                      personMedAndelerTilkjentYtelse.ytelsePerioder.filter(
+                                          ytelsePeriodeFilter =>
+                                              ytelsePeriodeFilter.ytelseType ===
+                                              YtelseType.SMÅBARNSTILLEGG
+                                      );
+
+                                  return [
+                                      ...acc,
+                                      ...splittUtvidetVedEndringerPåSmåbarnstillegg(
+                                          periode,
+                                          ytelsePeriode,
+                                          småbarnstilleggAndeler
+                                      ),
+                                  ];
+                              } else if (ytelsePeriode.ytelseType !== YtelseType.SMÅBARNSTILLEGG) {
+                                  return [...acc, periode];
+                              } else {
+                                  return acc;
+                              }
+                          },
+                          []
                       );
                   }
               )

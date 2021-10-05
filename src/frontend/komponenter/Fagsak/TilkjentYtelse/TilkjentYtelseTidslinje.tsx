@@ -26,6 +26,7 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
         useTidslinje();
     const tidslinjeRader = genererRader(tidslinjePersoner);
 
+    console.log(tidslinjeRader);
     return (
         <>
             <div className={'tidslinje-header'}>

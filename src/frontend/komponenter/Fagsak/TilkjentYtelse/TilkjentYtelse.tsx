@@ -19,7 +19,7 @@ import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
 import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
-import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
+import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
@@ -69,10 +69,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     };
 
     const filtrerPerioderForAktivEtikett = (
-        utbetalingsperioder: Vedtaksperiode[]
-    ): Vedtaksperiode[] => {
+        utbetalingsperioder: Utbetalingsperiode[]
+    ): Utbetalingsperiode[] => {
         return aktivEtikett
-            ? utbetalingsperioder.filter((utbetalingsperiode: Vedtaksperiode) =>
+            ? utbetalingsperioder.filter((utbetalingsperiode: Utbetalingsperiode) =>
                   periodeOverlapperMedValgtDato(
                       utbetalingsperiode.periodeFom,
                       utbetalingsperiode.periodeTom,
@@ -142,7 +142,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             )}
             {aktivEtikett && (
                 <Oppsummeringsboks
-                    vedtaksperioder={filtrerPerioderForAktivEtikett(
+                    utbetalingsperioder={filtrerPerioderForAktivEtikett(
                         åpenBehandling.utbetalingsperioder
                     )}
                     aktivEtikett={aktivEtikett}
