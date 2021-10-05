@@ -23,13 +23,15 @@ const Container = styled.div`
     margin-left: 3rem;
 `;
 
-const StyledFamilieDatovelger = styled(FamilieDatovelger)<{ feil: boolean }>`
+export const StyledFamilieDatovelger = styled(FamilieDatovelger)<{ feil: boolean }>`
     .nav-datovelger__input {
         border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navBla)};
+        box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
     }
 
     .nav-datovelger__kalenderknapp {
         border-color: ${({ feil }) => (feil ? navFarger.redError : navFarger.navBla)};
+        box-shadow: ${({ feil }) => (feil ? '0 0 0 1px #ba3a26' : '0 0 0 0')};
     }
 
     margin-bottom: ${({ feil }) => (feil ? '.125rem' : '0')};
@@ -45,7 +47,7 @@ const DatovelgerOgSlettknapp = styled.div<{ feil: boolean }>`
     }
 `;
 
-const StyledFeilmelding = styled(Feilmelding)`
+export const StyledFeilmelding = styled(Feilmelding)`
     margin-bottom: 1rem;
 `;
 

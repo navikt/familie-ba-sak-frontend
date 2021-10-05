@@ -48,6 +48,7 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                     {endretUtbetalingAndeler.map(endretUtbetalingAndel => (
                         <EndretUtbetalingAndelProvider
                             endretUtbetalingAndel={endretUtbetalingAndel}
+                            key={endretUtbetalingAndel.id}
                         >
                             <EndretUtbetalingAndelRad
                                 endretUtbetalingAndel={endretUtbetalingAndel}
