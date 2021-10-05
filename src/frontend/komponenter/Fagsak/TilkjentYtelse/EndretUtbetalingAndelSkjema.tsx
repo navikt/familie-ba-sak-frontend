@@ -58,6 +58,7 @@ const StyledSkjemaGruppe = styled(SkjemaGruppe)`
 
 const StyledPersonvelger = styled(FamilieReactSelect)`
     max-width: 20rem;
+    z-index: 1000;
 `;
 
 const StyledSatsvelger = styled(FamilieReactSelect)`
