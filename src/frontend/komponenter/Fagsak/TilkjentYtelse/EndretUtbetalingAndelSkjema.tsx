@@ -397,11 +397,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     </Flatknapp>
                 </Knapperad>
 
-                <Flatknapp mini={true} onClick={slettEndretUtbetaling}>
-                    <>
-                        <StyledDeleteIkon />
-                        Fjern Periode
-                    </>
+                <Flatknapp mini onClick={slettEndretUtbetaling}>
+                    <Delete />
+                    <span>Fjern Periode</span>
                 </Flatknapp>
             </Knapperekke>
         </StyledSkjemaGruppe>
