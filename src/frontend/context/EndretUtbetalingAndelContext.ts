@@ -104,12 +104,6 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         });
 
         const hentProsentForEndretUtbetaling = () => {
-            if (
-                !endretUtbetalingAndel.prosent &&
-                !skjema.felter.periodeSkalUtbetalesTilSøker.verdi
-            ) {
-                return endretUtbetalingAndel.prosent;
-            }
             return (
                 (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
                 (skjema.felter.fullSats.verdi ? 1 : 2)
@@ -145,7 +139,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             kanSendeSkjema,
             onSubmit,
             nullstillSkjema,
-            hentEndretUtbetalingsandelFraSkjema: hentSkjemaData,
+            hentSkjemaData,
         };
     }
 );
