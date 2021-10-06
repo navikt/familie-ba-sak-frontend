@@ -142,7 +142,7 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
                       );
                   }
               )
-            : [[]];
+            : [];
     };
 
     const filterOgSorterGrunnlagPersonerMedAndeler = (
