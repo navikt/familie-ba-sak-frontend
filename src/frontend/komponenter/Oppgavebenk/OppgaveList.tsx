@@ -28,6 +28,7 @@ import OppgaveDirektelenke from './OppgaveDirektelenke';
 import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
 import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
+import { OppgaveReactTable } from './OppgaveReactTable';
 
 const intDatoTilNorskDato = (intDato: string) => {
     return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
@@ -190,6 +191,13 @@ const OppgaveList: React.FunctionComponent = () => {
                             </tbody>
                         )}
                 </table>
+            </div>
+            <div className={'oppgavelist__header'}>
+                <Systemtittel>Oppgaveliste</Systemtittel>
+                <OppgavelisteNavigator />
+            </div>
+            <div>
+                <OppgaveReactTable />
             </div>
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
                 <Alertstripe type="advarsel" className="oppgavelist__info">
