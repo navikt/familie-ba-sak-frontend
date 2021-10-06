@@ -102,7 +102,50 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             skjemanavn: 'Endre utbetalingsperiode',
         });
 
-        return { endretUtbetalingAndel, skjema, kanSendeSkjema, onSubmit, nullstillSkjema };
+        const hentProsentForEndretUtbetaling = () => {
+            if (
+                !endretUtbetalingAndel.prosent &&
+                !skjema.felter.periodeSkalUtbetalesTilSøker.verdi
+            ) {
+                return endretUtbetalingAndel.prosent;
+            }
+            return (
+                (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
+                (skjema.felter.fullSats.verdi ? 1 : 2)
+            );
+        };
+
+        const hentSkjemaData = () => {
+            const {
+                person,
+                fom,
+                tom,
+                årsak,
+                begrunnelse,
+                søknadstidspunkt,
+                avtaletidspunktDeltBosted,
+            } = skjema.felter;
+            return {
+                id: endretUtbetalingAndel.id,
+                personIdent: person && person.verdi,
+                prosent: hentProsentForEndretUtbetaling(),
+                fom: fom && fom.verdi,
+                tom: tom && tom.verdi,
+                årsak: årsak && årsak.verdi,
+                begrunnelse: begrunnelse.verdi,
+                søknadstidspunkt: søknadstidspunkt.verdi,
+                avtaletidspunktDeltBosted: avtaletidspunktDeltBosted.verdi,
+            };
+        };
+
+        return {
+            endretUtbetalingAndel,
+            skjema,
+            kanSendeSkjema,
+            onSubmit,
+            nullstillSkjema,
+            hentEndretUtbetalingsandelFraSkjema: hentSkjemaData,
+        };
     }
 );
 

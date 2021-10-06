@@ -34,6 +34,7 @@ import {
 } from '../../../typer/utbetalingAndel';
 import { datoformatNorsk, formaterIdent } from '../../../utils/formatter';
 import { YearMonth } from '../../../utils/kalender';
+import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
@@ -45,11 +46,12 @@ import {
 const Knapperad = styled.div`
     display: flex;
     flex-direction: row;
-    margin: 1rem 0;
 `;
 
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
-    margin-top: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
     padding-left: 3.75rem;
     margin-right: 2rem;
     border-left: 0.0625rem solid black;
@@ -76,10 +78,6 @@ const StyledFamilieTextarea = styled(FamilieTextarea)`
     min-height: 8rem;
 `;
 
-const StyledDeleteIkon = styled(Delete)`
-    margin-right: 0.5rem;
-`;
-
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     avbrytEndringAvUtbetalingsperiode: () => void;
@@ -97,8 +95,14 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     const { erLesevisning } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
 
-    const { endretUtbetalingAndel, skjema, kanSendeSkjema, onSubmit, nullstillSkjema } =
-        useEndretUtbetalingAndel();
+    const {
+        endretUtbetalingAndel,
+        skjema,
+        kanSendeSkjema,
+        onSubmit,
+        nullstillSkjema,
+        hentEndretUtbetalingsandelFraSkjema,
+    } = useEndretUtbetalingAndel();
 
     useEffect(() => {
         nullstillSkjema();
@@ -108,36 +112,13 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     }, [endretUtbetalingAndel]);
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
-        const {
-            person,
-            periodeSkalUtbetalesTilSøker,
-            fom,
-            tom,
-            årsak,
-            begrunnelse,
-            fullSats,
-            søknadstidspunkt,
-            avtaletidspunktDeltBosted,
-        } = skjema.felter;
         if (kanSendeSkjema()) {
             onSubmit<IRestEndretUtbetalingAndel>(
                 {
                     method: 'PUT',
                     url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
                     påvirkerSystemLaster: true,
-                    data: {
-                        id: endretUtbetalingAndel.id,
-                        personIdent: person && person.verdi,
-                        prosent:
-                            (periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
-                            (fullSats.verdi ? 1 : 2),
-                        fom: fom && fom.verdi,
-                        tom: tom && tom.verdi,
-                        årsak: årsak && årsak.verdi,
-                        begrunnelse: begrunnelse.verdi,
-                        søknadstidspunkt: søknadstidspunkt.verdi,
-                        avtaletidspunktDeltBosted: avtaletidspunktDeltBosted.verdi,
-                    },
+                    data: hentEndretUtbetalingsandelFraSkjema(),
                 },
                 (fagsak: Ressurs<IFagsak>) => {
                     if (fagsak.status === RessursStatus.SUKSESS) {
@@ -406,12 +387,14 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     </Flatknapp>
                 </Knapperad>
 
-                <Flatknapp mini={true} onClick={slettEndretUtbetaling}>
-                    <>
-                        <StyledDeleteIkon />
-                        Fjern Periode
-                    </>
-                </Flatknapp>
+                <IkonKnapp
+                    id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
+                    erLesevisning={erLesevisning()}
+                    label="Fjern Periode"
+                    mini
+                    onClick={slettEndretUtbetaling}
+                    ikon={<Delete />}
+                />
             </Knapperekke>
         </StyledSkjemaGruppe>
     );
