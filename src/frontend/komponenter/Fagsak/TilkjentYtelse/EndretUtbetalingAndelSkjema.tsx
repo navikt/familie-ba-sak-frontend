@@ -46,11 +46,12 @@ import {
 const Knapperad = styled.div`
     display: flex;
     flex-direction: row;
-    margin: 1rem 0;
 `;
 
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
-    margin-top: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
     padding-left: 3.75rem;
     margin-right: 2rem;
     border-left: 0.0625rem solid black;
