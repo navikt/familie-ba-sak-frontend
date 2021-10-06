@@ -10,10 +10,9 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import { Delete } from '@navikt/ds-icons';
 import {
     FamilieRadioGruppe,
-    FamilieReactSelect,
+    FamilieSelect,
     FamilieTextarea,
     ISODateString,
-    OptionType,
 } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -25,15 +24,15 @@ import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import {
     IEndretUtbetalingAndelFullSats,
+    IEndretUtbetalingAndelÅrsak,
     IRestEndretUtbetalingAndel,
+    optionTilsats,
     satser,
-    SatsOption,
     satsTilOption,
     årsaker,
-    ÅrsakOption,
-    årsakTilOption,
+    årsakTekst,
 } from '../../../typer/utbetalingAndel';
-import { datoformatNorsk } from '../../../utils/formatter';
+import { datoformatNorsk, formaterIdent } from '../../../utils/formatter';
 import { YearMonth } from '../../../utils/kalender';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
@@ -56,12 +55,12 @@ const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     border-left: 0.0625rem solid black;
 `;
 
-const StyledPersonvelger = styled(FamilieReactSelect)`
+const StyledPersonvelger = styled(FamilieSelect)`
     max-width: 20rem;
     z-index: 1000;
 `;
 
-const StyledSatsvelger = styled(FamilieReactSelect)`
+const StyledSatsvelger = styled(FamilieSelect)`
     max-width: 10rem;
 `;
 
@@ -97,9 +96,6 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     const { request } = useHttp();
     const { erLesevisning } = useBehandling();
     const { settFagsak } = useFagsakRessurser();
-
-    const tilOptionType = (value?: string): OptionType | undefined =>
-        value ? { value: value, label: value } : undefined;
 
     const { endretUtbetalingAndel, skjema, kanSendeSkjema, onSubmit, nullstillSkjema } =
         useEndretUtbetalingAndel();
@@ -195,24 +191,25 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             ).getFullYear() - new Date().getFullYear()
         );
     };
-
     return (
         <StyledSkjemaGruppe>
             <Feltmargin>
                 <StyledPersonvelger
                     {...skjema.felter.person.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     label={<Element>Velg hvem det gjelder</Element>}
-                    value={tilOptionType(skjema.felter.person.verdi)}
+                    value={skjema.felter.person.verdi}
                     placeholder={'Velg person'}
-                    isMulti={false}
-                    onChange={(valg): void => {
-                        skjema.felter.person.validerOgSettFelt((valg as OptionType).value);
+                    onChange={(event): void => {
+                        skjema.felter.person.validerOgSettFelt(event.target.value);
                     }}
-                    options={åpenBehandling.personer.map(person => ({
-                        value: person.personIdent,
-                        label: person.personIdent,
-                    }))}
-                />
+                >
+                    <option value={undefined}>Velg person</option>
+                    {åpenBehandling.personer.map(person => (
+                        <option value={person.personIdent}>
+                            {formaterIdent(person.personIdent)}
+                        </option>
+                    ))}
+                </StyledPersonvelger>
             </Feltmargin>
 
             <Feltmargin>
@@ -276,21 +273,22 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             </Feltmargin>
 
             <Feltmargin>
-                <FamilieReactSelect
+                <FamilieSelect
                     {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                    value={
-                        skjema.felter.årsak.verdi
-                            ? årsakTilOption(skjema.felter.årsak.verdi)
-                            : undefined
-                    }
+                    value={skjema.felter.årsak.verdi}
                     label={<Element>Årsak</Element>}
                     placeholder={'Velg årsak'}
-                    isMulti={false}
-                    onChange={(valg): void => {
-                        skjema.felter.årsak.validerOgSettFelt((valg as ÅrsakOption).årsak);
+                    onChange={(event): void => {
+                        skjema.felter.årsak.validerOgSettFelt(
+                            event.target.value as IEndretUtbetalingAndelÅrsak
+                        );
                     }}
-                    options={årsaker.map(årsak => årsakTilOption(årsak))}
-                />
+                >
+                    <option value={undefined}>Velg årsak</option>
+                    {årsaker.map(årsak => (
+                        <option value={årsak.valueOf()}>{årsakTekst[årsak]}</option>
+                    ))}
+                </FamilieSelect>
             </Feltmargin>
 
             <Feltmargin>
@@ -352,19 +350,30 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         {...skjema.felter.fullSats.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={<Element>Sats</Element>}
                         value={
-                            skjema.felter.fullSats.verdi !== undefined
-                                ? satsTilOption(skjema.felter.fullSats.verdi)
+                            skjema.felter.fullSats.verdi !== undefined &&
+                            skjema.felter.fullSats.verdi !== null
+                                ? skjema.felter.fullSats.verdi === true
+                                    ? IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf()
+                                    : IEndretUtbetalingAndelFullSats.DELT_SATS.valueOf()
                                 : undefined
                         }
                         placeholder={'Velg sats'}
-                        isMulti={false}
-                        onChange={(valg): void => {
-                            skjema.felter.fullSats.validerOgSettFelt((valg as SatsOption).fullSats);
+                        onChange={(event): void => {
+                            skjema.felter.fullSats.validerOgSettFelt(
+                                optionTilsats(event.target.value)
+                            );
                         }}
-                        options={satser.map(sats =>
-                            satsTilOption(sats === IEndretUtbetalingAndelFullSats.FULL_SATS)
-                        )}
-                    />
+                    >
+                        <option value={undefined}>Velg sats</option>
+                        {satser.map(sats => (
+                            <option value={sats.valueOf()}>
+                                {
+                                    satsTilOption(sats === IEndretUtbetalingAndelFullSats.FULL_SATS)
+                                        .label
+                                }
+                            </option>
+                        ))}
+                    </StyledSatsvelger>
                 </Feltmargin>
             )}
 

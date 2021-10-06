@@ -79,6 +79,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 }),
                 fullSats: useFelt<boolean | undefined>({
                     verdi:
+                        endretUtbetalingAndel.prosent !== null &&
                         endretUtbetalingAndel.prosent !== undefined
                             ? endretUtbetalingAndel.prosent === 100
                             : undefined,
