@@ -138,6 +138,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                         <StyledEditIkon />
                         <Element>Endre utbetalingsperiode</Element>
                     </Flatknapp>
+                    {visFeilmeldinger && opprettelseFeilmelding !== '' && (
+                        <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
+                    )}
                 </EndretUtbetalingAndel>
             )}
             {aktivEtikett && (
@@ -149,14 +152,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 />
             )}
             {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
-                <EndretUtbetalingAndelTabell
-                    åpenBehandling={åpenBehandling}
-                    settVisFeilmeldinger={settVisFeilmeldinger}
-                    settFeilmelding={settOpprettelseFeilmelding}
-                />
-            )}
-            {visFeilmeldinger && opprettelseFeilmelding !== '' && (
-                <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
+                <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
             )}
         </Skjemasteg>
     );
