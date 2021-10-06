@@ -170,7 +170,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
             skjema.felter.bruker.validerOgSettFelt(dataForManuellJournalføring.data.person);
 
-            settFagsak(dataForManuellJournalføring.data.fagsak);
+            if (dataForManuellJournalføring.data.fagsak) {
+                settFagsak(dataForManuellJournalføring.data.fagsak);
+            }
         }
     }, [dataForManuellJournalføring]);
 
