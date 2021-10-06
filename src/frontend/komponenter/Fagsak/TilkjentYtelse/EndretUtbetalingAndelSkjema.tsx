@@ -77,10 +77,6 @@ const StyledFamilieTextarea = styled(FamilieTextarea)`
     min-height: 8rem;
 `;
 
-const StyledDeleteIkon = styled(Delete)`
-    margin-right: 0.5rem;
-`;
-
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     avbrytEndringAvUtbetalingsperiode: () => void;
@@ -101,8 +97,14 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     const tilOptionType = (value?: string): OptionType | undefined =>
         value ? { value: value, label: value } : undefined;
 
-    const { endretUtbetalingAndel, skjema, kanSendeSkjema, onSubmit, nullstillSkjema } =
-        useEndretUtbetalingAndel();
+    const {
+        endretUtbetalingAndel,
+        skjema,
+        kanSendeSkjema,
+        onSubmit,
+        nullstillSkjema,
+        hentEndretUtbetalingsandelFraSkjema,
+    } = useEndretUtbetalingAndel();
 
     useEffect(() => {
         nullstillSkjema();
@@ -112,36 +114,13 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     }, [endretUtbetalingAndel]);
 
     const oppdaterEndretUtbetaling = (avbrytEndringAvUtbetalingsperiode: () => void) => {
-        const {
-            person,
-            periodeSkalUtbetalesTilSøker,
-            fom,
-            tom,
-            årsak,
-            begrunnelse,
-            fullSats,
-            søknadstidspunkt,
-            avtaletidspunktDeltBosted,
-        } = skjema.felter;
         if (kanSendeSkjema()) {
             onSubmit<IRestEndretUtbetalingAndel>(
                 {
                     method: 'PUT',
                     url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
                     påvirkerSystemLaster: true,
-                    data: {
-                        id: endretUtbetalingAndel.id,
-                        personIdent: person && person.verdi,
-                        prosent:
-                            (periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
-                            (fullSats.verdi ? 1 : 2),
-                        fom: fom && fom.verdi,
-                        tom: tom && tom.verdi,
-                        årsak: årsak && årsak.verdi,
-                        begrunnelse: begrunnelse.verdi,
-                        søknadstidspunkt: søknadstidspunkt.verdi,
-                        avtaletidspunktDeltBosted: avtaletidspunktDeltBosted.verdi,
-                    },
+                    data: hentEndretUtbetalingsandelFraSkjema(),
                 },
                 (fagsak: Ressurs<IFagsak>) => {
                     if (fagsak.status === RessursStatus.SUKSESS) {

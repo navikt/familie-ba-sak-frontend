@@ -43,23 +43,10 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         endretUtbetalingAndel.personIdent === null
     );
 
-    const { skjema } = useEndretUtbetalingAndel();
+    const { hentEndretUtbetalingsandelFraSkjema } = useEndretUtbetalingAndel();
 
-    function erSkjemaForandret() {
-        return (
-            endretUtbetalingAndel.årsak !== skjema.felter.årsak.verdi ||
-            endretUtbetalingAndel.fom !== skjema.felter.fom.verdi ||
-            endretUtbetalingAndel.tom !== skjema.felter.tom.verdi ||
-            endretUtbetalingAndel.personIdent !== skjema.felter.person.verdi ||
-            (endretUtbetalingAndel.prosent !== null ? endretUtbetalingAndel.prosent : 0) !==
-                (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
-                    (skjema.felter.fullSats.verdi ? 1 : 2) ||
-            endretUtbetalingAndel.søknadstidspunkt !== skjema.felter.søknadstidspunkt.verdi ||
-            endretUtbetalingAndel.avtaletidspunktDeltBosted !==
-                skjema.felter.avtaletidspunktDeltBosted.verdi ||
-            endretUtbetalingAndel.begrunnelse !== skjema.felter.begrunnelse.verdi
-        );
-    }
+    const erSkjemaForandret = () =>
+        !deepEqual(endretUtbetalingAndel, hentEndretUtbetalingsandelFraSkjema());
 
     const toggleForm = () => {
         if (erSkjemaForandret() && åpenUtbetalingsAndel) {
