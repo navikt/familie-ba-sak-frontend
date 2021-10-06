@@ -15,7 +15,10 @@
     "test:one": "jest -t",
     "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{js,ts,tsx}' --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start:cypress": "tsc -p tsconfig.backend.json && NODE_ENV=production node node_dist/backend/cypress-server.js",
+    "run:cypress": "cypress run",
+    "cypress": "npm-run-all -p start:cypress -r run:cypress"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css}": [
@@ -143,10 +146,12 @@
     "copyfiles": "^2.2.0",
     "css-loader": "^5.1.1",
     "css-minimizer-webpack-plugin": "^3.0.2",
+    "cypress": "^8.5.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-loader": "^4.0.2",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-import": "^2.24.1",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.4.0",
@@ -163,6 +168,7 @@
     "less-loader": "^9.0.0",
     "lint-staged": "^11.1.2",
     "mini-css-extract-plugin": "^2.2.2",
+    "npm-run-all": "^4.1.5",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "prettier": "^2.0.5",
     "react-hooks-testing-library": "^0.6.0",
