@@ -23,6 +23,8 @@ interface IEndretUtbetalingAndelRadProps {
     åpenBehandling: IBehandling;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
     settFeilmelding: (feilmelding: string) => void;
+    visFeilmeldinger: boolean;
+    opprettelseFeilmelding?: string;
 }
 
 const StyledCollapseIkon = styled(Collapse)`
@@ -38,6 +40,8 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     åpenBehandling,
     settVisFeilmeldinger,
     settFeilmelding,
+    visFeilmeldinger,
+    opprettelseFeilmelding = '',
 }) => {
     const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
         endretUtbetalingAndel.personIdent === null
@@ -96,7 +100,8 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             <tr>
                 <td>
                     {formaterIdent(
-                        endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : ''
+                        endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : '',
+                        'Ikke satt'
                     )}
                 </td>
                 <td>
@@ -143,6 +148,8 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             }}
                             settVisFeilmeldinger={settVisFeilmeldinger}
                             settFeilmelding={settFeilmelding}
+                            visFeilmeldinger={visFeilmeldinger}
+                            opprettelseFeilmelding={opprettelseFeilmelding}
                         />
                     </td>
                 </tr>

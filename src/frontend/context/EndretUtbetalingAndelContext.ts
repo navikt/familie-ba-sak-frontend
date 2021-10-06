@@ -96,6 +96,8 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 }),
                 begrunnelse: useFelt<string | undefined>({
                     verdi: endretUtbetalingAndel.begrunnelse,
+                    valideringsfunksjon: felt =>
+                        felt.verdi ? ok(felt) : feil(felt, 'Du må oppgi en begrunnelse.'),
                 }),
             },
             skjemanavn: 'Endre utbetalingsperiode',

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element, Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { Delete } from '@navikt/ds-icons';
 import {
@@ -86,6 +86,8 @@ interface IEndretUtbetalingAndelSkjemaProps {
     avbrytEndringAvUtbetalingsperiode: () => void;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
     settFeilmelding: (feilmelding: string) => void;
+    visFeilmeldinger: boolean;
+    opprettelseFeilmelding?: string;
 }
 
 const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
@@ -93,6 +95,8 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     avbrytEndringAvUtbetalingsperiode,
     settVisFeilmeldinger,
     settFeilmelding,
+    visFeilmeldinger,
+    opprettelseFeilmelding = '',
 }) => {
     const { request } = useHttp();
     const { erLesevisning } = useBehandling();
@@ -382,8 +386,12 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
                         skjema.felter.begrunnelse.validerOgSettFelt(event.target.value);
                     }}
+                    feil={skjema.visFeilmeldinger && skjema.felter.begrunnelse.feilmelding}
                 />
             </Feltmargin>
+            {visFeilmeldinger && opprettelseFeilmelding !== '' && (
+                <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
+            )}
             <Knapperekke>
                 <Knapperad>
                     <StyledFerdigKnapp

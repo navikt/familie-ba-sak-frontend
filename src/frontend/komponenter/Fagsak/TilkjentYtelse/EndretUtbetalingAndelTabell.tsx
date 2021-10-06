@@ -14,6 +14,8 @@ interface IEndretUtbetalingAndelTabellProps {
     åpenBehandling: IBehandling;
     settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
     settFeilmelding: (feilmelding: string) => void;
+    visFeilmeldinger: boolean;
+    opprettelseFeilmelding?: string;
 }
 
 const EndredePerioder = styled.div`
@@ -28,6 +30,8 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
     åpenBehandling,
     settVisFeilmeldinger,
     settFeilmelding,
+    visFeilmeldinger,
+    opprettelseFeilmelding = '',
 }) => {
     const endretUtbetalingAndeler = åpenBehandling.endretUtbetalingAndeler;
 
@@ -55,6 +59,8 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                                 åpenBehandling={åpenBehandling}
                                 settVisFeilmeldinger={settVisFeilmeldinger}
                                 settFeilmelding={settFeilmelding}
+                                visFeilmeldinger={visFeilmeldinger}
+                                opprettelseFeilmelding={opprettelseFeilmelding}
                             />
                         </EndretUtbetalingAndelProvider>
                     ))}

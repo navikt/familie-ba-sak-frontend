@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { Flatknapp } from 'nav-frontend-knapper';
-import { Element, Feilmelding } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
 
 import { Edit } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
@@ -153,10 +153,9 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                     åpenBehandling={åpenBehandling}
                     settVisFeilmeldinger={settVisFeilmeldinger}
                     settFeilmelding={settOpprettelseFeilmelding}
+                    visFeilmeldinger={visFeilmeldinger}
+                    opprettelseFeilmelding={opprettelseFeilmelding}
                 />
-            )}
-            {visFeilmeldinger && opprettelseFeilmelding !== '' && (
-                <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
             )}
         </Skjemasteg>
     );
