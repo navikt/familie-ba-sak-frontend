@@ -114,7 +114,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             );
         };
 
-        const hentEndretUtbetalingsandelFraSkjema = () => {
+        const hentSkjemaData = () => {
             const {
                 person,
                 fom,
@@ -143,7 +143,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             kanSendeSkjema,
             onSubmit,
             nullstillSkjema,
-            hentEndretUtbetalingsandelFraSkjema,
+            hentEndretUtbetalingsandelFraSkjema: hentSkjemaData,
         };
     }
 );
