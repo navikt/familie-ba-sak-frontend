@@ -10,3 +10,5 @@ yarn-error.log
 .env
 secure.log
 ci-tests/reports
+cypress/videos
+cypress/screenshots
