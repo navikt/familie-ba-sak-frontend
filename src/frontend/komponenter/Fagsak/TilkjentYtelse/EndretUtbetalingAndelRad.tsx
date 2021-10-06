@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
 import { Flatknapp } from 'nav-frontend-knapper';
@@ -35,6 +36,10 @@ const StyledExpandIkon = styled(Expand)`
     margin-right: 0.5rem;
 `;
 
+const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
+    ${props => props.erÅpen && 'border-bottom: 0 !important;'}
+`;
+
 const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
     endretUtbetalingAndel,
     åpenBehandling,
@@ -47,23 +52,10 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         endretUtbetalingAndel.personIdent === null
     );
 
-    const { skjema } = useEndretUtbetalingAndel();
+    const { hentEndretUtbetalingsandelFraSkjema } = useEndretUtbetalingAndel();
 
-    function erSkjemaForandret() {
-        return (
-            endretUtbetalingAndel.årsak !== skjema.felter.årsak.verdi ||
-            endretUtbetalingAndel.fom !== skjema.felter.fom.verdi ||
-            endretUtbetalingAndel.tom !== skjema.felter.tom.verdi ||
-            endretUtbetalingAndel.personIdent !== skjema.felter.person.verdi ||
-            (endretUtbetalingAndel.prosent !== null ? endretUtbetalingAndel.prosent : 0) !==
-                (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
-                    (skjema.felter.fullSats.verdi ? 1 : 2) ||
-            endretUtbetalingAndel.søknadstidspunkt !== skjema.felter.søknadstidspunkt.verdi ||
-            endretUtbetalingAndel.avtaletidspunktDeltBosted !==
-                skjema.felter.avtaletidspunktDeltBosted.verdi ||
-            endretUtbetalingAndel.begrunnelse !== skjema.felter.begrunnelse.verdi
-        );
-    }
+    const erSkjemaForandret = () =>
+        !deepEqual(endretUtbetalingAndel, hentEndretUtbetalingsandelFraSkjema());
 
     const toggleForm = () => {
         if (erSkjemaForandret() && åpenUtbetalingsAndel) {
@@ -98,21 +90,21 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     return (
         <>
             <tr>
-                <td>
+                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {formaterIdent(
                         endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : '',
                         'Ikke satt'
                     )}
-                </td>
-                <td>
+                </TdUtenUnderstrek>
+                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {endretUtbetalingAndel.fom
                         ? yearMonthPeriodeToString({
                               fom: endretUtbetalingAndel.fom,
                               tom: endretUtbetalingAndel.tom,
                           })
                         : ''}
-                </td>
-                <td>
+                </TdUtenUnderstrek>
+                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {typeof endretUtbetalingAndel.prosent === 'number' &&
                     endretUtbetalingAndel.årsak
                         ? fraProsentTilTekst(
@@ -120,11 +112,11 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                               endretUtbetalingAndel.årsak
                           )
                         : ''}
-                </td>
-                <td>
+                </TdUtenUnderstrek>
+                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
-                </td>
-                <td>
+                </TdUtenUnderstrek>
+                <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <Flatknapp mini onClick={() => toggleForm()}>
                         {åpenUtbetalingsAndel ? (
                             <>
@@ -136,7 +128,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             </>
                         )}
                     </Flatknapp>
-                </td>
+                </TdUtenUnderstrek>
             </tr>
             {åpenUtbetalingsAndel && (
                 <tr>
