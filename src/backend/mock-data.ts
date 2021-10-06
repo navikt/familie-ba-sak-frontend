@@ -1,23 +1,3 @@
-export const featureMock = {
-    data: {
-        'familie-ba-sak.behandling.vis-teknisk-opphoer': true,
-        'familie-ba-sak.behandling.tilbakekreving': true,
-        'familie-ba-sak.behandling.medlemskap': true,
-        'familie-ba-sak.behandling.journalpostliste': true,
-        'familie-ba-sak.behandling.delt_bosted': true,
-        'familie-ba-sak.forhaandsvis-alle-brevbegrunnelser': true,
-        'familie-ba-sak.behandling.begrunnelse-fra-sanity': true,
-        'familie-ba-sak.behandling.legg-til-barn': true,
-        'familie-ba-sak.behandling.korreksjon-vedtaksbrev': true,
-        'familie-ba-sak.behandling.kan-endre-utbetalingsperiode': true,
-        'familie-ba-sak.behandling.utvidet': true,
-    },
-    status: 'SUKSESS',
-    melding: 'Innhenting av data var vellykket',
-    frontendFeilmelding: null,
-    stacktrace: null,
-};
-
 export const oppgaveMock = {
     data: {
         antallTreffTotalt: 2,
