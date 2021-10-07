@@ -82,6 +82,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                                                 ? oppgaveFelt.feilmelding
                                                 : undefined
                                         }
+                                        data-cy={`select-${oppgaveFelt.label}`}
                                     >
                                         {oppgaveFelt.filter.nøkkelPar &&
                                             Object.values(oppgaveFelt.filter.nøkkelPar)
