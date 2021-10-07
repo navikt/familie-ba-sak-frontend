@@ -1,6 +1,10 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
+
+import { Knapp } from 'nav-frontend-knapper';
+import { Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieCheckbox } from '@navikt/familie-form-elements';
 
@@ -10,6 +14,7 @@ import Slett from '../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { formaterIdent, hentAlderSomString } from '../../../utils/formatter';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -45,12 +50,33 @@ const FjernBarnKnapp = styled(IkonKnapp)`
 const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknad();
     const { erLesevisning } = useBehandling();
+    const [visHarLøpendeModal, settVisHarLøpendeModal] = useState(false);
+
+    const barnetHarLøpendeUtbetaling = barnMedLøpendeUtbetaling.has(barn.ident);
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
-    )}) | ${formaterIdent(barn.ident)} ${
-        barnMedLøpendeUtbetaling.has(barn.ident) ? '(løpende)' : ''
-    }`;
+    )}) | ${formaterIdent(barn.ident)} ${barnetHarLøpendeUtbetaling ? '(løpende)' : ''}`;
+
+    const oppdaterBarnMerket = () => {
+        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+            skjema.felter.barnaMedOpplysninger.verdi.map(
+                (barnMedOpplysninger: IBarnMedOpplysninger) =>
+                    barnMedOpplysninger.ident === barn.ident
+                        ? {
+                              ...barnMedOpplysninger,
+                              merket: !barnMedOpplysninger.merket,
+                          }
+                        : barnMedOpplysninger
+            )
+        );
+    };
+
+    useEffect(() => {
+        if (barnetHarLøpendeUtbetaling && barn.merket) {
+            settVisHarLøpendeModal(true);
+        }
+    }, [barn]);
 
     return (
         <CheckboxOgSlettknapp>
@@ -63,17 +89,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                 }
                 checked={barn.merket}
                 onChange={() => {
-                    skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                        skjema.felter.barnaMedOpplysninger.verdi.map(
-                            (barnMedOpplysninger: IBarnMedOpplysninger) =>
-                                barnMedOpplysninger.ident === barn.ident
-                                    ? {
-                                          ...barnMedOpplysninger,
-                                          merket: !barnMedOpplysninger.merket,
-                                      }
-                                    : barnMedOpplysninger
-                        )
-                    );
+                    oppdaterBarnMerket();
                 }}
             />
             {barn.manueltRegistrert && (
@@ -96,6 +112,37 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                     label={'Fjern barn'}
                 />
             )}
+            <UIModalWrapper
+                modal={{
+                    tittel: 'Søker mottar allerede barnetrygd for dette barnet',
+                    lukkKnapp: false,
+                    visModal: visHarLøpendeModal,
+                    actions: [
+                        <Knapp
+                            key={'fjern-barn'}
+                            mini={true}
+                            onClick={() => {
+                                oppdaterBarnMerket();
+                                settVisHarLøpendeModal(false);
+                            }}
+                            children={'Fjern barn'}
+                        />,
+                        <Knapp
+                            key={'behold-barn'}
+                            mini={true}
+                            onClick={() => {
+                                settVisHarLøpendeModal(false);
+                            }}
+                            children={'Behold barn'}
+                        />,
+                    ],
+                }}
+            >
+                <Normaltekst>
+                    Hvis det ikke er søkt for nye perioder skal du ikke krysse av for dette barnet (
+                    {formaterIdent(barn.ident)}).
+                </Normaltekst>
+            </UIModalWrapper>
         </CheckboxOgSlettknapp>
     );
 };
