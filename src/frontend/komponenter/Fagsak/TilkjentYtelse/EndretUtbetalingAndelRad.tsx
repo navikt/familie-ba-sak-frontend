@@ -22,8 +22,6 @@ import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
     åpenBehandling: IBehandling;
-    settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
-    settFeilmelding: (feilmelding: string) => void;
 }
 
 const StyledCollapseIkon = styled(Collapse)`
@@ -41,8 +39,6 @@ const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
 const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
     endretUtbetalingAndel,
     åpenBehandling,
-    settVisFeilmeldinger,
-    settFeilmelding,
 }) => {
     const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
         endretUtbetalingAndel.personIdent === null
@@ -88,7 +84,8 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {formaterIdent(
-                        endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : ''
+                        endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : '',
+                        'Ikke satt'
                     )}
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
@@ -133,8 +130,6 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             avbrytEndringAvUtbetalingsperiode={() => {
                                 settÅpenUtbetalingsAndel(false);
                             }}
-                            settVisFeilmeldinger={settVisFeilmeldinger}
-                            settFeilmelding={settFeilmelding}
                         />
                     </td>
                 </tr>
