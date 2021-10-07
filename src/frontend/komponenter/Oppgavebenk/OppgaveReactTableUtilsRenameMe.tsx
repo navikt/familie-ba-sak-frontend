@@ -2,6 +2,8 @@ import React, { ReactNode } from 'react';
 
 import { Column } from 'react-table';
 
+import Lenke from 'nav-frontend-lenker';
+
 import { ISaksbehandler } from '@navikt/familie-typer';
 
 import { IPar } from '../../typer/common';
@@ -38,47 +40,47 @@ export interface Accessor {
 export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     {
         accessor: 'opprettetTidspunkt',
-        Header: 'Reg. dato',
+        Header: <Lenke href="#">Reg. dato</Lenke>,
     },
     {
         accessor: 'oppgavetype',
-        Header: 'Oppgavetype',
+        Header: <Lenke href="#">Oppgavetype</Lenke>,
     },
     {
         accessor: 'behandlingstema',
-        Header: 'Gjelder',
+        Header: <Lenke href="#">Gjelder</Lenke>,
     },
     {
         accessor: 'behandlingstype',
-        Header: 'Behandlingstype',
+        Header: <Lenke href="#">Behandlingstype</Lenke>,
     },
     {
         accessor: 'fristFerdigstillelse',
-        Header: 'Frist',
+        Header: <Lenke href="#">Frist</Lenke>,
     },
     {
         accessor: 'prioritet',
-        Header: 'Prioritet',
+        Header: <Lenke href="#">Prioritet</Lenke>,
     },
     {
         accessor: 'beskrivelse',
-        Header: 'Beskrivelse',
+        Header: <Lenke href="#">Beskrivelse</Lenke>,
     },
     {
         accessor: 'ident',
-        Header: 'Bruker',
+        Header: <Lenke href="#">Bruker</Lenke>,
     },
     {
         accessor: 'tildeltEnhetsnr',
-        Header: 'Enhet',
+        Header: <Lenke href="#">Enhet</Lenke>,
     },
     {
         accessor: 'tilordnetRessurs',
-        Header: 'Saksbehandler',
+        Header: <Lenke href="#">Saksbehandler</Lenke>,
     },
     {
         accessor: 'handlinger',
-        Header: 'Handlinger',
+        Header: <Lenke href="#">Handlinger</Lenke>,
     },
 ];
 

@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import {
     Cell,
     Column,
+    ColumnInstance,
     TableInstance,
     useSortBy,
     UseSortByInstanceProps,
@@ -13,6 +14,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
+import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
 import { IOppgaveRad, kolonner, mapIOppgaverTilOppgaveRad } from './OppgaveReactTableUtilsRenameMe';
 
 export const OppgaveReactTable = () => {
@@ -20,7 +22,6 @@ export const OppgaveReactTable = () => {
     const { oppgaver } = useOppgaver();
 
     const columns: ReadonlyArray<Column<IOppgaveRad>> = useMemo(() => kolonner, []);
-
     const data: ReadonlyArray<IOppgaveRad> = useMemo(() => {
         return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
             ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, innloggetSaksbehandler)
@@ -35,8 +36,23 @@ export const OppgaveReactTable = () => {
             },
             useSortBy
         );
-
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = instance;
+
+    const getAriaSort = (
+        column: ColumnInstance<IOppgaveRad>
+    ): 'none' | 'descending' | 'ascending' | undefined => {
+        if (column.isSortedDesc === true) {
+            return ariaSortMap.get(FeltSortOrder.DESCENDANT);
+        }
+        if (column.isSortedDesc === false) {
+            return ariaSortMap.get(FeltSortOrder.ASCENDANT);
+        }
+        return ariaSortMap.get(FeltSortOrder.NONE);
+    };
+
+    const getSortLenkClassName = (_: ColumnInstance<IOppgaveRad>) => {
+        return 'tabell__th--sortert-desc';
+    };
 
     return (
         <div>
@@ -48,6 +64,8 @@ export const OppgaveReactTable = () => {
                                 return (
                                     <th
                                         role="columnheader"
+                                        aria-sort={getAriaSort(column)}
+                                        className={getSortLenkClassName(column)}
                                         {...column.getHeaderProps(column.getSortByToggleProps())}
                                     >
                                         {column.render('Header')}
