@@ -89,6 +89,7 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
             case OppgavetypeFilter.BEH_SAK:
             case OppgavetypeFilter.GOD_VED:
             case OppgavetypeFilter.BEH_UND_VED:
+            case OppgavetypeFilter.VURD_LIVS:
             case OppgavetypeFilter.FREM:
                 return (
                     <FamilieBaseKnapp
