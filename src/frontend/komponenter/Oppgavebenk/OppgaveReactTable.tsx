@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Column, TableOptions, useTable } from 'react-table';
+import { Column, TableInstance, useSortBy, UseSortByInstanceProps, useTable } from 'react-table';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -20,13 +20,16 @@ export const OppgaveReactTable = () => {
             : [];
     }, [oppgaver]);
 
-    const tableOptions: TableOptions<IOppgaveRad> = {
-        columns,
-        data,
-    };
+    const instance: TableInstance<IOppgaveRad> & UseSortByInstanceProps<IOppgaveRad> =
+        useTable<IOppgaveRad>(
+            {
+                columns,
+                data,
+            },
+            useSortBy
+        );
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable<IOppgaveRad>(tableOptions);
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = instance;
 
     return (
         <div>
@@ -34,19 +37,21 @@ export const OppgaveReactTable = () => {
                 <thead>
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map(column => (
-                                <th
-                                    {...column.getHeaderProps()}
-                                    style={{
-                                        borderBottom: 'solid 3px red',
-                                        background: 'aliceblue',
-                                        color: 'black',
-                                        fontWeight: 'bold',
-                                    }}
-                                >
-                                    {column.render('Header')}
-                                </th>
-                            ))}
+                            {headerGroup.headers.map(column => {
+                                return (
+                                    <th
+                                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                                        style={{
+                                            borderBottom: 'solid 3px red',
+                                            background: 'aliceblue',
+                                            color: 'black',
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        {column.render('Header')}
+                                    </th>
+                                );
+                            })}
                         </tr>
                     ))}
                 </thead>
