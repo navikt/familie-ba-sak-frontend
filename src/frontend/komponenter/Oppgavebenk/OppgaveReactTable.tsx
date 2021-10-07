@@ -1,6 +1,13 @@
 import React, { useMemo } from 'react';
 
-import { Column, TableInstance, useSortBy, UseSortByInstanceProps, useTable } from 'react-table';
+import {
+    Cell,
+    Column,
+    TableInstance,
+    useSortBy,
+    UseSortByInstanceProps,
+    useTable,
+} from 'react-table';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -55,8 +62,17 @@ export const OppgaveReactTable = () => {
                         prepareRow(row);
                         return (
                             <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => {
-                                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                                {row.cells.map((cell: Cell<IOppgaveRad>) => {
+                                    return (
+                                        <td
+                                            className={
+                                                cell.column.isSorted ? 'tabell__td--sortert' : ''
+                                            }
+                                            {...cell.getCellProps()}
+                                        >
+                                            {cell.render('Cell')}
+                                        </td>
+                                    );
                                 })}
                             </tr>
                         );
