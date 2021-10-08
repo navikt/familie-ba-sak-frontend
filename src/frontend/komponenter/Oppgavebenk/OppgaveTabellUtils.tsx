@@ -45,9 +45,8 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
         accessor: 'behandlingstema',
         Header: <Lenke href="#">Gjelder</Lenke>,
         Cell: ({ value: behandlingstema }) => {
-            return behandlingstema.behandlingstema
-                ? gjelderFilter[behandlingstema.behandlingstema as GjelderFilter]?.navn ??
-                      behandlingstema.behandlingstema
+            return behandlingstema
+                ? gjelderFilter[behandlingstema as GjelderFilter]?.navn ?? behandlingstema
                 : 'Ikke satt';
         },
     },
