@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 
+import classNames from 'classnames';
 import {
     Cell,
     Column,
-    ColumnInstance,
     TableInstance,
     useSortBy,
     UseSortByInstanceProps,
@@ -14,8 +14,14 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
-import { IOppgaveRad, kolonner, mapIOppgaverTilOppgaveRad } from './OppgaveTabellUtils';
+import {
+    getAriaSort,
+    getSortLenkClassName,
+    IOppgaveRad,
+    kolonner,
+    mapIOppgaverTilOppgaveRad,
+    styleFraAccessorEllerId,
+} from './OppgaveTabellUtils';
 
 export const OppgaveTabell = () => {
     const { innloggetSaksbehandler } = useApp();
@@ -28,31 +34,19 @@ export const OppgaveTabell = () => {
             : [];
     }, [oppgaver]);
 
-    const instance: TableInstance<IOppgaveRad> & UseSortByInstanceProps<IOppgaveRad> =
-        useTable<IOppgaveRad>(
-            {
-                columns,
-                data,
-            },
-            useSortBy
-        );
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = instance;
-
-    const getAriaSort = (
-        column: ColumnInstance<IOppgaveRad>
-    ): 'none' | 'descending' | 'ascending' | undefined => {
-        if (column.isSortedDesc === true) {
-            return ariaSortMap.get(FeltSortOrder.DESCENDANT);
-        }
-        if (column.isSortedDesc === false) {
-            return ariaSortMap.get(FeltSortOrder.ASCENDANT);
-        }
-        return ariaSortMap.get(FeltSortOrder.NONE);
-    };
-
-    const getSortLenkClassName = (_: ColumnInstance<IOppgaveRad>) => {
-        return 'tabell__th--sortert-desc';
-    };
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+    }: TableInstance<IOppgaveRad> & UseSortByInstanceProps<IOppgaveRad> = useTable<IOppgaveRad>(
+        {
+            columns,
+            data,
+        },
+        useSortBy
+    );
 
     return (
         <div className={'oppgavelist'}>
@@ -60,18 +54,16 @@ export const OppgaveTabell = () => {
                 <thead>
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map(column => {
-                                return (
-                                    <th
-                                        role="columnheader"
-                                        aria-sort={getAriaSort(column)}
-                                        className={getSortLenkClassName(column)}
-                                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                                    >
-                                        {column.render('Header')}
-                                    </th>
-                                );
-                            })}
+                            {headerGroup.headers.map(column => (
+                                <th
+                                    role="columnheader"
+                                    aria-sort={getAriaSort(column)}
+                                    className={getSortLenkClassName(column)}
+                                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                                >
+                                    {column.render('Header')}
+                                </th>
+                            ))}
                         </tr>
                     ))}
                 </thead>
@@ -80,18 +72,17 @@ export const OppgaveTabell = () => {
                         prepareRow(row);
                         return (
                             <tr {...row.getRowProps()}>
-                                {row.cells.map((cell: Cell<IOppgaveRad>) => {
-                                    return (
-                                        <td
-                                            className={
-                                                cell.column.isSorted ? 'tabell__td--sortert' : ''
-                                            }
-                                            {...cell.getCellProps()}
-                                        >
-                                            {cell.render('Cell')}
-                                        </td>
-                                    );
-                                })}
+                                {row.cells.map((cell: Cell<IOppgaveRad>) => (
+                                    <td
+                                        className={classNames([
+                                            cell.column.isSorted ? 'tabell__td--sortert' : '',
+                                            styleFraAccessorEllerId(cell.column.id),
+                                        ])}
+                                        {...cell.getCellProps()}
+                                    >
+                                        {cell.render('Cell')}
+                                    </td>
+                                ))}
                             </tr>
                         );
                     })}
