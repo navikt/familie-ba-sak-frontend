@@ -51,11 +51,6 @@ export const useVilkårBegrunnelser = ({
                       )
                   )
                   .reduce((acc: GroupType<ISelectOption>[], vedtakBegrunnelseType: string) => {
-                      const vedtaksbegrunnelsetype =
-                          vedtakBegrunnelseType === 'INNVILGELSE'
-                              ? 'INNVILGET'
-                              : vedtakBegrunnelseType;
-
                       return [
                           ...acc,
                           {
@@ -63,9 +58,15 @@ export const useVilkårBegrunnelser = ({
                                   vedtakBegrunnelseType as VedtakBegrunnelseType
                               ],
                               options: vedtaksperiodeMedBegrunnelser.gyldigeBegrunnelser
-                                  .filter((vedtakBegrunnelse: VedtakBegrunnelse) =>
-                                      vedtakBegrunnelse.includes(vedtaksbegrunnelsetype)
-                                  )
+                                  .filter((vedtakBegrunnelse: VedtakBegrunnelse) => {
+                                      return (
+                                          vedtaksbegrunnelseTekster.data[
+                                              vedtakBegrunnelseType as VedtakBegrunnelseType
+                                          ].find(
+                                              begrunnelse => begrunnelse.id === vedtakBegrunnelse
+                                          ) !== undefined
+                                      );
+                                  })
                                   .map((vedtakBegrunnelse: VedtakBegrunnelse) => ({
                                       label:
                                           vedtaksbegrunnelseTekster.data[
