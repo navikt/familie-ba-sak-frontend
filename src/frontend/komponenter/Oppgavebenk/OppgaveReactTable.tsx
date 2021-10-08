@@ -55,7 +55,7 @@ export const OppgaveReactTable = () => {
     };
 
     return (
-        <div>
+        <div className={'oppgavelist'}>
             <table className="tabell" {...getTableProps()}>
                 <thead>
                     {headerGroups.map(headerGroup => (

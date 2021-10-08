@@ -112,18 +112,25 @@ export const mapIOppgaverTilOppgaveRad = (
             oppgavetype: oppg.oppgavetype
                 ? oppgaveTypeFilter[oppg.oppgavetype as OppgavetypeFilter]?.navn ?? oppg.oppgavetype
                 : 'Ukjent',
+            beskrivelse: <div className={'beskrivelse'}>{oppg.beskrivelse}</div>,
             opprettetTidspunkt: oppg.opprettetTidspunkt
                 ? intDatoTilNorskDato(oppg.opprettetTidspunkt)
                 : 'Ukjent',
             prioritet: PrioritetFilter[oppg.prioritet as keyof typeof PrioritetFilter],
             tilordnetRessurs: (
-                <OppgavelisteSaksbehandler
-                    oppgave={oppg}
-                    innloggetSaksbehandler={innloggetSaksbehandler}
-                />
+                <div className={'tilordnet-ressurs'}>
+                    <OppgavelisteSaksbehandler
+                        oppgave={oppg}
+                        innloggetSaksbehandler={innloggetSaksbehandler}
+                    />
+                </div>
             ),
             tildeltEnhetsnr: enhet ? enhet.navn : oppg.tildeltEnhetsnr,
-            handlinger: <OppgaveDirektelenke oppgave={oppg} />,
+            handlinger: (
+                <div className={'handlinger'}>
+                    <OppgaveDirektelenke oppgave={oppg} />
+                </div>
+            ),
         };
     });
 };
