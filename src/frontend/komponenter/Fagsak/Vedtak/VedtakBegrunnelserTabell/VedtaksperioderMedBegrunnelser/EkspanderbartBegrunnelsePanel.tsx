@@ -31,11 +31,11 @@ const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
 `;
 
 const PanelTittel = styled.div`
-    width: 100%;
     display: grid;
-    grid-template-columns: 12rem 7.5rem auto;
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
+    grid-template-columns: minmax(6rem, 12rem) minmax(6rem, 15rem) auto;
+    grid-gap: 0.5rem;
+    margin: 1rem;
+    margin-left: 0;
 `;
 
 interface IEkspanderbartBegrunnelsePanelProps {

@@ -51,6 +51,14 @@ export const satsTilOption = (fullSats: boolean): SatsOption => ({
     fullSats: fullSats,
 });
 
+export const optionTilsats = (satsLabel: string): boolean => {
+    if (satsLabel === IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf()) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 export const satser: IEndretUtbetalingAndelFullSats[] = Object.keys(
     IEndretUtbetalingAndelFullSats
 ).map(k => k as IEndretUtbetalingAndelFullSats);
