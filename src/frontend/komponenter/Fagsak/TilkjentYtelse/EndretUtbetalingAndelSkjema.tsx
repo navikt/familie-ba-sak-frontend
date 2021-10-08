@@ -98,7 +98,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         kanSendeSkjema,
         onSubmit,
         nullstillSkjema,
-        hentEndretUtbetalingsandelFraSkjema,
+        hentSkjemaData,
     } = useEndretUtbetalingAndel();
 
     useEffect(() => {
@@ -115,7 +115,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     method: 'PUT',
                     url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
                     påvirkerSystemLaster: true,
-                    data: hentEndretUtbetalingsandelFraSkjema(),
+                    data: hentSkjemaData(),
                 },
                 (fagsak: Ressurs<IFagsak>) => {
                     if (fagsak.status === RessursStatus.SUKSESS) {

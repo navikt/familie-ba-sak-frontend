@@ -44,10 +44,19 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         endretUtbetalingAndel.personIdent === null
     );
 
-    const { hentEndretUtbetalingsandelFraSkjema } = useEndretUtbetalingAndel();
+    const { hentSkjemaData } = useEndretUtbetalingAndel();
 
     const erSkjemaForandret = () =>
-        !deepEqual(endretUtbetalingAndel, hentEndretUtbetalingsandelFraSkjema());
+        !deepEqual(
+            {
+                ...endretUtbetalingAndel,
+                prosent:
+                    typeof endretUtbetalingAndel.prosent === 'number'
+                        ? endretUtbetalingAndel.prosent
+                        : 0,
+            },
+            hentSkjemaData()
+        );
 
     const toggleForm = () => {
         if (erSkjemaForandret() && åpenUtbetalingsAndel) {
