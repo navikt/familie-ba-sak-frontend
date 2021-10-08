@@ -7,7 +7,11 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { ytelsetype } from '../../../typer/beregning';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
+import {
+    Utbetalingsperiode,
+    Vedtaksperiode,
+    Vedtaksperiodetype,
+} from '../../../typer/vedtaksperiode';
 import {
     datoformat,
     formaterBeløp,
@@ -19,7 +23,7 @@ import {
 import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 
 interface IProps {
-    vedtaksperioder: Vedtaksperiode[];
+    utbetalingsperioder: Utbetalingsperiode[];
     aktivEtikett: Skalaetikett;
 }
 
@@ -29,7 +33,10 @@ const summerTotalbeløpForPeriode = (sum: number, vedtaksperiode: Vedtaksperiode
     return sum + vedtaksperiode.utbetaltPerMnd;
 };
 
-const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, aktivEtikett }) => {
+const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
+    utbetalingsperioder,
+    aktivEtikett,
+}) => {
     const { settAktivEtikett } = useTidslinje();
 
     const månedNavnOgÅr = () => {
@@ -46,7 +53,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                 <div className={'tilkjentytelse-informasjonsboks__header__info'}>
                     <Element>{månedNavnOgÅr()}</Element>
 
-                    {vedtaksperioder.length > 0 ? (
+                    {utbetalingsperioder.length > 0 ? (
                         <Normaltekst>
                             Totalt utbetalt i mnd
                             <span
@@ -55,7 +62,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                                 }
                             >
                                 {formaterBeløp(
-                                    vedtaksperioder.reduce(summerTotalbeløpForPeriode, 0)
+                                    utbetalingsperioder.reduce(summerTotalbeløpForPeriode, 0)
                                 )}
                             </span>
                         </Normaltekst>
@@ -69,7 +76,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                     }}
                 />
             </div>
-            {vedtaksperioder.length > 0 && (
+            {utbetalingsperioder.length > 0 && (
                 <table>
                     <thead>
                         <tr>
@@ -85,11 +92,14 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                         </tr>
                     </thead>
                     <tbody>
-                        {vedtaksperioder.map((vedtaksperiode: Vedtaksperiode) => {
-                            if (vedtaksperiode.vedtaksperiodetype !== Vedtaksperiodetype.UTBETALING)
+                        {utbetalingsperioder.map((utbetalingsperiode: Utbetalingsperiode) => {
+                            if (
+                                utbetalingsperiode.vedtaksperiodetype !==
+                                Vedtaksperiodetype.UTBETALING
+                            )
                                 return null;
 
-                            return vedtaksperiode.utbetalingsperiodeDetaljer
+                            return utbetalingsperiode.utbetalingsperiodeDetaljer
                                 .sort((detaljA, detaljB) =>
                                     sorterPersonTypeOgFødselsdato(detaljA.person, detaljB.person)
                                 )

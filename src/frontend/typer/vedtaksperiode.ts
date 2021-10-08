@@ -133,7 +133,18 @@ export const hentVedtaksperiodeTittel = (
             vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET) &&
         utbetalingsperiode
     ) {
-        return ytelsetype[utbetalingsperiode?.ytelseTyper[0]].navn;
+        if (
+            utbetalingsperiode?.ytelseTyper.includes(YtelseType.UTVIDET_BARNETRYGD) &&
+            utbetalingsperiode?.ytelseTyper.includes(YtelseType.SMÅBARNSTILLEGG)
+        ) {
+            return `${ytelsetype[YtelseType.UTVIDET_BARNETRYGD].navn} og ${ytelsetype[
+                YtelseType.SMÅBARNSTILLEGG
+            ].navn.toLowerCase()}`;
+        } else if (utbetalingsperiode?.ytelseTyper.includes(YtelseType.UTVIDET_BARNETRYGD)) {
+            return ytelsetype[YtelseType.UTVIDET_BARNETRYGD].navn;
+        } else {
+            return ytelsetype[YtelseType.ORDINÆR_BARNETRYGD].navn;
+        }
     }
 
     switch (vedtaksperiodetype) {

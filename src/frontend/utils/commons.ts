@@ -15,12 +15,6 @@ export const tilFeilside = (): void => {
     window.location.assign(window.location.protocol + '//' + window.location.host + '/error');
 };
 
-export const fjernElementMedNøkkel = (obj: { [key: string]: unknown }, propToDelete: string) => {
-    // eslint-disable-next-line
-    const { [propToDelete]: _, ...objectWithoutDeletedProp } = obj;
-    return objectWithoutDeletedProp;
-};
-
 export const sjekkTilgangTilPerson = (personRes: Ressurs<IPersonInfo>): Ressurs<IPersonInfo> => {
     if (personRes.status === RessursStatus.SUKSESS && personRes.data.harTilgang === false) {
         return byggFeiletRessurs('Du har ikke tilgang til denne brukeren.');

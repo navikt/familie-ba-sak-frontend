@@ -69,16 +69,16 @@ const erOrgNr = (orgNr: string) => {
     return kunSiffer(orgNr) && orgNr.length === 9;
 };
 
-export const formaterIdent = (personIdent: string) => {
+export const formaterIdent = (personIdent: string, ukjentTekst = 'Ukjent id') => {
     if (personIdent === '') {
-        return 'Ukjent id';
+        return ukjentTekst;
     }
 
     return erPersonId(personIdent)
         ? `${personIdent.slice(0, 6)} ${personIdent.slice(6, personIdent.length)}`
         : erOrgNr(personIdent)
         ? `${personIdent.slice(0, 3)} ${personIdent.slice(3, 6)} ${personIdent.slice(6, 9)}`
-        : 'Ukjent id';
+        : ukjentTekst;
 };
 
 export const sorterFødselsdato = (fødselsDatoA: string, fødselsDatoB: string) =>
