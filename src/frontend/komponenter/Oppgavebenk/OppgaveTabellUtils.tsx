@@ -15,6 +15,7 @@ import {
     GjelderFilter,
     gjelderFilter,
     IOppgave,
+    IOppgaveIdent,
     OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
@@ -104,7 +105,8 @@ export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     },
 ];
 
-export interface IOppgaveRad extends Omit<IOppgave, 'tilordnetRessurs'> {
+export interface IOppgaveRad extends Omit<IOppgave, 'tilordnetRessurs' | 'identer'> {
+    ident: IOppgaveIdent[] | undefined;
     tilordnetRessurs: { oppg: IOppgave; innloggetSaksbehandler?: ISaksbehandler };
     handlinger: IOppgave;
 }
