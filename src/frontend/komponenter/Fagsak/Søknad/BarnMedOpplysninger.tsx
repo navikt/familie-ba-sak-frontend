@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -58,25 +58,19 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
         barn.fødselsdato
     )}) | ${formaterIdent(barn.ident)} ${barnetHarLøpendeUtbetaling ? '(løpende)' : ''}`;
 
-    const oppdaterBarnMerket = () => {
+    const oppdaterBarnMerket = (nyMerketStatus: boolean) => {
         skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
             skjema.felter.barnaMedOpplysninger.verdi.map(
                 (barnMedOpplysninger: IBarnMedOpplysninger) =>
                     barnMedOpplysninger.ident === barn.ident
                         ? {
                               ...barnMedOpplysninger,
-                              merket: !barnMedOpplysninger.merket,
+                              merket: nyMerketStatus,
                           }
                         : barnMedOpplysninger
             )
         );
     };
-
-    useEffect(() => {
-        if (barnetHarLøpendeUtbetaling && barn.merket) {
-            settVisHarLøpendeModal(true);
-        }
-    }, [barn]);
 
     return (
         <CheckboxOgSlettknapp>
@@ -89,7 +83,13 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                 }
                 checked={barn.merket}
                 onChange={() => {
-                    oppdaterBarnMerket();
+                    const nyMerketStatus = !barn.merket;
+
+                    if (barnetHarLøpendeUtbetaling && nyMerketStatus) {
+                        settVisHarLøpendeModal(true);
+                    } else {
+                        oppdaterBarnMerket(nyMerketStatus);
+                    }
                 }}
             />
             {barn.manueltRegistrert && (
@@ -122,7 +122,6 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                             key={'fjern-barn'}
                             mini={true}
                             onClick={() => {
-                                oppdaterBarnMerket();
                                 settVisHarLøpendeModal(false);
                             }}
                             children={'Fjern barn'}
@@ -132,6 +131,7 @@ const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
                             mini={true}
                             onClick={() => {
                                 settVisHarLøpendeModal(false);
+                                oppdaterBarnMerket(true);
                             }}
                             children={'Behold barn'}
                         />,
