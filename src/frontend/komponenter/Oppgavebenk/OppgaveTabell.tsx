@@ -15,9 +15,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
 import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
-import { IOppgaveRad, kolonner, mapIOppgaverTilOppgaveRad } from './OppgaveReactTableUtilsRenameMe';
+import { IOppgaveRad, kolonner, mapIOppgaverTilOppgaveRad } from './OppgaveTabellUtils';
 
-export const OppgaveReactTable = () => {
+export const OppgaveTabell = () => {
     const { innloggetSaksbehandler } = useApp();
     const { oppgaver } = useOppgaver();
 

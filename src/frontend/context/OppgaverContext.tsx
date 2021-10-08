@@ -34,7 +34,7 @@ import {
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
-import { erFør, erIsoStringGyldig, kalenderDato } from '../utils/kalender';
+import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useApp } from './AppContext';
@@ -202,94 +202,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     //Stable sort algorithm makes sorting by multiple fields easier. However,
     //Javascript does not specify the sort algorithm. To make sure the sort algorithm implemented
     //by browsers are stable, we have to wrap it with the function below.
-    const sortOppgave = (felt: string, ascendant: boolean) => {
-        if (oppgaver.status !== RessursStatus.SUKSESS) {
-            return;
-        }
-
-        type OppgaveMedIndeks = {
-            oppgave: IOppgave;
-            indeks: number;
-        };
-
-        const oppgaveMedIndeks: OppgaveMedIndeks[] = oppgaver.data.oppgaver.map((v, i) => {
-            return {
-                oppgave: v,
-                indeks: i,
-            };
-        });
-
-        const compareTid = (a: string, b: string) => {
-            if (a.substring(0, 10) === b.substring(0, 10)) {
-                return 0;
-            }
-
-            const aValid = erIsoStringGyldig(a.substring(0, 10));
-            const bValid = erIsoStringGyldig(b.substring(0, 10));
-
-            if (!aValid && !bValid) {
-                return 0;
-            }
-
-            if (!aValid) {
-                return ascendant ? 1 : -1;
-            }
-
-            if (!bValid) {
-                return ascendant ? -1 : 1;
-            }
-
-            const aBefore = ascendant ? -1 : 1;
-            const aAfter = ascendant ? 1 : -1;
-            return erFør(kalenderDato(a.substring(0, 10)), kalenderDato(b.substring(0, 10)))
-                ? aBefore
-                : aAfter;
-        };
-
-        const compareOppgave = (a: IOppgave, b: IOppgave) => {
-            if (felt === 'opprettetTidspunkt' || felt === 'fristFerdigstillelse') {
-                return compareTid(a[felt], b[felt]);
-            }
-
-            if (!a[felt] && !b[felt]) {
-                return 0;
-            }
-
-            if (!a[felt]) {
-                return ascendant ? 1 : -1;
-            }
-
-            if (!b[felt]) {
-                return ascendant ? -1 : 1;
-            }
-
-            if (a[felt] === b[felt]) {
-                return 0;
-            }
-            return ascendant ? a[felt].localeCompare(b[felt]) : b[felt].localeCompare(a[felt]);
-        };
-
-        const stablizedCompareOppgave = (a: OppgaveMedIndeks, b: OppgaveMedIndeks) => {
-            const result = compareOppgave(a.oppgave, b.oppgave);
-            return result !== 0 ? result : a.indeks - b.indeks;
-        };
-
-        const sortedMedIndeks = oppgaveMedIndeks.sort(stablizedCompareOppgave);
-
-        settOppgaver({
-            status: oppgaver.status,
-            data: {
-                ...oppgaver.data,
-                oppgaver: sortedMedIndeks.map(
-                    (oppgaveMedIndeks: OppgaveMedIndeks) => oppgaveMedIndeks.oppgave
-                ),
-            },
-        });
-
-        settSideindeks(sortedMedIndeks.length > 0 ? 0 : -1);
-
-        settSortOrderPåOppgaveFelt(felt);
-    };
 
     const settSide = (side: number) => settSideindeks(side);
 
@@ -551,7 +463,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         settSortOrderPåOppgaveFelt,
         settVerdiPåOppgaveFelt,
         sideindeks,
-        sortOppgave,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
         validerSkjema,
