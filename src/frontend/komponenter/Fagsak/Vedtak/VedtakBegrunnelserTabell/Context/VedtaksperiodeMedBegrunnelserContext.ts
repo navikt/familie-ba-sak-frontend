@@ -162,6 +162,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
         const utbetalingsperiode: Utbetalingsperiode | undefined =
             vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
+            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.ENDRET_UTBETALING ||
             vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET
                 ? hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode(
                       {

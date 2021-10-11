@@ -15,7 +15,6 @@ import { ytelsetype, YtelseType } from './beregning';
 import { IGrunnlagPerson } from './person';
 import { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 
-// Vedtaksperioder med begrunnelser - POC på ny måte å samle begrunnelser knyttet til vedtaksperioder
 export interface IVedtaksperiodeMedBegrunnelser {
     id: number;
     fom?: FamilieIsoDate;
@@ -39,13 +38,13 @@ export interface IRestPutVedtaksbegrunnelse {
 export interface IRestPutVedtaksperiodeMedFritekster {
     fritekster: string[];
 }
-// POC slutt
 
 export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
     OPPHØR = 'OPPHØR',
     AVSLAG = 'AVSLAG',
     FORTSATT_INNVILGET = 'FORTSATT_INNVILGET',
+    ENDRET_UTBETALING = 'ENDRET_UTBETALING',
 }
 
 export type Vedtaksperiode =
@@ -148,6 +147,8 @@ export const hentVedtaksperiodeTittel = (
     }
 
     switch (vedtaksperiodetype) {
+        case Vedtaksperiodetype.ENDRET_UTBETALING:
+            return 'Endret utbetalingsperiode';
         case Vedtaksperiodetype.OPPHØR:
             return 'Opphør';
         case Vedtaksperiodetype.AVSLAG:
