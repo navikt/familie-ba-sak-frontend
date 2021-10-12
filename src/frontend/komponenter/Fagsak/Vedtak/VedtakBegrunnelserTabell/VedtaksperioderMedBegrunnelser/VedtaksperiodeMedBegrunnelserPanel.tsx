@@ -32,7 +32,8 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
         toggles[ToggleNavn.forhåndsvisAlleBrevbegrunnelser];
 
     const visFritekster = () =>
-        vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING ||
+        (vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING &&
+            vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.ENDRET_UTBETALING) ||
         vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
             begrunnelse => begrunnelse.vedtakBegrunnelseType === VedtakBegrunnelseType.REDUKSJON
         ).length > 0;
