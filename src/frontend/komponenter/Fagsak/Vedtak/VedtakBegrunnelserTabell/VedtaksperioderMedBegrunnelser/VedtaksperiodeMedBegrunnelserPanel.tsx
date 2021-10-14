@@ -61,7 +61,8 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
             )}
             <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
             {genererteBrevbegrunnelser.status === RessursStatus.SUKSESS &&
-                forhåndvisBegrunnelsetekster && (
+                forhåndvisBegrunnelsetekster &&
+                genererteBrevbegrunnelser.data.length > 0 && (
                     <>
                         <Element>Begrunnelse(r)</Element>
                         <ul>
