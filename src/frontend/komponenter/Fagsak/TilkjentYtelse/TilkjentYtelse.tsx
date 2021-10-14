@@ -68,18 +68,18 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
     };
 
-    const filtrerPerioderForAktivEtikett = (
+    const finnUtbetalingsperiodeForAktivEtikett = (
         utbetalingsperioder: Utbetalingsperiode[]
-    ): Utbetalingsperiode[] => {
+    ): Utbetalingsperiode | undefined => {
         return aktivEtikett
-            ? utbetalingsperioder.filter((utbetalingsperiode: Utbetalingsperiode) =>
+            ? utbetalingsperioder.find((utbetalingsperiode: Utbetalingsperiode) =>
                   periodeOverlapperMedValgtDato(
                       utbetalingsperiode.periodeFom,
                       utbetalingsperiode.periodeTom,
                       aktivEtikett.dato
                   )
               )
-            : [];
+            : undefined;
     };
 
     const grunnlagPersoner = filterOgSorterGrunnlagPersonerMedAndeler(
@@ -145,7 +145,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
             )}
             {aktivEtikett && (
                 <Oppsummeringsboks
-                    utbetalingsperioder={filtrerPerioderForAktivEtikett(
+                    utbetalingsperiode={finnUtbetalingsperiodeForAktivEtikett(
                         åpenBehandling.utbetalingsperioder
                     )}
                     aktivEtikett={aktivEtikett}
