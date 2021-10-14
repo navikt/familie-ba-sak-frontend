@@ -8,6 +8,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import {
     hentVedtaksperiodeTittel,
     IVedtaksperiodeMedBegrunnelser,
+    Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
 import { formaterBeløp } from '../../../../../utils/formatter';
 import {
@@ -83,11 +84,12 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                         </Element>
                     )}
                     <Normaltekst>{vedtaksperiodeTittel}</Normaltekst>
-                    {utbetalingsperiode && (
-                        <Normaltekst>
-                            {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
-                        </Normaltekst>
-                    )}
+                    {vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING &&
+                        utbetalingsperiode && (
+                            <Normaltekst>
+                                {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
+                            </Normaltekst>
+                        )}
                 </PanelTittel>
             }
         >

@@ -159,6 +159,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             ).getFullYear() - new Date().getFullYear()
         );
     };
+
     return (
         <>
             <StyledSkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
@@ -173,11 +174,17 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         }}
                     >
                         <option value={undefined}>Velg person</option>
-                        {åpenBehandling.personer.map(person => (
-                            <option value={person.personIdent}>
-                                {formaterIdent(person.personIdent)}
-                            </option>
-                        ))}
+                        {åpenBehandling.personer
+                            .filter(person =>
+                                åpenBehandling.personerMedAndelerTilkjentYtelse
+                                    .map(personMedAndeler => personMedAndeler.personIdent)
+                                    .includes(person.personIdent)
+                            )
+                            .map(person => (
+                                <option value={person.personIdent}>
+                                    {formaterIdent(person.personIdent)}
+                                </option>
+                            ))}
                     </StyledPersonvelger>
                 </Feltmargin>
 

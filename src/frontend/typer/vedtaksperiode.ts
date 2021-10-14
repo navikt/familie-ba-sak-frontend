@@ -121,25 +121,31 @@ export interface IUtbetalingsperiodeDetalj {
     person: IGrunnlagPerson;
     ytelseType: YtelseType;
     utbetaltPerMnd: number;
+    erPåvirketAvEndring: boolean;
 }
 
 export const hentVedtaksperiodeTittel = (
     vedtaksperiodetype: Vedtaksperiodetype,
     utbetalingsperiode?: Utbetalingsperiode
 ) => {
+    const ytelseTyperUtenEndring =
+        utbetalingsperiode?.utbetalingsperiodeDetaljer
+            .filter(utbetalingsperiodeDetalj => !utbetalingsperiodeDetalj.erPåvirketAvEndring)
+            .map(utbetalingsperiodeDetalj => utbetalingsperiodeDetalj.ytelseType) ?? [];
+
     if (
         (vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
             vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET) &&
         utbetalingsperiode
     ) {
         if (
-            utbetalingsperiode?.ytelseTyper.includes(YtelseType.UTVIDET_BARNETRYGD) &&
-            utbetalingsperiode?.ytelseTyper.includes(YtelseType.SMÅBARNSTILLEGG)
+            ytelseTyperUtenEndring.includes(YtelseType.UTVIDET_BARNETRYGD) &&
+            ytelseTyperUtenEndring.includes(YtelseType.SMÅBARNSTILLEGG)
         ) {
             return `${ytelsetype[YtelseType.UTVIDET_BARNETRYGD].navn} og ${ytelsetype[
                 YtelseType.SMÅBARNSTILLEGG
             ].navn.toLowerCase()}`;
-        } else if (utbetalingsperiode?.ytelseTyper.includes(YtelseType.UTVIDET_BARNETRYGD)) {
+        } else if (ytelseTyperUtenEndring.includes(YtelseType.UTVIDET_BARNETRYGD)) {
             return ytelsetype[YtelseType.UTVIDET_BARNETRYGD].navn;
         } else {
             return ytelsetype[YtelseType.ORDINÆR_BARNETRYGD].navn;
