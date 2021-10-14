@@ -332,9 +332,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             value={
                                 skjema.felter.fullSats.verdi !== undefined &&
                                 skjema.felter.fullSats.verdi !== null
-                                    ? skjema.felter.fullSats.verdi === true
+                                    ? skjema.felter.fullSats.verdi
                                         ? IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf()
-                                        : IEndretUtbetalingAndelFullSats.DELT_SATS.valueOf()
+                                        : undefined
                                     : undefined
                             }
                             placeholder={'Velg sats'}
