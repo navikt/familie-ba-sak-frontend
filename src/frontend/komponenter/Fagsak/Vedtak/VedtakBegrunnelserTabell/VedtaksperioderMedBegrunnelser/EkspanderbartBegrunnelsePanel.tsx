@@ -8,6 +8,7 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 import {
     hentVedtaksperiodeTittel,
     IVedtaksperiodeMedBegrunnelser,
+    Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
 import { formaterBeløp } from '../../../../../utils/formatter';
 import {
@@ -31,11 +32,11 @@ const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
 `;
 
 const PanelTittel = styled.div`
-    width: 100%;
     display: grid;
-    grid-template-columns: 12rem 7.5rem auto;
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
+    grid-template-columns: minmax(6rem, 12rem) minmax(6rem, 15rem) auto;
+    grid-gap: 0.5rem;
+    margin: 1rem;
+    margin-left: 0;
 `;
 
 interface IEkspanderbartBegrunnelsePanelProps {
@@ -83,11 +84,12 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                         </Element>
                     )}
                     <Normaltekst>{vedtaksperiodeTittel}</Normaltekst>
-                    {utbetalingsperiode && (
-                        <Normaltekst>
-                            {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
-                        </Normaltekst>
-                    )}
+                    {vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING &&
+                        utbetalingsperiode && (
+                            <Normaltekst>
+                                {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
+                            </Normaltekst>
+                        )}
                 </PanelTittel>
             }
         >

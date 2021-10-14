@@ -79,6 +79,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 }),
                 fullSats: useFelt<boolean | undefined>({
                     verdi:
+                        endretUtbetalingAndel.prosent !== null &&
                         endretUtbetalingAndel.prosent !== undefined
                             ? endretUtbetalingAndel.prosent === 100
                             : undefined,
@@ -96,18 +97,14 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 }),
                 begrunnelse: useFelt<string | undefined>({
                     verdi: endretUtbetalingAndel.begrunnelse,
+                    valideringsfunksjon: felt =>
+                        felt.verdi ? ok(felt) : feil(felt, 'Du må oppgi en begrunnelse.'),
                 }),
             },
             skjemanavn: 'Endre utbetalingsperiode',
         });
 
         const hentProsentForEndretUtbetaling = () => {
-            if (
-                !endretUtbetalingAndel.prosent &&
-                !skjema.felter.periodeSkalUtbetalesTilSøker.verdi
-            ) {
-                return endretUtbetalingAndel.prosent;
-            }
             return (
                 (skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 100 : 0) /
                 (skjema.felter.fullSats.verdi ? 1 : 2)
@@ -143,7 +140,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
             kanSendeSkjema,
             onSubmit,
             nullstillSkjema,
-            hentEndretUtbetalingsandelFraSkjema: hentSkjemaData,
+            hentSkjemaData,
         };
     }
 );

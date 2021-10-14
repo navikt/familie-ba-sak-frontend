@@ -7,7 +7,7 @@ import { Skalaetikett } from '@navikt/helse-frontend-tidslinje/lib/src/component
 
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import { ytelsetype } from '../../../typer/beregning';
-import { Vedtaksperiode, Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
+import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import {
     datoformat,
     formaterBeløp,
@@ -19,17 +19,14 @@ import {
 import { kalenderDatoFraDate, serializeIso8601String } from '../../../utils/kalender';
 
 interface IProps {
-    vedtaksperioder: Vedtaksperiode[];
+    utbetalingsperiode: Utbetalingsperiode | undefined;
     aktivEtikett: Skalaetikett;
 }
 
-const summerTotalbeløpForPeriode = (sum: number, vedtaksperiode: Vedtaksperiode) => {
-    if (vedtaksperiode.vedtaksperiodetype !== Vedtaksperiodetype.UTBETALING) return sum;
-
-    return sum + vedtaksperiode.utbetaltPerMnd;
-};
-
-const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, aktivEtikett }) => {
+const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
+    utbetalingsperiode,
+    aktivEtikett,
+}) => {
     const { settAktivEtikett } = useTidslinje();
 
     const månedNavnOgÅr = () => {
@@ -46,7 +43,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                 <div className={'tilkjentytelse-informasjonsboks__header__info'}>
                     <Element>{månedNavnOgÅr()}</Element>
 
-                    {vedtaksperioder.length > 0 ? (
+                    {utbetalingsperiode !== undefined ? (
                         <Normaltekst>
                             Totalt utbetalt i mnd
                             <span
@@ -54,9 +51,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                                     'tilkjentytelse-informasjonsboks__header__info__totalbeløp'
                                 }
                             >
-                                {formaterBeløp(
-                                    vedtaksperioder.reduce(summerTotalbeløpForPeriode, 0)
-                                )}
+                                {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
                             </span>
                         </Normaltekst>
                     ) : (
@@ -69,7 +64,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                     }}
                 />
             </div>
-            {vedtaksperioder.length > 0 && (
+            {utbetalingsperiode !== undefined && (
                 <table>
                     <thead>
                         <tr>
@@ -85,40 +80,35 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({ vedtaksperioder, a
                         </tr>
                     </thead>
                     <tbody>
-                        {vedtaksperioder.map((vedtaksperiode: Vedtaksperiode) => {
-                            if (vedtaksperiode.vedtaksperiodetype !== Vedtaksperiodetype.UTBETALING)
-                                return null;
-
-                            return vedtaksperiode.utbetalingsperiodeDetaljer
-                                .sort((detaljA, detaljB) =>
-                                    sorterPersonTypeOgFødselsdato(detaljA.person, detaljB.person)
-                                )
-                                .map((detalj, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>
-                                                <Normaltekst>{`${
-                                                    detalj.person.navn
-                                                } (${hentAlderSomString(
-                                                    detalj.person.fødselsdato
-                                                )}) | ${formaterIdent(
-                                                    detalj.person.personIdent
-                                                )}`}</Normaltekst>
-                                            </td>
-                                            <td>
-                                                <Normaltekst>
-                                                    {ytelsetype[detalj.ytelseType].navn}
-                                                </Normaltekst>
-                                            </td>
-                                            <td>
-                                                <Normaltekst>
-                                                    {formaterBeløp(detalj.utbetaltPerMnd)}
-                                                </Normaltekst>
-                                            </td>
-                                        </tr>
-                                    );
-                                });
-                        })}
+                        {utbetalingsperiode.utbetalingsperiodeDetaljer
+                            .sort((detaljA, detaljB) =>
+                                sorterPersonTypeOgFødselsdato(detaljA.person, detaljB.person)
+                            )
+                            .map((detalj, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <Normaltekst>{`${
+                                                detalj.person.navn
+                                            } (${hentAlderSomString(
+                                                detalj.person.fødselsdato
+                                            )}) | ${formaterIdent(
+                                                detalj.person.personIdent
+                                            )}`}</Normaltekst>
+                                        </td>
+                                        <td>
+                                            <Normaltekst>
+                                                {ytelsetype[detalj.ytelseType].navn}
+                                            </Normaltekst>
+                                        </td>
+                                        <td>
+                                            <Normaltekst>
+                                                {formaterBeløp(detalj.utbetaltPerMnd)}
+                                            </Normaltekst>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
             )}

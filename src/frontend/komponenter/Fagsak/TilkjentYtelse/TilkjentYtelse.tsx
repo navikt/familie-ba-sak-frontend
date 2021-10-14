@@ -19,7 +19,7 @@ import { IBehandling } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
 import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
-import { Vedtaksperiode } from '../../../typer/vedtaksperiode';
+import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import useFagsakApi from '../useFagsakApi';
@@ -68,18 +68,18 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
         history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
     };
 
-    const filtrerPerioderForAktivEtikett = (
-        utbetalingsperioder: Vedtaksperiode[]
-    ): Vedtaksperiode[] => {
+    const finnUtbetalingsperiodeForAktivEtikett = (
+        utbetalingsperioder: Utbetalingsperiode[]
+    ): Utbetalingsperiode | undefined => {
         return aktivEtikett
-            ? utbetalingsperioder.filter((utbetalingsperiode: Vedtaksperiode) =>
+            ? utbetalingsperioder.find((utbetalingsperiode: Utbetalingsperiode) =>
                   periodeOverlapperMedValgtDato(
                       utbetalingsperiode.periodeFom,
                       utbetalingsperiode.periodeTom,
                       aktivEtikett.dato
                   )
               )
-            : [];
+            : undefined;
     };
 
     const grunnlagPersoner = filterOgSorterGrunnlagPersonerMedAndeler(
@@ -138,25 +138,21 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                         <StyledEditIkon />
                         <Element>Endre utbetalingsperiode</Element>
                     </Flatknapp>
+                    {visFeilmeldinger && opprettelseFeilmelding !== '' && (
+                        <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
+                    )}
                 </EndretUtbetalingAndel>
             )}
             {aktivEtikett && (
                 <Oppsummeringsboks
-                    vedtaksperioder={filtrerPerioderForAktivEtikett(
+                    utbetalingsperiode={finnUtbetalingsperiodeForAktivEtikett(
                         åpenBehandling.utbetalingsperioder
                     )}
                     aktivEtikett={aktivEtikett}
                 />
             )}
             {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
-                <EndretUtbetalingAndelTabell
-                    åpenBehandling={åpenBehandling}
-                    settVisFeilmeldinger={settVisFeilmeldinger}
-                    settFeilmelding={settOpprettelseFeilmelding}
-                />
-            )}
-            {visFeilmeldinger && opprettelseFeilmelding !== '' && (
-                <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
+                <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
             )}
         </Skjemasteg>
     );

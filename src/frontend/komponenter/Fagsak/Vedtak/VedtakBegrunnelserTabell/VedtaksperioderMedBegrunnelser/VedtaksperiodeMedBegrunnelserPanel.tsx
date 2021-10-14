@@ -32,7 +32,8 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
         toggles[ToggleNavn.forhåndsvisAlleBrevbegrunnelser];
 
     const visFritekster = () =>
-        vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING ||
+        (vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING &&
+            vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.ENDRET_UTBETALING) ||
         vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
             begrunnelse => begrunnelse.vedtakBegrunnelseType === VedtakBegrunnelseType.REDUKSJON
         ).length > 0;
@@ -46,6 +47,16 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
             {utbetalingsperiode && (
                 <Utbetalingsresultat
                     utbetalingsperiodeDetaljer={utbetalingsperiode.utbetalingsperiodeDetaljer}
+                    filtrerDetalj={utbetalingsperiodeDetalj => {
+                        if (
+                            vedtaksperiodeMedBegrunnelser.type ===
+                            Vedtaksperiodetype.ENDRET_UTBETALING
+                        ) {
+                            return utbetalingsperiodeDetalj.erPåvirketAvEndring;
+                        } else {
+                            return !utbetalingsperiodeDetalj.erPåvirketAvEndring;
+                        }
+                    }}
                 />
             )}
             <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
