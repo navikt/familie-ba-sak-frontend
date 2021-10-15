@@ -14,11 +14,9 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
     hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
@@ -44,7 +42,6 @@ export interface IFritekstFelt {
 const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] = constate(
     ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
         const { settFagsak } = useFagsakRessurser();
-        const { toggles } = useApp();
         const { request } = useHttp();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
@@ -126,12 +123,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         useEffect(() => {
             if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
                 populerSkjemaFraBackend();
-                if (
-                    vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.AVSLAG ||
-                    toggles[ToggleNavn.forhåndsvisAlleBrevbegrunnelser]
-                ) {
-                    genererOgSettBegrunnelserForForhåndsvisning(vedtaksperiodeMedBegrunnelser.id);
-                }
+                genererOgSettBegrunnelserForForhåndsvisning(vedtaksperiodeMedBegrunnelser.id);
             }
         }, [vedtaksbegrunnelseTekster, vedtaksperiodeMedBegrunnelser]);
 
