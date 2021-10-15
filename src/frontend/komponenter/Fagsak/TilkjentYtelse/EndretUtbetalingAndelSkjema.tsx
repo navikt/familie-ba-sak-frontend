@@ -38,7 +38,6 @@ import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
-import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 import {
     StyledFamilieDatovelger,
     StyledFeilmelding,
@@ -159,6 +158,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
             ).getFullYear() - new Date().getFullYear()
         );
     };
+
     return (
         <>
             <StyledSkjemaGruppe feil={hentFrontendFeilmelding(skjema.submitRessurs)}>
@@ -173,24 +173,25 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         }}
                     >
                         <option value={undefined}>Velg person</option>
-                        {åpenBehandling.personer.map(person => (
-                            <option value={person.personIdent}>
-                                {formaterIdent(person.personIdent)}
-                            </option>
-                        ))}
+                        {åpenBehandling.personer
+                            .filter(person =>
+                                åpenBehandling.personerMedAndelerTilkjentYtelse
+                                    .map(personMedAndeler => personMedAndeler.personIdent)
+                                    .includes(person.personIdent)
+                            )
+                            .map(person => (
+                                <option value={person.personIdent}>
+                                    {formaterIdent(person.personIdent)}
+                                </option>
+                            ))}
                     </StyledPersonvelger>
                 </Feltmargin>
 
                 <Feltmargin>
-                    <Element>Fastsett andelsperiode</Element>
+                    <Element>Fastsett periode</Element>
                     <MånedÅrVelger
                         {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={
-                            <>
-                                <SkjultLegend>Fastsett andelsperiode </SkjultLegend>
-                                <Normaltekst>F.o.m</Normaltekst>
-                            </>
-                        }
+                        label={<Normaltekst>F.o.m</Normaltekst>}
                         antallÅrFrem={finnÅrFremTilStønadTom()}
                         antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
                         onEndret={(dato: YearMonth | undefined) =>
@@ -200,12 +201,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     />
                     <MånedÅrVelger
                         {...skjema.felter.tom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={
-                            <>
-                                <SkjultLegend>Fastsett andelsperiode </SkjultLegend>
-                                <Normaltekst>T.o.m</Normaltekst>
-                            </>
-                        }
+                        label={<Normaltekst>T.o.m</Normaltekst>}
                         antallÅrFrem={finnÅrFremTilStønadTom()}
                         antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
                         onEndret={(dato: YearMonth | undefined) => {
@@ -325,9 +321,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             value={
                                 skjema.felter.fullSats.verdi !== undefined &&
                                 skjema.felter.fullSats.verdi !== null
-                                    ? skjema.felter.fullSats.verdi === true
+                                    ? skjema.felter.fullSats.verdi
                                         ? IEndretUtbetalingAndelFullSats.FULL_SATS.valueOf()
-                                        : IEndretUtbetalingAndelFullSats.DELT_SATS.valueOf()
+                                        : undefined
                                     : undefined
                             }
                             placeholder={'Velg sats'}

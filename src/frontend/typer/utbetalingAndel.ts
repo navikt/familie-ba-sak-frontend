@@ -38,7 +38,6 @@ export const årsaker: IEndretUtbetalingAndelÅrsak[] = Object.keys(IEndretUtbet
 
 export enum IEndretUtbetalingAndelFullSats {
     FULL_SATS = 'FULL_SATS',
-    DELT_SATS = 'DELT_SATS',
 }
 
 export interface SatsOption extends OptionType {
