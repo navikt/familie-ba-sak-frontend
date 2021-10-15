@@ -4,8 +4,6 @@ import { Element, Normaltekst } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
-import { useApp } from '../../../../../context/AppContext';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { VedtakBegrunnelseType } from '../../../../../typer/vedtak';
 import {
     IVedtaksperiodeMedBegrunnelser,
@@ -26,10 +24,6 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
 }) => {
     const { erPanelEkspandert, onPanelClose, utbetalingsperiode, genererteBrevbegrunnelser } =
         useVedtaksperiodeMedBegrunnelser();
-    const { toggles } = useApp();
-    const forhåndvisBegrunnelsetekster =
-        vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.AVSLAG ||
-        toggles[ToggleNavn.forhåndsvisAlleBrevbegrunnelser];
 
     const visFritekster = () =>
         (vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.UTBETALING &&
@@ -66,7 +60,6 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                     />
                 )}
             {genererteBrevbegrunnelser.status === RessursStatus.SUKSESS &&
-                forhåndvisBegrunnelsetekster &&
                 genererteBrevbegrunnelser.data.length > 0 && (
                     <>
                         <Element>Begrunnelse(r)</Element>
