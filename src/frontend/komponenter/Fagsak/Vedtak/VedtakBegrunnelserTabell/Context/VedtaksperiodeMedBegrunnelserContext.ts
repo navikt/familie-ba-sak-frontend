@@ -123,7 +123,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
         useEffect(() => {
             if (vedtaksbegrunnelseTekster.status === RessursStatus.SUKSESS) {
                 populerSkjemaFraBackend();
-
                 genererOgSettBegrunnelserForForhåndsvisning(vedtaksperiodeMedBegrunnelser.id);
             }
         }, [vedtaksbegrunnelseTekster, vedtaksperiodeMedBegrunnelser]);
