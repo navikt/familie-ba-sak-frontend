@@ -159,7 +159,7 @@ const TilbakekrevingSkjema: React.FC<{
                             ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
                             : undefined
                     }
-                    legend={<Element>Tilbakekreving</Element>}
+                    legend="Tilbakekreving"
                 >
                     <Radio
                         label={'Opprett tilbakekreving, send varsel'}
@@ -265,6 +265,13 @@ const TilbakekrevingSkjema: React.FC<{
                         id={'avvent-tilbakekreving'}
                     />
                 </FamilieRadioGruppe>
+                {erLesevisning() && fritekstVarsel.erSynlig && (
+                    <FamilieTextarea
+                        label="Fritekst i varselet"
+                        {...fritekstVarsel.hentNavInputProps(tilbakekrevingSkjema.visFeilmeldinger)}
+                        erLesevisning={erLesevisning()}
+                    />
+                )}
 
                 <FamilieTextarea
                     label="Begrunnelse"
