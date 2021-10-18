@@ -1,12 +1,14 @@
 import React from 'react';
 
-import { Column, ColumnInstance } from 'react-table';
+import { Column } from 'react-table';
 
 import Lenke from 'nav-frontend-lenker';
 
 import { ISaksbehandler } from '@navikt/familie-typer';
 
-import { IPar } from '../../typer/common';
+import OppgaveDirektelenke from '../komponenter/Oppgavebenk/OppgaveDirektelenke';
+import OppgavelisteSaksbehandler from '../komponenter/Oppgavebenk/OppgavelisteSaksbehandler';
+import { IPar } from '../typer/common';
 import {
     BehandlingstypeFilter,
     behandlingstypeFilter,
@@ -19,11 +21,8 @@ import {
     OppgavetypeFilter,
     oppgaveTypeFilter,
     PrioritetFilter,
-} from '../../typer/oppgave';
-import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import OppgaveDirektelenke from './OppgaveDirektelenke';
-import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
-import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
+} from '../typer/oppgave';
+import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 
 export const kolonner: ReadonlyArray<Column<IOppgaveRad>> = [
     {
@@ -138,32 +137,3 @@ export const mapIOppgaverTilOppgaveRad = (
 
 export const intDatoTilNorskDato = (intDato: string) =>
     `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
-
-export const styleFraAccessorEllerId = (id: string) => {
-    switch (id) {
-        case 'beskrivelse':
-            return 'beskrivelse';
-        case 'tilordnetRessurs':
-            return 'tilordnet-ressurs';
-        case 'handlinger':
-            return 'handlinger';
-        default:
-            return null;
-    }
-};
-
-export const getAriaSort = (
-    column: ColumnInstance<IOppgaveRad>
-): 'none' | 'descending' | 'ascending' | undefined => {
-    if (column.isSortedDesc === true) {
-        return ariaSortMap.get(FeltSortOrder.DESCENDANT);
-    }
-    if (column.isSortedDesc === false) {
-        return ariaSortMap.get(FeltSortOrder.ASCENDANT);
-    }
-    return ariaSortMap.get(FeltSortOrder.NONE);
-};
-
-export const getSortLenkClassName = (_: ColumnInstance<IOppgaveRad>) => {
-    return 'tabell__th--sortert-desc';
-};

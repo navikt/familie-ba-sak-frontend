@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
+import {
+    Column,
+    TableInstance,
+    usePagination,
+    UsePaginationInstanceProps,
+    useSortBy,
+    UseSortByInstanceProps,
+    useTable,
+} from 'react-table';
 
 import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -38,6 +47,7 @@ import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useApp } from './AppContext';
+import { IOppgaveRad, kolonner, mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 
 export const oppgaveSideLimit = 15;
 
@@ -49,11 +59,35 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
+
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
         byggTomRessurs<IHentOppgaveDto>()
     );
+
     const [oppgaveFelter, settOppgaveFelter] = useState<IOppgaveFelter>(
         initialOppgaveFelter(innloggetSaksbehandler)
+    );
+
+    const columns: ReadonlyArray<Column<IOppgaveRad>> = useMemo(() => kolonner, []);
+    const data: ReadonlyArray<IOppgaveRad> = useMemo(() => {
+        return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
+            ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, innloggetSaksbehandler)
+            : [];
+    }, [oppgaver]);
+
+    const tableInstance: TableInstance<IOppgaveRad> &
+        UseSortByInstanceProps<IOppgaveRad> &
+        UsePaginationInstanceProps<IOppgaveRad> = useTable<IOppgaveRad>(
+        {
+            columns,
+            data,
+            initialState: {
+                pageSize: oppgaveSideLimit,
+                pageIndex: 0,
+            },
+        },
+        useSortBy,
+        usePagination
     );
 
     useEffect(() => {
@@ -140,22 +174,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         }
     };
 
-    const tilbakestillSortOrder = () => {
-        let midlertidigOppgaveFelter = oppgaveFelter;
-        Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
-            midlertidigOppgaveFelter = {
-                ...midlertidigOppgaveFelter,
-                [oppgaveFelt.nøkkel]: {
-                    ...oppgaveFelt,
-                    order: FeltSortOrder.NONE,
-                    feilmelding: '',
-                    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-                },
-            };
-            settOppgaveFelter(midlertidigOppgaveFelter);
-        });
-    };
-
     const settSortOrderPåOppgaveFelt = (felt: string) => {
         let midlertidigOppgaveFelter = oppgaveFelter;
         Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
@@ -196,18 +214,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             'Feilmelding';
         }
     );
-
-    const [sideindeks, settSideindeks] = React.useState(-1);
-
-    const settSide = (side: number) => settSideindeks(side);
-
-    const hentOppgaveSide = () =>
-        oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
-            ? oppgaver.data.oppgaver.slice(
-                  sideindeks * oppgaveSideLimit,
-                  Math.min((sideindeks + 1) * oppgaveSideLimit, oppgaver.data.oppgaver.length)
-              )
-            : [];
 
     const harLøpendeSakIInfotrygd = async (
         bruker: string
@@ -347,7 +353,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const hentOppgaver = () => {
         settOppgaver(byggHenterRessurs());
-        tilbakestillSortOrder();
 
         const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
         let tildeltRessurs;
@@ -375,12 +380,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             tildeltRessurs
         ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
             settOppgaver(oppgaverRessurs);
-            settSideindeks(
-                oppgaverRessurs.status === RessursStatus.SUKSESS &&
-                    oppgaverRessurs.data.oppgaver.length > 0
-                    ? 0
-                    : -1
-            );
         });
     };
 
@@ -451,17 +450,15 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     return {
         fordelOppgave,
         harLøpendeSakIInfotrygd,
-        hentOppgaveSide,
         hentOppgaver,
         oppgaveFelter,
         oppgaver,
-        settSide,
         settSortOrderPåOppgaveFelt,
         settVerdiPåOppgaveFelt,
-        sideindeks,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
         validerSkjema,
+        tableInstance,
     };
 });
 const Oppgaver: React.FC = () => {
