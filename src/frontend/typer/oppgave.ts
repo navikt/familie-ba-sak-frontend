@@ -26,8 +26,6 @@ export interface IHentOppgaveDto {
 }
 
 export interface IOppgave {
-    // eslint-disable-next-line
-    [key: string]: any;
     id: string;
     identer?: IOppgaveIdent[];
     tildeltEnhetsnr: string;
