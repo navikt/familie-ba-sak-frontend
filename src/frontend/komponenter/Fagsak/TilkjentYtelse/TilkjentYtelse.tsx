@@ -71,6 +71,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     const finnUtbetalingsperiodeForAktivEtikett = (
         utbetalingsperioder: Utbetalingsperiode[]
     ): Utbetalingsperiode | undefined => {
+        åpenBehandling.personerMedAndelerTilkjentYtelse.flatMap(it => it);
         return aktivEtikett
             ? utbetalingsperioder.find((utbetalingsperiode: Utbetalingsperiode) =>
                   periodeOverlapperMedValgtDato(

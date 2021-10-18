@@ -33,6 +33,7 @@ export const mockUtbetalingsperiode = ({
         begrunnelser,
         fritekster: [],
         gyldigeBegrunnelser: [],
+        utbetalingsperiodeDetaljer: [],
     };
 };
 
@@ -49,6 +50,7 @@ export const mockOpphørsperiode = ({
         begrunnelser,
         fritekster: [],
         gyldigeBegrunnelser: [],
+        utbetalingsperiodeDetaljer: [],
     };
 };
 
@@ -65,5 +67,6 @@ export const mockAvslagsperiode = ({
         begrunnelser,
         fritekster: [],
         gyldigeBegrunnelser: [],
+        utbetalingsperiodeDetaljer: [],
     };
 };

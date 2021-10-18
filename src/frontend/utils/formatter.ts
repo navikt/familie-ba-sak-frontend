@@ -57,6 +57,8 @@ export const formaterBeløp = (beløp: number): string => {
     return `${beløp.toLocaleString('no-NO')} kr`;
 };
 
+export const summer = (beløp: number[]): number => beløp.reduce((acc, b) => acc + b, 0);
+
 export const kunSiffer = (value: string) => /^\d+$/.test(value);
 
 const erPersonId = (personIdent: string) => {
