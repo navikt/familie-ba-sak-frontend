@@ -4,19 +4,20 @@ import Pagination from 'paginering';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useOppgaver, oppgaveSideLimit } from '../../context/OppgaverContext';
+import { oppgaveSideLimit, useOppgaver } from '../../context/OppgaverContext';
 
 const OppgavelisteNavigator: React.FunctionComponent = () => {
-    const { oppgaver, hentOppgaveSide, sideindeks, settSide } = useOppgaver();
+    const { oppgaver, tableInstance } = useOppgaver();
+    const { state, gotoPage, page } = tableInstance;
+    const { pageIndex } = state;
 
-    return oppgaver.status === RessursStatus.SUKSESS && sideindeks >= 0 ? (
+    return oppgaver.status === RessursStatus.SUKSESS && pageIndex >= 0 ? (
         <div className={'navigator'}>
             |
             <span className={'navigator--felt'}>
-                Viser {sideindeks * oppgaveSideLimit + 1} -{' '}
-                {sideindeks * oppgaveSideLimit + hentOppgaveSide().length} av{' '}
-                {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt}{' '}
-                oppgaver)
+                Viser {pageIndex * oppgaveSideLimit + 1} -{' '}
+                {pageIndex * oppgaveSideLimit + page.length} av {oppgaver.data.oppgaver.length}{' '}
+                oppgaver (totalt {oppgaver.data.antallTreffTotalt} oppgaver)
             </span>
             |
             <Pagination
@@ -24,7 +25,7 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
                 numberOfItems={oppgaver.data.oppgaver.length}
                 itemsPerPage={oppgaveSideLimit}
                 maxPageButtons={5}
-                onChange={(side: number) => settSide(side - 1)}
+                onChange={(side: number) => gotoPage(side - 1)}
             />
         </div>
     ) : null;
