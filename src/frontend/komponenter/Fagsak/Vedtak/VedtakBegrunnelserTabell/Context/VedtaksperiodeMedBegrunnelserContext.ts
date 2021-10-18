@@ -19,10 +19,8 @@ import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
-    hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode,
     IRestPutVedtaksperiodeMedFritekster,
     IVedtaksperiodeMedBegrunnelser,
-    Utbetalingsperiode,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
 import { IPeriode } from '../../../../../utils/kalender';
@@ -151,19 +149,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             valideringsstatus:
                 initiellVerdi === '' ? Valideringsstatus.IKKE_VALIDERT : Valideringsstatus.OK,
         });
-
-        const utbetalingsperiode: Utbetalingsperiode | undefined =
-            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING ||
-            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.ENDRET_UTBETALING ||
-            vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.FORTSATT_INNVILGET
-                ? hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode(
-                      {
-                          fom: vedtaksperiodeMedBegrunnelser.fom,
-                          tom: vedtaksperiodeMedBegrunnelser.tom,
-                      },
-                      åpenBehandling
-                  )
-                : undefined;
 
         const onChangeBegrunnelse = (action: ActionMeta<ISelectOption>) => {
             switch (action.action) {
@@ -298,7 +283,6 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
             onPanelClose,
             putVedtaksperiodeMedFritekster,
             skjema,
-            utbetalingsperiode,
             åpenBehandling,
             standardBegrunnelserPut,
             genererteBrevbegrunnelser,

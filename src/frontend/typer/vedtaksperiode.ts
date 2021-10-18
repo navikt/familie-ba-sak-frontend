@@ -1,16 +1,4 @@
-import {
-    erEtter,
-    erFør,
-    erSamme,
-    FamilieIsoDate,
-    IPeriode,
-    kalenderDatoMedFallback,
-    TIDENES_ENDE,
-    TIDENES_MORGEN,
-    kalenderDatoFraDate,
-    kalenderDato,
-} from '../utils/kalender';
-import { IBehandling } from './behandling';
+import { FamilieIsoDate } from '../utils/kalender';
 import { ytelsetype, YtelseType } from './beregning';
 import { IGrunnlagPerson } from './person';
 import { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
@@ -23,6 +11,7 @@ export interface IVedtaksperiodeMedBegrunnelser {
     begrunnelser: IRestVedtaksbegrunnelse[];
     fritekster: string[];
     gyldigeBegrunnelser: VedtakBegrunnelse[];
+    utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
 }
 
 export interface IRestVedtaksbegrunnelse {
@@ -84,39 +73,6 @@ export type Utbetalingsperiode = {
     utbetaltPerMnd: number;
 };
 
-export const hentGjeldendeUtbetalingsperiodePåBehandlingOgPeriode = (
-    periode: IPeriode,
-    behandling: IBehandling
-): Utbetalingsperiode | undefined => {
-    const sorterteUtbetalingsperioder = sorterUtbetalingsperioder(
-        behandling.utbetalingsperioder
-    ).filter(periode => periode?.vedtaksperiodetype === Vedtaksperiodetype.UTBETALING);
-
-    return periode.fom
-        ? hentUtbetalingsperiodeInnenforPeriode(sorterteUtbetalingsperioder, periode)
-        : hentSistGjeldendeEllerNesteUtbetalingsperiode(sorterteUtbetalingsperioder);
-};
-
-export const hentUtbetalingsperiodeDetaljer = (
-    vedtaksperiode?: Vedtaksperiode
-): IUtbetalingsperiodeDetalj[] | undefined => {
-    if (!vedtaksperiode) {
-        return undefined;
-    }
-
-    switch (vedtaksperiode.vedtaksperiodetype) {
-        case Vedtaksperiodetype.UTBETALING:
-            return vedtaksperiode.utbetalingsperiodeDetaljer;
-        case Vedtaksperiodetype.FORTSATT_INNVILGET:
-            return vedtaksperiode.utbetalingsperiode.vedtaksperiodetype ===
-                Vedtaksperiodetype.UTBETALING
-                ? vedtaksperiode.utbetalingsperiode.utbetalingsperiodeDetaljer
-                : undefined;
-        default:
-            return undefined;
-    }
-};
-
 export interface IUtbetalingsperiodeDetalj {
     person: IGrunnlagPerson;
     ytelseType: YtelseType;
@@ -125,18 +81,19 @@ export interface IUtbetalingsperiodeDetalj {
 }
 
 export const hentVedtaksperiodeTittel = (
-    vedtaksperiodetype: Vedtaksperiodetype,
-    utbetalingsperiode?: Utbetalingsperiode
+    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser
 ) => {
+    const { type, utbetalingsperiodeDetaljer } = vedtaksperiodeMedBegrunnelser;
+
     const ytelseTyperUtenEndring =
-        utbetalingsperiode?.utbetalingsperiodeDetaljer
+        utbetalingsperiodeDetaljer
             .filter(utbetalingsperiodeDetalj => !utbetalingsperiodeDetalj.erPåvirketAvEndring)
             .map(utbetalingsperiodeDetalj => utbetalingsperiodeDetalj.ytelseType) ?? [];
 
     if (
-        (vedtaksperiodetype === Vedtaksperiodetype.UTBETALING ||
-            vedtaksperiodetype === Vedtaksperiodetype.FORTSATT_INNVILGET) &&
-        utbetalingsperiode
+        (type === Vedtaksperiodetype.UTBETALING ||
+            type === Vedtaksperiodetype.FORTSATT_INNVILGET) &&
+        utbetalingsperiodeDetaljer.length > 0
     ) {
         if (
             ytelseTyperUtenEndring.includes(YtelseType.UTVIDET_BARNETRYGD) &&
@@ -152,7 +109,7 @@ export const hentVedtaksperiodeTittel = (
         }
     }
 
-    switch (vedtaksperiodetype) {
+    switch (type) {
         case Vedtaksperiodetype.ENDRET_UTBETALING:
             return 'Endret utbetalingsperiode';
         case Vedtaksperiodetype.OPPHØR:
@@ -163,55 +120,3 @@ export const hentVedtaksperiodeTittel = (
             return '';
     }
 };
-
-const hentSistGjeldendeEllerNesteUtbetalingsperiode = (
-    sorterteUtbetalingsperioder: Utbetalingsperiode[]
-): Utbetalingsperiode | undefined => {
-    const nå = kalenderDatoFraDate(new Date());
-
-    const sistGjeldendeUtbetalingsperiode = sorterteUtbetalingsperioder
-        .filter(
-            utbetalingsperiode =>
-                erFør(kalenderDato(utbetalingsperiode.periodeFom), nå) ||
-                erSamme(kalenderDato(utbetalingsperiode.periodeFom), nå)
-        )
-        .slice(-1)[0];
-
-    if (sistGjeldendeUtbetalingsperiode === undefined) {
-        return sorterteUtbetalingsperioder[0];
-    } else {
-        return sistGjeldendeUtbetalingsperiode;
-    }
-};
-
-const hentUtbetalingsperiodeInnenforPeriode = (
-    sorterteUtbetalingsperioder: Utbetalingsperiode[],
-    periode: IPeriode
-): Utbetalingsperiode | undefined => {
-    const periodeFom = kalenderDatoMedFallback(periode.fom, TIDENES_MORGEN);
-    const periodeTom = kalenderDatoMedFallback(periode.tom, TIDENES_ENDE);
-
-    return sorterteUtbetalingsperioder.find(utbetalingsperiode => {
-        const utbetalingFom = kalenderDatoMedFallback(
-            utbetalingsperiode.periodeFom,
-            TIDENES_MORGEN
-        );
-        const utbetalingTom = kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE);
-        return (
-            (erSamme(utbetalingFom, periodeFom) || erEtter(utbetalingFom, periodeFom)) &&
-            (erSamme(utbetalingTom, periodeTom) || erFør(utbetalingTom, periodeTom))
-        );
-    });
-};
-
-const sorterUtbetalingsperioder = (
-    utbetalingsperioder: Utbetalingsperiode[]
-): Utbetalingsperiode[] =>
-    utbetalingsperioder.sort((utbetalingsperiodeA, utbetalingsperiodeB) =>
-        erEtter(
-            kalenderDato(utbetalingsperiodeA.periodeFom),
-            kalenderDato(utbetalingsperiodeB.periodeFom)
-        )
-            ? 1
-            : -1
-    );
