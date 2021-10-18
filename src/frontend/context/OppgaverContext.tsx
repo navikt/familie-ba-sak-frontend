@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
 import { useHistory } from 'react-router';
+import {
+    Column,
+    TableInstance,
+    usePagination,
+    UsePaginationInstanceProps,
+    useSortBy,
+    UseSortByInstanceProps,
+    useTable,
+} from 'react-table';
 
 import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -34,10 +43,11 @@ import {
     OppgavetypeFilter,
     SaksbehandlerFilter,
 } from '../typer/oppgave';
-import { erFør, erIsoStringGyldig, kalenderDato } from '../utils/kalender';
+import { erIsoStringGyldig } from '../utils/kalender';
 import { hentFnrFraOppgaveIdenter } from '../utils/oppgave';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useApp } from './AppContext';
+import { IOppgaveRad, kolonner, mapIOppgaverTilOppgaveRad } from './OppgaverContextUtils';
 
 export const oppgaveSideLimit = 15;
 
@@ -49,11 +59,35 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
+
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(
         byggTomRessurs<IHentOppgaveDto>()
     );
+
     const [oppgaveFelter, settOppgaveFelter] = useState<IOppgaveFelter>(
         initialOppgaveFelter(innloggetSaksbehandler)
+    );
+
+    const columns: ReadonlyArray<Column<IOppgaveRad>> = useMemo(() => kolonner, []);
+    const data: ReadonlyArray<IOppgaveRad> = useMemo(() => {
+        return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
+            ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, innloggetSaksbehandler)
+            : [];
+    }, [oppgaver]);
+
+    const tableInstance: TableInstance<IOppgaveRad> &
+        UseSortByInstanceProps<IOppgaveRad> &
+        UsePaginationInstanceProps<IOppgaveRad> = useTable<IOppgaveRad>(
+        {
+            columns,
+            data,
+            initialState: {
+                pageSize: oppgaveSideLimit,
+                pageIndex: 0,
+            },
+        },
+        useSortBy,
+        usePagination
     );
 
     useEffect(() => {
@@ -140,22 +174,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         }
     };
 
-    const tilbakestillSortOrder = () => {
-        let midlertidigOppgaveFelter = oppgaveFelter;
-        Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
-            midlertidigOppgaveFelter = {
-                ...midlertidigOppgaveFelter,
-                [oppgaveFelt.nøkkel]: {
-                    ...oppgaveFelt,
-                    order: FeltSortOrder.NONE,
-                    feilmelding: '',
-                    valideringsstatus: Valideringsstatus.IKKE_VALIDERT,
-                },
-            };
-            settOppgaveFelter(midlertidigOppgaveFelter);
-        });
-    };
-
     const settSortOrderPåOppgaveFelt = (felt: string) => {
         let midlertidigOppgaveFelter = oppgaveFelter;
         Object.values(oppgaveFelter).forEach((oppgaveFelt: IOppgaveFelt) => {
@@ -196,110 +214,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             'Feilmelding';
         }
     );
-
-    const [sideindeks, settSideindeks] = React.useState(-1);
-
-    //Stable sort algorithm makes sorting by multiple fields easier. However,
-    //Javascript does not specify the sort algorithm. To make sure the sort algorithm implemented
-    //by browsers are stable, we have to wrap it with the function below.
-    const sortOppgave = (felt: string, ascendant: boolean) => {
-        if (oppgaver.status !== RessursStatus.SUKSESS) {
-            return;
-        }
-
-        type OppgaveMedIndeks = {
-            oppgave: IOppgave;
-            indeks: number;
-        };
-
-        const oppgaveMedIndeks: OppgaveMedIndeks[] = oppgaver.data.oppgaver.map((v, i) => {
-            return {
-                oppgave: v,
-                indeks: i,
-            };
-        });
-
-        const compareTid = (a: string, b: string) => {
-            if (a.substring(0, 10) === b.substring(0, 10)) {
-                return 0;
-            }
-
-            const aValid = erIsoStringGyldig(a.substring(0, 10));
-            const bValid = erIsoStringGyldig(b.substring(0, 10));
-
-            if (!aValid && !bValid) {
-                return 0;
-            }
-
-            if (!aValid) {
-                return ascendant ? 1 : -1;
-            }
-
-            if (!bValid) {
-                return ascendant ? -1 : 1;
-            }
-
-            const aBefore = ascendant ? -1 : 1;
-            const aAfter = ascendant ? 1 : -1;
-            return erFør(kalenderDato(a.substring(0, 10)), kalenderDato(b.substring(0, 10)))
-                ? aBefore
-                : aAfter;
-        };
-
-        const compareOppgave = (a: IOppgave, b: IOppgave) => {
-            if (felt === 'opprettetTidspunkt' || felt === 'fristFerdigstillelse') {
-                return compareTid(a[felt], b[felt]);
-            }
-
-            if (!a[felt] && !b[felt]) {
-                return 0;
-            }
-
-            if (!a[felt]) {
-                return ascendant ? 1 : -1;
-            }
-
-            if (!b[felt]) {
-                return ascendant ? -1 : 1;
-            }
-
-            if (a[felt] === b[felt]) {
-                return 0;
-            }
-            return ascendant ? a[felt].localeCompare(b[felt]) : b[felt].localeCompare(a[felt]);
-        };
-
-        const stablizedCompareOppgave = (a: OppgaveMedIndeks, b: OppgaveMedIndeks) => {
-            const result = compareOppgave(a.oppgave, b.oppgave);
-            return result !== 0 ? result : a.indeks - b.indeks;
-        };
-
-        const sortedMedIndeks = oppgaveMedIndeks.sort(stablizedCompareOppgave);
-
-        settOppgaver({
-            status: oppgaver.status,
-            data: {
-                ...oppgaver.data,
-                oppgaver: sortedMedIndeks.map(
-                    (oppgaveMedIndeks: OppgaveMedIndeks) => oppgaveMedIndeks.oppgave
-                ),
-            },
-        });
-
-        settSideindeks(sortedMedIndeks.length > 0 ? 0 : -1);
-
-        settSortOrderPåOppgaveFelt(felt);
-    };
-
-    const settSide = (side: number) => settSideindeks(side);
-
-    const hentOppgaveSide = () =>
-        oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
-            ? oppgaver.data.oppgaver.slice(
-                  sideindeks * oppgaveSideLimit,
-                  Math.min((sideindeks + 1) * oppgaveSideLimit, oppgaver.data.oppgaver.length)
-              )
-            : [];
 
     const harLøpendeSakIInfotrygd = async (
         bruker: string
@@ -439,7 +353,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
 
     const hentOppgaver = () => {
         settOppgaver(byggHenterRessurs());
-        tilbakestillSortOrder();
 
         const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
         let tildeltRessurs;
@@ -467,12 +380,6 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
             tildeltRessurs
         ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
             settOppgaver(oppgaverRessurs);
-            settSideindeks(
-                oppgaverRessurs.status === RessursStatus.SUKSESS &&
-                    oppgaverRessurs.data.oppgaver.length > 0
-                    ? 0
-                    : -1
-            );
         });
     };
 
@@ -543,18 +450,15 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     return {
         fordelOppgave,
         harLøpendeSakIInfotrygd,
-        hentOppgaveSide,
         hentOppgaver,
         oppgaveFelter,
         oppgaver,
-        settSide,
         settSortOrderPåOppgaveFelt,
         settVerdiPåOppgaveFelt,
-        sideindeks,
-        sortOppgave,
         tilbakestillFordelingPåOppgave,
         tilbakestillOppgaveFelter,
         validerSkjema,
+        tableInstance,
     };
 });
 const Oppgaver: React.FC = () => {
