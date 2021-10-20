@@ -17,6 +17,7 @@ import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, uiResultat } from '../../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { periodeToString } from '../../../../utils/kalender';
+import { alleRegelverk } from '../../../../utils/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import { vilkårFeilmeldingId } from './VilkårTabell';
 import VilkårTabellRadEndre from './VilkårTabellRadEndre';
@@ -54,6 +55,22 @@ const EkspanderbarTr = styled.tr`
         border-bottom: ${(props: IEkspanderbarTrProps) =>
             props.ekspandert ? 'none' : '1px solid rgba(0, 0, 0, 0.15)'} !important;
     }
+`;
+
+const FlexDiv = styled.div`
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+`;
+
+const SpacingLeftI = styled.i`
+    padding-left: 1rem;
+`;
+
+const ToggleFormKnappTd = styled.td`
+    text-align: right !important;
+    padding-right: 0 !important;
 `;
 
 const VilkårTabellRad: React.FC<IProps> = ({
@@ -106,6 +123,31 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
                 </td>
                 <td>
+                    {redigerbartVilkår.verdi.vurderesEtter !== null &&
+                        alleRegelverk[redigerbartVilkår.verdi.vurderesEtter]}
+                </td>
+                <td>
+                    <FlexDiv>
+                        {vilkårResultat.verdi.erAutomatiskVurdert ? (
+                            <AutomatiskVurdering />
+                        ) : (
+                            <ManuellVurdering />
+                        )}
+                        <SpacingLeftI>
+                            {åpenBehandling.status === RessursStatus.SUKSESS &&
+                            vilkårResultat.verdi.erVurdert
+                                ? vilkårResultat.verdi.behandlingId ===
+                                  åpenBehandling.data.behandlingId
+                                    ? 'Vurdert i denne behandlingen'
+                                    : `Vurdert ${formaterIsoDato(
+                                          vilkårResultat.verdi.endretTidspunkt,
+                                          datoformat.DATO_FORKORTTET
+                                      )}`
+                                : ''}
+                        </SpacingLeftI>
+                    </FlexDiv>
+                </td>
+                <ToggleFormKnappTd>
                     <IkonKnapp
                         erLesevisning={erLesevisning()}
                         onClick={() => toggleForm(true)}
@@ -120,27 +162,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                         mini={true}
                         ikon={<FamilieChevron retning={ekspandertVilkår ? 'opp' : 'ned'} />}
                     />
-                </td>
-                <td>
-                    {vilkårResultat.verdi.erAutomatiskVurdert ? (
-                        <AutomatiskVurdering />
-                    ) : (
-                        <ManuellVurdering />
-                    )}
-                </td>
-                <td>
-                    <i>
-                        {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        vilkårResultat.verdi.erVurdert
-                            ? vilkårResultat.verdi.behandlingId === åpenBehandling.data.behandlingId
-                                ? 'Vurdert i denne behandlingen'
-                                : `Vurdert ${formaterIsoDato(
-                                      vilkårResultat.verdi.endretTidspunkt,
-                                      datoformat.DATO_FORKORTTET
-                                  )}`
-                            : ''}
-                    </i>
-                </td>
+                </ToggleFormKnappTd>
             </EkspanderbarTr>
 
             {ekspandertVilkår && (

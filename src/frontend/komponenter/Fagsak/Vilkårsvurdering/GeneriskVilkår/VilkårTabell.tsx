@@ -44,13 +44,13 @@ const TabellHeader = styled.th`
         width: 12rem;
     }
     &:nth-of-type(4) {
-        width: 7rem;
+        width: 12rem;
     }
     &:nth-of-type(5) {
-        width: 3rem;
+        width: 17rem;
     }
     &:nth-of-type(6) {
-        width: 15rem;
+        width: 6rem;
     }
 `;
 
@@ -67,8 +67,8 @@ const VilkårTabell: React.FC<IProps> = ({
                     <TabellHeader>Vurdering</TabellHeader>
                     <TabellHeader>Periode</TabellHeader>
                     <TabellHeader>Begrunnelse</TabellHeader>
-                    <TabellHeader />
-                    <TabellHeader />
+                    <TabellHeader>Vurderes etter</TabellHeader>
+                    <TabellHeader>Vurdert av</TabellHeader>
                     <TabellHeader />
                 </tr>
             </thead>
