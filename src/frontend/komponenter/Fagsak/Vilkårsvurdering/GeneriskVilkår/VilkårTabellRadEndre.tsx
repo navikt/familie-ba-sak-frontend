@@ -8,6 +8,7 @@ import { CheckboxGruppe, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import {
     FamilieKnapp,
     FamilieRadioGruppe,
+    FamilieSelect,
     FamilieTextareaControlled,
 } from '@navikt/familie-form-elements';
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
@@ -30,10 +31,13 @@ import {
     IPersonResultat,
     IVilkårConfig,
     IVilkårResultat,
+    Regelverk,
+    regelverkOptions,
     Resultat,
     resultater,
     VilkårType,
 } from '../../../../typer/vilkår';
+import { tilRegelverkVerdi } from '../../../../utils/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import DeltBostedCheckbox from './DeltBostedCheckbox';
@@ -268,15 +272,35 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-                {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                    årsakErSøknad && (
-                        <AvslagSkjema
-                            redigerbartVilkår={redigerbartVilkår}
-                            settRedigerbartVilkår={settRedigerbartVilkår}
-                            visFeilmeldinger={skalViseFeilmeldinger()}
-                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                        />
-                    )}
+
+                {redigerbartVilkår.verdi.vurderesEtter !== null && (
+                    <FamilieSelect
+                        erLesevisning={erLesevisning()}
+                        value={redigerbartVilkår.verdi.vurderesEtter}
+                        label={'Vurderes etter'}
+                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                            settRedigerbartVilkår({
+                                ...redigerbartVilkår,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    vurderesEtter: tilRegelverkVerdi(event.target.value),
+                                },
+                            });
+                        }}
+                    >
+                        {regelverkOptions.map(([tekst, regelverk]: [string, Regelverk]) => {
+                            return (
+                                <option
+                                    key={regelverk}
+                                    aria-selected={vilkårResultat.verdi.vurderesEtter === regelverk}
+                                    value={regelverk}
+                                >
+                                    {tekst}
+                                </option>
+                            );
+                        })}
+                    </FamilieSelect>
+                )}
 
                 {redigerbartVilkår.verdi.vilkårType !== VilkårType.UTVIDET_BARNETRYGD && (
                     <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
@@ -308,13 +332,20 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             )}
                     </CheckboxGruppe>
                 )}
-
+                {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                    årsakErSøknad && (
+                        <AvslagSkjema
+                            redigerbartVilkår={redigerbartVilkår}
+                            settRedigerbartVilkår={settRedigerbartVilkår}
+                            visFeilmeldinger={skalViseFeilmeldinger()}
+                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                        />
+                    )}
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
-
                 <FamilieTextareaControlled
                     tekstLesevisning={''}
                     erLesevisning={leseVisning}
@@ -343,7 +374,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         });
                     }}
                 />
-
                 <Knapperad>
                     <div>
                         <FamilieKnapp

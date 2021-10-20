@@ -6,10 +6,12 @@ import {
     IRestPersonResultat,
     IRestVilkårResultat,
     IVilkårResultat,
+    Regelverk,
     Resultat,
     VilkårType,
 } from '../../../typer/vilkår';
 import { IPeriode } from '../../kalender';
+import { erIkkeGenereltVilkår } from '../../vilkår';
 
 interface IMockVilkårResultat {
     behandlingId?: number;
@@ -63,6 +65,7 @@ export const mockVilkårResultater = ({
     endretTidspunkt,
     behandlingId,
     avslagBegrunnelser: mockFeltstate<VedtakBegrunnelse[]>([]),
+    vurderesEtter: Regelverk.NASJONALE_REGLER,
 });
 
 interface IMockRestPersonResultat {
@@ -78,6 +81,7 @@ interface IRestResultaterMock {
     vilkårType?: VilkårType;
     periodeFom?: string;
     periodeTom?: string;
+    vurderesEtter?: Regelverk | null;
 }
 
 export const mockRestVilkårResultat = ({
@@ -87,6 +91,7 @@ export const mockRestVilkårResultat = ({
     vilkårType = VilkårType.LOVLIG_OPPHOLD,
     periodeFom = '2000-01-01',
     periodeTom = undefined,
+    vurderesEtter = Regelverk.NASJONALE_REGLER,
 }: IRestResultaterMock = {}): IRestVilkårResultat => ({
     id,
     vilkårType,
@@ -103,6 +108,7 @@ export const mockRestVilkårResultat = ({
     endretTidspunkt: '2020-03-19T09:08:56.8',
     behandlingId,
     avslagBegrunnelser: [],
+    vurderesEtter: erIkkeGenereltVilkår(vilkårType) ? vurderesEtter : null,
 });
 
 export const mockRestPersonResultat = ({
