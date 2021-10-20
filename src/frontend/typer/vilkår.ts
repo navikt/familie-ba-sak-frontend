@@ -45,15 +45,6 @@ export enum Regelverk {
     EØS_FORORDNINGEN = 'EØS_FORORDNINGEN',
 }
 
-export const regelverkOptions = (brukEøs: boolean): [string, Regelverk][] => {
-    return brukEøs
-        ? [
-              ['Nasjonale regler', Regelverk.NASJONALE_REGLER],
-              ['EØS-forordningen', Regelverk.EØS_FORORDNINGEN],
-          ]
-        : [['Nasjonale regler', Regelverk.NASJONALE_REGLER]];
-};
-
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;

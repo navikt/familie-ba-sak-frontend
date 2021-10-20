@@ -32,12 +32,11 @@ import {
     IVilkårConfig,
     IVilkårResultat,
     Regelverk,
-    regelverkOptions,
     Resultat,
     resultater,
     VilkårType,
 } from '../../../../typer/vilkår';
-import { tilRegelverkVerdi } from '../../../../utils/vilkår';
+import { alleRegelverk } from '../../../../utils/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import DeltBostedCheckbox from './DeltBostedCheckbox';
@@ -283,13 +282,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                                 ...redigerbartVilkår,
                                 verdi: {
                                     ...redigerbartVilkår.verdi,
-                                    vurderesEtter: tilRegelverkVerdi(event.target.value),
+                                    vurderesEtter: event.target.value as Regelverk,
                                 },
                             });
                         }}
                     >
-                        {regelverkOptions(toggles[ToggleNavn.brukEøs]).map(
-                            ([tekst, regelverk]: [string, Regelverk]) => {
+                        {Object.entries(alleRegelverk).map(
+                            ([regelverk, tekst]: [string, string]) => {
                                 return (
                                     <option
                                         key={regelverk}

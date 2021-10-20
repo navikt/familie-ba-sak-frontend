@@ -81,7 +81,7 @@ interface IRestResultaterMock {
     vilkårType?: VilkårType;
     periodeFom?: string;
     periodeTom?: string;
-    vurderesEtter?: Regelverk | null;
+    vurderesEtter?: Regelverk;
 }
 
 export const mockRestVilkårResultat = ({
