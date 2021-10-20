@@ -273,7 +273,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     />
                 </FamilieRadioGruppe>
 
-                {redigerbartVilkår.verdi.vurderesEtter !== null && (
+                {toggles[ToggleNavn.brukEøs] && redigerbartVilkår.verdi.vurderesEtter !== null && (
                     <FamilieSelect
                         erLesevisning={erLesevisning()}
                         value={redigerbartVilkår.verdi.vurderesEtter}
@@ -288,17 +288,21 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             });
                         }}
                     >
-                        {regelverkOptions.map(([tekst, regelverk]: [string, Regelverk]) => {
-                            return (
-                                <option
-                                    key={regelverk}
-                                    aria-selected={vilkårResultat.verdi.vurderesEtter === regelverk}
-                                    value={regelverk}
-                                >
-                                    {tekst}
-                                </option>
-                            );
-                        })}
+                        {regelverkOptions(toggles[ToggleNavn.brukEøs]).map(
+                            ([tekst, regelverk]: [string, Regelverk]) => {
+                                return (
+                                    <option
+                                        key={regelverk}
+                                        aria-selected={
+                                            vilkårResultat.verdi.vurderesEtter === regelverk
+                                        }
+                                        value={regelverk}
+                                    >
+                                        {tekst}
+                                    </option>
+                                );
+                            }
+                        )}
                     </FamilieSelect>
                 )}
 
