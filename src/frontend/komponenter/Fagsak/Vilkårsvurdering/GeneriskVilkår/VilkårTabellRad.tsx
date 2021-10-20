@@ -142,6 +142,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     </i>
                 </td>
             </EkspanderbarTr>
+
             {ekspandertVilkår && (
                 <tr>
                     <EkspandertTd colSpan={6}>
