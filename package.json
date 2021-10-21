@@ -57,7 +57,6 @@
     "@types/react-modal": "^3.13.1",
     "@types/react-router-dom": "^5.3.0",
     "@types/react-router-hash-link": "^2.4.1",
-    "@types/request-promise": "^4.1.48",
     "@types/styled-components": "^5.1.14",
     "@types/uuid": "^8.3.1",
     "amplitude-js": "^8.8.0",
@@ -70,7 +69,6 @@
     "dayjs": "^1.10.6",
     "deep-equal": "^2.0.3",
     "dotenv": "^10.0.0",
-    "ds-icons": "^1.0.1",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.4",
     "https-proxy-agent": "^5.0.0",
@@ -126,6 +124,7 @@
     "react-router-hash-link": "^2.4.3",
     "react-table": "^7.7.0",
     "react-toast-notifications": "^2.5.1",
+    "request": "^2.88.2",
     "snyk": "^1.742.0",
     "styled-components": "^5.3.1",
     "uuid": "^8.3.0"
