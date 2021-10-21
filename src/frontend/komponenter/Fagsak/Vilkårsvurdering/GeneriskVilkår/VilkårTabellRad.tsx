@@ -100,10 +100,6 @@ const VilkårTabellRad: React.FC<IProps> = ({
         }
     };
 
-    if (redigerbartVilkår.verdi.vurderesEtter) {
-        console.info(redigerbartVilkår.verdi.vurderesEtter);
-    }
-
     return (
         <>
             <EkspanderbarTr {...{ ekspandert: ekspandertVilkår }}>
