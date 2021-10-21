@@ -22,7 +22,7 @@ interface IProps {
 const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
     vedtaksperiodeMedBegrunnelser,
 }) => {
-    const { erPanelEkspandert, onPanelClose, utbetalingsperiode, genererteBrevbegrunnelser } =
+    const { erPanelEkspandert, onPanelClose, genererteBrevbegrunnelser } =
         useVedtaksperiodeMedBegrunnelser();
 
     const visFritekster = () =>
@@ -38,21 +38,11 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
             åpen={erPanelEkspandert}
             onClick={() => onPanelClose(true)}
         >
-            {utbetalingsperiode && (
-                <Utbetalingsresultat
-                    utbetalingsperiodeDetaljer={utbetalingsperiode.utbetalingsperiodeDetaljer}
-                    filtrerDetalj={utbetalingsperiodeDetalj => {
-                        if (
-                            vedtaksperiodeMedBegrunnelser.type ===
-                            Vedtaksperiodetype.ENDRET_UTBETALING
-                        ) {
-                            return utbetalingsperiodeDetalj.erPåvirketAvEndring;
-                        } else {
-                            return !utbetalingsperiodeDetalj.erPåvirketAvEndring;
-                        }
-                    }}
-                />
-            )}
+            <Utbetalingsresultat
+                utbetalingsperiodeDetaljer={
+                    vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer
+                }
+            />
             {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG &&
                 vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.ENDRET_UTBETALING && (
                     <BegrunnelserMultiselect
