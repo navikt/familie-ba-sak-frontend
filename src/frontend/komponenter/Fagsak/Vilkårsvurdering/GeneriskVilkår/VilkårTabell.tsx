@@ -31,6 +31,7 @@ interface IProps {
 
 const Tabell = styled.table`
     table-layout: fixed;
+    min-width: 64rem;
     td:first-child .checkboks + .skjemaelement__label {
         text-indent: 2rem;
         width: 13rem;
