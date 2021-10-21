@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertekst, Undertittel } from 'nav-frontend-typografi';
+import { Element, Undertittel } from 'nav-frontend-typografi';
 
 import { FeltState } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -100,7 +100,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
                 <VilkårTittel tag={'h4'}>
                     <Element children={vilkårFraConfig.tittel} />
-                    <Undertekst children={vilkårFraConfig.lovreferanse} />
                 </VilkårTittel>
                 <VilkårTabell
                     person={person}
