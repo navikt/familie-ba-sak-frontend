@@ -8,12 +8,14 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import AutomatiskVurdering from '../../../../ikoner/AutomatiskVurdering';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
 import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import { IGrunnlagPerson } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import { IVilkårConfig, IVilkårResultat, Resultat, uiResultat } from '../../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../../utils/formatter';
 import { periodeToString } from '../../../../utils/kalender';
@@ -79,6 +81,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
     vilkårResultat,
     visFeilmeldinger,
 }) => {
+    const { toggles } = useApp();
     const { erLesevisning, åpenBehandling } = useBehandling();
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(
@@ -123,7 +126,8 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
                 </td>
                 <td>
-                    {redigerbartVilkår.verdi.vurderesEtter !== null &&
+                    {toggles[ToggleNavn.brukEøs] &&
+                        redigerbartVilkår.verdi.vurderesEtter !== null &&
                         alleRegelverk[redigerbartVilkår.verdi.vurderesEtter]}
                 </td>
                 <td>
