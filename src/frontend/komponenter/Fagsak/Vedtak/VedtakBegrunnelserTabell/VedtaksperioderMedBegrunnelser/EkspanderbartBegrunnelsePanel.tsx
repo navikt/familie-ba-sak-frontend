@@ -10,7 +10,7 @@ import {
     IVedtaksperiodeMedBegrunnelser,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
-import { formaterBeløp } from '../../../../../utils/formatter';
+import { formaterBeløp, summer } from '../../../../../utils/formatter';
 import {
     erEtter,
     kalenderDatoMedFallback,
@@ -18,7 +18,6 @@ import {
     sisteDagIInneværendeMåned,
     TIDENES_ENDE,
 } from '../../../../../utils/kalender';
-import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const StyledEkspanderbartpanelBase = styled(EkspanderbartpanelBase)`
     margin-bottom: 1rem;
@@ -59,12 +58,7 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
         tom: vedtaksperiodeMedBegrunnelser.tom,
     };
 
-    const { utbetalingsperiode } = useVedtaksperiodeMedBegrunnelser();
-
-    const vedtaksperiodeTittel = hentVedtaksperiodeTittel(
-        vedtaksperiodeMedBegrunnelser.type,
-        utbetalingsperiode
-    );
+    const vedtaksperiodeTittel = hentVedtaksperiodeTittel(vedtaksperiodeMedBegrunnelser);
 
     return (
         <StyledEkspanderbartpanelBase
@@ -85,9 +79,16 @@ const EkspanderbartBegrunnelsePanel: React.FC<IEkspanderbartBegrunnelsePanelProp
                     )}
                     <Normaltekst>{vedtaksperiodeTittel}</Normaltekst>
                     {vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.UTBETALING &&
-                        utbetalingsperiode && (
+                        vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.length > 0 && (
                             <Normaltekst>
-                                {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
+                                {formaterBeløp(
+                                    summer(
+                                        vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.map(
+                                            utbetalingsperiodeDetalj =>
+                                                utbetalingsperiodeDetalj.utbetaltPerMnd
+                                        )
+                                    )
+                                )}
                             </Normaltekst>
                         )}
                 </PanelTittel>

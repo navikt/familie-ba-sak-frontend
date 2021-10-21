@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -8,6 +8,7 @@ import { CheckboxGruppe, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import {
     FamilieKnapp,
     FamilieRadioGruppe,
+    FamilieSelect,
     FamilieTextareaControlled,
 } from '@navikt/familie-form-elements';
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
@@ -30,10 +31,12 @@ import {
     IPersonResultat,
     IVilkårConfig,
     IVilkårResultat,
+    Regelverk,
     Resultat,
     resultater,
     VilkårType,
 } from '../../../../typer/vilkår';
+import { alleRegelverk } from '../../../../utils/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import DeltBostedCheckbox from './DeltBostedCheckbox';
@@ -268,15 +271,42 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 </FamilieRadioGruppe>
-                {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                    årsakErSøknad && (
-                        <AvslagSkjema
-                            redigerbartVilkår={redigerbartVilkår}
-                            settRedigerbartVilkår={settRedigerbartVilkår}
-                            visFeilmeldinger={skalViseFeilmeldinger()}
-                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                        />
-                    )}
+
+                {toggles[ToggleNavn.brukEøs] && redigerbartVilkår.verdi.vurderesEtter !== null && (
+                    <FamilieSelect
+                        erLesevisning={erLesevisning()}
+                        value={redigerbartVilkår.verdi.vurderesEtter}
+                        label={'Vurderes etter'}
+                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                            settRedigerbartVilkår({
+                                ...redigerbartVilkår,
+                                verdi: {
+                                    ...redigerbartVilkår.verdi,
+                                    vurderesEtter: event.target.value as Regelverk,
+                                },
+                            });
+                        }}
+                    >
+                        {Object.entries(alleRegelverk).map(
+                            ([regelverk, { tekst }]: [
+                                string,
+                                { tekst: string; symbol: ReactNode }
+                            ]) => {
+                                return (
+                                    <option
+                                        key={regelverk}
+                                        aria-selected={
+                                            vilkårResultat.verdi.vurderesEtter === regelverk
+                                        }
+                                        value={regelverk}
+                                    >
+                                        {tekst}
+                                    </option>
+                                );
+                            }
+                        )}
+                    </FamilieSelect>
+                )}
 
                 {redigerbartVilkår.verdi.vilkårType !== VilkårType.UTVIDET_BARNETRYGD && (
                     <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
@@ -308,13 +338,20 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             )}
                     </CheckboxGruppe>
                 )}
-
+                {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
+                    årsakErSøknad && (
+                        <AvslagSkjema
+                            redigerbartVilkår={redigerbartVilkår}
+                            settRedigerbartVilkår={settRedigerbartVilkår}
+                            visFeilmeldinger={skalViseFeilmeldinger()}
+                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                        />
+                    )}
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     visFeilmeldinger={skalViseFeilmeldinger()}
                 />
-
                 <FamilieTextareaControlled
                     tekstLesevisning={''}
                     erLesevisning={leseVisning}
@@ -343,7 +380,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         });
                     }}
                 />
-
                 <Knapperad>
                     <div>
                         <FamilieKnapp

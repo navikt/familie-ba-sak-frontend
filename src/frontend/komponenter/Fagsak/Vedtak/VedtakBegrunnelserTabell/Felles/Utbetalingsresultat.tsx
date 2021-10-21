@@ -13,7 +13,6 @@ import {
 
 interface IProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
-    filtrerDetalj?: (utbetalingsperiodeDetalj: IUtbetalingsperiodeDetalj) => boolean;
 }
 
 const UtbetalingsperiodeDetalj = styled.div`
@@ -25,16 +24,14 @@ const UtbetalingsperiodeDetalj = styled.div`
     }
 `;
 
-const Utbetalingsresultat: React.FC<IProps> = ({
-    filtrerDetalj = () => true,
-    utbetalingsperiodeDetaljer,
-}) => {
+const Utbetalingsresultat: React.FC<IProps> = ({ utbetalingsperiodeDetaljer }) => {
+    if (utbetalingsperiodeDetaljer.length === 0) return null;
+
     return (
         <div style={{ marginBottom: '1rem' }}>
             <Element>Resultat</Element>
 
             {utbetalingsperiodeDetaljer
-                .filter(filtrerDetalj)
                 .sort((utbetalingA, utbetalingB) =>
                     sorterPersonTypeOgFødselsdato(utbetalingA.person, utbetalingB.person)
                 )

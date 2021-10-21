@@ -103,8 +103,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
             avhengigheter?.tilbakekrevingErToggletPå &&
             avhengigheter?.erFeilutbetaling &&
             avhengigheter?.tilbakekreving?.verdi ===
-                Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL &&
-            !harÅpenTilbakekreving,
+                Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
     });
     const begrunnelse = useFelt<string>({
         verdi: åpenBehandling.tilbakekreving?.begrunnelse ?? '',

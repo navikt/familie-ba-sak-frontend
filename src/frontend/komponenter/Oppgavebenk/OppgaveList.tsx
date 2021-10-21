@@ -1,53 +1,51 @@
 import React from 'react';
 
 import classNames from 'classnames';
+import { Cell, ColumnInstance } from 'react-table';
 
 import Alertstripe from 'nav-frontend-alertstriper';
-import Lenke from 'nav-frontend-lenker';
 import { Systemtittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../context/AppContext';
 import { useOppgaver } from '../../context/OppgaverContext';
-import { IPar } from '../../typer/common';
-import {
-    enhetFilter,
-    gjelderFilter,
-    behandlingstypeFilter,
-    IOppgave,
-    oppgaveTypeFilter,
-    PrioritetFilter,
-    EnhetFilter,
-    OppgavetypeFilter,
-    BehandlingstypeFilter,
-    GjelderFilter,
-} from '../../typer/oppgave';
-import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-import OppgaveDirektelenke from './OppgaveDirektelenke';
-import { ariaSortMap, FeltSortOrder, IOppgaveFelt, sortLenkClassNameMap } from './oppgavefelter';
+import { IOppgaveRad } from '../../context/OppgaverContextUtils';
+import { ariaSortMap, FeltSortOrder } from './oppgavefelter';
 import OppgavelisteNavigator from './OppgavelisteNavigator';
-import OppgavelisteSaksbehandler from './OppgavelisteSaksbehandler';
 
-const intDatoTilNorskDato = (intDato: string) => {
-    return `${intDato.substr(8, 2)}.${intDato.substr(5, 2)}.${intDato.substr(2, 2)}`;
+export const styleFraAccessorEllerId = (id: string) => {
+    switch (id) {
+        case 'beskrivelse':
+            return 'beskrivelse';
+        case 'tilordnetRessurs':
+            return 'tilordnet-ressurs';
+        case 'handlinger':
+            return 'handlinger';
+        default:
+            return null;
+    }
+};
+
+export const getAriaSort = (
+    column: ColumnInstance<IOppgaveRad>
+): 'none' | 'descending' | 'ascending' | undefined => {
+    if (column.isSortedDesc === true) {
+        return ariaSortMap.get(FeltSortOrder.DESCENDANT);
+    }
+    if (column.isSortedDesc === false) {
+        return ariaSortMap.get(FeltSortOrder.ASCENDANT);
+    }
+    return ariaSortMap.get(FeltSortOrder.NONE);
+};
+
+export const getSortLenkClassName = (_: ColumnInstance<IOppgaveRad>) => {
+    return 'tabell__th--sortert-desc';
 };
 
 const OppgaveList: React.FunctionComponent = () => {
-    const { oppgaver, sortOppgave, oppgaveFelter, hentOppgaveSide } = useOppgaver();
-    const { innloggetSaksbehandler } = useApp();
+    const { oppgaver, tableInstance } = useOppgaver();
 
-    const onColumnSort = (felt: IOppgaveFelt) => {
-        sortOppgave(felt.nøkkel, felt.order !== FeltSortOrder.ASCENDANT);
-    };
-
-    const getAriaSort = (felt: IOppgaveFelt) => ariaSortMap.get(felt.order || FeltSortOrder.NONE);
-
-    const getSortLenkClassName = (felt: IOppgaveFelt) =>
-        sortLenkClassNameMap.get(felt.order || FeltSortOrder.NONE);
-
-    const sortertClassName = (felt: IOppgaveFelt) =>
-        felt.order !== FeltSortOrder.NONE ? 'tabell__td--sortert' : '';
+    const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = tableInstance;
 
     return (
         <div className={'oppgavelist'}>
@@ -56,141 +54,52 @@ const OppgaveList: React.FunctionComponent = () => {
                 <OppgavelisteNavigator />
             </div>
             <div>
-                <table className="tabell">
-                    <thead>
-                        <tr>
-                            {Object.values(oppgaveFelter).map((felt: IOppgaveFelt) => {
-                                return felt.order ? (
-                                    <th
-                                        role="columnheader"
-                                        aria-sort={getAriaSort(felt)}
-                                        className={classNames(
-                                            getSortLenkClassName(felt),
-                                            felt.nøkkel
-                                        )}
-                                        key={felt.nøkkel}
-                                    >
-                                        <Lenke href="#" onClick={() => onColumnSort(felt)}>
-                                            {felt.label}
-                                        </Lenke>
-                                    </th>
-                                ) : (
-                                    <th
-                                        role="columnheader"
-                                        key={felt.nøkkel}
-                                        className={felt.nøkkel}
-                                    >
-                                        {felt.label}
-                                    </th>
+                <div className={'oppgavelist'}>
+                    <table className="tabell" {...getTableProps()}>
+                        <thead>
+                            {headerGroups.map(headerGroup => (
+                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                    {headerGroup.headers.map(column => (
+                                        <th
+                                            role="columnheader"
+                                            aria-sort={getAriaSort(column)}
+                                            className={getSortLenkClassName(column)}
+                                            {...column.getHeaderProps(
+                                                column.getSortByToggleProps()
+                                            )}
+                                        >
+                                            {column.render('Header')}
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {page.map(row => {
+                                prepareRow(row);
+                                return (
+                                    <tr {...row.getRowProps()}>
+                                        {row.cells.map((cell: Cell<IOppgaveRad>) => (
+                                            <td
+                                                className={classNames([
+                                                    cell.column.isSorted
+                                                        ? 'tabell__td--sortert'
+                                                        : '',
+                                                    styleFraAccessorEllerId(cell.column.id),
+                                                ])}
+                                                {...cell.getCellProps()}
+                                            >
+                                                {cell.render('Cell')}
+                                            </td>
+                                        ))}
+                                    </tr>
                                 );
                             })}
-                        </tr>
-                    </thead>
-                    {oppgaver.status === RessursStatus.SUKSESS &&
-                        oppgaver.data.oppgaver.length > 0 && (
-                            <tbody>
-                                {hentOppgaveSide().map((oppg: IOppgave, index) => {
-                                    const enhet: IPar | undefined =
-                                        enhetFilter[`E${oppg.tildeltEnhetsnr}` as EnhetFilter];
-
-                                    return (
-                                        <tr key={index}>
-                                            <td
-                                                className={sortertClassName(
-                                                    oppgaveFelter.opprettetTidspunkt
-                                                )}
-                                            >
-                                                {oppg.opprettetTidspunkt
-                                                    ? intDatoTilNorskDato(oppg.opprettetTidspunkt)
-                                                    : 'Ukjent'}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    'oppgavetype',
-                                                    sortertClassName(oppgaveFelter.oppgavetype)
-                                                )}
-                                            >
-                                                {oppg.oppgavetype
-                                                    ? oppgaveTypeFilter[
-                                                          oppg.oppgavetype as OppgavetypeFilter
-                                                      ]?.navn ?? oppg.oppgavetype
-                                                    : 'Ukjent'}
-                                            </td>
-                                            <td
-                                                className={sortertClassName(
-                                                    oppgaveFelter.behandlingstema
-                                                )}
-                                            >
-                                                {oppg.behandlingstema
-                                                    ? gjelderFilter[
-                                                          oppg.behandlingstema as GjelderFilter
-                                                      ]?.navn ?? oppg.behandlingstema
-                                                    : 'Ikke satt'}
-                                            </td>
-                                            <td
-                                                className={sortertClassName(
-                                                    oppgaveFelter.behandlingstype
-                                                )}
-                                            >
-                                                {oppg.behandlingstype
-                                                    ? behandlingstypeFilter[
-                                                          oppg.behandlingstype as BehandlingstypeFilter
-                                                      ]?.navn ?? oppg.behandlingstype
-                                                    : 'Ikke satt'}
-                                            </td>
-                                            <td
-                                                className={sortertClassName(
-                                                    oppgaveFelter.fristFerdigstillelse
-                                                )}
-                                            >
-                                                {oppg.fristFerdigstillelse
-                                                    ? intDatoTilNorskDato(oppg.fristFerdigstillelse)
-                                                    : 'Ukjent'}
-                                            </td>
-                                            <td
-                                                className={sortertClassName(
-                                                    oppgaveFelter.prioritet
-                                                )}
-                                            >
-                                                {
-                                                    PrioritetFilter[
-                                                        oppg.prioritet as keyof typeof PrioritetFilter
-                                                    ]
-                                                }
-                                            </td>
-                                            <td className={'beskrivelse'}>{oppg.beskrivelse}</td>
-                                            <td>
-                                                {hentFnrFraOppgaveIdenter(oppg.identer) || 'Ukjent'}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    'tildelt-enhetsnr',
-                                                    sortertClassName(oppgaveFelter.tildeltEnhetsnr)
-                                                )}
-                                            >
-                                                {enhet ? enhet.navn : oppg.tildeltEnhetsnr}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    'tilordnet-ressurs',
-                                                    sortertClassName(oppgaveFelter.tilordnetRessurs)
-                                                )}
-                                            >
-                                                <OppgavelisteSaksbehandler
-                                                    oppgave={oppg}
-                                                    innloggetSaksbehandler={innloggetSaksbehandler}
-                                                />
-                                            </td>
-                                            <td className={'handlinger'}>
-                                                <OppgaveDirektelenke oppgave={oppg} />
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        )}
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
                 <Alertstripe type="advarsel" className="oppgavelist__info">
                     Ingen oppgaver

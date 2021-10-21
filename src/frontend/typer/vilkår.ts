@@ -40,6 +40,11 @@ export enum VilkårType {
     UTVIDET_BARNETRYGD = 'UTVIDET_BARNETRYGD',
 }
 
+export enum Regelverk {
+    NASJONALE_REGLER = 'NASJONALE_REGLER',
+    EØS_FORORDNINGEN = 'EØS_FORORDNINGEN',
+}
+
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
@@ -74,6 +79,7 @@ export interface IVilkårResultat {
     erMedlemskapVurdert: boolean;
     erDeltBosted: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
+    vurderesEtter: Regelverk | null;
 }
 
 // Vilkårsvurdering typer for api
@@ -105,6 +111,7 @@ export interface IRestVilkårResultat {
     erDeltBosted: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
+    vurderesEtter: Regelverk | null;
 }
 
 export interface IRestAnnenVurdering {
@@ -130,7 +137,6 @@ export type VedtaksbegrunnelseTekster = {
 export interface IVilkårConfig {
     beskrivelse: string;
     key: string;
-    lovreferanse: string;
     spørsmål?: (part?: string) => string;
     tittel: string;
     parterDetteGjelderFor: PersonType[];
@@ -140,7 +146,6 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     UNDER_18_ÅR: {
         beskrivelse: 'under 18 år',
         key: 'UNDER_18_ÅR',
-        lovreferanse: '§ 2',
         tittel: 'Under 18 år',
         spørsmål: () => `Er barnet under 18 år?`,
         parterDetteGjelderFor: [PersonType.BARN],
@@ -148,7 +153,6 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     BOR_MED_SØKER: {
         beskrivelse: 'bor med søker',
         key: 'BOR_MED_SØKER',
-        lovreferanse: '§ 2, 2. LEDD',
         tittel: 'Bor med søker',
         spørsmål: () => `Bor barnet med søker?`,
         parterDetteGjelderFor: [PersonType.BARN],
@@ -156,7 +160,6 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     GIFT_PARTNERSKAP: {
         beskrivelse: 'ugift og ikke partnerskap',
         key: 'GIFT_PARTNERSKAP',
-        lovreferanse: '§ 2, 4. LEDD',
         tittel: 'Ugift og ikke partnerskap',
         spørsmål: () => 'Har barnet inngått ekteskap eller partnerskap?',
         parterDetteGjelderFor: [PersonType.BARN],
@@ -164,7 +167,6 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     BOSATT_I_RIKET: {
         beskrivelse: 'bosatt i riket',
         key: 'BOSATT_I_RIKET',
-        lovreferanse: '§ 4, 1. LEDD',
         tittel: 'Bosatt i riket',
         spørsmål: (part?: string) => `Er ${part} bosatt i riket?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
@@ -172,7 +174,6 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     LOVLIG_OPPHOLD: {
         beskrivelse: 'lovlig opphold',
         key: 'LOVLIG_OPPHOLD',
-        lovreferanse: '§ 4, 2. LEDD',
         tittel: 'Lovlig opphold',
         spørsmål: (part?: string) => `Har ${part} lovlig opphold?`,
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER],
@@ -180,7 +181,6 @@ export const vilkårConfig: Record<VilkårType, IVilkårConfig> = {
     UTVIDET_BARNETRYGD: {
         beskrivelse: 'utvidet barnetrygd',
         key: 'UTVIDET_BARNETRYGD',
-        lovreferanse: '§ 9',
         tittel: 'Utvidet barnetrygd',
         spørsmål: () => 'Foreligger det rett på utvidet barnetrygd?',
         parterDetteGjelderFor: [PersonType.SØKER],
@@ -191,7 +191,6 @@ export interface IAnnenVurderingConfig {
     beskrivelse: string;
     key: string;
     tittel: string;
-    lovreferanse: string;
     parterDetteGjelderFor: PersonType[];
     spørsmål?: (part?: string) => string;
 }
@@ -201,7 +200,6 @@ export const annenVurderingConfig: Record<AnnenVurderingType, IAnnenVurderingCon
         beskrivelse: 'Opplysningsplikt',
         key: 'OPPLYSNINGSPLIKT',
         tittel: 'Opplysningsplikt',
-        lovreferanse: '§§ 17 OG 18',
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER, PersonType.ANNENPART],
         spørsmål: () => 'Er opplysningsplikten oppfylt?',
     },
