@@ -40,6 +40,11 @@ export enum VilkårType {
     UTVIDET_BARNETRYGD = 'UTVIDET_BARNETRYGD',
 }
 
+export enum Regelverk {
+    NASJONALE_REGLER = 'NASJONALE_REGLER',
+    EØS_FORORDNINGEN = 'EØS_FORORDNINGEN',
+}
+
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
@@ -74,6 +79,7 @@ export interface IVilkårResultat {
     erMedlemskapVurdert: boolean;
     erDeltBosted: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
+    vurderesEtter: Regelverk | null;
 }
 
 // Vilkårsvurdering typer for api
@@ -105,6 +111,7 @@ export interface IRestVilkårResultat {
     erDeltBosted: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
+    vurderesEtter: Regelverk | null;
 }
 
 export interface IRestAnnenVurdering {

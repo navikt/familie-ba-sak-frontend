@@ -4,7 +4,9 @@ import styled from 'styled-components';
 
 import { FeltState } from '@navikt/familie-skjema';
 
+import { useApp } from '../../../../context/AppContext';
 import { IGrunnlagPerson } from '../../../../typer/person';
+import { ToggleNavn } from '../../../../typer/toggles';
 import { IVilkårConfig, IVilkårResultat } from '../../../../typer/vilkår';
 import VilkårTabellRad from './VilkårTabellRad';
 
@@ -29,6 +31,7 @@ interface IProps {
 
 const Tabell = styled.table`
     table-layout: fixed;
+    min-width: 64rem;
     td:first-child .checkboks + .skjemaelement__label {
         text-indent: 2rem;
         width: 13rem;
@@ -44,13 +47,13 @@ const TabellHeader = styled.th`
         width: 12rem;
     }
     &:nth-of-type(4) {
-        width: 7rem;
+        width: 12rem;
     }
     &:nth-of-type(5) {
-        width: 3rem;
+        width: 17rem;
     }
     &:nth-of-type(6) {
-        width: 15rem;
+        width: 6rem;
     }
 `;
 
@@ -60,6 +63,7 @@ const VilkårTabell: React.FC<IProps> = ({
     vilkårResultater,
     visFeilmeldinger,
 }) => {
+    const { toggles } = useApp();
     return (
         <Tabell className={'tabell'}>
             <thead>
@@ -67,8 +71,10 @@ const VilkårTabell: React.FC<IProps> = ({
                     <TabellHeader>Vurdering</TabellHeader>
                     <TabellHeader>Periode</TabellHeader>
                     <TabellHeader>Begrunnelse</TabellHeader>
-                    <TabellHeader />
-                    <TabellHeader />
+                    <TabellHeader>
+                        {toggles[ToggleNavn.brukEøs] ? 'Vurderes etter' : ''}
+                    </TabellHeader>
+                    <TabellHeader>Vurdert av</TabellHeader>
                     <TabellHeader />
                 </tr>
             </thead>

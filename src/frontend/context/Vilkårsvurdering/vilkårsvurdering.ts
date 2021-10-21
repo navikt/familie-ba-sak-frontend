@@ -100,6 +100,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     ),
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
+                                    vurderesEtter: vilkårResultat.vurderesEtter,
                                 },
                                 validerVilkår
                             )
