@@ -70,7 +70,6 @@
     "dayjs": "^1.10.6",
     "deep-equal": "^2.0.3",
     "dotenv": "^10.0.0",
-    "ds-icons": "^1.0.1",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.4",
     "https-proxy-agent": "^5.0.0",
