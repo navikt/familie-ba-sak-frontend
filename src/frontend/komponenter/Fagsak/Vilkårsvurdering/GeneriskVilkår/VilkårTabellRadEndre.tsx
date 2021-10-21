@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -288,7 +288,10 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }}
                     >
                         {Object.entries(alleRegelverk).map(
-                            ([regelverk, tekst]: [string, string]) => {
+                            ([regelverk, { tekst }]: [
+                                string,
+                                { tekst: string; symbol: ReactNode }
+                            ]) => {
                                 return (
                                     <option
                                         key={regelverk}

@@ -5,14 +5,13 @@ import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import { AutomaticSystem, People, Settings } from '@navikt/ds-icons';
 import { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import AutomatiskVurdering from '../../../../ikoner/AutomatiskVurdering';
 import FamilieChevron from '../../../../ikoner/FamilieChevron';
-import ManuellVurdering from '../../../../ikoner/ManuellVurdering';
 import VilkårResultatIkon from '../../../../ikoner/VilkårResultatIkon';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
@@ -64,10 +63,9 @@ const FlexDiv = styled.div`
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
-`;
-
-const SpacingLeftI = styled.i`
-    padding-left: 1rem;
+    > div:nth-child(n + 2) {
+        padding-left: 0.5rem;
+    }
 `;
 
 const ToggleFormKnappTd = styled.td`
@@ -102,6 +100,10 @@ const VilkårTabellRad: React.FC<IProps> = ({
         }
     };
 
+    if (redigerbartVilkår.verdi.vurderesEtter) {
+        console.info(redigerbartVilkår.verdi.vurderesEtter);
+    }
+
     return (
         <>
             <EkspanderbarTr {...{ ekspandert: ekspandertVilkår }}>
@@ -127,17 +129,42 @@ const VilkårTabellRad: React.FC<IProps> = ({
                 </td>
                 <td>
                     {toggles[ToggleNavn.brukEøs] &&
-                        redigerbartVilkår.verdi.vurderesEtter !== null &&
-                        alleRegelverk[redigerbartVilkår.verdi.vurderesEtter]}
+                        (redigerbartVilkår.verdi.vurderesEtter ? (
+                            <FlexDiv>
+                                <div>
+                                    {alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].symbol}
+                                </div>
+                                <div>
+                                    {alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst}
+                                </div>
+                            </FlexDiv>
+                        ) : (
+                            <FlexDiv>
+                                <div>
+                                    <Settings width={24} height={24} viewBox={'0 0 24 24'} />
+                                </div>
+                                <div>Generell vurdering</div>
+                            </FlexDiv>
+                        ))}
                 </td>
                 <td>
                     <FlexDiv>
                         {vilkårResultat.verdi.erAutomatiskVurdert ? (
-                            <AutomatiskVurdering />
+                            <AutomaticSystem
+                                width={24}
+                                height={24}
+                                aria-labelledby={'Automatisk Vurdering'}
+                                viewBox={'0 0 24 24'}
+                            />
                         ) : (
-                            <ManuellVurdering />
+                            <People
+                                width={24}
+                                height={24}
+                                aria-labelledby={'ManuellVurdering'}
+                                viewBox={'0 0 24 24'}
+                            />
                         )}
-                        <SpacingLeftI>
+                        <div>
                             {åpenBehandling.status === RessursStatus.SUKSESS &&
                             vilkårResultat.verdi.erVurdert
                                 ? vilkårResultat.verdi.behandlingId ===
@@ -148,7 +175,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
                                           datoformat.DATO_FORKORTTET
                                       )}`
                                 : ''}
-                        </SpacingLeftI>
+                        </div>
                     </FlexDiv>
                 </td>
                 <ToggleFormKnappTd>
