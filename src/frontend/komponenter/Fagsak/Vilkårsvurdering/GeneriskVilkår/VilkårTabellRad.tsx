@@ -131,18 +131,14 @@ const VilkårTabellRad: React.FC<IProps> = ({
                     {toggles[ToggleNavn.brukEøs] &&
                         (redigerbartVilkår.verdi.vurderesEtter ? (
                             <FlexDiv>
-                                <div>
-                                    {alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].symbol}
-                                </div>
+                                {alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].symbol}
                                 <div>
                                     {alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst}
                                 </div>
                             </FlexDiv>
                         ) : (
                             <FlexDiv>
-                                <div>
-                                    <Settings width={24} height={24} viewBox={'0 0 24 24'} />
-                                </div>
+                                <Settings width={24} height={24} viewBox={'0 0 24 24'} />
                                 <div>Generell vurdering</div>
                             </FlexDiv>
                         ))}
