@@ -9,6 +9,7 @@ import { Flatknapp } from 'nav-frontend-knapper';
 import { Collapse, Expand } from '@navikt/ds-icons';
 
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
+import Advarsel from '../../../ikoner/Advarsel';
 import { IBehandling } from '../../../typer/behandling';
 import {
     IEndretUtbetalingAndelÅrsak,
@@ -34,6 +35,10 @@ const StyledExpandIkon = styled(Expand)`
 
 const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
     ${props => props.erÅpen && 'border-bottom: 0 !important;'}
+    display: flex;
+    svg {
+        margin-right: 1rem;
+    }
 `;
 
 const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
@@ -92,6 +97,15 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         <>
             <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
+                    {!endretUtbetalingAndel.tilknyttetAndeler && (
+                        <Advarsel
+                            heigth={20}
+                            width={20}
+                            title={
+                                'Du har endrede utbetalingsperioder. Bekreft, slett eller oppdater periodene i listen.'
+                            }
+                        />
+                    )}
                     {formaterIdent(
                         endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : '',
                         'Ikke satt'
