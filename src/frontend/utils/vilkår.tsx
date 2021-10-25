@@ -22,9 +22,3 @@ export const alleRegelverk: Record<Regelverk, { tekst: string; symbol: ReactNode
         symbol: <Globe width={24} height={24} viewBox={'0 0 24 24'} />,
     },
 };
-
-// eslint-disable-next-line
-export const isRegelverk = (input: any): input is Regelverk => input && input in Regelverk;
-
-export const maybeRegelverkTilTekst = (input: Regelverk | null): string =>
-    isRegelverk(input) ? alleRegelverk[input].tekst : 'Generell vurdering';
