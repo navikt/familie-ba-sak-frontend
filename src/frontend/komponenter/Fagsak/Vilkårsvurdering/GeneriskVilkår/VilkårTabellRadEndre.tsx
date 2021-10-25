@@ -62,7 +62,7 @@ interface IProps {
 
 const Container = styled.div`
     max-width: 30rem;
-    border-left: 1px solid ${navFarger.navBlaLighten20};
+    border-left: 0.0625rem solid ${navFarger.navBla};
     padding-left: 2rem;
     .skjemagruppe.radiogruppe {
         margin-bottom: 0 !important;
