@@ -5,7 +5,7 @@ import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import { useFelt, feil, Avhengigheter, useSkjema, ok, FeltState } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -17,7 +17,12 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
+import {
+    Behandlingstype,
+    BehandlingÅrsak,
+    IBehandling,
+    IBehandlingstema,
+} from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
 import {
     IDataForManuellJournalføring,
@@ -92,6 +97,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
         {
             journalpostTittel: string;
+            behandlingstema: IBehandlingstema | undefined;
             dokumenter: IDokumentInfo[];
             bruker: IPersonInfo | undefined;
             avsenderNavn: string;
@@ -111,6 +117,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         ? ok(felt)
                         : feil(felt, 'Journalposttittel kan ikke være tom');
                 },
+            }),
+            behandlingstema: useFelt<IBehandlingstema | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
             }),
             dokumenter: useFelt<IDokumentInfo[]>({
                 verdi: [],

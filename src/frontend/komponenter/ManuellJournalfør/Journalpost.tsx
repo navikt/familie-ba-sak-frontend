@@ -5,10 +5,11 @@ import styled from 'styled-components';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
+import { behandlingstemaer, IBehandlingstema } from '../../typer/behandling';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 
@@ -28,31 +29,56 @@ const EndreJournalpost: React.FC = () => {
     const { skjema, erLesevisning } = useManuellJournalfør();
 
     return (
-        <FamilieReactSelect
-            {...skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger)}
-            creatable={true}
-            isClearable
-            erLesevisning={erLesevisning()}
-            label={'Endre journalposttittel'}
-            placeholder={'Skriv fritekst for å endre tittel...'}
-            isMulti={false}
-            options={journalpostTittelList}
-            value={
-                skjema.felter.journalpostTittel.verdi === ''
-                    ? null
-                    : {
-                          value: skjema.felter.journalpostTittel.verdi,
-                          label: skjema.felter.journalpostTittel.verdi,
-                      }
-            }
-            onChange={value => {
-                if (value && 'value' in value) {
-                    skjema.felter.journalpostTittel.validerOgSettFelt(value.value);
-                } else {
-                    skjema.felter.journalpostTittel.nullstill();
+        <>
+            <FamilieReactSelect
+                {...skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger)}
+                creatable={true}
+                isClearable
+                erLesevisning={erLesevisning()}
+                label={'Endre journalposttittel'}
+                placeholder={'Skriv fritekst for å endre tittel...'}
+                isMulti={false}
+                options={journalpostTittelList}
+                value={
+                    skjema.felter.journalpostTittel.verdi === ''
+                        ? null
+                        : {
+                              value: skjema.felter.journalpostTittel.verdi,
+                              label: skjema.felter.journalpostTittel.verdi,
+                          }
                 }
-            }}
-        />
+                onChange={value => {
+                    if (value && 'value' in value) {
+                        skjema.felter.journalpostTittel.validerOgSettFelt(value.value);
+                    } else {
+                        skjema.felter.journalpostTittel.nullstill();
+                    }
+                }}
+            />
+            <FamilieSelect
+                value={skjema.felter.behandlingstema.verdi?.id}
+                label={'Sett behandlingstema / Gjelder'}
+                onChange={evt => {
+                    skjema.felter.behandlingstema.validerOgSettFelt(
+                        behandlingstemaer[evt.target.value]
+                    );
+                }}
+            >
+                {Object.entries(behandlingstemaer).map(
+                    ([key, behandlingstema]: [string, IBehandlingstema]) => (
+                        <option
+                            key={key}
+                            aria-selected={
+                                skjema.felter.behandlingstema.verdi?.id === behandlingstema.id
+                            }
+                            value={behandlingstema.id}
+                        >
+                            {behandlingstema.navn}
+                        </option>
+                    )
+                )}
+            </FamilieSelect>
+        </>
     );
 };
 
