@@ -15,7 +15,7 @@ interface IMockVedtaksperiode {
 const mockBegrunnelse = (begrunnelseSpesifikasjon: VedtakBegrunnelse): IRestVedtaksbegrunnelse => {
     return {
         vedtakBegrunnelseSpesifikasjon: begrunnelseSpesifikasjon,
-        vedtakBegrunnelseType: VedtakBegrunnelseType.INNVILGELSE,
+        vedtakBegrunnelseType: VedtakBegrunnelseType.INNVILGET,
         personIdenter: ['12345678910'],
     };
 };
