@@ -33,7 +33,7 @@ import {
 } from '../../../typer/behandling';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -227,7 +227,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                             ikon={<DokumentIkon />}
                             onClick={() => settVisVedtaksbrev(!visVedtaksbrev)}
                             spinner={vedtaksbrev.status === RessursStatus.HENTER}
-                            knappPosisjon={'venstre'}
+                            ikonPosisjon={IkonPosisjon.VENSTRE}
                             mini={true}
                         />
                     </Container>

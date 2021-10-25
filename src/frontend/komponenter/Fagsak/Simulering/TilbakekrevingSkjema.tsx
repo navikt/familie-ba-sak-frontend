@@ -19,7 +19,7 @@ import useForhåndsvisning from '../../../hooks/useForhåndsvisning';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import { visTilbakekrevingsvalg, Tilbakekrevingsvalg } from '../../../typer/simulering';
 import { Målform, målform } from '../../../typer/søknad';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
@@ -237,7 +237,7 @@ const TilbakekrevingSkjema: React.FC<{
                                         )
                                     }
                                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
-                                    knappPosisjon={'venstre'}
+                                    ikonPosisjon={IkonPosisjon.VENSTRE}
                                     mini={true}
                                 />
                             </ForhåndsvisVarselKnappContainer>

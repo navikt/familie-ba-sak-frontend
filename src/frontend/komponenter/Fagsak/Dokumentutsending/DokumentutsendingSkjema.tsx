@@ -16,7 +16,7 @@ import {
     useDokumentutsending,
 } from '../../../context/DokumentutsendingContext';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 
@@ -111,7 +111,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                     id={'forhandsvis-vedtaksbrev'}
                     erLesevisning={false}
                     label={'Forhåndsvis'}
-                    knappPosisjon={'venstre'}
+                    ikonPosisjon={IkonPosisjon.VENSTRE}
                     ikon={<DokumentIkon />}
                     mini={true}
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}

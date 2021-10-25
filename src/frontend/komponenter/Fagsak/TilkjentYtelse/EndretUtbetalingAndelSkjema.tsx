@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
+import variables from 'nav-frontend-core';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
@@ -35,7 +36,7 @@ import {
 import { datoformatNorsk, formaterIdent } from '../../../utils/formatter';
 import { YearMonth } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Felleskomponenter/Knapperekke';
 import MånedÅrVelger from '../../Felleskomponenter/MånedÅrInput/MånedÅrVelger';
 import {
@@ -43,7 +44,7 @@ import {
     StyledFeilmelding,
 } from '../Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
-const Knapperad = styled.div`
+const KnapperekkeVenstre = styled.div`
     display: flex;
     flex-direction: row;
 `;
@@ -51,10 +52,10 @@ const Knapperad = styled.div`
 const StyledSkjemaGruppe = styled(SkjemaGruppe)`
     margin-top: 1rem;
     margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 3.75rem;
+    padding-left: 2rem;
     margin-right: 2rem;
-    border-left: 0.0625rem solid black;
+    border-left: 0.0625rem solid ${variables.navBla};
+    max-width: 30rem;
 `;
 
 const StyledPersonvelger = styled(FamilieSelect)`
@@ -67,7 +68,7 @@ const StyledSatsvelger = styled(FamilieSelect)`
 `;
 
 const Feltmargin = styled.div`
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
 `;
 
 const StyledFerdigKnapp = styled(Knapp)`
@@ -189,16 +190,18 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
 
                 <Feltmargin>
                     <Element>Fastsett periode</Element>
-                    <MånedÅrVelger
-                        {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={<Normaltekst>F.o.m</Normaltekst>}
-                        antallÅrFrem={finnÅrFremTilStønadTom()}
-                        antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
-                        onEndret={(dato: YearMonth | undefined) =>
-                            skjema.felter.fom.validerOgSettFelt(dato)
-                        }
-                        lesevisning={erLesevisning()}
-                    />
+                    <Feltmargin>
+                        <MånedÅrVelger
+                            {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                            label={<Normaltekst>F.o.m</Normaltekst>}
+                            antallÅrFrem={finnÅrFremTilStønadTom()}
+                            antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
+                            onEndret={(dato: YearMonth | undefined) =>
+                                skjema.felter.fom.validerOgSettFelt(dato)
+                            }
+                            lesevisning={erLesevisning()}
+                        />
+                    </Feltmargin>
                     <MånedÅrVelger
                         {...skjema.felter.tom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={<Normaltekst>T.o.m</Normaltekst>}
@@ -211,31 +214,29 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     />
                 </Feltmargin>
 
-                <Feltmargin>
-                    <FamilieRadioGruppe
-                        legend={<Element>Skal perioden utbetales til søker?</Element>}
-                        erLesevisning={erLesevisning()}
-                    >
-                        <Radio
-                            label={'Ja'}
-                            name={'skal perioden utbetales til søker?'}
-                            checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
-                            onChange={() =>
-                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
-                            }
-                            id={'ja-perioden-utbetales-til-søker'}
-                        />
-                        <Radio
-                            label={'Nei'}
-                            name={'skal perioden utbetales til søker?'}
-                            checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
-                            onChange={() =>
-                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
-                            }
-                            id={'nei-perioden-skal-ikke-utbetales-til-søker'}
-                        />
-                    </FamilieRadioGruppe>
-                </Feltmargin>
+                <FamilieRadioGruppe
+                    legend={<Element>Skal perioden utbetales til søker?</Element>}
+                    erLesevisning={erLesevisning()}
+                >
+                    <Radio
+                        label={'Ja'}
+                        name={'skal perioden utbetales til søker?'}
+                        checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
+                        onChange={() =>
+                            skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
+                        }
+                        id={'ja-perioden-utbetales-til-søker'}
+                    />
+                    <Radio
+                        label={'Nei'}
+                        name={'skal perioden utbetales til søker?'}
+                        checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
+                        onChange={() =>
+                            skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
+                        }
+                        id={'nei-perioden-skal-ikke-utbetales-til-søker'}
+                    />
+                </FamilieRadioGruppe>
 
                 <Feltmargin>
                     <FamilieSelect
@@ -364,29 +365,33 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         }}
                     />
                 </Feltmargin>
-            </StyledSkjemaGruppe>
-            <Knapperekke>
-                <Knapperad>
-                    <StyledFerdigKnapp
-                        mini
-                        onClick={() => oppdaterEndretUtbetaling(avbrytEndringAvUtbetalingsperiode)}
-                    >
-                        Ferdig
-                    </StyledFerdigKnapp>
-                    <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
-                        Avbryt
-                    </Flatknapp>
-                </Knapperad>
 
-                <IkonKnapp
-                    id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
-                    erLesevisning={erLesevisning()}
-                    label="Fjern Periode"
-                    mini
-                    onClick={slettEndretUtbetaling}
-                    ikon={<Delete />}
-                />
-            </Knapperekke>
+                <Knapperekke>
+                    <KnapperekkeVenstre>
+                        <StyledFerdigKnapp
+                            mini
+                            onClick={() =>
+                                oppdaterEndretUtbetaling(avbrytEndringAvUtbetalingsperiode)
+                            }
+                        >
+                            Ferdig
+                        </StyledFerdigKnapp>
+                        <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
+                            Avbryt
+                        </Flatknapp>
+                    </KnapperekkeVenstre>
+
+                    <IkonKnapp
+                        id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
+                        erLesevisning={erLesevisning()}
+                        label="Fjern Periode"
+                        mini
+                        ikonPosisjon={IkonPosisjon.VENSTRE}
+                        onClick={slettEndretUtbetaling}
+                        ikon={<Delete />}
+                    />
+                </Knapperekke>
+            </StyledSkjemaGruppe>
         </>
     );
 };

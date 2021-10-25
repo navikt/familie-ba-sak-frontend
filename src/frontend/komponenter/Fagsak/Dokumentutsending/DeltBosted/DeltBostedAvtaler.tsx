@@ -13,7 +13,7 @@ import Slett from '../../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { datoformatNorsk } from '../../../../utils/formatter';
 import { erIsoStringGyldig } from '../../../../utils/kalender';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -124,7 +124,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                                     id={`fjern_avtale__${barn.ident}`}
                                     mini={true}
                                     ikon={<Slett />}
-                                    knappPosisjon={'venstre'}
+                                    ikonPosisjon={IkonPosisjon.VENSTRE}
                                     onClick={() => {
                                         deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt(
                                             {
@@ -163,7 +163,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                     id={`legg_til_avtale__${barn.ident}`}
                     mini={true}
                     ikon={<Pluss />}
-                    knappPosisjon={'venstre'}
+                    ikonPosisjon={IkonPosisjon.VENSTRE}
                     onClick={() =>
                         deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
                             ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,
