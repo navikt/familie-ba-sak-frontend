@@ -109,7 +109,7 @@ export enum VedtakBegrunnelse {
 }
 
 export enum VedtakBegrunnelseType {
-    INNVILGELSE = 'INNVILGELSE',
+    INNVILGET = 'INNVILGET',
     AVSLAG = 'AVSLAG',
     REDUKSJON = 'REDUKSJON',
     OPPHØR = 'OPPHØR',
@@ -117,7 +117,7 @@ export enum VedtakBegrunnelseType {
 }
 
 export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
-    INNVILGELSE: 'Innvilgelse',
+    INNVILGET: 'Innvilgelse',
     AVSLAG: 'Avslag',
     REDUKSJON: 'Reduksjon',
     OPPHØR: 'Opphør',
@@ -128,7 +128,7 @@ export const vedtaksbegrunnelsetypeTilVedtaksperiodetype = (
     vedtaksbegrunnelsetype: VedtakBegrunnelseType
 ) => {
     switch (vedtaksbegrunnelsetype) {
-        case VedtakBegrunnelseType.INNVILGELSE:
+        case VedtakBegrunnelseType.INNVILGET:
         case VedtakBegrunnelseType.REDUKSJON:
             return Vedtaksperiodetype.UTBETALING;
         case VedtakBegrunnelseType.AVSLAG:
