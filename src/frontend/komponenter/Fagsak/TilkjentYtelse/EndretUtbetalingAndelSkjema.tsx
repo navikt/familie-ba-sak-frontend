@@ -44,7 +44,7 @@ import {
     StyledFeilmelding,
 } from '../Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
-const Knapperad = styled.div`
+const KnapperekkeVenstre = styled.div`
     display: flex;
     flex-direction: row;
 `;
@@ -367,7 +367,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                 </Feltmargin>
 
                 <Knapperekke>
-                    <Knapperad>
+                    <KnapperekkeVenstre>
                         <StyledFerdigKnapp
                             mini
                             onClick={() =>
@@ -379,7 +379,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
                             Avbryt
                         </Flatknapp>
-                    </Knapperad>
+                    </KnapperekkeVenstre>
 
                     <IkonKnapp
                         id={`sletteknapp-endret-utbetaling-andel-${endretUtbetalingAndel.id}`}
