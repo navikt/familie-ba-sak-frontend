@@ -37,7 +37,7 @@ import {
     VilkårType,
 } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import DeltBostedCheckbox from './DeltBostedCheckbox';
 import MedlemskapCheckbox from './MedlemskapCheckbox';
@@ -417,7 +417,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         disabled={vilkårSubmit === VilkårSubmit.DELETE}
                         mini={true}
                         label={'Fjern'}
-                        knappPosisjon={'venstre'}
+                        ikonPosisjon={IkonPosisjon.VENSTRE}
                         ikon={<Slett />}
                     />
                 </Knapperad>

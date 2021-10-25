@@ -6,12 +6,17 @@ import KnappBase, { KnappBaseProps } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Normaltekst } from 'nav-frontend-typografi';
 
+export enum IkonPosisjon {
+    VENSTRE = 'venstre',
+    HØYRE = 'høyre',
+}
+
 interface IProps {
     className?: string;
     erLesevisning: boolean;
     id: string;
     ikon: React.ReactChild;
-    knappPosisjon?: 'venstre' | 'høyre';
+    ikonPosisjon?: IkonPosisjon;
     label: string;
     mini?: boolean;
     onClick: () => void;
@@ -23,7 +28,7 @@ const IkonKnapp: React.FC<IProps & KnappBaseProps> = ({
     erLesevisning,
     id,
     ikon,
-    knappPosisjon = 'høyre',
+    ikonPosisjon = IkonPosisjon.HØYRE,
     label,
     mini,
     onClick,
@@ -32,7 +37,7 @@ const IkonKnapp: React.FC<IProps & KnappBaseProps> = ({
 }) => {
     return !erLesevisning ? (
         <KnappBase
-            className={classNames(className, 'ikon-knapp', knappPosisjon)}
+            className={classNames(className, 'ikon-knapp', ikonPosisjon)}
             id={id}
             onClick={onClick}
             type={props.type ?? 'flat'}
@@ -40,9 +45,9 @@ const IkonKnapp: React.FC<IProps & KnappBaseProps> = ({
             kompakt={true}
             {...props}
         >
-            {knappPosisjon === 'venstre' && <IkonTilKnapp ikon={ikon} spinner={spinner} />}
+            {ikonPosisjon === 'venstre' && <IkonTilKnapp ikon={ikon} spinner={spinner} />}
             <Normaltekst>{label}</Normaltekst>
-            {knappPosisjon === 'høyre' ? <IkonTilKnapp ikon={ikon} spinner={spinner} /> : null}
+            {ikonPosisjon === 'høyre' ? <IkonTilKnapp ikon={ikon} spinner={spinner} /> : null}
         </KnappBase>
     ) : null;
 };

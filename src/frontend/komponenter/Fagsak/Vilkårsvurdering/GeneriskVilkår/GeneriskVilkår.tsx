@@ -18,7 +18,7 @@ import Pluss from '../../../../ikoner/Pluss';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import VilkårTabell from './VilkårTabell';
 
 interface IProps {
@@ -119,7 +119,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         }}
                         id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
                         ikon={<Pluss />}
-                        knappPosisjon={'venstre'}
+                        ikonPosisjon={IkonPosisjon.VENSTRE}
                         label={'Legg til periode'}
                         mini={true}
                         spinner={vilkårSubmit === VilkårSubmit.POST}
