@@ -35,6 +35,9 @@ const StyledExpandIkon = styled(Expand)`
 
 const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
     ${props => props.erÅpen && 'border-bottom: 0 !important;'}
+`;
+
+const PersonCelle = styled.div`
     display: flex;
     svg {
         margin-right: 1rem;
@@ -97,19 +100,23 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         <>
             <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    {!endretUtbetalingAndel.tilknyttetAndeler && (
-                        <Advarsel
-                            heigth={20}
-                            width={20}
-                            title={
-                                'Du har endrede utbetalingsperioder. Bekreft, slett eller oppdater periodene i listen.'
-                            }
-                        />
-                    )}
-                    {formaterIdent(
-                        endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : '',
-                        'Ikke satt'
-                    )}
+                    <PersonCelle>
+                        {!endretUtbetalingAndel.tilknyttetAndeler && (
+                            <Advarsel
+                                heigth={20}
+                                width={20}
+                                title={
+                                    'Du har endrede utbetalingsperioder. Bekreft, slett eller oppdater periodene i listen.'
+                                }
+                            />
+                        )}
+                        {formaterIdent(
+                            endretUtbetalingAndel.personIdent
+                                ? endretUtbetalingAndel.personIdent
+                                : '',
+                            'Ikke satt'
+                        )}
+                    </PersonCelle>
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {endretUtbetalingAndel.fom
