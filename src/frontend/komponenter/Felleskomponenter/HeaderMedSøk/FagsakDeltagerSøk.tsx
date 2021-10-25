@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 
 import { useHistory } from 'react-router';
 
-import { ikoner, Søk, ISøkeresultat } from '@navikt/familie-header';
+import { ikoner, Søk } from '@navikt/familie-header';
+import type { ISøkeresultat } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,

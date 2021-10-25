@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { ISøkeresultat } from '@navikt/familie-header';
+import type { ISøkeresultat } from '@navikt/familie-header';
 
 import { useApp } from '../../../context/AppContext';
 import { formaterIdent } from '../../../utils/formatter';

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Element, Undertekst, Undertittel } from 'nav-frontend-typografi';
+import { Element, Undertittel } from 'nav-frontend-typografi';
 
 import { FeltState } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -18,7 +18,7 @@ import Pluss from '../../../../ikoner/Pluss';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import VilkårTabell from './VilkårTabell';
 
 interface IProps {
@@ -100,7 +100,6 @@ const GeneriskVilkår: React.FC<IProps> = ({
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
                 <VilkårTittel tag={'h4'}>
                     <Element children={vilkårFraConfig.tittel} />
-                    <Undertekst children={vilkårFraConfig.lovreferanse} />
                 </VilkårTittel>
                 <VilkårTabell
                     person={person}
@@ -120,7 +119,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         }}
                         id={`${person.personIdent}__legg-til-periode__${vilkårFraConfig.key}`}
                         ikon={<Pluss />}
-                        knappPosisjon={'venstre'}
+                        ikonPosisjon={IkonPosisjon.VENSTRE}
                         label={'Legg til periode'}
                         mini={true}
                         spinner={vilkårSubmit === VilkårSubmit.POST}

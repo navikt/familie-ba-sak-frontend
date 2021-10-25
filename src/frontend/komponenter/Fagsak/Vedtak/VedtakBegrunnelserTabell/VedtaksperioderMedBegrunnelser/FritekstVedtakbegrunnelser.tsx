@@ -20,7 +20,7 @@ import Slett from '../../../../../ikoner/Slett';
 import { målform } from '../../../../../typer/søknad';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Hjelpetekst44px from '../../../../Felleskomponenter/Hjelpetekst44px';
-import IkonKnapp from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
 import {
@@ -222,7 +222,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
                             onClick={leggTilFritekst}
                             id={`legg-til-fritekst`}
                             ikon={<Pluss />}
-                            knappPosisjon={'venstre'}
+                            ikonPosisjon={IkonPosisjon.VENSTRE}
                             label={'Legg til fritekst'}
                             mini={true}
                         />
@@ -260,7 +260,7 @@ const FritekstVedtakbegrunnelser: React.FC = () => {
             onClick={leggTilFritekst}
             id={`legg-til-fritekst`}
             ikon={<Pluss />}
-            knappPosisjon={'venstre'}
+            ikonPosisjon={IkonPosisjon.VENSTRE}
             label={'Legg til fritekst'}
             mini={true}
         />

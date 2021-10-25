@@ -27,7 +27,7 @@ import { IBarnMedOpplysninger } from '../../typer/søknad';
 import { FamilieIsoDate } from '../../utils/kalender';
 import { identValidator } from '../../utils/validators';
 import LeggTilUregistrertBarn from '../Fagsak/Søknad/LeggTilUregistrertBarn';
-import IkonKnapp from './IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from './IkonKnapp/IkonKnapp';
 import UIModalWrapper from './Modal/UIModalWrapper';
 
 const LeggTilBarnKnapp = styled(IkonKnapp)`
@@ -241,7 +241,7 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                 }}
                 ikon={<Pluss />}
                 label={'Legg til barn'}
-                knappPosisjon={'venstre'}
+                ikonPosisjon={IkonPosisjon.VENSTRE}
             />
 
             <StyledUIModalWrapper

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { CheckboxGruppe, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { Delete } from '@navikt/ds-icons';
 import {
     FamilieKnapp,
     FamilieRadioGruppe,
@@ -22,7 +23,6 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import Slett from '../../../../ikoner/Slett';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
@@ -37,7 +37,7 @@ import {
     VilkårType,
 } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import DeltBostedCheckbox from './DeltBostedCheckbox';
 import MedlemskapCheckbox from './MedlemskapCheckbox';
@@ -62,7 +62,7 @@ interface IProps {
 
 const Container = styled.div`
     max-width: 30rem;
-    border-left: 1px solid ${navFarger.navBlaLighten20};
+    border-left: 0.0625rem solid ${navFarger.navBla};
     padding-left: 2rem;
     .skjemagruppe.radiogruppe {
         margin-bottom: 0 !important;
@@ -422,8 +422,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         disabled={vilkårSubmit === VilkårSubmit.DELETE}
                         mini={true}
                         label={'Fjern'}
-                        knappPosisjon={'venstre'}
-                        ikon={<Slett />}
+                        ikonPosisjon={IkonPosisjon.VENSTRE}
+                        ikon={<Delete />}
                     />
                 </Knapperad>
             </Container>
