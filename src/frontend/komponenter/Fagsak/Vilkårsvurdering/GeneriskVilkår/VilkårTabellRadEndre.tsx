@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { CheckboxGruppe, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
+import { Delete } from '@navikt/ds-icons';
 import {
     FamilieKnapp,
     FamilieRadioGruppe,
@@ -22,7 +23,6 @@ import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import Slett from '../../../../ikoner/Slett';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IFagsak } from '../../../../typer/fagsak';
 import { IGrunnlagPerson } from '../../../../typer/person';
@@ -418,7 +418,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         mini={true}
                         label={'Fjern'}
                         ikonPosisjon={IkonPosisjon.VENSTRE}
-                        ikon={<Slett />}
+                        ikon={<Delete />}
                     />
                 </Knapperad>
             </Container>
