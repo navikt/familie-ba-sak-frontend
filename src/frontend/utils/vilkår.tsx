@@ -26,5 +26,5 @@ export const alleRegelverk: Record<Regelverk, { tekst: string; symbol: ReactNode
 // eslint-disable-next-line
 export const isRegelverk = (input: any): input is Regelverk => input && input in Regelverk;
 
-export const maybeRegelverkTilTekst = (input: Regelverk | null): string | undefined =>
-    isRegelverk(input) ? alleRegelverk[input].tekst : undefined;
+export const maybeRegelverkTilTekst = (input: Regelverk | null): string =>
+    isRegelverk(input) ? alleRegelverk[input].tekst : 'Generell vurdering';
