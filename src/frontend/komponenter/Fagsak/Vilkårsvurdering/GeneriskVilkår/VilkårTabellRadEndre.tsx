@@ -36,7 +36,7 @@ import {
     resultater,
     VilkårType,
 } from '../../../../typer/vilkår';
-import { alleRegelverk } from '../../../../utils/vilkår';
+import { alleRegelverk, maybeRegelverkTilTekst } from '../../../../utils/vilkår';
 import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
 import DeltBostedCheckbox from './DeltBostedCheckbox';
@@ -275,6 +275,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 {toggles[ToggleNavn.brukEøs] && redigerbartVilkår.verdi.vurderesEtter !== null && (
                     <FamilieSelect
                         erLesevisning={erLesevisning()}
+                        lesevisningVerdi={maybeRegelverkTilTekst(
+                            redigerbartVilkår.verdi.vurderesEtter
+                        )}
                         value={redigerbartVilkår.verdi.vurderesEtter}
                         label={'Vurderes etter'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
