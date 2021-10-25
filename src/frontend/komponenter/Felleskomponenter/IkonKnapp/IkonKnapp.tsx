@@ -45,9 +45,13 @@ const IkonKnapp: React.FC<IProps & KnappBaseProps> = ({
             kompakt={true}
             {...props}
         >
-            {ikonPosisjon === 'venstre' && <IkonTilKnapp ikon={ikon} spinner={spinner} />}
+            {ikonPosisjon === IkonPosisjon.VENSTRE && (
+                <IkonTilKnapp ikon={ikon} spinner={spinner} />
+            )}
             <Normaltekst>{label}</Normaltekst>
-            {ikonPosisjon === 'høyre' ? <IkonTilKnapp ikon={ikon} spinner={spinner} /> : null}
+            {ikonPosisjon === IkonPosisjon.HØYRE ? (
+                <IkonTilKnapp ikon={ikon} spinner={spinner} />
+            ) : null}
         </KnappBase>
     ) : null;
 };
