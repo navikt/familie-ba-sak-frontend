@@ -5,11 +5,9 @@ import { FeltState, useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import generator from '../../testverktøy/fnr/fnr-generator';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
-import { VedtakBegrunnelse } from '../../typer/vedtak';
 import { Resultat } from '../../typer/vilkår';
 import { IPeriode, nyPeriode } from '../kalender';
 import {
-    erAvslagBegrunnelserGyldig,
     erBegrunnelseGyldig,
     erPeriodeGyldig,
     erResultatGyldig,
@@ -242,26 +240,5 @@ describe('utils/validators', () => {
 
         act(() => result.current.onChange(Resultat.OPPFYLT));
         expect(result.current.valider(result.current).valideringsstatus).toBe(Valideringsstatus.OK);
-    });
-
-    test('Validering av avslagsbegrunnelser', () => {
-        const { result } = renderHook(() =>
-            useFelt({
-                verdi: [],
-                valideringsfunksjon: erAvslagBegrunnelserGyldig,
-            })
-        );
-
-        const validertTomListe = result.current.valider(result.current, {
-            erEksplisittAvslagPåSøknad: true,
-        });
-        expect(validertTomListe.valideringsstatus).toBe(Valideringsstatus.FEIL);
-        expect(validertTomListe.feilmelding).toBe('Du må velge minst en begrunnelse ved avslag');
-
-        act(() => result.current.onChange([VedtakBegrunnelse.AVSLAG_BOSATT_I_RIKET]));
-        expect(
-            result.current.valider(result.current, { erEksplisittAvslagPåSøknad: true })
-                .valideringsstatus
-        ).toBe(Valideringsstatus.OK);
     });
 });
