@@ -1,10 +1,11 @@
+import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { IBehandling } from '../typer/behandling';
-import { fagsakStatus, IFagsak } from '../typer/fagsak';
+import { fagsakStatus, IFagsak, IMinimalFagsak } from '../typer/fagsak';
 import { IVedtakForBehandling } from '../typer/vedtak';
 import { kalenderDiff } from './kalender';
 
-export const hentFagsakStatusVisning = (fagsak: IFagsak): string =>
-    fagsak.underBehandling ? 'Under behandling' : fagsakStatus[fagsak.status].navn;
+export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =>
+    minimalFagsak.underBehandling ? 'Under behandling' : fagsakStatus[minimalFagsak.status].navn;
 
 export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
     if (fagsak.behandlinger.length === 0) {
@@ -18,6 +19,12 @@ export const hentSisteBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | und
 
 export const hentAktivBehandlingPåFagsak = (fagsak: IFagsak): IBehandling | undefined => {
     return fagsak.behandlinger.find((behandling: IBehandling) => behandling.aktiv);
+};
+
+export const hentAktivBehandlingPåMinimalFagsak = (
+    minimalFagsak: IMinimalFagsak
+): VisningBehandling | undefined => {
+    return minimalFagsak.behandlinger.find((behandling: VisningBehandling) => behandling.aktiv);
 };
 
 export const hentBehandlingPåFagsak = (

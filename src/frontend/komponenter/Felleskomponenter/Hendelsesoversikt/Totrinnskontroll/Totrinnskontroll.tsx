@@ -31,7 +31,7 @@ import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 
 interface IProps {
     åpenBehandling: IBehandling;
-    fagsak: IFagsak;
+    fagsak?: IFagsak;
 }
 
 const Container = styled.div`
@@ -122,7 +122,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                         return side.navn;
                     }),
                 },
-                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/iverksett-vedtak`,
+                url: `/familie-ba-sak/api/fagsaker/${fagsak?.id}/iverksett-vedtak`,
             })
                 .then((response: Ressurs<IFagsak>) => {
                     settInnsendtVedtak(response);
@@ -160,7 +160,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                                 mini={true}
                                 onClick={() => {
                                     settModalVerdi(initiellModalVerdi);
-                                    history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                    history.push(`/fagsak/${fagsak?.id}/saksoversikt`);
                                 }}
                                 children={'Gå til saksoversikten'}
                             />,

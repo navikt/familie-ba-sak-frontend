@@ -1,23 +1,22 @@
 import * as React from 'react';
 
-import { hentDataFraRessursMedFallback, RessursStatus } from '@navikt/familie-typer';
+import {
+    hentDataFraRessurs,
+    hentDataFraRessursMedFallback,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../context/FagsakContext';
-import { IFagsak } from '../../../typer/fagsak';
 import { ILogg } from '../../../typer/logg';
 import { formaterIsoDato, datoformat } from '../../../utils/formatter';
 import Hendelsesoversikt from '../../Felleskomponenter/Hendelsesoversikt/Hendelsesoversikt';
 import { Hendelse } from '../../Felleskomponenter/Hendelsesoversikt/typer';
 import Behandlingskort from '../Behandlingskort/Behandlingskort';
 
-interface IProps {
-    fagsak: IFagsak;
-}
-
-const Høyremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
+const Høyremeny: React.FunctionComponent = () => {
     const { åpenBehandling } = useBehandling();
-    const { logg, hentLogg } = useFagsakRessurser();
+    const { fagsak, logg, hentLogg } = useFagsakRessurser();
 
     React.useEffect(() => {
         if (åpenBehandling && åpenBehandling.status === RessursStatus.SUKSESS) {
@@ -27,7 +26,10 @@ const Høyremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     return åpenBehandling.status === RessursStatus.SUKSESS ? (
         <div className={'høyremeny'}>
-            <Behandlingskort fagsak={fagsak} åpenBehandling={åpenBehandling.data} />
+            <Behandlingskort
+                fagsak={hentDataFraRessurs(fagsak)}
+                åpenBehandling={åpenBehandling.data}
+            />
             <Hendelsesoversikt
                 hendelser={hentDataFraRessursMedFallback(logg, []).map(
                     (loggElement: ILogg): Hendelse => {
@@ -44,7 +46,7 @@ const Høyremeny: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         };
                     }
                 )}
-                fagsak={fagsak}
+                fagsak={hentDataFraRessurs(fagsak)}
                 åpenBehandling={åpenBehandling.data}
             />
         </div>

@@ -17,8 +17,9 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
-import { IFagsak } from '../typer/fagsak';
+import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import { IMinimalFagsak } from '../typer/fagsak';
 import {
     IDataForManuellJournalføring,
     IRestJournalføring,
@@ -26,7 +27,7 @@ import {
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
-import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
+import { hentAktivBehandlingPåMinimalFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
@@ -40,7 +41,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
     const [dokumentData, settDokumentData] = React.useState(byggTomRessurs<string>());
 
-    const [fagsak, settFagsak] = useState<IFagsak | undefined>(undefined);
+    const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
     const [dataForManuellJournalføring, settDataForManuellJournalføring] = React.useState(
         byggTomRessurs<IDataForManuellJournalføring>()
     );
@@ -170,8 +171,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
             skjema.felter.bruker.validerOgSettFelt(dataForManuellJournalføring.data.person);
 
-            if (dataForManuellJournalføring.data.fagsak) {
-                settFagsak(dataForManuellJournalføring.data.fagsak);
+            if (dataForManuellJournalføring.data.minimalFagsak) {
+                settMinimalFagsak(dataForManuellJournalføring.data.minimalFagsak);
             }
         }
     }, [dataForManuellJournalføring]);
@@ -212,7 +213,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         const restFagsak = await hentFagsakForPerson(hentetPerson.data.personIdent);
         if (restFagsak.status === RessursStatus.SUKSESS) {
             skjema.felter.bruker.validerOgSettFelt(hentetPerson.data);
-            settFagsak(restFagsak.data);
+            settMinimalFagsak(restFagsak.data);
             return '';
         } else {
             return 'Ukjent feil ved henting av fagsak.';
@@ -294,21 +295,23 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         }
     };
 
-    const hentAktivBehandlingForJournalføring = (): IBehandling | undefined => {
+    const hentAktivBehandlingForJournalføring = (): VisningBehandling | undefined => {
         let aktivBehandling = undefined;
         if (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.data.fagsak
+            dataForManuellJournalføring.data.minimalFagsak
         ) {
-            aktivBehandling = hentAktivBehandlingPåFagsak(dataForManuellJournalføring.data.fagsak);
+            aktivBehandling = hentAktivBehandlingPåMinimalFagsak(
+                dataForManuellJournalføring.data.minimalFagsak
+            );
         }
         return aktivBehandling;
     };
 
     const hentSorterteBehandlinger = () => {
         return dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-            dataForManuellJournalføring.data.fagsak?.behandlinger.length
-            ? dataForManuellJournalføring.data.fagsak.behandlinger.sort((a, b) =>
+            dataForManuellJournalføring.data.minimalFagsak?.behandlinger.length
+            ? dataForManuellJournalføring.data.minimalFagsak.behandlinger.sort((a, b) =>
                   kalenderDiff(new Date(b.opprettetTidspunkt), new Date(a.opprettetTidspunkt))
               )
             : [];
@@ -434,7 +437,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         dokumentData,
         endreBruker,
         erLesevisning,
-        fagsak,
+        minimalFagsak,
         hentAktivBehandlingForJournalføring,
         hentFeilTilOppsummering,
         hentSorterteBehandlinger,

@@ -25,18 +25,13 @@ export enum TilbakekrevingsbehandlingResultat {
     HENLAGT = 'HENLAGT',
 }
 
-interface IVedtakForTilbakekreving {
-    aktiv: boolean;
-    vedtaksdato: string;
-}
-
 export interface ITilbakekrevingsbehandling {
     aktiv: boolean;
     behandlingId: string;
-    type: Tilbakekrevingsbehandlingstype;
     opprettetTidspunkt: string;
     resultat?: TilbakekrevingsbehandlingResultat;
     status: BehandlingStatus;
+    type: Tilbakekrevingsbehandlingstype;
+    vedtaksdato: string;
     årsak?: TilbakekrevingsbehandlingÅrsak;
-    vedtakForBehandling: IVedtakForTilbakekreving[];
 }

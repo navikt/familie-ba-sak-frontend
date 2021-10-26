@@ -14,13 +14,13 @@ import {
     BehandlingÅrsak,
     IBehandling,
 } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
+import { IFagsak, IMinimalFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 
 const useOpprettBehandling = (
     lukkModal: () => void,
-    fagsak: IFagsak,
+    minimalFagsak: IMinimalFagsak,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
     const { innloggetSaksbehandler } = useApp();
@@ -88,7 +88,7 @@ const useOpprettBehandling = (
                 onSubmit(
                     {
                         method: 'GET',
-                        url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/opprett-tilbakekreving`,
+                        url: `/familie-ba-sak/api/fagsaker/${minimalFagsak.id}/opprett-tilbakekreving`,
                     },
                     response => {
                         if (response.status === RessursStatus.SUKSESS) {

@@ -18,9 +18,9 @@ import {
     kategorier,
     underkategorier,
 } from '../../../typer/behandling';
-import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
+import { FagsakStatus, IMinimalFagsak } from '../../../typer/fagsak';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import {
     førsteDagIInneværendeMåned,
@@ -36,9 +36,10 @@ import { useInfotrygdRequest } from '../../Infotrygd/useInfotrygd';
 import Behandlinger from './Behandlinger';
 import FagsakLenkepanel from './FagsakLenkepanel';
 import Utbetalinger from './Utbetalinger';
+import { VisningBehandling } from './visningBehandling';
 
 interface IProps {
-    fagsak: IFagsak;
+    minimalFagsak: IMinimalFagsak;
 }
 
 enum Tabvalg {
@@ -59,19 +60,19 @@ const StyledTabs = styled(Tabs)`
     margin-bottom: 1rem;
 `;
 
-const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
+const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
 
     const { bestemÅpenBehandling } = useBehandling();
 
     React.useEffect(() => {
         bestemÅpenBehandling(undefined);
-    }, [fagsak.status]);
+    }, [minimalFagsak.status]);
 
     const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
 
-    const iverksatteBehandlinger = fagsak.behandlinger.filter(
-        (behandling: IBehandling) =>
+    const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
+        (behandling: VisningBehandling) =>
             behandling.status === BehandlingStatus.AVSLUTTET &&
             behandling.resultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
             behandling.resultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET &&
@@ -85,13 +86,13 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
               )[0]
             : undefined;
 
-    const aktivBehandling = hentAktivBehandlingPåFagsak(fagsak);
+    const aktivBehandling = hentAktivBehandlingPåMinimalFagsak(minimalFagsak);
 
     if (!gjeldendeBehandling) {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const gjeldendeUtbetalingsperioder = fagsak.gjeldendeUtbetalingsperioder;
+    const gjeldendeUtbetalingsperioder = minimalFagsak.gjeldendeUtbetalingsperioder;
     const utbetalingsperiodeInneværendeMåned = gjeldendeUtbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
@@ -107,7 +108,9 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
 
     const lenkeTilBehandlingsresultat = () => {
         return aktivBehandling ? (
-            <Lenke href={`/fagsak/${fagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}>
+            <Lenke
+                href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
+            >
                 Se behandlingsresultat for detaljer
             </Lenke>
         ) : null;
@@ -185,20 +188,20 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
                         settTabvalg(Tabvalg.BASAK);
                     } else {
                         settTabvalg(Tabvalg.INFOTRYGD);
-                        hentInfotrygdsaker(fagsak.søkerFødselsnummer);
+                        hentInfotrygdsaker(minimalFagsak.søkerFødselsnummer);
                     }
                 }}
             />
             {tabvalg === Tabvalg.BASAK ? (
                 <>
-                    <FagsakLenkepanel fagsak={fagsak} />
-                    {fagsak.status === FagsakStatus.LØPENDE && (
+                    <FagsakLenkepanel minimalFagsak={minimalFagsak} />
+                    {minimalFagsak.status === FagsakStatus.LØPENDE && (
                         <>
                             <Systemtittel>Løpende månedlig utbetaling</Systemtittel>
                             {løpendeMånedligUtbetaling()}
                         </>
                     )}
-                    <Behandlinger fagsak={fagsak} />
+                    <Behandlinger minimalFagsak={minimalFagsak} />
                 </>
             ) : (
                 visTabell()
@@ -206,6 +209,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ fagsak }) => {
         </div>
     );
 };
+
 export const sakstype = (behandling?: IBehandling) => {
     if (!behandling) {
         return 'Ikke satt';

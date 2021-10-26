@@ -12,11 +12,12 @@ import {
     behandlingsstatuser,
     BehandlingStatus,
     behandlingstyper,
+    BehandlingÅrsak,
     behandlingÅrsak,
-    IBehandling,
 } from '../../typer/behandling';
-import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
+import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
+import { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 
 const KnyttDiv = styled.div`
@@ -38,9 +39,10 @@ const GenerellSakInfoStripeTittel = styled.div`
     font-weight: bold;
 `;
 export const KnyttJournalpostTilBehandling: React.FC = () => {
-    const { skjema, fagsak, hentSorterteBehandlinger, erLesevisning } = useManuellJournalfør();
-    const åpenBehandling: IBehandling | undefined = fagsak
-        ? hentAktivBehandlingPåFagsak(fagsak)
+    const { skjema, minimalFagsak, hentSorterteBehandlinger, erLesevisning } =
+        useManuellJournalfør();
+    const åpenBehandling: VisningBehandling | undefined = minimalFagsak
+        ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
 
     const visGenerellSakInfoStripe =
@@ -48,7 +50,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
         !skjema.felter.knyttTilNyBehandling.verdi;
     return (
         <KnyttDiv>
-            {!!fagsak?.behandlinger.length && (
+            {!!minimalFagsak?.behandlinger.length && (
                 <>
                     <Undertittel>Knytt til tidligere behandling(er)</Undertittel>
                     <table className="tabell">
@@ -62,18 +64,18 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody className="tabell__body">
-                            {hentSorterteBehandlinger().map((behandling: IBehandling) => (
+                            {hentSorterteBehandlinger().map((behandling: VisningBehandling) => (
                                 <tr
                                     key={behandling.behandlingId}
                                     className={
                                         skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                            behandling.behandlingId
+                                            behandling.behandlingId as number
                                         )
                                             ? 'tabell__tr--valgt'
                                             : ''
                                     }
                                     aria-selected={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                        behandling.behandlingId
+                                        behandling.behandlingId as number
                                     )}
                                 >
                                     <KnyttTilBehandlingTd>
@@ -82,19 +84,21 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             erLesevisning={erLesevisning()}
                                             label={'-'}
                                             checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                behandling.behandlingId
+                                                behandling.behandlingId as number
                                             )}
                                             onChange={() => {
                                                 skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
                                                     [
                                                         ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
-                                                            it => it !== behandling.behandlingId
+                                                            it =>
+                                                                it !==
+                                                                (behandling.behandlingId as number)
                                                         ),
                                                         ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                            behandling.behandlingId
+                                                            behandling.behandlingId as number
                                                         )
                                                             ? []
-                                                            : [behandling.behandlingId]),
+                                                            : [behandling.behandlingId as number]),
                                                     ]
                                                 );
                                             }}
@@ -106,7 +110,7 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                                             datoformat.DATO_FORKORTTET
                                         )}
                                     </td>
-                                    <td>{behandlingÅrsak[behandling.årsak]}</td>
+                                    <td>{behandlingÅrsak[behandling.årsak as BehandlingÅrsak]}</td>
                                     <BehandlingstypeTd>
                                         {behandlingstyper[behandling.type].navn}
                                     </BehandlingstypeTd>

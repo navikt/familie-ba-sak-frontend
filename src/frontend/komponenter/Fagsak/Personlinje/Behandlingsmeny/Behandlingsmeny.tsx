@@ -11,7 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
-import { IFagsak } from '../../../../typer/fagsak';
+import { IMinimalFagsak } from '../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandling from './EndreBehandling/EndreBehandling';
@@ -20,10 +20,10 @@ import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBeh
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 
 interface IProps {
-    fagsak: IFagsak;
+    minimalFagsak: IMinimalFagsak;
 }
 
-const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
+const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
     const { toggles } = useApp();
     const { åpenBehandling, erLesevisning } = useBehandling();
     const history = useHistory();
@@ -76,14 +76,14 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                     <li>
                         <OpprettBehandling
                             onListElementClick={() => settAnker(undefined)}
-                            fagsak={fagsak}
+                            minimalFagsak={minimalFagsak}
                         />
                     </li>
                     {åpenBehandling.status === RessursStatus.SUKSESS && (
                         <li>
                             <HenleggBehandling
                                 onListElementClick={() => settAnker(undefined)}
-                                fagsak={fagsak}
+                                minimalFagsak={minimalFagsak}
                                 behandling={åpenBehandling.data}
                             />
                         </li>
@@ -107,7 +107,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ fagsak }) => {
                             <KnappBase
                                 mini={true}
                                 onClick={() => {
-                                    history.push(`/fagsak/${fagsak.id}/dokumentutsending`);
+                                    history.push(`/fagsak/${minimalFagsak.id}/dokumentutsending`);
                                     settAnker(undefined);
                                 }}
                             >

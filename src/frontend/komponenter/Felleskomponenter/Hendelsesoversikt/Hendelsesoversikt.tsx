@@ -15,7 +15,7 @@ import { Hendelse, Tabs } from './typer';
 export interface IHendelsesoversiktProps {
     className?: string;
     hendelser: Hendelse[];
-    fagsak: IFagsak;
+    fagsak?: IFagsak;
     åpenBehandling: IBehandling;
 }
 

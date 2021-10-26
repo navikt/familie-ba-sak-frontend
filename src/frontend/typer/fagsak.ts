@@ -1,3 +1,4 @@
+import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { IBehandling } from './behandling';
 import { INøkkelPar } from './common';
 import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
@@ -20,6 +21,17 @@ export interface IFagsak {
     søkerFødselsnummer: string;
     underBehandling: boolean;
     tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[];
+    gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
+}
+
+export interface IMinimalFagsak {
+    opprettetTidspunkt: string;
+    id: number;
+    søkerFødselsnummer: string;
+    status: FagsakStatus;
+    underBehandling: boolean;
+    behandlinger: VisningBehandling[];
+    tilbakekrevingsbehandlinger: VisningBehandling[];
     gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 

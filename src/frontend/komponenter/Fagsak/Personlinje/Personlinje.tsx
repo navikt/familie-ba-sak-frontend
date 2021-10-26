@@ -7,7 +7,7 @@ import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
 import { useApp } from '../../../context/AppContext';
-import { IFagsak } from '../../../typer/fagsak';
+import { IMinimalFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentFagsakStatusVisning } from '../../../utils/fagsak';
@@ -16,10 +16,10 @@ import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
 interface IProps {
     bruker?: IPersonInfo;
-    fagsak?: IFagsak;
+    minimalFagsak?: IMinimalFagsak;
 }
 
-const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
+const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { harInnloggetSaksbehandlerSkrivetilgang, toggles } = useApp();
     return (
         <Visittkort
@@ -31,30 +31,30 @@ const Personlinje: React.FC<IProps> = ({ bruker, fagsak }) => {
             <div className="visittkort__pipe">|</div>
             <Normaltekst>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</Normaltekst>
             <div style={{ flex: 1 }}></div>
-            {fagsak !== undefined && (
+            {minimalFagsak !== undefined && (
                 <>
                     <Normaltekst children={'Status på sak '} />
                     <Element
                         className={'visittkort__status'}
-                        children={hentFagsakStatusVisning(fagsak)}
+                        children={hentFagsakStatusVisning(minimalFagsak)}
                     />
                     <Lenke
                         className={'visittkort__lenke'}
-                        href={`/fagsak/${fagsak.id}/saksoversikt`}
+                        href={`/fagsak/${minimalFagsak.id}/saksoversikt`}
                     >
                         <Normaltekst>Saksoversikt</Normaltekst>
                     </Lenke>
                     {toggles[ToggleNavn.journalpostliste] && (
                         <Lenke
                             className={'visittkort__lenke'}
-                            href={`/fagsak/${fagsak.id}/dokumenter`}
+                            href={`/fagsak/${minimalFagsak.id}/dokumenter`}
                         >
                             <Normaltekst>Dokumenter</Normaltekst>
                         </Lenke>
                     )}
 
                     {harInnloggetSaksbehandlerSkrivetilgang() && (
-                        <Behandlingsmeny fagsak={fagsak} />
+                        <Behandlingsmeny minimalFagsak={minimalFagsak} />
                     )}
                 </>
             )}
