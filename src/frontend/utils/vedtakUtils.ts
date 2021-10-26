@@ -104,7 +104,7 @@ export const finnVedtakBegrunnelseVilkår = (
 
 export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
-        case VedtakBegrunnelseType.INNVILGELSE:
+        case VedtakBegrunnelseType.INNVILGET:
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
             return navFarger.navGronnLighten80;
         case VedtakBegrunnelseType.AVSLAG:
@@ -120,7 +120,7 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
 
 export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {
     switch (vedtakBegrunnelseType) {
-        case VedtakBegrunnelseType.INNVILGELSE:
+        case VedtakBegrunnelseType.INNVILGET:
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
             return navFarger.navGronn;
         case VedtakBegrunnelseType.AVSLAG:
