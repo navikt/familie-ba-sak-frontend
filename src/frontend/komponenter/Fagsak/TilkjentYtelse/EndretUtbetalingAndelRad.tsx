@@ -101,7 +101,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <PersonCelle>
-                        {!endretUtbetalingAndel.tilknyttetAndeler && (
+                        {!endretUtbetalingAndel.erTilknyttetAndeler && (
                             <Advarsel
                                 heigth={20}
                                 width={20}
