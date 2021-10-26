@@ -4,9 +4,15 @@ interface IAdvarsel {
     className?: string;
     heigth?: number;
     width?: number;
+    title?: string;
 }
 
-const Advarsel: React.FunctionComponent<IAdvarsel> = ({ className, heigth, width }) => {
+const Advarsel: React.FunctionComponent<IAdvarsel> = ({
+    className,
+    heigth,
+    width,
+    title = 'Advarsel ikon',
+}) => {
     return (
         <svg
             aria-labelledby={'advarsel'}
@@ -16,7 +22,7 @@ const Advarsel: React.FunctionComponent<IAdvarsel> = ({ className, heigth, width
             viewBox="0 0 24 25"
             xmlns="http://www.w3.org/2000/svg"
         >
-            <title id={'advarsel'}>Advarsel ikon</title>
+            <title id={'advarsel'}>{title}</title>
             <path
                 d="M12.2047 0.996094L11.9908 0.99818C8.77684 1.05452 5.75173 2.35342 3.47376 4.65598C1.1791 6.97523 -0.0532777 10.0112 0.0020279 13.2058C0.116813 19.8172 5.2978 24.9961 11.7967 24.9961L12.0086 24.994C18.735 24.8782 24.1142 19.4009 23.9984 12.7874C23.8836 6.17606 18.7026 0.996094 12.2047 0.996094Z"
                 fill="#FFA733"
