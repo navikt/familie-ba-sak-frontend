@@ -56,16 +56,31 @@ const EndreJournalpost: React.FC = () => {
                 }}
             />
             <FamilieSelect
-                value={skjema.felter.behandlingstema.verdi?.id}
+                {...skjema.felter.behandlingstema.hentNavInputProps(skjema.visFeilmeldinger)}
+                value={
+                    skjema.felter.behandlingstema.verdi
+                        ? skjema.felter.behandlingstema.verdi.id
+                        : ''
+                }
                 label={'Sett behandlingstema / Gjelder'}
                 onChange={evt => {
-                    skjema.felter.behandlingstema.validerOgSettFelt(
-                        behandlingstemaer[evt.target.value]
-                    );
+                    if (evt.target.value !== '') {
+                        skjema.felter.behandlingstema.validerOgSettFelt(
+                            behandlingstemaer[evt.target.value]
+                        );
+                    }
                 }}
                 erLesevisning={erLesevisning()}
                 lesevisningVerdi={skjema.felter.behandlingstema.verdi?.navn}
             >
+                <option
+                    disabled
+                    key={'behandlingstema-select-disabled'}
+                    value={''}
+                    aria-selected={skjema.felter.behandlingstema.verdi === undefined}
+                >
+                    Velg behandlingstema
+                </option>
                 {Object.entries(behandlingstemaer).map(
                     ([key, behandlingstema]: [string, IBehandlingstema]) => (
                         <option

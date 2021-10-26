@@ -18,6 +18,7 @@ import {
 } from '@navikt/familie-typer';
 
 import {
+    behandlingstemaer,
     Behandlingstype,
     BehandlingÅrsak,
     IBehandling,
@@ -29,12 +30,29 @@ import {
     IRestJournalføring,
     JournalpostKanal,
 } from '../typer/manuell-journalføring';
+import { BehandlingstypeFilter, GjelderFilter, IOppgave } from '../typer/oppgave';
 import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
+
+const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingstema | undefined => {
+    const { behandlingstema, behandlingstype } = oppgave;
+
+    const erOrdinær = behandlingstema === GjelderFilter.ab0180;
+    const erUtvidet = behandlingstema === GjelderFilter.ab0096;
+    const erNasjonal = behandlingstype === BehandlingstypeFilter.ae0118;
+    const erEøs = behandlingstype === BehandlingstypeFilter.ae0120;
+
+    if (erOrdinær && erNasjonal) return behandlingstemaer['NASJONAL_ORDINÆR'];
+    if (erUtvidet && erNasjonal) return behandlingstemaer['NASJONAL_UTVIDET'];
+    if (erOrdinær && erEøs) return behandlingstemaer['EØS_ORDINÆR'];
+    if (erUtvidet && erEøs) return behandlingstemaer['EØS_UTVIDET'];
+
+    return undefined;
+};
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler } = useApp();
@@ -169,6 +187,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
             skjema.felter.journalpostTittel.validerOgSettFelt(
                 dataForManuellJournalføring.data.journalpost.tittel ?? ''
+            );
+
+            skjema.felter.behandlingstema.validerOgSettFelt(
+                utredBehandlingstemaFraOppgave(dataForManuellJournalføring.data.oppgave)
             );
 
             skjema.felter.avsenderNavn.validerOgSettFelt(
