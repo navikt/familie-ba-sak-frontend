@@ -20,7 +20,6 @@ import {
     HenleggÅrsak,
     IBehandling,
 } from '../../../../../typer/behandling';
-import { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -29,7 +28,7 @@ import useHenleggBehandling from './useHenleggBehandling';
 
 interface IProps {
     onListElementClick: () => void;
-    minimalFagsak: IMinimalFagsak;
+    fagsakId: number;
     behandling: IBehandling;
 }
 
@@ -54,7 +53,7 @@ const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
     align-items: center;
 `;
 
-const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak, behandling }) => {
+const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, behandling }) => {
     const history = useHistory();
     const [visModal, settVisModal] = useState(false);
     const { erLesevisning } = useBehandling();
@@ -200,7 +199,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
                             key={'Gå til saksoversikten'}
                             mini={true}
                             onClick={() => {
-                                history.push(`/fagsak/${minimalFagsak.id}/saksoversikt`);
+                                history.push(`/fagsak/${fagsakId}/saksoversikt`);
                             }}
                             children={'Gå til saksoversikten'}
                         />,

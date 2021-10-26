@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { useApp } from '../../../context/AppContext';
 import { BrevModulProvider } from '../../../context/BrevModulContext';
 import { BehandlerRolle, BehandlingStatus, IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
 import Brev from './BrevModul/Brev';
 import Header from './Header/Header';
 import HendelseItem from './komponenter/HendelseItem';
@@ -15,7 +14,7 @@ import { Hendelse, Tabs } from './typer';
 export interface IHendelsesoversiktProps {
     className?: string;
     hendelser: Hendelse[];
-    fagsak?: IFagsak;
+    fagsakId: number;
     åpenBehandling: IBehandling;
 }
 
@@ -26,7 +25,7 @@ const tilHendelseItem = (hendelse: Hendelse) => (
 const Hendelsesoversikt = ({
     hendelser,
     className,
-    fagsak,
+    fagsakId,
     åpenBehandling,
 }: IHendelsesoversiktProps) => {
     const { hentSaksbehandlerRolle } = useApp();
@@ -48,7 +47,7 @@ const Hendelsesoversikt = ({
                     skalViseTotrinnskontroll={skalViseTotrinnskontroll}
                 />
                 {aktivTab === Tabs.Totrinnskontroll && (
-                    <Totrinnskontroll fagsak={fagsak} åpenBehandling={åpenBehandling} />
+                    <Totrinnskontroll fagsakId={fagsakId} åpenBehandling={åpenBehandling} />
                 )}
                 {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                     <div className={'historikk'}>

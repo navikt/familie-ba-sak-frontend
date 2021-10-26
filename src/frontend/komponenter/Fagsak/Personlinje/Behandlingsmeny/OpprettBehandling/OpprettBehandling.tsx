@@ -27,7 +27,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
 
     const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus } = useOpprettBehandling(
         () => settVisModal(false),
-        minimalFagsak,
+        minimalFagsak.id,
         () => {
             settVisModal(false);
             settVisBekreftelseTilbakekrevingModal(true);

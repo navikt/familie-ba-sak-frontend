@@ -9,7 +9,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import useForhåndsvisning from '../hooks/useForhåndsvisning';
 import { useDeltBostedSkjema } from '../komponenter/Fagsak/Dokumentutsending/DeltBosted/useDeltBostedSkjema';
 import { IManueltBrevRequestPåFagsak } from '../typer/dokument';
-import { IMinimalFagsak } from '../typer/fagsak';
 import { Målform } from '../typer/søknad';
 import { hentFrontendFeilmelding } from '../utils/ressursUtils';
 import { useFagsakRessurser } from './FagsakContext';
@@ -23,7 +22,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
 };
 
 export const [DokumentutsendingProvider, useDokumentutsending] = createUseContext(
-    ({ minimalFagsak }: { minimalFagsak: IMinimalFagsak }) => {
+    ({ fagsakId }: { fagsakId: number }) => {
         const { bruker } = useFagsakRessurser();
         const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
         const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
@@ -95,7 +94,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
             hentForhåndsvisning<IManueltBrevRequestPåFagsak>({
                 method: 'POST',
                 data: skjemaData,
-                url: `/familie-ba-sak/api/dokument/fagsak/${minimalFagsak.id}/forhaandsvis-brev`,
+                url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/forhaandsvis-brev`,
             });
         };
 
@@ -106,7 +105,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                         {
                             method: 'POST',
                             data: { ...hentSkjemaData(), målform: målformFelt.verdi },
-                            url: `/familie-ba-sak/api/dokument/fagsak/${minimalFagsak.id}/send-brev`,
+                            url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/send-brev`,
                         },
                         () => {
                             settVisInnsendtBrevModal(true);
@@ -132,7 +131,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         return {
             deltBostedSkjema,
-            minimalFagsak,
+            fagsakId,
             hentForhåndsvisningPåFagsak,
             hentSkjemaFeilmelding,
             hentetForhåndsvisning,

@@ -83,7 +83,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
                         <li>
                             <HenleggBehandling
                                 onListElementClick={() => settAnker(undefined)}
-                                minimalFagsak={minimalFagsak}
+                                fagsakId={minimalFagsak.id}
                                 behandling={åpenBehandling.data}
                             />
                         </li>

@@ -46,7 +46,7 @@ const Høyremeny: React.FunctionComponent = () => {
                         };
                     }
                 )}
-                fagsak={hentDataFraRessurs(fagsak)}
+                fagsakId={hentDataFraRessurs(fagsak)?.id ?? 0}
                 åpenBehandling={åpenBehandling.data}
             />
         </div>

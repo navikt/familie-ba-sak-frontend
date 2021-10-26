@@ -29,15 +29,12 @@ interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
 }
 
-const lagLenkePåType = (
-    minimalFagsak: IMinimalFagsak,
-    behandling: VisningBehandling
-): ReactNode => {
+const lagLenkePåType = (fagsakId: number, behandling: VisningBehandling): ReactNode => {
     return behandling.status === BehandlingStatus.AVSLUTTET ? (
         behandlingstyper[behandling.type].navn
     ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
         <Lenke
-            href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
+            href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsakId}/behandling/${behandling.behandlingId}`}
             onMouseDown={e => e.preventDefault()}
             target="_blank"
         >
@@ -45,7 +42,7 @@ const lagLenkePåType = (
             <ExternalLink />
         </Lenke>
     ) : (
-        <Lenke href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
+        <Lenke href={`/fagsak/${fagsakId}/${behandling.behandlingId}`}>
             {behandlingstyper[behandling.type].navn}
         </Lenke>
     );
@@ -126,7 +123,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                             )}`}
                                         />
                                         <td>{finnÅrsak(behandling)}</td>
-                                        <td>{lagLenkePåType(minimalFagsak, behandling)}</td>
+                                        <td>{lagLenkePåType(minimalFagsak.id, behandling)}</td>
                                         <td>
                                             {behandling.kategori
                                                 ? kategorier[behandling.kategori].navn
