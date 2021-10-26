@@ -30,7 +30,7 @@ export const useVilkårBegrunnelser = ({
         switch (vedtaksperiodeMedBegrunnelser.type) {
             case Vedtaksperiodetype.UTBETALING:
                 return [
-                    VedtakBegrunnelseType.INNVILGELSE,
+                    VedtakBegrunnelseType.INNVILGET,
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.FORTSATT_INNVILGET,
                 ];
