@@ -12,6 +12,7 @@ export interface IRestEndretUtbetalingAndel {
     søknadstidspunkt?: FamilieIsoDate;
     avtaletidspunktDeltBosted?: FamilieIsoDate;
     årsak?: IEndretUtbetalingAndelÅrsak;
+    erTilknyttetAndeler?: boolean;
 }
 
 export enum IEndretUtbetalingAndelÅrsak {

@@ -152,7 +152,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
                 />
             )}
             {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
-                <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
+                <EndretUtbetalingAndelTabell
+                    åpenBehandling={åpenBehandling}
+                    settFeilmelding={settFeilmelding}
+                />
             )}
         </Skjemasteg>
     );
