@@ -33,6 +33,7 @@ export const useVilkårBegrunnelser = ({
                     VedtakBegrunnelseType.INNVILGET,
                     VedtakBegrunnelseType.REDUKSJON,
                     VedtakBegrunnelseType.FORTSATT_INNVILGET,
+                    VedtakBegrunnelseType.ETTER_ENDRET_UTBETALING,
                 ];
             case Vedtaksperiodetype.FORTSATT_INNVILGET:
                 return [VedtakBegrunnelseType.FORTSATT_INNVILGET];
@@ -93,24 +94,16 @@ export const mapBegrunnelserTilSelectOptions = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
     vilkårBegrunnelser: Ressurs<VedtaksbegrunnelseTekster>
 ): ISelectOption[] => {
-    return vedtaksperiodeMedBegrunnelser.begrunnelser
-        .filter(
-            (begrunnelse: IRestVedtaksbegrunnelse) =>
-                begrunnelse.vedtakBegrunnelseSpesifikasjon !==
-                    VedtakBegrunnelse.REDUKSJON_FRITEKST &&
-                begrunnelse.vedtakBegrunnelseSpesifikasjon !== VedtakBegrunnelse.AVSLAG_FRITEKST &&
-                begrunnelse.vedtakBegrunnelseSpesifikasjon !== VedtakBegrunnelse.OPPHØR_FRITEKST &&
-                begrunnelse.vedtakBegrunnelseSpesifikasjon !==
-                    VedtakBegrunnelse.FORTSATT_INNVILGET_FRITEKST
-        )
-        .map((begrunnelse: IRestVedtaksbegrunnelse) => ({
+    return vedtaksperiodeMedBegrunnelser.begrunnelser.map(
+        (begrunnelse: IRestVedtaksbegrunnelse) => ({
             value: begrunnelse.vedtakBegrunnelseSpesifikasjon.toString(),
             label: hentLabelForOption(
                 begrunnelse.vedtakBegrunnelseType,
                 begrunnelse.vedtakBegrunnelseSpesifikasjon,
                 vilkårBegrunnelser
             ),
-        }));
+        })
+    );
 };
 
 const hentLabelForOption = (

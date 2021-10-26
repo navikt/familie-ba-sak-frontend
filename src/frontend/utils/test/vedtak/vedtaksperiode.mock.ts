@@ -1,4 +1,4 @@
-import { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../typer/vedtak';
+import { VedtakBegrunnelseType } from '../../../typer/vedtak';
 import {
     IRestVedtaksbegrunnelse,
     IVedtaksperiodeMedBegrunnelser,
@@ -12,9 +12,9 @@ interface IMockVedtaksperiode {
     begrunnelser?: IRestVedtaksbegrunnelse[];
 }
 
-const mockBegrunnelse = (begrunnelseSpesifikasjon: VedtakBegrunnelse): IRestVedtaksbegrunnelse => {
+const mockBegrunnelse = (): IRestVedtaksbegrunnelse => {
     return {
-        vedtakBegrunnelseSpesifikasjon: begrunnelseSpesifikasjon,
+        vedtakBegrunnelseSpesifikasjon: 'Test',
         vedtakBegrunnelseType: VedtakBegrunnelseType.INNVILGET,
         personIdenter: ['12345678910'],
     };
@@ -23,7 +23,7 @@ const mockBegrunnelse = (begrunnelseSpesifikasjon: VedtakBegrunnelse): IRestVedt
 export const mockUtbetalingsperiode = ({
     fom = '2020-01-01',
     tom = '2020-02-28',
-    begrunnelser = [mockBegrunnelse(VedtakBegrunnelse.INNVILGET_BOR_HOS_SØKER)],
+    begrunnelser = [mockBegrunnelse()],
 }: IMockVedtaksperiode = {}): IVedtaksperiodeMedBegrunnelser => {
     return {
         id: 0,
@@ -40,7 +40,7 @@ export const mockUtbetalingsperiode = ({
 export const mockOpphørsperiode = ({
     fom = '2020-03-01',
     tom = '',
-    begrunnelser = [mockBegrunnelse(VedtakBegrunnelse.OPPHØR_IKKE_MOTTATT_OPPLYSNINGER)],
+    begrunnelser = [mockBegrunnelse()],
 }: IMockVedtaksperiode = {}): IVedtaksperiodeMedBegrunnelser => {
     return {
         id: 0,
@@ -57,7 +57,7 @@ export const mockOpphørsperiode = ({
 export const mockAvslagsperiode = ({
     fom = '2019-06-01',
     tom = '2019-06-30',
-    begrunnelser = [mockBegrunnelse(VedtakBegrunnelse.AVSLAG_MEDLEM_I_FOLKETRYGDEN)],
+    begrunnelser = [mockBegrunnelse()],
 }: IMockVedtaksperiode = {}): IVedtaksperiodeMedBegrunnelser => {
     return {
         id: 0,
