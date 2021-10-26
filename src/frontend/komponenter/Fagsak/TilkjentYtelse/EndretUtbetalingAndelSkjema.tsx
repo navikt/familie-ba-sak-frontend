@@ -377,7 +377,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 oppdaterEndretUtbetaling(avbrytEndringAvUtbetalingsperiode)
                             }
                         >
-                            Ferdig
+                            Bekreft
                         </StyledFerdigKnapp>
                         <Flatknapp mini onClick={avbrytEndringAvUtbetalingsperiode}>
                             Avbryt
