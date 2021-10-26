@@ -8,9 +8,11 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { behandlingstemaer, IBehandlingstema } from '../../typer/behandling';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
+import { ToggleNavn } from '../../typer/toggles';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 
 export const journalpostTittelList = Object.keys(JournalpostTittel).map((_, index) => {
@@ -26,6 +28,7 @@ const JournalpostMetadataDiv = styled.div`
 `;
 
 const EndreJournalpost: React.FC = () => {
+    const { toggles } = useApp();
     const { skjema, erLesevisning } = useManuellJournalfør();
 
     return (
@@ -55,46 +58,48 @@ const EndreJournalpost: React.FC = () => {
                     }
                 }}
             />
-            <FamilieSelect
-                {...skjema.felter.behandlingstema.hentNavInputProps(skjema.visFeilmeldinger)}
-                value={
-                    skjema.felter.behandlingstema.verdi
-                        ? skjema.felter.behandlingstema.verdi.id
-                        : ''
-                }
-                label={'Sett behandlingstema / Gjelder'}
-                onChange={evt => {
-                    if (evt.target.value !== '') {
-                        skjema.felter.behandlingstema.validerOgSettFelt(
-                            behandlingstemaer[evt.target.value]
-                        );
+            {toggles[ToggleNavn.brukEøs] && (
+                <FamilieSelect
+                    {...skjema.felter.behandlingstema.hentNavInputProps(skjema.visFeilmeldinger)}
+                    value={
+                        skjema.felter.behandlingstema.verdi
+                            ? skjema.felter.behandlingstema.verdi.id
+                            : ''
                     }
-                }}
-                erLesevisning={erLesevisning()}
-                lesevisningVerdi={skjema.felter.behandlingstema.verdi?.navn}
-            >
-                <option
-                    disabled
-                    key={'behandlingstema-select-disabled'}
-                    value={''}
-                    aria-selected={skjema.felter.behandlingstema.verdi === undefined}
+                    label={'Sett behandlingstema / Gjelder'}
+                    onChange={evt => {
+                        if (evt.target.value !== '') {
+                            skjema.felter.behandlingstema.validerOgSettFelt(
+                                behandlingstemaer[evt.target.value]
+                            );
+                        }
+                    }}
+                    erLesevisning={erLesevisning()}
+                    lesevisningVerdi={skjema.felter.behandlingstema.verdi?.navn}
                 >
-                    Velg behandlingstema
-                </option>
-                {Object.entries(behandlingstemaer).map(
-                    ([key, behandlingstema]: [string, IBehandlingstema]) => (
-                        <option
-                            key={key}
-                            aria-selected={
-                                skjema.felter.behandlingstema.verdi?.id === behandlingstema.id
-                            }
-                            value={behandlingstema.id}
-                        >
-                            {behandlingstema.navn}
-                        </option>
-                    )
-                )}
-            </FamilieSelect>
+                    <option
+                        disabled
+                        key={'behandlingstema-select-disabled'}
+                        value={''}
+                        aria-selected={skjema.felter.behandlingstema.verdi === undefined}
+                    >
+                        Velg behandlingstema
+                    </option>
+                    {Object.entries(behandlingstemaer).map(
+                        ([key, behandlingstema]: [string, IBehandlingstema]) => (
+                            <option
+                                key={key}
+                                aria-selected={
+                                    skjema.felter.behandlingstema.verdi?.id === behandlingstema.id
+                                }
+                                value={behandlingstema.id}
+                            >
+                                {behandlingstema.navn}
+                            </option>
+                        )
+                    )}
+                </FamilieSelect>
+            )}
         </>
     );
 };

@@ -33,6 +33,7 @@ import {
 import { BehandlingstypeFilter, GjelderFilter, IOppgave } from '../typer/oppgave';
 import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
+import { ToggleNavn } from '../typer/toggles';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
@@ -55,7 +56,7 @@ const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingstema | u
 };
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
-    const { innloggetSaksbehandler } = useApp();
+    const { innloggetSaksbehandler, toggles } = useApp();
     const { hentFagsakForPerson } = useFagsakRessurser();
     const history = useHistory();
     const { request } = useHttp();
@@ -138,8 +139,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }),
             behandlingstema: useFelt<IBehandlingstema | undefined>({
                 verdi: undefined,
-                valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
-                    felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
+                valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) => {
+                    if (!toggles[ToggleNavn.brukEøs]) {
+                        return ok(felt);
+                    }
+                    return felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.');
+                },
             }),
             dokumenter: useFelt<IDokumentInfo[]>({
                 verdi: [],
@@ -366,8 +371,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     }&ferdigstill=true`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
-                        kategori: skjema.felter.behandlingstema.verdi?.kategori,
-                        underkategori: skjema.felter.behandlingstema.verdi?.underkategori,
+                        kategori: toggles[ToggleNavn.brukEøs]
+                            ? skjema.felter.behandlingstema.verdi?.kategori ?? null
+                            : null,
+                        underkategori: toggles[ToggleNavn.brukEøs]
+                            ? skjema.felter.behandlingstema.verdi?.underkategori ?? null
+                            : null,
                         bruker: {
                             navn: skjema.felter.bruker.verdi?.navn ?? '',
                             id: skjema.felter.bruker.verdi?.personIdent ?? '',

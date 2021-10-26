@@ -76,8 +76,8 @@ export interface IRestJournalføring {
     tilknyttedeBehandlingIder: number[];
     opprettOgKnyttTilNyBehandling: boolean;
     navIdent: string;
-    kategori?: BehandlingKategori;
-    underkategori?: BehandlingUnderkategori;
+    kategori: BehandlingKategori | null;
+    underkategori: BehandlingUnderkategori | null;
 }
 
 export interface ILogiskVedlegg {
