@@ -8,7 +8,7 @@ import { useDokumentutsending } from '../../../../context/DokumentutsendingConte
 import Slett from '../../../../ikoner/Slett';
 import { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { formaterIdent, hentAlderSomString } from '../../../../utils/formatter';
-import IkonKnapp from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 const CheckboxOgSlettknapp = styled.div`
@@ -103,7 +103,7 @@ const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
                         id={`fjern__${barn.ident}`}
                         mini={true}
                         ikon={<Slett />}
-                        knappPosisjon={'venstre'}
+                        ikonPosisjon={IkonPosisjon.VENSTRE}
                         onClick={() => {
                             deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt([
                                 ...deltBostedSkjema.felter.barnaMedOpplysninger.verdi.filter(

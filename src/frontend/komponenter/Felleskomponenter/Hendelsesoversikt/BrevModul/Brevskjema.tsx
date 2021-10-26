@@ -24,7 +24,7 @@ import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
 import { formaterIdent } from '../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
-import IkonKnapp from '../../IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../IkonKnapp/IkonKnapp';
 import Knapperekke from '../../Knapperekke';
 import PdfVisningModal from '../../PdfVisningModal/PdfVisningModal';
 import SkjultLegend from '../../SkjultLegend';
@@ -183,7 +183,7 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                     id={'forhandsvis-vedtaksbrev'}
                     erLesevisning={erLesevisning()}
                     label={'Forhåndsvis'}
-                    knappPosisjon={'venstre'}
+                    ikonPosisjon={IkonPosisjon.VENSTRE}
                     ikon={<DokumentIkon />}
                     mini={true}
                     spinner={hentetForhåndsvisning.status === RessursStatus.HENTER}
