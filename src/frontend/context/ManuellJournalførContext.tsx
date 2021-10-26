@@ -344,6 +344,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     }&ferdigstill=true`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
+                        kategori: skjema.felter.behandlingstema.verdi?.kategori,
+                        underkategori: skjema.felter.behandlingstema.verdi?.underkategori,
                         bruker: {
                             navn: skjema.felter.bruker.verdi?.navn ?? '',
                             id: skjema.felter.bruker.verdi?.personIdent ?? '',
