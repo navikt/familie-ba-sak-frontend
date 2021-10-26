@@ -23,6 +23,7 @@ import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
     åpenBehandling: IBehandling;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
 const StyledCollapseIkon = styled(Collapse)`
@@ -47,6 +48,7 @@ const PersonCelle = styled.div`
 const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
     endretUtbetalingAndel,
     åpenBehandling,
+    settFeilmelding,
 }) => {
     const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
         endretUtbetalingAndel.personIdent === null
@@ -160,6 +162,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             avbrytEndringAvUtbetalingsperiode={() => {
                                 settÅpenUtbetalingsAndel(false);
                             }}
+                            settFeilmelding={settFeilmelding}
                         />
                     </td>
                 </tr>

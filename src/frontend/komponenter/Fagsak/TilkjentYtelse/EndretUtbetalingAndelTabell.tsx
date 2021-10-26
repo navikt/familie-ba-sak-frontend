@@ -12,6 +12,7 @@ import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
 
 interface IEndretUtbetalingAndelTabellProps {
     åpenBehandling: IBehandling;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
 const EndredePerioder = styled.div`
@@ -24,6 +25,7 @@ const Overskrift = styled(Element)`
 
 const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAndelTabellProps> = ({
     åpenBehandling,
+    settFeilmelding,
 }) => {
     const endretUtbetalingAndeler = åpenBehandling.endretUtbetalingAndeler;
 
@@ -49,6 +51,7 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                             <EndretUtbetalingAndelRad
                                 endretUtbetalingAndel={endretUtbetalingAndel}
                                 åpenBehandling={åpenBehandling}
+                                settFeilmelding={settFeilmelding}
                             />
                         </EndretUtbetalingAndelProvider>
                     ))}

@@ -82,11 +82,13 @@ const StyledFamilieTextarea = styled(FamilieTextarea)`
 interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     avbrytEndringAvUtbetalingsperiode: () => void;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
 const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
     avbrytEndringAvUtbetalingsperiode,
+    settFeilmelding,
 }) => {
     const { request } = useHttp();
     const { erLesevisning } = useBehandling();
@@ -121,6 +123,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     if (fagsak.status === RessursStatus.SUKSESS) {
                         avbrytEndringAvUtbetalingsperiode();
                         settFagsak(fagsak);
+                        settFeilmelding('');
                     }
                 }
             );
