@@ -63,6 +63,8 @@ const EndreJournalpost: React.FC = () => {
                         behandlingstemaer[evt.target.value]
                     );
                 }}
+                erLesevisning={erLesevisning()}
+                lesevisningVerdi={skjema.felter.behandlingstema.verdi?.navn}
             >
                 {Object.entries(behandlingstemaer).map(
                     ([key, behandlingstema]: [string, IBehandlingstema]) => (
