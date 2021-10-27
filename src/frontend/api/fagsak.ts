@@ -1,10 +1,5 @@
-import {
-    BehandlingKategori,
-    Behandlingstype,
-    BehandlingUnderkategori,
-    BehandlingÅrsak,
-    IBehandling,
-} from '../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
+import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandlingstema';
 
 export const aktivVedtakPåBehandling = (behandling?: IBehandling) =>
     behandling?.vedtakForBehandling.find(v => v.aktiv);

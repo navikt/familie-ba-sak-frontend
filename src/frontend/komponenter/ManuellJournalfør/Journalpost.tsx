@@ -5,15 +5,15 @@ import styled from 'styled-components';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
-import { FamilieReactSelect, FamilieSelect } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
-import { behandlingstemaer, IBehandlingstema } from '../../typer/behandling';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { ToggleNavn } from '../../typer/toggles';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
+import { BehandlingstemaSelect } from '../Felleskomponenter/BehandlingstemaSelect';
 
 export const journalpostTittelList = Object.keys(JournalpostTittel).map((_, index) => {
     return {
@@ -30,11 +30,12 @@ const JournalpostMetadataDiv = styled.div`
 const EndreJournalpost: React.FC = () => {
     const { toggles } = useApp();
     const { skjema, erLesevisning } = useManuellJournalfør();
+    const { journalpostTittel, behandlingstema } = skjema.felter;
 
     return (
         <>
             <FamilieReactSelect
-                {...skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger)}
+                {...journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger)}
                 creatable={true}
                 isClearable
                 erLesevisning={erLesevisning()}
@@ -46,59 +47,25 @@ const EndreJournalpost: React.FC = () => {
                     skjema.felter.journalpostTittel.verdi === ''
                         ? null
                         : {
-                              value: skjema.felter.journalpostTittel.verdi,
-                              label: skjema.felter.journalpostTittel.verdi,
+                              value: journalpostTittel.verdi,
+                              label: journalpostTittel.verdi,
                           }
                 }
                 onChange={value => {
                     if (value && 'value' in value) {
-                        skjema.felter.journalpostTittel.validerOgSettFelt(value.value);
+                        journalpostTittel.validerOgSettFelt(value.value);
                     } else {
-                        skjema.felter.journalpostTittel.nullstill();
+                        journalpostTittel.nullstill();
                     }
                 }}
             />
             {toggles[ToggleNavn.brukEøs] && (
-                <FamilieSelect
-                    {...skjema.felter.behandlingstema.hentNavInputProps(skjema.visFeilmeldinger)}
-                    value={
-                        skjema.felter.behandlingstema.verdi
-                            ? skjema.felter.behandlingstema.verdi.id
-                            : ''
-                    }
-                    label={'Sett behandlingstema / Gjelder'}
-                    onChange={evt => {
-                        if (evt.target.value !== '') {
-                            skjema.felter.behandlingstema.validerOgSettFelt(
-                                behandlingstemaer[evt.target.value]
-                            );
-                        }
-                    }}
-                    erLesevisning={erLesevisning()}
-                    lesevisningVerdi={skjema.felter.behandlingstema.verdi?.navn}
-                >
-                    <option
-                        disabled
-                        key={'behandlingstema-select-disabled'}
-                        value={''}
-                        aria-selected={skjema.felter.behandlingstema.verdi === undefined}
-                    >
-                        Velg behandlingstema
-                    </option>
-                    {Object.entries(behandlingstemaer).map(
-                        ([key, behandlingstema]: [string, IBehandlingstema]) => (
-                            <option
-                                key={key}
-                                aria-selected={
-                                    skjema.felter.behandlingstema.verdi?.id === behandlingstema.id
-                                }
-                                value={behandlingstema.id}
-                            >
-                                {behandlingstema.navn}
-                            </option>
-                        )
-                    )}
-                </FamilieSelect>
+                <BehandlingstemaSelect
+                    behandlingstema={behandlingstema}
+                    visFeilmeldinger={skjema.visFeilmeldinger}
+                    name="Behandlingstema"
+                    label="Sett behandlingstema / Gjelder"
+                />
             )}
         </>
     );

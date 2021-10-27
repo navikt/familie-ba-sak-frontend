@@ -2,18 +2,18 @@ import { useEffect } from 'react';
 
 import { useHistory } from 'react-router';
 
-import { useFelt, feil, ok, Avhengigheter, useSkjema } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import {
-    BehandlingKategori,
     Behandlingstype,
-    BehandlingUnderkategori,
     BehandlingÅrsak,
     IBehandling,
+    IRestNyBehandling,
 } from '../../../../../typer/behandling';
+import { IBehandlingstema, isIBehandlingstema } from '../../../../../typer/behandlingstema';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
@@ -50,20 +50,32 @@ const useOpprettBehandling = (
         avhengigheter: { behandlingstype },
     });
 
+    const behandlingstema = useFelt<IBehandlingstema | ''>({
+        verdi: '',
+        valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) => {
+            return isIBehandlingstema(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Behandlingstema må settes.');
+        },
+        avhengigheter: { behandlingstype },
+        skalFeltetVises: avhengigheter => {
+            const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
+            return behandlingstypeVerdi !== Tilbakekrevingsbehandlingstype.TILBAKEKREVING;
+        },
+    });
+
     const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs } = useSkjema<
         {
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
-            underkategori: BehandlingUnderkategori | '';
+            behandlingstema: IBehandlingstema | '';
         },
         IFagsak
     >({
         felter: {
             behandlingstype,
             behandlingsårsak,
-            underkategori: useFelt<BehandlingUnderkategori | ''>({
-                verdi: BehandlingUnderkategori.ORDINÆR,
-            }),
+            behandlingstema,
         },
         skjemanavn: 'Opprett behandling modal',
     });
@@ -80,6 +92,7 @@ const useOpprettBehandling = (
     }, [skjema.felter.behandlingstype.verdi]);
 
     const onBekreft = (søkersIdent: string) => {
+        const { behandlingstype, behandlingsårsak, behandlingstema } = skjema.felter;
         if (kanSendeSkjema()) {
             if (
                 skjema.felter.behandlingstype.verdi ===
@@ -97,16 +110,22 @@ const useOpprettBehandling = (
                         }
                     }
                 );
-            } else {
-                onSubmit(
+            } else if (isIBehandlingstema(behandlingstema.verdi)) {
+                const kategori = behandlingstema.verdi.kategori;
+                const underkategori = behandlingstema.verdi.underkategori;
+
+                onSubmit<IRestNyBehandling>(
                     {
                         data: {
-                            behandlingType: skjema.felter.behandlingstype.verdi as Behandlingstype,
-                            behandlingÅrsak: skjema.felter.behandlingsårsak.verdi,
-                            kategori: BehandlingKategori.NASJONAL,
-                            navIdent: innloggetSaksbehandler?.navIdent,
+                            kategori,
+                            underkategori,
                             søkersIdent,
-                            underkategori: skjema.felter.underkategori.verdi,
+                            behandlingType: behandlingstype.verdi as Behandlingstype,
+                            behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
+                            navIdent: innloggetSaksbehandler?.navIdent ?? null,
+                            journalpostID: null,
+                            skalBehandlesAutomatisk: null,
+                            barnasIdenter: null,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',

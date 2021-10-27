@@ -6,12 +6,8 @@ import { LenkepanelBase } from 'nav-frontend-lenkepanel';
 import Panel from 'nav-frontend-paneler';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import {
-    BehandlingStatus,
-    IBehandling,
-    kategorier,
-    underkategorier,
-} from '../../../typer/behandling';
+import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
+import { behandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
 import { IFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
 
@@ -44,12 +40,12 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
                 <tr>
                     <td>
                         <Normaltekst>
-                            {behandling ? kategorier[behandling.kategori].navn : '-'}
+                            {behandling ? behandlingKategori[behandling.kategori] : '-'}
                         </Normaltekst>
                     </td>
                     <td>
                         <Normaltekst>
-                            {behandling ? underkategorier[behandling.underkategori].navn : '-'}
+                            {behandling ? behandlingUnderkategori[behandling.underkategori] : '-'}
                         </Normaltekst>
                     </td>
                     <td>

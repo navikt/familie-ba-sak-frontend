@@ -1,3 +1,4 @@
+import { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import { INøkkelPar } from './common';
 import { IFødselshendelsefiltreringResultat } from './fødselshendelser';
@@ -14,14 +15,16 @@ import { IVedtakForBehandling } from './vedtak';
 import { Utbetalingsperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
-export enum BehandlingKategori {
-    NASJONAL = 'NASJONAL',
-    EØS = 'EØS',
-}
-
-export interface IRestEndreBehandlingUnderkategori {
-    behandlingUnderkategori: BehandlingUnderkategori;
-    behandlingKategori: BehandlingKategori;
+export interface IRestNyBehandling {
+    kategori: BehandlingKategori;
+    underkategori: BehandlingUnderkategori;
+    søkersIdent: string;
+    behandlingType: Behandlingstype;
+    journalpostID: string | null;
+    behandlingÅrsak: BehandlingÅrsak | null;
+    skalBehandlesAutomatisk: boolean | null;
+    navIdent: string | null;
+    barnasIdenter: string[] | null;
 }
 
 export enum HenleggÅrsak {
@@ -72,16 +75,6 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     REVURDERING_OPPLYSNINGER_OM_FORELDELSE: 'Nye opplysninger',
     REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT:
         'Feilutbetalt beløp helt eller delvis bortfalt',
-};
-
-export enum BehandlingUnderkategori {
-    ORDINÆR = 'ORDINÆR',
-    UTVIDET = 'UTVIDET',
-}
-
-export const behandlingUnderkategori: Record<BehandlingUnderkategori, string> = {
-    ORDINÆR: 'Ordinær',
-    UTVIDET: 'Utvidet',
 };
 
 export enum BehandlingSteg {
@@ -195,6 +188,7 @@ export interface IBehandling {
     behandlingId: number;
     endretAv: string;
     kategori: BehandlingKategori;
+    underkategori: BehandlingUnderkategori;
     opprettetTidspunkt: string;
     personResultater: IRestPersonResultat[];
     personer: IGrunnlagPerson[];
@@ -205,7 +199,6 @@ export interface IBehandling {
     søknadsgrunnlag?: ISøknadDTO;
     totrinnskontroll?: ITotrinnskontroll;
     type: Behandlingstype;
-    underkategori: BehandlingUnderkategori;
     fødselshendelsefiltreringResultater: IFødselshendelsefiltreringResultat[];
     vedtakForBehandling: IVedtakForBehandling[];
     utbetalingsperioder: Utbetalingsperiode[];
@@ -263,76 +256,6 @@ export const behandlingstyper: INøkkelPar = {
         id: 'REVURDERING_TILBAKEKREVING',
         navn: 'Revurdering tilbakekreving',
     },
-};
-
-export const kategorier: INøkkelPar = {
-    NASJONAL: {
-        id: 'NASJONAL',
-        navn: 'Nasjonal',
-    },
-    EØS: {
-        id: 'EØS',
-        navn: 'EØS',
-    },
-};
-
-export const underkategorier: INøkkelPar = {
-    ORDINÆR: {
-        id: 'ORDINÆR',
-        navn: 'Ordinær',
-    },
-    UTVIDET: {
-        id: 'UTVIDET',
-        navn: 'Utvidet',
-    },
-};
-
-export interface IBehandlingstema {
-    kategori: BehandlingKategori;
-    underkategori: BehandlingUnderkategori;
-    navn: string;
-    id: string;
-}
-
-export interface INøkkelParBehandlingstema {
-    [key: string]: IBehandlingstema;
-}
-
-export const behandlingstemaer: INøkkelParBehandlingstema = {
-    NASJONAL_ORDINÆR: {
-        kategori: BehandlingKategori.NASJONAL,
-        underkategori: BehandlingUnderkategori.ORDINÆR,
-        navn: 'Nasjonal ordinær',
-        id: 'NASJONAL_ORDINÆR',
-    },
-    NASJONAL_UTVIDET: {
-        kategori: BehandlingKategori.NASJONAL,
-        underkategori: BehandlingUnderkategori.UTVIDET,
-        navn: 'Nasjonal utvidet',
-        id: 'NASJONAL_UTVIDET',
-    },
-    EØS_ORDINÆR: {
-        kategori: BehandlingKategori.EØS,
-        underkategori: BehandlingUnderkategori.ORDINÆR,
-        navn: 'EØS ordinær',
-        id: 'EØS_ORDINÆR',
-    },
-    EØS_UTVIDET: {
-        kategori: BehandlingKategori.EØS,
-        underkategori: BehandlingUnderkategori.UTVIDET,
-        navn: 'EØS utvidet',
-        id: 'EØS_UTVIDET',
-    },
-};
-
-export const tilBehandlingstema = (
-    kategori: BehandlingKategori,
-    underkategori: BehandlingUnderkategori
-): IBehandlingstema => {
-    return Object.values(behandlingstemaer).find(
-        (tema: IBehandlingstema) =>
-            tema.kategori === kategori && tema.underkategori === underkategori
-    ) as IBehandlingstema;
 };
 
 export const behandlingsresultater: Record<

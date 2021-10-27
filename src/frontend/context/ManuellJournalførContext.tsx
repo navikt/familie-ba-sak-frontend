@@ -17,20 +17,18 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
 import {
-    behandlingstemaer,
-    Behandlingstype,
-    BehandlingÅrsak,
-    IBehandling,
     IBehandlingstema,
-} from '../typer/behandling';
+    isIBehandlingstema,
+    utredBehandlingstemaFraOppgave,
+} from '../typer/behandlingstema';
 import { IFagsak } from '../typer/fagsak';
 import {
     IDataForManuellJournalføring,
     IRestJournalføring,
     JournalpostKanal,
 } from '../typer/manuell-journalføring';
-import { BehandlingstypeFilter, GjelderFilter, IOppgave } from '../typer/oppgave';
 import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../typer/toggles';
@@ -38,22 +36,6 @@ import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
-
-const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingstema | undefined => {
-    const { behandlingstema, behandlingstype } = oppgave;
-
-    const erOrdinær = behandlingstema === GjelderFilter.ab0180;
-    const erUtvidet = behandlingstema === GjelderFilter.ab0096;
-    const erNasjonal = behandlingstype === BehandlingstypeFilter.ae0118;
-    const erEøs = behandlingstype === BehandlingstypeFilter.ae0120;
-
-    if (erOrdinær && erNasjonal) return behandlingstemaer['NASJONAL_ORDINÆR'];
-    if (erUtvidet && erNasjonal) return behandlingstemaer['NASJONAL_UTVIDET'];
-    if (erOrdinær && erEøs) return behandlingstemaer['EØS_ORDINÆR'];
-    if (erUtvidet && erEøs) return behandlingstemaer['EØS_UTVIDET'];
-
-    return undefined;
-};
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
     const { innloggetSaksbehandler, toggles } = useApp();
@@ -116,7 +98,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
         {
             journalpostTittel: string;
-            behandlingstema: IBehandlingstema | undefined;
+            behandlingstema: IBehandlingstema | '';
             dokumenter: IDokumentInfo[];
             bruker: IPersonInfo | undefined;
             avsenderNavn: string;
@@ -137,9 +119,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         : feil(felt, 'Journalposttittel kan ikke være tom');
                 },
             }),
-            behandlingstema: useFelt<IBehandlingstema | undefined>({
-                verdi: undefined,
-                valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) => {
+            behandlingstema: useFelt<IBehandlingstema | ''>({
+                verdi: '',
+                valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) => {
                     if (!toggles[ToggleNavn.brukEøs]) {
                         return ok(felt);
                     }
@@ -359,6 +341,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
             const nyBehandlingstype = skjema.felter.behandlingstype.verdi;
             const nyBehandlingsårsak = skjema.felter.behandlingsårsak.verdi;
+            const { verdi: behandlingstema } = skjema.felter.behandlingstema;
 
             //SKAN_IM-kanalen benytter logiske vedlegg, NAV_NO-kanalen gjør ikke. For sistnevnte må titlene konkateneres.
             onSubmit<IRestJournalføring>(
@@ -371,12 +354,14 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     }&ferdigstill=true`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
-                        kategori: toggles[ToggleNavn.brukEøs]
-                            ? skjema.felter.behandlingstema.verdi?.kategori ?? null
-                            : null,
-                        underkategori: toggles[ToggleNavn.brukEøs]
-                            ? skjema.felter.behandlingstema.verdi?.underkategori ?? null
-                            : null,
+                        kategori:
+                            toggles[ToggleNavn.brukEøs] && isIBehandlingstema(behandlingstema)
+                                ? behandlingstema.kategori
+                                : null,
+                        underkategori:
+                            toggles[ToggleNavn.brukEøs] && isIBehandlingstema(behandlingstema)
+                                ? behandlingstema.underkategori
+                                : null,
                         bruker: {
                             navn: skjema.felter.bruker.verdi?.navn ?? '',
                             id: skjema.felter.bruker.verdi?.personIdent ?? '',

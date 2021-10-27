@@ -9,13 +9,12 @@ import { ExternalLink } from '@navikt/ds-icons';
 
 import {
     behandlingsresultater,
-    behandlingstyper,
     behandlingsstatuser,
-    kategorier,
-    underkategorier,
     BehandlingStatus,
+    behandlingstyper,
     behandlingÅrsak,
 } from '../../../typer/behandling';
+import { behandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
 import { IFagsak } from '../../../typer/fagsak';
 import {
     Tilbakekrevingsbehandlingstype,
@@ -128,12 +127,12 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                         <td>{lagLenkePåType(fagsak, behandling)}</td>
                                         <td>
                                             {behandling.kategori
-                                                ? kategorier[behandling.kategori].navn
+                                                ? behandlingKategori[behandling.kategori]
                                                 : '-'}
                                         </td>
                                         <td>
                                             {behandling.underkategori
-                                                ? underkategorier[behandling.underkategori].navn
+                                                ? behandlingUnderkategori[behandling.underkategori]
                                                 : '-'}
                                         </td>
                                         <td>{behandlingsstatuser[behandling.status]}</td>

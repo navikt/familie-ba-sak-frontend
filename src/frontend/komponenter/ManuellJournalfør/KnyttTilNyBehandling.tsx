@@ -21,31 +21,32 @@ const StyledCheckboxDiv = styled.div`
  */
 export const KnyttTilNyBehandling: React.FC = () => {
     const { skjema, fagsak, erLesevisning } = useManuellJournalfør();
+    const { knyttTilNyBehandling, behandlingstema, behandlingsårsak, behandlingstype } =
+        skjema.felter;
     return (
         <SkjemaGruppe>
             <Undertittel>Knytt til ny behandling</Undertittel>
             <br />
             <StyledCheckboxDiv>
                 <FamilieCheckbox
-                    id={skjema.felter.knyttTilNyBehandling.id}
+                    id={knyttTilNyBehandling.id}
                     erLesevisning={erLesevisning()}
                     label={'Knytt til ny behandling'}
-                    checked={skjema.felter.knyttTilNyBehandling.verdi}
+                    checked={knyttTilNyBehandling.verdi}
                     onChange={() => {
-                        skjema.felter.knyttTilNyBehandling.validerOgSettFelt(
-                            !skjema.felter.knyttTilNyBehandling.verdi
-                        );
+                        knyttTilNyBehandling.validerOgSettFelt(!knyttTilNyBehandling.verdi);
                     }}
                 />
             </StyledCheckboxDiv>
-            {skjema.felter.behandlingstype.erSynlig && (
+            {behandlingstype.erSynlig && (
                 <OpprettBehandlingValg
-                    behandlingstype={skjema.felter.behandlingstype}
-                    behandlingsårsak={skjema.felter.behandlingsårsak}
+                    behandlingstype={behandlingstype}
+                    behandlingsårsak={behandlingsårsak}
                     fagsak={fagsak}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     erLesevisning={erLesevisning()}
                     manuellJournalfør
+                    behandlingstema={behandlingstema}
                 />
             )}
         </SkjemaGruppe>

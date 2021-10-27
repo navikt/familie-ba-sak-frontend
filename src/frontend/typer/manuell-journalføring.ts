@@ -1,6 +1,6 @@
 import { IJournalpost } from '@navikt/familie-typer';
 
-import { BehandlingKategori, BehandlingUnderkategori } from './behandling';
+import { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import { INøkkelPar } from './common';
 import { IFagsak } from './fagsak';
 import { IOppgave } from './oppgave';
