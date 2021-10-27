@@ -217,30 +217,32 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         lesevisning={erLesevisning()}
                     />
                 </Feltmargin>
-
-                <FamilieRadioGruppe
-                    legend={<Element>Skal perioden utbetales til søker?</Element>}
-                    erLesevisning={erLesevisning()}
-                >
-                    <Radio
-                        label={'Ja'}
-                        name={'skal perioden utbetales til søker?'}
-                        checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
-                        onChange={() =>
-                            skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
-                        }
-                        id={'ja-perioden-utbetales-til-søker'}
-                    />
-                    <Radio
-                        label={'Nei'}
-                        name={'skal perioden utbetales til søker?'}
-                        checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
-                        onChange={() =>
-                            skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
-                        }
-                        id={'nei-perioden-skal-ikke-utbetales-til-søker'}
-                    />
-                </FamilieRadioGruppe>
+                <Feltmargin>
+                    <FamilieRadioGruppe
+                        legend={<Element>Skal perioden utbetales til søker?</Element>}
+                        erLesevisning={erLesevisning()}
+                        verdi={skjema.felter.periodeSkalUtbetalesTilSøker.verdi ? 'Ja' : 'Nei'}
+                    >
+                        <Radio
+                            label={'Ja'}
+                            name={'skal perioden utbetales til søker?'}
+                            checked={skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
+                            onChange={() =>
+                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(true)
+                            }
+                            id={'ja-perioden-utbetales-til-søker'}
+                        />
+                        <Radio
+                            label={'Nei'}
+                            name={'skal perioden utbetales til søker?'}
+                            checked={!skjema.felter.periodeSkalUtbetalesTilSøker.verdi}
+                            onChange={() =>
+                                skjema.felter.periodeSkalUtbetalesTilSøker.validerOgSettFelt(false)
+                            }
+                            id={'nei-perioden-skal-ikke-utbetales-til-søker'}
+                        />
+                    </FamilieRadioGruppe>
+                </Feltmargin>
 
                 <Feltmargin>
                     <FamilieSelect
@@ -254,6 +256,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             );
                         }}
                         erLesevisning={erLesevisning()}
+                        lesevisningVerdi={
+                            skjema.felter.årsak.verdi ? årsakTekst[skjema.felter.årsak.verdi] : ''
+                        }
                     >
                         <option value={undefined}>Velg årsak</option>
                         {årsaker.map(årsak => (
