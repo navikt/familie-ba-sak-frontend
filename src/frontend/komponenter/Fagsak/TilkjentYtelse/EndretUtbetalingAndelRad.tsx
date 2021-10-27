@@ -8,6 +8,7 @@ import { Flatknapp } from 'nav-frontend-knapper';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
 
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import Advarsel from '../../../ikoner/Advarsel';
 import { IBehandling } from '../../../typer/behandling';
@@ -53,6 +54,8 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
     const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
         endretUtbetalingAndel.personIdent === null
     );
+
+    const { erLesevisning } = useBehandling();
 
     const { hentSkjemaData } = useEndretUtbetalingAndel();
 
@@ -148,7 +151,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             </>
                         ) : (
                             <>
-                                <StyledExpandIkon /> Endre
+                                <StyledExpandIkon /> {erLesevisning() ? 'Se mer' : 'Endre'}
                             </>
                         )}
                     </Flatknapp>
