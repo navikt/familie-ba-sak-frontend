@@ -70,6 +70,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                     return (
                         <>
                             <Personlinje bruker={bruker.data} fagsak={fagsak.data} />
+
                             <div className={'fagsakcontainer__content'}>
                                 {skalHaVenstremeny && (
                                     <div className={'fagsakcontainer__content--venstremeny'}>

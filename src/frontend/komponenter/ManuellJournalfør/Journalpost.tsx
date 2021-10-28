@@ -8,10 +8,8 @@ import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../context/AppContext';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
-import { ToggleNavn } from '../../typer/toggles';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
 import { BehandlingstemaSelect } from '../Felleskomponenter/BehandlingstemaSelect';
 
@@ -28,7 +26,6 @@ const JournalpostMetadataDiv = styled.div`
 `;
 
 const EndreJournalpost: React.FC = () => {
-    const { toggles } = useApp();
     const { skjema, erLesevisning } = useManuellJournalfør();
     const { journalpostTittel, behandlingstema } = skjema.felter;
 
@@ -59,14 +56,12 @@ const EndreJournalpost: React.FC = () => {
                     }
                 }}
             />
-            {toggles[ToggleNavn.brukEøs] && (
-                <BehandlingstemaSelect
-                    behandlingstema={behandlingstema}
-                    visFeilmeldinger={skjema.visFeilmeldinger}
-                    name="Behandlingstema"
-                    label="Sett behandlingstema / Gjelder"
-                />
-            )}
+            <BehandlingstemaSelect
+                behandlingstema={behandlingstema}
+                visFeilmeldinger={skjema.visFeilmeldinger}
+                name="Behandlingstema"
+                label="Sett behandlingstema / Gjelder"
+            />
         </>
     );
 };
