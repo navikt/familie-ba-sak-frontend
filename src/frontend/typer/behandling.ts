@@ -20,11 +20,11 @@ export interface IRestNyBehandling {
     underkategori: BehandlingUnderkategori;
     søkersIdent: string;
     behandlingType: Behandlingstype;
-    journalpostID: string | null;
-    behandlingÅrsak: BehandlingÅrsak | null;
-    skalBehandlesAutomatisk: boolean | null;
-    navIdent: string | null;
-    barnasIdenter: string[] | null;
+    journalpostID?: string;
+    behandlingÅrsak?: BehandlingÅrsak;
+    skalBehandlesAutomatisk?: boolean;
+    navIdent?: string;
+    barnasIdenter?: string[];
 }
 
 export enum HenleggÅrsak {

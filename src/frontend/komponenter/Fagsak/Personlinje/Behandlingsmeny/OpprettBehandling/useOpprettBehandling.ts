@@ -60,7 +60,7 @@ const useOpprettBehandling = (
         avhengigheter: { behandlingstype },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
-            return behandlingstypeVerdi !== Tilbakekrevingsbehandlingstype.TILBAKEKREVING;
+            return behandlingstypeVerdi in Behandlingstype;
         },
     });
 
@@ -122,10 +122,7 @@ const useOpprettBehandling = (
                             søkersIdent,
                             behandlingType: behandlingstype.verdi as Behandlingstype,
                             behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
-                            navIdent: innloggetSaksbehandler?.navIdent ?? null,
-                            journalpostID: null,
-                            skalBehandlesAutomatisk: null,
-                            barnasIdenter: null,
+                            navident: innloggetSaksbehandler?.navIdent,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',

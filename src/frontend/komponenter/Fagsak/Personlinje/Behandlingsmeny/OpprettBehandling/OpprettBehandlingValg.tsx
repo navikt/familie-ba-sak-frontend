@@ -151,16 +151,15 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </FamilieSelect>
             )}
 
-            {behandlingsårsak.verdi === BehandlingÅrsak.SØKNAD &&
-                toggles[ToggleNavn.kanBehandleUtvidet] && (
-                    <BehandlingstemaSelect
-                        behandlingstema={behandlingstema}
-                        erLesevisning={erLesevisning}
-                        visFeilmeldinger={visFeilmeldinger}
-                        name="Behandlingstema"
-                        label="Velg behandlingstema"
-                    />
-                )}
+            {behandlingstema.erSynlig && (
+                <BehandlingstemaSelect
+                    behandlingstema={behandlingstema}
+                    erLesevisning={erLesevisning}
+                    visFeilmeldinger={visFeilmeldinger}
+                    name="Behandlingstema"
+                    label="Velg behandlingstema"
+                />
+            )}
         </>
     );
 };
