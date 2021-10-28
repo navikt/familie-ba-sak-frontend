@@ -11,6 +11,7 @@ import { Collapse, Expand } from '@navikt/ds-icons';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import Advarsel from '../../../ikoner/Advarsel';
+import GrønnHake from '../../../ikoner/GrønnHake';
 import { IBehandling } from '../../../typer/behandling';
 import {
     IEndretUtbetalingAndelÅrsak,
@@ -114,6 +115,9 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                                     'Du har endrede utbetalingsperioder. Bekreft, slett eller oppdater periodene i listen.'
                                 }
                             />
+                        )}
+                        {endretUtbetalingAndel.erTilknyttetAndeler && (
+                            <GrønnHake heigth={20} width={20} />
                         )}
                         {formaterIdent(
                             endretUtbetalingAndel.personIdent
