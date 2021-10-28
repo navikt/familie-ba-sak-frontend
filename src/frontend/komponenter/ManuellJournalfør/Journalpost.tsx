@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -72,6 +72,12 @@ const Journalpost: React.FC = () => {
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.datoMottatt
             : undefined;
+    const [åpen, settÅpen] = useState(false);
+    const toggleApen = () => settÅpen(!åpen);
+    const erÅpen = (): boolean => {
+        if (skjema.visFeilmeldinger === true) return true;
+        return åpen;
+    };
 
     return (
         <EkspanderbartpanelBase
@@ -79,7 +85,8 @@ const Journalpost: React.FC = () => {
             tittel={
                 <Undertittel>{skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}</Undertittel>
             }
-            apen={skjema.visFeilmeldinger ?? undefined}
+            apen={erÅpen()}
+            onClick={toggleApen}
         >
             <JournalpostMetadataDiv>
                 <Normaltekst>
