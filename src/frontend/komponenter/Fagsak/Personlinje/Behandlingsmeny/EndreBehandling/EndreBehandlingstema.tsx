@@ -16,7 +16,7 @@ interface IProps {
     onListElementClick: () => void;
 }
 
-const EndreBehandlingstemaModal: React.FC<IProps> = ({ onListElementClick }) => {
+const EndreBehandlingstema: React.FC<IProps> = ({ onListElementClick }) => {
     const [visModal, settVisModal] = useState(false);
     const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() =>
         settVisModal(false)
@@ -81,4 +81,4 @@ const EndreBehandlingstemaModal: React.FC<IProps> = ({ onListElementClick }) => 
     );
 };
 
-export default EndreBehandlingstemaModal;
+export default EndreBehandlingstema;

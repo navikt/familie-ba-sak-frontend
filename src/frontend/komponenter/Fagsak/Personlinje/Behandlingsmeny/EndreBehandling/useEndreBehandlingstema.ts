@@ -16,7 +16,7 @@ import {
 import { IFagsak } from '../../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../../typer/toggles';
 
-const useEndreBehandlingstema = (lukkModal: () => void) => {
+const useEndreBehandling = (lukkModal: () => void) => {
     const { toggles } = useApp();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
@@ -81,4 +81,4 @@ const useEndreBehandlingstema = (lukkModal: () => void) => {
     };
 };
 
-export default useEndreBehandlingstema;
+export default useEndreBehandling;

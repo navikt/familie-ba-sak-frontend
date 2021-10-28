@@ -14,7 +14,7 @@ import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IMinimalFagsak } from '../../../../typer/fagsak';
 import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
-import EndreBehandlingstemaModal from './EndreBehandling/EndreBehandlingstemaModal';
+import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
 import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
@@ -70,7 +70,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
                         toggles[ToggleNavn.kanBehandleUtvidet] &&
                         åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD && (
                             <li>
-                                <EndreBehandlingstemaModal
+                                <EndreBehandlingstema
                                     onListElementClick={() => settAnker(undefined)}
                                 />
                             </li>
