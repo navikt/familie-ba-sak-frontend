@@ -45,8 +45,8 @@ const useEndreBehandlingstema = (lukkModal: () => void) => {
 
     const endreBehandlingstema = (behandlingId: number) => {
         const { behandlingstema } = skjema.felter;
-        if (isIBehandlingstema(behandlingstema)) {
-            const { kategori, underkategori } = behandlingstema;
+        if (isIBehandlingstema(behandlingstema.verdi)) {
+            const { kategori, underkategori } = behandlingstema.verdi;
             settRessurs(byggHenterRessurs());
             request<IRestEndreBehandlingUnderkategori, IFagsak>({
                 method: 'PUT',
