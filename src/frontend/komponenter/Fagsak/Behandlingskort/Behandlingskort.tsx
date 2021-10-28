@@ -20,7 +20,7 @@ import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasj
 import { sakstype } from '../Saksoversikt/Saksoversikt';
 
 interface IBehandlingskortProps {
-    fagsak: IFagsak;
+    fagsak?: IFagsak;
     åpenBehandling: IBehandling;
 }
 
@@ -85,8 +85,13 @@ const StyledHr = styled.hr`
 `;
 
 const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandling }) => {
-    const antallBehandlinger = fagsak.behandlinger.length;
-    const åpenBehandlingIndex = fagsak.behandlinger.findIndex(() => åpenBehandling) + 1;
+    const behandlinger = fagsak?.behandlinger ?? [];
+
+    const antallBehandlinger = behandlinger.length;
+    const åpenBehandlingIndex =
+        behandlinger.findIndex(
+            behandling => behandling.behandlingId === åpenBehandling.behandlingId
+        ) + 1;
     const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
 
     const tittel = `${

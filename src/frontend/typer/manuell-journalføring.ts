@@ -1,7 +1,7 @@
 import { IJournalpost } from '@navikt/familie-typer';
 
 import { INøkkelPar } from './common';
-import { IFagsak } from './fagsak';
+import { IMinimalFagsak } from './fagsak';
 import { IOppgave } from './oppgave';
 import { IPersonInfo } from './person';
 
@@ -9,7 +9,7 @@ export interface IDataForManuellJournalføring {
     journalpost: IJournalpost;
     oppgave: IOppgave;
     person?: IPersonInfo;
-    fagsak?: IFagsak;
+    minimalFagsak?: IMinimalFagsak;
 }
 
 export enum Dokumenttype {

@@ -23,13 +23,16 @@ const ToKolonnerDiv = styled.div`
 `;
 
 const ManuellJournalførContent: React.FC = () => {
-    const { dataForManuellJournalføring, fagsak } = useManuellJournalfør();
+    const { dataForManuellJournalføring, minimalFagsak } = useManuellJournalfør();
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS:
             return (
                 <>
-                    <Personlinje bruker={dataForManuellJournalføring.data.person} fagsak={fagsak} />
+                    <Personlinje
+                        bruker={dataForManuellJournalføring.data.person}
+                        minimalFagsak={minimalFagsak}
+                    />
 
                     {dataForManuellJournalføring.data.journalpost.journalstatus !==
                         Journalstatus.MOTTATT && (

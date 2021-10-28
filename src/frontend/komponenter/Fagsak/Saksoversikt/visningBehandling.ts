@@ -12,20 +12,15 @@ import {
     TilbakekrevingsbehandlingÅrsak,
 } from '../../../typer/tilbakekrevingsbehandling';
 
-export interface VisningVedtakForBehandling {
-    aktiv: boolean;
-    vedtaksdato: string;
-}
-
 export interface VisningBehandling {
     aktiv: boolean;
     behandlingId: number | string;
-    type: Behandlingstype | Tilbakekrevingsbehandlingstype;
+    kategori?: BehandlingKategori;
     opprettetTidspunkt: string;
     resultat?: BehandlingResultat | TilbakekrevingsbehandlingResultat;
     status: BehandlingStatus;
-    årsak?: BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak;
-    vedtakForBehandling: VisningVedtakForBehandling[];
-    kategori?: BehandlingKategori;
+    type: Behandlingstype | Tilbakekrevingsbehandlingstype;
     underkategori?: BehandlingUnderkategori;
+    vedtaksdato: string;
+    årsak?: BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak;
 }

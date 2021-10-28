@@ -22,7 +22,7 @@ const Container = styled.div`
 const Dokumentutsending: React.FC = () => {
     const history = useHistory();
 
-    const { fagsak, hentetForhåndsvisning, settVisInnsendtBrevModal, visInnsendtBrevModal } =
+    const { fagsakId, hentetForhåndsvisning, settVisInnsendtBrevModal, visInnsendtBrevModal } =
         useDokumentutsending();
 
     return (
@@ -46,7 +46,7 @@ const Dokumentutsending: React.FC = () => {
                                 key={'til dokumentoversikt'}
                                 mini={true}
                                 onClick={() => {
-                                    history.push(`/fagsak/${fagsak.id}/dokumenter`);
+                                    history.push(`/fagsak/${fagsakId}/dokumenter`);
                                 }}
                                 children={'Gå til Dokumentoversikt'}
                             />,

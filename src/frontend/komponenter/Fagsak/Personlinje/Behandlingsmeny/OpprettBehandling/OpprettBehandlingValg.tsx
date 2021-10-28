@@ -11,18 +11,18 @@ import {
     BehandlingUnderkategori,
     BehandlingÅrsak,
     behandlingÅrsak,
-    IBehandling,
 } from '../../../../../typer/behandling';
-import { FagsakStatus, IFagsak } from '../../../../../typer/fagsak';
+import { FagsakStatus, IMinimalFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
-import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
+import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak';
+import { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 
 interface IProps {
     behandlingstype: Felt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>;
     behandlingsårsak: Felt<BehandlingÅrsak | ''>;
     underkategori?: Felt<BehandlingUnderkategori | ''>;
-    fagsak?: IFagsak;
+    minimalFagsak?: IMinimalFagsak;
     visFeilmeldinger: boolean;
     erLesevisning?: boolean;
     manuellJournalfør?: boolean;
@@ -44,24 +44,24 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     behandlingstype,
     behandlingsårsak,
     underkategori,
-    fagsak,
+    minimalFagsak,
     visFeilmeldinger,
     erLesevisning = false,
     manuellJournalfør = false,
 }) => {
     const { toggles } = useApp();
-    const aktivBehandling: IBehandling | undefined = fagsak
-        ? hentAktivBehandlingPåFagsak(fagsak)
+    const aktivBehandling: VisningBehandling | undefined = minimalFagsak
+        ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
 
     const kanOppretteBehandling =
         !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
-    const førstegangsbehandlingEnabled = !fagsak
+    const førstegangsbehandlingEnabled = !minimalFagsak
         ? true
-        : fagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
-    const revurderingEnabled = !fagsak
+        : minimalFagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
+    const revurderingEnabled = !minimalFagsak
         ? false
-        : fagsak.behandlinger.length > 0 && kanOppretteBehandling;
+        : minimalFagsak.behandlinger.length > 0 && kanOppretteBehandling;
     const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
     const kanOppretteTilbakekreving = !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
 

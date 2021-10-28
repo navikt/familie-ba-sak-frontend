@@ -8,17 +8,22 @@ import {
     byggFeiletRessurs,
     byggHenterRessurs,
     byggTomRessurs,
+    hentDataFraRessurs,
     Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { IFagsak, IInternstatistikk } from '../typer/fagsak';
+import { IFagsak, IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
 import { ILogg } from '../typer/logg';
 import { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     const [fagsak, settFagsak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
+    const [minimalFagsak, settMinimalFagsak] = React.useState<Ressurs<IMinimalFagsak>>(
+        byggTomRessurs()
+    );
+
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
     const [logg, settLogg] = React.useState<Ressurs<ILogg[]>>(byggTomRessurs());
     const [internstatistikk, settInternstatistikk] = React.useState<Ressurs<IInternstatistikk>>(
@@ -30,9 +35,23 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         if (fagsak.status !== RessursStatus.SUKSESS && fagsak.status !== RessursStatus.HENTER) {
             settBruker(byggTomRessurs());
         } else {
-            oppdaterBrukerHvisFagsakEndres(bruker, fagsak);
+            oppdaterBrukerHvisFagsakEndres(bruker, hentDataFraRessurs(fagsak)?.søkerFødselsnummer);
         }
     }, [fagsak]);
+
+    React.useEffect(() => {
+        if (
+            minimalFagsak.status !== RessursStatus.SUKSESS &&
+            minimalFagsak.status !== RessursStatus.HENTER
+        ) {
+            settBruker(byggTomRessurs());
+        } else {
+            oppdaterBrukerHvisFagsakEndres(
+                bruker,
+                hentDataFraRessurs(minimalFagsak)?.søkerFødselsnummer
+            );
+        }
+    }, [minimalFagsak]);
 
     const hentFagsak = (fagsakId: string): void => {
         settFagsak(byggHenterRessurs());
@@ -49,19 +68,34 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
             });
     };
 
+    const hentMinimalFagsak = (fagsakId: string): void => {
+        settFagsak(byggHenterRessurs());
+        request<void, IMinimalFagsak>({
+            method: 'GET',
+            url: `/familie-ba-sak/api/fagsaker/minimal/${fagsakId}`,
+            påvirkerSystemLaster: true,
+        })
+            .then((hentetFagsak: Ressurs<IMinimalFagsak>) => {
+                settMinimalFagsak(hentetFagsak);
+            })
+            .catch((_error: AxiosError) => {
+                settMinimalFagsak(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
+            });
+    };
+
     const oppdaterBrukerHvisFagsakEndres = (
         bruker: Ressurs<IPersonInfo>,
-        fagsak: Ressurs<IFagsak>
+        søkerFødselsnummer?: string
     ): void => {
-        if (fagsak.status !== RessursStatus.SUKSESS) {
+        if (søkerFødselsnummer === undefined) {
             return;
         }
 
         if (
             bruker.status !== RessursStatus.SUKSESS ||
-            fagsak.data.søkerFødselsnummer !== bruker.data.personIdent
+            søkerFødselsnummer !== bruker.data.personIdent
         ) {
-            hentBruker(fagsak.data.søkerFødselsnummer);
+            hentBruker(søkerFødselsnummer);
         }
     };
 
@@ -135,27 +169,29 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     };
 
     const hentFagsakForPerson = async (personId: string) => {
-        return request<{ personIdent: string }, IFagsak | undefined>({
+        return request<{ personIdent: string }, IMinimalFagsak | undefined>({
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
             data: {
                 personIdent: personId,
             },
-        }).then((fagsak: Ressurs<IFagsak | undefined>) => {
+        }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
             return fagsak;
         });
     };
 
     return {
-        oppdaterRegisteropplysninger,
-        hentInternstatistikk,
-        internstatistikk,
         bruker,
         fagsak,
         hentFagsak,
         hentFagsakForPerson,
+        hentInternstatistikk,
         hentLogg,
+        hentMinimalFagsak,
+        internstatistikk,
         logg,
+        minimalFagsak,
+        oppdaterRegisteropplysninger,
         settFagsak,
     };
 });
