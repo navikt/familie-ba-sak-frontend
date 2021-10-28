@@ -96,8 +96,5 @@ export const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingst
 };
 
 // eslint-disable-next-line
-export const isBehandlingstema = (input: any): input is Behandlingstema =>
-    !!(input && input in Behandlingstema);
-// eslint-disable-next-line
 export const isIBehandlingstema = (input: any): input is IBehandlingstema =>
     !!(input && typeof input === 'object' && input.kategori && input.underkategori);
