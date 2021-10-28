@@ -64,59 +64,66 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody className="tabell__body">
-                            {hentSorterteBehandlinger().map((behandling: VisningBehandling) => (
-                                <tr
-                                    key={behandling.behandlingId}
-                                    className={
-                                        skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                            behandling.behandlingId as number
-                                        )
-                                            ? 'tabell__tr--valgt'
-                                            : ''
-                                    }
-                                    aria-selected={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                        behandling.behandlingId as number
-                                    )}
-                                >
-                                    <KnyttTilBehandlingTd>
-                                        <FamilieCheckbox
-                                            id={skjema.felter.tilknyttedeBehandlingIder.id}
-                                            erLesevisning={erLesevisning()}
-                                            label={'-'}
-                                            checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                behandling.behandlingId as number
-                                            )}
-                                            onChange={() => {
-                                                skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
-                                                    [
-                                                        ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
-                                                            it =>
-                                                                it !==
-                                                                (behandling.behandlingId as number)
-                                                        ),
-                                                        ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
-                                                            behandling.behandlingId as number
-                                                        )
-                                                            ? []
-                                                            : [behandling.behandlingId as number]),
-                                                    ]
-                                                );
-                                            }}
-                                        />
-                                    </KnyttTilBehandlingTd>
-                                    <td>
-                                        {formaterIsoDato(
-                                            behandling.opprettetTidspunkt,
-                                            datoformat.DATO_FORKORTTET
+                            {hentSorterteBehandlinger().map((behandling: VisningBehandling) => {
+                                const behandlingId: number | undefined =
+                                    typeof behandling.behandlingId == 'number'
+                                        ? behandling.behandlingId
+                                        : undefined;
+
+                                return behandlingId !== undefined ? (
+                                    <tr
+                                        key={behandlingId}
+                                        className={
+                                            skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                                behandlingId
+                                            )
+                                                ? 'tabell__tr--valgt'
+                                                : ''
+                                        }
+                                        aria-selected={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                            behandlingId
                                         )}
-                                    </td>
-                                    <td>{behandlingÅrsak[behandling.årsak as BehandlingÅrsak]}</td>
-                                    <BehandlingstypeTd>
-                                        {behandlingstyper[behandling.type].navn}
-                                    </BehandlingstypeTd>
-                                    <td>{behandlingsstatuser[behandling.status]}</td>
-                                </tr>
-                            ))}
+                                    >
+                                        <KnyttTilBehandlingTd>
+                                            <FamilieCheckbox
+                                                id={skjema.felter.tilknyttedeBehandlingIder.id}
+                                                erLesevisning={erLesevisning()}
+                                                label={'-'}
+                                                checked={skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                                    behandlingId
+                                                )}
+                                                onChange={() => {
+                                                    skjema.felter.tilknyttedeBehandlingIder.validerOgSettFelt(
+                                                        [
+                                                            ...skjema.felter.tilknyttedeBehandlingIder.verdi.filter(
+                                                                it => it !== behandlingId
+                                                            ),
+                                                            ...(skjema.felter.tilknyttedeBehandlingIder.verdi.includes(
+                                                                behandlingId
+                                                            )
+                                                                ? []
+                                                                : [behandlingId]),
+                                                        ]
+                                                    );
+                                                }}
+                                            />
+                                        </KnyttTilBehandlingTd>
+                                        <td>
+                                            {formaterIsoDato(
+                                                behandling.opprettetTidspunkt,
+                                                datoformat.DATO_FORKORTTET
+                                            )}
+                                        </td>
+                                        <td>
+                                            {behandlingÅrsak[behandling.årsak as BehandlingÅrsak]}
+                                        </td>
+                                        <BehandlingstypeTd>
+                                            {behandlingstyper[behandling.type].navn}
+                                        </BehandlingstypeTd>
+                                        <td>{behandlingsstatuser[behandling.status]}</td>
+                                    </tr>
+                                ) : null;
+                            })}
                         </tbody>
                     </table>
                     <br />

@@ -1,5 +1,3 @@
-import { BehandlingStatus } from './behandling';
-
 export enum Tilbakekrevingsbehandlingstype {
     TILBAKEKREVING = 'TILBAKEKREVING',
     REVURDERING_TILBAKEKREVING = 'REVURDERING_TILBAKEKREVING',
@@ -23,15 +21,4 @@ export enum TilbakekrevingsbehandlingResultat {
     DELVIS_TILBAKEBETALING = 'DELVIS_TILBAKEBETALING',
     FULL_TILBAKEBETALING = 'FULL_TILBAKEBETALING',
     HENLAGT = 'HENLAGT',
-}
-
-export interface ITilbakekrevingsbehandling {
-    aktiv: boolean;
-    behandlingId: string;
-    opprettetTidspunkt: string;
-    resultat?: TilbakekrevingsbehandlingResultat;
-    status: BehandlingStatus;
-    type: Tilbakekrevingsbehandlingstype;
-    vedtaksdato: string;
-    årsak?: TilbakekrevingsbehandlingÅrsak;
 }

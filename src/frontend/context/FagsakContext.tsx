@@ -72,7 +72,7 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         settFagsak(byggHenterRessurs());
         request<void, IMinimalFagsak>({
             method: 'GET',
-            url: `/familie-ba-sak/api/fagsaker/saksoversikt/${fagsakId}`,
+            url: `/familie-ba-sak/api/fagsaker/minimal/${fagsakId}`,
             påvirkerSystemLaster: true,
         })
             .then((hentetFagsak: Ressurs<IMinimalFagsak>) => {
