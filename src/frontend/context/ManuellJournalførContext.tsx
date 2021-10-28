@@ -31,14 +31,13 @@ import {
 } from '../typer/manuell-journalføring';
 import { Adressebeskyttelsegradering, IPersonInfo } from '../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../typer/tilbakekrevingsbehandling';
-import { ToggleNavn } from '../typer/toggles';
 import { hentAktivBehandlingPåFagsak } from '../utils/fagsak';
 import { kalenderDiff } from '../utils/kalender';
 import { useApp } from './AppContext';
 import { useFagsakRessurser } from './FagsakContext';
 
 const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() => {
-    const { innloggetSaksbehandler, toggles } = useApp();
+    const { innloggetSaksbehandler } = useApp();
     const { hentFagsakForPerson } = useFagsakRessurser();
     const history = useHistory();
     const { request } = useHttp();
@@ -352,14 +351,12 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     }&ferdigstill=true`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
-                        kategori:
-                            toggles[ToggleNavn.brukEøs] && isIBehandlingstema(behandlingstema)
-                                ? behandlingstema.kategori
-                                : null,
-                        underkategori:
-                            toggles[ToggleNavn.brukEøs] && isIBehandlingstema(behandlingstema)
-                                ? behandlingstema.underkategori
-                                : null,
+                        kategori: isIBehandlingstema(behandlingstema)
+                            ? behandlingstema.kategori
+                            : null,
+                        underkategori: isIBehandlingstema(behandlingstema)
+                            ? behandlingstema.underkategori
+                            : null,
                         bruker: {
                             navn: skjema.felter.bruker.verdi?.navn ?? '',
                             id: skjema.felter.bruker.verdi?.personIdent ?? '',
