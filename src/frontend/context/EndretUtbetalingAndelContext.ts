@@ -131,6 +131,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 begrunnelse: begrunnelse.verdi,
                 søknadstidspunkt: søknadstidspunkt.verdi,
                 avtaletidspunktDeltBosted: avtaletidspunktDeltBosted.verdi,
+                erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,
             };
         };
 

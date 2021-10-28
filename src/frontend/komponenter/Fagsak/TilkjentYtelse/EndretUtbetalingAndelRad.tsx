@@ -8,7 +8,9 @@ import { Flatknapp } from 'nav-frontend-knapper';
 
 import { Collapse, Expand } from '@navikt/ds-icons';
 
+import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
+import Advarsel from '../../../ikoner/Advarsel';
 import { IBehandling } from '../../../typer/behandling';
 import {
     IEndretUtbetalingAndelÅrsak,
@@ -22,6 +24,7 @@ import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 interface IEndretUtbetalingAndelRadProps {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
     åpenBehandling: IBehandling;
+    settFeilmelding: (feilmelding: string) => void;
 }
 
 const StyledCollapseIkon = styled(Collapse)`
@@ -36,13 +39,23 @@ const TdUtenUnderstrek = styled.td<{ erÅpen: boolean }>`
     ${props => props.erÅpen && 'border-bottom: 0 !important;'}
 `;
 
+const PersonCelle = styled.div`
+    display: flex;
+    svg {
+        margin-right: 1rem;
+    }
+`;
+
 const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
     endretUtbetalingAndel,
     åpenBehandling,
+    settFeilmelding,
 }) => {
     const [åpenUtbetalingsAndel, settÅpenUtbetalingsAndel] = useState<boolean>(
         endretUtbetalingAndel.personIdent === null
     );
+
+    const { erLesevisning } = useBehandling();
 
     const { hentSkjemaData } = useEndretUtbetalingAndel();
 
@@ -92,10 +105,23 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
         <>
             <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
-                    {formaterIdent(
-                        endretUtbetalingAndel.personIdent ? endretUtbetalingAndel.personIdent : '',
-                        'Ikke satt'
-                    )}
+                    <PersonCelle>
+                        {!endretUtbetalingAndel.erTilknyttetAndeler && (
+                            <Advarsel
+                                heigth={20}
+                                width={20}
+                                title={
+                                    'Du har endrede utbetalingsperioder. Bekreft, slett eller oppdater periodene i listen.'
+                                }
+                            />
+                        )}
+                        {formaterIdent(
+                            endretUtbetalingAndel.personIdent
+                                ? endretUtbetalingAndel.personIdent
+                                : '',
+                            'Ikke satt'
+                        )}
+                    </PersonCelle>
                 </TdUtenUnderstrek>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     {endretUtbetalingAndel.fom
@@ -125,7 +151,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             </>
                         ) : (
                             <>
-                                <StyledExpandIkon /> Endre
+                                <StyledExpandIkon /> {erLesevisning() ? 'Se mer' : 'Endre'}
                             </>
                         )}
                     </Flatknapp>
@@ -139,6 +165,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                             avbrytEndringAvUtbetalingsperiode={() => {
                                 settÅpenUtbetalingsAndel(false);
                             }}
+                            settFeilmelding={settFeilmelding}
                         />
                     </td>
                 </tr>
