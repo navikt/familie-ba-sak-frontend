@@ -1,4 +1,4 @@
-import { BehandlingstypeFilter, GjelderFilter, IOppgave } from './oppgave';
+import { IOppgave } from './oppgave';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -74,20 +74,25 @@ export const tilBehandlingstema = (
     ) as IBehandlingstema;
 };
 
+export const kodeTilBehandlingUnderkategoriMap: Record<string, BehandlingUnderkategori> = {
+    ab0180: BehandlingUnderkategori.ORDINÆR,
+    ab0096: BehandlingUnderkategori.UTVIDET,
+};
+
+export const kodeTilBehandlingKategoriMap: Record<string, BehandlingKategori> = {
+    ae0118: BehandlingKategori.NASJONAL,
+    ae0120: BehandlingKategori.EØS,
+};
+
 export const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingstema | '' => {
-    const { behandlingstema, behandlingstype } = oppgave;
-
-    const erOrdinær = behandlingstema === GjelderFilter.ab0180;
-    const erUtvidet = behandlingstema === GjelderFilter.ab0096;
-    const erNasjonal = behandlingstype === BehandlingstypeFilter.ae0118;
-    const erEøs = behandlingstype === BehandlingstypeFilter.ae0120;
-
-    if (erOrdinær && erNasjonal) return behandlingstemaer['NASJONAL_ORDINÆR'];
-    if (erUtvidet && erNasjonal) return behandlingstemaer['NASJONAL_UTVIDET'];
-    if (erOrdinær && erEøs) return behandlingstemaer['EØS_ORDINÆR'];
-    if (erUtvidet && erEøs) return behandlingstemaer['EØS_UTVIDET'];
-
-    return '';
+    const { behandlingstema: gjelder, behandlingstype } = oppgave;
+    return gjelder in kodeTilBehandlingUnderkategoriMap &&
+        behandlingstype in kodeTilBehandlingKategoriMap
+        ? tilBehandlingstema(
+              kodeTilBehandlingKategoriMap[behandlingstype],
+              kodeTilBehandlingUnderkategoriMap[gjelder]
+          )
+        : '';
 };
 
 // eslint-disable-next-line
