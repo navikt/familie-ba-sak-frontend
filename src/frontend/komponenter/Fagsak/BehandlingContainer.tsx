@@ -7,6 +7,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
+import { useFagsakRessurser } from '../../context/FagsakContext';
 import { SimuleringProvider } from '../../context/SimuleringContext';
 import { SøknadProvider } from '../../context/SøknadContext';
 import { TidslinjeProvider } from '../../context/TidslinjeContext';
@@ -151,4 +152,44 @@ const BehandlingContainer: React.FunctionComponent<IProps> = ({ fagsak }) => {
     }
 };
 
-export default BehandlingContainer;
+interface IFagsakForBehandlingContainerProps {
+    fagsakId: string;
+}
+
+const FagsakForBehandlingContainer: React.FC<IFagsakForBehandlingContainerProps> = ({
+    fagsakId,
+}) => {
+    const { fagsak, hentFagsak } = useFagsakRessurser();
+
+    useEffect(() => {
+        if (fagsakId !== undefined) {
+            if (fagsak.status !== RessursStatus.SUKSESS) {
+                hentFagsak(fagsakId);
+            } else if (
+                fagsak.status === RessursStatus.SUKSESS &&
+                fagsak.data.id !== parseInt(fagsakId, 10)
+            ) {
+                hentFagsak(fagsakId);
+            }
+        }
+    }, [fagsakId]);
+
+    switch (fagsak.status) {
+        case RessursStatus.SUKSESS:
+            return <BehandlingContainer fagsak={fagsak.data} />;
+        case RessursStatus.IKKE_TILGANG:
+            return (
+                <AlertStripe
+                    children={`Du har ikke tilgang til å se denne saken.`}
+                    type={'advarsel'}
+                />
+            );
+        case RessursStatus.FEILET:
+        case RessursStatus.FUNKSJONELL_FEIL:
+            return <AlertStripe children={fagsak.frontendFeilmelding} type={'feil'} />;
+        default:
+            return <div />;
+    }
+};
+
+export default FagsakForBehandlingContainer;

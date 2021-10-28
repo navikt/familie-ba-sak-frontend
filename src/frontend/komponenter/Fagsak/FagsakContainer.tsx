@@ -38,17 +38,17 @@ const FagsakContainer: React.FunctionComponent = () => {
         ? !erPåSaksoversikt && !erPåDokumentutsending
         : !erPåSaksoversikt;
 
-    const { bruker, fagsak, hentFagsak } = useFagsakRessurser();
+    const { bruker, minimalFagsak, hentMinimalFagsak } = useFagsakRessurser();
 
     useEffect(() => {
         if (fagsakId !== undefined) {
-            if (fagsak.status !== RessursStatus.SUKSESS) {
-                hentFagsak(fagsakId);
+            if (minimalFagsak.status !== RessursStatus.SUKSESS) {
+                hentMinimalFagsak(fagsakId);
             } else if (
-                fagsak.status === RessursStatus.SUKSESS &&
-                fagsak.data.id !== parseInt(fagsakId, 10)
+                minimalFagsak.status === RessursStatus.SUKSESS &&
+                minimalFagsak.data.id !== parseInt(fagsakId, 10)
             ) {
-                hentFagsak(fagsakId);
+                hentMinimalFagsak(fagsakId);
             }
         }
     }, [fagsakId]);
@@ -63,18 +63,18 @@ const FagsakContainer: React.FunctionComponent = () => {
         }
     }, []);
 
-    switch (fagsak.status) {
+    switch (minimalFagsak.status) {
         case RessursStatus.SUKSESS:
             switch (bruker.status) {
                 case RessursStatus.SUKSESS:
                     return (
                         <>
-                            <Personlinje bruker={bruker.data} fagsak={fagsak.data} />
+                            <Personlinje bruker={bruker.data} minimalFagsak={minimalFagsak.data} />
 
                             <div className={'fagsakcontainer__content'}>
                                 {skalHaVenstremeny && (
                                     <div className={'fagsakcontainer__content--venstremeny'}>
-                                        <Venstremeny fagsak={fagsak.data} />
+                                        <Venstremeny />
                                     </div>
                                 )}
                                 <div
@@ -86,7 +86,11 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             exact={true}
                                             path="/fagsak/:fagsakId/saksoversikt"
                                             render={() => {
-                                                return <Saksoversikt fagsak={fagsak.data} />;
+                                                return (
+                                                    <Saksoversikt
+                                                        minimalFagsak={minimalFagsak.data}
+                                                    />
+                                                );
                                             }}
                                         />
 
@@ -97,7 +101,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                                 render={() => {
                                                     return (
                                                         <DokumentutsendingProvider
-                                                            fagsak={fagsak.data}
+                                                            fagsakId={minimalFagsak.data.id}
                                                         >
                                                             <Dokumentutsending />
                                                         </DokumentutsendingProvider>
@@ -117,7 +121,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         <Route
                                             path="/fagsak/:fagsakId/:behandlingId"
                                             render={() => {
-                                                return <BehandlingContainer fagsak={fagsak.data} />;
+                                                return <BehandlingContainer fagsakId={fagsakId} />;
                                             }}
                                         />
                                         <Redirect
@@ -128,7 +132,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                 </div>
                                 {skalHaHøyremeny && (
                                     <div className={'fagsakcontainer__content--høyremeny'}>
-                                        <Høyremeny fagsak={fagsak.data} />
+                                        <Høyremeny />
                                     </div>
                                 )}
                             </div>
@@ -150,7 +154,7 @@ const FagsakContainer: React.FunctionComponent = () => {
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-            return <AlertStripe children={fagsak.frontendFeilmelding} type={'feil'} />;
+            return <AlertStripe children={minimalFagsak.frontendFeilmelding} type={'feil'} />;
         default:
             return <div />;
     }
