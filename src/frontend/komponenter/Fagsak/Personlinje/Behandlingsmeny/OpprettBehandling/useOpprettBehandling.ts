@@ -52,11 +52,8 @@ const useOpprettBehandling = (
 
     const behandlingstema = useFelt<IBehandlingstema | ''>({
         verdi: '',
-        valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) => {
-            return isIBehandlingstema(felt.verdi)
-                ? ok(felt)
-                : feil(felt, 'Behandlingstema må settes.');
-        },
+        valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) =>
+            isIBehandlingstema(felt.verdi) ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
         avhengigheter: { behandlingstype },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;

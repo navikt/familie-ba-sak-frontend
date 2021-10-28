@@ -121,12 +121,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }),
             behandlingstema: useFelt<IBehandlingstema | ''>({
                 verdi: '',
-                valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) => {
-                    if (!toggles[ToggleNavn.brukEøs]) {
-                        return ok(felt);
-                    }
-                    return felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.');
-                },
+                valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) =>
+                    isIBehandlingstema(felt.verdi)
+                        ? ok(felt)
+                        : feil(felt, 'Behandlingstema må settes.'),
             }),
             dokumenter: useFelt<IDokumentInfo[]>({
                 verdi: [],

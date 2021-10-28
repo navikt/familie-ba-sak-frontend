@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
@@ -79,11 +79,12 @@ const Journalpost: React.FC = () => {
             : undefined;
 
     return (
-        <Ekspanderbartpanel
+        <EkspanderbartpanelBase
             id={skjema.felter.journalpostTittel.id}
             tittel={
                 <Undertittel>{skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}</Undertittel>
             }
+            apen={skjema.visFeilmeldinger ?? undefined}
         >
             <JournalpostMetadataDiv>
                 <Normaltekst>
@@ -94,7 +95,7 @@ const Journalpost: React.FC = () => {
                 </Normaltekst>
             </JournalpostMetadataDiv>
             <EndreJournalpost />
-        </Ekspanderbartpanel>
+        </EkspanderbartpanelBase>
     );
 };
 
