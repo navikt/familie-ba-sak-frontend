@@ -15,25 +15,25 @@ import {
     behandlingÅrsak,
 } from '../../../typer/behandling';
 import { behandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
-import { IFagsak } from '../../../typer/fagsak';
+import { IMinimalFagsak } from '../../../typer/fagsak';
 import {
     Tilbakekrevingsbehandlingstype,
     tilbakekrevingstyper,
 } from '../../../typer/tilbakekrevingsbehandling';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { kalenderDiff } from '../../../utils/kalender';
-import { VisningBehandling, VisningVedtakForBehandling } from './visningBehandling';
+import { VisningBehandling } from './visningBehandling';
 
 interface IBehandlingshistorikkProps {
-    fagsak: IFagsak;
+    minimalFagsak: IMinimalFagsak;
 }
 
-const lagLenkePåType = (fagsak: IFagsak, behandling: VisningBehandling): ReactNode => {
+const lagLenkePåType = (fagsakId: number, behandling: VisningBehandling): ReactNode => {
     return behandling.status === BehandlingStatus.AVSLUTTET ? (
         behandlingstyper[behandling.type].navn
     ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
         <Lenke
-            href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.id}/behandling/${behandling.behandlingId}`}
+            href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsakId}/behandling/${behandling.behandlingId}`}
             onMouseDown={e => e.preventDefault()}
             target="_blank"
         >
@@ -41,18 +41,21 @@ const lagLenkePåType = (fagsak: IFagsak, behandling: VisningBehandling): ReactN
             <ExternalLink />
         </Lenke>
     ) : (
-        <Lenke href={`/fagsak/${fagsak.id}/${behandling.behandlingId}`}>
+        <Lenke href={`/fagsak/${fagsakId}/${behandling.behandlingId}`}>
             {behandlingstyper[behandling.type].navn}
         </Lenke>
     );
 };
 
-const lagLenkePåResultat = (fagsak: IFagsak, behandling: VisningBehandling): ReactNode => {
+const lagLenkePåResultat = (
+    minimalFagsak: IMinimalFagsak,
+    behandling: VisningBehandling
+): ReactNode => {
     return !behandling.resultat ? (
         '-'
     ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
         <Lenke
-            href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.id}/behandling/${behandling.behandlingId}`}
+            href={`/redirect/familie-tilbake/fagsystem/BA/fagsak/${minimalFagsak.id}/behandling/${behandling.behandlingId}`}
             onMouseDown={e => e.preventDefault()}
             target="_blank"
         >
@@ -60,7 +63,7 @@ const lagLenkePåResultat = (fagsak: IFagsak, behandling: VisningBehandling): Re
             <ExternalLink />
         </Lenke>
     ) : behandling.status === BehandlingStatus.AVSLUTTET ? (
-        <Lenke href={`/fagsak/${fagsak.id}/${behandling.behandlingId}`}>
+        <Lenke href={`/fagsak/${minimalFagsak.id}/${behandling.behandlingId}`}>
             {behandling ? behandlingsresultater[behandling.resultat] : '-'}
         </Lenke>
     ) : (
@@ -76,10 +79,10 @@ const finnÅrsak = (behandling: VisningBehandling): ReactNode => {
         : '-';
 };
 
-const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
-    const behandlinger: Array<VisningBehandling> = [
-        ...fagsak.behandlinger,
-        ...fagsak.tilbakekrevingsbehandlinger,
+const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
+    const behandlinger: VisningBehandling[] = [
+        ...minimalFagsak.behandlinger,
+        ...minimalFagsak.tilbakekrevingsbehandlinger,
     ];
 
     return (
@@ -110,11 +113,6 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                 )
                             )
                             .map((behandling: VisningBehandling) => {
-                                const aktivVedtakForBehandling =
-                                    behandling.vedtakForBehandling.find(
-                                        (vedtak: VisningVedtakForBehandling) => vedtak.aktiv
-                                    );
-
                                 return (
                                     <tr key={behandling.behandlingId}>
                                         <td
@@ -124,7 +122,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                             )}`}
                                         />
                                         <td>{finnÅrsak(behandling)}</td>
-                                        <td>{lagLenkePåType(fagsak, behandling)}</td>
+                                        <td>{lagLenkePåType(minimalFagsak.id, behandling)}</td>
                                         <td>
                                             {behandling.kategori
                                                 ? behandlingKategori[behandling.kategori]
@@ -138,15 +136,15 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ fagsak }) => {
                                         <td>{behandlingsstatuser[behandling.status]}</td>
                                         <td
                                             children={
-                                                aktivVedtakForBehandling
+                                                behandling.vedtaksdato
                                                     ? formaterIsoDato(
-                                                          aktivVedtakForBehandling.vedtaksdato,
+                                                          behandling.vedtaksdato,
                                                           datoformat.DATO
                                                       )
                                                     : '-'
                                             }
                                         />
-                                        <td>{lagLenkePåResultat(fagsak, behandling)}</td>
+                                        <td>{lagLenkePåResultat(minimalFagsak, behandling)}</td>
                                     </tr>
                                 );
                             })}

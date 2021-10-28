@@ -20,7 +20,7 @@ const StyledCheckboxDiv = styled.div`
  * journalposten er journalført på slik at man kan klikke seg inn på behandlingen
  */
 export const KnyttTilNyBehandling: React.FC = () => {
-    const { skjema, fagsak, erLesevisning } = useManuellJournalfør();
+    const { skjema, minimalFagsak, erLesevisning } = useManuellJournalfør();
     const { knyttTilNyBehandling, behandlingstema, behandlingsårsak, behandlingstype } =
         skjema.felter;
     return (
@@ -42,7 +42,7 @@ export const KnyttTilNyBehandling: React.FC = () => {
                 <OpprettBehandlingValg
                     behandlingstype={behandlingstype}
                     behandlingsårsak={behandlingsårsak}
-                    fagsak={fagsak}
+                    minimalFagsak={minimalFagsak}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     erLesevisning={erLesevisning()}
                     manuellJournalfør

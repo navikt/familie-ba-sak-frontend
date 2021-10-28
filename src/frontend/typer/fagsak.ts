@@ -1,6 +1,6 @@
+import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { IBehandling } from './behandling';
 import { INøkkelPar } from './common';
-import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 import { Utbetalingsperiode } from './vedtaksperiode';
 
 // Enum
@@ -11,15 +11,24 @@ export enum FagsakStatus {
 }
 
 // Interface
-export interface IFagsak {
-    behandlinger: IBehandling[];
+export interface IBaseFagsak {
     id: number;
     opprettetTidspunkt: string;
     saksnummer: string;
     status: FagsakStatus;
     søkerFødselsnummer: string;
     underBehandling: boolean;
-    tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[];
+}
+
+export interface IFagsak extends IBaseFagsak {
+    behandlinger: IBehandling[];
+    tilbakekrevingsbehandlinger: VisningBehandling[];
+    gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
+}
+
+export interface IMinimalFagsak extends IBaseFagsak {
+    behandlinger: VisningBehandling[];
+    tilbakekrevingsbehandlinger: VisningBehandling[];
     gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 

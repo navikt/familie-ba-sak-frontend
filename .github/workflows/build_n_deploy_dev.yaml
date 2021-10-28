@@ -1,7 +1,6 @@
 name: Build&deploy to dev
 
 on:
-  pull_request:
   workflow_dispatch:
 
 env:

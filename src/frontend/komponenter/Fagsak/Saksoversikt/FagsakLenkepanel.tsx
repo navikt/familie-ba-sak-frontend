@@ -6,21 +6,22 @@ import { LenkepanelBase } from 'nav-frontend-lenkepanel';
 import Panel from 'nav-frontend-paneler';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { BehandlingStatus, IBehandling } from '../../../typer/behandling';
+import { BehandlingStatus } from '../../../typer/behandling';
 import { behandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
-import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
+import { IMinimalFagsak } from '../../../typer/fagsak';
+import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
+import { VisningBehandling } from './visningBehandling';
 
 interface IBehandlingLenkepanel {
-    fagsak: IFagsak;
+    minimalFagsak: IMinimalFagsak;
 }
 
 interface IInnholdstabell {
-    fagsak: IFagsak;
-    behandling?: IBehandling;
+    minimalFagsak: IMinimalFagsak;
+    behandling?: VisningBehandling;
 }
 
-const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
+const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak, behandling }) => {
     return (
         <table className={'fagsak-panel__tabell'}>
             <thead>
@@ -40,16 +41,20 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
                 <tr>
                     <td>
                         <Normaltekst>
-                            {behandling ? behandlingKategori[behandling.kategori] : '-'}
+                            {behandling && behandling.kategori
+                                ? behandlingKategori[behandling.kategori]
+                                : '-'}
                         </Normaltekst>
                     </td>
                     <td>
                         <Normaltekst>
-                            {behandling ? behandlingUnderkategori[behandling.underkategori] : '-'}
+                            {behandling && behandling.underkategori
+                                ? behandlingUnderkategori[behandling.underkategori]
+                                : '-'}
                         </Normaltekst>
                     </td>
                     <td>
-                        <Normaltekst>{hentFagsakStatusVisning(fagsak)}</Normaltekst>
+                        <Normaltekst>{hentFagsakStatusVisning(minimalFagsak)}</Normaltekst>
                     </td>
                 </tr>
             </tbody>
@@ -57,26 +62,27 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ fagsak, behandling }) => {
     );
 };
 
-const genererHoverTekst = (behandling: IBehandling) => {
+const genererHoverTekst = (behandling: VisningBehandling) => {
     return behandling.status === BehandlingStatus.AVSLUTTET
         ? 'Gå til gjeldende vedtak'
         : 'Gå til åpen behandling';
 };
 
-const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ fagsak }) => {
-    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(fagsak);
+const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) => {
+    const aktivBehandling: VisningBehandling | undefined =
+        hentAktivBehandlingPåMinimalFagsak(minimalFagsak);
 
     return aktivBehandling ? (
         <LenkepanelBase
             title={genererHoverTekst(aktivBehandling)}
             className={classNames('fagsak-panel', 'fagsak-lenkepanel')}
-            href={`/fagsak/${fagsak.id}/${aktivBehandling.behandlingId}`}
+            href={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
         >
-            <Innholdstabell fagsak={fagsak} behandling={aktivBehandling} />
+            <Innholdstabell minimalFagsak={minimalFagsak} behandling={aktivBehandling} />
         </LenkepanelBase>
     ) : (
         <Panel className={'fagsak-panel'}>
-            <Innholdstabell fagsak={fagsak} behandling={aktivBehandling} />
+            <Innholdstabell minimalFagsak={minimalFagsak} behandling={aktivBehandling} />
         </Panel>
     );
 };

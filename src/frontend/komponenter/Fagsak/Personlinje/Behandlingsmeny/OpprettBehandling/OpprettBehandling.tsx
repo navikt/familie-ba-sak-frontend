@@ -7,7 +7,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { IFagsak } from '../../../../../typer/fagsak';
+import { IMinimalFagsak } from '../../../../../typer/fagsak';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
@@ -16,10 +16,10 @@ import useOpprettBehandling from './useOpprettBehandling';
 
 interface IProps {
     onListElementClick: () => void;
-    fagsak: IFagsak;
+    minimalFagsak: IMinimalFagsak;
 }
 
-const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => {
+const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak }) => {
     const [visModal, settVisModal] = useState(false);
     const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
         useState(false);
@@ -27,7 +27,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
 
     const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus } = useOpprettBehandling(
         () => settVisModal(false),
-        fagsak,
+        minimalFagsak.id,
         () => {
             settVisModal(false);
             settVisBekreftelseTilbakekrevingModal(true);
@@ -65,7 +65,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                             key={'bekreft'}
                             type={'hoved'}
                             mini={true}
-                            onClick={() => onBekreft(fagsak.søkerFødselsnummer)}
+                            onClick={() => onBekreft(minimalFagsak.søkerFødselsnummer)}
                             children={'Bekreft'}
                             spinner={
                                 opprettBehandlingSkjema.submitRessurs.status ===
@@ -89,7 +89,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                         behandlingstype={behandlingstype}
                         behandlingsårsak={behandlingsårsak}
                         behandlingstema={behandlingstema}
-                        fagsak={fagsak}
+                        minimalFagsak={minimalFagsak}
                         visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                     />
                 </SkjemaGruppe>
@@ -107,7 +107,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, fagsak }) => 
                                 mini={true}
                                 onClick={() => {
                                     settVisBekreftelseTilbakekrevingModal(false);
-                                    history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                    history.push(`/fagsak/${minimalFagsak.id}/saksoversikt`);
                                 }}
                                 children={'Gå til saksoversikten'}
                             />,
