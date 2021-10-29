@@ -19,11 +19,7 @@ import {
 
 import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
-import {
-    IBehandlingstema,
-    isIBehandlingstema,
-    utredBehandlingstemaFraOppgave,
-} from '../typer/behandlingstema';
+import { IBehandlingstema, utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
 import { IMinimalFagsak } from '../typer/fagsak';
 import {
     IDataForManuellJournalføring,
@@ -98,7 +94,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
         {
             journalpostTittel: string;
-            behandlingstema: IBehandlingstema | '';
+            behandlingstema: IBehandlingstema | undefined;
             dokumenter: IDokumentInfo[];
             bruker: IPersonInfo | undefined;
             avsenderNavn: string;
@@ -119,12 +115,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         : feil(felt, 'Journalposttittel kan ikke være tom');
                 },
             }),
-            behandlingstema: useFelt<IBehandlingstema | ''>({
-                verdi: '',
-                valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) =>
-                    isIBehandlingstema(felt.verdi)
-                        ? ok(felt)
-                        : feil(felt, 'Behandlingstema må settes.'),
+            behandlingstema: useFelt<IBehandlingstema | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
             }),
             dokumenter: useFelt<IDokumentInfo[]>({
                 verdi: [],
@@ -354,12 +348,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     }&ferdigstill=true`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
-                        kategori: isIBehandlingstema(behandlingstema)
-                            ? behandlingstema.kategori
-                            : null,
-                        underkategori: isIBehandlingstema(behandlingstema)
-                            ? behandlingstema.underkategori
-                            : null,
+                        kategori: behandlingstema?.kategori ?? null,
+                        underkategori: behandlingstema?.underkategori ?? null,
                         bruker: {
                             navn: skjema.felter.bruker.verdi?.navn ?? '',
                             id: skjema.felter.bruker.verdi?.personIdent ?? '',

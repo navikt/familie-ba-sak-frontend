@@ -84,7 +84,7 @@ export const kodeTilBehandlingKategoriMap: Record<string, BehandlingKategori> = 
     ae0120: BehandlingKategori.EØS,
 };
 
-export const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingstema | '' => {
+export const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingstema | undefined => {
     const { behandlingstema: gjelder, behandlingstype } = oppgave;
     return gjelder in kodeTilBehandlingUnderkategoriMap &&
         behandlingstype in kodeTilBehandlingKategoriMap
@@ -92,9 +92,5 @@ export const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingst
               kodeTilBehandlingKategoriMap[behandlingstype],
               kodeTilBehandlingUnderkategoriMap[gjelder]
           )
-        : '';
+        : undefined;
 };
-
-// eslint-disable-next-line
-export const isIBehandlingstema = (input: any): input is IBehandlingstema =>
-    !!(input && typeof input === 'object' && input.kategori && input.underkategori);

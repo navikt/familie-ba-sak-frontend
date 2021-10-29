@@ -11,12 +11,11 @@ import {
     behandlingstemaer,
     BehandlingUnderkategori,
     IBehandlingstema,
-    isIBehandlingstema,
 } from '../../typer/behandlingstema';
 import { ToggleNavn } from '../../typer/toggles';
 
 interface EgneProps {
-    behandlingstema: Felt<IBehandlingstema | ''>;
+    behandlingstema: Felt<IBehandlingstema | undefined>;
     visFeilmeldinger?: boolean;
     erLesevisning?: boolean;
 }
@@ -35,16 +34,16 @@ export const BehandlingstemaSelect = ({
         <FamilieSelect
             {...familieSelectProps}
             {...behandlingstema.hentNavInputProps(visFeilmeldinger)}
-            value={isIBehandlingstema(verdi) ? verdi.id : verdi}
+            value={verdi !== undefined ? verdi.id : ''}
             onChange={evt => {
                 behandlingstema.validerOgSettFelt(
                     behandlingstemaer[evt.target.value as Behandlingstema]
                 );
             }}
             erLesevisning={erLesevisning}
-            lesevisningVerdi={isIBehandlingstema(verdi) ? verdi.navn : ''}
+            lesevisningVerdi={verdi !== undefined ? verdi.navn : ''}
         >
-            {verdi === '' && (
+            {verdi === undefined && (
                 <option
                     disabled
                     key={'behandlingstema-select-disabled'}
@@ -58,7 +57,7 @@ export const BehandlingstemaSelect = ({
                 return (
                     <option
                         key={tema.id}
-                        aria-selected={isIBehandlingstema(verdi) && verdi.id === tema.id}
+                        aria-selected={verdi !== undefined && verdi.id === tema.id}
                         value={tema.id}
                         disabled={
                             (tema.kategori === BehandlingKategori.EØS &&

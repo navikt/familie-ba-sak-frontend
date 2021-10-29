@@ -21,7 +21,7 @@ import { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 interface IProps {
     behandlingstype: Felt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>;
     behandlingsårsak: Felt<BehandlingÅrsak | ''>;
-    behandlingstema: Felt<IBehandlingstema | ''>;
+    behandlingstema: Felt<IBehandlingstema | undefined>;
     minimalFagsak?: IMinimalFagsak;
     visFeilmeldinger: boolean;
     erLesevisning?: boolean;

@@ -4,36 +4,28 @@ import { useHttp } from '@navikt/familie-http';
 import { feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import {
     IBehandlingstema,
     IRestEndreBehandlingUnderkategori,
-    isIBehandlingstema,
     tilBehandlingstema,
 } from '../../../../../typer/behandlingstema';
 import { IFagsak } from '../../../../../typer/fagsak';
-import { ToggleNavn } from '../../../../../typer/toggles';
 
 const useEndreBehandling = (lukkModal: () => void) => {
-    const { toggles } = useApp();
     const { request } = useHttp();
     const { settFagsak } = useFagsakRessurser();
     const { åpenBehandling } = useBehandling();
 
     const [ressurs, settRessurs] = useState(byggTomRessurs());
 
-    const { skjema } = useSkjema<{ behandlingstema: IBehandlingstema | '' }, string>({
+    const { skjema } = useSkjema<{ behandlingstema: IBehandlingstema | undefined }, string>({
         felter: {
-            behandlingstema: useFelt<IBehandlingstema | ''>({
-                verdi: '',
-                valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) => {
-                    if (!toggles[ToggleNavn.brukEøs]) {
-                        return ok(felt);
-                    }
-                    return felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.');
-                },
+            behandlingstema: useFelt<IBehandlingstema | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
             }),
         },
         skjemanavn: 'Endre behandlingstema',
@@ -45,7 +37,7 @@ const useEndreBehandling = (lukkModal: () => void) => {
 
     const endreBehandlingstema = (behandlingId: number) => {
         const { behandlingstema } = skjema.felter;
-        if (isIBehandlingstema(behandlingstema.verdi)) {
+        if (behandlingstema.verdi !== undefined) {
             const { kategori, underkategori } = behandlingstema.verdi;
             settRessurs(byggHenterRessurs());
             request<IRestEndreBehandlingUnderkategori, IFagsak>({

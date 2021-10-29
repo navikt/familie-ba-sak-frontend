@@ -13,7 +13,7 @@ import {
     IBehandling,
     IRestNyBehandling,
 } from '../../../../../typer/behandling';
-import { IBehandlingstema, isIBehandlingstema } from '../../../../../typer/behandlingstema';
+import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
@@ -50,10 +50,10 @@ const useOpprettBehandling = (
         avhengigheter: { behandlingstype },
     });
 
-    const behandlingstema = useFelt<IBehandlingstema | ''>({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<IBehandlingstema | ''>) =>
-            isIBehandlingstema(felt.verdi) ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
+    const behandlingstema = useFelt<IBehandlingstema | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
+            felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
         avhengigheter: { behandlingstype },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
@@ -65,7 +65,7 @@ const useOpprettBehandling = (
         {
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
-            behandlingstema: IBehandlingstema | '';
+            behandlingstema: IBehandlingstema | undefined;
         },
         IFagsak
     >({
@@ -107,7 +107,7 @@ const useOpprettBehandling = (
                         }
                     }
                 );
-            } else if (isIBehandlingstema(behandlingstema.verdi)) {
+            } else if (behandlingstema.verdi) {
                 const kategori = behandlingstema.verdi.kategori;
                 const underkategori = behandlingstema.verdi.underkategori;
 
