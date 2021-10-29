@@ -8,10 +8,9 @@ import Alertstripe from 'nav-frontend-alertstriper';
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useSimulering } from '../../../context/SimuleringContext';
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
 import { ITilbakekreving } from '../../../typer/simulering';
 import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -20,7 +19,6 @@ import SimuleringTabell from './SimuleringTabell';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
 
 interface ISimuleringProps {
-    fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
@@ -28,7 +26,8 @@ const StyledAlertstripe = styled(Alertstripe)`
     margin-bottom: 2rem;
 `;
 
-const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling, fagsak }) => {
+const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
+    const { fagsakId } = useSakOgBehandlingParams();
     const history = useHistory();
     const {
         erFeilutbetaling,
@@ -39,24 +38,23 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         tilbakekrevingErToggletPå,
         harÅpenTilbakekrevingRessurs,
     } = useSimulering();
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, settÅpenBehandling } = useBehandling();
 
-    const { settFagsak } = useFagsakRessurser();
-
+    // Flytt til useBehandlingssteg
     const nesteOnClick = () => {
         if (erLesevisning()) {
-            history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+            history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
         } else {
             onSubmit<ITilbakekreving | undefined>(
                 {
                     data: hentSkjemadata(),
                     method: 'POST',
-                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/tilbakekreving`,
+                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/tilbakekreving`,
                 },
-                (ressurs: Ressurs<IFagsak>) => {
+                (ressurs: Ressurs<IBehandling>) => {
                     if (ressurs.status === RessursStatus.SUKSESS) {
-                        settFagsak(ressurs);
-                        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vedtak`);
+                        settÅpenBehandling(ressurs);
+                        history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
                     }
                 }
             );
@@ -64,7 +62,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     };
 
     const forrigeOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`);
+        history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`);
     };
 
     if (

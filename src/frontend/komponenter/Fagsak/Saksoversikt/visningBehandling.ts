@@ -21,6 +21,6 @@ export interface VisningBehandling {
     status: BehandlingStatus;
     type: Behandlingstype | Tilbakekrevingsbehandlingstype;
     underkategori?: BehandlingUnderkategori;
-    vedtaksdato: string;
+    vedtaksdato?: string;
     årsak?: BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak;
 }

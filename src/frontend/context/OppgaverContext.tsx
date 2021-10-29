@@ -33,7 +33,7 @@ import {
     IOppgaveFelt,
     IOppgaveFelter,
 } from '../komponenter/Oppgavebenk/oppgavefelter';
-import { IFagsak } from '../typer/fagsak';
+import { IMinimalFagsak } from '../typer/fagsak';
 import {
     BehandlingstypeFilter,
     EnhetFilter,
@@ -433,13 +433,13 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
     const gåTilTilbakekreving = (oppgave: IOppgave) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
         if (brukerident) {
-            request<{ personIdent: string }, IFagsak | undefined>({
+            request<{ personIdent: string }, IMinimalFagsak | undefined>({
                 method: 'POST',
                 url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
                 data: {
                     personIdent: brukerident,
                 },
-            }).then((fagsak: Ressurs<IFagsak | undefined>) => {
+            }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
                 if (fagsak.status === RessursStatus.SUKSESS && !!fagsak.data) {
                     window.location.href = `/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.data.id}/behandling/${oppgave.saksreferanse}`;
                 }

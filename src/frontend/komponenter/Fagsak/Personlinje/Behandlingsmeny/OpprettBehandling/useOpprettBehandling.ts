@@ -3,10 +3,11 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 
 import { useFelt, feil, ok, Avhengigheter, useSkjema } from '@navikt/familie-skjema';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import {
     BehandlingKategori,
     Behandlingstype,
@@ -14,17 +15,15 @@ import {
     BehandlingÅrsak,
     IBehandling,
 } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
-import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 
 const useOpprettBehandling = (
     lukkModal: () => void,
-    fagsakId: number,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
+    const { fagsakId } = useSakOgBehandlingParams();
+    const { settÅpenBehandling } = useBehandling();
     const { innloggetSaksbehandler } = useApp();
-    const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
@@ -56,7 +55,7 @@ const useOpprettBehandling = (
             behandlingsårsak: BehandlingÅrsak | '';
             underkategori: BehandlingUnderkategori | '';
         },
-        IFagsak
+        IBehandling
     >({
         felter: {
             behandlingstype,
@@ -116,20 +115,17 @@ const useOpprettBehandling = (
                             lukkModal();
                             nullstillSkjema();
 
-                            settFagsak(response);
-                            const aktivBehandling: IBehandling | undefined =
-                                hentAktivBehandlingPåFagsak(response.data);
+                            settÅpenBehandling(response);
+                            const behandling: IBehandling | undefined =
+                                hentDataFraRessurs(response);
 
-                            if (
-                                aktivBehandling &&
-                                aktivBehandling.årsak === BehandlingÅrsak.SØKNAD
-                            ) {
+                            if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
                                 history.push(
-                                    `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
+                                    `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                                 );
                             } else {
                                 history.push(
-                                    `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
+                                    `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                                 );
                             }
                         }

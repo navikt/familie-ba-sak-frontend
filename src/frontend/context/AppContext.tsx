@@ -138,7 +138,6 @@ const [AppContentProvider, useApp] = createUseContext(() => {
             method: 'POST',
             url: '/familie-ba-sak/api/feature',
             data: Object.values(ToggleNavn),
-            påvirkerSystemLaster: true,
         }).then((response: Ressurs<IToggles>) => {
             if (response.status === RessursStatus.SUKSESS) {
                 settToggles(response.data);
@@ -234,6 +233,7 @@ const [AppContentProvider, useApp] = createUseContext(() => {
         return rolle >= BehandlerRolle.SAKSBEHANDLER;
     };
 
+    console.log(systemetLaster());
     return {
         autentisert,
         hentSaksbehandlerRolle,

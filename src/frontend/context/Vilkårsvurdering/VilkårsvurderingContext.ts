@@ -6,7 +6,6 @@ import { useHttp } from '@navikt/familie-http';
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IBehandling } from '../../typer/behandling';
-import { IFagsak } from '../../typer/fagsak';
 import {
     IAnnenVurdering,
     IPersonResultat,
@@ -59,7 +58,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
     ) => {
         settVilkårSubmit(VilkårSubmit.PUT);
 
-        return request<IRestPersonResultat, IFagsak>({
+        return request<IRestPersonResultat, IBehandling>({
             method: 'PUT',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
             data: {
@@ -94,7 +93,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
     const putAnnenVurdering = (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => {
         settVilkårSubmit(VilkårSubmit.PUT);
 
-        return request<IRestAnnenVurdering, IFagsak>({
+        return request<IRestAnnenVurdering, IBehandling>({
             method: 'PUT',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/annenvurdering/${redigerbartAnnenVurdering.verdi.id}`,
             data: {
@@ -113,7 +112,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
     const deleteVilkår = (personIdent: string, vilkårId: number) => {
         settVilkårSubmit(VilkårSubmit.DELETE);
 
-        return request<string, IFagsak>({
+        return request<string, IBehandling>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${vilkårId}`,
             data: personIdent,
@@ -123,7 +122,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
     const postVilkår = (personIdent: string, vilkårType: VilkårType) => {
         settVilkårSubmit(VilkårSubmit.DELETE);
 
-        return request<IRestNyttVilkår, IFagsak>({
+        return request<IRestNyttVilkår, IBehandling>({
             method: 'POST',
             url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}`,
             data: { personIdent, vilkårType },

@@ -4,18 +4,16 @@ import { useHttp } from '@navikt/familie-http';
 import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import {
     BehandlingKategori,
     BehandlingUnderkategori,
+    IBehandling,
     IRestEndreBehandlingUnderkategori,
 } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
 
 const useEndreBehandling = (lukkModal: () => void) => {
     const { request } = useHttp();
-    const { settFagsak } = useFagsakRessurser();
-    const { åpenBehandling } = useBehandling();
+    const { åpenBehandling, settÅpenBehandling } = useBehandling();
 
     const [underkategori, settUnderkategori] = useState<BehandlingUnderkategori>(
         BehandlingUnderkategori.ORDINÆR
@@ -35,17 +33,17 @@ const useEndreBehandling = (lukkModal: () => void) => {
 
     const endreBehandlingstema = (behandlingId: number) => {
         settSubmitRessurs(byggHenterRessurs());
-        request<IRestEndreBehandlingUnderkategori, IFagsak>({
+        request<IRestEndreBehandlingUnderkategori, IBehandling>({
             method: 'PUT',
             data: { behandlingUnderkategori: underkategori, behandlingKategori: kategori },
             url: `/familie-ba-sak/api/behandlinger/${behandlingId}/behandlingstema`,
-        }).then((oppdatertFagsak: Ressurs<IFagsak>) => {
-            if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
-                settFagsak(oppdatertFagsak);
+        }).then((oppdatertBehandling: Ressurs<IBehandling>) => {
+            if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
+                settÅpenBehandling(oppdatertBehandling);
                 settSubmitRessurs(byggTomRessurs());
                 lukkModal();
             }
-            settSubmitRessurs(oppdatertFagsak);
+            settSubmitRessurs(oppdatertBehandling);
         });
     };
 

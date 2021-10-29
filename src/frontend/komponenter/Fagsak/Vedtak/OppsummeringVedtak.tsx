@@ -18,10 +18,9 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import {
     BehandlerRolle,
@@ -31,8 +30,6 @@ import {
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -41,7 +38,6 @@ import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Co
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
 interface IVedtakProps {
-    fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
@@ -52,11 +48,11 @@ const Container = styled.div`
     }
 `;
 
-const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
+const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
     const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { fagsakId } = useSakOgBehandlingParams();
     const { request } = useHttp();
-    const { settFagsak } = useFagsakRessurser();
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, settÅpenBehandling } = useBehandling();
 
     const history = useHistory();
 
@@ -71,7 +67,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
     const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const hentVedtaksbrev = () => {
-        const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
+        const vedtak = åpenBehandling.vedtak;
         const rolle = hentSaksbehandlerRolle();
         const genererBrevUnderBehandling =
             rolle &&
@@ -86,11 +82,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         const httpMethod =
             genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
-        if (aktivtVedtak) {
+        if (vedtak) {
             settVedtaksbrev(byggHenterRessurs());
             request<void, string>({
                 method: httpMethod,
-                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
+                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${vedtak?.id}`,
             })
                 .then((response: Ressurs<string>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -125,7 +121,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
 
     const minstEnPeriodeharBegrunnetelseEllerFritekst = (): boolean => {
         const vedtaksperioderMedBegrunnelser =
-            hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [];
+            åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser ?? [];
         return vedtaksperioderMedBegrunnelser.some(
             vedtaksperioderMedBegrunnelse =>
                 vedtaksperioderMedBegrunnelse.begrunnelser.length !== 0 ||
@@ -139,20 +135,23 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
 
+    // TODO flytt til useBehandlingssteg
     const sendInn = () => {
         if (kanSendeinnVedtak()) {
             settSenderInn(true);
             settSubmitFeil('');
-            request<void, IFagsak>({
+            request<void, IBehandling>({
                 method: 'POST',
-                url: `/familie-ba-sak/api/fagsaker/${
-                    fagsak.id
-                }/send-til-beslutter?behandlendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
-            }).then((response: Ressurs<IFagsak>) => {
+                url: `/familie-ba-sak/api/behandlinger/${
+                    åpenBehandling.behandlingId
+                }/steg/send-til-beslutter?behandlendeEnhet=${
+                    innloggetSaksbehandler?.enhet ?? '9999'
+                }`,
+            }).then((response: Ressurs<IBehandling>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     settVisModal(true);
-                    settFagsak(response);
+                    settÅpenBehandling(response);
                 } else if (
                     response.status === RessursStatus.FEILET ||
                     response.status === RessursStatus.FUNKSJONELL_FEIL ||
@@ -172,7 +171,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         <Skjemasteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
-                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`)
+                history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
             nesteOnClick={visSubmitKnapp ? sendInn : undefined}
             nesteKnappTittel={'Til godkjenning'}
@@ -213,7 +212,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
                                 <VedtaksperioderMedBegrunnelser
-                                    fagsak={fagsak}
                                     åpenBehandling={åpenBehandling}
                                     erLesevisning={erLesevisning()}
                                 />
@@ -243,7 +241,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                                         mini={true}
                                         onClick={() => {
                                             settVisModal(false);
-                                            history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                            history.push(`/fagsak/${fagsakId}/saksoversikt`);
                                             window.location.reload();
                                         }}
                                         children={'Gå til saksoversikten'}

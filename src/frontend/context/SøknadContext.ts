@@ -6,8 +6,9 @@ import { useHistory } from 'react-router';
 import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
-import { IFagsak } from '../typer/fagsak';
+import { IMinimalFagsak } from '../typer/fagsak';
 import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import {
     IBarnMedOpplysninger,
@@ -24,8 +25,8 @@ import {
 import { useBehandling } from './behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from './FagsakContext';
 
-export const hentBarnMedLøpendeUtbetaling = (fagsak: IFagsak) =>
-    fagsak.gjeldendeUtbetalingsperioder
+export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak) =>
+    minimalFagsak.gjeldendeUtbetalingsperioder
         .filter(utbetalingsperiode =>
             erEtter(
                 kalenderDatoMedFallback(utbetalingsperiode.periodeTom, TIDENES_ENDE),
@@ -42,15 +43,15 @@ export const hentBarnMedLøpendeUtbetaling = (fagsak: IFagsak) =>
 
 const [SøknadProvider, useSøknad] = createUseContext(
     ({ åpenBehandling }: { åpenBehandling: IBehandling }) => {
-        const { fagsak, settFagsak } = useFagsakRessurser();
-        const { erLesevisning } = useBehandling();
+        const { erLesevisning, settÅpenBehandling } = useBehandling();
+        const { fagsakId } = useSakOgBehandlingParams();
         const history = useHistory();
-        const { bruker } = useFagsakRessurser();
+        const { bruker, minimalFagsak } = useFagsakRessurser();
         const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
         const barnMedLøpendeUtbetaling =
-            fagsak.status === RessursStatus.SUKSESS
-                ? hentBarnMedLøpendeUtbetaling(fagsak.data)
+            minimalFagsak.status === RessursStatus.SUKSESS
+                ? hentBarnMedLøpendeUtbetaling(minimalFagsak.data)
                 : new Set();
 
         const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
@@ -60,7 +61,7 @@ const [SøknadProvider, useSøknad] = createUseContext(
                 endringAvOpplysningerBegrunnelse: string;
                 målform: Målform | undefined;
             },
-            IFagsak
+            IBehandling
         >({
             felter: {
                 underkategori: useFelt<BehandlingUnderkategori>({
@@ -148,18 +149,13 @@ const [SøknadProvider, useSøknad] = createUseContext(
             }
         }, [åpenBehandling]);
 
+        // Flytt til useBehandlingssteg
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
             if (bruker.status === RessursStatus.SUKSESS) {
                 if (erLesevisning()) {
-                    if (fagsak.status === RessursStatus.SUKSESS) {
-                        history.push(
-                            `/fagsak/${fagsak.data.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
-                        );
-                    } else {
-                        throw Error(
-                            'Prøver å gå videre fra søknadsregistrering uten å ha en fagsak'
-                        );
-                    }
+                    history.push(
+                        `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`
+                    );
                 } else {
                     onSubmit<IRestRegistrerSøknad>(
                         {
@@ -185,17 +181,17 @@ const [SøknadProvider, useSøknad] = createUseContext(
                                 },
                                 bekreftEndringerViaFrontend,
                             },
-                            url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/registrere-søknad-og-hent-persongrunnlag`,
+                            url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/registrer-søknad`,
                         },
-                        (response: Ressurs<IFagsak>) => {
+                        (response: Ressurs<IBehandling>) => {
                             if (response.status === RessursStatus.SUKSESS) {
-                                settFagsak(response);
+                                settÅpenBehandling(response);
                                 history.push(
-                                    `/fagsak/${response.data.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
+                                    `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
                                 );
                             }
                         },
-                        (errorResponse: Ressurs<IFagsak>) => {
+                        (errorResponse: Ressurs<IBehandling>) => {
                             if (errorResponse.status === RessursStatus.FUNKSJONELL_FEIL) {
                                 settVisBekreftModal(true);
                             }

@@ -14,13 +14,12 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { validerAnnenVurdering } from '../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { IFagsak } from '../../../../typer/fagsak';
+import { IBehandling } from '../../../../typer/behandling';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import {
     IAnnenVurdering,
@@ -75,8 +74,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
-    const { erLesevisning } = useBehandling();
-    const { settFagsak } = useFagsakRessurser();
+    const { erLesevisning, settÅpenBehandling } = useBehandling();
     const leseVisning = erLesevisning();
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
@@ -127,24 +125,24 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
         }
     };
 
-    const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IFagsak>>) => {
+    const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IBehandling>>) => {
         promise
-            .then((oppdatertFagsak: Ressurs<IFagsak>) => {
+            .then((oppdatertBehandling: Ressurs<IBehandling>) => {
                 settVilkårSubmit(VilkårSubmit.NONE);
-                if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
+                if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
                     settVisFeilmeldingerForEttVilkår(false);
-                    settFagsak(oppdatertFagsak);
+                    settÅpenBehandling(oppdatertBehandling);
                     settEkspandertAnnenVurdering(false);
                 } else if (
-                    oppdatertFagsak.status === RessursStatus.FEILET ||
-                    oppdatertFagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    oppdatertFagsak.status === RessursStatus.IKKE_TILGANG
+                    oppdatertBehandling.status === RessursStatus.FEILET ||
+                    oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    oppdatertBehandling.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settVisFeilmeldingerForEttVilkår(true);
                     settRedigerbartAnnenVurdering({
                         ...redigerbartAnnenVurdering,
                         valideringsstatus: Valideringsstatus.FEIL,
-                        feilmelding: oppdatertFagsak.frontendFeilmelding,
+                        feilmelding: oppdatertBehandling.frontendFeilmelding,
                     });
                 } else {
                     settVisFeilmeldingerForEttVilkår(true);

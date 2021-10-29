@@ -1,3 +1,4 @@
+import { VisningBehandling } from '../../../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import {
     BehandlingKategori,
     BehandlingResultat,
@@ -29,7 +30,6 @@ export const mockBehandling = ({
     opprettetTidspunkt = '2020-03-19T09:08:56.8',
     steg = BehandlingSteg.VILKÅRSVURDERING,
     status = BehandlingStatus.FATTER_VEDTAK,
-    aktiv = true,
     årsak = BehandlingÅrsak.SØKNAD,
     type = Behandlingstype.FØRSTEGANGSBEHANDLING,
     skalBehandlesAutomatisk = false,
@@ -48,7 +48,7 @@ export const mockBehandling = ({
 
     return {
         behandlingId,
-        aktiv,
+        endretAv: 'VL',
         arbeidsfordelingPåBehandling: {
             behandlendeEnhetId: '4820',
             behandlendeEnhetNavn: 'enhet navn',
@@ -67,7 +67,6 @@ export const mockBehandling = ({
         ],
         type: type,
         personer: [barn, søker],
-        begrunnelse: '',
         resultat: BehandlingResultat.INNVILGET,
         opprettetTidspunkt,
         kategori: BehandlingKategori.NASJONAL,
@@ -75,8 +74,7 @@ export const mockBehandling = ({
         status,
         personResultater: [søkerRestPersonResultat, barnRestPersonResultat],
         fødselshendelsefiltreringResultater: [],
-        vedtakForBehandling: [],
-        endretAv: 'VL',
+        vedtak: undefined,
         totrinnskontroll: {
             saksbehandler: 'Saksbehandler',
             beslutter: 'Beslutter',
@@ -88,5 +86,27 @@ export const mockBehandling = ({
         personerMedAndelerTilkjentYtelse: [],
         årsak: årsak,
         skalBehandlesAutomatisk,
+    };
+};
+
+export const mockVisningBehandling = ({
+    behandlingId = 1,
+    opprettetTidspunkt = '2020-03-19T09:08:56.8',
+    status = BehandlingStatus.FATTER_VEDTAK,
+    aktiv = true,
+    årsak = BehandlingÅrsak.SØKNAD,
+    type = Behandlingstype.FØRSTEGANGSBEHANDLING,
+}: IMockBehandling = {}): VisningBehandling => {
+    return {
+        behandlingId,
+        aktiv,
+        type: type,
+        resultat: BehandlingResultat.INNVILGET,
+        opprettetTidspunkt,
+        kategori: BehandlingKategori.NASJONAL,
+        underkategori: BehandlingUnderkategori.ORDINÆR,
+        status,
+        årsak,
+        vedtaksdato: undefined,
     };
 };

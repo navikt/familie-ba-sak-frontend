@@ -54,11 +54,13 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                     <>
                         <Element>Begrunnelse(r)</Element>
                         <ul>
-                            {genererteBrevbegrunnelser.data.map((begrunnelse: string) => (
-                                <li>
-                                    <Normaltekst children={begrunnelse} />
-                                </li>
-                            ))}
+                            {genererteBrevbegrunnelser.data.map(
+                                (begrunnelse: string, index: number) => (
+                                    <li key={`begrunnelse-${index}`}>
+                                        <Normaltekst children={begrunnelse} />
+                                    </li>
+                                )
+                            )}
                         </ul>
                     </>
                 )}

@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
+import { hentDataFraRessurs } from '@navikt/familie-typer';
+
+import { useFagsakRessurser } from '../../../context/FagsakContext';
 import {
     BehandlingResultat,
     behandlingsresultater,
@@ -13,14 +16,11 @@ import {
     behandlingÅrsak,
     IBehandling,
 } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
 import { datoformat, formaterIsoDato, formaterIverksattDato } from '../../../utils/formatter';
 import Informasjonsbolk from '../../Felleskomponenter/Informasjonsbolk/Informasjonsbolk';
 import { sakstype } from '../Saksoversikt/Saksoversikt';
 
 interface IBehandlingskortProps {
-    fagsak?: IFagsak;
     åpenBehandling: IBehandling;
 }
 
@@ -84,15 +84,15 @@ const StyledHr = styled.hr`
     border-bottom: 1px solid ${navFarger.navLysGra};
 `;
 
-const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandling }) => {
-    const behandlinger = fagsak?.behandlinger ?? [];
+const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {
+    const minimalFagsak = hentDataFraRessurs(useFagsakRessurser().minimalFagsak);
+    const behandlinger = minimalFagsak?.behandlinger ?? [];
 
     const antallBehandlinger = behandlinger.length;
     const åpenBehandlingIndex =
         behandlinger.findIndex(
             behandling => behandling.behandlingId === åpenBehandling.behandlingId
         ) + 1;
-    const aktivVedtak = hentAktivVedtakPåBehandlig(åpenBehandling);
 
     const tittel = `${
         åpenBehandling ? behandlingstyper[åpenBehandling.type].navn : 'ukjent'
@@ -128,7 +128,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ fagsak, åpenBehandl
                     },
                     {
                         label: 'Vedtaksdato',
-                        tekst: formaterIverksattDato(aktivVedtak?.vedtaksdato),
+                        tekst: formaterIverksattDato(åpenBehandling.vedtak?.vedtaksdato),
                     },
                 ]}
             />

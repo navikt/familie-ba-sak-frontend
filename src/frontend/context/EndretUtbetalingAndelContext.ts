@@ -2,7 +2,7 @@ import createUseContext from 'constate';
 
 import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
-import { IFagsak } from '../typer/fagsak';
+import { IBehandling } from '../typer/behandling';
 import { IEndretUtbetalingAndelÅrsak, IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 import { erIsoStringGyldig, FamilieIsoDate } from '../utils/kalender';
 
@@ -34,7 +34,7 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                 fullSats: boolean | undefined;
                 begrunnelse: string | undefined;
             },
-            IFagsak
+            IBehandling
         >({
             felter: {
                 person: useFelt<string | undefined>({
