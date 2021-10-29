@@ -107,7 +107,9 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <PersonCelle>
-                        {!endretUtbetalingAndel.erTilknyttetAndeler && (
+                        {endretUtbetalingAndel.erTilknyttetAndeler ? (
+                            <GrønnHake heigth={20} width={20} title={'Periode OK'} />
+                        ) : (
                             <Advarsel
                                 heigth={20}
                                 width={20}
@@ -115,9 +117,6 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
                                     'Du har endrede utbetalingsperioder. Bekreft, slett eller oppdater periodene i listen.'
                                 }
                             />
-                        )}
-                        {endretUtbetalingAndel.erTilknyttetAndeler && (
-                            <GrønnHake heigth={20} width={20} />
                         )}
                         {formaterIdent(
                             endretUtbetalingAndel.personIdent
