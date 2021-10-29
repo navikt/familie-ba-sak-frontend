@@ -11,6 +11,7 @@ import { Collapse, Expand } from '@navikt/ds-icons';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
 import Advarsel from '../../../ikoner/Advarsel';
+import GrønnHake from '../../../ikoner/GrønnHake';
 import { IBehandling } from '../../../typer/behandling';
 import {
     IEndretUtbetalingAndelÅrsak,
@@ -106,7 +107,9 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             <tr>
                 <TdUtenUnderstrek erÅpen={åpenUtbetalingsAndel}>
                     <PersonCelle>
-                        {!endretUtbetalingAndel.erTilknyttetAndeler && (
+                        {endretUtbetalingAndel.erTilknyttetAndeler ? (
+                            <GrønnHake heigth={20} width={20} title={'Periode OK'} />
+                        ) : (
                             <Advarsel
                                 heigth={20}
                                 width={20}
