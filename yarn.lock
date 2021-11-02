@@ -1676,10 +1676,12 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.2.2.tgz#5296982182ddb40c6bb6374cab4d3274ee64d880"
   integrity sha512-r2UVHOVzxGk6wLBbRtMFBAYI5XD+lqHAktNuSmly6cre7PXgVfar+JcVHqEc1r1HSZxkC4Kl4EjlU/laOPSr0Q==
 
-"@navikt/ds-icons@^0.5.4":
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.5.4.tgz#5b00f98f84da5cdb01f7b0dac9e4004d7d4bed0a"
-  integrity sha512-4lk4CTKZtNkqGJ2wAtJPheaCcwD6hILh6zWICO7071Lu/O+O+qSmxJSGFJmPh4pTAUuPONp6p8jOUqQwTi4yhw==
+"@navikt/ds-icons@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.6.1.tgz#2320886b6903508543567fe8ccbb48535a11321f"
+  integrity sha512-iiM1VLNJux1q8wRanEWyc61WyJl0ZF3WpLILCAuZKPPtAx+K2YBa+jijoIYcKw+3EDE6AjxNU4to1DUW7SxvtA==
+  dependencies:
+    uuid "^8.3.2"
 
 "@navikt/familie-backend@^5.0.28":
   version "5.0.28"
