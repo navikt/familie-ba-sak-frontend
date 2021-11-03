@@ -66,7 +66,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const { settÅpenBehandling } = useBehandling();
 
     React.useEffect(() => {
-        settÅpenBehandling(byggTomRessurs());
+        settÅpenBehandling(byggTomRessurs(), false);
     }, [minimalFagsak.status]);
 
     const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();
