@@ -1,11 +1,10 @@
 import {
-    BehandlingKategori,
     BehandlingResultat,
     BehandlingStatus,
     Behandlingstype,
-    BehandlingUnderkategori,
     BehandlingÅrsak,
 } from '../../../typer/behandling';
+import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
 import {
     TilbakekrevingsbehandlingResultat,
     Tilbakekrevingsbehandlingstype,

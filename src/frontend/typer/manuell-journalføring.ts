@@ -1,5 +1,6 @@
 import { IJournalpost } from '@navikt/familie-typer';
 
+import { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import { INøkkelPar } from './common';
 import { IMinimalFagsak } from './fagsak';
 import { IOppgave } from './oppgave';
@@ -75,6 +76,8 @@ export interface IRestJournalføring {
     tilknyttedeBehandlingIder: number[];
     opprettOgKnyttTilNyBehandling: boolean;
     navIdent: string;
+    kategori: BehandlingKategori | null;
+    underkategori: BehandlingUnderkategori | null;
 }
 
 export interface ILogiskVedlegg {

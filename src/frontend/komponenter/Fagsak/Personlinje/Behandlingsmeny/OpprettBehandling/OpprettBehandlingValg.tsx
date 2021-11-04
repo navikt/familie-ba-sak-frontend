@@ -7,21 +7,21 @@ import { useApp } from '../../../../../context/AppContext';
 import {
     BehandlingStatus,
     Behandlingstype,
-    behandlingUnderkategori,
-    BehandlingUnderkategori,
     BehandlingÅrsak,
     behandlingÅrsak,
 } from '../../../../../typer/behandling';
+import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { FagsakStatus, IMinimalFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak';
+import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 
 interface IProps {
     behandlingstype: Felt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>;
     behandlingsårsak: Felt<BehandlingÅrsak | ''>;
-    underkategori?: Felt<BehandlingUnderkategori | ''>;
+    behandlingstema: Felt<IBehandlingstema | undefined>;
     minimalFagsak?: IMinimalFagsak;
     visFeilmeldinger: boolean;
     erLesevisning?: boolean;
@@ -36,14 +36,10 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
     value: BehandlingÅrsak | '';
 }
 
-interface BehandlingUnderkategoriSelect extends HTMLSelectElement {
-    value: BehandlingUnderkategori | '';
-}
-
 const OpprettBehandlingValg: React.FC<IProps> = ({
     behandlingstype,
     behandlingsårsak,
-    underkategori,
+    behandlingstema,
     minimalFagsak,
     visFeilmeldinger,
     erLesevisning = false,
@@ -155,36 +151,15 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </FamilieSelect>
             )}
 
-            {underkategori &&
-                behandlingsårsak.verdi === BehandlingÅrsak.SØKNAD &&
-                toggles[ToggleNavn.kanBehandleUtvidet] && (
-                    <FamilieSelect
-                        {...underkategori.hentNavBaseSkjemaProps(visFeilmeldinger)}
-                        erLesevisning={erLesevisning}
-                        name={'Behandlingsårsak'}
-                        label={'Velg underkategori'}
-                        onChange={(
-                            event: React.ChangeEvent<BehandlingUnderkategoriSelect>
-                        ): void => {
-                            underkategori.onChange(event.target.value);
-                        }}
-                    >
-                        <option disabled={true} value={''}>
-                            Velg
-                        </option>
-                        {Object.values(BehandlingUnderkategori).map(mapUnderkategori => {
-                            return (
-                                <option
-                                    key={mapUnderkategori}
-                                    aria-selected={underkategori.verdi === mapUnderkategori}
-                                    value={mapUnderkategori}
-                                >
-                                    {behandlingUnderkategori[mapUnderkategori]}
-                                </option>
-                            );
-                        })}
-                    </FamilieSelect>
-                )}
+            {behandlingstema.erSynlig && (
+                <BehandlingstemaSelect
+                    behandlingstema={behandlingstema}
+                    erLesevisning={erLesevisning}
+                    visFeilmeldinger={visFeilmeldinger}
+                    name="Behandlingstema"
+                    label="Velg behandlingstema"
+                />
+            )}
         </>
     );
 };

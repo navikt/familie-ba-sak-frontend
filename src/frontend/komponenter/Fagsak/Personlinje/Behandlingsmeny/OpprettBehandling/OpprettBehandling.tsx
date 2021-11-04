@@ -33,6 +33,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
             settVisBekreftelseTilbakekrevingModal(true);
         }
     );
+    const { behandlingsårsak, behandlingstype, behandlingstema } = opprettBehandlingSkjema.felter;
 
     const lukkOpprettBehandlingModal = () => {
         nullstillSkjemaStatus();
@@ -85,9 +86,9 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
                 <SkjemaGruppe feil={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}>
                     <SkjultLegend>Opprett ny behandling</SkjultLegend>
                     <OpprettBehandlingValg
-                        behandlingstype={opprettBehandlingSkjema.felter.behandlingstype}
-                        behandlingsårsak={opprettBehandlingSkjema.felter.behandlingsårsak}
-                        underkategori={opprettBehandlingSkjema.felter.underkategori}
+                        behandlingstype={behandlingstype}
+                        behandlingsårsak={behandlingsårsak}
+                        behandlingstema={behandlingstema}
                         minimalFagsak={minimalFagsak}
                         visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                     />

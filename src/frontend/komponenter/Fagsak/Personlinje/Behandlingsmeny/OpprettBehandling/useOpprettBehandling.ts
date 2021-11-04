@@ -2,18 +2,22 @@ import { useEffect } from 'react';
 
 import { useHistory } from 'react-router';
 
-import { useFelt, feil, ok, Avhengigheter, useSkjema } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import {
-    BehandlingKategori,
     Behandlingstype,
-    BehandlingUnderkategori,
     BehandlingÅrsak,
     IBehandling,
+    IRestNyBehandling,
 } from '../../../../../typer/behandling';
+import {
+    BehandlingKategori,
+    BehandlingUnderkategori,
+    IBehandlingstema,
+} from '../../../../../typer/behandlingstema';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
@@ -24,7 +28,7 @@ const useOpprettBehandling = (
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
     const { innloggetSaksbehandler } = useApp();
-    const { settFagsak } = useFagsakRessurser();
+    const { fagsak, settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
@@ -50,20 +54,33 @@ const useOpprettBehandling = (
         avhengigheter: { behandlingstype },
     });
 
+    const behandlingstema = useFelt<IBehandlingstema | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
+            felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
+        avhengigheter: { behandlingstype, behandlingsårsak },
+        skalFeltetVises: avhengigheter => {
+            const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
+            const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
+            return (
+                behandlingstypeVerdi in Behandlingstype &&
+                behandlingsårsakVerdi === BehandlingÅrsak.SØKNAD
+            );
+        },
+    });
+
     const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs } = useSkjema<
         {
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
-            underkategori: BehandlingUnderkategori | '';
+            behandlingstema: IBehandlingstema | undefined;
         },
         IFagsak
     >({
         felter: {
             behandlingstype,
             behandlingsårsak,
-            underkategori: useFelt<BehandlingUnderkategori | ''>({
-                verdi: BehandlingUnderkategori.ORDINÆR,
-            }),
+            behandlingstema,
         },
         skjemanavn: 'Opprett behandling modal',
     });
@@ -79,7 +96,35 @@ const useOpprettBehandling = (
         }
     }, [skjema.felter.behandlingstype.verdi]);
 
+    // TODO: logikken for setting av behandlingstema når årsak ikke er søknad burde fikses i backend, slik at kategori og underkategori kan være optional. Deretter kan disse to funksjonene fjernes.
+    const utredKategori = () => {
+        if (behandlingstema.verdi?.kategori) {
+            return behandlingstema.verdi.kategori;
+        }
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            const aktivBehandling = fagsak.data.behandlinger.find(b => b.aktiv);
+            if (aktivBehandling) {
+                return aktivBehandling.kategori;
+            }
+        }
+        return BehandlingKategori.NASJONAL;
+    };
+
+    const utredUnderkategori = () => {
+        if (behandlingstema.verdi?.underkategori) {
+            return behandlingstema.verdi?.underkategori;
+        }
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            const aktivBehandling = fagsak.data.behandlinger.find(b => b.aktiv);
+            if (aktivBehandling) {
+                return aktivBehandling.underkategori;
+            }
+        }
+        return BehandlingUnderkategori.ORDINÆR;
+    };
+
     const onBekreft = (søkersIdent: string) => {
+        const { behandlingstype, behandlingsårsak } = skjema.felter;
         if (kanSendeSkjema()) {
             if (
                 skjema.felter.behandlingstype.verdi ===
@@ -98,15 +143,15 @@ const useOpprettBehandling = (
                     }
                 );
             } else {
-                onSubmit(
+                onSubmit<IRestNyBehandling>(
                     {
                         data: {
-                            behandlingType: skjema.felter.behandlingstype.verdi as Behandlingstype,
-                            behandlingÅrsak: skjema.felter.behandlingsårsak.verdi,
-                            kategori: BehandlingKategori.NASJONAL,
-                            navIdent: innloggetSaksbehandler?.navIdent,
+                            kategori: utredKategori(),
+                            underkategori: utredUnderkategori(),
                             søkersIdent,
-                            underkategori: skjema.felter.underkategori.verdi,
+                            behandlingType: behandlingstype.verdi as Behandlingstype,
+                            behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
+                            navident: innloggetSaksbehandler?.navIdent,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',
