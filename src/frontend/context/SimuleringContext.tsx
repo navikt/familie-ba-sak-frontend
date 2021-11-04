@@ -9,8 +9,14 @@ import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 import { aktivVedtakPåBehandling } from '../api/fagsak';
 import { IBehandling } from '../typer/behandling';
 import { IFagsak } from '../typer/fagsak';
-import { ISimuleringDTO, Tilbakekrevingsvalg, ITilbakekreving } from '../typer/simulering';
+import {
+    ISimuleringDTO,
+    Tilbakekrevingsvalg,
+    ITilbakekreving,
+    ISimuleringPeriode,
+} from '../typer/simulering';
 import { ToggleNavn } from '../typer/toggles';
+import { kalenderDato, kalenderDatoTilDate, kalenderDiff, TIDENES_MORGEN } from '../utils/kalender';
 import { useApp } from './AppContext';
 
 interface IProps {
@@ -38,6 +44,17 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
             url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/simulering`,
             påvirkerSystemLaster: true,
         }).then(response => {
+            if (response.status === RessursStatus.SUKSESS) {
+                const tidSimuleringHentet = response.data.tidSimuleringHentet;
+
+                response.data.perioder.map((periode: ISimuleringPeriode) => {
+                    return settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert(
+                        periode,
+                        tidSimuleringHentet
+                    );
+                });
+            }
+
             settSimuleringresultat(response);
         });
     }, [aktivtVedtak]);
@@ -156,6 +173,27 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
               }
             : undefined;
     };
+
+    function settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert(
+        periode: ISimuleringPeriode,
+        tidSimuleringHentet: string | undefined
+    ) {
+        if (
+            periode.resultat === 0 &&
+            kalenderDiff(
+                kalenderDatoTilDate(
+                    periode.forfallsdato ? kalenderDato(periode.forfallsdato) : TIDENES_MORGEN
+                ),
+                kalenderDatoTilDate(
+                    tidSimuleringHentet ? kalenderDato(tidSimuleringHentet) : TIDENES_MORGEN
+                )
+            ) > 0
+        ) {
+            periode.tidligereUtbetalt = 0;
+            periode.resultat = periode.nyttBeløp;
+        }
+        return periode;
+    }
 
     return {
         simuleringsresultat,
