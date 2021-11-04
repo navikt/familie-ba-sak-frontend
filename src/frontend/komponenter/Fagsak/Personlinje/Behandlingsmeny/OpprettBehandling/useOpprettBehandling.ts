@@ -13,7 +13,11 @@ import {
     IBehandling,
     IRestNyBehandling,
 } from '../../../../../typer/behandling';
-import { IBehandlingstema } from '../../../../../typer/behandlingstema';
+import {
+    BehandlingKategori,
+    BehandlingUnderkategori,
+    IBehandlingstema,
+} from '../../../../../typer/behandlingstema';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
@@ -24,7 +28,7 @@ const useOpprettBehandling = (
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
     const { innloggetSaksbehandler } = useApp();
-    const { settFagsak } = useFagsakRessurser();
+    const { fagsak, settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
@@ -54,10 +58,14 @@ const useOpprettBehandling = (
         verdi: undefined,
         valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
             felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
-        avhengigheter: { behandlingstype },
+        avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
-            return behandlingstypeVerdi in Behandlingstype;
+            const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
+            return (
+                behandlingstypeVerdi in Behandlingstype &&
+                behandlingsårsakVerdi === BehandlingÅrsak.SØKNAD
+            );
         },
     });
 
@@ -88,8 +96,35 @@ const useOpprettBehandling = (
         }
     }, [skjema.felter.behandlingstype.verdi]);
 
+    // TODO: logikken for setting av behandlingstema når årsak ikke er søknad burde fikses i backend, slik at kategori og underkategori kan være optional. Deretter kan disse to funksjonene fjernes.
+    const utredKategori = () => {
+        if (behandlingstema.verdi?.kategori) {
+            return behandlingstema.verdi.kategori;
+        }
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            const aktivBehandling = fagsak.data.behandlinger.find(b => b.aktiv);
+            if (aktivBehandling) {
+                return aktivBehandling.kategori;
+            }
+        }
+        return BehandlingKategori.NASJONAL;
+    };
+
+    const utredUnderkategori = () => {
+        if (behandlingstema.verdi?.underkategori) {
+            return behandlingstema.verdi?.underkategori;
+        }
+        if (fagsak.status === RessursStatus.SUKSESS) {
+            const aktivBehandling = fagsak.data.behandlinger.find(b => b.aktiv);
+            if (aktivBehandling) {
+                return aktivBehandling.underkategori;
+            }
+        }
+        return BehandlingUnderkategori.ORDINÆR;
+    };
+
     const onBekreft = (søkersIdent: string) => {
-        const { behandlingstype, behandlingsårsak, behandlingstema } = skjema.felter;
+        const { behandlingstype, behandlingsårsak } = skjema.felter;
         if (kanSendeSkjema()) {
             if (
                 skjema.felter.behandlingstype.verdi ===
@@ -107,15 +142,12 @@ const useOpprettBehandling = (
                         }
                     }
                 );
-            } else if (behandlingstema.verdi) {
-                const kategori = behandlingstema.verdi.kategori;
-                const underkategori = behandlingstema.verdi.underkategori;
-
+            } else {
                 onSubmit<IRestNyBehandling>(
                     {
                         data: {
-                            kategori,
-                            underkategori,
+                            kategori: utredKategori(),
+                            underkategori: utredUnderkategori(),
                             søkersIdent,
                             behandlingType: behandlingstype.verdi as Behandlingstype,
                             behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
