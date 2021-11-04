@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
@@ -11,7 +11,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useManuellJournalfør } from '../../context/ManuellJournalførContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { datoformat, formaterIsoDato } from '../../utils/formatter';
-import { BehandlingstemaSelect } from '../Felleskomponenter/BehandlingstemaSelect';
 
 export const journalpostTittelList = Object.keys(JournalpostTittel).map((_, index) => {
     return {
@@ -27,42 +26,33 @@ const JournalpostMetadataDiv = styled.div`
 
 const EndreJournalpost: React.FC = () => {
     const { skjema, erLesevisning } = useManuellJournalfør();
-    const { journalpostTittel, behandlingstema } = skjema.felter;
 
     return (
-        <>
-            <FamilieReactSelect
-                {...journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger)}
-                creatable={true}
-                isClearable
-                erLesevisning={erLesevisning()}
-                label={'Endre journalposttittel'}
-                placeholder={'Skriv fritekst for å endre tittel...'}
-                isMulti={false}
-                options={journalpostTittelList}
-                value={
-                    skjema.felter.journalpostTittel.verdi === ''
-                        ? null
-                        : {
-                              value: journalpostTittel.verdi,
-                              label: journalpostTittel.verdi,
-                          }
+        <FamilieReactSelect
+            {...skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger)}
+            creatable={true}
+            isClearable
+            erLesevisning={erLesevisning()}
+            label={'Endre journalposttittel'}
+            placeholder={'Skriv fritekst for å endre tittel...'}
+            isMulti={false}
+            options={journalpostTittelList}
+            value={
+                skjema.felter.journalpostTittel.verdi === ''
+                    ? null
+                    : {
+                          value: skjema.felter.journalpostTittel.verdi,
+                          label: skjema.felter.journalpostTittel.verdi,
+                      }
+            }
+            onChange={value => {
+                if (value && 'value' in value) {
+                    skjema.felter.journalpostTittel.validerOgSettFelt(value.value);
+                } else {
+                    skjema.felter.journalpostTittel.nullstill();
                 }
-                onChange={value => {
-                    if (value && 'value' in value) {
-                        journalpostTittel.validerOgSettFelt(value.value);
-                    } else {
-                        journalpostTittel.nullstill();
-                    }
-                }}
-            />
-            <BehandlingstemaSelect
-                behandlingstema={behandlingstema}
-                visFeilmeldinger={skjema.visFeilmeldinger}
-                name="Behandlingstema"
-                label="Sett behandlingstema / Gjelder"
-            />
-        </>
+            }}
+        />
     );
 };
 
@@ -72,21 +62,13 @@ const Journalpost: React.FC = () => {
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.datoMottatt
             : undefined;
-    const [åpen, settÅpen] = useState(false);
-    const toggleApen = () => settÅpen(!åpen);
-    const erÅpen = (): boolean => {
-        if (skjema.visFeilmeldinger === true) return true;
-        return åpen;
-    };
 
     return (
-        <EkspanderbartpanelBase
+        <Ekspanderbartpanel
             id={skjema.felter.journalpostTittel.id}
             tittel={
                 <Undertittel>{skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}</Undertittel>
             }
-            apen={erÅpen()}
-            onClick={toggleApen}
         >
             <JournalpostMetadataDiv>
                 <Normaltekst>
@@ -97,7 +79,7 @@ const Journalpost: React.FC = () => {
                 </Normaltekst>
             </JournalpostMetadataDiv>
             <EndreJournalpost />
-        </EkspanderbartpanelBase>
+        </Ekspanderbartpanel>
     );
 };
 
