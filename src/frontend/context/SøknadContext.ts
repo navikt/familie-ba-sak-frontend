@@ -6,7 +6,8 @@ import { useHistory } from 'react-router';
 import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
+import { IBehandling } from '../typer/behandling';
+import { BehandlingUnderkategori } from '../typer/behandlingstema';
 import { IFagsak } from '../typer/fagsak';
 import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import {

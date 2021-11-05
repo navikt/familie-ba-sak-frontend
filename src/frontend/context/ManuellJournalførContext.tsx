@@ -5,7 +5,7 @@ import createUseContext from 'constate';
 import { useHistory, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import { useFelt, feil, Avhengigheter, useSkjema, ok, FeltState } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import {
     byggDataRessurs,
     byggFeiletRessurs,
@@ -19,6 +19,7 @@ import {
 
 import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
+import { IBehandlingstema, utredBehandlingstemaFraOppgave } from '../typer/behandlingstema';
 import { IMinimalFagsak } from '../typer/fagsak';
 import {
     IDataForManuellJournalføring,
@@ -93,6 +94,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
         {
             journalpostTittel: string;
+            behandlingstema: IBehandlingstema | undefined;
             dokumenter: IDokumentInfo[];
             bruker: IPersonInfo | undefined;
             avsenderNavn: string;
@@ -112,6 +114,11 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                         ? ok(felt)
                         : feil(felt, 'Journalposttittel kan ikke være tom');
                 },
+            }),
+            behandlingstema: useFelt<IBehandlingstema | undefined>({
+                verdi: undefined,
+                valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
+                    felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
             }),
             dokumenter: useFelt<IDokumentInfo[]>({
                 verdi: [],
@@ -159,6 +166,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
             skjema.felter.journalpostTittel.validerOgSettFelt(
                 dataForManuellJournalføring.data.journalpost.tittel ?? ''
+            );
+
+            skjema.felter.behandlingstema.validerOgSettFelt(
+                utredBehandlingstemaFraOppgave(dataForManuellJournalføring.data.oppgave)
             );
 
             skjema.felter.avsenderNavn.validerOgSettFelt(
@@ -324,6 +335,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
 
             const nyBehandlingstype = skjema.felter.behandlingstype.verdi;
             const nyBehandlingsårsak = skjema.felter.behandlingsårsak.verdi;
+            const { verdi: behandlingstema } = skjema.felter.behandlingstema;
 
             //SKAN_IM-kanalen benytter logiske vedlegg, NAV_NO-kanalen gjør ikke. For sistnevnte må titlene konkateneres.
             onSubmit<IRestJournalføring>(
@@ -336,6 +348,8 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     }&ferdigstill=true`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
+                        kategori: behandlingstema?.kategori ?? null,
+                        underkategori: behandlingstema?.underkategori ?? null,
                         bruker: {
                             navn: skjema.felter.bruker.verdi?.navn ?? '',
                             id: skjema.felter.bruker.verdi?.personIdent ?? '',
