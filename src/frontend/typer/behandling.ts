@@ -16,8 +16,8 @@ import { Utbetalingsperiode } from './vedtaksperiode';
 import { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export interface IRestNyBehandling {
-    kategori: BehandlingKategori;
-    underkategori: BehandlingUnderkategori;
+    kategori: BehandlingKategori | null;
+    underkategori: BehandlingUnderkategori | null;
     søkersIdent: string;
     behandlingType: Behandlingstype;
     journalpostID?: string;

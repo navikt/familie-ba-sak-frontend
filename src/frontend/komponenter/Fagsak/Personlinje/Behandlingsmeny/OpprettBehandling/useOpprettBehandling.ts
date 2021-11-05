@@ -13,11 +13,7 @@ import {
     IBehandling,
     IRestNyBehandling,
 } from '../../../../../typer/behandling';
-import {
-    BehandlingKategori,
-    BehandlingUnderkategori,
-    IBehandlingstema,
-} from '../../../../../typer/behandlingstema';
+import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { IFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
@@ -28,7 +24,7 @@ const useOpprettBehandling = (
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
     const { innloggetSaksbehandler } = useApp();
-    const { fagsak, settFagsak } = useFagsakRessurser();
+    const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
@@ -96,33 +92,6 @@ const useOpprettBehandling = (
         }
     }, [skjema.felter.behandlingstype.verdi]);
 
-    // TODO: logikken for setting av behandlingstema når årsak ikke er søknad burde fikses i backend, slik at kategori og underkategori kan være optional. Deretter kan disse to funksjonene fjernes.
-    const utredKategori = () => {
-        if (behandlingstema.verdi?.kategori) {
-            return behandlingstema.verdi.kategori;
-        }
-        if (fagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = fagsak.data.behandlinger.find(b => b.aktiv);
-            if (aktivBehandling) {
-                return aktivBehandling.kategori;
-            }
-        }
-        return BehandlingKategori.NASJONAL;
-    };
-
-    const utredUnderkategori = () => {
-        if (behandlingstema.verdi?.underkategori) {
-            return behandlingstema.verdi?.underkategori;
-        }
-        if (fagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = fagsak.data.behandlinger.find(b => b.aktiv);
-            if (aktivBehandling) {
-                return aktivBehandling.underkategori;
-            }
-        }
-        return BehandlingUnderkategori.ORDINÆR;
-    };
-
     const onBekreft = (søkersIdent: string) => {
         const { behandlingstype, behandlingsårsak } = skjema.felter;
         if (kanSendeSkjema()) {
@@ -146,8 +115,9 @@ const useOpprettBehandling = (
                 onSubmit<IRestNyBehandling>(
                     {
                         data: {
-                            kategori: utredKategori(),
-                            underkategori: utredUnderkategori(),
+                            kategori: skjema.felter.behandlingstema.verdi?.kategori ?? null,
+                            underkategori:
+                                skjema.felter.behandlingstema.verdi?.underkategori ?? null,
                             søkersIdent,
                             behandlingType: behandlingstype.verdi as Behandlingstype,
                             behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
