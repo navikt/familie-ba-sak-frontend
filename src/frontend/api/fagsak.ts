@@ -1,5 +1,4 @@
-import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
-import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandlingstema';
+import { IBehandling } from '../typer/behandling';
 
 export const aktivVedtakPåBehandling = (behandling?: IBehandling) =>
     behandling?.vedtakForBehandling.find(v => v.aktiv);
@@ -7,13 +6,4 @@ export const aktivVedtakPåBehandling = (behandling?: IBehandling) =>
 export interface IOpprettEllerHentFagsakData {
     personIdent: string | null;
     aktørId: string | null;
-}
-
-export interface IOpprettBehandlingData {
-    behandlingType: Behandlingstype;
-    behandlingÅrsak: BehandlingÅrsak;
-    kategori: BehandlingKategori;
-    navIdent?: string;
-    søkersIdent: string;
-    underkategori: BehandlingUnderkategori;
 }
