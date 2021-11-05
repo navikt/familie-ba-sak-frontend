@@ -56,3 +56,35 @@ Fra og med Windows 10 følge det med eget Subsystem for Linux i Windows.
 * Legg til .env fila (se beskrivelsen over)
 
 Anbefaler også å laste ned Visual Studio Code fra Microsoft store for å kunne åpne og redigere filene i Linux uten å gå via terminalen. Det gjør det også betydelig lettere å legge til .env fila.
+
+## Cypress med Azure AD login
+lag en fil ```cypress.env.json``` på root og fyll inn for verdiene:
+```
+{
+  "ENV": "fyll inn",
+  "APP_VERSION": "fyll inn",
+
+  "SESSION_SECRET": "fyll inn",
+
+  "CLIENT_ID": "fyll inn",
+  "CLIENT_SECRET": "fyll inn",
+  "BA_SAK_SCOPE": "fyll inn",
+
+  "PASSPORTCOOKIE_KEY1": "fyll inn",
+  "PASSPORTCOOKIE_KEY2": "fyll inn",
+  "PASSPORTCOOKIE_KEY3": "fyll inn",
+  "PASSPORTCOOKIE_KEY4": "fyll inn",
+
+  "COOKIE_KEY1": "fyll inn",
+  "COOKIE_KEY2": "fyll inn",
+
+  "REDIS_PASSWORD": "fyll inn",
+
+  "SLACK_TOKEN": "fyll inn",
+
+  "USERNAME": "fyll inn",
+  "PASSWORD": "fyll inn",
+  "TOKEN_NAME": "fyll inn",
+  "TENANT_ID": "fyll inn"
+}
+```
