@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import { byggFeiletRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { IOpprettBehandlingData, IOpprettEllerHentFagsakData } from '../../api/fagsak';
+import { IOpprettEllerHentFagsakData } from '../../api/fagsak';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { BehandlingResultat, BehandlingÅrsak, IBehandling } from '../../typer/behandling';
+import { BehandlingResultat, IBehandling } from '../../typer/behandling';
 import { IFagsak } from '../../typer/fagsak';
 import { defaultFunksjonellFeil } from '../../typer/feilmeldinger';
 import { hentAktivBehandlingPåFagsak } from '../../utils/fagsak';
@@ -58,51 +58,6 @@ const useFagsakApi = (
                 settSenderInn(false);
                 settVisFeilmeldinger(true);
                 settFeilmelding('Opprettelse av fagsak feilet');
-            });
-    };
-
-    const opprettBehandling = (data: IOpprettBehandlingData): Promise<Ressurs<IFagsak>> => {
-        settSenderInn(true);
-        return request<IOpprettBehandlingData, IFagsak>({
-            data,
-            method: 'POST',
-            url: '/familie-ba-sak/api/behandlinger',
-        })
-            .then((response: Ressurs<IFagsak>) => {
-                settSenderInn(false);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settFagsak(response);
-
-                    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
-                        response.data
-                    );
-
-                    if (!aktivBehandling) {
-                        settVisFeilmeldinger(true);
-                        settFeilmelding('Opprettelse av behandling feilet');
-                    } else if (aktivBehandling.årsak === BehandlingÅrsak.SØKNAD) {
-                        history.push(
-                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
-                        );
-                    } else {
-                        history.push(
-                            `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
-                        );
-                    }
-                } else if (response.status === RessursStatus.FEILET) {
-                    settVisFeilmeldinger(true);
-                    settFeilmelding(response.frontendFeilmelding);
-                } else {
-                    settVisFeilmeldinger(true);
-                    settFeilmelding('Opprettelse av behandling feilet');
-                }
-                return response;
-            })
-            .catch(() => {
-                settSenderInn(false);
-                settVisFeilmeldinger(true);
-                settFeilmelding('Opprettelse av behandling feilet');
-                return byggFeiletRessurs('Opprettelse av behandling feilet');
             });
     };
 
@@ -193,7 +148,6 @@ const useFagsakApi = (
     };
 
     return {
-        opprettBehandling,
         opprettEllerHentFagsak,
         validerVilkårsvurderingOgSendInn,
         behandlingresultatNesteOnClick,
