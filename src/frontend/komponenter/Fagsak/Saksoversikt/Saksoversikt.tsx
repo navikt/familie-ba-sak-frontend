@@ -10,14 +10,12 @@ import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
+import { BehandlingResultat, BehandlingStatus, IBehandling } from '../../../typer/behandling';
 import {
+    behandlingKategori,
     BehandlingKategori,
-    BehandlingResultat,
-    BehandlingStatus,
-    IBehandling,
-    kategorier,
-    underkategorier,
-} from '../../../typer/behandling';
+    behandlingUnderkategori,
+} from '../../../typer/behandlingstema';
 import { FagsakStatus, IMinimalFagsak } from '../../../typer/fagsak';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
@@ -216,10 +214,10 @@ export const sakstype = (behandling?: IBehandling) => {
     }
 
     return `${
-        behandling?.kategori ? kategorier[behandling?.kategori].navn : behandling?.kategori
+        behandling?.kategori ? behandlingKategori[behandling?.kategori] : behandling?.kategori
     }, ${
         behandling?.underkategori
-            ? underkategorier[behandling?.underkategori].navn
+            ? behandlingUnderkategori[behandling?.underkategori]
             : behandling?.underkategori
     }`;
 };

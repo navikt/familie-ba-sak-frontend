@@ -6,10 +6,12 @@ import Alertstripe from 'nav-frontend-alertstriper';
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import Lenke from 'nav-frontend-lenker';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { Radio, Feiloppsummering, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element, Normaltekst, Undertekst } from 'nav-frontend-typografi';
 
+import { ExternalLink } from '@navikt/ds-icons';
 import { FamilieTextarea, FamilieRadioGruppe } from '@navikt/familie-form-elements';
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
@@ -21,7 +23,6 @@ import { visTilbakekrevingsvalg, Tilbakekrevingsvalg } from '../../../typer/simu
 import { Målform, målform } from '../../../typer/søknad';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
-import SkjultLegend from '../../Felleskomponenter/SkjultLegend';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
     display: flex;
@@ -65,6 +66,10 @@ const TilbakekrevingSkjemaGruppe = styled(SkjemaGruppe)`
     margin-top: 4rem;
     width: 90%;
     max-width: 40rem;
+
+    .radiogruppe {
+        margin-top: 2rem;
+    }
 `;
 
 const StyledAlertstripe = styled(Alertstripe)`
@@ -148,7 +153,17 @@ const TilbakekrevingSkjema: React.FC<{
                 pdfdata={hentetForhåndsvisning}
             />
 
-            <TilbakekrevingSkjemaGruppe legend={<SkjultLegend>Tilbakekrevingsvalg</SkjultLegend>}>
+            <TilbakekrevingSkjemaGruppe legend="Tilbakekreving">
+                <FamilieTextarea
+                    label="Begrunn hvordan feilutbetalingen skal behandles videre"
+                    {...begrunnelse.hentNavInputProps(
+                        tilbakekrevingSkjema.visFeilmeldinger ||
+                            begrunnelse.verdi.length > maksLengdeTekst
+                    )}
+                    erLesevisning={erLesevisning()}
+                    maxLength={maksLengdeTekst}
+                />
+
                 <FamilieRadioGruppe
                     {...tilbakekrevingsvalg.hentNavBaseSkjemaProps(
                         tilbakekrevingSkjema.visFeilmeldinger
@@ -159,7 +174,7 @@ const TilbakekrevingSkjema: React.FC<{
                             ? visTilbakekrevingsvalg[tilbakekrevingsvalg.verdi]
                             : undefined
                     }
-                    legend="Tilbakekreving"
+                    legend="Fastsett videre behandling"
                 >
                     <Radio
                         label={'Opprett tilbakekreving, send varsel'}
@@ -201,6 +216,14 @@ const TilbakekrevingSkjema: React.FC<{
                                                     utbetalt barnetrygd for perioden (Fom dato - Tom
                                                     dato).
                                                 </StyledNormaltekst>
+                                                <br />
+                                                <Lenke
+                                                    href="https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx"
+                                                    target="_blank"
+                                                >
+                                                    <span>Se retningslinjer for klarspråk:</span>
+                                                    <ExternalLink />
+                                                </Lenke>
                                             </StyledHjelpetekst>
                                         </FlexRad>
                                         <StyledEtikettInfo>
@@ -272,16 +295,6 @@ const TilbakekrevingSkjema: React.FC<{
                         erLesevisning={erLesevisning()}
                     />
                 )}
-
-                <FamilieTextarea
-                    label="Begrunnelse"
-                    {...begrunnelse.hentNavInputProps(
-                        tilbakekrevingSkjema.visFeilmeldinger ||
-                            begrunnelse.verdi.length > maksLengdeTekst
-                    )}
-                    erLesevisning={erLesevisning()}
-                    maxLength={maksLengdeTekst}
-                />
 
                 {tilbakekrevingSkjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                     <Feiloppsummering

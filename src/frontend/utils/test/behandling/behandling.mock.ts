@@ -1,15 +1,14 @@
 import { VisningBehandling } from '../../../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import {
-    BehandlingKategori,
     BehandlingResultat,
     BehandlingStatus,
     BehandlingSteg,
     BehandlingStegStatus,
     Behandlingstype,
-    BehandlingUnderkategori,
     BehandlingÅrsak,
     IBehandling,
 } from '../../../typer/behandling';
+import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
 import { IRestPersonResultat } from '../../../typer/vilkår';
 import { mockBarn, mockSøker } from '../person/person.mock';
 import { mockRestPersonResultat } from '../vilkårsvurdering/vilkår.mock';

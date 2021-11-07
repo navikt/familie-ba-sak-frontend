@@ -7,7 +7,8 @@ import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skj
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
-import { BehandlingUnderkategori, IBehandling } from '../typer/behandling';
+import { IBehandling } from '../typer/behandling';
+import { BehandlingUnderkategori } from '../typer/behandlingstema';
 import { IMinimalFagsak } from '../typer/fagsak';
 import { ForelderBarnRelasjonRolle, IForelderBarnRelasjon } from '../typer/person';
 import {

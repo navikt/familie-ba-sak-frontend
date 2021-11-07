@@ -10,7 +10,7 @@ import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
-import { BehandlingUnderkategori, underkategorier } from '../../../typer/behandling';
+import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
 import { ToggleNavn } from '../../../typer/toggles';
 
 const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
@@ -35,18 +35,18 @@ const SøknadType: React.FunctionComponent = () => {
         <StyledFamilieRadioGruppe
             {...skjema.felter.underkategori.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
             erLesevisning={lesevisning}
-            verdi={underkategorier[skjema.felter.underkategori.verdi].navn}
+            verdi={behandlingUnderkategori[skjema.felter.underkategori.verdi]}
             legend={<Systemtittel children={'Hva har bruker søkt om?'} />}
         >
             <StyledRadio
-                label={underkategorier[BehandlingUnderkategori.ORDINÆR].navn}
+                label={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR]}
                 name={'registrer-søknad-søknadtype'}
                 checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.ORDINÆR}
                 onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
             />
             {toggles[ToggleNavn.kanBehandleUtvidet] && (
                 <StyledRadio
-                    label={underkategorier[BehandlingUnderkategori.UTVIDET].navn}
+                    label={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET]}
                     name={'registrer-søknad-søknadtype'}
                     checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.UTVIDET}
                     onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
