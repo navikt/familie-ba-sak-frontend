@@ -56,7 +56,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
             settSimuleringresultat(response);
         });
-    }, [vedtak]);
+    }, [åpenBehandling]);
 
     useEffect(() => {
         if (tilbakekrevingErToggletPå) {
