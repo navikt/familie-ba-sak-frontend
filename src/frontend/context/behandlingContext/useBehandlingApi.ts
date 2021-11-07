@@ -68,7 +68,6 @@ const useBehandlingApi = (
     };
 
     const hentBehandling = () => {
-        console.log('hent behandling');
         request<void, IBehandling>({
             method: 'GET',
             url: `/familie-ba-sak/api/behandlinger/${behandlingId}`,

@@ -150,7 +150,6 @@ const [SøknadProvider, useSøknad] = createUseContext(
             }
         }, [åpenBehandling]);
 
-        // Flytt til useBehandlingssteg
         const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
             if (bruker.status === RessursStatus.SUKSESS) {
                 if (erLesevisning()) {

@@ -40,7 +40,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     } = useSimulering();
     const { erLesevisning, settÅpenBehandling } = useBehandling();
 
-    // Flytt til useBehandlingssteg
     const nesteOnClick = () => {
         if (erLesevisning()) {
             history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);

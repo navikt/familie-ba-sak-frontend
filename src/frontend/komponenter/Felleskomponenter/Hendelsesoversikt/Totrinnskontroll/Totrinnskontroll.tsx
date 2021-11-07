@@ -87,7 +87,6 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
         nullstillFeilmelding();
     }, [trinnPåBehandling]);
 
-    // TODO flytt til useBehandlingssteg
     const sendInnVedtak = (
         beslutning: TotrinnskontrollBeslutning,
         begrunnelse: string,
@@ -107,7 +106,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
         }
 
         settInnsendtVedtak(byggHenterRessurs());
-        settModalVerdi({ ...modalVerdi, beslutning: beslutning });
+        settModalVerdi({ ...modalVerdi, beslutning });
         const manglerBegrunnelse =
             beslutning === TotrinnskontrollBeslutning.UNDERKJENT && !begrunnelse;
         if (beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {

@@ -43,7 +43,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     }, [minimalFagsak]);
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
-        console.log('hent minimal fagsak');
         settMinimalFagsak(byggHenterRessurs());
         request<void, IMinimalFagsak>({
             method: 'GET',

@@ -50,7 +50,8 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         submitRessurs: behandlingsstegSubmitressurs,
         vilkårsvurderingNesteOnClick,
         behandlingresultatNesteOnClick,
-    } = useBehandlingssteg(settÅpenBehandling);
+        sendTilBeslutterNesteOnClick,
+    } = useBehandlingssteg(settÅpenBehandling, hentDataFraRessurs(åpenBehandling));
 
     const { opprettBehandling, logg, hentLogg, oppdaterRegisteropplysninger } = useBehandlingApi(
         åpenBehandling,
@@ -196,6 +197,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         behandlingresultatNesteOnClick,
         settÅpenBehandling,
         oppdaterRegisteropplysninger,
+        sendTilBeslutterNesteOnClick,
     };
 });
 

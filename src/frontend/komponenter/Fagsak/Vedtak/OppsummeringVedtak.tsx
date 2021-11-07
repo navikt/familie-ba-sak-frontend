@@ -30,6 +30,7 @@ import {
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -49,18 +50,16 @@ const Container = styled.div`
 `;
 
 const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+    const { hentSaksbehandlerRolle } = useApp();
     const { fagsakId } = useSakOgBehandlingParams();
     const { request } = useHttp();
-    const { erLesevisning, settÅpenBehandling } = useBehandling();
+    const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
+        useBehandling();
 
     const history = useHistory();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
     const [visVedtaksbrev, settVisVedtaksbrev] = React.useState(false);
-
-    const [submitFeil, settSubmitFeil] = React.useState('');
-    const [senderInn, settSenderInn] = React.useState(false);
 
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
@@ -119,52 +118,8 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         }
     };
 
-    const minstEnPeriodeharBegrunnetelseEllerFritekst = (): boolean => {
-        const vedtaksperioderMedBegrunnelser =
-            åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser ?? [];
-        return vedtaksperioderMedBegrunnelser.some(
-            vedtaksperioderMedBegrunnelse =>
-                vedtaksperioderMedBegrunnelse.begrunnelser.length !== 0 ||
-                vedtaksperioderMedBegrunnelse.fritekster.length !== 0
-        );
-    };
-
-    const kanSendeinnVedtak = () =>
-        minstEnPeriodeharBegrunnetelseEllerFritekst() ||
-        åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
-        åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-        åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
-
-    // TODO flytt til useBehandlingssteg
-    const sendInn = () => {
-        if (kanSendeinnVedtak()) {
-            settSenderInn(true);
-            settSubmitFeil('');
-            request<void, IBehandling>({
-                method: 'POST',
-                url: `/familie-ba-sak/api/behandlinger/${
-                    åpenBehandling.behandlingId
-                }/steg/send-til-beslutter?behandlendeEnhet=${
-                    innloggetSaksbehandler?.enhet ?? '9999'
-                }`,
-            }).then((response: Ressurs<IBehandling>) => {
-                settSenderInn(false);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settVisModal(true);
-                    settÅpenBehandling(response);
-                } else if (
-                    response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    response.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    settSubmitFeil(response.frontendFeilmelding);
-                }
-            });
-        } else {
-            settSubmitFeil(
-                'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
-            );
-        }
+    const sendTilBeslutter = () => {
+        sendTilBeslutterNesteOnClick((visModal: boolean) => settVisModal(visModal));
     };
 
     return (
@@ -173,12 +128,12 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             forrigeOnClick={() =>
                 history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
-            nesteOnClick={visSubmitKnapp ? sendInn : undefined}
+            nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
             nesteKnappTittel={'Til godkjenning'}
-            senderInn={senderInn}
+            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             maxWidthStyle="100%"
             className={'vedtak'}
-            feilmelding={submitFeil}
+            feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
         >
             {åpenBehandling.årsak !== BehandlingÅrsak.TEKNISK_OPPHØR ? (
                 <>
