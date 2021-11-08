@@ -106,9 +106,9 @@ export interface IRestVilkårResultat {
     periodeTom?: FamilieIsoDate;
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
-    erSkjønnsmessigVurdert: boolean;
-    erMedlemskapVurdert: boolean;
-    erDeltBosted: boolean;
+    erSkjønnsmessigVurdert: boolean; // Vurdering annet grunnlag
+    erMedlemskapVurdert: boolean; // Vurdert medlemskap
+    erDeltBosted: boolean; // Delt bosted
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
     vurderesEtter: Regelverk | null;

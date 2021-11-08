@@ -40,6 +40,7 @@ import AvslagSkjema from './AvslagSkjema';
 import DeltBostedCheckbox from './DeltBostedCheckbox';
 import MedlemskapCheckbox from './MedlemskapCheckbox';
 import SkjønnsvurderingCheckbox from './SkjønnsvurderingCheckbox';
+import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
@@ -340,6 +341,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             )}
                     </CheckboxGruppe>
                 )}
+                <UtdypendeVilkårsvurderingMultiselect
+                    vilkår={redigerbartVilkår}
+                    settRedigerbartVilkår={settRedigerbartVilkår}
+                    settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                />
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     årsakErSøknad && (
                         <AvslagSkjema
