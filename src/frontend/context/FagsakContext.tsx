@@ -2,6 +2,7 @@ import React from 'react';
 
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
+import deepEqual from 'deep-equal';
 
 import { useHttp } from '@navikt/familie-http';
 import {
@@ -43,14 +44,19 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
     }, [minimalFagsak]);
 
     const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
-        settMinimalFagsak(byggHenterRessurs());
+        if (påvirkerSystemLaster) {
+            settMinimalFagsak(byggHenterRessurs());
+        }
+
         request<void, IMinimalFagsak>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/minimal/${fagsakId}`,
             påvirkerSystemLaster,
         })
             .then((hentetFagsak: Ressurs<IMinimalFagsak>) => {
-                settMinimalFagsak(hentetFagsak);
+                if (påvirkerSystemLaster || !deepEqual(hentetFagsak, minimalFagsak)) {
+                    settMinimalFagsak(hentetFagsak);
+                }
             })
             .catch((_error: AxiosError) => {
                 settMinimalFagsak(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
