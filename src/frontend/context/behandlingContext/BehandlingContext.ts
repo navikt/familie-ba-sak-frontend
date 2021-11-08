@@ -41,7 +41,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     );
 
     const settÅpenBehandling = (behandling: Ressurs<IBehandling>, oppdaterMinimalFagsak = true) => {
-        if (oppdaterMinimalFagsak) {
+        if (oppdaterMinimalFagsak && fagsakId) {
             hentMinimalFagsak(fagsakId, false);
         }
         privatSettÅpenBehandling(behandling);
