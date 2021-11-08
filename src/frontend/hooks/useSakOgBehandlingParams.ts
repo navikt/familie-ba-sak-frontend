@@ -1,25 +1,38 @@
 import { useRouteMatch } from 'react-router-dom';
 
-const useSakOgBehandlingParams = () => {
-    const match = useRouteMatch('/fagsak/:fagsakId/:behandlingId');
+const useSakOgBehandlingParams = (): { fagsakId?: string; behandlingId?: string } => {
+    const matchFagsakIdOgBehandlingId = useRouteMatch<{
+        fagsakId: string;
+        behandlingId: string;
+    }>('/fagsak/:fagsakId/:behandlingId');
 
-    const fagsakId = match === null ? '' : trekkUtFagsakId(match.url.split('/'));
-    const behandlingId = match === null ? undefined : trekkUtBehandlingsId(match.url.split('/'));
+    const matchBareFagsakId = useRouteMatch<{
+        fagsakId: string;
+    }>('/fagsak/:fagsakId');
 
-    return {
-        fagsakId,
-        behandlingId,
-    };
-};
+    if (matchFagsakIdOgBehandlingId) {
+        return {
+            fagsakId: isNaN(parseInt(matchFagsakIdOgBehandlingId.params.fagsakId))
+                ? undefined
+                : matchFagsakIdOgBehandlingId.params.fagsakId,
+            behandlingId:
+                matchFagsakIdOgBehandlingId.params.behandlingId &&
+                isNaN(parseInt(matchFagsakIdOgBehandlingId.params.behandlingId))
+                    ? undefined
+                    : matchFagsakIdOgBehandlingId.params.behandlingId,
+        };
+    }
 
-const trekkUtFagsakId = (matchPath: string[]): string => {
-    return matchPath[2];
-};
+    if (matchBareFagsakId) {
+        return {
+            fagsakId: isNaN(parseInt(matchBareFagsakId.params.fagsakId))
+                ? undefined
+                : matchBareFagsakId.params.fagsakId,
+            behandlingId: undefined,
+        };
+    }
 
-const trekkUtBehandlingsId = (matchPath: string[]): string | undefined => {
-    const id = matchPath[3];
-
-    return isNaN(parseInt(id)) ? undefined : id;
+    return { fagsakId: undefined, behandlingId: undefined };
 };
 
 export default useSakOgBehandlingParams;
