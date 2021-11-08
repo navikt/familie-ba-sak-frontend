@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Redirect, useHistory } from 'react-router';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import AlertStripe from 'nav-frontend-alertstriper';
 
@@ -10,6 +10,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useApp } from '../../context/AppContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
+import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
 import { ToggleNavn } from '../../typer/toggles';
 import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
@@ -21,7 +22,8 @@ import Personlinje from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 
 const FagsakContainer: React.FunctionComponent = () => {
-    const { fagsakId } = useParams<{ fagsakId: string }>();
+    const { fagsakId } = useSakOgBehandlingParams();
+
     const history = useHistory();
     const { toggles } = useApp();
     const { loggSidevisning } = useAmplitude();
@@ -121,7 +123,7 @@ const FagsakContainer: React.FunctionComponent = () => {
                                         <Route
                                             path="/fagsak/:fagsakId/:behandlingId"
                                             render={() => {
-                                                return <BehandlingContainer fagsakId={fagsakId} />;
+                                                return <BehandlingContainer />;
                                             }}
                                         />
                                         <Redirect

@@ -5,13 +5,11 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { IBehandling } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
 import {
     IVedtaksperiodeMedBegrunnelser,
     Vedtaksperiodetype,
 } from '../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../utils/commons';
-import { hentAktivVedtakPåBehandlig } from '../../../../../utils/fagsak';
 import { filtrerOgSorterPerioderMedBegrunnelseBehov2 } from '../../../../../utils/vedtakUtils';
 import { useVedtaksbegrunnelseTekster } from '../Context/VedtaksbegrunnelseTeksterContext';
 import { VedtaksperiodeMedBegrunnelserProvider } from '../Context/VedtaksperiodeMedBegrunnelserContext';
@@ -19,20 +17,18 @@ import OverskriftMedHjelpetekst from '../Felles/OverskriftMedHjelpetekst';
 import VedtaksperiodeMedBegrunnelserPanel from './VedtaksperiodeMedBegrunnelserPanel';
 
 interface IVedtakBegrunnelserTabell {
-    fagsak: IFagsak;
     åpenBehandling: IBehandling;
     erLesevisning: boolean;
 }
 
 const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
-    fagsak,
     åpenBehandling,
     erLesevisning,
 }) => {
     const { vedtaksbegrunnelseTekster } = useVedtaksbegrunnelseTekster();
 
     const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov2(
-        hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [],
+        åpenBehandling.vedtak?.vedtaksperioderMedBegrunnelser ?? [],
         erLesevisning,
         åpenBehandling.resultat
     );
@@ -57,7 +53,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 hjelpetekst={
                     'Her skal du sette begrunnelsestekster for innvilgelse, reduksjon og opphør.'
                 }
-                fagsak={fagsak}
                 åpenBehandling={åpenBehandling}
             />
 
@@ -67,7 +62,6 @@ const VedtaksperioderMedBegrunnelser: React.FC<IVedtakBegrunnelserTabell> = ({
                 hjelpetekst={
                     'Her har vi hentet begrunnelsestekster for avslag som du har satt i vilkårsvurderingen.'
                 }
-                fagsak={fagsak}
                 åpenBehandling={åpenBehandling}
             />
         </>
@@ -80,9 +74,8 @@ const VedtaksperiodeListe: React.FC<{
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     overskrift: string;
     hjelpetekst: string;
-    fagsak: IFagsak;
     åpenBehandling: IBehandling;
-}> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, fagsak, åpenBehandling }) => {
+}> = ({ vedtaksperioderMedBegrunnelser, overskrift, hjelpetekst, åpenBehandling }) => {
     if (vedtaksperioderMedBegrunnelser.length === 0) {
         return null;
     }
@@ -95,7 +88,6 @@ const VedtaksperiodeListe: React.FC<{
                 (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => (
                     <VedtaksperiodeMedBegrunnelserProvider
                         key={vedtaksperiodeMedBegrunnelser.id}
-                        fagsak={fagsak}
                         åpenBehandling={åpenBehandling}
                         vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
                     >

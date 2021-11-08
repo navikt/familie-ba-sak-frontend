@@ -2,6 +2,7 @@ import React from 'react';
 
 import { AxiosError } from 'axios';
 import createUseContext from 'constate';
+import deepEqual from 'deep-equal';
 
 import { useHttp } from '@navikt/familie-http';
 import {
@@ -13,31 +14,20 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { IFagsak, IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
-import { ILogg } from '../typer/logg';
+import { IMinimalFagsak, IInternstatistikk } from '../typer/fagsak';
 import { IPersonInfo } from '../typer/person';
 import { sjekkTilgangTilPerson } from '../utils/commons';
 
 const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
-    const [fagsak, settFagsak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
     const [minimalFagsak, settMinimalFagsak] = React.useState<Ressurs<IMinimalFagsak>>(
         byggTomRessurs()
     );
 
     const [bruker, settBruker] = React.useState<Ressurs<IPersonInfo>>(byggTomRessurs());
-    const [logg, settLogg] = React.useState<Ressurs<ILogg[]>>(byggTomRessurs());
     const [internstatistikk, settInternstatistikk] = React.useState<Ressurs<IInternstatistikk>>(
         byggTomRessurs()
     );
     const { request } = useHttp();
-
-    React.useEffect(() => {
-        if (fagsak.status !== RessursStatus.SUKSESS && fagsak.status !== RessursStatus.HENTER) {
-            settBruker(byggTomRessurs());
-        } else {
-            oppdaterBrukerHvisFagsakEndres(bruker, hentDataFraRessurs(fagsak)?.søkerFødselsnummer);
-        }
-    }, [fagsak]);
 
     React.useEffect(() => {
         if (
@@ -53,30 +43,20 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         }
     }, [minimalFagsak]);
 
-    const hentFagsak = (fagsakId: string): void => {
-        settFagsak(byggHenterRessurs());
-        request<void, IFagsak>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/fagsaker/${fagsakId}`,
-            påvirkerSystemLaster: true,
-        })
-            .then((hentetFagsak: Ressurs<IFagsak>) => {
-                settFagsak(hentetFagsak);
-            })
-            .catch((_error: AxiosError) => {
-                settFagsak(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
-            });
-    };
+    const hentMinimalFagsak = (fagsakId: string | number, påvirkerSystemLaster = true): void => {
+        if (påvirkerSystemLaster) {
+            settMinimalFagsak(byggHenterRessurs());
+        }
 
-    const hentMinimalFagsak = (fagsakId: string): void => {
-        settFagsak(byggHenterRessurs());
         request<void, IMinimalFagsak>({
             method: 'GET',
             url: `/familie-ba-sak/api/fagsaker/minimal/${fagsakId}`,
-            påvirkerSystemLaster: true,
+            påvirkerSystemLaster,
         })
             .then((hentetFagsak: Ressurs<IMinimalFagsak>) => {
-                settMinimalFagsak(hentetFagsak);
+                if (påvirkerSystemLaster || !deepEqual(hentetFagsak, minimalFagsak)) {
+                    settMinimalFagsak(hentetFagsak);
+                }
             })
             .catch((_error: AxiosError) => {
                 settMinimalFagsak(byggFeiletRessurs('Ukjent ved innhenting av fagsak'));
@@ -113,47 +93,6 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
         });
     };
 
-    const oppdaterRegisteropplysninger = (behandlingId: number): Promise<Ressurs<IFagsak>> => {
-        return request<void, IFagsak>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/person/oppdater-registeropplysninger/${behandlingId}`,
-            påvirkerSystemLaster: false,
-        })
-            .then((hentetFagsak: Ressurs<IFagsak>) => {
-                if (
-                    hentetFagsak.status === RessursStatus.FEILET ||
-                    hentetFagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    hentetFagsak.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    return byggFeiletRessurs(
-                        'Kunne ikke oppdatere registeropplysninger. Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.'
-                    ) as Ressurs<IFagsak>;
-                } else {
-                    settFagsak(hentetFagsak);
-                    return hentetFagsak;
-                }
-            })
-            .catch((_error: AxiosError) => {
-                return byggFeiletRessurs(
-                    'Ukjent feil ved oppdatering av registeropplysninger'
-                ) as Ressurs<IFagsak>;
-            });
-    };
-
-    const hentLogg = (behandlingId: number): void => {
-        settLogg(byggHenterRessurs());
-        request<void, ILogg[]>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/logg/${behandlingId}`,
-        })
-            .then((hentetLogg: Ressurs<ILogg[]>) => {
-                settLogg(hentetLogg);
-            })
-            .catch(() => {
-                settLogg(byggFeiletRessurs('Feil ved lasting av logg'));
-            });
-    };
-
     const hentInternstatistikk = (): void => {
         settInternstatistikk(byggHenterRessurs());
         request<void, IInternstatistikk>({
@@ -182,17 +121,12 @@ const [FagsakProvider, useFagsakRessurser] = createUseContext(() => {
 
     return {
         bruker,
-        fagsak,
-        hentFagsak,
         hentFagsakForPerson,
         hentInternstatistikk,
-        hentLogg,
         hentMinimalFagsak,
         internstatistikk,
-        logg,
         minimalFagsak,
-        oppdaterRegisteropplysninger,
-        settFagsak,
+        settMinimalFagsak,
     };
 });
 

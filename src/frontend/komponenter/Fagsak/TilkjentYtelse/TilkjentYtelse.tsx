@@ -13,16 +13,14 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
 import { ToggleNavn } from '../../../typer/toggles';
 import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import useFagsakApi from '../useFagsakApi';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
@@ -38,18 +36,16 @@ const StyledEditIkon = styled(Edit)`
 `;
 
 interface ITilkjentYtelseProps {
-    fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
-const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
-    fagsak,
-    åpenBehandling,
-}) => {
+const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBehandling }) => {
+    const history = useHistory();
+    const { fagsakId } = useSakOgBehandlingParams();
+
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
-    const history = useHistory();
     const {
         aktivEtikett,
         filterOgSorterAndelPersonerIGrunnlag,
@@ -58,14 +54,17 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
 
     const { request } = useHttp();
 
-    const { erLesevisning } = useBehandling();
-    const { settFagsak } = useFagsakRessurser();
+    const {
+        erLesevisning,
+        behandlingresultatNesteOnClick,
+        behandlingsstegSubmitressurs,
+        settÅpenBehandling,
+    } = useBehandling();
     const { toggles } = useApp();
     const [feilmelding, settFeilmelding] = useState('');
-    const { behandlingresultatNesteOnClick, senderInn } = useFagsakApi(_ => '', settFeilmelding);
 
     const forrigeOnClick = () => {
-        history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
+        history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
     };
 
     const finnUtbetalingsperiodeForAktivEtikett = (
@@ -93,15 +92,15 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
     );
 
     const opprettEndretUtbetaling = () => {
-        request<IRestEndretUtbetalingAndel, IFagsak>({
+        request<IRestEndretUtbetalingAndel, IBehandling>({
             method: 'POST',
             url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}`,
             påvirkerSystemLaster: true,
             data: {},
-        }).then((response: Ressurs<IFagsak>) => {
+        }).then((response: Ressurs<IBehandling>) => {
             if (response.status === RessursStatus.SUKSESS) {
                 settVisFeilmeldinger(false);
-                settFagsak(response);
+                settÅpenBehandling(response);
             } else if (
                 response.status === RessursStatus.FUNKSJONELL_FEIL ||
                 response.status === RessursStatus.FEILET
@@ -114,15 +113,15 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({
 
     return (
         <Skjemasteg
-            senderInn={senderInn}
+            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             tittel="Behandlingsresultat"
             className="tilkjentytelse"
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={() => {
                 if (erLesevisning()) {
-                    history.push(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/simulering`);
+                    history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
                 } else {
-                    behandlingresultatNesteOnClick(fagsak);
+                    behandlingresultatNesteOnClick();
                 }
             }}
             maxWidthStyle={'80rem'}

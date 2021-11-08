@@ -10,7 +10,7 @@ import {
     leggTil,
     serializeIso8601String,
 } from '../../utils/kalender';
-import { mockFagsak } from '../../utils/test/fagsak/fagsak.mock';
+import { mockMinimalFagsak } from '../../utils/test/minimalFagsak/minimalFagsak.mock';
 import { hentBarnMedLøpendeUtbetaling } from '../SøknadContext';
 
 describe('SøknadContext', () => {
@@ -25,7 +25,7 @@ describe('SøknadContext', () => {
             type: PersonType.BARN,
         };
 
-        const fagsak = mockFagsak({
+        const fagsak = mockMinimalFagsak({
             gjeldendeUtbetalingsperioder: [
                 {
                     periodeFom: '2020-01-01',

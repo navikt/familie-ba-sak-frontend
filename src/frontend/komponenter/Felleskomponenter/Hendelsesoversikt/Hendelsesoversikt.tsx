@@ -14,7 +14,6 @@ import { Hendelse, Tabs } from './typer';
 export interface IHendelsesoversiktProps {
     className?: string;
     hendelser: Hendelse[];
-    fagsakId: number;
     åpenBehandling: IBehandling;
 }
 
@@ -22,12 +21,7 @@ const tilHendelseItem = (hendelse: Hendelse) => (
     <HendelseItem key={hendelse.id} hendelse={hendelse} />
 );
 
-const Hendelsesoversikt = ({
-    hendelser,
-    className,
-    fagsakId,
-    åpenBehandling,
-}: IHendelsesoversiktProps) => {
+const Hendelsesoversikt = ({ hendelser, className, åpenBehandling }: IHendelsesoversiktProps) => {
     const { hentSaksbehandlerRolle } = useApp();
 
     const skalViseTotrinnskontroll =
@@ -47,7 +41,7 @@ const Hendelsesoversikt = ({
                     skalViseTotrinnskontroll={skalViseTotrinnskontroll}
                 />
                 {aktivTab === Tabs.Totrinnskontroll && (
-                    <Totrinnskontroll fagsakId={fagsakId} åpenBehandling={åpenBehandling} />
+                    <Totrinnskontroll åpenBehandling={åpenBehandling} />
                 )}
                 {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                     <div className={'historikk'}>

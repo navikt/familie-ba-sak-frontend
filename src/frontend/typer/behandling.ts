@@ -182,9 +182,7 @@ export enum BehandlerRolle {
 }
 
 export interface IBehandling {
-    aktiv: boolean;
     arbeidsfordelingPåBehandling: IArbeidsfordelingPåBehandling;
-    begrunnelse: string;
     behandlingId: number;
     endretAv: string;
     kategori: BehandlingKategori;
@@ -200,7 +198,7 @@ export interface IBehandling {
     totrinnskontroll?: ITotrinnskontroll;
     type: Behandlingstype;
     fødselshendelsefiltreringResultater: IFødselshendelsefiltreringResultat[];
-    vedtakForBehandling: IVedtakForBehandling[];
+    vedtak?: IVedtakForBehandling;
     utbetalingsperioder: Utbetalingsperiode[];
     endretUtbetalingAndeler: IRestEndretUtbetalingAndel[];
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
@@ -213,6 +211,15 @@ export interface IArbeidsfordelingPåBehandling {
     behandlendeEnhetId: string;
     behandlendeEnhetNavn: string;
     manueltOverstyrt: boolean;
+}
+
+export interface IOpprettBehandlingData {
+    behandlingType: Behandlingstype;
+    behandlingÅrsak: BehandlingÅrsak;
+    kategori: BehandlingKategori;
+    navIdent?: string;
+    søkersIdent: string;
+    underkategori: BehandlingUnderkategori;
 }
 
 export const behandlerRoller: INøkkelPar = {

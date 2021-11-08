@@ -14,12 +14,12 @@ import {
 export interface VisningBehandling {
     aktiv: boolean;
     behandlingId: number | string;
-    kategori?: BehandlingKategori;
+    kategori: BehandlingKategori;
     opprettetTidspunkt: string;
     resultat?: BehandlingResultat | TilbakekrevingsbehandlingResultat;
     status: BehandlingStatus;
     type: Behandlingstype | Tilbakekrevingsbehandlingstype;
-    underkategori?: BehandlingUnderkategori;
-    vedtaksdato: string;
+    underkategori: BehandlingUnderkategori;
+    vedtaksdato?: string;
     årsak?: BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak;
 }

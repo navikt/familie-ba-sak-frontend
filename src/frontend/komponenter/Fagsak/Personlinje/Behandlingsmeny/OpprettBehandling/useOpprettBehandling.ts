@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 
 import { useHistory } from 'react-router';
 
-import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { useFelt, feil, ok, Avhengigheter, useSkjema, FeltState } from '@navikt/familie-skjema';
+import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import {
     Behandlingstype,
     BehandlingÅrsak,
@@ -18,17 +20,16 @@ import {
     BehandlingUnderkategori,
     IBehandlingstema,
 } from '../../../../../typer/behandlingstema';
-import { IFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
-import { hentAktivBehandlingPåFagsak } from '../../../../../utils/fagsak';
 
 const useOpprettBehandling = (
     lukkModal: () => void,
-    fagsakId: number,
     onOpprettTilbakekrevingSuccess: () => void
 ) => {
+    const { fagsakId } = useSakOgBehandlingParams();
+    const { settÅpenBehandling } = useBehandling();
     const { innloggetSaksbehandler } = useApp();
-    const { fagsak, settFagsak } = useFagsakRessurser();
+    const { minimalFagsak } = useFagsakRessurser();
     const history = useHistory();
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
@@ -75,7 +76,7 @@ const useOpprettBehandling = (
             behandlingsårsak: BehandlingÅrsak | '';
             behandlingstema: IBehandlingstema | undefined;
         },
-        IFagsak
+        IBehandling
     >({
         felter: {
             behandlingstype,
@@ -97,12 +98,12 @@ const useOpprettBehandling = (
     }, [skjema.felter.behandlingstype.verdi]);
 
     // TODO: logikken for setting av behandlingstema når årsak ikke er søknad burde fikses i backend, slik at kategori og underkategori kan være optional. Deretter kan disse to funksjonene fjernes.
-    const utredKategori = () => {
+    const utredKategori = (): BehandlingKategori => {
         if (behandlingstema.verdi?.kategori) {
             return behandlingstema.verdi.kategori;
         }
-        if (fagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = fagsak.data.behandlinger.find(b => b.aktiv);
+        if (minimalFagsak.status === RessursStatus.SUKSESS) {
+            const aktivBehandling = minimalFagsak.data.behandlinger.find(b => b.aktiv);
             if (aktivBehandling) {
                 return aktivBehandling.kategori;
             }
@@ -114,8 +115,8 @@ const useOpprettBehandling = (
         if (behandlingstema.verdi?.underkategori) {
             return behandlingstema.verdi?.underkategori;
         }
-        if (fagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = fagsak.data.behandlinger.find(b => b.aktiv);
+        if (minimalFagsak.status === RessursStatus.SUKSESS) {
+            const aktivBehandling = minimalFagsak.data.behandlinger.find(b => b.aktiv);
             if (aktivBehandling) {
                 return aktivBehandling.underkategori;
             }
@@ -161,20 +162,17 @@ const useOpprettBehandling = (
                             lukkModal();
                             nullstillSkjema();
 
-                            settFagsak(response);
-                            const aktivBehandling: IBehandling | undefined =
-                                hentAktivBehandlingPåFagsak(response.data);
+                            settÅpenBehandling(response);
+                            const behandling: IBehandling | undefined =
+                                hentDataFraRessurs(response);
 
-                            if (
-                                aktivBehandling &&
-                                aktivBehandling.årsak === BehandlingÅrsak.SØKNAD
-                            ) {
+                            if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
                                 history.push(
-                                    `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/registrer-soknad`
+                                    `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                                 );
                             } else {
                                 history.push(
-                                    `/fagsak/${response.data.id}/${aktivBehandling?.behandlingId}/vilkaarsvurdering`
+                                    `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
                                 );
                             }
                         }

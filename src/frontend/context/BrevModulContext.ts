@@ -19,7 +19,6 @@ import {
 } from '../komponenter/Felleskomponenter/Hendelsesoversikt/BrevModul/typer';
 import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
 import { IManueltBrevRequestPåBehandling } from '../typer/dokument';
-import { IFagsak } from '../typer/fagsak';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { fjernWhitespace } from '../utils/commons';
@@ -125,7 +124,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             brevmal: Brevmal | '';
             multiselect: ISelectOptionMedBrevtekst[];
         },
-        IFagsak
+        IBehandling
     >({
         felter: {
             mottakerIdent,

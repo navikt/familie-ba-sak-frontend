@@ -17,14 +17,12 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import { validerVilkår } from '../../../../context/Vilkårsvurdering/validering';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
-import { BehandlingÅrsak } from '../../../../typer/behandling';
-import { IFagsak } from '../../../../typer/fagsak';
+import { BehandlingÅrsak, IBehandling } from '../../../../typer/behandling';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { ToggleNavn } from '../../../../typer/toggles';
 import {
@@ -93,8 +91,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
         useVilkårsvurdering();
 
-    const { erLesevisning, åpenBehandling } = useBehandling();
-    const { settFagsak } = useFagsakRessurser();
+    const { erLesevisning, åpenBehandling, settÅpenBehandling } = useBehandling();
     const leseVisning = erLesevisning();
     const årsakErSøknad =
         åpenBehandling.status !== RessursStatus.SUKSESS ||
@@ -154,24 +151,24 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         }
     };
 
-    const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IFagsak>>) => {
+    const håndterEndringPåVilkårsvurdering = (promise: Promise<Ressurs<IBehandling>>) => {
         promise
-            .then((oppdatertFagsak: Ressurs<IFagsak>) => {
+            .then((oppdatertBehandling: Ressurs<IBehandling>) => {
                 settVilkårSubmit(VilkårSubmit.NONE);
-                if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
+                if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
                     settVisFeilmeldingerForEttVilkår(false);
-                    settFagsak(oppdatertFagsak);
+                    settÅpenBehandling(oppdatertBehandling);
                     settEkspandertVilkår(false);
                 } else if (
-                    oppdatertFagsak.status === RessursStatus.FEILET ||
-                    oppdatertFagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    oppdatertFagsak.status === RessursStatus.IKKE_TILGANG
+                    oppdatertBehandling.status === RessursStatus.FEILET ||
+                    oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    oppdatertBehandling.status === RessursStatus.IKKE_TILGANG
                 ) {
                     settVisFeilmeldingerForEttVilkår(true);
                     settRedigerbartVilkår({
                         ...redigerbartVilkår,
                         valideringsstatus: Valideringsstatus.FEIL,
-                        feilmelding: oppdatertFagsak.frontendFeilmelding,
+                        feilmelding: oppdatertBehandling.frontendFeilmelding,
                     });
                 } else {
                     settVisFeilmeldingerForEttVilkår(true);

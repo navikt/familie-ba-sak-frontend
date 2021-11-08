@@ -1,5 +1,4 @@
 import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
-import { IBehandling } from './behandling';
 import { INøkkelPar } from './common';
 import { Utbetalingsperiode } from './vedtaksperiode';
 
@@ -18,12 +17,6 @@ export interface IBaseFagsak {
     status: FagsakStatus;
     søkerFødselsnummer: string;
     underBehandling: boolean;
-}
-
-export interface IFagsak extends IBaseFagsak {
-    behandlinger: IBehandling[];
-    tilbakekrevingsbehandlinger: VisningBehandling[];
-    gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 
 export interface IMinimalFagsak extends IBaseFagsak {

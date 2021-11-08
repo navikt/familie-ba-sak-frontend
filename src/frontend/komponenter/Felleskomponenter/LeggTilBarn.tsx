@@ -19,7 +19,7 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useFagsakRessurser } from '../../context/FagsakContext';
+import { useBehandling } from '../../context/behandlingContext/BehandlingContext';
 import Pluss from '../../ikoner/Pluss';
 import { LoggType } from '../../typer/logg';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../typer/person';
@@ -65,7 +65,7 @@ interface IProps {
 
 const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
     const { request } = useHttp();
-    const { logg } = useFagsakRessurser();
+    const { logg } = useBehandling();
 
     const [visModal, settVisModal] = useState<boolean>(false);
 

@@ -9,13 +9,12 @@ import { FeltState } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import {
     useVilkårsvurdering,
     VilkårSubmit,
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Pluss from '../../../../ikoner/Pluss';
-import { IFagsak } from '../../../../typer/fagsak';
+import { IBehandling } from '../../../../typer/behandling';
 import { IGrunnlagPerson } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
@@ -54,27 +53,26 @@ const GeneriskVilkår: React.FC<IProps> = ({
     vilkårResultater,
     visFeilmeldinger,
 }) => {
-    const { erLesevisning } = useBehandling();
-    const { settFagsak } = useFagsakRessurser();
+    const { erLesevisning, settÅpenBehandling } = useBehandling();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
     const [feilmelding, settFeilmelding] = useState('');
 
-    const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IFagsak>>) => {
+    const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IBehandling>>) => {
         promise
-            .then((oppdatertFagsak: Ressurs<IFagsak>) => {
+            .then((oppdatertBehandling: Ressurs<IBehandling>) => {
                 settVisFeilmeldingerForVilkår(false);
                 settVilkårSubmit(VilkårSubmit.NONE);
                 settFeilmelding('');
-                if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
-                    settFagsak(oppdatertFagsak);
+                if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
+                    settÅpenBehandling(oppdatertBehandling);
                 } else if (
-                    oppdatertFagsak.status === RessursStatus.FEILET ||
-                    oppdatertFagsak.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    oppdatertFagsak.status === RessursStatus.IKKE_TILGANG
+                    oppdatertBehandling.status === RessursStatus.FEILET ||
+                    oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    oppdatertBehandling.status === RessursStatus.IKKE_TILGANG
                 ) {
-                    settFeilmelding(oppdatertFagsak.frontendFeilmelding);
+                    settFeilmelding(oppdatertBehandling.frontendFeilmelding);
                     settVisFeilmeldingerForVilkår(true);
                 } else {
                     settFeilmelding(

@@ -17,9 +17,8 @@ import {
 } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import { BehandlingStatus, IBehandling } from '../../../../typer/behandling';
-import { IFagsak } from '../../../../typer/fagsak';
 import {
     TotrinnskontrollBeslutning,
     ITotrinnskontrollData,
@@ -31,7 +30,6 @@ import Totrinnskontrollskjema from './Totrinnskontrollskjema';
 
 interface IProps {
     åpenBehandling: IBehandling;
-    fagsakId: number;
 }
 
 const Container = styled.div`
@@ -49,13 +47,16 @@ const initiellModalVerdi = {
     beslutning: TotrinnskontrollBeslutning.IKKE_VURDERT,
 };
 
-const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fagsakId }) => {
-    const { trinnPåBehandling, settIkkeKontrollerteSiderTilManglerKontroll } = useBehandling();
+const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
+    const { fagsakId } = useSakOgBehandlingParams();
+    const { trinnPåBehandling, settIkkeKontrollerteSiderTilManglerKontroll, settÅpenBehandling } =
+        useBehandling();
     const { request } = useHttp();
-    const { settFagsak } = useFagsakRessurser();
     const history = useHistory();
 
-    const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IFagsak>>(byggTomRessurs());
+    const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IBehandling>>(
+        byggTomRessurs()
+    );
     const [modalVerdi, settModalVerdi] = React.useState<IModalVerdier>(initiellModalVerdi);
     React.useEffect(() => {
         settModalVerdi({
@@ -105,7 +106,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         }
 
         settInnsendtVedtak(byggHenterRessurs());
-        settModalVerdi({ ...modalVerdi, beslutning: beslutning });
+        settModalVerdi({ ...modalVerdi, beslutning });
         const manglerBegrunnelse =
             beslutning === TotrinnskontrollBeslutning.UNDERKJENT && !begrunnelse;
         if (beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
@@ -113,7 +114,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
         } else if (manglerBegrunnelse) {
             settInnsendtVedtak(byggFeiletRessurs('Mangler begrunnelse ved innsending'));
         } else {
-            request<ITotrinnskontrollData, IFagsak>({
+            request<ITotrinnskontrollData, IBehandling>({
                 method: 'POST',
                 data: {
                     beslutning,
@@ -122,12 +123,12 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling, fa
                         return side.navn;
                     }),
                 },
-                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/iverksett-vedtak`,
+                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/iverksett-vedtak`,
             })
-                .then((response: Ressurs<IFagsak>) => {
+                .then((response: Ressurs<IBehandling>) => {
                     settInnsendtVedtak(response);
                     if (response.status === RessursStatus.SUKSESS) {
-                        settFagsak(response);
+                        settÅpenBehandling(response);
                     }
                 })
                 .catch((_error: AxiosError) => {

@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
+import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import UIModalWrapper from '../../Modal/UIModalWrapper';
 import Brevskjema from './Brevskjema';
 
@@ -17,15 +17,14 @@ interface IProps {
 }
 
 const Brev = ({ onOkIModalClick }: IProps) => {
+    const { fagsakId } = useSakOgBehandlingParams();
     const { åpenBehandling } = useBehandling();
-    const { fagsak } = useFagsakRessurser();
     const { hentMuligeBrevMaler, navigerTilOpplysningsplikt } = useBrevModul();
 
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
-    const fagsakId = fagsak.status === RessursStatus.SUKSESS && fagsak.data.id;
     const history = useHistory();
 
     return (

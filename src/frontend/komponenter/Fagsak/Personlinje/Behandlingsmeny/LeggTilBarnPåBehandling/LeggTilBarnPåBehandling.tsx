@@ -19,9 +19,8 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { IBehandling } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
 import { adressebeskyttelsestyper, IPersonInfo, IRestTilgang } from '../../../../../typer/person';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { identValidator } from '../../../../../utils/validators';
@@ -39,7 +38,7 @@ interface IProps {
 
 const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behandling }) => {
     const { request } = useHttp();
-    const { settFagsak } = useFagsakRessurser();
+    const { settÅpenBehandling } = useBehandling();
 
     const [visModal, settVisModal] = useState<boolean>(false);
 
@@ -76,11 +75,11 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                 nullstillSkjema();
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     if (ressurs.data.saksbehandlerHarTilgang) {
-                        request<{ barnIdent: string }, IFagsak>({
+                        request<{ barnIdent: string }, IBehandling>({
                             method: 'POST',
                             data: { barnIdent: skjema.felter.ident.verdi },
                             url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/legg-til-barn`,
-                        }).then((leggTilRespons: Ressurs<IFagsak>) => {
+                        }).then((leggTilRespons: Ressurs<IBehandling>) => {
                             if (
                                 leggTilRespons.status === RessursStatus.FEILET ||
                                 leggTilRespons.status === RessursStatus.FUNKSJONELL_FEIL ||
@@ -90,7 +89,7 @@ const LeggTiLBarnPåBehandling: React.FC<IProps> = ({ onListElementClick, behand
                                     byggFeiletRessurs(leggTilRespons.frontendFeilmelding)
                                 );
                             } else {
-                                settFagsak(leggTilRespons);
+                                settÅpenBehandling(leggTilRespons);
                                 settVisModal(false);
                             }
                         });

@@ -7,7 +7,7 @@ import Lenke from 'nav-frontend-lenker';
 import Tabs from 'nav-frontend-tabs';
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { BehandlingResultat, BehandlingStatus, IBehandling } from '../../../typer/behandling';
@@ -61,10 +61,10 @@ const StyledTabs = styled(Tabs)`
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const [tabvalg, settTabvalg] = useState<Tabvalg>(Tabvalg.BASAK);
 
-    const { bestemÅpenBehandling } = useBehandling();
+    const { settÅpenBehandling } = useBehandling();
 
     React.useEffect(() => {
-        bestemÅpenBehandling(undefined);
+        settÅpenBehandling(byggTomRessurs(), false);
     }, [minimalFagsak.status]);
 
     const { hentInfotrygdsaker, infotrygdsakerRessurs } = useInfotrygdRequest();

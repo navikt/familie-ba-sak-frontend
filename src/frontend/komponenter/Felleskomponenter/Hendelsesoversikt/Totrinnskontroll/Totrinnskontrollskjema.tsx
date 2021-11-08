@@ -14,14 +14,13 @@ import ØyeGrå from '../../../../ikoner/ØyeGrå';
 import ØyeGrønn from '../../../../ikoner/ØyeGrønn';
 import ØyeRød from '../../../../ikoner/ØyeRød';
 import { IBehandling } from '../../../../typer/behandling';
-import { IFagsak } from '../../../../typer/fagsak';
 import { TotrinnskontrollBeslutning } from '../../../../typer/totrinnskontroll';
 import { formaterIsoDato, datoformat } from '../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { KontrollertStatus } from '../../Venstremeny/sider';
 
 interface IProps {
-    innsendtVedtak: Ressurs<IFagsak>;
+    innsendtVedtak: Ressurs<IBehandling>;
     sendInnVedtak: (
         beslutning: TotrinnskontrollBeslutning,
         begrunnelse: string,

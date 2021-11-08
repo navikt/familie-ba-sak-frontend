@@ -14,9 +14,8 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { Behandlingstype, IBehandling } from '../../../../../typer/behandling';
-import { IFagsak } from '../../../../../typer/fagsak';
 import { VedtakBegrunnelse } from '../../../../../typer/vedtak';
 import {
     IRestPutVedtaksperiodeMedFritekster,
@@ -27,7 +26,6 @@ import { IPeriode } from '../../../../../utils/kalender';
 import { useVilkårBegrunnelser } from '../Hooks/useVedtaksbegrunnelser';
 
 interface IProps {
-    fagsak: IFagsak;
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpenBehandling: IBehandling;
 }
@@ -39,8 +37,8 @@ export interface IFritekstFelt {
 
 const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] = constate(
     ({ åpenBehandling, vedtaksperiodeMedBegrunnelser }: IProps) => {
-        const { settFagsak } = useFagsakRessurser();
         const { request } = useHttp();
+        const { settÅpenBehandling } = useBehandling();
         const [erPanelEkspandert, settErPanelEkspandert] = useState(
             åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
                 vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0 &&
@@ -89,7 +87,7 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                     periode: IPeriode;
                     fritekster: FeltState<IFritekstFelt>[];
                 },
-                IFagsak
+                IBehandling
             >({
                 felter: {
                     periode,
@@ -187,16 +185,16 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
 
         const oppdaterStandardbegrunnelser = (standardbegrunnelser: VedtakBegrunnelse[]) => {
             settStandardBegrunnelserPut(byggHenterRessurs());
-            request<{ standardbegrunnelser: VedtakBegrunnelse[] }, IFagsak>({
+            request<{ standardbegrunnelser: VedtakBegrunnelse[] }, IBehandling>({
                 method: 'PUT',
                 url: `/familie-ba-sak/api/vedtaksperioder/standardbegrunnelser/${vedtaksperiodeMedBegrunnelser.id}`,
                 data: { standardbegrunnelser },
-            }).then((fagsak: Ressurs<IFagsak>) => {
-                if (fagsak.status === RessursStatus.SUKSESS) {
-                    settFagsak(fagsak);
+            }).then((behandling: Ressurs<IBehandling>) => {
+                if (behandling.status === RessursStatus.SUKSESS) {
+                    settÅpenBehandling(behandling);
                     settStandardBegrunnelserPut(byggTomRessurs());
-                } else if (fagsak.status === RessursStatus.FUNKSJONELL_FEIL) {
-                    settStandardBegrunnelserPut(byggFeiletRessurs(fagsak.frontendFeilmelding));
+                } else if (behandling.status === RessursStatus.FUNKSJONELL_FEIL) {
+                    settStandardBegrunnelserPut(byggFeiletRessurs(behandling.frontendFeilmelding));
                 } else {
                     settStandardBegrunnelserPut(
                         byggFeiletRessurs('Klarte ikke oppdatere standardbegrunnelser')
@@ -262,8 +260,8 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                             ),
                         },
                     },
-                    (fagsak: Ressurs<IFagsak>) => {
-                        settFagsak(fagsak);
+                    (behandling: Ressurs<IBehandling>) => {
+                        settÅpenBehandling(behandling);
                         onPanelClose(false);
                     }
                 );

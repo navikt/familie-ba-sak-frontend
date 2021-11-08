@@ -5,14 +5,13 @@ import styled from 'styled-components';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
 import { IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
 import { Filtreringsregel, filtreringsregler } from '../../../typer/fødselshendelser';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
 interface IProps {
-    fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
@@ -30,7 +29,8 @@ const StyledVilkårResultatIkon = styled(VilkårResultatIkon)`
     margin-right: 1rem;
 `;
 
-const Filtreringsregler: React.FC<IProps> = ({ fagsak, åpenBehandling }) => {
+const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
+    const { fagsakId } = useSakOgBehandlingParams();
     const history = useHistory();
 
     return (
@@ -39,7 +39,7 @@ const Filtreringsregler: React.FC<IProps> = ({ fagsak, åpenBehandling }) => {
             tittel={'Filtreringsregler'}
             nesteOnClick={() => {
                 history.push(
-                    `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
+                    `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
                 );
             }}
             maxWidthStyle={'80rem'}
