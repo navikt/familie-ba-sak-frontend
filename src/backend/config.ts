@@ -24,7 +24,7 @@ const Environment = () => {
             namespace: 'preprod',
             proxyUrl: 'http://familie-ba-sak',
             familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
-            redisUrl: 'familie-ba-sak-frontend-redis.default.svc.nais.local',
+            redisUrl: 'familie-ba-sak-frontend-redis',
         };
     }
 
@@ -33,7 +33,7 @@ const Environment = () => {
         namespace: 'production',
         proxyUrl: 'http://familie-ba-sak',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
-        redisUrl: 'familie-ba-sak-frontend-redis.default.svc.nais.local',
+        redisUrl: 'familie-ba-sak-frontend-redis',
     };
 };
 const env = Environment();

@@ -2,11 +2,11 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: familie-ba-sak-frontend-redis-exporter
-  namespace: default
+  namespace: teamfamilie
   labels:
     team: teamfamilie
 spec:
-  image: navikt/secure-redisexporter:v0.29.0-alpine-3
+  image: oliver006/redis_exporter:v1.16.0
   port: 9121
   prometheus:
     enabled: true
@@ -20,8 +20,12 @@ spec:
     requests:
       cpu: 100m
       memory: 100Mi
-  vault:
-    enabled: true
+  envFrom:
+    - secret: familie-ba-sak-frontend-redis
+  liveness:
+    path: /health
   env:
     - name: REDIS_ADDR
-      value: familie-ba-sak-frontend-redis.default.svc.nais.local:6379
+      value: familie-ba-sak-frontend-redis:6379
+    - name: REDIS_EXPORTER_LOG_FORMAT
+      value: json
