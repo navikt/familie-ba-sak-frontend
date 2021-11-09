@@ -13,10 +13,9 @@ import { FamilieKnapp } from '@navikt/familie-form-elements';
 import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { BehandlingÅrsak, IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
 import {
     annenVurderingConfig,
     IAnnenVurdering,
@@ -24,8 +23,8 @@ import {
     vilkårConfig,
 } from '../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
-import useFagsakApi from '../useFagsakApi';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
@@ -45,32 +44,32 @@ const HentetLabelOgKnappDiv = styled.div`
 `;
 
 interface IProps {
-    fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
-const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehandling }) => {
+const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
+    const { fagsakId } = useSakOgBehandlingParams();
+
     const {
         erVilkårsvurderingenGyldig,
         hentVilkårMedFeil,
         hentAndreVurderingerMedFeil,
         vilkårsvurdering,
     } = useVilkårsvurdering();
-    const { erLesevisning } = useBehandling();
-    const { oppdaterRegisteropplysninger } = useFagsakRessurser();
+    const {
+        erLesevisning,
+        oppdaterRegisteropplysninger,
+        vilkårsvurderingNesteOnClick,
+        behandlingsstegSubmitressurs,
+    } = useBehandling();
 
     const registeropplysningerHentetTidpsunkt =
         vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [hentOpplysningerRessurs, settHentOpplysningerRessurs] = React.useState(byggTomRessurs());
-    const [opprettelseFeilmelding, settOpprettelseFeilmelding] = React.useState('');
 
     const history = useHistory();
-    const { validerVilkårsvurderingOgSendInn, senderInn } = useFagsakApi(
-        settVisFeilmeldinger,
-        settOpprettelseFeilmelding
-    );
 
     const uregistrerteBarn =
         åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(
@@ -80,6 +79,8 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
     if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen.</div>;
     }
+
+    const skjemaFeilmelding = hentFrontendFeilmelding(behandlingsstegSubmitressurs);
 
     return (
         <Skjemasteg
@@ -91,27 +92,27 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
             forrigeOnClick={() => {
                 if (åpenBehandling.årsak === BehandlingÅrsak.SØKNAD) {
                     history.push(
-                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/registrer-soknad`
+                        `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/registrer-soknad`
                     );
                 } else {
                     history.push(
-                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/filtreringsregler`
+                        `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/filtreringsregler`
                     );
                 }
             }}
             nesteOnClick={() => {
                 if (erLesevisning()) {
                     history.push(
-                        `/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
+                        `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/tilkjent-ytelse`
                     );
                 } else if (erVilkårsvurderingenGyldig()) {
-                    validerVilkårsvurderingOgSendInn(fagsak);
+                    vilkårsvurderingNesteOnClick();
                 } else {
                     settVisFeilmeldinger(true);
                 }
             }}
             maxWidthStyle={'80rem'}
-            senderInn={senderInn}
+            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
         >
             <>
                 <HentetLabelOgKnappDiv>
@@ -132,8 +133,8 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         title={'Oppdater'}
                         onClick={() => {
                             settHentOpplysningerRessurs(byggHenterRessurs());
-                            oppdaterRegisteropplysninger(åpenBehandling.behandlingId).then(
-                                (response: Ressurs<IFagsak>) => {
+                            oppdaterRegisteropplysninger().then(
+                                (response: Ressurs<IBehandling>) => {
                                     settHentOpplysningerRessurs(response);
                                 }
                             );
@@ -197,9 +198,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ fagsak, åpenBehan
                         ]}
                     />
                 )}
-            {visFeilmeldinger && opprettelseFeilmelding !== '' && (
-                <Feilmelding>{opprettelseFeilmelding}</Feilmelding>
-            )}
+            {skjemaFeilmelding !== '' && <Feilmelding>{skjemaFeilmelding}</Feilmelding>}
         </Skjemasteg>
     );
 };

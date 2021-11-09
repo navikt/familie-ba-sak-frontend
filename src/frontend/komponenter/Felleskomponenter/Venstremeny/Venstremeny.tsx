@@ -4,22 +4,22 @@ import classNames from 'classnames';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import Link from './Link';
 import { erSidenAktiv, IUnderside } from './sider';
 
 const Venstremeny: React.FunctionComponent = () => {
+    const { fagsakId } = useSakOgBehandlingParams();
     const { åpenBehandling, trinnPåBehandling } = useBehandling();
-    const fagsak = hentDataFraRessurs(useFagsakRessurser().fagsak);
 
     return (
         <nav className={'venstremeny'}>
             {åpenBehandling.status === RessursStatus.SUKSESS
                 ? Object.entries(trinnPåBehandling).map(([sideId, side], index: number) => {
-                      const tilPath = `/fagsak/${fagsak?.id}/${åpenBehandling.data.behandlingId}/${side.href}`;
+                      const tilPath = `/fagsak/${fagsakId}/${åpenBehandling.data.behandlingId}/${side.href}`;
 
                       const undersider: IUnderside[] = side.undersider
                           ? side.undersider(åpenBehandling.data)

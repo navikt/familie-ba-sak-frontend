@@ -5,18 +5,16 @@ import { feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema'
 import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
+import { IBehandling } from '../../../../../typer/behandling';
 import {
     IBehandlingstema,
     IRestEndreBehandlingUnderkategori,
     tilBehandlingstema,
 } from '../../../../../typer/behandlingstema';
-import { IFagsak } from '../../../../../typer/fagsak';
 
 const useEndreBehandling = (lukkModal: () => void) => {
     const { request } = useHttp();
-    const { settFagsak } = useFagsakRessurser();
-    const { åpenBehandling } = useBehandling();
+    const { åpenBehandling, settÅpenBehandling } = useBehandling();
 
     const [ressurs, settRessurs] = useState(byggTomRessurs());
 
@@ -40,13 +38,13 @@ const useEndreBehandling = (lukkModal: () => void) => {
         if (behandlingstema.verdi !== undefined) {
             const { kategori, underkategori } = behandlingstema.verdi;
             settRessurs(byggHenterRessurs());
-            request<IRestEndreBehandlingUnderkategori, IFagsak>({
+            request<IRestEndreBehandlingUnderkategori, IBehandling>({
                 method: 'PUT',
                 data: { behandlingUnderkategori: underkategori, behandlingKategori: kategori },
                 url: `/familie-ba-sak/api/behandlinger/${behandlingId}/behandlingstema`,
-            }).then((oppdatertFagsak: Ressurs<IFagsak>) => {
+            }).then((oppdatertFagsak: Ressurs<IBehandling>) => {
                 if (oppdatertFagsak.status === RessursStatus.SUKSESS) {
-                    settFagsak(oppdatertFagsak);
+                    settÅpenBehandling(oppdatertFagsak);
                     settRessurs(byggTomRessurs());
                 }
                 settRessurs(oppdatertFagsak);

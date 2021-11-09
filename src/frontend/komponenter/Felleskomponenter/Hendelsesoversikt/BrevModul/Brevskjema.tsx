@@ -15,11 +15,9 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { useBrevModul } from '../../../../context/BrevModulContext';
-import { useFagsakRessurser } from '../../../../context/FagsakContext';
 import useForhåndsvisning from '../../../../hooks/useForhåndsvisning';
 import { DokumentIkon } from '../../../../ikoner/DokumentIkon';
-import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
-import { IFagsak } from '../../../../typer/fagsak';
+import { BehandlingSteg, hentStegNummer, IBehandling } from '../../../../typer/behandling';
 import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { målform } from '../../../../typer/søknad';
 import { formaterIdent } from '../../../../utils/formatter';
@@ -53,8 +51,7 @@ const LabelOgEtikett = styled.div`
 `;
 
 const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
-    const { åpenBehandling, erLesevisning } = useBehandling();
-    const { hentLogg, settFagsak } = useFagsakRessurser();
+    const { åpenBehandling, settÅpenBehandling, erLesevisning, hentLogg } = useBehandling();
     const { hentForhåndsvisning, hentetForhåndsvisning } = useForhåndsvisning();
 
     const {
@@ -217,10 +214,10 @@ const Brevskjema = ({ brevMaler, onSubmitSuccess }: IProps) => {
                                     data: hentSkjemaData(),
                                     url: `/familie-ba-sak/api/dokument/send-brev/${åpenBehandling.data.behandlingId}`,
                                 },
-                                (ressurs: Ressurs<IFagsak>) => {
+                                (ressurs: Ressurs<IBehandling>) => {
                                     onSubmitSuccess();
-                                    settFagsak(ressurs);
-                                    hentLogg(åpenBehandling.data.behandlingId);
+                                    settÅpenBehandling(ressurs);
+                                    hentLogg();
                                 }
                             );
                         }

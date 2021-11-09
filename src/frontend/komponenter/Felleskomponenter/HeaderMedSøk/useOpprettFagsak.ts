@@ -5,9 +5,9 @@ import { useHistory } from 'react-router';
 import { useHttp } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivBehandlingPåFagsak } from '../../../utils/fagsak';
+import { IMinimalFagsak } from '../../../typer/fagsak';
+import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
+import { VisningBehandling } from '../../Fagsak/Saksoversikt/visningBehandling';
 
 export interface IOpprettFagsakData {
     personIdent: string | null;
@@ -21,19 +21,18 @@ const useOpprettFagsak = () => {
     const [senderInn, settSenderInn] = useState(false);
 
     const opprettFagsak = (data: IOpprettFagsakData, onSuccess?: () => void) => {
-        request<IOpprettFagsakData, IFagsak>({
+        request<IOpprettFagsakData, IMinimalFagsak>({
             data,
             method: 'POST',
             url: `/familie-ba-sak/api/fagsaker`,
             påvirkerSystemLaster: true,
         })
-            .then((response: Ressurs<IFagsak>) => {
+            .then((response: Ressurs<IMinimalFagsak>) => {
                 settSenderInn(false);
                 if (response.status === RessursStatus.SUKSESS) {
                     onSuccess && onSuccess();
-                    const aktivBehandling: IBehandling | undefined = hentAktivBehandlingPåFagsak(
-                        response.data
-                    );
+                    const aktivBehandling: VisningBehandling | undefined =
+                        hentAktivBehandlingPåMinimalFagsak(response.data);
                     aktivBehandling
                         ? history.push(
                               `/fagsak/${response.data.id}/${aktivBehandling.behandlingId}`

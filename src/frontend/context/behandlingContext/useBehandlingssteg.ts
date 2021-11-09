@@ -1,0 +1,141 @@
+import { useState } from 'react';
+
+import { useHistory } from 'react-router';
+
+import { useHttp } from '@navikt/familie-http';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
+
+import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
+import { IBehandling, BehandlingResultat, BehandlingÅrsak } from '../../typer/behandling';
+import { defaultFunksjonellFeil } from '../../typer/feilmeldinger';
+import { useApp } from '../AppContext';
+
+const useBehandlingssteg = (
+    oppdaterBehandling: (behandling: Ressurs<IBehandling>) => void,
+    behandling?: IBehandling
+) => {
+    const { request } = useHttp();
+    const { innloggetSaksbehandler } = useApp();
+    const { fagsakId, behandlingId } = useSakOgBehandlingParams();
+
+    const history = useHistory();
+
+    const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
+
+    const vilkårsvurderingNesteOnClick = () => {
+        settSubmitRessurs(byggHenterRessurs());
+
+        request<void, IBehandling>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/behandlinger/${behandlingId}/steg/vilkårsvurdering`,
+        })
+            .then((response: Ressurs<IBehandling>) => {
+                settSubmitRessurs(response);
+                if (response.status === RessursStatus.SUKSESS) {
+                    const behandling = response.data;
+                    oppdaterBehandling(response);
+
+                    if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
+                        history.push(
+                            `/fagsak/${fagsakId}/${behandling.behandlingId}/tilkjent-ytelse`
+                        );
+                    } else {
+                        history.push(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
+                    }
+                }
+            })
+            .catch(() => {
+                settSubmitRessurs(byggFeiletRessurs(defaultFunksjonellFeil));
+            });
+    };
+
+    const behandlingresultatNesteOnClick = () => {
+        settSubmitRessurs(byggHenterRessurs());
+
+        request<void, IBehandling>({
+            method: 'POST',
+            url: `/familie-ba-sak/api/behandlinger/${behandlingId}/steg/behandlingsresultat`,
+        })
+            .then((response: Ressurs<IBehandling>) => {
+                settSubmitRessurs(response);
+
+                if (response.status === RessursStatus.SUKSESS) {
+                    const behandling = response.data;
+                    oppdaterBehandling(response);
+
+                    if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
+                        history.push(`/fagsak/${fagsakId}/${behandlingId}/simulering`);
+                    } else {
+                        history.push(`/fagsak/${fagsakId}/${behandlingId}/vedtak`);
+                    }
+                }
+            })
+            .catch(() => {
+                settSubmitRessurs(byggFeiletRessurs(defaultFunksjonellFeil));
+            });
+    };
+
+    const minstEnPeriodeharBegrunnetelseEllerFritekst = (): boolean => {
+        const vedtaksperioderMedBegrunnelser =
+            behandling?.vedtak?.vedtaksperioderMedBegrunnelser ?? [];
+        return vedtaksperioderMedBegrunnelser.some(
+            vedtaksperioderMedBegrunnelse =>
+                vedtaksperioderMedBegrunnelse.begrunnelser.length !== 0 ||
+                vedtaksperioderMedBegrunnelse.fritekster.length !== 0
+        );
+    };
+
+    const kanSendeinnVedtak = () =>
+        minstEnPeriodeharBegrunnetelseEllerFritekst() ||
+        behandling?.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
+        behandling?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+        behandling?.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
+
+    const sendTilBeslutterNesteOnClick = (settVisModal: (visModal: boolean) => void) => {
+        if (kanSendeinnVedtak()) {
+            settSubmitRessurs(byggHenterRessurs());
+            request<void, IBehandling>({
+                method: 'POST',
+                url: `/familie-ba-sak/api/behandlinger/${
+                    behandling?.behandlingId
+                }/steg/send-til-beslutter?behandlendeEnhet=${
+                    innloggetSaksbehandler?.enhet ?? '9999'
+                }`,
+            }).then((response: Ressurs<IBehandling>) => {
+                settSubmitRessurs(response);
+
+                if (response.status === RessursStatus.SUKSESS) {
+                    settVisModal(true);
+                    oppdaterBehandling(response);
+                } else if (
+                    response.status === RessursStatus.FEILET ||
+                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    response.status === RessursStatus.IKKE_TILGANG
+                ) {
+                    settSubmitRessurs(byggFeiletRessurs(defaultFunksjonellFeil));
+                }
+            });
+        } else {
+            settSubmitRessurs(
+                byggFeiletRessurs(
+                    'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
+                )
+            );
+        }
+    };
+
+    return {
+        submitRessurs,
+        vilkårsvurderingNesteOnClick,
+        behandlingresultatNesteOnClick,
+        sendTilBeslutterNesteOnClick,
+    };
+};
+
+export default useBehandlingssteg;

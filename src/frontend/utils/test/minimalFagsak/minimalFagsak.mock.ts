@@ -1,10 +1,10 @@
-import { IBehandling } from '../../../typer/behandling';
-import { FagsakStatus, IFagsak } from '../../../typer/fagsak';
+import { VisningBehandling } from '../../../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import { FagsakStatus, IMinimalFagsak } from '../../../typer/fagsak';
 import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
-import { mockBehandling } from '../behandling/behandling.mock';
+import { mockVisningBehandling } from '../behandling/behandling.mock';
 
-interface IMockFagsak {
-    behandlinger?: IBehandling[];
+interface IMockMinimalFagsak {
+    behandlinger?: VisningBehandling[];
     gjeldendeUtbetalingsperioder?: Utbetalingsperiode[];
     id?: number;
     opprettetTidspunkt?: string;
@@ -14,8 +14,8 @@ interface IMockFagsak {
     underBehandling?: boolean;
 }
 
-export const mockFagsak = ({
-    behandlinger = [mockBehandling()],
+export const mockMinimalFagsak = ({
+    behandlinger = [mockVisningBehandling()],
     gjeldendeUtbetalingsperioder = [],
     id = 1,
     opprettetTidspunkt = '2020-09-19T09:08:56.8',
@@ -23,7 +23,7 @@ export const mockFagsak = ({
     status = FagsakStatus.LØPENDE,
     søkerFødselsnummer = '12345678910',
     underBehandling = false,
-}: IMockFagsak = {}): IFagsak => ({
+}: IMockMinimalFagsak = {}): IMinimalFagsak => ({
     behandlinger,
     id,
     søkerFødselsnummer,

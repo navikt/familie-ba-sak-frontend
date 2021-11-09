@@ -20,9 +20,7 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useEndretUtbetalingAndel } from '../../../context/EndretUtbetalingAndelContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
 import { IBehandling } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
 import {
     IEndretUtbetalingAndelFullSats,
     IEndretUtbetalingAndelÅrsak,
@@ -91,8 +89,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     settFeilmelding,
 }) => {
     const { request } = useHttp();
-    const { erLesevisning } = useBehandling();
-    const { settFagsak } = useFagsakRessurser();
+    const { erLesevisning, settÅpenBehandling } = useBehandling();
 
     const {
         endretUtbetalingAndel,
@@ -119,10 +116,10 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     påvirkerSystemLaster: true,
                     data: hentSkjemaData(),
                 },
-                (fagsak: Ressurs<IFagsak>) => {
-                    if (fagsak.status === RessursStatus.SUKSESS) {
+                (behandling: Ressurs<IBehandling>) => {
+                    if (behandling.status === RessursStatus.SUKSESS) {
                         avbrytEndringAvUtbetalingsperiode();
-                        settFagsak(fagsak);
+                        settÅpenBehandling(behandling);
                         settFeilmelding('');
                     }
                 }
@@ -131,11 +128,11 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
     };
 
     const slettEndretUtbetaling = () => {
-        request<undefined, IFagsak>({
+        request<undefined, IBehandling>({
             method: 'DELETE',
             url: `/familie-ba-sak/api/endretutbetalingandel/${åpenBehandling.behandlingId}/${endretUtbetalingAndel.id}`,
             påvirkerSystemLaster: true,
-        }).then((fagsak: Ressurs<IFagsak>) => settFagsak(fagsak));
+        }).then((behandling: Ressurs<IBehandling>) => settÅpenBehandling(behandling));
     };
 
     const finnÅrTilbakeTilStønadFra = (): number => {

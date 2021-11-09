@@ -6,9 +6,8 @@ import { useHttp } from '@navikt/familie-http';
 import { useSkjema, useFelt, feil, ok, Avhengigheter } from '@navikt/familie-skjema';
 import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
-import { aktivVedtakPåBehandling } from '../api/fagsak';
+import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import { IBehandling } from '../typer/behandling';
-import { IFagsak } from '../typer/fagsak';
 import {
     ISimuleringDTO,
     Tilbakekrevingsvalg,
@@ -21,12 +20,12 @@ import { useApp } from './AppContext';
 
 interface IProps {
     åpenBehandling: IBehandling;
-    fagsak: IFagsak;
 }
 
-const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak }: IProps) => {
+const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProps) => {
     const { request } = useHttp();
-    const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
+    const { fagsakId } = useSakOgBehandlingParams();
+    const vedtak = åpenBehandling.vedtak;
     const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
     });
@@ -57,19 +56,19 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
 
             settSimuleringresultat(response);
         });
-    }, [aktivtVedtak]);
+    }, [åpenBehandling]);
 
     useEffect(() => {
         if (tilbakekrevingErToggletPå) {
             request<undefined, boolean>({
                 method: 'GET',
-                url: `/familie-ba-sak/api/fagsaker/${fagsak.id}/har-apen-tilbakekreving`,
+                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/har-apen-tilbakekreving`,
                 påvirkerSystemLaster: true,
             }).then(response => {
                 settHarÅpentTilbakekrevingRessurs(response);
             });
         }
-    }, [fagsak.id]);
+    }, [fagsakId]);
 
     const harÅpenTilbakekreving: boolean =
         harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS &&
@@ -155,16 +154,16 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling, fagsak 
             fritekstVarsel: string;
             begrunnelse: string;
         },
-        IFagsak
+        IBehandling
     >({
         felter: { tilbakekrevingsvalg, fritekstVarsel, begrunnelse },
         skjemanavn: 'Opprett tilbakekreving',
     });
 
     const hentSkjemadata = (): ITilbakekreving | undefined => {
-        return tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi && aktivtVedtak
+        return tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi && vedtak
             ? {
-                  vedtakId: aktivtVedtak?.id,
+                  vedtakId: vedtak?.id,
                   valg: tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi,
                   begrunnelse: tilbakekrevingSkjema.felter.begrunnelse.verdi,
                   varsel: tilbakekrevingSkjema.felter.fritekstVarsel.erSynlig

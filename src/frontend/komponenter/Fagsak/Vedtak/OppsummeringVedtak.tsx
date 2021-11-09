@@ -18,10 +18,9 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { aktivVedtakPåBehandling } from '../../../api/fagsak';
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../context/FagsakContext';
+import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import {
     BehandlerRolle,
@@ -31,8 +30,7 @@ import {
     hentStegNummer,
     IBehandling,
 } from '../../../typer/behandling';
-import { IFagsak } from '../../../typer/fagsak';
-import { hentAktivVedtakPåBehandlig } from '../../../utils/fagsak';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -41,7 +39,6 @@ import { VedtaksbegrunnelseTeksterProvider } from './VedtakBegrunnelserTabell/Co
 import VedtaksperioderMedBegrunnelser from './VedtakBegrunnelserTabell/VedtaksperioderMedBegrunnelser/VedtaksperioderMedBegrunnelser';
 
 interface IVedtakProps {
-    fagsak: IFagsak;
     åpenBehandling: IBehandling;
 }
 
@@ -52,26 +49,24 @@ const Container = styled.div`
     }
 `;
 
-const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åpenBehandling }) => {
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useApp();
+const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling }) => {
+    const { hentSaksbehandlerRolle } = useApp();
+    const { fagsakId } = useSakOgBehandlingParams();
     const { request } = useHttp();
-    const { settFagsak } = useFagsakRessurser();
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } =
+        useBehandling();
 
     const history = useHistory();
 
     const [visModal, settVisModal] = React.useState<boolean>(false);
     const [visVedtaksbrev, settVisVedtaksbrev] = React.useState(false);
 
-    const [submitFeil, settSubmitFeil] = React.useState('');
-    const [senderInn, settSenderInn] = React.useState(false);
-
     const [vedtaksbrev, settVedtaksbrev] = React.useState(byggTomRessurs<string>());
 
     const visSubmitKnapp = !erLesevisning() && åpenBehandling?.status === BehandlingStatus.UTREDES;
 
     const hentVedtaksbrev = () => {
-        const aktivtVedtak = aktivVedtakPåBehandling(åpenBehandling);
+        const vedtak = åpenBehandling.vedtak;
         const rolle = hentSaksbehandlerRolle();
         const genererBrevUnderBehandling =
             rolle &&
@@ -86,11 +81,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         const httpMethod =
             genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
-        if (aktivtVedtak) {
+        if (vedtak) {
             settVedtaksbrev(byggHenterRessurs());
             request<void, string>({
                 method: httpMethod,
-                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${aktivtVedtak?.id}`,
+                url: `/familie-ba-sak/api/dokument/vedtaksbrev/${vedtak?.id}`,
             })
                 .then((response: Ressurs<string>) => {
                     if (response.status === RessursStatus.SUKSESS) {
@@ -123,63 +118,22 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
         }
     };
 
-    const minstEnPeriodeharBegrunnetelseEllerFritekst = (): boolean => {
-        const vedtaksperioderMedBegrunnelser =
-            hentAktivVedtakPåBehandlig(åpenBehandling)?.vedtaksperioderMedBegrunnelser ?? [];
-        return vedtaksperioderMedBegrunnelser.some(
-            vedtaksperioderMedBegrunnelse =>
-                vedtaksperioderMedBegrunnelse.begrunnelser.length !== 0 ||
-                vedtaksperioderMedBegrunnelse.fritekster.length !== 0
-        );
-    };
-
-    const kanSendeinnVedtak = () =>
-        minstEnPeriodeharBegrunnetelseEllerFritekst() ||
-        åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
-        åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-        åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
-
-    const sendInn = () => {
-        if (kanSendeinnVedtak()) {
-            settSenderInn(true);
-            settSubmitFeil('');
-            request<void, IFagsak>({
-                method: 'POST',
-                url: `/familie-ba-sak/api/fagsaker/${
-                    fagsak.id
-                }/send-til-beslutter?behandlendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
-            }).then((response: Ressurs<IFagsak>) => {
-                settSenderInn(false);
-                if (response.status === RessursStatus.SUKSESS) {
-                    settVisModal(true);
-                    settFagsak(response);
-                } else if (
-                    response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    response.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    settSubmitFeil(response.frontendFeilmelding);
-                }
-            });
-        } else {
-            settSubmitFeil(
-                'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
-            );
-        }
+    const sendTilBeslutter = () => {
+        sendTilBeslutterNesteOnClick((visModal: boolean) => settVisModal(visModal));
     };
 
     return (
         <Skjemasteg
             tittel={'Vedtak'}
             forrigeOnClick={() =>
-                history.push(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/simulering`)
+                history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
-            nesteOnClick={visSubmitKnapp ? sendInn : undefined}
+            nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
             nesteKnappTittel={'Til godkjenning'}
-            senderInn={senderInn}
+            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             maxWidthStyle="100%"
             className={'vedtak'}
-            feilmelding={submitFeil}
+            feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
         >
             {åpenBehandling.årsak !== BehandlingÅrsak.TEKNISK_OPPHØR ? (
                 <>
@@ -213,7 +167,6 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                         ) : (
                             <VedtaksbegrunnelseTeksterProvider>
                                 <VedtaksperioderMedBegrunnelser
-                                    fagsak={fagsak}
                                     åpenBehandling={åpenBehandling}
                                     erLesevisning={erLesevisning()}
                                 />
@@ -243,7 +196,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ fagsak, åp
                                         mini={true}
                                         onClick={() => {
                                             settVisModal(false);
-                                            history.push(`/fagsak/${fagsak.id}/saksoversikt`);
+                                            history.push(`/fagsak/${fagsakId}/saksoversikt`);
                                             window.location.reload();
                                         }}
                                         children={'Gå til saksoversikten'}
