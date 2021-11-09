@@ -345,6 +345,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     vilkår={redigerbartVilkår}
                     settRedigerbartVilkår={settRedigerbartVilkår}
                     settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                    erLesevisning={leseVisning}
                 />
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     årsakErSøknad && (
