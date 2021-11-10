@@ -135,6 +135,7 @@ const useBehandlingssteg = (
         vilkårsvurderingNesteOnClick,
         behandlingresultatNesteOnClick,
         sendTilBeslutterNesteOnClick,
+        settSubmitRessurs,
     };
 };
 
