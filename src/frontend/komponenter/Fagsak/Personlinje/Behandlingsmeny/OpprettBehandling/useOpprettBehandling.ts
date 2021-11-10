@@ -82,8 +82,8 @@ const useOpprettBehandling = (
 
     useEffect(() => {
         switch (skjema.felter.behandlingstype.verdi) {
-            case Behandlingstype.TEKNISK_OPPHØR:
-                skjema.felter.behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.TEKNISK_OPPHØR);
+            case Behandlingstype.TEKNISK_ENDRING:
+                skjema.felter.behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.TEKNISK_ENDRING);
                 break;
             case Behandlingstype.FØRSTEGANGSBEHANDLING:
                 skjema.felter.behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.SØKNAD);

@@ -198,7 +198,9 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         ]}
                     />
                 )}
-            {skjemaFeilmelding !== '' && <Feilmelding>{skjemaFeilmelding}</Feilmelding>}
+            {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
+                <Feilmelding>{skjemaFeilmelding}</Feilmelding>
+            )}
         </Skjemasteg>
     );
 };
