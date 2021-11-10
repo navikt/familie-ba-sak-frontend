@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
@@ -20,6 +19,7 @@ import { ToggleNavn } from '../../../typer/toggles';
 import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
+import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
@@ -61,7 +61,6 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
         settÅpenBehandling,
     } = useBehandling();
     const { toggles } = useApp();
-    const [feilmelding, settFeilmelding] = useState('');
 
     const forrigeOnClick = () => {
         history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
@@ -125,7 +124,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
                 }
             }}
             maxWidthStyle={'80rem'}
-            feilmelding={feilmelding}
+            feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
         >
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
@@ -151,10 +150,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
                 />
             )}
             {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
-                <EndretUtbetalingAndelTabell
-                    åpenBehandling={åpenBehandling}
-                    settFeilmelding={settFeilmelding}
-                />
+                <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
             )}
         </Skjemasteg>
     );
