@@ -45,12 +45,15 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
             hentMinimalFagsak(fagsakId, false);
         }
         privatSettÅpenBehandling(behandling);
+        settBehandlingsstegSubmitressurs(byggTomRessurs());
     };
+
     const {
         submitRessurs: behandlingsstegSubmitressurs,
         vilkårsvurderingNesteOnClick,
         behandlingresultatNesteOnClick,
         sendTilBeslutterNesteOnClick,
+        settSubmitRessurs: settBehandlingsstegSubmitressurs,
     } = useBehandlingssteg(settÅpenBehandling, hentDataFraRessurs(åpenBehandling));
 
     const { opprettBehandling, logg, hentLogg, oppdaterRegisteropplysninger } = useBehandlingApi(
