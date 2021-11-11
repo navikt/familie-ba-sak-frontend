@@ -14,7 +14,7 @@ import {
     behandlingstyper,
     behandlingÅrsak,
 } from '../../../typer/behandling';
-import { behandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
+import { tilBehandlingstema } from '../../../typer/behandlingstema';
 import { IMinimalFagsak } from '../../../typer/fagsak';
 import {
     Tilbakekrevingsbehandlingstype,
@@ -97,8 +97,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                             <th children={'Opprettet'} />
                             <th children={'Årsak'} />
                             <th children={'Type'} />
-                            <th children={'Fagsaktype'} />
-                            <th children={'Gjelder'} />
+                            <th children={'Behandlingstema'} />
                             <th children={'Status'} />
                             <th children={'Vedtaksdato'} />
                             <th children={'Resultat'} />
@@ -124,14 +123,12 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                         <td>{finnÅrsak(behandling)}</td>
                                         <td>{lagLenkePåType(minimalFagsak.id, behandling)}</td>
                                         <td>
-                                            {behandling.kategori
-                                                ? behandlingKategori[behandling.kategori]
-                                                : '-'}
-                                        </td>
-                                        <td>
-                                            {behandling.underkategori
-                                                ? behandlingUnderkategori[behandling.underkategori]
-                                                : '-'}
+                                            {
+                                                tilBehandlingstema(
+                                                    behandling.kategori,
+                                                    behandling.underkategori
+                                                ).navn
+                                            }
                                         </td>
                                         <td>{behandlingsstatuser[behandling.status]}</td>
                                         <td
