@@ -287,13 +287,14 @@ export const behandlingsresultater: Record<
     FORTSATT_INNVILGET: 'Fortsatt innvilget',
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
+    HENLAGT_AUTOMATISK_FØDSELSHENDELSE: 'Henlagt automatisk fødselshendelse',
     IKKE_VURDERT: 'Ikke vurdert',
     /** De neste er resultat for tilbakekrevingsbehandlinger **/
+    IKKE_FASTSATT: 'Ikke fastsatt',
     INGEN_TILBAKEBETALING: 'Ingen tilbakebetaling',
     DELVIS_TILBAKEBETALING: 'Delvis tilbakebetaling',
     FULL_TILBAKEBETALING: 'Full tilbakebetaling',
     HENLAGT: 'Henlagt',
-    HENLAGT_AUTOMATISK_FØDSELSHENDELSE: 'Henlagt automatisk fødselshendelse',
 };
 
 export const behandlingsstatuser: Record<BehandlingStatus, string> = {

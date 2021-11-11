@@ -1,5 +1,6 @@
 import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { INøkkelPar } from './common';
+import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 import { Utbetalingsperiode } from './vedtaksperiode';
 
 // Enum
@@ -21,7 +22,7 @@ export interface IBaseFagsak {
 
 export interface IMinimalFagsak extends IBaseFagsak {
     behandlinger: VisningBehandling[];
-    tilbakekrevingsbehandlinger: VisningBehandling[];
+    tilbakekrevingsbehandlinger: ITilbakekrevingsbehandling[];
     gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 
