@@ -38,7 +38,7 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak, behandling }
                 <tr>
                     <td>
                         <Normaltekst>
-                            {behandling
+                            {behandling && behandling.kategori && behandling.underkategori
                                 ? tilBehandlingstema(behandling.kategori, behandling.underkategori)
                                       .navn
                                 : '-'}
