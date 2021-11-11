@@ -14,7 +14,7 @@ import {
     behandlingstyper,
     behandlingÅrsak,
 } from '../../../typer/behandling';
-import { tilBehandlingstema } from '../../../typer/behandlingstema';
+import { IBehandlingstema, tilBehandlingstema } from '../../../typer/behandlingstema';
 import { IMinimalFagsak } from '../../../typer/fagsak';
 import {
     Tilbakekrevingsbehandlingstype,
@@ -112,6 +112,11 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                 )
                             )
                             .map((behandling: VisningBehandling) => {
+                                const behandlingstema: IBehandlingstema | undefined =
+                                    tilBehandlingstema(
+                                        behandling.kategori,
+                                        behandling.underkategori
+                                    );
                                 return (
                                     <tr key={behandling.behandlingId}>
                                         <td
@@ -122,14 +127,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                         />
                                         <td>{finnÅrsak(behandling)}</td>
                                         <td>{lagLenkePåType(minimalFagsak.id, behandling)}</td>
-                                        <td>
-                                            {
-                                                tilBehandlingstema(
-                                                    behandling.kategori,
-                                                    behandling.underkategori
-                                                ).navn
-                                            }
-                                        </td>
+                                        <td>{behandlingstema ? behandlingstema.navn : '-'}</td>
                                         <td>{behandlingsstatuser[behandling.status]}</td>
                                         <td
                                             children={
