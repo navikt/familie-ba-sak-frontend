@@ -14,7 +14,7 @@ import {
     behandlingstyper,
     behandlingÅrsak,
 } from '../../../typer/behandling';
-import { tilBehandlingstema } from '../../../typer/behandlingstema';
+import { IBehandlingstema, tilBehandlingstema } from '../../../typer/behandlingstema';
 import { IMinimalFagsak } from '../../../typer/fagsak';
 import {
     Tilbakekrevingsbehandlingstype,
@@ -112,10 +112,11 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                 )
                             )
                             .map((behandling: VisningBehandling) => {
-                                const behandlingstema = tilBehandlingstema(
-                                    behandling.kategori,
-                                    behandling.underkategori
-                                );
+                                const behandlingstema: IBehandlingstema | undefined =
+                                    tilBehandlingstema(
+                                        behandling.kategori,
+                                        behandling.underkategori
+                                    );
                                 return (
                                     <tr key={behandling.behandlingId}>
                                         <td

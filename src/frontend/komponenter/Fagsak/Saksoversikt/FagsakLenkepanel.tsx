@@ -7,7 +7,7 @@ import Panel from 'nav-frontend-paneler';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { BehandlingStatus } from '../../../typer/behandling';
-import { tilBehandlingstema } from '../../../typer/behandlingstema';
+import { IBehandlingstema, tilBehandlingstema } from '../../../typer/behandlingstema';
 import { IMinimalFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { VisningBehandling } from './visningBehandling';
@@ -22,6 +22,8 @@ interface IInnholdstabell {
 }
 
 const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak, behandling }) => {
+    const behandlingstema: IBehandlingstema | undefined =
+        behandling && tilBehandlingstema(behandling.kategori, behandling.underkategori);
     return (
         <table className={'fagsak-panel__tabell'}>
             <thead>
@@ -37,12 +39,7 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak, behandling }
             <tbody>
                 <tr>
                     <td>
-                        <Normaltekst>
-                            {behandling && behandling.kategori && behandling.underkategori
-                                ? tilBehandlingstema(behandling.kategori, behandling.underkategori)
-                                      .navn
-                                : '-'}
-                        </Normaltekst>
+                        <Normaltekst>{behandlingstema ? behandlingstema.navn : '-'}</Normaltekst>
                     </td>
                     <td>
                         <Normaltekst>{hentFagsakStatusVisning(minimalFagsak)}</Normaltekst>
