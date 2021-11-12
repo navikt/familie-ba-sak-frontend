@@ -52,13 +52,15 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
     const kanOppretteBehandling =
         !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
-    const førstegangsbehandlingEnabled = !minimalFagsak
+    const kanOppretteFørstegangsbehandling = !minimalFagsak
         ? true
         : minimalFagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
-    const revurderingEnabled = !minimalFagsak
+    const kanOppretteRevurdering = !minimalFagsak
         ? false
         : minimalFagsak.behandlinger.length > 0 && kanOppretteBehandling;
-    const visTekniskOpphør = revurderingEnabled && toggles[ToggleNavn.visTekniskOpphør];
+    const kanOppretteTekniskEndring =
+        kanOppretteRevurdering &&
+        (toggles[ToggleNavn.visTekniskOpphør] || toggles[ToggleNavn.kanBehandleTekniskEndring]);
     const kanOppretteTilbakekreving = !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
 
     return (
@@ -77,26 +79,26 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </option>
                 <option
                     aria-selected={behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING}
-                    disabled={!førstegangsbehandlingEnabled}
+                    disabled={!kanOppretteFørstegangsbehandling}
                     value={Behandlingstype.FØRSTEGANGSBEHANDLING}
                 >
                     Førstegangsbehandling
                 </option>
                 <option
                     aria-selected={behandlingstype.verdi === Behandlingstype.REVURDERING}
-                    disabled={!revurderingEnabled}
+                    disabled={!kanOppretteRevurdering}
                     value={Behandlingstype.REVURDERING}
                 >
                     Revurdering
                 </option>
 
-                {visTekniskOpphør && (
+                {kanOppretteTekniskEndring && (
                     <option
-                        aria-selected={behandlingstype.verdi === Behandlingstype.TEKNISK_OPPHØR}
-                        disabled={!revurderingEnabled}
-                        value={Behandlingstype.TEKNISK_OPPHØR}
+                        aria-selected={behandlingstype.verdi === Behandlingstype.TEKNISK_ENDRING}
+                        disabled={!kanOppretteRevurdering}
+                        value={Behandlingstype.TEKNISK_ENDRING}
                     >
-                        Teknisk opphør
+                        Teknisk endring
                     </option>
                 )}
 
@@ -129,6 +131,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         .filter(
                             årsak =>
                                 årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
+                                årsak !== BehandlingÅrsak.TEKNISK_ENDRING &&
                                 årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
                                 årsak !== BehandlingÅrsak.SATSENDRING &&
                                 årsak !== BehandlingÅrsak.MIGRERING &&

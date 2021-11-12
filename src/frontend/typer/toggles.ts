@@ -3,7 +3,8 @@ export interface IToggles {
 }
 
 export enum ToggleNavn {
-    visTekniskOpphør = 'familie-ba-sak.behandling.vis-teknisk-opphoer',
+    visTekniskOpphør = 'familie-ba-sak.behandling.vis-teknisk-opphoer', // Deprecated, bruk kanBehandleTekniskEndring istedet.
+    kanBehandleTekniskEndring = 'familie-ba-sak.behandling.teknisk-endring',
     tilbakekreving = 'familie-ba-sak.behandling.tilbakekreving',
     brukErDeltBosted = 'familie-ba-sak.behandling.delt_bosted',
     brukBegrunnelserFraSanity = 'familie-ba-sak.behandling.begrunnelse-fra-sanity',

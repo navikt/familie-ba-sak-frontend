@@ -93,7 +93,7 @@ const useBehandlingssteg = (
 
     const kanSendeinnVedtak = () =>
         minstEnPeriodeharBegrunnetelseEllerFritekst() ||
-        behandling?.årsak === BehandlingÅrsak.TEKNISK_OPPHØR ||
+        behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
         behandling?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling?.årsak === BehandlingÅrsak.DØDSFALL_BRUKER;
 
