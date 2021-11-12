@@ -7,7 +7,7 @@ import Panel from 'nav-frontend-paneler';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { BehandlingStatus } from '../../../typer/behandling';
-import { behandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
+import { IBehandlingstema, tilBehandlingstema } from '../../../typer/behandlingstema';
 import { IMinimalFagsak } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { VisningBehandling } from './visningBehandling';
@@ -22,15 +22,14 @@ interface IInnholdstabell {
 }
 
 const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak, behandling }) => {
+    const behandlingstema: IBehandlingstema | undefined =
+        behandling && tilBehandlingstema(behandling.kategori, behandling.underkategori);
     return (
         <table className={'fagsak-panel__tabell'}>
             <thead>
                 <tr>
                     <th>
-                        <Normaltekst>Fagsaktype</Normaltekst>
-                    </th>
-                    <th>
-                        <Normaltekst>Gjelder</Normaltekst>
+                        <Normaltekst>Behandlingstema</Normaltekst>
                     </th>
                     <th>
                         <Normaltekst>Status</Normaltekst>
@@ -40,18 +39,7 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak, behandling }
             <tbody>
                 <tr>
                     <td>
-                        <Normaltekst>
-                            {behandling && behandling.kategori
-                                ? behandlingKategori[behandling.kategori]
-                                : '-'}
-                        </Normaltekst>
-                    </td>
-                    <td>
-                        <Normaltekst>
-                            {behandling && behandling.underkategori
-                                ? behandlingUnderkategori[behandling.underkategori]
-                                : '-'}
-                        </Normaltekst>
+                        <Normaltekst>{behandlingstema ? behandlingstema.navn : '-'}</Normaltekst>
                     </td>
                     <td>
                         <Normaltekst>{hentFagsakStatusVisning(minimalFagsak)}</Normaltekst>

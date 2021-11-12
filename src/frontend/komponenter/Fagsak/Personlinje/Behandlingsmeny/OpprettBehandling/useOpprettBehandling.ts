@@ -2,12 +2,11 @@ import { useEffect } from 'react';
 
 import { useHistory } from 'react-router';
 
-import { useFelt, feil, ok, Avhengigheter, useSkjema, FeltState } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import {
     Behandlingstype,
@@ -15,11 +14,7 @@ import {
     IBehandling,
     IRestNyBehandling,
 } from '../../../../../typer/behandling';
-import {
-    BehandlingKategori,
-    BehandlingUnderkategori,
-    IBehandlingstema,
-} from '../../../../../typer/behandlingstema';
+import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 
 const useOpprettBehandling = (
@@ -29,7 +24,6 @@ const useOpprettBehandling = (
     const { fagsakId } = useSakOgBehandlingParams();
     const { settÅpenBehandling } = useBehandling();
     const { innloggetSaksbehandler } = useApp();
-    const { minimalFagsak } = useFagsakRessurser();
     const history = useHistory();
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
@@ -97,33 +91,6 @@ const useOpprettBehandling = (
         }
     }, [skjema.felter.behandlingstype.verdi]);
 
-    // TODO: logikken for setting av behandlingstema når årsak ikke er søknad burde fikses i backend, slik at kategori og underkategori kan være optional. Deretter kan disse to funksjonene fjernes.
-    const utredKategori = (): BehandlingKategori => {
-        if (behandlingstema.verdi?.kategori) {
-            return behandlingstema.verdi.kategori;
-        }
-        if (minimalFagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = minimalFagsak.data.behandlinger.find(b => b.aktiv);
-            if (aktivBehandling) {
-                return aktivBehandling.kategori;
-            }
-        }
-        return BehandlingKategori.NASJONAL;
-    };
-
-    const utredUnderkategori = () => {
-        if (behandlingstema.verdi?.underkategori) {
-            return behandlingstema.verdi?.underkategori;
-        }
-        if (minimalFagsak.status === RessursStatus.SUKSESS) {
-            const aktivBehandling = minimalFagsak.data.behandlinger.find(b => b.aktiv);
-            if (aktivBehandling) {
-                return aktivBehandling.underkategori;
-            }
-        }
-        return BehandlingUnderkategori.ORDINÆR;
-    };
-
     const onBekreft = (søkersIdent: string) => {
         const { behandlingstype, behandlingsårsak } = skjema.felter;
         if (kanSendeSkjema()) {
@@ -147,8 +114,9 @@ const useOpprettBehandling = (
                 onSubmit<IRestNyBehandling>(
                     {
                         data: {
-                            kategori: utredKategori(),
-                            underkategori: utredUnderkategori(),
+                            kategori: skjema.felter.behandlingstema.verdi?.kategori ?? null,
+                            underkategori:
+                                skjema.felter.behandlingstema.verdi?.underkategori ?? null,
                             søkersIdent,
                             behandlingType: behandlingstype.verdi as Behandlingstype,
                             behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,

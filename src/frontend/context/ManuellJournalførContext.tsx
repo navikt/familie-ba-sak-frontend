@@ -117,6 +117,9 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }),
             behandlingstema: useFelt<IBehandlingstema | undefined>({
                 verdi: undefined,
+                avhengigheter: { knyttTilNyBehandling: knyttTilNyBehandling.verdi },
+                skalFeltetVises: (avhengigheter: Avhengigheter) =>
+                    avhengigheter.knyttTilNyBehandling,
                 valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
                     felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
             }),

@@ -5,21 +5,16 @@ import {
     BehandlingÅrsak,
 } from '../../../typer/behandling';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
-import {
-    TilbakekrevingsbehandlingResultat,
-    Tilbakekrevingsbehandlingstype,
-    TilbakekrevingsbehandlingÅrsak,
-} from '../../../typer/tilbakekrevingsbehandling';
 
 export interface VisningBehandling {
     aktiv: boolean;
     behandlingId: number | string;
-    kategori: BehandlingKategori;
     opprettetTidspunkt: string;
-    resultat?: BehandlingResultat | TilbakekrevingsbehandlingResultat;
+    resultat?: BehandlingResultat;
     status: BehandlingStatus;
-    type: Behandlingstype | Tilbakekrevingsbehandlingstype;
+    type: Behandlingstype;
+    kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
     vedtaksdato?: string;
-    årsak?: BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak;
+    årsak?: BehandlingÅrsak;
 }

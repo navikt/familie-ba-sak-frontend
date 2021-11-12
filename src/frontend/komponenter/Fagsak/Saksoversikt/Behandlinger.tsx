@@ -14,9 +14,14 @@ import {
     behandlingstyper,
     behandlingÅrsak,
 } from '../../../typer/behandling';
-import { behandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
+import {
+    hentKategorierHvisVisningBehandling,
+    IBehandlingstema,
+    tilBehandlingstema,
+} from '../../../typer/behandlingstema';
 import { IMinimalFagsak } from '../../../typer/fagsak';
 import {
+    ITilbakekrevingsbehandling,
     Tilbakekrevingsbehandlingstype,
     tilbakekrevingstyper,
 } from '../../../typer/tilbakekrevingsbehandling';
@@ -28,8 +33,11 @@ interface IBehandlingshistorikkProps {
     minimalFagsak: IMinimalFagsak;
 }
 
-const lagLenkePåType = (fagsakId: number, behandling: VisningBehandling): ReactNode => {
-    return behandling.status === BehandlingStatus.AVSLUTTET ? (
+const lagLenkePåType = (
+    fagsakId: number,
+    behandling: VisningBehandling | ITilbakekrevingsbehandling
+): ReactNode =>
+    behandling.status === BehandlingStatus.AVSLUTTET ? (
         behandlingstyper[behandling.type].navn
     ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
         <Lenke
@@ -45,13 +53,12 @@ const lagLenkePåType = (fagsakId: number, behandling: VisningBehandling): React
             {behandlingstyper[behandling.type].navn}
         </Lenke>
     );
-};
 
 const lagLenkePåResultat = (
     minimalFagsak: IMinimalFagsak,
-    behandling: VisningBehandling
-): ReactNode => {
-    return !behandling.resultat ? (
+    behandling: VisningBehandling | ITilbakekrevingsbehandling
+): ReactNode =>
+    !behandling.resultat ? (
         '-'
     ) : tilbakekrevingstyper.some(type => type === behandling.type) ? (
         <Lenke
@@ -69,18 +76,16 @@ const lagLenkePåResultat = (
     ) : (
         behandlingsresultater[behandling.resultat]
     );
-};
 
-const finnÅrsak = (behandling: VisningBehandling): ReactNode => {
-    return behandling.type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
+const finnÅrsak = (behandling: VisningBehandling | ITilbakekrevingsbehandling): ReactNode =>
+    behandling.type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
         ? 'Feilutbetaling'
         : behandling.årsak
         ? behandlingÅrsak[behandling.årsak]
         : '-';
-};
 
 const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) => {
-    const behandlinger: VisningBehandling[] = [
+    const behandlinger: (VisningBehandling | ITilbakekrevingsbehandling)[] = [
         ...minimalFagsak.behandlinger,
         ...minimalFagsak.tilbakekrevingsbehandlinger,
     ];
@@ -97,8 +102,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                             <th children={'Opprettet'} />
                             <th children={'Årsak'} />
                             <th children={'Type'} />
-                            <th children={'Fagsaktype'} />
-                            <th children={'Gjelder'} />
+                            <th children={'Behandlingstema'} />
                             <th children={'Status'} />
                             <th children={'Vedtaksdato'} />
                             <th children={'Resultat'} />
@@ -112,7 +116,15 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                     new Date(a.opprettetTidspunkt)
                                 )
                             )
-                            .map((behandling: VisningBehandling) => {
+                            .map((behandling: VisningBehandling | ITilbakekrevingsbehandling) => {
+                                const kategorier = hentKategorierHvisVisningBehandling(behandling);
+
+                                const behandlingstema: IBehandlingstema | undefined = kategorier
+                                    ? tilBehandlingstema(
+                                          kategorier.kategori,
+                                          kategorier.underkategori
+                                      )
+                                    : undefined;
                                 return (
                                     <tr key={behandling.behandlingId}>
                                         <td
@@ -123,16 +135,7 @@ const Behandlinger: React.FC<IBehandlingshistorikkProps> = ({ minimalFagsak }) =
                                         />
                                         <td>{finnÅrsak(behandling)}</td>
                                         <td>{lagLenkePåType(minimalFagsak.id, behandling)}</td>
-                                        <td>
-                                            {behandling.kategori
-                                                ? behandlingKategori[behandling.kategori]
-                                                : '-'}
-                                        </td>
-                                        <td>
-                                            {behandling.underkategori
-                                                ? behandlingUnderkategori[behandling.underkategori]
-                                                : '-'}
-                                        </td>
+                                        <td>{behandlingstema ? behandlingstema.navn : '-'}</td>
                                         <td>{behandlingsstatuser[behandling.status]}</td>
                                         <td
                                             children={
