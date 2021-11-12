@@ -204,7 +204,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const erBegrunnelsePåkrevd = (): boolean =>
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
         redigerbartVilkår.verdi.erSkjønnsmessigVurdert ||
-        (toggles[ToggleNavn.medlemskap] && redigerbartVilkår.verdi.erMedlemskapVurdert) ||
+        redigerbartVilkår.verdi.erMedlemskapVurdert ||
         (toggles[ToggleNavn.brukErDeltBosted] && redigerbartVilkår.verdi.erDeltBosted);
 
     return (
@@ -318,16 +318,13 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
                         />
 
-                        {toggles[ToggleNavn.medlemskap] &&
-                            redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
-                                <MedlemskapCheckbox
-                                    redigerbartVilkår={redigerbartVilkår}
-                                    settRedigerbartVilkår={settRedigerbartVilkår}
-                                    settVisFeilmeldingerForEttVilkår={
-                                        settVisFeilmeldingerForEttVilkår
-                                    }
-                                />
-                            )}
+                        {redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
+                            <MedlemskapCheckbox
+                                redigerbartVilkår={redigerbartVilkår}
+                                settRedigerbartVilkår={settRedigerbartVilkår}
+                                settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                            />
+                        )}
                         {toggles[ToggleNavn.brukErDeltBosted] &&
                             redigerbartVilkår.verdi.vilkårType === VilkårType.BOR_MED_SØKER && (
                                 <DeltBostedCheckbox
