@@ -149,7 +149,6 @@ const [TidslinjeProvider, useTidslinje] = createUseContext(() => {
         personer: IGrunnlagPerson[],
         personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[]
     ): IGrunnlagPerson[] => {
-        console.log(personerMedAndelerTilkjentYtelse);
         personer.sort(sorterPersonTypeOgFødselsdato);
         return personer.filter(
             grunnlagPerson =>
