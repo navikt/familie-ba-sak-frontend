@@ -21,6 +21,7 @@ import {
     BehandlerRolle,
     BehandlingStatus,
     BehandlingSteg,
+    BehandlingÅrsak,
     IBehandling,
 } from '../../typer/behandling';
 import { harTilgangTilEnhet } from '../../typer/enhet';
@@ -140,11 +141,12 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const erLesevisning = (sjekkTilgangTilEnhet = true): boolean => {
         const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
-        const saksbehandlerHarTilgangTilEnhet = harTilgangTilEnhet(
-            hentDataFraRessurs(åpenBehandling)?.arbeidsfordelingPåBehandling.behandlendeEnhetId ??
-                '',
-            innloggetSaksbehandler?.groups ?? []
-        );
+        const saksbehandlerHarTilgangTilEnhet =
+            harTilgangTilEnhet(
+                hentDataFraRessurs(åpenBehandling)?.arbeidsfordelingPåBehandling
+                    .behandlendeEnhetId ?? '',
+                innloggetSaksbehandler?.groups ?? []
+            ) || hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.TEKNISK_ENDRING;
         const steg = hentStegPåÅpenBehandling();
 
         return saksbehandlerHarKunLesevisning(
