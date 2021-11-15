@@ -65,10 +65,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 ? ok(felt)
                 : feil(felt, 'Velg type behandling som skal opprettes fra nedtrekkslisten');
         },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            const knyttTilNyBehandling = avhengigheter.knyttTilNyBehandling;
-            return knyttTilNyBehandling;
-        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => avhengigheter.knyttTilNyBehandling,
         avhengigheter: { knyttTilNyBehandling: knyttTilNyBehandling.verdi },
     });
 
