@@ -5,11 +5,7 @@ import styled from 'styled-components';
 import { Normaltekst, Element } from 'nav-frontend-typografi';
 
 import { IUtbetalingsperiodeDetalj } from '../../../../../typer/vedtaksperiode';
-import {
-    formaterIdent,
-    formaterBeløp,
-    sorterPersonTypeOgFødselsdato,
-} from '../../../../../utils/formatter';
+import { formaterIdent, formaterBeløp, sorterUtbetaling } from '../../../../../utils/formatter';
 
 interface IProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
@@ -32,9 +28,7 @@ const Utbetalingsresultat: React.FC<IProps> = ({ utbetalingsperiodeDetaljer }) =
             <Element>Resultat</Element>
 
             {utbetalingsperiodeDetaljer
-                .sort((utbetalingA, utbetalingB) =>
-                    sorterPersonTypeOgFødselsdato(utbetalingA.person, utbetalingB.person)
-                )
+                .sort(sorterUtbetaling)
                 .map((detalj: IUtbetalingsperiodeDetalj) => (
                     <UtbetalingsperiodeDetalj key={detalj.person.personIdent}>
                         <Normaltekst title={detalj.person.navn}>

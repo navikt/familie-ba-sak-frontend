@@ -7,7 +7,7 @@ import {
     Vedtaksperiode,
     Vedtaksperiodetype,
 } from '../../../typer/vedtaksperiode';
-import { formaterBeløp, sorterPersonTypeOgFødselsdato } from '../../../utils/formatter';
+import { formaterBeløp, sorterUtbetaling } from '../../../utils/formatter';
 import PersonUtbetaling from './PersonUtbetaling';
 
 interface IUtbetalingerProps {
@@ -19,9 +19,7 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ vedtaksperiode }) => {
 
     const utbetalingsperiodeDetaljerGruppertPåPerson =
         vedtaksperiode?.utbetalingsperiodeDetaljer
-            .sort((detaljA, detaljB) =>
-                sorterPersonTypeOgFødselsdato(detaljA.person, detaljB.person)
-            )
+            .sort(sorterUtbetaling)
             .reduce(
                 (acc: { [key: string]: IUtbetalingsperiodeDetalj[] }, utbetalingsperiodeDetalj) => {
                     const utbetalingsperiodeDetaljerForPerson =
