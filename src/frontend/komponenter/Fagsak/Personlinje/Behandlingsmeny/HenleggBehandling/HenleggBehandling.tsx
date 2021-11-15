@@ -170,17 +170,19 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                         <option disabled={true} value={''}>
                             Velg
                         </option>
-                        {Object.values(HenleggÅrsak).map(årsak => {
-                            return (
-                                <option
-                                    key={årsak}
-                                    aria-selected={skjema.felter.årsak.verdi === årsak}
-                                    value={årsak}
-                                >
-                                    {henleggÅrsak[årsak]}
-                                </option>
-                            );
-                        })}
+                        {Object.values(HenleggÅrsak)
+                            .filter(årsak => årsak !== HenleggÅrsak.FØDSELSHENDELSE_UGYLDIG_UTFALL)
+                            .map(årsak => {
+                                return (
+                                    <option
+                                        key={årsak}
+                                        aria-selected={skjema.felter.årsak.verdi === årsak}
+                                        value={årsak}
+                                    >
+                                        {henleggÅrsak[årsak]}
+                                    </option>
+                                );
+                            })}
                     </FamilieSelect>
 
                     <FamilieTextarea
