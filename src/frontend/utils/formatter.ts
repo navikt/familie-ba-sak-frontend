@@ -1,4 +1,6 @@
+import { YtelseType } from '../typer/beregning';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
+import { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
 import familieDayjs from './familieDayjs';
 import { iDag, kalenderDato, kalenderDatoTilDate, kalenderDiff } from './kalender';
 
@@ -93,4 +95,19 @@ export const sorterPersonTypeOgFødselsdato = (
     if (personA.type === PersonType.SØKER) return -1;
     else if (personB.type === PersonType.SØKER) return 1;
     else return sorterFødselsdato(personA.fødselsdato, personB.fødselsdato);
+};
+
+export const sorterUtbetaling = (
+    utbetalingsperiodeDetaljA: IUtbetalingsperiodeDetalj,
+    utbetalingsperiodeDetaljB: IUtbetalingsperiodeDetalj
+) => {
+    if (utbetalingsperiodeDetaljA.ytelseType === YtelseType.UTVIDET_BARNETRYGD) return -1;
+    else if (utbetalingsperiodeDetaljB.ytelseType === YtelseType.UTVIDET_BARNETRYGD) return 1;
+    else if (utbetalingsperiodeDetaljA.ytelseType === YtelseType.SMÅBARNSTILLEGG) return -1;
+    else if (utbetalingsperiodeDetaljB.ytelseType === YtelseType.SMÅBARNSTILLEGG) return 1;
+    else
+        return sorterFødselsdato(
+            utbetalingsperiodeDetaljA.person.fødselsdato,
+            utbetalingsperiodeDetaljB.person.fødselsdato
+        );
 };

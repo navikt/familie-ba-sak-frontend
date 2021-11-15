@@ -94,8 +94,8 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
                         !erLesevisning() &&
                         (åpenBehandling.data.årsak === BehandlingÅrsak.NYE_OPPLYSNINGER ||
                             åpenBehandling.data.årsak === BehandlingÅrsak.KLAGE ||
-                            åpenBehandling.data.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV) &&
-                        toggles[ToggleNavn.brukLeggTilBarnPåBehandling] && (
+                            åpenBehandling.data.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+                            åpenBehandling.data.årsak === BehandlingÅrsak.TEKNISK_ENDRING) && (
                             <li>
                                 <LeggTilBarnPBehandling
                                     onListElementClick={() => settAnker(undefined)}

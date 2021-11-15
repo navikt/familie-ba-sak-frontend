@@ -1,6 +1,16 @@
+import { YtelseType } from '../../typer/beregning';
+import { lagUtbetalingsperiodeDetalj } from '../../typer/test/utbetalingsperiode.mock';
 import familieDayjs from '../familieDayjs';
-import { datoformat, formaterIdent, formaterIsoDato, hentAlder, kunSiffer } from '../formatter';
+import {
+    datoformat,
+    formaterIdent,
+    formaterIsoDato,
+    hentAlder,
+    kunSiffer,
+    sorterUtbetaling,
+} from '../formatter';
 import { iDag, KalenderEnhet, leggTil, serializeIso8601String, trekkFra } from '../kalender';
+import { mockBarn, mockSøker } from './person/person.mock';
 
 describe('utils/formatter', () => {
     test('Skal formatere ident', () => {
@@ -79,6 +89,33 @@ describe('utils/formatter', () => {
         });
         test('Skal returnere dato på format MMMM YYYY', () => {
             expect(formaterIsoDato(datoString, datoformat.MÅNED_ÅR_NAVN)).toEqual('desember 2020');
+        });
+
+        test('Skal gi riktig rekkefølge på utbetalinger', () => {
+            const utbetalingBarn = lagUtbetalingsperiodeDetalj({
+                person: mockBarn,
+                ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
+            });
+
+            const utbetalingSmåbarnstillegg = lagUtbetalingsperiodeDetalj({
+                person: mockSøker(),
+                ytelseType: YtelseType.SMÅBARNSTILLEGG,
+            });
+
+            const utbetalingUtvidet = lagUtbetalingsperiodeDetalj({
+                person: mockSøker(),
+                ytelseType: YtelseType.UTVIDET_BARNETRYGD,
+            });
+
+            const sorterteUtbetalingsperiodedetaljer = [
+                utbetalingBarn,
+                utbetalingSmåbarnstillegg,
+                utbetalingUtvidet,
+            ].sort(sorterUtbetaling);
+
+            expect(sorterteUtbetalingsperiodedetaljer[0]).toEqual(utbetalingUtvidet);
+            expect(sorterteUtbetalingsperiodedetaljer[1]).toEqual(utbetalingSmåbarnstillegg);
+            expect(sorterteUtbetalingsperiodedetaljer[2]).toEqual(utbetalingBarn);
         });
     });
 });

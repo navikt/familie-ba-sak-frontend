@@ -26,6 +26,7 @@ import {
     BehandlerRolle,
     BehandlingStatus,
     BehandlingSteg,
+    Behandlingstype,
     BehandlingÅrsak,
     hentStegNummer,
     IBehandling,
@@ -122,6 +123,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         sendTilBeslutterNesteOnClick((visModal: boolean) => settVisModal(visModal));
     };
 
+    const erBehandlingMedVedtaksbrevutsending =
+        åpenBehandling.type !== Behandlingstype.TEKNISK_ENDRING &&
+        åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING;
+
     return (
         <Skjemasteg
             tittel={'Vedtak'}
@@ -135,7 +140,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
             className={'vedtak'}
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
         >
-            {åpenBehandling.årsak !== BehandlingÅrsak.TEKNISK_OPPHØR ? (
+            {erBehandlingMedVedtaksbrevutsending ? (
                 <>
                     <PdfVisningModal
                         onRequestOpen={() => {
@@ -220,11 +225,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 </>
             ) : (
                 <AlertStripeInfo>
-                    {`Den forrige behandlingen er annullert, og det er ${
-                        åpenBehandling.status === BehandlingStatus.AVSLUTTET
-                            ? 'ikke sendt ut brev til søker'
-                            : 'ikke generert brev'
-                    }`}
+                    {`Du er inne på en teknisk behandling og det finnes ingen vedtaksbrev.`}
                 </AlertStripeInfo>
             )}
         </Skjemasteg>

@@ -1,4 +1,6 @@
+import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
 import { IOppgave } from './oppgave';
+import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 
 export enum BehandlingKategori {
     NASJONAL = 'NASJONAL',
@@ -67,11 +69,11 @@ export const behandlingstemaer: Record<Behandlingstema, IBehandlingstema> = {
 export const tilBehandlingstema = (
     kategori: BehandlingKategori,
     underkategori: BehandlingUnderkategori
-): IBehandlingstema => {
+): IBehandlingstema | undefined => {
     return Object.values(behandlingstemaer).find(
         (tema: IBehandlingstema) =>
             tema.kategori === kategori && tema.underkategori === underkategori
-    ) as IBehandlingstema;
+    );
 };
 
 export const kodeTilBehandlingUnderkategoriMap: Record<string, BehandlingUnderkategori> = {
@@ -93,4 +95,14 @@ export const utredBehandlingstemaFraOppgave = (oppgave: IOppgave): IBehandlingst
               kodeTilBehandlingUnderkategoriMap[gjelder]
           )
         : undefined;
+};
+
+export const hentKategorierHvisVisningBehandling = (
+    behandling?: VisningBehandling | ITilbakekrevingsbehandling
+) => {
+    const kategori: BehandlingKategori | undefined = (behandling as VisningBehandling)?.kategori;
+    const underkategori: BehandlingUnderkategori | undefined = (behandling as VisningBehandling)
+        ?.underkategori;
+
+    return kategori && underkategori ? { kategori, underkategori } : undefined;
 };
