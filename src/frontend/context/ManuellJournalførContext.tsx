@@ -145,11 +145,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }),
             avsenderIdent: useFelt<string>({
                 verdi: '',
-                valideringsfunksjon: (felt: FeltState<string>) => {
-                    return felt.verdi !== ''
-                        ? ok(felt)
-                        : feil(felt, 'Avsenders ident er ikke satt');
-                },
             }),
             knyttTilNyBehandling,
             behandlingstype,
