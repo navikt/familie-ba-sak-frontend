@@ -2,6 +2,7 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
+    erUtdypendeVilkårsvurderingerGyldig,
     IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
@@ -91,9 +92,6 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
                                     erEksplisittAvslagPåSøknad:
                                         vilkårResultat.erEksplisittAvslagPåSøknad,
-                                    erSkjønnsmessigVurdert: vilkårResultat.erSkjønnsmessigVurdert,
-                                    erMedlemskapVurdert: vilkårResultat.erMedlemskapVurdert,
-                                    erDeltBosted: vilkårResultat.erDeltBosted,
                                     avslagBegrunnelser: lagInitiellFelt(
                                         vilkårResultat.avslagBegrunnelser,
                                         erAvslagBegrunnelserGyldig
@@ -101,6 +99,10 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                     vurderesEtter: vilkårResultat.vurderesEtter,
+                                    utdypendeVilkårsvurderinger: lagInitiellFelt(
+                                        vilkårResultat.utdypendeVilkårsvurderinger,
+                                        erUtdypendeVilkårsvurderingerGyldig
+                                    ),
                                 },
                                 validerVilkår
                             )

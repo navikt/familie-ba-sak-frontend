@@ -176,14 +176,7 @@ export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avh
         return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må fylle inn en begrunnelse');
     }
 
-    if (
-        felt.verdi.length > 0 ||
-        !(
-            avhengigheter?.erMedlemskapVurdert ||
-            avhengigheter?.erSkjønnsmessigVurdert ||
-            avhengigheter?.erDeltBosted
-        )
-    ) {
+    if (felt.verdi.length > 0 || avhengigheter?.utdypendeVilkårsvurderinger.length === 0) {
         return ok(felt);
     }
 

@@ -4,7 +4,7 @@ import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-f
 import { FeltState } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../context/AppContext';
-import { IVilkårResultat } from '../../../../typer/vilkår';
+import { IVilkårResultat, UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
 
 interface Props {
     vilkår: FeltState<IVilkårResultat>;
@@ -13,24 +13,18 @@ interface Props {
     erLesevisning: boolean;
 }
 
-enum UtdypendeVilkårsvurderingOption {
-    erSkjønnsmessigVurdert = 'erSkjønnsmessigVurdert',
-    erMedlemskapVurdert = 'erMedlemskapVurdert',
-    erDeltBosted = 'erDeltBosted',
-}
-
 const erSkjønnsmessigVurdertOption = {
     label: 'Vurdering annet grunnlag',
-    value: UtdypendeVilkårsvurderingOption.erSkjønnsmessigVurdert,
+    value: UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG,
 };
 const erMedlemskapVurdertOption = {
     label: 'Vurdert medlemskap',
-    value: UtdypendeVilkårsvurderingOption.erMedlemskapVurdert,
+    value: UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP,
 };
 
 const erDeltBostedOption = {
     label: 'Delt bosted',
-    value: UtdypendeVilkårsvurderingOption.erDeltBosted,
+    value: UtdypendeVilkårsvurdering.DELT_BOSTED,
 };
 
 const utdypendeVilkårsvurderingOptions: ISelectOption[] = [
@@ -39,31 +33,49 @@ const utdypendeVilkårsvurderingOptions: ISelectOption[] = [
     erDeltBostedOption,
 ];
 
-const vilkårResultatTilSelectOptions = (vilkårResultat: IVilkårResultat): ISelectOption[] => {
-    return [
-        ...(vilkårResultat.erSkjønnsmessigVurdert ? [erSkjønnsmessigVurdertOption] : []),
-        ...(vilkårResultat.erMedlemskapVurdert ? [erMedlemskapVurdertOption] : []),
-        ...(vilkårResultat.erDeltBosted ? [erDeltBostedOption] : []),
-    ];
+const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string> = {
+    [UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG]: 'Vurdering annet grunnlag',
+    [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]: 'Vurdert medlemskap',
+    [UtdypendeVilkårsvurdering.DELT_BOSTED]: 'Delt bosted',
 };
+
+const mapUtdypendeVilkårsvurderingTilOption = (
+    utdypendeVilkårsvurdering: UtdypendeVilkårsvurdering
+): ISelectOption => ({
+    value: utdypendeVilkårsvurdering,
+    label: utdypendeVilkårsvurderingTekst[utdypendeVilkårsvurdering],
+});
+const mapOptionTilUtdypendeVilkårsvurdering = (option: ISelectOption): UtdypendeVilkårsvurdering =>
+    option.value as UtdypendeVilkårsvurdering;
+
+const vilkårResultatTilSelectOptions = (vilkårResultat: IVilkårResultat): ISelectOption[] =>
+    vilkårResultat.utdypendeVilkårsvurderinger.verdi.map(mapUtdypendeVilkårsvurderingTilOption);
 
 const tømUtdypendeVilkårsvurderinger = (vilkårResultat: IVilkårResultat): IVilkårResultat => ({
     ...vilkårResultat,
-    erSkjønnsmessigVurdert: false,
-    erMedlemskapVurdert: false,
-    erDeltBosted: false,
+    utdypendeVilkårsvurderinger: {
+        ...vilkårResultat.utdypendeVilkårsvurderinger,
+        verdi: [],
+    },
 });
 
 function oppdaterUtdypendeVilkårsvurdering(
     action: ActionMeta<ISelectOption>,
-    vilkår: IVilkårResultat,
-    nyVerdi: boolean
-) {
+    vilkår: IVilkårResultat
+): IVilkårResultat {
     const { option } = action;
-    return {
-        ...vilkår,
-        [option?.value as string]: nyVerdi,
-    };
+    return option
+        ? {
+              ...vilkår,
+              utdypendeVilkårsvurderinger: {
+                  ...vilkår.utdypendeVilkårsvurderinger,
+                  verdi: [
+                      ...vilkår.utdypendeVilkårsvurderinger.verdi,
+                      mapOptionTilUtdypendeVilkårsvurdering(option),
+                  ],
+              },
+          }
+        : vilkår;
 }
 
 export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
@@ -80,13 +92,13 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
             case 'set-value':
                 settRedigerbartVilkår({
                     ...vilkår,
-                    verdi: oppdaterUtdypendeVilkårsvurdering(action, vilkår.verdi, true),
+                    verdi: oppdaterUtdypendeVilkårsvurdering(action, vilkår.verdi),
                 });
                 break;
             case 'deselect-option':
                 settRedigerbartVilkår({
                     ...vilkår,
-                    verdi: oppdaterUtdypendeVilkårsvurdering(action, vilkår.verdi, false),
+                    verdi: oppdaterUtdypendeVilkårsvurdering(action, vilkår.verdi),
                 });
                 break;
             case 'remove-value':

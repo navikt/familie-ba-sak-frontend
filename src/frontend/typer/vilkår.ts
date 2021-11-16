@@ -1,4 +1,4 @@
-import { FeltState } from '@navikt/familie-skjema';
+import { Avhengigheter, feil, FeltState, ok } from '@navikt/familie-skjema';
 
 import { FamilieIsoDate, IPeriode } from '../utils/kalender';
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
@@ -75,11 +75,9 @@ export interface IVilkårResultat {
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
     erEksplisittAvslagPåSøknad?: boolean;
-    erSkjønnsmessigVurdert: boolean;
-    erMedlemskapVurdert: boolean;
-    erDeltBosted: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
     vurderesEtter: Regelverk | null;
+    utdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]>;
 }
 
 // Vilkårsvurdering typer for api
@@ -106,12 +104,10 @@ export interface IRestVilkårResultat {
     periodeTom?: FamilieIsoDate;
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
-    erSkjønnsmessigVurdert: boolean; // Vurdering annet grunnlag
-    erMedlemskapVurdert: boolean; // Vurdert medlemskap
-    erDeltBosted: boolean; // Delt bosted
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
     vurderesEtter: Regelverk | null;
+    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[];
 }
 
 export interface IRestAnnenVurdering {
@@ -203,4 +199,20 @@ export const annenVurderingConfig: Record<AnnenVurderingType, IAnnenVurderingCon
         parterDetteGjelderFor: [PersonType.BARN, PersonType.SØKER, PersonType.ANNENPART],
         spørsmål: () => 'Er opplysningsplikten oppfylt?',
     },
+};
+
+export enum UtdypendeVilkårsvurdering {
+    VURDERING_ANNET_GRUNNLAG = 'VURDERING_ANNET_GRUNNLAG',
+    VURDERT_MEDLEMSKAP = 'VURDERT_MEDLEMSKAP',
+    DELT_BOSTED = 'DELT_BOSTED',
+}
+
+export const erUtdypendeVilkårsvurderingerGyldig = (
+    felt: FeltState<UtdypendeVilkårsvurdering[]>,
+    avhengingheter?: Avhengigheter
+): FeltState<UtdypendeVilkårsvurdering[]> => {
+    // TODO: Validation regler for hvilke utdypende vilkårsvurderinger som er lov?
+    return Array.isArray(felt)
+        ? ok(felt)
+        : feil(felt, 'TODO: Utdypende vilkårsvurderinger er ikke gyldig');
 };
