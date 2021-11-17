@@ -2,7 +2,6 @@ import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
 import {
-    erUtdypendeVilkårsvurderingerGyldig,
     IPersonResultat,
     IRestPersonResultat,
     IRestVilkårResultat,
@@ -23,6 +22,7 @@ import {
     ikkeValider,
     lagInitiellFelt,
     erBegrunnelseGyldig,
+    erUtdypendeVilkårsvurderingerGyldig,
 } from '../../utils/validators';
 import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
@@ -53,7 +53,7 @@ export const mapFraRestVilkårsvurderingTilUi = (
 export const mapFraRestPersonResultatTilPersonResultat = (
     personResultater: IRestPersonResultat[],
     personer: IGrunnlagPerson[]
-) => {
+): IPersonResultat[] => {
     return personResultater
         .map((personResultat: IRestPersonResultat) => {
             const person: IGrunnlagPerson | undefined = personer.find(

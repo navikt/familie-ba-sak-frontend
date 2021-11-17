@@ -1,9 +1,8 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import { ActionMeta, FamilieReactSelect, ISelectOption } from '@navikt/familie-form-elements';
 import { FeltState } from '@navikt/familie-skjema';
 
-import { useApp } from '../../../../context/AppContext';
 import { IVilkårResultat, UtdypendeVilkårsvurdering } from '../../../../typer/vilkår';
 
 interface Props {
@@ -81,10 +80,10 @@ function oppdaterUtdypendeVilkårsvurdering(
 export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     vilkår,
     settRedigerbartVilkår,
-    settVisFeilmeldingerForEttVilkår,
+    // settVisFeilmeldingerForEttVilkår,
     erLesevisning,
 }) => {
-    const { toggles } = useApp();
+    // const { toggles } = useApp();
 
     const håndterEndring = (action: ActionMeta<ISelectOption>) => {
         switch (action.action) {

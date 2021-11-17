@@ -9,7 +9,7 @@ import {
 
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
-import { Resultat, VilkårType } from '../typer/vilkår';
+import { Resultat, UtdypendeVilkårsvurdering, VilkårType } from '../typer/vilkår';
 import {
     erEtter,
     erFør,
@@ -184,4 +184,27 @@ export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avh
         felt,
         'Du har haket av under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
     );
+};
+
+/*
+Avhengigheter:
+personType: PersonType
+vilkårType: VilkårType
+resultat: Resultat,
+vurderesEtter: Regelverk | null,
+*/
+export const erUtdypendeVilkårsvurderingerGyldig = (
+    felt: FeltState<UtdypendeVilkårsvurdering[]>,
+    avhengingheter?: Avhengigheter
+): FeltState<UtdypendeVilkårsvurdering[]> => {
+    // TODO: Validation regler for hvilke utdypende vilkårsvurderinger som er lov?
+
+    console.info(
+        'avhengigheter skal inneholde: personType, vilkårType, resultat og regelverk | null'
+    );
+    console.info(JSON.stringify(avhengingheter));
+
+    return Array.isArray(felt)
+        ? ok(felt)
+        : feil(felt, 'TODO: Utdypende vilkårsvurderinger er ikke gyldig');
 };

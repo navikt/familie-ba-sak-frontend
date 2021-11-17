@@ -6,6 +6,7 @@ import {
     IPersonResultat,
     IVilkårResultat,
     Resultat,
+    UtdypendeVilkårsvurdering,
     VilkårType,
 } from '../../typer/vilkår';
 import { IPeriode } from '../../utils/kalender';
@@ -26,9 +27,7 @@ export const validerVilkår = (
     const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
         nyttVilkårResultat.verdi.begrunnelse,
         {
-            erSkjønnsmessigVurdert: nyttVilkårResultat.verdi.erSkjønnsmessigVurdert,
-            erMedlemskapVurdert: nyttVilkårResultat.verdi.erMedlemskapVurdert,
-            erDeltBosted: nyttVilkårResultat.verdi.erDeltBosted,
+            utdypendeVilkårsvurderinger: nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger.verdi,
             vilkårType: nyttVilkårResultat.verdi.vilkårType,
         }
     );
@@ -43,11 +42,23 @@ export const validerVilkår = (
             { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
         );
 
+    const nyeUtdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]> =
+        nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger.valider(
+            nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger,
+            {
+                personType: avhengigheter?.person.type,
+                vilkårType: nyttVilkårResultat.verdi.vilkårType,
+                resultat: nyttVilkårResultat.verdi.resultat.verdi,
+                vurderesEtter: nyttVilkårResultat.verdi.vurderesEtter,
+            }
+        );
+
     const gyldigVilkår: boolean =
         nyPeriode.valideringsstatus === Valideringsstatus.OK &&
         nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
         nyttResultat.valideringsstatus === Valideringsstatus.OK &&
-        nyeAvslagbegrunnelser.valideringsstatus === Valideringsstatus.OK;
+        nyeAvslagbegrunnelser.valideringsstatus === Valideringsstatus.OK &&
+        nyeUtdypendeVilkårsvurderinger.valideringsstatus === Valideringsstatus.OK;
 
     const nyVerdi: IVilkårResultat = {
         ...nyttVilkårResultat.verdi,

@@ -1,4 +1,4 @@
-import { Avhengigheter, feil, FeltState, ok } from '@navikt/familie-skjema';
+import { FeltState } from '@navikt/familie-skjema';
 
 import { FamilieIsoDate, IPeriode } from '../utils/kalender';
 import { BehandlingSteg, BehandlingStegStatus } from './behandling';
@@ -206,13 +206,3 @@ export enum UtdypendeVilkårsvurdering {
     VURDERT_MEDLEMSKAP = 'VURDERT_MEDLEMSKAP',
     DELT_BOSTED = 'DELT_BOSTED',
 }
-
-export const erUtdypendeVilkårsvurderingerGyldig = (
-    felt: FeltState<UtdypendeVilkårsvurdering[]>,
-    avhengingheter?: Avhengigheter
-): FeltState<UtdypendeVilkårsvurdering[]> => {
-    // TODO: Validation regler for hvilke utdypende vilkårsvurderinger som er lov?
-    return Array.isArray(felt)
-        ? ok(felt)
-        : feil(felt, 'TODO: Utdypende vilkårsvurderinger er ikke gyldig');
-};
