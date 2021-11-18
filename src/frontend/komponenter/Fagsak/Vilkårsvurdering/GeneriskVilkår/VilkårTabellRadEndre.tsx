@@ -99,7 +99,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
-        settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
+        settRedigerbartVilkår(validerVilkår(endretVilkår, { person, toggles }));
     };
 
     const radioOnChange = (resultat: Resultat) => {
@@ -125,7 +125,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     const onClickVilkårFerdig = () => {
-        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person });
+        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person, toggles });
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
             (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent
@@ -316,10 +316,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     </FamilieSelect>
                 )}
                 <UtdypendeVilkårsvurderingMultiselect
-                    vilkår={redigerbartVilkår}
-                    settRedigerbartVilkår={settRedigerbartVilkår}
-                    settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                    redigerbartVilkår={redigerbartVilkår}
+                    validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     erLesevisning={leseVisning}
+                    visFeilmeldinger={skalViseFeilmeldinger()}
+                    personType={person.type}
                 />
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     årsakErSøknad && (

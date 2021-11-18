@@ -1,5 +1,6 @@
 import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
+import { IToggles, ToggleNavn } from '../../typer/toggles';
 import { VedtakBegrunnelse } from '../../typer/vedtak';
 import {
     IAnnenVurdering,
@@ -10,6 +11,7 @@ import {
     VilkårType,
 } from '../../typer/vilkår';
 import { IPeriode } from '../../utils/kalender';
+import { UtdypendeVilkRsvurderingAvhengigheter } from '../../utils/utdypendeVilkårsvurderinger';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
@@ -50,7 +52,9 @@ export const validerVilkår = (
                 vilkårType: nyttVilkårResultat.verdi.vilkårType,
                 resultat: nyttVilkårResultat.verdi.resultat.verdi,
                 vurderesEtter: nyttVilkårResultat.verdi.vurderesEtter,
-            }
+                brukErDeltBosted: avhengigheter?.toggles[ToggleNavn.brukErDeltBosted],
+                brukEøs: avhengigheter?.toggles[ToggleNavn.brukEøs],
+            } as UtdypendeVilkRsvurderingAvhengigheter
         );
 
     const gyldigVilkår: boolean =
@@ -99,13 +103,19 @@ export const validerAnnenVurdering = (
         : feil({ ...nyttAnnenVurdering, verdi: nyVerdi }, '');
 };
 
-export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonResultat[] => {
+export const kjørValidering = (
+    vilkårsvurdering: IPersonResultat[],
+    toggles: IToggles
+): IPersonResultat[] => {
     return vilkårsvurdering.map((personResultat: IPersonResultat) => {
         return {
             ...personResultat,
             vilkårResultater: personResultat.vilkårResultater.map(
                 (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
-                    return validerVilkår(vilkårResultat, { person: personResultat.person });
+                    return validerVilkår(vilkårResultat, {
+                        person: personResultat.person,
+                        toggles,
+                    });
                 }
             ),
             andreVurderinger: personResultat.andreVurderinger.map(

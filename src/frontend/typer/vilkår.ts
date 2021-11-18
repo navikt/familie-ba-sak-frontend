@@ -77,6 +77,9 @@ export interface IVilkårResultat {
     erEksplisittAvslagPåSøknad?: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
     vurderesEtter: Regelverk | null;
+    // TODO: Det er ikke sikkert det gir mening å validere utdypende vilkårsvurderinger.
+    //  Ettersom hvis det er en feil, så er det pga bug, og ikke noe brukeren har fylt ut feil eller mangler å fylle ut...
+    //  kanskje endre til bare <UtdypendeVilkårsvurderinger[]> ?
     utdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]>;
 }
 

@@ -1,6 +1,7 @@
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
+import { IToggles } from '../../typer/toggles';
 import {
     IPersonResultat,
     IRestPersonResultat,
@@ -9,20 +10,20 @@ import {
     Resultat,
 } from '../../typer/vilkår';
 import {
-    periodeDiff,
-    nyPeriode,
-    kalenderDiff,
-    kalenderDatoTilDate,
     kalenderDato,
+    kalenderDatoTilDate,
+    kalenderDiff,
+    nyPeriode,
+    periodeDiff,
 } from '../../utils/kalender';
 import {
     erAvslagBegrunnelserGyldig,
+    erBegrunnelseGyldig,
     erPeriodeGyldig,
     erResultatGyldig,
     ikkeValider,
     lagInitiellFelt,
-    erBegrunnelseGyldig,
-    erUtdypendeVilkårsvurderingerGyldig,
+    validerUtdypendeVilkårsvurderingerFelt,
 } from '../../utils/validators';
 import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
@@ -41,13 +42,18 @@ export const sorterVilkårsvurderingForPerson = (
  *
  * @param personResultater perioder fra api
  * @param personer personer på behandlingen
+ * @param toggles toggles
  */
 
 export const mapFraRestVilkårsvurderingTilUi = (
     personResultater: IRestPersonResultat[],
-    personer: IGrunnlagPerson[]
+    personer: IGrunnlagPerson[],
+    toggles: IToggles
 ): IPersonResultat[] => {
-    return kjørValidering(mapFraRestPersonResultatTilPersonResultat(personResultater, personer));
+    return kjørValidering(
+        mapFraRestPersonResultatTilPersonResultat(personResultater, personer),
+        toggles
+    );
 };
 
 export const mapFraRestPersonResultatTilPersonResultat = (
@@ -101,7 +107,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     vurderesEtter: vilkårResultat.vurderesEtter,
                                     utdypendeVilkårsvurderinger: lagInitiellFelt(
                                         vilkårResultat.utdypendeVilkårsvurderinger,
-                                        erUtdypendeVilkårsvurderingerGyldig
+                                        validerUtdypendeVilkårsvurderingerFelt
                                     ),
                                 },
                                 validerVilkår

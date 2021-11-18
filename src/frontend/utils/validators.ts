@@ -1,6 +1,6 @@
 import {
-    feil,
     Avhengigheter,
+    feil,
     FeltState,
     ok,
     ValiderFelt,
@@ -23,6 +23,10 @@ import {
     TIDENES_ENDE,
     TIDENES_MORGEN,
 } from './kalender';
+import {
+    bestemMuligeUtdypendeVilkårsvurderinger,
+    UtdypendeVilkRsvurderingAvhengigheter,
+} from './utdypendeVilkårsvurderinger';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -186,25 +190,43 @@ export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avh
     );
 };
 
-/*
-Avhengigheter:
-personType: PersonType
-vilkårType: VilkårType
-resultat: Resultat,
-vurderesEtter: Regelverk | null,
-*/
-export const erUtdypendeVilkårsvurderingerGyldig = (
+export const validerUtdypendeVilkårsvurderingerFelt = (
     felt: FeltState<UtdypendeVilkårsvurdering[]>,
-    avhengingheter?: Avhengigheter
+    avhengigheter?: Avhengigheter
 ): FeltState<UtdypendeVilkårsvurdering[]> => {
-    // TODO: Validation regler for hvilke utdypende vilkårsvurderinger som er lov?
-
-    console.info(
-        'avhengigheter skal inneholde: personType, vilkårType, resultat og regelverk | null'
-    );
-    console.info(JSON.stringify(avhengingheter));
-
-    return Array.isArray(felt)
+    return erUtdypendeVilkårsvurderingerGyldig(felt.verdi, avhengigheter)
         ? ok(felt)
-        : feil(felt, 'TODO: Utdypende vilkårsvurderinger er ikke gyldig');
+        : feil(felt, 'Utdypende vilkårsvurderinger er ikke gyldig.');
+};
+
+export const erUtdypendeVilkårsvurderingerGyldig = (
+    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[],
+    avhengigheter?: Avhengigheter
+): boolean => {
+    if (
+        !(
+            avhengigheter &&
+            avhengigheter.personType !== undefined &&
+            avhengigheter.vilkårType !== undefined &&
+            avhengigheter.resultat !== undefined &&
+            avhengigheter.vurderesEtter !== undefined &&
+            avhengigheter.brukEøs !== undefined &&
+            avhengigheter.brukErDeltBosted !== undefined
+        )
+    ) {
+        throw new Error(
+            'validators.ts: erUtdypendeVilkårsvurderingerGyldig mangler nødvendige avhengigheter'
+        );
+    }
+    const typedAvhengigheter = {
+        ...(avhengigheter as UtdypendeVilkRsvurderingAvhengigheter),
+    };
+
+    const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
+        bestemMuligeUtdypendeVilkårsvurderinger(typedAvhengigheter);
+
+    return utdypendeVilkårsvurderinger.reduce((acc: boolean, curr: UtdypendeVilkårsvurdering) => {
+        if (!acc) return false;
+        return muligeUtdypendeVilkårsvurderinger.find(e => e === curr) !== undefined;
+    }, true);
 };
