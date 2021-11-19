@@ -52,6 +52,7 @@ export enum BehandlingÅrsak {
     KORREKSJON_VEDTAKSBREV = 'KORREKSJON_VEDTAKSBREV',
     OMREGNING_6ÅR = 'OMREGNING_6ÅR',
     OMREGNING_18ÅR = 'OMREGNING_18ÅR',
+    SMÅBARNSTILLEGG = 'SMÅBARNSTILLEGG',
     SATSENDRING = 'SATSENDRING',
     MIGRERING = 'MIGRERING',
 }
@@ -68,6 +69,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     KORREKSJON_VEDTAKSBREV: 'Korrigere vedtak med egen brevmal',
     OMREGNING_6ÅR: 'Omregning 6 år',
     OMREGNING_18ÅR: 'Omregning 18 år',
+    SMÅBARNSTILLEGG: 'Småbarnstillegg',
     SATSENDRING: 'Satsendring',
     MIGRERING: 'Migrering',
     /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
