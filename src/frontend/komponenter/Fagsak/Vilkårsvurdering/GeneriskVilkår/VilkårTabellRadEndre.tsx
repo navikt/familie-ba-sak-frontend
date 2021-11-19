@@ -124,7 +124,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     };
 
     const onClickVilkårFerdig = () => {
-        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person, toggles });
+        const validertVilkår = redigerbartVilkår.valider(redigerbartVilkår, { person });
 
         const vilkårsvurderingForPerson = vilkårsvurdering.find(
             (personResultat: IPersonResultat) => personResultat.personIdent === person.personIdent

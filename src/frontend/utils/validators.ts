@@ -193,40 +193,12 @@ export const erBegrunnelseGyldig = (
     );
 };
 
-export const validerUtdypendeVilkårsvurderingerFelt = (
-    felt: FeltState<UtdypendeVilkårsvurdering[]>,
-    avhengigheter?: Avhengigheter
-): FeltState<UtdypendeVilkårsvurdering[]> => {
-    return erUtdypendeVilkårsvurderingerGyldig(felt.verdi, avhengigheter)
-        ? ok(felt)
-        : feil(felt, 'Utdypende vilkårsvurderinger er ikke gyldig.');
-};
-
 export const erUtdypendeVilkårsvurderingerGyldig = (
     utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[],
-    avhengigheter?: Avhengigheter
+    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter
 ): boolean => {
-    if (
-        !(
-            avhengigheter &&
-            avhengigheter.personType !== undefined &&
-            avhengigheter.vilkårType !== undefined &&
-            avhengigheter.resultat !== undefined &&
-            avhengigheter.vurderesEtter !== undefined &&
-            avhengigheter.brukEøs !== undefined &&
-            avhengigheter.brukErDeltBosted !== undefined
-        )
-    ) {
-        throw new Error(
-            'validators.ts: erUtdypendeVilkårsvurderingerGyldig mangler nødvendige avhengigheter'
-        );
-    }
-    const typedAvhengigheter = {
-        ...(avhengigheter as UtdypendeVilkRsvurderingAvhengigheter),
-    };
-
     const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
-        bestemMuligeUtdypendeVilkårsvurderinger(typedAvhengigheter);
+        bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
 
     return utdypendeVilkårsvurderinger.reduce((acc: boolean, curr: UtdypendeVilkårsvurdering) => {
         if (!acc) return false;
