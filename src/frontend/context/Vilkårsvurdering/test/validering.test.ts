@@ -4,18 +4,6 @@ import { kjørValidering } from '../validering';
 import { mapFraRestPersonResultatTilPersonResultat } from '../vilkårsvurdering';
 import { genererPerson, genererPersonresultat } from './TestData';
 
-const allTogglesOn = {
-    visTekniskOpphør: true,
-    kanBehandleTekniskEndring: true,
-    tilbakekreving: true,
-    brukErDeltBosted: true,
-    brukBegrunnelserFraSanity: true,
-    kanManueltKorrigereMedVedtaksbrev: true,
-    kanEndretUtbetalingAndel: true,
-    kanBehandleUtvidet: true,
-    brukEøs: true,
-};
-
 describe('vilkårsvurdering/validering', () => {
     describe('validering', () => {
         test('List med to andrevurderinger som begge validerer OK', () => {
@@ -23,7 +11,7 @@ describe('vilkårsvurdering/validering', () => {
                 [genererPersonresultat('OPPFYLT', 'IKKE_OPPFYLT')],
                 [genererPerson]
             );
-            const validert = kjørValidering(p, allTogglesOn);
+            const validert = kjørValidering(p);
             expect(!!validert).toBe(true);
 
             const anneVurderingMedOKValidering = validert
@@ -40,7 +28,7 @@ describe('vilkårsvurdering/validering', () => {
                 [genererPersonresultat('IKKE_VURDERT', 'IKKE_VURDERT')],
                 [genererPerson]
             );
-            const validert = kjørValidering(p, allTogglesOn);
+            const validert = kjørValidering(p);
             expect(!!validert).toBe(true);
             const anneVurderingMedOKValidering = validert
                 ?.flatMap(personResultat => personResultat.andreVurderinger)
@@ -56,7 +44,7 @@ describe('vilkårsvurdering/validering', () => {
                 [genererPersonresultat('OPPFYLT', 'IKKE_VURDERT')],
                 [genererPerson]
             );
-            const validert = kjørValidering(p, allTogglesOn);
+            const validert = kjørValidering(p);
             expect(!!validert).toBe(true);
 
             const anneVurderingMedOKValidering = validert

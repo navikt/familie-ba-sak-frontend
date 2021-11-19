@@ -32,7 +32,6 @@ import {
     Regelverk,
     Resultat,
     resultater,
-    UtdypendeVilkårsvurdering,
     VilkårType,
 } from '../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../utils/vilkår';
@@ -99,7 +98,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
-        settRedigerbartVilkår(validerVilkår(endretVilkår, { person, toggles }));
+        settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));
     };
 
     const radioOnChange = (resultat: Resultat) => {
@@ -202,16 +201,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
     const erBegrunnelsePåkrevd = (): boolean =>
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
-        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.find(
-            e => e === UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG
-        ) !== undefined ||
-        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.find(
-            e => e === UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP
-        ) !== undefined ||
-        (toggles[ToggleNavn.brukErDeltBosted] &&
-            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.find(
-                e => e === UtdypendeVilkårsvurdering.DELT_BOSTED
-            ) !== undefined);
+        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.length > 0;
 
     return (
         <SkjemaGruppe
@@ -319,7 +309,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
                     erLesevisning={leseVisning}
-                    visFeilmeldinger={skalViseFeilmeldinger()}
                     personType={person.type}
                 />
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&

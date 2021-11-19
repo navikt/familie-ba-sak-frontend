@@ -16,7 +16,6 @@ import { erUtdypendeVilkårsvurderingerGyldig } from '../../../../utils/validato
 interface Props {
     redigerbartVilkår: FeltState<IVilkårResultat>;
     validerOgSettRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
-    visFeilmeldinger: boolean;
     erLesevisning: boolean;
     personType: PersonType;
 }
@@ -38,10 +37,7 @@ const mapOptionTilUtdypendeVilkårsvurdering = (option: ISelectOption): Utdypend
 
 const tømUtdypendeVilkårsvurderinger = (vilkårResultat: IVilkårResultat): IVilkårResultat => ({
     ...vilkårResultat,
-    utdypendeVilkårsvurderinger: {
-        ...vilkårResultat.utdypendeVilkårsvurderinger,
-        verdi: [],
-    },
+    utdypendeVilkårsvurderinger: [],
 });
 
 function mapOgLeggTilUtdypendeVilkårsvurdering(
@@ -52,13 +48,10 @@ function mapOgLeggTilUtdypendeVilkårsvurdering(
     return option
         ? {
               ...vilkår,
-              utdypendeVilkårsvurderinger: {
+              utdypendeVilkårsvurderinger: [
                   ...vilkår.utdypendeVilkårsvurderinger,
-                  verdi: [
-                      ...vilkår.utdypendeVilkårsvurderinger.verdi,
-                      mapOptionTilUtdypendeVilkårsvurdering(option),
-                  ],
-              },
+                  mapOptionTilUtdypendeVilkårsvurdering(option),
+              ],
           }
         : vilkår;
 }
@@ -66,7 +59,6 @@ function mapOgLeggTilUtdypendeVilkårsvurdering(
 export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     redigerbartVilkår,
     validerOgSettRedigerbartVilkår,
-    visFeilmeldinger,
     erLesevisning,
     personType,
 }) => {
@@ -88,13 +80,13 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     useEffect(() => {
         if (
             !erUtdypendeVilkårsvurderingerGyldig(
-                redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
                 utdypendeVilkårsvurderingAvhengigheter
             )
         ) {
             validerOgSettRedigerbartVilkår({
                 ...redigerbartVilkår,
-                verdi: tømUtdypendeVilkårsvurderinger(redigerbartVilkår.verdi),
+                verdi: tømUtdypendeVilkårsvurderinger(redigerbartVilkår.verdi), // TODO: Muligens bedre å bare filtrere ut de som ikke lenger er lov å ha med
             });
         }
     }, [redigerbartVilkår, utdypendeVilkårsvurderingAvhengigheter]);
@@ -115,12 +107,9 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
                     ...redigerbartVilkår,
                     verdi: {
                         ...redigerbartVilkår.verdi,
-                        utdypendeVilkårsvurderinger: {
+                        utdypendeVilkårsvurderinger: [
                             ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                            verdi: [
-                                ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-                            ].filter(e => e !== action.removedValue?.value),
-                        },
+                        ].filter(e => e !== action.removedValue?.value),
                     },
                 });
                 break;
@@ -144,15 +133,10 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         <FamilieReactSelect
             id="UtdypendeVilkarsvurderingMultiselect"
             label="Utdypende vilkårsvurdering"
-            value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi.map(
+            value={redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.map(
                 mapUtdypendeVilkårsvurderingTilOption
             )}
             placeholder={'Velg utdypende vilkårsvurdering(er)'}
-            feil={
-                visFeilmeldinger
-                    ? redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.feilmelding
-                    : undefined
-            }
             propSelectStyles={{
                 menu: (provided: CSSProperties) => ({
                     ...provided,

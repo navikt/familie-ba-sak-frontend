@@ -1,17 +1,14 @@
 import { Avhengigheter, feil, FeltState, ok, Valideringsstatus } from '@navikt/familie-skjema';
 
-import { IToggles, ToggleNavn } from '../../typer/toggles';
 import { VedtakBegrunnelse } from '../../typer/vedtak';
 import {
     IAnnenVurdering,
     IPersonResultat,
     IVilkårResultat,
     Resultat,
-    UtdypendeVilkårsvurdering,
     VilkårType,
 } from '../../typer/vilkår';
 import { IPeriode } from '../../utils/kalender';
-import { UtdypendeVilkRsvurderingAvhengigheter } from '../../utils/utdypendeVilkårsvurderinger';
 
 export const validerVilkår = (
     nyttVilkårResultat: FeltState<IVilkårResultat>,
@@ -29,7 +26,7 @@ export const validerVilkår = (
     const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
         nyttVilkårResultat.verdi.begrunnelse,
         {
-            utdypendeVilkårsvurderinger: nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger.verdi,
+            utdypendeVilkårsvurderinger: nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger,
             vilkårType: nyttVilkårResultat.verdi.vilkårType,
         }
     );
@@ -44,25 +41,11 @@ export const validerVilkår = (
             { erEksplisittAvslagPåSøknad: nyttVilkårResultat.verdi.erEksplisittAvslagPåSøknad }
         );
 
-    const nyeUtdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]> =
-        nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger.valider(
-            nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger,
-            {
-                personType: avhengigheter?.person.type,
-                vilkårType: nyttVilkårResultat.verdi.vilkårType,
-                resultat: nyttVilkårResultat.verdi.resultat.verdi,
-                vurderesEtter: nyttVilkårResultat.verdi.vurderesEtter,
-                brukErDeltBosted: avhengigheter?.toggles[ToggleNavn.brukErDeltBosted],
-                brukEøs: avhengigheter?.toggles[ToggleNavn.brukEøs],
-            } as UtdypendeVilkRsvurderingAvhengigheter
-        );
-
     const gyldigVilkår: boolean =
         nyPeriode.valideringsstatus === Valideringsstatus.OK &&
         nyBegrunnelse.valideringsstatus === Valideringsstatus.OK &&
         nyttResultat.valideringsstatus === Valideringsstatus.OK &&
-        nyeAvslagbegrunnelser.valideringsstatus === Valideringsstatus.OK &&
-        nyeUtdypendeVilkårsvurderinger.valideringsstatus === Valideringsstatus.OK;
+        nyeAvslagbegrunnelser.valideringsstatus === Valideringsstatus.OK;
 
     const nyVerdi: IVilkårResultat = {
         ...nyttVilkårResultat.verdi,
@@ -103,10 +86,7 @@ export const validerAnnenVurdering = (
         : feil({ ...nyttAnnenVurdering, verdi: nyVerdi }, '');
 };
 
-export const kjørValidering = (
-    vilkårsvurdering: IPersonResultat[],
-    toggles: IToggles
-): IPersonResultat[] => {
+export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonResultat[] => {
     return vilkårsvurdering.map((personResultat: IPersonResultat) => {
         return {
             ...personResultat,
@@ -114,7 +94,6 @@ export const kjørValidering = (
                 (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
                     return validerVilkår(vilkårResultat, {
                         person: personResultat.person,
-                        toggles,
                     });
                 }
             ),

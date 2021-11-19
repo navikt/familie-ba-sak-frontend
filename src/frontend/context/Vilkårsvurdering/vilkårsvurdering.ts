@@ -1,7 +1,6 @@
 import { FeltState, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { IGrunnlagPerson, PersonTypeVisningsRangering } from '../../typer/person';
-import { IToggles } from '../../typer/toggles';
 import {
     IPersonResultat,
     IRestPersonResultat,
@@ -23,7 +22,6 @@ import {
     erResultatGyldig,
     ikkeValider,
     lagInitiellFelt,
-    validerUtdypendeVilkårsvurderingerFelt,
 } from '../../utils/validators';
 import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
@@ -42,18 +40,13 @@ export const sorterVilkårsvurderingForPerson = (
  *
  * @param personResultater perioder fra api
  * @param personer personer på behandlingen
- * @param toggles toggles
  */
 
 export const mapFraRestVilkårsvurderingTilUi = (
     personResultater: IRestPersonResultat[],
-    personer: IGrunnlagPerson[],
-    toggles: IToggles
+    personer: IGrunnlagPerson[]
 ): IPersonResultat[] => {
-    return kjørValidering(
-        mapFraRestPersonResultatTilPersonResultat(personResultater, personer),
-        toggles
-    );
+    return kjørValidering(mapFraRestPersonResultatTilPersonResultat(personResultater, personer));
 };
 
 export const mapFraRestPersonResultatTilPersonResultat = (
@@ -105,10 +98,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                     vurderesEtter: vilkårResultat.vurderesEtter,
-                                    utdypendeVilkårsvurderinger: lagInitiellFelt(
+                                    utdypendeVilkårsvurderinger:
                                         vilkårResultat.utdypendeVilkårsvurderinger,
-                                        validerUtdypendeVilkårsvurderingerFelt
-                                    ),
                                 },
                                 validerVilkår
                             )

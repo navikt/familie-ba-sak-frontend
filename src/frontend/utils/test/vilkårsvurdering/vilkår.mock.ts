@@ -60,9 +60,7 @@ export const mockVilkårResultater = ({
     behandlingId,
     avslagBegrunnelser: mockFeltstate<VedtakBegrunnelse[]>([]),
     vurderesEtter: Regelverk.NASJONALE_REGLER,
-    utdypendeVilkårsvurderinger: mockFeltstate<UtdypendeVilkårsvurdering[]>(
-        utdypendeVilkårsvurderinger ?? []
-    ),
+    utdypendeVilkårsvurderinger: utdypendeVilkårsvurderinger ?? [],
 });
 
 interface IMockRestPersonResultat {

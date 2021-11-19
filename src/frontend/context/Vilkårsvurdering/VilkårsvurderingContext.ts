@@ -15,7 +15,6 @@ import {
     IVilkårResultat,
     VilkårType,
 } from '../../typer/vilkår';
-import { useApp } from '../AppContext';
 import { mapFraRestVilkårsvurderingTilUi } from './vilkårsvurdering';
 
 interface IProps {
@@ -31,15 +30,13 @@ export enum VilkårSubmit {
 
 const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehandling }: IProps) => {
     const { request } = useHttp();
-    const { toggles } = useApp();
     const [vilkårSubmit, settVilkårSubmit] = React.useState(VilkårSubmit.NONE);
 
     const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
         åpenBehandling
             ? mapFraRestVilkårsvurderingTilUi(
                   åpenBehandling.personResultater,
-                  åpenBehandling.personer,
-                  toggles
+                  åpenBehandling.personer
               )
             : []
     );
@@ -49,8 +46,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
             åpenBehandling
                 ? mapFraRestVilkårsvurderingTilUi(
                       åpenBehandling.personResultater,
-                      åpenBehandling.personer,
-                      toggles
+                      åpenBehandling.personer
                   )
                 : []
         );
@@ -85,7 +81,7 @@ const [VilkårsvurderingProvider, useVilkårsvurdering] = constate(({ åpenBehan
                         vilkårType: redigerbartVilkår.verdi.vilkårType,
                         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
                         utdypendeVilkårsvurderinger:
-                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
                     },
                 ],
                 andreVurderinger: [],
