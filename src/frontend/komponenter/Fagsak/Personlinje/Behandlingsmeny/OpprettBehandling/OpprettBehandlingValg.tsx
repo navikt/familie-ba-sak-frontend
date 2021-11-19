@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FamilieSelect } from '@navikt/familie-form-elements';
+import { FamilieDatovelger, FamilieSelect } from '@navikt/familie-form-elements';
 import { Felt } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../../context/AppContext';
@@ -15,6 +15,7 @@ import { FagsakStatus, IMinimalFagsak } from '../../../../../typer/fagsak';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak';
+import { FamilieIsoDate } from '../../../../../utils/kalender';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 
@@ -22,6 +23,7 @@ interface IProps {
     behandlingstype: Felt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>;
     behandlingsårsak: Felt<BehandlingÅrsak | ''>;
     behandlingstema: Felt<IBehandlingstema | undefined>;
+    migreringsdato?: Felt<FamilieIsoDate | undefined>;
     minimalFagsak?: IMinimalFagsak;
     visFeilmeldinger: boolean;
     erLesevisning?: boolean;
@@ -40,6 +42,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     behandlingstype,
     behandlingsårsak,
     behandlingstema,
+    migreringsdato = undefined,
     minimalFagsak,
     visFeilmeldinger,
     erLesevisning = false,
@@ -61,8 +64,10 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const kanOppretteTekniskEndring =
         kanOppretteRevurdering &&
         (toggles[ToggleNavn.visTekniskOpphør] || toggles[ToggleNavn.kanBehandleTekniskEndring]);
-    const kanOppretteTilbakekreving = !manuellJournalfør && toggles[ToggleNavn.tilbakekreving];
+    const kanOppretteTilbakekreving = !manuellJournalfør && !kanOppretteFørstegangsbehandling;
     const kanOppretteSmåbarnstillegg = toggles[ToggleNavn.kanBehandleSmåbarnstillegg];
+    const erMigreringFraInfotrygd =
+        !manuellJournalfør && behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return (
         <>
@@ -103,16 +108,25 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     </option>
                 )}
 
-                {kanOppretteTilbakekreving && (
-                    <option
-                        aria-selected={
-                            behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
-                        }
-                        value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
-                    >
-                        Tilbakekreving
-                    </option>
-                )}
+                <option
+                    aria-selected={
+                        behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
+                    }
+                    disabled={!kanOppretteTilbakekreving}
+                    value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
+                >
+                    Tilbakekreving
+                </option>
+
+                <option
+                    aria-selected={
+                        behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+                    }
+                    disabled={!kanOppretteRevurdering}
+                    value={Behandlingstype.MIGRERING_FRA_INFOTRYGD}
+                >
+                    Migrering fra infotrygd
+                </option>
             </FamilieSelect>
 
             {behandlingsårsak.erSynlig && (
@@ -128,32 +142,52 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     <option disabled={true} value={''}>
                         Velg
                     </option>
-                    {Object.values(BehandlingÅrsak)
-                        .filter(
-                            årsak =>
-                                årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
-                                årsak !== BehandlingÅrsak.TEKNISK_ENDRING &&
-                                årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
-                                årsak !== BehandlingÅrsak.SATSENDRING &&
-                                årsak !== BehandlingÅrsak.MIGRERING &&
-                                årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
-                                årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
-                                (årsak !== BehandlingÅrsak.SMÅBARNSTILLEGG ||
-                                    kanOppretteSmåbarnstillegg) &&
-                                (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-                                    toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev])
-                        )
-                        .map(årsak => {
-                            return (
-                                <option
-                                    key={årsak}
-                                    aria-selected={behandlingsårsak.verdi === årsak}
-                                    value={årsak}
-                                >
-                                    {behandlingÅrsak[årsak]}
-                                </option>
-                            );
-                        })}
+                    {erMigreringFraInfotrygd
+                        ? Object.values(BehandlingÅrsak)
+                              .filter(
+                                  årsak =>
+                                      (kanOppretteFørstegangsbehandling &&
+                                          årsak === BehandlingÅrsak.MIGRERING_FRA_INFOTRYGD) ||
+                                      (!kanOppretteFørstegangsbehandling &&
+                                          årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
+                              )
+                              .map(årsak => {
+                                  return (
+                                      <option
+                                          key={årsak}
+                                          aria-selected={behandlingsårsak.verdi === årsak}
+                                          value={årsak}
+                                      >
+                                          {behandlingÅrsak[årsak]}
+                                      </option>
+                                  );
+                              })
+                        : Object.values(BehandlingÅrsak)
+                              .filter(
+                                  årsak =>
+                                      årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
+                                      årsak !== BehandlingÅrsak.TEKNISK_ENDRING &&
+                                      årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
+                                      årsak !== BehandlingÅrsak.SATSENDRING &&
+                                      årsak !== BehandlingÅrsak.MIGRERING &&
+                                      årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
+                                      årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
+                                      (årsak !== BehandlingÅrsak.SMÅBARNSTILLEGG ||
+                                          kanOppretteSmåbarnstillegg) &&
+                                      (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+                                          toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev])
+                              )
+                              .map(årsak => {
+                                  return (
+                                      <option
+                                          key={årsak}
+                                          aria-selected={behandlingsårsak.verdi === årsak}
+                                          value={årsak}
+                                      >
+                                          {behandlingÅrsak[årsak]}
+                                      </option>
+                                  );
+                              })}
                 </FamilieSelect>
             )}
 
@@ -164,6 +198,15 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     visFeilmeldinger={visFeilmeldinger}
                     name="Behandlingstema"
                     label="Velg behandlingstema"
+                />
+            )}
+
+            {erMigreringFraInfotrygd && migreringsdato?.erSynlig && (
+                <FamilieDatovelger
+                    {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
+                    valgtDato={migreringsdato.verdi}
+                    label={'Ny migreringsdato'}
+                    placeholder={'DD.MM.ÅÅÅÅ'}
                 />
             )}
         </>
