@@ -71,7 +71,7 @@ const useOpprettBehandling = (
     const migreringsdato = useFelt<FamilieIsoDate | undefined>({
         verdi: undefined,
         valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
-            felt.verdi ? ok(felt) : feil(felt, 'Migreringsdato må settes.'),
+            felt.verdi ? ok(felt) : feil(felt, 'Ny migreringsdato må settes.'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;

@@ -2,6 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import navFarger from 'nav-frontend-core';
+import { Normaltekst } from 'nav-frontend-typografi';
+
 import { FamilieDatovelger, FamilieSelect } from '@navikt/familie-form-elements';
 import { Felt } from '@navikt/familie-skjema';
 
@@ -25,6 +28,12 @@ const FixedDatoVelger = styled(FamilieDatovelger)`
     .nav-datovelger__kalenderPortal__content {
         position: fixed;
     }
+`;
+
+const FeltFeilmelding = styled(Normaltekst)`
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: ${navFarger.redError};
 `;
 
 interface IProps {
@@ -74,6 +83,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         (toggles[ToggleNavn.visTekniskOpphør] || toggles[ToggleNavn.kanBehandleTekniskEndring]);
     const kanOppretteTilbakekreving = !manuellJournalfør && !kanOppretteFørstegangsbehandling;
     const kanOppretteSmåbarnstillegg = toggles[ToggleNavn.kanBehandleSmåbarnstillegg];
+    const kanOppretteMigreringFraInfotrygd =
+        kanOppretteRevurdering && toggles[ToggleNavn.kanManueltMigrereTilbakeITid];
     const erMigreringFraInfotrygd =
         !manuellJournalfør && behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
@@ -126,15 +137,17 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     Tilbakekreving
                 </option>
 
-                <option
-                    aria-selected={
-                        behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                    }
-                    disabled={!kanOppretteRevurdering}
-                    value={Behandlingstype.MIGRERING_FRA_INFOTRYGD}
-                >
-                    Migrering fra infotrygd
-                </option>
+                {kanOppretteMigreringFraInfotrygd && (
+                    <option
+                        aria-selected={
+                            behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+                        }
+                        disabled={!kanOppretteRevurdering}
+                        value={Behandlingstype.MIGRERING_FRA_INFOTRYGD}
+                    >
+                        Migrering fra infotrygd
+                    </option>
+                )}
             </FamilieSelect>
 
             {behandlingsårsak.erSynlig && (
@@ -204,12 +217,17 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             )}
 
             {erMigreringFraInfotrygd && migreringsdato?.erSynlig && (
-                <FixedDatoVelger
-                    {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
-                    valgtDato={migreringsdato.verdi}
-                    label={'Ny migreringsdato'}
-                    placeholder={'DD.MM.ÅÅÅÅ'}
-                />
+                <>
+                    <FixedDatoVelger
+                        {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
+                        valgtDato={migreringsdato.verdi}
+                        label={'Ny migreringsdato'}
+                        placeholder={'DD.MM.ÅÅÅÅ'}
+                    />
+                    {migreringsdato.feilmelding && visFeilmeldinger && (
+                        <FeltFeilmelding>{migreringsdato.feilmelding}</FeltFeilmelding>
+                    )}
+                </>
             )}
         </>
     );
