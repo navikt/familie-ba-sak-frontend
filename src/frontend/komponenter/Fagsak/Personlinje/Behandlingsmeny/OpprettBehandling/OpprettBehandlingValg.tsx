@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
 import { FamilieDatovelger, FamilieSelect } from '@navikt/familie-form-elements';
 import { Felt } from '@navikt/familie-skjema';
 
@@ -18,6 +20,12 @@ import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak
 import { FamilieIsoDate } from '../../../../../utils/kalender';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
+
+const FixedDatoVelger = styled(FamilieDatovelger)`
+    .nav-datovelger__kalenderPortal__content {
+        position: fixed;
+    }
+`;
 
 interface IProps {
     behandlingstype: Felt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>;
@@ -144,13 +152,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     </option>
                     {erMigreringFraInfotrygd
                         ? Object.values(BehandlingÅrsak)
-                              .filter(
-                                  årsak =>
-                                      (kanOppretteFørstegangsbehandling &&
-                                          årsak === BehandlingÅrsak.MIGRERING_FRA_INFOTRYGD) ||
-                                      (!kanOppretteFørstegangsbehandling &&
-                                          årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
-                              )
+                              .filter(årsak => årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
                               .map(årsak => {
                                   return (
                                       <option
@@ -202,7 +204,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
             )}
 
             {erMigreringFraInfotrygd && migreringsdato?.erSynlig && (
-                <FamilieDatovelger
+                <FixedDatoVelger
                     {...migreringsdato.hentNavInputProps(visFeilmeldinger)}
                     valgtDato={migreringsdato.verdi}
                     label={'Ny migreringsdato'}
