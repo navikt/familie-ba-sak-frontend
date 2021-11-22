@@ -12,8 +12,8 @@ const avhengigheter: UtdypendeVilkRsvurderingAvhengigheter = {
     brukEøs: true,
 };
 
-describe('Utdypende Vilkårs', () => {
-    it('kan ikke velge UtdypendeVilkårsvurdering.DELT_BOSTED for VilkårType.BOSATT_I_RIKET', () => {
+describe('Utdypende Vilkårsvurderinger', () => {
+    it('UtdypendeVilkårsvurderingerGyldig er gyldig', () => {
         const actual = erUtdypendeVilkårsvurderingerGyldig(
             [
                 UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG,
@@ -27,7 +27,7 @@ describe('Utdypende Vilkårs', () => {
         expect(actual).toBe(true);
     });
 
-    it('kan ikke velge UtdypendeVilkårsvurdering.DELT_BOSTED for VilkårType.BOSATT_I_RIKET', () => {
+    it('kan ikke velge DELT_BOSTED for VilkårType BOSATT_I_RIKET', () => {
         const actual = erUtdypendeVilkårsvurderingerGyldig(
             [
                 UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP,
