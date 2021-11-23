@@ -3,7 +3,7 @@ import React, { ReactNode, useState } from 'react';
 import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
-import { CheckboxGruppe, Radio, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Radio, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { Delete } from '@navikt/ds-icons';
 import {
@@ -37,9 +37,7 @@ import {
 import { alleRegelverk } from '../../../../utils/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import AvslagSkjema from './AvslagSkjema';
-import DeltBostedCheckbox from './DeltBostedCheckbox';
-import MedlemskapCheckbox from './MedlemskapCheckbox';
-import SkjønnsvurderingCheckbox from './SkjønnsvurderingCheckbox';
+import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
 import {
     vilkårBegrunnelseFeilmeldingId,
@@ -203,9 +201,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
 
     const erBegrunnelsePåkrevd = (): boolean =>
         redigerbartVilkår.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD ||
-        redigerbartVilkår.verdi.erSkjønnsmessigVurdert ||
-        redigerbartVilkår.verdi.erMedlemskapVurdert ||
-        (toggles[ToggleNavn.brukErDeltBosted] && redigerbartVilkår.verdi.erDeltBosted);
+        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.length > 0;
 
     return (
         <SkjemaGruppe
@@ -309,34 +305,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         )}
                     </FamilieSelect>
                 )}
-
-                {redigerbartVilkår.verdi.vilkårType !== VilkårType.UTVIDET_BARNETRYGD && (
-                    <CheckboxGruppe legend={'Utdypende vilkårsvurdering'}>
-                        <SkjønnsvurderingCheckbox
-                            redigerbartVilkår={redigerbartVilkår}
-                            settRedigerbartVilkår={settRedigerbartVilkår}
-                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                        />
-
-                        {redigerbartVilkår.verdi.vilkårType === VilkårType.BOSATT_I_RIKET && (
-                            <MedlemskapCheckbox
-                                redigerbartVilkår={redigerbartVilkår}
-                                settRedigerbartVilkår={settRedigerbartVilkår}
-                                settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                            />
-                        )}
-                        {toggles[ToggleNavn.brukErDeltBosted] &&
-                            redigerbartVilkår.verdi.vilkårType === VilkårType.BOR_MED_SØKER && (
-                                <DeltBostedCheckbox
-                                    redigerbartVilkår={redigerbartVilkår}
-                                    settRedigerbartVilkår={settRedigerbartVilkår}
-                                    settVisFeilmeldingerForEttVilkår={
-                                        settVisFeilmeldingerForEttVilkår
-                                    }
-                                />
-                            )}
-                    </CheckboxGruppe>
-                )}
+                <UtdypendeVilkårsvurderingMultiselect
+                    redigerbartVilkår={redigerbartVilkår}
+                    validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
+                    erLesevisning={leseVisning}
+                    personType={person.type}
+                />
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
                     årsakErSøknad && (
                         <AvslagSkjema

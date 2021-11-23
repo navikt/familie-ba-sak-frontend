@@ -1,6 +1,6 @@
 import {
-    feil,
     Avhengigheter,
+    feil,
     FeltState,
     ok,
     ValiderFelt,
@@ -9,7 +9,7 @@ import {
 
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
-import { Resultat, VilkårType } from '../typer/vilkår';
+import { Resultat, UtdypendeVilkårsvurdering, VilkårType } from '../typer/vilkår';
 import {
     erEtter,
     erFør,
@@ -23,6 +23,10 @@ import {
     TIDENES_ENDE,
     TIDENES_MORGEN,
 } from './kalender';
+import {
+    bestemMuligeUtdypendeVilkårsvurderinger,
+    UtdypendeVilkRsvurderingAvhengigheter,
+} from './utdypendeVilkårsvurderinger';
 
 // eslint-disable-next-line
 const validator = require('@navikt/fnrvalidator');
@@ -171,19 +175,15 @@ export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => 
     return ok(felt);
 };
 
-export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter) => {
+export const erBegrunnelseGyldig = (
+    felt: FeltState<string>,
+    avhengigheter?: Avhengigheter
+): FeltState<string> => {
     if (avhengigheter?.vilkårType === VilkårType.UTVIDET_BARNETRYGD) {
         return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må fylle inn en begrunnelse');
     }
 
-    if (
-        felt.verdi.length > 0 ||
-        !(
-            avhengigheter?.erMedlemskapVurdert ||
-            avhengigheter?.erSkjønnsmessigVurdert ||
-            avhengigheter?.erDeltBosted
-        )
-    ) {
+    if (felt.verdi.length > 0 || avhengigheter?.utdypendeVilkårsvurderinger.length === 0) {
         return ok(felt);
     }
 
@@ -191,4 +191,17 @@ export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avh
         felt,
         'Du har haket av under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
     );
+};
+
+export const erUtdypendeVilkårsvurderingerGyldig = (
+    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[],
+    avhengigheter: UtdypendeVilkRsvurderingAvhengigheter
+): boolean => {
+    const muligeUtdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[] =
+        bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
+
+    return utdypendeVilkårsvurderinger.reduce((acc: boolean, curr: UtdypendeVilkårsvurdering) => {
+        if (!acc) return false;
+        return muligeUtdypendeVilkårsvurderinger.find(e => e === curr) !== undefined;
+    }, true);
 };
