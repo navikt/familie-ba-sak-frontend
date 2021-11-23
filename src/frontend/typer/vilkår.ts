@@ -75,11 +75,9 @@ export interface IVilkårResultat {
     resultat: FeltState<Resultat>;
     vilkårType: VilkårType;
     erEksplisittAvslagPåSøknad?: boolean;
-    erSkjønnsmessigVurdert: boolean;
-    erMedlemskapVurdert: boolean;
-    erDeltBosted: boolean;
     avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
     vurderesEtter: Regelverk | null;
+    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[];
 }
 
 // Vilkårsvurdering typer for api
@@ -106,12 +104,10 @@ export interface IRestVilkårResultat {
     periodeTom?: FamilieIsoDate;
     resultat: Resultat;
     erEksplisittAvslagPåSøknad?: boolean;
-    erSkjønnsmessigVurdert: boolean;
-    erMedlemskapVurdert: boolean;
-    erDeltBosted: boolean;
     avslagBegrunnelser: VedtakBegrunnelse[];
     vilkårType: VilkårType;
     vurderesEtter: Regelverk | null;
+    utdypendeVilkårsvurderinger: UtdypendeVilkårsvurdering[];
 }
 
 export interface IRestAnnenVurdering {
@@ -204,3 +200,9 @@ export const annenVurderingConfig: Record<AnnenVurderingType, IAnnenVurderingCon
         spørsmål: () => 'Er opplysningsplikten oppfylt?',
     },
 };
+
+export enum UtdypendeVilkårsvurdering {
+    VURDERING_ANNET_GRUNNLAG = 'VURDERING_ANNET_GRUNNLAG',
+    VURDERT_MEDLEMSKAP = 'VURDERT_MEDLEMSKAP',
+    DELT_BOSTED = 'DELT_BOSTED',
+}

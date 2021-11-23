@@ -5,7 +5,7 @@ import { FeltState, useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import generator from '../../testverktøy/fnr/fnr-generator';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
-import { Resultat } from '../../typer/vilkår';
+import { Resultat, UtdypendeVilkårsvurdering } from '../../typer/vilkår';
 import { IPeriode, nyPeriode } from '../kalender';
 import {
     erBegrunnelseGyldig,
@@ -144,19 +144,17 @@ describe('utils/validators', () => {
 
     test('Begrunnelse må oppgis dersom Utdypende vilkårsvurdering er valgt', () => {
         const valideringBegrunnelseOppgitt = erBegrunnelseGyldig(nyFeltState('begrunnelse'), {
-            erMedlemskapVurdert: true,
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP],
         });
         expect(valideringBegrunnelseOppgitt.valideringsstatus).toEqual(Valideringsstatus.OK);
 
         const valideringVurderingIkkeValgt = erBegrunnelseGyldig(nyFeltState(''), {
-            erMedlemskapVurdert: false,
-            erSkjønnsmessigVurdert: false,
-            erDeltBosted: false,
+            utdypendeVilkårsvurderinger: [],
         });
         expect(valideringVurderingIkkeValgt.valideringsstatus).toEqual(Valideringsstatus.OK);
 
         const valideringMedlemskapVurdertManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
-            erMedlemskapVurdert: true,
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP],
         });
         expect(valideringMedlemskapVurdertManglerBegrunnelse.valideringsstatus).toEqual(
             Valideringsstatus.FEIL
@@ -168,7 +166,7 @@ describe('utils/validators', () => {
         const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
             nyFeltState(''),
             {
-                erSkjønnsmessigVurdert: true,
+                utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurdering.VURDERING_ANNET_GRUNNLAG],
             }
         );
         expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.valideringsstatus).toEqual(
@@ -179,7 +177,7 @@ describe('utils/validators', () => {
         );
 
         const valideringDeltBostedManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
-            erDeltBosted: true,
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurdering.DELT_BOSTED],
         });
         expect(valideringDeltBostedManglerBegrunnelse.valideringsstatus).toEqual(
             Valideringsstatus.FEIL
@@ -191,8 +189,7 @@ describe('utils/validators', () => {
         const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(
             nyFeltState(''),
             {
-                erSkjønnsmessigVurdert: false,
-                erMedlemskapVurdert: false,
+                utdypendeVilkårsvurderinger: [],
             }
         );
         expect(valideringBegrunnelseIkkeOppgittNårIngenErValgt.valideringsstatus).toEqual(

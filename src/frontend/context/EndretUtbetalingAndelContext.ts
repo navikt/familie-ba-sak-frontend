@@ -90,10 +90,15 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
                     skalFeltetVises: (avhengigheter: Avhengigheter) =>
                         avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED &&
                         periodeSkalUtbetalesTilSøkerFelt.verdi,
-                    valideringsfunksjon: felt =>
-                        typeof felt.verdi == 'boolean'
-                            ? ok(felt)
-                            : feil(felt, 'Du må velge om brukeren skal ha full sats eller ikke.'),
+                    valideringsfunksjon: (felt, avhengigheter) => {
+                        const feilmelding = 'Du må velge om brukeren skal ha full sats eller ikke.';
+                        if (avhengigheter?.årsak.verdi === IEndretUtbetalingAndelÅrsak.DELT_BOSTED)
+                            return felt.verdi ? ok(felt) : feil(felt, feilmelding);
+                        else
+                            return typeof felt.verdi === 'boolean'
+                                ? ok(felt)
+                                : feil(felt, feilmelding);
+                    },
                 }),
                 begrunnelse: useFelt<string | undefined>({
                     verdi: endretUtbetalingAndel.begrunnelse,
