@@ -9,19 +9,19 @@ import {
     Resultat,
 } from '../../typer/vilkår';
 import {
-    periodeDiff,
-    nyPeriode,
-    kalenderDiff,
-    kalenderDatoTilDate,
     kalenderDato,
+    kalenderDatoTilDate,
+    kalenderDiff,
+    nyPeriode,
+    periodeDiff,
 } from '../../utils/kalender';
 import {
     erAvslagBegrunnelserGyldig,
+    erBegrunnelseGyldig,
     erPeriodeGyldig,
     erResultatGyldig,
     ikkeValider,
     lagInitiellFelt,
-    erBegrunnelseGyldig,
 } from '../../utils/validators';
 import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
@@ -52,7 +52,7 @@ export const mapFraRestVilkårsvurderingTilUi = (
 export const mapFraRestPersonResultatTilPersonResultat = (
     personResultater: IRestPersonResultat[],
     personer: IGrunnlagPerson[]
-) => {
+): IPersonResultat[] => {
     return personResultater
         .map((personResultat: IRestPersonResultat) => {
             const person: IGrunnlagPerson | undefined = personer.find(
@@ -91,9 +91,6 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
                                     erEksplisittAvslagPåSøknad:
                                         vilkårResultat.erEksplisittAvslagPåSøknad,
-                                    erSkjønnsmessigVurdert: vilkårResultat.erSkjønnsmessigVurdert,
-                                    erMedlemskapVurdert: vilkårResultat.erMedlemskapVurdert,
-                                    erDeltBosted: vilkårResultat.erDeltBosted,
                                     avslagBegrunnelser: lagInitiellFelt(
                                         vilkårResultat.avslagBegrunnelser,
                                         erAvslagBegrunnelserGyldig
@@ -101,6 +98,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     endretTidspunkt: vilkårResultat.endretTidspunkt,
                                     behandlingId: vilkårResultat.behandlingId,
                                     vurderesEtter: vilkårResultat.vurderesEtter,
+                                    utdypendeVilkårsvurderinger:
+                                        vilkårResultat.utdypendeVilkårsvurderinger,
                                 },
                                 validerVilkår
                             )

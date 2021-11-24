@@ -26,9 +26,7 @@ export const validerVilkår = (
     const nyBegrunnelse: FeltState<string> = nyttVilkårResultat.verdi.begrunnelse.valider(
         nyttVilkårResultat.verdi.begrunnelse,
         {
-            erSkjønnsmessigVurdert: nyttVilkårResultat.verdi.erSkjønnsmessigVurdert,
-            erMedlemskapVurdert: nyttVilkårResultat.verdi.erMedlemskapVurdert,
-            erDeltBosted: nyttVilkårResultat.verdi.erDeltBosted,
+            utdypendeVilkårsvurderinger: nyttVilkårResultat.verdi.utdypendeVilkårsvurderinger,
             vilkårType: nyttVilkårResultat.verdi.vilkårType,
         }
     );
@@ -94,7 +92,9 @@ export const kjørValidering = (vilkårsvurdering: IPersonResultat[]): IPersonRe
             ...personResultat,
             vilkårResultater: personResultat.vilkårResultater.map(
                 (vilkårResultat: FeltState<IVilkårResultat>): FeltState<IVilkårResultat> => {
-                    return validerVilkår(vilkårResultat, { person: personResultat.person });
+                    return validerVilkår(vilkårResultat, {
+                        person: personResultat.person,
+                    });
                 }
             ),
             andreVurderinger: personResultat.andreVurderinger.map(
