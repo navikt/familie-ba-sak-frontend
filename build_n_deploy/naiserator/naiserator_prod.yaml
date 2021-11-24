@@ -42,6 +42,8 @@ spec:
     application:
       enabled: true
       allowAllUsers: false
+      replyURLs:
+        - https://barnetrygd.nais.adeo.no/auth/openid/callback
       claims:
         groups:
           - id: "199c2b39-e535-4ae8-ac59-8ccbee7991ae"  # VEILEDER_ROLLE
