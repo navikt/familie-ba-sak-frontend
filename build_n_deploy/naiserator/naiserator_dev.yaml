@@ -48,7 +48,7 @@ spec:
           - id: "d21e00a4-969d-4b28-8782-dc818abfae65"  # SAKSBEHANDLER_ROLLE
           - id: "9449c153-5a1e-44a7-84c6-7cc7a8867233"  # BESLUTTER_ROLLE
   accessPolicy:
-    outboud:
+    outbound:
       rules:
         - application: familie-ba-sak
 

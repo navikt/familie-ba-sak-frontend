@@ -54,7 +54,7 @@ spec:
           - id: "7af5f216-6a5e-4228-9c99-687658c5b957"  # MEDLEM: 4842 NAV Familie- og pensjonsytelser Stord
           - id: "0feaea21-ada1-48c0-9300-3f6aec36b993"  # MEDLEM: 4817 NAV Familie- og pensjonsytelser Steinkjer
   accessPolicy:
-    outboud:
+    outbound:
       rules:
         - application: familie-ba-sak
 
