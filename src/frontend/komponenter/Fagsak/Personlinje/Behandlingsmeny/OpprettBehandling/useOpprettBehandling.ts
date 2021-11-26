@@ -16,7 +16,7 @@ import {
 } from '../../../../../typer/behandling';
 import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
-import { FamilieIsoDate } from '../../../../../utils/kalender';
+import { erIsoStringGyldig, FamilieIsoDate } from '../../../../../utils/kalender';
 
 const useOpprettBehandling = (
     lukkModal: () => void,
@@ -71,7 +71,9 @@ const useOpprettBehandling = (
     const migreringsdato = useFelt<FamilieIsoDate | undefined>({
         verdi: undefined,
         valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
-            felt.verdi ? ok(felt) : feil(felt, 'Ny migreringsdato må settes.'),
+            felt.verdi && erIsoStringGyldig(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Du må velge en ny migreringsdato'),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
