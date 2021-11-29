@@ -35,8 +35,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         onSubmit,
         simuleringsresultat,
         tilbakekrevingSkjema,
-        tilbakekrevingErToggletPå,
         harÅpenTilbakekrevingRessurs,
+        erMigreringMedEtterEllerFeilutbetaling,
     } = useSimulering();
     const { erLesevisning, settÅpenBehandling } = useBehandling();
 
@@ -79,6 +79,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
+            skalViseNesteKnapp={!erMigreringMedEtterEllerFeilutbetaling}
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
@@ -89,11 +90,19 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
-                        {tilbakekrevingErToggletPå && erFeilutbetaling && (
+                        {!erMigreringMedEtterEllerFeilutbetaling && erFeilutbetaling && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
                                 harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
                             />
+                        )}
+                        {erMigreringMedEtterEllerFeilutbetaling && (
+                            <Alertstripe type="feil">
+                                Utbetalingen må være lik utbetalingen i Infotrygd.
+                                <br />
+                                Du må tilbake og gjøre nødvendige endringer for å komme videre i
+                                behandlingen
+                            </Alertstripe>
                         )}
                     </>
                 )
