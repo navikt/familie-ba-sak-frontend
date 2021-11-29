@@ -4,14 +4,14 @@ import createUseContext from 'constate';
 
 import {
     Avhengigheter,
-    FeltState,
-    Valideringsstatus,
     feil,
+    FeltState,
     ok,
     useFelt,
     useSkjema,
+    Valideringsstatus,
 } from '@navikt/familie-skjema';
-import { RessursStatus, Ressurs } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import {
     Brevmal,
@@ -22,6 +22,11 @@ import { IManueltBrevRequestPåBehandling } from '../typer/dokument';
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
 import { fjernWhitespace } from '../utils/commons';
+import {
+    genererIdBasertPåAndreFritekster,
+    IFritekstFelt,
+    lagInitiellFritekst,
+} from '../utils/fritekstfelter';
 import { useBehandling } from './behandlingContext/BehandlingContext';
 
 export const hentMuligeBrevmalerImplementering = (
@@ -59,6 +64,10 @@ export const mottakersMålformImplementering = (
 
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
+
+    // TODO: Sjekk disse
+    const maksAntallKulepunkter = 3;
+    const makslengdeFritekst = 220;
 
     const mottakerIdent = useFelt({
         verdi: '',
@@ -118,11 +127,29 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         avhengigheter: { brevmal },
     });
 
+    const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
+            return felt.verdi.some(
+                fritekst =>
+                    fritekst.valideringsstatus === Valideringsstatus.FEIL ||
+                    fritekst.verdi.tekst.length === 0
+            )
+                ? feil(felt, '')
+                : ok(felt);
+        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK;
+        },
+        avhengigheter: { brevmal },
+    });
+
     const { kanSendeSkjema, onSubmit, skjema } = useSkjema<
         {
             mottakerIdent: string;
             brevmal: Brevmal | '';
             multiselect: ISelectOptionMedBrevtekst[];
+            fritekster: FeltState<IFritekstFelt>[];
         },
         IBehandling
     >({
@@ -130,6 +157,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             mottakerIdent,
             brevmal,
             multiselect,
+            fritekster,
         },
         skjemanavn: 'brevmodul',
     });
@@ -157,17 +185,25 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
 
     const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(åpenBehandling);
 
+    const leggTilFritekst = () => {
+        skjema.felter.fritekster.validerOgSettFelt([
+            ...skjema.felter.fritekster.verdi,
+            lagInitiellFritekst('', genererIdBasertPåAndreFritekster(fritekster)),
+        ]);
+    };
+
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
         mottakerIdent: skjema.felter.mottakerIdent.verdi,
-        multiselectVerdier: skjema.felter.multiselect.verdi.map(
-            (selectOption: ISelectOptionMedBrevtekst) => {
+        multiselectVerdier: [
+            ...skjema.felter.multiselect.verdi.map((selectOption: ISelectOptionMedBrevtekst) => {
                 if (selectOption.brevtekst) {
                     return selectOption.brevtekst[mottakersMålform()];
                 } else {
                     return selectOption.value;
                 }
-            }
-        ),
+            }),
+            ...skjema.felter.fritekster.verdi.map(f => f.verdi.tekst),
+        ],
         brevmal: skjema.felter.brevmal.verdi as Brevmal,
     });
 
@@ -181,6 +217,9 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         onSubmit,
         personer,
         settNavigerTilOpplysningsplikt,
+        leggTilFritekst,
+        makslengdeFritekst,
+        maksAntallKulepunkter,
     };
 });
 

@@ -41,13 +41,12 @@ export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevte
     }
 
     return (
-        selectOptionsMedBrevtekst?.map((selectOptionMedBrevtekst: ISelectOptionMedBrevtekst) => ({
-            ...selectOptionMedBrevtekst,
-            value:
-                selectOptionMedBrevtekst.value !== ''
-                    ? selectOptionMedBrevtekst.value
-                    : selectOptionMedBrevtekst.label.toLocaleLowerCase().replace(' ', '_'),
-        })) ?? []
+        selectOptionsMedBrevtekst?.map(
+            (selectOptionMedBrevtekst: Omit<ISelectOptionMedBrevtekst, 'value'>) => ({
+                ...selectOptionMedBrevtekst,
+                value: selectOptionMedBrevtekst.label.toLocaleLowerCase().replace(' ', '_'),
+            })
+        ) ?? []
     );
 };
 
@@ -62,10 +61,8 @@ export interface ISelectOptionMedBrevtekst extends OptionType {
     brevtekst?: Record<Målform, string>;
 }
 
-// Value settes ved henting av select option basert på label
-const dokumenter: ISelectOptionMedBrevtekst[] = [
+const dokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] = [
     {
-        value: '',
         label: 'Adopsjon - barna',
         brevtekst: {
             NB: 'Dokumentasjon på adopsjon som viser hvilken dato du overtok omsorgen for barna.',
@@ -73,7 +70,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Adopsjon - barnet',
         brevtekst: {
             NB: 'Dokumentasjon på adopsjon som viser hvilken dato du overtok omsorgen for barnet.',
@@ -81,7 +77,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Ankomst Norge - barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser når barna kom til Norge.',
@@ -89,7 +84,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Ankomst Norge - barnet',
         brevtekst: {
             NB: 'Dokumentasjon som viser når barnet kom til Norge.',
@@ -97,7 +91,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Ankomst Norge - søker',
         brevtekst: {
             NB: 'Dokumentasjon som viser når du kom til Norge.',
@@ -105,7 +98,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Ankomst Norge - søker og barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser når du og barna kom til Norge.',
@@ -113,7 +105,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Ankomst Norge - søker og barnet',
         brevtekst: {
             NB: 'Dokumentasjon som viser når du og barnet kom til Norge.',
@@ -121,7 +112,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Avtale om delt bosted',
         brevtekst: {
             NB: 'Avtale om delt bosted.',
@@ -129,7 +119,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Avtale om fast bosted',
         brevtekst: {
             NB: 'Avtale om fast bosted.',
@@ -137,7 +126,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Bor sammen med - barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser at barna bor sammen med deg.',
@@ -145,7 +133,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Bor sammen med - barnet',
         brevtekst: {
             NB: 'Dokumentasjon som viser at barnet bor sammen med deg.',
@@ -153,7 +140,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Flyttet til søker - barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilken dato barna flyttet til deg. Du må melde flytting til Folkeregisteret.',
@@ -161,7 +147,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Flyttet til søker - barnet',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilken dato barnet flyttet til deg. Du må melde flytting til Folkeregisteret.',
@@ -169,7 +154,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Folkeregistrert i Norge - barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser at barna har norsk fødselsnummer og er bosatt i Norge.',
@@ -177,7 +161,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Folkeregistrert i Norge - barnet',
         brevtekst: {
             NB: 'Dokumentasjon som viser at barnet har norsk fødselsnummer og er bosatt i Norge.',
@@ -185,7 +168,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Folkeregistrert i Norge - søker',
         brevtekst: {
             NB: 'Dokumentasjon som viser at du har norsk fødselsnummer og er bosatt i Norge.',
@@ -193,7 +175,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Folkeregistrert i Norge - søker og barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser at du og barna har norsk fødselsnummer og er bosatt i Norge.',
@@ -201,7 +182,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Folkeregistrert i Norge - søker og barnet',
         brevtekst: {
             NB: 'Dokumentasjon som viser at du og barnet har norsk fødselsnummer og er bosatt i Norge.',
@@ -209,7 +189,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Oppholdstillatelse - barna',
         brevtekst: {
             NB: 'Kopi av vedtak om oppholdstillatelse for barna.',
@@ -217,7 +196,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Oppholdstillatelse - barnet',
         brevtekst: {
             NB: 'Kopi av vedtak om oppholdstillatelse for barnet.',
@@ -225,7 +203,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Oppholdstillatelse - søker',
         brevtekst: {
             NB: 'Kopi av vedtak om oppholdstillatelse for deg.',
@@ -233,7 +210,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Oppholdstillatelse - søker og barna',
         brevtekst: {
             NB: 'Kopi av vedtak om oppholdstillatelse for deg og barna.',
@@ -241,7 +217,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Oppholdstillatelse - søker og barnet',
         brevtekst: {
             NB: 'Kopi av vedtak om oppholdstillatelse for deg og barnet.',
@@ -249,7 +224,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Rettsavgjørelse - barna',
         brevtekst: {
             NB: 'Rettsavgjørelse som viser fra hvilken dato barna bor sammen med deg.',
@@ -257,7 +231,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Rettsavgjørelse - barnet',
         brevtekst: {
             NB: 'Rettsavgjørelse som viser fra hvilken dato barnet bor sammen med deg.',
@@ -265,7 +238,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Utenlandsopphold, perioder - barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilke perioder barna har vært i Norge og hvilke perioder barna har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole, barnehage eller helsestasjon.',
@@ -273,7 +245,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Utenlandsopphold, perioder - barnet',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilke perioder barnet har vært i Norge og hvilke perioder barnet har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole, barnehage eller helsestasjon.',
@@ -281,7 +252,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Utenlandsopphold, perioder - søker',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilke perioder du har vært i Norge og hvilke perioder du har vært i utlandet. For eksempel kopi av flybilletter eller kopi av pass med stempel.',
@@ -289,7 +259,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Utenlandsopphold, perioder - søker og barna',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilke perioder du og barna har vært i Norge og hvilke perioder dere har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole barnehage eller helsestasjon.',
@@ -297,7 +266,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Utenlandsopphold, perioder - søker og barnet',
         brevtekst: {
             NB: 'Dokumentasjon som viser hvilke perioder du og barnet har vært i Norge og hvilke perioder dere har vært i utlandet. For eksempel kopi av flybilletter, kopi av pass med stempel, bekreftelse fra skole barnehage eller helsestasjon.',
@@ -305,7 +273,6 @@ const dokumenter: ISelectOptionMedBrevtekst[] = [
         },
     },
     {
-        value: '',
         label: 'Vergefullmakt',
         brevtekst: {
             NB: 'Vergefullmakt.',
