@@ -65,10 +65,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 ? ok(felt)
                 : feil(felt, 'Velg type behandling som skal opprettes fra nedtrekkslisten');
         },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            const knyttTilNyBehandling = avhengigheter.knyttTilNyBehandling;
-            return knyttTilNyBehandling;
-        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => avhengigheter.knyttTilNyBehandling,
         avhengigheter: { knyttTilNyBehandling: knyttTilNyBehandling.verdi },
     });
 
@@ -145,11 +142,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             }),
             avsenderIdent: useFelt<string>({
                 verdi: '',
-                valideringsfunksjon: (felt: FeltState<string>) => {
-                    return felt.verdi !== ''
-                        ? ok(felt)
-                        : feil(felt, 'Avsenders ident er ikke satt');
-                },
             }),
             knyttTilNyBehandling,
             behandlingstype,
