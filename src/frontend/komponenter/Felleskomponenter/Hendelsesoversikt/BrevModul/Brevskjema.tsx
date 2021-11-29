@@ -6,8 +6,7 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Knapp } from 'nav-frontend-knapper';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Label, SkjemaGruppe } from 'nav-frontend-skjema';
 
 import { FamilieReactSelect, FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { Felt, FeltState } from '@navikt/familie-skjema';
@@ -203,11 +202,17 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         {...skjema.felter.multiselect.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={
                             <LabelOgEtikett>
-                                <Normaltekst>
+                                <Label
+                                    htmlFor={
+                                        skjema.felter.multiselect.hentNavInputProps(
+                                            skjema.visFeilmeldinger
+                                        ).id
+                                    }
+                                >
                                     {valgtBrevmal.verdi !== ''
                                         ? selectLabelsForBrevmaler[valgtBrevmal.verdi]
                                         : ''}
-                                </Normaltekst>
+                                </Label>
                                 <StyledEtikettInfo mini={true}>
                                     Skriv {målform[mottakersMålform()].toLowerCase()}
                                 </StyledEtikettInfo>
@@ -228,6 +233,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                 )}
                 {skjema.felter.fritekster.erSynlig && (
                     <>
+                        <Label htmlFor={skjemaGruppeId}>Fritekst til kulepunkt i brev</Label>
                         {erLesevisning() ? (
                             <StyledList id={skjemaGruppeId}>
                                 {skjema.felter.fritekster.verdi.map(
