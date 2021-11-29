@@ -123,9 +123,11 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
         sendTilBeslutterNesteOnClick((visModal: boolean) => settVisModal(visModal));
     };
 
+    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
     const erBehandlingMedVedtaksbrevutsending =
         åpenBehandling.type !== Behandlingstype.TEKNISK_ENDRING &&
-        åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING;
+        åpenBehandling.årsak !== BehandlingÅrsak.SATSENDRING &&
+        !erMigreringFraInfotrygd;
 
     return (
         <Skjemasteg
@@ -223,6 +225,10 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                         </UIModalWrapper>
                     )}
                 </>
+            ) : erMigreringFraInfotrygd ? (
+                <AlertStripeInfo>
+                    {`Du er inne på en migreringsbehandling og det sendes ingen vedtaksbrev.`}
+                </AlertStripeInfo>
             ) : (
                 <AlertStripeInfo>
                     {`Du er inne på en teknisk behandling og det finnes ingen vedtaksbrev.`}
