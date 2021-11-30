@@ -18,15 +18,13 @@ import { EksternLenke } from '../../../../../ikoner/EksternLenke';
 import Pluss from '../../../../../ikoner/Pluss';
 import Slett from '../../../../../ikoner/Slett';
 import { målform } from '../../../../../typer/søknad';
+import { IFritekstFelt } from '../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import Hjelpetekst44px from '../../../../Felleskomponenter/Hjelpetekst44px';
 import IkonKnapp, { IkonPosisjon } from '../../../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import Knapperekke from '../../../../Felleskomponenter/Knapperekke';
 import SkjultLegend from '../../../../Felleskomponenter/SkjultLegend';
-import {
-    IFritekstFelt,
-    useVedtaksperiodeMedBegrunnelser,
-} from '../Context/VedtaksperiodeMedBegrunnelserContext';
+import { useVedtaksperiodeMedBegrunnelser } from '../Context/VedtaksperiodeMedBegrunnelserContext';
 
 const FritekstContainer = styled.div`
     background-color: ${navFarger.navGraBakgrunn};
