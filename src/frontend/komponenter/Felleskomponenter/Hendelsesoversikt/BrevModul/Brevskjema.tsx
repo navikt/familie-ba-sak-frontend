@@ -252,7 +252,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                     }
                                 >
                                     {skjema.felter.fritekster.verdi.map(
-                                        (fritekst: FeltState<IFritekstFelt>) => {
+                                        (fritekst: FeltState<IFritekstFelt>, index: number) => {
                                             const fritekstId = fritekst.verdi.id;
 
                                             return (
@@ -277,25 +277,32 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                                         /* eslint-disable-next-line jsx-a11y/no-autofocus */
                                                         autoFocus
                                                     />
-                                                    <SletteKnapp
-                                                        erLesevisning={false}
-                                                        onClick={() => {
-                                                            skjema.felter.fritekster.validerOgSettFelt(
-                                                                [
-                                                                    ...skjema.felter.fritekster.verdi.filter(
-                                                                        mapFritekst =>
-                                                                            mapFritekst.verdi.id !==
-                                                                            fritekst.verdi.id
-                                                                    ),
-                                                                ]
-                                                            );
-                                                        }}
-                                                        id={`fjern_fritekst-${fritekstId}`}
-                                                        mini={true}
-                                                        label={'Fjern'}
-                                                        aria-label={'Fjern fritekst'}
-                                                        ikon={<Slett />}
-                                                    />
+                                                    {!(
+                                                        index === 0 &&
+                                                        skjema.felter.brevmal.verdi ===
+                                                            Brevmal.VARSEL_OM_REVURDERING
+                                                    ) && (
+                                                        <SletteKnapp
+                                                            erLesevisning={false}
+                                                            onClick={() => {
+                                                                skjema.felter.fritekster.validerOgSettFelt(
+                                                                    [
+                                                                        ...skjema.felter.fritekster.verdi.filter(
+                                                                            mapFritekst =>
+                                                                                mapFritekst.verdi
+                                                                                    .id !==
+                                                                                fritekst.verdi.id
+                                                                        ),
+                                                                    ]
+                                                                );
+                                                            }}
+                                                            id={`fjern_fritekst-${fritekstId}`}
+                                                            mini={true}
+                                                            label={'Fjern'}
+                                                            aria-label={'Fjern fritekst'}
+                                                            ikon={<Slett />}
+                                                        />
+                                                    )}
                                                 </StyledFamilieFritekstFelt>
                                             );
                                         }

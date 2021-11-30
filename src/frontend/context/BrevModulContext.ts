@@ -121,7 +121,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             return ok(felt);
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK;
+            return (
+                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
+                avhengigheter?.brevmal.verdi !== Brevmal.VARSEL_OM_REVURDERING
+            );
         },
         avhengigheter: { brevmal },
     });
@@ -190,6 +193,15 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             lagInitiellFritekst('', genererIdBasertPåAndreFritekster(fritekster)),
         ]);
     };
+
+    /**
+     * Legger til initielt fritekstpunkt hvis brevmal er "Varsel om revurdering"
+     */
+    useEffect(() => {
+        if (fritekster.verdi.length === 0 && brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING) {
+            leggTilFritekst();
+        }
+    }, [brevmal, fritekster]);
 
     const hentSkjemaData = (): IManueltBrevRequestPåBehandling => ({
         mottakerIdent: skjema.felter.mottakerIdent.verdi,
