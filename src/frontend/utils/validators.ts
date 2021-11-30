@@ -114,11 +114,7 @@ export const erPeriodeGyldig = (
         );
 
         const idag = kalenderDatoMedFallback(familieDayjs().toISOString(), TIDENES_ENDE);
-        if (
-            !er18ÅrsVilkår &&
-            tomKalenderDato &&
-            valgtDatoErNesteMånedEllerSenere(tomKalenderDato, idag)
-        ) {
+        if (tom && !er18ÅrsVilkår && valgtDatoErNesteMånedEllerSenere(tomKalenderDato, idag)) {
             return feil(
                 felt,
                 'Du kan ikke legge inn til og med dato som er i neste måned eller senere'
