@@ -15,7 +15,7 @@ describe('Sammenligning av datoer', () => {
         };
         expect(valgtDatoErNesteMånedEllerSenere(valgtDato, today)).toBeTruthy();
     });
-    it('er neste måned eller senere', () => {
+    it('er ikke neste måned eller senere', () => {
         const valgtDato: DagMånedÅr = {
             år: 2100,
             måned: 4,
