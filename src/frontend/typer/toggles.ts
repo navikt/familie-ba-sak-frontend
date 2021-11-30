@@ -13,6 +13,7 @@ export enum ToggleNavn {
     kanEndretUtbetalingAndel = 'familie-ba-sak.behandling.kan-endre-utbetalingsperiode',
     kanBehandleUtvidet = 'familie-ba-sak.behandling.utvidet',
     brukEøs = 'familie-ba-sak.behandling.eos',
+    kanManueltMigrereTilbakeITid = 'familie-ba-sak.behandling.manuell-migrering-tilbake-i-tid',
 }
 
 export const alleTogglerAv = (): IToggles => {
