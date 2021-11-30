@@ -10,6 +10,7 @@ import {
 import { IGrunnlagPerson, PersonType } from '../typer/person';
 import { VedtakBegrunnelse } from '../typer/vedtak';
 import { Resultat, UtdypendeVilkårsvurdering, VilkårType } from '../typer/vilkår';
+import familieDayjs from './familieDayjs';
 import {
     erEtter,
     erFør,
@@ -22,6 +23,7 @@ import {
     leggTil,
     TIDENES_ENDE,
     TIDENES_MORGEN,
+    valgtDatoErNesteMånedEllerSenere,
 } from './kalender';
 import {
     bestemMuligeUtdypendeVilkårsvurderinger,
@@ -105,10 +107,23 @@ export const erPeriodeGyldig = (
                 }
             }
         }
+        const tomKalenderDato = kalenderDatoMedFallback(tom, TIDENES_ENDE);
         const fomDatoErFørTomDato = erFør(
             kalenderDatoMedFallback(fom, TIDENES_MORGEN),
-            kalenderDatoMedFallback(tom, TIDENES_ENDE)
+            tomKalenderDato
         );
+
+        const idag = kalenderDatoMedFallback(familieDayjs().toISOString(), TIDENES_ENDE);
+        if (
+            !er18ÅrsVilkår &&
+            tomKalenderDato &&
+            valgtDatoErNesteMånedEllerSenere(tomKalenderDato, idag)
+        ) {
+            return feil(
+                felt,
+                'Du kan ikke legge inn til og med dato som er i neste måned eller senere'
+            );
+        }
 
         return fomDatoErFørTomDato ? ok(felt) : feil(felt, 'F.o.m må settes tidligere enn t.o.m');
     } else {
