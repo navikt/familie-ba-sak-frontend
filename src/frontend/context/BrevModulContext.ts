@@ -65,8 +65,7 @@ export const mottakersMålformImplementering = (
 const [BrevModulProvider, useBrevModul] = createUseContext(() => {
     const { åpenBehandling } = useBehandling();
 
-    // TODO: Sjekk disse
-    const maksAntallKulepunkter = 3;
+    const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;
 
     const mottakerIdent = useFelt({
