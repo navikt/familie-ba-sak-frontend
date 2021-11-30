@@ -136,7 +136,7 @@ const OppsummeringVedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehand
                 history.push(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)
             }
             nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
-            nesteKnappTittel={'Til godkjenning'}
+            nesteKnappTittel={erMigreringFraInfotrygd ? 'Godkjenn vedtaket' : 'Til godkjenning'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             maxWidthStyle="100%"
             className={'vedtak'}
