@@ -14,6 +14,7 @@ export enum ToggleNavn {
     kanBehandleUtvidet = 'familie-ba-sak.behandling.utvidet',
     brukEøs = 'familie-ba-sak.behandling.eos',
     kanManueltMigrereTilbakeITid = 'familie-ba-sak.behandling.manuell-migrering-tilbake-i-tid',
+    skalIkkeStoppeMigreringsbehandlig = 'familie-ba-sak.ikke.stopp.migeringsbehandling',
 }
 
 export const alleTogglerAv = (): IToggles => {
