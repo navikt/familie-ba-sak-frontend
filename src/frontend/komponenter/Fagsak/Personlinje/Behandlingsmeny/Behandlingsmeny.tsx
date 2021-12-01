@@ -8,11 +8,9 @@ import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../../context/AppContext';
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
 import { BehandlingÅrsak } from '../../../../typer/behandling';
 import { IMinimalFagsak } from '../../../../typer/fagsak';
-import { ToggleNavn } from '../../../../typer/toggles';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
@@ -24,7 +22,6 @@ interface IProps {
 }
 
 const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
-    const { toggles } = useApp();
     const { åpenBehandling, erLesevisning } = useBehandling();
     const history = useHistory();
     const [anker, settAnker] = useState<HTMLElement | undefined>(undefined);
@@ -67,7 +64,6 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
                         </li>
                     )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        toggles[ToggleNavn.kanBehandleUtvidet] &&
                         åpenBehandling.data.årsak !== BehandlingÅrsak.SØKNAD && (
                             <li>
                                 <EndreBehandlingstema
@@ -104,19 +100,17 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
                             </li>
                         )}
 
-                    {toggles[ToggleNavn.brukErDeltBosted] && (
-                        <li>
-                            <KnappBase
-                                mini={true}
-                                onClick={() => {
-                                    history.push(`/fagsak/${minimalFagsak.id}/dokumentutsending`);
-                                    settAnker(undefined);
-                                }}
-                            >
-                                Send informasjonsbrev
-                            </KnappBase>
-                        </li>
-                    )}
+                    <li>
+                        <KnappBase
+                            mini={true}
+                            onClick={() => {
+                                history.push(`/fagsak/${minimalFagsak.id}/dokumentutsending`);
+                                settAnker(undefined);
+                            }}
+                        >
+                            Send informasjonsbrev
+                        </KnappBase>
+                    </li>
                 </ul>
             </Popover>
         </>

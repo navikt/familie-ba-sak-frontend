@@ -8,7 +8,6 @@ const avhengigheter: UtdypendeVilkRsvurderingAvhengigheter = {
     vilkårType: VilkårType.BOSATT_I_RIKET,
     resultat: Resultat.OPPFYLT,
     vurderesEtter: null,
-    brukErDeltBosted: true,
     brukEøs: true,
 };
 

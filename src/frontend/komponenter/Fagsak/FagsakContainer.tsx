@@ -7,11 +7,9 @@ import AlertStripe from 'nav-frontend-alertstriper';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../context/AppContext';
 import { DokumentutsendingProvider } from '../../context/DokumentutsendingContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
 import useSakOgBehandlingParams from '../../hooks/useSakOgBehandlingParams';
-import { ToggleNavn } from '../../typer/toggles';
 import { useAmplitude } from '../../utils/amplitude';
 import Venstremeny from '../Felleskomponenter/Venstremeny/Venstremeny';
 import BehandlingContainer from './BehandlingContainer';
@@ -25,20 +23,14 @@ const FagsakContainer: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
 
     const history = useHistory();
-    const { toggles } = useApp();
     const { loggSidevisning } = useAmplitude();
     const erPåSaksoversikt = history.location.pathname.includes('saksoversikt');
     const erPåDokumentliste = history.location.pathname.includes('dokumenter');
     const erPåDokumentutsending = history.location.pathname.includes('dokumentutsending');
-    const visDokumentutsending = toggles[ToggleNavn.brukErDeltBosted];
 
-    const skalHaVenstremeny = visDokumentutsending
-        ? !erPåSaksoversikt && !erPåDokumentliste && !erPåDokumentutsending
-        : !erPåSaksoversikt && !erPåDokumentliste;
+    const skalHaVenstremeny = !erPåSaksoversikt && !erPåDokumentliste && !erPåDokumentutsending;
 
-    const skalHaHøyremeny = visDokumentutsending
-        ? !erPåSaksoversikt && !erPåDokumentutsending
-        : !erPåSaksoversikt;
+    const skalHaHøyremeny = !erPåSaksoversikt && !erPåDokumentutsending;
 
     const { bruker, minimalFagsak, hentMinimalFagsak } = useFagsakRessurser();
 
@@ -60,7 +52,7 @@ const FagsakContainer: React.FunctionComponent = () => {
             loggSidevisning('saksoversikt');
         }
 
-        if (visDokumentutsending && erPåDokumentutsending) {
+        if (erPåDokumentutsending) {
             loggSidevisning('dokumentutsending');
         }
     }, []);
@@ -96,21 +88,19 @@ const FagsakContainer: React.FunctionComponent = () => {
                                             }}
                                         />
 
-                                        {visDokumentutsending && (
-                                            <Route
-                                                exact={true}
-                                                path="/fagsak/:fagsakId/dokumentutsending"
-                                                render={() => {
-                                                    return (
-                                                        <DokumentutsendingProvider
-                                                            fagsakId={minimalFagsak.data.id}
-                                                        >
-                                                            <Dokumentutsending />
-                                                        </DokumentutsendingProvider>
-                                                    );
-                                                }}
-                                            />
-                                        )}
+                                        <Route
+                                            exact={true}
+                                            path="/fagsak/:fagsakId/dokumentutsending"
+                                            render={() => {
+                                                return (
+                                                    <DokumentutsendingProvider
+                                                        fagsakId={minimalFagsak.data.id}
+                                                    >
+                                                        <Dokumentutsending />
+                                                    </DokumentutsendingProvider>
+                                                );
+                                            }}
+                                        />
 
                                         <Route
                                             exact={true}

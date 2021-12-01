@@ -9,7 +9,6 @@ import {
     BehandlingKategori,
     Behandlingstema,
     behandlingstemaer,
-    BehandlingUnderkategori,
     IBehandlingstema,
 } from '../../typer/behandlingstema';
 import { ToggleNavn } from '../../typer/toggles';
@@ -60,10 +59,7 @@ export const BehandlingstemaSelect = ({
                         aria-selected={verdi !== undefined && verdi.id === tema.id}
                         value={tema.id}
                         disabled={
-                            (tema.kategori === BehandlingKategori.EØS &&
-                                !toggles[ToggleNavn.brukEøs]) ||
-                            (tema.underkategori === BehandlingUnderkategori.UTVIDET &&
-                                !toggles[ToggleNavn.kanBehandleUtvidet])
+                            tema.kategori === BehandlingKategori.EØS && !toggles[ToggleNavn.brukEøs]
                         }
                     >
                         {tema.navn}

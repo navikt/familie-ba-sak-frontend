@@ -35,7 +35,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         onSubmit,
         simuleringsresultat,
         tilbakekrevingSkjema,
-        tilbakekrevingErToggletPå,
         harÅpenTilbakekrevingRessurs,
     } = useSimulering();
     const { erLesevisning, settÅpenBehandling } = useBehandling();
@@ -89,7 +88,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
-                        {tilbakekrevingErToggletPå && erFeilutbetaling && (
+                        {erFeilutbetaling && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
                                 harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
