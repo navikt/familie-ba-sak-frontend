@@ -125,6 +125,7 @@
     "react-table": "^7.7.0",
     "react-toast-notifications": "^2.5.1",
     "request": "^2.88.2",
+    "snyk": "^1.763.0",
     "snyk": "^1.773.0",
     "styled-components": "^5.3.1",
     "uuid": "^8.3.0"
@@ -143,7 +144,7 @@
     "babel-preset-react-app": "^10.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "compression-webpack-plugin": "^9.0.1",
-    "copy-webpack-plugin": "^9.0.1",
+    "copy-webpack-plugin": "^10.0.0",
     "copyfiles": "^2.2.0",
     "css-loader": "^5.1.1",
     "css-minimizer-webpack-plugin": "^3.0.2",
