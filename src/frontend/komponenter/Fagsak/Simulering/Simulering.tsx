@@ -5,13 +5,15 @@ import styled from 'styled-components';
 
 import Alertstripe from 'nav-frontend-alertstriper';
 
-import { RessursStatus, Ressurs } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { IBehandling } from '../../../typer/behandling';
 import { ITilbakekreving } from '../../../typer/simulering';
+import { ToggleNavn } from '../../../typer/toggles';
 import { hentSøkersMålform } from '../../../utils/behandling';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
@@ -30,14 +32,17 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { fagsakId } = useSakOgBehandlingParams();
     const history = useHistory();
     const {
-        erFeilutbetaling,
         hentSkjemadata,
         onSubmit,
         simuleringsresultat,
         tilbakekrevingSkjema,
         harÅpenTilbakekrevingRessurs,
+        erMigreringMedEtterEllerFeilutbetaling,
     } = useSimulering();
     const { erLesevisning, settÅpenBehandling } = useBehandling();
+    const { toggles } = useApp();
+    const skalIkkeStoppeMigreringsbehandlinger =
+        toggles[ToggleNavn.skalIkkeStoppeMigreringsbehandlig];
 
     const nesteOnClick = () => {
         if (erLesevisning()) {
@@ -78,6 +83,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             forrigeOnClick={forrigeOnClick}
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
+            skalViseNesteKnapp={
+                !erMigreringMedEtterEllerFeilutbetaling || skalIkkeStoppeMigreringsbehandlinger
+            }
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
@@ -88,11 +96,20 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
-                        {erFeilutbetaling && (
+                        {(!erMigreringMedEtterEllerFeilutbetaling ||
+                            skalIkkeStoppeMigreringsbehandlinger) && (
                             <TilbakekrevingSkjema
                                 søkerMålform={hentSøkersMålform(åpenBehandling)}
                                 harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
                             />
+                        )}
+                        {erMigreringMedEtterEllerFeilutbetaling && (
+                            <Alertstripe type="feil">
+                                Utbetalingen må være lik utbetalingen i Infotrygd.
+                                <br />
+                                Du må tilbake og gjøre nødvendige endringer for å komme videre i
+                                behandlingen
+                            </Alertstripe>
                         )}
                     </>
                 )

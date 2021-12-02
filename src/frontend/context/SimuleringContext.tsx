@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { useSkjema, useFelt, feil, ok, Avhengigheter } from '@navikt/familie-skjema';
+import { RessursStatus, Ressurs } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
-import { IBehandling } from '../typer/behandling';
+import { Behandlingstype, IBehandling } from '../typer/behandling';
 import {
     ISimuleringDTO,
-    ISimuleringPeriode,
-    ITilbakekreving,
     Tilbakekrevingsvalg,
+    ITilbakekreving,
+    ISimuleringPeriode,
 } from '../typer/simulering';
 import { kalenderDato, kalenderDatoTilDate, kalenderDiff, TIDENES_MORGEN } from '../utils/kalender';
 
@@ -56,14 +56,16 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     }, [åpenBehandling]);
 
     useEffect(() => {
-        request<undefined, boolean>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/fagsaker/${fagsakId}/har-apen-tilbakekreving`,
-            påvirkerSystemLaster: true,
-        }).then(response => {
-            settHarÅpentTilbakekrevingRessurs(response);
-        });
-    }, [fagsakId]);
+        if (erFeilutbetaling) {
+            request<undefined, boolean>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/har-apen-tilbakekreving`,
+                påvirkerSystemLaster: true,
+            }).then(response => {
+                settHarÅpentTilbakekrevingRessurs(response);
+            });
+        }
+    }, [fagsakId, simuleringsresultat]);
 
     const harÅpenTilbakekreving: boolean =
         harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS &&
@@ -72,14 +74,25 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const erFeilutbetaling =
         simuleringsresultat.status === RessursStatus.SUKSESS &&
         simuleringsresultat.data.feilutbetaling > 0;
+    const erEtterutbetaling =
+        simuleringsresultat.status === RessursStatus.SUKSESS &&
+        simuleringsresultat.data.etterbetaling > 0;
+
+    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const erMigreringMedEtterEllerFeilutbetaling =
+        erMigreringFraInfotrygd && (erFeilutbetaling || erEtterutbetaling);
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
         verdi: åpenBehandling.tilbakekreving?.valg,
-        avhengigheter: { erFeilutbetaling, harÅpenTilbakekreving },
+        avhengigheter: {
+            erMigreringMedEtterEllerFeilutbetaling,
+            erFeilutbetaling,
+            harÅpenTilbakekreving,
+        },
         skalFeltetVises: avhengigheter =>
             avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
-        valideringsfunksjon: felt =>
-            felt.verdi === undefined
+        valideringsfunksjon: (felt, avhengigheter) =>
+            !avhengigheter?.erMigreringMedEtterEllerFeilutbetaling && felt.verdi === undefined
                 ? feil(
                       felt,
                       'Resultatet medfører en feilutbetaling. Du må velge om det skal opprettes tilbakekrevingsbehandling.'
@@ -89,6 +102,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const fritekstVarsel = useFelt<string>({
         verdi: åpenBehandling.tilbakekreving?.varsel ?? '',
         avhengigheter: {
+            erMigreringMedEtterEllerFeilutbetaling,
             tilbakekreving: tilbakekrevingsvalg,
             erFeilutbetaling,
             maksLengdeTekst,
@@ -106,6 +120,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                   )
                 : ok(felt),
         skalFeltetVises: (avhengigheter: Avhengigheter) =>
+            !avhengigheter?.erMigreringMedEtterEllerFeilutbetaling &&
             avhengigheter?.erFeilutbetaling &&
             avhengigheter?.tilbakekreving?.verdi ===
                 Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
@@ -113,12 +128,15 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const begrunnelse = useFelt<string>({
         verdi: åpenBehandling.tilbakekreving?.begrunnelse ?? '',
         avhengigheter: {
+            erMigreringMedEtterEllerFeilutbetaling,
             erFeilutbetaling,
             maksLengdeTekst: maksLengdeTekst,
             harÅpenTilbakekreving,
         },
         skalFeltetVises: avhengigheter =>
-            avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
+            !avhengigheter.erMigreringMedEtterEllerFeilutbetaling &&
+            avhengigheter?.erFeilutbetaling &&
+            !avhengigheter?.harÅpenTilbakekreving,
         valideringsfunksjon: (felt, avhengigheter) =>
             felt.verdi === ''
                 ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
@@ -189,6 +207,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
         hentSkjemadata,
         maksLengdeTekst,
         harÅpenTilbakekrevingRessurs,
+        erMigreringMedEtterEllerFeilutbetaling,
     };
 });
 
