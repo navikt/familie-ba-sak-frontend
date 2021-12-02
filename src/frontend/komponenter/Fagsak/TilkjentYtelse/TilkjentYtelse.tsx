@@ -10,12 +10,10 @@ import { Edit } from '@navikt/ds-icons';
 import { useHttp } from '@navikt/familie-http';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import { IBehandling } from '../../../typer/behandling';
-import { ToggleNavn } from '../../../typer/toggles';
 import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
@@ -60,7 +58,6 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
         behandlingsstegSubmitressurs,
         settÅpenBehandling,
     } = useBehandling();
-    const { toggles } = useApp();
 
     const forrigeOnClick = () => {
         history.push(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
@@ -130,7 +127,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}
             />
-            {toggles[ToggleNavn.kanEndretUtbetalingAndel] && !erLesevisning() && (
+            {!erLesevisning() && (
                 <EndretUtbetalingAndel>
                     <Flatknapp mini onClick={() => opprettEndretUtbetaling()}>
                         <StyledEditIkon />

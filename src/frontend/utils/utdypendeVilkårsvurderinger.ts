@@ -6,7 +6,6 @@ export interface UtdypendeVilkRsvurderingAvhengigheter {
     vilkårType: VilkårType;
     resultat: Resultat;
     vurderesEtter: Regelverk | null;
-    brukErDeltBosted: boolean;
     brukEøs: boolean;
 }
 
@@ -17,7 +16,7 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
     Det er mange ting på avhengigheter her som ikke brukes for øyeblikket, men som vil bli nødvendig å ha tilgjengelig senere
     når reglene for hvilke som skal være mulig å velge endres
      */
-    const { vilkårType, brukErDeltBosted } = avhengigheter;
+    const { vilkårType } = avhengigheter;
 
     if (vilkårType === VilkårType.UTVIDET_BARNETRYGD) {
         return [];
@@ -28,8 +27,6 @@ export const bestemMuligeUtdypendeVilkårsvurderinger = (
         ...(vilkårType === VilkårType.BOSATT_I_RIKET
             ? [UtdypendeVilkårsvurdering.VURDERT_MEDLEMSKAP]
             : []),
-        ...(brukErDeltBosted && vilkårType === VilkårType.BOR_MED_SØKER
-            ? [UtdypendeVilkårsvurdering.DELT_BOSTED]
-            : []),
+        ...(vilkårType === VilkårType.BOR_MED_SØKER ? [UtdypendeVilkårsvurdering.DELT_BOSTED] : []),
     ];
 };

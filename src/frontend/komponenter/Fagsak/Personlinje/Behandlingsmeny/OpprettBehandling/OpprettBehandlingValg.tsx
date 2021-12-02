@@ -79,12 +79,10 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : minimalFagsak.behandlinger.length > 0 && kanOppretteBehandling;
     const kanOppretteTekniskEndring =
-        kanOppretteRevurdering &&
-        (toggles[ToggleNavn.visTekniskOpphør] || toggles[ToggleNavn.kanBehandleTekniskEndring]);
+        kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
     const kanOppretteTilbakekreving = !manuellJournalfør && !kanOppretteFørstegangsbehandling;
     const kanOppretteSmåbarnstillegg = toggles[ToggleNavn.kanBehandleSmåbarnstillegg];
-    const kanOppretteMigreringFraInfotrygd =
-        kanOppretteRevurdering && toggles[ToggleNavn.kanManueltMigrereTilbakeITid];
+    const kanOppretteMigreringFraInfotrygd = kanOppretteRevurdering;
     const erMigreringFraInfotrygd =
         !manuellJournalfør && behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 

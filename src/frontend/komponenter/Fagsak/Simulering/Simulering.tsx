@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Alertstripe from 'nav-frontend-alertstriper';
 
-import { RessursStatus, Ressurs } from '@navikt/familie-typer';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
@@ -32,7 +32,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { fagsakId } = useSakOgBehandlingParams();
     const history = useHistory();
     const {
-        erFeilutbetaling,
         hentSkjemadata,
         onSubmit,
         simuleringsresultat,
@@ -98,13 +97,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
                         {(!erMigreringMedEtterEllerFeilutbetaling ||
-                            skalIkkeStoppeMigreringsbehandlinger) &&
-                            erFeilutbetaling && (
-                                <TilbakekrevingSkjema
-                                    søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                />
-                            )}
+                            skalIkkeStoppeMigreringsbehandlinger) && (
+                            <TilbakekrevingSkjema
+                                søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                            />
+                        )}
                         {erMigreringMedEtterEllerFeilutbetaling && (
                             <Alertstripe type="feil">
                                 Utbetalingen må være lik utbetalingen i Infotrygd.
