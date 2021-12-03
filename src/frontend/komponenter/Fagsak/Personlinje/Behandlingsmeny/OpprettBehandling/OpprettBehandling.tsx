@@ -32,7 +32,8 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
             settVisBekreftelseTilbakekrevingModal(true);
         }
     );
-    const { behandlingsårsak, behandlingstype, behandlingstema } = opprettBehandlingSkjema.felter;
+    const { behandlingsårsak, behandlingstype, behandlingstema, migreringsdato } =
+        opprettBehandlingSkjema.felter;
 
     const lukkOpprettBehandlingModal = () => {
         nullstillSkjemaStatus();
@@ -88,6 +89,7 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
                         behandlingstype={behandlingstype}
                         behandlingsårsak={behandlingsårsak}
                         behandlingstema={behandlingstema}
+                        migreringsdato={migreringsdato}
                         minimalFagsak={minimalFagsak}
                         visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                     />

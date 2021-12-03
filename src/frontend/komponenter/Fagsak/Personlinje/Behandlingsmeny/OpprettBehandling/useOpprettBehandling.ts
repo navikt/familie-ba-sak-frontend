@@ -16,6 +16,7 @@ import {
 } from '../../../../../typer/behandling';
 import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
+import { erIsoStringGyldig, FamilieIsoDate } from '../../../../../utils/kalender';
 
 const useOpprettBehandling = (
     lukkModal: () => void,
@@ -44,7 +45,10 @@ const useOpprettBehandling = (
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             const behandlingstypeVerdi = avhengigheter.behandlingstype.verdi;
-            return behandlingstypeVerdi === Behandlingstype.REVURDERING;
+            return (
+                behandlingstypeVerdi === Behandlingstype.REVURDERING ||
+                behandlingstypeVerdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD
+            );
         },
         avhengigheter: { behandlingstype },
     });
@@ -64,11 +68,29 @@ const useOpprettBehandling = (
         },
     });
 
+    const migreringsdato = useFelt<FamilieIsoDate | undefined>({
+        verdi: undefined,
+        valideringsfunksjon: (felt: FeltState<FamilieIsoDate | undefined>) =>
+            felt.verdi && erIsoStringGyldig(felt.verdi)
+                ? ok(felt)
+                : feil(felt, 'Du må velge en ny migreringsdato'),
+        avhengigheter: { behandlingstype, behandlingsårsak },
+        skalFeltetVises: avhengigheter => {
+            const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
+            const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
+            return (
+                behandlingstypeVerdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+                behandlingsårsakVerdi === BehandlingÅrsak.ENDRE_MIGRERINGSDATO
+            );
+        },
+    });
+
     const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs } = useSkjema<
         {
             behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | '';
             behandlingsårsak: BehandlingÅrsak | '';
             behandlingstema: IBehandlingstema | undefined;
+            migreringsdato: FamilieIsoDate | undefined;
         },
         IBehandling
     >({
@@ -76,6 +98,7 @@ const useOpprettBehandling = (
             behandlingstype,
             behandlingsårsak,
             behandlingstema,
+            migreringsdato,
         },
         skjemanavn: 'Opprett behandling modal',
     });
@@ -121,6 +144,13 @@ const useOpprettBehandling = (
                             behandlingType: behandlingstype.verdi as Behandlingstype,
                             behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                             navident: innloggetSaksbehandler?.navIdent,
+                            nyMigreringsdato:
+                                skjema.felter.behandlingstype.verdi ===
+                                    Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+                                skjema.felter.behandlingsårsak.verdi ===
+                                    BehandlingÅrsak.ENDRE_MIGRERINGSDATO
+                                    ? skjema.felter.migreringsdato.verdi
+                                    : undefined,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',

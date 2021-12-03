@@ -7,11 +7,9 @@ import { Systemtittel } from 'nav-frontend-typografi';
 
 import { FamilieRadioGruppe } from '@navikt/familie-form-elements/dist';
 
-import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
-import { ToggleNavn } from '../../../typer/toggles';
 
 const StyledFamilieRadioGruppe = styled(FamilieRadioGruppe)`
     margin: 2rem 0;
@@ -25,7 +23,6 @@ const SøknadType: React.FunctionComponent = () => {
     const { erLesevisning } = useBehandling();
     const lesevisning = erLesevisning();
     const { skjema } = useSøknad();
-    const { toggles } = useApp();
 
     const radioOnChange = (underKategori: BehandlingUnderkategori) => {
         skjema.felter.underkategori.validerOgSettFelt(underKategori);
@@ -44,14 +41,12 @@ const SøknadType: React.FunctionComponent = () => {
                 checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.ORDINÆR}
                 onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
             />
-            {toggles[ToggleNavn.kanBehandleUtvidet] && (
-                <StyledRadio
-                    label={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET]}
-                    name={'registrer-søknad-søknadtype'}
-                    checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.UTVIDET}
-                    onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
-                />
-            )}
+            <StyledRadio
+                label={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET]}
+                name={'registrer-søknad-søknadtype'}
+                checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.UTVIDET}
+                onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
+            />
         </StyledFamilieRadioGruppe>
     );
 };

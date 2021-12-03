@@ -69,7 +69,6 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         vilkårType: redigerbartVilkår.verdi.vilkårType,
         resultat: redigerbartVilkår.verdi.resultat.verdi,
         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
-        brukErDeltBosted: toggles[ToggleNavn.brukErDeltBosted],
         brukEøs: toggles[ToggleNavn.brukEøs],
     };
 
