@@ -102,7 +102,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 tekstType={'UNDERTITTEL'}
                             />
 
-                            {!erLesevisning &&
+                            {!erLesevisning() &&
                                 personResultat.person.type === PersonType.SØKER &&
                                 !harUtvidet &&
                                 erMigreringOgEndreMigreringsdato && (
