@@ -79,6 +79,23 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
     });
 
+    const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
+            return felt.verdi.some(
+                fritekst =>
+                    fritekst.valideringsstatus === Valideringsstatus.FEIL ||
+                    fritekst.verdi.tekst.length === 0
+            )
+                ? feil(felt, '')
+                : ok(felt);
+        },
+        skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            return avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK;
+        },
+        avhengigheter: { brevmal },
+    });
+
     const multiselect = useFelt({
         verdi: [],
         valideringsfunksjon: (
@@ -87,7 +104,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         ) => {
             const brevmal: Brevmal | '' = avhengigheter?.brevmal.verdi;
 
-            if (felt.verdi.length === 0) {
+            if (felt.verdi.length === 0 && avhengigheter?.fritekster.verdi.length === 0) {
                 return feil(
                     felt,
                     `Du må velge minst ${
@@ -126,24 +143,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 avhengigheter?.brevmal.verdi !== Brevmal.VARSEL_OM_REVURDERING
             );
         },
-        avhengigheter: { brevmal },
-    });
-
-    const fritekster = useFelt<FeltState<IFritekstFelt>[]>({
-        verdi: [],
-        valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
-            return felt.verdi.some(
-                fritekst =>
-                    fritekst.valideringsstatus === Valideringsstatus.FEIL ||
-                    fritekst.verdi.tekst.length === 0
-            )
-                ? feil(felt, '')
-                : ok(felt);
-        },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK;
-        },
-        avhengigheter: { brevmal },
+        avhengigheter: { brevmal, fritekster },
     });
 
     const { kanSendeSkjema, onSubmit, skjema } = useSkjema<
