@@ -38,6 +38,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         tilbakekrevingSkjema,
         harÅpenTilbakekrevingRessurs,
         erMigreringMedEtterEllerFeilutbetaling,
+        erFeilutbetaling,
     } = useSimulering();
     const { erLesevisning, settÅpenBehandling } = useBehandling();
     const { toggles } = useApp();
@@ -97,12 +98,13 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
                         {(!erMigreringMedEtterEllerFeilutbetaling ||
-                            skalIkkeStoppeMigreringsbehandlinger) && (
-                            <TilbakekrevingSkjema
-                                søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                            />
-                        )}
+                            skalIkkeStoppeMigreringsbehandlinger) &&
+                            erFeilutbetaling && (
+                                <TilbakekrevingSkjema
+                                    søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                                />
+                            )}
                         {erMigreringMedEtterEllerFeilutbetaling && (
                             <Alertstripe type="feil">
                                 Utbetalingen må være lik utbetalingen i Infotrygd.
