@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { Element, Feilmelding, Normaltekst } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
@@ -64,6 +64,11 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                         </ul>
                     </>
                 )}
+            {genererteBrevbegrunnelser.status === RessursStatus.FEILET && (
+                <>
+                    <Feilmelding>{genererteBrevbegrunnelser.frontendFeilmelding}</Feilmelding>
+                </>
+            )}
             {visFritekster() && <FritekstVedtakbegrunnelser />}
         </EkspanderbartBegrunnelsePanel>
     );

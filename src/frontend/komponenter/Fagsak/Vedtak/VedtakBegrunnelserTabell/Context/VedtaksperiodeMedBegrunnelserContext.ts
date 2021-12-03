@@ -185,7 +185,8 @@ const [VedtaksperiodeMedBegrunnelserProvider, useVedtaksperiodeMedBegrunnelser] 
                 } else {
                     settGenererteBrevbegrunnelser(
                         byggFeiletRessurs(
-                            'Klarte ikke generere forhåndsvisning av brevbegrunnelser'
+                            'Noe gikk galt og vi klarte ikke generere forhåndsvisning av brevbegrunnelser. ' +
+                                'Ta kontakt med brukerstøtte hvis problemet vedvarer.'
                         )
                     );
                 }
