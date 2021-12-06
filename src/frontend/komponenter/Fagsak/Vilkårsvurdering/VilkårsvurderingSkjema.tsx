@@ -4,7 +4,6 @@ import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
-import Lenke from 'nav-frontend-lenker';
 
 import { AddCircle } from '@navikt/ds-icons';
 import { FeltState } from '@navikt/familie-skjema';
@@ -24,7 +23,7 @@ import {
     annenVurderingConfig,
     VilkårType,
 } from '../../../typer/vilkår';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
@@ -56,7 +55,6 @@ const PersonLinje = styled.div`
 
 const VilkårDiv = styled.div`
     display: flex;
-    flex: 1;
     align-items: center;
 
     a.lenke span {
@@ -83,6 +81,15 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
         }, {})
     );
 
+    const leggTilVilkårUtvidet = (personIdent: string) => {
+        const promise = postVilkår(personIdent, VilkårType.UTVIDET_BARNETRYGD);
+        promise.then((oppdatertBehandling: Ressurs<IBehandling>) => {
+            if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
+                settÅpenBehandling(oppdatertBehandling);
+            }
+        });
+    };
+
     return (
         <>
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
@@ -103,32 +110,24 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                             />
 
                             {!erLesevisning() &&
+                                personErEkspandert[personResultat.personIdent] &&
                                 personResultat.person.type === PersonType.SØKER &&
                                 !harUtvidet &&
                                 erMigreringOgEndreMigreringsdato && (
                                     <VilkårDiv>
-                                        <Lenke
-                                            href="#"
-                                            onClick={() => {
-                                                const promise = postVilkår(
-                                                    personResultat.personIdent,
-                                                    VilkårType.UTVIDET_BARNETRYGD
-                                                );
-                                                promise.then(
-                                                    (oppdatertBehandling: Ressurs<IBehandling>) => {
-                                                        if (
-                                                            oppdatertBehandling.status ===
-                                                            RessursStatus.SUKSESS
-                                                        ) {
-                                                            settÅpenBehandling(oppdatertBehandling);
-                                                        }
-                                                    }
-                                                );
-                                            }}
-                                        >
-                                            <AddCircle />
-                                            <span>Legg til vilkår utvidet barnetrygd</span>
-                                        </Lenke>
+                                        <IkonKnapp
+                                            erLesevisning={erLesevisning()}
+                                            id={`${personResultat.person.personIdent}__legg-til-vilkår-utvidet`}
+                                            onClick={() =>
+                                                leggTilVilkårUtvidet(personResultat.personIdent)
+                                            }
+                                            label={`Legg til vilkår utvidet barnetrygd`}
+                                            mini={true}
+                                            ikonPosisjon={IkonPosisjon.VENSTRE}
+                                            ikon={
+                                                <AddCircle title="Legg til vilkår utvidet barnetrygd" />
+                                            }
+                                        />
                                     </VilkårDiv>
                                 )}
 
