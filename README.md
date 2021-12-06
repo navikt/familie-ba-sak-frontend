@@ -9,20 +9,22 @@ Frontend app for barnetrygd sak
 * Starte dev-server `yarn start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
 
-Appen krever en del environment variabler og legges til i .env fila i root på prosjektet.  
+Appen krever en del environment variabler og legges til i .env fila i root på prosjektet. 
+Disse kan hentes ved å kjøre `kubectl -n teamfamilie get secret azuread-familie-ba-sak-frontend-lokal -o json | jq '.data | map_values(@base64d)'`
+i konsollen.
 ```
-    CLIENT_ID='<application_id from aad app>'
-    CLIENT_SECRET='<KEY from aad app>'
+    CLIENT_ID='AZURE_APP_CLIENT_ID' (fra konsollen)
+    CLIENT_SECRET='AZURE_APP_CLIENT_SECRET' (fra konsollen)
     COOKIE_KEY1='<any string of length 32>'
     COOKIE_KEY2='<any string of length 32>'
     
     SESSION_SECRET='<any string of length 32>'
-    BA_SAK_SCOPE=api://<familie-ba-sak client ID>/.default
+    BA_SAK_SCOPE=api://dev-fss.teamfamilie.familie-ba-sak-lokal/.default
 
     ENV=local
     APP_VERSION=0.0.1
 ```
-Disse kan hentes ut fra Secrets i Vault under kv/preprod/fss/familie-ba-sak-frontend/default, med unntak av ENV og APP_VERSION som er gitt over.
+
 
 For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokalt med mindre det gjøres en del endringer i forbindelse med uthenting av environment variabler og URLer for uthenting av informasjon.
 
