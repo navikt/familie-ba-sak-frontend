@@ -10,7 +10,10 @@ import { FeltState } from '@navikt/familie-skjema';
 import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import {
+    useVilkårsvurdering,
+    VilkårSubmit,
+} from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
 import { IBehandling } from '../../../typer/behandling';
 import { PersonType } from '../../../typer/person';
@@ -65,7 +68,7 @@ const VilkårDiv = styled.div`
 const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema> = ({
     visFeilmeldinger,
 }) => {
-    const { vilkårsvurdering, postVilkår } = useVilkårsvurdering();
+    const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
     const { erLesevisning, erMigreringOgEndreMigreringsdato, settÅpenBehandling } = useBehandling();
     const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
         vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
@@ -84,6 +87,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     const leggTilVilkårUtvidet = (personIdent: string) => {
         const promise = postVilkår(personIdent, VilkårType.UTVIDET_BARNETRYGD);
         promise.then((oppdatertBehandling: Ressurs<IBehandling>) => {
+            settVilkårSubmit(VilkårSubmit.NONE);
             if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
                 settÅpenBehandling(oppdatertBehandling);
             }
