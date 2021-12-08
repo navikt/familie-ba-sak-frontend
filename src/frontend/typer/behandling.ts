@@ -75,8 +75,8 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     MIGRERING: 'Migrering',
     ENDRE_MIGRERINGSDATO: 'Endre migreringsdato',
     /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
-    REVURDERING_KLAGE_NFP: 'Revurdering etter klage',
-    REVURDERING_KLAGE_KA: 'Revurdering etter klage',
+    REVURDERING_KLAGE_NFP: 'Klage tilbakekreving',
+    REVURDERING_KLAGE_KA: 'Klage omgjort av KA',
     REVURDERING_OPPLYSNINGER_OM_VILKÅR: 'Nye opplysninger',
     REVURDERING_OPPLYSNINGER_OM_FORELDELSE: 'Nye opplysninger',
     REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT:
