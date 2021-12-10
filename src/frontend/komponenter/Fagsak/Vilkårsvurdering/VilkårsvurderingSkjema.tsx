@@ -99,7 +99,8 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
                 const andreVurderinger = personResultat.andreVurderinger;
                 const harUtvidet = personResultat.vilkårResultater.find(
-                    vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
+                    vilkårResultat =>
+                        vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
                 return (
                     <Container

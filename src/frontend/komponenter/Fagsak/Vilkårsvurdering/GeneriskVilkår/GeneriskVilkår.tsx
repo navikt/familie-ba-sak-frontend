@@ -96,7 +96,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
 
     const skalViseFjernUtvidetBarnetrygdKnapp = () => {
         const utvidetVilkår = vilkårResultater.filter(
-            vr => vr.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
+            vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
         );
         return (
             erMigreringOgEndreMigreringsdato &&
