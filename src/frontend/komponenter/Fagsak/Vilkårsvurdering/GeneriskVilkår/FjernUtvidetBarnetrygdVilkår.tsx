@@ -37,7 +37,7 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ erLesevisning, person
             settDisabled(true);
             request<{ personIdent: string; vilkårType: VilkårType }, IBehandling>({
                 method: 'DELETE',
-                url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling.data.behandlingId}`,
+                url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling.data.behandlingId}/vilkaar`,
                 data: {
                     personIdent: personIdent,
                     vilkårType: VilkårType.UTVIDET_BARNETRYGD,
