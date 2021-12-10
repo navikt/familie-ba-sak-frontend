@@ -9,7 +9,7 @@ import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
-import { BehandlingÅrsak } from '../../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { IMinimalFagsak } from '../../../../typer/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
@@ -91,7 +91,9 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
                         (åpenBehandling.data.årsak === BehandlingÅrsak.NYE_OPPLYSNINGER ||
                             åpenBehandling.data.årsak === BehandlingÅrsak.KLAGE ||
                             åpenBehandling.data.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-                            åpenBehandling.data.årsak === BehandlingÅrsak.TEKNISK_ENDRING) && (
+                            åpenBehandling.data.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
+                            åpenBehandling.data.type ===
+                                Behandlingstype.MIGRERING_FRA_INFOTRYGD) && (
                             <li>
                                 <LeggTilBarnPBehandling
                                     onListElementClick={() => settAnker(undefined)}
