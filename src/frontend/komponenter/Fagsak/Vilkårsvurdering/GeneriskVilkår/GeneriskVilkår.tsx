@@ -15,9 +15,10 @@ import {
 } from '../../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import Pluss from '../../../../ikoner/Pluss';
 import { IBehandling } from '../../../../typer/behandling';
-import { IGrunnlagPerson } from '../../../../typer/person';
+import { IGrunnlagPerson, PersonType } from '../../../../typer/person';
 import { IVilkårConfig, IVilkårResultat, Resultat, VilkårType } from '../../../../typer/vilkår';
 import IkonKnapp, { IkonPosisjon } from '../../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
 
 interface IProps {
@@ -53,7 +54,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     vilkårResultater,
     visFeilmeldinger,
 }) => {
-    const { erLesevisning, settÅpenBehandling } = useBehandling();
+    const { erLesevisning, settÅpenBehandling, erMigreringOgEndreMigreringsdato } = useBehandling();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
@@ -93,6 +94,18 @@ const GeneriskVilkår: React.FC<IProps> = ({
         return uvurdertPeriodePåVilkår === undefined;
     };
 
+    const skalViseFjernUtvidetBarnetrygdKnapp = () => {
+        const utvidetVilkår = vilkårResultater.filter(
+            vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
+        );
+        return (
+            erMigreringOgEndreMigreringsdato &&
+            person.type === PersonType.SØKER &&
+            vilkårFraConfig.key === VilkårType.UTVIDET_BARNETRYGD &&
+            utvidetVilkår.length !== 0
+        );
+    };
+
     return (
         <Container>
             <SkjemaGruppe feil={visFeilmeldingerForVilkår ? feilmelding : undefined}>
@@ -124,6 +137,12 @@ const GeneriskVilkår: React.FC<IProps> = ({
                         disabled={vilkårSubmit === VilkårSubmit.POST}
                     />
                 ) : null}
+                {skalViseFjernUtvidetBarnetrygdKnapp() && (
+                    <FjernUtvidetBarnetrygdVilkår
+                        erLesevisning={erLesevisning()}
+                        personIdent={person.personIdent}
+                    />
+                )}
             </SkjemaGruppe>
         </Container>
     );

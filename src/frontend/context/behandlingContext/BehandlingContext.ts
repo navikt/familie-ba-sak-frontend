@@ -21,6 +21,7 @@ import {
     BehandlerRolle,
     BehandlingStatus,
     BehandlingSteg,
+    Behandlingstype,
     BehandlingÅrsak,
     IBehandling,
 } from '../../typer/behandling';
@@ -185,6 +186,11 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
         innloggetSaksbehandler?.email !== åpenBehandling.data.endretAv;
 
+    const erMigreringOgEndreMigreringsdato =
+        åpenBehandling.status === RessursStatus.SUKSESS &&
+        åpenBehandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+        åpenBehandling.data.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
+
     return {
         erLesevisning,
         forrigeÅpneSide,
@@ -203,6 +209,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         settÅpenBehandling,
         oppdaterRegisteropplysninger,
         sendTilBeslutterNesteOnClick,
+        erMigreringOgEndreMigreringsdato,
     };
 });
 

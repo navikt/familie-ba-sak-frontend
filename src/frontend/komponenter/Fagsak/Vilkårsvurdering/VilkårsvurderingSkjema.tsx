@@ -5,11 +5,18 @@ import styled from 'styled-components';
 
 import AlertStripe from 'nav-frontend-alertstriper';
 
+import { AddCircle } from '@navikt/ds-icons';
 import { FeltState } from '@navikt/familie-skjema';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
+import {
+    useVilkårsvurdering,
+    VilkårSubmit,
+} from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import FamilieChevron from '../../../ikoner/FamilieChevron';
+import { IBehandling } from '../../../typer/behandling';
+import { PersonType } from '../../../typer/person';
 import {
     IPersonResultat,
     IVilkårConfig,
@@ -17,8 +24,9 @@ import {
     vilkårConfig,
     Resultat,
     annenVurderingConfig,
+    VilkårType,
 } from '../../../typer/vilkår';
-import IkonKnapp from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
+import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 import GeneriskAnnenVurdering from './GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from './GeneriskVilkår/GeneriskVilkår';
@@ -48,11 +56,20 @@ const PersonLinje = styled.div`
     padding: 1.5rem 0;
 `;
 
+const VilkårDiv = styled.div`
+    display: flex;
+    align-items: center;
+
+    a.lenke span {
+        margin-left: 10px;
+    }
+`;
+
 const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema> = ({
     visFeilmeldinger,
 }) => {
-    const { vilkårsvurdering } = useVilkårsvurdering();
-    const { erLesevisning } = useBehandling();
+    const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
+    const { erLesevisning, erMigreringOgEndreMigreringsdato, settÅpenBehandling } = useBehandling();
     const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
         vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
             return {
@@ -67,10 +84,24 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
         }, {})
     );
 
+    const leggTilVilkårUtvidet = (personIdent: string) => {
+        const promise = postVilkår(personIdent, VilkårType.UTVIDET_BARNETRYGD);
+        promise.then((oppdatertBehandling: Ressurs<IBehandling>) => {
+            settVilkårSubmit(VilkårSubmit.NONE);
+            if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
+                settÅpenBehandling(oppdatertBehandling);
+            }
+        });
+    };
+
     return (
         <>
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
                 const andreVurderinger = personResultat.andreVurderinger;
+                const harUtvidet = personResultat.vilkårResultater.find(
+                    vilkårResultat =>
+                        vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
+                );
                 return (
                     <Container
                         key={personResultat.personIdent}
@@ -82,6 +113,29 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 tag={'h3'}
                                 tekstType={'UNDERTITTEL'}
                             />
+
+                            {!erLesevisning() &&
+                                personErEkspandert[personResultat.personIdent] &&
+                                personResultat.person.type === PersonType.SØKER &&
+                                !harUtvidet &&
+                                erMigreringOgEndreMigreringsdato && (
+                                    <VilkårDiv>
+                                        <IkonKnapp
+                                            erLesevisning={erLesevisning()}
+                                            id={`${personResultat.person.personIdent}__legg-til-vilkår-utvidet`}
+                                            onClick={() =>
+                                                leggTilVilkårUtvidet(personResultat.personIdent)
+                                            }
+                                            label={`Legg til vilkår utvidet barnetrygd`}
+                                            mini={true}
+                                            ikonPosisjon={IkonPosisjon.VENSTRE}
+                                            ikon={
+                                                <AddCircle title="Legg til vilkår utvidet barnetrygd" />
+                                            }
+                                        />
+                                    </VilkårDiv>
+                                )}
+
                             <IkonKnapp
                                 erLesevisning={false}
                                 id={`vis-skjul-vilkårsvurdering-${personResultat.personIdent}`}

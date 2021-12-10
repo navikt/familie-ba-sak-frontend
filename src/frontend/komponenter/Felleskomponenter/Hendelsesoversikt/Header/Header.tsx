@@ -2,7 +2,10 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
+import { RessursStatus } from '@navikt/familie-typer';
+
 import { useBehandling } from '../../../../context/behandlingContext/BehandlingContext';
+import { Behandlingstype } from '../../../../typer/behandling';
 import { Tabs } from '../typer';
 import Dokumenterknapp from './Dokumenterknapp';
 import Historikkknapp from './Historikkknapp';
@@ -22,7 +25,11 @@ const StyledHeader = styled.header`
 `;
 
 const Header = ({ aktivTab, settAktivTab, skalViseTotrinnskontroll }: IProps) => {
-    const { erLesevisning } = useBehandling();
+    const { erLesevisning, åpenBehandling } = useBehandling();
+
+    const erMigreringFraInfotrygd =
+        åpenBehandling.status === RessursStatus.SUKSESS &&
+        åpenBehandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return (
         <StyledHeader>
@@ -42,7 +49,7 @@ const Header = ({ aktivTab, settAktivTab, skalViseTotrinnskontroll }: IProps) =>
             />
             <Meldingerknapp
                 aktiv={aktivTab === Tabs.Meldinger}
-                disabled={erLesevisning()}
+                disabled={erLesevisning() || erMigreringFraInfotrygd}
                 onClick={() => settAktivTab(Tabs.Meldinger)}
             />
         </StyledHeader>
