@@ -22,15 +22,14 @@ interface IRegisteropplysningerProps {
 }
 
 const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ opplysninger }) => {
-    const bleOpprettetUtenRegisteropplysninger = opplysninger.statsborgerskap.length === 0;
+    const manglerRegisteropplysninger = opplysninger.statsborgerskap.length === 0;
 
     return (
         <>
             <Ingress children={'Registeropplysninger'} />
-            {bleOpprettetUtenRegisteropplysninger ? (
+            {manglerRegisteropplysninger ? (
                 <Alertstripe type="info" style={{ marginTop: '1rem' }}>
-                    Behandlingen ble gjort før registeropplysninger ble lagret i systemet og mangler
-                    derfor opplysninger.
+                    Det ble ikke hentet inn registeropplysninger på denne behandlingen.
                 </Alertstripe>
             ) : (
                 <Container>
