@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 
 import { useHistory } from 'react-router';
 
+import { ISelectOption } from '@navikt/familie-form-elements';
 import { Avhengigheter, feil, FeltState, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
+import { useFagsakRessurser } from '../../../../../context/FagsakContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import {
     Behandlingstype,
@@ -24,8 +26,11 @@ const useOpprettBehandling = (
 ) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { settÅpenBehandling } = useBehandling();
+    const { bruker: brukerRessurs } = useFagsakRessurser();
     const { innloggetSaksbehandler } = useApp();
     const history = useHistory();
+
+    const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | ''>({
         verdi: '',
@@ -80,7 +85,23 @@ const useOpprettBehandling = (
             const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
             return (
                 behandlingstypeVerdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
-                behandlingsårsakVerdi === BehandlingÅrsak.ENDRE_MIGRERINGSDATO
+                behandlingsårsakVerdi in BehandlingÅrsak
+            );
+        },
+    });
+
+    const valgteBarn = useFelt({
+        verdi: [],
+        valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => {
+            return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må velge minst ett barn');
+        },
+        avhengigheter: { behandlingstype, behandlingsårsak },
+        skalFeltetVises: avhengigheter => {
+            const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
+            const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
+            return (
+                behandlingstypeVerdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+                behandlingsårsakVerdi === BehandlingÅrsak.HELMANUELL_MIGRERING
             );
         },
     });
@@ -91,6 +112,7 @@ const useOpprettBehandling = (
             behandlingsårsak: BehandlingÅrsak | '';
             behandlingstema: IBehandlingstema | undefined;
             migreringsdato: FamilieIsoDate | undefined;
+            valgteBarn: ISelectOption[];
         },
         IBehandling
     >({
@@ -99,6 +121,7 @@ const useOpprettBehandling = (
             behandlingsårsak,
             behandlingstema,
             migreringsdato,
+            valgteBarn,
         },
         skjemanavn: 'Opprett behandling modal',
     });
@@ -146,10 +169,15 @@ const useOpprettBehandling = (
                             navident: innloggetSaksbehandler?.navIdent,
                             nyMigreringsdato:
                                 skjema.felter.behandlingstype.verdi ===
+                                Behandlingstype.MIGRERING_FRA_INFOTRYGD
+                                    ? skjema.felter.migreringsdato.verdi
+                                    : undefined,
+                            barnasIdenter:
+                                skjema.felter.behandlingstype.verdi ===
                                     Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
                                 skjema.felter.behandlingsårsak.verdi ===
-                                    BehandlingÅrsak.ENDRE_MIGRERINGSDATO
-                                    ? skjema.felter.migreringsdato.verdi
+                                    BehandlingÅrsak.HELMANUELL_MIGRERING
+                                    ? skjema.felter.valgteBarn.verdi.map(option => option.value)
                                     : undefined,
                         },
                         method: 'POST',
@@ -189,6 +217,7 @@ const useOpprettBehandling = (
         onBekreft,
         opprettBehandlingSkjema: skjema,
         nullstillSkjemaStatus,
+        bruker,
     };
 };
 

@@ -5,7 +5,13 @@ import styled from 'styled-components';
 import navFarger from 'nav-frontend-core';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { FamilieDatovelger, FamilieSelect } from '@navikt/familie-form-elements';
+import {
+    FamilieDatovelger,
+    FamilieReactSelect,
+    FamilieSelect,
+    FormatOptionLabelMeta,
+    ISelectOption,
+} from '@navikt/familie-form-elements';
 import { Felt } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../../context/AppContext';
@@ -17,9 +23,11 @@ import {
 } from '../../../../../typer/behandling';
 import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { FagsakStatus, IMinimalFagsak } from '../../../../../typer/fagsak';
+import { ForelderBarnRelasjonRolle, IPersonInfo } from '../../../../../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../../../utils/fagsak';
+import { hentAlder } from '../../../../../utils/formatter';
 import { FamilieIsoDate } from '../../../../../utils/kalender';
 import { BehandlingstemaSelect } from '../../../../Felleskomponenter/BehandlingstemaSelect';
 import { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
@@ -27,6 +35,9 @@ import { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 const FixedDatoVelger = styled(FamilieDatovelger)`
     .nav-datovelger__kalenderPortal__content {
         position: fixed;
+    }
+    .nav-datovelger__kalenderknapp {
+        z-index: 0;
     }
 `;
 
@@ -45,6 +56,8 @@ interface IProps {
     visFeilmeldinger: boolean;
     erLesevisning?: boolean;
     manuellJournalfør?: boolean;
+    bruker?: IPersonInfo | undefined;
+    valgteBarn?: Felt<ISelectOption[]> | undefined;
 }
 
 interface BehandlingstypeSelect extends HTMLSelectElement {
@@ -64,6 +77,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     visFeilmeldinger,
     erLesevisning = false,
     manuellJournalfør = false,
+    bruker = undefined,
+    valgteBarn = undefined,
 }) => {
     const { toggles } = useApp();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
@@ -83,9 +98,18 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const kanOppretteTilbakekreving = !manuellJournalfør && !kanOppretteFørstegangsbehandling;
     const kanOppretteSmåbarnstillegg = toggles[ToggleNavn.kanBehandleSmåbarnstillegg];
     const kanOppretteMigreringFraInfotrygd =
-        kanOppretteRevurdering && toggles[ToggleNavn.kanManueltMigrereTilbakeITid];
+        kanOppretteBehandling && toggles[ToggleNavn.kanManueltMigrereTilbakeITid];
     const erMigreringFraInfotrygd =
         !manuellJournalfør && behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const erHelmanuellMigrering =
+        erMigreringFraInfotrygd && behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
+
+    const barn = bruker?.forelderBarnRelasjon
+        .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
+        .map<ISelectOption>(relasjon => ({
+            value: relasjon.personIdent,
+            label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år)`,
+        }));
 
     return (
         <>
@@ -141,7 +165,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         aria-selected={
                             behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD
                         }
-                        disabled={!kanOppretteRevurdering}
+                        disabled={!kanOppretteMigreringFraInfotrygd}
                         value={Behandlingstype.MIGRERING_FRA_INFOTRYGD}
                     >
                         Migrering fra infotrygd
@@ -164,7 +188,13 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     </option>
                     {erMigreringFraInfotrygd
                         ? Object.values(BehandlingÅrsak)
-                              .filter(årsak => årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
+                              .filter(
+                                  årsak =>
+                                      (kanOppretteFørstegangsbehandling &&
+                                          årsak === BehandlingÅrsak.HELMANUELL_MIGRERING) ||
+                                      (!kanOppretteFørstegangsbehandling &&
+                                          årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
+                              )
                               .map(årsak => {
                                   return (
                                       <option
@@ -213,6 +243,36 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     visFeilmeldinger={visFeilmeldinger}
                     name="Behandlingstema"
                     label="Velg behandlingstema"
+                />
+            )}
+
+            {erMigreringFraInfotrygd && erHelmanuellMigrering && valgteBarn?.erSynlig && (
+                <FamilieReactSelect
+                    {...valgteBarn.hentNavInputProps(visFeilmeldinger)}
+                    label={'Legg til juridiske barn for migrering'}
+                    placeholder={'Velg barn'}
+                    options={barn}
+                    creatable={false}
+                    isMulti={true}
+                    formatOptionLabel={(
+                        option: ISelectOption,
+                        formatOptionLabelMeta: FormatOptionLabelMeta<ISelectOption, true>
+                    ) => {
+                        if (formatOptionLabelMeta.context === 'menu') {
+                            return (
+                                <Normaltekst>
+                                    <b>{option.label}</b> | {option.value}
+                                </Normaltekst>
+                            );
+                        } else {
+                            return <Normaltekst>{option.value}</Normaltekst>;
+                        }
+                    }}
+                    onChange={valgteOptions => {
+                        valgteBarn.onChange(
+                            valgteOptions === null ? [] : (valgteOptions as ISelectOption[])
+                        );
+                    }}
                 />
             )}
 

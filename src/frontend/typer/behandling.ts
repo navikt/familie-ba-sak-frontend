@@ -56,6 +56,7 @@ export enum BehandlingÅrsak {
     SATSENDRING = 'SATSENDRING',
     MIGRERING = 'MIGRERING',
     ENDRE_MIGRERINGSDATO = 'ENDRE_MIGRERINGSDATO',
+    HELMANUELL_MIGRERING = 'HELMANUELL_MIGRERING',
 }
 
 export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak, string> = {
@@ -74,6 +75,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     SATSENDRING: 'Satsendring',
     MIGRERING: 'Migrering',
     ENDRE_MIGRERINGSDATO: 'Endre migreringsdato',
+    HELMANUELL_MIGRERING: 'Manuell migrering',
     /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
     REVURDERING_KLAGE_NFP: 'Klage tilbakekreving',
     REVURDERING_KLAGE_KA: 'Klage omgjort av KA',
