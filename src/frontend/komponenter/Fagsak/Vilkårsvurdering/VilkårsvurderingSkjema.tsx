@@ -69,7 +69,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
     visFeilmeldinger,
 }) => {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurdering();
-    const { erLesevisning, erMigreringOgEndreMigreringsdato, settÅpenBehandling } = useBehandling();
+    const { erLesevisning, erMigreringsbehandling, settÅpenBehandling } = useBehandling();
     const [personErEkspandert, settPersonErEkspandert] = useState<{ [key: string]: boolean }>(
         vilkårsvurdering.reduce((personMapEkspandert, personResultat) => {
             return {
@@ -118,7 +118,7 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                 personErEkspandert[personResultat.personIdent] &&
                                 personResultat.person.type === PersonType.SØKER &&
                                 !harUtvidet &&
-                                erMigreringOgEndreMigreringsdato && (
+                                erMigreringsbehandling && (
                                     <VilkårDiv>
                                         <IkonKnapp
                                             erLesevisning={erLesevisning()}

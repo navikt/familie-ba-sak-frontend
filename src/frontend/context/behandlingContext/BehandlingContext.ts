@@ -186,10 +186,9 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
         innloggetSaksbehandler?.email !== åpenBehandling.data.endretAv;
 
-    const erMigreringOgEndreMigreringsdato =
+    const erMigreringsbehandling =
         åpenBehandling.status === RessursStatus.SUKSESS &&
-        åpenBehandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
-        åpenBehandling.data.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
+        åpenBehandling.data.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return {
         erLesevisning,
@@ -209,7 +208,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
         settÅpenBehandling,
         oppdaterRegisteropplysninger,
         sendTilBeslutterNesteOnClick,
-        erMigreringOgEndreMigreringsdato,
+        erMigreringsbehandling,
     };
 });
 
