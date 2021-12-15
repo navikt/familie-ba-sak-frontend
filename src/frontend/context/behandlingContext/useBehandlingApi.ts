@@ -78,17 +78,21 @@ const useBehandlingApi = (
     };
 
     const hentLogg = (): void => {
-        settLogg(byggHenterRessurs());
-        request<void, ILogg[]>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/logg/${behandlingId}`,
-        })
-            .then((hentetLogg: Ressurs<ILogg[]>) => {
-                settLogg(hentetLogg);
+        if (behandlingId === undefined) {
+            settLogg(byggFeiletRessurs('Klarte ikke laste logg. Ingen behandlingsid.'));
+        } else {
+            settLogg(byggHenterRessurs());
+            request<void, ILogg[]>({
+                method: 'GET',
+                url: `/familie-ba-sak/api/logg/${behandlingId}`,
             })
-            .catch(() => {
-                settLogg(byggFeiletRessurs('Feil ved lasting av logg'));
-            });
+                .then((hentetLogg: Ressurs<ILogg[]>) => {
+                    settLogg(hentetLogg);
+                })
+                .catch(() => {
+                    settLogg(byggFeiletRessurs('Feil ved lasting av logg'));
+                });
+        }
     };
 
     const oppdaterRegisteropplysninger = (): Promise<Ressurs<IBehandling>> => {
