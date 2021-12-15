@@ -25,14 +25,15 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
         useState(false);
     const history = useHistory();
 
-    const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus } = useOpprettBehandling(
-        () => settVisModal(false),
-        () => {
-            settVisModal(false);
-            settVisBekreftelseTilbakekrevingModal(true);
-        }
-    );
-    const { behandlingsårsak, behandlingstype, behandlingstema, migreringsdato } =
+    const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker } =
+        useOpprettBehandling(
+            () => settVisModal(false),
+            () => {
+                settVisModal(false);
+                settVisBekreftelseTilbakekrevingModal(true);
+            }
+        );
+    const { behandlingsårsak, behandlingstype, behandlingstema, migreringsdato, valgteBarn } =
         opprettBehandlingSkjema.felter;
 
     const lukkOpprettBehandlingModal = () => {
@@ -92,6 +93,8 @@ const OpprettBehandling: React.FC<IProps> = ({ onListElementClick, minimalFagsak
                         migreringsdato={migreringsdato}
                         minimalFagsak={minimalFagsak}
                         visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                        bruker={bruker}
+                        valgteBarn={valgteBarn}
                     />
                 </SkjemaGruppe>
             </UIModalWrapper>

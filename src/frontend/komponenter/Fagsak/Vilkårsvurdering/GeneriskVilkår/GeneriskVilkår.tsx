@@ -54,7 +54,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     vilkårResultater,
     visFeilmeldinger,
 }) => {
-    const { erLesevisning, settÅpenBehandling, erMigreringOgEndreMigreringsdato } = useBehandling();
+    const { erLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandling();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurdering();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
@@ -99,7 +99,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
             vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
         );
         return (
-            erMigreringOgEndreMigreringsdato &&
+            erMigreringsbehandling &&
             person.type === PersonType.SØKER &&
             vilkårFraConfig.key === VilkårType.UTVIDET_BARNETRYGD &&
             utvidetVilkår.length !== 0
