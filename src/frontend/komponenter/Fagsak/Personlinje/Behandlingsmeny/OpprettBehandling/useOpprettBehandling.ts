@@ -157,6 +157,12 @@ const useOpprettBehandling = (
                     }
                 );
             } else {
+                const erMigreringFraInfoTrygd =
+                    skjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+                const erHelmanuellMigrering =
+                    erMigreringFraInfoTrygd &&
+                    skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
+
                 onSubmit<IRestNyBehandling>(
                     {
                         data: {
@@ -167,18 +173,12 @@ const useOpprettBehandling = (
                             behandlingType: behandlingstype.verdi as Behandlingstype,
                             behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                             navident: innloggetSaksbehandler?.navIdent,
-                            nyMigreringsdato:
-                                skjema.felter.behandlingstype.verdi ===
-                                Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                                    ? skjema.felter.migreringsdato.verdi
-                                    : undefined,
-                            barnasIdenter:
-                                skjema.felter.behandlingstype.verdi ===
-                                    Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
-                                skjema.felter.behandlingsårsak.verdi ===
-                                    BehandlingÅrsak.HELMANUELL_MIGRERING
-                                    ? skjema.felter.valgteBarn.verdi.map(option => option.value)
-                                    : undefined,
+                            nyMigreringsdato: erMigreringFraInfoTrygd
+                                ? skjema.felter.migreringsdato.verdi
+                                : undefined,
+                            barnasIdenter: erHelmanuellMigrering
+                                ? skjema.felter.valgteBarn.verdi.map(option => option.value)
+                                : undefined,
                         },
                         method: 'POST',
                         url: '/familie-ba-sak/api/behandlinger',

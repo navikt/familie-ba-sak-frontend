@@ -246,7 +246,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 />
             )}
 
-            {erMigreringFraInfotrygd && erHelmanuellMigrering && valgteBarn?.erSynlig && (
+            {erHelmanuellMigrering && valgteBarn?.erSynlig && (
                 <FamilieReactSelect
                     {...valgteBarn.hentNavInputProps(visFeilmeldinger)}
                     label={'Legg til juridiske barn for migrering'}
