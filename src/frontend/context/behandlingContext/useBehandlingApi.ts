@@ -78,6 +78,10 @@ const useBehandlingApi = (
     };
 
     const hentLogg = (): void => {
+        if (behandlingId === undefined) {
+            settLogg(byggFeiletRessurs('Klarte ikke laste logg. Ingen behandlingsid.'));
+        }
+
         settLogg(byggHenterRessurs());
         request<void, ILogg[]>({
             method: 'GET',
