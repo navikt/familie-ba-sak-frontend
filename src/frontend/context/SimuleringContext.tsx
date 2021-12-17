@@ -80,16 +80,12 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
 
     const skalStoppeISimulering = () => {
         if (åpenBehandling.årsak === BehandlingÅrsak.HELMANUELL_MIGRERING && simResultat) {
-            console.log(`Antall perioder før filter: ${simResultat.perioder.length}`);
             const tidligereUtbetaltPerioderEtterbetalingOver220 = simResultat.perioder.filter(
                 periode =>
                     periode.tidligereUtbetalt &&
                     periode.tidligereUtbetalt > 0 &&
                     periode.etterbetaling &&
                     periode.etterbetaling > 220
-            );
-            console.log(
-                `Antall perioder etter filter: ${tidligereUtbetaltPerioderEtterbetalingOver220.length}`
             );
             return erFeilutbetaling || tidligereUtbetaltPerioderEtterbetalingOver220.length > 0;
         }
@@ -149,7 +145,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             harÅpenTilbakekreving,
         },
         skalFeltetVises: avhengigheter =>
-            !avhengigheter.erMigreringMedStoppISimulering &&
+            !avhengigheter?.erMigreringMedStoppISimulering &&
             avhengigheter?.erFeilutbetaling &&
             !avhengigheter?.harÅpenTilbakekreving,
         valideringsfunksjon: (felt, avhengigheter) =>
