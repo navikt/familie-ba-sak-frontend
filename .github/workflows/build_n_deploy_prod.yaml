@@ -45,10 +45,24 @@ jobs:
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
           VAR: VERSION=${{ env.VERSION }}
+      - name: Deploy til dev-gcp team namespace
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: build_n_deploy/naiserator/gcp-dev.yaml
+          VAR: VERSION=${{ env.VERSION }}
       - name: Deploy til prod-fss team namespace
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_prod.yaml
+          VAR: VERSION=${{ env.VERSION }}
+      - name: Deploy til prod-gcp team namespace
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: build_n_deploy/naiserator/gcp-prod.yaml
           VAR: VERSION=${{ env.VERSION }}
