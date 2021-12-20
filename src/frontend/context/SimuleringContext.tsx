@@ -14,7 +14,14 @@ import {
     ITilbakekreving,
     ISimuleringPeriode,
 } from '../typer/simulering';
-import { kalenderDato, kalenderDatoTilDate, kalenderDiff, TIDENES_MORGEN } from '../utils/kalender';
+import {
+    kalenderDato,
+    kalenderDatoTilDate,
+    kalenderDiff,
+    TIDENES_MORGEN,
+    erFør,
+    iDag,
+} from '../utils/kalender';
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -81,11 +88,16 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     const skalStoppeISimulering = () => {
         if (åpenBehandling.årsak === BehandlingÅrsak.HELMANUELL_MIGRERING && simResultat) {
             const tidligereUtbetaltPerioderEtterbetalingOver220 = simResultat.perioder.filter(
-                periode =>
-                    periode.tidligereUtbetalt &&
-                    periode.tidligereUtbetalt > 0 &&
-                    periode.etterbetaling &&
-                    periode.etterbetaling > 220
+                periode => {
+                    const forfallsDato = periode.forfallsdato
+                        ? kalenderDato(periode.forfallsdato)
+                        : undefined;
+                    return (
+                        (!forfallsDato || erFør(forfallsDato, iDag())) &&
+                        periode.etterbetaling &&
+                        periode.etterbetaling > 220
+                    );
+                }
             );
             return erFeilutbetaling || tidligereUtbetaltPerioderEtterbetalingOver220.length > 0;
         }
