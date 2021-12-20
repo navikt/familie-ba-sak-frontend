@@ -8,7 +8,6 @@ const Environment = () => {
             buildPath: 'frontend_development',
             namespace: 'local',
             proxyUrl: 'http://localhost:8089',
-            baSakScope: 'api://dev-fss.teamfamilie.familie-ba-sak/.default',
             familieTilbakeUrl: 'http://localhost:8000',
         };
     } else if (process.env.ENV === 'e2e') {
@@ -16,7 +15,6 @@ const Environment = () => {
             buildPath: 'frontend_production',
             namespace: 'e2e',
             proxyUrl: 'http://familie-ba-sak:8089',
-            baSakScope: 'api://dev-fss.teamfamilie.familie-ba-sak/.default',
             familieTilbakeUrl: 'http://familie-tilbake-frontend:8000',
             redisUrl: 'familie-redis',
         };
@@ -25,7 +23,6 @@ const Environment = () => {
             buildPath: 'frontend_production',
             namespace: 'preprod',
             proxyUrl: 'https://familie-ba-sak.dev-fss-pub.nais.io',
-            baSakScope: 'api://dev-fss.teamfamilie.familie-ba-sak/.default',
             familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
             redisUrl: 'familie-ba-sak-frontend-redis',
         };
@@ -56,13 +53,13 @@ export const saksbehandlerConfig: IApi = {
     scopes: [`${appConfig.clientId}/.default`],
 };
 
+if (!process.env.BA_SAK_SCOPE) {
+    throw new Error('Scope mot familie-ba-sak er ikke konfigurert');
+}
+
 export const oboConfig: IApi = {
     clientId: appConfig.clientId,
-    scopes: [
-        process.env.BA_SAK_SCOPE !== undefined && process.env.BA_SAK_SCOPE !== ''
-            ? process.env.BA_SAK_SCOPE
-            : env.baSakScope,
-    ],
+    scopes: [process.env.BA_SAK_SCOPE],
 };
 
 export const buildPath = env.buildPath;
