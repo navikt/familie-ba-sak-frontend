@@ -118,7 +118,7 @@ export const doPdfProxy: any = () => {
 export const attachToken = (authClient: Client) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
         getOnBehalfOfAccessToken(authClient, req, oboConfig).then((accessToken: string) => {
-            req.headers['Nav-Call-Id'] = uuidv4();
+            req.headers['x_callId'] = uuidv4();
             req.headers['Nav-Consumer-Id'] = 'familie-ba-sak-front';
             req.headers.Authorization = `Bearer ${accessToken}`;
             return next();
