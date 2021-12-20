@@ -20,10 +20,10 @@ describe('BrevmodulContext', () => {
         });
 
         const behandlingSøknad = mockBehandling({ årsak: BehandlingÅrsak.SØKNAD });
-        test('Skal returnere liste med INNHENTE_OPPLYSNINGER når behandlingsårsaken er SØKNAD', () => {
+        test('Skal returnere liste med INNHENTE_OPPLYSNINGER og SVARTIDSBREV når behandlingsårsaken er SØKNAD', () => {
             expect(
                 hentMuligeBrevmalerImplementering(lagBehandlignRessursSuksess(behandlingSøknad))
-            ).toEqual([Brevmal.INNHENTE_OPPLYSNINGER]);
+            ).toEqual([Brevmal.INNHENTE_OPPLYSNINGER, Brevmal.SVARTIDSBREV]);
         });
 
         const behandlingsårsaker = [
