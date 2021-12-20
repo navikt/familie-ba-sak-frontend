@@ -36,6 +36,7 @@ export const hentMuligeBrevmalerImplementering = (
     if (åpenBehandling.status === RessursStatus.SUKSESS) {
         if (åpenBehandling.data.årsak === BehandlingÅrsak.SØKNAD) {
             brevMaler.push(Brevmal.INNHENTE_OPPLYSNINGER);
+            brevMaler.push(Brevmal.SVARTIDSBREV);
         }
 
         if (
@@ -91,7 +92,10 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
                 : ok(felt);
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK;
+            return (
+                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
+                avhengigheter.brevmal.verdi !== Brevmal.SVARTIDSBREV
+            );
         },
         avhengigheter: { brevmal },
     });
@@ -140,7 +144,8 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
             return (
                 avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                avhengigheter?.brevmal.verdi !== Brevmal.VARSEL_OM_REVURDERING
+                avhengigheter?.brevmal.verdi !== Brevmal.VARSEL_OM_REVURDERING &&
+                avhengigheter?.brevmal.verdi !== Brevmal.SVARTIDSBREV
             );
         },
         avhengigheter: { brevmal, fritekster },
