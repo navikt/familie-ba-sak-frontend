@@ -32,7 +32,6 @@ const Environment = () => {
         buildPath: 'frontend_production',
         namespace: 'production',
         proxyUrl: 'http://familie-ba-sak.prod-fss-pub.nais.io',
-        baSakScope: 'api://prod-fss.teamfamilie.familie-ba-sak/.default',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
         redisUrl: 'familie-ba-sak-frontend-redis',
     };
