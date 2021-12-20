@@ -58,7 +58,11 @@ export const saksbehandlerConfig: IApi = {
 
 export const oboConfig: IApi = {
     clientId: appConfig.clientId,
-    scopes: [env.baSakScope],
+    scopes: [
+        process.env.BA_SAK_SCOPE !== undefined && process.env.BA_SAK_SCOPE !== ''
+            ? process.env.BA_SAK_SCOPE
+            : env.baSakScope,
+    ],
 };
 
 export const buildPath = env.buildPath;
