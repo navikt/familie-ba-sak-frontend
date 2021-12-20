@@ -6,8 +6,8 @@ on:
       - 'master'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:${{ github.sha }}
-  IMAGE_LATEST: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:latest
+  IMAGE: ghcr.io/navikt/familie-ba-sak-frontend:${{ github.sha }}
+  IMAGE_LATEST: ghcr.io/navikt/familie-ba-sak-frontend:latest
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
           yarn test
           yarn run cypress
           docker build . -t ${IMAGE} -t ${IMAGE_LATEST}
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
           docker push ${IMAGE}
           docker push ${IMAGE_LATEST} 
   deploy:

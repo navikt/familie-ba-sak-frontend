@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:${{ github.sha }}
+  IMAGE: ghcr.io/navikt/familie-ba-sak-frontend:${{ github.sha }}
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 
@@ -27,7 +27,7 @@ jobs:
           yarn test
           yarn run cypress
           docker build . -t ${IMAGE}
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
           docker push ${IMAGE}
   deploy:
     name: Deploy to dev-gcp team namespace
