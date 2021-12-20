@@ -22,7 +22,7 @@ const Environment = () => {
         return {
             buildPath: 'frontend_production',
             namespace: 'preprod',
-            proxyUrl: 'http://familie-ba-sak',
+            proxyUrl: 'https://familie-ba-sak.dev-fss-pub.nais.io',
             familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
             redisUrl: 'familie-ba-sak-frontend-redis',
         };
@@ -31,7 +31,7 @@ const Environment = () => {
     return {
         buildPath: 'frontend_production',
         namespace: 'production',
-        proxyUrl: 'http://familie-ba-sak',
+        proxyUrl: 'http://familie-ba-sak.prod-fss-pub.nais.io',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
         redisUrl: 'familie-ba-sak-frontend-redis',
     };
