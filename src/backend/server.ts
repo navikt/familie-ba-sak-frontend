@@ -3,7 +3,9 @@ import './konfigurerApp';
 import path from 'path';
 
 import bodyParser from 'body-parser';
+import { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
+import { v4 as uuidv4 } from 'uuid';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -38,6 +40,12 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     } else {
         app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_production'), {}));
     }
+
+    app.use((req: Request, _res: Response, next: NextFunction) => {
+        req.headers['Nav-Call-Id'] = uuidv4();
+        req.headers['Nav-Consumer-Id'] = 'familie-ba-sak-front';
+        next();
+    });
 
     app.use(
         '/familie-ba-sak/api',

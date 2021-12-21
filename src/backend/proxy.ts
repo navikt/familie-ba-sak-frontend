@@ -2,7 +2,6 @@ import { ClientRequest } from 'http';
 
 import { NextFunction, Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { stdoutLogger, logError } from '@navikt/familie-logging';
@@ -118,8 +117,6 @@ export const doPdfProxy: any = () => {
 export const attachToken = (authClient: Client) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
         getOnBehalfOfAccessToken(authClient, req, oboConfig).then((accessToken: string) => {
-            req.headers['Nav-Call-Id'] = uuidv4();
-            req.headers['Nav-Consumer-Id'] = 'familie-ba-sak-front';
             req.headers.Authorization = `Bearer ${accessToken}`;
             return next();
         });
