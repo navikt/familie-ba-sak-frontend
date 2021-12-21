@@ -1,0 +1,62 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: familie-ba-sak-frontend
+  namespace: teamfamilie
+  labels:
+    team: teamfamilie
+spec:
+  image: {{ image }}
+  team: teamfamilie
+  replicas:
+    min: 2
+    max: 2
+    cpuThresholdPercentage: 50
+  port: 8000
+  liveness:
+    path: /isAlive
+    initialDelay: 5
+  readiness:
+    path: /isReady
+    initialDelay: 5
+  prometheus:
+    enabled: true
+    path: /metrics
+  ingresses:
+    - https://barnetrygd.intern.nav.no
+  azure:
+    application:
+      enabled: true
+      replyURLs:
+        - https://barnetrygd.intern.nav.no/auth/openid/callback
+      claims:
+        groups:
+          - id: "199c2b39-e535-4ae8-ac59-8ccbee7991ae"  # VEILEDER_ROLLE
+          - id: "847e3d72-9dc1-41c3-80ff-f5d4acdd5d46"  # SAKSBEHANDLER_ROLLE
+          - id: "7a271f87-39fb-468b-a9ee-6cf3c070f548"  # BESLUTTER_ROLLE
+          - id: "833f1f77-b64b-4708-b479-389ca4009af5"  # MEDLEM: 2103 NAV Vikafossen
+          - id: "c2cf4114-1f5d-47f2-bb6e-c7a06fd26412"  # MEDLEM: 4806 NAV Familie- og pensjonsytelser Drammen
+          - id: "6c8c5d93-0e08-4bd8-960c-5c4c0ce5c609"  # MEDLEM: 4820 NAV Familie- og pensjonsytelser Vadsø
+          - id: "9cd89ac3-5587-46ba-b571-a625f2af481d"  # MEDLEM: 4833 NAV Familie- og pensjonsytelser Oslo 1
+          - id: "7af5f216-6a5e-4228-9c99-687658c5b957"  # MEDLEM: 4842 NAV Familie- og pensjonsytelser Stord
+          - id: "0feaea21-ada1-48c0-9300-3f6aec36b993"  # MEDLEM: 4817 NAV Familie- og pensjonsytelser Steinkjer
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+    requests:
+      memory: 512Mi
+  accessPolicy:
+    outbound:
+      rules:
+        - application: familie-ba-sak
+        - application: familie-ba-sak-frontend-redis
+      external:
+        - host: familie-ba-sak.prod-fss-pub.nais.io
+  envFrom:
+    - secret: ba-sak-frontend
+  env:
+    - name: APP_VERSION
+      value: {{ VERSION }}
+    - name: ENV
+      value: preprod

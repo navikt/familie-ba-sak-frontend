@@ -1,10 +1,10 @@
-name: Build&deploy to dev
+name: Build&deploy to dev (fss og gcp)
 
 on:
   workflow_dispatch:
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:${{ github.sha }}
+  IMAGE: ghcr.io/navikt/familie-ba-sak-frontend:${{ github.sha }}
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
@@ -26,17 +26,25 @@ jobs:
           yarn test
           yarn run cypress
           docker build . -t ${IMAGE}
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
           docker push ${IMAGE}
   deploy:
-    name: Deploy to dev-fss team namespace
+    name: Deploy to NAIS
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: nais/deploy/actions/deploy@v1
+      - name: Deploy til dev-fss team namespace
+        uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
+          VAR: VERSION=${{ env.VERSION }}
+      - name: Deploy til dev-gcp team namespace
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: build_n_deploy/naiserator/gcp-dev.yaml
           VAR: VERSION=${{ env.VERSION }}

@@ -14,15 +14,20 @@ spec:
   replicas: # A single Redis-app doesn't scale
     min: 1
     max: 1
-  envFrom:
-    - secret: familie-ba-sak-frontend-redis
   resources: # you need to monitor need your self
     limits:
-      cpu: 250m 
-      memory: 256Mi
+      cpu: 100m
+      memory: 128Mi
     requests:
-      cpu: 250m
-      memory: 256Mi
+      cpu: 100m
+      memory: 128Mi
   service:
     port: 6379
     protocol: redis
+  accessPolicy:
+    inbound:
+      rules:
+        - application: familie-ba-sak-frontend
+        - application: familie-ba-sak-frontend-redis-exporter
+  envFrom:
+    - secret: ba-sak-frontend-redis
