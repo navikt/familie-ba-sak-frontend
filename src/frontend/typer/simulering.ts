@@ -16,6 +16,8 @@ export interface ISimuleringPeriode {
     nyttBeløp?: number;
     tidligereUtbetalt?: number;
     resultat?: number;
+    etterbetaling?: number;
+    feilutbetaling?: number;
 }
 
 export enum Tilbakekrevingsvalg {
