@@ -1,4 +1,4 @@
-name: Build&deploy to dev and prod
+name: Build&deploy to dev and prod (fss og gcp)
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - 'master'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:${{ github.sha }}
-  IMAGE_LATEST: docker.pkg.github.com/${{ github.repository }}/familie-ba-sak-frontend:latest
+  IMAGE: ghcr.io/navikt/familie-ba-sak-frontend:${{ github.sha }}
+  IMAGE_LATEST: ghcr.io/navikt/familie-ba-sak-frontend:latest
   VERSION: familie-ba-sak-frontend:${{ github.sha }}
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
           yarn test
           yarn run cypress
           docker build . -t ${IMAGE} -t ${IMAGE_LATEST}
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
           docker push ${IMAGE}
           docker push ${IMAGE_LATEST} 
   deploy:
@@ -45,10 +45,24 @@ jobs:
           CLUSTER: dev-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
           VAR: VERSION=${{ env.VERSION }}
+      - name: Deploy til dev-gcp team namespace
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: build_n_deploy/naiserator/gcp-dev.yaml
+          VAR: VERSION=${{ env.VERSION }}
       - name: Deploy til prod-fss team namespace
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
           RESOURCE: build_n_deploy/naiserator/naiserator_prod.yaml
+          VAR: VERSION=${{ env.VERSION }}
+      - name: Deploy til prod-gcp team namespace
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: build_n_deploy/naiserator/gcp-prod.yaml
           VAR: VERSION=${{ env.VERSION }}
