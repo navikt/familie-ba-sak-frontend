@@ -87,7 +87,7 @@ export const useDeltBostedSkjema = () => {
         nullstillDeltBostedSkjema();
     }, [bruker.status]);
 
-    const hentDeltBostedSkjemaData = (): IManueltBrevRequestPåFagsak => {
+    const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
         if (bruker.status === RessursStatus.SUKSESS) {
             const barnIBrev = deltBostedSkjema.felter.barnaMedOpplysninger.verdi.filter(
                 barn => barn.merket
@@ -111,7 +111,7 @@ export const useDeltBostedSkjema = () => {
                     );
                 }),
                 barnIBrev: barnIBrev.map(barn => barn.ident),
-                mottakerMålform: Målform.NB,
+                mottakerMålform: målform,
                 mottakerNavn: bruker.data.navn,
                 brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
             };
