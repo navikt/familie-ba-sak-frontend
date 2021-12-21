@@ -1,9 +1,6 @@
 name: Build&deploy to dev (fss og gcp)
 
 on:
-  push:
-    branches:
-      - 'feature/gcp'
   workflow_dispatch:
 
 env:

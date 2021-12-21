@@ -1,4 +1,4 @@
-name: OBS! Rett i prod
+name: OBS! Rett i prod (fss og gcp)
 
 on:
   workflow_dispatch:
