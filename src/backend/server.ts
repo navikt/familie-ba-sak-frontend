@@ -42,8 +42,8 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
     }
 
     app.use((req: Request, _res: Response, next: NextFunction) => {
-        req.headers['Nav-Call-Id'] = uuidv4();
-        req.headers['Nav-Consumer-Id'] = 'familie-ba-sak-front';
+        req.headers['nav-call-id'] = uuidv4();
+        req.headers['nav-consumer-id'] = 'familie-ba-sak-front';
         next();
     });
 
