@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react';
 import constate from 'constate';
 
 import { useHttp } from '@navikt/familie-http';
-import { useSkjema, useFelt, feil, ok, Avhengigheter } from '@navikt/familie-skjema';
-import { RessursStatus, Ressurs } from '@navikt/familie-typer';
+import { Avhengigheter, feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
+import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import useSakOgBehandlingParams from '../hooks/useSakOgBehandlingParams';
 import { Behandlingstype, BehandlingÅrsak, IBehandling } from '../typer/behandling';
 import {
     ISimuleringDTO,
-    Tilbakekrevingsvalg,
-    ITilbakekreving,
     ISimuleringPeriode,
+    ITilbakekreving,
+    Tilbakekrevingsvalg,
 } from '../typer/simulering';
 import {
     kalenderDato,
@@ -46,20 +46,22 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
             method: 'GET',
             url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/simulering`,
             påvirkerSystemLaster: true,
-        }).then(response => {
-            if (response.status === RessursStatus.SUKSESS) {
-                const tidSimuleringHentet = response.data.tidSimuleringHentet;
-
-                response.data.perioder.map((periode: ISimuleringPeriode) => {
-                    return settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert(
-                        periode,
-                        tidSimuleringHentet
-                    );
-                });
-            }
-
-            settSimuleringresultat(response);
-        });
+        }).then(response =>
+            response.status === RessursStatus.SUKSESS
+                ? settSimuleringresultat({
+                      ...response,
+                      data: {
+                          ...response.data,
+                          perioder: response.data.perioder.map(periode =>
+                              settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert(
+                                  periode,
+                                  response.data.tidSimuleringHentet
+                              )
+                          ),
+                      },
+                  })
+                : settSimuleringresultat(response)
+        );
     }, [åpenBehandling]);
 
     useEffect(() => {
@@ -203,7 +205,7 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
     function settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert(
         periode: ISimuleringPeriode,
         tidSimuleringHentet: string | undefined
-    ) {
+    ): ISimuleringPeriode {
         if (
             periode.resultat === 0 &&
             kalenderDiff(
@@ -215,8 +217,11 @@ const [SimuleringProvider, useSimulering] = constate(({ åpenBehandling }: IProp
                 )
             ) > 0
         ) {
-            periode.tidligereUtbetalt = 0;
-            periode.resultat = periode.nyttBeløp;
+            return {
+                ...periode,
+                tidligereUtbetalt: 0,
+                resultat: periode.nyttBeløp,
+            };
         }
         return periode;
     }
