@@ -59,4 +59,4 @@ spec:
     - name: APP_VERSION
       value: {{ VERSION }}
     - name: ENV
-      value: preprod
+      value: production
