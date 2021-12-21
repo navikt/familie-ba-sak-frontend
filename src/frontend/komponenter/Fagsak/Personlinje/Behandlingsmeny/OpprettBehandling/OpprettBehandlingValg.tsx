@@ -92,7 +92,9 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         : minimalFagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
     const kanOppretteRevurdering = !minimalFagsak
         ? false
-        : minimalFagsak.behandlinger.length > 0 && kanOppretteBehandling;
+        : minimalFagsak.behandlinger.length > 0 &&
+          kanOppretteBehandling &&
+          hentAktivBehandlingPåMinimalFagsak(minimalFagsak) !== undefined;
     const kanOppretteTekniskEndring =
         kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
     const kanOppretteTilbakekreving = !manuellJournalfør && !kanOppretteFørstegangsbehandling;
