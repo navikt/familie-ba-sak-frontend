@@ -9488,10 +9488,10 @@ node-releases@^2.0.1:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.1.tgz#3d1d395f204f1f2f29a54358b9fb678765ad2fc5"
   integrity sha512-CqyzN6z7Q6aMeF/ktcMVTzhAHCEpf8SOarwpzpf8pNBY2k5/oM34UHldUwp8VKI7uxct2HxSRdJjBaZeESzcxA==
 
-node@^17.2.0:
-  version "17.2.0"
-  resolved "https://registry.yarnpkg.com/node/-/node-17.2.0.tgz#bee040193ce1f3c2c6d19b93a5df8de367f34edd"
-  integrity sha512-DPS9prUcMq7sK1nfiVEEHPeiJFz5UZuzdz+oq9rsb1v/Zj9Q/JPguI9kgozDLxiJC0yIM+C3+UDVss+8sr3O5Q==
+node@^17.3.0:
+  version "17.3.0"
+  resolved "https://registry.yarnpkg.com/node/-/node-17.3.0.tgz#7585d700f3c3ad098b64518b3ffa2115ffe81cda"
+  integrity sha512-Qftg93Mt+OkF0zmCELRFtBvpC7tian7sNg+I1vE97Mn6wV5gPj+jsii0B1K3NNqYgJac8Em50QZMbU8p/M9mCQ==
   dependencies:
     node-bin-setup "^1.0.0"
 
@@ -11761,10 +11761,10 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snyk@^1.473.0, snyk@^1.802.0:
-  version "1.802.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.802.0.tgz#6332286f9eaf38b9b854db32c12cd21e4d19eccc"
-  integrity sha512-bLgtSgrg6uoJdn0lb/oWiIgQk69R+I/WI/VbMBoFSIGz6tqbVy0QW0wlw7QyI0qDTknmZS+SRyp0TC+niShoLg==
+snyk@^1.473.0, snyk@^1.803.0:
+  version "1.803.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.803.0.tgz#2e3ebd272a1a76ea829fb5632049f469e616cb54"
+  integrity sha512-uYRzFhEokzsrn6QxRnz5H3XJiVe1axcR2FN0St9Ro3o4+U5xfu+EiRWZjI3pZTNBuPz1QxIq1h+ZImr9ntsWiw==
 
 source-list-map@^2.0.0:
   version "2.0.1"

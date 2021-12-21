@@ -37,7 +37,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         simuleringsresultat,
         tilbakekrevingSkjema,
         harÅpenTilbakekrevingRessurs,
-        erMigreringMedEtterEllerFeilutbetaling,
+        erMigreringMedStoppISimulering,
         erFeilutbetaling,
     } = useSimulering();
     const { erLesevisning, settÅpenBehandling } = useBehandling();
@@ -85,7 +85,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
             skalViseNesteKnapp={
-                !erMigreringMedEtterEllerFeilutbetaling || skalIkkeStoppeMigreringsbehandlinger
+                !erMigreringMedStoppISimulering || skalIkkeStoppeMigreringsbehandlinger
             }
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
@@ -97,7 +97,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
                         <SimuleringTabell simulering={simuleringsresultat.data} />
-                        {(!erMigreringMedEtterEllerFeilutbetaling ||
+                        {(!erMigreringMedStoppISimulering ||
                             skalIkkeStoppeMigreringsbehandlinger) &&
                             erFeilutbetaling && (
                                 <TilbakekrevingSkjema
@@ -105,7 +105,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                     harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
                                 />
                             )}
-                        {erMigreringMedEtterEllerFeilutbetaling && (
+                        {erMigreringMedStoppISimulering && (
                             <Alertstripe type="feil">
                                 Utbetalingen må være lik utbetalingen i Infotrygd.
                                 <br />
