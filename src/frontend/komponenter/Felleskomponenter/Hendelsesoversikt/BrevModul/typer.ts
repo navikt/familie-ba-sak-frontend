@@ -8,6 +8,7 @@ export enum Brevmal {
     INNHENTE_OPPLYSNINGER = 'INNHENTE_OPPLYSNINGER',
     VARSEL_OM_REVURDERING = 'VARSEL_OM_REVURDERING',
     HENLEGGE_TRUKKET_SØKNAD = 'HENLEGGE_TRUKKET_SØKNAD',
+    SVARTIDSBREV = 'SVARTIDSBREV',
 }
 
 export enum Informasjonsbrev {
@@ -18,12 +19,14 @@ export const brevmaler: Record<Brevmal, string> = {
     INNHENTE_OPPLYSNINGER: 'Innhent opplysninger',
     VARSEL_OM_REVURDERING: 'Varsel om revurdering',
     HENLEGGE_TRUKKET_SØKNAD: 'Henlegg søknad',
+    SVARTIDSBREV: 'Svartidsbrev',
 };
 
 export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
     INNHENTE_OPPLYSNINGER: 'Velg dokumenter',
     VARSEL_OM_REVURDERING: 'Velg årsak',
     HENLEGGE_TRUKKET_SØKNAD: 'Velg årsak',
+    SVARTIDSBREV: 'Velg årsak',
 };
 
 export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevtekst[] => {
@@ -37,6 +40,9 @@ export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevte
             break;
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
             selectOptionsMedBrevtekst = årsaker;
+            break;
+        case Brevmal.SVARTIDSBREV:
+            selectOptionsMedBrevtekst = [];
             break;
     }
 
