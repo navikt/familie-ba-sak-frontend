@@ -46,13 +46,7 @@ const useBehandlingssteg = (
                     const behandling = response.data;
                     oppdaterBehandling(response);
 
-                    if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
-                        history.push(
-                            `/fagsak/${fagsakId}/${behandling.behandlingId}/tilkjent-ytelse`
-                        );
-                    } else {
-                        history.push(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
-                    }
+                    history.push(`/fagsak/${fagsakId}/${behandling.behandlingId}/tilkjent-ytelse`);
                 }
             })
             .catch(() => {
