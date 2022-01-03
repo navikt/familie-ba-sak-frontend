@@ -19,6 +19,7 @@ import { DokumentIkon } from '../../../ikoner/DokumentIkon';
 import IkonKnapp, { IkonPosisjon } from '../../Felleskomponenter/IkonKnapp/IkonKnapp';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 
 const Container = styled.div`
     padding: 2rem;
@@ -97,6 +98,7 @@ const DokumentutsendingSkjema: React.FC = () => {
 
                 <ÅrsakSkjema>
                     {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
+                    {årsakFelt.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
                 </ÅrsakSkjema>
 
                 {visForhåndsvisningBeskjed() && (
