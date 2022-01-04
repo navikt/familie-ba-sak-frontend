@@ -257,7 +257,7 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
 
         const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
             if (bruker.status === RessursStatus.SUKSESS) {
-                switch (årsak.verdi) {
+                switch (skjema.felter.årsak.verdi) {
                     case DokumentÅrsak.DELT_BOSTED:
                         return hentDeltBostedSkjemaData(målform.verdi ?? Målform.NB);
 
