@@ -18,7 +18,7 @@ const LabelOgEtikett = styled.div`
     justify-content: space-between;
 `;
 export const Dokumentvelger = () => {
-    const { kanSøkeSkjema: skjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsending();
 
     const dokumenter = skjema.felter.dokumenter;
     const inputProps = dokumenter.hentNavInputProps(skjema.visFeilmeldinger);

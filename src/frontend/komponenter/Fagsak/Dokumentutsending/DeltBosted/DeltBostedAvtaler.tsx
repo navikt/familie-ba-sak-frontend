@@ -60,13 +60,13 @@ const LeggTilAvtaleKnapp = styled(IkonKnapp)`
 `;
 
 const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
-    const { deltBostedSkjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsending();
 
     const avtalerOmDeltBosted: ISODateString[] =
-        deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
+        skjema.felter.avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
 
     const hentFeilmelding = (avtaleDato?: ISODateString) => {
-        if (!deltBostedSkjema.visFeilmeldinger) return undefined;
+        if (!skjema.visFeilmeldinger) return undefined;
 
         if (avtaleDato === '') {
             return 'Du må fylle inn dato for avtale';
@@ -95,26 +95,23 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                                 }}
                                 feil={feilmelding !== undefined}
                                 onChange={(dato?: ISODateString) => {
-                                    deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt(
-                                        {
-                                            ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn
-                                                .verdi,
-                                            [barn.ident]: avtalerOmDeltBosted.reduce(
-                                                (
-                                                    acc: string[],
-                                                    forrigeAvtaleDato: string,
-                                                    reduceIndex: number
-                                                ) => {
-                                                    if (index === reduceIndex) {
-                                                        return [...acc, dato ?? ''];
-                                                    } else {
-                                                        return [...acc, forrigeAvtaleDato];
-                                                    }
-                                                },
-                                                []
-                                            ),
-                                        }
-                                    );
+                                    skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                                        ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                                        [barn.ident]: avtalerOmDeltBosted.reduce(
+                                            (
+                                                acc: string[],
+                                                forrigeAvtaleDato: string,
+                                                reduceIndex: number
+                                            ) => {
+                                                if (index === reduceIndex) {
+                                                    return [...acc, dato ?? ''];
+                                                } else {
+                                                    return [...acc, forrigeAvtaleDato];
+                                                }
+                                            },
+                                            []
+                                        ),
+                                    });
                                 }}
                                 valgtDato={avtaleDato}
                             />
@@ -126,26 +123,23 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                                     ikon={<Slett />}
                                     ikonPosisjon={IkonPosisjon.VENSTRE}
                                     onClick={() => {
-                                        deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt(
-                                            {
-                                                ...deltBostedSkjema.felter
-                                                    .avtalerOmDeltBostedPerBarn.verdi,
-                                                [barn.ident]: avtalerOmDeltBosted.reduce(
-                                                    (
-                                                        acc: string[],
-                                                        forrigeAvtaleDato: string,
-                                                        reduceIndex: number
-                                                    ) => {
-                                                        if (index === reduceIndex) {
-                                                            return acc;
-                                                        } else {
-                                                            return [...acc, forrigeAvtaleDato];
-                                                        }
-                                                    },
-                                                    []
-                                                ),
-                                            }
-                                        );
+                                        skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                                            ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                                            [barn.ident]: avtalerOmDeltBosted.reduce(
+                                                (
+                                                    acc: string[],
+                                                    forrigeAvtaleDato: string,
+                                                    reduceIndex: number
+                                                ) => {
+                                                    if (index === reduceIndex) {
+                                                        return acc;
+                                                    } else {
+                                                        return [...acc, forrigeAvtaleDato];
+                                                    }
+                                                },
+                                                []
+                                            ),
+                                        });
                                     }}
                                     label={'Fjern'}
                                 />
@@ -165,8 +159,8 @@ const DeltBostedAvtaler: React.FC<IProps> = ({ barn }) => {
                     ikon={<Pluss />}
                     ikonPosisjon={IkonPosisjon.VENSTRE}
                     onClick={() =>
-                        deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
-                            ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                        skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                            ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
                             [barn.ident]: [...avtalerOmDeltBosted, ''],
                         })
                     }

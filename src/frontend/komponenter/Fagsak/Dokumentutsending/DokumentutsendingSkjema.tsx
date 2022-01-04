@@ -52,12 +52,11 @@ const DokumentutsendingSkjema: React.FC = () => {
     const {
         hentForhåndsvisningPåFagsak,
         hentetForhåndsvisning,
-        målformFelt,
+        skjema,
         nullstillSkjema,
         senderBrev,
         sendBrevPåFagsak,
         skjemaErLåst,
-        årsakFelt,
         hentSkjemaFeilmelding,
         visForhåndsvisningBeskjed,
     } = useDokumentutsending();
@@ -68,11 +67,11 @@ const DokumentutsendingSkjema: React.FC = () => {
 
             <StyledSkjemaGruppe feil={hentSkjemaFeilmelding()} utenFeilPropagering={true}>
                 <FamilieSelect
-                    {...årsakFelt.hentNavBaseSkjemaProps(false)}
+                    {...skjema.felter.årsak.hentNavBaseSkjemaProps(false)}
                     label={'Velg årsak'}
-                    value={årsakFelt.verdi}
+                    value={skjema.felter.årsak.verdi}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                        årsakFelt.onChange(event.target.value as DokumentÅrsak);
+                        skjema.felter.årsak.onChange(event.target.value as DokumentÅrsak);
                     }}
                     bredde={'m'}
                 >
@@ -80,7 +79,7 @@ const DokumentutsendingSkjema: React.FC = () => {
                         return (
                             <option
                                 key={årsak}
-                                aria-selected={årsakFelt.verdi === årsak}
+                                aria-selected={skjema.felter.årsak.verdi === årsak}
                                 value={årsak}
                             >
                                 {dokumentÅrsak[årsak]}
@@ -90,15 +89,17 @@ const DokumentutsendingSkjema: React.FC = () => {
                 </FamilieSelect>
 
                 <MålformVelger
-                    målformFelt={målformFelt}
+                    målformFelt={skjema.felter.målform}
                     visFeilmeldinger={false}
                     erLesevisning={false}
                     Legend={<Element children={'Målform'} />}
                 />
 
                 <ÅrsakSkjema>
-                    {årsakFelt.verdi === DokumentÅrsak.DELT_BOSTED && <DeltBostedSkjema />}
-                    {årsakFelt.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
+                    {skjema.felter.årsak.verdi === DokumentÅrsak.DELT_BOSTED && (
+                        <DeltBostedSkjema />
+                    )}
+                    {skjema.felter.årsak.verdi === DokumentÅrsak.KAN_SØKE && <KanSøkeSkjema />}
                 </ÅrsakSkjema>
 
                 {visForhåndsvisningBeskjed() && (

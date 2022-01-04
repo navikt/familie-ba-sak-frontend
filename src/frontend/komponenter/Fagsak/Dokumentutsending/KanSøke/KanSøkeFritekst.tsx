@@ -47,7 +47,7 @@ const KanSøkeFritekst = ({
     makslengdeFritekst: number;
 }) => {
     const skjemaGruppeId = 'Fritekster-brev';
-    const { kanSøkeSkjema: skjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsending();
     const friteksterFelt = skjema.felter.fritekster;
 
     const leggTilFritekst = () => {

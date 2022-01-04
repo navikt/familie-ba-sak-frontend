@@ -5,7 +5,7 @@ import { Dokumentvelger } from './Dokumentvelger';
 import KanSøkeFritekst from './KanSøkeFritekst';
 
 const KanSøkeSkjema = () => {
-    const { kanSøkeSkjema: skjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsending();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;
