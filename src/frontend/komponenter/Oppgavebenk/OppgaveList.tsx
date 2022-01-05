@@ -38,8 +38,14 @@ export const getAriaSort = (
     return ariaSortMap.get(FeltSortOrder.NONE);
 };
 
-export const getSortLenkClassName = (_: ColumnInstance<IOppgaveRad>) => {
-    return 'tabell__th--sortert-desc';
+export const getSortLenkClassName = (column: ColumnInstance<IOppgaveRad>) => {
+    if (column.isSortedDesc === true) {
+        return 'tabell__th--sortert-desc';
+    }
+    if (column.isSortedDesc === false) {
+        return 'tabell__th--sortert-asc';
+    }
+    return '';
 };
 
 const OppgaveList: React.FunctionComponent = () => {
