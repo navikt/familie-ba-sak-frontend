@@ -142,12 +142,18 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const erLesevisning = (sjekkTilgangTilEnhet = true): boolean => {
         const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
+        const behandlingsårsak = hentDataFraRessurs(åpenBehandling)?.årsak;
+        const behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak =
+            behandlingsårsak === BehandlingÅrsak.TEKNISK_ENDRING ||
+            behandlingsårsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV;
+
         const saksbehandlerHarTilgangTilEnhet =
             harTilgangTilEnhet(
                 hentDataFraRessurs(åpenBehandling)?.arbeidsfordelingPåBehandling
                     .behandlendeEnhetId ?? '',
                 innloggetSaksbehandler?.groups ?? []
-            ) || hentDataFraRessurs(åpenBehandling)?.årsak === BehandlingÅrsak.TEKNISK_ENDRING;
+            ) || behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak;
+
         const steg = hentStegPåÅpenBehandling();
 
         return saksbehandlerHarKunLesevisning(
