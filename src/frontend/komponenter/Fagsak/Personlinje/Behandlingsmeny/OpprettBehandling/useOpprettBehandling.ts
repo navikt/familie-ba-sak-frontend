@@ -92,9 +92,7 @@ const useOpprettBehandling = (
 
     const valgteBarn = useFelt({
         verdi: [],
-        valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => {
-            return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må velge minst ett barn');
-        },
+        valideringsfunksjon: (felt: FeltState<ISelectOption[]>) => ok(felt),
         avhengigheter: { behandlingstype, behandlingsårsak },
         skalFeltetVises: avhengigheter => {
             const { verdi: behandlingstypeVerdi } = avhengigheter.behandlingstype;
