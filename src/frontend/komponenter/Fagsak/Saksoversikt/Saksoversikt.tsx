@@ -165,7 +165,12 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
 
     const visTabell = () => {
         if (infotrygdsakerRessurs.status === RessursStatus.SUKSESS) {
-            return <Infotrygdtabeller saker={infotrygdsakerRessurs.data.saker} />;
+            return (
+                <Infotrygdtabeller
+                    saker={infotrygdsakerRessurs.data.saker}
+                    minimalFagsak={minimalFagsak}
+                />
+            );
         } else if (
             infotrygdsakerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
             infotrygdsakerRessurs.status === RessursStatus.FEILET

@@ -83,12 +83,12 @@ export const useInfotrygdRequest = () => {
 export const useInfotrygdMigrering = () => {
     const history = useHistory();
     const { request } = useHttp();
-    const [infotrygdmigreringRessurs, settInfotrygdmigreringRessurs] = useState<
+    const [migrerInfotrygdSakRessurs, settMigrerInfotrygdSakRessurs] = useState<
         Ressurs<IMigreringResponseDto>
     >(byggTomRessurs());
 
     const flyttBrukerTilBaSak = (ident: string) => {
-        settInfotrygdmigreringRessurs(byggHenterRessurs());
+        settMigrerInfotrygdSakRessurs(byggHenterRessurs());
         request<{ ident: string }, IMigreringResponseDto>({
             method: 'POST',
             data: { ident },
@@ -97,15 +97,12 @@ export const useInfotrygdMigrering = () => {
             .then(ressurs => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
                     history.push(`/fagsak/${ressurs.data.fagsakId}/saksoversikt`);
-                } else if (
-                    ressurs.status === RessursStatus.FEILET ||
-                    ressurs.status === RessursStatus.FUNKSJONELL_FEIL
-                ) {
-                    settInfotrygdmigreringRessurs(byggFeiletRessurs(ressurs.frontendFeilmelding));
+                } else {
+                    settMigrerInfotrygdSakRessurs(ressurs);
                 }
             })
             .catch((_error: AxiosError) => {
-                settInfotrygdmigreringRessurs(
+                settMigrerInfotrygdSakRessurs(
                     byggFeiletRessurs('Ukjent feil ved flytting av bruker til BA-sak')
                 );
             });
@@ -113,7 +110,7 @@ export const useInfotrygdMigrering = () => {
 
     return {
         flyttBrukerTilBaSak,
-        infotrygdmigreringRessurs,
+        migrerInfotrygdSakRessurs,
     };
 };
 

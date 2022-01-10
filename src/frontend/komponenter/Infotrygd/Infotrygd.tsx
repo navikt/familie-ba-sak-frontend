@@ -42,7 +42,7 @@ const FlyttSakKnapp = styled(Knapp)`
 
 export const Infotrygd: React.FC = () => {
     const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
-    const { flyttBrukerTilBaSak, infotrygdmigreringRessurs } = useInfotrygdMigrering();
+    const { flyttBrukerTilBaSak, migrerInfotrygdSakRessurs } = useInfotrygdMigrering();
 
     const history = useHistory<{ bruker: string } | undefined>();
     useEffect(() => {
@@ -53,7 +53,7 @@ export const Infotrygd: React.FC = () => {
     }, []);
 
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
-    const knappMigrerErLåst = infotrygdmigreringRessurs.status !== RessursStatus.IKKE_HENTET;
+    const knappMigrerErLåst = migrerInfotrygdSakRessurs.status !== RessursStatus.IKKE_HENTET;
 
     const visFlyttSakKnapp = () => {
         if (skjema.submitRessurs.status === RessursStatus.SUKSESS) {
@@ -73,12 +73,12 @@ export const Infotrygd: React.FC = () => {
 
     const visFlyttSakAlert = () => {
         if (
-            infotrygdmigreringRessurs.status === RessursStatus.FEILET ||
-            infotrygdmigreringRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+            migrerInfotrygdSakRessurs.status === RessursStatus.FEILET ||
+            migrerInfotrygdSakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
         ) {
             return (
                 <AlertStripe
-                    children={infotrygdmigreringRessurs.frontendFeilmelding}
+                    children={migrerInfotrygdSakRessurs.frontendFeilmelding}
                     type={'feil'}
                 />
             );
