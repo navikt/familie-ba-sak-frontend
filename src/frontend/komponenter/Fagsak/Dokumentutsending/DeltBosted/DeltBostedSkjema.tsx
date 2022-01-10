@@ -10,9 +10,9 @@ import LeggTilBarn from '../../../Felleskomponenter/LeggTilBarn';
 import BarnCheckbox from './BarnCheckbox';
 
 const DeltBostedSkjema = () => {
-    const { deltBostedSkjema } = useDokumentutsending();
+    const { skjema } = useDokumentutsending();
 
-    const sorterteBarnMedOpplysninger = deltBostedSkjema.felter.barnaMedOpplysninger.verdi.sort(
+    const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
             if (!a.fødselsdato) {
                 return 1;
@@ -33,9 +33,7 @@ const DeltBostedSkjema = () => {
 
     return (
         <CheckboxGruppe
-            {...deltBostedSkjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(
-                deltBostedSkjema.visFeilmeldinger
-            )}
+            {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
             legend={'Hvilke barn har delt bosted?'}
         >
             {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
@@ -43,10 +41,10 @@ const DeltBostedSkjema = () => {
             ))}
 
             <LeggTilBarn
-                barnaMedOpplysninger={deltBostedSkjema.felter.barnaMedOpplysninger}
+                barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
                 onSuccess={(barn: IPersonInfo) => {
-                    deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
-                        ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                    skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                        ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
                         [barn.personIdent]: [''],
                     });
                 }}

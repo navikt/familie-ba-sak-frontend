@@ -48,7 +48,7 @@ interface IProps {
 }
 
 const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
-    const { deltBostedSkjema, settVisfeilmeldinger } = useDokumentutsending();
+    const { skjema, settVisfeilmeldinger } = useDokumentutsending();
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(
         barn.fødselsdato
@@ -66,13 +66,12 @@ const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
                     }
                     checked={barn.merket}
                     onChange={() => {
-                        const nyMerketStatus =
-                            !deltBostedSkjema.felter.barnaMedOpplysninger.verdi.find(
-                                barnMedOpplysninger => barnMedOpplysninger.ident === barn.ident
-                            )?.merket;
+                        const nyMerketStatus = !skjema.felter.barnaMedOpplysninger.verdi.find(
+                            barnMedOpplysninger => barnMedOpplysninger.ident === barn.ident
+                        )?.merket;
 
-                        deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                            deltBostedSkjema.felter.barnaMedOpplysninger.verdi.map(
+                        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
+                            skjema.felter.barnaMedOpplysninger.verdi.map(
                                 (barnMedOpplysninger: IBarnMedOpplysninger) =>
                                     barnMedOpplysninger.ident === barn.ident
                                         ? {
@@ -85,13 +84,13 @@ const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
                         settVisfeilmeldinger(false);
 
                         if (nyMerketStatus) {
-                            deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
-                                ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                            skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                                ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
                                 [barn.ident]: [''],
                             });
                         } else {
-                            deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
-                                ...deltBostedSkjema.felter.avtalerOmDeltBostedPerBarn.verdi,
+                            skjema.felter.avtalerOmDeltBostedPerBarn.validerOgSettFelt({
+                                ...skjema.felter.avtalerOmDeltBostedPerBarn.verdi,
                                 [barn.ident]: [],
                             });
                         }
@@ -105,8 +104,8 @@ const BarnCheckbox: React.FC<IProps> = ({ barn }) => {
                         ikon={<Slett />}
                         ikonPosisjon={IkonPosisjon.VENSTRE}
                         onClick={() => {
-                            deltBostedSkjema.felter.barnaMedOpplysninger.validerOgSettFelt([
-                                ...deltBostedSkjema.felter.barnaMedOpplysninger.verdi.filter(
+                            skjema.felter.barnaMedOpplysninger.validerOgSettFelt([
+                                ...skjema.felter.barnaMedOpplysninger.verdi.filter(
                                     barnMedOpplysninger =>
                                         barnMedOpplysninger.ident !== barn.ident ||
                                         barnMedOpplysninger.navn !== barn.navn ||

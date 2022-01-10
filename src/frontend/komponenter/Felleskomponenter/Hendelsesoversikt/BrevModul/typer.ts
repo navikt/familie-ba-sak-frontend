@@ -15,6 +15,7 @@ export enum Informasjonsbrev {
     INFORMASJONSBREV_DELT_BOSTED = 'INFORMASJONSBREV_DELT_BOSTED',
     INFORMASJONSBREV_FØDSEL_MINDREÅRIG = 'INFORMASJONSBREV_FØDSEL_MINDREÅRIG',
     INFORMASJONSBREV_FØDSEL_UMYNDIG = 'INFORMASJONSBREV_FØDSEL_UMYNDIG',
+    INFORMASJONSBREV_KAN_SØKE = 'INFORMASJONSBREV_KAN_SØKE',
 }
 
 export const brevmaler: Record<Brevmal, string> = {
@@ -31,11 +32,18 @@ export const selectLabelsForBrevmaler: Record<Brevmal, string> = {
     SVARTIDSBREV: 'Velg årsak',
 };
 
+export const leggTilValuePåOption = (
+    option: Omit<ISelectOptionMedBrevtekst, 'value'>
+): ISelectOptionMedBrevtekst => ({
+    ...option,
+    value: option.label.toLocaleLowerCase().replace(' ', '_'),
+});
+
 export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevtekst[] => {
     let selectOptionsMedBrevtekst;
     switch (brevmal) {
         case Brevmal.INNHENTE_OPPLYSNINGER:
-            selectOptionsMedBrevtekst = dokumenter;
+            selectOptionsMedBrevtekst = opplysningsdokumenter;
             break;
         case Brevmal.VARSEL_OM_REVURDERING:
             selectOptionsMedBrevtekst = årsaker;
@@ -48,14 +56,7 @@ export const hentSelectOptions = (brevmal: Brevmal | ''): ISelectOptionMedBrevte
             break;
     }
 
-    return (
-        selectOptionsMedBrevtekst?.map(
-            (selectOptionMedBrevtekst: Omit<ISelectOptionMedBrevtekst, 'value'>) => ({
-                ...selectOptionMedBrevtekst,
-                value: selectOptionMedBrevtekst.label.toLocaleLowerCase().replace(' ', '_'),
-            })
-        ) ?? []
-    );
+    return selectOptionsMedBrevtekst?.map(leggTilValuePåOption) ?? [];
 };
 
 type OptionType = {
@@ -69,7 +70,7 @@ export interface ISelectOptionMedBrevtekst extends OptionType {
     brevtekst?: Record<Målform, string>;
 }
 
-const dokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] = [
+export const opplysningsdokumenter: Omit<ISelectOptionMedBrevtekst, 'value'>[] = [
     {
         label: 'Adopsjon - barna',
         brevtekst: {
