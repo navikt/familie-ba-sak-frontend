@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { satsBeløp, YtelseType, ytelsetype } from '../../../typer/beregning';
+import { YtelseType, ytelsetype } from '../../../typer/beregning';
 import { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
-import { formaterBeløp } from '../../../utils/formatter';
+import { formaterBeløp, hentAlder } from '../../../utils/formatter';
 import DashedHr from '../../Felleskomponenter/DashedHr/DashedHr';
 import PersonInformasjon from '../../Felleskomponenter/PersonInformasjon/PersonInformasjon';
 
@@ -13,8 +13,8 @@ interface IPersonUtbetalingProps {
 }
 
 const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiodeDetaljer }) => {
-    const genererTekstForOrdinær = (beløp: number) =>
-        beløp === satsBeløp.ORDINÆR_UNDER_6_ÅR ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
+    const genererTekstForOrdinær = (fødselsdato: string) =>
+        hentAlder(fødselsdato) < 6 ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
 
     return (
         <li>
@@ -27,7 +27,7 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
                                 {utbetalingsperiodeDetalj.ytelseType ===
                                 YtelseType.ORDINÆR_BARNETRYGD
                                     ? genererTekstForOrdinær(
-                                          utbetalingsperiodeDetalj.utbetaltPerMnd
+                                          utbetalingsperiodeDetalj.person.fødselsdato
                                       )
                                     : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
                             </Normaltekst>
