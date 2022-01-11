@@ -167,6 +167,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         if (infotrygdsakerRessurs.status === RessursStatus.SUKSESS) {
             return (
                 <Infotrygdtabeller
+                    ident={minimalFagsak.søkerFødselsnummer}
                     saker={infotrygdsakerRessurs.data.saker}
                     minimalFagsak={minimalFagsak}
                 />

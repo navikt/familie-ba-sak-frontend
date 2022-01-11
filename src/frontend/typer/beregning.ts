@@ -36,8 +36,3 @@ export const ytelsetype: INøkkelPar = {
         navn: 'Småbarnstillegg',
     },
 };
-
-export const satsBeløp = {
-    ORDINÆR_UNDER_6_ÅR: 1354,
-    ORDINÆR_FRA_6_ÅR: 1054,
-};

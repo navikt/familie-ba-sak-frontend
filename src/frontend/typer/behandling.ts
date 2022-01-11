@@ -57,6 +57,7 @@ export enum BehandlingÅrsak {
     MIGRERING = 'MIGRERING',
     ENDRE_MIGRERINGSDATO = 'ENDRE_MIGRERINGSDATO',
     HELMANUELL_MIGRERING = 'HELMANUELL_MIGRERING',
+    OMREGNING_SMÅBARNSTILLEGG = 'OMREGNING_SMÅBARNSTILLEGG',
 }
 
 export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak, string> = {
@@ -71,6 +72,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     KORREKSJON_VEDTAKSBREV: 'Korrigere vedtak med egen brevmal',
     OMREGNING_6ÅR: 'Omregning 6 år',
     OMREGNING_18ÅR: 'Omregning 18 år',
+    OMREGNING_SMÅBARNSTILLEGG: 'Omregning småbarnstillegg',
     SMÅBARNSTILLEGG: 'Småbarnstillegg',
     SATSENDRING: 'Satsendring',
     MIGRERING: 'Migrering',
