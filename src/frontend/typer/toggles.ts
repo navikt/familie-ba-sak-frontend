@@ -10,7 +10,7 @@ export enum ToggleNavn {
     brukEøs = 'familie-ba-sak.behandling.eos',
     kanManueltMigrereTilbakeITid = 'familie-ba-sak.behandling.manuell-migrering-tilbake-i-tid',
     skalIkkeStoppeMigreringsbehandlig = 'familie-ba-sak.ikke.stopp.migeringsbehandling',
-    tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.permanent',
+    tekniskVedlikeholdHenleggelse = 'familie-ba-sak.teknisk-vedlikehold-henleggelse.tilgangsstyring',
 }
 
 export const alleTogglerAv = (): IToggles => {
