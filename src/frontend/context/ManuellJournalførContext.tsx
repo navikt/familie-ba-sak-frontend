@@ -156,8 +156,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
         skjemanavn: 'Journalfør dokument',
     });
 
-    console.log(skjema);
-
     useEffect(() => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
             skjema.felter.dokumenter.validerOgSettFelt(
