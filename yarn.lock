@@ -2903,10 +2903,10 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
-"@types/amplitude-js@^8.0.1":
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/@types/amplitude-js/-/amplitude-js-8.0.1.tgz#97406436b0ba3b14eba87b01a63b56681364654d"
-  integrity sha512-JrVJ/G8bXEz/b12xKOsSWbQ4C4i4AlPalQprJBCXhUG0loWtPNfV/8Uj53mL0OHa3hfI5javocIsgF33k6cOVQ==
+"@types/amplitude-js@^8.9.3":
+  version "8.9.3"
+  resolved "https://registry.yarnpkg.com/@types/amplitude-js/-/amplitude-js-8.9.3.tgz#d6280fe6cb6210d6dbc5a374577385ac5b682872"
+  integrity sha512-Sv7yiP7MLkcrrrNzUVHwpyGyR+3POMwQlJWHywqXhQa8ae3HpXPnwwvnEry0BQ1t+xRW3MoEuVXha/8Oy8i50w==
 
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.7":
   version "7.1.16"
