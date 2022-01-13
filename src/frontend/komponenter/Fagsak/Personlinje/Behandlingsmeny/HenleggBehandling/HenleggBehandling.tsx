@@ -164,7 +164,7 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                             .filter(
                                 årsak =>
                                     (årsak !== HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
-                                        !erLesevisning()) ||
+                                        !toggles[ToggleNavn.tekniskVedlikeholdHenleggelse]) ||
                                     (årsak === HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
                                         toggles[ToggleNavn.tekniskVedlikeholdHenleggelse])
                             )
