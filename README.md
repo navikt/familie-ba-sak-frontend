@@ -28,6 +28,20 @@ i konsollen.
 
 For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokalt med mindre det gjøres en del endringer i forbindelse med uthenting av environment variabler og URLer for uthenting av informasjon.
 
+## Få token for familie-ba-sak-frontend
+For å få token for familie-ba-sak-frontend kan du kjøre følgende kommando i terminalen med samme verdier for cliend_id, 
+client_secret og scope som er definert i forrige avsnitt. 
+
+``` 
+curl --location --request GET ‘https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/v2.0/token’ \
+--header ‘Content-Type: application/x-www-form-urlencoded’ \
+--header ‘Cookie: fpc=AsRNnIJ3MI9FqfN68mC5KW4’ \
+--data-urlencode ‘client_id=’ \
+--data-urlencode ‘client_secret=’ \
+--data-urlencode ‘scope=’ \
+--data-urlencode ‘grant_type=client_credentials’
+```
+
 ---
 
 
