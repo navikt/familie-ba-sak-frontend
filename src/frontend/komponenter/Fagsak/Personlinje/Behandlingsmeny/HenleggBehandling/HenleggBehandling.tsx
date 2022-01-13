@@ -11,6 +11,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 import { FamilieSelect, FamilieTextarea } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useForhåndsvisning from '../../../../../hooks/useForhåndsvisning';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
@@ -20,6 +21,7 @@ import {
     HenleggÅrsak,
     IBehandling,
 } from '../../../../../typer/behandling';
+import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 import PdfVisningModal from '../../../../Felleskomponenter/PdfVisningModal/PdfVisningModal';
@@ -56,7 +58,6 @@ const StyledLenke = styled(Lenke)<{ visLenke: boolean }>`
 const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, behandling }) => {
     const history = useHistory();
     const [visModal, settVisModal] = useState(false);
-    const { erLesevisning } = useBehandling();
     const {
         hentForhåndsvisning,
         nullstillHentetForhåndsvisning,
@@ -64,7 +65,8 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
         hentetForhåndsvisning,
         settVisForhåndsviningModal,
     } = useForhåndsvisning();
-    const { åpenBehandling } = useBehandling();
+    const { åpenBehandling, erLesevisning } = useBehandling();
+    const { toggles } = useApp();
 
     const behandlingId =
         åpenBehandling.status === RessursStatus.SUKSESS && åpenBehandling.data.behandlingId;
@@ -81,6 +83,16 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
         settVisModal(false);
     });
 
+    const erPåHenleggbartSteg = [
+        BehandlingSteg.REGISTRERE_SØKNAD,
+        BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+        BehandlingSteg.VILKÅRSVURDERING,
+        BehandlingSteg.SEND_TIL_BESLUTTER,
+    ].includes(behandling.steg);
+
+    const harTilgangTilTekniskVedlikeholdHenleggelse =
+        toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
+
     return (
         <>
             <KnappBase
@@ -90,13 +102,8 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                     settVisModal(true);
                 }}
                 disabled={
-                    erLesevisning() &&
-                    ![
-                        BehandlingSteg.REGISTRERE_SØKNAD,
-                        BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
-                        BehandlingSteg.VILKÅRSVURDERING,
-                        BehandlingSteg.SEND_TIL_BESLUTTER,
-                    ].includes(behandling.steg)
+                    (erLesevisning() || !erPåHenleggbartSteg) &&
+                    !harTilgangTilTekniskVedlikeholdHenleggelse
                 }
             >
                 Henlegg behandling
@@ -172,6 +179,13 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                         </option>
                         {Object.values(HenleggÅrsak)
                             .filter(årsak => årsak !== HenleggÅrsak.FØDSELSHENDELSE_UGYLDIG_UTFALL)
+                            .filter(
+                                årsak =>
+                                    (årsak !== HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
+                                        erPåHenleggbartSteg) ||
+                                    (årsak === HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
+                                        harTilgangTilTekniskVedlikeholdHenleggelse)
+                            )
                             .map(årsak => {
                                 return (
                                     <option
