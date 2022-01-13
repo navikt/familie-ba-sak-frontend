@@ -306,7 +306,7 @@ export const behandlingsresultater: Record<
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
     HENLAGT_AUTOMATISK_FØDSELSHENDELSE: 'Henlagt automatisk fødselshendelse',
-    HENLAGT_TEKNISK_VEDLIKEHOLD: 'Henlagt teknsik vedlikehold',
+    HENLAGT_TEKNISK_VEDLIKEHOLD: 'Henlagt teknisk vedlikehold',
     IKKE_VURDERT: 'Ikke vurdert',
     /** De neste er resultat for tilbakekrevingsbehandlinger **/
     IKKE_FASTSATT: 'Ikke fastsatt',
