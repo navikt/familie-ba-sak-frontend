@@ -15,7 +15,12 @@ import { useApp } from '../../../../../context/AppContext';
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import useForhåndsvisning from '../../../../../hooks/useForhåndsvisning';
 import Oppfylt from '../../../../../ikoner/Oppfylt';
-import { henleggÅrsak, HenleggÅrsak, IBehandling } from '../../../../../typer/behandling';
+import {
+    BehandlingSteg,
+    henleggÅrsak,
+    HenleggÅrsak,
+    IBehandling,
+} from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
@@ -78,6 +83,16 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
         settVisModal(false);
     });
 
+    const erPåHenleggbartSteg = [
+        BehandlingSteg.REGISTRERE_SØKNAD,
+        BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+        BehandlingSteg.VILKÅRSVURDERING,
+        BehandlingSteg.SEND_TIL_BESLUTTER,
+    ].includes(behandling.steg);
+
+    const harTilgangTilTekniskVedlikeholdHenleggelse =
+        toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
+
     return (
         <>
             <KnappBase
@@ -86,7 +101,10 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                     onListElementClick();
                     settVisModal(true);
                 }}
-                disabled={erLesevisning() && !toggles[ToggleNavn.tekniskVedlikeholdHenleggelse]}
+                disabled={
+                    (erLesevisning() || !erPåHenleggbartSteg) &&
+                    !harTilgangTilTekniskVedlikeholdHenleggelse
+                }
             >
                 Henlegg behandling
             </KnappBase>
@@ -164,9 +182,9 @@ const HenleggBehandling: React.FC<IProps> = ({ onListElementClick, fagsakId, beh
                             .filter(
                                 årsak =>
                                     (årsak !== HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
-                                        !toggles[ToggleNavn.tekniskVedlikeholdHenleggelse]) ||
+                                        erPåHenleggbartSteg) ||
                                     (årsak === HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
-                                        toggles[ToggleNavn.tekniskVedlikeholdHenleggelse])
+                                        harTilgangTilTekniskVedlikeholdHenleggelse)
                             )
                             .map(årsak => {
                                 return (
