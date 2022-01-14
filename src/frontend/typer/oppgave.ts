@@ -58,6 +58,7 @@ export enum IdentGruppe {
 
 export enum EnhetFilter {
     VELG = 'VELG',
+    E2103 = 'E2103',
     E4806 = 'E4806',
     E4820 = 'E4820',
     E4833 = 'E4833',
@@ -67,6 +68,7 @@ export enum EnhetFilter {
 
 export const enhetFilter: Record<EnhetFilter, IPar> = {
     VELG: { id: 'VELG', navn: 'Velg' },
+    E2103: { id: 'E2103', navn: '2103 Vikafossen' },
     E4806: { id: 'E4806', navn: '4806 Drammen' },
     E4820: { id: 'E4820', navn: '4820 Vadsø' },
     E4833: { id: 'E4833', navn: '4833 Oslo' },
