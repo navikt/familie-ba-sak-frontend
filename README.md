@@ -19,7 +19,7 @@ i konsollen.
     COOKIE_KEY2='<any string of length 32>'
     
     SESSION_SECRET='<any string of length 32>'
-    BA_SAK_SCOPE=api://dev-fss.teamfamilie.familie-ba-sak-lokal/.default
+    BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak-lokal/.default
 
     ENV=local
     APP_VERSION=0.0.1
