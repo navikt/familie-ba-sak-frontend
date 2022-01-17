@@ -7,6 +7,7 @@ import { Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { erBehandlingHenlagt } from '../../typer/behandling';
 import { IMinimalFagsak } from '../../typer/fagsak';
 import { IInfotrygdSak } from '../../typer/infotrygd';
 import { Sakstabell } from './Sakstabell';
@@ -52,7 +53,9 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
 
     return (
         <>
-            {minimalFagsak?.behandlinger.length === 0 && (
+            {minimalFagsak?.behandlinger.filter(
+                behandling => !erBehandlingHenlagt(behandling.resultat)
+            ).length === 0 && (
                 <FlyttSakKnapp
                     mini
                     disabled={migrerInfotrygdSakRessurs.status === RessursStatus.HENTER}

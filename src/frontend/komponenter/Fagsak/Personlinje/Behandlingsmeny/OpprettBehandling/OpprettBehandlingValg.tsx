@@ -16,11 +16,11 @@ import { Felt } from '@navikt/familie-skjema';
 
 import { useApp } from '../../../../../context/AppContext';
 import {
-    BehandlingResultat,
     BehandlingStatus,
     Behandlingstype,
     BehandlingÅrsak,
     behandlingÅrsak,
+    erBehandlingHenlagt,
 } from '../../../../../typer/behandling';
 import { IBehandlingstema } from '../../../../../typer/behandlingstema';
 import { FagsakStatus, IMinimalFagsak } from '../../../../../typer/fagsak';
@@ -93,11 +93,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         : minimalFagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
     const kanOppretteRevurdering = !minimalFagsak
         ? false
-        : minimalFagsak.behandlinger.filter(
-              behandling =>
-                  behandling.resultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
-                  behandling.resultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET
-          ).length > 0 && kanOppretteBehandling;
+        : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat))
+              .length > 0 && kanOppretteBehandling;
     const kanOppretteTekniskEndring =
         kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
     const kanOppretteTilbakekreving = !manuellJournalfør && !kanOppretteFørstegangsbehandling;
