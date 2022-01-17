@@ -113,14 +113,7 @@ const useBehandlingssteg = (
                 if (response.status === RessursStatus.SUKSESS) {
                     settVisModal(true);
                     oppdaterBehandling(response);
-                } else if (response.status === RessursStatus.IKKE_TILGANG) {
-                    settSubmitRessurs(
-                        byggFeiletRessurs(response.frontendFeilmelding || defaultFunksjonellFeil)
-                    );
-                } else if (
-                    response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.FUNKSJONELL_FEIL
-                ) {
+                } else if (response.status === RessursStatus.FEILET) {
                     settSubmitRessurs(byggFeiletRessurs(defaultFunksjonellFeil));
                 }
             });
