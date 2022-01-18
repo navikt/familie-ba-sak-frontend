@@ -34,6 +34,7 @@ export enum DokumentÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',
     FØDSEL_MINDREÅRIG = 'FØDSEL_MINDREÅRIG',
     FØDSEL_UMYNDIG = 'FØDSEL_UMYNDIG',
+    FØDSEL_GENERELL = 'FØDSEL_GENERELL',
     KAN_SØKE = 'KAN_SØKE',
 }
 
@@ -41,6 +42,7 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     DELT_BOSTED: 'Delt bosted',
     FØDSEL_MINDREÅRIG: 'Fødsel mindreårig',
     FØDSEL_UMYNDIG: 'Fødsel umyndig',
+    FØDSEL_GENERELL: 'Fødsel generell',
     KAN_SØKE: 'Kan søke',
 };
 
@@ -272,6 +274,12 @@ export const [DokumentutsendingProvider, useDokumentutsending] = createUseContex
                             bruker: bruker,
                             målform: målform.verdi ?? Målform.NB,
                             brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_UMYNDIG,
+                        });
+                    case DokumentÅrsak.FØDSEL_GENERELL:
+                        return hentEnkeltInformasjonsbrevRequest({
+                            bruker: bruker,
+                            målform: målform.verdi ?? Målform.NB,
+                            brevmal: Informasjonsbrev.INFORMASJONSBREV_FØDSEL_GENERELL,
                         });
                     case DokumentÅrsak.KAN_SØKE:
                         return hentKanSøkeSkjemaData(målform.verdi ?? Målform.NB);
