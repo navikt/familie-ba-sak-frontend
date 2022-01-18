@@ -176,8 +176,6 @@ const LeggTilBarn: React.FC<IProps> = ({ barnaMedOpplysninger, onSuccess }) => {
                     url: '/familie-ba-sak/api/tilgang',
                     data: { brukerIdent: registrerBarnSkjema.felter.ident.verdi },
                 }).then((ressurs: Ressurs<IRestTilgang>) => {
-                    nullstillRegistrerBarnSkjema();
-
                     if (ressurs.status === RessursStatus.SUKSESS) {
                         if (ressurs.data.saksbehandlerHarTilgang) {
                             request<void, IPersonInfo>({
