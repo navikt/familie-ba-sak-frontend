@@ -187,6 +187,15 @@ export enum BehandlingResultat {
     HENLAGT_TEKNISK_VEDLIKEHOLD = 'HENLAGT_TEKNISK_VEDLIKEHOLD',
 }
 
+export const erBehandlingHenlagt = (behandlingsresultat?: BehandlingResultat) => {
+    return (
+        behandlingsresultat === BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET ||
+        behandlingsresultat === BehandlingResultat.HENLAGT_SØKNAD_TRUKKET ||
+        behandlingsresultat === BehandlingResultat.HENLAGT_AUTOMATISK_FØDSELSHENDELSE ||
+        behandlingsresultat === BehandlingResultat.HENLAGT_TEKNISK_VEDLIKEHOLD
+    );
+};
+
 export enum BehandlerRolle {
     UKJENT = 0,
     VEILEDER = 1,
