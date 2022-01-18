@@ -99,8 +99,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
     const kanOppretteTilbakekreving = !manuellJournalfør && !kanOppretteFørstegangsbehandling;
     const kanOppretteSmåbarnstillegg = toggles[ToggleNavn.kanBehandleSmåbarnstillegg];
-    const kanOppretteMigreringFraInfotrygd =
-        kanOppretteBehandling && toggles[ToggleNavn.kanManueltMigrereTilbakeITid];
+    const kanOppretteMigreringFraInfotrygd = kanOppretteBehandling;
     const erMigreringFraInfotrygd =
         !manuellJournalfør && behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
     const erHelmanuellMigrering =
@@ -222,7 +221,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                                           kanOppretteSmåbarnstillegg) &&
                                       (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                                           toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev]) &&
-                                      årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO
+                                      årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
+                                      årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING
                               )
                               .map(årsak => {
                                   return (
