@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import navFarger from 'nav-frontend-core';
 import { Knapp } from 'nav-frontend-knapper';
-import { Select } from 'nav-frontend-skjema';
+import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 
 import { FamilieDatovelger, ISODateString } from '@navikt/familie-form-elements';
@@ -38,7 +38,7 @@ const FilterSkjema: React.FunctionComponent = () => {
     } = useOppgaver();
 
     return (
-        <div className="filterskjema">
+        <SkjemaGruppe className="filterskjema" aria-label="oppgavebenken-filterskjema">
             <div className="filterskjema__filtre">
                 {Object.values(oppgaveFelter)
                     .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
@@ -134,7 +134,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     children={'Tilbakestill filtrering'}
                 />
             </div>
-        </div>
+        </SkjemaGruppe>
     );
 };
 
