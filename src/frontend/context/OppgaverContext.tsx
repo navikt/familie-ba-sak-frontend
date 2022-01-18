@@ -346,7 +346,7 @@ const [OppgaverProvider, useOppgaver] = createUseContext(() => {
         };
 
         const erGyldig = opprettetTidspunktGyldig && fristGyldig && enhetGyldig;
-        !erGyldig && settOppgaveFelter(oppdaterteOppgaveFelter);
+        settOppgaveFelter(oppdaterteOppgaveFelter);
 
         return erGyldig;
     };

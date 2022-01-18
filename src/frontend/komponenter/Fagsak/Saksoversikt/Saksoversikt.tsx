@@ -10,7 +10,7 @@ import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi';
 import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { BehandlingResultat, BehandlingStatus, IBehandling } from '../../../typer/behandling';
+import { BehandlingStatus, erBehandlingHenlagt, IBehandling } from '../../../typer/behandling';
 import {
     behandlingKategori,
     BehandlingKategori,
@@ -72,9 +72,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
             behandling.status === BehandlingStatus.AVSLUTTET &&
-            behandling.resultat !== BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET &&
-            behandling.resultat !== BehandlingResultat.HENLAGT_SØKNAD_TRUKKET &&
-            behandling.resultat !== BehandlingResultat.HENLAGT_AUTOMATISK_FØDSELSHENDELSE
+            !erBehandlingHenlagt(behandling.resultat)
     );
 
     let gjeldendeBehandling =

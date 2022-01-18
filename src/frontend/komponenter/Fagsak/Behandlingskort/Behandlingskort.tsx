@@ -14,6 +14,7 @@ import {
     behandlingsstatuser,
     behandlingstyper,
     behandlingÅrsak,
+    erBehandlingHenlagt,
     IBehandling,
 } from '../../../typer/behandling';
 import { datoformat, formaterIsoDato, formaterIverksattDato } from '../../../utils/formatter';
@@ -25,6 +26,10 @@ interface IBehandlingskortProps {
 }
 
 const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
+    if (erBehandlingHenlagt(behandlingResultat)) {
+        return navFarger.navGra20;
+    }
+
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
@@ -35,9 +40,6 @@ const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
         case BehandlingResultat.AVSLÅTT:
         case BehandlingResultat.OPPHØRT:
             return navFarger.redErrorDarken20;
-        case BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET:
-        case BehandlingResultat.HENLAGT_SØKNAD_TRUKKET:
-            return navFarger.navGra20;
         case BehandlingResultat.IKKE_VURDERT:
             return '#F2F2F2';
         default:
@@ -46,6 +48,10 @@ const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
 };
 
 const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
+    if (erBehandlingHenlagt(behandlingResultat)) {
+        return navFarger.navMorkGra;
+    }
+
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
@@ -56,10 +62,6 @@ const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
         case BehandlingResultat.AVSLÅTT:
         case BehandlingResultat.OPPHØRT:
             return navFarger.redErrorDarken20;
-        case BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET:
-        case BehandlingResultat.HENLAGT_SØKNAD_TRUKKET:
-        case BehandlingResultat.IKKE_VURDERT:
-            return navFarger.navMorkGra;
         default:
             return navFarger.navMorkGra;
     }
