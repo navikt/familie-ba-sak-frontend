@@ -188,15 +188,22 @@ const VilkårsvurderingSkjema: React.FunctionComponent<IVilkårsvurderingSkjema>
                                                 vilkårResultat.verdi.vilkårType === vc.key
                                         );
 
-                                    return vilkårResultater.length ? (
-                                        <GeneriskVilkår
-                                            key={`${personResultat.personIdent}_${vc.key}`}
-                                            person={personResultat.person}
-                                            vilkårResultater={vilkårResultater}
-                                            vilkårFraConfig={vc}
-                                            visFeilmeldinger={visFeilmeldinger}
-                                        />
-                                    ) : undefined;
+                                    if (
+                                        vilkårResultater.length === 0 &&
+                                        personResultat.person.type === PersonType.SØKER
+                                    )
+                                        return undefined;
+                                    // For barn ønsker vi alltid å rendre alle vilkår slik at man evt kan legge til tom periode
+                                    else
+                                        return (
+                                            <GeneriskVilkår
+                                                key={`${personResultat.personIdent}_${vc.key}`}
+                                                person={personResultat.person}
+                                                vilkårResultater={vilkårResultater}
+                                                vilkårFraConfig={vc}
+                                                visFeilmeldinger={visFeilmeldinger}
+                                            />
+                                        );
                                 })}
                             {andreVurderinger.length > 0 &&
                                 Object.values(annenVurderingConfig)
