@@ -1,6 +1,6 @@
 // Konfigurer appen før backend prøver å sette opp konfigurasjon
 
-import { appConfig, ISessionKonfigurasjon, IApi } from '@navikt/familie-backend';
+import { appConfig, IApi, ISessionKonfigurasjon } from '@navikt/familie-backend';
 
 const Environment = () => {
     if (process.env.ENV === 'local') {
@@ -25,7 +25,7 @@ const Environment = () => {
             proxyUrl:
                 process.env.CLUSTER === 'gcp'
                     ? 'https://familie-ba-sak.dev-fss-pub.nais.io'
-                    : 'http://familie-ba-sak',
+                    : 'https://familie-ba-sak.dev.intern.nav.no',
             familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
             redisUrl: 'familie-ba-sak-frontend-redis',
         };
@@ -37,7 +37,7 @@ const Environment = () => {
         proxyUrl:
             process.env.CLUSTER === 'gcp'
                 ? 'https://familie-ba-sak.prod-fss-pub.nais.io'
-                : 'http://familie-ba-sak',
+                : 'https://familie-ba-sak.prod.intern.nav.no',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
         redisUrl: 'familie-ba-sak-frontend-redis',
     };
