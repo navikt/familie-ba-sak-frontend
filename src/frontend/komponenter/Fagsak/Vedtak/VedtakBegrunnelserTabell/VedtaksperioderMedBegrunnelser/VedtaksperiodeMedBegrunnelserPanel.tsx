@@ -43,12 +43,9 @@ const VedtaksperiodeMedBegrunnelserPanel: React.FC<IProps> = ({
                     vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer
                 }
             />
-            {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG &&
-                vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.ENDRET_UTBETALING && (
-                    <BegrunnelserMultiselect
-                        vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type}
-                    />
-                )}
+            {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG && (
+                <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
+            )}
             {genererteBrevbegrunnelser.status === RessursStatus.SUKSESS &&
                 genererteBrevbegrunnelser.data.length > 0 && (
                     <>
