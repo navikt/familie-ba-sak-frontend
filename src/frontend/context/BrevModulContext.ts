@@ -149,6 +149,7 @@ const [BrevModulProvider, useBrevModul] = createUseContext(() => {
             );
         },
         avhengigheter: { brevmal, fritekster },
+        nullstillVedAvhengighetEndring: false,
     });
 
     const { kanSendeSkjema, onSubmit, skjema } = useSkjema<
