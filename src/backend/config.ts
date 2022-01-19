@@ -31,10 +31,7 @@ const Environment = () => {
     return {
         buildPath: 'frontend_production',
         namespace: 'production',
-        proxyUrl:
-            process.env.CLUSTER === 'gcp'
-                ? 'https://familie-ba-sak.prod-fss-pub.nais.io'
-                : 'http://familie-ba-sak',
+        proxyUrl: 'http://familie-ba-sak',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
         redisUrl: 'familie-ba-sak-frontend-redis',
     };
