@@ -1,4 +1,4 @@
-name: Build&deploy to dev (fss og gcp)
+name: Build&deploy to dev
 
 on:
   workflow_dispatch:
