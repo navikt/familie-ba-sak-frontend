@@ -2358,10 +2358,10 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/familie-backend@^5.0.29":
-  version "5.0.29"
-  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.29.tgz#ed05f26bb4b6ccc11e57afc928d1beb1ac88a699"
-  integrity sha512-8BRGoW68YmnIAQkhOSxHJeImENFIY6Kwo1I8GhiIjZgCCt0HSYNdSmqUAe8Yqt7etSzxefGpGNdqEXoLI24JjA==
+"@navikt/familie-backend@^5.0.30":
+  version "5.0.30"
+  resolved "https://registry.yarnpkg.com/@navikt/familie-backend/-/familie-backend-5.0.30.tgz#d2682d67c1ded85533ec9edbde5661533fa15fb1"
+  integrity sha512-iKiDR9HVBJ0otK/NMwIixYQWoV55lNJErIGYGk8jXXAyOP7QMzTHOznWEmCWnXd18k162XAMxqa8EoKJQ45TNg==
   dependencies:
     "@navikt/familie-logging" "^1.0.5"
     "@types/cookie-parser" "^1.4.2"
