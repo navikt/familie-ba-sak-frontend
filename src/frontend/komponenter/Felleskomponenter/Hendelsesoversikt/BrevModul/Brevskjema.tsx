@@ -181,6 +181,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                     placeholder={'Velg brevmal'}
                     onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
                         skjema.felter.brevmal.onChange(event.target.value);
+                        skjema.felter.multiselect.nullstill();
                     }}
                 >
                     <option value={''}>Velg</option>
