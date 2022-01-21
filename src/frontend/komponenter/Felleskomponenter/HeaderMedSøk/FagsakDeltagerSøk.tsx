@@ -122,7 +122,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                 <Endringslogg
                     userId={innloggetSaksbehandler.navIdent}
                     dataFetchingIntervalSeconds={60 * 15}
-                    appId={'BA'}
+                    appId={'BAKS'}
                     backendUrl={'/endringslogg'}
                     dataset={'production'}
                     maxEntries={50}
