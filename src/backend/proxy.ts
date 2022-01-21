@@ -4,10 +4,10 @@ import { NextFunction, Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import { Client, getOnBehalfOfAccessToken } from '@navikt/familie-backend';
-import { stdoutLogger, logError } from '@navikt/familie-logging';
+import { logError, stdoutLogger } from '@navikt/familie-logging';
 import { ApiRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { oboConfig, proxyUrl, redirectRecords } from './config.js';
+import { endringsloggProxyUrl, oboConfig, proxyUrl, redirectRecords } from './config.js';
 
 const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     if (req.body) {
@@ -30,6 +30,22 @@ export const doProxy: any = () => {
         },
         secure: true,
         target: `${proxyUrl}`,
+        logProvider: () => stdoutLogger,
+    });
+};
+
+// eslint-disable-next-line
+export const doEndringslogProxy: any = () => {
+    return createProxyMiddleware('/endringslogg', {
+        changeOrigin: true,
+        logLevel: 'info',
+        onProxyReq: restream,
+        pathRewrite: (path: string, _req: Request) => {
+            const newPath = path.replace('/endringslogg', '');
+            return `${newPath}`;
+        },
+        secure: true,
+        target: `${endringsloggProxyUrl}`,
         logProvider: () => stdoutLogger,
     });
 };

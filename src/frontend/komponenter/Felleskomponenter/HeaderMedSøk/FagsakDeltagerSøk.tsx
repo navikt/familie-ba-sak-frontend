@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 
 import { useHistory } from 'react-router';
 
-import { ikoner, Søk } from '@navikt/familie-header';
+import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
+import { ikoner, Søk } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
@@ -15,8 +16,10 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import { fagsakdeltagerRoller, IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
+import { ToggleNavn } from '../../../typer/toggles';
 import OpprettFagsakModal from './OpprettFagsakModal';
 
 // eslint-disable-next-line
@@ -24,7 +27,9 @@ const validator = require('@navikt/fnrvalidator');
 
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
+    const { toggles, innloggetSaksbehandler } = useApp();
     const history = useHistory();
+
     const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(
         byggTomRessurs()
     );
@@ -112,6 +117,20 @@ const FagsakDeltagerSøk: React.FC = () => {
                         : søkeresultat.harTilgang && settDeltagerForOpprettFagsak(søkeresultat)
                 }
             />
+
+            {toggles[ToggleNavn.brukEndringslogg] && innloggetSaksbehandler && (
+                <Endringslogg
+                    userId={innloggetSaksbehandler.navIdent}
+                    dataFetchingIntervalSeconds={60 * 15}
+                    appId={'BA'}
+                    backendUrl={'/endringslogg'}
+                    dataset={'production'}
+                    maxEntries={50}
+                    appName={'Barnetrygd'}
+                    alignLeft={true}
+                    stil={'lys'}
+                />
+            )}
 
             <OpprettFagsakModal
                 søkeresultat={deltagerForOpprettFagsak}
