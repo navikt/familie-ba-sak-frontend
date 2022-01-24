@@ -20,6 +20,7 @@ import { useApp } from '../../../context/AppContext';
 import IkkeTilgang from '../../../ikoner/IkkeTilgang';
 import { fagsakdeltagerRoller, IFagsakDeltager, ISøkParam } from '../../../typer/fagsakdeltager';
 import { ToggleNavn } from '../../../typer/toggles';
+import { erProd } from '../../../utils/miljø';
 import OpprettFagsakModal from './OpprettFagsakModal';
 
 // eslint-disable-next-line
@@ -124,14 +125,13 @@ const FagsakDeltagerSøk: React.FC = () => {
                     dataFetchingIntervalSeconds={60 * 15}
                     appId={'BAKS'}
                     backendUrl={'/endringslogg'}
-                    dataset={'production'}
+                    dataset={`${erProd() ? 'production' : 'preProduction'}`}
                     maxEntries={50}
                     appName={'Barnetrygd'}
                     alignLeft={true}
                     stil={'lys'}
                 />
             )}
-
             <OpprettFagsakModal
                 søkeresultat={deltagerForOpprettFagsak}
                 lukkModal={() => settDeltagerForOpprettFagsak(undefined)}
