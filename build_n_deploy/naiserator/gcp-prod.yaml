@@ -51,8 +51,6 @@ spec:
       rules:
         - application: familie-ba-sak
         - application: familie-ba-sak-frontend-redis
-      external:
-        - host: familie-ba-sak.prod-fss-pub.nais.io
   envFrom:
     - secret: ba-sak-frontend
   env:

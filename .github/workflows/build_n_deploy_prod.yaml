@@ -1,4 +1,4 @@
-name: Build&deploy to dev and prod (fss og gcp)
+name: Build&deploy to dev and prod
 
 on:
   push:
@@ -38,26 +38,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Deploy til dev-fss team namespace
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
-          RESOURCE: build_n_deploy/naiserator/naiserator_dev.yaml
-          VAR: VERSION=${{ env.VERSION }}
       - name: Deploy til dev-gcp team namespace
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: build_n_deploy/naiserator/gcp-dev.yaml
-          VAR: VERSION=${{ env.VERSION }}
-      - name: Deploy til prod-fss team namespace
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-fss
-          RESOURCE: build_n_deploy/naiserator/naiserator_prod.yaml
           VAR: VERSION=${{ env.VERSION }}
       - name: Deploy til prod-gcp team namespace
         uses: nais/deploy/actions/deploy@v1

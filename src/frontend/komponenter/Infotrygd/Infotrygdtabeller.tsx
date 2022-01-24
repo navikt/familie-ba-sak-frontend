@@ -2,13 +2,16 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import { Undertittel } from 'nav-frontend-typografi';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { erBehandlingHenlagt } from '../../typer/behandling';
 import { IMinimalFagsak } from '../../typer/fagsak';
 import { IInfotrygdSak } from '../../typer/infotrygd';
+import UIModalWrapper from '../Felleskomponenter/Modal/UIModalWrapper';
 import { Sakstabell } from './Sakstabell';
 import { useInfotrygdMigrering } from './useInfotrygd';
 import { Vedtakstabell } from './Vedtakstabell';
@@ -36,6 +39,10 @@ const FlyttSakKnapp = styled(Knapp)`
     height: 40px;
 `;
 
+const Feilmelding = styled(AlertStripe)`
+    margin-top: 10px;
+`;
+
 const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
     saker.sort((sakA, sakB) => {
         const saksnrA = sakA.saksnr ? parseInt(sakA.saksnr) : 1000;
@@ -48,20 +55,73 @@ export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
     saker,
     minimalFagsak,
 }) => {
-    const { flyttBrukerTilBaSak, migrerInfotrygdSakRessurs } = useInfotrygdMigrering();
+    const {
+        flyttBrukerTilBaSak,
+        migrerInfotrygdSakRessurs,
+        visMigrertModal,
+        gåTilSaksoversiktVedSuksess,
+    } = useInfotrygdMigrering();
+
+    const visFlyttSakAlert = () => {
+        if (
+            migrerInfotrygdSakRessurs.status === RessursStatus.FEILET ||
+            migrerInfotrygdSakRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+        ) {
+            return (
+                <>
+                    <Feilmelding
+                        children={migrerInfotrygdSakRessurs.frontendFeilmelding}
+                        type={'feil'}
+                    />
+                </>
+            );
+        }
+    };
+
+    const disableMigrerKnapp =
+        migrerInfotrygdSakRessurs.status === RessursStatus.HENTER ||
+        migrerInfotrygdSakRessurs.status === RessursStatus.FEILET ||
+        migrerInfotrygdSakRessurs.status === RessursStatus.FUNKSJONELL_FEIL;
 
     return (
         <>
-            {minimalFagsak?.behandlinger.length === 0 && (
-                <FlyttSakKnapp
-                    mini
-                    disabled={migrerInfotrygdSakRessurs.status === RessursStatus.HENTER}
-                    onClick={() => {
-                        ident && flyttBrukerTilBaSak(ident);
+            {saker.length > 0 &&
+                minimalFagsak?.behandlinger.filter(
+                    behandling => !erBehandlingHenlagt(behandling.resultat)
+                ).length === 0 && (
+                    <FlyttSakKnapp
+                        mini
+                        disabled={disableMigrerKnapp}
+                        onClick={() => {
+                            ident && flyttBrukerTilBaSak(ident);
+                        }}
+                    >
+                        Flytt til BA-sak
+                    </FlyttSakKnapp>
+                )}
+            {visFlyttSakAlert()}
+            {visMigrertModal && (
+                <UIModalWrapper
+                    modal={{
+                        tittel: 'Migreringen pågår',
+                        lukkKnapp: false,
+                        visModal: visMigrertModal,
+                        actions: [
+                            <Knapp
+                                key={'bekreft'}
+                                type={'hoved'}
+                                mini={true}
+                                onClick={() => gåTilSaksoversiktVedSuksess(minimalFagsak?.id)}
+                                children={'Gå til saksoversikt'}
+                            />,
+                        ],
                     }}
                 >
-                    Flytt til BA-sak
-                </FlyttSakKnapp>
+                    <Normaltekst>
+                        Migrering tar 1-2 minutter. Du vil se behandlingen i saksoversikten så fort
+                        migreringen er ferdig.
+                    </Normaltekst>
+                </UIModalWrapper>
             )}
             <SakerTekst>{ident ? `Saker for ${ident}` : 'Saker'}</SakerTekst>
             <Sakstabell saker={sorterSakerEtterSaksnr(saker)} />

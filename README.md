@@ -19,7 +19,7 @@ i konsollen.
     COOKIE_KEY2='<any string of length 32>'
     
     SESSION_SECRET='<any string of length 32>'
-    BA_SAK_SCOPE=api://dev-fss.teamfamilie.familie-ba-sak-lokal/.default
+    BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak-lokal/.default
 
     ENV=local
     APP_VERSION=0.0.1
@@ -46,7 +46,7 @@ curl --location --request GET ‘https://login.microsoftonline.com/navq.onmicros
 
 
 # Bygg og deploy
-Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i fss området. Alle commits til feature brancher går til dev miljøet og master går til produksjon.
+Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i gcp området. Alle commits til feature brancher går til dev miljøet og master går til produksjon.
 
 # Henvendelser
 

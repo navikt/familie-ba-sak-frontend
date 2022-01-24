@@ -31,6 +31,7 @@ export enum HenleggÅrsak {
     SØKNAD_TRUKKET = 'SØKNAD_TRUKKET',
     FEILAKTIG_OPPRETTET = 'FEILAKTIG_OPPRETTET',
     FØDSELSHENDELSE_UGYLDIG_UTFALL = 'FØDSELSHENDELSE_UGYLDIG_UTFALL',
+    TEKNISK_VEDLIKEHOLD = 'TEKNISK_VEDLIKEHOLD',
 }
 
 export const henleggÅrsak: Record<HenleggÅrsak, string> = {
@@ -38,6 +39,7 @@ export const henleggÅrsak: Record<HenleggÅrsak, string> = {
     FEILAKTIG_OPPRETTET: 'Behandlingen er feilaktig opprettet',
     FØDSELSHENDELSE_UGYLDIG_UTFALL:
         'Automatisk henlagt på grunn av ugyldig utfall fra fødselshendelse',
+    TEKNISK_VEDLIKEHOLD: 'Teknisk vedlikehold',
 };
 
 export enum BehandlingÅrsak {
@@ -182,7 +184,17 @@ export enum BehandlingResultat {
     HENLAGT_SØKNAD_TRUKKET = 'HENLAGT_SØKNAD_TRUKKET',
     IKKE_VURDERT = 'IKKE_VURDERT',
     HENLAGT_AUTOMATISK_FØDSELSHENDELSE = 'HENLAGT_AUTOMATISK_FØDSELSHENDELSE',
+    HENLAGT_TEKNISK_VEDLIKEHOLD = 'HENLAGT_TEKNISK_VEDLIKEHOLD',
 }
+
+export const erBehandlingHenlagt = (behandlingsresultat?: BehandlingResultat) => {
+    return (
+        behandlingsresultat === BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET ||
+        behandlingsresultat === BehandlingResultat.HENLAGT_SØKNAD_TRUKKET ||
+        behandlingsresultat === BehandlingResultat.HENLAGT_AUTOMATISK_FØDSELSHENDELSE ||
+        behandlingsresultat === BehandlingResultat.HENLAGT_TEKNISK_VEDLIKEHOLD
+    );
+};
 
 export enum BehandlerRolle {
     UKJENT = 0,
@@ -303,6 +315,7 @@ export const behandlingsresultater: Record<
     HENLAGT_FEILAKTIG_OPPRETTET: 'Henlagt (feilaktig opprettet)',
     HENLAGT_SØKNAD_TRUKKET: 'Henlagt (søknad trukket)',
     HENLAGT_AUTOMATISK_FØDSELSHENDELSE: 'Henlagt automatisk fødselshendelse',
+    HENLAGT_TEKNISK_VEDLIKEHOLD: 'Henlagt teknisk vedlikehold',
     IKKE_VURDERT: 'Ikke vurdert',
     /** De neste er resultat for tilbakekrevingsbehandlinger **/
     IKKE_FASTSATT: 'Ikke fastsatt',

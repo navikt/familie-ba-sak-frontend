@@ -123,7 +123,10 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             dokumenter: useFelt<IDokumentInfo[]>({
                 verdi: [],
                 valideringsfunksjon: (felt: FeltState<IDokumentInfo[]>) => {
-                    return !felt.verdi.some((dokument: IDokumentInfo) => dokument.tittel === '')
+                    return !felt.verdi.some(
+                        (dokument: IDokumentInfo) =>
+                            dokument.tittel === undefined || dokument.tittel === ''
+                    )
                         ? ok(felt)
                         : feil(felt, 'Tittel på minst ett dokument er ikke satt');
                 },
@@ -150,7 +153,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                 verdi: [],
             }),
         },
-        skjemanavn: 'Opprett behandling modal',
+        skjemanavn: 'Journalfør dokument',
     });
 
     useEffect(() => {
@@ -323,7 +326,7 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
             : [];
     };
 
-    const journalfør = async () => {
+    const journalfør = () => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
             const erDigitalKanal =
                 dataForManuellJournalføring.data.journalpost.kanal === JournalpostKanal.NAV_NO;
@@ -405,7 +408,6 @@ const [ManuellJournalførProvider, useManuellJournalfør] = createUseContext(() 
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
                         history.push('/oppgaver');
                     }
-                    return fagsakId;
                 }
             );
         }
