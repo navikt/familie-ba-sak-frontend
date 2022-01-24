@@ -15,7 +15,7 @@ import { logInfo } from '@navikt/familie-logging';
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
-import { attachToken, doPdfProxy, doProxy, doRedirectProxy } from './proxy';
+import { attachToken, doProxy, doRedirectProxy } from './proxy';
 import setupRouter from './router';
 
 // eslint-disable-next-line
@@ -52,13 +52,6 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         ensureAuthenticated(azureAuthClient, true),
         attachToken(azureAuthClient),
         doProxy()
-    );
-
-    app.use(
-        '/api/pdf-proxy',
-        ensureAuthenticated(azureAuthClient, true),
-        attachToken(azureAuthClient),
-        doPdfProxy()
     );
 
     app.use('/redirect', doRedirectProxy());
