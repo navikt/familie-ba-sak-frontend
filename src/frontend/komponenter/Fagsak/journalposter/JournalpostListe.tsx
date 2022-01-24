@@ -276,7 +276,7 @@ const JournalpostListe: React.FC<IProps> = ({ bruker }) => {
                                                                 <EksternLenkeWrapper
                                                                     onClick={() => {
                                                                         window.open(
-                                                                            `/api/pdf-proxy/journalpost/${journalpost.journalpostId}/hent/${dokument.dokumentInfoId}`,
+                                                                            `/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/dokument/${dokument.dokumentInfoId}`,
                                                                             '_blank'
                                                                         );
                                                                     }}

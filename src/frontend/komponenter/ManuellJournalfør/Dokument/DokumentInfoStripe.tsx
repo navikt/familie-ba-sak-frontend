@@ -61,7 +61,7 @@ export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
                     <StyledÅpenDokument
                         onClick={() => {
                             window.open(
-                                `/api/pdf-proxy/journalpost/${journalpostId}/hent/${dokument.dokumentInfoId}`,
+                                `/familie-ba-sak/api/journalpost/${journalpostId}/dokument/${dokument.dokumentInfoId}`,
                                 '_blank'
                             );
                         }}
