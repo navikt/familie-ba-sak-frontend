@@ -86,6 +86,7 @@ export const useInfotrygdMigrering = () => {
     const [migrerInfotrygdSakRessurs, settMigrerInfotrygdSakRessurs] = useState<
         Ressurs<IMigreringResponseDto>
     >(byggTomRessurs());
+    const [visMigrertModal, settVisMigrertModal] = useState<boolean>(false);
 
     const flyttBrukerTilBaSak = (ident: string) => {
         settMigrerInfotrygdSakRessurs(byggHenterRessurs());
@@ -96,10 +97,9 @@ export const useInfotrygdMigrering = () => {
         })
             .then(ressurs => {
                 if (ressurs.status === RessursStatus.SUKSESS) {
-                    history.push(`/fagsak/${ressurs.data.fagsakId}/saksoversikt`);
-                } else {
-                    settMigrerInfotrygdSakRessurs(ressurs);
+                    settVisMigrertModal(true);
                 }
+                settMigrerInfotrygdSakRessurs(ressurs);
             })
             .catch((_error: AxiosError) => {
                 settMigrerInfotrygdSakRessurs(
@@ -108,9 +108,19 @@ export const useInfotrygdMigrering = () => {
             });
     };
 
+    const gåTilSaksoversiktVedSuksess = (fagsakId?: number) => {
+        settVisMigrertModal(false);
+        if (fagsakId) {
+            history.push(`/fagsak/${fagsakId}/saksoversikt`);
+            history.go(0);
+        }
+    };
+
     return {
         flyttBrukerTilBaSak,
         migrerInfotrygdSakRessurs,
+        visMigrertModal,
+        gåTilSaksoversiktVedSuksess,
     };
 };
 
