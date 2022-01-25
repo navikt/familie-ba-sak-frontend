@@ -10,12 +10,12 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
-import backend, { IApp, ensureAuthenticated, envVar } from '@navikt/familie-backend';
+import backend, { ensureAuthenticated, envVar, IApp } from '@navikt/familie-backend';
 import { logInfo } from '@navikt/familie-logging';
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
-import { attachToken, doProxy, doRedirectProxy } from './proxy';
+import { attachToken, doEndringslogProxy, doProxy, doRedirectProxy } from './proxy';
 import setupRouter from './router';
 
 // eslint-disable-next-line
@@ -52,6 +52,13 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         ensureAuthenticated(azureAuthClient, true),
         attachToken(azureAuthClient),
         doProxy()
+    );
+
+    app.use(
+        '/endringslogg',
+        ensureAuthenticated(azureAuthClient, true),
+        attachToken(azureAuthClient),
+        doEndringslogProxy()
     );
 
     app.use('/redirect', doRedirectProxy());

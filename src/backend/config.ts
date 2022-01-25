@@ -1,6 +1,6 @@
 // Konfigurer appen før backend prøver å sette opp konfigurasjon
 
-import { appConfig, ISessionKonfigurasjon, IApi } from '@navikt/familie-backend';
+import { appConfig, IApi, ISessionKonfigurasjon } from '@navikt/familie-backend';
 
 const Environment = () => {
     if (process.env.ENV === 'local') {
@@ -9,6 +9,7 @@ const Environment = () => {
             namespace: 'local',
             proxyUrl: 'http://localhost:8089',
             familieTilbakeUrl: 'http://localhost:8000',
+            endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
         };
     } else if (process.env.ENV === 'e2e') {
         return {
@@ -17,6 +18,7 @@ const Environment = () => {
             proxyUrl: 'http://familie-ba-sak:8089',
             familieTilbakeUrl: 'http://familie-tilbake-frontend:8000',
             redisUrl: 'familie-redis',
+            endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
         };
     } else if (process.env.ENV === 'preprod') {
         return {
@@ -25,6 +27,7 @@ const Environment = () => {
             proxyUrl: 'http://familie-ba-sak',
             familieTilbakeUrl: 'https://familie-tilbake-frontend.dev.intern.nav.no',
             redisUrl: 'familie-ba-sak-frontend-redis',
+            endringsloggProxyUrl: 'https://familie-endringslogg.dev.intern.nav.no',
         };
     }
 
@@ -33,6 +36,7 @@ const Environment = () => {
         namespace: 'production',
         proxyUrl: 'http://familie-ba-sak',
         familieTilbakeUrl: 'https://familietilbakekreving.intern.nav.no',
+        endringsloggProxyUrl: 'https://familie-endringslogg.intern.nav.no',
         redisUrl: 'familie-ba-sak-frontend-redis',
     };
 };
@@ -63,6 +67,7 @@ export const oboConfig: IApi = {
 
 export const buildPath = env.buildPath;
 export const proxyUrl = env.proxyUrl;
+export const endringsloggProxyUrl = env.endringsloggProxyUrl;
 export const namespace = env.namespace;
 
 export const redirectRecords: Record<string, string> = {
