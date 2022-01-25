@@ -55,3 +55,9 @@ export const vedtakBegrunnelseTyper: Record<VedtakBegrunnelseType, string> = {
     FORTSATT_INNVILGET: 'Fortsatt innvilget',
     ETTER_ENDRET_UTBETALING: 'Etter endret utbetaling',
 };
+
+export enum Standardbegrunnelse {
+    REDUKSJON_SATSENDRING = 'REDUKSJON_SATSENDRING',
+    REDUKSJON_UNDER_6_ÅR = 'REDUKSJON_UNDER_6_ÅR',
+    REDUKSJON_UNDER_18_ÅR = 'REDUKSJON_UNDER_18_ÅR',
+}
