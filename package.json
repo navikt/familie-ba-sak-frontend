@@ -43,7 +43,7 @@
     "@navikt/fnrvalidator": "^1.1.4",
     "@navikt/helse-frontend-tidslinje": "^3.1.0",
     "@sentry/browser": "^6.17.1",
-    "@sentry/core": "^6.16.1",
+    "@sentry/core": "^6.17.1",
     "@sentry/tracing": "^6.15.0",
     "@sentry/webpack-plugin": "^1.18.1",
     "@svgr/webpack": "^6.2.0",
