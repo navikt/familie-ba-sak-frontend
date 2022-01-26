@@ -179,7 +179,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                     .includes(person.personIdent)
                             )
                             .map(person => (
-                                <option value={person.personIdent}>
+                                <option value={person.personIdent} key={person.personIdent}>
                                     {formaterIdent(person.personIdent)}
                                 </option>
                             ))}
@@ -256,7 +256,9 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                     >
                         <option value={undefined}>Velg årsak</option>
                         {årsaker.map(årsak => (
-                            <option value={årsak.valueOf()}>{årsakTekst[årsak]}</option>
+                            <option value={årsak.valueOf()} key={årsak.valueOf()}>
+                                {årsakTekst[årsak]}
+                            </option>
                         ))}
                     </FamilieSelect>
                 </Feltmargin>
@@ -342,7 +344,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         >
                             <option value={undefined}>Velg sats</option>
                             {satser.map(sats => (
-                                <option value={sats.valueOf()}>
+                                <option value={sats.valueOf()} key={sats.valueOf()}>
                                     {
                                         satsTilOption(
                                             sats === IEndretUtbetalingAndelFullSats.FULL_SATS
