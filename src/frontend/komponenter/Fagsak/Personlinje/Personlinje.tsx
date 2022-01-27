@@ -32,7 +32,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             <Normaltekst>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</Normaltekst>
             {bruker?.dødsfallDato?.length && (
                 <>
-                    <div className="visittkort__pipe">|</div>
+                    <div className="visittkort__pipe"></div>
                     <DødsfallTag dødsfallDato={bruker.dødsfallDato} />
                 </>
             )}
