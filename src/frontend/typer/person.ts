@@ -60,6 +60,7 @@ export interface IPersonInfo {
     navn: string;
     personIdent: string;
     type: PersonType;
+    dødsfallDato: string;
 }
 
 export interface IForelderBarnRelasjon {

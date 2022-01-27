@@ -1,8 +1,13 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
+import navFarger from 'nav-frontend-core';
 import Lenke from 'nav-frontend-lenker';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
+import '@navikt/ds-css';
+import { Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
@@ -18,6 +23,11 @@ interface IProps {
     minimalFagsak?: IMinimalFagsak;
 }
 
+const DødsfallTag = styled(Tag)`
+    color: white;
+    background-color: ${navFarger.navMorkGra};
+`;
+
 const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
     return (
@@ -29,6 +39,14 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
         >
             <div className="visittkort__pipe">|</div>
             <Normaltekst>{`Kommunenr: ${bruker?.kommunenummer ?? 'ukjent'}`}</Normaltekst>
+            {bruker?.dødsfallDato?.length && (
+                <>
+                    <div className="visittkort__pipe">|</div>
+                    <DødsfallTag variant="info">{`Død ${new Date(
+                        bruker.dødsfallDato
+                    ).toLocaleDateString()}`}</DødsfallTag>
+                </>
+            )}
             <div style={{ flex: 1 }}></div>
             {minimalFagsak !== undefined && (
                 <>
