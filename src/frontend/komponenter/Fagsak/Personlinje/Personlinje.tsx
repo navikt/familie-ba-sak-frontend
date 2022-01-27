@@ -1,13 +1,8 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
-import navFarger from 'nav-frontend-core';
 import Lenke from 'nav-frontend-lenker';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 
-import '@navikt/ds-css';
-import { Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 import Visittkort from '@navikt/familie-visittkort';
 
@@ -16,17 +11,13 @@ import { IMinimalFagsak } from '../../../typer/fagsak';
 import { IPersonInfo } from '../../../typer/person';
 import { hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { formaterIdent, hentAlder } from '../../../utils/formatter';
+import DødsfallTag from '../../Felleskomponenter/DødsfallTag';
 import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
 
 interface IProps {
     bruker?: IPersonInfo;
     minimalFagsak?: IMinimalFagsak;
 }
-
-const DødsfallTag = styled(Tag)`
-    color: white;
-    background-color: ${navFarger.navMorkGra};
-`;
 
 const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
     const { harInnloggetSaksbehandlerSkrivetilgang } = useApp();
@@ -42,9 +33,7 @@ const Personlinje: React.FC<IProps> = ({ bruker, minimalFagsak }) => {
             {bruker?.dødsfallDato?.length && (
                 <>
                     <div className="visittkort__pipe">|</div>
-                    <DødsfallTag variant="info">{`Død ${new Date(
-                        bruker.dødsfallDato
-                    ).toLocaleDateString()}`}</DødsfallTag>
+                    <DødsfallTag dødsfallDato={bruker.dødsfallDato} />
                 </>
             )}
             <div style={{ flex: 1 }}></div>
