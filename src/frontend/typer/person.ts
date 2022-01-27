@@ -47,6 +47,7 @@ export interface IGrunnlagPerson {
     registerhistorikk?: IRestRegisterhistorikk;
     type: PersonType;
     målform: Målform;
+    dødsfallDato?: string;
 }
 
 export interface IPersonInfo {
@@ -60,7 +61,7 @@ export interface IPersonInfo {
     navn: string;
     personIdent: string;
     type: PersonType;
-    dødsfallDato: string;
+    dødsfallDato?: string;
 }
 
 export interface IForelderBarnRelasjon {
