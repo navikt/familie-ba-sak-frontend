@@ -15,7 +15,9 @@ const [EndretUtbetalingAndelProvider, useEndretUtbetalingAndel] = createUseConte
         const årsakFelt = useFelt<IEndretUtbetalingAndelÅrsak | undefined>({
             verdi: endretUtbetalingAndel.årsak ? endretUtbetalingAndel.årsak : undefined,
             valideringsfunksjon: felt =>
-                felt.verdi ? ok(felt) : feil(felt, 'Du må velge en årsak'),
+                felt.verdi && Object.values(IEndretUtbetalingAndelÅrsak).includes(felt.verdi)
+                    ? ok(felt)
+                    : feil(felt, 'Du må velge en årsak'),
         });
 
         const periodeSkalUtbetalesTilSøkerFelt = useFelt<boolean>({

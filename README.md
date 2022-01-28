@@ -11,7 +11,7 @@ Frontend app for barnetrygd sak
 
 Appen krever en del environment variabler og legges til i .env fila i root på prosjektet. 
 Disse kan hentes ved å kjøre `kubectl -n teamfamilie get secret azuread-familie-ba-sak-frontend-lokal -o json | jq '.data | map_values(@base64d)'`
-i konsollen.
+mot dev-gcp clusteret i konsollen.
 ```
     CLIENT_ID='AZURE_APP_CLIENT_ID' (fra konsollen)
     CLIENT_SECRET='AZURE_APP_CLIENT_SECRET' (fra konsollen)
