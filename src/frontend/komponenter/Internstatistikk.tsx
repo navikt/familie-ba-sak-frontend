@@ -53,9 +53,11 @@ const Internstatistikk: React.FC = () => {
                                         <tr>
                                             <td>
                                                 {
-                                                    // eslint-disable-next-line
-                                                    // @ts-ignore: her får vi riktig type, det er bare ts som ikke skjønner det
-                                                    behandlingÅrsak[behandlingsårsak]
+                                                    behandlingÅrsak[
+                                                        behandlingsårsak as
+                                                            | BehandlingÅrsak
+                                                            | TilbakekrevingsbehandlingÅrsak
+                                                    ]
                                                 }
                                             </td>
                                             <td>{antall}</td>
