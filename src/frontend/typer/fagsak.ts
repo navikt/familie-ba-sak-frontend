@@ -1,4 +1,5 @@
 import { VisningBehandling } from '../komponenter/Fagsak/Saksoversikt/visningBehandling';
+import { BehandlingÅrsak } from './behandling';
 import { INøkkelPar } from './common';
 import { ITilbakekrevingsbehandling } from './tilbakekrevingsbehandling';
 import { Utbetalingsperiode } from './vedtaksperiode';
@@ -45,4 +46,5 @@ export interface IInternstatistikk {
     antallFagsakerTotalt: number;
     antallFagsakerLøpende: number;
     antallBehandlingerIkkeFerdigstilt: number;
+    antallBehandlingerPerÅrsak: Record<BehandlingÅrsak, number>;
 }
