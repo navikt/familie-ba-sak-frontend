@@ -3,8 +3,16 @@ import { useEffect } from 'react';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 
 import { IBehandling, ISettPåVent, SettPåVentÅrsak } from '../../../../../typer/behandling';
-import { FamilieIsoDate } from '../../../../../utils/kalender';
+import {
+    FamilieIsoDate,
+    iDag,
+    KalenderEnhet,
+    leggTil,
+    serializeIso8601String,
+} from '../../../../../utils/kalender';
 import { validerLeggPåVentFrist } from './leggPåVentUtils';
+
+const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 
 export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined) => {
     const settPåVentSkjema = useSkjema<
@@ -16,7 +24,11 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined) => {
     >({
         felter: {
             frist: useFelt<FamilieIsoDate | undefined>({
-                verdi: settPåVent?.frist ?? '',
+                verdi:
+                    settPåVent?.frist ??
+                    serializeIso8601String(
+                        leggTil(iDag(), STANDARD_ANTALL_DAGER_FRIST, KalenderEnhet.DAG)
+                    ),
                 valideringsfunksjon: validerLeggPåVentFrist,
             }),
             årsak: useFelt<SettPåVentÅrsak | undefined>({
