@@ -29,8 +29,9 @@
   "dependencies": {
     "@axe-core/react": "^4.3.1",
     "@navikt/ds-icons": "^0.5.4",
-    "@navikt/familie-backend": "^5.0.30",
+    "@navikt/familie-backend": "^5.0.31",
     "@navikt/familie-clipboard": "^3.1.6",
+    "@navikt/familie-endringslogg": "^1.2.1",
     "@navikt/familie-form-elements": "^3.2.2",
     "@navikt/familie-header": "^3.2.0",
     "@navikt/familie-http": "^1.1.0",
@@ -39,7 +40,6 @@
     "@navikt/familie-skjema": "^1.1.8",
     "@navikt/familie-typer": "^3.0.14",
     "@navikt/familie-visittkort": "^2.1.26",
-    "@navikt/familie-endringslogg": "^1.2.1",
     "@navikt/fnrvalidator": "^1.1.4",
     "@navikt/helse-frontend-tidslinje": "^3.1.0",
     "@sentry/browser": "^6.17.1",
