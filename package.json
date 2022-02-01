@@ -40,7 +40,7 @@
     "@navikt/familie-skjema": "^1.1.8",
     "@navikt/familie-typer": "^3.0.14",
     "@navikt/familie-visittkort": "^2.1.26",
-    "@navikt/fnrvalidator": "^1.1.4",
+    "@navikt/fnrvalidator": "^1.2.0",
     "@navikt/helse-frontend-tidslinje": "^3.1.0",
     "@sentry/browser": "^6.17.1",
     "@sentry/core": "^6.17.1",
