@@ -2,11 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import 'nav-frontend-tabell-style';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useFagsakRessurser } from '../context/FagsakContext';
+import { behandlingÅrsak } from '../typer/behandling';
 
 const Container = styled.div`
     margin: 5rem;
@@ -22,14 +24,47 @@ const Internstatistikk: React.FC = () => {
             {internstatistikk.status === RessursStatus.SUKSESS && (
                 <>
                     <Undertittel children={'Internstatistikk BA-SAK'} />
-                    <Element children={internstatistikk.data.antallFagsakerTotalt} />
-                    <Normaltekst children={'Antall fagsaker totalt'} />
+                    <Normaltekst>
+                        {`Antall fagsaker totalt: ${internstatistikk.data.antallFagsakerTotalt}`}
+                    </Normaltekst>
 
-                    <Element children={internstatistikk.data.antallFagsakerLøpende} />
-                    <Normaltekst children={'Antall løpende saker'} />
+                    <Normaltekst>
+                        {`Antall løpende saker: ${internstatistikk.data.antallFagsakerLøpende}`}
+                    </Normaltekst>
 
-                    <Element children={internstatistikk.data.antallBehandlingerIkkeFerdigstilt} />
-                    <Normaltekst children={'Antall behandlinger som ikke er ferdigstilt'} />
+                    <Normaltekst>
+                        {`Antall behandlinger som ikke er ferdigstilt: ${internstatistikk.data.antallBehandlingerIkkeFerdigstilt}`}
+                    </Normaltekst>
+
+                    <br />
+                    <hr />
+                    <Undertittel>Antall behandlinger per årsak</Undertittel>
+                    <table className="tabell tabell--stripet">
+                        <thead>
+                            <tr>
+                                <th>Behandlingsårsak</th>
+                                <th>Antall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.entries(internstatistikk.data.antallBehandlingerPerÅrsak).map(
+                                ([behandlingsårsak, antall]) => {
+                                    return (
+                                        <tr>
+                                            <td>
+                                                {
+                                                    // eslint-disable-next-line
+                                                    // @ts-ignore: her får vi riktig type, det er bare ts som ikke skjønner det
+                                                    behandlingÅrsak[behandlingsårsak]
+                                                }
+                                            </td>
+                                            <td>{antall}</td>
+                                        </tr>
+                                    );
+                                }
+                            )}
+                        </tbody>
+                    </table>
                 </>
             )}
         </Container>
