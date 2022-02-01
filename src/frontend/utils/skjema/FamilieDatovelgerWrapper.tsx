@@ -9,7 +9,7 @@ import { FamilieDatovelger } from '@navikt/familie-form-elements';
 
 import { StyledFeilmelding } from '../../komponenter/Fagsak/Dokumentutsending/DeltBosted/DeltBostedAvtaler';
 
-export const StyledFamilieDatovelgerForSkjema = styled(FamilieDatovelger)<{
+const StyledFamilieDatovelgerForSkjema = styled(FamilieDatovelger)<{
     feil: ReactNode | undefined;
 }>`
     .nav-datovelger__input {
