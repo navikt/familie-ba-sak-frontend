@@ -14,7 +14,10 @@ import { validerSettPåVentFrist } from './settPåVentUtils';
 
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 
-export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined) => {
+export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, modalVises: boolean) => {
+    const standardfrist = serializeIso8601String(
+        leggTil(iDag(), STANDARD_ANTALL_DAGER_FRIST, KalenderEnhet.DAG)
+    );
     const settPåVentSkjema = useSkjema<
         {
             frist: FamilieIsoDate | undefined;
@@ -24,11 +27,7 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined) => {
     >({
         felter: {
             frist: useFelt<FamilieIsoDate | undefined>({
-                verdi:
-                    settPåVent?.frist ??
-                    serializeIso8601String(
-                        leggTil(iDag(), STANDARD_ANTALL_DAGER_FRIST, KalenderEnhet.DAG)
-                    ),
+                verdi: settPåVent?.frist ?? standardfrist,
                 valideringsfunksjon: validerSettPåVentFrist,
             }),
             årsak: useFelt<SettPåVentÅrsak | undefined>({
@@ -40,10 +39,19 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined) => {
         skjemanavn: 'Sett behandling på vent',
     });
 
+    const fyllInnStandardverdier = () => {
+        settPåVentSkjema.skjema.felter.frist.validerOgSettFelt(standardfrist);
+        settPåVentSkjema.skjema.felter.årsak.validerOgSettFelt(undefined);
+    };
+
     useEffect(() => {
-        settPåVentSkjema.skjema.felter.frist.validerOgSettFelt(settPåVent?.frist);
-        settPåVentSkjema.skjema.felter.årsak.validerOgSettFelt(settPåVent?.årsak);
-    }, [settPåVent]);
+        if (modalVises && settPåVent) {
+            settPåVentSkjema.skjema.felter.frist.validerOgSettFelt(settPåVent.frist);
+            settPåVentSkjema.skjema.felter.årsak.validerOgSettFelt(settPåVent.årsak);
+        } else {
+            fyllInnStandardverdier();
+        }
+    }, [modalVises]);
 
     return settPåVentSkjema;
 };

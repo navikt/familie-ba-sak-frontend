@@ -17,16 +17,12 @@ interface IProps {
 const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behandling }) => {
     const { settÅpenBehandling } = useBehandling();
     const [visModal, settVisModal] = useState<boolean>(false);
-    const { skjema, kanSendeSkjema, nullstillSkjema, onSubmit } = useSettPåVentSkjema(
-        behandling.aktivSettPåVent
+    const { skjema, kanSendeSkjema, onSubmit } = useSettPåVentSkjema(
+        behandling.aktivSettPåVent,
+        visModal
     );
 
     const erBehandlingAlleredePåVent = !!behandling.aktivSettPåVent;
-
-    const lukkModal = () => {
-        settVisModal(false);
-        nullstillSkjema();
-    };
 
     const settBehandlingPåVent = () => {
         if (kanSendeSkjema()) {
@@ -35,11 +31,10 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behand
                     method: erBehandlingAlleredePåVent ? 'PUT' : 'POST',
                     data: { frist: skjema.felter.frist.verdi, årsak: skjema.felter.årsak.verdi },
                     url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}`,
-                    påvirkerSystemLaster: true,
                 },
                 (ressurs: Ressurs<IBehandling>) => {
                     settÅpenBehandling(ressurs);
-                    lukkModal();
+                    settVisModal(false);
                 }
             );
         }
@@ -61,7 +56,7 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behand
 
             <SettBehandlingPåVentModal
                 visModal={visModal}
-                onAvbryt={lukkModal}
+                onAvbryt={() => settVisModal(false)}
                 settBehandlingPåVent={settBehandlingPåVent}
                 skjema={skjema}
                 erBehandlingAlleredePåVent={erBehandlingAlleredePåVent}

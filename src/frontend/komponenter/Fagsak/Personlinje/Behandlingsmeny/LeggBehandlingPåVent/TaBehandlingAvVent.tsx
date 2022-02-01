@@ -50,7 +50,6 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }
         request<undefined, IBehandling>({
             method: 'PUT',
             url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}/fortsettbehandling`,
-            påvirkerSystemLaster: true,
         })
             .then((ressurs: Ressurs<IBehandling>) => {
                 settÅpenBehandling(ressurs, true);
