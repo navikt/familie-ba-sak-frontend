@@ -8,7 +8,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useApp } from '../../context/AppContext';
 import { useFagsakRessurser } from '../../context/FagsakContext';
-import { useOppgaver } from '../../context/OppgaverContext';
 import { IOppgave, oppgaveTypeFilter, OppgavetypeFilter } from '../../typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import FamilieBaseKnapp from '../Felleskomponenter/FamilieBaseKnapp';
@@ -20,7 +19,6 @@ interface IOppgaveDirektelenke {
 
 const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { settToast } = useApp();
-    const { harLøpendeSakIInfotrygd } = useOppgaver();
     const { hentFagsakForPerson } = useFagsakRessurser();
     const { sjekkTilgang } = useApp();
     const [laster, settLaster] = useState<boolean>(false);
@@ -28,22 +26,17 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype as OppgavetypeFilter]?.id;
 
     const visTilgangsmodalEllerSendVidere = async (oppgave: IOppgave) => {
-        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
+        settLaster(true);
 
+        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
         if (brukerident) {
             if (await sjekkTilgang(brukerident, false)) {
-                const løpendeSak = await harLøpendeSakIInfotrygd(brukerident);
-                if (løpendeSak.status === RessursStatus.SUKSESS) {
-                    if (løpendeSak.data.harLøpendeSak) {
-                        history.push('/infotrygd', { bruker: brukerident });
-                    } else {
-                        history.push(`/oppgaver/journalfør/${oppgave.id}`);
-                    }
-                }
+                history.push(`/oppgaver/journalfør/${oppgave.id}`);
             }
         } else {
             history.push(`/oppgaver/journalfør/${oppgave.id}`);
         }
+        settLaster(false);
     };
 
     const sjekkTilgangOgGåTilBehandling = async (oppgave: IOppgave) => {
@@ -80,7 +73,6 @@ const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
                     <FamilieBaseKnapp
                         key={'tiloppg'}
                         onClick={() => {
-                            settLaster(true);
                             visTilgangsmodalEllerSendVidere(oppgave);
                         }}
                         children={'Gå til oppgave'}
