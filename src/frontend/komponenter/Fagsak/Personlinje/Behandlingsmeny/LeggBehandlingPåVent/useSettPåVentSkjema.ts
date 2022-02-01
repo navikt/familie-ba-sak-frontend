@@ -6,7 +6,7 @@ import { IBehandling, ISettPåVent, SettPåVentÅrsak } from '../../../../../typ
 import { FamilieIsoDate } from '../../../../../utils/kalender';
 import { validerLeggPåVentFrist } from './leggPåVentUtils';
 
-export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, modalÅpen: boolean) => {
+export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined) => {
     const settPåVentSkjema = useSkjema<
         {
             frist: FamilieIsoDate | undefined;
@@ -29,13 +29,9 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined, moda
     });
 
     useEffect(() => {
-        if (modalÅpen) {
-            settPåVentSkjema.skjema.felter.frist.validerOgSettFelt(settPåVent?.frist);
-            settPåVentSkjema.skjema.felter.årsak.validerOgSettFelt(settPåVent?.årsak);
-        } else {
-            settPåVentSkjema.nullstillSkjema();
-        }
-    }, [modalÅpen]);
+        settPåVentSkjema.skjema.felter.frist.validerOgSettFelt(settPåVent?.frist);
+        settPåVentSkjema.skjema.felter.årsak.validerOgSettFelt(settPåVent?.årsak);
+    }, [settPåVent]);
 
     return settPåVentSkjema;
 };

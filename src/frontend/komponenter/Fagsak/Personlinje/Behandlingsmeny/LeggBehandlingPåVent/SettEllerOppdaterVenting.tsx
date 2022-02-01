@@ -18,8 +18,7 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behand
     const { settÅpenBehandling } = useBehandling();
     const [visModal, settVisModal] = useState<boolean>(false);
     const { skjema, kanSendeSkjema, nullstillSkjema, onSubmit } = useSettPåVentSkjema(
-        behandling.settPåVent,
-        visModal
+        behandling.settPåVent
     );
 
     const erBehandlingAlleredePåVent = !!behandling.settPåVent;
@@ -36,6 +35,7 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behand
                     method: erBehandlingAlleredePåVent ? 'PUT' : 'POST',
                     data: { frist: skjema.felter.frist.verdi, årsak: skjema.felter.årsak.verdi },
                     url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}`,
+                    påvirkerSystemLaster: true,
                 },
                 (ressurs: Ressurs<IBehandling>) => {
                     settÅpenBehandling(ressurs);
