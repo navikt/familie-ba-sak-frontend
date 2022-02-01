@@ -44,7 +44,9 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
     return (
         <UIModalWrapper
             modal={{
-                tittel: 'Sett behandlingen på vent',
+                tittel: erBehandlingAlleredePåVent
+                    ? 'Oppdater behandling på vent'
+                    : 'Legg behandling på vent',
                 visModal: visModal,
                 lukkKnapp: true,
                 onClose: onAvbryt,
@@ -55,7 +57,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                         key={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
                         mini={true}
                         onClick={settBehandlingPåVent}
-                        children={'Bekreft'}
+                        children={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
                         spinner={skjema.submitRessurs.status === RessursStatus.HENTER}
                         disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                     />,
