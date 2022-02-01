@@ -15,7 +15,6 @@ import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
 import { ITilbakekreving } from '../../../typer/simulering';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentSøkersMålform } from '../../../utils/behandling';
-import { behandlingErEtterSteg } from '../../../utils/steg';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';

@@ -24,7 +24,6 @@ import {
 } from '../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import { behandlingErEtterSteg } from '../../../utils/steg';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';

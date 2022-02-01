@@ -29,7 +29,7 @@ const StyledSkjemasteg = styled(Skjemasteg)`
 `;
 
 const RegistrerSøknad: React.FC = () => {
-    const { erLesevisning, åpenBehandling } = useBehandling();
+    const { erLesevisning } = useBehandling();
 
     const {
         hentFeilTilOppsummering,
