@@ -55,8 +55,8 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behand
                 }}
             >
                 {erBehandlingAlleredePåVent
-                    ? 'Oppdater behandling på vent'
-                    : 'Legg behandling på vent'}
+                    ? 'Endre ventende behandling'
+                    : 'Sett behandling på vent'}
             </KnappBase>
 
             <SettBehandlingPåVentModal

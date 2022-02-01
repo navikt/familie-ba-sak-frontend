@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import styled from 'styled-components';
+
 import AlertStripe from 'nav-frontend-alertstriper';
 import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
@@ -11,6 +13,13 @@ import { useBehandling } from '../../../../../context/behandlingContext/Behandli
 import { IBehandling, settPåVentÅrsaker } from '../../../../../typer/behandling';
 import { datoformat, formaterIsoDato } from '../../../../../utils/formatter';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
+
+const StyledNormaltekst = styled(Normaltekst)`
+    padding-bottom: 1rem;
+`;
+const StyledAlertStripe = styled(AlertStripe)`
+    padding-bottom: 1rem;
+`;
 
 interface IProps {
     onListElementClick: () => void;
@@ -86,20 +95,20 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
                 <Normaltekst>
                     Behandlingen er satt på vent.
                     {behandling?.settPåVent &&
-                        ` Årsak: ${
-                            settPåVentÅrsaker[behandling?.settPåVent?.årsak]
-                        }. Frist: ${formaterIsoDato(
-                            behandling?.settPåVent?.frist,
-                            datoformat.DATO
-                        )}.`}{' '}
-                    Ønsker du å fortsette behandlingen?
+                        ` Årsak: ${settPåVentÅrsaker[behandling?.settPåVent?.årsak]}. `}
                 </Normaltekst>
+                <StyledNormaltekst>
+                    {`Frist: ${formaterIsoDato(behandling?.settPåVent?.frist, datoformat.DATO)}.`}{' '}
+                    Gå via meny for å endre årsak og frist på ventende behandling.
+                </StyledNormaltekst>
+
+                <StyledNormaltekst>Ønsker du å fortsette behandlingen?</StyledNormaltekst>
 
                 {feilMotBaSak && (
-                    <AlertStripe className={'saksoversikt__alert'} type={'feil'}>
+                    <StyledAlertStripe className={'saksoversikt__alert'} type={'feil'}>
                         Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt
                         brukerstøtte hvis problemet vedvarer.
-                    </AlertStripe>
+                    </StyledAlertStripe>
                 )}
             </UIModalWrapper>
         </>

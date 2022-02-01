@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { Normaltekst } from 'nav-frontend-typografi';
 
 import { FamilieSelect } from '@navikt/familie-form-elements';
 import { ISkjema } from '@navikt/familie-skjema';
@@ -16,7 +17,11 @@ import { FamilieDatovelgerWrapper } from '../../../../../utils/skjema/FamilieDat
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 
 const Feltmargin = styled.div`
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+`;
+const StyledNormaltekst = styled(Normaltekst)`
+    margin-bottom: 2.5rem;
+    margin-top: 0.5rem;
 `;
 
 interface IProps {
@@ -45,8 +50,8 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
         <UIModalWrapper
             modal={{
                 tittel: erBehandlingAlleredePåVent
-                    ? 'Oppdater behandling på vent'
-                    : 'Legg behandling på vent',
+                    ? 'Endre ventende behandling'
+                    : 'Sett behandling på vent',
                 visModal: visModal,
                 lukkKnapp: true,
                 onClose: onAvbryt,
@@ -68,6 +73,10 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                 feil={hentFrontendFeilmelding(skjema.submitRessurs)}
                 utenFeilPropagering={true}
             >
+                {erBehandlingAlleredePåVent && (
+                    <StyledNormaltekst>Behandlingen er satt på vent.</StyledNormaltekst>
+                )}
+
                 <Feltmargin>
                     <FamilieDatovelgerWrapper
                         {...skjema.felter.frist.hentNavInputProps(skjema.visFeilmeldinger)}
@@ -76,18 +85,20 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                         placeholder={'DD.MM.ÅÅÅÅ'}
                     />
                 </Feltmargin>
-                <FamilieSelect
-                    {...skjema.felter.årsak.hentNavInputProps(skjema.visFeilmeldinger)}
-                    label={'Årsak'}
-                    placeholder={'Tema'}
-                >
-                    <option value={undefined}>Velg årsak</option>
-                    {årsaker.map(årsak => (
-                        <option value={årsak.valueOf()} key={årsak.valueOf()}>
-                            {settPåVentÅrsaker[årsak]}
-                        </option>
-                    ))}
-                </FamilieSelect>
+                <Feltmargin>
+                    <FamilieSelect
+                        {...skjema.felter.årsak.hentNavInputProps(skjema.visFeilmeldinger)}
+                        label={'Årsak'}
+                        placeholder={'Tema'}
+                    >
+                        <option value={undefined}>Velg årsak</option>
+                        {årsaker.map(årsak => (
+                            <option value={årsak.valueOf()} key={årsak.valueOf()}>
+                                {settPåVentÅrsaker[årsak]}
+                            </option>
+                        ))}
+                    </FamilieSelect>
+                </Feltmargin>
             </SkjemaGruppe>
         </UIModalWrapper>
     );

@@ -14,8 +14,8 @@ export const validerLeggPåVentFrist = (
     if (felt.verdi && erIsoStringGyldig(felt.verdi)) {
         return felt.verdi && erEtter(kalenderDato(felt.verdi), iDag())
             ? ok(felt)
-            : feil(felt, 'Fristen kan ikke være før dagens dato.');
+            : feil(felt, 'Frist kan ikke settes tilbake i tid.');
     } else {
-        return feil(felt, 'Du må velge en dato.');
+        return feil(felt, 'Du må sette en frist.');
     }
 };
