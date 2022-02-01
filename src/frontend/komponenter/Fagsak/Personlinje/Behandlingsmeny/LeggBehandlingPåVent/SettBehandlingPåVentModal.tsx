@@ -89,7 +89,7 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({
                     <FamilieSelect
                         {...skjema.felter.årsak.hentNavInputProps(skjema.visFeilmeldinger)}
                         label={'Årsak'}
-                        placeholder={'Tema'}
+                        placeholder={'Årsak'}
                     >
                         <option value={undefined}>Velg årsak</option>
                         {årsaker.map(årsak => (

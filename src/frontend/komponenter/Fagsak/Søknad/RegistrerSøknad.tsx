@@ -7,12 +7,11 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Feiloppsummering } from 'nav-frontend-skjema';
 import { Normaltekst } from 'nav-frontend-typografi';
 
-import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
 import { BehandlingSteg } from '../../../typer/behandling';
-import { behandlingErEtterSteg } from '../../../utils/steg';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -50,13 +49,7 @@ const RegistrerSøknad: React.FC = () => {
             }}
             nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
             senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
-            skalViseNesteKnapp={
-                !erLesevisning() ||
-                behandlingErEtterSteg(
-                    BehandlingSteg.REGISTRERE_SØKNAD,
-                    hentDataFraRessurs(åpenBehandling)
-                )
-            }
+            steg={BehandlingSteg.REGISTRERE_SØKNAD}
         >
             {søknadErLastetFraBackend && !erLesevisning() && (
                 <>

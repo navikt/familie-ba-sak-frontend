@@ -86,10 +86,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
             skalViseNesteKnapp={
-                (!erMigreringMedStoppISimulering || skalIkkeStoppeMigreringsbehandlinger) &&
-                (!erLesevisning() ||
-                    behandlingErEtterSteg(BehandlingSteg.VURDER_TILBAKEKREVING, åpenBehandling))
+                !erMigreringMedStoppISimulering || skalIkkeStoppeMigreringsbehandlinger
             }
+            steg={BehandlingSteg.VURDER_TILBAKEKREVING}
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (

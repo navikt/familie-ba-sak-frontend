@@ -18,7 +18,6 @@ import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
-import { behandlingErEtterSteg } from '../../../utils/steg';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 import MigreringInfoboks from './MigreringInfoboks';
@@ -126,10 +125,7 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
             }}
             maxWidthStyle={'80rem'}
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
-            skalViseNesteKnapp={
-                !erLesevisning() ||
-                behandlingErEtterSteg(BehandlingSteg.BEHANDLINGSRESULTAT, åpenBehandling)
-            }
+            steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
             {erMigreringFraInfotrygd && (
                 <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />

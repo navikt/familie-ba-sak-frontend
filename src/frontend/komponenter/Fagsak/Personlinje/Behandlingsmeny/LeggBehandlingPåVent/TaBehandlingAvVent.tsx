@@ -104,7 +104,7 @@ const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }
                     {`Frist: ${formaterIsoDato(
                         behandling?.aktivSettPåVent?.frist,
                         datoformat.DATO
-                    )}.`}{' '}
+                    )}. `}
                     Gå via meny for å endre årsak og frist på ventende behandling.
                 </StyledNormaltekst>
 

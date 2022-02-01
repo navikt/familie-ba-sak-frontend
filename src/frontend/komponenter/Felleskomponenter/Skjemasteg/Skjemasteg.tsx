@@ -11,8 +11,9 @@ import { Feilmelding, Innholdstittel } from 'nav-frontend-typografi';
 import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
-import { settPåVentÅrsaker } from '../../../typer/behandling';
+import { BehandlingSteg, settPåVentÅrsaker } from '../../../typer/behandling';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
+import { behandlingErEtterSteg } from '../../../utils/steg';
 import { ISide, sider } from '../Venstremeny/sider';
 
 interface IProps {
@@ -27,6 +28,7 @@ interface IProps {
     skalViseNesteKnapp?: boolean;
     skalViseForrigeKnapp?: boolean;
     feilmelding?: string;
+    steg: BehandlingSteg;
 }
 
 const Container = styled.div<{ maxWidthStyle: string }>`
@@ -72,7 +74,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     feilmelding = '',
 }) => {
     const history = useHistory();
-    const { forrigeÅpneSide, åpenBehandling } = useBehandling();
+    const { forrigeÅpneSide, åpenBehandling, erLesevisning } = useBehandling();
     const settPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
 
     useEffect(() => {
@@ -88,6 +90,10 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
         }
     }, [forrigeÅpneSide]);
 
+    const kanGåVidereILesevisning = behandlingErEtterSteg(
+        BehandlingSteg.VURDER_TILBAKEKREVING,
+        hentDataFraRessurs(åpenBehandling)
+    );
     return (
         <>
             {settPåVent && (
@@ -105,20 +111,22 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                 {feilmelding !== '' && <StyledFeilmelding>{feilmelding}</StyledFeilmelding>}
 
                 <Navigering>
-                    {nesteOnClick && skalViseNesteKnapp && (
-                        <Knapp
-                            type={'hoved'}
-                            spinner={senderInn}
-                            disabled={senderInn}
-                            onClick={() => {
-                                if (!senderInn) {
-                                    nesteOnClick();
-                                }
-                            }}
-                            mini={true}
-                            children={nesteKnappTittel ?? 'Neste'}
-                        />
-                    )}
+                    {nesteOnClick &&
+                        skalViseNesteKnapp &&
+                        (!erLesevisning() || kanGåVidereILesevisning) && (
+                            <Knapp
+                                type={'hoved'}
+                                spinner={senderInn}
+                                disabled={senderInn}
+                                onClick={() => {
+                                    if (!senderInn) {
+                                        nesteOnClick();
+                                    }
+                                }}
+                                mini={true}
+                                children={nesteKnappTittel ?? 'Neste'}
+                            />
+                        )}
                     {forrigeOnClick && skalViseForrigeKnapp && (
                         <Knapp
                             onClick={() => {

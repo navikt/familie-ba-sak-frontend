@@ -114,10 +114,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             }}
             maxWidthStyle={'80rem'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
-            skalViseNesteKnapp={
-                !erLesevisning() ||
-                behandlingErEtterSteg(BehandlingSteg.VILKÅRSVURDERING, åpenBehandling)
-            }
+            steg={BehandlingSteg.VILKÅRSVURDERING}
         >
             <>
                 <HentetLabelOgKnappDiv>
