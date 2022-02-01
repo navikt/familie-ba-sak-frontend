@@ -73,7 +73,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
 }) => {
     const history = useHistory();
     const { forrigeÅpneSide, åpenBehandling } = useBehandling();
-    const settPåVent = hentDataFraRessurs(åpenBehandling)?.settPåVent;
+    const settPåVent = hentDataFraRessurs(åpenBehandling)?.aktivSettPåVent;
 
     useEffect(() => {
         const element = document.getElementById('skjemasteg');
