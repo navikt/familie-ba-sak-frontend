@@ -10,7 +10,7 @@ import {
     leggTil,
     serializeIso8601String,
 } from '../../../../../utils/kalender';
-import { validerLeggPåVentFrist } from './leggPåVentUtils';
+import { validerSettPåVentFrist } from './settPåVentUtils';
 
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 
@@ -29,7 +29,7 @@ export const useSettPåVentSkjema = (settPåVent: ISettPåVent | undefined) => {
                     serializeIso8601String(
                         leggTil(iDag(), STANDARD_ANTALL_DAGER_FRIST, KalenderEnhet.DAG)
                     ),
-                valideringsfunksjon: validerLeggPåVentFrist,
+                valideringsfunksjon: validerSettPåVentFrist,
             }),
             årsak: useFelt<SettPåVentÅrsak | undefined>({
                 verdi: settPåVent?.årsak ?? undefined,

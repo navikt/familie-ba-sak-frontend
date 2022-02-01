@@ -8,7 +8,7 @@ import {
     kalenderDato,
 } from '../../../../../utils/kalender';
 
-export const validerLeggPåVentFrist = (
+export const validerSettPåVentFrist = (
     felt: FeltState<FamilieIsoDate | undefined>
 ): FeltState<FamilieIsoDate | undefined> => {
     if (felt.verdi && erIsoStringGyldig(felt.verdi)) {
