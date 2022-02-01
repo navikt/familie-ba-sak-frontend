@@ -7,10 +7,17 @@ import KnappBase, { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 import { useHttp } from '@navikt/familie-http';
-import { Ressurs } from '@navikt/familie-typer';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
 import { IBehandling, settPåVentÅrsaker } from '../../../../../typer/behandling';
+import { defaultFunksjonellFeil } from '../../../../../typer/feilmeldinger';
 import { datoformat, formaterIsoDato } from '../../../../../utils/formatter';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 
@@ -26,21 +33,20 @@ interface IProps {
     behandling: IBehandling;
 }
 
-const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, behandling }) => {
+const TaBehandlingAvVent: React.FC<IProps> = ({ onListElementClick, behandling }) => {
     const { request } = useHttp();
     const { settÅpenBehandling } = useBehandling();
 
-    const [visModal, settVisModal] = useState<boolean>(!!behandling.settPåVent);
-    const [spinner, settSpinner] = useState<boolean>(false);
-    const [feilMotBaSak, settFeilMotBaSak] = useState<boolean>(false);
+    const [visModal, settVisModal] = useState<boolean>(!!behandling.aktivSettPåVent);
+    const [submitRessurs, settSubmitRessurs] = useState(byggTomRessurs());
 
     const lukkModal = () => {
         settVisModal(false);
     };
 
     const deaktiverVentingPåBehandling = () => {
-        settSpinner(true);
-        settFeilMotBaSak(false);
+        settSubmitRessurs(byggHenterRessurs());
+
         request<undefined, IBehandling>({
             method: 'PUT',
             url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}/fortsettbehandling`,
@@ -48,12 +54,11 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
         })
             .then((ressurs: Ressurs<IBehandling>) => {
                 settÅpenBehandling(ressurs, true);
+                settSubmitRessurs(ressurs);
                 lukkModal();
-                settSpinner(false);
             })
             .catch(() => {
-                settFeilMotBaSak(true);
-                settSpinner(false);
+                settSubmitRessurs(byggFeiletRessurs(defaultFunksjonellFeil));
             });
     };
 
@@ -83,8 +88,7 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
                             mini={true}
                             onClick={deaktiverVentingPåBehandling}
                             children={'Ja, fortsett'}
-                            spinner={spinner}
-                            disabled={spinner}
+                            spinner={submitRessurs.status === RessursStatus.HENTER}
                         />,
                     ],
                     style: {
@@ -94,20 +98,22 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
             >
                 <Normaltekst>
                     Behandlingen er satt på vent.
-                    {behandling?.settPåVent &&
-                        ` Årsak: ${settPåVentÅrsaker[behandling?.settPåVent?.årsak]}. `}
+                    {behandling?.aktivSettPåVent &&
+                        ` Årsak: ${settPåVentÅrsaker[behandling?.aktivSettPåVent?.årsak]}. `}
                 </Normaltekst>
                 <StyledNormaltekst>
-                    {`Frist: ${formaterIsoDato(behandling?.settPåVent?.frist, datoformat.DATO)}.`}{' '}
+                    {`Frist: ${formaterIsoDato(
+                        behandling?.aktivSettPåVent?.frist,
+                        datoformat.DATO
+                    )}.`}{' '}
                     Gå via meny for å endre årsak og frist på ventende behandling.
                 </StyledNormaltekst>
 
                 <StyledNormaltekst>Ønsker du å fortsette behandlingen?</StyledNormaltekst>
 
-                {feilMotBaSak && (
+                {submitRessurs.status === RessursStatus.FEILET && (
                     <StyledAlertStripe className={'saksoversikt__alert'} type={'feil'}>
-                        Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt
-                        brukerstøtte hvis problemet vedvarer.
+                        submitRessurs.feilmelding
                     </StyledAlertStripe>
                 )}
             </UIModalWrapper>
@@ -115,4 +121,4 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
     );
 };
 
-export default DeaktiverVentingPåBehandling;
+export default TaBehandlingAvVent;

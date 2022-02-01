@@ -142,7 +142,7 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
 
     const erLesevisning = (sjekkTilgangTilEnhet = true): boolean => {
         const åpenBehandlingData = hentDataFraRessurs(åpenBehandling);
-        if (åpenBehandlingData?.settPåVent) {
+        if (åpenBehandlingData?.aktivSettPåVent) {
             return true;
         }
 

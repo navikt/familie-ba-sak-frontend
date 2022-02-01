@@ -230,7 +230,7 @@ export interface IBehandling {
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
     tilbakekreving?: ITilbakekreving;
-    settPåVent?: ISettPåVent;
+    aktivSettPåVent?: ISettPåVent;
 }
 
 export interface IArbeidsfordelingPåBehandling {

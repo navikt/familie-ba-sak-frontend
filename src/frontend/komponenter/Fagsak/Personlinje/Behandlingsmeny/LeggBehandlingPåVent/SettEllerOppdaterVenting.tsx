@@ -18,10 +18,10 @@ const SettEllerOppdaterVenting: React.FC<IProps> = ({ onListElementClick, behand
     const { settÅpenBehandling } = useBehandling();
     const [visModal, settVisModal] = useState<boolean>(false);
     const { skjema, kanSendeSkjema, nullstillSkjema, onSubmit } = useSettPåVentSkjema(
-        behandling.settPåVent
+        behandling.aktivSettPåVent
     );
 
-    const erBehandlingAlleredePåVent = !!behandling.settPåVent;
+    const erBehandlingAlleredePåVent = !!behandling.aktivSettPåVent;
 
     const lukkModal = () => {
         settVisModal(false);

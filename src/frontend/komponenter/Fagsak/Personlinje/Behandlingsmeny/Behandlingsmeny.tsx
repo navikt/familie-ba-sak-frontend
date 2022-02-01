@@ -14,8 +14,8 @@ import { IMinimalFagsak } from '../../../../typer/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
-import DeaktiverVentingPåBehandling from './LeggBehandlingPåVent/DeaktiverVentingPåBehandling';
 import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
+import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 
@@ -104,9 +104,9 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
                             </li>
                         )}
                     {åpenBehandling.status === RessursStatus.SUKSESS &&
-                        åpenBehandling.data.settPåVent && (
+                        åpenBehandling.data.aktivSettPåVent && (
                             <li>
-                                <DeaktiverVentingPåBehandling
+                                <TaBehandlingAvVent
                                     onListElementClick={() => settAnker(undefined)}
                                     behandling={åpenBehandling.data}
                                 />
