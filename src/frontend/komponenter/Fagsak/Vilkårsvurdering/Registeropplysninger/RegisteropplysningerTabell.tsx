@@ -59,6 +59,12 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
     ikon,
     historikk,
 }) => {
+    const datoHeader =
+        opplysningstype === Registeropplysning.SIVILSTAND
+            ? 'Dato'
+            : opplysningstype === Registeropplysning.DØDSBOADRESSE
+            ? 'Dø'
+            : 'Periode';
     return (
         <>
             <Container>
@@ -70,13 +76,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                     <thead>
                         <tr>
                             <TabellHeader children={registeropplysning[opplysningstype]} />
-                            <TabellHeader
-                                children={
-                                    opplysningstype === Registeropplysning.SIVILSTAND
-                                        ? 'Dato'
-                                        : 'Periode'
-                                }
-                            />
+                            <TabellHeader children={datoHeader} />
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +101,9 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                                             <td
                                                 children={
                                                     opplysningstype ===
-                                                    Registeropplysning.SIVILSTAND
+                                                        Registeropplysning.SIVILSTAND ||
+                                                    opplysningstype ===
+                                                        Registeropplysning.DØDSBOADRESSE
                                                         ? tilVisning(
                                                               periode.fom
                                                                   ? kalenderDato(periode.fom)

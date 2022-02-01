@@ -88,6 +88,7 @@ export interface IRestRegisterhistorikk {
     oppholdstillatelse: IRestRegisteropplysning[];
     statsborgerskap: IRestRegisteropplysning[];
     bostedsadresse: IRestRegisteropplysning[];
+    dødsboadresse: IRestRegisteropplysning[];
 }
 
 export interface IRestRegisteropplysning {
