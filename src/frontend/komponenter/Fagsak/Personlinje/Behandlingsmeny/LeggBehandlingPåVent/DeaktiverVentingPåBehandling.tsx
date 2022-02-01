@@ -8,7 +8,8 @@ import { useHttp } from '@navikt/familie-http';
 import { Ressurs } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../../../context/behandlingContext/BehandlingContext';
-import { IBehandling } from '../../../../../typer/behandling';
+import { IBehandling, settPåVentÅrsaker } from '../../../../../typer/behandling';
+import { datoformat, formaterIsoDato } from '../../../../../utils/formatter';
 import UIModalWrapper from '../../../../Felleskomponenter/Modal/UIModalWrapper';
 
 interface IProps {
@@ -20,7 +21,7 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
     const { request } = useHttp();
     const { settÅpenBehandling } = useBehandling();
 
-    const [visModal, settVisModal] = useState<boolean>(false);
+    const [visModal, settVisModal] = useState<boolean>(!!behandling.settPåVent);
     const [spinner, settSpinner] = useState<boolean>(false);
     const [feilMotBaSak, settFeilMotBaSak] = useState<boolean>(false);
 
@@ -34,6 +35,7 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
         request<undefined, IBehandling>({
             method: 'PUT',
             url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}/fortsettbehandling`,
+            påvirkerSystemLaster: true,
         })
             .then((ressurs: Ressurs<IBehandling>) => {
                 settÅpenBehandling(ressurs, true);
@@ -60,18 +62,18 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
 
             <UIModalWrapper
                 modal={{
-                    tittel: <Undertittel>Fortsett behandlingen</Undertittel>,
+                    tittel: <Undertittel>Fortsett behandling</Undertittel>,
                     visModal: visModal,
                     lukkKnapp: true,
                     onClose: lukkModal,
                     actions: [
-                        <Flatknapp key={'Avbryt'} mini onClick={lukkModal} children={'Avbryt'} />,
+                        <Flatknapp key={'Nei'} mini onClick={lukkModal} children={'Nei'} />,
                         <Knapp
                             type={'hoved'}
                             key={'Bekreft'}
                             mini={true}
                             onClick={deaktiverVentingPåBehandling}
-                            children={'Bekreft'}
+                            children={'Ja, fortsett'}
                             spinner={spinner}
                             disabled={spinner}
                         />,
@@ -81,7 +83,18 @@ const DeaktiverVentingPåBehandling: React.FC<IProps> = ({ onListElementClick, b
                     },
                 }}
             >
-                <Normaltekst>Deaktiver venting og fortsett behandlingen.</Normaltekst>
+                <Normaltekst>
+                    Behandlingen er satt på vent.
+                    {behandling?.settPåVent &&
+                        ` Årsak: ${
+                            settPåVentÅrsaker[behandling?.settPåVent?.årsak]
+                        }. Frist: ${formaterIsoDato(
+                            behandling?.settPåVent?.frist,
+                            datoformat.DATO
+                        )}.`}{' '}
+                    Ønsker du å fortsette behandlingen?
+                </Normaltekst>
+
                 {feilMotBaSak && (
                     <AlertStripe className={'saksoversikt__alert'} type={'feil'}>
                         Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt
