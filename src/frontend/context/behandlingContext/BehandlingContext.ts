@@ -141,16 +141,20 @@ const [BehandlingProvider, useBehandling] = createUseContext(() => {
     };
 
     const erLesevisning = (sjekkTilgangTilEnhet = true): boolean => {
+        const åpenBehandlingData = hentDataFraRessurs(åpenBehandling);
+        if (åpenBehandlingData?.settPåVent) {
+            return true;
+        }
+
         const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
-        const behandlingsårsak = hentDataFraRessurs(åpenBehandling)?.årsak;
+        const behandlingsårsak = åpenBehandlingData?.årsak;
         const behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak =
             behandlingsårsak === BehandlingÅrsak.TEKNISK_ENDRING ||
             behandlingsårsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV;
 
         const saksbehandlerHarTilgangTilEnhet =
             harTilgangTilEnhet(
-                hentDataFraRessurs(åpenBehandling)?.arbeidsfordelingPåBehandling
-                    .behandlendeEnhetId ?? '',
+                åpenBehandlingData?.arbeidsfordelingPåBehandling.behandlendeEnhetId ?? '',
                 innloggetSaksbehandler?.groups ?? []
             ) || behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak;
 

@@ -15,7 +15,7 @@ import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navi
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { BehandlingÅrsak, IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak, IBehandling } from '../../../typer/behandling';
 import {
     annenVurderingConfig,
     IAnnenVurdering,
@@ -24,6 +24,7 @@ import {
 } from '../../../typer/vilkår';
 import { datoformat, formaterIsoDato } from '../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import { behandlingErEtterSteg } from '../../../utils/steg';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
@@ -113,6 +114,10 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             }}
             maxWidthStyle={'80rem'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
+            skalViseNesteKnapp={
+                !erLesevisning() ||
+                behandlingErEtterSteg(BehandlingSteg.VILKÅRSVURDERING, åpenBehandling)
+            }
         >
             <>
                 <HentetLabelOgKnappDiv>

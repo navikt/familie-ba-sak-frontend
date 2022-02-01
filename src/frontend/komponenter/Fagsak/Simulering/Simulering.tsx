@@ -11,10 +11,11 @@ import { useApp } from '../../../context/AppContext';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSimulering } from '../../../context/SimuleringContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
 import { ITilbakekreving } from '../../../typer/simulering';
 import { ToggleNavn } from '../../../typer/toggles';
 import { hentSøkersMålform } from '../../../utils/behandling';
+import { behandlingErEtterSteg } from '../../../utils/steg';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
@@ -85,7 +86,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
             nesteOnClick={nesteOnClick}
             maxWidthStyle={'80rem'}
             skalViseNesteKnapp={
-                !erMigreringMedStoppISimulering || skalIkkeStoppeMigreringsbehandlinger
+                (!erMigreringMedStoppISimulering || skalIkkeStoppeMigreringsbehandlinger) &&
+                (!erLesevisning() ||
+                    behandlingErEtterSteg(BehandlingSteg.VURDER_TILBAKEKREVING, åpenBehandling))
             }
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (

@@ -13,11 +13,12 @@ import { Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useTidslinje } from '../../../context/TidslinjeContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { Behandlingstype, IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, Behandlingstype, IBehandling } from '../../../typer/behandling';
 import { IRestEndretUtbetalingAndel } from '../../../typer/utbetalingAndel';
 import { Utbetalingsperiode } from '../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../utils/kalender';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
+import { behandlingErEtterSteg } from '../../../utils/steg';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetalingAndelTabell';
 import MigreringInfoboks from './MigreringInfoboks';
@@ -125,6 +126,10 @@ const TilkjentYtelse: React.FunctionComponent<ITilkjentYtelseProps> = ({ åpenBe
             }}
             maxWidthStyle={'80rem'}
             feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
+            skalViseNesteKnapp={
+                !erLesevisning() ||
+                behandlingErEtterSteg(BehandlingSteg.BEHANDLINGSRESULTAT, åpenBehandling)
+            }
         >
             {erMigreringFraInfotrygd && (
                 <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />

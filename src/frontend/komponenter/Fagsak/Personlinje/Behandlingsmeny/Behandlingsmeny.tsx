@@ -14,6 +14,8 @@ import { IMinimalFagsak } from '../../../../typer/fagsak';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
 import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
+import DeaktiverVentingPåBehandling from './LeggBehandlingPåVent/DeaktiverVentingPåBehandling';
+import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
 import LeggTilBarnPBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import OpprettBehandling from './OpprettBehandling/OpprettBehandling';
 
@@ -28,7 +30,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
 
     return (
         <>
-            <div style={{ marginLeft: '3rem' }}></div>
+            <div style={{ marginLeft: '3rem' }} />
             <Menyknapp
                 id={'behandlingsmeny-arialabel-knapp'}
                 mini={true}
@@ -101,6 +103,23 @@ const Behandlingsmeny: React.FC<IProps> = ({ minimalFagsak }) => {
                                 />
                             </li>
                         )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS &&
+                        åpenBehandling.data.settPåVent && (
+                            <li>
+                                <DeaktiverVentingPåBehandling
+                                    onListElementClick={() => settAnker(undefined)}
+                                    behandling={åpenBehandling.data}
+                                />
+                            </li>
+                        )}
+                    {åpenBehandling.status === RessursStatus.SUKSESS && (
+                        <li>
+                            <SettEllerOppdaterVenting
+                                onListElementClick={() => settAnker(undefined)}
+                                behandling={åpenBehandling.data}
+                            />
+                        </li>
+                    )}
 
                     <li>
                         <KnappBase
