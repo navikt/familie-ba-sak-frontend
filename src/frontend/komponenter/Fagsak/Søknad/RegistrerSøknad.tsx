@@ -11,6 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useSøknad } from '../../../context/SøknadContext';
+import { BehandlingSteg } from '../../../typer/behandling';
 import UIModalWrapper from '../../Felleskomponenter/Modal/UIModalWrapper';
 import MålformVelger from '../../Felleskomponenter/MålformVelger';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
@@ -48,6 +49,7 @@ const RegistrerSøknad: React.FC = () => {
             }}
             nesteKnappTittel={erLesevisning() ? 'Neste' : 'Bekreft og fortsett'}
             senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
+            steg={BehandlingSteg.REGISTRERE_SØKNAD}
         >
             {søknadErLastetFraBackend && !erLesevisning() && (
                 <>

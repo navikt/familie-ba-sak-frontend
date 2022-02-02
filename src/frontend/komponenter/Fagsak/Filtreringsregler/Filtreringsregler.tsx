@@ -7,7 +7,7 @@ import { Normaltekst } from 'nav-frontend-typografi';
 
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
 import VilkårResultatIkon from '../../../ikoner/VilkårResultatIkon';
-import { IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, IBehandling } from '../../../typer/behandling';
 import { Filtreringsregel, filtreringsregler } from '../../../typer/fødselshendelser';
 import Skjemasteg from '../../Felleskomponenter/Skjemasteg/Skjemasteg';
 
@@ -44,6 +44,7 @@ const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
             }}
             maxWidthStyle={'80rem'}
             senderInn={false}
+            steg={BehandlingSteg.FILTRERING_FØDSELSHENDELSER}
         >
             <StyledUl>
                 {Object.keys(Filtreringsregel).map(filtreringsregel => {
