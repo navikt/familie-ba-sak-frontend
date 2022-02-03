@@ -54,17 +54,21 @@ interface IRegisteropplysningerTabellProps {
     historikk: IRestRegisteropplysning[];
 }
 
+const hentDatoHeader = (opplysningstype: Registeropplysning) => {
+    if (opplysningstype === Registeropplysning.SIVILSTAND) {
+        return 'Dato';
+    } else if (opplysningstype === Registeropplysning.DØDSBOADRESSE) {
+        return 'Dø';
+    } else {
+        return 'Periode';
+    }
+};
+
 const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = ({
     opplysningstype,
     ikon,
     historikk,
 }) => {
-    const datoHeader =
-        opplysningstype === Registeropplysning.SIVILSTAND
-            ? 'Dato'
-            : opplysningstype === Registeropplysning.DØDSBOADRESSE
-            ? 'Dø'
-            : 'Periode';
     return (
         <>
             <Container>
@@ -76,7 +80,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                     <thead>
                         <tr>
                             <TabellHeader children={registeropplysning[opplysningstype]} />
-                            <TabellHeader children={datoHeader} />
+                            <TabellHeader children={hentDatoHeader(opplysningstype)} />
                         </tr>
                     </thead>
                     <tbody>
