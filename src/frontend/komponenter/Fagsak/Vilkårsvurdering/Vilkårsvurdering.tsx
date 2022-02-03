@@ -15,7 +15,7 @@ import { byggHenterRessurs, byggTomRessurs, Ressurs, RessursStatus } from '@navi
 import { useBehandling } from '../../../context/behandlingContext/BehandlingContext';
 import { useVilkårsvurdering } from '../../../context/Vilkårsvurdering/VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../hooks/useSakOgBehandlingParams';
-import { BehandlingÅrsak, IBehandling } from '../../../typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak, IBehandling } from '../../../typer/behandling';
 import {
     annenVurderingConfig,
     IAnnenVurdering,
@@ -113,6 +113,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             }}
             maxWidthStyle={'80rem'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
+            steg={BehandlingSteg.VILKÅRSVURDERING}
         >
             <>
                 <HentetLabelOgKnappDiv>
