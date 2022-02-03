@@ -2405,10 +2405,10 @@
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
 
-"@navikt/ds-css@^0.13.0-rc.search.0":
-  version "0.13.0-rc.search.0"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.13.0-rc.search.0.tgz#1e410a9728b9a2571cdc680a49a8f152348fdcbf"
-  integrity sha512-D5ZQcpiW0V7YDtDz9cFrq3jbKzWxJw240n0CgFf9qJJguL1A1VntfD/Oln5j49KFzc8sPPldBSh+EPav/Iexsw==
+"@navikt/ds-css@0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.14.1.tgz#0e3a37b802043106ecdca7ed154b82d7384b0441"
+  integrity sha512-mkbrnUcXIfQSCGoydmr3Vo5/1qRlWX9/s50nlKz6GviV+7b75XiG0CL/wf1QIqfmdbYtCMLRqPVoW9TQbfuleA==
 
 "@navikt/ds-icons@^0.2.1":
   version "0.2.2"
@@ -2422,20 +2422,20 @@
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-icons@^0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.7.3.tgz#ffe37e32cc5a0b3e640b9db0f95ff4c5f18c4002"
-  integrity sha512-fixTpRhYWB+DGG7LGsnNeIvHuO95uubaAH9YkSW3AsaoNQMaYtIKRCbGzqNcDTvfYiJvGQe++wIZCLAarCZfMA==
+"@navikt/ds-icons@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.8.1.tgz#9ec3e06957661db303518a9b71808e9690ba26a6"
+  integrity sha512-Te7r2wE2xZiEBusf0QToyhB2MCigH0y3xqDWnPXpuF4V6AoUSjlsPDpIm9Gu6MK82eJDy0UnJEMXe9ldRPRoxg==
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@^0.14.16-rc.search.0":
-  version "0.14.16-rc.search.0"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.14.16-rc.search.0.tgz#d236bb8143f5e8f48789580e361fbcdbccb4dc0d"
-  integrity sha512-KmZKjtya4IJzU7jtU2psKinbPK/ZJKzpdNTOgrDSVfIsWSAR6mUrPEPUPbL1lBQKfxd/yUBM7gvVp6W2lS+yqA==
+"@navikt/ds-react@0.15.3":
+  version "0.15.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-0.15.3.tgz#70e35610ce7ea41359d4a359e84b96435ea1ab64"
+  integrity sha512-SZaD6w+kTKPxjRLqib2qWM/VrUvrjURr0oulwungEIx1MJyLm7zcQfuvqXoVNSsBh9vjrr3SW50bmE0Eskvy2Q==
   dependencies:
     "@material-ui/core" "^4.12.3"
-    "@navikt/ds-icons" "^0.7.3"
+    "@navikt/ds-icons" "^0.8.1"
     "@popperjs/core" "^2.10.1"
     classnames "^2.2.6"
     react-collapse "^5.1.0"
